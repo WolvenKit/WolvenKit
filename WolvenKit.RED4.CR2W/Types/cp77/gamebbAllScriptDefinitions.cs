@@ -73,6 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<UI_NPCNextToTheCrosshairDef> _uI_NPCNextToTheCrosshair;
 		private CHandle<UI_NameplateDataDef> _uI_NameplateData;
 		private CHandle<UI_DamageInfoDef> _uI_DamageInfo;
+		private CHandle<UI_InterfaceOptionsDef> _uI_InterfaceOptions;
 		private CHandle<UI_CompassInfoDef> _uI_CompassInfo;
 		private CHandle<UI_ActiveWeaponDataDef> _uI_ActiveWeaponData;
 		private CHandle<UI_TargetingInfoDef> _uI_TargetingInfo;
@@ -645,6 +646,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(66)] 
+		[RED("UI_InterfaceOptions")] 
+		public CHandle<UI_InterfaceOptionsDef> UI_InterfaceOptions
+		{
+			get => GetProperty(ref _uI_InterfaceOptions);
+			set => SetProperty(ref _uI_InterfaceOptions, value);
+		}
+
+		[Ordinal(67)] 
 		[RED("UI_CompassInfo")] 
 		public CHandle<UI_CompassInfoDef> UI_CompassInfo
 		{
@@ -652,7 +661,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_CompassInfo, value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("UI_ActiveWeaponData")] 
 		public CHandle<UI_ActiveWeaponDataDef> UI_ActiveWeaponData
 		{
@@ -660,7 +669,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_ActiveWeaponData, value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
 		[RED("UI_TargetingInfo")] 
 		public CHandle<UI_TargetingInfoDef> UI_TargetingInfo
 		{
@@ -668,7 +677,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_TargetingInfo, value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("UI_Notifications")] 
 		public CHandle<UI_NotificationsDef> UI_Notifications
 		{
@@ -676,7 +685,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Notifications, value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(71)] 
 		[RED("LeftHandCyberware")] 
 		public CHandle<LeftHandCyberwareDataDef> LeftHandCyberware
 		{
@@ -684,7 +693,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _leftHandCyberware, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("CoverAction")] 
 		public CHandle<CoverActionDataDef> CoverAction
 		{
@@ -692,7 +701,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _coverAction, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(73)] 
 		[RED("UI_QuickSlotsData")] 
 		public CHandle<UI_QuickSlotsDataDef> UI_QuickSlotsData
 		{
@@ -700,7 +709,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_QuickSlotsData, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(74)] 
 		[RED("UI_VisionMode")] 
 		public CHandle<UI_VisionModeDef> UI_VisionMode
 		{
@@ -708,7 +717,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_VisionMode, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("UI_HudTooltip")] 
 		public CHandle<UI_HudTooltipDef> UI_HudTooltip
 		{
@@ -716,7 +725,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_HudTooltip, value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("UI_HudButtonHelp")] 
 		public CHandle<UI_HudButtonHelpDef> UI_HudButtonHelp
 		{
@@ -724,7 +733,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_HudButtonHelp, value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("UI_ActivityLog")] 
 		public CHandle<UI_ActivityLogDef> UI_ActivityLog
 		{
@@ -732,7 +741,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_ActivityLog, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("UI_LevelUp")] 
 		public CHandle<UI_LevelUpDef> UI_LevelUp
 		{
@@ -740,7 +749,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_LevelUp, value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("UI_Vendor")] 
 		public CHandle<UI_VendorDef> UI_Vendor
 		{
@@ -748,7 +757,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Vendor, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("UI_Briefing")] 
 		public CHandle<UI_BriefingDef> UI_Briefing
 		{
@@ -756,7 +765,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Briefing, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("UI_ItemModSystem")] 
 		public CHandle<UI_ItemModSystemDef> UI_ItemModSystem
 		{
@@ -764,7 +773,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_ItemModSystem, value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(82)] 
 		[RED("UI_CodexSystem")] 
 		public CHandle<UI_CodexSystemDef> UI_CodexSystem
 		{
@@ -772,7 +781,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_CodexSystem, value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(83)] 
 		[RED("UI_Equipment")] 
 		public CHandle<UI_EquipmentDef> UI_Equipment
 		{
@@ -780,7 +789,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Equipment, value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(84)] 
 		[RED("UI_Crafting")] 
 		public CHandle<UI_CraftingDef> UI_Crafting
 		{
@@ -788,7 +797,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Crafting, value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(85)] 
 		[RED("UI_Map")] 
 		public CHandle<UI_MapDef> UI_Map
 		{
@@ -796,7 +805,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Map, value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(86)] 
 		[RED("UI_CpoCharacterSelection")] 
 		public CHandle<UI_CpoCharacterSelectionDef> UI_CpoCharacterSelection
 		{
@@ -804,7 +813,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_CpoCharacterSelection, value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("UI_ChatBox")] 
 		public CHandle<UI_ChatBoxDef> UI_ChatBox
 		{
@@ -812,7 +821,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_ChatBox, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("UI_HUDNarrationLog")] 
 		public CHandle<UI_HUDNarrationLogDef> UI_HUDNarrationLog
 		{
@@ -820,7 +829,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_HUDNarrationLog, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("UI_NarrativePlate")] 
 		public CHandle<UI_NarrativePlateDef> UI_NarrativePlate
 		{
@@ -828,7 +837,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_NarrativePlate, value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("UI_Crosshair")] 
 		public CHandle<UI_CrosshairDef> UI_Crosshair
 		{
@@ -836,7 +845,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Crosshair, value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("UI_ItemLog")] 
 		public CHandle<UI_ItemLogDef> UI_ItemLog
 		{
@@ -844,7 +853,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_ItemLog, value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("UI_HUDButtonHints")] 
 		public CHandle<UI_HUDButtonHintDef> UI_HUDButtonHints
 		{
@@ -852,7 +861,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_HUDButtonHints, value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("UI_Companion")] 
 		public CHandle<UI_CompanionDef> UI_Companion
 		{
@@ -860,7 +869,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Companion, value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(94)] 
 		[RED("UI_CustomQuestNotification")] 
 		public CHandle<UI_CustomQuestNotificationDef> UI_CustomQuestNotification
 		{
@@ -868,7 +877,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_CustomQuestNotification, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(95)] 
 		[RED("HUD_Manager")] 
 		public CHandle<HUDManagerDef> HUD_Manager
 		{
@@ -876,7 +885,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hUD_Manager, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(96)] 
 		[RED("UI_Hacking")] 
 		public CHandle<UI_HackingDef> UI_Hacking
 		{
@@ -884,7 +893,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Hacking, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("UI_Stealth")] 
 		public CHandle<UI_StealthDef> UI_Stealth
 		{
@@ -892,7 +901,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_Stealth, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("UI_TopbarHubMenu")] 
 		public CHandle<UI_TopbarHubMenuDef> UI_TopbarHubMenu
 		{
@@ -900,7 +909,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_TopbarHubMenu, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("UI_LocalPlayer")] 
 		public CHandle<LocalPlayerDef> UI_LocalPlayer
 		{
@@ -908,7 +917,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_LocalPlayer, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("UI_SceneScreen")] 
 		public CHandle<UI_SceneScreenDef> UI_SceneScreen
 		{
@@ -916,7 +925,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uI_SceneScreen, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("CombatGadget")] 
 		public CHandle<CombatGadgetDataDef> CombatGadget
 		{
@@ -924,7 +933,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _combatGadget, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("Mines")] 
 		public CHandle<MinesDataDef> Mines
 		{
@@ -932,7 +941,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mines, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("DebugData")] 
 		public CHandle<DebugDataDef> DebugData
 		{
@@ -940,7 +949,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugData, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("DeviceDebug")] 
 		public CHandle<DeviceDebugDef> DeviceDebug
 		{
@@ -948,7 +957,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceDebug, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("CustomCentaurBlackboard")] 
 		public CHandle<CustomCentaurBlackboardDef> CustomCentaurBlackboard
 		{
@@ -956,7 +965,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _customCentaurBlackboard, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("CW_MuteArm")] 
 		public CHandle<CW_MuteArmDef> CW_MuteArm
 		{
@@ -964,7 +973,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cW_MuteArm, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("PhotoMode")] 
 		public CHandle<PhotoModeDef> PhotoMode
 		{
@@ -972,7 +981,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _photoMode, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("GameplaySettings")] 
 		public CHandle<GameplaySettingsDef> GameplaySettings
 		{

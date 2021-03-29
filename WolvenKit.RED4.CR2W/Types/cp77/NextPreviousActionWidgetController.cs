@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _moneyStatusAnimName;
 		private CBool _isProcessing;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("defaultContainer")] 
 		public inkWidgetReference DefaultContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultContainer, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("declineContainer")] 
 		public inkWidgetReference DeclineContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _declineContainer, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("moneyStatusAnimName")] 
 		public CName MoneyStatusAnimName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _moneyStatusAnimName, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("isProcessing")] 
 		public CBool IsProcessing
 		{

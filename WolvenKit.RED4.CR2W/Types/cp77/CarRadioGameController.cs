@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkTextWidgetReference _radioStationName;
 		private inkTextWidgetReference _songName;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CUInt32 _stateChangesBlackboardId;
 		private CUInt32 _songNameChangeBlackboardId;
 		private CHandle<gameIBlackboard> _blackboard;
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

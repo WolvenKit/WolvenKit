@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _playContainer;
 		private CBool _isPlaying;
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("playContainer")] 
 		public inkWidgetReference PlayContainer
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playContainer, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("isPlaying")] 
 		public CBool IsPlaying
 		{

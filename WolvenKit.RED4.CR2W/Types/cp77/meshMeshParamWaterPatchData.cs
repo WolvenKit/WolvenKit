@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("nodes", 4096, 16)] 
+		[RED("nodes", 4096)] 
 		public CStatic<CStatic<CFloat>> Nodes
 		{
 			get => GetProperty(ref _nodes);

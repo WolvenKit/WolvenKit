@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isShortGlitchActive;
 		private gameDelayID _shortGlitchDelayID;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("linkedFastTravelPoint")] 
 		public CHandle<gameFastTravelPointData> LinkedFastTravelPoint
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _linkedFastTravelPoint, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("exitNode")] 
 		public NodeRef ExitNode
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exitNode, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("fastTravelComponent")] 
 		public CHandle<FastTravelComponent> FastTravelComponent
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fastTravelComponent, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("lockColiderComponent")] 
 		public CHandle<entIPlacedComponent> LockColiderComponent
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lockColiderComponent, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mappinID, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{

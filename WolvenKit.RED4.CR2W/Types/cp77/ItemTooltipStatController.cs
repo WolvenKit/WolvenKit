@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _statComparedContainer;
 		private inkTextWidgetReference _statComparedValue;
 		private inkImageWidgetReference _arrow;
+		private CEnum<EMeasurementUnit> _measurementUnit;
 
 		[Ordinal(1)] 
 		[RED("statName")] 
@@ -51,6 +52,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _arrow);
 			set => SetProperty(ref _arrow, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("measurementUnit")] 
+		public CEnum<EMeasurementUnit> MeasurementUnit
+		{
+			get => GetProperty(ref _measurementUnit);
+			set => SetProperty(ref _measurementUnit, value);
 		}
 
 		public ItemTooltipStatController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

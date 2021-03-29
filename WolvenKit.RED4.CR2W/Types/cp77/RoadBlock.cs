@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<EAnimationType> _animationType;
 		private CBool _forceEnableLink;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("openingSpeed")] 
 		public CFloat OpeningSpeed
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openingSpeed, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationController, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnection, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RoadBlock> AnimFeature
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeature, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationType, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("forceEnableLink")] 
 		public CBool ForceEnableLink
 		{

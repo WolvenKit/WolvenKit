@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isPercentage;
 		private CBool _roundValue;
 		private CBool _displayPlus;
+		private CBool _inMeters;
+		private CBool _inSeconds;
 
 		[Ordinal(0)] 
 		[RED("value")] 
@@ -69,6 +71,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _displayPlus);
 			set => SetProperty(ref _displayPlus, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("inMeters")] 
+		public CBool InMeters
+		{
+			get => GetProperty(ref _inMeters);
+			set => SetProperty(ref _inMeters, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("inSeconds")] 
+		public CBool InSeconds
+		{
+			get => GetProperty(ref _inSeconds);
+			set => SetProperty(ref _inSeconds, value);
 		}
 
 		public MinimalItemTooltipStatData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

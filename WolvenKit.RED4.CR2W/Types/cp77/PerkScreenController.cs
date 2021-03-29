@@ -19,6 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _rewardsControllerRef;
 		private inkWidgetReference _tooltipsManagerRef;
 		private inkWidgetReference _proficiencyRootRef;
+		private inkTextWidgetReference _proficiencyDescriptionText;
 		private CHandle<PlayerDevelopmentDataManager> _dataManager;
 		private CHandle<AttributeDisplayData> _displayData;
 		private CHandle<TabRadioGroup> _proficiencyRoot;
@@ -127,6 +128,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("proficiencyDescriptionText")] 
+		public inkTextWidgetReference ProficiencyDescriptionText
+		{
+			get => GetProperty(ref _proficiencyDescriptionText);
+			set => SetProperty(ref _proficiencyDescriptionText, value);
+		}
+
+		[Ordinal(14)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
@@ -134,7 +143,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataManager, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("displayData")] 
 		public CHandle<AttributeDisplayData> DisplayData
 		{
@@ -142,7 +151,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _displayData, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("proficiencyRoot")] 
 		public CHandle<TabRadioGroup> ProficiencyRoot
 		{
@@ -150,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _proficiencyRoot, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("widgetMap")] 
 		public CArray<wCHandle<PerkDisplayContainerController>> WidgetMap
 		{
@@ -158,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _widgetMap, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("traitController")] 
 		public CHandle<PerkDisplayContainerController> TraitController
 		{
@@ -166,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _traitController, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("currentIndex")] 
 		public CInt32 CurrentIndex
 		{
@@ -174,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentIndex, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("connectionLines", 45)] 
 		public CArrayFixedSize<CInt32> ConnectionLines
 		{
@@ -182,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _connectionLines, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("levelController")] 
 		public CHandle<StatsProgressController> LevelController
 		{
@@ -190,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _levelController, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("rewardsController")] 
 		public CHandle<StatsStreetCredReward> RewardsController
 		{
@@ -198,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rewardsController, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("tooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{

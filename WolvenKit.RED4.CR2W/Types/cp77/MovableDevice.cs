@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _useWorkspotComponentPosition;
 		private CBool _shouldMoveRight;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("workspotSideName")] 
 		public CName WorkspotSideName
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workspotSideName, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sideTriggerNames, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerComponents, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("offMeshConnectionsToOpenNames")] 
 		public CArray<CName> OffMeshConnectionsToOpenNames
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionsToOpenNames, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("offMeshConnectionsToOpen")] 
 		public CArray<CHandle<AIOffMeshConnectionComponent>> OffMeshConnectionsToOpen
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionsToOpen, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("additionalMeshComponent")] 
 		public CHandle<entMeshComponent> AdditionalMeshComponent
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _additionalMeshComponent, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("UseWorkspotComponentPosition")] 
 		public CBool UseWorkspotComponentPosition
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useWorkspotComponentPosition, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(103)] 
 		[RED("shouldMoveRight")] 
 		public CBool ShouldMoveRight
 		{

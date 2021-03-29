@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameStaticTriggerAreaComponent> _centeredArea;
 		private CHandle<gameStaticTriggerAreaComponent> _leavingArea;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("enteringArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> EnteringArea
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _enteringArea, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("centeredArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> CenteredArea
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _centeredArea, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("leavingArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> LeavingArea
 		{

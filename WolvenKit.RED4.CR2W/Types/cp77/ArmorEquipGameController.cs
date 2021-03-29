@@ -11,10 +11,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkVerticalPanelWidget> _inventoryList;
 		private CArray<wCHandle<gameItemData>> _inventory;
 		private wCHandle<PlayerPuppet> _player;
-		private CHandle<EquipmentSystem> _equipmentSystem;
-		private CHandle<SubCharacterSystem> _subCharacterSystem;
-		private CHandle<gameTransactionSystem> _transactionSystem;
-		private CHandle<CraftingSystem> _craftingSystem;
+		private wCHandle<EquipmentSystem> _equipmentSystem;
+		private wCHandle<SubCharacterSystem> _subCharacterSystem;
+		private wCHandle<gameTransactionSystem> _transactionSystem;
+		private wCHandle<CraftingSystem> _craftingSystem;
 		private wCHandle<inkCanvasWidget> _buttonScrollUp;
 		private wCHandle<inkCanvasWidget> _buttonScrollDn;
 		private wCHandle<inkCanvasWidget> _buttonPlayer;
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("equipmentSystem")] 
-		public CHandle<EquipmentSystem> EquipmentSystem
+		public wCHandle<EquipmentSystem> EquipmentSystem
 		{
 			get => GetProperty(ref _equipmentSystem);
 			set => SetProperty(ref _equipmentSystem, value);
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("subCharacterSystem")] 
-		public CHandle<SubCharacterSystem> SubCharacterSystem
+		public wCHandle<SubCharacterSystem> SubCharacterSystem
 		{
 			get => GetProperty(ref _subCharacterSystem);
 			set => SetProperty(ref _subCharacterSystem, value);
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("transactionSystem")] 
-		public CHandle<gameTransactionSystem> TransactionSystem
+		public wCHandle<gameTransactionSystem> TransactionSystem
 		{
 			get => GetProperty(ref _transactionSystem);
 			set => SetProperty(ref _transactionSystem, value);
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("craftingSystem")] 
-		public CHandle<CraftingSystem> CraftingSystem
+		public wCHandle<CraftingSystem> CraftingSystem
 		{
 			get => GetProperty(ref _craftingSystem);
 			set => SetProperty(ref _craftingSystem, value);

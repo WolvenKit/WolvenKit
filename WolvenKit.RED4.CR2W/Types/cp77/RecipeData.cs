@@ -16,8 +16,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gamedataItem_Record> _id;
 		private CBool _isCraftable;
 		private InventoryItemData _inventoryItem;
-		private CHandle<gameItemData> _gameItemData;
 		private CInt32 _amount;
+		private CBool _isNew;
 
 		[Ordinal(0)] 
 		[RED("label")] 
@@ -92,19 +92,19 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(9)] 
-		[RED("gameItemData")] 
-		public CHandle<gameItemData> GameItemData
-		{
-			get => GetProperty(ref _gameItemData);
-			set => SetProperty(ref _gameItemData, value);
-		}
-
-		[Ordinal(10)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
 			get => GetProperty(ref _amount);
 			set => SetProperty(ref _amount, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("isNew")] 
+		public CBool IsNew
+		{
+			get => GetProperty(ref _isNew);
+			set => SetProperty(ref _isNew, value);
 		}
 
 		public RecipeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entMeshComponent> _canMeshComponent;
 		private CArray<CEnum<EVendorMode>> _vendingBlacklist;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _position, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("canMeshComponent")] 
 		public CHandle<entMeshComponent> CanMeshComponent
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canMeshComponent, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("vendingBlacklist")] 
 		public CArray<CEnum<EVendorMode>> VendingBlacklist
 		{

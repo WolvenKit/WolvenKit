@@ -9,11 +9,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CInt32 _tileX;
 		private CInt32 _tileY;
-		private CInt32 _tileLayer;
 		private DataBuffer _tilesBuffer;
 		private CEnum<NavGenAgentSize> _agentSize;
 		private worldOffMeshConnectionsData _offMeshConnections;
-		private CBool _regenerable;
 
 		[Ordinal(0)] 
 		[RED("tileX")] 
@@ -32,14 +30,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("tileLayer")] 
-		public CInt32 TileLayer
-		{
-			get => GetProperty(ref _tileLayer);
-			set => SetProperty(ref _tileLayer, value);
-		}
-
-		[Ordinal(3)] 
 		[RED("tilesBuffer")] 
 		public DataBuffer TilesBuffer
 		{
@@ -47,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tilesBuffer, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("agentSize")] 
 		public CEnum<NavGenAgentSize> AgentSize
 		{
@@ -55,20 +45,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _agentSize, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("offMeshConnections")] 
 		public worldOffMeshConnectionsData OffMeshConnections
 		{
 			get => GetProperty(ref _offMeshConnections);
 			set => SetProperty(ref _offMeshConnections, value);
-		}
-
-		[Ordinal(6)] 
-		[RED("regenerable")] 
-		public CBool Regenerable
-		{
-			get => GetProperty(ref _regenerable);
-			set => SetProperty(ref _regenerable, value);
 		}
 
 		public worldNavigationTileData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

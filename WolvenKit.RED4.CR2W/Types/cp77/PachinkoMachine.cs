@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CName _distractionFXName;
 
-		[Ordinal(98)] 
+		[Ordinal(103)] 
 		[RED("distractionFXName")] 
 		public CName DistractionFXName
 		{

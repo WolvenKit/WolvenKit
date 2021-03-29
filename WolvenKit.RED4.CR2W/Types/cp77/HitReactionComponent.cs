@@ -71,7 +71,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _deathStimName;
 		private CInt32 _meleeHitCount;
 		private CInt32 _strongMeleeHitCount;
-		private CInt32 _maxHitChain;
+		private CInt32 _maxHitChainForMelee;
+		private CInt32 _maxHitChainForRanged;
 		private CBool _isAlive;
 		private CFloat _frameDamageHealthFactor;
 		private CArrayFixedSize<CFloat> _hitCountData;
@@ -595,14 +596,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(69)] 
-		[RED("maxHitChain")] 
-		public CInt32 MaxHitChain
+		[RED("maxHitChainForMelee")] 
+		public CInt32 MaxHitChainForMelee
 		{
-			get => GetProperty(ref _maxHitChain);
-			set => SetProperty(ref _maxHitChain, value);
+			get => GetProperty(ref _maxHitChainForMelee);
+			set => SetProperty(ref _maxHitChainForMelee, value);
 		}
 
 		[Ordinal(70)] 
+		[RED("maxHitChainForRanged")] 
+		public CInt32 MaxHitChainForRanged
+		{
+			get => GetProperty(ref _maxHitChainForRanged);
+			set => SetProperty(ref _maxHitChainForRanged, value);
+		}
+
+		[Ordinal(71)] 
 		[RED("isAlive")] 
 		public CBool IsAlive
 		{
@@ -610,7 +619,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isAlive, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("frameDamageHealthFactor")] 
 		public CFloat FrameDamageHealthFactor
 		{
@@ -618,7 +627,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frameDamageHealthFactor, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(73)] 
 		[RED("hitCountData", 100)] 
 		public CArrayFixedSize<CFloat> HitCountData
 		{
@@ -626,7 +635,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitCountData, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(74)] 
 		[RED("hitCountArrayEnd")] 
 		public CInt32 HitCountArrayEnd
 		{
@@ -634,7 +643,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitCountArrayEnd, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("hitCountArrayCurrent")] 
 		public CInt32 HitCountArrayCurrent
 		{
@@ -642,7 +651,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitCountArrayCurrent, value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("indicatorEnabledBlackboardId")] 
 		public CUInt32 IndicatorEnabledBlackboardId
 		{
@@ -650,7 +659,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicatorEnabledBlackboardId, value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("hitIndicatorEnabled")] 
 		public CBool HitIndicatorEnabled
 		{
@@ -658,7 +667,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitIndicatorEnabled, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("hasBeenWounded")] 
 		public CBool HasBeenWounded
 		{
@@ -666,7 +675,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasBeenWounded, value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("hitReactionData")] 
 		public CHandle<animAnimFeature_HitReactionsData> HitReactionData
 		{

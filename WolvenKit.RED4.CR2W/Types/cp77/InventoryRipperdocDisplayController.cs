@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _ownedBackground;
 		private inkWidgetReference _ownedSign;
 
-		[Ordinal(78)] 
+		[Ordinal(80)] 
 		[RED("ownedBackground")] 
 		public inkWidgetReference OwnedBackground
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ownedBackground, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(81)] 
 		[RED("ownedSign")] 
 		public inkWidgetReference OwnedSign
 		{

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<entIPlacedComponent> _effectComponent;
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("effectComponent")] 
 		public CHandle<entIPlacedComponent> EffectComponent
 		{

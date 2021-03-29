@@ -8,10 +8,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class entCorpseParameter : entEntityParameter
 	{
 		private CUInt32 _lod;
-		private CArray<QsTransform> _bones;
-		private CArray<raRef<animRig>> _rigs;
 		private CArray<QsTransform> _bakedPose;
 		private CArray<CName> _bakedBoneNames;
+		private raRef<animRig> _baseRig;
 
 		[Ordinal(0)] 
 		[RED("lod")] 
@@ -22,22 +21,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("bones")] 
-		public CArray<QsTransform> Bones
-		{
-			get => GetProperty(ref _bones);
-			set => SetProperty(ref _bones, value);
-		}
-
-		[Ordinal(2)] 
-		[RED("rigs")] 
-		public CArray<raRef<animRig>> Rigs
-		{
-			get => GetProperty(ref _rigs);
-			set => SetProperty(ref _rigs, value);
-		}
-
-		[Ordinal(3)] 
 		[RED("bakedPose")] 
 		public CArray<QsTransform> BakedPose
 		{
@@ -45,12 +28,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bakedPose, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("bakedBoneNames")] 
 		public CArray<CName> BakedBoneNames
 		{
 			get => GetProperty(ref _bakedBoneNames);
 			set => SetProperty(ref _bakedBoneNames, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("baseRig")] 
+		public raRef<animRig> BaseRig
+		{
+			get => GetProperty(ref _baseRig);
+			set => SetProperty(ref _baseRig, value);
 		}
 
 		public entCorpseParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

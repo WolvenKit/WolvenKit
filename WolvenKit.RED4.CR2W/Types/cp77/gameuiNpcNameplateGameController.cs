@@ -17,8 +17,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<wCHandle<gameuiMappinBaseController>> _cachedMappinControllers;
 		private CBool _visualControllerNeedsMappinsUpdate;
 		private CHandle<inkScreenProjection> _nameplateProjection;
-		private CHandle<inkScreenProjection> _nameplateProjectionCloseOffset;
-		private wCHandle<gameObject> _bufferedNPC;
+		private CHandle<inkScreenProjection> _nameplateProjectionCloseDistance;
+		private CHandle<inkScreenProjection> _nameplateProjectionDevice;
+		private CHandle<inkScreenProjection> _nameplateProjectionDeviceCloseDistance;
+		private wCHandle<gameObject> _bufferedGameObject;
 		private CHandle<gamedataCharacter_Record> _bufferedCharacterRecord;
 		private CBool _isScanning;
 		private CBool _isNewNPC;
@@ -34,6 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _bbBuffsList;
 		private CUInt32 _bbDebuffsList;
 		private CUInt32 _bbHighLevelStateID;
+		private CUInt32 _bbNPCNamesEnabledID;
 		private CUInt32 _visionStateBlackboardId;
 		private CUInt32 _zoomStateBlackboardId;
 		private CUInt32 _playerZonesBlackboardID;
@@ -42,6 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _damagePreviewBlackboardID;
 		private CHandle<gameIBlackboard> _uiBlackboardTargetNPC;
 		private CHandle<gameIBlackboard> _uiBlackboardInteractions;
+		private CHandle<gameIBlackboard> _interfaceOptionsBlackboard;
 
 		[Ordinal(9)] 
 		[RED("projection")] 
@@ -124,22 +128,38 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(19)] 
-		[RED("nameplateProjectionCloseOffset")] 
-		public CHandle<inkScreenProjection> NameplateProjectionCloseOffset
+		[RED("nameplateProjectionCloseDistance")] 
+		public CHandle<inkScreenProjection> NameplateProjectionCloseDistance
 		{
-			get => GetProperty(ref _nameplateProjectionCloseOffset);
-			set => SetProperty(ref _nameplateProjectionCloseOffset, value);
+			get => GetProperty(ref _nameplateProjectionCloseDistance);
+			set => SetProperty(ref _nameplateProjectionCloseDistance, value);
 		}
 
 		[Ordinal(20)] 
-		[RED("bufferedNPC")] 
-		public wCHandle<gameObject> BufferedNPC
+		[RED("nameplateProjectionDevice")] 
+		public CHandle<inkScreenProjection> NameplateProjectionDevice
 		{
-			get => GetProperty(ref _bufferedNPC);
-			set => SetProperty(ref _bufferedNPC, value);
+			get => GetProperty(ref _nameplateProjectionDevice);
+			set => SetProperty(ref _nameplateProjectionDevice, value);
 		}
 
 		[Ordinal(21)] 
+		[RED("nameplateProjectionDeviceCloseDistance")] 
+		public CHandle<inkScreenProjection> NameplateProjectionDeviceCloseDistance
+		{
+			get => GetProperty(ref _nameplateProjectionDeviceCloseDistance);
+			set => SetProperty(ref _nameplateProjectionDeviceCloseDistance, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("bufferedGameObject")] 
+		public wCHandle<gameObject> BufferedGameObject
+		{
+			get => GetProperty(ref _bufferedGameObject);
+			set => SetProperty(ref _bufferedGameObject, value);
+		}
+
+		[Ordinal(23)] 
 		[RED("bufferedCharacterRecord")] 
 		public CHandle<gamedataCharacter_Record> BufferedCharacterRecord
 		{
@@ -147,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bufferedCharacterRecord, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("isScanning")] 
 		public CBool IsScanning
 		{
@@ -155,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isScanning, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("isNewNPC")] 
 		public CBool IsNewNPC
 		{
@@ -163,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isNewNPC, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("attitude")] 
 		public CEnum<EAIAttitude> Attitude
 		{
@@ -171,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attitude, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("zoom")] 
 		public CFloat Zoom
 		{
@@ -179,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _zoom, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
@@ -187,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentHealth, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
@@ -195,7 +215,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maximumHealth, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("c_DisplayRange")] 
 		public CFloat C_DisplayRange
 		{
@@ -203,7 +223,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_DisplayRange, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("c_MaxDisplayRange")] 
 		public CFloat C_MaxDisplayRange
 		{
@@ -211,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_MaxDisplayRange, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("c_MaxDisplayRangeNotAggressive")] 
 		public CFloat C_MaxDisplayRangeNotAggressive
 		{
@@ -219,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_MaxDisplayRangeNotAggressive, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("c_DisplayRangeNotAggressive")] 
 		public CFloat C_DisplayRangeNotAggressive
 		{
@@ -227,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_DisplayRangeNotAggressive, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("bbNameplateData")] 
 		public CUInt32 BbNameplateData
 		{
@@ -235,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bbNameplateData, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("bbBuffsList")] 
 		public CUInt32 BbBuffsList
 		{
@@ -243,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bbBuffsList, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("bbDebuffsList")] 
 		public CUInt32 BbDebuffsList
 		{
@@ -251,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bbDebuffsList, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("bbHighLevelStateID")] 
 		public CUInt32 BbHighLevelStateID
 		{
@@ -259,7 +279,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bbHighLevelStateID, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
+		[RED("bbNPCNamesEnabledID")] 
+		public CUInt32 BbNPCNamesEnabledID
+		{
+			get => GetProperty(ref _bbNPCNamesEnabledID);
+			set => SetProperty(ref _bbNPCNamesEnabledID, value);
+		}
+
+		[Ordinal(39)] 
 		[RED("VisionStateBlackboardId")] 
 		public CUInt32 VisionStateBlackboardId
 		{
@@ -267,7 +295,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visionStateBlackboardId, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("ZoomStateBlackboardId")] 
 		public CUInt32 ZoomStateBlackboardId
 		{
@@ -275,7 +303,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _zoomStateBlackboardId, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("playerZonesBlackboardID")] 
 		public CUInt32 PlayerZonesBlackboardID
 		{
@@ -283,7 +311,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerZonesBlackboardID, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(42)] 
 		[RED("playerCombatBlackboardID")] 
 		public CUInt32 PlayerCombatBlackboardID
 		{
@@ -291,7 +319,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerCombatBlackboardID, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("playerAimStatusBlackboardID")] 
 		public CUInt32 PlayerAimStatusBlackboardID
 		{
@@ -299,7 +327,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerAimStatusBlackboardID, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("damagePreviewBlackboardID")] 
 		public CUInt32 DamagePreviewBlackboardID
 		{
@@ -307,7 +335,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _damagePreviewBlackboardID, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("uiBlackboardTargetNPC")] 
 		public CHandle<gameIBlackboard> UiBlackboardTargetNPC
 		{
@@ -315,12 +343,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiBlackboardTargetNPC, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("uiBlackboardInteractions")] 
 		public CHandle<gameIBlackboard> UiBlackboardInteractions
 		{
 			get => GetProperty(ref _uiBlackboardInteractions);
 			set => SetProperty(ref _uiBlackboardInteractions, value);
+		}
+
+		[Ordinal(47)] 
+		[RED("interfaceOptionsBlackboard")] 
+		public CHandle<gameIBlackboard> InterfaceOptionsBlackboard
+		{
+			get => GetProperty(ref _interfaceOptionsBlackboard);
+			set => SetProperty(ref _interfaceOptionsBlackboard, value);
 		}
 
 		public gameuiNpcNameplateGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

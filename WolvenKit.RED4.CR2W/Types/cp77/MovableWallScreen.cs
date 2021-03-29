@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _animationLength;
 		private CHandle<AnimFeature_SimpleDevice> _animFeature;
 
-		[Ordinal(135)] 
+		[Ordinal(138)] 
 		[RED("animationLength")] 
 		public CFloat AnimationLength
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationLength, value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(139)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{

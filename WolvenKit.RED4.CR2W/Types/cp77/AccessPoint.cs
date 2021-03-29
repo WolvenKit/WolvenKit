@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<BreachViewTimeListener> _breachViewTimeListener;
 		private CUInt32 _upload_program_listener_id;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("diode0")] 
 		public CHandle<gameLightComponent> Diode0
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _diode0, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("diode1")] 
 		public CHandle<gameLightComponent> Diode1
 		{
@@ -35,7 +35,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _diode1, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("diode2")] 
 		public CHandle<gameLightComponent> Diode2
 		{
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _diode2, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("diode3")] 
 		public CHandle<gameLightComponent> Diode3
 		{
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _diode3, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("elapsedTime")] 
 		public CFloat ElapsedTime
 		{
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _elapsedTime, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("turnOnLight")] 
 		public CBool TurnOnLight
 		{
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _turnOnLight, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("networkName")] 
 		public CString NetworkName
 		{
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _networkName, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(103)] 
 		[RED("isPlayerInBreachView")] 
 		public CBool IsPlayerInBreachView
 		{
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPlayerInBreachView, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(104)] 
 		[RED("isRevealed")] 
 		public CBool IsRevealed
 		{
@@ -91,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isRevealed, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(105)] 
 		[RED("breachViewTimeListener")] 
 		public CHandle<BreachViewTimeListener> BreachViewTimeListener
 		{
@@ -99,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _breachViewTimeListener, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(106)] 
 		[RED("upload_program_listener_id")] 
 		public CUInt32 Upload_program_listener_id
 		{

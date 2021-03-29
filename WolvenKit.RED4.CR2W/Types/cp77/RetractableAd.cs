@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entIComponent> _advUiComponent;
 		private CBool _isPartOfTheTrap;
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnection, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areaComponent, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(103)] 
 		[RED("advUiComponent")] 
 		public CHandle<entIComponent> AdvUiComponent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _advUiComponent, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(104)] 
 		[RED("isPartOfTheTrap")] 
 		public CBool IsPartOfTheTrap
 		{

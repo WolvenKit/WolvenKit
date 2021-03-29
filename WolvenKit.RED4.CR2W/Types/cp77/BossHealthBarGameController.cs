@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<BossHealthStatListener> _statListener;
 		private wCHandle<NPCPuppet> _boss;
 		private wCHandle<NameplateBarLogicController> _healthController;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CHandle<inkanimProxy> _foldAnimation;
 		private CArray<wCHandle<NPCPuppet>> _bossPuppets;
 
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

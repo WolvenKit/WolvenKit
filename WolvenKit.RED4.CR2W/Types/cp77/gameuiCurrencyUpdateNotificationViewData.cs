@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class CurrencyUpdateNotificationViewData : gameuiGenericNotificationViewData
+	public class gameuiCurrencyUpdateNotificationViewData : gameuiGenericNotificationViewData
 	{
 		private CInt32 _diff;
 		private CUInt32 _total;
@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _total, value);
 		}
 
-		public CurrencyUpdateNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameuiCurrencyUpdateNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,18 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TransactionRequest : MarketSystemRequest
 	{
+		private CInt32 _requestID;
 		private CArray<TransactionRequestData> _items;
 
 		[Ordinal(2)] 
+		[RED("requestID")] 
+		public CInt32 RequestID
+		{
+			get => GetProperty(ref _requestID);
+			set => SetProperty(ref _requestID, value);
+		}
+
+		[Ordinal(3)] 
 		[RED("items")] 
 		public CArray<TransactionRequestData> Items
 		{

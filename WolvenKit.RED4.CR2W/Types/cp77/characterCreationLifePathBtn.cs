@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _label;
 		private inkVideoWidgetReference _video;
 		private CHandle<inkanimProxy> _animationProxy;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
 		private CString _localizedText;
 
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
 		private CHandle<gameTransactionSystem> _transactionSystem;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CHandle<inkanimProxy> _animProxy;
 		private CHandle<inkanimDefinition> _alpha_fadein;
 		private inkanimPlaybackOptions _animOptions;
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

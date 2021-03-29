@@ -15,7 +15,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gamebbScriptDefinition> _braindanceFPP;
 		private CHandle<gamebbScriptDefinition> _braindanceActive;
 		private CHandle<gamebbScriptDefinition> _veryHardLanding;
-		private CHandle<gamebbScriptDefinition> _noScanningRestriction;
 
 		[Ordinal(0)] 
 		[RED("kerenzikov")] 
@@ -79,14 +78,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _veryHardLanding);
 			set => SetProperty(ref _veryHardLanding, value);
-		}
-
-		[Ordinal(8)] 
-		[RED("noScanningRestriction")] 
-		public CHandle<gamebbScriptDefinition> NoScanningRestriction
-		{
-			get => GetProperty(ref _noScanningRestriction);
-			set => SetProperty(ref _noScanningRestriction, value);
 		}
 
 		public PlayerVisionModeControllerBBIds(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _currentYawModifier;
 		private CFloat _currentPitchModifier;
 
-		[Ordinal(187)] 
+		[Ordinal(190)] 
 		[RED("virtualCam")] 
 		public CHandle<entVirtualCameraComponent> VirtualCam
 		{
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _virtualCam, value);
 		}
 
-		[Ordinal(188)] 
+		[Ordinal(191)] 
 		[RED("cameraHead")] 
 		public CHandle<entIComponent> CameraHead
 		{
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cameraHead, value);
 		}
 
-		[Ordinal(189)] 
+		[Ordinal(192)] 
 		[RED("cameraHeadPhysics")] 
 		public CHandle<entIComponent> CameraHeadPhysics
 		{
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cameraHeadPhysics, value);
 		}
 
-		[Ordinal(190)] 
+		[Ordinal(193)] 
 		[RED("verticalDecal1")] 
 		public CHandle<entIComponent> VerticalDecal1
 		{
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _verticalDecal1, value);
 		}
 
-		[Ordinal(191)] 
+		[Ordinal(194)] 
 		[RED("verticalDecal2")] 
 		public CHandle<entIComponent> VerticalDecal2
 		{
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _verticalDecal2, value);
 		}
 
-		[Ordinal(192)] 
+		[Ordinal(195)] 
 		[RED("meshDestrSupport")] 
 		public CBool MeshDestrSupport
 		{
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshDestrSupport, value);
 		}
 
-		[Ordinal(193)] 
+		[Ordinal(196)] 
 		[RED("shouldRotate")] 
 		public CBool ShouldRotate
 		{
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldRotate, value);
 		}
 
-		[Ordinal(194)] 
+		[Ordinal(197)] 
 		[RED("canStreamVideo")] 
 		public CBool CanStreamVideo
 		{
@@ -89,7 +89,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canStreamVideo, value);
 		}
 
-		[Ordinal(195)] 
+		[Ordinal(198)] 
 		[RED("canDetectIntruders")] 
 		public CBool CanDetectIntruders
 		{
@@ -97,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canDetectIntruders, value);
 		}
 
-		[Ordinal(196)] 
+		[Ordinal(199)] 
 		[RED("currentAngle")] 
 		public CFloat CurrentAngle
 		{
@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentAngle, value);
 		}
 
-		[Ordinal(197)] 
+		[Ordinal(200)] 
 		[RED("rotateLeft")] 
 		public CBool RotateLeft
 		{
@@ -113,7 +113,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rotateLeft, value);
 		}
 
-		[Ordinal(198)] 
+		[Ordinal(201)] 
 		[RED("targetPosition")] 
 		public Vector4 TargetPosition
 		{
@@ -121,7 +121,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetPosition, value);
 		}
 
-		[Ordinal(199)] 
+		[Ordinal(202)] 
 		[RED("factOnFeedReceived")] 
 		public CName FactOnFeedReceived
 		{
@@ -129,7 +129,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _factOnFeedReceived, value);
 		}
 
-		[Ordinal(200)] 
+		[Ordinal(203)] 
 		[RED("questFactOnDetection")] 
 		public CName QuestFactOnDetection
 		{
@@ -137,7 +137,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _questFactOnDetection, value);
 		}
 
-		[Ordinal(201)] 
+		[Ordinal(204)] 
 		[RED("lookAtEvent")] 
 		public CHandle<entLookAtAddEvent> LookAtEvent
 		{
@@ -145,7 +145,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lookAtEvent, value);
 		}
 
-		[Ordinal(202)] 
+		[Ordinal(205)] 
 		[RED("currentYawModifier")] 
 		public CFloat CurrentYawModifier
 		{
@@ -153,7 +153,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentYawModifier, value);
 		}
 
-		[Ordinal(203)] 
+		[Ordinal(206)] 
 		[RED("currentPitchModifier")] 
 		public CFloat CurrentPitchModifier
 		{

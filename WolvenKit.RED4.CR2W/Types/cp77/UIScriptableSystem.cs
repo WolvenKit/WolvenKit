@@ -13,6 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _vendorPanelPlayerActiveSorting;
 		private CInt32 _vendorPanelVendorActiveSorting;
 		private CArray<gameItemID> _newItems;
+		private CBool _comparisionTooltipDisabled;
 		private wCHandle<PlayerPuppet> _attachedPlayer;
 		private CHandle<UIScriptableInventoryListenerCallback> _inventoryListenerCallback;
 		private CHandle<gameInventoryScriptListener> _inventoryListener;
@@ -66,6 +67,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("comparisionTooltipDisabled")] 
+		public CBool ComparisionTooltipDisabled
+		{
+			get => GetProperty(ref _comparisionTooltipDisabled);
+			set => SetProperty(ref _comparisionTooltipDisabled, value);
+		}
+
+		[Ordinal(7)] 
 		[RED("attachedPlayer")] 
 		public wCHandle<PlayerPuppet> AttachedPlayer
 		{
@@ -73,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attachedPlayer, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("inventoryListenerCallback")] 
 		public CHandle<UIScriptableInventoryListenerCallback> InventoryListenerCallback
 		{
@@ -81,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryListenerCallback, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{

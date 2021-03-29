@@ -8,6 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CraftBook : IScriptable
 	{
 		private CArray<ItemRecipe> _knownRecipes;
+		private CArray<TweakDBID> _newRecipes;
 		private wCHandle<gameObject> _owner;
 
 		[Ordinal(0)] 
@@ -19,6 +20,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("newRecipes")] 
+		public CArray<TweakDBID> NewRecipes
+		{
+			get => GetProperty(ref _newRecipes);
+			set => SetProperty(ref _newRecipes, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{

@@ -15,6 +15,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameIBlackboard> _braindanceBB;
 		private CUInt32 _bbWeaponEventId;
 		private CUInt32 _bBID_BraindanceActive;
+		private CUInt32 _scannerscannerObjectStatsId;
+		private CUInt32 _scannerScannablesId;
+		private CUInt32 _scannerCurrentProgressId;
+		private CUInt32 _scannerCurrentStateId;
+		private CUInt32 _scannerScannedObjectId;
 		private scannerDataStructure _scannerData;
 		private GameObjectScanStats _curObj;
 		private wCHandle<inkCompoundWidget> _scannerBorderMain;
@@ -108,6 +113,46 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("scannerscannerObjectStatsId")] 
+		public CUInt32 ScannerscannerObjectStatsId
+		{
+			get => GetProperty(ref _scannerscannerObjectStatsId);
+			set => SetProperty(ref _scannerscannerObjectStatsId, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("scannerScannablesId")] 
+		public CUInt32 ScannerScannablesId
+		{
+			get => GetProperty(ref _scannerScannablesId);
+			set => SetProperty(ref _scannerScannablesId, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("scannerCurrentProgressId")] 
+		public CUInt32 ScannerCurrentProgressId
+		{
+			get => GetProperty(ref _scannerCurrentProgressId);
+			set => SetProperty(ref _scannerCurrentProgressId, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("scannerCurrentStateId")] 
+		public CUInt32 ScannerCurrentStateId
+		{
+			get => GetProperty(ref _scannerCurrentStateId);
+			set => SetProperty(ref _scannerCurrentStateId, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("scannerScannedObjectId")] 
+		public CUInt32 ScannerScannedObjectId
+		{
+			get => GetProperty(ref _scannerScannedObjectId);
+			set => SetProperty(ref _scannerScannedObjectId, value);
+		}
+
+		[Ordinal(22)] 
 		[RED("scannerData")] 
 		public scannerDataStructure ScannerData
 		{
@@ -115,7 +160,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerData, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(23)] 
 		[RED("curObj")] 
 		public GameObjectScanStats CurObj
 		{
@@ -123,7 +168,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _curObj, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(24)] 
 		[RED("scannerBorderMain")] 
 		public wCHandle<inkCompoundWidget> ScannerBorderMain
 		{
@@ -131,7 +176,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerBorderMain, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(25)] 
 		[RED("scannerBorderController")] 
 		public wCHandle<scannerBorderLogicController> ScannerBorderController
 		{
@@ -139,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerBorderController, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(26)] 
 		[RED("scannerProgressMain")] 
 		public wCHandle<inkCompoundWidget> ScannerProgressMain
 		{
@@ -147,7 +192,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerProgressMain, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(27)] 
 		[RED("scannerFullScreenOverlay")] 
 		public wCHandle<inkWidget> ScannerFullScreenOverlay
 		{
@@ -155,7 +200,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerFullScreenOverlay, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(28)] 
 		[RED("center_frame")] 
 		public wCHandle<inkImageWidget> Center_frame
 		{
@@ -163,7 +208,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _center_frame, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(29)] 
 		[RED("squares")] 
 		public CArray<wCHandle<inkImageWidget>> Squares
 		{
@@ -171,7 +216,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _squares, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(30)] 
 		[RED("squaresFilled")] 
 		public CArray<wCHandle<inkImageWidget>> SquaresFilled
 		{
@@ -179,7 +224,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _squaresFilled, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(31)] 
 		[RED("isUnarmed")] 
 		public CBool IsUnarmed
 		{
@@ -187,7 +232,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isUnarmed, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(32)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -195,7 +240,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isEnabled, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(33)] 
 		[RED("isFinish")] 
 		public CBool IsFinish
 		{
@@ -203,7 +248,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isFinish, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(34)] 
 		[RED("isScanned")] 
 		public CBool IsScanned
 		{
@@ -211,7 +256,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isScanned, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(35)] 
 		[RED("isBraindanceActive")] 
 		public CBool IsBraindanceActive
 		{
@@ -219,7 +264,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isBraindanceActive, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(36)] 
 		[RED("border_show")] 
 		public CHandle<inkanimDefinition> Border_show
 		{
@@ -227,7 +272,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _border_show, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(37)] 
 		[RED("center_show")] 
 		public CHandle<inkanimDefinition> Center_show
 		{
@@ -235,7 +280,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _center_show, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(38)] 
 		[RED("center_hide")] 
 		public CHandle<inkanimDefinition> Center_hide
 		{
@@ -243,7 +288,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _center_hide, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(39)] 
 		[RED("dots_show")] 
 		public CHandle<inkanimDefinition> Dots_show
 		{
@@ -251,7 +296,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dots_show, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(40)] 
 		[RED("dots_hide")] 
 		public CHandle<inkanimDefinition> Dots_hide
 		{
@@ -259,7 +304,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dots_hide, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(41)] 
 		[RED("BorderAnimProxy")] 
 		public CHandle<inkanimProxy> BorderAnimProxy
 		{
@@ -267,7 +312,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _borderAnimProxy, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(42)] 
 		[RED("soundFinishedOn")] 
 		public CName SoundFinishedOn
 		{
@@ -275,7 +320,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soundFinishedOn, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(43)] 
 		[RED("soundFinishedOff")] 
 		public CName SoundFinishedOff
 		{
@@ -283,7 +328,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soundFinishedOff, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(44)] 
 		[RED("playerSpawnedCallbackID")] 
 		public CUInt32 PlayerSpawnedCallbackID
 		{
@@ -291,7 +336,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerSpawnedCallbackID, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(45)] 
 		[RED("BBID_IsEnabledChange")] 
 		public CUInt32 BBID_IsEnabledChange
 		{
@@ -299,7 +344,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bBID_IsEnabledChange, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(46)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -307,7 +352,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameInstance, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(47)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{
@@ -315,7 +360,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShown, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(48)] 
 		[RED("playerPuppet")] 
 		public wCHandle<gameObject> PlayerPuppet
 		{

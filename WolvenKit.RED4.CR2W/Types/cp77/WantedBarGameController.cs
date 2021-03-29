@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkanimProxy> _bountyAnimProxy;
 		private inkanimPlaybackOptions _animOptionsLoop;
 		private CInt32 _wantedLevel;
-		private CHandle<inkWidget> _rootWidget;
+		private wCHandle<inkWidget> _rootWidget;
 		private CFloat _wANTED_TIER_1;
 		private CFloat _wANTED_MIN;
 
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("rootWidget")] 
-		public CHandle<inkWidget> RootWidget
+		public wCHandle<inkWidget> RootWidget
 		{
 			get => GetProperty(ref _rootWidget);
 			set => SetProperty(ref _rootWidget, value);

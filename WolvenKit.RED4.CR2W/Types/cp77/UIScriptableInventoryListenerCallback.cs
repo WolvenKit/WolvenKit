@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UIScriptableInventoryListenerCallback : gameInventoryScriptCallback
 	{
-		private CHandle<UIScriptableSystem> _uiScriptableSystem;
+		private wCHandle<UIScriptableSystem> _uiScriptableSystem;
 
 		[Ordinal(1)] 
 		[RED("uiScriptableSystem")] 
-		public CHandle<UIScriptableSystem> UiScriptableSystem
+		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
 			get => GetProperty(ref _uiScriptableSystem);
 			set => SetProperty(ref _uiScriptableSystem, value);

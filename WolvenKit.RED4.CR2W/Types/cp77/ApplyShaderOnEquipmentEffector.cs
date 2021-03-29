@@ -7,39 +7,21 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApplyShaderOnEquipmentEffector : gameEffector
 	{
-		private CArray<wCHandle<gameItemObject>> _items;
-		private CArray<CHandle<gameEffectInstance>> _effects;
-		private CString _overrideMaterialName;
+		private CName _overrideMaterialName;
 		private CName _overrideMaterialTag;
 		private CHandle<gameEffectInstance> _effectInstance;
 		private wCHandle<gameObject> _owner;
 		private CHandle<gameEffectInstance> _ownerEffect;
 
 		[Ordinal(0)] 
-		[RED("items")] 
-		public CArray<wCHandle<gameItemObject>> Items
-		{
-			get => GetProperty(ref _items);
-			set => SetProperty(ref _items, value);
-		}
-
-		[Ordinal(1)] 
-		[RED("effects")] 
-		public CArray<CHandle<gameEffectInstance>> Effects
-		{
-			get => GetProperty(ref _effects);
-			set => SetProperty(ref _effects, value);
-		}
-
-		[Ordinal(2)] 
 		[RED("overrideMaterialName")] 
-		public CString OverrideMaterialName
+		public CName OverrideMaterialName
 		{
 			get => GetProperty(ref _overrideMaterialName);
 			set => SetProperty(ref _overrideMaterialName, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(1)] 
 		[RED("overrideMaterialTag")] 
 		public CName OverrideMaterialTag
 		{
@@ -47,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _overrideMaterialTag, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("effectInstance")] 
 		public CHandle<gameEffectInstance> EffectInstance
 		{
@@ -55,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectInstance, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("owner")] 
 		public wCHandle<gameObject> Owner
 		{
@@ -63,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _owner, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("ownerEffect")] 
 		public CHandle<gameEffectInstance> OwnerEffect
 		{

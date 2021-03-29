@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _damagePercentValue;
 		private entEntityID _targetID;
 		private Vector4 _targetPosition;
+		private CBool _isTargetAlive;
+		private CBool _isTargetPrevention;
 
 		[Ordinal(0)] 
 		[RED("isInternal")] 
@@ -42,6 +44,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _targetPosition);
 			set => SetProperty(ref _targetPosition, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("isTargetAlive")] 
+		public CBool IsTargetAlive
+		{
+			get => GetProperty(ref _isTargetAlive);
+			set => SetProperty(ref _isTargetAlive, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("isTargetPrevention")] 
+		public CBool IsTargetPrevention
+		{
+			get => GetProperty(ref _isTargetPrevention);
+			set => SetProperty(ref _isTargetPrevention, value);
 		}
 
 		public PreventionDamageRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isShortGlitchActive;
 		private gameDelayID _shortGlitchDelayID;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stations, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("startingStation")] 
 		public CInt32 StartingStation
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _startingStation, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInteractive, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{

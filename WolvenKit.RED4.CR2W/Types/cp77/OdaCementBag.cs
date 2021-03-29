@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _onCooldown;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("onCooldown")] 
 		public CBool OnCooldown
 		{

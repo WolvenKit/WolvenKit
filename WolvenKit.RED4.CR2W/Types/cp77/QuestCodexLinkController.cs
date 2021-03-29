@@ -7,14 +7,23 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuestCodexLinkController : BaseCodexLinkController
 	{
-		private CHandle<gameJournalCodexEntry> _codexEntry;
+		private inkWidgetReference _linkLabelContainer;
+		private CHandle<gameJournalEntry> _journalEntry;
 
-		[Ordinal(4)] 
-		[RED("codexEntry")] 
-		public CHandle<gameJournalCodexEntry> CodexEntry
+		[Ordinal(5)] 
+		[RED("linkLabelContainer")] 
+		public inkWidgetReference LinkLabelContainer
 		{
-			get => GetProperty(ref _codexEntry);
-			set => SetProperty(ref _codexEntry, value);
+			get => GetProperty(ref _linkLabelContainer);
+			set => SetProperty(ref _linkLabelContainer, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("journalEntry")] 
+		public CHandle<gameJournalEntry> JournalEntry
+		{
+			get => GetProperty(ref _journalEntry);
+			set => SetProperty(ref _journalEntry, value);
 		}
 
 		public QuestCodexLinkController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

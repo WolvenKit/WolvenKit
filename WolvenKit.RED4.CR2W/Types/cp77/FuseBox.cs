@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CHandle<entIPlacedComponent>> _componentsON;
 		private CArray<CHandle<entIPlacedComponent>> _componentsOFF;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shortGlitchDelayID, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("numberOfComponentsToON")] 
 		public CInt32 NumberOfComponentsToON
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numberOfComponentsToON, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("numberOfComponentsToOFF")] 
 		public CInt32 NumberOfComponentsToOFF
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numberOfComponentsToOFF, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("indexesOfComponentsToOFF")] 
 		public CArray<CInt32> IndexesOfComponentsToOFF
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indexesOfComponentsToOFF, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mesh, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("componentsON")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsON
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _componentsON, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(103)] 
 		[RED("componentsOFF")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsOFF
 		{

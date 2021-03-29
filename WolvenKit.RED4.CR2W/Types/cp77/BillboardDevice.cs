@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isShortGlitchActive;
 		private gameDelayID _shortGlitchDelayID;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("advUiComponent")] 
 		public CHandle<entIComponent> AdvUiComponent
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _advUiComponent, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{

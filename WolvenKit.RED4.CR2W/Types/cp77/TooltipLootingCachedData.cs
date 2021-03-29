@@ -9,7 +9,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<gameItemData> _externalItemData;
 		private wCHandle<gamedataItem_Record> _itemRecord;
-		private wCHandle<gameItemData> _comparisionItemData;
+		private wCHandle<gameItemData> _comparisonItemData;
+		private gameItemID _comparisonItemId;
 		private CHandle<MinimalLootingListItemData> _lootingData;
 
 		[Ordinal(0)] 
@@ -29,14 +30,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("comparisionItemData")] 
-		public wCHandle<gameItemData> ComparisionItemData
+		[RED("comparisonItemData")] 
+		public wCHandle<gameItemData> ComparisonItemData
 		{
-			get => GetProperty(ref _comparisionItemData);
-			set => SetProperty(ref _comparisionItemData, value);
+			get => GetProperty(ref _comparisonItemData);
+			set => SetProperty(ref _comparisonItemData, value);
 		}
 
 		[Ordinal(3)] 
+		[RED("comparisonItemId")] 
+		public gameItemID ComparisonItemId
+		{
+			get => GetProperty(ref _comparisonItemId);
+			set => SetProperty(ref _comparisonItemId, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("lootingData")] 
 		public CHandle<MinimalLootingListItemData> LootingData
 		{

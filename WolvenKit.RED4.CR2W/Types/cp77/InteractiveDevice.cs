@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isPlayerAround;
 		private CBool _disableAreaIndicatorDelayActive;
 		private CHandle<gameObjectActionsCallbackController> _objectActionsCallbackCtrl;
+		private CArray<Vector4> _investigationPositionsArray;
+		private wCHandle<gameIBlackboard> _actionRestrictionPlayerBB;
+		private CUInt32 _actionRestrictionCallbackID;
 
 		[Ordinal(86)] 
 		[RED("interaction")] 
@@ -69,6 +72,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _objectActionsCallbackCtrl);
 			set => SetProperty(ref _objectActionsCallbackCtrl, value);
+		}
+
+		[Ordinal(93)] 
+		[RED("investigationPositionsArray")] 
+		public CArray<Vector4> InvestigationPositionsArray
+		{
+			get => GetProperty(ref _investigationPositionsArray);
+			set => SetProperty(ref _investigationPositionsArray, value);
+		}
+
+		[Ordinal(94)] 
+		[RED("actionRestrictionPlayerBB")] 
+		public wCHandle<gameIBlackboard> ActionRestrictionPlayerBB
+		{
+			get => GetProperty(ref _actionRestrictionPlayerBB);
+			set => SetProperty(ref _actionRestrictionPlayerBB, value);
+		}
+
+		[Ordinal(95)] 
+		[RED("actionRestrictionCallbackID")] 
+		public CUInt32 ActionRestrictionCallbackID
+		{
+			get => GetProperty(ref _actionRestrictionCallbackID);
+			set => SetProperty(ref _actionRestrictionCallbackID, value);
 		}
 
 		public InteractiveDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -8,6 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class UnregisterListenerOnTargetHPEvent : redEvent
 	{
 		private CHandle<TargetedObjectDeathListener> _listener;
+		private CBool _isFromListenerEvent;
 
 		[Ordinal(0)] 
 		[RED("listener")] 
@@ -15,6 +16,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _listener);
 			set => SetProperty(ref _listener, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isFromListenerEvent")] 
+		public CBool IsFromListenerEvent
+		{
+			get => GetProperty(ref _isFromListenerEvent);
+			set => SetProperty(ref _isFromListenerEvent, value);
 		}
 
 		public UnregisterListenerOnTargetHPEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

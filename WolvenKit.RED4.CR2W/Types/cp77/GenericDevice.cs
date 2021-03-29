@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AIOffMeshConnectionComponent> _offMeshConnectionComponent;
 		private CHandle<CustomDeviceAction> _currentSpiderbotAction;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionComponent, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("currentSpiderbotAction")] 
 		public CHandle<CustomDeviceAction> CurrentSpiderbotAction
 		{

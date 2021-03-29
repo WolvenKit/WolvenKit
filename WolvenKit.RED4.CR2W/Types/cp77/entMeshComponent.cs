@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<ERenderObjectType> _objectTypeID;
 		private CUInt32 _numInstances;
 		private CUInt64 _chunkMask;
+		private CUInt8 _order;
 		private CBool _isEnabled;
 		private CEnum<entMeshComponentLODMode> _lODMode;
 		private CBool _overrideMeshNavigationImpact;
@@ -103,6 +104,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("order")] 
+		public CUInt8 Order
+		{
+			get => GetProperty(ref _order);
+			set => SetProperty(ref _order, value);
+		}
+
+		[Ordinal(19)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -110,7 +119,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isEnabled, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("LODMode")] 
 		public CEnum<entMeshComponentLODMode> LODMode
 		{
@@ -118,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lODMode, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("overrideMeshNavigationImpact")] 
 		public CBool OverrideMeshNavigationImpact
 		{
@@ -126,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _overrideMeshNavigationImpact, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("navigationImpact")] 
 		public NavGenNavigationSetting NavigationImpact
 		{

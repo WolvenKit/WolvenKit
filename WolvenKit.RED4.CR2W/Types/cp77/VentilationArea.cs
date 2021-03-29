@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameEffectInstance> _gameEffect;
 		private CBool _highLightActive;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areaComponent, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("RestartGameEffectOnAttach")] 
 		public CBool RestartGameEffectOnAttach
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _restartGameEffectOnAttach, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("AttackRecord")] 
 		public CString AttackRecord
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attackRecord, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameEffectRef, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("gameEffect")] 
 		public CHandle<gameEffectInstance> GameEffect
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameEffect, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{

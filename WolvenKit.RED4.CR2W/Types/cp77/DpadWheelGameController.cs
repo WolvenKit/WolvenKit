@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class DpadWheelGameController : gameuiMenuGameController
+	public class DpadWheelGameController : gameuiHUDGameController
 	{
 		private inkCompoundWidgetReference _haskMarkContainer;
 		private inkCompoundWidgetReference _itemContainer;
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _itemDistance;
 		private CFloat _hashMarkDistance;
 		private CFloat _minDistance;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private wCHandle<PlayerPuppet> _player;
 		private wCHandle<QuickSlotsManager> _quickSlotsManager;
 		private CHandle<InventoryDataManagerV2> _inventoryDataManager;
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _dPadWheelInterationEndedBBID;
 		private CUInt32 _dpadWheelCyberwareAssignedBBID;
 
-		[Ordinal(3)] 
+		[Ordinal(9)] 
 		[RED("haskMarkContainer")] 
 		public inkCompoundWidgetReference HaskMarkContainer
 		{
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _haskMarkContainer, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(10)] 
 		[RED("itemContainer")] 
 		public inkCompoundWidgetReference ItemContainer
 		{
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemContainer, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(11)] 
 		[RED("selectorWrapper")] 
 		public inkWidgetReference SelectorWrapper
 		{
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectorWrapper, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(12)] 
 		[RED("centerIcon")] 
 		public inkWidgetReference CenterIcon
 		{
@@ -82,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _centerIcon, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(13)] 
 		[RED("centerGlow")] 
 		public inkWidgetReference CenterGlow
 		{
@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _centerGlow, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(14)] 
 		[RED("itemLabel")] 
 		public inkTextWidgetReference ItemLabel
 		{
@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemLabel, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(15)] 
 		[RED("itemDesc")] 
 		public inkTextWidgetReference ItemDesc
 		{
@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemDesc, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(16)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonHintsManagerRef, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(17)] 
 		[RED("indicator02")] 
 		public inkImageWidgetReference Indicator02
 		{
@@ -122,7 +122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicator02, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(18)] 
 		[RED("indicator03")] 
 		public inkImageWidgetReference Indicator03
 		{
@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicator03, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(19)] 
 		[RED("indicator04")] 
 		public inkImageWidgetReference Indicator04
 		{
@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicator04, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(20)] 
 		[RED("indicator05")] 
 		public inkImageWidgetReference Indicator05
 		{
@@ -146,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicator05, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(21)] 
 		[RED("indicator06")] 
 		public inkImageWidgetReference Indicator06
 		{
@@ -154,7 +154,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicator06, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(22)] 
 		[RED("indicator07")] 
 		public inkImageWidgetReference Indicator07
 		{
@@ -162,7 +162,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicator07, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(23)] 
 		[RED("indicator08")] 
 		public inkImageWidgetReference Indicator08
 		{
@@ -170,7 +170,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indicator08, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(24)] 
 		[RED("itemDistance")] 
 		public CFloat ItemDistance
 		{
@@ -178,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemDistance, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(25)] 
 		[RED("hashMarkDistance")] 
 		public CFloat HashMarkDistance
 		{
@@ -186,7 +186,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hashMarkDistance, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(26)] 
 		[RED("minDistance")] 
 		public CFloat MinDistance
 		{
@@ -194,15 +194,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _minDistance, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(27)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(28)] 
 		[RED("Player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
@@ -210,7 +210,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _player, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(29)] 
 		[RED("QuickSlotsManager")] 
 		public wCHandle<QuickSlotsManager> QuickSlotsManager
 		{
@@ -218,7 +218,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickSlotsManager, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(30)] 
 		[RED("InventoryDataManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryDataManager
 		{
@@ -226,7 +226,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryDataManager, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(31)] 
 		[RED("dpadItemsList")] 
 		public CArray<CHandle<DpadWheelItemController>> DpadItemsList
 		{
@@ -234,7 +234,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dpadItemsList, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(32)] 
 		[RED("commandsList")] 
 		public CArray<QuickSlotCommand> CommandsList
 		{
@@ -242,7 +242,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _commandsList, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(33)] 
 		[RED("selectedWheelItem")] 
 		public wCHandle<DpadWheelItemController> SelectedWheelItem
 		{
@@ -250,7 +250,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedWheelItem, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(34)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
@@ -258,7 +258,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonHintsController, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(35)] 
 		[RED("selectedIndicator")] 
 		public inkWidgetReference SelectedIndicator
 		{
@@ -266,7 +266,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedIndicator, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(36)] 
 		[RED("angleInterval")] 
 		public CFloat AngleInterval
 		{
@@ -274,7 +274,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _angleInterval, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(37)] 
 		[RED("previousAmount")] 
 		public CFloat PreviousAmount
 		{
@@ -282,7 +282,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousAmount, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(38)] 
 		[RED("previousAngle")] 
 		public CFloat PreviousAngle
 		{
@@ -290,7 +290,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousAngle, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(39)] 
 		[RED("data")] 
 		public QuickWheelStartUIStructure Data
 		{
@@ -298,7 +298,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _data, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(40)] 
 		[RED("masterListOfAllCyberware")] 
 		public CArray<AbilityData> MasterListOfAllCyberware
 		{
@@ -306,7 +306,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _masterListOfAllCyberware, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(41)] 
 		[RED("listOfUnassignedCyberware")] 
 		public CArray<AbilityData> ListOfUnassignedCyberware
 		{
@@ -314,7 +314,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _listOfUnassignedCyberware, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(42)] 
 		[RED("dpadWheelOpen")] 
 		public CBool DpadWheelOpen
 		{
@@ -322,7 +322,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dpadWheelOpen, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(43)] 
 		[RED("neutralChoiceDelayId")] 
 		public gameDelayID NeutralChoiceDelayId
 		{
@@ -330,7 +330,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _neutralChoiceDelayId, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(44)] 
 		[RED("previouslySelectedData")] 
 		public QuickSlotCommand PreviouslySelectedData
 		{
@@ -338,7 +338,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previouslySelectedData, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(45)] 
 		[RED("UiQuickItemsBlackboard")] 
 		public CHandle<gameIBlackboard> UiQuickItemsBlackboard
 		{
@@ -346,7 +346,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiQuickItemsBlackboard, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(46)] 
 		[RED("UiQuickSlotDef")] 
 		public CHandle<UI_QuickSlotsDataDef> UiQuickSlotDef
 		{
@@ -354,7 +354,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiQuickSlotDef, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(47)] 
 		[RED("DPadWheelAngleBBID")] 
 		public CUInt32 DPadWheelAngleBBID
 		{
@@ -362,7 +362,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dPadWheelAngleBBID, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(48)] 
 		[RED("DPadWheelInterationStartedBBID")] 
 		public CUInt32 DPadWheelInterationStartedBBID
 		{
@@ -370,7 +370,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dPadWheelInterationStartedBBID, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(49)] 
 		[RED("DPadWheelInterationEndedBBID")] 
 		public CUInt32 DPadWheelInterationEndedBBID
 		{
@@ -378,7 +378,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dPadWheelInterationEndedBBID, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(50)] 
 		[RED("DpadWheelCyberwareAssignedBBID")] 
 		public CUInt32 DpadWheelCyberwareAssignedBBID
 		{

@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _currentMesh;
 		private CHandle<entMeshComponent> _glitchMesh;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("meshTable")] 
 		public CArray<CHandle<entMeshComponent>> MeshTable
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshTable, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("componentCounter")] 
 		public CInt32 ComponentCounter
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _componentCounter, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("currentMesh")] 
 		public CInt32 CurrentMesh
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentMesh, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("glitchMesh")] 
 		public CHandle<entMeshComponent> GlitchMesh
 		{
