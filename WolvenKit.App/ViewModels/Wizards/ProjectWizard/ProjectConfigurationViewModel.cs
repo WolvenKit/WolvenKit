@@ -28,7 +28,7 @@ namespace WolvenKit.ViewModels.Wizards.ProjectWizard
         /// <summary>
         /// Register the ProjectWizardModel property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty("ProjectWizardModel", typeof(ProjectWizardModel));
+        public static readonly PropertyData ProjectWizardModelProperty = RegisterProperty(nameof(ProjectWizardModel), typeof(ProjectWizardModel));
 
         /// <summary>
         /// Gets or sets the projectWizardModel.

@@ -3,7 +3,6 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
-using FinalizeSetupView = WolvenKit.Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView;
 
 namespace WolvenKit.Views.Wizards
 {
@@ -23,7 +22,7 @@ namespace WolvenKit.Views.Wizards
 
         public ProjectWizardView()
         {
-            ServiceLocator.Default.RegisterTypeAndInstantiate<FirstSetupWizardModel>();
+            ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectWizardModel>();
 
             InitializeComponent();
         }
@@ -75,18 +74,16 @@ namespace WolvenKit.Views.Wizards
 
         private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
         {
-            if (ViewModel == null)
+            if (ViewModel is ProjectWizardViewModel vm)
             {
-                return;
+                ServiceLocator.Default.RegisterInstance(vm);
+
+                SPTV = new SelectProjectTypeView();
+                PCV = new ProjectConfigurationView();
+                FSV = new FinalizeSetupView();
+
+                ShowPage();
             }
-
-            ServiceLocator.Default.RegisterInstance(ViewModel as ProjectWizardViewModel);
-
-            SPTV = new SelectProjectTypeView();
-            PCV = new ProjectConfigurationView();
-            FSV = new FinalizeSetupView();
-
-            ShowPage();
         }
 
         #endregion Methods
