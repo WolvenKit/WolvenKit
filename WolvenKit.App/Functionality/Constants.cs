@@ -21,6 +21,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string Exit = "Application.Exit";
             public const string NewFile = "Application.NewFile";
             public const string NewProject = "Application.NewProject";
+            public const string PublishProject = "Application.PublishProject";
             public const string OpenFile = "Application.OpenFile";
             public const string OpenLink = "Application.OpenLink";
             public const string OpenProject = "Application.OpenProject";

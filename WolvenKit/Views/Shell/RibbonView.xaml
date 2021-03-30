@@ -69,7 +69,7 @@
 
                 <!--  Project  -->
                 <fluent:RibbonGroupBox Header="Project">
-                    <fluent:Button Command="{catel:CommandManagerBinding Application.OpenFile}" Header="Open Project">
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.OpenProject}" Header="Open Project">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
                              Width="25"
@@ -158,7 +158,7 @@
 
                 <!--  Mod  -->
                 <fluent:RibbonGroupBox Header="Mod">
-                    <fluent:Button Command="{catel:CommandManagerBinding Application.PackMod}" Header="Pack Mod">
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.PublishProject}" Header="Pack Mod">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
                              Width="25"
