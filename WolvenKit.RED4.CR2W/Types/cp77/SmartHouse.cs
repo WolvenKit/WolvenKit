@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _timetableActive;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("timetableActive")] 
 		public CBool TimetableActive
 		{

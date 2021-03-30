@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AnimFeature_RoadBlock> _animFeature;
 		private CEnum<EAnimationType> _animationType;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("openingSpeed")] 
 		public CFloat OpeningSpeed
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openingSpeed, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("closingSpeed")] 
 		public CFloat ClosingSpeed
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _closingSpeed, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationController, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RoadBlock> AnimFeature
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeature, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{

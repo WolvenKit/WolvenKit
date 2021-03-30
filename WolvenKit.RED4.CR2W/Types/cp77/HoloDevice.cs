@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CName _questFactName;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("questFactName")] 
 		public CName QuestFactName
 		{

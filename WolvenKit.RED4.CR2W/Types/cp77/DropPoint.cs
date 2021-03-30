@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameNewMappinID _mappinID;
 		private CHandle<gameInventory> _inventory;
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(103)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shortGlitchDelayID, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(104)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mappinID, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(105)] 
 		[RED("inventory")] 
 		public CHandle<gameInventory> Inventory
 		{

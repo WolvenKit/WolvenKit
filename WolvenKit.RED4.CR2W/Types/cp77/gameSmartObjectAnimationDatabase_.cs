@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class gameSmartObjectAnimationDatabase : ISerializable
+	public class gameSmartObjectAnimationDatabase_ : ISerializable
 	{
 		private CArray<gameAnimationExtractedData> _animationData;
 		private CArray<gameBodyTypeData> _bodyTypesData;
@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bodyTypesData, value);
 		}
 
-		public gameSmartObjectAnimationDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameSmartObjectAnimationDatabase_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

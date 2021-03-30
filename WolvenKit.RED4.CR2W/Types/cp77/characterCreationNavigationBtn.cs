@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkWidgetReference _icon1;
 		private CBool _shouldPlaySoundOnHover;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 
 		[Ordinal(10)] 
 		[RED("icon1")] 
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

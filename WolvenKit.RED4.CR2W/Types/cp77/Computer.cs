@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private PlayerControlDeviceData _playerControlData;
 		private CEnum<EComputerAnimationState> _currentAnimationState;
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("bannerUpdateActive")] 
 		public CBool BannerUpdateActive
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bannerUpdateActive, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("bannerUpdateID")] 
 		public gameDelayID BannerUpdateID
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bannerUpdateID, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("transformX")] 
 		public CHandle<entIPlacedComponent> TransformX
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _transformX, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("transformY")] 
 		public CHandle<entIPlacedComponent> TransformY
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _transformY, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(103)] 
 		[RED("playerControlData")] 
 		public PlayerControlDeviceData PlayerControlData
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerControlData, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(104)] 
 		[RED("currentAnimationState")] 
 		public CEnum<EComputerAnimationState> CurrentAnimationState
 		{

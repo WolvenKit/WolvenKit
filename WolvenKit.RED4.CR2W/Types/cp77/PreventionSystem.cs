@@ -35,11 +35,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameDelayID _deescalationZeroDelayID;
 		private CBool _deescalationZeroCheck;
 		private gameDelayID _policemenSpawnDelayID;
-		private CHandle<PreventionDelayedSpawnRequest> _spawnDelayedEvt;
 		private gameDelayID _preventionTickDelayID;
 		private CBool _preventionTickCheck;
 		private gameDelayID _securityAreaResetDelayID;
 		private CBool _securityAreaResetCheck;
+		private CBool _hadOngoingSpawnRequest;
 		private CEnum<EPreventionDebugProcessReason> _debug_PorcessReason;
 		private CEnum<EPreventionPsychoLogicType> _debug_PsychoLogicType;
 		private TweakDBID _currentPreventionPreset;
@@ -55,6 +55,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _playerVehicleStateID;
 		private CEnum<gamePSMHighLevel> _playerHLS;
 		private CEnum<gamePSMVehicle> _playerVehicleState;
+		private CBool _currentStageFallbackUnitSpawned;
+		private CInt32 _unhandledInputsReceived;
+		private gameDelayID _inputlockDelayID;
+		private CBool _preventionUnitKilledDuringLock;
+		private CBool _reconDeployed;
 		private CArray<wCHandle<vehicleBaseObject>> _vehicles;
 		private CArray<wCHandle<gameObject>> _viewers;
 
@@ -283,14 +288,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(28)] 
-		[RED("spawnDelayedEvt")] 
-		public CHandle<PreventionDelayedSpawnRequest> SpawnDelayedEvt
-		{
-			get => GetProperty(ref _spawnDelayedEvt);
-			set => SetProperty(ref _spawnDelayedEvt, value);
-		}
-
-		[Ordinal(29)] 
 		[RED("preventionTickDelayID")] 
 		public gameDelayID PreventionTickDelayID
 		{
@@ -298,7 +295,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _preventionTickDelayID, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(29)] 
 		[RED("preventionTickCheck")] 
 		public CBool PreventionTickCheck
 		{
@@ -306,7 +303,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _preventionTickCheck, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("securityAreaResetDelayID")] 
 		public gameDelayID SecurityAreaResetDelayID
 		{
@@ -314,12 +311,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityAreaResetDelayID, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("securityAreaResetCheck")] 
 		public CBool SecurityAreaResetCheck
 		{
 			get => GetProperty(ref _securityAreaResetCheck);
 			set => SetProperty(ref _securityAreaResetCheck, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("hadOngoingSpawnRequest")] 
+		public CBool HadOngoingSpawnRequest
+		{
+			get => GetProperty(ref _hadOngoingSpawnRequest);
+			set => SetProperty(ref _hadOngoingSpawnRequest, value);
 		}
 
 		[Ordinal(33)] 
@@ -443,6 +448,46 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(48)] 
+		[RED("currentStageFallbackUnitSpawned")] 
+		public CBool CurrentStageFallbackUnitSpawned
+		{
+			get => GetProperty(ref _currentStageFallbackUnitSpawned);
+			set => SetProperty(ref _currentStageFallbackUnitSpawned, value);
+		}
+
+		[Ordinal(49)] 
+		[RED("unhandledInputsReceived")] 
+		public CInt32 UnhandledInputsReceived
+		{
+			get => GetProperty(ref _unhandledInputsReceived);
+			set => SetProperty(ref _unhandledInputsReceived, value);
+		}
+
+		[Ordinal(50)] 
+		[RED("inputlockDelayID")] 
+		public gameDelayID InputlockDelayID
+		{
+			get => GetProperty(ref _inputlockDelayID);
+			set => SetProperty(ref _inputlockDelayID, value);
+		}
+
+		[Ordinal(51)] 
+		[RED("preventionUnitKilledDuringLock")] 
+		public CBool PreventionUnitKilledDuringLock
+		{
+			get => GetProperty(ref _preventionUnitKilledDuringLock);
+			set => SetProperty(ref _preventionUnitKilledDuringLock, value);
+		}
+
+		[Ordinal(52)] 
+		[RED("reconDeployed")] 
+		public CBool ReconDeployed
+		{
+			get => GetProperty(ref _reconDeployed);
+			set => SetProperty(ref _reconDeployed, value);
+		}
+
+		[Ordinal(53)] 
 		[RED("vehicles")] 
 		public CArray<wCHandle<vehicleBaseObject>> Vehicles
 		{
@@ -450,7 +495,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vehicles, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(54)] 
 		[RED("viewers")] 
 		public CArray<wCHandle<gameObject>> Viewers
 		{

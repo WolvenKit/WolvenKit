@@ -7,14 +7,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BaseSubtitleLineLogicController : inkWidgetLogicController
 	{
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CBool _isKiroshiEnabled;
 		private CFloat _c_tier1_duration;
 		private CFloat _c_tier2_duration;
 
 		[Ordinal(1)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

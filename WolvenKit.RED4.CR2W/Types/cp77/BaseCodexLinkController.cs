@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _linkImage;
 		private inkTextWidgetReference _linkLabel;
 		private CHandle<inkanimProxy> _animProxy;
+		private CBool _isInteractive;
 
 		[Ordinal(1)] 
 		[RED("linkImage")] 
@@ -33,6 +34,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _animProxy);
 			set => SetProperty(ref _animProxy, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("isInteractive")] 
+		public CBool IsInteractive
+		{
+			get => GetProperty(ref _isInteractive);
+			set => SetProperty(ref _isInteractive, value);
 		}
 
 		public BaseCodexLinkController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

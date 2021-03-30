@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AIOffMeshConnectionComponent> _offMeshConnectionComponent;
 		private CBool _isLoadPerformed;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("advertismentNames")] 
 		public CArray<CName> AdvertismentNames
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _advertismentNames, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("advertisments")] 
 		public CArray<CHandle<entIPlacedComponent>> Advertisments
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _advertisments, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("movingPlatform")] 
 		public CHandle<gameMovingPlatform> MovingPlatform
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _movingPlatform, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("floors")] 
 		public CArray<ElevatorFloorSetup> Floors
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _floors, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("QuestSafeguardColliders")] 
 		public CArray<CHandle<entIPlacedComponent>> QuestSafeguardColliders
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _questSafeguardColliders, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(101)] 
 		[RED("QuestSafeguardColliderNames")] 
 		public CArray<CName> QuestSafeguardColliderNames
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _questSafeguardColliderNames, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(102)] 
 		[RED("frontDoorOccluder")] 
 		public CHandle<entIPlacedComponent> FrontDoorOccluder
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frontDoorOccluder, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(103)] 
 		[RED("backDoorOccluder")] 
 		public CHandle<entIPlacedComponent> BackDoorOccluder
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _backDoorOccluder, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(104)] 
 		[RED("radioMesh")] 
 		public CHandle<entIPlacedComponent> RadioMesh
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _radioMesh, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(105)] 
 		[RED("radioDestroyed")] 
 		public CHandle<entIPlacedComponent> RadioDestroyed
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _radioDestroyed, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(106)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionComponent, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("isLoadPerformed")] 
 		public CBool IsLoadPerformed
 		{

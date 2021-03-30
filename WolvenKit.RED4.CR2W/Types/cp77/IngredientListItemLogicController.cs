@@ -21,6 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private IngredientData _data;
 		private wCHandle<inkWidget> _root;
 		private wCHandle<gameuiTooltipsManager> _tooltipsManager;
+		private CInt32 _itemAmount;
 
 		[Ordinal(10)] 
 		[RED("itemName")] 
@@ -132,6 +133,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _tooltipsManager);
 			set => SetProperty(ref _tooltipsManager, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("itemAmount")] 
+		public CInt32 ItemAmount
+		{
+			get => GetProperty(ref _itemAmount);
+			set => SetProperty(ref _itemAmount, value);
 		}
 
 		public IngredientListItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

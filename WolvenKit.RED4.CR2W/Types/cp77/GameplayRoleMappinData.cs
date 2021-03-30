@@ -24,6 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<gamedataQuality> _quality;
 		private CName _slotName;
 		private TweakDBID _textureID;
+		private CBool _showOnMiniMap;
 
 		[Ordinal(1)] 
 		[RED("mappinVisualState")] 
@@ -159,6 +160,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _textureID);
 			set => SetProperty(ref _textureID, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("showOnMiniMap")] 
+		public CBool ShowOnMiniMap
+		{
+			get => GetProperty(ref _showOnMiniMap);
+			set => SetProperty(ref _showOnMiniMap, value);
 		}
 
 		public GameplayRoleMappinData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,7 +15,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _braindanceFPP;
 		private CName _braindanceActive;
 		private CName _veryHardLanding;
-		private CName _noScanningRestriction;
 
 		[Ordinal(0)] 
 		[RED("kerenzikov")] 
@@ -79,14 +78,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _veryHardLanding);
 			set => SetProperty(ref _veryHardLanding, value);
-		}
-
-		[Ordinal(8)] 
-		[RED("noScanningRestriction")] 
-		public CName NoScanningRestriction
-		{
-			get => GetProperty(ref _noScanningRestriction);
-			set => SetProperty(ref _noScanningRestriction, value);
 		}
 
 		public PlayerVisionModeControllerBlackboardListenersFunctions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

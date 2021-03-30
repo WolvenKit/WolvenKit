@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<HoverStatus> _hoverState;
 		private CBool _isBusy;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("buttonText")] 
 		public inkTextWidgetReference ButtonText
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonText, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("standardButtonContainer")] 
 		public inkWidgetReference StandardButtonContainer
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _standardButtonContainer, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("hoveredButtonContainer")] 
 		public inkWidgetReference HoveredButtonContainer
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hoveredButtonContainer, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("buttonState")] 
 		public CEnum<ButtonStatus> ButtonState
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonState, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("hoverState")] 
 		public CEnum<HoverStatus> HoverState
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hoverState, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("isBusy")] 
 		public CBool IsBusy
 		{

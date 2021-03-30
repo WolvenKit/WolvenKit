@@ -8,6 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AnimFeature_CombatGadget : animAnimFeature
 	{
 		private CBool _isQuickthrow;
+		private CBool _isChargedThrow;
 		private CBool _isDetonated;
 
 		[Ordinal(0)] 
@@ -19,6 +20,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("isChargedThrow")] 
+		public CBool IsChargedThrow
+		{
+			get => GetProperty(ref _isChargedThrow);
+			set => SetProperty(ref _isChargedThrow, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("isDetonated")] 
 		public CBool IsDetonated
 		{

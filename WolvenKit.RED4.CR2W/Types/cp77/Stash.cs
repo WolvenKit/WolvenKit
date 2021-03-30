@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<gameInventory> _inventory;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("inventory")] 
 		public CHandle<gameInventory> Inventory
 		{

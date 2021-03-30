@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class worldTrafficCompiledNode : worldNode
+	public class worldTrafficCompiledNode_ : worldNode
 	{
 		private Box _aabb;
 
@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _aabb, value);
 		}
 
-		public worldTrafficCompiledNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldTrafficCompiledNode_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

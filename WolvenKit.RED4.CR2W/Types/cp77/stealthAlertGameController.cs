@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _fluff_02;
 		private inkWidgetReference _fluff_03;
 		private inkWidgetReference _fluff_04;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CUInt32 _securityBlackBoardID;
 		private CUInt32 _playerBlackboardID;
 		private CHandle<gameIBlackboard> _blackboard;
@@ -97,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

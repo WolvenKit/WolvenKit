@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
         private CUInt16 _unk1;
 
         [Ordinal(0)]
-        [RED]
+        [REDBuffer]
         public CUInt16 Unk1
         {
             get => GetProperty(ref _unk1);

@@ -47,6 +47,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameIBlackboard> _psmBlackboard;
 		private CEnum<gamePSMVehicle> _playerState;
 		private wCHandle<UIScriptableSystem> _uiScriptableSystem;
+		private CHandle<inkGameNotificationToken> _confirmationPopupToken;
+		private CHandle<ItemDisplayHoverOverEvent> _lastItemHoverOverEvent;
+		private CBool _isComparisionDisabled;
 		private CHandle<inkGameNotificationToken> _itemPreviewPopupToken;
 		private CBool _afterCloseRequest;
 
@@ -371,6 +374,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(43)] 
+		[RED("confirmationPopupToken")] 
+		public CHandle<inkGameNotificationToken> ConfirmationPopupToken
+		{
+			get => GetProperty(ref _confirmationPopupToken);
+			set => SetProperty(ref _confirmationPopupToken, value);
+		}
+
+		[Ordinal(44)] 
+		[RED("lastItemHoverOverEvent")] 
+		public CHandle<ItemDisplayHoverOverEvent> LastItemHoverOverEvent
+		{
+			get => GetProperty(ref _lastItemHoverOverEvent);
+			set => SetProperty(ref _lastItemHoverOverEvent, value);
+		}
+
+		[Ordinal(45)] 
+		[RED("isComparisionDisabled")] 
+		public CBool IsComparisionDisabled
+		{
+			get => GetProperty(ref _isComparisionDisabled);
+			set => SetProperty(ref _isComparisionDisabled, value);
+		}
+
+		[Ordinal(46)] 
 		[RED("itemPreviewPopupToken")] 
 		public CHandle<inkGameNotificationToken> ItemPreviewPopupToken
 		{
@@ -378,7 +405,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemPreviewPopupToken, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
 		[RED("afterCloseRequest")] 
 		public CBool AfterCloseRequest
 		{

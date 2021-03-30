@@ -31,6 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _applyButtonEnabled;
 		private CBool _resetButtonEnabled;
 		private CBool _closeSettingsRequest;
+		private CBool _resetSettingsRequest;
 		private wCHandle<inkListController> _selectorCtrl;
 
 		[Ordinal(3)] 
@@ -226,6 +227,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(27)] 
+		[RED("resetSettingsRequest")] 
+		public CBool ResetSettingsRequest
+		{
+			get => GetProperty(ref _resetSettingsRequest);
+			set => SetProperty(ref _resetSettingsRequest, value);
+		}
+
+		[Ordinal(28)] 
 		[RED("selectorCtrl")] 
 		public wCHandle<inkListController> SelectorCtrl
 		{

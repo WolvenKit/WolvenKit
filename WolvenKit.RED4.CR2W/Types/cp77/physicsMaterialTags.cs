@@ -7,19 +7,28 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsMaterialTags : CVariable
 	{
-		private CEnum<physicsMaterialTagAIVisibility> _aiVisibility;
+		private CEnum<physicsMaterialTagVisibility> _aiVisibility;
+		private CEnum<physicsMaterialTagVisibility> _playerVisibility;
 		private CEnum<physicsMaterialTagProjectilePenetration> _projectilePenetration;
 		private CEnum<physicsMaterialTagVehicleTraction> _vehicleTraction;
 
 		[Ordinal(0)] 
 		[RED("aiVisibility")] 
-		public CEnum<physicsMaterialTagAIVisibility> AiVisibility
+		public CEnum<physicsMaterialTagVisibility> AiVisibility
 		{
 			get => GetProperty(ref _aiVisibility);
 			set => SetProperty(ref _aiVisibility, value);
 		}
 
 		[Ordinal(1)] 
+		[RED("playerVisibility")] 
+		public CEnum<physicsMaterialTagVisibility> PlayerVisibility
+		{
+			get => GetProperty(ref _playerVisibility);
+			set => SetProperty(ref _playerVisibility, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("projectilePenetration")] 
 		public CEnum<physicsMaterialTagProjectilePenetration> ProjectilePenetration
 		{
@@ -27,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _projectilePenetration, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("vehicleTraction")] 
 		public CEnum<physicsMaterialTagVehicleTraction> VehicleTraction
 		{

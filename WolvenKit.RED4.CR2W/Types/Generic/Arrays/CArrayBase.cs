@@ -76,11 +76,47 @@ namespace WolvenKit.RED4.CR2W.Types
             }
         }
 
+        protected void ReadWithoutMeta(BinaryReader file, uint size, int elementcount)
+        {
+            for (int i = 0; i < elementcount; i++)
+            {
+                var element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
+
+                // no actual way to find out the elementsize of an array element
+                // bacause cdpr serialized classes have no fixed size
+                // solution? not sure: pass 0 and disable checks?
+
+                var elementsize = 0;
+                if (element is IDataBufferAccessor)
+                    elementsize = (int)((size - 4) / elementcount);
+
+                element.ReadWithoutMeta(file, (uint)elementsize);
+                if (element is T te)
+                {
+                    te.IsSerialized = true;
+                    Elements.Add(te);
+                }
+            }
+        }
+
         public override void Write(BinaryWriter file)
         {
             foreach (var element in Elements)
             {
                 element.Write(file);
+            }
+        }
+
+        public override void WriteWithoutMeta(BinaryWriter file)
+        {
+            foreach (var element in Elements)
+            {
+                if (!(element is CVariable elem))
+                {
+                    throw new NotSupportedException();
+                }
+
+                elem.WriteWithoutMeta(file);
             }
         }
 

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<EquipmentSystem> _equipmentSystem;
 		private wCHandle<gameTransactionSystem> _transactionSystem;
 		private wCHandle<UIScriptableSystem> _uiScriptableSystem;
-		private CHandle<InventoryGenericItemChooser> _itemChooser;
+		private wCHandle<InventoryGenericItemChooser> _itemChooser;
 		private CArray<CEnum<gamedataEquipmentArea>> _lastEquipmentAreas;
 		private CEnum<gameEHotkey> _currentHotkey;
 		private wCHandle<gameuiInventoryGameController> _inventoryController;
@@ -47,6 +47,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isE3Demo;
 		private CBool _isShown;
 		private CArray<gameItemModParams> _itemDropQueue;
+		private CHandle<ItemDisplayHoverOverEvent> _lastItemHoverOverEvent;
+		private CBool _isComparisionDisabled;
 		private CHandle<inkGameNotificationToken> _replaceModNotification;
 		private CHandle<InstallModConfirmationData> _installModData;
 		private CHandle<ItemDisplayClickEvent> _hACK_lastItemDisplayEvent;
@@ -173,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("itemChooser")] 
-		public CHandle<InventoryGenericItemChooser> ItemChooser
+		public wCHandle<InventoryGenericItemChooser> ItemChooser
 		{
 			get => GetProperty(ref _itemChooser);
 			set => SetProperty(ref _itemChooser, value);
@@ -372,6 +374,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(41)] 
+		[RED("lastItemHoverOverEvent")] 
+		public CHandle<ItemDisplayHoverOverEvent> LastItemHoverOverEvent
+		{
+			get => GetProperty(ref _lastItemHoverOverEvent);
+			set => SetProperty(ref _lastItemHoverOverEvent, value);
+		}
+
+		[Ordinal(42)] 
+		[RED("isComparisionDisabled")] 
+		public CBool IsComparisionDisabled
+		{
+			get => GetProperty(ref _isComparisionDisabled);
+			set => SetProperty(ref _isComparisionDisabled, value);
+		}
+
+		[Ordinal(43)] 
 		[RED("replaceModNotification")] 
 		public CHandle<inkGameNotificationToken> ReplaceModNotification
 		{
@@ -379,7 +397,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _replaceModNotification, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("installModData")] 
 		public CHandle<InstallModConfirmationData> InstallModData
 		{
@@ -387,7 +405,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _installModData, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("HACK_lastItemDisplayEvent")] 
 		public CHandle<ItemDisplayClickEvent> HACK_lastItemDisplayEvent
 		{

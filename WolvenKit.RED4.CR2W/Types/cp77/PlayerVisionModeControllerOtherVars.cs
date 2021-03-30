@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _enabledByToggle;
 		private CBool _active;
+		private CBool _toggledDuringHold;
 
 		[Ordinal(0)] 
 		[RED("enabledByToggle")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _active);
 			set => SetProperty(ref _active, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("toggledDuringHold")] 
+		public CBool ToggledDuringHold
+		{
+			get => GetProperty(ref _toggledDuringHold);
+			set => SetProperty(ref _toggledDuringHold, value);
 		}
 
 		public PlayerVisionModeControllerOtherVars(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

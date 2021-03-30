@@ -15,6 +15,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private WeakspotRecordData _weakspotRecordData;
 		private CBool _alive;
 		private CBool _hasBeenScanned;
+		private CHandle<gameStatPoolsSystem> _statPoolSystem;
+		private CEnum<gamedataStatPoolType> _statPoolType;
+		private CHandle<WeakspotHealthChangeListener> _healthListener;
 
 		[Ordinal(40)] 
 		[RED("weakspotOnDestroyProperties")] 
@@ -78,6 +81,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _hasBeenScanned);
 			set => SetProperty(ref _hasBeenScanned, value);
+		}
+
+		[Ordinal(48)] 
+		[RED("statPoolSystem")] 
+		public CHandle<gameStatPoolsSystem> StatPoolSystem
+		{
+			get => GetProperty(ref _statPoolSystem);
+			set => SetProperty(ref _statPoolSystem, value);
+		}
+
+		[Ordinal(49)] 
+		[RED("statPoolType")] 
+		public CEnum<gamedataStatPoolType> StatPoolType
+		{
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
+		}
+
+		[Ordinal(50)] 
+		[RED("healthListener")] 
+		public CHandle<WeakspotHealthChangeListener> HealthListener
+		{
+			get => GetProperty(ref _healthListener);
+			set => SetProperty(ref _healthListener, value);
 		}
 
 		public ScriptedWeakspotObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

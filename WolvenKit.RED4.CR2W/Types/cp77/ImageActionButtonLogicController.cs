@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _tallImageWidget;
 		private CInt32 _price;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("tallImageWidget")] 
 		public inkImageWidgetReference TallImageWidget
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tallImageWidget, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("price")] 
 		public CInt32 Price
 		{

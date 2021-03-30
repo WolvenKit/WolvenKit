@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _talkingAnimName;
 		private CEnum<IntercomStatus> _status;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("statusText")] 
 		public inkTextWidgetReference StatusText
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statusText, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("callingAnimName")] 
 		public CName CallingAnimName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _callingAnimName, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("talkingAnimName")] 
 		public CName TalkingAnimName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _talkingAnimName, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("status")] 
 		public CEnum<IntercomStatus> Status
 		{

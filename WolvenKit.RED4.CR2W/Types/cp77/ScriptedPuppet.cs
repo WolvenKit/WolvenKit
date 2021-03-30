@@ -33,6 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entAnimationControllerComponent> _animationControllerComponent;
 		private CHandle<gameinfluenceBumpComponent> _bumpComponent;
 		private CBool _isCrowd;
+		private CBool _incapacitatedOnAttach;
 		private CBool _isIconic;
 		private CHandle<CombatHUDManager> _combatHUDManager;
 		private CBool _exposePosition;
@@ -273,6 +274,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(66)] 
+		[RED("incapacitatedOnAttach")] 
+		public CBool IncapacitatedOnAttach
+		{
+			get => GetProperty(ref _incapacitatedOnAttach);
+			set => SetProperty(ref _incapacitatedOnAttach, value);
+		}
+
+		[Ordinal(67)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
@@ -280,7 +289,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isIconic, value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("combatHUDManager")] 
 		public CHandle<CombatHUDManager> CombatHUDManager
 		{
@@ -288,7 +297,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _combatHUDManager, value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
 		[RED("exposePosition")] 
 		public CBool ExposePosition
 		{
@@ -296,7 +305,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exposePosition, value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("puppetStateBlackboard")] 
 		public CHandle<gameIBlackboard> PuppetStateBlackboard
 		{
@@ -304,7 +313,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _puppetStateBlackboard, value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(71)] 
 		[RED("customBlackboard")] 
 		public CHandle<gameIBlackboard> CustomBlackboard
 		{
@@ -312,7 +321,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _customBlackboard, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("securityAreaCallbackID")] 
 		public CUInt32 SecurityAreaCallbackID
 		{
@@ -320,7 +329,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityAreaCallbackID, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(73)] 
 		[RED("customAIComponents")] 
 		public CArray<CHandle<AICustomComponents>> CustomAIComponents
 		{
@@ -328,7 +337,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _customAIComponents, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(74)] 
 		[RED("listeners")] 
 		public CArray<CHandle<PuppetListener>> Listeners
 		{
@@ -336,7 +345,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _listeners, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("securitySupportListener")] 
 		public CHandle<SecuritySupportListener> SecuritySupportListener
 		{
@@ -344,7 +353,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securitySupportListener, value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("shouldBeRevealedStorage")] 
 		public CHandle<RevealRequestsStorage> ShouldBeRevealedStorage
 		{
@@ -352,7 +361,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldBeRevealedStorage, value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("inputProcessed")] 
 		public CBool InputProcessed
 		{
@@ -360,7 +369,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inputProcessed, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("targetedBlackBoard")] 
 		public CHandle<gameIBlackboard> TargetedBlackBoard
 		{
@@ -368,7 +377,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetedBlackBoard, value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("shouldSpawnBloodPuddle")] 
 		public CBool ShouldSpawnBloodPuddle
 		{
@@ -376,7 +385,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldSpawnBloodPuddle, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("bloodPuddleSpawned")] 
 		public CBool BloodPuddleSpawned
 		{
@@ -384,7 +393,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bloodPuddleSpawned, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("skipDeathAnimation")] 
 		public CBool SkipDeathAnimation
 		{
@@ -392,7 +401,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _skipDeathAnimation, value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(82)] 
 		[RED("hitHistory")] 
 		public CHandle<HitHistory> HitHistory
 		{
@@ -400,7 +409,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitHistory, value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(83)] 
 		[RED("currentWorkspotTags")] 
 		public CArray<CName> CurrentWorkspotTags
 		{
@@ -408,7 +417,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentWorkspotTags, value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(84)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
@@ -416,7 +425,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lootQuality, value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(85)] 
 		[RED("hasQuestItems")] 
 		public CBool HasQuestItems
 		{
@@ -424,7 +433,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasQuestItems, value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(86)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
@@ -432,7 +441,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeQualityRangeInteraction, value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("weakspotComponent")] 
 		public CHandle<gameWeakspotComponent> WeakspotComponent
 		{
@@ -440,7 +449,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weakspotComponent, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("highlightData")] 
 		public CHandle<FocusForcedHighlightData> HighlightData
 		{
@@ -448,7 +457,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highlightData, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("killer")] 
 		public wCHandle<entEntity> Killer
 		{
@@ -456,7 +465,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _killer, value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
@@ -464,7 +473,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _objectActionsCallbackCtrl, value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("isActiveCached")] 
 		public AIUtilsCachedBoolValue IsActiveCached
 		{
@@ -472,7 +481,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isActiveCached, value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("isCyberpsycho")] 
 		public CBool IsCyberpsycho
 		{
@@ -480,7 +489,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isCyberpsycho, value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("isCivilian")] 
 		public CBool IsCivilian
 		{
@@ -488,7 +497,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isCivilian, value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(94)] 
 		[RED("isPolice")] 
 		public CBool IsPolice
 		{
@@ -496,7 +505,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPolice, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(95)] 
 		[RED("isGanger")] 
 		public CBool IsGanger
 		{
@@ -504,7 +513,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isGanger, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(96)] 
 		[RED("attemptedShards")] 
 		public CArray<gameItemID> AttemptedShards
 		{

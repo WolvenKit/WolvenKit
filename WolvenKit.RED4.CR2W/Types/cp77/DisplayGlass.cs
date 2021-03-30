@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entIPlacedComponent> _collider;
 		private CBool _isDestroyed;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _collider, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("isDestroyed")] 
 		public CBool IsDestroyed
 		{

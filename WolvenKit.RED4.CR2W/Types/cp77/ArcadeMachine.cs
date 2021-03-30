@@ -12,8 +12,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private redResourceReferenceScriptToken _currentGame;
 		private CName _currentGameAudio;
 		private CName _currentGameAudioStop;
+		private CName _meshAppearanceOn;
+		private CName _meshAppearanceOff;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -21,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -29,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shortGlitchDelayID, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("currentGame")] 
 		public redResourceReferenceScriptToken CurrentGame
 		{
@@ -37,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentGame, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("currentGameAudio")] 
 		public CName CurrentGameAudio
 		{
@@ -45,12 +47,28 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentGameAudio, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("currentGameAudioStop")] 
 		public CName CurrentGameAudioStop
 		{
 			get => GetProperty(ref _currentGameAudioStop);
 			set => SetProperty(ref _currentGameAudioStop, value);
+		}
+
+		[Ordinal(101)] 
+		[RED("meshAppearanceOn")] 
+		public CName MeshAppearanceOn
+		{
+			get => GetProperty(ref _meshAppearanceOn);
+			set => SetProperty(ref _meshAppearanceOn, value);
+		}
+
+		[Ordinal(102)] 
+		[RED("meshAppearanceOff")] 
+		public CName MeshAppearanceOff
+		{
+			get => GetProperty(ref _meshAppearanceOff);
+			set => SetProperty(ref _meshAppearanceOff, value);
 		}
 
 		public ArcadeMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

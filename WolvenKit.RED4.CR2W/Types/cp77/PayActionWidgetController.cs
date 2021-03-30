@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _processingAnimName;
 		private CBool _isProcessingPayment;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("priceContainer")] 
 		public inkWidgetReference PriceContainer
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _priceContainer, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("moneyStatusContainer")] 
 		public inkWidgetReference MoneyStatusContainer
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _moneyStatusContainer, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("processingStatusContainer")] 
 		public inkWidgetReference ProcessingStatusContainer
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _processingStatusContainer, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("moneyStatusAnimName")] 
 		public CName MoneyStatusAnimName
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _moneyStatusAnimName, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("processingAnimName")] 
 		public CName ProcessingAnimName
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _processingAnimName, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("isProcessingPayment")] 
 		public CBool IsProcessingPayment
 		{

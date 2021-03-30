@@ -34,7 +34,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _itemPrice;
 		private CFloat _itemWeight;
 		private CBool _isBuyback;
+		private CBool _sendQuantityChangedEvent;
 		private CHandle<QuantityPickerPopupData> _data;
+		private CHandle<PickerChoosenQuantityChangedEvent> _quantityChangedEvent;
 		private CHandle<QuantityPickerPopupCloseData> _closeData;
 
 		[Ordinal(2)] 
@@ -254,6 +256,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(29)] 
+		[RED("sendQuantityChangedEvent")] 
+		public CBool SendQuantityChangedEvent
+		{
+			get => GetProperty(ref _sendQuantityChangedEvent);
+			set => SetProperty(ref _sendQuantityChangedEvent, value);
+		}
+
+		[Ordinal(30)] 
 		[RED("data")] 
 		public CHandle<QuantityPickerPopupData> Data
 		{
@@ -261,7 +271,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _data, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
+		[RED("quantityChangedEvent")] 
+		public CHandle<PickerChoosenQuantityChangedEvent> QuantityChangedEvent
+		{
+			get => GetProperty(ref _quantityChangedEvent);
+			set => SetProperty(ref _quantityChangedEvent, value);
+		}
+
+		[Ordinal(32)] 
 		[RED("closeData")] 
 		public CHandle<QuantityPickerPopupCloseData> CloseData
 		{

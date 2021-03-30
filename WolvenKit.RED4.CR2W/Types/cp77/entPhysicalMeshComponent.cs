@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<physicsFilterDataSource> _filterDataSource;
 		private CHandle<physicsFilterData> _filterData;
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("visibilityAnimationParam")] 
 		public CName VisibilityAnimationParam
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visibilityAnimationParam, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _simulationType, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("useResourceSimulationType")] 
 		public CBool UseResourceSimulationType
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useResourceSimulationType, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _startInactive, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _filterDataSource, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{

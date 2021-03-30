@@ -15,10 +15,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _dpsValue;
 		private inkWidgetReference _silencerIcon;
 		private inkWidgetReference _scopeIcon;
-		private inkWidgetReference _dpsArrow;
 		private CArray<wCHandle<InventoryItemPartDisplay>> _weaponAttachmentsDisplay;
 
-		[Ordinal(78)] 
+		[Ordinal(80)] 
 		[RED("weaponSpecyficModsRoot")] 
 		public inkCompoundWidgetReference WeaponSpecyficModsRoot
 		{
@@ -26,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponSpecyficModsRoot, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(81)] 
 		[RED("statsWrapper")] 
 		public inkWidgetReference StatsWrapper
 		{
@@ -34,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statsWrapper, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(82)] 
 		[RED("dpsText")] 
 		public inkTextWidgetReference DpsText
 		{
@@ -42,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dpsText, value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(83)] 
 		[RED("damageTypeIndicatorImage")] 
 		public inkImageWidgetReference DamageTypeIndicatorImage
 		{
@@ -50,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _damageTypeIndicatorImage, value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(84)] 
 		[RED("dpsWrapper")] 
 		public inkWidgetReference DpsWrapper
 		{
@@ -58,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dpsWrapper, value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(85)] 
 		[RED("dpsValue")] 
 		public inkTextWidgetReference DpsValue
 		{
@@ -66,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dpsValue, value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(86)] 
 		[RED("silencerIcon")] 
 		public inkWidgetReference SilencerIcon
 		{
@@ -74,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _silencerIcon, value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(87)] 
 		[RED("scopeIcon")] 
 		public inkWidgetReference ScopeIcon
 		{
@@ -82,15 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scopeIcon, value);
 		}
 
-		[Ordinal(86)] 
-		[RED("dpsArrow")] 
-		public inkWidgetReference DpsArrow
-		{
-			get => GetProperty(ref _dpsArrow);
-			set => SetProperty(ref _dpsArrow, value);
-		}
-
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("weaponAttachmentsDisplay")] 
 		public CArray<wCHandle<InventoryItemPartDisplay>> WeaponAttachmentsDisplay
 		{

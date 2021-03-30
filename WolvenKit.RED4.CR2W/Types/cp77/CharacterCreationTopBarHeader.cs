@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkImageWidgetReference _icon;
 		private inkTextWidgetReference _label;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CHandle<inkanimProxy> _animationProxy;
 
 		[Ordinal(10)] 
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);

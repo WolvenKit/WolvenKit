@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isActivatorPlayer;
 		private CBool _isActivatorNPC;
+		private CBool _canNPCBeDead;
 		private CName _componentName;
 		private CEnum<ETriggerOperationType> _operationType;
 
@@ -29,6 +30,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("canNPCBeDead")] 
+		public CBool CanNPCBeDead
+		{
+			get => GetProperty(ref _canNPCBeDead);
+			set => SetProperty(ref _canNPCBeDead, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
@@ -36,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _componentName, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("operationType")] 
 		public CEnum<ETriggerOperationType> OperationType
 		{

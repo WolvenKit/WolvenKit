@@ -44,6 +44,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameNewMappinID _remoteMappinId;
 		private CHandle<CPOMissionDataState> _cPOMissionDataState;
 		private CUInt32 _cPOMissionDataBbId;
+		private CHandle<VisibilityStatListener> _visibilityListener;
+		private CHandle<SecondHeartStatListener> _secondHeartListener;
 		private CHandle<ArmorStatListener> _armorStatListener;
 		private CHandle<HealthStatListener> _healthStatListener;
 		private CHandle<OxygenStatListener> _oxygenStatListener;
@@ -58,6 +60,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _numberOfCombatantsListenerID;
 		private CInt32 _numberOfCombatants;
 		private CUInt32 _zoneChangeListener;
+		private CName _equipmentMeshOverlayEffectName;
+		private CName _equipmentMeshOverlayEffectTag;
+		private CArray<TweakDBID> _equipmentMeshOverlaySlots;
 		private CBool _coverVisibilityPerkBlocked;
 		private CBool _behindCover;
 		private CBool _inCombat;
@@ -76,6 +81,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _visReductionRecordID;
 		private EngineTime _lastDmgInflicted;
 		private CFloat _lowHealthNextRumbleTime;
+		private CHandle<StaminaListener> _staminaListener;
+		private CHandle<MemoryListener> _memoryListener;
 		private CEnum<ESecurityAreaType> _securityAreaTypeE3HACK;
 		private CArray<gamePersistentID> _overlappedSecurityZones;
 		private InterestingFacts _interestingFacts;
@@ -88,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _choiceTokenTextLayerId;
 		private CBool _choiceTokenTextDrawn;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("quickSlotsManager")] 
 		public CHandle<QuickSlotsManager> QuickSlotsManager
 		{
@@ -96,7 +103,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickSlotsManager, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("inspectionComponent")] 
 		public CHandle<InspectionComponent> InspectionComponent
 		{
@@ -104,7 +111,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inspectionComponent, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("Phone")] 
 		public CHandle<PlayerPhone> Phone
 		{
@@ -112,7 +119,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _phone, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("fppCameraComponent")] 
 		public CHandle<gameFPPCameraComponent> FppCameraComponent
 		{
@@ -120,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fppCameraComponent, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("primaryTargetingComponent")] 
 		public CHandle<gameTargetingComponent> PrimaryTargetingComponent
 		{
@@ -128,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _primaryTargetingComponent, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("DEBUG_Visualizer")] 
 		public CHandle<DEBUG_VisualizerComponent> DEBUG_Visualizer
 		{
@@ -136,7 +143,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_Visualizer, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("Debug_DamageInputRec")] 
 		public CHandle<DEBUG_DamageInputReceiver> Debug_DamageInputRec
 		{
@@ -144,7 +151,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debug_DamageInputRec, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("highDamageThreshold")] 
 		public CFloat HighDamageThreshold
 		{
@@ -152,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highDamageThreshold, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("medDamageThreshold")] 
 		public CFloat MedDamageThreshold
 		{
@@ -160,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _medDamageThreshold, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("lowDamageThreshold")] 
 		public CFloat LowDamageThreshold
 		{
@@ -168,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lowDamageThreshold, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("meleeHighDamageThreshold")] 
 		public CFloat MeleeHighDamageThreshold
 		{
@@ -176,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meleeHighDamageThreshold, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("meleeMedDamageThreshold")] 
 		public CFloat MeleeMedDamageThreshold
 		{
@@ -184,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meleeMedDamageThreshold, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("meleeLowDamageThreshold")] 
 		public CFloat MeleeLowDamageThreshold
 		{
@@ -192,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meleeLowDamageThreshold, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("explosionHighDamageThreshold")] 
 		public CFloat ExplosionHighDamageThreshold
 		{
@@ -200,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosionHighDamageThreshold, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("explosionMedDamageThreshold")] 
 		public CFloat ExplosionMedDamageThreshold
 		{
@@ -208,7 +215,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosionMedDamageThreshold, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("explosionLowDamageThreshold")] 
 		public CFloat ExplosionLowDamageThreshold
 		{
@@ -216,7 +223,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosionLowDamageThreshold, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("effectTimeStamp")] 
 		public CFloat EffectTimeStamp
 		{
@@ -224,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectTimeStamp, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("curInventoryWeight")] 
 		public CFloat CurInventoryWeight
 		{
@@ -232,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _curInventoryWeight, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("healthVfxBlackboard")] 
 		public CHandle<worldEffectBlackboard> HealthVfxBlackboard
 		{
@@ -240,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _healthVfxBlackboard, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("laserTargettingVfxBlackboard")] 
 		public CHandle<worldEffectBlackboard> LaserTargettingVfxBlackboard
 		{
@@ -248,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _laserTargettingVfxBlackboard, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("itemLogBlackboard")] 
 		public CHandle<gameIBlackboard> ItemLogBlackboard
 		{
@@ -256,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemLogBlackboard, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("lastScanTarget")] 
 		public wCHandle<gameObject> LastScanTarget
 		{
@@ -264,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastScanTarget, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("meleeSelectInputProcessed")] 
 		public CBool MeleeSelectInputProcessed
 		{
@@ -272,7 +279,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meleeSelectInputProcessed, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("waitingForDelayEvent")] 
 		public CBool WaitingForDelayEvent
 		{
@@ -280,7 +287,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _waitingForDelayEvent, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("randomizedTime")] 
 		public CFloat RandomizedTime
 		{
@@ -288,7 +295,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _randomizedTime, value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(122)] 
 		[RED("isResetting")] 
 		public CBool IsResetting
 		{
@@ -296,7 +303,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isResetting, value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(123)] 
 		[RED("delayEventID")] 
 		public gameDelayID DelayEventID
 		{
@@ -304,7 +311,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _delayEventID, value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(124)] 
 		[RED("resetTickID")] 
 		public gameDelayID ResetTickID
 		{
@@ -312,7 +319,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _resetTickID, value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(125)] 
 		[RED("katanaAnimProgression")] 
 		public CFloat KatanaAnimProgression
 		{
@@ -320,7 +327,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _katanaAnimProgression, value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(126)] 
 		[RED("coverModifierActive")] 
 		public CBool CoverModifierActive
 		{
@@ -328,7 +335,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _coverModifierActive, value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(127)] 
 		[RED("workspotDamageReductionActive")] 
 		public CBool WorkspotDamageReductionActive
 		{
@@ -336,7 +343,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workspotDamageReductionActive, value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(128)] 
 		[RED("workspotVisibilityReductionActive")] 
 		public CBool WorkspotVisibilityReductionActive
 		{
@@ -344,7 +351,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workspotVisibilityReductionActive, value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(129)] 
 		[RED("currentPlayerWorkspotTags")] 
 		public CArray<CName> CurrentPlayerWorkspotTags
 		{
@@ -352,7 +359,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentPlayerWorkspotTags, value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(130)] 
 		[RED("incapacitated")] 
 		public CBool Incapacitated
 		{
@@ -360,7 +367,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _incapacitated, value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(131)] 
 		[RED("remoteMappinId")] 
 		public gameNewMappinID RemoteMappinId
 		{
@@ -368,7 +375,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _remoteMappinId, value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(132)] 
 		[RED("CPOMissionDataState")] 
 		public CHandle<CPOMissionDataState> CPOMissionDataState
 		{
@@ -376,7 +383,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cPOMissionDataState, value);
 		}
 
-		[Ordinal(132)] 
+		[Ordinal(133)] 
 		[RED("CPOMissionDataBbId")] 
 		public CUInt32 CPOMissionDataBbId
 		{
@@ -384,7 +391,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cPOMissionDataBbId, value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(134)] 
+		[RED("visibilityListener")] 
+		public CHandle<VisibilityStatListener> VisibilityListener
+		{
+			get => GetProperty(ref _visibilityListener);
+			set => SetProperty(ref _visibilityListener, value);
+		}
+
+		[Ordinal(135)] 
+		[RED("secondHeartListener")] 
+		public CHandle<SecondHeartStatListener> SecondHeartListener
+		{
+			get => GetProperty(ref _secondHeartListener);
+			set => SetProperty(ref _secondHeartListener, value);
+		}
+
+		[Ordinal(136)] 
 		[RED("armorStatListener")] 
 		public CHandle<ArmorStatListener> ArmorStatListener
 		{
@@ -392,7 +415,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _armorStatListener, value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(137)] 
 		[RED("healthStatListener")] 
 		public CHandle<HealthStatListener> HealthStatListener
 		{
@@ -400,7 +423,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _healthStatListener, value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(138)] 
 		[RED("oxygenStatListener")] 
 		public CHandle<OxygenStatListener> OxygenStatListener
 		{
@@ -408,7 +431,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _oxygenStatListener, value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(139)] 
 		[RED("aimAssistListener")] 
 		public CHandle<AimAssistSettingsListener> AimAssistListener
 		{
@@ -416,7 +439,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _aimAssistListener, value);
 		}
 
-		[Ordinal(137)] 
+		[Ordinal(140)] 
 		[RED("autoRevealListener")] 
 		public CHandle<AutoRevealStatListener> AutoRevealListener
 		{
@@ -424,7 +447,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _autoRevealListener, value);
 		}
 
-		[Ordinal(138)] 
+		[Ordinal(141)] 
 		[RED("isTalkingOnPhone")] 
 		public CBool IsTalkingOnPhone
 		{
@@ -432,7 +455,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isTalkingOnPhone, value);
 		}
 
-		[Ordinal(139)] 
+		[Ordinal(142)] 
 		[RED("DataDamageUpdateID")] 
 		public gameDelayID DataDamageUpdateID
 		{
@@ -440,7 +463,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataDamageUpdateID, value);
 		}
 
-		[Ordinal(140)] 
+		[Ordinal(143)] 
 		[RED("playerAttachedCallbackID")] 
 		public CUInt32 PlayerAttachedCallbackID
 		{
@@ -448,7 +471,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerAttachedCallbackID, value);
 		}
 
-		[Ordinal(141)] 
+		[Ordinal(144)] 
 		[RED("playerDetachedCallbackID")] 
 		public CUInt32 PlayerDetachedCallbackID
 		{
@@ -456,7 +479,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerDetachedCallbackID, value);
 		}
 
-		[Ordinal(142)] 
+		[Ordinal(145)] 
 		[RED("combatStateListener")] 
 		public CUInt32 CombatStateListener
 		{
@@ -464,7 +487,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _combatStateListener, value);
 		}
 
-		[Ordinal(143)] 
+		[Ordinal(146)] 
 		[RED("LocomotionStateListener")] 
 		public CUInt32 LocomotionStateListener
 		{
@@ -472,7 +495,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _locomotionStateListener, value);
 		}
 
-		[Ordinal(144)] 
+		[Ordinal(147)] 
 		[RED("numberOfCombatantsListenerID")] 
 		public CUInt32 NumberOfCombatantsListenerID
 		{
@@ -480,7 +503,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numberOfCombatantsListenerID, value);
 		}
 
-		[Ordinal(145)] 
+		[Ordinal(148)] 
 		[RED("numberOfCombatants")] 
 		public CInt32 NumberOfCombatants
 		{
@@ -488,7 +511,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numberOfCombatants, value);
 		}
 
-		[Ordinal(146)] 
+		[Ordinal(149)] 
 		[RED("zoneChangeListener")] 
 		public CUInt32 ZoneChangeListener
 		{
@@ -496,7 +519,31 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _zoneChangeListener, value);
 		}
 
-		[Ordinal(147)] 
+		[Ordinal(150)] 
+		[RED("equipmentMeshOverlayEffectName")] 
+		public CName EquipmentMeshOverlayEffectName
+		{
+			get => GetProperty(ref _equipmentMeshOverlayEffectName);
+			set => SetProperty(ref _equipmentMeshOverlayEffectName, value);
+		}
+
+		[Ordinal(151)] 
+		[RED("equipmentMeshOverlayEffectTag")] 
+		public CName EquipmentMeshOverlayEffectTag
+		{
+			get => GetProperty(ref _equipmentMeshOverlayEffectTag);
+			set => SetProperty(ref _equipmentMeshOverlayEffectTag, value);
+		}
+
+		[Ordinal(152)] 
+		[RED("equipmentMeshOverlaySlots")] 
+		public CArray<TweakDBID> EquipmentMeshOverlaySlots
+		{
+			get => GetProperty(ref _equipmentMeshOverlaySlots);
+			set => SetProperty(ref _equipmentMeshOverlaySlots, value);
+		}
+
+		[Ordinal(153)] 
 		[RED("coverVisibilityPerkBlocked")] 
 		public CBool CoverVisibilityPerkBlocked
 		{
@@ -504,7 +551,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _coverVisibilityPerkBlocked, value);
 		}
 
-		[Ordinal(148)] 
+		[Ordinal(154)] 
 		[RED("behindCover")] 
 		public CBool BehindCover
 		{
@@ -512,7 +559,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _behindCover, value);
 		}
 
-		[Ordinal(149)] 
+		[Ordinal(155)] 
 		[RED("inCombat")] 
 		public CBool InCombat
 		{
@@ -520,7 +567,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inCombat, value);
 		}
 
-		[Ordinal(150)] 
+		[Ordinal(156)] 
 		[RED("hasBeenDetected")] 
 		public CBool HasBeenDetected
 		{
@@ -528,7 +575,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasBeenDetected, value);
 		}
 
-		[Ordinal(151)] 
+		[Ordinal(157)] 
 		[RED("inCrouch")] 
 		public CBool InCrouch
 		{
@@ -536,7 +583,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inCrouch, value);
 		}
 
-		[Ordinal(152)] 
+		[Ordinal(158)] 
 		[RED("gunshotRange")] 
 		public CFloat GunshotRange
 		{
@@ -544,7 +591,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gunshotRange, value);
 		}
 
-		[Ordinal(153)] 
+		[Ordinal(159)] 
 		[RED("explosionRange")] 
 		public CFloat ExplosionRange
 		{
@@ -552,7 +599,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosionRange, value);
 		}
 
-		[Ordinal(154)] 
+		[Ordinal(160)] 
 		[RED("nextBufferModifier")] 
 		public CInt32 NextBufferModifier
 		{
@@ -560,7 +607,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nextBufferModifier, value);
 		}
 
-		[Ordinal(155)] 
+		[Ordinal(161)] 
 		[RED("attackingNetrunnerID")] 
 		public entEntityID AttackingNetrunnerID
 		{
@@ -568,7 +615,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attackingNetrunnerID, value);
 		}
 
-		[Ordinal(156)] 
+		[Ordinal(162)] 
 		[RED("NPCDeathInstigator")] 
 		public wCHandle<NPCPuppet> NPCDeathInstigator
 		{
@@ -576,7 +623,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nPCDeathInstigator, value);
 		}
 
-		[Ordinal(157)] 
+		[Ordinal(163)] 
 		[RED("bestTargettingWeapon")] 
 		public wCHandle<gameweaponObject> BestTargettingWeapon
 		{
@@ -584,7 +631,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bestTargettingWeapon, value);
 		}
 
-		[Ordinal(158)] 
+		[Ordinal(164)] 
 		[RED("bestTargettingDot")] 
 		public CFloat BestTargettingDot
 		{
@@ -592,7 +639,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bestTargettingDot, value);
 		}
 
-		[Ordinal(159)] 
+		[Ordinal(165)] 
 		[RED("targettingEnemies")] 
 		public CInt32 TargettingEnemies
 		{
@@ -600,7 +647,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targettingEnemies, value);
 		}
 
-		[Ordinal(160)] 
+		[Ordinal(166)] 
 		[RED("coverRecordID")] 
 		public TweakDBID CoverRecordID
 		{
@@ -608,7 +655,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _coverRecordID, value);
 		}
 
-		[Ordinal(161)] 
+		[Ordinal(167)] 
 		[RED("damageReductionRecordID")] 
 		public TweakDBID DamageReductionRecordID
 		{
@@ -616,7 +663,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _damageReductionRecordID, value);
 		}
 
-		[Ordinal(162)] 
+		[Ordinal(168)] 
 		[RED("visReductionRecordID")] 
 		public TweakDBID VisReductionRecordID
 		{
@@ -624,7 +671,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visReductionRecordID, value);
 		}
 
-		[Ordinal(163)] 
+		[Ordinal(169)] 
 		[RED("lastDmgInflicted")] 
 		public EngineTime LastDmgInflicted
 		{
@@ -632,7 +679,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastDmgInflicted, value);
 		}
 
-		[Ordinal(164)] 
+		[Ordinal(170)] 
 		[RED("lowHealthNextRumbleTime")] 
 		public CFloat LowHealthNextRumbleTime
 		{
@@ -640,7 +687,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lowHealthNextRumbleTime, value);
 		}
 
-		[Ordinal(165)] 
+		[Ordinal(171)] 
+		[RED("staminaListener")] 
+		public CHandle<StaminaListener> StaminaListener
+		{
+			get => GetProperty(ref _staminaListener);
+			set => SetProperty(ref _staminaListener, value);
+		}
+
+		[Ordinal(172)] 
+		[RED("memoryListener")] 
+		public CHandle<MemoryListener> MemoryListener
+		{
+			get => GetProperty(ref _memoryListener);
+			set => SetProperty(ref _memoryListener, value);
+		}
+
+		[Ordinal(173)] 
 		[RED("securityAreaTypeE3HACK")] 
 		public CEnum<ESecurityAreaType> SecurityAreaTypeE3HACK
 		{
@@ -648,7 +711,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityAreaTypeE3HACK, value);
 		}
 
-		[Ordinal(166)] 
+		[Ordinal(174)] 
 		[RED("overlappedSecurityZones")] 
 		public CArray<gamePersistentID> OverlappedSecurityZones
 		{
@@ -656,7 +719,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _overlappedSecurityZones, value);
 		}
 
-		[Ordinal(167)] 
+		[Ordinal(175)] 
 		[RED("interestingFacts")] 
 		public InterestingFacts InterestingFacts
 		{
@@ -664,7 +727,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _interestingFacts, value);
 		}
 
-		[Ordinal(168)] 
+		[Ordinal(176)] 
 		[RED("interestingFactsListenersIds")] 
 		public InterestingFactsListenersIds InterestingFactsListenersIds
 		{
@@ -672,7 +735,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _interestingFactsListenersIds, value);
 		}
 
-		[Ordinal(169)] 
+		[Ordinal(177)] 
 		[RED("interestingFactsListenersFunctions")] 
 		public InterestingFactsListenersFunctions InterestingFactsListenersFunctions
 		{
@@ -680,7 +743,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _interestingFactsListenersFunctions, value);
 		}
 
-		[Ordinal(170)] 
+		[Ordinal(178)] 
 		[RED("visionModeController")] 
 		public CHandle<PlayerVisionModeController> VisionModeController
 		{
@@ -688,7 +751,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visionModeController, value);
 		}
 
-		[Ordinal(171)] 
+		[Ordinal(179)] 
 		[RED("cachedGameplayRestrictions")] 
 		public CArray<TweakDBID> CachedGameplayRestrictions
 		{
@@ -696,7 +759,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cachedGameplayRestrictions, value);
 		}
 
-		[Ordinal(172)] 
+		[Ordinal(180)] 
 		[RED("delayEndGracePeriodAfterSpawnEventID")] 
 		public gameDelayID DelayEndGracePeriodAfterSpawnEventID
 		{
@@ -704,7 +767,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _delayEndGracePeriodAfterSpawnEventID, value);
 		}
 
-		[Ordinal(173)] 
+		[Ordinal(181)] 
 		[RED("bossThatTargetsPlayer")] 
 		public entEntityID BossThatTargetsPlayer
 		{
@@ -712,7 +775,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bossThatTargetsPlayer, value);
 		}
 
-		[Ordinal(174)] 
+		[Ordinal(182)] 
 		[RED("choiceTokenTextLayerId")] 
 		public CUInt32 ChoiceTokenTextLayerId
 		{
@@ -720,7 +783,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _choiceTokenTextLayerId, value);
 		}
 
-		[Ordinal(175)] 
+		[Ordinal(183)] 
 		[RED("choiceTokenTextDrawn")] 
 		public CBool ChoiceTokenTextDrawn
 		{

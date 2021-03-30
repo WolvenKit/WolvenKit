@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CName> _sideTriggerNames;
 		private CArray<CHandle<gameStaticTriggerAreaComponent>> _triggerComponents;
 
-		[Ordinal(93)] 
+		[Ordinal(96)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeature, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(97)] 
 		[RED("workspotSideName")] 
 		public CName WorkspotSideName
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workspotSideName, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("portalLight")] 
 		public CHandle<gameLightComponent> PortalLight
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _portalLight, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(99)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sideTriggerNames, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(100)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{

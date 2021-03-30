@@ -10,6 +10,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _normalAppearence;
 		private wCHandle<InventoryItemDisplayController> _controller;
 		private CBool _isSelected;
+		private CHandle<ItemCraftingData> _itemData;
+		private CHandle<RecipeData> _recipeData;
 		private CName _displayToCreate;
 
 		[Ordinal(15)] 
@@ -37,6 +39,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("itemData")] 
+		public CHandle<ItemCraftingData> ItemData
+		{
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("recipeData")] 
+		public CHandle<RecipeData> RecipeData
+		{
+			get => GetProperty(ref _recipeData);
+			set => SetProperty(ref _recipeData, value);
+		}
+
+		[Ordinal(20)] 
 		[RED("displayToCreate")] 
 		public CName DisplayToCreate
 		{

@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class worldInstancedMeshNode : worldNode
+	public class worldInstancedMeshNode_ : worldNode
 	{
 		private raRef<CMesh> _mesh;
 		private CName _meshAppearance;
@@ -80,6 +80,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _worldTransformsBuffer, value);
 		}
 
-		public worldInstancedMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldInstancedMeshNode_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

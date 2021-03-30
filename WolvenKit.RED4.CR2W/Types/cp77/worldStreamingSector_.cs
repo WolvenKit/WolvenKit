@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class worldStreamingSector : CResource
+	public class worldStreamingSector_ : CResource
 	{
 		private CArray<rRef<CResource>> _localInplaceResource;
 		private raRef<worldStreamingSectorInplaceContent> _externInplaceResource;
@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _category, value);
 		}
 
-		public worldStreamingSector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldStreamingSector_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

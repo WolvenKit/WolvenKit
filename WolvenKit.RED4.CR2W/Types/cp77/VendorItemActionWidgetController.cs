@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _moneyStatusContainer;
 		private inkWidgetReference _processingStatusContainer;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("priceWidget")] 
 		public inkTextWidgetReference PriceWidget
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _priceWidget, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("priceContainer")] 
 		public inkWidgetReference PriceContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _priceContainer, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("moneyStatusContainer")] 
 		public inkWidgetReference MoneyStatusContainer
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _moneyStatusContainer, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("processingStatusContainer")] 
 		public inkWidgetReference ProcessingStatusContainer
 		{

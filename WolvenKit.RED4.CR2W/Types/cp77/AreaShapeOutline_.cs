@@ -14,17 +14,17 @@ namespace WolvenKit.RED4.CR2W.Types
 		[RED("points")] 
 		public CArray<Vector3> Points
 		{
-            get => GetProperty(ref _points);
-            set => SetProperty(ref _points, value);
-        }
+			get => GetProperty(ref _points);
+			set => SetProperty(ref _points, value);
+		}
 
 		[Ordinal(1)] 
 		[RED("height")] 
 		public CFloat Height
 		{
-            get => GetProperty(ref _height);
-            set => SetProperty(ref _height, value);
-        }
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
+		}
 
 		public AreaShapeOutline_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}

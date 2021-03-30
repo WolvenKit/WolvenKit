@@ -25,6 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gamebbScriptID_Float _radius;
 		private gamebbScriptID_Float _range;
 		private gamebbScriptID_Bool _renderMaterialOverride;
+		private gamebbScriptID_Bool _clearMaterialOverlayOnDetach;
 		private gamebbScriptID_Quaternion _rotation;
 		private gamebbScriptID_Float _minRayAngleDiff;
 		private gamebbScriptID_Int32 _statType;
@@ -208,6 +209,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("clearMaterialOverlayOnDetach")] 
+		public gamebbScriptID_Bool ClearMaterialOverlayOnDetach
+		{
+			get => GetProperty(ref _clearMaterialOverlayOnDetach);
+			set => SetProperty(ref _clearMaterialOverlayOnDetach, value);
+		}
+
+		[Ordinal(19)] 
 		[RED("rotation")] 
 		public gamebbScriptID_Quaternion Rotation
 		{
@@ -215,7 +224,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rotation, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("minRayAngleDiff")] 
 		public gamebbScriptID_Float MinRayAngleDiff
 		{
@@ -223,7 +232,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _minRayAngleDiff, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("statType")] 
 		public gamebbScriptID_Int32 StatType
 		{
@@ -231,7 +240,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statType, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("stimuliEvent")] 
 		public gamebbScriptID_Variant StimuliEvent
 		{
@@ -239,7 +248,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stimuliEvent, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("stimuliRaycastTest")] 
 		public gamebbScriptID_Bool StimuliRaycastTest
 		{
@@ -247,7 +256,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stimuliRaycastTest, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("stimuliNavigationTest")] 
 		public gamebbScriptID_Bool StimuliNavigationTest
 		{
@@ -255,7 +264,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stimuliNavigationTest, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("stimuliConeFilter")] 
 		public gamebbScriptID_Bool StimuliConeFilter
 		{
@@ -263,7 +272,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stimuliConeFilter, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("stimuliAxisFilter")] 
 		public gamebbScriptID_Bool StimuliAxisFilter
 		{
@@ -271,7 +280,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stimuliAxisFilter, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("stimuliAxisConstraints")] 
 		public gamebbScriptID_Vector4 StimuliAxisConstraints
 		{
@@ -279,7 +288,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stimuliAxisConstraints, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("stimType")] 
 		public gamebbScriptID_Int32 StimType
 		{
@@ -287,7 +296,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stimType, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("value")] 
 		public gamebbScriptID_Float Value
 		{
@@ -295,7 +304,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _value, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("flags")] 
 		public gamebbScriptID_Variant Flags
 		{
@@ -303,7 +312,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _flags, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("attack")] 
 		public gamebbScriptID_Variant Attack
 		{
@@ -311,7 +320,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attack, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("attackId")] 
 		public gamebbScriptID_Variant AttackId
 		{
@@ -319,7 +328,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attackId, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("attackNumber")] 
 		public gamebbScriptID_Int32 AttackNumber
 		{
@@ -327,7 +336,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attackNumber, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("impactOrientationSlot")] 
 		public gamebbScriptID_CName ImpactOrientationSlot
 		{
@@ -335,7 +344,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _impactOrientationSlot, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("statusEffect")] 
 		public gamebbScriptID_Variant StatusEffect
 		{
@@ -343,7 +352,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statusEffect, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("angle")] 
 		public gamebbScriptID_Float Angle
 		{
@@ -351,7 +360,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _angle, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("fallback_weaponPierce")] 
 		public gamebbScriptID_Bool Fallback_weaponPierce
 		{
@@ -359,7 +368,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fallback_weaponPierce, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("fallback_weaponPierceChargeLevel")] 
 		public gamebbScriptID_Float Fallback_weaponPierceChargeLevel
 		{
@@ -367,7 +376,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fallback_weaponPierceChargeLevel, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("raycastEnd")] 
 		public gamebbScriptID_Vector4 RaycastEnd
 		{
@@ -375,7 +384,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _raycastEnd, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("maxPathLength")] 
 		public gamebbScriptID_Float MaxPathLength
 		{
@@ -383,7 +392,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxPathLength, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("effectorRecordName")] 
 		public gamebbScriptID_String EffectorRecordName
 		{
@@ -391,7 +400,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectorRecordName, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("targets")] 
 		public gamebbScriptID_Variant Targets
 		{
@@ -399,7 +408,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targets, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("highlightType")] 
 		public gamebbScriptID_Int32 HighlightType
 		{
@@ -407,7 +416,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highlightType, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("outlineType")] 
 		public gamebbScriptID_Int32 OutlineType
 		{
@@ -415,7 +424,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _outlineType, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("highlightPriority")] 
 		public gamebbScriptID_Int32 HighlightPriority
 		{
@@ -423,7 +432,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highlightPriority, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("fxResource")] 
 		public gamebbScriptID_Variant FxResource
 		{
@@ -431,7 +440,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fxResource, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("dotCycleDuration")] 
 		public gamebbScriptID_Float DotCycleDuration
 		{
@@ -439,7 +448,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dotCycleDuration, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("dotLastApplicationTime")] 
 		public gamebbScriptID_Float DotLastApplicationTime
 		{
@@ -447,7 +456,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dotLastApplicationTime, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("enable")] 
 		public gamebbScriptID_Bool Enable
 		{
@@ -455,7 +464,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _enable, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("slotName")] 
 		public gamebbScriptID_CName SlotName
 		{
@@ -463,7 +472,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _slotName, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("targetComponent")] 
 		public gamebbScriptID_Variant TargetComponent
 		{
@@ -471,7 +480,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetComponent, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("meleeCleave")] 
 		public gamebbScriptID_Bool MeleeCleave
 		{
@@ -479,7 +488,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meleeCleave, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("highlightedTargets")] 
 		public gamebbScriptID_Variant HighlightedTargets
 		{
@@ -487,7 +496,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highlightedTargets, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("forceVisionAppearanceData")] 
 		public gamebbScriptID_Variant ForceVisionAppearanceData
 		{
@@ -495,7 +504,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceVisionAppearanceData, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("debugBool")] 
 		public gamebbScriptID_Bool DebugBool
 		{

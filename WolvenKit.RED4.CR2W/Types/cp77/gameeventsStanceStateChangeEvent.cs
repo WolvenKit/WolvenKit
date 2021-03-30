@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class StanceStateChangeEvent : redEvent
+	public class gameeventsStanceStateChangeEvent : redEvent
 	{
 		private CEnum<gamedataNPCStanceState> _state;
 
@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _state, value);
 		}
 
-		public StanceStateChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameeventsStanceStateChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

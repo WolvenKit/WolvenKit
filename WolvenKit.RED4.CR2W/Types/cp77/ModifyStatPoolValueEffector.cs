@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<wCHandle<gamedataStatPoolUpdate_Record>> _statPoolUpdates;
 		private CBool _usePercent;
 		private CString _applicationTarget;
+		private CBool _setValue;
 
 		[Ordinal(0)] 
 		[RED("statPoolUpdates")] 
@@ -33,6 +34,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _applicationTarget);
 			set => SetProperty(ref _applicationTarget, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("setValue")] 
+		public CBool SetValue
+		{
+			get => GetProperty(ref _setValue);
+			set => SetProperty(ref _setValue, value);
 		}
 
 		public ModifyStatPoolValueEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

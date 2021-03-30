@@ -28,12 +28,15 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _selectedItemIndex;
 		private CInt32 _itemsToCompare;
 		private CBool _isShown;
+		private gameItemID _currentComparisonItemId;
 		private gameItemID _lastTooltipItemId;
 		private gameItemID _currentTooltipItemId;
 		private CHandle<TooltipLootingCachedData> _currentTooltipLootingData;
 		private entEntityID _lastItemOwnerId;
 		private entEntityID _currentItemOwnerId;
+		private CEnum<gamedataEquipmentArea> _currentComparisonEquipmentArea;
 		private CBool _lastListOpenedState;
+		private CBool _isComaprisonDirty;
 		private entEntityID _bufferedOwnerId;
 		private CHandle<inkanimProxy> _introAnimProxy;
 		private gameinteractionsvisLootData _currendData;
@@ -211,6 +214,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(22)] 
+		[RED("currentComparisonItemId")] 
+		public gameItemID CurrentComparisonItemId
+		{
+			get => GetProperty(ref _currentComparisonItemId);
+			set => SetProperty(ref _currentComparisonItemId, value);
+		}
+
+		[Ordinal(23)] 
 		[RED("lastTooltipItemId")] 
 		public gameItemID LastTooltipItemId
 		{
@@ -218,7 +229,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastTooltipItemId, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("currentTooltipItemId")] 
 		public gameItemID CurrentTooltipItemId
 		{
@@ -226,7 +237,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentTooltipItemId, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("currentTooltipLootingData")] 
 		public CHandle<TooltipLootingCachedData> CurrentTooltipLootingData
 		{
@@ -234,7 +245,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentTooltipLootingData, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("lastItemOwnerId")] 
 		public entEntityID LastItemOwnerId
 		{
@@ -242,7 +253,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastItemOwnerId, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("currentItemOwnerId")] 
 		public entEntityID CurrentItemOwnerId
 		{
@@ -250,7 +261,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentItemOwnerId, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
+		[RED("currentComparisonEquipmentArea")] 
+		public CEnum<gamedataEquipmentArea> CurrentComparisonEquipmentArea
+		{
+			get => GetProperty(ref _currentComparisonEquipmentArea);
+			set => SetProperty(ref _currentComparisonEquipmentArea, value);
+		}
+
+		[Ordinal(29)] 
 		[RED("lastListOpenedState")] 
 		public CBool LastListOpenedState
 		{
@@ -258,7 +277,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastListOpenedState, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
+		[RED("isComaprisonDirty")] 
+		public CBool IsComaprisonDirty
+		{
+			get => GetProperty(ref _isComaprisonDirty);
+			set => SetProperty(ref _isComaprisonDirty, value);
+		}
+
+		[Ordinal(31)] 
 		[RED("bufferedOwnerId")] 
 		public entEntityID BufferedOwnerId
 		{
@@ -266,7 +293,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bufferedOwnerId, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("introAnimProxy")] 
 		public CHandle<inkanimProxy> IntroAnimProxy
 		{
@@ -274,7 +301,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _introAnimProxy, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("currendData")] 
 		public gameinteractionsvisLootData CurrendData
 		{
@@ -282,7 +309,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currendData, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("activeWeapon")] 
 		public InventoryItemData ActiveWeapon
 		{
@@ -290,7 +317,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeWeapon, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
@@ -298,7 +325,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isLocked, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("currentWidgetRequestVersion")] 
 		public CInt32 CurrentWidgetRequestVersion
 		{
@@ -306,7 +333,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentWidgetRequestVersion, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("currentItemRequestVersion")] 
 		public CInt32 CurrentItemRequestVersion
 		{

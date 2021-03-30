@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<QuantityPickerActionType> _actionType;
 		private wCHandle<gameObject> _vendor;
 		private CBool _isBuyback;
+		private CBool _sendQuantityChangedEvent;
 
 		[Ordinal(6)] 
 		[RED("maxValue")] 
@@ -51,6 +52,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isBuyback);
 			set => SetProperty(ref _isBuyback, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("sendQuantityChangedEvent")] 
+		public CBool SendQuantityChangedEvent
+		{
+			get => GetProperty(ref _sendQuantityChangedEvent);
+			set => SetProperty(ref _sendQuantityChangedEvent, value);
 		}
 
 		public QuantityPickerPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

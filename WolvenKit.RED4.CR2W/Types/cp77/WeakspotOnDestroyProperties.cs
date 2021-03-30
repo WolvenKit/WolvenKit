@@ -19,6 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _sendAIActionAnimFeatureName;
 		private CInt32 _sendAIActionAnimFeatureState;
 		private CFloat _destroyDelay;
+		private CBool _useWeakspotDestroyStageVFX;
 		private TweakDBID _attackRecordID;
 		private TweakDBID _statusEffectOnDestroyID;
 
@@ -119,6 +120,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("useWeakspotDestroyStageVFX")] 
+		public CBool UseWeakspotDestroyStageVFX
+		{
+			get => GetProperty(ref _useWeakspotDestroyStageVFX);
+			set => SetProperty(ref _useWeakspotDestroyStageVFX, value);
+		}
+
+		[Ordinal(13)] 
 		[RED("attackRecordID")] 
 		public TweakDBID AttackRecordID
 		{
@@ -126,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attackRecordID, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("StatusEffectOnDestroyID")] 
 		public TweakDBID StatusEffectOnDestroyID
 		{

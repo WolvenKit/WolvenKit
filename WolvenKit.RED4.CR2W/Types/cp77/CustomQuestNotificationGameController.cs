@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _desc;
 		private inkImageWidgetReference _icon;
 		private inkTextWidgetReference _fluffHeader;
-		private CHandle<inkWidget> _root;
+		private wCHandle<inkWidget> _root;
 		private CHandle<CustomQuestNotificationUserData> _data;
 		private CHandle<inkanimProxy> _animationProxy;
 
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("root")] 
-		public CHandle<inkWidget> Root
+		public wCHandle<inkWidget> Root
 		{
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);
