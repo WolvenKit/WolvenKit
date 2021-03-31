@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Numerics;
 
 namespace WolvenKit.RED4.GeneralStructs
@@ -109,8 +109,19 @@ namespace WolvenKit.RED4.GeneralStructs
                 Z = (Int16)(-1 * (Z - 512));
             return new Vector4(X / 512f, Y / 512f, Z / 512f, W / 3f);
         }
+        public static UInt32 Vec4ToU32(Vector4 v) // reversing for 10bit nors and tans
+        {
+            UInt32 a = (UInt32)(v.X * 511 + 511);
+            UInt32 b = (UInt32)(v.Y * 511 + 511) << 10;
+            UInt32 c = (UInt32)(v.Z * 511 + 511) << 20;
+            UInt32 d = 0; // for tangents in bits its 00000000000000000000000000000000
+            if (v.W == 0)
+                d = 1073741824;  // for normals in bits its 01000000000000000000000000000000
+            UInt32 U32 = a | b | c | d;
+            return U32;
+        }
     }
-    class Manipulators
+    public class Manipulators
     {
         public static float CalculateRealPart(Quaternion Q)
         {

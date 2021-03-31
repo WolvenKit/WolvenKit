@@ -597,7 +597,7 @@ namespace WolvenKit.RED4.MeshFile
             }
             return meshstream;
         }
-        static ModelRoot RawSkinnedMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
+        public static ModelRoot RawSkinnedMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
         {
             var scene = new SceneBuilder();
 
@@ -677,7 +677,7 @@ namespace WolvenKit.RED4.MeshFile
 
             return model;
         }
-        static ModelRoot RawRigidMeshesToGLTF(List<RawMeshContainer> meshes)
+        public static ModelRoot RawRigidMeshesToGLTF(List<RawMeshContainer> meshes)
         {
             var scene = new SceneBuilder();
 
