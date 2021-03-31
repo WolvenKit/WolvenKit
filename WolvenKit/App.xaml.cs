@@ -31,6 +31,7 @@ namespace WolvenKit
         // Alternative Constructor
         public App()
         {
+
             // Change the default location of the ffmpeg binaries (same directory as application)
             // You can get the 64-bit binaries here: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
             // Library.FFmpegDirectory = @"c:\ffmpeg";

@@ -46,7 +46,7 @@
          EnableTimestamp="True"
          ErrorMessageBrush="Red"
          IgnoreCatelLogging="True"
-         InfoMessageBrush="White"
+         InfoMessageBrush="LightGray"
          ScrollMode="AutoScrollPriority"
          ShowDebug="False"
          ShowError="False"

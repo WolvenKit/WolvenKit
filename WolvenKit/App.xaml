@@ -14,7 +14,7 @@
                 <ResourceDictionary>
                     <vm:RootViewModel x:Key="ViewModel" />
                 </ResourceDictionary>
-
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
                 <!--  Global Styles  -->
                 <ResourceDictionary>
                     <Style x:Key="SidePanelContainerBorderStyle" TargetType="Border">
