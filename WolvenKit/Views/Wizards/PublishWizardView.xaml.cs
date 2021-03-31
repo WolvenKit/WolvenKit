@@ -42,17 +42,18 @@ namespace WolvenKit.Views.Wizards
                 }
             }
 
+            RSV = new RequiredSettingsView();
+            OSV = new OptionalSettingsView();
+            FSV = new FinalizeSetupView();
+
+            InitializeComponent();
+
             if (projectManager?.ActiveProject is Tw3Project)
             {
                 StepMain.Items.Insert(1, new StepBarItem() { Content = "W3 pack settings" });
                 PSV = new W3PackSettingsView();
             }
 
-            RSV = new RequiredSettingsView();
-            OSV = new OptionalSettingsView();
-            FSV = new FinalizeSetupView();
-
-            InitializeComponent();
             ShowPage();
         }
 

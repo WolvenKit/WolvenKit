@@ -9,11 +9,13 @@ using Catel.IoC;
 using Catel.Linq;
 using Catel.Logging;
 using Newtonsoft.Json;
+using Orc.ProjectManagement;
 using ProtoBuf;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.CR2W.Types;
@@ -21,6 +23,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
 using WolvenKit.Wwise;
@@ -332,7 +335,12 @@ namespace WolvenKit.Functionality.Controllers
                 return false;
             }
 
-            var packsettings = new WolvenKit.Common.Model.WitcherPackSettings();
+            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+            WitcherPackSettings packsettings = null;
+            if (projectManager?.ActiveProject is Tw3Project tw3p)
+            {
+                packsettings = tw3p.PackSettings;
+            }
             if (packsettings != null)
             {
                 MainController.Get().ProjectStatus = EProjectStatus.Busy;
