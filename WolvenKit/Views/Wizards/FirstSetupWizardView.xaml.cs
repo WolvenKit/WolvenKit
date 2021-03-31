@@ -88,20 +88,18 @@ namespace WolvenKit.Views.Wizards
 
         private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
         {
-            if (ViewModel == null)
+            if (ViewModel is FirstSetupWizardViewModel vm)
             {
-                return;
+                ServiceLocator.Default.RegisterInstance(vm);
+
+                CUV = new CreateUserView();
+                STV = new SelectThemeView();
+                LGDV = new LocateGameDateView();
+                FSV = new FinalizeSetupView();
+                SIPV = new SetInitialPreferencesView();
+
+                ShowPage();
             }
-
-            ServiceLocator.Default.RegisterInstance(ViewModel as FirstSetupWizardViewModel);
-
-            CUV = new CreateUserView();
-            STV = new SelectThemeView();
-            LGDV = new LocateGameDateView();
-            FSV = new FinalizeSetupView();
-            SIPV = new SetInitialPreferencesView();
-
-            ShowPage();
         }
 
         #endregion Methods

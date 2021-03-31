@@ -122,6 +122,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
             viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));
             viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
         }
 
         public static async Task InitializeShell()

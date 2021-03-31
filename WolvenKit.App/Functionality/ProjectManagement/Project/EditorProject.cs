@@ -36,7 +36,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public abstract void Load(string path);
 
-        public abstract void Save(string path);
+        public abstract void Save(string path = null);
 
         #endregion Methods
 

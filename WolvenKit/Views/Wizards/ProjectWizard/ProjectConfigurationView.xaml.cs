@@ -33,8 +33,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
 
         private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
-            if (imgBrush != null)
+            if (imgSelector.PreviewBrush is System.Windows.Media.ImageBrush imgBrush)
             {
                 _pwvm.ProfileImageBrush = imgBrush;
                 _pwvm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
@@ -51,13 +50,14 @@ namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
             var result = await _selectDirectoryService.DetermineDirectoryAsync(
                 new DetermineDirectoryContext()
             );
-            if (result.Result)
+            if (result.Result && ViewModel is ProjectConfigurationViewModel vm)
             {
-                (ViewModel as ProjectConfigurationViewModel).ProjectWizardModel.ProjectPath = result.DirectoryName;
+                vm.ProjectWizardModel.ProjectPath = result.DirectoryName;
             }
         }
 
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+            => validateAllFields();
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -78,11 +78,18 @@ namespace WolvenKit.Views.Wizards.WizardPages.ProjectWizard
             }
         }
 
-        private void validateAllFields() => _pwvm.AllFieldIsValid = projectNameTxtbx.VerifyData() && projectPathTxtbx.VerifyData();
+        private void validateAllFields()
+            => _pwvm.AllFieldIsValid = projectNameTxtbx.VerifyData() && projectPathTxtbx.VerifyData();
 
-        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
-                        ? HandyControl.Data.OperationResult.Success()
-                : HandyControl.Data.OperationResult.Failed("WolvenKit path does not exist");
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
+            => System.IO.Directory.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed("Selected path does not exist");
+
+        private HandyControl.Data.OperationResult<bool> VerifyIfProjectExists(string str)
+            => string.IsNullOrEmpty(str) || System.IO.Directory.Exists(System.IO.Path.Combine(projectPathTxtbx.Text, projectNameTxtbx.Text))
+                ? HandyControl.Data.OperationResult.Failed("WolvenKit project exists")
+                : HandyControl.Data.OperationResult.Success();
 
         #endregion Methods
     }

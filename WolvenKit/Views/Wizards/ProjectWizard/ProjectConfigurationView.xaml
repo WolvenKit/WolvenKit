@@ -61,7 +61,8 @@
                              hc:InfoElement.TitleWidth="140"
                              Style="{StaticResource TextBoxExtendCustom}"
                              Text="{Binding ProjectName}"
-                             TextChanged="TextBox_TextChanged" />
+                             TextChanged="TextBox_TextChanged"
+                             VerifyFunc="VerifyIfProjectExists" />
                             <hc:TextBox
                              x:Name="projectPathTxtbx"
                              Margin="0,32,50,0"
