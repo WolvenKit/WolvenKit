@@ -31,7 +31,6 @@ namespace WolvenKit
         // Alternative Constructor
         public App()
         {
-            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("@31382e342e30E51YtpIBDNMaLX45vPhZSLXDhv+dyyEAR1p+nbw8U2M=");
 
             // Change the default location of the ffmpeg binaries (same directory as application)
             // You can get the 64-bit binaries here: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
