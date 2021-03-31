@@ -11,6 +11,7 @@
  xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
+ xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  d:DesignHeight="450"
  d:DesignWidth="800"
@@ -23,6 +24,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
@@ -39,10 +42,14 @@
         <TreeView
          Name="TreeView"
          Margin="0,0,0,0"
+         pu:TreeViewHelper.ExpandMode="SingleClick"
+         pu:TreeViewHelper.ExpandedBrush="{DynamicResource MahApps.Brushes.Accent3}"
+         pu:TreeViewHelper.ItemHeight="25"
+         pu:TreeViewHelper.ItemPadding="1"
+         pu:TreeViewHelper.TreeViewStyle="Chain"
          BorderBrush="Transparent"
          ItemsSource="{Binding Treenodes}"
          SelectedItemChanged="TreeView_SelectedItemChanged"
-         Style="{DynamicResource TreeView}"
          >
             <i1:Interaction.Behaviors>
                 <behavior:TreeViewBehavior />
@@ -63,32 +70,34 @@
                     </MenuItem>
 
                     <MenuItem Header="Export">
-                        <MenuItem
-                         Command="{Binding ExportMeshCommand}"
-                         Header="Export with WCC"
-                         Visibility="Collapsed"
-                         />
-                        <MenuItem
-                         Command="{Binding ExportJsonCommand}"
-                         Header="Export to JSON"
-                         Visibility="Collapsed"
-                         />
+                        <MenuItem Header="Wem" />
+                        <MenuItem Header="BK2" />
+
+                        <MenuItem Header="Mesh">
+                            <MenuItem
+                             Command="{Binding ExportMeshCommand}"
+                             Header="Export with WCC"
+                             Visibility="Collapsed"
+                             />
+                            <MenuItem Header="Mesh with Materials" Visibility="Visible" />
 
 
-                        <hc:ComboBox
-                         x:Name="meshxport"
-                         Width="350"
-                         hc:InfoElement.Title="Mesh to"
-                         hc:InfoElement.TitlePlacement="Left"
-                         SelectedIndex="17"
-                         SelectionChanged="meshxport_SelectionChanged"
-                         >
-                            <hc:ComboBox.ItemTemplate>
-                                <HierarchicalDataTemplate>
-                                    <TextBlock Text="{Binding FileExtension}" />
-                                </HierarchicalDataTemplate>
-                            </hc:ComboBox.ItemTemplate>
-                        </hc:ComboBox>
+                            <hc:ComboBox
+                             x:Name="meshxport"
+                             Width="350"
+                             hc:InfoElement.Title="Mesh to"
+                             hc:InfoElement.TitlePlacement="Left"
+                             SelectedIndex="17"
+                             SelectionChanged="meshxport_SelectionChanged"
+                             >
+                                <hc:ComboBox.ItemTemplate>
+                                    <HierarchicalDataTemplate>
+                                        <TextBlock Text="{Binding FileExtension}" />
+                                    </HierarchicalDataTemplate>
+                                </hc:ComboBox.ItemTemplate>
+                            </hc:ComboBox>
+
+                        </MenuItem>
 
                     </MenuItem>
 

@@ -58,11 +58,17 @@
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Ab3d.PowerToys.Assimp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assimp32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assimp64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AssimpNet.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="FFME\avcodec-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -928,8 +934,10 @@
     <Content Remove="C:\Users\cancerPC\.nuget\packages\microsoft.web.webview2\1.0.664.37\build\\..\runtimes\win-x64\native\WebView2Loader.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Ab3d.PowerToys.Assimp.dll" />
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
+    <None Remove="AssimpNet.dll" />
     <None Remove="distraction_generic.bk2" />
     <None Remove="FFME\avcodec-58.dll" />
     <None Remove="FFME\avdevice-58.dll" />
@@ -1039,10 +1047,8 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ab3d.PowerToys.Assimp">
-      <HintPath>..\..\WolvenKit.Magic\WolvenKit.Magic\Ab3d.PowerToys.Assimp.dll</HintPath>
     </Reference>
     <Reference Include="AssimpNet">
-      <HintPath>..\..\WolvenKit.Magic\WolvenKit.Magic\AssimpNet.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
