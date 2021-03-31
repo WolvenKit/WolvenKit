@@ -175,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _boneVertexEpsilons, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("lodBoneMask")] 
 		public CArray<CUInt8> LodBoneMask
 		{

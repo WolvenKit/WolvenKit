@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _consoleBias, value);
         }
 
-        [Ordinal(21)]
+        [Ordinal(22)]
         [RED("saveDateTime")]
         public CDateTime SaveDateTime
         {
