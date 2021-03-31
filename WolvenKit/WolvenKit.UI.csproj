@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -155,7 +155,7 @@
 
   <ItemGroup>
 
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.2.7697" />
+    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.2.7730-beta" />
 
 
     <PackageReference Include="Ab3d.DXEngine" Version="4.2.7730-beta" />
