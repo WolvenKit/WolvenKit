@@ -364,7 +364,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanOpenFile(FileSystemInfoModel model) => true;
 
-        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
+        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
 
         private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
 
