@@ -535,8 +535,13 @@
             </Grid.RowDefinitions>
 
 
-            <hc:FlexPanel>
-                <Grid hc:FlexPanel.AlignSelf="Auto" hc:FlexPanel.FlexGrow="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
                     <Grid Grid.Column="0">
                         <Grid.Resources>
                             <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
@@ -583,7 +588,7 @@
 
 
 
-                <Grid hc:FlexPanel.FlexGrow="1">
+                <Grid Grid.Column="1">
 
                     <DockPanel
                      Height="40"
@@ -697,7 +702,7 @@
                      IsDraggable="True"
                      ShowCloseButton="True"
                      >
-                        <hc:TabItem Header="Depot">
+                        <hc:TabItem Header="Depot" ShowCloseButton="False">
                             <Grid>
                                 <DataGrid
                                  x:Name="InnerList"
@@ -760,7 +765,7 @@
                         </hc:TabItem>
                     </hc:TabControl>
                 </Grid>
-            </hc:FlexPanel>
+            </Grid>
         </Grid>
     </Border>
 </catel:UserControl>
