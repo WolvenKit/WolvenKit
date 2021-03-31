@@ -63,8 +63,33 @@
                     </MenuItem>
 
                     <MenuItem Header="Export">
-                        <MenuItem Command="{Binding ExportMeshCommand}" Header="Export with WCC" />
-                        <MenuItem Command="{Binding ExportJsonCommand}" Header="Export to JSON" />
+                        <MenuItem
+                         Command="{Binding ExportMeshCommand}"
+                         Header="Export with WCC"
+                         Visibility="Collapsed"
+                         />
+                        <MenuItem
+                         Command="{Binding ExportJsonCommand}"
+                         Header="Export to JSON"
+                         Visibility="Collapsed"
+                         />
+
+
+                        <hc:ComboBox
+                         x:Name="meshxport"
+                         Width="350"
+                         hc:InfoElement.Title="Mesh to"
+                         hc:InfoElement.TitlePlacement="Left"
+                         SelectedIndex="17"
+                         SelectionChanged="meshxport_SelectionChanged"
+                         >
+                            <hc:ComboBox.ItemTemplate>
+                                <HierarchicalDataTemplate>
+                                    <TextBlock Text="{Binding FileExtension}" />
+                                </HierarchicalDataTemplate>
+                            </hc:ComboBox.ItemTemplate>
+                        </hc:ComboBox>
+
                     </MenuItem>
 
                     <Separator />

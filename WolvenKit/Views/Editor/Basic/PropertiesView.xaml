@@ -47,6 +47,8 @@
                          >
 
                             <Viewport3D Name="MainViewport">
+                             
+
                                 <ModelVisual3D x:Name="ContentVisual" />
                                 <visuals:WireframeVisual3D
                                  x:Name="ContentWireframeVisual"
@@ -56,6 +58,8 @@
                                  UseModelColor="False"
                                  WireframeType="WireframeWithOriginalSolidModel"
                                  />
+
+
                             </Viewport3D>
                         </dxControls:DXViewportView>
                     </Border>
@@ -75,8 +79,12 @@
                      Name="MouseCameraController1"
                      EventsSourceElement="{Binding ElementName=ViewportBorder}"
                      MoveCameraConditions="LeftMouseButtonPressed, ControlKey"
+                     MoveOnlyHorizontally="True"
+                     QuickZoomConditions="ShiftKey, LeftMouseButtonPressed"
                      RotateCameraConditions="LeftMouseButtonPressed"
+                     ShowRotationCenterMarker="True"
                      TargetCamera="{Binding ElementName=Camera1}"
+                     ZoomMode="Viewport3DCenter"
                      />
 
                     <ab3d:CameraAxisPanel
