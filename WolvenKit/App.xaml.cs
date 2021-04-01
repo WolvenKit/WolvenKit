@@ -30,7 +30,15 @@ namespace WolvenKit
 
         // Alternative Constructor
         public App()
-        {
+        {// FreeNonCommercial license for WolvenKit:
+            Ab3d.Licensing.PowerToys.LicenseHelper.SetLicense(licenseOwner: "WolvenKit",
+                                                              licenseType: "TeamDeveloperLicense",
+                                                              license: "7EFB-B820-5D23-33E0-7ECA-D45B-D7A9-869C-4EFE-AA9E-AA5A-EA95-DB8F-88CA-D49C-BB1C");
+
+            Ab3d.Licensing.DXEngine.LicenseHelper.SetLicense(licenseOwner: "WolvenKit",
+                                                             licenseType: "TeamDeveloperLicense",
+                                                             license: "5119-3A9C-6A1E-6A03-A1C7-5DD5-1318-4FA3-1B84-60EF-B1FC-2706-E5F9-00CA-6D72-0704");
+
 
             // Change the default location of the ffmpeg binaries (same directory as application)
             // You can get the 64-bit binaries here: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z

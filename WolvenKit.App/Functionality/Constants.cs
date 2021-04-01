@@ -37,6 +37,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string ShowAnimationTool = "Application.ShowAnimationTool";
             public const string ShowAssetBrowser = "Application.ShowAssetBrowser";
             public const string ShowAudioTool = "Application.ShowAudioTool";
+            public const string ShowVideoTool = "Application.ShowVideoTool";
             public const string ShowBulkEditor = "Application.ShowBulkEditor";
             public const string ShowCodeEditor = "Application.ShowCodeEditor";
             public const string ShowCR2WEditor = "Application.ShowCR2WEditor";

@@ -86,6 +86,8 @@ namespace WolvenKit.ViewModels.Shell
             ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
             ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
             ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
+            ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
+
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
             ShowGameDebuggerToolCommand = new RelayCommand(ExecuteGameDebuggerTool, CanShowGameDebuggerTool);
@@ -186,6 +188,8 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
+
             commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowGameDebuggerTool, ShowGameDebuggerToolCommand, this);
@@ -259,6 +263,8 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowAudioToolCommand { get; private set; }
+        public ICommand ShowVideoToolCommand { get; private set; }
+
 
         /// <summary>
         /// Displays the BulkEditor.
@@ -356,6 +362,13 @@ namespace WolvenKit.ViewModels.Shell
 
         public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
+        public void ExecuteVideoTool()
+        {
+            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.SendMessage<bool>(true);
+        }
+
+
         private static void ExecutePackMod() => MainController.GetGame().PackAndInstallProject();
 
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
@@ -372,7 +385,9 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
-        private bool CanShowAudioTool() => true;
+        private bool CanShowAudioTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowVideoTool() => _projectManager.ActiveProject is EditorProject;
+
 
         private bool CanShowBulkEditor() => false;
 
@@ -1162,6 +1177,8 @@ namespace WolvenKit.ViewModels.Shell
 
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
             mediator.SendMessage<string>(fullpath);
+            mediator.SendMessage<bool>(true);
+
 
 
         }

@@ -459,7 +459,7 @@
                     <fluent:Button
                      Command="{catel:CommandManagerBinding Application.ShowAudioTool}"
                      Header="Audio Tool"
-                     Visibility="Collapsed"
+                     Visibility="Visible"
                      >
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons
@@ -468,6 +468,22 @@
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
                              Kind="Soundwave"
+                             />
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+
+                    <fluent:Button
+                     Command="{catel:CommandManagerBinding Application.ShowVideoTool}"
+                     Header="Video Tool"
+                     Visibility="Visible"
+                     >
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="CameraVideo"
                              />
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
@@ -593,6 +609,32 @@
             <fluent:RibbonTabItem Header="Options">
 
                 <fluent:RibbonGroupBox Header="General">
+                    <fluent:Button
+                     Click="Button_Click"
+                     Header="GPU Settings"
+                     Visibility="Collapsed"
+                     >
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Gear"
+                             />
+                        </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Gear"
+                             />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+
                     <fluent:Button Command="{catel:CommandManagerBinding Application.ShowSettings}" Header="Settings">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons

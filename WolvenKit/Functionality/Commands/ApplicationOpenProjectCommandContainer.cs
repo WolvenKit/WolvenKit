@@ -54,49 +54,65 @@ namespace WolvenKit.Functionality.Commands
 
         protected override async Task ExecuteAsync(object parameter)
         {
-            try
+            if (_projectManager.ActiveProject != null)
             {
-                var location = parameter as string;
-
-                if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
+                var a = _projectManager.ActiveProject;
+                if (parameter.ToString().Contains(a.Title))
                 {
-                    var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
-                    {
-                        Filter = "Cyberpunk 2077 Project | *.cpmodproj|Witcher 3 Project (*.w3modproj)|*.w3modproj",
-                        IsMultiSelect = false,
-                        Title = "Please select the WolvenKit project you would like to open."
-                    });
-
-                    if (result.Result)
-                    {
-                        location = result.FileName;
-                    }
+                    return;
                 }
-
-                if (!string.IsNullOrWhiteSpace(location))
-                {
-                    using (_pleaseWaitService.PushInScope())
-                    {
-                        StaticReferences.MainView.OnLoadLayoutAsync();
-
-                        await _projectManager.LoadAsync(location);
-                        var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
-                        btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
-
-
-
-
-                        StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
-                    }
-                }
-                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
             }
-            catch (Exception)
+
+
+
+            else
             {
-                // TODO: Are we intentionally swallowing this?
-                //Log.Error(ex, "Failed to open file");
+                try
+                {
+                    var location = parameter as string;
+
+                    if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
+                    {
+                        var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
+                        {
+                            Filter = "Cyberpunk 2077 Project | *.cpmodproj|Witcher 3 Project (*.w3modproj)|*.w3modproj",
+                            IsMultiSelect = false,
+                            Title = "Please select the WolvenKit project you would like to open."
+                        });
+
+                        if (result.Result)
+                        {
+                            location = result.FileName;
+                        }
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(location))
+                    {
+                        using (_pleaseWaitService.PushInScope())
+                        {
+                            StaticReferences.MainView.OnLoadLayoutAsync();
+
+                            await _projectManager.LoadAsync(location);
+                            var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
+                            btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
+
+
+
+
+                            StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
+                        }
+                    }
+                    RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                    RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+                }
+                catch (Exception)
+                {
+                    // TODO: Are we intentionally swallowing this?
+                    //Log.Error(ex, "Failed to open file");
+                }
             }
+
+
         }
 
         #endregion Methods

@@ -62,13 +62,13 @@ namespace WolvenKit.Views
             // Load up WPF resources
             InitializeComponent();
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-            mediator.Register<string>(this, OnMessage);
+            mediator.Register<bool>(this, OnMessage);
             // Setup the UI
             InitializeMainWindow();
             InitializeMediaEvents();
         }
 
-        private void OnMessage(string obj)
+        private void OnMessage(bool obj)
         {
             this.Show();
             this.SetCurrentValue(VisibilityProperty, Visibility.Visible);

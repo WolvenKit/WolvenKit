@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -58,6 +58,21 @@
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Ab3d.DirectX.Client.Settings.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Ab3d.PowerToys.Assimp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assimp32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assimp64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AssimpNet.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="FFME\avcodec-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -84,6 +99,108 @@
     </Content>
     <Content Include="FFME\swscale-5.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\Media\Images\Icons\Files\acousticdata.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\actionanimdb.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\cellmap.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\csv.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\ent.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\guiconfig.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\hud.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\navgraph.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\reddest.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redicsv.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redswf.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redwpset.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2em.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2ent.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2fnt.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2je.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2job.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2p.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2qm.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2rig.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2scene.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w3app.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w3fac.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysBack512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysDown512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysFront512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysLeft512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysRight512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysUp512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0001.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0002.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0003.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0004.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0005.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\Media\Images\Icons\Files\cminimapedit.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -115,6 +232,12 @@
   </ItemGroup>
 
   <ItemGroup>
+
+    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.2.7730-beta" />
+
+
+    <PackageReference Include="Ab3d.DXEngine" Version="4.2.7730-beta" />
+    <PackageReference Include="Ab3d.PowerToys" Version="9.5.7730-beta" />
     <PackageReference Include="Catel.Core" Version="5.12.12" />
     <PackageReference Include="Catel.MVVM" Version="5.12.12" />
     <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />
@@ -879,10 +1002,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
   <ItemGroup>
-    <Content Remove="C:\Users\cancerPC\.nuget\packages\microsoft.web.webview2\1.0.664.37\build\\..\runtimes\win-x64\native\WebView2Loader.dll" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Ab3d.DirectX.Client.Settings.dll" />
+    <None Remove="Ab3d.PowerToys.Assimp.dll" />
+    <None Remove="Assimp32.dll" />
+    <None Remove="Assimp64.dll" />
+    <None Remove="AssimpNet.dll" />
     <None Remove="distraction_generic.bk2" />
     <None Remove="FFME\avcodec-58.dll" />
     <None Remove="FFME\avdevice-58.dll" />
@@ -896,18 +1022,23 @@
     <None Remove="FFME\postproc-55.dll" />
     <None Remove="FFME\swresample-3.dll" />
     <None Remove="FFME\swscale-5.dll" />
+    <None Remove="Resources\Media\Images\Icons\Files\acousticdata.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\actionanimdb.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\animgraph.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\archetypes.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\areas.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\bikecurveset.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\buffer.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\cellmap.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\cminimapedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\community.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\conversationsedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\cooked_mlsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\csv.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\datedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\default.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\dtex.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\ent.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\envprob b.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\envprob_b.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\es.svg" />
@@ -922,7 +1053,9 @@
     <None Remove="Resources\Media\Images\Icons\Files\genericanimdb.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\geometry_cache.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Grassmask.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\guiconfig.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\hitrepresentation.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\hud.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\ies.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\joke.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\json2.svg" />
@@ -934,6 +1067,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\morphtarget.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\mt.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Navconfig.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\navgraph.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Naviobstacles.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\navmesh.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Navtile.svg" />
@@ -947,10 +1081,14 @@
     <None Remove="Resources\Media\Images\Icons\Files\psrep.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redapex.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Redcloth.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\reddest.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\reddlc.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Redexp.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redfur.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redgame.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redicsv.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redswf.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redwpset.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\regionset.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\remt.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\sav.svg" />
@@ -966,17 +1104,39 @@
     <None Remove="Resources\Media\Images\Icons\Files\subs.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\terrainsetup.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Usm.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2em.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2ent.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2fnt.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2je.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2job.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2l.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\W2Mg.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2p.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2qm.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\W2Ragdoll.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2rig.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2scene.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\W2Sf.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\W2Steer.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\W2Ter.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\W2W.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w3app.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\W3Dyng.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w3fac.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w3simplex.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\wizdef.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\workspot2.svg" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysBack512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysDown512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysFront512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysLeft512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysRight512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysUp512.png" />
+    <None Remove="Resources\SkyboxTextures\skyrender0001.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0002.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0003.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0004.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
     <None Remove="sample.mp4" />
   </ItemGroup>
   <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
@@ -984,4 +1144,13 @@
       <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)\$(AssemblyName).UNK" />
     </ItemGroup>
   </Target>
+  <ItemGroup>
+    <Reference Include="Ab3d.DirectX.Client.Settings">
+      <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Ab3d.PowerToys.Assimp">
+    </Reference>
+    <Reference Include="AssimpNet">
+    </Reference>
+  </ItemGroup>
 </Project>
