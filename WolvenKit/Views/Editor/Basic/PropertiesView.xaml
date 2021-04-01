@@ -47,7 +47,7 @@
                          >
 
                             <Viewport3D Name="MainViewport">
-                             
+
 
                                 <ModelVisual3D x:Name="ContentVisual" />
                                 <visuals:WireframeVisual3D
@@ -63,6 +63,19 @@
                             </Viewport3D>
                         </dxControls:DXViewportView>
                     </Border>
+                    <ab3d:ViewCubeCameraController
+                     x:Name="ViewCubeCameraController1"
+                     Width="100"
+                     Height="100"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Bottom"
+                     AmbientLightColor="{DynamicResource MahApps.Colors.AccentBase}"
+                     Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
+                     IsEdgeSelectionEnabled="True"
+                     IsRotationCircleShown="True"
+                     SelectionBrush="{DynamicResource MahApps.Brushes.Accent3}"
+                     TargetCamera="{Binding ElementName=Camera1}"
+                     />
 
                     <cameras:TargetPositionCamera
                      Name="Camera1"
@@ -88,8 +101,11 @@
                      />
 
                     <ab3d:CameraAxisPanel
+                     Width="50"
+                     Height="50"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Bottom"
+                     Is3DAxesShown="True"
                      TargetCamera="{Binding ElementName=Camera1}"
                      />
 

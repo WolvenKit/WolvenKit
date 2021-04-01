@@ -11,7 +11,6 @@
  xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
- xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  d:DesignHeight="450"
  d:DesignWidth="800"
@@ -24,8 +23,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
-                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
-
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </catel:UserControl.Resources>
@@ -42,29 +39,28 @@
         <TreeView
          Name="TreeView"
          Margin="0,0,0,0"
-         pu:TreeViewHelper.ExpandMode="SingleClick"
-         pu:TreeViewHelper.ExpandedBrush="{DynamicResource MahApps.Brushes.Accent3}"
-         pu:TreeViewHelper.ItemHeight="25"
-         pu:TreeViewHelper.ItemPadding="1"
-         pu:TreeViewHelper.TreeViewStyle="Chain"
          BorderBrush="Transparent"
+         FontSize="11"
          ItemsSource="{Binding Treenodes}"
          SelectedItemChanged="TreeView_SelectedItemChanged"
+         Style="{DynamicResource TreeView}"
          >
             <i1:Interaction.Behaviors>
                 <behavior:TreeViewBehavior />
             </i1:Interaction.Behaviors>
 
             <TreeView.ContextMenu>
-                <ContextMenu>
+                <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
                     <MenuItem
+                     Margin="0"
                      Command="{catel:CommandManagerBinding Application.OpenFile}"
                      CommandParameter="{Binding SelectedItem}"
                      Header="Open"
                      />
-                    <Separator />
+                    <Separator Margin="-15" />
 
-                    <MenuItem Header="Actions">
+                    <MenuItem Margin="0" Header="Actions">
+
                         <MenuItem Command="{Binding AddAllCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
@@ -101,20 +97,20 @@
 
                     </MenuItem>
 
-                    <Separator />
+                    <Separator Margin="-15" />
                     <!--<MenuItem Header="Cut" Command="{Binding CutFileCommand}" />-->
                     <MenuItem Command="{Binding CopyCommand}" Header="Copy" />
                     <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
                     <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
                     <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
-                    <Separator />
+                    <Separator Margin="-15" />
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
                     <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
-                    <Separator />
+                    <Separator Margin="-15" />
                     <MenuItem Command="{Binding ExpandCommand}" Header="Expand children" />
                     <MenuItem Command="{Binding CollapseCommand}" Header="Collapse children" />
-                    <Separator />
+                    <Separator Margin="-15" />
                 </ContextMenu>
             </TreeView.ContextMenu>
 
