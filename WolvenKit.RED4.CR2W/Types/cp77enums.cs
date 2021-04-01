@@ -284,41 +284,41 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public enum ETextureRawFormat
         {
-            TRF_Invalid = 0,
-            TRF_AlphaGrayscale = 0,
-            TRF_TrueColor = 1,
-            TRF_DeepColor = 2,
-            TRF_Grayscale = 3,
-            TRF_HDRFloat = 4,
-            TRF_HDRHalf = 5,
-            TRF_HDRFloatGrayscale = 6,
-            TRF_Grayscale_Font = 7,
-            TRF_R8G8 = 8,
-            TRF_R32UI = 9
+            TRF_Invalid,
+            TRF_AlphaGrayscale,
+            TRF_TrueColor,
+            TRF_DeepColor,
+            TRF_Grayscale,
+            TRF_HDRFloat,
+            TRF_HDRHalf,
+            TRF_HDRFloatGrayscale,
+            TRF_Grayscale_Font,
+            TRF_R8G8,
+            TRF_R32UI
         }
 
         public enum ETextureCompression
         {
-            TCM_None = 0,
-            TCM_DXTNoAlpha = 1,
-            TCM_DXTAlpha = 2,
-            TCM_RGBE = 3,
-            TCM_Normalmap = 4,
-            TCM_Normals_DEPRECATED = 5,
-            TCM_Normals = 5,
-            TCM_NormalsHigh_DEPRECATED = 6,
-            TCM_NormalsHigh = 6,
-            TCM_NormalsGloss_DEPRECATED = 7,
-            TCM_NormalsGloss = 7,
-            TCM_TileMap = 8,
-            TCM_DXTAlphaLinear = 9,
-            TCM_QualityR = 10,
-            TCM_QualityRG = 11,
-            TCM_QualityColor = 12,
-            TCM_HalfHDR_Unsigned = 13,
-            TCM_HalfHDR = 13,
-            TCM_HalfHDR_Signed = 14,
-            TCM_Max = 15
+            TCM_None,
+            TCM_DXTNoAlpha,
+            TCM_DXTAlpha,
+            TCM_RGBE,
+            TCM_Normalmap,
+            TCM_Normals_DEPRECATED,
+            TCM_Normals,
+            TCM_NormalsHigh_DEPRECATED,
+            TCM_NormalsHigh,
+            TCM_NormalsGloss_DEPRECATED,
+            TCM_NormalsGloss,
+            TCM_TileMap,
+            TCM_DXTAlphaLinear,
+            TCM_QualityR,
+            TCM_QualityRG,
+            TCM_QualityColor,
+            TCM_HalfHDR_Unsigned,
+            TCM_HalfHDR,
+            TCM_HalfHDR_Signed,
+            TCM_Max
         }
 
         public enum Sample_Enum_As_Bitfield_2_9
