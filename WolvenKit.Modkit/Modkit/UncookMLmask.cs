@@ -74,7 +74,7 @@ namespace CP77.CR2W.Uncooker
             //}
 
             //Read tilesdata buffer into appropriate variable type
-            var tileBuffer = cr2w.Buffers[0];
+            var tileBuffer = cr2w.Buffers[1];
             var tiles = new uint[tileBuffer.MemSize / 4];
             cr2wStream.Seek(tileBuffer.Offset, SeekOrigin.Begin);
             using (var ms = new MemoryStream())
