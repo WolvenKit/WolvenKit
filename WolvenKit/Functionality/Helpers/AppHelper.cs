@@ -12,7 +12,6 @@ using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.ViewModels.Shared;
@@ -178,9 +177,15 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             ws.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             BindingOperations.SetBinding(sh, ShellWindow.WindowStateProperty, ws);
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            sh.Closed += Sh_Closed;
 
             StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
             StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
+        }
+
+        private static void Sh_Closed(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         private static void ThemeInnerInit()

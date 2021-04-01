@@ -216,7 +216,29 @@ namespace WolvenKit.Functionality.Converters
                 case "spatial_representation":
                 case "mlsetup":
                 case "opusinfo":
-
+                case "w3fac":
+                case "actionanimdb":
+                case "acousticdata":
+                case "cellmap":
+                case "csv":
+                case "ent":
+                case "guiconfig":
+                case "hud":
+                case "navgraph":
+                case "reddest":
+                case "redicsv":
+                case "redswf":
+                case "redwpset":
+                case "w2em":
+                case "w2ent":
+                case "w2fnt":
+                case "w2je":
+                case "w2job":
+                case "w2p":
+                case "w2qm":
+                case "w2rig":
+                case "w2scene":
+                case "w3app":
 
                     return $"Icons/Files/{extension}.svg";
 
@@ -224,32 +246,21 @@ namespace WolvenKit.Functionality.Converters
                     return $"RedEngine/{extension}.png";
 
 
-                case "actionanimdb":
                 case "apx":
-                case "cellmap":
-                case "csv":
                 case "ctw":
                 case "dds":
                 case "ebv":
-                case "ent":
                 case "env":
                 case "gidata":
                 case "gradient":
-                case "guiconfig":
-                case "hud":
                 case "jpeg":
                 case "jpg":
                 case "lipmap":
                 case "mlmask":
                 case "mltemplate":
-                case "navgraph":
                 case "no":
                 case "png":
                 case "psd":
-                case "reddest":
-                case "redicsv":
-                case "redswf":
-                case "redwpset":
                 case "tga":
                 case "vbrush":
                 case "w2anim":
@@ -261,24 +272,12 @@ namespace WolvenKit.Functionality.Converters
                 case "w2comm":
                 case "w2conv":
                 case "w2cube":
-                case "w2em":
-                case "w2ent":
                 case "w2faces":
-                case "w2fnt":
-                case "w2je":
-                case "w2job":
-                case "w2p":
                 case "w2phase":
-                case "w2qm":
                 case "w2quest":
                 case "w2rag":
-                case "w2rig":
-                case "w2scene":
-                case "w3app":
-                case "w3fac":
                 case "xcf":
                 case "zip":
-                case "acousticdata":
 
                 default:
                     return $"Icons/Files/default.svg";
