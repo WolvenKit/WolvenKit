@@ -4,6 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage"
  xmlns:catel="http://schemas.catelproject.com"
+ xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:fluent="urn:fluent-ribbon"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -40,12 +41,13 @@
                  IsOpen="{Binding BackstageIsOpen}"
                  Shown="{Binding StartScreenShown}"
                  >
-                    <HomeView:HomePageView />
+                    <HomeView:HomePageView x:Name="HMPV" />
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
 
             <fluent:Ribbon.Menu>
                 <ToggleButton
+                 x:Name="FileDrawer"
                  Grid.Row="0"
                  Grid.Column="1"
                  Width="50"
@@ -67,7 +69,7 @@
 
                 <!--  Project  -->
                 <fluent:RibbonGroupBox Header="Project">
-                    <fluent:Button Command="{catel:CommandManagerBinding Application.OpenFile}" Header="Open Project">
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.OpenProject}" Header="Open Project">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
                              Width="25"
@@ -157,6 +159,27 @@
                 <!--  Mod  -->
                 <fluent:RibbonGroupBox Header="Mod">
                     <fluent:Button Command="{catel:CommandManagerBinding Application.PackMod}" Header="Pack Mod">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="Play"
+                             />
+                        </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="Play"
+                             />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.PublishProject}" Header="Publish Project">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
                              Width="25"
@@ -436,7 +459,7 @@
                     <fluent:Button
                      Command="{catel:CommandManagerBinding Application.ShowAudioTool}"
                      Header="Audio Tool"
-                     Visibility="Collapsed"
+                     Visibility="Visible"
                      >
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconBootstrapIcons
@@ -445,6 +468,22 @@
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
                              Kind="Soundwave"
+                             />
+                        </fluent:Button.LargeIcon>
+                    </fluent:Button>
+
+                    <fluent:Button
+                     Command="{catel:CommandManagerBinding Application.ShowVideoTool}"
+                     Header="Video Tool"
+                     Visibility="Visible"
+                     >
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Kind="CameraVideo"
                              />
                         </fluent:Button.LargeIcon>
                     </fluent:Button>
@@ -570,6 +609,32 @@
             <fluent:RibbonTabItem Header="Options">
 
                 <fluent:RibbonGroupBox Header="General">
+                    <fluent:Button
+                     Click="Button_Click"
+                     Header="GPU Settings"
+                     Visibility="Collapsed"
+                     >
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Gear"
+                             />
+                        </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Gear"
+                             />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
+
+
                     <fluent:Button Command="{catel:CommandManagerBinding Application.ShowSettings}" Header="Settings">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
@@ -745,8 +810,11 @@
             </Border>
         </Border>
 
-
-
+        <feather:GuidedTour
+         Name="guide"
+         AllowDismiss="True"
+         Animate="True"
+         />
 
 
         <hc:Drawer

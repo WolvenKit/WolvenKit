@@ -40,6 +40,7 @@
          Name="TreeView"
          Margin="0,0,0,0"
          BorderBrush="Transparent"
+         FontSize="11"
          ItemsSource="{Binding Treenodes}"
          SelectedItemChanged="TreeView_SelectedItemChanged"
          Style="{DynamicResource TreeView}"
@@ -49,38 +50,67 @@
             </i1:Interaction.Behaviors>
 
             <TreeView.ContextMenu>
-                <ContextMenu>
+                <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
                     <MenuItem
+                     Margin="0"
                      Command="{catel:CommandManagerBinding Application.OpenFile}"
                      CommandParameter="{Binding SelectedItem}"
                      Header="Open"
                      />
-                    <Separator />
+                    <Separator Margin="-15" />
 
-                    <MenuItem Header="Actions">
+                    <MenuItem Margin="0" Header="Actions">
+
                         <MenuItem Command="{Binding AddAllCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
 
                     <MenuItem Header="Export">
-                        <MenuItem Command="{Binding ExportMeshCommand}" Header="Export with WCC" />
-                        <MenuItem Command="{Binding ExportJsonCommand}" Header="Export to JSON" />
+                        <MenuItem Header="Wem" />
+                        <MenuItem Header="BK2" />
+
+                        <MenuItem Header="Mesh">
+                            <MenuItem
+                             Command="{Binding ExportMeshCommand}"
+                             Header="Export with WCC"
+                             Visibility="Collapsed"
+                             />
+                            <MenuItem Header="Mesh with Materials" Visibility="Visible" />
+
+
+                            <hc:ComboBox
+                             x:Name="meshxport"
+                             Width="350"
+                             hc:InfoElement.Title="Mesh to"
+                             hc:InfoElement.TitlePlacement="Left"
+                             SelectedIndex="17"
+                             SelectionChanged="meshxport_SelectionChanged"
+                             >
+                                <hc:ComboBox.ItemTemplate>
+                                    <HierarchicalDataTemplate>
+                                        <TextBlock Text="{Binding FileExtension}" />
+                                    </HierarchicalDataTemplate>
+                                </hc:ComboBox.ItemTemplate>
+                            </hc:ComboBox>
+
+                        </MenuItem>
+
                     </MenuItem>
 
-                    <Separator />
+                    <Separator Margin="-15" />
                     <!--<MenuItem Header="Cut" Command="{Binding CutFileCommand}" />-->
                     <MenuItem Command="{Binding CopyCommand}" Header="Copy" />
                     <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
                     <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
                     <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
-                    <Separator />
+                    <Separator Margin="-15" />
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
                     <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
-                    <Separator />
+                    <Separator Margin="-15" />
                     <MenuItem Command="{Binding ExpandCommand}" Header="Expand children" />
                     <MenuItem Command="{Binding CollapseCommand}" Header="Collapse children" />
-                    <Separator />
+                    <Separator Margin="-15" />
                 </ContextMenu>
             </TreeView.ContextMenu>
 

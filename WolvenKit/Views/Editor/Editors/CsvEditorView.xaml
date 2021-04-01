@@ -3,7 +3,9 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol">
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:orccsvtexteditor="http://schemas.wildgums.com/orc/csvtexteditor"
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -21,19 +23,30 @@
                 <Button
                  Width="150"
                  Margin="0,5,5,5"
-                 Content="Save" />
+                 Content="Save"
+                 />
                 <Button
                  Width="150"
                  Margin="5"
-                 Content="Export Csv" />
+                 Content="Export Csv"
+                 />
                 <Button
                  Width="150"
                  Margin="5"
-                 Content="Import Csv" />
+                 Content="Import Csv"
+                 />
             </StackPanel>
-            <Grid Height="360">
-                <hc:TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            </Grid>
+
         </StackPanel>
+
+        <Grid Margin="0,150,0,0">
+
+            <orccsvtexteditor:CsvTextEditorControl
+             EditorInstanceType="{Binding EditorInstanceType}"
+             Foreground="White"
+                
+             Text="one,two,three,four,five" Height="155"
+             />
+        </Grid>
     </Grid>
 </catel:UserControl>

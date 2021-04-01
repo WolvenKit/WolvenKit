@@ -3,7 +3,8 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol">
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ Loaded="UserControl_Loaded">
 
     <Grid Grid.Row="3" VerticalAlignment="Center">
         <Grid
@@ -28,12 +29,14 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="Mod logo" />
                                 <hc:ImageSelector
+                                 x:Name="imgSelector"
                                  Width="100"
                                  Height="100"
                                  Margin="85,0,0,0"
                                  HorizontalAlignment="Left" />
                             </StackPanel>
-                            <TextBox
+                            <hc:TextBox
+                             x:Name="modNameTxtbox"
                              Margin="0,32,0,0"
                              HorizontalAlignment="Stretch"
                              hc:InfoElement.Title="Mod Name"
@@ -42,8 +45,9 @@
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                              SelectionBrush="{DynamicResource MahApps.Brushes.Accent}"
                              Style="{StaticResource TextBoxExtend}"
-                             Text="test" />
-                            <TextBox
+                             Text="{Binding Name}" />
+                            <hc:TextBox
+                             x:Name="modVersionTxtbox"
                              Margin="0,32,0,0"
                              HorizontalAlignment="Stretch"
                              hc:InfoElement.Title="Mod Version"
@@ -52,8 +56,9 @@
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                              SelectionBrush="{DynamicResource MahApps.Brushes.Accent}"
                              Style="{StaticResource TextBoxExtend}"
-                             Text="test" />
-                            <TextBox
+                             Text="{Binding Version}" />
+                            <hc:TextBox
+                             x:Name="modAuthorTxtbox"
                              Margin="0,32,0,0"
                              HorizontalAlignment="Stretch"
                              hc:InfoElement.Title="Mod Author"
@@ -62,13 +67,19 @@
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                              SelectionBrush="{DynamicResource MahApps.Brushes.Accent}"
                              Style="{StaticResource TextBoxExtend}"
-                             Text="test" />
+                             Text="{Binding Author}" />
 
                             <Grid>
                                 <RichTextBox
                                  Height="100"
                                  Margin="140,32,0,0"
-                                 HorizontalAlignment="Stretch" />
+                                 HorizontalAlignment="Stretch">
+                                    <FlowDocument>
+                                        <Paragraph>
+                                            <Run Text="{Binding Description}"/>
+                                        </Paragraph>
+                                    </FlowDocument>
+                                </RichTextBox>
 
                                 <TextBlock
                                  Margin="2,32,0,0"

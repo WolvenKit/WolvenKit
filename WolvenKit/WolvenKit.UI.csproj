@@ -25,6 +25,12 @@
     <Version>0.8.0.1-Beta</Version>
     <Description>WPF</Description>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Quest\**" />
@@ -52,6 +58,162 @@
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Ab3d.DirectX.Client.Settings.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Ab3d.PowerToys.Assimp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assimp32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assimp64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AssimpNet.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avcodec-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avdevice-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avfilter-7.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avformat-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\avutil-56.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\distraction_generic.bk2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\postproc-55.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\swresample-3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FFME\swscale-5.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\Media\Images\Icons\Files\acousticdata.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\actionanimdb.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\cellmap.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\csv.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\ent.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\guiconfig.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\hud.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\navgraph.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\reddest.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redicsv.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redswf.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redwpset.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2em.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2ent.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2fnt.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2je.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2job.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2p.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2qm.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2rig.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2scene.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w3app.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w3fac.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysBack512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysDown512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysFront512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysLeft512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysRight512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\CloudyLightRaysUp512.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0001.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0002.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0003.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0004.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SkyboxTextures\skyrender0005.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\Media\Images\Icons\Files\cminimapedit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\conversationsedit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\datedit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\default.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Application\cloud.png" />
     <Resource Include="Resources\Media\Images\Application\cp77proj.png" />
     <Resource Include="Resources\Media\Images\Application\CpProj.png" />
@@ -70,12 +232,21 @@
   </ItemGroup>
 
   <ItemGroup>
+
+    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.2.7730-beta" />
+
+
+    <PackageReference Include="Ab3d.DXEngine" Version="4.2.7730-beta" />
+    <PackageReference Include="Ab3d.PowerToys" Version="9.5.7730-beta" />
     <PackageReference Include="Catel.Core" Version="5.12.12" />
     <PackageReference Include="Catel.MVVM" Version="5.12.12" />
     <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
     <PackageReference Include="Dirkster.WSF" Version="1.2.0" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
+    <PackageReference Include="Feather.Controls" Version="1.0.1" />
+    <PackageReference Include="Feather.Core" Version="1.0.0" />
+    <PackageReference Include="FFME.Windows" Version="4.3.340" />
     <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
     <PackageReference Include="CsvHelper" Version="16.1.0" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
@@ -97,6 +268,7 @@
     <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
+    <PackageReference Include="Panuon.UI.Silver" Version="1.1.3.4" />
     <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.1" />
     <PackageReference Include="Pfim" Version="0.9.1" />
     <PackageReference Include="protobuf-net" Version="3.0.73" />
@@ -246,10 +418,13 @@
     <Resource Include="Resources\Media\Images\Application\.cpmodproj.png" />
     <Resource Include="Resources\Media\Images\Application\.w3modproj.png" />
     <Resource Include="Resources\Media\Images\Application\BlankProfilePicture.png" />
-    <Resource Include="Resources\Media\Images\Icons\Files\aiarch3.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\aiarch.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\animation.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\animgraph.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\anims.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\aningraph.svg">
@@ -258,13 +433,22 @@
     <Resource Include="Resources\Media\Images\Icons\Files\app.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\audiometadata2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\archetypes.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\areas.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\audio_metadata.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\audiovehcurveset.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\behavior_graph3.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\behavior.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\bikecurveset.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\bk2.svg">
@@ -273,13 +457,10 @@
     <Resource Include="Resources\Media\Images\Icons\Files\bnk.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\buffer.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\camcurveset.svg">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset1.svg">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\camcurveset2.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\cfoilage.svg">
@@ -291,6 +472,9 @@
     <Resource Include="Resources\Media\Images\Icons\Files\cminimap.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\community.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\conversations.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -300,7 +484,10 @@
     <Resource Include="Resources\Media\Images\Icons\Files\cookedapp.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\credits2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\cooked_mlsetup.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\credits.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\cubemap.svg">
@@ -312,10 +499,13 @@
     <Resource Include="Resources\Media\Images\Icons\Files\dat.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\Devices.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\devices.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\Effect.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\dtex.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\effect.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\envparam.svg">
@@ -327,10 +517,28 @@
     <Resource Include="Resources\Media\Images\Icons\Files\envprob b.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\envprobe.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\envprob_b.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\es.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\facialcustom.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\facialsetup.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\fb2tl.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\file.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\flyr.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\folbrush.svg">
@@ -351,22 +559,49 @@
     <Resource Include="Resources\Media\Images\Icons\Files\fnt.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\font.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\formation.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\fp.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\gamedef.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\garmentlayerparams.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\genericanimdb.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\geometry_cache.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\grassmask.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\hitrepresentation.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\hp.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inkanim2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\ies.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inkatlas3.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\inkanim.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkatlas.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\inkcharcustomization.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inkfont.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\inkfontfamily.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\inkgamesettings.svg">
@@ -375,31 +610,34 @@
     <Resource Include="Resources\Media\Images\Icons\Files\inkhud.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inklayers2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\inklayers.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inkmenu3.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\inkmenu.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inkscreencomp.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\inkfullscreencomposition.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inkshapecollection2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\inkshapecollection.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\inkstyle.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\inktypography2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\inktypography.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\inkwidget.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\Interaction.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\interaction.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\journal2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\joke.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\journal.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\journaldesc.svg">
@@ -408,10 +646,16 @@
     <Resource Include="Resources\Media\Images\Icons\Files\json.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\json2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\lane_connections.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\lane_polygons.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\lane_spots.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\lights.svg">
@@ -420,10 +664,19 @@
     <Resource Include="Resources\Media\Images\Icons\Files\location.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\locopaths.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\loot.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\mappins.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\materialinstance2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\menu.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\mesh.svg">
@@ -432,19 +685,61 @@
     <Resource Include="Resources\Media\Images\Icons\Files\mi.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\navmesh.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\mlsetup.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\morphtarget.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mt.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\navconfig.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\naviobstacles.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\navtile.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\null_areas.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\navmesh.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\opuspak.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\opusinfo.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\osupak.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\particle.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\phys.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\physicalscene.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\physmatlib.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\poimappins.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\poimappinsedit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\popup.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\psrep.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\quest.svg">
@@ -453,19 +748,82 @@
     <Resource Include="Resources\Media\Images\Icons\Files\questphase.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\resourcelist2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\redapex.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redcloth.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\reddlc.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redexp.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redfur.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\redgame.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\regionset.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\remt.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\reslist.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\rig.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\scenerid_Cutscene_info.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\sav.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\scenesversions_Cutscene_versioning.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\scenerid.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\scene_Cutscene.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\scenesversions.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\scene.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w3simplex.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\smartobject.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\smartobjects.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\sp.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\spawntree.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\srt.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\streamingquerydata.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\streamingsector.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\streamingsector_inplace.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\streamingworld.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\subs.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\terrainsetup.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\texarray.svg">
@@ -477,28 +835,58 @@
     <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent2.svg">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\traffic_persistent3.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\VoiceTags.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\usm.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\voicetags.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2l.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\w2mesh.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\w2mi2.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\w2mg.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\W3Occulsion.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\w2mi.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2ragdoll.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2sf.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2steer.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2ter.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2w.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w3dyng.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w3occulsion.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\wem.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Media\Images\Icons\Files\workspot3.svg">
+    <Resource Include="Resources\Media\Images\Icons\Files\wizdef.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\workspot2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\workspot.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\xbm.svg">
@@ -614,10 +1002,155 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
   <ItemGroup>
-    <Content Remove="C:\Users\cancerPC\.nuget\packages\microsoft.web.webview2\1.0.664.37\build\\..\runtimes\win-x64\native\WebView2Loader.dll" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Ab3d.DirectX.Client.Settings.dll" />
+    <None Remove="Ab3d.PowerToys.Assimp.dll" />
+    <None Remove="Assimp32.dll" />
+    <None Remove="Assimp64.dll" />
+    <None Remove="AssimpNet.dll" />
+    <None Remove="distraction_generic.bk2" />
+    <None Remove="FFME\avcodec-58.dll" />
+    <None Remove="FFME\avdevice-58.dll" />
+    <None Remove="FFME\avfilter-7.dll" />
+    <None Remove="FFME\avformat-58.dll" />
+    <None Remove="FFME\avutil-56.dll" />
+    <None Remove="FFME\distraction_generic.bk2" />
+    <None Remove="FFME\ffmpeg.exe" />
+    <None Remove="FFME\ffplay.exe" />
+    <None Remove="FFME\ffprobe.exe" />
+    <None Remove="FFME\postproc-55.dll" />
+    <None Remove="FFME\swresample-3.dll" />
+    <None Remove="FFME\swscale-5.dll" />
+    <None Remove="Resources\Media\Images\Icons\Files\acousticdata.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\actionanimdb.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\animgraph.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\archetypes.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\areas.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\bikecurveset.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\buffer.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\cellmap.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\cminimapedit.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\community.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\conversationsedit.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\cooked_mlsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\csv.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\datedit.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\default.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\dtex.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\ent.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\envprob b.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\envprob_b.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\es.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\facialcustom.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\fb2tl.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\file.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\flyr.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\font.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Formation.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\fp.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\garmentlayerparams.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\genericanimdb.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\geometry_cache.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Grassmask.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\guiconfig.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\hitrepresentation.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\hud.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\ies.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\joke.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\json2.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\lane_spots.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\locopaths.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\materialinstance2.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\menu.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\mlsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\morphtarget.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\mt.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Navconfig.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\navgraph.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Naviobstacles.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\navmesh.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Navtile.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\opusinfo.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\osupak.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\phys.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\physicalscene.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\physmatlib.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\poimappinsedit.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Popup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\psrep.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redapex.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Redcloth.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\reddest.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\reddlc.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Redexp.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redfur.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redgame.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redicsv.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redswf.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\redwpset.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\regionset.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\remt.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\sav.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\smartobject.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\smartobjects.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\sp.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Spawntree.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\srt.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\streamingquerydata.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\streamingsector.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\streamingsector_inplace.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\streamingworld.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\subs.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\terrainsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\Usm.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2em.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2ent.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2fnt.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2je.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2job.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2l.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\W2Mg.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2p.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2qm.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\W2Ragdoll.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2rig.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2scene.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\W2Sf.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\W2Steer.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\W2Ter.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\W2W.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w3app.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\W3Dyng.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w3fac.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w3simplex.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\wizdef.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\workspot2.svg" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysBack512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysDown512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysFront512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysLeft512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysRight512.png" />
+    <None Remove="Resources\SkyboxTextures\CloudyLightRaysUp512.png" />
+    <None Remove="Resources\SkyboxTextures\skyrender0001.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0002.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0003.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0004.bmp" />
+    <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
+    <None Remove="sample.mp4" />
+  </ItemGroup>
+  <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
+    <ItemGroup>
+      <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)\$(AssemblyName).UNK" />
+    </ItemGroup>
+  </Target>
+  <ItemGroup>
+    <Reference Include="Ab3d.DirectX.Client.Settings">
+      <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Ab3d.PowerToys.Assimp">
+    </Reference>
+    <Reference Include="AssimpNet">
+    </Reference>
   </ItemGroup>
 </Project>

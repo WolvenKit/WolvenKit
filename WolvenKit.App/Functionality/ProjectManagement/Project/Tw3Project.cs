@@ -75,10 +75,17 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override void Save(string path)
         {
+            if (path == null)
+                path = Location;
             using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
             var ser = new XmlSerializer(typeof(W3Mod));
             ser.Serialize(sf, (W3Mod)Data);
         }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public WitcherPackSettings PackSettings { get; set; } = new WitcherPackSettings();
 
         #region Directories
 

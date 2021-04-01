@@ -21,6 +21,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string Exit = "Application.Exit";
             public const string NewFile = "Application.NewFile";
             public const string NewProject = "Application.NewProject";
+            public const string PublishProject = "Application.PublishProject";
             public const string OpenFile = "Application.OpenFile";
             public const string OpenLink = "Application.OpenLink";
             public const string OpenProject = "Application.OpenProject";
@@ -36,6 +37,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string ShowAnimationTool = "Application.ShowAnimationTool";
             public const string ShowAssetBrowser = "Application.ShowAssetBrowser";
             public const string ShowAudioTool = "Application.ShowAudioTool";
+            public const string ShowVideoTool = "Application.ShowVideoTool";
             public const string ShowBulkEditor = "Application.ShowBulkEditor";
             public const string ShowCodeEditor = "Application.ShowCodeEditor";
             public const string ShowCR2WEditor = "Application.ShowCR2WEditor";

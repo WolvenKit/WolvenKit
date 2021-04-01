@@ -4,7 +4,8 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
 
     <Grid Grid.Row="3" VerticalAlignment="Center">
         <Grid
@@ -45,7 +46,9 @@
                                              Kind="LogosYoutube"
                                              Spin="False"
                                              SpinAutoReverse="False" />
-                                            <TextBox Margin="100,0,0,0" />
+                                            <TextBox
+                                             Margin="100,0,0,0"
+                                             Text="{Binding YoutubeLink}" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
@@ -64,7 +67,9 @@
                                              Kind="LogosTwitch"
                                              Spin="False"
                                              SpinAutoReverse="False" />
-                                            <TextBox Margin="100,0,0,0" />
+                                            <TextBox
+                                             Margin="100,0,0,0"
+                                             Text="{Binding TwitchLink}" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
@@ -83,7 +88,9 @@
                                              Kind="LogosTwitter"
                                              Spin="False"
                                              SpinAutoReverse="False" />
-                                            <TextBox Margin="100,0,0,0" />
+                                            <TextBox
+                                             Margin="100,0,0,0"
+                                             Text="{Binding TwitterLink}" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
@@ -102,7 +109,9 @@
                                              Kind="LogosFacebook"
                                              Spin="False"
                                              SpinAutoReverse="False" />
-                                            <TextBox Margin="100,0,0,0" />
+                                            <TextBox
+                                             Margin="100,0,0,0"
+                                             Text="{Binding FacebookLink}" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
@@ -121,7 +130,9 @@
                                              Kind="LogosDiscord"
                                              Spin="False"
                                              SpinAutoReverse="False" />
-                                            <TextBox Margin="100,0,0,0" />
+                                            <TextBox
+                                             Margin="100,0,0,0"
+                                             Text="{Binding DiscordLink}" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
@@ -140,7 +151,9 @@
                                              Kind="Cloud"
                                              Spin="False"
                                              SpinAutoReverse="False" />
-                                            <TextBox Margin="100,0,0,0" />
+                                            <TextBox
+                                             Margin="100,0,0,0"
+                                             Text="{Binding WebsiteLink}" />
                                         </Grid>
                                         <Grid Margin="0,5,0,5">
                                             <TextBlock
@@ -159,7 +172,9 @@
                                              Kind="RegularDonateHeart"
                                              Spin="False"
                                              SpinAutoReverse="False" />
-                                            <TextBox Margin="100,0,0,0" />
+                                            <TextBox
+                                             Margin="100,0,0,0"
+                                             Text="{Binding DonateLink}" />
                                         </Grid>
                                     </StackPanel>
                                 </Grid>
@@ -172,26 +187,28 @@
                                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                  SelectionBrush="{DynamicResource MahApps.Brushes.Accent}"
                                  Style="{StaticResource TextBoxExtend}"
-                                 Text="test" />
+                                 Text="{Binding License}" />
                                 <Grid Margin="0,32,0,5">
                                     <TextBlock
                                      Margin="0,0,0,0"
                                      VerticalAlignment="Center"
                                      Text="Header background" />
-                                    <Button
+                                    <mah:ColorPicker
                                      Margin="120,0,0,0"
                                      HorizontalAlignment="Left"
-                                     Content="None" />
+                                     Width="250"
+                                     SelectedColor="{Binding HeaderBackground}" />
                                 </Grid>
                                 <Grid Margin="0,32,0,5">
                                     <TextBlock
                                      Margin="0,0,0,0"
                                      VerticalAlignment="Center"
                                      Text="Icon background" />
-                                    <Button
+                                    <mah:ColorPicker
                                      Margin="120,0,0,0"
                                      HorizontalAlignment="Left"
-                                     Content="None" />
+                                     Width="250"
+                                     SelectedColor="{Binding IconBackground}" />
                                 </Grid>
                                 <Grid Margin="0,32,0,5">
                                     <TextBlock
@@ -201,13 +218,19 @@
                                     <CheckBox
                                      Margin="120,0,0,0"
                                      HorizontalAlignment="Left"
-                                     Content="None" />
+                                     IsChecked="{Binding UseBlackText}" />
                                 </Grid>
                                 <Grid>
                                     <RichTextBox
                                      Height="200"
                                      Margin="100,32,0,0"
-                                     HorizontalAlignment="Stretch" />
+                                     HorizontalAlignment="Stretch">
+                                        <FlowDocument>
+                                            <Paragraph>
+                                                <Run Text="{Binding LargeDescription}"/>
+                                            </Paragraph>
+                                        </FlowDocument>
+                                    </RichTextBox>
 
                                     <TextBlock
                                      Margin="2,32,0,0"

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#2CA9E1;stroke-miterlimit:10;}
+	.st1{fill:#2FA8E0;stroke:#2CA9E1;stroke-width:1.0111;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;stroke:#2CA9E1;stroke-miterlimit:10;}
+	.st3{stroke:#2CA9E1;stroke-miterlimit:10;}
+	.st4{display:none;}
+	.st5{display:inline;fill:#00A651;}
+	.st6{display:inline;fill:#39B54A;}
+	.st7{display:inline;fill:none;stroke:#29AAE2;stroke-miterlimit:10;}
+</style>
+<g id="Layer_1">
+	<circle class="st0" cx="11" cy="13.7" r="7.3"/>
+	<polygon class="st1" points="15,14.4 15,9.6 11,7.2 7,9.6 7,14.4 11,19.8 	"/>
+	<path class="st2" d="M13,12.2L13,12.2c0-0.7-0.4-1.4-1-1.7l0,0c-0.6-0.4-1.4-0.4-2,0l0,0c-0.6,0.4-1,1-1,1.7v0c0,0.7,0.4,1.4,1,1.7
+		l0,0c0.6,0.4,1.4,0.4,2,0l0,0C12.6,13.6,13,12.9,13,12.2z"/>
+</g>
+<g id="Layer_3">
+	<rect x="2.1" y="1.6" class="st3" width="2.8" height="3.2"/>
+	<rect x="5.1" y="1.6" class="st3" width="2.8" height="3.2"/>
+	<rect x="8.1" y="1.6" class="st3" width="2.8" height="3.2"/>
+	<rect x="11.1" y="1.6" class="st3" width="2.8" height="3.2"/>
+	<rect x="14" y="1.6" class="st0" width="6" height="3.2"/>
+</g>
+<g id="Layer_4" class="st4">
+	<rect x="4.1" y="1.9" class="st5" width="11.4" height="2.6"/>
+	<rect x="14.5" y="1.9" class="st6" width="1" height="2.6"/>
+	<rect x="4.1" y="1.9" class="st7" width="15" height="2.6"/>
+</g>
+</svg>

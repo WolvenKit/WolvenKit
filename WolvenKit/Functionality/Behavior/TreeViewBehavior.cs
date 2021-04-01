@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
+using WolvenKit.RED4.MeshFile;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
 
@@ -28,6 +29,16 @@ namespace WolvenKit.Functionality.Behavior
                         StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(Expander.VisibilityProperty, Visibility.Collapsed);
 
                         StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, tv.SelectedItem as FileSystemInfoModel);
+                        var z = tv.SelectedItem as FileSystemInfoModel;
+                        if (z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
+                        {
+
+                            var q = MESH.ExportMeshWithoutRigPreviewer(z.FullName);
+                            if (q.Length > 0)
+                            {
+                                StaticReferences.GlobalPropertiesView.LoadModel(q);
+                            }
+                        }
                     }
 
                     break;

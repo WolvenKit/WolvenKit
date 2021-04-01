@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+<!-- Generator: Adobe Illustrator 25.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
-	.st1{stroke:#000000;stroke-linecap:round;stroke-miterlimit:10;}
-	.st2{fill:#FFFFFF;stroke:#000000;stroke-linecap:round;stroke-miterlimit:10;}
+	.st0{fill:none;stroke:#185D76;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st1{fill:#29ABE2;stroke:#29ABE2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;stroke:#29ABE2;stroke-linecap:round;stroke-miterlimit:10;}
 	.st3{fill:#FFFFFF;}
 </style>
-<g>
+<g id="Layer_2">
 	<g>
-		<line class="st0" x1="4.5" y1="11.5" x2="4.5" y2="14.5"/>
+		<g>
+			<line class="st0" x1="2.1" y1="9.8" x2="2.1" y2="13.4"/>
+		</g>
+		<g>
+			<line class="st0" x1="12.5" y1="9.8" x2="12.5" y2="13.4"/>
+		</g>
+		<path class="st1" d="M13,11H1.6C1.3,11,1,10.7,1,10.4v-3c0-0.6,0.5-1.1,1.1-1.1h10.5c0.6,0,1.1,0.5,1.1,1.1v3
+			C13.6,10.7,13.3,11,13,11z"/>
+		<path class="st2" d="M12.4,5.8H2.3V3.1C2.3,2.5,2.7,2,3.3,2h7.9c0.6,0,1.1,0.5,1.1,1.1V5.8z"/>
+		<path class="st3" d="M4.6,9.8H3.1c-0.5,0-1-0.4-1-1V8.5c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C5.6,9.4,5.1,9.8,4.6,9.8z"/>
+		<path class="st3" d="M11.5,9.8H10c-0.5,0-1-0.4-1-1V8.5c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C12.5,9.4,12,9.8,11.5,9.8z"/>
 	</g>
-	<g>
-		<line class="st0" x1="13.5" y1="11.5" x2="13.5" y2="14.5"/>
-	</g>
-	<path class="st1" d="M13.9,12.5H4.1c-0.3,0-0.6-0.3-0.6-0.6V9.6C3.5,9,4,8.5,4.6,8.5h8.8c0.6,0,1.1,0.5,1.1,1.1v2.3
-		C14.5,12.2,14.2,12.5,13.9,12.5z"/>
-	<path class="st2" d="M13.4,8.1H4.6V6c0-0.6,0.5-1.1,1.1-1.1h6.6c0.6,0,1.1,0.5,1.1,1.1V8.1z"/>
-	<path class="st3" d="M6.5,11.5h-1c-0.5,0-1-0.4-1-1v0c0-0.5,0.4-1,1-1h1c0.5,0,1,0.4,1,1v0C7.5,11.1,7.1,11.5,6.5,11.5z"/>
-	<path class="st3" d="M12.5,11.5h-1c-0.5,0-1-0.4-1-1v0c0-0.5,0.4-1,1-1h1c0.5,0,1,0.4,1,1v0C13.5,11.1,13.1,11.5,12.5,11.5z"/>
 </g>
-<g>
+<g id="Layer_1">
 	<g>
-		<line class="st0" x1="10.5" y1="17.5" x2="10.5" y2="20.5"/>
+		<g>
+			<line class="st0" x1="9" y1="16.9" x2="9" y2="20.5"/>
+		</g>
+		<g>
+			<line class="st0" x1="19.4" y1="16.9" x2="19.4" y2="20.5"/>
+		</g>
+		<path class="st1" d="M19.9,18.1H8.5c-0.3,0-0.6-0.3-0.6-0.6v-3c0-0.6,0.5-1.1,1.1-1.1h10.5c0.6,0,1.1,0.5,1.1,1.1v3
+			C20.5,17.9,20.2,18.1,19.9,18.1z"/>
+		<path class="st2" d="M19.2,12.9H9.1v-2.7c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V12.9z"/>
+		<path class="st3" d="M11.5,16.9H10c-0.5,0-1-0.5-1-1v-0.4c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C12.5,16.5,12,16.9,11.5,16.9z"
+			/>
+		<path class="st3" d="M18.4,16.9h-1.4c-0.5,0-1-0.5-1-1v-0.4c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4
+			C19.4,16.5,18.9,16.9,18.4,16.9z"/>
 	</g>
-	<g>
-		<line class="st0" x1="19.5" y1="17.5" x2="19.5" y2="20.5"/>
-	</g>
-	<path class="st1" d="M19.9,18.5h-9.8c-0.3,0-0.6-0.3-0.6-0.6v-2.3c0-0.6,0.5-1.1,1.1-1.1h8.8c0.6,0,1.1,0.5,1.1,1.1v2.3
-		C20.5,18.2,20.2,18.5,19.9,18.5z"/>
-	<path class="st2" d="M19.4,14.1h-8.8V12c0-0.6,0.5-1.1,1.1-1.1h6.6c0.6,0,1.1,0.5,1.1,1.1V14.1z"/>
-	<path class="st3" d="M12.5,17.5h-1c-0.5,0-1-0.4-1-1v0c0-0.5,0.4-1,1-1h1c0.5,0,1,0.4,1,1v0C13.5,17.1,13.1,17.5,12.5,17.5z"/>
-	<path class="st3" d="M18.5,17.5h-1c-0.5,0-1-0.4-1-1v0c0-0.5,0.4-1,1-1h1c0.5,0,1,0.4,1,1v0C19.5,17.1,19.1,17.5,18.5,17.5z"/>
 </g>
 </svg>

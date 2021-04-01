@@ -3,6 +3,7 @@ using HandyControl.Controls;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
+using WolvenKit.ViewModels.Wizards.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 {
@@ -58,9 +59,9 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             }
             else
             {
-                var frame = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(ViewModels.Wizards.FirstSetupWizard.FinalizeSetupViewModel.bpp));
+                var frame = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(FinalizeSetupViewModel.bpp));
                 _fswm.ProfileImageBrush = new System.Windows.Media.ImageBrush(frame);
-                _fswm.ProfileImageBrushPath = ViewModels.Wizards.FirstSetupWizard.FinalizeSetupViewModel.bpp;
+                _fswm.ProfileImageBrushPath = FinalizeSetupViewModel.bpp;
             }
         }
 

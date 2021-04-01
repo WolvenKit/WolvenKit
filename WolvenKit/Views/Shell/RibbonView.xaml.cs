@@ -1,10 +1,12 @@
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
+using Ab3d.DirectX;
+using Ab3d.DirectX.Client.Settings;
+using Ab3d.DXEngine.Wpf.Samples;
 using Catel.Data;
-using Catel.IoC;
 using Orchestra;
-using Orchestra.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Editor;
@@ -22,6 +24,10 @@ namespace WolvenKit.Views.Shell
             ribbon.AddAboutButton();
 
             StaticReferences.RibbonViewInstance = this;
+            var dxEngineSettingsStorage = new DXEngineSettingsStorage();
+            DXEngineSettings.Initialize(dxEngineSettingsStorage);
+            this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
+
         }
 
         protected override void OnViewModelChanged() => base.OnViewModelChanged();
@@ -132,5 +138,43 @@ namespace WolvenKit.Views.Shell
         {
             // No
         }
+        private double _selectedDpiScale = double.NaN;
+
+        public int MaxBackgroundThreadsCount { get; set; }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var dxEngineSettingsWindow = new DXEngineSettingsWindow();
+
+            if (DXEngineSettings.Current.GraphicsProfiles != null && DXEngineSettings.Current.GraphicsProfiles.Length > 0)
+                dxEngineSettingsWindow.SelectedGraphicsProfile = DXEngineSettings.Current.GraphicsProfiles[0];
+            else
+                dxEngineSettingsWindow.SelectedGraphicsProfile = null;
+
+            dxEngineSettingsWindow.SelectedDpiScale = _selectedDpiScale;
+
+            dxEngineSettingsWindow.SelectedMaxBackgroundThreadsCount = MaxBackgroundThreadsCount;
+
+            dxEngineSettingsWindow.ShowDialog();
+
+
+            GraphicsProfile selectedGraphicsProfile = dxEngineSettingsWindow.SelectedGraphicsProfile;
+
+
+            // Save the selected GraphicsProfile to application settings
+            DXEngineSettings.Current.SaveGraphicsProfile(selectedGraphicsProfile);
+
+            _selectedDpiScale = dxEngineSettingsWindow.SelectedDpiScale;
+            MaxBackgroundThreadsCount = dxEngineSettingsWindow.SelectedMaxBackgroundThreadsCount;
+
+
+            // Now create an array of GraphicsProfile from selectedGraphicsProfiles
+            // If selectedGraphicsProfiles is hardware GraphicProfile, than we will also add software and WPF 3D rendering as fallback to the array
+            DXEngineSettings.Current.GraphicsProfiles = DXEngineSettings.Current.SystemCapabilities.CreateArrayOfRecommendedGraphicsProfiles(selectedGraphicsProfile);
+
+
+        }
+
+
     }
 }
+

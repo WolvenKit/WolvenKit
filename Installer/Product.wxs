@@ -1,0 +1,1360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+    <Product Id="*" Name="Installer" Language="1033" Version="1.0.0.0" Manufacturer="WolvenKit" UpgradeCode="a35575f4-2fcb-41f0-ba92-38031f4c3e93">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platforms="x64" />
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate EmbedCab="yes" />
+        <Feature Id="ProductFeature" Title="Installer" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+            <ComponentRef Id="INSTALLFOLDER_Component" />
+        </Feature>
+        <Property Id="WIXUI_INSTALLDIR" Value="MYAPPINSTALLERDIR" />
+        <UIRef Id="WixUI_InstallDir" />
+    </Product>
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFiles64Folder">
+                <Directory Id="MYAPPINSTALLERDIR" Name="WolvenKit">
+                    <Component Id="INSTALLFOLDER_Component" Guid="B226422B-61C7-4617-88E2-939DA9D77E62" Win64="yes">
+                        <CreateFolder>
+                            <util:PermissionEx User="Everyone" GenericAll="yes" ChangePermission="yes" CreateFile="yes" />
+                            <util:PermissionEx User="Users" GenericAll="yes" ChangePermission="yes" CreateFile="yes" />
+                        </CreateFolder>
+                    </Component>
+                </Directory>
+            </Directory>
+        </Directory>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="MYAPPINSTALLERDIR">
+            <Directory Id="dir6298C2114593B62906526CA52B964DD3" Name="win-x64" ComponentGuidGenerationSeed="65CEAF29-63FC-4C35-9FBB-F6EDA7FF4736" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ProductComponents">
+            <Component Id="cmp914CDCC9BA17A98492D9196613E9F059" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0550D79E2DE920F8BE6690AB57792393" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\AvalonDock.dll" />
+            </Component>
+            <Component Id="cmp963BA77C99AA6E667D3F894008CDB8E3" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil433305990ED97A058F2B80EC2E92D284" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\AvalonDock.Themes.VS2013.dll" />
+            </Component>
+            <Component Id="cmpC273C3D5C88E937B949F6EDB45B1286A" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA4BFB8EF046037FB2B7F0F9955CAB7F8" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\BmLib.dll" />
+            </Component>
+            <Component Id="cmp760097F9608B5EC9BFCCC2D53BDF8E4E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil7D0BB7797E3F92F110ED726C6DE8142C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Catel.Core.dll" />
+            </Component>
+            <Component Id="cmpA25582FD1A0423209CFBCF8591C5AE02" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filD9EB89C2559045C32D133A72E214AAED" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Catel.Fody.Attributes.dll" />
+            </Component>
+            <Component Id="cmp4E666DE580FE38824CD76F99942F03AD" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filC1A9FE1FDFEAC2C4D7E459F4120B6F7E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Catel.MVVM.dll" />
+            </Component>
+            <Component Id="cmpAB72CC9AEE1E1CC6534614DBCF0AE44C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filACD1D5A44011D2925CA60B019BD7E7F4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ControlzEx.dll" />
+            </Component>
+            <Component Id="cmp6A8766D845E8644F081706EE6B1A106D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filCF6A6D4693FC524CF22AF9679203FA8C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Crc32C.NET.dll" />
+            </Component>
+            <Component Id="cmpF7B0E27956AA3772F01F2A6536B69022" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil295347483A63CCB40318009A8F7F2E86" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\CsvHelper.dll" />
+            </Component>
+            <Component Id="cmp5D2380A4E2881A4E119F4741AA30BA66" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil34817DC314FAEE51D69F17978F6D523C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\DiscordRPC.dll" />
+            </Component>
+            <Component Id="cmpF2E61FAC00D91314B9D50A79483E0ECC" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil4A4C23CF2C7523989B33A66AA50A8D8E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Doboz.dll" />
+            </Component>
+            <Component Id="cmp53C403BD4E9B07136027D2122CEEBA7A" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil13ABD70B7220C3C41CD331A3504886AD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\DotNetHelper.FastMember.Extension.dll" />
+            </Component>
+            <Component Id="cmpE47F8423C28136BC78CDB7190E91E5D1" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil7F643041B9D8B1E09BC627A242B439E7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\DotNetZip.dll" />
+            </Component>
+            <Component Id="cmp7E3342AB6582C347B8FD643EC72A7D9C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filCB075D9BB3F70F00E22E45BFFE517C96" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\DynamicData.dll" />
+            </Component>
+            <Component Id="cmp830FAC4634AA0B55B826AA96509571D4" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filDDC9427600377D8A4FD4E96EE2F8C564" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FastMember.dll" />
+            </Component>
+            <Component Id="cmp77FDDE6DC08B989EED5F7AB948BDE114" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil1139101B72B66E7841A0A458E88150CD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Feather.Boost.dll" />
+            </Component>
+            <Component Id="cmp9D51553789C6D68899044B0F9D7F93BF" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil8456821BCE1F57A72868DFE06CA82C52" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Feather.Controls.dll" />
+            </Component>
+            <Component Id="cmp681FE9F068B48B52BC72D4B4EB0F2E33" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filD4A634ECF9B92FA075BC92B3DA6EE5F3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Feather.Converters.dll" />
+            </Component>
+            <Component Id="cmpD728822E0C82BC533F99287E4D8DA199" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil321139F1321F6A5C8D49A1C08A47E609" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Feather.Core.dll" />
+            </Component>
+            <Component Id="cmp2D01E4D962437A1FC7D665399422B2A8" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil40A560DE9D64CA0921C9EA59B27DE4AE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ffme.win.dll" />
+            </Component>
+            <Component Id="cmp51854BFA8429107FB86861D91DA57A78" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil85271E1846FBD5AA950A99F239C39BAD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFmpeg.AutoGen.dll" />
+            </Component>
+            <Component Id="cmp8823FD36100990F5F06BCC487C038200" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil4D5E8A55DEFC75914D1BA6BD363F01AF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Fluent.dll" />
+            </Component>
+            <Component Id="cmpC39D9D61CFB0D8E6D5D71DC046642A8E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil02049C038CC57ECB9C95930093100C94" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FluentNexus.dll" />
+            </Component>
+            <Component Id="cmp6E63B874074C4F42B1030445332B7F67" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filF52CA0919D73726C2E5688DAB31328FE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FmodAudio.dll" />
+            </Component>
+            <Component Id="cmpAC87F103CF73E51F4E18F46BE06AB1D0" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil6480D91BA96997541D5C8A58767A2DBB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\HandyControl.dll" />
+            </Component>
+            <Component Id="cmp16B7346ABB5D2CC857FC0E591B172100" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil5E076F5AB82F78DC5AD26B700E408BA4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ICSharpCode.AvalonEdit.dll" />
+            </Component>
+            <Component Id="cmp3E4BA9F35ABB32F26C5DDEC99C108AED" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil18387363CA523F69FE656AAD8A8FEDED" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ICSharpCode.SharpZipLib.dll" />
+            </Component>
+            <Component Id="cmp5270CFC2539938321FFC5F023C042C31" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil342AF2A35AA582E2FB3767E35437B4E0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\INIFileParser.dll" />
+            </Component>
+            <Component Id="cmpE348379F0F5156E8F486DADA20214847" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0F15169C74FB4AB4FB6D7FFF39804135" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Ionic.ZLib.dll" />
+            </Component>
+            <Component Id="cmp877D7A56D5A2543332E3E8B54A9037E4" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil693B960A44F00635138DF9BC69210FB1" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\log4net.dll" />
+            </Component>
+            <Component Id="cmpA80C5D306663313AA93BC15CEEE4BEBB" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0A869A4E1390947437E3A7C7E4D51D7C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\LZ4.dll" />
+            </Component>
+            <Component Id="cmp4AEC31DECC97BFC4C6C8B7C75FB122BC" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil39757626C95B3672F655C74BDC2E571B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\LZ4pn.dll" />
+            </Component>
+            <Component Id="cmp7E96EF808B90604659B01A230283AA66" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil09454E84FB5422B8A0DC5A5AEB1DA073" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.dll" />
+            </Component>
+            <Component Id="cmp1A60C308AE191D84A14C925B782283F7" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filD80F79A59F7A46AF5A7054B092E59A62" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.BootstrapIcons.dll" />
+            </Component>
+            <Component Id="cmp1C1E187E3355167E6A9237A715982815" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filE97817C1A57D1C505F04627BE8B73DFF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.BoxIcons.dll" />
+            </Component>
+            <Component Id="cmpEEE9D68172281FB7A326E0F22306068F" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0AE74B5AA6D1A40AE26AE307BF2C853A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Codicons.dll" />
+            </Component>
+            <Component Id="cmp8E2FDF08CF82FC31CF8EC70FB20916FD" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil5D2BFCB2129FF673BDB1D5ED361F5377" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Core.dll" />
+            </Component>
+            <Component Id="cmp02F01DE453BFB4784196A7ACBA81F786" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filFC949EFA682B6646D6F818809553B33E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.dll" />
+            </Component>
+            <Component Id="cmp4CBA1C296F72595D005D5AF6D5DF7AEE" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil474E6A0EC01946B53B24DD47D7CE9EF8" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Entypo.dll" />
+            </Component>
+            <Component Id="cmpA01886A79B80377E0D5D13A0FE896707" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filF2A064B94C7BE5EE26AE25C2CA858FEB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.EvaIcons.dll" />
+            </Component>
+            <Component Id="cmpDFB15518B486DA3010F1F52612F1CE5C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filFA7331D38E70E47937474572EC63B2B0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.FeatherIcons.dll" />
+            </Component>
+            <Component Id="cmpD43B9D0808044CEC811B2FB038C8FEEB" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil8C7D362B81C3E717E27FCE44A236D9EF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.FileIcons.dll" />
+            </Component>
+            <Component Id="cmp08A8DC7DE4726D6C1C6979421678336A" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filC3DE4CF048199379307C44BB63A6642C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Fontaudio.dll" />
+            </Component>
+            <Component Id="cmpB9A9BC29903D01C1D36E0C7692DA1A49" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil65BF7622871671D7A8D55CAF2F1F4E25" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.FontAwesome.dll" />
+            </Component>
+            <Component Id="cmp7DB54D2483A021643282554CA0AD5FA7" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil242C0FC23C2FE23DF30334B11B0277FA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.ForkAwesome.dll" />
+            </Component>
+            <Component Id="cmpE35A47328D5433A2A863F32B931AF8C3" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil66C2F26429EBCE5896D87284FEF0714E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Ionicons.dll" />
+            </Component>
+            <Component Id="cmp2B0D1A5695F3DE57FB40FEE9E57F979D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil6CDFABE3325A59706B298474D31B5309" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.JamIcons.dll" />
+            </Component>
+            <Component Id="cmp21303412EA0C25837CB2377E6ED28CE1" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0AC9268651741663456A3EBF9BC19907" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Material.dll" />
+            </Component>
+            <Component Id="cmp44630D1E6957EE25CA5384DF3CF60CD7" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filABF6EB6F3388D32F09D15768AC89802D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.MaterialDesign.dll" />
+            </Component>
+            <Component Id="cmp165E2307E6610AFF0450D7D5F65B406C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil5AFBE0BFF0FCC31242DA0EA217E16EAC" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.MaterialLight.dll" />
+            </Component>
+            <Component Id="cmp0CBCF939692C7FD9D777984D97D211B8" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil7F59FC8D2BAA19BBB1D4C585C52A7194" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Microns.dll" />
+            </Component>
+            <Component Id="cmp78C21EBAA1C3A8F35133F7249717B797" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil4048BF3183254DFF3F060696FA6B6723" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Modern.dll" />
+            </Component>
+            <Component Id="cmpA61CE22E9CAEE6F48C5B7C9562CC73EB" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA6F6AA3BC67B9647080493A2C26FA8F8" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Octicons.dll" />
+            </Component>
+            <Component Id="cmpBE9587035A484D464D275191C0657A2B" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil31859E826D52DE6D8C3EB975C33837D4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.PicolIcons.dll" />
+            </Component>
+            <Component Id="cmp109792240274B5AD4C65F45D5EFBC78D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA14306CA7DB18767DA4ED26FCA260038" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.PixelartIcons.dll" />
+            </Component>
+            <Component Id="cmpF70E4F29C8CE5DB227F3FC865159DF19" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil1B31F4B0F514C99D0EB63D31485786E0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.RadixIcons.dll" />
+            </Component>
+            <Component Id="cmpF650F84A4A2751F3C9D19798D829D892" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil17C4171C6ED29D0AF3B3A2BB91E9E135" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.RemixIcon.dll" />
+            </Component>
+            <Component Id="cmpD25D51B20B4B81587CFE16CCFDA2BF9D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filF503F76587ADD202D4D3C2A470D6C3F9" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.RPGAwesome.dll" />
+            </Component>
+            <Component Id="cmpDBF75C4CAEFECF9DAB22BD50E5D1980D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filEFA0CF2731D408D15E3AB5E93D758629" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.SimpleIcons.dll" />
+            </Component>
+            <Component Id="cmp319F57F3312A76F85D4292D3D066E8C2" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filB1EC58E0BE288E38C4E14BA34E6F7DFD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Typicons.dll" />
+            </Component>
+            <Component Id="cmp6851C50A90D4D51310E00CFA75009CA1" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA94602956B64E48B3EC3EE98B9E83F04" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Unicons.dll" />
+            </Component>
+            <Component Id="cmp094CBE0F509AE87DB23A8B33C105EC7B" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil24E71D1CA48053974872A072AD3BD7DA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.VaadinIcons.dll" />
+            </Component>
+            <Component Id="cmp27A39BA5322597ED6832AC2C7955F106" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil25F82362DA6AFDAB15E03FE708579AF4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.WeatherIcons.dll" />
+            </Component>
+            <Component Id="cmp0D8336719AF6A91B5D84553D9E77957E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA34307E0AF08FD970E086DE1488AFBA7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MahApps.Metro.IconPacks.Zondicons.dll" />
+            </Component>
+            <Component Id="cmp841057A5AF6263A9A492E68831DC49E2" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filFC2DD755354FC5861E87D3A58967735D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MathNet.Numerics.dll" />
+            </Component>
+            <Component Id="cmp704C9718257DCC2647EFD517BB84EB6F" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil7F8F4C1F4742A10FDCCCD72D33FBA48A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.CodeAnalysis.CSharp.dll" />
+            </Component>
+            <Component Id="cmp712790E17D6B55E0FC9BBDF83FB86E6A" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filB49A07695AC04DD3B9446AD0C72ACC4A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.CodeAnalysis.dll" />
+            </Component>
+            <Component Id="cmpA31B856450B3F4E3D8DCC70685EB2CC5" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filEBC7DCC0BBBEBE821096359EE014E1C6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.Expression.Interactions.dll" />
+            </Component>
+            <Component Id="cmpAC64BD437618325C620E3B3F546C6E68" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil87F25E56732BF475FE9048DA375861B6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.Web.WebView2.Core.dll" />
+            </Component>
+            <Component Id="cmp512DFAA45905DA6D373676BB7AFE846E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil368E19AE1B468639833DD816915DB72D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.Web.WebView2.WinForms.dll" />
+            </Component>
+            <Component Id="cmpFFD9B8E7A3F26F710A7E0E748D7EEF93" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filAB3316719335EBA6871473C73D778810" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.Web.WebView2.Wpf.dll" />
+            </Component>
+            <Component Id="cmpAC96DF9827D6983636DDB950590414ED" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil3B03366311873B9A861C87AFB0EE7EA2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.WindowsAPICodePack.dll" />
+            </Component>
+            <Component Id="cmpDA11DE1D6DC33E1ADC44A481F98FFD26" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filE39012942B33B4B0826CC405611393D9" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.WindowsAPICodePack.Shell.dll" />
+            </Component>
+            <Component Id="cmpED4DF993EC9ADA65492BF949E2CE9D1A" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filAF1DFBFB81EF8BF70D14932A859BF019" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Microsoft.Xaml.Behaviors.dll" />
+            </Component>
+            <Component Id="cmpD39FE744F28B9AA6F1FD53E38AA06D22" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filFFE39C47531589887A68FC4BEDBE9288" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MLib.dll" />
+            </Component>
+            <Component Id="cmp9797B1EDE6A667A0B447869C5030A564" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil6364260F313F56D5DD62EDBC135D48DB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MWindowInterfacesLib.dll" />
+            </Component>
+            <Component Id="cmpB0035421C39023376ABAF877DA57CC1B" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil27307F4AEBABB76D2E3CF3B57AE1CE3D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\MWindowLib.dll" />
+            </Component>
+            <Component Id="cmp2FBF29885671C1706A15E6DB6030BD79" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filCC64FEAB2805AD346E47FD7375A5799D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\NAudio.dll" />
+            </Component>
+            <Component Id="cmp9BF84439D24881D147DE0511A292C93C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0AAFF0C7CEA626F56C2FB81EA4526CBD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Newtonsoft.Json.Bson.dll" />
+            </Component>
+            <Component Id="cmp0071C4AF63D501DCA0235822D61FAEF0" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil5B2177007DEADBA7CE3D8EBA65CF53E9" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Newtonsoft.Json.dll" />
+            </Component>
+            <Component Id="cmpE6C04EEA5C02268E4A9BB68737CA1ABD" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0C61DADDBB1E161832E07C0B1521E9DF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\NodeNetwork.dll" />
+            </Component>
+            <Component Id="cmp7571DDEC32E125E77CDCDBB0E85AE99E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil20573BE40CF1BBFEF9F7DA30E7CEC171" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\NodeNetworkToolkit.dll" />
+            </Component>
+            <Component Id="cmp76F258671E857CF6A85C33B93345C929" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil4DC1C7B5D0B812E92B02130A09D699F0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Octokit.dll" />
+            </Component>
+            <Component Id="cmpC33E01EAA28DFD8EC4924090B6ED71C7" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil1C9A456A77A59A9B41F6D09DB6F0683E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Open.ChannelExtensions.dll" />
+            </Component>
+            <Component Id="cmp013C008AE0260F383A5EBD5BE1C9C397" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filFADB87EB2FC9FBF966BD92D29CD35489" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.CommandLine.dll" />
+            </Component>
+            <Component Id="cmp8282132265F16DA3EEC1A3C129A45B8C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filDF1544FA8A87C90BCF7056F1CCC5701D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.Controls.dll" />
+            </Component>
+            <Component Id="cmp2EA97DF3AAC1C4953BB03829A599AAD0" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil48DDC5C4C968D3792A4C6BC0D16C9F09" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.CsvTextEditor.dll" />
+            </Component>
+            <Component Id="cmp69310D25931BC1BE4840AA4C1C03C0EA" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filADDE4EA9F9E05C8B2550627E40E2B309" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.FileSystem.dll" />
+            </Component>
+            <Component Id="cmp79619428E2AF01C99B1F273D6FD259AE" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil185E7A9B074C2D6DCB20F6E0C8DFEB3A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.LogViewer.dll" />
+            </Component>
+            <Component Id="cmpDCF9E38B8C425F3E0156EE6F57D93801" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil166E2AB95BB1CBC0F15072537B38BEA1" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.ProjectManagement.dll" />
+            </Component>
+            <Component Id="cmp5A7D8E3943409C05B73363FD04B5BCAF" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil56348C300ADF2A134C3433620582447A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.Squirrel.dll" />
+            </Component>
+            <Component Id="cmpAB8095ABF04DC361CAE93884DD8D8C03" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA55A6EECD03DEF055E761D84BAA6624B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.Squirrel.Xaml.dll" />
+            </Component>
+            <Component Id="cmpEC039E0DFFDC21935502CC4ACC595B34" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil6A6F14522C619B72BDD8B86275E7F53B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.SystemInfo.dll" />
+            </Component>
+            <Component Id="cmpA3CC20C898DD62D3A1EA412F598E9939" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filCB29AEADC88231A68D9987118D4EB551" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orc.Theming.dll" />
+            </Component>
+            <Component Id="cmp855F4E6D086C0B71EAC280C2D2A7E99F" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil2E01C149A7E4C0E936BB754961F22AFB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orchestra.Core.dll" />
+            </Component>
+            <Component Id="cmp1C480C1E970DDF3583275E7CD8DF7F23" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filBBF3B3C437B59DB78188B0B2B630CC69" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Orchestra.Shell.Ribbon.Fluent.dll" />
+            </Component>
+            <Component Id="cmp84F690A75BF3187C03591EC77524AF74" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filC880C1377D3471AA5936BDEFDB81EDC2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Panuon.UI.Silver.dll" />
+            </Component>
+            <Component Id="cmp0EF3BA5B1285424EB8B56CDA9CACBBAF" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filF48E97A4E1EE4C126F48223ABA1D41B3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Pathoschild.Http.Client.dll" />
+            </Component>
+            <Component Id="cmpABF16ECA4FACE80B91E4DBBB3EDF97B3" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil399E7A6AE83020905C6D821F050F009F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Pfim.dll" />
+            </Component>
+            <Component Id="cmpF07873B59186524A177E5D06B21D5CBB" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil79D55F6C9D268454AB1E8B4A63301BD2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Pharmacist.Common.dll" />
+            </Component>
+            <Component Id="cmp6BF1049670965BF0B3F6A6A8BCA6919C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA9DEA2EC198CD014AEE827458FEC5FA9" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\protobuf-net.Core.dll" />
+            </Component>
+            <Component Id="cmp635B1645B5AD5A8037DD19FEDBC9D42C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil01B1328DC83E0C0710AAF488FBCB52CB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\protobuf-net.dll" />
+            </Component>
+            <Component Id="cmp7B49C505B252BA76D8E065D9D82120B3" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil25902A5684353C9A7EAE9F4B928DC002" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ReactiveUI.dll" />
+            </Component>
+            <Component Id="cmp738A3513620786407583DC4904D16AD8" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil190BD7534968A91E405F5742139D28EF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ReactiveUI.Events.WPF.dll" />
+            </Component>
+            <Component Id="cmpB9761D226BD145D867B1596105C2B618" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filFC3851A706B8B47EB420E6FB79FF5C18" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ReactiveUI.Wpf.dll" />
+            </Component>
+            <Component Id="cmp5187070AF401189E9AF4EF21B0453E1D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil78B85CFA56F903E5856C58B649A5EDE2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Serilog.dll" />
+            </Component>
+            <Component Id="cmpD951C16FBB374AC8D563F369DF6F1FC1" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA68033672AE3301BDE67F3E7A05066E3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpGLTF.Core.dll" />
+            </Component>
+            <Component Id="cmpDC00992D75BA0B5F7A2F05C43D8C934E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filAEB54B7D01FB1E9F1F1C506AAD384ECD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpGLTF.Toolkit.dll" />
+            </Component>
+            <Component Id="cmp1D5C7B26848D6AC57DA21E1B92D600C4" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil558A2B23220C6F0E309111C32597634B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Converters.Wpf.dll" />
+            </Component>
+            <Component Id="cmpBC456DA23C78D1524A7479F067ED15A5" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA87F69A515FD28B7C9480CB9BD1F2BC7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Core.dll" />
+            </Component>
+            <Component Id="cmpE806DD8942C096AFDCF1CAB46B1C3B05" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil466CCD96A88EC689C823584CFA824680" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Css.dll" />
+            </Component>
+            <Component Id="cmp23BE0F1DE3D0AAD8465F1763E02A08C2" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil23A373EC101B2473101CFFE79701B5EA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Dom.dll" />
+            </Component>
+            <Component Id="cmp9D899E0DF53EC747EA5D0D471AA5593D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil4183A4135E0795B0C00EDBAA1AD5C9B4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Model.dll" />
+            </Component>
+            <Component Id="cmpDDB6685D1E8A2CEDFFDEEE8362ED5B6E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filCBBF4B9683A60E9D364C15E6818E4360" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Rendering.Gdi.dll" />
+            </Component>
+            <Component Id="cmpFC3D9E0F66ED8B8C48E15641A8758CDB" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0B06BD02718D907AA1724E51013BE9BD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Rendering.Wpf.dll" />
+            </Component>
+            <Component Id="cmp115FFB7A9ADA24DB8E6638CB977CADCD" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil5A4FABFD1F0B844F17E89B36768160AA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SharpVectors.Runtime.Wpf.dll" />
+            </Component>
+            <Component Id="cmpCED26A5A6E61EBF58B5F929F894F246C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filE18EBB9E81F2E293CF88F2730E0FE4F6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Snappy.NET.dll" />
+            </Component>
+            <Component Id="cmp37406058B035172CDC565E6E21666977" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filD9829CD3F9B0EF08D06821061D6D9F67" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Splat.dll" />
+            </Component>
+            <Component Id="cmp03471465F419126077C83AA2D496AD85" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil2763BE97527078F4F45A3CF9223AF692" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Splat.Drawing.dll" />
+            </Component>
+            <Component Id="cmpDC3D4CC614576663B86F7F36AE5F90F7" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil7B71858AF743F47E2BA5003D57753CC4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SuggestBoxLib.dll" />
+            </Component>
+            <Component Id="cmpD3C9480713245468E47ED38CE30442AE" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil70AA8C619848377E11277F63D92A3D53" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\System.Drawing.Common.dll" />
+            </Component>
+            <Component Id="cmp42955B34DE40E5EF0484E7521F54FE12" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil688FB9B16A877591DE96C8FEC708CD9C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\System.Management.dll" />
+            </Component>
+            <Component Id="cmpB072B0121A0489BBEDFB8E8E9CE9616E" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filBDDB8F9B2AA98DCADAB8B533FEEC986B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\System.Net.Http.Formatting.dll" />
+            </Component>
+            <Component Id="cmpBC11AB17D4043ABA5A8F1FCDF84C5963" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil42426E6FD3006CE5D713C1AC55C43C10" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\System.Reactive.dll" />
+            </Component>
+            <Component Id="cmp67FF8294CCF18BCD805E4C87B094B2D1" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil53599D85B389C193E7FB47BEC4B43EFB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\System.Windows.Interactivity.dll" />
+            </Component>
+            <Component Id="cmp8DD32030083A4F8A9402FE668660537A" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil21268906DEC6AE17D347F9241BDF1261" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\taglib-sharp.dll" />
+            </Component>
+            <Component Id="cmp830E5243DC9561592BD0AE91BC02CDB6" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA402B81230E3D873C2066A341D84159E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\texconv.exe" />
+            </Component>
+            <Component Id="cmpCC419E158CE5E4196F185482EC873702" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filAC220D458B1BD7C373F7A4A09913F356" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WebView2Loader.dll" />
+            </Component>
+            <Component Id="cmpE9896B60E14BAC4C0857D29477E03F12" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filE5E58597D62FEEA5019581A628DA5EA6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.App.dll" />
+            </Component>
+            <Component Id="cmpCF78113ECA99A3FAECD6C0D6CD51EB4A" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA53138DC2CB357B86CB8526BEDAB20C7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.App.pdb" />
+            </Component>
+            <Component Id="cmpDB150B54D31F33A411EFFBFF9A46A332" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil80336924CFBA4586D35DD39991380A33" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.AssetBrowserBar.dll" />
+            </Component>
+            <Component Id="cmpE55852E4A432DD0DFE77970A9E8D3727" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil7D9193D624A04812AE5DF620D03D6092" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Common.dll" />
+            </Component>
+            <Component Id="cmp57663047A4DDCA5CCAB5A7AA5AF66EB6" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil4F16FE2A7D04135E012D0CE43010208F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Common.pdb" />
+            </Component>
+            <Component Id="cmp657BCFE9BD83F3A5B409C938A52633D9" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil14C4D3917CD0B6F367D7C42959FB2C09" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.CR2W.dll" />
+            </Component>
+            <Component Id="cmp3F2B5F10027F78093D208CAE86125668" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil92C64BF26369FD8E6BB4077CE6242107" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.deps.json" />
+            </Component>
+            <Component Id="cmpE488B1D4AE9B98A7A55FCD174C3E875D" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil0532ED11B61B9F5343E804658D87A65A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.dll" />
+            </Component>
+            <Component Id="cmp46534FC5EE959F4E61EF38648E095B02" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filD10283D7C4204CC69DFD03A057150145" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.dll.config" />
+            </Component>
+            <Component Id="cmpE6FF30CDF53CC8004D51D247D03AB257" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil79C10FED12DFB8394CB7D855641D5697" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.exe" />
+            </Component>
+            <Component Id="cmpE2C1BF901613E56DE02834753BD2012C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil2BE09AA984CED5C95CADBE5AC77AD194" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Modkit.dll" />
+            </Component>
+            <Component Id="cmp23F367C2A121191C2B309DC9C66BFD9C" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filA33E38AFF9A031351C9001AC25DA8314" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Modkit.pdb" />
+            </Component>
+            <Component Id="cmpDAB6987AE278784071BC27DB06222FA1" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil47CF9EDE57B8E92050334F7FC1E95D38" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Radish.dll" />
+            </Component>
+            <Component Id="cmpE0F6A313407E30B6A830AB40DD6099F7" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filF755BD1F2E66E97AD91EF5E28EF77543" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Radish.dll.config" />
+            </Component>
+            <Component Id="cmpC42B5D592365B74A8C9D4D87BE5B06F7" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil36E6B2DC6D00F4D9C69A1C5699757BF3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Radish.pdb" />
+            </Component>
+            <Component Id="cmp5F3D4786514AFD36BA64FB50EBBF9976" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil9C808A619CCEE93C3A4BC699A175045E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.RED3.CR2W.dll" />
+            </Component>
+            <Component Id="cmpDCC0167FEF6DCD63CBF367FA517A4EDF" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filD0FCDF50821E9A76A30C47DCCE5FF063" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.RED3.CR2W.dll.config" />
+            </Component>
+            <Component Id="cmp689E9EECD1C1C7A2DBE34724C1930692" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil2AA4EFDB4EF629CDED7A4ED5BCF60762" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.RED3.CR2W.pdb" />
+            </Component>
+            <Component Id="cmp82F96BB2A1936C43321DD01153532977" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filF0C8FEFEA737C1A20F4BCB4B12D833CD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.RED4.CR2W.dll" />
+            </Component>
+            <Component Id="cmp606FE61FE19F600EAD887CC2E00B15B8" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filD33577FDE667A2027F3F50E82308233F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.RED4.CR2W.pdb" />
+            </Component>
+            <Component Id="cmpC8D78730A0835852451E25CE0FDE5110" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil67CB3A0783013E41A926F6D15C4920B7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.runtimeconfig.dev.json" />
+            </Component>
+            <Component Id="cmpD692BD99520E1BF049A61661421F90CB" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filDFC53364A5A65D4296A51436AB8F0750" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.runtimeconfig.json" />
+            </Component>
+            <Component Id="cmp75F0ACE90CAF681941602D7387E4AE62" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil9C587ED1537F322693FD008B758AFD50" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Witcher3Formats.dll" />
+            </Component>
+            <Component Id="cmpDEF0C693295D4E2385115A50AF52BE14" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filFBC4FA997190E5D36CB16A6C30354FD2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WolvenKit.Witcher3Formats.pdb" />
+            </Component>
+            <Component Id="cmp2409331971CBA62854CC4B370D965C4F" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil26BFCCD183495B7C1C90E29613508CF0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WpfExtensions.Xaml.dll" />
+            </Component>
+            <Component Id="cmp54CC42CF2DA7CF2292F236530806D82B" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="fil27D8CADE3894F4A6C99C13988CC852DE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WPFHexaEditor.dll" />
+            </Component>
+            <Component Id="cmp458D6118964D3AE637532F8BC71B9C80" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filE6EC1599A2ABBD55909D12BEBF57BEBE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WPFSoundVisualizationLibNet5.dll" />
+            </Component>
+            <Component Id="cmp4F4C54E55934998C03F149C0629F8306" Directory="dir6298C2114593B62906526CA52B964DD3" Guid="*" Win64="yes">
+                <File Id="filBB82891F4E7DC03FE0998D22BB884DA0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\WSF.dll" />
+            </Component>
+            <Component Id="cmp7B4A2274CBB610E9B3EF3A054C43C97C" Directory="dir4F5502FD30F09B87EAEFABED51BA8FB1" Guid="*" Win64="yes">
+                <File Id="filC24C48D463EDE5E9121000060B7EC7F1" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\arm64\WebView2Loader.dll" />
+            </Component>
+            <Component Id="cmp5979BE47724AAC23D74D81EE47DE10F7" Directory="dirB8132E05BECE28138A71EDAA45A00920" Guid="*" Win64="yes">
+                <File Id="fil11E97173CE45CF695295C1404B79987E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\bnkext\bnkextr.exe" />
+            </Component>
+            <Component Id="cmp31BCDFAD314C102FA90CF20BB602C132" Directory="dirD5CE249DCC487DC45ADBBE9EB4DB76DD" Guid="*" Win64="yes">
+                <File Id="fil7AAD4F63396C31F5834ACA4BAA46B3F5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ca-ES\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpB310BBB89C0EACF8783FA758E9B590DE" Directory="dirD5CE249DCC487DC45ADBBE9EB4DB76DD" Guid="*" Win64="yes">
+                <File Id="filDF4A5AE58D8CA52268827C342372D21E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ca-ES\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp458DC2B103415DDE6E2009C585088229" Directory="dir8A99D548E0871655EF8091570A5D8257" Guid="*" Win64="yes">
+                <File Id="filD4612CD925296AEA079AA74E735062FC" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Config\AvalonDock.Layout.config" />
+            </Component>
+            <Component Id="cmpEBE1D7BB1FDA2BE747CCE2CA1DC308AE" Directory="dir8A99D548E0871655EF8091570A5D8257" Guid="*" Win64="yes">
+                <File Id="fil19FF2E53649A4639E4EE28996912C44D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Config\__xbmdump_3768555366.csv" />
+            </Component>
+            <Component Id="cmp0C990F3F17905E54006BB2EDE67BEA5E" Directory="dirFA257EE776F6CF31DCE47EC1E9EFADEE" Guid="*" Win64="yes">
+                <File Id="fil6E6ED826A9E553469F338A9CC826194F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\cs\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmpBD1F8EF8C4F2013A9A780AEB5EC9FD73" Directory="dirFA257EE776F6CF31DCE47EC1E9EFADEE" Guid="*" Win64="yes">
+                <File Id="fil1BDA499378C6C0A54477F00A55F75DB1" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\cs\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmpA8F983CD93688CA30F765B2C2450A9D2" Directory="dirFBA703AB0D0CB43F0277256B705F6B0B" Guid="*" Win64="yes">
+                <File Id="fil22696097F7B6B5D2132AE7CFA96B8846" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\cs-CZ\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp48D3A6A32B2897C700099FDAC9B28308" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil8BD1413EC0A00CDE9F69537069083A13" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp4D5790175BCAC89C2135BE5DAC2B383E" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil970E79BAE21985FF4B6B335FC1364EFD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmp7394FCCAFAE823AEDA251AFCD1AC89B2" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil313FE61DD67BEEA400EB1ED22ACF697D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\MahApps.Metro.resources.dll" />
+            </Component>
+            <Component Id="cmp5B7D6664A499DA44AA3FCDD171519773" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil6FE371F26F983062F8A476BE55652962" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmpDD3F967E92F33970E69D4122E8F1BE54" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil3AC3353A273435F34B33AB8A93C9860C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmp3F742ABA6A8D455DEF08245237DF312A" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil8CAAF2C84193B092DDB519BB9E98808B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.CommandLine.resources.dll" />
+            </Component>
+            <Component Id="cmpA0DAA749B24EBB239F74785DC7778B26" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="filFC3B37696B1EA4366B1282DF72C87B9B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.Controls.resources.dll" />
+            </Component>
+            <Component Id="cmpCEE361D2BBB5E909C6DCDAB88DB994C8" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil0BE9B3705A8A1956FEEE260E4AA0EC58" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.CsvTextEditor.resources.dll" />
+            </Component>
+            <Component Id="cmpE1ED8A4AF82E220F6D80033AE1BDC6F1" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="filFE093314426C9FF70687971EFEA2F5E7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.FileSystem.resources.dll" />
+            </Component>
+            <Component Id="cmp9D008427FC3EDF1DC1439DD153089809" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="filCF43B0BF11190627BD7A0948D5054184" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.LogViewer.resources.dll" />
+            </Component>
+            <Component Id="cmp28E58DE5C7B4BFD2FC01FF1450D4815C" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil557C51DDF35AD54AFEB8339430957D8B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.ProjectManagement.resources.dll" />
+            </Component>
+            <Component Id="cmpD9113945BC847FF953C6C891E6AC90D1" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="filC0B3E6E55A23624D42F40A5FA4F47730" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.Squirrel.resources.dll" />
+            </Component>
+            <Component Id="cmpD967E385BAE665C1CD7F2436E61F5C10" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil3DE6DA15559CB028830FAF6A72099CDD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.Squirrel.Xaml.resources.dll" />
+            </Component>
+            <Component Id="cmpC2DA00B6A479A561A8A72F00F5A34BC5" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil84FF0B2E1D44F1A07C8A1CFA5FA4E8A5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.SystemInfo.resources.dll" />
+            </Component>
+            <Component Id="cmp8A522FEC3554FCAA28D963F9067A1845" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil43D51686D4AC713DF3B94D606DAC9F0A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orc.Theming.resources.dll" />
+            </Component>
+            <Component Id="cmp04147E0B8B59EFC156D8517210960F5A" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="fil7E3217574F2560960DAA65068DAD8E82" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orchestra.Core.resources.dll" />
+            </Component>
+            <Component Id="cmp8BDA3DF7DF67C90B9C7627B20A6B2F18" Directory="dir8BCADAA541ADC8A91E3AF48566900ACD" Guid="*" Win64="yes">
+                <File Id="filE97CA8BCA3DFC9C6B75A300DD4D2FA45" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de\Orchestra.Shell.Ribbon.Fluent.resources.dll" />
+            </Component>
+            <Component Id="cmp7FA9B32D11848124888CBE728BA835DB" Directory="dir0859F03E0004B8E4C6A62C190D306B48" Guid="*" Win64="yes">
+                <File Id="fil1EBBD300F6BEBB6E2BAFE0E755E068E7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\de-DE\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmp52545C88F144073C71C8A3F2BA3543E8" Directory="dir60726AE598AC411BF5EC64CF060865A7" Guid="*" Win64="yes">
+                <File Id="filA8FEE3439849BEB898D351DEC482552A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\en\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp0CDE0ACE32B8288573AB45A099479494" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil0B6CBD3C6D2B43DE9330CD838600DED9" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpFCBCFB27326C86C9C9D2060DA5A827EA" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="filA83F80976980DBF23ABC89240E56376A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmp189C8D5BCBEF37028F0929EB86658839" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="filE9BF28ABF4559648CEF27AC85D6F3450" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmp72E3DB6CB336D3C91CC69C7E5BB45621" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil31DF9E50CAEDFA4C918C6F681827EC55" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmpC9F25818F1C09FF68165C4700A27E25E" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil8C568757831E60D9B6F4AEFDA03AB3FA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.CommandLine.resources.dll" />
+            </Component>
+            <Component Id="cmpAFFC12668BF0399641E9F722DB49B9CC" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="filB11BED21A3DC0975FA8EEE1F65A81214" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.Controls.resources.dll" />
+            </Component>
+            <Component Id="cmpA70E6C9B4C55831EA0B12DF800D63B65" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="filBBBD2A063E55B0E11C8E22160E027F29" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.CsvTextEditor.resources.dll" />
+            </Component>
+            <Component Id="cmpC42DB439411F7B90C39D41E85D035D31" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil2DA0C7A758227A57C6AE739BC778344C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.FileSystem.resources.dll" />
+            </Component>
+            <Component Id="cmp4D08FDAC340BB09530D6DFA7790B7701" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil908442A50BEC7C2A7582737696A2A7FE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.LogViewer.resources.dll" />
+            </Component>
+            <Component Id="cmp8177B1F06EBE55C9B345860AB9C6DF25" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="filF9C384D789ACCFE35B950051FC281EDF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.ProjectManagement.resources.dll" />
+            </Component>
+            <Component Id="cmp1C6B9B2BFEA41662F5A261753F0EE345" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil6A06A656B43060EBAB4278861DB48F88" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.Squirrel.resources.dll" />
+            </Component>
+            <Component Id="cmp6AEF68C69F0DC4372D94A96F53065538" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil054B688B5B31152151EF2BCC26C82082" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.Squirrel.Xaml.resources.dll" />
+            </Component>
+            <Component Id="cmpA2321892D67FB1CDA3EF2192057D5556" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil85F8613C55B16C93DD09E3FC6AEDCF44" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.SystemInfo.resources.dll" />
+            </Component>
+            <Component Id="cmp461EE1845EC3F5CAA5039CAA74CABEC7" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="fil5FF23FB8B1F17D9D42D796EE3AE82062" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orc.Theming.resources.dll" />
+            </Component>
+            <Component Id="cmpAA02B80434B73626281C77BEAD472F21" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="filC592994AD081A02C9011275E228BA0D6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orchestra.Core.resources.dll" />
+            </Component>
+            <Component Id="cmp135201CC7B4CE32AE32881789F38AE4A" Directory="dirA77362E438DF0056C9C48F325B7F9B88" Guid="*" Win64="yes">
+                <File Id="filCAC6A42B569E9BA3BE842BC33BEAFF18" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es\Orchestra.Shell.Ribbon.Fluent.resources.dll" />
+            </Component>
+            <Component Id="cmp22E7BE595B261FFD3C04045965A97CC2" Directory="dir94420A9905BF86543E158CC598E3DFAA" Guid="*" Win64="yes">
+                <File Id="fil2D2A97E9AF73F868DE405F1AE7967007" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\es-ES\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmpE819162F4A65CE8824912C74267933D1" Directory="dir1A1D5BCFC5A9A231FC49B80398629637" Guid="*" Win64="yes">
+                <File Id="fil7F37A1C82DD19E99B2BAACB84B647792" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fa\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmpBBC4F00A022D892102962C1C93E3081D" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="fil446038F781EEA82550A319EAE15C6343" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\avcodec-58.dll" />
+            </Component>
+            <Component Id="cmp3AE36ADD284479D5A47DD4953B91D8CA" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="fil5B720CB11112CEA0FE7E5FC6141F0526" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\avdevice-58.dll" />
+            </Component>
+            <Component Id="cmp29EDB619F0EF227F2B84C67A929C4E26" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="filBA5CC8D0F70DB8FF730B15D2B7359F92" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\avfilter-7.dll" />
+            </Component>
+            <Component Id="cmp198EFB4D0D0950A310D255215D53E729" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="fil20572D869132C695ABB7C7AD3C576A00" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\avformat-58.dll" />
+            </Component>
+            <Component Id="cmpD64F03B368A24AB009010D25094C4E1B" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="fil92A3589B6AF5C921044BFD48F8C9FBC7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\avutil-56.dll" />
+            </Component>
+            <Component Id="cmp6A602CE88E4B3C16FBB1DDF5EF9DAA57" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="fil08AD46C0B104B9E315ED313E4481B478" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\distraction_generic.bk2" />
+            </Component>
+            <Component Id="cmp3868139B253C3BE61A17492C590731C2" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="filC648A4E39B3607350D26EB3C3D181F2B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\postproc-55.dll" />
+            </Component>
+            <Component Id="cmp5F496E2E7B3707F41485F7C3E6D63CBC" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="fil9D27E3E2AA1D5A5AE70B618EA82F28C5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\swresample-3.dll" />
+            </Component>
+            <Component Id="cmp85786E4934286FF91CD6359A23FC2D9A" Directory="dir491D6C2141E3140FFEEAD58B2E1B61E7" Guid="*" Win64="yes">
+                <File Id="fil41A0B40782BE46EB2EC49E2784643C77" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\FFME\swscale-5.dll" />
+            </Component>
+            <Component Id="cmp483A7995F2539959C9A36930A17BB199" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil33305523C7BF2894136C3184E3F96FA3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp0F5099B8BE26919A4B445B3DEA152D9D" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil3DF710A3CFB41A56AD085B88573CA451" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmp8733DD5D52BF9AB39BFA9CF016518D6F" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil422D34A25A265EFDE7795D02912B06A5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp492CC9B9B5122D3DC930C620CCC90F00" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil8370555BA0114875B4AC5F12F53B5088" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmp9294FC4300C08328826DDDD6B068FC18" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="filC48F204B9770886894A3A0B571335DB4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmp68F3C5D97152AC701D58CF767B22D2DF" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil52802047855059215F9BC57042B0E555" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.CommandLine.resources.dll" />
+            </Component>
+            <Component Id="cmp84FB9329699253E6C32F870D70D10D3A" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="filC2FD5B4E54E609D24A6C5EE3D791700A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.Controls.resources.dll" />
+            </Component>
+            <Component Id="cmp39A87515A83456DC9D2C2366B7744E87" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="filD219FDC5053872B009C6FE6555C298C5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.CsvTextEditor.resources.dll" />
+            </Component>
+            <Component Id="cmp2EE363C0B45749D561E4F9F7F4B95BE1" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil66B3515CC2633E9ED2FF3025AF954208" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.FileSystem.resources.dll" />
+            </Component>
+            <Component Id="cmpDFC37990FA9834D074C790FC2202BDE3" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil00A584D892A2DA526B01CF05667B98E4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.LogViewer.resources.dll" />
+            </Component>
+            <Component Id="cmp3988E98A065F67BAA07A060EAD1FC7B1" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil2E07DF57F72FE57888DF6F50B5B7B6FD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.ProjectManagement.resources.dll" />
+            </Component>
+            <Component Id="cmp6D76F5FE1C9FC1373616057FEB1FB82F" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil63AA4C775EE6FF805610AE99B94925DB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.Squirrel.resources.dll" />
+            </Component>
+            <Component Id="cmp21DE9F53A78320D9FF2328BEACC3D20B" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil5B87DC1046DE4C297FC6A54FF3CDBB26" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.Squirrel.Xaml.resources.dll" />
+            </Component>
+            <Component Id="cmp43AC7FD7BF9E4876BA34C273E5846B67" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil5620A873A7049153935A1C6B1FB03EDD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.SystemInfo.resources.dll" />
+            </Component>
+            <Component Id="cmp110C2D6659DB420C6E88B7216DAB5DAA" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil413BC985CEF0E10DA902A46C5EE76E47" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orc.Theming.resources.dll" />
+            </Component>
+            <Component Id="cmp40490D9AC3C83B862CE6F875322B3DA4" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil1D1B149BC2064D65EA4019970248C9B6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orchestra.Core.resources.dll" />
+            </Component>
+            <Component Id="cmp6218DBE25F297C5E99D37AF2BF42B28F" Directory="dirE4429F190710E84AAA4E480CB16C09ED" Guid="*" Win64="yes">
+                <File Id="fil7F61B3D3242EFF28B2B5289826CD17D0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr\Orchestra.Shell.Ribbon.Fluent.resources.dll" />
+            </Component>
+            <Component Id="cmp043DAAB5408538D1FB1E60EACF95CB11" Directory="dir1A86A78CBCCBB382742A0316AC790B9E" Guid="*" Win64="yes">
+                <File Id="filB5E65612E4D96501C9938DCC54B0F897" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr-CA\WPFHexaEditor.resources.dll" />
+            </Component>
+            <Component Id="cmpF7F0003D3636B13838BF7F3013868D4B" Directory="dir72BBB986E42CA4067201E6E779F4BA65" Guid="*" Win64="yes">
+                <File Id="fil7DD516EEE1D6DFE81AE4ECF581BCDB2A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\fr-FR\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmpD65AA1D16A1AB1F18C4BF9B4DD8F1E2E" Directory="dirB93038B839CEE407DFD1555E42580095" Guid="*" Win64="yes">
+                <File Id="fil9A5013463B9C7CE3D0B57D80FFDA3CD7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\hi-IN\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmpCFA9DD1F896E541F3CACDA3157155577" Directory="dir1124DB9B94C8CE6568C321A6E999ECA5" Guid="*" Win64="yes">
+                <File Id="filE4A64F5669DB29182E9E6802CCD98BC2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\hu\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpD136114EBC2DF7C8CACA8E5C1451F978" Directory="dirBE18E1B8E77A8EDB40158567F91B74C9" Guid="*" Win64="yes">
+                <File Id="filF566ECDDEBB5E3C234F21B83D6DBB136" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\it\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp3435859FB7EF283A7F8BE00C021EFFF4" Directory="dirBE18E1B8E77A8EDB40158567F91B74C9" Guid="*" Win64="yes">
+                <File Id="fil958D8B4A2C11643AFD08CA70476F38D1" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\it\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmp1DCC078AC81A1799CDC2CA4B4C0B68B9" Directory="dirBE18E1B8E77A8EDB40158567F91B74C9" Guid="*" Win64="yes">
+                <File Id="filC6F183BA6F58D6C2AFB68058F8A644CA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\it\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmpDB8BA412A2182BBB5F09280F16221135" Directory="dirBE18E1B8E77A8EDB40158567F91B74C9" Guid="*" Win64="yes">
+                <File Id="filDA31A5B4747D48C75822DCF626C35CB5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\it\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmpF4116A00E9B14633BDE18915C78B93A8" Directory="dir45D1FAC5261D3ED92EEF24CF2DACA58E" Guid="*" Win64="yes">
+                <File Id="filEB3C8D3D8CBB45E960F176042B52DEB3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\it-IT\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmpD659AFBEE4778E7F27D3F81CA6A4FCB0" Directory="dir6110DD047F489DFCEFEFA26B4D1F2095" Guid="*" Win64="yes">
+                <File Id="fil6FB6F4D41CE45F0AD057F003F6322AEE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ja\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp3055376FFB5B6E3FEC59DE76008F9304" Directory="dir6110DD047F489DFCEFEFA26B4D1F2095" Guid="*" Win64="yes">
+                <File Id="fil7A49094A971861B3205F9DBC408EF12B" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ja\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmp3A9F9CB242BDFF0DD4858D3113C50C67" Directory="dir6110DD047F489DFCEFEFA26B4D1F2095" Guid="*" Win64="yes">
+                <File Id="filA6D99E1825302740124731985FC3A0F3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ja\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmp8A97406B51557FDF710E19907DF2245D" Directory="dir817AE5A0A69E9F457C89622998CF1505" Guid="*" Win64="yes">
+                <File Id="fil0518FDF65A1E012C7511896297EFD42E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ja-JP\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmpA3B4970719BDC6B3DB242097A22E4042" Directory="dir1CB1A05A6CCC5DDE8C26EA01D8E336CB" Guid="*" Win64="yes">
+                <File Id="fil5C490935395B3123D7BCEA8A58BD8F46" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ko\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp1A8DBC4AC15DE9610F1F44D29970441E" Directory="dir1CB1A05A6CCC5DDE8C26EA01D8E336CB" Guid="*" Win64="yes">
+                <File Id="filF1F62D079F94A1041BD544FEAF96B407" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ko\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmp081C8C1D8D891785FFEE9514B2CE9CE1" Directory="dir1CB1A05A6CCC5DDE8C26EA01D8E336CB" Guid="*" Win64="yes">
+                <File Id="filB83C6BBC257CEA3873F881DC798CC9F7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ko\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmpEF15876E053E36E14C63EB0F6D910AF3" Directory="dirF0D17D3FC876F5D0723E745722F39215" Guid="*" Win64="yes">
+                <File Id="fil86DC805D4947DA466AABFF1052052C88" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ko-KR\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp05B911CBF9EE86EF470C8354FF7D6944" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="filD7F10738BB781131C88C2B4716FF52A0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmp00954908297E8C7BB30639601F0EE957" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil256BA9547882BFE643CF413CE8D42286" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.CommandLine.resources.dll" />
+            </Component>
+            <Component Id="cmpCD32F6D76F29D6D9283910A35A867DB4" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil1BE3B470652B40E8B1D92B5EC87C3028" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.Controls.resources.dll" />
+            </Component>
+            <Component Id="cmpD8068A8EA0EF2EA666ACC18A775022D0" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil9596CFF12F43C9E27297DA12CA219415" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.CsvTextEditor.resources.dll" />
+            </Component>
+            <Component Id="cmpE9A4E1FCDBE5E687DAB8A8A82543AEFD" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil7E6F278C561452F1A732FDA716E318D7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.FileSystem.resources.dll" />
+            </Component>
+            <Component Id="cmp241D1D0DEB5241C85FCE01038B6C87F8" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil02D334E8AF69F12F25A2CBACF6D2AEE0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.LogViewer.resources.dll" />
+            </Component>
+            <Component Id="cmp014E47FC022D2FB95A4536055CF9B54D" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="filBC3E92D0473F5FFECBE78E0E6640623A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.ProjectManagement.resources.dll" />
+            </Component>
+            <Component Id="cmp64C0D85D3690216670639F3971D2E471" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil47952C4F1BF6B1F45454FA9A6B6B641D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.Squirrel.resources.dll" />
+            </Component>
+            <Component Id="cmp670503FF1B01792E05EA32A3E17BD469" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="filED0B6B80B2142C91274DC0C3A2F8A589" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.Squirrel.Xaml.resources.dll" />
+            </Component>
+            <Component Id="cmpE91334DD2D3EB24E39659C469578A28C" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil44FAFC2D89B33B5022614FF1B3D98AA3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.SystemInfo.resources.dll" />
+            </Component>
+            <Component Id="cmp3D6A5B59ACA059A30B8F72842A7B3717" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="filA7E91340F6EECA60B258C1AE8D958AFD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orc.Theming.resources.dll" />
+            </Component>
+            <Component Id="cmp3AEEFBBFF471F513ACB45837C8FF5CCC" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil1B547D90B9746C5F22160999E5B5B443" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orchestra.Core.resources.dll" />
+            </Component>
+            <Component Id="cmp9F40858FCE4451E76E63DF5E01D59D55" Directory="dir1E3574C98A2A00626DCE754B0BB4912B" Guid="*" Win64="yes">
+                <File Id="fil5077CF378FDE6154C59EDC48CAA61476" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl\Orchestra.Shell.Ribbon.Fluent.resources.dll" />
+            </Component>
+            <Component Id="cmp7740AE935C0E0EC2897A3664172B0056" Directory="dir64CD0274EAAF5388A8E6B1F37D82A7AB" Guid="*" Win64="yes">
+                <File Id="filE7447E947324767C2B73F3D97DBCF3EA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\nl-BE\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp8599ECECFA6F760A09E2A285AD661388" Directory="dir2A319D0072BACE9F7C1F3B407659463F" Guid="*" Win64="yes">
+                <File Id="fil4ABD549474FC814F3497627F5763D107" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pl\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp4C6C676E1FE7B5F51E4CB6C5349F0CFD" Directory="dir2A319D0072BACE9F7C1F3B407659463F" Guid="*" Win64="yes">
+                <File Id="fil42D8FF0EF760630CB2145FC15E381566" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pl\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp97A2CD23B22238065E0741974C8BD4BF" Directory="dir2A319D0072BACE9F7C1F3B407659463F" Guid="*" Win64="yes">
+                <File Id="fil7066208E458A1D191BFB4757E5A5BB51" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pl\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmp3F95D338A6CD9DF6222A1443BC5E127A" Directory="dir2A319D0072BACE9F7C1F3B407659463F" Guid="*" Win64="yes">
+                <File Id="fil6E5AFA3F8D71653B341F8E1FE7CA9C7F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pl\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmp06E5AC5A1BE310BD8FB0521CBFD4F487" Directory="dir01EAA6992AD788A07ABD46E787E68C3C" Guid="*" Win64="yes">
+                <File Id="filE0686803578F11BCDE38BA54C7A196E8" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pl-PL\WPFHexaEditor.resources.dll" />
+            </Component>
+            <Component Id="cmp8D5069DB0259E5A12E0AE95FCFAED6B6" Directory="dirB2B421F2C18D54371317743C25CA3B88" Guid="*" Win64="yes">
+                <File Id="fil36D13C1A59A1BEFDA3F880982BD05F81" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pt-BR\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpFCCCC9E94AA474B236480878AFA5D6E0" Directory="dirB2B421F2C18D54371317743C25CA3B88" Guid="*" Win64="yes">
+                <File Id="fil34CFC2672582C3DEC008FD5413427844" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pt-BR\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp9F2DA8D091B0264DC7CD17981653F759" Directory="dirB2B421F2C18D54371317743C25CA3B88" Guid="*" Win64="yes">
+                <File Id="fil307B7ECD0B82D223A18A94BEC4CFBD52" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmpA01DE87C4570AD4E3B71C7A21C22963F" Directory="dirB2B421F2C18D54371317743C25CA3B88" Guid="*" Win64="yes">
+                <File Id="fil580C9994A3FEAD1EEDA517FB43B18871" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pt-BR\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmpACB4672EA6B4276A7D45B9FBA46853B5" Directory="dirB2B421F2C18D54371317743C25CA3B88" Guid="*" Win64="yes">
+                <File Id="fil0AF508A28A2E7FC15C4D66E5A986B97D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\pt-BR\WPFHexaEditor.resources.dll" />
+            </Component>
+            <Component Id="cmp3E914FEF6D208E031238999E1CC6C022" Directory="dir2882D0668B02230465FE4DB990069488" Guid="*" Win64="yes">
+                <File Id="fil603BF1BD66BADC4906B31EF7714BF4EE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ref\WolvenKit.dll" />
+            </Component>
+            <Component Id="cmpC19B5616516B9D02B089BDF7D4E15707" Directory="dir7338A182F74040B61AEA9E174DB526D7" Guid="*" Win64="yes">
+                <File Id="fil68C44944A843E77454803357F9C4D5AB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Images\git.png" />
+            </Component>
+            <Component Id="cmpEF0CF5E125211CD95098AC9282195B87" Directory="dir7338A182F74040B61AEA9E174DB526D7" Guid="*" Win64="yes">
+                <File Id="fil118304D61DE4D114A2B4A46B77A59AFC" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Images\Preferences_light_64x.png" />
+            </Component>
+            <Component Id="cmp96AFDCADAE139C006A54C3198844FEBF" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil3D9334E735EDC7B789D9F7E9184C2AED" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\case-sensitive.svg" />
+            </Component>
+            <Component Id="cmp12BCFD76E931EBD6C4D95014871207A4" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil80FD4E63E823DF72A342E64EA07D0554" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\Close_16x.svg" />
+            </Component>
+            <Component Id="cmp8E9251537FF43BC39211245190A93DE0" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filCA1DB0FBAAEB6933972C662071064554" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\Close_red_16x.svg" />
+            </Component>
+            <Component Id="cmp4AEA2B378F4B585038E8DF9D90067F9D" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil528080F412E49681533D3EA2BADA8AFC" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\CollapseAll_16x.svg" />
+            </Component>
+            <Component Id="cmpEADA95092BD8C266F794AF2245C0714E" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil8BEE2A263E04D14662973ACC81EE2C2D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\CollapseChevronUpGroup_16x.svg" />
+            </Component>
+            <Component Id="cmp6C19E0B09AF1B70DD67075F1C0B699FF" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil83F359A8A572B8E264EA1BF107D1CD69" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\EventLog_16x.svg" />
+            </Component>
+            <Component Id="cmp9104833B722BA463E928FAD1F0353546" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filB3C5A45D073A5D56E3B14FCD6A39EFD8" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\ExpandAll_16x.svg" />
+            </Component>
+            <Component Id="cmpB34322AFA902DCE494F27B41CD11643D" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil7183BFC187C641110D31BA4FD2BBBEB2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\ExpandChevronDownGroup_16x.svg" />
+            </Component>
+            <Component Id="cmp0561538712EA99A40A0C8FBE728347C0" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filE0F1DE099FAF4BF0D47A5E333890305C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\ImportFile_16x.svg" />
+            </Component>
+            <Component Id="cmpE2FA013A887D58CDF2AB4E507D3405A2" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil73350D0AE78A1A173B0289558027FC0F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\ImportTheme_16x.svg" />
+            </Component>
+            <Component Id="cmp0EC4BDAE9D1947EB6B26639E53E6610A" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil22AE02E1051A44EBFA7BEA8CF3A59783" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\Method_16x.svg" />
+            </Component>
+            <Component Id="cmp9D056A88E34E2CD9B9C8A3033B8345DE" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil1C287EDF41E4F779D925A56942B81EE8" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\Method_left_16x.svg" />
+            </Component>
+            <Component Id="cmp6D42D07B9A6528CC56D304B27045DA0F" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filF1DC30CB5C8E1A206CD2B4AF5A74583F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\MoveToSubmodule2_16x.svg" />
+            </Component>
+            <Component Id="cmp80FFCEBD2DC2E1A5DDFB80A953A4D918" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filBEB3D2A2B5AE33CDE2CA4E86FBE9CD85" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\MoveToSubmodule_16x.svg" />
+            </Component>
+            <Component Id="cmpEE979C34932585967524F7A0C1DCEB04" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil931C962260E9B8B0D741D112CAD5DA46" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\NewFile_16x.svg" />
+            </Component>
+            <Component Id="cmp95FF800888A780F0655CF806A69BEBBF" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil7285B08A7E97C455450CC8933C52434E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\NewSolutionFolder_16x.svg" />
+            </Component>
+            <Component Id="cmp774A7B444223B241479EBF027A00CD74" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil36724B6E217C04B7E1F547DCE3E0DCA0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\OpenFile_16x.svg" />
+            </Component>
+            <Component Id="cmpC42BA27D69A297AFEE955B28247EF17B" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil8484EF4875565C28AF139684502F3B20" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\OpenFolder_16x.svg" />
+            </Component>
+            <Component Id="cmp7905A3CA87E47C03258FB3062EC8D2A1" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil2419B946E6F05EA44FB04F1D31033664" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\PackageProperty_16x.svg" />
+            </Component>
+            <Component Id="cmpEE7EE20B97E0166CF2B98D860F756394" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filB17F08E3057C9983AD4A7D940D4052AF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\PlaybackPreview_16x.svg" />
+            </Component>
+            <Component Id="cmpA01EAF387BE2FE1AED602FD979463EA2" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil42B8EA49CD956D8E167E781E085D3B5C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\Property_left_16x.svg" />
+            </Component>
+            <Component Id="cmpE50D8E489DD864730BFC2494616AF141" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil346E3F4FA271DD7E54042FF1A11A8F0E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\PushpinOutlineAngle_16x.svg" />
+            </Component>
+            <Component Id="cmp55100A8DE3999B54AC3D106D3318ED87" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filDB9B292FDBE036190756EA98F2BA13AD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\regex.svg" />
+            </Component>
+            <Component Id="cmpF40CFE229E798EDF013B0125AFB55DAB" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil4323246C4CBFA5253C52DC36432D5ABB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\RunTest_16x.svg" />
+            </Component>
+            <Component Id="cmp64B997B61C60FD767501281284D33328" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil51EEAFB05B9A3B86EF4F70E5FDFA9896" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\Run_16x.svg" />
+            </Component>
+            <Component Id="cmpC760E95A842661C8C9AE535CBB4ECB0A" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filEA1011DD974E040643E1785AB1E91D01" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\SearchFolderClosed_16x.svg" />
+            </Component>
+            <Component Id="cmpB544B482D7079ACCE71A2F5C600403DE" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filFCF1177551238C1D19274AC41A246862" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\SelectAllItems_inversed_16x.svg" />
+            </Component>
+            <Component Id="cmpDF1D56B49B6777E018572CAF2FAC4E1E" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil983A8EFF6E401090757CCB7AF5BFE2A3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\SelectInverseItems_inversed_16x.svg" />
+            </Component>
+            <Component Id="cmpE99E7FFCFC40B7B1806A9C102569E88B" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filC7CF2357C217587B76D0FAEBFEC45A90" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\SelectNoItems_inversed_16x.svg" />
+            </Component>
+            <Component Id="cmpDAE9470AD073FBAEF45CEE61F99E55F1" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil15E0E415951B1E5A927FCCB466683A19" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\SelectObject_16x.svg" />
+            </Component>
+            <Component Id="cmp215883608DBA491038CAAF144A4B7A6D" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil2F1532696551CD731FAADFCC54667497" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\Settings_16x.svg" />
+            </Component>
+            <Component Id="cmp39308C7C0AE03EEADFC6BC512006EEB1" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil90967FF21AE0DCA2607CBE9167B21EFA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\SQLServerObjectExplorer_16x.svg" />
+            </Component>
+            <Component Id="cmp5C7A13D3CFFC566159B2E23F3299ABEC" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil383FB3D4CAC713F4C551F8ED9116C872" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\TypeDefinition_16x.svg" />
+            </Component>
+            <Component Id="cmp11FE7C89CB2DB9AF06015C6DBF48978A" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil21B3A9F36891EB49ACC91C9A789407FF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\UploadFile_16x.svg" />
+            </Component>
+            <Component Id="cmpA06F3F499BEF8E3E7FCC3B3AA9302763" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil7C3F393E6533EC5E3B052F0BD35A58BE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\whole-word.svg" />
+            </Component>
+            <Component Id="cmp20B62ACB47EEDF05B8609A4F1B0D6D37" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="fil99076638B24A0B2AA566D16E401C340D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\WK_Logo.svg" />
+            </Component>
+            <Component Id="cmp27D64E6062DB7F9179F54E35B087D6B3" Directory="dirCC2DBAB5251065DDEAA63B458B48A090" Guid="*" Win64="yes">
+                <File Id="filCF5B161D842265B5B63904055FAB06EE" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\Resources\Old\Svg\ZoomOriginalSize_16x.svg" />
+            </Component>
+            <Component Id="cmp396AA26305794E64B41E72B78F7A327F" Directory="dirF2244AE5AABC10A1B8F1DD4AA43FB2DC" Guid="*" Win64="yes">
+                <File Id="fil3D5DD419228B28E8E112DE4664766618" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ro\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpFFB0AEBBF020F94766CD31CB185F4D57" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil5C2264D1DF22E894D68239A4A811F850" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmp5789C923E6FA06576458CBDDE4211A35" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="filDB6F2ABA7AF2B62CB79F8EFAD5CF1840" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmp5A023A935833158A7F159BA0A427D840" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil836C7E15C1B6784DFDA5A81064E56F7A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp71011C8D4CCCCD53D24D28DDDFCB6AE9" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil1BF4ECDB147EC9D94A84656B51CC3596" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmpCF6D09BC65703990074AA66A9FFC0FDD" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="filBBFB5AD7101A72254A794878D5161C98" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmpC05C7EA5821996544492EE69F64D2B59" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil336FCCE1C4EDD32D4A7B6331C3FDE1BC" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.CommandLine.resources.dll" />
+            </Component>
+            <Component Id="cmp42DD4D7B24DB45A05E2F81AEF771D971" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil05B0B80B4C0D9B770998442FA2DBF41A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.Controls.resources.dll" />
+            </Component>
+            <Component Id="cmpB2772A8A87906332F4F7BED1EFD442C0" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil021F9CFE35B5D8B7919DDB4EAB6A6E8A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.CsvTextEditor.resources.dll" />
+            </Component>
+            <Component Id="cmp04F641040CBCED5A36558129BB3BF01B" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="filFA54BC4655A973B1E08FC1C055D3B913" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.FileSystem.resources.dll" />
+            </Component>
+            <Component Id="cmp68F8B78CDB3FF362B0EA2917B392B3FC" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="filB537C72B732BD23EEF2991255E64396D" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.LogViewer.resources.dll" />
+            </Component>
+            <Component Id="cmpBA0F76E30556D18E5EEC3539CFC1615C" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="filD0710B790BA62BC621A62FFAFEC86EE9" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.ProjectManagement.resources.dll" />
+            </Component>
+            <Component Id="cmpBF1A6077D2060B7A2C107EEF78A58C93" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil8FBEDA7C1E24A5D708CCD45FD7E99083" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.Squirrel.resources.dll" />
+            </Component>
+            <Component Id="cmpFCC5B71CEA025A41BF3920A9CC8F9D74" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="filA6D9328CAD5E01C760C49AF0595C0BFF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.Squirrel.Xaml.resources.dll" />
+            </Component>
+            <Component Id="cmp50BFB2B57B57B29C8909FDFC93F982CA" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil7966D8AB3BE056CD7D08C40FB6BDDB0C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.SystemInfo.resources.dll" />
+            </Component>
+            <Component Id="cmp956B0A80E1EBBB83A455FC7ED15D9A71" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil3EFA43A2EBCAAE68593E8E45890AA9CD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orc.Theming.resources.dll" />
+            </Component>
+            <Component Id="cmp66FE43E3700297D80C89DD0413FB4F21" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="fil223B1EB7BE6EA1CBB8153674CF0664B7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orchestra.Core.resources.dll" />
+            </Component>
+            <Component Id="cmpCE33E8199C8C1E6D8995F9E46A800CC5" Directory="dirAA81E43C791731687503ABD27F486280" Guid="*" Win64="yes">
+                <File Id="filF08CDE323AEDC08760DF16BA3A1D1FF3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru\Orchestra.Shell.Ribbon.Fluent.resources.dll" />
+            </Component>
+            <Component Id="cmp9DFD899D2A9DCF0F54A152E08E6EE2AB" Directory="dir84CC7BBE89A9E04230D46E2DD2263DA1" Guid="*" Win64="yes">
+                <File Id="fil890721D64152D5F535DA637D92588FA5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru-RU\WPFHexaEditor.resources.dll" />
+            </Component>
+            <Component Id="cmp391D67FD8BE22C8F300FB29B27C654FA" Directory="dir84CC7BBE89A9E04230D46E2DD2263DA1" Guid="*" Win64="yes">
+                <File Id="fil3934740320EE2FAE29DBE5B8C4821EFD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\ru-RU\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmp08B3E059B29EF4B82011F07F2F886F83" Directory="dirC68DA8112F607F62039943C74F56AB22" Guid="*" Win64="yes">
+                <File Id="filAF327DE0B568FE728B485AE8A019E6B4" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\SoundCache\soundbanksinfo.xml" />
+            </Component>
+            <Component Id="cmp62CDFFE5DD4079C1B36E0B74D7ADA219" Directory="dirF3B4AF7C91F4E4731A029BB4F88EE18D" Guid="*" Win64="yes">
+                <File Id="fil05A718BE500B329F222BEA95AC141BA2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\sv\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpD6ADA2CD82D33B5567F3EFD61C79489D" Directory="dir33B657DA24AC65F6B2F8DE36B3D047FB" Guid="*" Win64="yes">
+                <File Id="fil47D3696FCFC4FEA8EB68C2E69A7FFDE6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\tr\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmpA34E286F39E5204D4310962886D715BA" Directory="dir33B657DA24AC65F6B2F8DE36B3D047FB" Guid="*" Win64="yes">
+                <File Id="fil695D0DF32DD07066C69F2FC57DDCB1E6" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\tr\HandyControl.resources.dll" />
+            </Component>
+            <Component Id="cmp1E52E762A888100845E928EA588AAF0A" Directory="dir33B657DA24AC65F6B2F8DE36B3D047FB" Guid="*" Win64="yes">
+                <File Id="fil905FD0D82749C4B994CFC90E94C1D46E" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\tr\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmp19E14BE41F3EDB88B7168469B3722894" Directory="dir33B657DA24AC65F6B2F8DE36B3D047FB" Guid="*" Win64="yes">
+                <File Id="fil9E3B8355F277792722A5CF42A37DDEB2" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\tr\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmp258098073BAF24DE7E22AF1D4F5BA620" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="filFEC8ABEEFD43DB944BE97F8840FB960F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\avcodec-vgmstream-58.dll" />
+            </Component>
+            <Component Id="cmpD98482FDD4818EB21AD118E706E5EC52" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil8AA8C0B716F66D61F5B0E919C619DECB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\avformat-vgmstream-58.dll" />
+            </Component>
+            <Component Id="cmp81C6C5160ACF9DADE7EE8DF23A969FFD" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil06CE4ABA422CD8FE6A7F877DB6BF23B0" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\avutil-vgmstream-56.dll" />
+            </Component>
+            <Component Id="cmp1CCBB3E38BCDD945CB27CE7B3FA73CB9" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil87B5219A3D55CFDB7ECCB85C3315E9B3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\COPYING" />
+            </Component>
+            <Component Id="cmp2EE428737254F1B13904EDE314F857BE" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil8D5EE2BE50702F6B9CDF783E8A688D33" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\in_vgmstream.dll" />
+            </Component>
+            <Component Id="cmp9D632ACD72E7EDD803DC62536F3956AD" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil6B3C556B099C3EF87FC7DEADBC3F803F" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\libatrac9.dll" />
+            </Component>
+            <Component Id="cmp7837BC47F8E9A1381457FB84B0EDD873" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="filB55474CD1D46E1F759B111C69B32A6EF" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\libcelt-0061.dll" />
+            </Component>
+            <Component Id="cmpCBB597A7A57F24A3FAB72DB65F1FB490" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="filA08A557AF4C0B0F5ED52CE40D76F4205" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\libcelt-0110.dll" />
+            </Component>
+            <Component Id="cmpD0D9C8CBAD80FD935C7B9381C32BC8B3" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil34E1B058D92E8DF36E8BD6C15367FB7A" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\libg719_decode.dll" />
+            </Component>
+            <Component Id="cmpCBBA8C3332AE064811428279DFAA1A14" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="filE4C2FACF7B56E4875E96CBFE89C72713" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\libmpg123-0.dll" />
+            </Component>
+            <Component Id="cmpC0ED015AEBA9408F2D77997A9E039E1C" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil671471CEC5D69F41FD0C05499EBB73C3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\libvorbis.dll" />
+            </Component>
+            <Component Id="cmp2E3669E839054F64F17F4738B71D693B" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="filF8E54046CDD458452B0185DD776D0903" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\README.md" />
+            </Component>
+            <Component Id="cmp51E5D3FAAE25C8A9052C8FC8C7E64704" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil0C0FFF141F0A0915B0E48234C6DC8472" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\swresample-vgmstream-3.dll" />
+            </Component>
+            <Component Id="cmp7BED95A17C46FAEBEB67122626CB8C69" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="fil82ACC363A0007B539A5EBDFD121B90A5" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\test.exe" />
+            </Component>
+            <Component Id="cmpCD99781A4CB70DC6FB104E227305C853" Directory="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Guid="*" Win64="yes">
+                <File Id="filEC9751A63B42A46E5D99B0EE2277F628" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\vgmstream\xmp-vgmstream.dll" />
+            </Component>
+            <Component Id="cmp5B14CC2DA69BD10A4F04189AF618D8F8" Directory="dir72675FDC9C989DCDB63C37CCF1FF060E" Guid="*" Win64="yes">
+                <File Id="fil5F4E105724C8F05565AD93BFBE8FE8DC" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\x64\WebView2Loader.dll" />
+            </Component>
+            <Component Id="cmpD815A8D2573C64F39F526B79CD6734F4" Directory="dir0BECB3579B0E986EDEA5E2A50B7974EF" Guid="*" Win64="yes">
+                <File Id="fil93D22F7A83E5CF51636643673FCFC063" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\x86\WebView2Loader.dll" />
+            </Component>
+            <Component Id="cmp71163E83ED3BFA4F6FD22EEB754F3B4B" Directory="dirB69628A8F4A24A57FA62F64933C78445" Guid="*" Win64="yes">
+                <File Id="fil7D0B9E8E38C96F6AC2DB2EE1BC59C435" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-CHS\WSF.resources.dll" />
+            </Component>
+            <Component Id="cmp498D255CAC874760C4E18AE4AD7B0803" Directory="dir7B0E467D38BB39BC76EBBC55FAF343B0" Guid="*" Win64="yes">
+                <File Id="filBFACE30C29B1B12A64CC146E34FA07EA" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-CN\WPFHexaEditor.resources.dll" />
+            </Component>
+            <Component Id="cmpAB7A93FF08BA9D2E0CF51883A126EF03" Directory="dirA99587EA3898FB221576E6785DBF4A3B" Guid="*" Win64="yes">
+                <File Id="fil65955A0BF6776DA51431BDA447EC19AD" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-Hans\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpC89701E94907F32E21B65C78DF394773" Directory="dirA99587EA3898FB221576E6785DBF4A3B" Guid="*" Win64="yes">
+                <File Id="fil643EBE3CCC1D03AC3680A97403B2AE97" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-Hans\Catel.MVVM.resources.dll" />
+            </Component>
+            <Component Id="cmpDE4851DECC9A17C9B5DEDCA7A8862357" Directory="dirA99587EA3898FB221576E6785DBF4A3B" Guid="*" Win64="yes">
+                <File Id="filB38879F550F0AB3CC45EA41086FA29B3" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmp741B8CD6234A29DD70F5E4D55908C906" Directory="dirA99587EA3898FB221576E6785DBF4A3B" Guid="*" Win64="yes">
+                <File Id="fil503B2731F2EC330A98ED90C0114EF9E7" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-Hans\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+            <Component Id="cmp4786F503A06BC8711D332B1A1352AF11" Directory="dir03BB267D948D268376AF55F6A430706F" Guid="*" Win64="yes">
+                <File Id="fil2ADB50A156222D770717F2B765112456" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-Hant\AvalonDock.resources.dll" />
+            </Component>
+            <Component Id="cmpA45A075225A5B9237AF90EF662467954" Directory="dir03BB267D948D268376AF55F6A430706F" Guid="*" Win64="yes">
+                <File Id="filC3D4E73EEFA38E3065C35BE4E48769AB" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll" />
+            </Component>
+            <Component Id="cmpCEE9093440282E640FC8E89B72ECFDB2" Directory="dir03BB267D948D268376AF55F6A430706F" Guid="*" Win64="yes">
+                <File Id="fil80DF2F7A7AF975E65254B4607AF69A9C" KeyPath="yes" Source="$(var.WolvenKit.UI.TargetDir)net5.0-windows\win-x64\zh-Hant\Microsoft.CodeAnalysis.resources.dll" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir01EAA6992AD788A07ABD46E787E68C3C" Name="pl-PL" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir03BB267D948D268376AF55F6A430706F" Name="zh-Hant" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir0859F03E0004B8E4C6A62C190D306B48" Name="de-DE" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir0BECB3579B0E986EDEA5E2A50B7974EF" Name="x86" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir1124DB9B94C8CE6568C321A6E999ECA5" Name="hu" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir1A1D5BCFC5A9A231FC49B80398629637" Name="fa" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir1A86A78CBCCBB382742A0316AC790B9E" Name="fr-CA" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir1CB1A05A6CCC5DDE8C26EA01D8E336CB" Name="ko" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir1E3574C98A2A00626DCE754B0BB4912B" Name="nl" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir2882D0668B02230465FE4DB990069488" Name="ref" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir2A319D0072BACE9F7C1F3B407659463F" Name="pl" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir33B657DA24AC65F6B2F8DE36B3D047FB" Name="tr" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir4548DC4BB9FF3385C4B6EE531FB1DCD9" Name="vgmstream" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir45D1FAC5261D3ED92EEF24CF2DACA58E" Name="it-IT" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir491D6C2141E3140FFEEAD58B2E1B61E7" Name="FFME" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir4F5502FD30F09B87EAEFABED51BA8FB1" Name="arm64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir60726AE598AC411BF5EC64CF060865A7" Name="en" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir6110DD047F489DFCEFEFA26B4D1F2095" Name="ja" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir64CD0274EAAF5388A8E6B1F37D82A7AB" Name="nl-BE" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir84AFEDB071136BC4CE761BCCF5E550CE">
+            <Directory Id="dir6E2949BE34EA24462B45A27C28E69022" Name="Old" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir72675FDC9C989DCDB63C37CCF1FF060E" Name="x64" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir72BBB986E42CA4067201E6E779F4BA65" Name="fr-FR" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6E2949BE34EA24462B45A27C28E69022">
+            <Directory Id="dir7338A182F74040B61AEA9E174DB526D7" Name="Images" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir7B0E467D38BB39BC76EBBC55FAF343B0" Name="zh-CN" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir817AE5A0A69E9F457C89622998CF1505" Name="ja-JP" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir84AFEDB071136BC4CE761BCCF5E550CE" Name="Resources" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir84CC7BBE89A9E04230D46E2DD2263DA1" Name="ru-RU" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir8A99D548E0871655EF8091570A5D8257" Name="Config" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir8BCADAA541ADC8A91E3AF48566900ACD" Name="de" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dir94420A9905BF86543E158CC598E3DFAA" Name="es-ES" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirA77362E438DF0056C9C48F325B7F9B88" Name="es" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirA99587EA3898FB221576E6785DBF4A3B" Name="zh-Hans" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirAA81E43C791731687503ABD27F486280" Name="ru" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirB2B421F2C18D54371317743C25CA3B88" Name="pt-BR" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirB69628A8F4A24A57FA62F64933C78445" Name="zh-CHS" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirB8132E05BECE28138A71EDAA45A00920" Name="bnkext" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirB93038B839CEE407DFD1555E42580095" Name="hi-IN" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirBE18E1B8E77A8EDB40158567F91B74C9" Name="it" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirC68DA8112F607F62039943C74F56AB22" Name="SoundCache" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6E2949BE34EA24462B45A27C28E69022">
+            <Directory Id="dirCC2DBAB5251065DDEAA63B458B48A090" Name="Svg" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirD5CE249DCC487DC45ADBBE9EB4DB76DD" Name="ca-ES" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirE4429F190710E84AAA4E480CB16C09ED" Name="fr" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirE587E6E7F0A2FB8D32D7D98C2B350564" Name="Cache" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirF0D17D3FC876F5D0723E745722F39215" Name="ko-KR" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirF2244AE5AABC10A1B8F1DD4AA43FB2DC" Name="ro" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirF3B4AF7C91F4E4731A029BB4F88EE18D" Name="sv" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirFA257EE776F6CF31DCE47EC1E9EFADEE" Name="cs" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6298C2114593B62906526CA52B964DD3">
+            <Directory Id="dirFBA703AB0D0CB43F0277256B705F6B0B" Name="cs-CZ" />
+        </DirectoryRef>
+    </Fragment>
+</Wix>

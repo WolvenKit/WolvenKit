@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using Catel;
 using Catel.IoC;
+using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
@@ -86,6 +86,8 @@ namespace WolvenKit.ViewModels.Shell
             ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
             ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
             ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
+            ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
+
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
             ShowGameDebuggerToolCommand = new RelayCommand(ExecuteGameDebuggerTool, CanShowGameDebuggerTool);
@@ -186,6 +188,8 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
+            commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
+
             commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowGameDebuggerTool, ShowGameDebuggerToolCommand, this);
@@ -259,6 +263,8 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowAudioToolCommand { get; private set; }
+        public ICommand ShowVideoToolCommand { get; private set; }
+
 
         /// <summary>
         /// Displays the BulkEditor.
@@ -356,6 +362,13 @@ namespace WolvenKit.ViewModels.Shell
 
         public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
+        public void ExecuteVideoTool()
+        {
+            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.SendMessage<bool>(true);
+        }
+
+
         private static void ExecutePackMod() => MainController.GetGame().PackAndInstallProject();
 
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
@@ -364,7 +377,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanOpenFile(FileSystemInfoModel model) => true;
 
-        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject proj;
+        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
 
         private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
 
@@ -372,13 +385,15 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
-        private bool CanShowAudioTool() => true;
+        private bool CanShowAudioTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowVideoTool() => _projectManager.ActiveProject is EditorProject;
+
 
         private bool CanShowBulkEditor() => false;
 
         private bool CanShowCR2WToTextTool() => false;
 
-        private bool CanShowCsvEditor() => false;
+        private bool CanShowCsvEditor() => _projectManager.ActiveProject is EditorProject;
 
         private bool CanShowGameDebuggerTool() => false;
 
@@ -423,7 +438,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteCR2WToTextTool() => CR2WToTextToolVM.IsVisible = false;
 
-        private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = false;
+        private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = !CsvEditorVM.IsVisible;
 
         private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
 
@@ -1057,7 +1072,8 @@ namespace WolvenKit.ViewModels.Shell
                 case ".JPEG":
                 case ".DDS":
                 //text
-                case ".CSV":
+
+
                 case ".XML":
                 case ".TXT":
                 case ".WS":
@@ -1078,17 +1094,25 @@ namespace WolvenKit.ViewModels.Shell
                     ShellExecute(fullpath);
                     break;
 
-                case ".BNK":
-                case ".WEM":
-                {
-                    OpenAudioFile(fullpath);
-                    // TODO: port winforms
-                    //using (var sp = new frmAudioPlayer(fullpath))
-                    //{
-                    //    sp.ShowDialog();
-                    //}
+
+
+
+                // VIDEO
+                case ".BK2":
+                    OpenVideoFile(fullpath);
                     break;
-                }
+
+
+
+
+
+                // AUDIO
+
+                case ".BNK":
+                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
+                case ".WEM":
+                    OpenAudioFile(fullpath);
+                    break;
                 case ".SUBS":
                     PolymorphExecute(fullpath, ".txt");
                     break;
@@ -1110,10 +1134,12 @@ namespace WolvenKit.ViewModels.Shell
 
             void OpenAudioFile(string full)
             {
-                // #convert2MVVMSoon
-                //   var z = (AudioToolView)ServiceLocator.Default.ResolveType<AudioToolView>();
-                //   ExecuteAudioTool();
-                //   z.AddAudioItem(full);
+
+
+
+                var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
+                ExecuteAudioTool();
+                z.AddAudioItem(full);
             }
 
             void ShellExecute(string path)
@@ -1145,6 +1171,21 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
+
+        private void OpenVideoFile(string fullpath)
+        {
+
+            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.SendMessage<string>(fullpath);
+            mediator.SendMessage<bool>(true);
+
+
+
+        }
+
+
+
+
 
         #endregion methods
     }

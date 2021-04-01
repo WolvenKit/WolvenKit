@@ -20,6 +20,9 @@ namespace WolvenKit.Common.Model
         public bool dlcScripts { get; set; }
         public bool dlcSound { get; set; }
         public bool dlcStrings { get; set; }
+        public bool dlcShaderCache { get; set; }
+        public bool dlcDeprecationCache { get; set; }
+        public bool dlcSpeech { get; set; }
         public bool modGenCollCache { get; set; }
         public bool modGenMetadata { get; set; }
         public bool modGenTexCache { get; set; }
@@ -28,6 +31,9 @@ namespace WolvenKit.Common.Model
         public bool modScripts { get; set; }
         public bool modSound { get; set; }
         public bool modStrings { get; set; }
+        public bool modShaderCache { get; set; }
+        public bool modDeprecationCache { get; set; }
+        public bool modSpeech { get; set; }
 
         #endregion Properties
     }

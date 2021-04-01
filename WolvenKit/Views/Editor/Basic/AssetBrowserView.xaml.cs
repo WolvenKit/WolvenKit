@@ -62,5 +62,7 @@ namespace WolvenKit.Views.Editor
                 StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
             }
         }
+
+
     }
 }

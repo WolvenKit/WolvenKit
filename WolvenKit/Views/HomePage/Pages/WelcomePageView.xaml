@@ -3,6 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
+ xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
@@ -518,6 +519,7 @@
                                     <Grid Width="125">
                                         <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Add" />
                                         <TextBlock
+                                         x:Name="QuickAccessStacker"
                                          Margin="5,0,35,0"
                                          HorizontalAlignment="Right"
                                          Text="Create Project"
@@ -636,6 +638,7 @@
                                  />
 
                                 <TextBlock
+                                 x:Name="RecentProjectTour"
                                  Margin="10,0,0,0"
                                  FontSize="18"
                                  Text="Recent Projects"
@@ -893,5 +896,9 @@
              Text="{Binding VersionWkit}"
              />
         </Grid>
+
+     
+
+        
     </Grid>
 </catel:UserControl>

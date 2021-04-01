@@ -83,7 +83,14 @@ namespace WolvenKit.ViewModels.Shared
         public ICommand TutorialsCommand { get; private set; }
         public string TwitterLink => "https://twitter.com/ModdingRed";
         public Command<string> UnpinItem { get; private set; }
-        public string VersionWkit => GetAssemblyVersion();
+        public string VersionWkit
+        {
+            get { return GetAssemblyVersion(); }
+            set
+            {
+            }
+        }
+
         public ICommand WikiCommand { get; private set; }
 
         #endregion Properties
@@ -147,7 +154,7 @@ namespace WolvenKit.ViewModels.Shared
             }
         }
 
-        public string GetAssemblyVersion() => GetType().Assembly.GetName().Version.ToString();
+        public string GetAssemblyVersion() => "0.8.0.1-Beta";
 
         protected override Task CloseAsync()
         {

@@ -1,4 +1,12 @@
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Catel.IoC;
+using HandyControl.Controls;
+using Orc.ProjectManagement;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models.Wizards;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ViewModels.Wizards.PublishWizard;
 using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
 
 namespace WolvenKit.Views.Wizards
@@ -8,6 +16,8 @@ namespace WolvenKit.Views.Wizards
         #region Fields
 
         private FinalizeSetupView FSV;
+
+        private W3PackSettingsView PSV;
 
         private OptionalSettingsView OSV;
 
@@ -19,11 +29,31 @@ namespace WolvenKit.Views.Wizards
 
         public PublishWizardView()
         {
+            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+            var pwm = ServiceLocator.Default.RegisterTypeAndInstantiate<PublishWizardModel>();
+
+            if (projectManager?.ActiveProject is EditorProject ep)
+            {
+                var imgPath = System.IO.Path.Combine(ep.ProjectDirectory, "img.png");
+                if (System.IO.File.Exists(imgPath))
+                {
+                    pwm.ProfileImageBrushPath = imgPath;
+                    pwm.ProfileImageBrush = new ImageBrush(new BitmapImage(new System.Uri(imgPath)));
+                }
+            }
+
             RSV = new RequiredSettingsView();
             OSV = new OptionalSettingsView();
             FSV = new FinalizeSetupView();
 
             InitializeComponent();
+
+            if (projectManager?.ActiveProject is Tw3Project)
+            {
+                StepMain.Items.Insert(1, new StepBarItem() { Content = "W3 pack settings" });
+                PSV = new W3PackSettingsView();
+            }
+
             ShowPage();
         }
 
@@ -33,6 +63,8 @@ namespace WolvenKit.Views.Wizards
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (StepMain.StepIndex == 0 && RSV.AllProjectFieldIsValid() && RSV.ViewModel is RequiredSettingsViewModel vm)
+                vm.EditorProject.Save();
             StepMain.Next();
             ShowPage();
         }
@@ -54,10 +86,21 @@ namespace WolvenKit.Views.Wizards
 
                 case 1:
                     PageGrid.Children.Clear();
-                    PageGrid.Children.Add(OSV);
+                    if (PSV != null)
+                        PageGrid.Children.Add(PSV);
+                    else
+                        PageGrid.Children.Add(OSV);
                     break;
 
                 case 2:
+                    PageGrid.Children.Clear();
+                    if (PSV != null)
+                        PageGrid.Children.Add(OSV);
+                    else
+                        PageGrid.Children.Add(FSV);
+                    break;
+
+                case 3:
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(FSV);
                     break;

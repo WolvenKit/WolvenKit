@@ -94,6 +94,7 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.BugReport));
 
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.NewProject));
+            _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.PublishProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.CreateNewProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenProject));
             _commandManager.CreateCommandWithGesture(typeof(AppCommands.Application), nameof(AppCommands.Application.OpenLink));
@@ -128,6 +129,8 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.ShowVisualEditor);
             _commandManager.CreateCommand(AppCommands.Application.ShowAnimationTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowAudioTool);
+            _commandManager.CreateCommand(AppCommands.Application.ShowVideoTool);
+
             _commandManager.CreateCommand(AppCommands.Application.ShowImporterTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowCR2WToTextTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowGameDebuggerTool);
