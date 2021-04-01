@@ -979,4 +979,9 @@
     <None Remove="Resources\Media\Images\Icons\Files\workspot2.svg" />
     <None Remove="sample.mp4" />
   </ItemGroup>
+  <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
+    <ItemGroup>
+      <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)\$(AssemblyName).UNK" />
+    </ItemGroup>
+  </Target>
 </Project>
