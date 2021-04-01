@@ -1,10 +1,10 @@
-﻿using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.RED4.MeshFile.Materials.MaterialTypes
 {
     public enum MaterialType
     {
-        MultiLayered, MeshDecal, HoomanSkin
+        MultiLayered, MeshDecal, HumanSkin
     }
     public class MultiLayered
     {
