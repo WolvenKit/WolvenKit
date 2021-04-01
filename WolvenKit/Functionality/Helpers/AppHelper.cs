@@ -166,9 +166,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             StaticReferences.GlobalShell = sh;
             sh.MinWidth = 1;
             sh.MinHeight = 1;
-            sh.Height = 830;
-            sh.Width = 1540;
-            sh.WindowState = WindowState.Normal;
+         
+            sh.WindowState = WindowState.Maximized;
             sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Binding ws = new Binding();
             ws.Source = HomePageViewModel.GlobalHomePageVM;
@@ -176,7 +175,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             ws.Mode = BindingMode.TwoWay;
             ws.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             BindingOperations.SetBinding(sh, ShellWindow.WindowStateProperty, ws);
-            sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             sh.Closed += Sh_Closed;
 
             StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);

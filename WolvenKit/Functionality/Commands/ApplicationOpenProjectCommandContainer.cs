@@ -54,6 +54,10 @@ namespace WolvenKit.Functionality.Commands
 
         protected override async Task ExecuteAsync(object parameter)
         {
+
+
+
+
             if (_projectManager.ActiveProject != null)
             {
                 var a = _projectManager.ActiveProject;
@@ -63,54 +67,51 @@ namespace WolvenKit.Functionality.Commands
                 }
             }
 
-
-
-            else
+            try
             {
-                try
+                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+                var location = parameter as string;
+
+                if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
                 {
-                    var location = parameter as string;
-
-                    if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
+                    var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
                     {
-                        var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
-                        {
-                            Filter = "Cyberpunk 2077 Project | *.cpmodproj|Witcher 3 Project (*.w3modproj)|*.w3modproj",
-                            IsMultiSelect = false,
-                            Title = "Please select the WolvenKit project you would like to open."
-                        });
+                        Filter = "Cyberpunk 2077 Project | *.cpmodproj|Witcher 3 Project (*.w3modproj)|*.w3modproj",
+                        IsMultiSelect = false,
+                        Title = "Please select the WolvenKit project you would like to open."
+                    });
 
-                        if (result.Result)
-                        {
-                            location = result.FileName;
-                        }
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(location))
+                    if (result.Result)
                     {
-                        using (_pleaseWaitService.PushInScope())
-                        {
-                            StaticReferences.MainView.OnLoadLayoutAsync();
-
-                            await _projectManager.LoadAsync(location);
-                            var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
-                            btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
-
-
-
-
-                            StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
-                        }
+                        location = result.FileName;
                     }
-                    RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-                    RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
                 }
-                catch (Exception)
+
+                if (!string.IsNullOrWhiteSpace(location))
                 {
-                    // TODO: Are we intentionally swallowing this?
-                    //Log.Error(ex, "Failed to open file");
+                    using (_pleaseWaitService.PushInScope())
+                    {
+                        StaticReferences.MainView.OnLoadLayoutAsync();
+
+                        await _projectManager.LoadAsync(location);
+                        var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
+                        btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
+
+
+
+
+                        StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
+                    }
                 }
+
             }
+            catch (Exception)
+            {
+                // TODO: Are we intentionally swallowing this?
+                //Log.Error(ex, "Failed to open file");
+            }
+
 
 
         }
