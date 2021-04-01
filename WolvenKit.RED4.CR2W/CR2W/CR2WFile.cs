@@ -36,6 +36,13 @@ namespace WolvenKit.RED4.CR2W
             VirtualParent
         }
 
+        public enum EHashVersion
+        {
+            Unknown,
+            Pre120,
+            Latest
+        }
+
         #endregion
 
         #region Constants
@@ -81,6 +88,7 @@ namespace WolvenKit.RED4.CR2W
         // misc
         private uint headerOffset = 0;
         //private bool m_hasInternalBuffer;
+        private EHashVersion hashVersion = EHashVersion.Latest;
 
         private CR2WFile additionalCr2WFile;
         public byte[] AdditionalCr2WFileBytes;
@@ -529,6 +537,8 @@ namespace WolvenKit.RED4.CR2W
 
             #endregion
 
+            IdentifyHash();
+
             return (Imports, false, Buffers);
         }
 
@@ -608,6 +618,8 @@ namespace WolvenKit.RED4.CR2W
 
             #endregion
 
+            IdentifyHash();
+
             #region Read Data
 
             // Read object data //block 5
@@ -665,6 +677,32 @@ namespace WolvenKit.RED4.CR2W
             stopwatch1.Stop();
             //m_stream = null;
             return 0;
+        }
+
+        private void IdentifyHash()
+        {
+            hashVersion = EHashVersion.Unknown;
+
+            foreach (var name in Names)
+            {
+                if (string.IsNullOrEmpty(name.Str))
+                    continue;
+
+                var hash64 = FNV1A64HashAlgorithm.HashString(name.Str, Encoding.GetEncoding("iso-8859-1"), false, true);
+                if ((uint)(hash64 & 0xFFFFFFFF) == name.Name.hash)
+                {
+                    hashVersion = EHashVersion.Pre120;
+                    return;
+                }
+
+                if ((uint)((hash64 >> 32) ^ (uint)hash64) == name.Name.hash)
+                {
+                    hashVersion = EHashVersion.Latest;
+                    return;
+                }
+
+                return;
+            }
         }
 
         public CR2WFile GetAdditionalCr2wFile()
@@ -767,7 +805,19 @@ namespace WolvenKit.RED4.CR2W
                 var hash64 = string.IsNullOrEmpty(name)
                     ? 0
                     : FNV1A64HashAlgorithm.HashString(name, Encoding.GetEncoding("iso-8859-1"), false, true);
-                uint hash = (uint)(hash64 & 0xffffffff);
+
+                uint hash;
+                switch (hashVersion)
+                {
+                    case EHashVersion.Pre120:
+                        hash = (uint)(hash64 & 0xffffffff);
+                        break;
+                    case EHashVersion.Latest:
+                        hash = (uint)((hash64 >> 32) ^ (uint)hash64);
+                        break;
+                    default:
+                        throw new NotImplementedException("Unknown hashing method");
+                }
 
                 Names.Add(new CR2WNameWrapper(new CR2WName()
                 {
