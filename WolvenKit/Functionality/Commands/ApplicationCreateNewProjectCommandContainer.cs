@@ -94,6 +94,8 @@ namespace WolvenKit.Functionality.Commands
 
                 if (!string.IsNullOrWhiteSpace(location))
                 {
+                    RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                    RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
                     using (_pleaseWaitService.PushInScope())
                     {
                         switch (Path.GetExtension(location))
@@ -145,8 +147,7 @@ namespace WolvenKit.Functionality.Commands
 
                     await _projectManager.LoadAsync(location);
 
-                    RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-                    RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+
                 }
             }
             catch (Exception ex)

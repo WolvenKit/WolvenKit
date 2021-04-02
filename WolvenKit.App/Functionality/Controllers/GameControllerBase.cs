@@ -8,6 +8,7 @@ using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.W3Strings;
+using Catel.IoC;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -84,7 +85,38 @@ namespace WolvenKit.Functionality.Controllers
 
         public abstract Task HandleStartup();
 
-        public abstract Task<bool> PackageMod();
+        public virtual Task<bool> PackageMod()
+        {
+            var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
+            var data = MainController.Get().ActiveMod;
+            var headerBackground = System.Drawing.Color.FromArgb(
+                pwm.HeaderBackground.A,
+                pwm.HeaderBackground.R,
+                pwm.HeaderBackground.G,
+                pwm.HeaderBackground.B
+            );
+            var iconBackground = System.Drawing.Color.FromArgb(
+                pwm.IconBackground.A,
+                pwm.IconBackground.R,
+                pwm.IconBackground.G,
+                pwm.IconBackground.B
+            );
+            var author = Tuple.Create<string, string, string, string, string, string>(
+                data.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
+            );
+            var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
+                data.Version,
+                data.Name,
+                author,
+                pwm.Description,
+                pwm.LargeDescription,
+                pwm.License,
+                (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
+                new List<System.Xml.Linq.XElement> { }
+            );
+            
+            return Task.FromResult(true);
+        }
 
         public abstract Task<bool> PackAndInstallProject();
 

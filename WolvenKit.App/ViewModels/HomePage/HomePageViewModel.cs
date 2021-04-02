@@ -27,6 +27,7 @@ namespace WolvenKit.ViewModels.HomePage
             GlobalHomePageVM = this;
             RegisterCommands();
             SetCurrentPage("Welcome");
+            CurrentWindowState = WindowState.Maximized;
         }
 
         #endregion Constructors
