@@ -115,6 +115,7 @@ namespace WolvenKit.ViewModels.Shared
 
         public void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
+            FancyProjects.Clear();
             var RCUI = RecentlyUsedItems;
             foreach (var item in RCUI)
             {

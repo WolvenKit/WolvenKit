@@ -1,11 +1,14 @@
 using System;
 using Catel;
+using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.ProjectManagement;
+using Orchestra.Models;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.ViewModels.Shared;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -13,6 +16,8 @@ namespace WolvenKit.Functionality.Commands
     {
         #region Fields
 
+        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        private readonly IServiceLocator _serviceLocator;
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly INavigationService _navigationService;
@@ -25,6 +30,8 @@ namespace WolvenKit.Functionality.Commands
         #region Constructors
 
         public ApplicationDeleteProjectCommandContainer(
+            IRecentlyUsedItemsService recentlyUsedItemsService,
+            IServiceLocator serviceLocator,
             ICommandManager commandManager,
             INavigationService navigationService,
             IProjectManager projectManager,
@@ -36,10 +43,14 @@ namespace WolvenKit.Functionality.Commands
             ILoggerService loggerService)
             : base(AppCommands.Application.DelProject, commandManager)
         {
+            Argument.IsNotNull(() => recentlyUsedItemsService);
+            Argument.IsNotNull(() => serviceLocator);
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => saveFileService);
 
+            _recentlyUsedItemsService = recentlyUsedItemsService;
+            _serviceLocator = serviceLocator;
             _navigationService = navigationService;
             _loggerService = loggerService;
             _saveFileService = saveFileService;
@@ -58,11 +69,22 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
+                RecentlyUsedItem projectToDel = null;
+                foreach (var project in _recentlyUsedItemsService.Items)
+                {
+                    if (project.Name == parameter?.ToString())
+                    {
+                        projectToDel = project;
+                        break;
+                    }
+                }
+                if (projectToDel != null)
+                    _recentlyUsedItemsService.RemoveItem(projectToDel);
             }
             catch (Exception ex)
             {
                 _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to steal your nuggets!", Logtype.Error);
+                _loggerService.LogString("Failed to delete recent project", Logtype.Error);
             }
         }
 
