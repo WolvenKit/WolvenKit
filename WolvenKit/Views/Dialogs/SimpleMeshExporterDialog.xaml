@@ -221,7 +221,7 @@
                 <Expander
                  Background="{DynamicResource RegionBrush}"
                  Header="Advanced Export"
-                 IsEnabled="False"
+                 IsEnabled="True"
                  >
                     <hc:ScrollViewer>
                         <Border Background="{DynamicResource RegionBrush}" CornerRadius="4">
@@ -325,7 +325,6 @@
                                                  VerticalAlignment="Center"
                                                  BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                                                  SelectedIndex="17"
-                                                 SelectionChanged="meshxport_SelectionChanged"
                                                  Style="{DynamicResource ComboBoxBaseStyle}"
                                                  Visibility="Visible"
                                                  />
