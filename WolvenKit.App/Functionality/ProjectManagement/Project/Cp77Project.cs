@@ -142,7 +142,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 {
                     return null;
                 }
-                var dir = Path.Combine(ProjectDirectory, "packed", "DLC", GetDlcName(), "content");
+                var dir = Path.Combine(ProjectDirectory, "packed", "archive", "pc", "dlc", $"mod{Name}");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -159,7 +159,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
+                var dir = Path.Combine(ProjectDirectory, "packed", "archive", "pc", "mod", $"mod{Name}");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
