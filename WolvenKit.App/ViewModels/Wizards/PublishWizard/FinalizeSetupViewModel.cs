@@ -88,7 +88,7 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
         {
             var dofc = new DetermineOpenFileContext()
             {
-                Filter = "WolvenKit package | *.zip",
+                Filter = "WolvenKit Package | *.wkp | Zip file | *.zip",
                 IsMultiSelect = false,
                 Title = "Please select where to save the WolvenKit package."
             };

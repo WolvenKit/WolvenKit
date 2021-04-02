@@ -114,6 +114,7 @@ namespace WolvenKit.Functionality.Controllers
                 (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
                 new List<System.Xml.Linq.XElement> { }
             );
+            
             return Task.FromResult(true);
         }
 
