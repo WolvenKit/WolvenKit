@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -33,7 +34,6 @@ namespace WolvenKit.Views.Dialogs
 
 
 
-        public List<ComboBoxItem> ExportFormats { get; set; }
         public FileSystemInfoModel SelectedItem { get; set; }
         public string OutPath { get; set; }
         public bool ExtractRigged { get; set; }
@@ -41,7 +41,6 @@ namespace WolvenKit.Views.Dialogs
         public EUncookExtension TextureFormat { get; set; }
         public List<string> SelectedRigFiles { get; set; }
 
-        public int SelectedIndex { get; set; }
 
 
 
@@ -50,9 +49,7 @@ namespace WolvenKit.Views.Dialogs
             InitializeComponent();
             AssimpLoader.LoadAssimpNativeLibrary();
             DataContext = this;
-            SelectedIndex = 0;
             SelectedItem = selectedItem as FileSystemInfoModel;
-            ExportFormats = new List<ComboBoxItem>();
 
             var assimpWpfExporter = new AssimpWpfExporter();
             _exportFormatDescriptions = assimpWpfExporter.ExportFormatDescriptions;
@@ -66,7 +63,7 @@ namespace WolvenKit.Views.Dialogs
                     Tag = _exportFormatDescriptions[i].FormatId
                 };
 
-                ExportFormats.Add(comboBoxItem);
+                ExportTypeComboBox.Items.Add(comboBoxItem);
             }
 
 
@@ -81,7 +78,7 @@ namespace WolvenKit.Views.Dialogs
             // CreateTestScene();
 
             // Set initial output file name
-            OutputFileName.Text = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "AssimpExport.dae");
+            OutputFileName.Text = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WKitMeshExport.dae");
 
             // Add drag and drop handler for all file extensions
             var dragAndDropHelper = new DragAndDropHelper(ViewportBorder, "*");
@@ -174,13 +171,14 @@ namespace WolvenKit.Views.Dialogs
             MainViewport2.Children.Clear();
             MainViewport2.Children.Add(modelVisual3D);
 
+
             // Set Camera2 from Camera1
             Camera2.TargetPosition = Camera1.TargetPosition;
             Camera2.SetCurrentValue(Ab3d.Cameras.SphericalCamera.HeadingProperty, Camera1.Heading);
             Camera2.SetCurrentValue(Ab3d.Cameras.SphericalCamera.AttitudeProperty, Camera1.Attitude);
             Camera2.SetCurrentValue(Ab3d.Cameras.BaseTargetPositionCamera.DistanceProperty, Camera1.Distance);
 
-            ExportedSceneTitleTextBlock.SetCurrentValue(TextBlock.TextProperty, "Scene imported from " + fileName);
+            ExportedSceneTitleTextBlock.SetCurrentValue(TextBlock.TextProperty, Path.GetFileName(fileName));
         }
 
         private void CreateTestScene()

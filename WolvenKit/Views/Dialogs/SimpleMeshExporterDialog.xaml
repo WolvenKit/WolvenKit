@@ -8,6 +8,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:visuals="clr-namespace:Ab3d.Visuals;assembly=Ab3d.PowerToys"
  Title="WolvenKit Mesh Exporter"
  VerticalContentAlignment="Stretch"
  ResizeMode="CanMinimize"
@@ -30,206 +31,28 @@
      >
 
         <StackPanel>
-            <Grid>
-                <hc:TabControl Background="{DynamicResource RegionBrush}">
-                    <hc:TabItem Header="Simple Export">
-                        <hc:ScrollViewer>
-                            <Border Background="{DynamicResource RegionBrush}" CornerRadius="4">
-                                <Grid>
-                                    <StackPanel>
-                                        <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent3}" BorderThickness="2">
-
-                                            <StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Margin="5" Text="Outpath" />
-                                                    <TextBox
-                                                     Name="OutputFileName"
-                                                     Width="370"
-                                                     MaxWidth="370"
-                                                     Margin="16,5,5,5"
-                                                     />
-                                                </StackPanel>
-
-
-
-                                                <TextBox
-                                                 x:Name="SelectedItemTextboxSimple"
-                                                 MaxWidth="435"
-                                                 DataContext="{Binding SelectedItem}"
-                                                 IsEnabled="False"
-                                                 Text="{Binding FullName, Mode=OneWay}"
-                                                 TextWrapping="Wrap"
-                                                 />
-
-
-
-
-
-
-                                            </StackPanel>
-                                        </Border>
-
-                                        <hc:Divider Margin="0" />
-
-
-
-                                    </StackPanel>
-
-                                </Grid>
-
-                            </Border>
-                        </hc:ScrollViewer>
-                    </hc:TabItem>
-                    <hc:TabItem Header="Advanced Export">
-                        <hc:ScrollViewer>
-                            <Border Background="{DynamicResource RegionBrush}" CornerRadius="4">
-                                <Grid>
-                                    <StackPanel>
-                                        <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent3}" BorderThickness="2">
-                                            <StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Margin="5" Text="Outpath" />
-                                                    <TextBox
-                                                     Name="OutputFileName2"
-                                                     Width="370"
-                                                     MaxWidth="370"
-                                                     Margin="16,5,5,5"
-                                                     />
-                                                </StackPanel>
-                                                <TextBox
-                                                 x:Name="SelectedItemTextbox"
-                                                 MaxWidth="435"
-                                                 DataContext="{Binding SelectedItem}"
-                                                 IsEnabled="False"
-                                                 Text="{Binding FullName, Mode=OneWay}"
-                                                 TextWrapping="Wrap"
-                                                 />
-
-                                                <StackPanel Orientation="Horizontal">
-
-                                                    <StackPanel
-                                                     Margin="15,0,0,0"
-                                                     HorizontalAlignment="Left"
-                                                     Orientation="Vertical"
-                                                     Visibility="Visible"
-                                                     >
-                                                        <RadioButton
-                                                         x:Name="ExtractRiggedMeshRadio"
-                                                         Margin="10"
-                                                         HorizontalAlignment="Left"
-                                                         Background="{DynamicResource MahApps.Brushes.Accent2}"
-                                                         Content="Extract Rigged Mesh"
-                                                         Foreground="{DynamicResource accent2}"
-                                                         GroupName="X"
-                                                         />
-
-                                                        <Border
-                                                         Width="auto"
-                                                         Height="auto"
-                                                         Margin="5"
-                                                         BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                                                         BorderThickness="1"
-                                                         >
-                                                            <StackPanel Orientation="Horizontal">
-                                                                <StackPanel Orientation="Vertical">
-                                                                    <StackPanel Orientation="Horizontal">
-                                                                        <RadioButton
-                                                                         x:Name="ExportMaterialsCheckbox"
-                                                                         Margin="5"
-                                                                         HorizontalAlignment="Left"
-                                                                         Background="{DynamicResource MahApps.Brushes.Accent2}"
-                                                                         Content="Export Materials"
-                                                                         Foreground="{DynamicResource accent2}"
-                                                                         GroupName="X"
-                                                                         />
-                                                                        <CheckBox
-                                                                         x:Name="UseAssetLibCheck"
-                                                                         Margin="5"
-                                                                         HorizontalAlignment="Left"
-                                                                         Background="{DynamicResource MahApps.Brushes.Accent2}"
-                                                                         Content="Use Asset Library"
-                                                                         Foreground="{DynamicResource accent2}"
-                                                                         Visibility="{Binding IsChecked, ElementName=ExportMaterialsCheckbox, Converter={StaticResource boolToVisibilityConverter}}"
-                                                                         />
-                                                                        <CheckBox
-                                                                         Margin="5"
-                                                                         HorizontalAlignment="Left"
-                                                                         Background="{DynamicResource MahApps.Brushes.Accent2}"
-                                                                         Content="Copy Textures"
-                                                                         Foreground="{DynamicResource accent2}"
-                                                                         Visibility="{Binding IsChecked, ElementName=UseAssetLibCheck, Converter={StaticResource boolToVisibilityConverter}}"
-                                                                         />
-                                                                    </StackPanel>
-                                                                    <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock
-                                                                         Margin="5"
-                                                                         HorizontalAlignment="Center"
-                                                                         Text="Texture Format"
-                                                                         />
-                                                                        <hc:ComboBox Width="90" Margin="5,5,5,5" />
-
-                                                                    </StackPanel>
-                                                                </StackPanel>
-
-
-
-
-
-                                                            </StackPanel>
-
-                                                        </Border>
-
-
-
-
-
-                                                    </StackPanel>
-
-                                                    <StackPanel VerticalAlignment="Center" />
-                                                </StackPanel>
-
-
-                                                <StackPanel Orientation="Horizontal" Visibility="{Binding IsChecked, ElementName=ExtractRiggedMeshRadio, Converter={StaticResource boolToVisibilityConverter}}">
-
-                                                    <hc:ComboBox
-                                                     x:Name="xzz"
-                                                     Width="320"
-                                                     Margin="15,0,15,0"
-                                                     HorizontalAlignment="Left"
-                                                     VerticalAlignment="Center"
-                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                                                     SelectedIndex="17"
-                                                     SelectionChanged="meshxport_SelectionChanged"
-                                                     Style="{DynamicResource ComboBoxBaseStyle}"
-                                                     Visibility="Visible"
-                                                     />
-                                                    <hc:ProgressButton
-                                                     Width="90"
-                                                     Height="35"
-                                                     Content="Add rigs"
-                                                     />
-                                                </StackPanel>
-
-
-                                            </StackPanel>
-
-                                        </Border>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </hc:ScrollViewer>
-                    </hc:TabItem>
-
-                </hc:TabControl>
-
-
-            </Grid>
-
-
             <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent3}" BorderThickness="2">
 
 
                 <StackPanel>
+                    <TextBox
+                     x:Name="SelectedItemTextbox"
+                     MaxWidth="435"
+                     DataContext="{Binding SelectedItem}"
+                     IsEnabled="False"
+                     Text="{Binding FullName, Mode=OneWay}"
+                     TextWrapping="Wrap"
+                     />
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="5" Text="Outpath" />
+                        <TextBox
+                         Name="OutputFileName"
+                         Width="370"
+                         MaxWidth="370"
+                         Margin="16,5,5,5"
+                         />
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <hc:ComboBox
                          x:Name="ExportTypeComboBox"
@@ -240,9 +63,8 @@
                          hc:InfoElement.Title="Mesh to"
                          hc:InfoElement.TitlePlacement="Left"
                          BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                         ItemsSource="{Binding ExportFormats}"
-                         SelectedIndex="{Binding SelectedIndex}"
-                         SelectionChanged="meshxport_SelectionChanged"
+                         SelectedIndex="1"
+                         SelectionChanged="ExportTypeComboBox_OnSelectionChanged"
                          Style="{DynamicResource ComboBoxBaseStyle}"
                          Visibility="Visible"
                          >
@@ -293,6 +115,7 @@
                                         <Model3DGroup x:Name="LightsModel3DGroup" />
                                     </ModelVisual3D.Content>
                                 </ModelVisual3D>
+
                             </Viewport3D>
                         </Border>
 
@@ -306,7 +129,6 @@
                          IsHitTestVisible="False"
                          Text="Original Model"
                          />
-
                         <cameras:TargetPositionCamera
                          Name="Camera1"
                          Grid.Row="1"
@@ -345,7 +167,17 @@
                          SnapsToDevicePixels="True"
                          >
                             <Viewport3D Name="MainViewport2" />
+
                         </Border>
+                        <TextBlock
+                         Grid.Row="1"
+                         Grid.Column="1"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Bottom"
+                         FontSize="7"
+                         Text="Powered by Ab4d"
+                         />
+
                         <TextBlock
                          Name="ExportedSceneTitleTextBlock"
                          Grid.Row="1"
@@ -385,6 +217,141 @@
                 </StackPanel>
 
             </Border>
+            <Grid>
+                <Expander
+                 Background="{DynamicResource RegionBrush}"
+                 Header="Advanced Export"
+                 IsEnabled="False"
+                 >
+                    <hc:ScrollViewer>
+                        <Border Background="{DynamicResource RegionBrush}" CornerRadius="4">
+                            <Grid>
+                                <StackPanel>
+                                    <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent3}" BorderThickness="2">
+                                        <StackPanel>
+
+
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <StackPanel
+                                                 Margin="15,0,0,0"
+                                                 HorizontalAlignment="Left"
+                                                 Orientation="Vertical"
+                                                 Visibility="Visible"
+                                                 >
+                                                    <RadioButton
+                                                     x:Name="ExtractRiggedMeshRadio"
+                                                     Margin="10"
+                                                     HorizontalAlignment="Left"
+                                                     Background="{DynamicResource MahApps.Brushes.Accent2}"
+                                                     Content="Extract Rigged Mesh"
+                                                     Foreground="{DynamicResource accent2}"
+                                                     GroupName="X"
+                                                     />
+
+                                                    <Border
+                                                     Width="auto"
+                                                     Height="auto"
+                                                     Margin="5"
+                                                     BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
+                                                     BorderThickness="1"
+                                                     >
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <StackPanel Orientation="Vertical">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <RadioButton
+                                                                     x:Name="ExportMaterialsCheckbox"
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Left"
+                                                                     Background="{DynamicResource MahApps.Brushes.Accent2}"
+                                                                     Content="Export Materials"
+                                                                     Foreground="{DynamicResource accent2}"
+                                                                     GroupName="X"
+                                                                     />
+                                                                    <CheckBox
+                                                                     x:Name="UseAssetLibCheck"
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Left"
+                                                                     Background="{DynamicResource MahApps.Brushes.Accent2}"
+                                                                     Content="Use Asset Library"
+                                                                     Foreground="{DynamicResource accent2}"
+                                                                     Visibility="{Binding IsChecked, ElementName=ExportMaterialsCheckbox, Converter={StaticResource boolToVisibilityConverter}}"
+                                                                     />
+                                                                    <CheckBox
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Left"
+                                                                     Background="{DynamicResource MahApps.Brushes.Accent2}"
+                                                                     Content="Copy Textures"
+                                                                     Foreground="{DynamicResource accent2}"
+                                                                     Visibility="{Binding IsChecked, ElementName=UseAssetLibCheck, Converter={StaticResource boolToVisibilityConverter}}"
+                                                                     />
+                                                                </StackPanel>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Center"
+                                                                     Text="Texture Format"
+                                                                     />
+                                                                    <hc:ComboBox Width="90" Margin="5,5,5,5" />
+
+                                                                </StackPanel>
+                                                            </StackPanel>
+
+
+
+
+
+                                                        </StackPanel>
+
+                                                    </Border>
+
+
+
+
+
+                                                </StackPanel>
+
+                                                <StackPanel VerticalAlignment="Center" />
+                                            </StackPanel>
+
+
+                                            <StackPanel Orientation="Horizontal" Visibility="{Binding IsChecked, ElementName=ExtractRiggedMeshRadio, Converter={StaticResource boolToVisibilityConverter}}">
+
+                                                <hc:ComboBox
+                                                 x:Name="xzz"
+                                                 Width="320"
+                                                 Margin="15,0,15,0"
+                                                 HorizontalAlignment="Left"
+                                                 VerticalAlignment="Center"
+                                                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                 SelectedIndex="17"
+                                                 SelectionChanged="meshxport_SelectionChanged"
+                                                 Style="{DynamicResource ComboBoxBaseStyle}"
+                                                 Visibility="Visible"
+                                                 />
+                                                <hc:ProgressButton
+                                                 Width="90"
+                                                 Height="35"
+                                                 Content="Add rigs"
+                                                 />
+                                            </StackPanel>
+
+
+                                        </StackPanel>
+
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </hc:ScrollViewer>
+
+                </Expander>
+
+
+            </Grid>
+
+
+
 
 
         </StackPanel>
