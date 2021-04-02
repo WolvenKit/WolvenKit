@@ -76,7 +76,14 @@
                      SelectionBrush="{DynamicResource MahApps.Brushes.Accent3}"
                      TargetCamera="{Binding ElementName=Camera1}"
                      />
-
+                    <TextBlock
+                     Grid.Row="1"
+                     Grid.Column="1"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Bottom"
+                     FontSize="7"
+                     Text="Powered by Ab4d"
+                     />
                     <cameras:TargetPositionCamera
                      Name="Camera1"
                      Attitude="-20"
