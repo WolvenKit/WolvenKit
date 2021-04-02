@@ -67,33 +67,8 @@
 
                     <MenuItem Header="Export">
                         <MenuItem Header="Wem" />
-                        <MenuItem Header="BK2" />
 
-                        <MenuItem Header="Mesh">
-                            <MenuItem
-                             Command="{Binding ExportMeshCommand}"
-                             Header="Export with WCC"
-                             Visibility="Collapsed"
-                             />
-                            <MenuItem Header="Mesh with Materials" Visibility="Visible" />
-
-
-                            <hc:ComboBox
-                             x:Name="meshxport"
-                             Width="350"
-                             hc:InfoElement.Title="Mesh to"
-                             hc:InfoElement.TitlePlacement="Left"
-                             SelectedIndex="17"
-                             SelectionChanged="meshxport_SelectionChanged"
-                             >
-                                <hc:ComboBox.ItemTemplate>
-                                    <HierarchicalDataTemplate>
-                                        <TextBlock Text="{Binding FileExtension}" />
-                                    </HierarchicalDataTemplate>
-                                </hc:ComboBox.ItemTemplate>
-                            </hc:ComboBox>
-
-                        </MenuItem>
+                        <MenuItem Click="MenuItem_Click" Header="Export Mesh" />
 
                     </MenuItem>
 

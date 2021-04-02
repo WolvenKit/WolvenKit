@@ -233,11 +233,11 @@
 
   <ItemGroup>
 
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.2.7730-beta" />
+    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7760" />
 
 
-    <PackageReference Include="Ab3d.DXEngine" Version="4.2.7730-beta" />
-    <PackageReference Include="Ab3d.PowerToys" Version="9.5.7730-beta" />
+    <PackageReference Include="Ab3d.DXEngine" Version="4.3.7760" />
+    <PackageReference Include="Ab3d.PowerToys" Version="9.5.7760" />
     <PackageReference Include="Catel.Core" Version="5.12.12" />
     <PackageReference Include="Catel.MVVM" Version="5.12.12" />
     <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />

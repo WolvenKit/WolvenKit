@@ -1,8 +1,8 @@
 using System.Windows;
-using System.Windows.Controls;
-using Ab3d.Assimp;
-using Assimp;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models;
+using WolvenKit.RED4.MeshFile;
+using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Editor
 {
@@ -12,27 +12,11 @@ namespace WolvenKit.Views.Editor
     public partial class ProjectExplorerView
     {
         #region Constructors
-        private ExportFormatDescription[] _exportFormatDescriptions;
 
         public ProjectExplorerView()
         {
             InitializeComponent();
-            AssimpLoader.LoadAssimpNativeLibrary();
 
-
-            var assimpWpfExporter = new AssimpWpfExporter();
-            _exportFormatDescriptions = assimpWpfExporter.ExportFormatDescriptions;
-
-            for (int i = 0; i < _exportFormatDescriptions.Length; i++)
-            {
-                var comboBoxItem = new ComboBoxItem()
-                {
-                    Content = string.Format("{0} (.{1})", _exportFormatDescriptions[i].Description, _exportFormatDescriptions[i].FileExtension),
-                    Tag = _exportFormatDescriptions[i].FormatId
-                };
-
-                meshxport.Items.Add(comboBoxItem);
-            }
             //ControlzEx.Theming.ThemeManager.Current.ChangeTheme(this, "Dark.Blue");
         }
 
@@ -53,18 +37,26 @@ namespace WolvenKit.Views.Editor
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
         }
-        private string _selectedExportFormatId;
 
-        private void meshxport_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            int exportTypeIndex = meshxport.SelectedIndex;
+            if (TreeView.SelectedItem != null)
+            {
+                var z = TreeView.SelectedItem as FileSystemInfoModel;
+                if (z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
+                {
 
-            if (exportTypeIndex == -1)
-                return;
+                    var q = MESH.ExportMeshWithoutRigPreviewer(z.FullName);
+                    if (q.Length > 0)
+                    {
+                        var meshexporter = new SimpleMeshExporterDialog(TreeView.SelectedItem);
+                        meshexporter.LoadModel(q);
+                        meshexporter.Show();
+                    }
+                }
 
-            var selectedFileExtension = _exportFormatDescriptions[exportTypeIndex].FileExtension;
+            }
 
-            _selectedExportFormatId = _exportFormatDescriptions[exportTypeIndex].FormatId;
 
         }
     }
