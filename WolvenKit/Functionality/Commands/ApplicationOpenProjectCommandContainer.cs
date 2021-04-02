@@ -54,11 +54,7 @@ namespace WolvenKit.Functionality.Commands
 
         protected override async Task ExecuteAsync(object parameter)
         {
-
-
-
-
-            if (_projectManager.ActiveProject != null)
+            if (_projectManager.ActiveProject != null && parameter != null)
             {
                 var a = _projectManager.ActiveProject;
                 if (parameter.ToString().Contains(a.Title))
@@ -111,9 +107,6 @@ namespace WolvenKit.Functionality.Commands
                 // TODO: Are we intentionally swallowing this?
                 //Log.Error(ex, "Failed to open file");
             }
-
-
-
         }
 
         #endregion Methods
