@@ -1152,5 +1152,8 @@
     </Reference>
     <Reference Include="AssimpNet">
     </Reference>
+    <Reference Include="AutoUpdater.NET">
+      <HintPath>..\Libs\AutoUpdater.NET.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

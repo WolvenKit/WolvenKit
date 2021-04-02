@@ -138,7 +138,8 @@ namespace WolvenKit
             Current.MainWindow.Show();
 
 
-
+            Log.Info("Check for new updates");
+            AppHelper.CheckForUpdates();
 
             await Task.Run(async () =>
             {
