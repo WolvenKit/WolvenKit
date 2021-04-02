@@ -1,31 +1,47 @@
+using System.Threading.Tasks;
 using Catel;
 using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
+using Catel.Services;
 using Orc.ProjectManagement;
 using WolvenKit.Common.Model;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ViewModels.Others;
 
 namespace WolvenKit.ViewModels.Wizards.PublishWizard
 {
     public class FinalizeSetupViewModel : ViewModelBase
     {
+        #region fields
+
+        private readonly IOpenFileService _openFileService;
+
+        #endregion fields
+
         #region constructors
 
         public FinalizeSetupViewModel(
             IServiceLocator serviceLocator,
-            IProjectManager projectManager)
+            IProjectManager projectManager,
+            IOpenFileService openFileService)
         {
             Argument.IsNotNull(() => serviceLocator);
             Argument.IsNotNull(() => projectManager);
+            Argument.IsNotNull(() => openFileService);
 
+            _openFileService = openFileService;
             if (projectManager.ActiveProject is EditorProject ep)
             {
                 EditorProjectData = ep.Data;
             }
 
             PublishWizardModel = serviceLocator.ResolveType<PublishWizardModel>();
+
+            PublishProject = new TaskCommand(PublishProjectExecuteAsync);
+            Cancel = new TaskCommand(CancelExecuteAsync);
         }
 
         #endregion constructors
@@ -61,5 +77,39 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
         public PublishWizardModel PublishWizardModel { get; set; }
 
         #endregion properties
+
+        #region commands
+
+        public TaskCommand PublishProject { get; }
+
+        public TaskCommand Cancel { get; }
+
+        private async Task PublishProjectExecuteAsync()
+        {
+            var dofc = new DetermineOpenFileContext()
+            {
+                Filter = "WolvenKit package | *.zip",
+                IsMultiSelect = false,
+                Title = "Please select where to save the WolvenKit package."
+            };
+            var result = await _openFileService.DetermineFileAsync(dofc);
+            if (result.Result)
+            {
+                //result.DirectoryName;
+                await MainController.GetGame().PackAndInstallProject();
+                await MainController.GetGame().PackageMod();
+                var host = ServiceLocator.Default.ResolveType<UserControlHostWindowViewModel>();
+                host?.CloseViewModelAsync(true);
+            }
+        }
+
+        private Task CancelExecuteAsync()
+        {
+            var host = ServiceLocator.Default.ResolveType<UserControlHostWindowViewModel>();
+            host?.CloseViewModelAsync(true);
+            return Task.CompletedTask;
+        }
+
+        #endregion commands
     }
 }

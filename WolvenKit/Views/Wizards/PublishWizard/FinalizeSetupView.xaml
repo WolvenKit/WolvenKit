@@ -326,13 +326,13 @@
                                      Height="45"
                                      Margin="0,0,0,0"
                                      Content="Yes, Publish my project!"
-                                     Click="Publish_Button_Click" />
+                                     Command="{Binding PublishProject}" />
 
                                     <Button
                                      Height="45"
                                      Margin="15,0,0,0"
                                      Content="No, Cancel"
-                                     Click="Cancel_Button_Click" />
+                                     Command="{Binding Cancel}" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

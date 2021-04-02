@@ -1,8 +1,6 @@
 using Catel.IoC;
 using HandyControl.Controls;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models.Wizards;
-using WolvenKit.ViewModels.Others;
 
 namespace WolvenKit.Views.Wizards.WizardPages.PublishWizard
 {
@@ -59,19 +57,6 @@ namespace WolvenKit.Views.Wizards.WizardPages.PublishWizard
                 imgSelector.SetValue(ImageSelector.HasValuePropertyKey, false);
                 imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, default);
             }
-        }
-
-        private async void Publish_Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            await MainController.GetGame().PackAndInstallProject();
-            var host = ServiceLocator.Default.ResolveType<UserControlHostWindowViewModel>();
-            host?.CloseViewModelAsync(true);
-        }
-
-        private void Cancel_Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            var host = ServiceLocator.Default.ResolveType<UserControlHostWindowViewModel>();
-            host?.CloseViewModelAsync(true);
         }
 
         #endregion Methods
