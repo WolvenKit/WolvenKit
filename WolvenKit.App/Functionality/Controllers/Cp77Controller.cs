@@ -52,8 +52,8 @@ namespace WolvenKit.Functionality.Controllers
             return Task.CompletedTask;
         }
 
-        //TODO: Create wkpackage from the mod
-        public override Task<bool> PackageMod() => Task.FromResult(true);
+        public override Task<bool> PackageMod()
+            => base.PackageMod();
 
         public override Task<bool> PackAndInstallProject()
         {

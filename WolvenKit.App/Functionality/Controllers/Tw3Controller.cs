@@ -316,9 +316,8 @@ namespace WolvenKit.Functionality.Controllers
             await Task.CompletedTask;
         }
 
-        public override Task<bool> PackageMod() =>
-            //TODO: Create wkpackage from the mod
-            Task.FromResult(true);
+        public override Task<bool> PackageMod()
+            => base.PackageMod();
 
         public override async Task<bool> PackAndInstallProject()
         {
