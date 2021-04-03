@@ -42,29 +42,53 @@
                  Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
                  BorderThickness="4,0,0,2"
                  Style="{StaticResource BorderTipPrimary}">
-                    <Grid>
-                        <TextBlock
-                         Margin="0,0,50,0"
-                         VerticalAlignment="Center"
-                         Text="Executable path" />
-                        <Button
-                         Margin="0,0,250,0"
-                         HorizontalAlignment="Right"
-                         Click="CP77ExecutablePathBtn_Click">
-                            <iconPacks:PackIconCodicons Kind="FolderOpened" />
-                        </Button>
+                    <StackPanel>
+                        <Grid>
+                            <TextBlock
+                             Margin="0,0,50,0"
+                             VerticalAlignment="Center"
+                             Text="Executable path" />
+                            <Button
+                             Margin="0,0,250,0"
+                             HorizontalAlignment="Right"
+                             Click="CP77ExecutablePathBtn_Click">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened" />
+                            </Button>
 
-                        <hc:TextBox
-                         x:Name="cp77Txtbx"
-                         Width="250"
-                         Margin="0,0,0,9"
-                         HorizontalAlignment="Right"
-                         hc:InfoElement.Necessary="True"
-                         Style="{StaticResource TextBoxExtendCustom}"
-                         Text="{Binding CP77ExecutablePath, Mode=OneWay}"
-                         TextChanged="TextBox_TextChanged"
-                         VerifyFunc="VerifyFile" />
-                    </Grid>
+                            <hc:TextBox
+                             x:Name="cp77Txtbx"
+                             Width="250"
+                             Margin="0,0,0,9"
+                             HorizontalAlignment="Right"
+                             hc:InfoElement.Necessary="True"
+                             Style="{StaticResource TextBoxExtendCustom}"
+                             Text="{Binding CP77ExecutablePath, Mode=OneWay}"
+                             TextChanged="TextBox_TextChanged"
+                             VerifyFunc="VerifyFile" />
+                        </Grid>
+                        <Grid Margin="5">
+                            <TextBlock
+                                Margin="0,0,50,0"
+                                VerticalAlignment="Center"
+                                Text="Material repository path" />
+                            <Button
+                                Margin="0,0,250,0"
+                                HorizontalAlignment="Right"
+                                Click="MaterialRepositoryPathBtn_Click">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened" />
+                            </Button>
+                            <hc:TextBox
+                                x:Name="materialReppathTxtbx"
+                                Width="250"
+                                Margin="0,0,0,9"
+                                HorizontalAlignment="Right"
+                                hc:InfoElement.Necessary="True"
+                                Style="{StaticResource TextBoxExtendCustom}"
+                                Text="{Binding MaterialRepositoryPath, Mode=OneWay}"
+                                TextChanged="TextBox_TextChanged"
+                                VerifyFunc="VerifyFolder" />
+                        </Grid>
+                    </StackPanel>
                 </Border>
             </StackPanel>
         </Grid>

@@ -52,6 +52,17 @@ namespace WolvenKit.Views.HomePage.Pages
             }
         }
 
+        private async void MaterialRepositoryPathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(
+                new DetermineDirectoryContext()
+            );
+            if (result.Result)
+            {
+                _settingsManager.MaterialRepositoryPath = result.DirectoryName;
+            }
+        }
+
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (cp77Txtbx.VerifyData())
@@ -72,6 +83,11 @@ namespace WolvenKit.Views.HomePage.Pages
             if (depotTxtbx.VerifyData())
             {
                 _settingsManager.DepotPath = depotTxtbx.Text;
+            }
+
+            if (materialReppathTxtbx.VerifyData())
+            {
+                _settingsManager.MaterialRepositoryPath = materialReppathTxtbx.Text;
             }
 
             _settingsManager.Save();

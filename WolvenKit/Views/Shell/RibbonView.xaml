@@ -9,6 +9,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+ xmlns:others="clr-namespace:WolvenKit.Views.Others"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
  IsVisibleChanged="UserControl_IsVisibleChanged"
  >
@@ -440,6 +441,42 @@
                         </fluent:Button.Icon>
                     </fluent:Button>
 
+                    <ToggleButton
+                     x:Name="xa"
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center"
+                     hc:IconElement.Geometry="{DynamicResource IntegratedGeo}"
+                     hc:IconElement.Height="50"
+                     hc:IconElement.Width="50"
+                     IsChecked="{Binding IsOpen, ElementName=MatRepoDrawer}"
+                     Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+                     >
+                        <Grid Height="70">
+                            <TextBlock
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Bottom"
+                             Text="Browse Material Repository"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap"
+                                Width="90"
+                                Margin="0"
+                             />
+
+
+                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Top" Margin="6" Height="28" Width="28" Kind="Image" />
+
+                        </Grid>
+
+                    </ToggleButton>
+
+
+
+
+
+
+
                     <fluent:Button
                      Command="{catel:CommandManagerBinding Application.ShowImportUtility}"
                      Header="Import Utility"
@@ -633,7 +670,30 @@
                              />
                         </fluent:Button.Icon>
                     </fluent:Button>
-
+                    <fluent:Button
+                     Click="Button_Click_1"
+                     Header="Material Repository"
+                     Visibility="Visible"
+                     >
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Image"
+                             />
+                        </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Image"
+                             />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
 
                     <fluent:Button Command="{catel:CommandManagerBinding Application.ShowSettings}" Header="Settings">
                         <fluent:Button.LargeIcon>
@@ -725,6 +785,9 @@
                     </fluent:Button>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
+
+
+
         </fluent:Ribbon>
 
 
@@ -816,6 +879,26 @@
          Animate="True"
          />
 
+
+        <hc:Drawer
+         x:Name="MatRepoDrawer"
+         Dock="Right"
+         IsEnabled="True"
+         IsOpen="False"
+         ShowMode="Cover"
+         Visibility="Visible"
+         >
+            <Border
+             Width="900"
+             Background="{DynamicResource RegionBrush}"
+             BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
+             BorderThickness="2,2,0,2"
+             CornerRadius="15,0,0,15"
+             >
+                <others:MaterialRepositoryDrawer />
+            </Border>
+
+        </hc:Drawer>
 
         <hc:Drawer
          Name="DrawerTop"

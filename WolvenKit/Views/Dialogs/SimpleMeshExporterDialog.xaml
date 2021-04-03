@@ -51,6 +51,7 @@
                          Width="370"
                          MaxWidth="370"
                          Margin="16,5,5,5"
+                         Text="{Binding OutPath, Mode=TwoWay}"
                          />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -220,8 +221,8 @@
             <Grid>
                 <Expander
                  Background="{DynamicResource RegionBrush}"
-                 Header="Advanced Export"
-                 IsEnabled="False"
+                 Header="Advanced Export (Experimental)"
+                 IsEnabled="True"
                  >
                     <hc:ScrollViewer>
                         <Border Background="{DynamicResource RegionBrush}" CornerRadius="4">
@@ -247,6 +248,7 @@
                                                      Content="Extract Rigged Mesh"
                                                      Foreground="{DynamicResource accent2}"
                                                      GroupName="X"
+                                                     IsChecked="{Binding ExtractRigged, Mode=TwoWay}"
                                                      />
 
                                                     <Border
@@ -267,6 +269,7 @@
                                                                      Content="Export Materials"
                                                                      Foreground="{DynamicResource accent2}"
                                                                      GroupName="X"
+                                                                     IsChecked="{Binding ExportMaterials, Mode=TwoWay}"
                                                                      />
                                                                     <CheckBox
                                                                      x:Name="UseAssetLibCheck"
@@ -275,6 +278,7 @@
                                                                      Background="{DynamicResource MahApps.Brushes.Accent2}"
                                                                      Content="Use Asset Library"
                                                                      Foreground="{DynamicResource accent2}"
+                                                                     IsChecked="{Binding UseMaterialsRepository, Mode=TwoWay}"
                                                                      Visibility="{Binding IsChecked, ElementName=ExportMaterialsCheckbox, Converter={StaticResource boolToVisibilityConverter}}"
                                                                      />
                                                                     <CheckBox
@@ -283,10 +287,11 @@
                                                                      Background="{DynamicResource MahApps.Brushes.Accent2}"
                                                                      Content="Copy Textures"
                                                                      Foreground="{DynamicResource accent2}"
+                                                                     IsChecked="{Binding CopyTextures, Mode=TwoWay}"
                                                                      Visibility="{Binding IsChecked, ElementName=UseAssetLibCheck, Converter={StaticResource boolToVisibilityConverter}}"
                                                                      />
                                                                 </StackPanel>
-                                                                <StackPanel Orientation="Horizontal">
+                                                                <StackPanel Orientation="Horizontal" Visibility="Collapsed">
                                                                     <TextBlock
                                                                      Margin="5"
                                                                      HorizontalAlignment="Center"

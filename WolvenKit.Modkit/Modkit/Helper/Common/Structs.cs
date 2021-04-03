@@ -115,10 +115,10 @@ namespace WolvenKit.RED4.GeneralStructs
     public class RawMaterial
     {
         public string Name { get; set; }
-        public MaterialType materialType { get; set; }
-        public bool extInstanced { get; set; } = false;
-        public HumanSkin humanSkin { get; set; }
-        public MeshDecal meshDecal { get; set; }
-        public MultiLayered multiLayered { get; set; }
+        public string BaseMaterial { get; set; }
+        public MaterialType MaterialType { get; set; }
+        public HumanSkin HumanSkin { get; set; }
+        public MeshDecal MeshDecal { get; set; }
+        public MultiLayered MultiLayered { get; set; }
     }
 }

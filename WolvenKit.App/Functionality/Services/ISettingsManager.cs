@@ -26,6 +26,8 @@ namespace WolvenKit.Functionality.Services
         /*public*/
         string WccLitePath { get; set; }
 
+        string MaterialRepositoryPath { get; set; }
+
         #endregion Properties
 
         /*public*/
