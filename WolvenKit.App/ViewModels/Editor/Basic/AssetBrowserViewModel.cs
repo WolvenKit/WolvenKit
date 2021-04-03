@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
@@ -64,6 +68,18 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        private bool _stillLoading;
+
+        public bool StillLoading
+        {
+            get => _stillLoading;
+            set
+            {
+                _stillLoading = value;
+                RaisePropertyChanged(() => StillLoading);
+            }
+        }
+
         #endregion fields
 
         #region properties
@@ -81,6 +97,22 @@ namespace WolvenKit.ViewModels.Editor
         public bool PreviewVisible { get; set; }
 
         public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
+
+        private Visibility _loadVisibility = Visibility.Visible;
+
+        public Visibility LoadVisibility
+        {
+            get
+            {
+                return _loadVisibility;
+            }
+            set
+            {
+                _loadVisibility = value;
+                RaisePropertyChanged(() => LoadVisibility);
+            }
+        }
+
         public GameFileTreeNode RootNode { get; set; }
 
         public string SelectedClass { get; set; }
@@ -215,6 +247,7 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public void ReInit()
         {
+            LoadVisibility = Visibility.Visible;
             SetCurrentNodeCommand = new RelayCommand<LazyObservableTreeNode<GameFileTreeNode>>(
                 async node => await SetCurrentNodeAsync(node));
 
@@ -247,6 +280,7 @@ namespace WolvenKit.ViewModels.Editor
             if (MainController.GetGame() is not MockGameController)
             {
                 _notificationService.Success($"Asset Browser is initialized");
+                LoadVisibility = Visibility.Collapsed;
             }
 
             InitializeCurrentNodeAsync(RootNode);
@@ -500,5 +534,26 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         public override string ToString() => StringFormat?.Invoke(Content) ?? Content.ToString();
+    }
+
+    public class BoolToVisConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            try
+            {
+                var v = (bool)value;
+                return v ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (InvalidCastException)
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -10,6 +10,7 @@
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:system="clr-namespace:System;assembly=mscorlib"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
@@ -523,13 +524,17 @@
 
         </ResourceDictionary>
     </catel:UserControl.Resources>
-    <Border
+    <Grid>
+        <Grid.Resources>
+            <editor:BoolToVisConverter x:Key="boolConverter"/>
+        </Grid.Resources>
+        
+        <Border
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
      BorderThickness="1"
      >
-
-        <Grid>
+            <Grid>
             <Grid.RowDefinitions>
 
                 <RowDefinition Height="9*" />
@@ -792,5 +797,14 @@
                 </Grid>
             </Grid>
         </Grid>
-    </Border>
+            </Border>
+        <Border x:Name="LoadingBorder" BorderBrush="Black" BorderThickness="1" Background="#80000000" Visibility="{Binding Path=LoadVisibility}" Grid.RowSpan="3">
+            <Grid>
+                <StackPanel VerticalAlignment="Center">
+                    <hc:LoadingCircle></hc:LoadingCircle>
+                    <TextBlock Margin="0" TextWrapping="Wrap" Text="Loading game files..." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="#7EFFFFFF"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </catel:UserControl>

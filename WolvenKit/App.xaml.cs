@@ -9,9 +9,11 @@ using FFmpeg.AutoGen;
 using NodeNetwork;
 using Orchestra.Services;
 using Unosquare.FFME;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.ViewModels;
 
 namespace WolvenKit
