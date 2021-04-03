@@ -1,4 +1,4 @@
-; Copyrights(c)2020-2021 RED Modding Tools. All Rights Reserved. 
+; Copyrights(c)2020-2021 RED Modding Tools. All Rights Reserved.
 ; script version: v1.3.5.1
 ; Changelog:
 ; v1.3.5:
@@ -27,8 +27,8 @@
 #define SetupVersion "1.3.5.1"
 
 // below we put the Build which is used in the setup [Dev, Preview, Beta, Production]
-#define WkitBuildVer "BETA" 
-    
+#define WkitBuildVer "BETA"
+
 #define MyAppPublisher "RED Modding Tools"
 #define MyAppURL "https://redmodding.org/"
 #define MyAppExeName "WolvenKit.exe"
@@ -61,7 +61,7 @@ function NextButtonClick(CurPageID: Integer): Boolean;
 begin
   if CurPageID = wpReady then begin
     DownloadPage.Clear;
-    DownloadPage.Add('{#RedistsNET}', 'dotnet-runtime-5.0.4-win-x64.exe', '');    //Downloads the required .NET Framework 
+    DownloadPage.Add('{#RedistsNET}', 'dotnet-runtime-5.0.4-win-x64.exe', '');    //Downloads the required .NET Framework
     DownloadPage.Add('{#RedistsWebView}', 'Microsoft_WebView_x64.exe', '');            // Downloads the WebView
     DownloadPage.Show;
     try
@@ -82,11 +82,10 @@ end;
 
 
 
-
 [Setup]
 ; DO NOT CHANGE THE APPID. IT IS USED FOR UPDATES!
 
-AppId={{CB4121C6-93E5-4985-8EDD-D956C5B776A9}           
+AppId={{CB4121C6-93E5-4985-8EDD-D956C5B776A9}
 AppName={#MyAppName}
 VersionInfoVersion={#SetupVersion}
 AppVersion={#MyAppVersion}
@@ -99,23 +98,23 @@ DefaultDirName={autopf}\RED Modding Team\WolvenKit\
 DisableProgramGroupPage=yes
 
 ; change the next line to put your own License file.
-LicenseFile=<PATH TO YOUR WKIT REPO>\Wolvenkit-dev\WolvenKit.Inno.Installer\files\wkit_license_2.rtf 
+LicenseFile=C:\Users\cancerPC\source\repos\Wolvenkit\WolvenKit.Inno.Installer\files\wkit_license_2.rtf
 
 
 ;PrivilegesRequired=lowest      ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 
 PrivilegesRequiredOverridesAllowed=dialog
-; the folder where the setup.exe file will be put after compilation. Change it to your own folder of choice.  
-OutputDir=<OUTPUT PATH FOR SETUP EXE>
+; the folder where the setup.exe file will be put after compilation. Change it to your own folder of choice.
+OutputDir=C:\Users\cancerPC\Desktop\New folder
 OutputBaseFilename=WolvenKit_{#MyAppVersion}-{#WkitBuildVer}
 SolidCompression=yes
 WizardStyle=modern
-WizardImageFile=<PATH TO YOUR WKIT REPO>\Wolvenkit-dev\WolvenKit.Inno.Installer\files\banner_vertical.bmp
-WizardSmallImageFile=<PATH TO YOUR WKIT REPO>\Wolvenkit-dev\WolvenKit.Inno.Installer\files\WkitEd.bmp
+WizardImageFile=C:\Users\cancerPC\source\repos\Wolvenkit\WolvenKit.Inno.Installer\files\banner_vertical.bmp
+WizardSmallImageFile=C:\Users\cancerPC\source\repos\Wolvenkit\WolvenKit.Inno.Installer\files\WkitEd.bmp
 AppCopyright=(c)2020 - 2021 RED Modding Tools
 VersionInfoCompany=RED Modding Tools
 ; change the versionInfoProductName to the corresponding Wkit version
-VersionInfoProductName=WolvenKit Tools {#MyAppVersion} {#WkitBuildVer}
+VersionInfoProductName=WolvenKit {#MyAppVersion} {#WkitBuildVer}
 InternalCompressLevel=max
 
 [Languages]
@@ -139,8 +138,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 // ----------------SETUP FILES----------------
 // Change the following to where the build of Wkit is.
-Source: "<PATH TO YOUR WKIT REPO>\WolvenKit\bin\Release\net5.0-windows\win-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "<PATH TO YOUR WKIT REPO>\WolvenKit\bin\Release\net5.0-windows\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\cancerPC\source\repos\Wolvenkit\WolvenKit\bin\Release\net5.0-windows\win-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\cancerPC\source\repos\Wolvenkit\WolvenKit\bin\Release\net5.0-windows\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 // Below are the files to download. any file should be downloaded must be put below.

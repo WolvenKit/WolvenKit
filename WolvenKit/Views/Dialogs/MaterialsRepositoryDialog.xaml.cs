@@ -36,7 +36,6 @@ namespace WolvenKit.Views.Dialogs
         private void matsbutton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = "C:\\Users";
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
@@ -47,7 +46,6 @@ namespace WolvenKit.Views.Dialogs
         private void archivespathbutt_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = "C:\\Users";
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
