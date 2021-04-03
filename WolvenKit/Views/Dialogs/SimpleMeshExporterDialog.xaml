@@ -221,7 +221,7 @@
             <Grid>
                 <Expander
                  Background="{DynamicResource RegionBrush}"
-                 Header="Advanced Export"
+                 Header="Advanced Export (Experimental)"
                  IsEnabled="True"
                  >
                     <hc:ScrollViewer>
