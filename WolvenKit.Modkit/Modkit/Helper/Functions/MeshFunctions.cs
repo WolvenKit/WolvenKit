@@ -312,14 +312,25 @@ namespace WolvenKit.RED4.MeshFile
         public static MeshesInfo GetMeshesinfo(CR2WFile cr2w)
         {
             int Index = 0;
+            bool renderBlobExists = false;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {
                 if (cr2w.Chunks[i].REDType == "rendRenderMeshBlob")
                 {
                     Index = i;
+                    renderBlobExists = true;
                 }
             }
-            int meshC = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
+            int meshC = 0;
+            if(renderBlobExists)
+            meshC = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
+            else
+            {
+                return (new MeshesInfo()
+                {
+                    meshC = 0,
+                });
+            }
 
             UInt32[] vertCounts = new UInt32[meshC];
             UInt32[] indCounts = new UInt32[meshC];
