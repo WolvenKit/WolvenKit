@@ -1,13 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
 using Catel.IoC;
 using Catel.Services;
+using Feather.Commands;
+using Feather.Controls;
 using HandyControl.Data;
 using Orc.ProjectManagement;
 using Orchestra.Services;
@@ -17,6 +25,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -43,6 +52,33 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IGrowlNotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private List<IGameArchiveManager> Managers { get; set; }
+        private ITreeNode<GameFileTreeNode> _currentNode;
+
+        public ICommand SetCurrentNodeCommand { get; set; }
+
+        public ICommand OpenDirectoryCommand { get; set; }
+
+        public ITreeNode<GameFileTreeNode> BreadCrumbCurrentNode
+        {
+            get => _currentNode;
+            set
+            {
+                _currentNode = value;
+                RaisePropertyChanged(() => BreadCrumbCurrentNode);
+            }
+        }
+
+        private bool _stillLoading;
+
+        public bool StillLoading
+        {
+            get => _stillLoading;
+            set
+            {
+                _stillLoading = value;
+                RaisePropertyChanged(() => StillLoading);
+            }
+        }
 
         #endregion fields
 
@@ -61,6 +97,22 @@ namespace WolvenKit.ViewModels.Editor
         public bool PreviewVisible { get; set; }
 
         public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
+
+        private Visibility _loadVisibility = Visibility.Visible;
+
+        public Visibility LoadVisibility
+        {
+            get
+            {
+                return _loadVisibility;
+            }
+            set
+            {
+                _loadVisibility = value;
+                RaisePropertyChanged(() => LoadVisibility);
+            }
+        }
+
         public GameFileTreeNode RootNode { get; set; }
 
         public string SelectedClass { get; set; }
@@ -153,11 +205,58 @@ namespace WolvenKit.ViewModels.Editor
 
         #region methods
 
+        public async Task SetCurrentNodeAsync(LazyObservableTreeNode<GameFileTreeNode> node)
+        {
+            BreadCrumbCurrentNode = node;
+            UpdateCurrentNode(node.Content);
+            //await InitializeCurrentNodeAsync(node.Content);
+            await node.RefreshAsync();
+        }
+
+        private void UpdateCurrentNode(GameFileTreeNode node)
+        {
+            CurrentNode = node;
+            CurrentNodeFiles = node.ToAssetBrowserData();
+        }
+
+        private async Task InitializeCurrentNodeAsync(GameFileTreeNode rnode)
+        {
+            var rootNode = new LazyObservableTreeNode<GameFileTreeNode>(rnode)
+            {
+                ChildrenProvider = content => Task.Run(() =>
+                {
+                    if (content is GameFileTreeNode gfi)
+                    {
+                        return (IEnumerable<GameFileTreeNode>)content.SubDirectories.ToList();
+                    }
+
+                    return null;
+                }),
+                StringFormat = content => content.Name.Replace("\\", "").Replace("/", "")
+            };
+
+            await rootNode.RefreshAsync();
+
+            BreadCrumbCurrentNode = rootNode;
+
+            await ((IRefreshable)CurrentNode).RefreshAsync();
+        }
+
         /// <summary>
         /// Initializes the Asset Browser and populates the data nodes.
         /// </summary>
         public void ReInit()
         {
+            LoadVisibility = Visibility.Visible;
+            SetCurrentNodeCommand = new RelayCommand<LazyObservableTreeNode<GameFileTreeNode>>(
+                async node => await SetCurrentNodeAsync(node));
+
+            OpenDirectoryCommand = new RelayCommand<GameFileTreeNode>(async info =>
+            {
+                var node = (LazyObservableTreeNode<GameFileTreeNode>)BreadCrumbCurrentNode.Children.First(item => item.Content.FullPath == info.FullPath);
+                await SetCurrentNodeAsync(node);
+            });
+
             SelectedFiles = new List<IGameFile>();
             Managers = MainController.Get().GetManagers(true);
 
@@ -181,6 +280,22 @@ namespace WolvenKit.ViewModels.Editor
             if (MainController.GetGame() is not MockGameController)
             {
                 _notificationService.Success($"Asset Browser is initialized");
+                LoadVisibility = Visibility.Collapsed;
+            }
+
+            InitializeCurrentNodeAsync(RootNode);
+        }
+
+        public async void NavigateTo(string path)
+        {
+            SetCurrentNodeCommand.Execute(RootNode);
+            var split = path.Split("\\");
+            if (split.Length > 1)
+            {
+                foreach (var part in split.Skip(1))
+                {
+                    OpenDirectoryCommand.Execute(BreadCrumbCurrentNode.Children.First(x => x.Content.Name == part));
+                }
             }
         }
 
@@ -260,6 +375,7 @@ namespace WolvenKit.ViewModels.Editor
                     CurrentNode = item.Children;
                     CurrentNode.Parent = item.This;
                     CurrentNodeFiles = item.Children.ToAssetBrowserData();
+                    //NavigateTo(CurrentNode.FullPath);
                     break;
                 }
                 case EntryType.File:
@@ -275,6 +391,7 @@ namespace WolvenKit.ViewModels.Editor
                     {
                         CurrentNode = item.Parent;
                         CurrentNodeFiles = item.Parent.ToAssetBrowserData();
+                        //NavigateTo(CurrentNode.FullPath);
                     }
                     break;
                 }
@@ -324,5 +441,119 @@ namespace WolvenKit.ViewModels.Editor
         public ImageSource Image { get; set; }
 
         #endregion Properties
+    }
+
+    public abstract class BindableBase : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value))
+                return false;
+            storage = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public interface IRefreshable
+    {
+        Task<bool> RefreshAsync();
+    }
+    public class LazyObservableTreeNode<T> : BindableBase, ITreeNode<T>, IRefreshable
+    {
+        private bool _isRefreshing;
+        private Func<T, Task<IEnumerable<T>>> _childrenProvider;
+        private Func<T, string> _stringFormat;
+        private IEnumerable<ITreeNode<T>> _children;
+
+        public LazyObservableTreeNode(T content) => Content = content;
+
+        public virtual Func<T, Task<IEnumerable<T>>> ChildrenProvider
+        {
+            get => _childrenProvider ??= ((LazyObservableTreeNode<T>)Parent)?.ChildrenProvider;
+            set => _childrenProvider = value;
+        }
+
+        public Func<T, string> StringFormat
+        {
+            get => _stringFormat ??= ((LazyObservableTreeNode<T>)Parent).StringFormat;
+            set => _stringFormat = value;
+        }
+
+        public T Content { get; }
+
+        public virtual ITreeNode<T> Parent { get; protected set; }
+
+        public virtual IEnumerable<ITreeNode<T>> Children
+        {
+            get => _children;
+            protected set => SetProperty(ref _children, value);
+        }
+
+        public virtual async Task<bool> RefreshAsync()
+        {
+            if (_isRefreshing)
+                return false;
+            _isRefreshing = true;
+
+            if (ChildrenProvider == null)
+                return AbortRefresh();
+            var enumerable = await ChildrenProvider(Content);
+            if (enumerable == null)
+                return AbortRefresh();
+
+            var collection = enumerable.ToList();
+            if (!collection.Any())
+                return AbortRefresh();
+
+            var children = collection.Select(GenerateLazyTreeNode).ToList();
+            children.ForEach(item => item.Parent = this);
+
+            SetChildrenCache(children.AsReadOnly());
+
+            _isRefreshing = false;
+            return true;
+        }
+
+        protected virtual LazyObservableTreeNode<T> GenerateLazyTreeNode(T content) => new LazyObservableTreeNode<T>(content);
+
+        protected virtual void SetChildrenCache(IReadOnlyList<ITreeNode<T>> childrenCache) => Children = childrenCache;
+
+        private bool AbortRefresh()
+        {
+            Children = null;
+            _isRefreshing = false;
+            return false;
+        }
+
+        public override string ToString() => StringFormat?.Invoke(Content) ?? Content.ToString();
+    }
+
+    public class BoolToVisConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            try
+            {
+                var v = (bool)value;
+                return v ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (InvalidCastException)
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
