@@ -102,9 +102,7 @@ namespace WolvenKit.Functionality
             }
             catch
             {
-#if DEBUG
-                Trace.WriteLine("RenderToBitmapSource returned " + file + " null, \n" + e.Message);
-#endif
+
                 return null;
             }
         }
