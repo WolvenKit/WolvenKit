@@ -10,7 +10,6 @@ using System.Windows.Media.Media3D;
 using Ab3d;
 using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
-using Ab3d.DXEngine;
 using Ab3d.Utilities;
 using Assimp;
 using WolvenKit.Common.DDS;
@@ -293,17 +292,16 @@ namespace WolvenKit.Views.Dialogs
 
         private void ExportButton_OnClick(object sender, RoutedEventArgs e)
         {
-            bool isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
-
+           // var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
             var Item = SelectedItem;
             var x = MainController.GetGame().GetArchiveManagersManagers();
-            ArchiveManager z = (ArchiveManager)x[0];
+            var z = (ArchiveManager)x[0];
             var list = z.Archives.Values.ToList();
 
 
 
-            FileInfo FIItem = new FileInfo(OutPath);
-            FileStream stream = new FileStream(Item.FullName, FileMode.Open);
+            var FIItem = new FileInfo(OutPath);
+            var stream = new FileStream(Item.FullName, FileMode.Open);
 
             if (Item.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
             {
