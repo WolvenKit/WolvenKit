@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using AutoUpdaterDotNET;
 using Catel.IoC;
 using Catel.MVVM;
 using HandyControl.Tools;
@@ -153,6 +154,18 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                         };
                         uchwv.Show();
                     }));
+            }
+        }
+
+        public static void CheckForUpdates()
+        {
+            try
+            {
+                AutoUpdater.Start("https://raw.githubusercontent.com/WolvenKit/WolvenKit/master/Update.xml");
+            }
+            catch (Exception)
+            {
+
             }
         }
 
