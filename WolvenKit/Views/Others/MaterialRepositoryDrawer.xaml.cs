@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Catel.IoC;
 using WolvenKit.Functionality;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Views.Others
 {
@@ -15,23 +17,28 @@ namespace WolvenKit.Views.Others
         public static ObservableCollection<string> ImageSources { get; set; }
         public static ObservableCollection<string> Folders { get; set; }
         public static string PreviousFolder { get; set; }
-        public static TextBlock RootFolder { get; set; }
         public MaterialRepositoryDrawer()
         {
             InitializeComponent();
 
 
-            TextBlock textBlock = new TextBlock();
-            textBlock.Text = @"C:\Wolvenkit_Develop";
-            textBlock.FontSize = 15;
-            RootFolder = textBlock;
+
+
 
             // string rootPath = @"C:\Wolvenkit_Develop";
             // string rootPath = @"C:\Wolvenkit_Develop";
             Folders = new ObservableCollection<string>();
             ImageSources = new ObservableCollection<string>();
-            PreviousFolder = @"C:\Wolvenkit_Develop";
-            GetFolders(PreviousFolder);
+
+
+            if (ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath != "")
+            {
+                PreviousFolder = ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath;
+                GetFolders(PreviousFolder);
+
+            }
+
+
             // ImageSources = GetDirFiles(rootPath);
             DataContext = this;
         }
@@ -45,7 +52,11 @@ namespace WolvenKit.Views.Others
 
             foreach (var z in allfiles)
             {
-                MaterialRepositoryDrawer.ImageSources.Add(z);
+                if (z.Contains(".dds") || z.Contains(".xbm"))
+                {
+                    MaterialRepositoryDrawer.ImageSources.Add(z);
+
+                }
             }
         }
 
@@ -57,6 +68,7 @@ namespace WolvenKit.Views.Others
             MaterialRepositoryDrawer.Folders.Add(PreviousFolder);
             foreach (var z in dirs)
             {
+
                 MaterialRepositoryDrawer.Folders.Add(z);
             }
 

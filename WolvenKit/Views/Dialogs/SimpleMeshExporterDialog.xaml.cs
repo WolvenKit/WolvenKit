@@ -12,8 +12,10 @@ using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
 using Ab3d.Utilities;
 using Assimp;
+using Catel.IoC;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.MeshFile;
@@ -292,12 +294,12 @@ namespace WolvenKit.Views.Dialogs
 
         private void ExportButton_OnClick(object sender, RoutedEventArgs e)
         {
-           // var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
+            // var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
             var Item = SelectedItem;
             var x = MainController.GetGame().GetArchiveManagersManagers();
             var z = (ArchiveManager)x[0];
             var list = z.Archives.Values.ToList();
-
+            var o = new DirectoryInfo(ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath);
 
 
             var FIItem = new FileInfo(OutPath);
@@ -319,13 +321,13 @@ namespace WolvenKit.Views.Dialogs
                 {
                     var M = new MATERIAL(list);
 
-                    M.ExportMeshWithMaterialsUsingAssetLib(stream, LibText, Item.Name, FIItem, true, true);
+                    M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem, true, true);
                 }
                 if (ExportMaterials && UseMaterialsRepository)
                 {
                     var M = new MATERIAL(list);
 
-                    M.ExportMeshWithMaterialsUsingAssetLib(stream, LibText, Item.Name, FIItem);
+                    M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem);
                 }
                 if (ExportMaterials)
                 {

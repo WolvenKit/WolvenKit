@@ -291,7 +291,7 @@
                                                                      Visibility="{Binding IsChecked, ElementName=UseAssetLibCheck, Converter={StaticResource boolToVisibilityConverter}}"
                                                                      />
                                                                 </StackPanel>
-                                                                <StackPanel Orientation="Horizontal">
+                                                                <StackPanel Orientation="Horizontal" Visibility="Collapsed">
                                                                     <TextBlock
                                                                      Margin="5"
                                                                      HorizontalAlignment="Center"
