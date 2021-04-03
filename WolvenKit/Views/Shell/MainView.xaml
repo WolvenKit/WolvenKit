@@ -47,7 +47,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
+        <Grid />
         <DockingManager
          x:Name="dockManager"
          Grid.Row="0"
@@ -257,5 +257,15 @@
                 </LayoutPanel>
             </LayoutRoot>
         </DockingManager>
+
+
+
+
+
+
+
+
+
+
     </Grid>
 </catel:UserControl>

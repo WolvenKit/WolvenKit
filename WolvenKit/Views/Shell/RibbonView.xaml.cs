@@ -9,6 +9,7 @@ using Catel.Data;
 using Orchestra;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Editor;
 using WolvenKit.Views.Editor.AudioTool;
 using WolvenKit.Views.Editor.VisualEditor;
@@ -174,7 +175,12 @@ namespace WolvenKit.Views.Shell
 
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var z = new MaterialsRepositoryDialog();
+            z.Show();
 
+        }
     }
 }
 
