@@ -17,6 +17,7 @@ namespace WolvenKit.Functionality.Services
 
         private string _cp77ExecutablePath = "";
         private string _depotPath = "";
+        private string _materialRepositoryPath = "";
         private System.Windows.Media.ImageBrush _profileImageBrush;
         private string _w3ExecutablePath = "";
         private string _wccLitePath = "";
@@ -81,6 +82,16 @@ namespace WolvenKit.Functionality.Services
             {
                 _depotPath = value;
                 RaisePropertyChanged(nameof(DepotPath));
+            }
+        }
+
+        public string MaterialRepositoryPath
+        {
+            get => _materialRepositoryPath;
+            set
+            {
+                _materialRepositoryPath = value;
+                RaisePropertyChanged(nameof(MaterialRepositoryPath));
             }
         }
 

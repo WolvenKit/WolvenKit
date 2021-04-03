@@ -40,6 +40,8 @@ namespace WolvenKit.Functionality.Controllers
 
         public string DepotPath { get; set; }
 
+        public string MaterialRepositoryPath { get; set; }
+
         public string InitialExportDirectory { get; set; }
 
         public string InitialFileDirectory { get; set; }
