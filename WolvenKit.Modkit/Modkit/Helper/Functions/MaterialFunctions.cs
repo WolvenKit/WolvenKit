@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using CP77.CR2W;
 using WolvenKit.RED4.GeneralStructs;
@@ -573,31 +573,35 @@ namespace WolvenKit.RED4.MeshFile.Materials
             RawMaterial rawMaterial = new RawMaterial();
 
             rawMaterial.Name = Name;
-            rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
-
-            if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "mesh_decal")
+            try
             {
-                rawMaterial.MaterialType = MaterialType.MeshDecal;
+                rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
 
-                MeshDecal MeshDecal = new MeshDecal(cMaterialInstance);
-                rawMaterial.MeshDecal = MeshDecal;
+                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "mesh_decal")
+                {
+                    rawMaterial.MaterialType = MaterialType.MeshDecal;
 
+                    MeshDecal MeshDecal = new MeshDecal(cMaterialInstance);
+                    rawMaterial.MeshDecal = MeshDecal;
+
+                }
+                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "multilayered")
+                {
+                    rawMaterial.MaterialType = MaterialType.MultiLayered;
+
+                    MultiLayered multiLayered = new MultiLayered(cMaterialInstance);
+                    rawMaterial.MultiLayered = multiLayered;
+
+                }
+                if (cMaterialInstance.BaseMaterial.DepotPath.Contains("skin"))
+                {
+                    rawMaterial.MaterialType = MaterialType.HumanSkin;
+
+                    HumanSkin HumanSkin = new HumanSkin(cMaterialInstance);
+                    rawMaterial.HumanSkin = HumanSkin;
+                }
             }
-            if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "multilayered")
-            {
-                rawMaterial.MaterialType = MaterialType.MultiLayered;
-
-                MultiLayered multiLayered = new MultiLayered(cMaterialInstance);
-                rawMaterial.MultiLayered = multiLayered;
-
-            }
-            if (cMaterialInstance.BaseMaterial.DepotPath.Contains("skin"))
-            {
-                rawMaterial.MaterialType = MaterialType.HumanSkin;
-
-                HumanSkin HumanSkin = new HumanSkin(cMaterialInstance);
-                rawMaterial.HumanSkin = HumanSkin;
-            }
+            catch { }
 
             return rawMaterial;
         }
@@ -624,9 +628,13 @@ namespace WolvenKit.RED4.MeshFile.Materials
             }
             return materialStream;
         }
-        public MATERIAL(List<Archive> Archives)
+        public MATERIAL(DirectoryInfo gameArchiveDir)
         {
-            archives = Archives;
+            string[] filenames = Directory.GetFiles(gameArchiveDir.FullName, "*.archive", SearchOption.AllDirectories);
+            archives = new List<Archive>();
+
+            for (int i = 0; i < filenames.Length; i++)
+                archives.Add(new Archive(filenames[i]));
         }
         public MATERIAL()
         {
@@ -659,8 +667,8 @@ namespace WolvenKit.RED4.MeshFile.Materials
                 ModTools.ExtractAll(ar, materialRepoDir, "*.texarray");
 
                 ModTools.UncookAll(ar, materialRepoDir, "*.xbm", "", texturesExtension);
-                // Should Be Uncooking this, But mlmask uncook still breaks even after tilesBuffer[1] fix in some instance
-                ModTools.ExtractAll(ar, materialRepoDir, "*.mlmask");
+                ModTools.UncookAll(ar, materialRepoDir, "*.mlmask","",texturesExtension);
+                // try catch the decode in mlmask.cs for now
             }
         }
     }

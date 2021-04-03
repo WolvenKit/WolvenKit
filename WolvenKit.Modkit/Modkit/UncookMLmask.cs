@@ -100,7 +100,11 @@ namespace CP77.CR2W.Uncooker
                 //Clear instead of allocate new is faster?
                 //Mandatory cause decode does not always write to every pixel
                 Array.Clear(maskData, 0, maskData.Length);
-                Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
+                try
+                {
+                    Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
+                }
+                catch { return false; }
 
                 using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
                 {
