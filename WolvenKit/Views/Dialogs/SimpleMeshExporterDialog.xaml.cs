@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,7 +14,11 @@ using Ab3d.DXEngine;
 using Ab3d.Utilities;
 using Assimp;
 using WolvenKit.Common.DDS;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.MeshFile;
+using WolvenKit.RED4.MeshFile.Materials;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -33,13 +38,19 @@ namespace WolvenKit.Views.Dialogs
         private Dictionary<string, object> _namedObjects;
 
 
+        public DirectoryInfo LibText { get; set; }
+
 
         public FileSystemInfoModel SelectedItem { get; set; }
+
         public string OutPath { get; set; }
         public bool ExtractRigged { get; set; }
         public bool ExportMaterials { get; set; }
+        public bool CopyTextures { get; set; }
+        public bool UseMaterialsRepository { get; set; }
+
         public EUncookExtension TextureFormat { get; set; }
-        public List<string> SelectedRigFiles { get; set; }
+        public string SelectedRigFiles { get; set; }
 
 
 
@@ -48,14 +59,19 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
             AssimpLoader.LoadAssimpNativeLibrary();
+            SelectedItem = selectedItem as FileSystemInfoModel;
+            ExtractRiggedMeshRadio.IsChecked = false;
+            ExportMaterialsCheckbox.IsChecked = false;
+            ExtractRigged = false;
+            ExportMaterials = false;
+            CopyTextures = false;
+            UseMaterialsRepository = false;
             DataContext = this;
             SelectedItem = selectedItem as FileSystemInfoModel;
 
             var assimpWpfExporter = new AssimpWpfExporter();
             _exportFormatDescriptions = assimpWpfExporter.ExportFormatDescriptions;
-
-
-            for (int i = 0; i < _exportFormatDescriptions.Length; i++)
+            for (var i = 0; i < _exportFormatDescriptions.Length; i++)
             {
                 var comboBoxItem = new ComboBoxItem()
                 {
@@ -74,15 +90,7 @@ namespace WolvenKit.Views.Dialogs
 
             _assimpWpfImporter = new AssimpWpfImporter();
             _assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
-
-            // CreateTestScene();
-
-            // Set initial output file name
-            OutputFileName.Text = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WKitMeshExport.dae");
-
-            // Add drag and drop handler for all file extensions
-            var dragAndDropHelper = new DragAndDropHelper(ViewportBorder, "*");
-            dragAndDropHelper.FileDropped += (sender, e) => LoadModel(e.FileName);
+            OutPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WKitMeshExport.dae");
         }
 
 
@@ -127,14 +135,9 @@ namespace WolvenKit.Views.Dialogs
                 isExported = assimpWpfExporter.Export(fileName, exportFormatId);
 
                 if (!isExported)
-                    MessageBox.Show("Not exported");
+                { MessageBox.Show("Not exported"); }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error exporting:\r\n" + ex.Message);
-                isExported = false;
-            }
-
+            catch (Exception ex) { MessageBox.Show("Error exporting:\r\n" + ex.Message); isExported = false; }
             return isExported;
         }
 
@@ -247,11 +250,7 @@ namespace WolvenKit.Views.Dialogs
                 // See the possible enum values to see what post processes are available.
                 // By default we just execute the Triangulate step to convert all polygons to triangles that are needed for WPF 3D.
                 assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
-
-                // Read model from file
-                Model3D readModel3D = assimpWpfImporter.ReadModel3D(fileName, texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
-
-                // Save the names of the objects - the same dictionary can be used when exporting the objects
+                Model3D readModel3D = assimpWpfImporter.ReadModel3D(fileName, texturesPath: null);
                 _namedObjects = assimpWpfImporter.NamedObjects;
 
                 // Show the model
@@ -283,12 +282,9 @@ namespace WolvenKit.Views.Dialogs
 
             // If the read model already define some lights, then do not show the Camera's light
             if (ModelUtils.HasAnyLight(model3D))
-                Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Never);
+            { Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Never); }
             else
-                Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Always);
-
-
-            // Clear exported object preview
+            { Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Always); }
             MainViewport2.Children.Clear();
             ExportedSceneTitleTextBlock.SetCurrentValue(TextBlock.TextProperty, "No Converted File");
         }
@@ -299,19 +295,55 @@ namespace WolvenKit.Views.Dialogs
         {
             bool isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
 
-            if (isExported)
+            var Item = SelectedItem;
+            var x = MainController.GetGame().GetArchiveManagersManagers();
+            ArchiveManager z = (ArchiveManager)x[0];
+            var list = z.Archives.Values.ToList();
+
+
+
+            FileInfo FIItem = new FileInfo(OutPath);
+            FileStream stream = new FileStream(Item.FullName, FileMode.Open);
+
+            if (Item.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
             {
-                LoadExportedScene(OutputFileName.Text);
-                //OpenExportedButton.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
+                {
+                    MESH.ExportMeshWithoutRig(stream, Item.Name, FIItem);
+                }
+
+                if (ExtractRigged)
+                {
+                    FileStream rigstream = new FileStream(SelectedRigFiles, FileMode.Open);
+                    MESH.ExportMeshWithRig(stream, rigstream, Item.Name, FIItem);
+                }
+                if (ExportMaterials && UseMaterialsRepository && CopyTextures)
+                {
+                    var M = new MATERIAL(list);
+
+                    M.ExportMeshWithMaterialsUsingAssetLib(stream, LibText, Item.Name, FIItem, true, true);
+                }
+                if (ExportMaterials && UseMaterialsRepository)
+                {
+                    var M = new MATERIAL(list);
+
+                    M.ExportMeshWithMaterialsUsingAssetLib(stream, LibText, Item.Name, FIItem);
+                }
+                if (ExportMaterials)
+                {
+                    var M = new MATERIAL(list);
+                    M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
+                }
             }
+            this.Close();
+
+
         }
 
         private void Camera1_OnCameraChanged(object sender, CameraChangedRoutedEventArgs e)
         {
-            if (!this.IsLoaded || _isInternalCameraChange)
-                return;
-
-            //Synchronize Camera1 and Camera2
+            if (!IsLoaded || _isInternalCameraChange)
+            { return; }
             _isInternalCameraChange = true;
 
             Camera2.SetCurrentValue(Ab3d.Cameras.SphericalCamera.HeadingProperty, Camera1.Heading);
@@ -323,8 +355,8 @@ namespace WolvenKit.Views.Dialogs
 
         private void Camera2_OnCameraChanged(object sender, CameraChangedRoutedEventArgs e)
         {
-            if (!this.IsLoaded || _isInternalCameraChange)
-                return;
+            if (!IsLoaded || _isInternalCameraChange)
+            { return; }
 
             //Synchronize Camera1 and Camera2
             _isInternalCameraChange = true;
@@ -358,7 +390,7 @@ namespace WolvenKit.Views.Dialogs
             return namedObjects;
         }
 
-        private void ExportTypeComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)  // Double this method for both boxes?
+        private void ExportTypeComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int exportTypeIndex = ExportTypeComboBox.SelectedIndex;
 
@@ -371,6 +403,8 @@ namespace WolvenKit.Views.Dialogs
 
             OutputFileName.SetCurrentValue(TextBox.TextProperty, System.IO.Path.ChangeExtension(OutputFileName.Text, selectedFileExtension));
         }
+
+
     }
 }
 

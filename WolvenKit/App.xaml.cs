@@ -12,6 +12,7 @@ using Unosquare.FFME;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views;
+using WolvenKit.Views.Others;
 using WolvenKit.Views.ViewModels;
 
 namespace WolvenKit
@@ -94,7 +95,8 @@ namespace WolvenKit
         protected override async void OnStartup(StartupEventArgs e)
         {
             var serviceLocator = ServiceLocator.Default;
-
+            //ShellService.GivenPoop = new StartupViewer();
+            
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
 
 #if DEBUG

@@ -230,7 +230,12 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />
   </ItemGroup>
+ <ItemGroup>
 
+    <Reference Include="WolvenKit.RED4.CR2W">
+      <HintPath>..\WolvenKit.RED4.CR2W\bin\Release\net5.0\WolvenKit.RED4.CR2W.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
 
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7760" />
@@ -288,8 +293,8 @@
     <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
     <PackageReference Include="WolvenKit.ExplorerControl" Version="1.3.0" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
-    <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.2" />
-    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.5" />
+    <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
+    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.6" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

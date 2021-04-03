@@ -1,5 +1,5 @@
 using WolvenKit.RED4.CR2W.Types;
-
+using System;
 namespace WolvenKit.RED4.MeshFile.Materials.MaterialTypes
 {
     public enum MaterialType
@@ -8,52 +8,52 @@ namespace WolvenKit.RED4.MeshFile.Materials.MaterialTypes
     }
     public class MultiLayered
     {
-        public string multilayerSetup { get; set; } = null;
-        public string multilayerMask { get; set; } = null;
-        public string globalNormal { get; set; } = null;
+        public string MultilayerSetup { get; set; } = null;
+        public string MultilayerMask { get; set; } = null;
+        public string GlobalNormal { get; set; } = null;
         public MultiLayered(CMaterialInstance cMaterialInstance)
         {
             for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
             {
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MultilayerSetup")
-                    multilayerSetup = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<Multilayer_Setup>).DepotPath;
+                    MultilayerSetup = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<Multilayer_Setup>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MultilayerMask")
-                    multilayerMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<Multilayer_Mask>).DepotPath;
+                    MultilayerMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<Multilayer_Mask>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "GlobalNormal")
-                    globalNormal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    GlobalNormal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
             }
         }
     }
     public class MeshDecal
     {
-        public string diffuseTexture { get; set; } = null;
-        public Color diffuseColor { get; set; }
-        public float diffuseAlpha { get; set; } = 9999;
-        public Struct2D uVOffset { get; set; }
-        public float uVRotation { get; set; } = 9999;
-        public Struct2D uVScale { get; set; }
-        public string secondaryMask { get; set; } = null;
-        public float secondaryMaskUVScale { get; set; } = 9999;
-        public float secondaryMaskInfluence { get; set; } = 9999;
-        public string normalTexture { get; set; } = null;
-        public float normalAlpha { get; set; } = 9999;
-        public string normalAlphaTex { get; set; } = null;
-        public float normalsBlendingMode { get; set; } = 9999;
-        public string roughnessTexture { get; set; } = null;
-        public string metalnessTexture { get; set; } = null;
-        public float alphaMaskContrast { get; set; } = 9999;
-        public float roughnessMetalnessAlpha { get; set; } = 9999;
-        public float animationSpeed { get; set; } = 9999;
-        public float animationFramesWidth { get; set; } = 9999;
-        public float animationFramesHeight { get; set; } = 9999;
-        public float depthThreshold { get; set; } = 9999;
+        public string DiffuseTexture { get; set; } = null;
+        public Color DiffuseColor { get; set; }
+        public Nullable<float> DiffuseAlpha { get; set; } = null;
+        public Struct2D UVOffset { get; set; }
+        public Nullable<float> UVRotation { get; set; } = null;
+        public Struct2D UVScale { get; set; }
+        public string SecondaryMask { get; set; } = null;
+        public Nullable<float> SecondaryMaskUVScale { get; set; } = null;
+        public Nullable<float> SecondaryMaskInfluence { get; set; } = null;
+        public string NormalTexture { get; set; } = null;
+        public Nullable<float> NormalAlpha { get; set; } = null;
+        public string NormalAlphaTex { get; set; } = null;
+        public Nullable<float> NormalsBlendingMode { get; set; } = null;
+        public string RoughnessTexture { get; set; } = null;
+        public string MetalnessTexture { get; set; } = null;
+        public Nullable<float> AlphaMaskContrast { get; set; } = null;
+        public Nullable<float> RoughnessMetalnessAlpha { get; set; } = null;
+        public Nullable<float> AnimationSpeed { get; set; } = null;
+        public Nullable<float> AnimationFramesWidth { get; set; } = null;
+        public Nullable<float> AnimationFramesHeight { get; set; } = null;
+        public Nullable<float> DepthThreshold { get; set; } = null;
 
         public MeshDecal(CMaterialInstance cMaterialInstance)
         {
             for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
             {
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DiffuseTexture")
-                    diffuseTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    DiffuseTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DiffuseColor")
                 {
                     float x = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Red.Value / 255f;
@@ -61,103 +61,102 @@ namespace WolvenKit.RED4.MeshFile.Materials.MaterialTypes
                     float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Blue.Value / 255f;
                     float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Alpha.Value / 255f;
 
-                    diffuseColor = new Color(x, y, z, w);
+                    DiffuseColor = new Color(x, y, z, w);
                 }
                 System.Numerics.Vector2 uvOff = new System.Numerics.Vector2();
                 System.Numerics.Vector2 uvSca = new System.Numerics.Vector2();
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DiffuseAlpha")
-                    diffuseAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    DiffuseAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVOffsetX")
                     uvOff.X = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVOffsetY")
                     uvOff.Y = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVRotation")
-                    uVRotation = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    UVRotation = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVScaleX")
                     uvSca.X = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVScaleY")
                     uvSca.Y = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SecondaryMask")
-                    secondaryMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    SecondaryMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SecondaryMaskUVScale")
-                    secondaryMaskUVScale = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    SecondaryMaskUVScale = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SecondaryMaskInfluence")
-                    secondaryMaskInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    SecondaryMaskInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalTexture")
-                    normalTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    NormalTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalAlpha")
-                    normalAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    NormalAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalAlphaTex")
-                    normalAlphaTex = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    NormalAlphaTex = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalsBlendingMode")
-                    normalsBlendingMode = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    NormalsBlendingMode = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "RoughnessTexture")
-                    roughnessTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    RoughnessTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MetalnessTexture")
-                    metalnessTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    MetalnessTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AlphaMaskContrast")
-                    alphaMaskContrast = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    AlphaMaskContrast = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "RoughnessMetalnessAlpha")
-                    roughnessMetalnessAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    RoughnessMetalnessAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AnimationSpeed")
-                    animationSpeed = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    AnimationSpeed = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AnimationFramesWidth")
-                    animationFramesWidth = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    AnimationFramesWidth = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AnimationFramesHeight")
-                    animationFramesHeight = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    AnimationFramesHeight = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DepthThreshold")
-                    depthThreshold = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    DepthThreshold = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
 
-                uVScale = new Struct2D(uvSca.X, uvSca.Y);
-                uVOffset = new Struct2D(uvSca.X, uvSca.Y);
+                UVScale = new Struct2D(uvSca.X, uvSca.Y);
+                UVOffset = new Struct2D(uvSca.X, uvSca.Y);
             }
         }
     }
-    
     public class HumanSkin
     {
-        public string roughness { get; set; } = null;
-        public string detailNormal { get; set; } = null;
-        public float detailNormalInfluence { get; set; } = 9999;
-        public string normal { get; set; } = null;
-        public string albedo { get; set; } = null;
-        public string detailmap_Squash { get; set; } = null;
-        public string detailmap_Stretch { get; set; } = null;
-        public float detailRoughnessBiasMin { get; set; } = 9999;
-        public float detailRoughnessBiasMax { get; set; } = 9999;
-        public Color tintColor { get; set; }
-        public float tintScale { get; set; } = 9999;
-        public string skinProfile { get; set; } = null;
-        public string bloodflow { get; set; } = null;
-        public Color bloodColor { get; set; }
-        public float microDetailUVScale01 { get; set; } = 9999;
-        public float microDetailUVScale02 { get; set; } = 9999;
-        public string tintColorMask { get; set; } = null;
-        public float microDetailInfluence { get; set; } = 9999;
-        public float cavityIntensity { get; set; } = 9999;
+        public string Roughness { get; set; } = null;
+        public string DetailNormal { get; set; } = null;
+        public Nullable<float> DetailNormalInfluence { get; set; } = null;
+        public string Normal { get; set; } = null;
+        public string Albedo { get; set; } = null;
+        public string Detailmap_Squash { get; set; } = null;
+        public string Detailmap_Stretch { get; set; } = null;
+        public Nullable<float> DetailRoughnessBiasMin { get; set; } = null;
+        public Nullable<float> DetailRoughnessBiasMax { get; set; } = null;
+        public Color TintColor { get; set; }
+        public Nullable<float> TintScale { get; set; } = null;
+        public string SkinProfile { get; set; } = null;
+        public string Bloodflow { get; set; } = null;
+        public Color BloodColor { get; set; }
+        public Nullable<float> MicroDetailUVScale01 { get; set; } = null;
+        public Nullable<float> MicroDetailUVScale02 { get; set; } = null;
+        public string TintColorMask { get; set; } = null;
+        public Nullable<float> MicroDetailInfluence { get; set; } = null;
+        public Nullable<float> CavityIntensity { get; set; } = null;
 
         public HumanSkin(CMaterialInstance cMaterialInstance)
         {
             for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
             {
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Roughness")
-                    roughness = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    Roughness = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailNormal")
-                    detailNormal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    DetailNormal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailNormalInfluence")
-                    detailNormalInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    DetailNormalInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Normal")
-                    normal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    Normal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Albedo")
-                    albedo = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    Albedo = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Detailmap_Squash")
-                    detailmap_Squash = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    Detailmap_Squash = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Detailmap_Stretch")
-                    detailmap_Stretch = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    Detailmap_Stretch = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailRoughnessBiasMin")
-                    detailRoughnessBiasMin = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    DetailRoughnessBiasMin = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailRoughnessBiasMax")
-                    detailRoughnessBiasMax = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    DetailRoughnessBiasMax = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "TintColor")
                 {
                     float x = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Red.Value / 255f;
@@ -165,15 +164,15 @@ namespace WolvenKit.RED4.MeshFile.Materials.MaterialTypes
                     float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Blue.Value / 255f;
                     float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Alpha.Value / 255f;
 
-                    tintColor = new Color(x, y, z, w);
+                    TintColor = new Color(x, y, z, w);
                 }
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "TintScale")
-                    tintScale = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    TintScale = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
 
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SkinProfile")
-                    skinProfile = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<CSkinProfile>).DepotPath;
+                    SkinProfile = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<CSkinProfile>).DepotPath;
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Bloodflow")
-                    bloodflow = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    Bloodflow = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
 
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "BloodColor")
                 {
@@ -182,23 +181,23 @@ namespace WolvenKit.RED4.MeshFile.Materials.MaterialTypes
                     float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Blue.Value / 255f;
                     float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Alpha.Value / 255f;
 
-                    bloodColor = new Color(x, y, z, w);
+                    BloodColor = new Color(x, y, z, w);
                 }
 
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MicroDetailUVScale01")
-                    microDetailUVScale01 = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    MicroDetailUVScale01 = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
 
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MicroDetailUVScale02")
-                    microDetailUVScale02 = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    MicroDetailUVScale02 = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
 
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "TintColorMask")
-                    tintColorMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                    TintColorMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
 
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MicroDetailInfluence")
-                    microDetailInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    MicroDetailInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
 
                 if (cMaterialInstance.CMaterialInstanceData[i].REDName == "CavityIntensity")
-                    cavityIntensity = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                    CavityIntensity = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
 
             }
         }

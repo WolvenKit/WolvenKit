@@ -633,7 +633,30 @@
                              />
                         </fluent:Button.Icon>
                     </fluent:Button>
-
+                    <fluent:Button
+                     Click="Button_Click_1"
+                     Header="Material Repository"
+                     Visibility="Visible"
+                     >
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Image"
+                             />
+                        </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="25"
+                             Height="25"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Kind="Image"
+                             />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
 
                     <fluent:Button Command="{catel:CommandManagerBinding Application.ShowSettings}" Header="Settings">
                         <fluent:Button.LargeIcon>
