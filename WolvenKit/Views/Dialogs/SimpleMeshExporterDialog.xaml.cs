@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,7 +13,11 @@ using Ab3d.Common.Cameras;
 using Ab3d.Utilities;
 using Assimp;
 using WolvenKit.Common.DDS;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.MeshFile;
+using WolvenKit.RED4.MeshFile.Materials;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -28,6 +33,8 @@ namespace WolvenKit.Views.Dialogs
         private Dictionary<string, object> _namedObjects;
 
 
+        public DirectoryInfo LibText { get; set; }
+
 
         public FileSystemInfoModel SelectedItem { get; set; }
 
@@ -38,7 +45,7 @@ namespace WolvenKit.Views.Dialogs
         public bool UseMaterialsRepository { get; set; }
 
         public EUncookExtension TextureFormat { get; set; }
-        public List<string> SelectedRigFiles { get; set; }
+        public string SelectedRigFiles { get; set; }
 
 
 
@@ -47,8 +54,14 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
             AssimpLoader.LoadAssimpNativeLibrary();
-            DataContext = this;
             SelectedItem = selectedItem as FileSystemInfoModel;
+            ExtractRiggedMeshRadio.IsChecked = false;
+            ExportMaterialsCheckbox.IsChecked = false;
+            ExtractRigged = false;
+            ExportMaterials = false;
+            CopyTextures = false;
+            UseMaterialsRepository = false;
+            DataContext = this;
 
             var assimpWpfExporter = new AssimpWpfExporter();
             _exportFormatDescriptions = assimpWpfExporter.ExportFormatDescriptions;
@@ -64,7 +77,7 @@ namespace WolvenKit.Views.Dialogs
             }
             _assimpWpfImporter = new AssimpWpfImporter();
             _assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
-            OutputFileName.Text = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WKitMeshExport.dae");
+            OutPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WKitMeshExport.dae");
         }
 
 
@@ -160,17 +173,49 @@ namespace WolvenKit.Views.Dialogs
         private void ExportButton_OnClick(object sender, RoutedEventArgs e)
         {
 
+            var Item = SelectedItem;
+            var x = MainController.GetGame().GetArchiveManagersManagers();
+            ArchiveManager z = (ArchiveManager)x[0];
+            var list = z.Archives.Values.ToList();
 
 
 
+            FileInfo FIItem = new FileInfo(OutPath);
+            FileStream stream = new FileStream(Item.FullName, FileMode.Open);
 
-
-            var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
-
-            if (isExported)
+            if (Item.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
             {
-                LoadExportedScene(OutputFileName.Text);
+                if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
+                {
+                    MESH.ExportMeshWithoutRig(stream, Item.Name, FIItem);
+                }
+
+                if (ExtractRigged)
+                {
+                    FileStream rigstream = new FileStream(SelectedRigFiles, FileMode.Open);
+                    MESH.ExportMeshWithRig(stream, rigstream, Item.Name, FIItem);
+                }
+                if (ExportMaterials && UseMaterialsRepository && CopyTextures)
+                {
+                    var M = new MATERIAL(list);
+
+                    M.ExportMeshWithMaterialsUsingAssetLib(stream, LibText, Item.Name, FIItem, true, true);
+                }
+                if (ExportMaterials && UseMaterialsRepository)
+                {
+                    var M = new MATERIAL(list);
+
+                    M.ExportMeshWithMaterialsUsingAssetLib(stream, LibText, Item.Name, FIItem);
+                }
+                if (ExportMaterials)
+                {
+                    var M = new MATERIAL(list);
+                    M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
+                }
             }
+            this.Close();
+
+
         }
 
         private void Camera1_OnCameraChanged(object sender, CameraChangedRoutedEventArgs e)
@@ -231,6 +276,8 @@ namespace WolvenKit.Views.Dialogs
 
             OutputFileName.SetCurrentValue(TextBox.TextProperty, System.IO.Path.ChangeExtension(OutputFileName.Text, selectedFileExtension));
         }
+
+
     }
 }
 

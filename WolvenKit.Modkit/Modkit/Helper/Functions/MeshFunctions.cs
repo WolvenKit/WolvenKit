@@ -135,12 +135,12 @@ namespace WolvenKit.RED4.MeshFile
                 expMeshes.Add(mesh);
             }
             ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
-            if(isGLBinary)
+            if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
                 model.SaveGLTF(outfile.FullName);
         }
-        public static void ExportMultiMeshWithoutRig(List<Stream> meshStreamS, List<string> _meshNameS,FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public static void ExportMultiMeshWithoutRig(List<Stream> meshStreamS, List<string> _meshNameS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
@@ -168,12 +168,12 @@ namespace WolvenKit.RED4.MeshFile
                 }
             }
             ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
-            if(isGLBinary)
+            if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
                 model.SaveGLTF(outfile.FullName);
         }
-        public static void ExportMeshWithRig(Stream meshMstream, Stream rigMStream, string _meshName,FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public static void ExportMeshWithRig(Stream meshMstream, Stream rigMStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             RawArmature Rig = RIG.ProcessRig(rigMStream);
 
@@ -219,12 +219,12 @@ namespace WolvenKit.RED4.MeshFile
             }
 
             ModelRoot model = RawSkinnedMeshesToGLTF(expMeshes, Rig);
-            if(isGLBinary)
+            if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
                 model.SaveGLTF(outfile.FullName);
         }
-        public static void ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, List<string> _meshNameS,FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public static void ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, List<string> _meshNameS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawArmature> Rigs = new List<RawArmature>();
             rigStreamS = rigStreamS.OrderByDescending(r => r.Length).ToList();  // not so smart hacky method to get bodybase rigs on top/ orderby descending
@@ -282,7 +282,7 @@ namespace WolvenKit.RED4.MeshFile
                 }
             }
             ModelRoot model = RawSkinnedMeshesToGLTF(expMeshes, expRig);
-            if(isGLBinary)
+            if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
                 model.SaveGLTF(outfile.FullName);
