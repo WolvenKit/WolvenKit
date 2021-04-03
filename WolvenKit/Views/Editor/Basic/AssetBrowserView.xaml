@@ -631,16 +631,12 @@
                              Style="{StaticResource ButtonIcon}"
                              />
 
-
-                            <hc:TextBox
-                             Width="auto"
-                             Margin="0,5,0,0"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
-                             IsManipulationEnabled="False"
-                             IsReadOnly="True"
-                             Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}"
-                             />
+                            <feather:TreeBreadcrumb
+                                VerticalAlignment="Top"
+                                CurrentNode="{Binding Path=BreadCrumbCurrentNode}"
+                                PathSeparator="\"
+                                SetCurrentNodeCommand="{Binding Path=SetCurrentNodeCommand}"
+                            />
 
 
 
