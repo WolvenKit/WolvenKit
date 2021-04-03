@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.Common;
@@ -47,6 +48,7 @@ namespace WolvenKit.Views.Editor
             {
                 vm.CurrentNode = e.NewValue as GameFileTreeNode;
                 vm.CurrentNodeFiles = (e.NewValue as GameFileTreeNode)?.ToAssetBrowserData();
+                //vm.NavigateTo(vm.CurrentNode.FullPath);
             }
         }
 

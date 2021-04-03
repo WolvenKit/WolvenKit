@@ -6,9 +6,11 @@
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:system="clr-namespace:System;assembly=mscorlib"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
@@ -522,13 +524,17 @@
 
         </ResourceDictionary>
     </catel:UserControl.Resources>
-    <Border
+    <Grid>
+        <Grid.Resources>
+            <editor:BoolToVisConverter x:Key="boolConverter"/>
+        </Grid.Resources>
+        
+        <Border
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
      BorderThickness="1"
      >
-
-        <Grid>
+            <Grid>
             <Grid.RowDefinitions>
 
                 <RowDefinition Height="9*" />
@@ -595,9 +601,12 @@
                      VerticalAlignment="Top"
                      Background="Transparent"
                      >
-                        <hc:UniformSpacingPanel>
+                        <hc:UniformSpacingPanel VerticalAlignment="Center">
                             <Button
                              Width="40"
+                             Height="25"
+                             Margin="0,3,-10,0"
+                             VerticalAlignment="Center"
                              hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
                              Background="Transparent"
                              BorderBrush="{x:Null}"
@@ -611,6 +620,7 @@
                              Command="{Binding HomeCommand}"
                              RenderTransformOrigin="0.5,0.5"
                              Style="{StaticResource ButtonIcon}"
+                             Visibility="Collapsed"
                              >
                                 <Button.RenderTransform>
                                     <TransformGroup>
@@ -629,38 +639,58 @@
                              Background="Transparent"
                              BorderBrush="{x:Null}"
                              Style="{StaticResource ButtonIcon}"
+                             Visibility="Collapsed"
+                             />
+
+                            <feather:TreeBreadcrumb
+                             Margin="5,0,15,0"
+                             VerticalAlignment="Center"
+                             Background="Transparent"
+                             BorderBrush="Transparent"
+                             CurrentNode="{Binding Path=BreadCrumbCurrentNode}"
+                             Foreground="White"
+                             PathSeparator="\"
+                             SetCurrentNodeCommand="{Binding Path=SetCurrentNodeCommand}"
                              />
 
 
-                            <hc:TextBox
-                             Width="auto"
-                             Margin="0,5,0,0"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
-                             IsManipulationEnabled="False"
-                             IsReadOnly="True"
-                             Text="{Binding Path=CurrentNode.FullPath, Mode=OneWay}"
-                             />
 
 
 
 
 
+                            <Border BorderBrush="Gray" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <hc:SearchBar
+                                         Width="auto"
+                                         MinWidth="88"
+                                         Padding="0,0,-25,0"
+                                         VerticalAlignment="Center"
+                                         hc:InfoElement.Placeholder="Search something"
+                                         Background="Transparent"
+                                         BorderBrush="Transparent"
+                                         FlowDirection="LeftToRight"
+                                         >
+
+                                            <hc:Interaction.Triggers>
+                                                <hc:EventTrigger EventName="SearchStarted">
+                                                    <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                                                </hc:EventTrigger>
+                                            </hc:Interaction.Triggers>
+                                        </hc:SearchBar>
+                                        <iconPacks:PackIconMaterial
+                                         Margin="0,5,0,0"
+                                         VerticalAlignment="Center"
+                                         BorderThickness="0"
+                                         Kind="LayersSearchOutline"
+                                         />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
 
 
-                            <hc:SearchBar
-                             Width="auto"
-                             MinWidth="88"
-                             Margin="5"
-                             hc:InfoElement.Placeholder="Search something"
-                             FlowDirection="LeftToRight"
-                             >
-                                <hc:Interaction.Triggers>
-                                    <hc:EventTrigger EventName="SearchStarted">
-                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
-                                    </hc:EventTrigger>
-                                </hc:Interaction.Triggers>
-                            </hc:SearchBar>
+
 
 
                             <hc:ComboBox
@@ -767,5 +797,14 @@
                 </Grid>
             </Grid>
         </Grid>
-    </Border>
+            </Border>
+        <Border x:Name="LoadingBorder" BorderBrush="Black" BorderThickness="1" Background="#80000000" Visibility="{Binding Path=LoadVisibility}" Grid.RowSpan="3">
+            <Grid>
+                <StackPanel VerticalAlignment="Center">
+                    <hc:LoadingCircle></hc:LoadingCircle>
+                    <TextBlock Margin="0" TextWrapping="Wrap" Text="Loading game files..." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="#7EFFFFFF"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </catel:UserControl>

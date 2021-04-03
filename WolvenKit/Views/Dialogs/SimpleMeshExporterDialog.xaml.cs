@@ -10,6 +10,7 @@ using System.Windows.Media.Media3D;
 using Ab3d;
 using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
+using Ab3d.DXEngine;
 using Ab3d.Utilities;
 using Assimp;
 using Catel.IoC;
@@ -330,7 +331,7 @@ namespace WolvenKit.Views.Dialogs
                     M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem);
                 }
                 if (ExportMaterials)
-                {
+            {
                     var M = new MATERIAL(list);
                     M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
                 }
