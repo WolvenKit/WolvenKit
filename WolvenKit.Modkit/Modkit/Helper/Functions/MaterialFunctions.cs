@@ -633,4 +633,35 @@ namespace WolvenKit.RED4.MeshFile.Materials
 
         }
     }
+    public class MaterialRepository
+    {
+        public static void Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
+        {
+            string[] filenames = Directory.GetFiles(gameArchiveDir.FullName, "*.archive", SearchOption.AllDirectories);
+            List<Archive> archives = new List<Archive>();
+
+            for (int i = 0; i < filenames.Length; i++)
+                archives.Add(new Archive(filenames[i]));
+
+            foreach (Archive ar in archives)
+            {
+                ModTools.ExtractAll(ar, materialRepoDir, "*.gradient");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.w2mi");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.matlib");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.remt");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.sp");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.hp");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.fp");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.mi");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.mt");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.mlsetup");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.mltemplate");
+                ModTools.ExtractAll(ar, materialRepoDir, "*.texarray");
+
+                ModTools.UncookAll(ar, materialRepoDir, "*.xbm", "", texturesExtension);
+                // Should Be Uncooking this, But mlmask uncook still breaks even after tilesBuffer[1] fix in some instance
+                ModTools.ExtractAll(ar, materialRepoDir, "*.mlmask");
+            }
+        }
+    }
 }
