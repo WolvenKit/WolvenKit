@@ -6,6 +6,7 @@
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -595,9 +596,12 @@
                      VerticalAlignment="Top"
                      Background="Transparent"
                      >
-                        <hc:UniformSpacingPanel>
+                        <hc:UniformSpacingPanel VerticalAlignment="Center">
                             <Button
                              Width="40"
+                             Height="25"
+                             Margin="0,3,-10,0"
+                             VerticalAlignment="Center"
                              hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
                              Background="Transparent"
                              BorderBrush="{x:Null}"
@@ -611,6 +615,7 @@
                              Command="{Binding HomeCommand}"
                              RenderTransformOrigin="0.5,0.5"
                              Style="{StaticResource ButtonIcon}"
+                             Visibility="Collapsed"
                              >
                                 <Button.RenderTransform>
                                     <TransformGroup>
@@ -629,14 +634,19 @@
                              Background="Transparent"
                              BorderBrush="{x:Null}"
                              Style="{StaticResource ButtonIcon}"
+                             Visibility="Collapsed"
                              />
 
                             <feather:TreeBreadcrumb
-                                VerticalAlignment="Top"
-                                CurrentNode="{Binding Path=BreadCrumbCurrentNode}"
-                                PathSeparator="\"
-                                SetCurrentNodeCommand="{Binding Path=SetCurrentNodeCommand}"
-                            />
+                             Margin="5,0,15,0"
+                             VerticalAlignment="Center"
+                             Background="Transparent"
+                             BorderBrush="Transparent"
+                             CurrentNode="{Binding Path=BreadCrumbCurrentNode}"
+                             Foreground="White"
+                             PathSeparator="\"
+                             SetCurrentNodeCommand="{Binding Path=SetCurrentNodeCommand}"
+                             />
 
 
 
@@ -644,19 +654,38 @@
 
 
 
-                            <hc:SearchBar
-                             Width="auto"
-                             MinWidth="88"
-                             Margin="5"
-                             hc:InfoElement.Placeholder="Search something"
-                             FlowDirection="LeftToRight"
-                             >
-                                <hc:Interaction.Triggers>
-                                    <hc:EventTrigger EventName="SearchStarted">
-                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
-                                    </hc:EventTrigger>
-                                </hc:Interaction.Triggers>
-                            </hc:SearchBar>
+                            <Border BorderBrush="Gray" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <hc:SearchBar
+                                         Width="auto"
+                                         MinWidth="88"
+                                         Padding="0,0,-25,0"
+                                         VerticalAlignment="Center"
+                                         hc:InfoElement.Placeholder="Search something"
+                                         Background="Transparent"
+                                         BorderBrush="Transparent"
+                                         FlowDirection="LeftToRight"
+                                         >
+
+                                            <hc:Interaction.Triggers>
+                                                <hc:EventTrigger EventName="SearchStarted">
+                                                    <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                                                </hc:EventTrigger>
+                                            </hc:Interaction.Triggers>
+                                        </hc:SearchBar>
+                                        <iconPacks:PackIconMaterial
+                                         Margin="0,5,0,0"
+                                         VerticalAlignment="Center"
+                                         BorderThickness="0"
+                                         Kind="LayersSearchOutline"
+                                         />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+
+
 
 
                             <hc:ComboBox
