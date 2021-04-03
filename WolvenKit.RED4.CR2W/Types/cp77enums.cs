@@ -26,6 +26,15 @@ namespace WolvenKit.RED4.CR2W.Types
             SmoothSymmertric
         }
 
+        [Flags]
+        public enum ETextureChannel
+        {
+            TextureChannel_R = 1 << 0,
+            TextureChannel_G = 1 << 1,
+            TextureChannel_B = 1 << 2,
+            TextureChannel_A = 1 << 3
+        }
+
         public enum EGameplayRole
         {
             [RED("")]
@@ -63,194 +72,272 @@ namespace WolvenKit.RED4.CR2W.Types
         [Flags]
         public enum TriggerChannel
         {
-            TC_Default,
-            TC_Player,
-            TC_Camera,
-            TC_Human,
-            TC_SoundReverbArea,
-            TC_SoundAmbientArea,
-            TC_Quest,
-            TC_Projectiles,
-            TC_Vehicle,
-            TC_Environment,
-            TC_WaterNullArea,
-            TC_Custom0,
-            TC_Custom1,
-            TC_Custom2,
-            TC_Custom3,
-            TC_Custom4,
-            TC_Custom5,
-            TC_Custom6,
-            TC_Custom7,
-            TC_Custom8,
-            TC_Custom9,
-            TC_Custom10,
-            TC_Custom11,
-            TC_Custom12,
-            TC_Custom13,
-            TC_Custom14
+            TC_Default = 1 << 0,
+            TC_Player = 1 << 1,
+            TC_Camera = 1 << 2,
+            TC_Human = 1 << 3,
+            TC_SoundReverbArea = 1 << 4,
+            TC_SoundAmbientArea = 1 << 5,
+            TC_Quest = 1 << 6,
+            TC_Projectiles = 1 << 7,
+            TC_Vehicle = 1 << 8,
+            TC_Environment = 1 << 9,
+            TC_WaterNullArea = 1 << 10,
+            TC_Custom0 = 1 << 16,
+            TC_Custom1 = 1 << 17,
+            TC_Custom2 = 1 << 18,
+            TC_Custom3 = 1 << 19,
+            TC_Custom4 = 1 << 20,
+            TC_Custom5 = 1 << 21,
+            TC_Custom6 = 1 << 22,
+            TC_Custom7 = 1 << 23,
+            TC_Custom8 = 1 << 24,
+            TC_Custom9 = 1 << 25,
+            TC_Custom10 = 1 << 26,
+            TC_Custom11 = 1 << 27,
+            TC_Custom12 = 1 << 28,
+            TC_Custom13 = 1 << 29,
+            TC_Custom14 = 1 << 30
         }
 
         [Flags]
         public enum RenderSceneLayerMask
         {
-            Default,
-            Cyberspace,
-            WorldMap
+            Default = 1 << 0,
+            Cyberspace = 1 << 1,
+            WorldMap = 1 << 2
         }
 
         [Flags]
         public enum rendLightChannel
         {
-            LC_Channel1,
-            LC_Channel2,
-            LC_Channel3,
-            LC_Channel4,
-            LC_Channel5,
-            LC_Channel6,
-            LC_Channel7,
-            LC_Channel8,
-            LC_ChannelWorld,
-            LC_Character,
-            LC_Player,
-            LC_Automated
+            LC_Channel1 = 1 << 0,
+            LC_Channel2 = 1 << 1,
+            LC_Channel3 = 1 << 2,
+            LC_Channel4 = 1 << 3,
+            LC_Channel5 = 1 << 4,
+            LC_Channel6 = 1 << 5,
+            LC_Channel7 = 1 << 6,
+            LC_Channel8 = 1 << 7,
+            LC_ChannelWorld = 1 << 8,
+            LC_Character = 1 << 9,
+            LC_Player = 1 << 10,
+            LC_Automated = 1 << 15
         }
 
         [Flags]
         public enum workWorkspotItemPolicy
         {
-            ItemPolicy_SpawnItemOnIdleChange,
-            ItemPolicy_DespawnItemOnIdleChange,
-            ItemPolicy_DespawnItemOnReaction
+            ItemPolicy_SpawnItemOnIdleChange = 1 << 0,
+            ItemPolicy_DespawnItemOnIdleChange = 1 << 1,
+            ItemPolicy_DespawnItemOnReaction = 1 << 2
         }
 
         [Flags]
         public enum entdismembermentWoundTypeE
         {
-            CLEAN,
-            COARSE
+            CLEAN = 1 << 0,
+            COARSE = 1 << 1,
+            HOLE = 1 << 6
         }
 
         [Flags]
         public enum entdismembermentResourceSetMask
         {
-            fleshPartMask,
-            FleshBodyMask,
-            cyberPartMask,
-            CyberBodyMask
+            BARE = 1 << 0,
+            BARE1 = 1 << 1,
+            BARE2 = 1 << 2,
+            BARE3 = 1 << 3,
+            GARMENT = 1 << 4,
+            GARMENT1 = 1 << 5,
+            GARMENT2 = 1 << 6,
+            GARMENT3 = 1 << 7,
+            CYBER = 1 << 8,
+            CYBER1 = 1 << 9,
+            CYBER2 = 1 << 10,
+            CYBER3 = 1 << 11,
+            MIXED = 1 << 12,
+            MIXED1 = 1 << 13,
+            MIXED2 = 1 << 14,
+            MIXED3 = 1 << 15
         }
 
         [Flags]
         public enum entdismembermentPlacementE
         {
-            MAIN_MESH,
-            DISM_MESH,
-            RAGDOLL_CONTACT,
-            RAGDOLL_CONTACT_SLIDE,
-            RAGDOLL_SLEEP
+            MAIN_MESH = 1 << 4,
+            DISM_MESH = 1 << 5,
+            RAGDOLL_CONTACT = 1 << 8,
+            RAGDOLL_CONTACT_SLIDE = 1 << 9,
+            RAGDOLL_SLEEP = 1 << 10
+        }
+
+        [Flags]
+        public enum entdismembermentGoreTypeE
+        {
+            FLESH = 1 << 2,
+            CYBER = 1 << 3
         }
 
         [Flags]
         public enum scnChoiceNodeNsChoiceNodeBitFlags
         {
-            IsFocusClue,
-            IsValidInteractionFailsafeDisabled
+            IsFocusClue = 1 << 0,
+            IsValidInteractionFailsafeDisabled = 1 << 1
         }
 
         [Flags]
         public enum worlduiContextVisibility
         {
-            SceneDefault,
-            SceneTier1,
-            SceneTier2,
-            SceneTier3,
-            SceneTier4,
-            SceneTier5
+            SceneDefault = 1 << 0,
+            SceneTier1 = 1 << 8,
+            SceneTier2 = 1 << 16,
+            SceneTier3 = 1 << 24,
+            SceneTier4 = 1 << 32,
+            SceneTier5 = 1 << 40
         }
 
         [Flags]
         public enum animMuteAnimEvents
         {
-            STANDARD,
-            FACE_ANIMS
+            STANDARD = 1 << 0,
+            FACE_ANIMS = 1 << 1
         }
 
         [Flags]
         public enum gameuiContext
         {
-            Default = 0,
-            QuickHack = 1,
-            Scanning = 2,
-            DeviceZoom = 3,
-            BraindanceEditor = 4,
-            BraindancePlayback = 5,
-            VehicleMounted = 6,
-            ModalPopup = 7,
-            RadialWheel = 8,
-            VehicleRace = 9,
+            Default = 1 << 0,
+            QuickHack = 1 << 1,
+            Scanning = 1 << 2,
+            DeviceZoom = 1 << 3,
+            BraindanceEditor = 1 << 4,
+            BraindancePlayback = 1 << 5,
+            VehicleMounted = 1 << 6,
+            ModalPopup = 1 << 7,
+            RadialWheel = 1 << 8,
+            VehicleRace = 1 << 9,
+            MAX = 1 << 31
         }
 
         [Flags]
         public enum gameEItemDynamicTags
         {
-            Quest,
-            UnequipBlocked
+            Quest = 1 << 0,
+            UnequipBlocked = 1 << 1
         }
 
         [Flags]
         public enum EMeshChunkFlags
         {
-            MCF_RenderInScene,
-            MCF_RenderInShadows,
-            MCF_IsTwoSided,
-            MCF_IsRayTracedEmissive,
-            MCF_IsPrefabProxy
+            MCF_RenderInScene = 1 << 0,
+            MCF_RenderInShadows = 1 << 1,
+            MCF_IsTwoSided = 1 << 2,
+            MCF_IsRayTracedEmissive = 1 << 3,
+            MCF_IsPrefabProxy = 1 << 6
         }
 
         [Flags]
         public enum physicsEClothCollisionMaskEnum
         {
-            CONVEX,
-            TRIMESH
+            SPHERE = 1 << 0,
+            BOX = 1 << 1,
+            CONVEX = 1 << 2,
+            TRIMESH = 1 << 3,
+            CAPSULE = 1 << 4
         }
 
         [Flags]
         public enum CensorshipFlags
         {
-            Censor_Nudity,
-            Censor_OverSexualised,
-            Censor_Suggestive,
-            Censor_Homosexuality,
-            Censor_Gore,
-            Censor_Drugs,
-            Censor_Religion,
-            Censor_Chinese
-
+            Censor_Nudity = 1 << 0,
+            Censor_OverSexualised = 1 << 1,
+            Censor_Suggestive = 1 << 2,
+            Censor_Homosexuality = 1 << 3,
+            Censor_Gore = 1 << 4,
+            Censor_Drugs = 1 << 5,
+            Censor_Religion = 1 << 6,
+            Censor_Chinese = 1 << 7
         }
 
         [Flags]
         public enum worldEDeniedAreaFlags
         {
-            EDAF_Togglable
+            EDAF_Togglable = 1 << 0
         }
 
         [Flags]
         public enum physicsRagdollBodyPartE
         {
-            HEAD,
-            LARM_UPPER,
-            LARM_LOWER,
-            LARM_PALM,
-            RARM_UPPER,
-            RARM_LOWER,
-            RARM_PALM,
-            LLEG_UPPER,
-            LLEG_LOWER,
-            LLEG_FOOT,
-            RLEG_UPPER,
-            RLEG_LOWER,
-            RLEG_FOOT,
-            BODY
+            HEAD = 1 << 0,
+            LARM_UPPER = 1 << 1,
+            LARM_LOWER = 1 << 2,
+            LARM_PALM = 1 << 3,
+            RARM_UPPER = 1 << 4,
+            RARM_LOWER = 1 << 5,
+            RARM_PALM = 1 << 6,
+            LLEG_UPPER = 1 << 7,
+            LLEG_LOWER = 1 << 8,
+            LLEG_FOOT = 1 << 9,
+            RLEG_UPPER = 1 << 10,
+            RLEG_LOWER = 1 << 11,
+            RLEG_FOOT = 1 << 12,
+            BODY = 1 << 13
+        }
+
+        [Flags]
+        public enum gametargetingSystemAimAssistFilter
+        {
+            Melee = 1 << 0,
+            Shooting = 1 << 1,
+            Scanning = 1 << 2,
+            QuickHack = 1 << 3,
+            ShootingLimbCyber = 1 << 4,
+            HeadTarget = 1 << 5,
+            LegTarget = 1 << 6,
+            MechanicalTarget = 1 << 7
+        }
+
+        [Flags]
+        public enum Sample_Enum_As_Bitfield_2_2
+        {
+            Sample_Bitfield_Option_2_2_0 = 1 << 0
+        }
+
+        [Flags]
+        public enum Sample_Enum_As_Bitfield_2_9
+        {
+            Sample_Bitfield_Option_2_9_0 = 1 << 0
+        }
+
+        [Flags]
+        public enum Sample_Enum_As_Bitfield_5_1
+        {
+            Sample_Bitfield_Option_5_1_0 = 1 << 0,
+            Sample_Bitfield_Option_5_1_1 = 1 << 1,
+            MyCustomBitfieldOptionName512 = 1 << 2
+        }
+
+        [Flags]
+        public enum Sample_Enum_As_Bitfield_6_9
+        {
+            Sample_Bitfield_Option_6_9_0 = 1 << 0
+        }
+
+        [Flags]
+        public enum Sample_Namespace_5_2Sample_Enum_As_Bitfield_5_2
+        {
+            Sample_Option_5_2_0 = 1 << 0,
+            Sample_Option_5_2_1 = 1 << 1,
+            MyCustomBitfieldOptionName522 = 1 << 2
+        }
+
+        [Flags]
+        public enum Sample_Namespace_5_3_0Sample_Namespace_5_3_1Sample_Enum_As_Bitfield_5_3
+        {
+            Sample_Option_5_3_0 = 1 << 0,
+            Sample_Option_5_3_1 = 1 << 1,
+            MyCustomBitfieldOptionName532 = 1 << 2
         }
 
         public enum toolsSocketDirection
@@ -321,35 +408,25 @@ namespace WolvenKit.RED4.CR2W.Types
             TCM_Max
         }
 
-        public enum Sample_Enum_As_Bitfield_2_9
-        {
-            Sample_Bitfield_Option_2_9_0
-        }
-
-        public enum Sample_Enum_As_Bitfield_2_2
-        {
-            Sample_Bitfield_Option_2_2_0
-        }
-
         public enum gameLootSlotState
         {
-            Looted,
-            Unavailable
+            Looted = 1 << 0,
+            Unavailable = 1 << 1
         }
 
         public enum EMeshChunkRenderMask
         {
-            MCR_Scene,
-            MCR_Cascade1,
-            MCR_Cascade2,
-            MCR_Cascade3,
-            MCR_Cascade4,
-            MCR_DistantShadows,
-            MCR_LocalShadows,
-            MCR_IsTwoSided,
-            MCR_IsRayTracedEmissive,
-            MCR_PrefabProxy,
-            MCR_Cascades
+            MCR_Scene = 1 << 0,
+            MCR_Cascade1 = 1 << 1,
+            MCR_Cascade2 = 1 << 2,
+            MCR_Cascade3 = 1 << 3,
+            MCR_Cascade4 = 1 << 4,
+            MCR_LocalShadows = 1 << 5,
+            MCR_IsTwoSided = 1 << 6,
+            MCR_DistantShadows = 1 << 7,
+            MCR_IsRayTracedEmissive = 1 << 8,
+            MCR_PrefabProxy = 1 << 11,
+            MCR_Cascades = 1 << 12
         }
 
         public enum ActiveMode

@@ -93,6 +93,7 @@ namespace WolvenKit.RED4.CR2W
         private CR2WFile additionalCr2WFile;
         public byte[] AdditionalCr2WFileBytes;
 
+        [JsonIgnore]
         public bool CreatePropertyOnAccess = true;
 
         #endregion
