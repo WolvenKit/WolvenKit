@@ -5,17 +5,19 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
- IsVisibleChanged="UserControl_IsVisibleChanged">
+ IsVisibleChanged="UserControl_IsVisibleChanged"
+ >
 
     <Grid
      MinWidth="300"
      MinHeight="300"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+     Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+     >
         <Grid Margin="3,75,3,0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-                <wv2:WebView2 Source="https://wiki.cybermods.net/wolvenkit/" />
+                <wv2:WebView2 x:Name="cal"  />
             </hc:TransitioningContentControl>
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
@@ -24,19 +26,22 @@
              Margin="0,0,5,0"
              HorizontalAlignment="Right"
              VerticalAlignment="Top"
-             Orientation="Horizontal">
+             Orientation="Horizontal"
+             >
 
                 <TextBlock
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center "
                  FontSize="20"
-                 Text="Wiki" />
+                 Text="Wiki"
+                 />
                 <hc:Divider
                  Height="45"
                  Margin="15"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Orientation="Vertical" />
+                 Orientation="Vertical"
+                 />
                 <hc:AnimationPath
                  Width="45"
                  Height="45"
@@ -46,7 +51,8 @@
                  Stretch="Uniform"
                  Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  StrokeThickness="1.5"
-                 Duration="00:00:08">
+                 Duration="00:00:08"
+                 >
                     <hc:AnimationPath.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform />

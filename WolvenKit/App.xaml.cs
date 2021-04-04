@@ -6,7 +6,6 @@ using System.Windows;
 using Catel.IoC;
 using Catel.Logging;
 using FFmpeg.AutoGen;
-using Microsoft.Web.WebView2.Core;
 using NodeNetwork;
 using Orchestra.Services;
 using Unosquare.FFME;
@@ -142,10 +141,10 @@ namespace WolvenKit
 
             Log.Info("Check for new updates");
             AppHelper.CheckForUpdates();
+            Directory.CreateDirectory(@"C:\WolvenKitData");
+
             Directory.CreateDirectory(@"C:\WebViewData");
-            CoreWebView2Environment objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, @"C:\WebViewData", null);
-            Microsoft.Web.WebView2.Wpf.WebView2 objWebView2 = new Microsoft.Web.WebView2.Wpf.WebView2();
-            await objWebView2.EnsureCoreWebView2Async(objCoreWebView2Environment);
+
             await Task.Run(async () =>
             {
                 try

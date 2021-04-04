@@ -4,18 +4,20 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf">
+ xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+ >
 
     <Grid
      MinWidth="300"
      MinHeight="300"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+     Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+     >
 
         <Grid Margin="3,75,3,0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-                <wv2:WebView2 Source="https://redmodding.org/" />
+                <wv2:WebView2 x:Name="cal" Source="https://redmodding.org/" />
             </hc:TransitioningContentControl>
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
@@ -24,18 +26,21 @@
              Margin="5"
              HorizontalAlignment="Right"
              VerticalAlignment="Top"
-             Orientation="Horizontal">
+             Orientation="Horizontal"
+             >
                 <TextBlock
                  Margin="0"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center "
-                 FontSize="20" />
+                 FontSize="20"
+                 />
                 <hc:Divider
                  Height="45"
                  Margin="15"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Orientation="Vertical" />
+                 Orientation="Vertical"
+                 />
                 <hc:AnimationPath
                  Width="45"
                  Height="45"
@@ -45,7 +50,8 @@
                  Stretch="Uniform"
                  Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  StrokeThickness="1.5"
-                 Duration="00:00:08">
+                 Duration="00:00:08"
+                 >
                     <hc:AnimationPath.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform />
@@ -70,7 +76,8 @@
              Background="Transparent"
              FontSize="20"
              SelectedIndex="0"
-             Visibility="Visible">
+             Visibility="Visible"
+             >
                 <ComboBoxItem Content="Organization Website" />
             </hc:ComboBox>
         </hc:TransitioningContentControl>

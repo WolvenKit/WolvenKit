@@ -28,8 +28,8 @@ namespace WolvenKit.Functionality.Services
             {
                 var path = AppDomain.CurrentDomain.BaseDirectory;
                 var filename = Path.GetFileNameWithoutExtension(path);
-                var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir ?? "", filename + "_config_n.json");
+              //  var dir = Path.GetDirectoryName(path);
+                return Path.Combine(@"C:\WolvenKitData" ?? "", filename + "_config_n.json");
             }
         }
 
@@ -39,8 +39,8 @@ namespace WolvenKit.Functionality.Services
             {
                 var path = AppDomain.CurrentDomain.BaseDirectory;
                 var filename = Path.GetFileNameWithoutExtension(path);
-                var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir ?? "", filename + "_profile_image.png");
+               //var dir = Path.GetDirectoryName(path);
+                return Path.Combine(@"C:\WolvenKitData" ?? "", filename + "_profile_image.png");
             }
         }
 
