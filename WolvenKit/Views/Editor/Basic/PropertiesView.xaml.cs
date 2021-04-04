@@ -105,7 +105,10 @@ namespace WolvenKit.Views.Editor
                 // To get the  object model of the assimp importer, you can observe the assimpWpfImporter.ImportedAssimpScene
 
                 // Show the model
-                ShowModel(readModel3D, updateCamera: isNewFile); // If we just reloaded the previous file, we preserve the current camera TargetPosition and Distance
+                if (readModel3D != null)
+                {
+                    ShowModel(readModel3D, updateCamera: isNewFile); // If we just reloaded the previous file, we preserve the current camera TargetPosition and Distance
+                }
 
 
                 // Force garbage collection to clear the previously loaded objects from memory.
