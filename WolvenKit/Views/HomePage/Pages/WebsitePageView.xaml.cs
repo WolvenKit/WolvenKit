@@ -8,6 +8,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             InitializeComponent();
         }
+     
 
         #endregion Constructors
     }

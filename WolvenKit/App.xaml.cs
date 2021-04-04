@@ -6,15 +6,13 @@ using System.Windows;
 using Catel.IoC;
 using Catel.Logging;
 using FFmpeg.AutoGen;
+using Microsoft.Web.WebView2.Core;
 using NodeNetwork;
 using Orchestra.Services;
 using Unosquare.FFME;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views;
-using WolvenKit.Views.Others;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.ViewModels;
 
 namespace WolvenKit
@@ -98,7 +96,7 @@ namespace WolvenKit
         {
             var serviceLocator = ServiceLocator.Default;
             //ShellService.GivenPoop = new StartupViewer();
-            
+
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
 
 #if DEBUG
@@ -144,7 +142,10 @@ namespace WolvenKit
 
             Log.Info("Check for new updates");
             AppHelper.CheckForUpdates();
-
+            Directory.CreateDirectory(@"C:\WebViewData");
+            CoreWebView2Environment objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, @"C:\WebViewData", null);
+            Microsoft.Web.WebView2.Wpf.WebView2 objWebView2 = new Microsoft.Web.WebView2.Wpf.WebView2();
+            await objWebView2.EnsureCoreWebView2Async(objCoreWebView2Environment);
             await Task.Run(async () =>
             {
                 try
