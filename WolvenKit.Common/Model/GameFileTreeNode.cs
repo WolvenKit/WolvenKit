@@ -55,7 +55,7 @@ namespace WolvenKit.Common
 
         public GameFileTreeNode Parent { get; set; }
 
-        public List<GameFileTreeNode> SubDirectories => Directories.Values.ToList();
+        public List<GameFileTreeNode> SubDirectories => Directories.Values.OrderBy(_ => _.Name).ToList();
 
         public EArchiveType Type
         {
@@ -105,7 +105,7 @@ namespace WolvenKit.Common
                 Extension = nameof(ECustomImageKeys.ClosedDirImageKey),
                 This = this,
                 Type = EntryType.Directory
-            }));
+            }).OrderBy(_ => _.Name));
 
             ret.AddRange(Files.Select(f => new AssetBrowserData()
             {
@@ -115,7 +115,7 @@ namespace WolvenKit.Common
                 Extension = Path.GetExtension(f.Key),
                 Type = EntryType.File,
                 Parent = this.Parent
-            }));
+            }).OrderBy(_ => _.Name));
 
             return ret;
         }
