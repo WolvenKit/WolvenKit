@@ -217,6 +217,21 @@ namespace CP77Tools.Model
             {
                 Dependencies.Add(new Dependency(br, i));
             }
+
+            foreach (var fileEntry in FileEntries)
+            {
+                var startIndex = (int)fileEntry.Value.SegmentsStart;
+                var nextIndex = (int)fileEntry.Value.SegmentsEnd;
+
+                fileEntry.Value.Size = FileSegments[startIndex].Size;
+                fileEntry.Value.ZSize = FileSegments[startIndex].ZSize;
+
+                for (var j = startIndex + 1; j < nextIndex; j++)
+                {
+                    fileEntry.Value.Size += FileSegments[j].Size;
+                    fileEntry.Value.ZSize += FileSegments[j].ZSize;
+                }
+            }
         }
 
         #endregion Methods
