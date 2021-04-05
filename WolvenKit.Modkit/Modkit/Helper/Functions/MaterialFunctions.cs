@@ -638,9 +638,21 @@ namespace WolvenKit.RED4.MeshFile.Materials
     }
     public class MaterialRepository
     {
-        public static void Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
+        public static Thread Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
         {
-            string[] filenames = Directory.GetFiles(gameArchiveDir.FullName, "*.archive", SearchOption.AllDirectories);
+            GameArchiveDir = gameArchiveDir;
+            MaterialRepoDir = materialRepoDir;
+            TexturesExtension = texturesExtension;
+
+            Thread thread = new Thread(GenerateInBG);
+            thread.IsBackground = true;
+            thread.Start();
+            return thread;
+        }
+
+        static void GenerateInBG()
+        {
+            string[] filenames = Directory.GetFiles(GameArchiveDir.FullName, "*.archive", SearchOption.AllDirectories);
             List<Archive> archives = new List<Archive>();
 
             for (int i = 0; i < filenames.Length; i++)
@@ -648,23 +660,26 @@ namespace WolvenKit.RED4.MeshFile.Materials
 
             foreach (Archive ar in archives)
             {
-                ModTools.ExtractAll(ar, materialRepoDir, "*.gradient");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.w2mi");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.matlib");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.remt");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.sp");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.hp");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.fp");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.mi");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.mt");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.mlsetup");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.mltemplate");
-                ModTools.ExtractAll(ar, materialRepoDir, "*.texarray");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.gradient");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.w2mi");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.matlib");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.remt");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.sp");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.hp");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.fp");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mi");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mt");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mlsetup");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mltemplate");
+                ModTools.ExtractAll(ar, MaterialRepoDir, "*.texarray");
 
-                ModTools.UncookAll(ar, materialRepoDir, "*.xbm", "", texturesExtension);
-                ModTools.UncookAll(ar, materialRepoDir, "*.mlmask", "", texturesExtension);
+                ModTools.UncookAll(ar, MaterialRepoDir, "*.xbm", "", TexturesExtension);
+                ModTools.UncookAll(ar, MaterialRepoDir, "*.mlmask", "", TexturesExtension);
                 // try catch the decode in mlmask.cs for now
             }
         }
+        static DirectoryInfo GameArchiveDir;
+        static DirectoryInfo MaterialRepoDir;
+        static EUncookExtension TexturesExtension;
     }
 }
