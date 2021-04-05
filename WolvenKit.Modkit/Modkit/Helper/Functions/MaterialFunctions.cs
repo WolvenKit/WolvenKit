@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using CP77.CR2W;
 using SharpGLTF.IO;
 using SharpGLTF.Schema2;
