@@ -110,7 +110,7 @@ namespace WolvenKit.Common
             ret.AddRange(Files.Select(f => new AssetBrowserData()
             {
                 Name = f.Key,
-                Size = f.Value[0].Size + " bytes",
+                Size = FormatSize(f.Value[0].Size),
                 This = this,
                 Extension = Path.GetExtension(f.Key),
                 Type = EntryType.File,
@@ -118,6 +118,20 @@ namespace WolvenKit.Common
             }).OrderBy(_ => _.Name));
 
             return ret;
+
+            string FormatSize(uint size)
+            {
+                string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
+
+                var counter = 0;
+                var number = (decimal)size;
+                while (Math.Round(number / 1024) >= 1)
+                {
+                    number = number / 1024;
+                    counter++;
+                }
+                return $"{number:n1} {suffixes[counter]}";
+            }
         }
 
         #endregion Methods
