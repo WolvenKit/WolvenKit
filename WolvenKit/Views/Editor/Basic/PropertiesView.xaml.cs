@@ -110,7 +110,6 @@ namespace WolvenKit.Views.Editor
                     ShowModel(readModel3D, updateCamera: isNewFile); // If we just reloaded the previous file, we preserve the current camera TargetPosition and Distance
                 }
 
-
                 // Force garbage collection to clear the previously loaded objects from memory.
                 // Note that sometimes when a lot of objects are created in large objects heap,
                 // it may take two garbage collections to release the memory

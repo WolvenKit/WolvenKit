@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.MeshFile
 
 
 
-                FileStream meshStream = new FileStream(FilePath, FileMode.Open);
+                FileStream meshStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 string _meshName = Path.GetFileNameWithoutExtension(FilePath);
 
 

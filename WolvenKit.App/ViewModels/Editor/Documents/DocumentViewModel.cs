@@ -286,7 +286,7 @@ namespace WolvenKit.ViewModels.Editor
                 logger.LogString("Opening file: " + path + "...");
 
                 //TODO
-                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     EFileReadErrorCodes errorcode;
                     using var reader = new BinaryReader(stream);

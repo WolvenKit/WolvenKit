@@ -14,6 +14,7 @@ using Ab3d.DXEngine;
 using Ab3d.Utilities;
 using Assimp;
 using Catel.IoC;
+using Orchestra.Services;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -300,45 +301,76 @@ namespace WolvenKit.Views.Dialogs
             var x = MainController.GetGame().GetArchiveManagersManagers();
             var z = (ArchiveManager)x[0];
             var list = z.Archives.Values.ToList();
-            var o = new DirectoryInfo(ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath);
-
-
-            var FIItem = new FileInfo(OutPath);
-            var stream = new FileStream(Item.FullName, FileMode.Open);
-
-            if (Item.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
+            var mrp = ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath;
+            if (String.IsNullOrEmpty(mrp))
             {
-                if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
-                {
-                    MESH.ExportMeshWithoutRig(stream, Item.Name, FIItem);
-                }
-
-                if (ExtractRigged)
-                {
-                    FileStream rigstream = new FileStream(SelectedRigFiles, FileMode.Open);
-                    MESH.ExportMeshWithRig(stream, rigstream, Item.Name, FIItem);
-                }
-                if (ExportMaterials && UseMaterialsRepository && CopyTextures)
-                {
-                    var M = new MATERIAL(list);
-
-                    M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem, true, true);
-                }
-                if (ExportMaterials && UseMaterialsRepository)
-                {
-                    var M = new MATERIAL(list);
-
-                    M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem);
-                }
-                if (ExportMaterials)
-            {
-                    var M = new MATERIAL(list);
-                    M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
-                }
+                ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Error("Please set up MaterialRepositoryPath in the settings before trying to export!");
+                return;
             }
-            this.Close();
 
+            var o = new DirectoryInfo(mrp);
 
+            try
+            {
+                var FIItem = new FileInfo(OutPath);
+                var stream = new FileStream(Item.FullName, FileMode.Open);
+                if (Item.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
+                    {
+                        MESH.ExportMeshWithoutRig(stream, Item.Name, FIItem);
+                    }
+
+                    if (ExtractRigged)
+                    {
+                        FileStream rigstream = new FileStream(SelectedRigFiles, FileMode.Open);
+                        MESH.ExportMeshWithRig(stream, rigstream, Item.Name, FIItem);
+                    }
+                    if (ExportMaterials && UseMaterialsRepository && CopyTextures)
+                    {
+                        var M = new MATERIAL(list);
+
+                        M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem, true, true);
+                    }
+                    if (ExportMaterials && UseMaterialsRepository)
+                    {
+                        var M = new MATERIAL(list);
+
+                        M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem);
+                    }
+                    if (ExportMaterials)
+                    {
+                        var M = new MATERIAL(list);
+                        M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
+                    }
+                    if (!_selectedExportFormatId.Contains("gltf") || !_selectedExportFormatId.Contains("glb"))
+                    {
+                        var assimpWpfImporter = new AssimpWpfImporter();
+                        assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
+                        assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
+
+                        Model3D readModel3D = assimpWpfImporter.ReadModel3D(FIItem.FullName, texturesPath: null);
+                        var assimpexport = new AssimpWpfExporter();
+                        assimpexport.NamedObjects = _namedObjects;
+                        assimpexport.AddModel(readModel3D);
+                        bool isExported;
+
+                        isExported = assimpexport.Export(FIItem.FullName, _selectedExportFormatId);
+
+                        if (!isExported)
+                            throw new Exception("Failed to export!");
+
+                    }
+                }
+                ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Success("Export completed to " + OutPath);
+
+                this.Close();
+            }
+            catch (Exception exception)
+            {
+                ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Error("Failed to export mesh: " + exception.ToString());
+                this.Close();
+            }
         }
 
         private void Camera1_OnCameraChanged(object sender, CameraChangedRoutedEventArgs e)
