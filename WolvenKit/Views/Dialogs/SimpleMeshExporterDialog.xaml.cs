@@ -348,8 +348,15 @@ namespace WolvenKit.Views.Dialogs
                         var assimpWpfImporter = new AssimpWpfImporter();
                         assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
                         assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
+                        string file_path = "";
+                        if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".glb")))
+                            file_path = Path.ChangeExtension(FIItem.FullName, ".glb");
+                        else if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".gltf")))
+                            file_path = Path.ChangeExtension(FIItem.FullName, ".gltf");
+                        else
+                            throw new Exception("Something went wrong!");
 
-                        Model3D readModel3D = assimpWpfImporter.ReadModel3D(FIItem.FullName, texturesPath: null);
+                        Model3D readModel3D = assimpWpfImporter.ReadModel3D(file_path, texturesPath: null);
                         var assimpexport = new AssimpWpfExporter();
                         assimpexport.NamedObjects = _namedObjects;
                         assimpexport.AddModel(readModel3D);
