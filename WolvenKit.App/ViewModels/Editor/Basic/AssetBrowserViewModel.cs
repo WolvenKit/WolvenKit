@@ -380,7 +380,21 @@ namespace WolvenKit.ViewModels.Editor
                 }
                 case EntryType.File:
                 {
-                    Task.Run(new Action(() => AddToMod(item.This.Files.First(x => x.Key == item.Name).Value.First())));
+                    Task.Run(new Action(() =>
+                    {
+                        if (item.This != null)
+                        {
+                            if (item.This.Files.Count > 0)
+                            {
+                                if (item.This.Files.ContainsKey(item.Name))
+                                {
+                                    var it = item.This.Files.FirstOrDefault(x => x.Key == item.Name);
+                                    if(it.Value.Count > 0)
+                                        AddToMod(it.Value.First());
+                                }
+                            }
+                        }
+                    }));
                     _notificationService.Info($"Importing file: {item.Name}");
 
                     break;
