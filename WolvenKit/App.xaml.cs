@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Catel.IoC;
 using Catel.Logging;
+using Catel.Messaging;
 using FFmpeg.AutoGen;
 using NodeNetwork;
 using Orchestra.Services;
@@ -130,13 +131,7 @@ namespace WolvenKit
                 MainWindow.Closing += OnClosing;
             }
 
-            MainX = new MainWindow();
 
-            Current.MainWindow = MainX;
-            Current.MainWindow.Loaded += (snd, eva) => ViewModel.OnApplicationLoaded();
-            Current.MainWindow.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
-
-            Current.MainWindow.Show();
 
 
             Log.Info("Check for new updates");
@@ -144,7 +139,8 @@ namespace WolvenKit
             Directory.CreateDirectory(@"C:\WolvenKitData");
 
             Directory.CreateDirectory(@"C:\WebViewData");
-
+            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.Register<int>(this, onmessage);
             await Task.Run(async () =>
             {
                 try
@@ -174,6 +170,25 @@ namespace WolvenKit
                     }
                 }
             });
+        }
+
+        private void onmessage(int obj)
+        {
+            if (obj == 0)
+            {
+                if (MainX == null)
+                {
+                    MainX = new MainWindow();
+
+                    Current.MainWindow = MainX;
+                    Current.MainWindow.Loaded += (snd, eva) => ViewModel.OnApplicationLoaded();
+                    Current.MainWindow.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
+
+                    Current.MainWindow.Show();
+                }
+
+
+            }
         }
 
         // TODO: add closing logic here for now since MainViewModel.OnClosing isn't realiable. Investigate this

@@ -8,8 +8,6 @@
     <Description>InnoSetup Integration for WolvenKit Tools</Description>
     <PackageTags>wolvenkit</PackageTags>
     <AssemblyVersion>1.3.5.1</AssemblyVersion>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>wkitinstaller.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

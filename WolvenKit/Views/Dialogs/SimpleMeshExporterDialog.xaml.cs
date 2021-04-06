@@ -10,7 +10,6 @@ using System.Windows.Media.Media3D;
 using Ab3d;
 using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
-using Ab3d.DXEngine;
 using Ab3d.Utilities;
 using Assimp;
 using Catel.IoC;
@@ -301,14 +300,10 @@ namespace WolvenKit.Views.Dialogs
             var x = MainController.GetGame().GetArchiveManagersManagers();
             var z = (ArchiveManager)x[0];
             var list = z.Archives.Values.ToList();
-            var mrp = ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath;
-            if (String.IsNullOrEmpty(mrp))
-            {
-                ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Error("Please set up MaterialRepositoryPath in the settings before trying to export!");
-                return;
-            }
 
-            var o = new DirectoryInfo(mrp);
+
+
+
 
             try
             {
@@ -328,15 +323,22 @@ namespace WolvenKit.Views.Dialogs
                     }
                     if (ExportMaterials && UseMaterialsRepository && CopyTextures)
                     {
-                        var M = new MATERIAL(list);
 
-                        M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem, true, true);
+                        var M = new MATERIAL(list);
+                        if (ReturnThisForMe() != null)
+                        {
+                            M.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem, true, true);
+
+                        }
                     }
                     if (ExportMaterials && UseMaterialsRepository)
                     {
                         var M = new MATERIAL(list);
+                        if (ReturnThisForMe() != null)
+                        {
+                            M.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem);
 
-                        M.ExportMeshWithMaterialsUsingAssetLib(stream, o, Item.Name, FIItem);
+                        }
                     }
                     if (ExportMaterials)
                     {
@@ -378,6 +380,21 @@ namespace WolvenKit.Views.Dialogs
                 ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Error("Failed to export mesh: " + exception.ToString());
                 this.Close();
             }
+        }
+
+
+        private DirectoryInfo ReturnThisForMe()
+        {
+            var mrp = ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath;
+
+            if (String.IsNullOrEmpty(mrp))
+            {
+                ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Error("Please set up MaterialRepositoryPath in the settings before trying to export!");
+                return null;
+            }
+
+            var o = new DirectoryInfo(mrp);
+            return o;
         }
 
         private void Camera1_OnCameraChanged(object sender, CameraChangedRoutedEventArgs e)
@@ -442,9 +459,17 @@ namespace WolvenKit.Views.Dialogs
             _selectedExportFormatId = _exportFormatDescriptions[exportTypeIndex].FormatId;
 
             OutputFileName.SetCurrentValue(TextBox.TextProperty, System.IO.Path.ChangeExtension(OutputFileName.Text, selectedFileExtension));
+            OutPath = System.IO.Path.ChangeExtension(OutputFileName.Text, selectedFileExtension);
         }
 
-
+        private void ProgressButton_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "Rig Files (*.rig)" };
+            var result = ofd.ShowDialog();
+            if (result == false)
+                return;
+            xzz.Items.Add(ofd.FileName);
+        }
     }
 }
 

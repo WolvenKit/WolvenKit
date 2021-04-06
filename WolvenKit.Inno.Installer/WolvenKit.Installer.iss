@@ -37,7 +37,13 @@
 #define RedistsWebView "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/8e88f2e1-4014-4458-9498-3ac1d460b172/MicrosoftEdgeWebView2RuntimeInstallerX64.exe"
 
 
+// Display a message box
+function InitializeSetup(): Boolean;
+begin
+  MsgBox('WolvenKit is still in BETA stage. Expect a lot of issues and missing features. Please we ask you to be a bit patient while our team is adding more tools and fixing issues. You can report discoverd bugs through our Discord. Thank you  & have fun modding!'#13#10'                                                           - The RED Modding Team', mbInformation, MB_OK);
 
+  Result := True;
+end;
 // bellow is code for downloder.    --NEEDS MORE WORK BUT FOR NOW IT DOES THE JOB--
 
 
@@ -80,10 +86,21 @@ begin
 end;
 
 
+[Registry]
+
+Root: HKCR; Subkey: ".wkp";                             ValueData: "{#MyAppName}";          Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: ".cpmodproj";                             ValueData: "{#MyAppName}";          Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: ".w3modproj";                             ValueData: "{#MyAppName}";          Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}";                     ValueData: "Program {#MyAppName}";  Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}\DefaultIcon";             ValueData: "{app}\{#MyAppExeName},0";               ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" ""%1""";  ValueType: string;  ValueName: ""
+
 
 
 [Setup]
 ; DO NOT CHANGE THE APPID. IT IS USED FOR UPDATES!
+
+ChangesAssociations = yes
 
 AppId={{CB4121C6-93E5-4985-8EDD-D956C5B776A9}
 AppName={#MyAppName}
@@ -94,7 +111,11 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\RED Modding Team\WolvenKit\
+DisableDirPage=no
+UsePreviousAppDir =no 
+;NEIN NO BAD NEIN NEGATIVE
+DisableWelcomePage=no
+DefaultDirName={drive:{src}}\RED Modding Team\WolvenKit\
 DisableProgramGroupPage=yes
 
 ; change the next line to put your own License file.
@@ -158,5 +179,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 ;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent       //LEAVE IT COMMENTED
 Filename: "{app}\_Redists\dotnet-runtime-5.0.4-win-x64.exe"; Flags: postinstall
 Filename: "{app}\_Redists\Microsoft_WebView_x64.exe"; Flags: postinstall
+Filename: "https://redmodding.org/"; Flags: shellexec runasoriginaluser postinstall; Description: "Visit Our Website"
+
 
 

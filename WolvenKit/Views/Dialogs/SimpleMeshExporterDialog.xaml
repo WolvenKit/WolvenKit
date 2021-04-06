@@ -337,7 +337,7 @@
                                                 <hc:ProgressButton
                                                  Width="90"
                                                  Height="35"
-                                                 Content="Add rigs"
+                                                 Content="Add rigs" Click="ProgressButton_Click"
                                                  />
                                             </StackPanel>
 

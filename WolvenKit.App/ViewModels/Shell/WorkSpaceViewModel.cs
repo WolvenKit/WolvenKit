@@ -365,6 +365,7 @@ namespace WolvenKit.ViewModels.Shell
         public void ExecuteVideoTool()
         {
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            mediator.SendMessage<int>(0);
             mediator.SendMessage<bool>(true);
         }
 
@@ -1176,8 +1177,11 @@ namespace WolvenKit.ViewModels.Shell
         {
 
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-            mediator.SendMessage<string>(fullpath);
+            mediator.SendMessage<int>(0);
+
             mediator.SendMessage<bool>(true);
+
+            mediator.SendMessage<string>(fullpath);
 
 
 

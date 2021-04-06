@@ -1,5 +1,6 @@
 using System.Windows;
 using Feather.Controls;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.HomePage
@@ -50,14 +51,18 @@ namespace WolvenKit.Views.HomePage
                 },
                 new GuidedTourItem()
                 {
-                    Target = WlcmPage.QuickAccessStacker,
+                    Target = WlcmPage.irathernot,
                     Content = "On the right you can find a 'quick access panel'.\nLet's start of making a new project.\n\nClick on 'Create Project' to continue\n (The tour will continue after creating a new project)",
                     Placement = GuidedTourItem.ItemPlacement.Left,
                     Title = "Quick Access Panel",
-                    AlternateTargets = new[] { Fgrid4 }
                 }
             });
 
+            if (SettingsManager.ShowGuidedTour)
+            {
+                guide.Visibility = Visibility.Visible;
+
+            }
 
 
 
