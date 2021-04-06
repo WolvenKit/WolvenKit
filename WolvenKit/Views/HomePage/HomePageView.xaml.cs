@@ -1,4 +1,5 @@
 using System.Windows;
+using Catel.IoC;
 using Feather.Controls;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -14,6 +15,7 @@ namespace WolvenKit.Views.HomePage
         #endregion Fields
 
         #region Constructors
+        private readonly ISettingsManager _settingsManager;
 
         public HomePageView()
         {
@@ -21,6 +23,8 @@ namespace WolvenKit.Views.HomePage
             GlobalHomePage = this;
 
 
+            _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>()
+;
 
 
 
@@ -52,13 +56,17 @@ namespace WolvenKit.Views.HomePage
                 new GuidedTourItem()
                 {
                     Target = WlcmPage.irathernot,
-                    Content = "On the right you can find a 'quick access panel'.\nLet's start of making a new project.\n\nClick on 'Create Project' to continue\n (The tour will continue after creating a new project)",
+                    Content = "On the right you can find a 'quick access panel'.\nLet's start of making a new project.\n\nClick on 'Create Project' to continue\n (The tour will End here, more will be explained in the next version.)",
                     Placement = GuidedTourItem.ItemPlacement.Left,
                     Title = "Quick Access Panel",
+                    AlternateTargets = new[] { WlcmPage.sdasd}
                 }
             });
 
-            if (SettingsManager.ShowGuidedTour)
+
+            guide.Finished += Guide_Finished;
+
+            if (_settingsManager.ShowGuidedTour)
             {
                 guide.Visibility = Visibility.Visible;
 
@@ -66,6 +74,14 @@ namespace WolvenKit.Views.HomePage
 
 
 
+        }
+
+        private void Guide_Finished(object sender, RoutedEventArgs e)
+        {
+            guide.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+            _settingsManager.ShowGuidedTour = false;
+            _settingsManager.Save();
+            //SAVE?
         }
 
         #endregion Constructors

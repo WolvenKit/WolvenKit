@@ -494,7 +494,9 @@ namespace WolvenKit.Views.Dialogs
             var ofd = new Microsoft.Win32.OpenFileDialog()
             {
                 Filter = "Rig Files (*.rig) | *.rig;",
-                InitialDirectory = Path.GetDirectoryName(projectManager?.ActiveProject.Location)
+                InitialDirectory = Path.GetDirectoryName(projectManager?.ActiveProject.Location),
+                Multiselect = true
+
             };
 
             var result = ofd.ShowDialog();
@@ -503,9 +505,15 @@ namespace WolvenKit.Views.Dialogs
                 return;
             }
 
-            xzz.Items.Add(ofd.FileName);
 
-            SelectedRigFile.Add(new FileStream(ofd.FileName, FileMode.Open));
+
+            foreach (string strng in ofd.FileNames)
+            {
+                xzz.Items.Add(strng);
+
+                SelectedRigFile.Add(new FileStream(strng, FileMode.Open));
+            }
+
         }
 
         private void ProgressButton_Click_1(object sender, RoutedEventArgs e)

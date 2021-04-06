@@ -118,7 +118,7 @@
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"
                                  IsEnabled="False"
-                                 Text="{Binding Source={x:Static services:SettingsManager.ShowGuidedTour}, Path=., StringFormat={}{0}}" />
+                                 Text="{Binding Source={Binding ShowGuidedTour}, Path=., StringFormat={}{0}}" />
                             </Grid>
                             <hc:Divider
                              Margin="0,32,10,0"

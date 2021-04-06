@@ -20,6 +20,8 @@ namespace WolvenKit.Functionality.Services
 
         Color ThemeAccent { get; set; }
 
+        bool ShowGuidedTour { get; set; }
+
         /*public*/
         string W3ExecutablePath { get; set; }
         /*public*/

@@ -61,7 +61,7 @@ namespace WolvenKit.Functionality.Services
 
         public static bool FirstTimeSetupForUser { get; set; } = true;
 
-        public static bool ShowGuidedTour { get; set; } = true;
+        public bool ShowGuidedTour { get; set; } = true;
 
         public bool CheckForUpdates { get; set; }
 

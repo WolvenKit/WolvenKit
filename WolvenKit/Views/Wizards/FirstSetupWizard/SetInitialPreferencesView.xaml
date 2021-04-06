@@ -4,18 +4,21 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:services="clr-namespace:WolvenKit.Functionality.Services;assembly=WolvenKit.App">
+ xmlns:services="clr-namespace:WolvenKit.Functionality.Services;assembly=WolvenKit.App"
+ >
 
     <Grid Grid.Row="3" VerticalAlignment="Center">
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+         >
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <StackPanel
                  Margin="0,10,0,0"
                  VerticalAlignment="Top"
-                 Orientation="Vertical">
+                 Orientation="Vertical"
+                 >
                     <Grid Margin="22,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -27,26 +30,30 @@
                              Margin="35,35,5,5"
                              FontSize="14"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                             Text="What game(s) do you want to create mods for?" />
+                             Text="What game(s) do you want to create mods for?"
+                             />
 
                             <TextBlock
                              Margin="35,40,5,5"
                              VerticalAlignment="Center"
                              FontSize="14"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                             Text="Show guided tour after completing setup" />
+                             Text="Show guided tour after completing setup"
+                             />
                             <TextBlock
                              Margin="35,40,5,5"
                              VerticalAlignment="Center"
                              FontSize="14"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                             Text="Auto-install mods upon creation?" />
+                             Text="Auto-install mods upon creation?"
+                             />
                         </StackPanel>
 
                         <StackPanel
                          Grid.Column="1"
                          Margin="0,0,0,0"
-                         Orientation="Vertical">
+                         Orientation="Vertical"
+                         >
 
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox
@@ -59,11 +66,13 @@
                                  Content="The Witcher 3"
                                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                  IsChecked="{Binding CreateModForW3}"
-                                 Unchecked="CheckBox_Checked" />
+                                 Unchecked="CheckBox_Checked"
+                                 />
                                 <hc:Divider
                                  MaxHeight="20"
                                  Margin="5,35,5,5"
-                                 Orientation="Vertical" />
+                                 Orientation="Vertical"
+                                 />
                                 <CheckBox
                                  x:Name="cp77Checkbox"
                                  Margin="5,35,5,5"
@@ -74,23 +83,26 @@
                                  Content="Cyberpunk 2077"
                                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                  IsChecked="{Binding CreateModForCP77}"
-                                 Unchecked="CheckBox_Checked" />
+                                 Unchecked="CheckBox_Checked"
+                                 />
                             </StackPanel>
                             <ToggleButton
                              Margin="5,35,5,5"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Center"
                              BorderThickness="0"
-                             IsChecked="{x:Static services:SettingsManager.ShowGuidedTour}"
+                             IsChecked="{Binding ShowGuidedTour}"
                              IsEnabled="True"
-                             Style="{StaticResource ToggleButtonFlip}">
+                             Style="{StaticResource ToggleButtonFlip}"
+                             >
                                 <hc:StatusSwitchElement.CheckedElement>
                                     <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                         <TextBlock
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center"
                                          Foreground="{DynamicResource TextIconBrush}"
-                                         Text="On" />
+                                         Text="On"
+                                         />
                                     </Border>
                                 </hc:StatusSwitchElement.CheckedElement>
                                 <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
@@ -98,7 +110,8 @@
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
                                      Foreground="{DynamicResource TextIconBrush}"
-                                     Text="Off" />
+                                     Text="Off"
+                                     />
                                 </Border>
                             </ToggleButton>
                             <StackPanel Orientation="Vertical">
@@ -109,14 +122,16 @@
                                  BorderThickness="0"
                                  IsChecked="{Binding AutoInstallMods}"
                                  IsEnabled="True"
-                                 Style="{StaticResource ToggleButtonFlip}">
+                                 Style="{StaticResource ToggleButtonFlip}"
+                                 >
                                     <hc:StatusSwitchElement.CheckedElement>
                                         <Border Background="{DynamicResource MahApps.Brushes.Accent3}">
                                             <TextBlock
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
                                              Foreground="{DynamicResource TextIconBrush}"
-                                             Text="On" />
+                                             Text="On"
+                                             />
                                         </Border>
                                     </hc:StatusSwitchElement.CheckedElement>
                                     <Border Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}">
@@ -124,7 +139,8 @@
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center"
                                          Foreground="{DynamicResource TextIconBrush}"
-                                         Text="Off" />
+                                         Text="Off"
+                                         />
                                     </Border>
                                 </ToggleButton>
                             </StackPanel>

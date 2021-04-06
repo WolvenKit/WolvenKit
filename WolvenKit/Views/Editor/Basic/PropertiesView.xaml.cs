@@ -129,54 +129,63 @@ namespace WolvenKit.Views.Editor
 
         public void ShowModel(Model3D model3D, bool updateCamera)
         {
-            ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);
-
-            // NOTE:
-            // We could show both solid model and wireframe in WireframeVisual3D (ContentWireframeVisual) with using WireframeWithOriginalSolidModel for WireframeType.
-            // But in this sample we show solid frame is separate ModelVisual3D and therefore we show only wireframe in WireframeVisual3D.
-            ContentWireframeVisual.BeginInit();
-            ContentWireframeVisual.SetCurrentValue(Ab3d.Visuals.WireframeVisual3D.ShowPolygonLinesProperty, ReadPolygonIndicesCheckBox.IsChecked ?? false);
-            ContentWireframeVisual.SetCurrentValue(Ab3d.Visuals.WireframeVisual3D.OriginalModelProperty, model3D);
-            ContentWireframeVisual.EndInit();
-
-            if (AddLineDepthBiasCheckBox.IsChecked ?? false)
+            try
             {
-                // To specify line depth bias to the Ab3d.PowerToys line Visual3D objects,
-                // we use SetDXAttribute extension method and use LineDepthBias as DXAttributeType
-                // NOTE: This can be used only before the Visual3D is created by DXEngine.
-                // If you want to change the line bias after the object has been rendered, use the SetDepthBias method (see OnAddLineDepthBiasCheckBoxCheckedChanged)
-                //
-                // See DXEngineVisuals/LineDepthBiasSample for more info.
-                ContentWireframeVisual.SetDXAttribute(DXAttributeType.LineDepthBias, model3D.Bounds.GetDiagonalLength() * 0.001);
+
+                ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);
+
+                // NOTE:
+                // We could show both solid model and wireframe in WireframeVisual3D (ContentWireframeVisual) with using WireframeWithOriginalSolidModel for WireframeType.
+                // But in this sample we show solid frame is separate ModelVisual3D and therefore we show only wireframe in WireframeVisual3D.
+                ContentWireframeVisual.BeginInit();
+                ContentWireframeVisual.SetCurrentValue(Ab3d.Visuals.WireframeVisual3D.ShowPolygonLinesProperty, ReadPolygonIndicesCheckBox.IsChecked ?? false);
+                ContentWireframeVisual.SetCurrentValue(Ab3d.Visuals.WireframeVisual3D.OriginalModelProperty, model3D);
+                ContentWireframeVisual.EndInit();
+
+                if (AddLineDepthBiasCheckBox.IsChecked ?? false)
+                {
+                    // To specify line depth bias to the Ab3d.PowerToys line Visual3D objects,
+                    // we use SetDXAttribute extension method and use LineDepthBias as DXAttributeType
+                    // NOTE: This can be used only before the Visual3D is created by DXEngine.
+                    // If you want to change the line bias after the object has been rendered, use the SetDepthBias method (see OnAddLineDepthBiasCheckBoxCheckedChanged)
+                    //
+                    // See DXEngineVisuals/LineDepthBiasSample for more info.
+                    ContentWireframeVisual.SetDXAttribute(DXAttributeType.LineDepthBias, model3D.Bounds.GetDiagonalLength() * 0.001);
+                }
+
+                // Calculate the center of the model and its size
+                // This will be used to position the camera
+
+                if (updateCamera)
+                {
+                    var bounds = model3D.Bounds;
+
+                    var modelCenter = new Point3D(bounds.X + bounds.SizeX / 2,
+                        bounds.Y + bounds.SizeY / 2,
+                        bounds.Z + bounds.SizeZ / 2);
+
+                    var modelSize = Math.Sqrt(bounds.SizeX * bounds.SizeX +
+                                              bounds.SizeY * bounds.SizeY +
+                                              bounds.SizeZ * bounds.SizeZ);
+
+
+                    Camera1.TargetPosition = modelCenter;
+                    Camera1.SetCurrentValue(Ab3d.Cameras.BaseTargetPositionCamera.DistanceProperty, modelSize * 2);
+                }
+
+                // If the read model already define some lights, then do not show the Camera's light
+                if (ModelUtils.HasAnyLight(model3D))
+                    Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Never);
+                else
+                    Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Always);
+
+                ShowInfoButton.SetCurrentValue(IsEnabledProperty, true);
             }
 
-            // Calculate the center of the model and its size
-            // This will be used to position the camera
-
-            if (updateCamera)
+            catch
             {
-                var bounds = model3D.Bounds;
 
-                var modelCenter = new Point3D(bounds.X + bounds.SizeX / 2,
-                    bounds.Y + bounds.SizeY / 2,
-                    bounds.Z + bounds.SizeZ / 2);
-
-                var modelSize = Math.Sqrt(bounds.SizeX * bounds.SizeX +
-                                          bounds.SizeY * bounds.SizeY +
-                                          bounds.SizeZ * bounds.SizeZ);
-
-
-                Camera1.TargetPosition = modelCenter;
-                Camera1.SetCurrentValue(Ab3d.Cameras.BaseTargetPositionCamera.DistanceProperty, modelSize * 2);
             }
-
-            // If the read model already define some lights, then do not show the Camera's light
-            if (ModelUtils.HasAnyLight(model3D))
-                Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Never);
-            else
-                Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Always);
-
-            ShowInfoButton.SetCurrentValue(IsEnabledProperty, true);
         }
 
 
