@@ -11,7 +11,6 @@ using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Schema2;
-using SharpGLTF.Memory;
 
 namespace WolvenKit.RED4.MorphTargetFile
 {
@@ -25,7 +24,7 @@ namespace WolvenKit.RED4.MorphTargetFile
     using VCT = VertexColor1Texture2;
     public class TARGET
     {
-        public static void ExportTargets(Stream targetStream,string outfile, bool isGLBinary = true)
+        public static void ExportTargets(Stream targetStream,FileInfo outfile, bool isGLBinary = true)
         {
             var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(targetStream);
 
@@ -35,20 +34,22 @@ namespace WolvenKit.RED4.MorphTargetFile
 
             var buffers = cr2w.Buffers;
 
-            targetStream.Seek(cr2w.Buffers[0].Offset, SeekOrigin.Begin);
             MemoryStream diffsbuffer = new MemoryStream();
+            MemoryStream mappingbuffer = new MemoryStream();
+            MemoryStream texbuffer = new MemoryStream();
+
+            targetStream.Seek(cr2w.Buffers[0].Offset, SeekOrigin.Begin);
             targetStream.DecompressAndCopySegment(diffsbuffer, buffers[0].DiskSize, buffers[0].MemSize);
 
             targetStream.Seek(cr2w.Buffers[1].Offset, SeekOrigin.Begin);
-            MemoryStream mappingbuffer = new MemoryStream();
             targetStream.DecompressAndCopySegment(mappingbuffer, buffers[1].DiskSize, buffers[1].MemSize);
 
             targetStream.Seek(cr2w.Buffers[2].Offset, SeekOrigin.Begin);
-            MemoryStream texbuffer = new MemoryStream();
             targetStream.DecompressAndCopySegment(texbuffer, buffers[2].DiskSize, buffers[2].MemSize);
 
             MeshesInfo meshinfo = MESH.GetMeshesinfo(cr2w);
 
+            int subMeshC = 0;
             for (int i = 0; i < meshinfo.meshC; i++)
             {
 
@@ -57,28 +58,25 @@ namespace WolvenKit.RED4.MorphTargetFile
                 RawMeshContainer mesh = MESH.ContainRawMesh(meshbuffer, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
                 mesh.name = "mesh_" + i;
                 expMeshes.Add(mesh);
+                subMeshC++;
             }
 
-            TargetsInfo targetsInfo = GetTargetInfos(cr2w, meshinfo.meshC);
+            TargetsInfo targetsInfo = GetTargetInfos(cr2w, subMeshC);
 
             List<RawTargetContainer[]> expTargets = new List<RawTargetContainer[]>();
 
             for (int i = 0; i < targetsInfo.NumTargets; i++)
             {
-                UInt32[] temp_NumVertexDiffsInEachChunk = new UInt32[meshinfo.meshC];
-                UInt32[] temp_NumVertexDiffsMappingInEachChunk = new UInt32[meshinfo.meshC];
-                for (int e = 0; e < meshinfo.meshC; e++)
+                UInt32[] temp_NumVertexDiffsInEachChunk = new UInt32[subMeshC];
+                UInt32[] temp_NumVertexDiffsMappingInEachChunk = new UInt32[subMeshC];
+                for (int e = 0; e < subMeshC; e++)
                 {
                     temp_NumVertexDiffsInEachChunk[e] = targetsInfo.NumVertexDiffsInEachChunk[i, e];
                     temp_NumVertexDiffsMappingInEachChunk[e] = targetsInfo.NumVertexDiffsMappingInEachChunk[i, e];
                 }
-                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], meshinfo.meshC));
+                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i],subMeshC));
             }
 
-            for (int i = 0; i < targetsInfo.NumTargets; i++)
-            {
-                //ExportASCII(expMeshes, outfile, expTargets[i], targetsInfo.Names[i]);
-            }
             string[] names = new string[targetsInfo.NumTargets];
             for (int i = 0; i < targetsInfo.NumTargets; i++)
             {
@@ -86,12 +84,23 @@ namespace WolvenKit.RED4.MorphTargetFile
             }
 
             List<MemoryStream> textureStreams =  ContainTextureStreams(cr2w, texbuffer);
-            ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, names, textureStreams);
+            ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, names);
 
             if (isGLBinary)
-                model.SaveGLB(outfile);
+                model.SaveGLB(outfile.FullName);
             else
-                model.SaveGLTF(outfile);
+                model.SaveGLTF(outfile.FullName);
+            var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_Textures");
+
+            if(textureStreams.Count > 0)
+            {
+                Directory.CreateDirectory(dir.FullName);
+            }
+
+            for(int i = 0; i < textureStreams.Count; i++)
+            {
+                File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds",textureStreams[i].ToArray());
+            }
         }
         static TargetsInfo GetTargetInfos(CR2WFile cr2w, int SubMeshC)
         {
@@ -286,7 +295,7 @@ namespace WolvenKit.RED4.MorphTargetFile
 
             return textureStreams;
         }
-        static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, List<MemoryStream> textures)
+        static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names)
         {
             var scene = new SharpGLTF.Scenes.SceneBuilder();
 
