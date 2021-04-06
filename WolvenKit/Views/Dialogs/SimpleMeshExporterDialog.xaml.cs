@@ -13,6 +13,7 @@ using Ab3d.Common.Cameras;
 using Ab3d.Utilities;
 using Assimp;
 using Catel.IoC;
+using Orc.ProjectManagement;
 using Orchestra.Services;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Controllers;
@@ -52,7 +53,8 @@ namespace WolvenKit.Views.Dialogs
         public bool UseMaterialsRepository { get; set; }
 
         public EUncookExtension TextureFormat { get; set; }
-        public string SelectedRigFiles { get; set; }
+        public List<Stream> SelectedRigFile { get; set; }
+        public List<Stream> SelectedMeshFiles { get; set; }
 
 
 
@@ -70,6 +72,9 @@ namespace WolvenKit.Views.Dialogs
             UseMaterialsRepository = false;
             DataContext = this;
             SelectedItem = selectedItem as FileSystemInfoModel;
+            SelectedRigFile = new List<Stream>();
+            SelectedMeshFiles = new List<Stream>();
+
 
             var assimpWpfExporter = new AssimpWpfExporter();
             _exportFormatDescriptions = assimpWpfExporter.ExportFormatDescriptions;
@@ -92,7 +97,7 @@ namespace WolvenKit.Views.Dialogs
 
             _assimpWpfImporter = new AssimpWpfImporter();
             _assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
-            OutPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WKitMeshExport.dae");
+            OutPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), SelectedItem.Name + ".dae");
         }
 
 
@@ -318,8 +323,16 @@ namespace WolvenKit.Views.Dialogs
 
                     if (ExtractRigged)
                     {
-                        FileStream rigstream = new FileStream(SelectedRigFiles, FileMode.Open);
-                        MESH.ExportMeshWithRig(stream, rigstream, Item.Name, FIItem);
+                        SelectedMeshFiles.Add(stream);
+                        var xz = new List<string>();
+                        foreach (var str in SelectedMeshFiles)
+                        {
+                            FileStream fs = stream as FileStream;
+
+                            xz.Add(Path.GetFileName(fs.Name));
+
+                        }
+                        MESH.ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
                     }
                     if (ExportMaterials && UseMaterialsRepository && CopyTextures)
                     {
@@ -352,11 +365,18 @@ namespace WolvenKit.Views.Dialogs
                         assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
                         string file_path = "";
                         if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".glb")))
+                        {
                             file_path = Path.ChangeExtension(FIItem.FullName, ".glb");
+
+                        }
                         else if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".gltf")))
+                        {
                             file_path = Path.ChangeExtension(FIItem.FullName, ".gltf");
+                        }
                         else
+                        {
                             throw new Exception("Something went wrong!");
+                        }
 
                         Model3D readModel3D = assimpWpfImporter.ReadModel3D(file_path, texturesPath: null);
                         var assimpexport = new AssimpWpfExporter();
@@ -367,7 +387,10 @@ namespace WolvenKit.Views.Dialogs
                         isExported = assimpexport.Export(FIItem.FullName, _selectedExportFormatId);
 
                         if (!isExported)
+                        {
                             throw new Exception("Failed to export!");
+
+                        }
 
                     }
                 }
@@ -464,11 +487,53 @@ namespace WolvenKit.Views.Dialogs
 
         private void ProgressButton_Click(object sender, RoutedEventArgs e)
         {
-            var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "Rig Files (*.rig)" };
+
+            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+
+
+            var ofd = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "Rig Files (*.rig) | *.rig;",
+                InitialDirectory = Path.GetDirectoryName(projectManager?.ActiveProject.Location)
+            };
+
             var result = ofd.ShowDialog();
             if (result == false)
+            {
                 return;
+            }
+
             xzz.Items.Add(ofd.FileName);
+
+            SelectedRigFile.Add(new FileStream(ofd.FileName, FileMode.Open));
+        }
+
+        private void ProgressButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+
+
+            var ofd = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "Mesh Files (*.mesh) | *.mesh;",
+                InitialDirectory = Path.GetDirectoryName(projectManager?.ActiveProject.Location),
+                Multiselect = true
+            };
+
+            var result = ofd.ShowDialog();
+            if (result == false)
+            {
+                return;
+            }
+
+
+            foreach (string strng in ofd.FileNames)
+            {
+                x65zz.Items.Add(strng);
+
+                SelectedMeshFiles.Add(new FileStream(strng, FileMode.Open));
+            }
+
         }
     }
 }

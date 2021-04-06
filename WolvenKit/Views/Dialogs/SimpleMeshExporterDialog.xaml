@@ -64,7 +64,7 @@
                          hc:InfoElement.Title="Mesh to"
                          hc:InfoElement.TitlePlacement="Left"
                          BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                         SelectedIndex="1"
+                         SelectedIndex="0"
                          SelectionChanged="ExportTypeComboBox_OnSelectionChanged"
                          Style="{DynamicResource ComboBoxBaseStyle}"
                          Visibility="Visible"
@@ -240,6 +240,27 @@
                                                  Orientation="Vertical"
                                                  Visibility="Visible"
                                                  >
+
+                                                    <StackPanel Orientation="Horizontal">
+
+                                                        <hc:ComboBox
+                                                         x:Name="x65zz"
+                                                         Width="320"
+                                                         Margin="0,5,15,0"
+                                                         HorizontalAlignment="Left"
+                                                         VerticalAlignment="Center"
+                                                         BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                         SelectedIndex="17"
+                                                         Style="{DynamicResource ComboBoxBaseStyle}"
+                                                         Visibility="Visible"
+                                                         />
+                                                        <hc:ProgressButton
+                                                         Width="90"
+                                                         Height="35"
+                                                         Click="ProgressButton_Click_1"
+                                                         Content="Add Meshes"
+                                                         />
+                                                    </StackPanel>
                                                     <RadioButton
                                                      x:Name="ExtractRiggedMeshRadio"
                                                      Margin="10"
@@ -330,14 +351,14 @@
                                                  VerticalAlignment="Center"
                                                  BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                                                  SelectedIndex="17"
-                                                 SelectionChanged="meshxport_SelectionChanged"
                                                  Style="{DynamicResource ComboBoxBaseStyle}"
                                                  Visibility="Visible"
                                                  />
                                                 <hc:ProgressButton
                                                  Width="90"
                                                  Height="35"
-                                                 Content="Add rigs" Click="ProgressButton_Click"
+                                                 Click="ProgressButton_Click"
+                                                 Content="Add rigs"
                                                  />
                                             </StackPanel>
 
