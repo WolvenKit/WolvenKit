@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Catel;
-using Catel.Data;
 using Catel.Fody;
 using Catel.MVVM;
 using HandyControl.Controls;
@@ -14,7 +13,7 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         #region fields
 
         public static readonly string bpp = "pack://application:,,,/Resources/Media/Images/Application/BlankProfilePicture.png";
-        public static readonly PropertyData SettingsManagerProperty = RegisterProperty("SettingsManager", typeof(ISettingsManager));
+
         #endregion fields
 
         #region constructors
@@ -62,11 +61,7 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         [Model]
         [Expose("DepotPath")]
         [Expose("ShowGuidedTour")]
-        public ISettingsManager SettingsManager
-        {
-            get => GetValue<ISettingsManager>(SettingsManagerProperty);
-            set => SetValue(SettingsManagerProperty, value);
-        }
+        public ISettingsManager SettingsManager { get; set; }
         #endregion properties
 
         #region commands
