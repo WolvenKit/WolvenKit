@@ -114,6 +114,9 @@ Offline | UI Development | [Email](mailto:sodanakin@gmail.com)
 <h3 align="center"><a href="https://imgbb.com/"><img src="https://i.ibb.co/ky17Xj9/download-1.png" alt="download-1" border="0"></a>
 </h3>
 
+
+
+
 <!-- readme: contributors -start -->
 [<img alt="Traderain" src="https://avatars.githubusercontent.com/u/6411732?v=4&s=117 width=117">](https://github.com/Traderain) |[<img alt="rfuzzo" src="https://avatars.githubusercontent.com/u/37657287?v=4&s=117 width=117">](https://github.com/rfuzzo) |[<img alt="kote2ster" src="https://avatars.githubusercontent.com/u/7668964?v=4&s=117 width=117">](https://github.com/kote2ster) |[<img alt="Murzinio" src="https://avatars.githubusercontent.com/u/17109925?v=4&s=117 width=117">](https://github.com/Murzinio) |[<img alt="Offline-R503B" src="https://avatars.githubusercontent.com/u/11785451?v=4&s=117 width=117">](https://github.com/Offline-R503B) |[<img alt="Maxzor" src="https://avatars.githubusercontent.com/u/16599683?v=4&s=117 width=117">](https://github.com/Maxzor) |[<img alt="vonLeebpl" src="https://avatars.githubusercontent.com/u/18351077?v=4&s=117 width=117">](https://github.com/vonLeebpl) |[<img alt="TheBloke" src="https://avatars.githubusercontent.com/u/784313?v=4&s=117 width=117">](https://github.com/TheBloke) |[<img alt="jato" src="https://avatars.githubusercontent.com/u/65016231?v=4&s=117 width=117">](https://github.com/ja-to) |[<img alt="michaelpolakatwork" src="https://avatars.githubusercontent.com/u/8367868?v=4&s=117 width=117">](https://github.com/michaelpolakatwork) |[<img alt="DerinHalil" src="https://avatars.githubusercontent.com/u/50413946?v=4&s=117 width=117">](https://github.com/DerinHalil) |[<img alt="HitmanHimself" src="https://avatars.githubusercontent.com/u/76775663?v=4&s=117 width=117">](https://github.com/HitmanHimself) |[<img alt="Lim3zer0" src="https://avatars.githubusercontent.com/u/37447664?v=4&s=117 width=117">](https://github.com/Lim3zer0) |[<img alt="phrisk" src="https://avatars.githubusercontent.com/u/2071877?v=4&s=117 width=117">](https://github.com/phrisk) |[<img alt="ali-alidoust" src="https://avatars.githubusercontent.com/u/11314833?v=4&s=117 width=117">](https://github.com/ali-alidoust) |[<img alt="Anras573" src="https://avatars.githubusercontent.com/u/3352626?v=4&s=117 width=117">](https://github.com/Anras573) |[<img alt="carlosproiete" src="https://avatars.githubusercontent.com/u/33644328?v=4&s=117 width=117">](https://github.com/carlosproiete) |[<img alt="Jicksaw" src="https://avatars.githubusercontent.com/u/4146763?v=4&s=117 width=117">](https://github.com/Jicksaw) |[<img alt="TheFusion21" src="https://avatars.githubusercontent.com/u/19536820?v=4&s=117 width=117">](https://github.com/TheFusion21) |[<img alt="mattstates" src="https://avatars.githubusercontent.com/u/10776356?v=4&s=117 width=117">](https://github.com/mattstates) |[<img alt="robymontyz" src="https://avatars.githubusercontent.com/u/1668164?v=4&s=117 width=117">](https://github.com/robymontyz) |[<img alt="Strahlemann83" src="https://avatars.githubusercontent.com/u/34252137?v=4&s=117 width=117">](https://github.com/Strahlemann83) |[<img alt="sw3dg1n" src="https://avatars.githubusercontent.com/u/56805141?v=4&s=117 width=117">](https://github.com/sw3dg1n) |[<img alt="dingdio" src="https://avatars.githubusercontent.com/u/4729750?v=4&s=117 width=117">](https://github.com/dingdio) |[<img alt="dnandha" src="https://avatars.githubusercontent.com/u/29749761?v=4&s=117 width=117">](https://github.com/dnandha) |[<img alt="hrkrx" src="https://avatars.githubusercontent.com/u/5176531?v=4&s=117 width=117">](https://github.com/hrkrx) |[<img alt="philippTheCat" src="https://avatars.githubusercontent.com/u/120595?v=4&s=117 width=117">](https://github.com/philippTheCat) |
 :---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -123,8 +126,52 @@ Offline | UI Development | [Email](mailto:sodanakin@gmail.com)
 <div id="credits">&zwnj;</div>
 <h3 align="center">Credits</h3>
 
----
+WolvenKit is a direct result of the hard work and continuous support, financial and otherwise, of the many researchers, programmers, artists, contributors, and companies that have helped with this project. Without their outstanding work and generous support, we never would have been able to create WolvenKit for Cyberpunk 2077. A very special thank you goes out to...
 
+</p>
+  <p align="center"> 
+    <a href=""><img src="https://westeurope1-mediap.svc.ms/transform/thumbnail?provider=spo&inputFormat=png&cs=fFNQTw&docid=https%3A%2F%2Fab4d-my.sharepoint.com%3A443%2F_api%2Fv2.0%2Fdrives%2Fb!om0nV2OXpkSuKuPbUOHMVAHSR4NqrSNJiWhax0B0h1V2Rs-aAf27TY9OPnezny9X%2Fitems%2F01LOPMH6QC42H7D6EMKRFLCJDK7N2YLS5D%3Fversion%3DPublished&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYWI0ZC1teS5zaGFyZXBvaW50LmNvbUBkNWQyZDViZS04NDc2LTRhODQtYmJlOC1lMDlkNzM0ZjY0YTciLCJpc3MiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAiLCJuYmYiOiIxNjE3NzIxMjAwIiwiZXhwIjoiMTYxNzc0MjgwMCIsImVuZHBvaW50dXJsIjoiZ3JLRXozQmp2cWY3bnhiLzlFaENxSnd1SUpwb20vWStmVnM3MUVjSi9FOD0iLCJlbmRwb2ludHVybExlbmd0aCI6IjExNCIsImlzbG9vcGJhY2siOiJUcnVlIiwidmVyIjoiaGFzaGVkcHJvb2Z0b2tlbiIsInNpdGVpZCI6Ik5UY3lOelprWVRJdE9UYzJNeTAwTkdFMkxXRmxNbUV0WlROa1lqVXdaVEZqWXpVMCIsIm5hbWVpZCI6IjAjLmZ8bWVtYmVyc2hpcHx1cm4lM2FzcG8lM2Fhbm9uI2U4MDJjMTYxNDFlOTJkYzNmZjExNzgyNzNlZDMwNGRjMGMyYzI2ODY2Y2MxMmM3NDAwY2UyZTJlNTU2OWFlYjUiLCJuaWkiOiJtaWNyb3NvZnQuc2hhcmVwb2ludCIsImlzdXNlciI6InRydWUiLCJjYWNoZWtleSI6IjBoLmZ8bWVtYmVyc2hpcHx1cm4lM2FzcG8lM2Fhbm9uI2U4MDJjMTYxNDFlOTJkYzNmZjExNzgyNzNlZDMwNGRjMGMyYzI2ODY2Y2MxMmM3NDAwY2UyZTJlNTU2OWFlYjUiLCJzaGFyaW5naWQiOiJjeXJldE96LzRrcW1Fck8wTTJSK2h3IiwidHQiOiIwIiwidXNlUGVyc2lzdGVudENvb2tpZSI6IjIifQ.aW84MXpRWDc5S1RMN08rZHNQLzg3aXZrSW44M05MTEJQTGZKd0pEUTZRWT0&encodeFailures=1&width=128&height=128&srcWidth=128&srcHeight=128" alt="Become-a-patron-button" border="0"></a>
+  <a href="h"><img src="https://avatars.githubusercontent.com/u/4129749?s=88&v=4" alt="Pngtree-file-download-icon-4719240" border="0"></a>  
+  <a href="h"><img src="https://gramfile.com/wp-content/uploads/2018/10/FFmpeg-Logo-Icon-45x45.png" alt="Pngtree-file-download-icon-4719240" border="0"></a>  
+
+</p>
+
+--- People
+
+- Traderain ( Core Development , Project Manager ) 
+- robertfuzzo ( Core Development , Co-Manager )
+- michaelpolak ( Vulkan Rendering Backend )
+- r503b  ( UI Design , Trello/Team Management  )
+- Sebi | hrkrx ( MVVM Development )
+- Nightmarea ( MVVM Development , Core Development )
+- Seberoth (Core Development)
+- HitmanHimself (Development)
+- ZATheDeadMan (Research + Installer)
+- Forsentio (Research)
+- BFG9000 (Research)
+- WSSDude420 (Development)
+- TheFusion21 (Research + Development)
+- m0xf (Research)
+- Joschka (Research)
+- Turk645  (Research) 
+
+- perzeuscs ( Web Design )
+- moonded  ( Web Design )
+- soulweaver1  ( Web Design )
+- Paco ( Web Design )
+- prawny ( Web Design )
+-
+- HomeSick  ( Logo, Banner Design )
+- shorono  ( Icon Design )
+- redgalacticbear  ( Icon Design )
+- PNDR ( Icon Design )
+- Rosza (Icon Design)
+
+--- Companies/Software
+
+- [Ab3d PowerToys](https://www.ab4d.com/PowerToys.aspx)
+- [Ab3d DXEngine](https://www.ab4d.com/DXEngine.aspx)
+- [Assimp](https://github.com/assimp/assimp-net)
 - [Zenhax](https://zenhax.com)
 - [Xentax](https://xentax.com)
 - [Lua Utils for W3](https://github.com/hhrhhr/Lua-utils-for-Witcher-3)
