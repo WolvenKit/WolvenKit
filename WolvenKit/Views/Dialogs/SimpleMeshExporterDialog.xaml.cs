@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -358,40 +359,48 @@ namespace WolvenKit.Views.Dialogs
                         var M = new MATERIAL(list);
                         M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
                     }
-                    if (!_selectedExportFormatId.Contains("gltf") || !_selectedExportFormatId.Contains("glb"))
+
+                    Trace.WriteLine(_selectedExportFormatId);
+
+                    if (!OutPath.Contains("gltf") || !OutPath.Contains("glb"))
                     {
-                        var assimpWpfImporter = new AssimpWpfImporter();
-                        assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
-                        assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
-                        string file_path = "";
-                        if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".glb")))
+
+
+                        if (!_selectedExportFormatId.Contains("gltf") || !_selectedExportFormatId.Contains("glb"))
                         {
-                            file_path = Path.ChangeExtension(FIItem.FullName, ".glb");
+                            var assimpWpfImporter = new AssimpWpfImporter();
+                            assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
+                            assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
+                            string file_path = "";
+                            if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".glb")))
+                            {
+                                file_path = Path.ChangeExtension(FIItem.FullName, ".glb");
+
+                            }
+                            else if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".gltf")))
+                            {
+                                file_path = Path.ChangeExtension(FIItem.FullName, ".gltf");
+                            }
+                            else
+                            {
+                                throw new Exception("Something went wrong!");
+                            }
+
+                            Model3D readModel3D = assimpWpfImporter.ReadModel3D(file_path, texturesPath: null);
+                            var assimpexport = new AssimpWpfExporter();
+                            assimpexport.NamedObjects = _namedObjects;
+                            assimpexport.AddModel(readModel3D);
+                            bool isExported;
+
+                            isExported = assimpexport.Export(FIItem.FullName, _selectedExportFormatId);
+
+                            if (!isExported)
+                            {
+                                throw new Exception("Failed to export!");
+
+                            }
 
                         }
-                        else if (File.Exists(Path.ChangeExtension(FIItem.FullName, ".gltf")))
-                        {
-                            file_path = Path.ChangeExtension(FIItem.FullName, ".gltf");
-                        }
-                        else
-                        {
-                            throw new Exception("Something went wrong!");
-                        }
-
-                        Model3D readModel3D = assimpWpfImporter.ReadModel3D(file_path, texturesPath: null);
-                        var assimpexport = new AssimpWpfExporter();
-                        assimpexport.NamedObjects = _namedObjects;
-                        assimpexport.AddModel(readModel3D);
-                        bool isExported;
-
-                        isExported = assimpexport.Export(FIItem.FullName, _selectedExportFormatId);
-
-                        if (!isExported)
-                        {
-                            throw new Exception("Failed to export!");
-
-                        }
-
                     }
                 }
                 ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Success("Export completed to " + OutPath);
