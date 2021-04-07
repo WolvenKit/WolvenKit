@@ -81,7 +81,11 @@ This repository was created to demonstrate how the proprietary game engine of CD
    1. All the required files are either nuget packages, which will automatically be downloaded once Build is pressed, or readily included in the package in the [Libs directory](/Libs/).
    1. If, for some reason, the LFS quota is depleted, the renderer prerequisite libs can be acquired here: https://outwa.it/lib.zip
 
+4. **Build Required Projects**
+   1. Build the Formats project and Wolvenkit.Radish with the "Release | any CPU" configuration
 
+5. **Build and Run**
+   1. Now you can build WolvenKit.UI in Debug | Any CPU configuration and run it
 
 <div id="contributing">&zwnj;</div>
 <h3 align="center">Contribute</h3>
