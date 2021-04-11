@@ -20,6 +20,12 @@ namespace CP77.CR2W
     /// </summary>
     public static partial class ModTools
     {
+        #region Fields
+
+        private static readonly List<string> s_uncompressedFiles = new() { ".bnk", ".wem", ".bk2", ".opuspak", ".opusinfo" };
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -170,12 +176,22 @@ namespace CP77.CR2W
                 }
                 else
                 {
-                    // kraken the file and write
                     fileStream.Seek(0, SeekOrigin.Begin);
                     var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(fileStream);
-                    var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
-                    ar.Index.FileSegments.Add(new FileSegment((ulong)bw.BaseStream.Position, zsize,
-                        (uint)cr2winbuffer.Length));
+                    var offset = (ulong)bw.BaseStream.Position;
+                    var size = (uint)cr2winbuffer.Length;
+
+                    if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()))
+                    {
+                        bw.Write(cr2winbuffer);
+                        ar.Index.FileSegments.Add(new FileSegment(offset, size, size));
+                    }
+                    else
+                    {
+                        // kraken the file and write
+                        var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
+                        ar.Index.FileSegments.Add(new FileSegment(offset, zsize, size));
+                    }
                 }
 
                 // save table data
