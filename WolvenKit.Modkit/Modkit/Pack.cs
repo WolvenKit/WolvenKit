@@ -192,6 +192,8 @@ namespace CP77.CR2W
                         var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
                         ar.Index.FileSegments.Add(new FileSegment(offset, zsize, size));
                     }
+
+                    lastoffsetidx = (uint)ar.Index.FileSegments.Count;
                 }
 
                 // save table data
