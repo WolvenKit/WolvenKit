@@ -89,6 +89,7 @@ namespace CP77.CR2W
 
             ar.Header.Write(bw);
             bw.Write(new byte[132]); // some weird padding
+            bw.PadUntilPage();
 
             #endregion write header
 
@@ -196,6 +197,8 @@ namespace CP77.CR2W
                     lastoffsetidx = (uint)ar.Index.FileSegments.Count;
                 }
 
+                bw.PadUntilPage();
+
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
                 var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(fileBinaryReader.BaseStream)); //TODO: this is only correct for files with no buffer
@@ -212,9 +215,6 @@ namespace CP77.CR2W
             #endregion write files
 
             #region write footer
-
-            // padding to page (4096 bytes)
-            bw.PadUntilPage();
 
             // write tables
             var tableoffset = bw.BaseStream.Position;
