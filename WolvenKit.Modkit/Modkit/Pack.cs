@@ -22,7 +22,11 @@ namespace CP77.CR2W
     {
         #region Fields
 
-        private static readonly List<string> s_uncompressedFiles = new() { ".bnk", ".wem", ".bk2", ".opuspak", ".opusinfo" };
+        // The first 4 files need to be aligned to 0x1000, added .bin because of unknown file type
+        private static readonly List<string> s_alignedFiles = new() { ".bk2", ".bnk", ".opusinfo", ".wem", ".bin" };
+
+        // same as above + dat and opuspak, (only one .dat, don't know if it can be compressed)
+        private static readonly List<string> s_uncompressedFiles = new() { ".bk2", ".bnk", ".opusinfo", ".wem", ".bin", ".dat", ".opuspak" };
 
         #endregion
 
@@ -89,7 +93,6 @@ namespace CP77.CR2W
 
             ar.Header.Write(bw);
             bw.Write(new byte[132]); // some weird padding
-            bw.PadUntilPage();
 
             #endregion write header
 
@@ -182,6 +185,12 @@ namespace CP77.CR2W
                     var offset = (ulong)bw.BaseStream.Position;
                     var size = (uint)cr2winbuffer.Length;
 
+                    if (s_alignedFiles.Contains(fileInfo.Extension.ToLower()))
+                    {
+                        bw.PadUntilPage();
+                        offset = (ulong)bw.BaseStream.Position;
+                    }
+
                     if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()))
                     {
                         bw.Write(cr2winbuffer);
@@ -196,8 +205,6 @@ namespace CP77.CR2W
 
                     lastoffsetidx = (uint)ar.Index.FileSegments.Count;
                 }
-
-                bw.PadUntilPage();
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
@@ -215,6 +222,8 @@ namespace CP77.CR2W
             #endregion write files
 
             #region write footer
+
+            bw.PadUntilPage();
 
             // write tables
             var tableoffset = bw.BaseStream.Position;
