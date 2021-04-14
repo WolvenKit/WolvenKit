@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _teleportEndEffect;
 		private CName _spawnEffect;
 		private CName _glitchEffect;
+		private CArray<gamePhantomEntityParametersBlendableAppearanceMatch> _blendableAppearanceMatches;
 
 		[Ordinal(0)] 
 		[RED("teleportStartEffect")] 
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _glitchEffect);
 			set => SetProperty(ref _glitchEffect, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("blendableAppearanceMatches")] 
+		public CArray<gamePhantomEntityParametersBlendableAppearanceMatch> BlendableAppearanceMatches
+		{
+			get => GetProperty(ref _blendableAppearanceMatches);
+			set => SetProperty(ref _blendableAppearanceMatches, value);
 		}
 
 		public gamePhantomEntityParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

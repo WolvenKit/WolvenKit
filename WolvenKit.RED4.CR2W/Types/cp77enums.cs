@@ -9426,8 +9426,10 @@ namespace WolvenKit.RED4.CR2W.Types
             CP77_Patch_1_Internal = 12,
             CP77_Patch_1_1 = 1100,
             CP77_Patch_1_1_Hotfix1 = 1110,
+            CP77_Patch_1_1_Hotfix2 = 1120,
             CP77_Patch_1_2 = 1200,
-            Current = 1200,
+            CP77_Patch_1_2_Hotfix1 = 1210,
+            Current = 1210,
             CP77_Patch_1_3 = 1300
         }
 
