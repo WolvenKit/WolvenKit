@@ -11,6 +11,7 @@ using Catel.IoC;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.CLI.MSTests;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 #if IS_PARALLEL
@@ -23,10 +24,7 @@ namespace CP77.MSTests
     public class Cr2wWriteTest : GameUnitTest
     {
         [ClassInitialize]
-        public static void SetupClass(TestContext context)
-        {
-            Setup(context);
-        }
+        public static void SetupClass(TestContext context) => Setup(context);
 
         private const bool TEST_EXISTING = true;
         private const bool WRITE_FAILED = true;
@@ -787,7 +785,7 @@ namespace CP77.MSTests
 
         private void Test_Extension(string extension)
         {
-            var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
             // Run Test
@@ -802,12 +800,14 @@ namespace CP77.MSTests
                 {
                     if (ulong.TryParse(line.Split(',').First(), out var hash))
                     {
-                        filesToTest.AddRange(bm.Files[hash]);
+                        filesToTest.AddRange(s_bm.Files[hash]);
                     }
                 }
             }
             else
-                filesToTest = GroupedFiles[extension];
+            {
+                filesToTest = s_groupedFiles[extension];
+            }
 
             results = Write_Archive_Items(filesToTest).ToList();
 
@@ -815,7 +815,7 @@ namespace CP77.MSTests
             var successCount = results.Count(r => r.Success);
 
             // Write
-            if (WriteToFile)
+            if (s_writeToFile)
             {
                 if (results.Any(r => !r.Success))
                 {
@@ -825,15 +825,15 @@ namespace CP77.MSTests
             }
 
             // Logging
-            int totalCount = GroupedFiles[extension].Count;
+            var totalCount = s_groupedFiles[extension].Count;
             var sb = new StringBuilder();
             sb.AppendLine(
                 $"{extension} -> Successful Writes: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
 
-            bool success = results.All(r => r.Success);
+            var success = results.All(r => r.Success);
 
-            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            sb.AppendLine(Logger.ErrorLogStr);
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            sb.AppendLine(logger.ErrorLogStr);
 
             var logPath = Path.Combine(resultDir, $"w_logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
@@ -922,7 +922,7 @@ namespace CP77.MSTests
 
                             if (!isBinaryEqual && WRITE_FAILED)
                             {
-                                var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
+                                var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
                                 var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.FileName));
 
                                 using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);
