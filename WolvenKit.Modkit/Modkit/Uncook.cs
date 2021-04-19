@@ -72,7 +72,7 @@ namespace CP77.CR2W
             ms.CopyTo(fs);
             #endregion
 
-
+            // uncook from main file stream
             var ext = Path.GetExtension(name)[1..];
             return Uncook(ms, outfile, ext, uncookext, flip);
         }
@@ -153,14 +153,13 @@ namespace CP77.CR2W
             {
                 return GenerateBuffers(cr2wStream, cr2wFileName);
             }
-
             if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
             {
                 return false;
             }
 
             // read the cr2wfile
-            var cr2w = ModTools.TryReadCr2WFile(cr2wStream);
+            var cr2w = TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
@@ -186,7 +185,7 @@ namespace CP77.CR2W
         private static bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
         {
             // read the cr2wfile
-            var cr2w = ModTools.TryReadCr2WFileHeaders(cr2wStream);
+            var cr2w = TryReadCr2WFileHeaders(cr2wStream);
             if (cr2w == null)
             {
                 Logger.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);

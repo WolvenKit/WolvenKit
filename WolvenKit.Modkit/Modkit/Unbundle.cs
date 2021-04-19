@@ -25,8 +25,9 @@ namespace CP77.CR2W
         /// <param name="outDir"></param>
         /// <param name="pattern"></param>
         /// <param name="regex"></param>
+        /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static (List<string>, int) ExtractAll(this Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "")
+        public static (List<string>, int) ExtractAll(this Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var extractedList = new ConcurrentBag<string>();
@@ -61,7 +62,7 @@ namespace CP77.CR2W
             logger.LogProgress(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                var extracted = ar.ExtractSingle(info.NameHash64, outDir);
+                var extracted = ar.ExtractSingle(info.NameHash64, outDir, decompressBuffers);
 
                 if (extracted != 0)
                 {
@@ -85,8 +86,9 @@ namespace CP77.CR2W
         /// <param name="ar"></param>
         /// <param name="hash"></param>
         /// <param name="outDir"></param>
+        /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static int ExtractSingle(this Archive ar, ulong hash, DirectoryInfo outDir)
+        public static int ExtractSingle(this Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false)
         {
             // get filename
             var name = ar.Files[hash].FileName;
@@ -105,7 +107,7 @@ namespace CP77.CR2W
             // create outfile
             Directory.CreateDirectory(outfile.Directory.FullName);
             using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
-            ExtractSingleToStream(ar, hash, fs);
+            ExtractSingleToStream(ar, hash, fs, decompressBuffers);
 
             return 1;
         }
@@ -116,7 +118,8 @@ namespace CP77.CR2W
         /// <param name="ar"></param>
         /// <param name="hash"></param>
         /// <param name="stream"></param>
-        public static void ExtractSingleToStream(Archive ar, ulong hash, Stream stream)
+        /// <param name="decompressBuffers"></param>
+        public static void ExtractSingleToStream(Archive ar, ulong hash, Stream stream, bool decompressBuffers = false)
         {
             if (!ar.Files.ContainsKey(hash))
             {
@@ -125,7 +128,7 @@ namespace CP77.CR2W
 
             // extract file to memorystream
             using var ms = new MemoryStream();
-            ar.CopyFileToStream(ms, hash, false);
+            ar.CopyFileToStream(ms, hash, decompressBuffers);
 
             ms.Seek(0, SeekOrigin.Begin);
             ms.CopyTo(stream);
