@@ -44,6 +44,9 @@ namespace WolvenKit.ViewModels.Shell
         #endregion Constructors
 
         #region Properties
+        public bool IsSelected { get; set; }
+        public bool IsExpanded { get; set; }
+
         private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
 

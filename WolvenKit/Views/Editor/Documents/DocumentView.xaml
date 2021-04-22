@@ -15,6 +15,7 @@
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:cr2W="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
+ xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
  d:DesignHeight="450"
  d:DesignWidth="800"
  d:DataContext="{d:DesignInstance Type=editor:DocumentViewModel}"
@@ -233,15 +234,18 @@
                 </Setter>
             </Style>
 
-            <propertyGridEditors:MyPropertyResolver x:Key="MyPropertyResolver" />
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
 
 
             </ResourceDictionary.MergedDictionaries>
+
+            
         </ResourceDictionary>
+        
     </catel:UserControl.Resources>
+
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
@@ -359,60 +363,54 @@
          HorizontalAlignment="Stretch"
          />
 
-        <Grid Grid.Column="2">
-            <UniformGrid >
-                <TreeView ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
-                    <TreeView.Resources>
-                        <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}"
-                                                  ItemsSource="{Binding Children}">
-                            <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition SharedSizeGroup="A"/>
-                                    <ColumnDefinition SharedSizeGroup="B"/>
-                                    <ColumnDefinition SharedSizeGroup="C"/>
-                                </Grid.ColumnDefinitions>
+        <Grid Grid.Column="2" >
 
-                                <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                                <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Property.REDValue}"/>
-                            </Grid>
-                        </HierarchicalDataTemplate>
+            <Grid.Resources>
+                <DataTemplate x:Key="CommmonTemplate">
+                    <TextBlock Text="{Binding REDValue}"/>
+                </DataTemplate>
 
-                        <DataTemplate DataType="{x:Type cmodel:RedBoolViewModel}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition SharedSizeGroup="A"/>
-                                    <ColumnDefinition SharedSizeGroup="B"/>
-                                    <ColumnDefinition SharedSizeGroup="C"/>
-                                </Grid.ColumnDefinitions>
+                <DataTemplate x:Key="RedboolTemplate">
+                    <CheckBox IsChecked="{Binding Value}" HorizontalAlignment="Left"/>
+                </DataTemplate>
 
-                                <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                                <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                                <CheckBox Grid.Column="2" IsChecked="{Binding Value}"/>
-                            </Grid>
-                            
-                        </DataTemplate>
+                <templates:IEditableVariableDataTemplateSelector x:Key="dataTemplateSelector"
+                                                                 CommmonTemplate="{StaticResource CommmonTemplate}"
+                                                                 RedboolTemplate="{StaticResource RedboolTemplate}"/>
+            </Grid.Resources>
 
-                        <DataTemplate DataType="{x:Type cmodel:RedStringViewModel}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition SharedSizeGroup="A"/>
-                                    <ColumnDefinition SharedSizeGroup="B"/>
-                                    <ColumnDefinition SharedSizeGroup="C"/>
-                                </Grid.ColumnDefinitions>
+            <TreeView ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
+                      x:Name="PropertyTreeView">
+                <TreeView.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
 
-                                <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                                <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                                <TextBox Grid.Column="2" Text="{Binding Value}"/>
-                            </Grid>
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}"
+                                              ItemsSource="{Binding Children}">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition  Width="*"/>
+                                <ColumnDefinition  Width="*"/>
+                                <ColumnDefinition  Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        </DataTemplate>
-
-                    </TreeView.Resources>
+                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
+                            <ContentControl Grid.Column="2"
+                                            x:Name="PART_ContentControl"
+                                            ContentTemplateSelector="{StaticResource dataTemplateSelector}"
+                                            Content="{Binding Property}"/>
+                        </Grid>
+                    </HierarchicalDataTemplate>
+                </TreeView.Resources>
                     
 
-                </TreeView>
-            </UniformGrid>
+            </TreeView>
         </Grid>
     </Grid>
     <!--    -->
