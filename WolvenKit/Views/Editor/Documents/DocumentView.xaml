@@ -360,58 +360,59 @@
          />
 
         <Grid Grid.Column="2">
-            <TreeView ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
-                <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}"
-                                              ItemsSource="{Binding Children}">
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+            <UniformGrid >
+                <TreeView ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}"
+                                                  ItemsSource="{Binding Children}">
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="A"/>
+                                    <ColumnDefinition SharedSizeGroup="B"/>
+                                    <ColumnDefinition SharedSizeGroup="C"/>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                            <TextBlock Grid.Column="2" Text="{Binding Property.REDValue}"/>
-                        </Grid>
-                    </HierarchicalDataTemplate>
+                                <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Property.REDValue}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
 
-                    <DataTemplate DataType="{x:Type cmodel:RedBoolViewModel}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                        <DataTemplate DataType="{x:Type cmodel:RedBoolViewModel}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="A"/>
+                                    <ColumnDefinition SharedSizeGroup="B"/>
+                                    <ColumnDefinition SharedSizeGroup="C"/>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                            <CheckBox Grid.Column="2" IsChecked="{Binding Value}"/>
-                        </Grid>
-                        
-                    </DataTemplate>
+                                <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
+                                <CheckBox Grid.Column="2" IsChecked="{Binding Value}"/>
+                            </Grid>
+                            
+                        </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type cmodel:RedStringViewModel}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                        <DataTemplate DataType="{x:Type cmodel:RedStringViewModel}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="A"/>
+                                    <ColumnDefinition SharedSizeGroup="B"/>
+                                    <ColumnDefinition SharedSizeGroup="C"/>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                            <TextBox Grid.Column="2" Text="{Binding Value}"/>
-                        </Grid>
+                                <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
+                                <TextBox Grid.Column="2" Text="{Binding Value}"/>
+                            </Grid>
 
-                    </DataTemplate>
+                        </DataTemplate>
 
-                </TreeView.Resources>
-                
+                    </TreeView.Resources>
+                    
 
-            </TreeView>
-
+                </TreeView>
+            </UniformGrid>
         </Grid>
     </Grid>
     <!--    -->
