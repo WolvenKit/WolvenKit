@@ -93,7 +93,8 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IREDColor : IEditorBindable<Color> { }
 
-    public interface IREDIntegerType<T> : IREDPrimitive, IEditorBindable<T> { }
+    public interface IREDIntegerType : IREDPrimitive { }
+    public interface IREDIntegerType<T> : IREDIntegerType, IEditorBindable<T> { }
     public interface IREDString : IREDPrimitive, IEditorBindable<string> { }
     public interface IREDBool : IREDPrimitive, IEditorBindable<bool> { }
 

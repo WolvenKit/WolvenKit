@@ -363,27 +363,56 @@
          HorizontalAlignment="Stretch"
          />
 
-        <syncfusion:SfTreeGrid Background="Red" ItemsSource="{Binding SelectedChunk.ChildrenProperties}" />
 
         <Grid Grid.Column="2">
 
             <Grid.Resources>
-                <DataTemplate x:Key="CommmonTemplate">
-                    <TextBlock Text="{Binding REDValue}" />
+                <DataTemplate x:Key="CommmonTemplate" >
+                    <TextBlock Text="{Binding Property.Value}" Padding="5"/>
                 </DataTemplate>
 
                 <DataTemplate x:Key="RedboolTemplate">
-                    <CheckBox HorizontalAlignment="Left" IsChecked="{Binding Value}" />
+                    <CheckBox HorizontalAlignment="Left" IsChecked="{Binding Property.Value}" Padding="5"/>
                 </DataTemplate>
 
-                <templates:IEditableVariableDataTemplateSelector
-                 x:Key="dataTemplateSelector"
+                <DataTemplate x:Key="NumericTemplate">
+                    <TextBox  Text="{Binding Property.Value}" Padding="5"/>
+                </DataTemplate>
+
+                <templates:EditableVariableDataTemplateSelector
+                 x:Key="DataTemplateSelector"
                  CommmonTemplate="{StaticResource CommmonTemplate}"
                  RedboolTemplate="{StaticResource RedboolTemplate}"
+                 NumericTemplate="{StaticResource NumericTemplate}"
                  />
             </Grid.Resources>
 
-            <TreeView x:Name="PropertyTreeView" ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
+            <syncfusion:SfTreeGrid
+                ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
+                ChildPropertyName="Children"
+                AutoGenerateColumns="False"
+                AutoExpandMode="RootNodesExpanded"
+                ColumnSizer="Star"
+                AllowResizingColumns="True"
+                AllowFiltering="True"
+                
+                
+                >
+                <syncfusion:SfTreeGrid.Columns>
+                    <syncfusion:TreeGridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False"/>
+                    
+                    <syncfusion:TreeGridTemplateColumn HeaderText="Value" MappingName="Property" AllowEditing="False"
+                                                       
+                                                       CellTemplateSelector="{StaticResource DataTemplateSelector}" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Type" MappingName="Type" AllowEditing="False" />
+                    
+                </syncfusion:SfTreeGrid.Columns>
+
+
+            </syncfusion:SfTreeGrid>
+
+
+            <!--TreeView x:Name="PropertyTreeView" ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -414,7 +443,7 @@
                 </TreeView.Resources>
 
 
-            </TreeView>
+            </TreeView-->
         </Grid>
     </Grid>
     <!--    -->

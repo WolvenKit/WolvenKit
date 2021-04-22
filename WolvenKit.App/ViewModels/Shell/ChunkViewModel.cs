@@ -47,6 +47,10 @@ namespace WolvenKit.ViewModels.Shell
         public bool IsSelected { get; set; }
         public bool IsExpanded { get; set; }
 
+        public string Name => Property.REDName;
+        public string Type => Property.REDType;
+        public string Value => Property.REDValue;
+
         private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
 
@@ -115,6 +119,13 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(ICR2WExport export)
         {
             _export = export;
+
+            var disposable = Data.ChildrEditableVariables
+                .AsObservableChangeSet()
+                .Transform(_ => new ChunkPropertyViewModel(_))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _children)
+                .Subscribe();
         }
 
         #endregion Constructors
@@ -123,8 +134,10 @@ namespace WolvenKit.ViewModels.Shell
 
         public List<ChunkViewModel> Children => _export.VirtualChildrenChunks.Select(_ => new ChunkViewModel(_)).ToList();
 
-        public List<ChunkPropertyViewModel> ChildrenProperties =>
-            Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
+        private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
+        public ReadOnlyObservableCollection<ChunkPropertyViewModel> ChildrenProperties => _children;
+        //public List<ChunkPropertyViewModel> ChildrenProperties =>
+        //    Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
         public IEditableVariable Data => _export.data;
 
