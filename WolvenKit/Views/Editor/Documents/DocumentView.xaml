@@ -13,10 +13,13 @@
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
  xmlns:propertyGridEditors="clr-namespace:WolvenKit.Extensions.PropertyGridEditors"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  d:DesignHeight="450"
  d:DesignWidth="800"
+ d:DataContext="{d:DesignInstance Type=editor:DocumentViewModel}"
  IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d"
+
  >
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -356,11 +359,18 @@
          />
 
         <Grid Grid.Column="2">
-            <hc:PropertyGrid
-             PropertyResolver="{DynamicResource MyPropertyResolver}"
-             SelectedObject="{Binding SelectedChunk.Data}"
-             Style="{StaticResource PropertyGridBaseStylez}"
-             />
+            <TreeView ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}"
+                                              ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Name}" />
+                    </HierarchicalDataTemplate>
+                    
+                </TreeView.Resources>
+                
+
+            </TreeView>
+
         </Grid>
     </Grid>
     <!--    -->
