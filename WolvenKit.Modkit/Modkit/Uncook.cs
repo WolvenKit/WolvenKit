@@ -24,6 +24,20 @@ namespace CP77.CR2W
     /// </summary>
     public static partial class ModTools
     {
+
+
+        /// <summary>
+        /// Extracts a single file (by hash) from an archive to a Stream
+        /// </summary>
+        /// <param name="ar"></param>
+        /// <param name="hash"></param>
+        /// <param name="stream"></param>
+        public static void UncookSingleToStream(Archive ar, ulong hash, Stream stream)
+        {
+
+        }
+
+
         /// <summary>
         /// Uncooks a single file by hash. This will both extract and uncook the redengine file
         /// </summary>
@@ -36,28 +50,29 @@ namespace CP77.CR2W
         public static bool UncookSingle(this Archive ar, ulong hash, DirectoryInfo outDir,
             EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
-            // checks
-            if (!ar.Files.ContainsKey(hash))
-                return false;
-
-
             // extract the main file with uncompressed buffers
-
             #region unbundle main file
-
             using var ms = new MemoryStream();
-            ar.CopyFileToStream(ms, hash, false);
+            ExtractSingleToStream(ar, hash, ms);
 
+            // write main file
             var name = ar.Files[hash].FileName;
+            if (string.IsNullOrEmpty(Path.GetExtension(name)))
+            {
+                name += ".bin";
+            }
             var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
             if (outfile.Directory == null)
+            {
                 return false;
+            }
             Directory.CreateDirectory(outfile.Directory.FullName);
             using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
             ms.Seek(0, SeekOrigin.Begin);
             ms.CopyTo(fs);
-
             #endregion
+
+            // uncook from main file stream
             var ext = Path.GetExtension(name)[1..];
             return Uncook(ms, outfile, ext, uncookext, flip);
         }
@@ -138,14 +153,13 @@ namespace CP77.CR2W
             {
                 return GenerateBuffers(cr2wStream, cr2wFileName);
             }
-
             if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
             {
                 return false;
             }
 
             // read the cr2wfile
-            var cr2w = ModTools.TryReadCr2WFile(cr2wStream);
+            var cr2w = TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
@@ -171,7 +185,7 @@ namespace CP77.CR2W
         private static bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
         {
             // read the cr2wfile
-            var cr2w = ModTools.TryReadCr2WFileHeaders(cr2wStream);
+            var cr2w = TryReadCr2WFileHeaders(cr2wStream);
             if (cr2w == null)
             {
                 Logger.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);

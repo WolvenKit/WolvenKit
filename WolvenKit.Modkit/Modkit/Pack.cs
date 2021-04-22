@@ -80,7 +80,7 @@ namespace CP77.CR2W
             if (!outpath.Exists)
                 return null;
 
-            var outfile = Path.Combine(outpath.FullName, $"basegame_{infolder.Name}.archive");
+            var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
             var ar = new Archive
             {
                 ArchiveAbsolutePath = outfile,
