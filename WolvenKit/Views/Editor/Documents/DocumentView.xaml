@@ -402,7 +402,7 @@
 
                             <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
                             <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                            <CheckBox Grid.Column="2" IsChecked="{Binding Value}"/>
+                            <TextBox Grid.Column="2" Text="{Binding Value}"/>
                         </Grid>
 
                     </DataTemplate>
