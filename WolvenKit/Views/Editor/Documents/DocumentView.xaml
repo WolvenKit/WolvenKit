@@ -6,22 +6,22 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:cmodel="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+ xmlns:cr2W="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
  xmlns:propertyGridEditors="clr-namespace:WolvenKit.Extensions.PropertyGridEditors"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
- xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
- xmlns:cr2W="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
+ xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+ d:DataContext="{d:DesignInstance Type=editor:DocumentViewModel}"
  d:DesignHeight="450"
  d:DesignWidth="800"
- d:DataContext="{d:DesignInstance Type=editor:DocumentViewModel}"
  IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d"
-
  >
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -241,9 +241,9 @@
 
             </ResourceDictionary.MergedDictionaries>
 
-            
+
         </ResourceDictionary>
-        
+
     </catel:UserControl.Resources>
 
 
@@ -363,24 +363,27 @@
          HorizontalAlignment="Stretch"
          />
 
-        <Grid Grid.Column="2" >
+        <syncfusion:SfTreeGrid Background="Red" ItemsSource="{Binding SelectedChunk.ChildrenProperties}" />
+
+        <Grid Grid.Column="2">
 
             <Grid.Resources>
                 <DataTemplate x:Key="CommmonTemplate">
-                    <TextBlock Text="{Binding REDValue}"/>
+                    <TextBlock Text="{Binding REDValue}" />
                 </DataTemplate>
 
                 <DataTemplate x:Key="RedboolTemplate">
-                    <CheckBox IsChecked="{Binding Value}" HorizontalAlignment="Left"/>
+                    <CheckBox HorizontalAlignment="Left" IsChecked="{Binding Value}" />
                 </DataTemplate>
 
-                <templates:IEditableVariableDataTemplateSelector x:Key="dataTemplateSelector"
-                                                                 CommmonTemplate="{StaticResource CommmonTemplate}"
-                                                                 RedboolTemplate="{StaticResource RedboolTemplate}"/>
+                <templates:IEditableVariableDataTemplateSelector
+                 x:Key="dataTemplateSelector"
+                 CommmonTemplate="{StaticResource CommmonTemplate}"
+                 RedboolTemplate="{StaticResource RedboolTemplate}"
+                 />
             </Grid.Resources>
 
-            <TreeView ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
-                      x:Name="PropertyTreeView">
+            <TreeView x:Name="PropertyTreeView" ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -390,25 +393,26 @@
                 </TreeView.ItemContainerStyle>
 
                 <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}"
-                                              ItemsSource="{Binding Children}">
-                        <Grid >
+                    <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}" ItemsSource="{Binding Children}">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition  Width="*"/>
-                                <ColumnDefinition  Width="*"/>
-                                <ColumnDefinition  Width="*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
-                            <ContentControl Grid.Column="2"
-                                            x:Name="PART_ContentControl"
-                                            ContentTemplateSelector="{StaticResource dataTemplateSelector}"
-                                            Content="{Binding Property}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}" />
+                            <ContentControl
+                             x:Name="PART_ContentControl"
+                             Grid.Column="2"
+                             Content="{Binding Property}"
+                             ContentTemplateSelector="{StaticResource dataTemplateSelector}"
+                             />
                         </Grid>
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>
-                    
+
 
             </TreeView>
         </Grid>
