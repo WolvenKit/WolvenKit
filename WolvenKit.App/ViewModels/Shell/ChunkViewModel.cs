@@ -1,44 +1,102 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
+using Catel.Data;
+using DynamicData;
+using ReactiveUI;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkPropertyViewModel
+    public class ChunkPropertyViewModel : ObservableObject
     {
         #region Fields
-
-        private readonly IEditableVariable _property;
-
+        public IEditableVariable Property { get; }
         #endregion Fields
 
         #region Constructors
 
+        
+
         public ChunkPropertyViewModel(IEditableVariable prop)
         {
-            _property = prop;
+            Property = prop;
 
-            Name = prop.REDName;
-            Type = prop.REDType;
-            Value = prop.REDValue;
+            var disposable = Property.ChildrEditableVariables
+                .AsObservableChangeSet()
+                .Transform(GetViewModel)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _children)
+                .Subscribe();
         }
+
+        private static ChunkPropertyViewModel GetViewModel(IEditableVariable editableVariable) =>
+            editableVariable switch
+            {
+                IREDBool redBool => new RedBoolViewModel(redBool),
+                IREDString redString => new RedStringViewModel(redString),
+                _ => new ChunkPropertyViewModel(editableVariable)
+            };
 
         #endregion Constructors
 
         #region Properties
+        private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
+        public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
 
-        public List<ChunkPropertyViewModel> Children => _property.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
-        public System.Windows.Media.Brush ForegroundColor => _property.IsSerialized
+        public System.Windows.Media.Brush ForegroundColor => Property.IsSerialized
                     ? System.Windows.Media.Brushes.Green
             : System.Windows.Media.Brushes.Azure;
 
-        public string Name { get; }
-        public string Type { get; }
-        public string Value { get; set; }
 
         #endregion Properties
+    }
+
+    // We can probably make this with generic types
+    public class RedBoolViewModel : ChunkPropertyViewModel
+    {
+        public RedBoolViewModel(IREDBool prop) :base(prop) { }
+
+        private IREDBool Prop => Property as IREDBool;
+
+        public bool Value
+        {
+            get => Prop.Value;
+            set
+            {
+                if (Prop.Value != value)
+                {
+                    var oldValue = Prop.Value;
+                    Prop.Value = value;
+                    RaisePropertyChanged(() => Value, oldValue, value);
+                }
+            }
+        }
+    }
+
+    public class RedStringViewModel : ChunkPropertyViewModel
+    {
+        public RedStringViewModel(IREDString prop) : base(prop) { }
+
+        private IREDString Prop => Property as IREDString;
+
+        public string Value
+        {
+            get => Prop.Value;
+            set
+            {
+                if (Prop.Value != value)
+                {
+                    var oldValue = Prop.Value;
+                    Prop.Value = value;
+                    RaisePropertyChanged(() => Value, oldValue, value);
+                }
+            }
+        }
     }
 
     public class ChunkViewModel : ISelectableTreeViewItemModel

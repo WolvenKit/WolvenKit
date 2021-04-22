@@ -14,6 +14,7 @@
  xmlns:propertyGridEditors="clr-namespace:WolvenKit.Extensions.PropertyGridEditors"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
+ xmlns:cr2W="clr-namespace:WolvenKit.Common.Model.Cr2w;assembly=WolvenKit.Common"
  d:DesignHeight="450"
  d:DesignWidth="800"
  d:DataContext="{d:DesignInstance Type=editor:DocumentViewModel}"
@@ -363,9 +364,49 @@
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}"
                                               ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding Name}" />
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Property.REDValue}"/>
+                        </Grid>
                     </HierarchicalDataTemplate>
-                    
+
+                    <DataTemplate DataType="{x:Type cmodel:RedBoolViewModel}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
+                            <CheckBox Grid.Column="2" IsChecked="{Binding Value}"/>
+                        </Grid>
+                        
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type cmodel:RedStringViewModel}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}"/>
+                            <CheckBox Grid.Column="2" IsChecked="{Binding Value}"/>
+                        </Grid>
+
+                    </DataTemplate>
+
                 </TreeView.Resources>
                 
 
