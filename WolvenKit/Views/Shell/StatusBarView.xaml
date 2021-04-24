@@ -30,6 +30,28 @@
 
     <Fluent:StatusBar Background="Transparent">
 
+        <Fluent:StatusBarItem
+         Title="Second left placed item"
+         HorizontalAlignment="Left"
+         ToolTip="Your ToolTip"
+         Value="Value shown in ContextMenu"
+         >
+            <hc:Tag
+             Height="28"
+             Margin="15,0,15,0"
+             hc:TitleElement.Background="{DynamicResource RegionBrush}"
+             Background="{DynamicResource GrayBrush10}"
+             Content="Show Catfact"
+             FontSize="11"
+             MouseLeftButtonDown="Tag_MouseLeftButtonDown"
+             ShowCloseButton="False"
+             >
+                <hc:Tag.Header>
+                    <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />
+                </hc:Tag.Header>
+
+            </hc:Tag>
+        </Fluent:StatusBarItem>
 
         <Fluent:StatusBarItem
          Title="Second left placed item"
