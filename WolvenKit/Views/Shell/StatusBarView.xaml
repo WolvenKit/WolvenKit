@@ -12,8 +12,6 @@
  xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
  xmlns:orchestra="http://schemas.wildgums.com/orchestra"
  xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
- Width="auto"
- HorizontalAlignment="Stretch"
  mc:Ignorable="d"
  >
 
@@ -33,21 +31,22 @@
         <Fluent:StatusBarItem
          Title="Second left placed item"
          HorizontalAlignment="Left"
-         ToolTip="Your ToolTip"
+         ToolTip="Show a catfact"
          Value="Value shown in ContextMenu"
          >
             <hc:Tag
              Height="28"
-             Margin="15,0,15,0"
+             Margin="5,0,0,0"
              hc:TitleElement.Background="{DynamicResource RegionBrush}"
              Background="{DynamicResource GrayBrush10}"
              Content="Show Catfact"
              FontSize="11"
              MouseLeftButtonDown="Tag_MouseLeftButtonDown"
              ShowCloseButton="False"
+             ToolTip="Show a catfact"
              >
                 <hc:Tag.Header>
-                    <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />
+                    <iconPacks:PackIconRPGAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="cat" />
                 </hc:Tag.Header>
 
             </hc:Tag>
@@ -55,18 +54,19 @@
 
         <Fluent:StatusBarItem
          Title="Second left placed item"
-         HorizontalAlignment="Left"
-         ToolTip="Your ToolTip"
+         HorizontalAlignment="Right"
+         ToolTip="Current Project"
          Value="Value shown in ContextMenu"
          >
             <hc:Tag
              Height="28"
-             Margin="15,0,15,0"
+             Margin="5,0,5,0"
              hc:TitleElement.Background="{DynamicResource RegionBrush}"
              Background="{DynamicResource GrayBrush10}"
              Content="{Binding CurrentProject}"
              FontSize="11"
              ShowCloseButton="False"
+             ToolTip="Current Project"
              >
                 <hc:Tag.Header>
                     <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />
@@ -78,6 +78,7 @@
         <Fluent:StatusBarItem
          Title="Item placed on the right side"
          HorizontalAlignment="Right"
+         ToolTip="Version"
          Value="Your value which is also used as content if no content is set."
          >
             <hc:Tag
@@ -88,6 +89,7 @@
              Content="0.8.0.1-Beta"
              FontSize="11"
              ShowCloseButton="False"
+             ToolTip="Version"
              >
                 <hc:Tag.Header>
                     <iconPacks:PackIconCodicons Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="Versions" />
