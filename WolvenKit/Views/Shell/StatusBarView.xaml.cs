@@ -20,11 +20,28 @@ namespace WolvenKit.Views.Shell
         {
             var client = new CatFactsClient();
             var randomFact = await client.GetRandomFactsAsync();
+
             try
             {
                 Random x = new Random();
                 var z = x.Next(0, randomFact.Length);
-                ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Info(randomFact[z].Text);
+                var catfact = randomFact[z].Text;
+
+
+
+                if (GetWords(catfact).Count > 1)
+                {
+                    if (!catfact.Contains("test", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Info(catfact);
+
+                    }
+
+                }
+                else
+                {
+
+                }
 
             }
             catch
@@ -33,5 +50,34 @@ namespace WolvenKit.Views.Shell
             }
 
         }
+
+        public System.Collections.Generic.List<string> GetWords(string Input)
+        {
+
+            string[] Result = System.Text.RegularExpressions.Regex.Split(Input, @"\b");
+
+            System.Collections.Generic.List<string> Words = new System.Collections.Generic.List<string>();
+
+            foreach (string s in Result)
+
+            {
+
+                if (System.Text.RegularExpressions.Regex.IsMatch(s, @"[a-z]+", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+
+                {
+
+                    Words.Add(s);
+
+                }
+
+            }
+
+            return Words;
+
+        }
+
+
+
+
     }
 }
