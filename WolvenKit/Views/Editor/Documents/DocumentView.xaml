@@ -407,13 +407,12 @@
              ColumnSizer="Star"
              ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
              >
-                <syncfusion:SfTreeGrid.Resources>
-
-                </syncfusion:SfTreeGrid.Resources>
+                <syncfusion:SfTreeGrid.Resources />
 
                 <syncfusion:SfTreeGrid.Columns>
                     <syncfusion:TreeGridTextColumn
                      AllowEditing="False"
+                     ColumnSizer="SizeToCells"
                      HeaderText="Name"
                      MappingName="Name"
                      />
@@ -426,6 +425,7 @@
                      />
                     <syncfusion:TreeGridTextColumn
                      AllowEditing="False"
+                     ColumnSizer="SizeToCells"
                      HeaderText="Type"
                      MappingName="Type"
                      />
