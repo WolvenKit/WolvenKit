@@ -9,6 +9,7 @@ using Catel.Messaging;
 using FFmpeg.AutoGen;
 using NodeNetwork;
 using Orchestra.Services;
+using Syncfusion.SfSkinManager;
 using Unosquare.FFME;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -133,7 +134,7 @@ namespace WolvenKit
             }
 
 
-
+            SfSkinManager.ApplyStylesOnApplication = true;
 
             Log.Info("Check for new updates");
             AppHelper.CheckForUpdates();

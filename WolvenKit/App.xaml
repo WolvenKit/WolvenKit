@@ -57,6 +57,8 @@
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeGrid/SfTreeGrid.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
 
             <Style

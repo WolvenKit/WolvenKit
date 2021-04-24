@@ -88,6 +88,12 @@
                     </DrawingGroup>
                 </DrawingBrush.Drawing>
             </DrawingBrush>
+
+            <Style TargetType="syncfusion:AdvancedFilterControl">
+                <Setter Property="CanGenerateUniqueItems" Value="False" />
+            </Style>
+
+
             <Style x:Key="PropertyItemBaseStyle" TargetType="hc:PropertyItem">
                 <Setter Property="Focusable" Value="False" />
                 <Setter Property="Margin" Value="0,0,0,6" />
@@ -239,6 +245,7 @@
                 <hc:Theme />
 
 
+
             </ResourceDictionary.MergedDictionaries>
 
 
@@ -367,45 +374,62 @@
         <Grid Grid.Column="2">
 
             <Grid.Resources>
-                <DataTemplate x:Key="CommmonTemplate" >
-                    <TextBlock Text="{Binding Property.Value}" Padding="5"/>
+                <DataTemplate x:Key="CommmonTemplate">
+                    <TextBlock Padding="5" Text="{Binding Property.Value}" />
                 </DataTemplate>
 
                 <DataTemplate x:Key="RedboolTemplate">
-                    <CheckBox HorizontalAlignment="Left" IsChecked="{Binding Property.Value}" Padding="5"/>
+                    <CheckBox
+                     Padding="5"
+                     HorizontalAlignment="Left"
+                     IsChecked="{Binding Property.Value}"
+                     />
                 </DataTemplate>
 
                 <DataTemplate x:Key="NumericTemplate">
-                    <TextBox  Text="{Binding Property.Value}" Padding="5"/>
+                    <TextBox Padding="5" Text="{Binding Property.Value}" />
                 </DataTemplate>
 
                 <templates:EditableVariableDataTemplateSelector
                  x:Key="DataTemplateSelector"
                  CommmonTemplate="{StaticResource CommmonTemplate}"
-                 RedboolTemplate="{StaticResource RedboolTemplate}"
                  NumericTemplate="{StaticResource NumericTemplate}"
+                 RedboolTemplate="{StaticResource RedboolTemplate}"
                  />
             </Grid.Resources>
 
             <syncfusion:SfTreeGrid
-                ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
-                ChildPropertyName="Children"
-                AutoGenerateColumns="False"
-                AutoExpandMode="RootNodesExpanded"
-                ColumnSizer="Star"
-                AllowResizingColumns="True"
-                AllowFiltering="True"
-                
-                
-                >
+             AllowFiltering="True"
+             AllowResizingColumns="True"
+             AutoExpandMode="RootNodesExpanded"
+             AutoGenerateColumns="False"
+             ChildPropertyName="Children"
+             ColumnSizer="Star"
+             ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
+             >
+                <syncfusion:SfTreeGrid.Resources>
+
+                </syncfusion:SfTreeGrid.Resources>
+
                 <syncfusion:SfTreeGrid.Columns>
-                    <syncfusion:TreeGridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False"/>
-                    
-                    <syncfusion:TreeGridTemplateColumn HeaderText="Value" MappingName="Property" AllowEditing="False"
-                                                       
-                                                       CellTemplateSelector="{StaticResource DataTemplateSelector}" />
-                    <syncfusion:TreeGridTextColumn HeaderText="Type" MappingName="Type" AllowEditing="False" />
-                    
+                    <syncfusion:TreeGridTextColumn
+                     AllowEditing="False"
+                     HeaderText="Name"
+                     MappingName="Name"
+                     />
+
+                    <syncfusion:TreeGridTemplateColumn
+                     AllowEditing="False"
+                     CellTemplateSelector="{StaticResource DataTemplateSelector}"
+                     HeaderText="Value"
+                     MappingName="Property"
+                     />
+                    <syncfusion:TreeGridTextColumn
+                     AllowEditing="False"
+                     HeaderText="Type"
+                     MappingName="Type"
+                     />
+
                 </syncfusion:SfTreeGrid.Columns>
 
 
