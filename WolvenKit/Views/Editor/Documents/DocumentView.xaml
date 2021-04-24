@@ -419,6 +419,7 @@
 
                     <syncfusion:TreeGridTemplateColumn
                      AllowEditing="False"
+                     AllowSorting="False"
                      CellTemplateSelector="{StaticResource DataTemplateSelector}"
                      HeaderText="Value"
                      MappingName="Property"
