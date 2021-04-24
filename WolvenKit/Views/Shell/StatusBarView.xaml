@@ -25,80 +25,118 @@
             <catel:BooleanToCollapsingVisibilityConverter x:Key="BooleanToCollapsingVisibilityConverter" />
         </ResourceDictionary>
     </catel:UserControl.Resources>
+    <Grid>
+        <hc:Divider
+         Width="9999"
+         Height="2"
+         Margin="0"
+         LineStroke="Black"
+         LineStrokeThickness="1"
+         Orientation="Horizontal"
+         Visibility="Hidden"
+         />
+        <Fluent:StatusBar Background="Transparent">
 
-    <Fluent:StatusBar Background="Transparent">
 
-        <Fluent:StatusBarItem
-         Title="Second left placed item"
-         HorizontalAlignment="Left"
-         ToolTip="Show a catfact"
-         Value="Value shown in ContextMenu"
-         >
-            <hc:Tag
-             Height="28"
-             Margin="5,0,0,0"
-             hc:TitleElement.Background="{DynamicResource RegionBrush}"
-             Background="{DynamicResource GrayBrush10}"
-             Content="Show Catfact"
-             FontSize="11"
-             MouseLeftButtonDown="Tag_MouseLeftButtonDown"
-             ShowCloseButton="False"
+            <Fluent:StatusBarItem
+             Title="CatFacts"
+             HorizontalAlignment="Left"
              ToolTip="Show a catfact"
+             Value="Show a catfact"
              >
-                <hc:Tag.Header>
-                    <iconPacks:PackIconRPGAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="cat" />
-                </hc:Tag.Header>
+                <hc:Tag
+                 Height="28"
+                 Margin="-10,0,0,0"
+                 hc:TitleElement.Background="{DynamicResource RegionBrush}"
+                 Background="{DynamicResource GrayBrush10}"
+                 Content="Show Catfact"
+                 FontSize="11"
+                 MouseLeftButtonDown="Tag_MouseLeftButtonDown"
+                 ShowCloseButton="False"
+                 ToolTip="Show a catfact"
+                 >
+                    <hc:Tag.Header>
+                        <iconPacks:PackIconRPGAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="cat" />
+                    </hc:Tag.Header>
 
-            </hc:Tag>
-        </Fluent:StatusBarItem>
+                </hc:Tag>
+            </Fluent:StatusBarItem>
 
-        <Fluent:StatusBarItem
-         Title="Second left placed item"
-         HorizontalAlignment="Right"
-         ToolTip="Current Project"
-         Value="Value shown in ContextMenu"
-         >
-            <hc:Tag
-             Height="28"
-             Margin="5,0,5,0"
-             hc:TitleElement.Background="{DynamicResource RegionBrush}"
-             Background="{DynamicResource GrayBrush10}"
-             Content="{Binding CurrentProject}"
-             FontSize="11"
-             ShowCloseButton="False"
+            <Fluent:StatusBarItem
+             Title="Current Project"
+             HorizontalAlignment="Right"
              ToolTip="Current Project"
+             Value="Displays current project."
              >
-                <hc:Tag.Header>
-                    <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />
-                </hc:Tag.Header>
+                <hc:Tag
+                 Height="28"
+                 Margin="5,0,5,0"
+                 hc:TitleElement.Background="{DynamicResource RegionBrush}"
+                 Background="{DynamicResource GrayBrush10}"
+                 Content="{Binding CurrentProject}"
+                 FontSize="11"
+                 ShowCloseButton="False"
+                 ToolTip="Current Project"
+                 >
+                    <hc:Tag.Header>
+                        <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />
+                    </hc:Tag.Header>
 
-            </hc:Tag>
-        </Fluent:StatusBarItem>
+                </hc:Tag>
+            </Fluent:StatusBarItem>
 
-        <Fluent:StatusBarItem
-         Title="Item placed on the right side"
-         HorizontalAlignment="Right"
-         ToolTip="Version"
-         Value="Your value which is also used as content if no content is set."
-         >
-            <hc:Tag
-             Height="28"
-             Margin="0"
-             hc:TitleElement.Background="{DynamicResource RegionBrush}"
-             Background="{DynamicResource GrayBrush10}"
-             Content="0.8.0.1-Beta"
-             FontSize="11"
-             ShowCloseButton="False"
+            <Fluent:StatusBarItem
+             Title="Version"
+             HorizontalAlignment="Right"
              ToolTip="Version"
+             Value="Shows the current app version"
              >
-                <hc:Tag.Header>
-                    <iconPacks:PackIconCodicons Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="Versions" />
-                </hc:Tag.Header>
+                <hc:Tag
+                 Height="28"
+                 Margin="0"
+                 hc:TitleElement.Background="{DynamicResource RegionBrush}"
+                 Background="{DynamicResource GrayBrush10}"
+                 Content="0.8.0.1-Beta"
+                 FontSize="11"
+                 ShowCloseButton="False"
+                 ToolTip="Version"
+                 >
+                    <hc:Tag.Header>
+                        <iconPacks:PackIconCodicons Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="Versions" />
+                    </hc:Tag.Header>
 
-            </hc:Tag>
-        </Fluent:StatusBarItem>
-    </Fluent:StatusBar>
+                </hc:Tag>
+            </Fluent:StatusBarItem>
 
+
+
+
+
+            <Fluent:StatusBarItem
+             Title="DefaultIcon"
+             Margin="0,0,0,0"
+             HorizontalAlignment="Right"
+             Value="DefaultIcon"
+             >
+                <hc:Tag
+                 Width="29"
+                 Height="28"
+                 Margin="0"
+                 hc:TitleElement.Background="{DynamicResource RegionBrush}"
+                 Background="{DynamicResource GrayBrush10}"
+                 FontSize="11"
+                 ShowCloseButton="False"
+                 >
+                    <hc:Tag.Header>
+                        <iconPacks:PackIconRPGAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="WolfHowl" />
+                    </hc:Tag.Header>
+
+                </hc:Tag>
+            </Fluent:StatusBarItem>
+        </Fluent:StatusBar>
+
+
+    </Grid>
 
 
 

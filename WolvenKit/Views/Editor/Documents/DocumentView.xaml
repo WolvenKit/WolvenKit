@@ -312,7 +312,11 @@
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Expander Grid.Column="0" ExpandDirection="Right">
+                    <Expander
+                     Grid.Column="0"
+                     ExpandDirection="Right"
+                     IsExpanded="True"
+                     >
                         <Grid>
 
                             <Grid x:Name="CHUNKSVISIBILITY">
