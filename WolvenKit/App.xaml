@@ -58,6 +58,9 @@
 
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeGrid/SfTreeGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeNavigator/SfTreeNavigator.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfNavigationDrawer/SfNavigationDrawer.xaml" />
+
 
             </ResourceDictionary.MergedDictionaries>
 

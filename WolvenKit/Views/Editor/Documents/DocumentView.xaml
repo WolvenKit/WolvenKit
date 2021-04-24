@@ -11,6 +11,7 @@
  xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:hc="https://handyorg.github.io/handycontrol"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
  xmlns:propertyGridEditors="clr-namespace:WolvenKit.Extensions.PropertyGridEditors"
@@ -258,186 +259,223 @@
         <Grid.Resources>
             <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
         </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="308" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <hc:TabControl
-             IsAnimationEnabled="True"
-             IsTabFillEnabled="True"
-             ShowCloseButton="False"
-             Style="{DynamicResource MahApps.Styles.TabControl.AnimatedSingleRow}"
+
+
+
+
+
+        <syncfusion:SfNavigationDrawer x:Name="navigationDrawer" DisplayMode="Expanded">
+            <syncfusion:NavigationItem
+             Header="Chunks"
+             IsExpanded="True"
+             IsSelected="True"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown"
              >
-                <hc:TabItem Width="75" Header="CHUNKS">
-                    <TreeView
-                     Name="TreeView"
-                     Grid.Row="0"
-                     ItemsSource="{Binding Chunks}"
-                     Style="{DynamicResource TreeView}"
-                     >
-                        <ei:Interaction.Behaviors>
-                            <behavior:TreeViewBehavior />
-                        </ei:Interaction.Behaviors>
-
-                        <TreeView.ContextMenu>
-                            <ContextMenu />
-                        </TreeView.ContextMenu>
-
-                        <TreeView.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                                <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                            </Style>
-                        </TreeView.ItemContainerStyle>
-
-                        <TreeView.Resources>
-                            <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkViewModel}" ItemsSource="{Binding Children}">
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                    <ei:Interaction.Triggers>
-                                        <ei:EventTrigger EventName="PreviewMouseRightButtonDown">
-                                            <ei:ChangePropertyAction
-                                             PropertyName="IsSelected"
-                                             TargetObject="{Binding}"
-                                             Value="true"
-                                             />
-                                        </ei:EventTrigger>
-                                    </ei:Interaction.Triggers>
-                                </StackPanel>
-                            </HierarchicalDataTemplate>
-                        </TreeView.Resources>
-                    </TreeView>
-                </hc:TabItem>
-
-                <hc:TabItem Width="75" Header="IMPORTS">
-                    <ListView Margin="20" ItemsSource="{Binding Imports}">
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="MouseDoubleClick">
-                                <hc:EventToCommand Command="{Binding OpenImportCommand}" PassEventArgsToCommand="True" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
-
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </hc:TabItem>
-
-                <hc:TabItem Width="75" Header="BUFFERS">
-                    <ListView ItemsSource="{Binding Buffers}">
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="MouseDoubleClick">
-                                <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
-
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </hc:TabItem>
-
-                <hc:TabItem Width="75" Header="EDITORS">
-                    <ListView ItemsSource="{Binding Editors}">
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="MouseDoubleClick">
-                                <hc:EventToCommand Command="{Binding OpenEditorCommand}" PassEventArgsToCommand="True" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
-
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </hc:TabItem>
-            </hc:TabControl>
-        </Grid>
-
-        <GridSplitter
-         Grid.Column="1"
-         Width="5"
-         HorizontalAlignment="Stretch"
-         />
-
-
-        <Grid Grid.Column="2">
-
-            <Grid.Resources>
-                <DataTemplate x:Key="CommmonTemplate">
-                    <TextBlock Padding="5" Text="{Binding Property.Value}" />
-                </DataTemplate>
-
-                <DataTemplate x:Key="RedboolTemplate">
-                    <CheckBox
-                     Padding="5"
-                     HorizontalAlignment="Left"
-                     IsChecked="{Binding Property.Value}"
-                     />
-                </DataTemplate>
-
-                <DataTemplate x:Key="NumericTemplate">
-                    <TextBox Padding="5" Text="{Binding Property.Value}" />
-                </DataTemplate>
-
-                <templates:EditableVariableDataTemplateSelector
-                 x:Key="DataTemplateSelector"
-                 CommmonTemplate="{StaticResource CommmonTemplate}"
-                 NumericTemplate="{StaticResource NumericTemplate}"
-                 RedboolTemplate="{StaticResource RedboolTemplate}"
-                 />
-            </Grid.Resources>
-
-            <syncfusion:SfTreeGrid
-             AllowFiltering="True"
-             AllowResizingColumns="True"
-             AutoExpandMode="RootNodesExpanded"
-             AutoGenerateColumns="False"
-             ChildPropertyName="Children"
-             ColumnSizer="Star"
-             ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconVaadinIcons Margin="10,5,5,5" Kind="Cubes" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem
+             Header="Imports"
+             IsExpanded="True"
+             IsSelected="False"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_1"
              >
-                <syncfusion:SfTreeGrid.Resources />
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconMaterialDesign Margin="10,5,5,5" Kind="ImportExport" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem
+             Header="Buffers"
+             IsExpanded="True"
+             IsSelected="False"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_2"
+             >
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="Buffer" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem
+             Header="Editors"
+             IsExpanded="True"
+             IsSelected="False"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_3"
+             >
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="BriefcaseEditOutline" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+            <syncfusion:SfNavigationDrawer.ContentView>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Expander Grid.Column="0" ExpandDirection="Right">
+                        <Grid>
 
-                <syncfusion:SfTreeGrid.Columns>
-                    <syncfusion:TreeGridTextColumn
-                     AllowEditing="False"
-                     ColumnSizer="SizeToCells"
-                     HeaderText="Name"
-                     MappingName="Name"
-                     />
+                            <Grid x:Name="CHUNKSVISIBILITY">
+                                <TreeView
+                                 Name="TreeView"
+                                 ItemsSource="{Binding Chunks}"
+                                 Style="{DynamicResource TreeView}"
+                                 >
+                                    <ei:Interaction.Behaviors>
+                                        <behavior:TreeViewBehavior />
+                                    </ei:Interaction.Behaviors>
 
-                    <syncfusion:TreeGridTemplateColumn
-                     AllowEditing="False"
-                     AllowSorting="False"
-                     CellTemplateSelector="{StaticResource DataTemplateSelector}"
-                     HeaderText="Value"
-                     MappingName="Property"
-                     />
-                    <syncfusion:TreeGridTextColumn
-                     AllowEditing="False"
-                     ColumnSizer="SizeToCells"
-                     HeaderText="Type"
-                     MappingName="Type"
-                     />
+                                    <TreeView.ContextMenu>
+                                        <ContextMenu />
+                                    </TreeView.ContextMenu>
 
-                </syncfusion:SfTreeGrid.Columns>
+                                    <TreeView.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
+                                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                            <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                                        </Style>
+                                    </TreeView.ItemContainerStyle>
+
+                                    <TreeView.Resources>
+                                        <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkViewModel}" ItemsSource="{Binding Children}">
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <TextBlock Text="{Binding Path=Name}" />
+                                                <ei:Interaction.Triggers>
+                                                    <ei:EventTrigger EventName="PreviewMouseRightButtonDown">
+                                                        <ei:ChangePropertyAction
+                                                         PropertyName="IsSelected"
+                                                         TargetObject="{Binding}"
+                                                         Value="true"
+                                                         />
+                                                    </ei:EventTrigger>
+                                                </ei:Interaction.Triggers>
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+                                    </TreeView.Resources>
+                                </TreeView>
+                            </Grid>
+
+                            <Grid x:Name="IMPORTSVISISBILITY" Visibility="Collapsed">
+                                <ListView Margin="20" ItemsSource="{Binding Imports}">
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="MouseDoubleClick">
+                                            <hc:EventToCommand Command="{Binding OpenImportCommand}" PassEventArgsToCommand="True" />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
+
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                            </Grid>
+                            <Grid x:Name="BUFFERSVISIBILITY" Visibility="Collapsed">
+                                <ListView ItemsSource="{Binding Buffers}">
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="MouseDoubleClick">
+                                            <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True" />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
+
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+
+                            <Grid x:Name="EDITORSVISIBILITY" Visibility="Collapsed">
+                                <ListView ItemsSource="{Binding Editors}">
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="MouseDoubleClick">
+                                            <hc:EventToCommand Command="{Binding OpenEditorCommand}" PassEventArgsToCommand="True" />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
+
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+
+                        </Grid>
 
 
-            </syncfusion:SfTreeGrid>
+                    </Expander>
+                    <Grid Grid.Column="1">
+
+                        <Grid.Resources>
+                            <DataTemplate x:Key="CommmonTemplate">
+                                <TextBlock Padding="5" Text="{Binding Property.Value}" />
+                            </DataTemplate>
+
+                            <DataTemplate x:Key="RedboolTemplate">
+                                <CheckBox
+                                 Padding="5"
+                                 HorizontalAlignment="Left"
+                                 IsChecked="{Binding Property.Value}"
+                                 />
+                            </DataTemplate>
+
+                            <DataTemplate x:Key="NumericTemplate">
+                                <TextBox Padding="5" Text="{Binding Property.Value}" />
+                            </DataTemplate>
+
+                            <templates:EditableVariableDataTemplateSelector
+                             x:Key="DataTemplateSelector"
+                             CommmonTemplate="{StaticResource CommmonTemplate}"
+                             NumericTemplate="{StaticResource NumericTemplate}"
+                             RedboolTemplate="{StaticResource RedboolTemplate}"
+                             />
+                        </Grid.Resources>
+
+                        <syncfusion:SfTreeGrid
+                         AllowFiltering="True"
+                         AllowResizingColumns="True"
+                         AutoExpandMode="RootNodesExpanded"
+                         AutoGenerateColumns="False"
+                         ChildPropertyName="Children"
+                         ColumnSizer="Star"
+                         ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
+                         >
+
+                            <syncfusion:SfTreeGrid.Columns>
+                                <syncfusion:TreeGridTextColumn
+                                 AllowEditing="False"
+                                 ColumnSizer="SizeToCells"
+                                 HeaderText="Name"
+                                 MappingName="Name"
+                                 />
+
+                                <syncfusion:TreeGridTemplateColumn
+                                 AllowEditing="False"
+                                 AllowSorting="False"
+                                 CellTemplateSelector="{StaticResource DataTemplateSelector}"
+                                 ColumnSizer="FillColumn"
+                                 HeaderText="Value"
+                                 MappingName="Property"
+                                 />
+                                <syncfusion:TreeGridTextColumn
+                                 AllowEditing="False"
+                                 ColumnSizer="SizeToCells"
+                                 HeaderText="Type"
+                                 MappingName="Type"
+                                 />
+
+                            </syncfusion:SfTreeGrid.Columns>
 
 
-            <!--TreeView x:Name="PropertyTreeView" ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
+                        </syncfusion:SfTreeGrid>
+
+
+                        <!--TreeView x:Name="PropertyTreeView" ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -469,7 +507,20 @@
 
 
             </TreeView-->
-        </Grid>
+                    </Grid>
+
+                </Grid>
+
+
+
+            </syncfusion:SfNavigationDrawer.ContentView>
+        </syncfusion:SfNavigationDrawer>
+
+
+
+
+
+
     </Grid>
     <!--    -->
 </catel:UserControl>

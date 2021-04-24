@@ -86,5 +86,40 @@ namespace WolvenKit.Views.Editor
         }
 
         #endregion Methods
+
+        private void NavigationItem_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            SetCollapsedAll();
+            CHUNKSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+        }
+
+
+        private void SetCollapsedAll()
+        {
+            CHUNKSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            BUFFERSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            IMPORTSVISISBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+        }
+
+        private void NavigationItem_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            SetCollapsedAll();
+            IMPORTSVISISBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        private void NavigationItem_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            SetCollapsedAll();
+            BUFFERSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        private void NavigationItem_MouseLeftButtonDown_3(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            SetCollapsedAll();
+            EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
     }
 }
