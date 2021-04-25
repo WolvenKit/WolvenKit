@@ -4,14 +4,14 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
- xmlns:system="clr-namespace:System;assembly=mscorlib"
- xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
- BorderBrush="{x:Null}"
+ xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
 
@@ -526,283 +526,299 @@
     </catel:UserControl.Resources>
     <Grid>
         <Grid.Resources>
-            <editor:BoolToVisConverter x:Key="boolConverter"/>
+            <editor:BoolToVisConverter x:Key="boolConverter" />
         </Grid.Resources>
-        
+
         <Border
-     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-     BorderThickness="1"
-     >
+         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+         BorderThickness="1"
+         >
             <Grid>
-            <Grid.RowDefinitions>
+                <Grid.RowDefinitions>
 
-                <RowDefinition Height="9*" />
-            </Grid.RowDefinitions>
+                    <RowDefinition Height="9*" />
+                </Grid.RowDefinitions>
 
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0">
                     <Grid Grid.Column="0">
-                        <Grid.Resources>
-                            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
-                        </Grid.Resources>
+                        <Grid Grid.Column="0">
+                            <Grid.Resources>
+                                <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                            </Grid.Resources>
+
+                            <syncfusion:SfTreeNavigator />
+
+                            <TreeView
+                             pu:TreeViewHelper.ExpandMode="SingleClick"
+                             pu:TreeViewHelper.ExpandedBrush="{DynamicResource MahApps.Brushes.Accent3}"
+                             pu:TreeViewHelper.ItemHeight="25"
+                             pu:TreeViewHelper.ItemPadding="1"
+                             pu:TreeViewHelper.TreeViewStyle="Chain"
+                             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+                             FontSize="11"
+                             ItemsSource="{Binding RootNode.SubDirectories}"
+                             SelectedItemChanged="TreeView_OnSelectedItemChanged"
+                             Visibility="Visible"
+                             >
+
+                                <TreeView.ItemTemplate>
+
+                                    <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
+
+                                        <StackPanel Margin="0,0,0,0" Orientation="Horizontal">
+                                            <svgc:SvgViewbox
+                                             Width="12"
+                                             Height="12"
+                                             Margin="0"
+                                             Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                             Stretch="Uniform"
+                                             />
+                                            <TextBlock FontSize="11" Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
 
 
 
-                        <TreeView
-                         pu:TreeViewHelper.ExpandMode="SingleClick"
-                         pu:TreeViewHelper.ExpandedBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                         pu:TreeViewHelper.ItemHeight="25"
-                         pu:TreeViewHelper.ItemPadding="1"
-                         pu:TreeViewHelper.TreeViewStyle="Chain"
-                         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-                         FontSize="11"
-                         ItemsSource="{Binding RootNode.SubDirectories}"
-                         SelectedItemChanged="TreeView_OnSelectedItemChanged"
-                         Visibility="Visible"
-                         >
-
-                            <TreeView.ItemTemplate>
-
-                                <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
-
-                                    <StackPanel Margin="0,0,0,0" Orientation="Horizontal">
-                                        <svgc:SvgViewbox
-                                         Width="12"
-                                         Height="12"
-                                         Margin="0"
-                                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                                         Stretch="Uniform"
-                                         />
-                                        <TextBlock FontSize="11" Text="{Binding Name}" />
-                                    </StackPanel>
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
-
-
+                        </Grid>
 
                     </Grid>
 
-                </Grid>
 
 
+                    <Grid Grid.Column="1">
 
-                <Grid Grid.Column="1">
-
-                    <DockPanel
-                     Height="40"
-                     VerticalAlignment="Top"
-                     Background="Transparent"
-                     >
-                        <hc:UniformSpacingPanel VerticalAlignment="Center">
-                            <Button
-                             Width="40"
-                             Height="25"
-                             Margin="0,3,-10,0"
-                             VerticalAlignment="Center"
-                             hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
-                             Background="Transparent"
-                             BorderBrush="{x:Null}"
-                             Style="{StaticResource ButtonIcon}"
-                             />
-                            <Button
-                             Width="40"
-                             hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
-                             Background="Transparent"
-                             BorderBrush="{x:Null}"
-                             Command="{Binding HomeCommand}"
-                             RenderTransformOrigin="0.5,0.5"
-                             Style="{StaticResource ButtonIcon}"
-                             Visibility="Collapsed"
-                             >
-                                <Button.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform />
-                                        <SkewTransform />
-                                        <RotateTransform Angle="180" />
-                                        <TranslateTransform />
-                                    </TransformGroup>
-                                </Button.RenderTransform>
-                            </Button>
-
-
-                            <Button
-                             Width="40"
-                             hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}"
-                             Background="Transparent"
-                             BorderBrush="{x:Null}"
-                             Style="{StaticResource ButtonIcon}"
-                             Visibility="Collapsed"
-                             />
-
-                            <feather:TreeBreadcrumb
-                             Margin="5,0,15,0"
-                             VerticalAlignment="Center"
-                             Background="Transparent"
-                             BorderBrush="Transparent"
-                             CurrentNode="{Binding Path=BreadCrumbCurrentNode}"
-                             Foreground="White"
-                             PathSeparator="\"
-                             SetCurrentNodeCommand="{Binding Path=SetCurrentNodeCommand}"
-                             />
-
-
-
-
-
-
-
-                            <Border BorderBrush="Gray" BorderThickness="0,0,0,1">
-                                <Grid>
-                                    <StackPanel Orientation="Horizontal">
-                                        <hc:SearchBar
-                                         Width="auto"
-                                         MinWidth="88"
-                                         Padding="0,0,-25,0"
-                                         VerticalAlignment="Center"
-                                         hc:InfoElement.Placeholder="Search something"
-                                         Background="Transparent"
-                                         BorderBrush="Transparent"
-                                         FlowDirection="LeftToRight"
-                                         >
-
-                                            <hc:Interaction.Triggers>
-                                                <hc:EventTrigger EventName="SearchStarted">
-                                                    <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
-                                                </hc:EventTrigger>
-                                            </hc:Interaction.Triggers>
-                                        </hc:SearchBar>
-                                        <iconPacks:PackIconMaterial
-                                         Margin="0,5,0,0"
-                                         VerticalAlignment="Center"
-                                         BorderThickness="0"
-                                         Kind="LayersSearchOutline"
-                                         />
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-
-
-
-
-
-                            <hc:ComboBox
-                             MinWidth="0"
-                             ItemsSource="{Binding Classes}"
-                             SelectedItem="{Binding SelectedClass}"
-                             Visibility="Collapsed"
-                             >
-                                <ComboBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel />
-                                    </ItemsPanelTemplate>
-                                </ComboBox.ItemsPanel>
-                            </hc:ComboBox>
-
-
-                            <hc:ComboBox
-                             MinWidth="100"
-                             ItemsSource="{Binding Extensions}"
-                             SelectedItem="{Binding SelectedExtension}"
-                             Visibility="Collapsed"
-                             >
-                                <ComboBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel />
-                                    </ItemsPanelTemplate>
-                                </ComboBox.ItemsPanel>
-                            </hc:ComboBox>
-                        </hc:UniformSpacingPanel>
-
-
-                    </DockPanel>
-
-
-                    <hc:TabControl
-                     Grid.Column="0"
-                     Margin="0,40,0,0"
-                     IsAnimationEnabled="True"
-                     IsDraggable="True"
-                     ShowCloseButton="True"
-                     >
-                        <hc:TabItem Header="Depot" ShowCloseButton="False">
-                            <Grid>
-                                <DataGrid
-                                 x:Name="InnerList"
-                                 Margin="0,-15,0,0"
-                                 AutoGenerateColumns="False"
+                        <DockPanel
+                         Height="40"
+                         VerticalAlignment="Top"
+                         Background="Transparent"
+                         >
+                            <hc:UniformSpacingPanel VerticalAlignment="Center">
+                                <Button
+                                 Width="40"
+                                 Height="25"
+                                 Margin="0,3,-10,0"
+                                 VerticalAlignment="Center"
+                                 hc:IconElement.Geometry="{DynamicResource GlobalLeftArrow}"
                                  Background="Transparent"
-                                 BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-                                 CanUserSortColumns="False"
-                                 ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStylez}"
-                                 IsManipulationEnabled="False"
-                                 ItemsSource="{Binding CurrentNodeFiles}"
-                                 SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
-                                 SelectionChanged="ListView_SelectionChanged"
-                                 Style="{DynamicResource DataGridz}"
+                                 BorderBrush="{x:Null}"
+                                 Style="{StaticResource ButtonIcon}"
+                                 />
+                                <Button
+                                 Width="40"
+                                 hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
+                                 Background="Transparent"
+                                 BorderBrush="{x:Null}"
+                                 Command="{Binding HomeCommand}"
+                                 RenderTransformOrigin="0.5,0.5"
+                                 Style="{StaticResource ButtonIcon}"
+                                 Visibility="Collapsed"
                                  >
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform />
+                                            <SkewTransform />
+                                            <RotateTransform Angle="180" />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
 
 
-                                    <DataGrid.Resources>
-                                        <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
-                                    </DataGrid.Resources>
+                                <Button
+                                 Width="40"
+                                 hc:IconElement.Geometry="{DynamicResource AssetBrowserStar}"
+                                 Background="Transparent"
+                                 BorderBrush="{x:Null}"
+                                 Style="{StaticResource ButtonIcon}"
+                                 Visibility="Collapsed"
+                                 />
 
-                                    <DataGrid.Columns>
+                                <feather:TreeBreadcrumb
+                                 Margin="5,0,15,0"
+                                 VerticalAlignment="Center"
+                                 Background="Transparent"
+                                 BorderBrush="Transparent"
+                                 CurrentNode="{Binding Path=BreadCrumbCurrentNode}"
+                                 Foreground="White"
+                                 PathSeparator="\"
+                                 SetCurrentNodeCommand="{Binding Path=SetCurrentNodeCommand}"
+                                 />
 
-                                        <DataGridTemplateColumn Width="25" CanUserResize="False">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <svgc:SvgViewbox
-                                                     Width="25"
-                                                     Height="18"
-                                                     Margin="5,5,0,0"
-                                                     Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                                                     Stretch="Uniform"
-                                                     />
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <DataGridTextColumn
-                                         Width="auto"
-                                         Binding="{Binding Name}"
-                                         CellStyle="{DynamicResource DataGridCellStyle}"
-                                         Header="Name"
-                                         IsReadOnly="True"
-                                         />
-                                        <DataGridTextColumn
-                                         Width="auto"
-                                         Binding="{Binding Size}"
-                                         CellStyle="{DynamicResource DataGridCellStyle}"
-                                         Header="Size"
-                                         IsReadOnly="True"
-                                         />
 
-                                    </DataGrid.Columns>
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="MouseDoubleClick">
-                                            <hc:EventToCommand Command="{Binding ImportFileCommand}" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
-                                </DataGrid>
-                            </Grid>
-                        </hc:TabItem>
-                    </hc:TabControl>
+
+
+
+
+
+                                <Border BorderBrush="Gray" BorderThickness="0,0,0,1">
+                                    <Grid>
+                                        <StackPanel Orientation="Horizontal">
+                                            <hc:SearchBar
+                                             Width="auto"
+                                             MinWidth="88"
+                                             Padding="0,0,-25,0"
+                                             VerticalAlignment="Center"
+                                             hc:InfoElement.Placeholder="Search something"
+                                             Background="Transparent"
+                                             BorderBrush="Transparent"
+                                             FlowDirection="LeftToRight"
+                                             >
+
+                                                <hc:Interaction.Triggers>
+                                                    <hc:EventTrigger EventName="SearchStarted">
+                                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                                                    </hc:EventTrigger>
+                                                </hc:Interaction.Triggers>
+                                            </hc:SearchBar>
+                                            <iconPacks:PackIconMaterial
+                                             Margin="0,5,0,0"
+                                             VerticalAlignment="Center"
+                                             BorderThickness="0"
+                                             Kind="LayersSearchOutline"
+                                             />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+
+
+
+
+                                <hc:ComboBox
+                                 MinWidth="0"
+                                 ItemsSource="{Binding Classes}"
+                                 SelectedItem="{Binding SelectedClass}"
+                                 Visibility="Collapsed"
+                                 >
+                                    <ComboBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ComboBox.ItemsPanel>
+                                </hc:ComboBox>
+
+
+                                <hc:ComboBox
+                                 MinWidth="100"
+                                 ItemsSource="{Binding Extensions}"
+                                 SelectedItem="{Binding SelectedExtension}"
+                                 Visibility="Collapsed"
+                                 >
+                                    <ComboBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ComboBox.ItemsPanel>
+                                </hc:ComboBox>
+                            </hc:UniformSpacingPanel>
+
+
+                        </DockPanel>
+
+
+                        <hc:TabControl
+                         Grid.Column="0"
+                         Margin="0,40,0,0"
+                         IsAnimationEnabled="True"
+                         IsDraggable="True"
+                         ShowCloseButton="True"
+                         >
+                            <hc:TabItem Header="Depot" ShowCloseButton="False">
+                                <Grid>
+                                    <DataGrid
+                                     x:Name="InnerList"
+                                     Margin="0,-15,0,0"
+                                     AutoGenerateColumns="False"
+                                     Background="Transparent"
+                                     BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+                                     CanUserSortColumns="False"
+                                     ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStylez}"
+                                     IsManipulationEnabled="False"
+                                     ItemsSource="{Binding CurrentNodeFiles}"
+                                     SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                                     SelectionChanged="ListView_SelectionChanged"
+                                     Style="{DynamicResource DataGridz}"
+                                     >
+
+
+                                        <DataGrid.Resources>
+                                            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                                        </DataGrid.Resources>
+
+                                        <DataGrid.Columns>
+
+                                            <DataGridTemplateColumn Width="25" CanUserResize="False">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <svgc:SvgViewbox
+                                                         Width="25"
+                                                         Height="18"
+                                                         Margin="5,5,0,0"
+                                                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                                         Stretch="Uniform"
+                                                         />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTextColumn
+                                             Width="auto"
+                                             Binding="{Binding Name}"
+                                             CellStyle="{DynamicResource DataGridCellStyle}"
+                                             Header="Name"
+                                             IsReadOnly="True"
+                                             />
+                                            <DataGridTextColumn
+                                             Width="auto"
+                                             Binding="{Binding Size}"
+                                             CellStyle="{DynamicResource DataGridCellStyle}"
+                                             Header="Size"
+                                             IsReadOnly="True"
+                                             />
+
+                                        </DataGrid.Columns>
+                                        <hc:Interaction.Triggers>
+                                            <hc:EventTrigger EventName="MouseDoubleClick">
+                                                <hc:EventToCommand Command="{Binding ImportFileCommand}" />
+                                            </hc:EventTrigger>
+                                        </hc:Interaction.Triggers>
+                                    </DataGrid>
+                                </Grid>
+                            </hc:TabItem>
+                        </hc:TabControl>
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
-            </Border>
-        <Border x:Name="LoadingBorder" BorderBrush="Black" BorderThickness="1" Background="#80000000" Visibility="{Binding Path=LoadVisibility}" Grid.RowSpan="3">
+        </Border>
+        <Border
+         x:Name="LoadingBorder"
+         Grid.RowSpan="3"
+         Background="#80000000"
+         BorderBrush="Black"
+         BorderThickness="1"
+         Visibility="{Binding Path=LoadVisibility}"
+         >
             <Grid>
                 <StackPanel VerticalAlignment="Center">
-                    <hc:LoadingCircle></hc:LoadingCircle>
-                    <TextBlock Margin="0" TextWrapping="Wrap" Text="Loading game files..." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="#7EFFFFFF"/>
+                    <hc:LoadingCircle />
+                    <TextBlock
+                     Margin="0"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     FontSize="24"
+                     FontWeight="Bold"
+                     Foreground="#7EFFFFFF"
+                     Text="Loading game files..."
+                     TextWrapping="Wrap"
+                     />
                 </StackPanel>
             </Grid>
         </Border>
