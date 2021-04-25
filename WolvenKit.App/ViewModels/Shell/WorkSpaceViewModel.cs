@@ -1109,8 +1109,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 // AUDIO
 
-                case ".BNK":
-                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
+
                 case ".WEM":
                     OpenAudioFile(fullpath);
                     break;
@@ -1127,6 +1126,8 @@ namespace WolvenKit.ViewModels.Shell
                     //usmplayer.Show(dockPanel, DockState.Document);
                     break;
                 }
+                //case ".BNK":
+                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
 
                 default:
                     ActiveDocument = await OpenAsync(model);

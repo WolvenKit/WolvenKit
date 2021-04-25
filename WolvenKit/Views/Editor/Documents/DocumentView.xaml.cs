@@ -1,8 +1,5 @@
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
-using Syncfusion.SfSkinManager;
-using Syncfusion.Themes.MaterialDark.WPF;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
 
@@ -26,9 +23,7 @@ namespace WolvenKit.Views.Editor
         /// </summary>
         public DocumentView()
         {
-            MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
-            themeSettings.PrimaryBackground = new SolidColorBrush(Colors.White);
-            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+
             InitializeComponent();
 
             WeakEventManager<FrameworkElement, RoutedEventArgs>

@@ -293,10 +293,12 @@
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="2.80.2" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.57" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.57" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.1" />

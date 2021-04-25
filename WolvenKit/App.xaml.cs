@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.Messaging;
@@ -10,6 +11,7 @@ using FFmpeg.AutoGen;
 using NodeNetwork;
 using Orchestra.Services;
 using Syncfusion.SfSkinManager;
+using Syncfusion.Themes.MaterialDark.WPF;
 using Unosquare.FFME;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -120,6 +122,12 @@ namespace WolvenKit
             base.OnStartup(e);
             Log.Info("Initializing NodeNetwork");
             NNViewRegistrar.RegisterSplat();
+
+
+            MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
+            themeSettings.PrimaryBackground = new SolidColorBrush(Colors.Gray);
+            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+
 
             NotificationHelper.InitializeNotificationHelper();
 

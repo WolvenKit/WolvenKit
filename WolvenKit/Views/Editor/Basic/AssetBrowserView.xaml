@@ -10,8 +10,9 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
- xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    BorderBrush="{x:Null}"
+ xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+ xmlns:system="clr-namespace:System;assembly=mscorlib"
+ BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
 
@@ -553,7 +554,7 @@
                                 <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                             </Grid.Resources>
 
-                            <syncfusion:SfTreeNavigator />
+
 
                             <TreeView
                              pu:TreeViewHelper.ExpandMode="SingleClick"
@@ -586,8 +587,52 @@
                                 </TreeView.ItemTemplate>
                             </TreeView>
 
+                            <syncfusion:SfTreeNavigator
+                             x:Name="TreeNavSF"
+                             Header="Depot"
+                             ItemsSource="{Binding RootNode.SubDirectories}"
+                             SelectionChanged="SfTreeNavigator_SelectionChanged"
+                             >
 
+                                <syncfusion:SfTreeNavigator.ItemTemplate>
 
+                                    <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
+
+                                        <StackPanel Margin="0,0,0,0" Orientation="Horizontal">
+                                            <svgc:SvgViewbox
+                                             Width="12"
+                                             Height="12"
+                                             Margin="0"
+                                             Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                             Stretch="Uniform"
+                                             />
+                                            <TextBlock FontSize="11" Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </syncfusion:SfTreeNavigator.ItemTemplate>
+                            </syncfusion:SfTreeNavigator>
+                            <Border
+                             x:Name="VisibleBackButton"
+                             Width="35"
+                             Height="35"
+                             Margin="5,2,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             Background="{DynamicResource RegionBrush}"
+                             >
+                                <Button
+                                 Background="{DynamicResource RegionBrush}"
+                                 BorderBrush="Transparent"
+                                 BorderThickness="2"
+                                 Click="Button_Click"
+                                 >
+                                    <iconPacks:PackIconRemixIcon
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Kind="ArrowGoBackFill"
+                                     />
+                                </Button>
+                            </Border>
                         </Grid>
 
                     </Grid>
@@ -808,7 +853,9 @@
          >
             <Grid>
                 <StackPanel VerticalAlignment="Center">
-                    <hc:LoadingCircle />
+                    <syncfusion:SfBusyIndicator AnimationType="Ball" Foreground="{DynamicResource MahApps.Brushes.Accent}" />
+
+
                     <TextBlock
                      Margin="0"
                      HorizontalAlignment="Center"
