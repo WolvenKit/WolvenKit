@@ -446,6 +446,7 @@
                          AutoExpandMode="RootNodesExpanded"
                          AutoGenerateColumns="False"
                          ChildPropertyName="Children"
+                            
                          ColumnSizer="Star"
                          ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
                          >

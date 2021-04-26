@@ -641,6 +641,8 @@
 
                     <Grid Grid.Column="1">
 
+
+
                         <DockPanel
                          Height="40"
                          VerticalAlignment="Top"
@@ -656,26 +658,9 @@
                                  Background="Transparent"
                                  BorderBrush="{x:Null}"
                                  Style="{StaticResource ButtonIcon}"
-                                 />
-                                <Button
-                                 Width="40"
-                                 hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
-                                 Background="Transparent"
-                                 BorderBrush="{x:Null}"
-                                 Command="{Binding HomeCommand}"
-                                 RenderTransformOrigin="0.5,0.5"
-                                 Style="{StaticResource ButtonIcon}"
                                  Visibility="Collapsed"
-                                 >
-                                    <Button.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform />
-                                            <SkewTransform />
-                                            <RotateTransform Angle="180" />
-                                            <TranslateTransform />
-                                        </TransformGroup>
-                                    </Button.RenderTransform>
-                                </Button>
+                                 />
+
 
 
                                 <Button
@@ -768,17 +753,36 @@
 
 
                         </DockPanel>
-
-
-                        <hc:TabControl
-                         Grid.Column="0"
-                         Margin="0,40,0,0"
-                         IsAnimationEnabled="True"
-                         IsDraggable="True"
-                         ShowCloseButton="True"
+                        <Grid
+                         Height="38"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Top"
                          >
-                            <hc:TabItem Header="Depot" ShowCloseButton="False">
-                                <Grid>
+                            <Button
+                             Width="40"
+                             hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
+                             Background="Transparent"
+                             BorderBrush="{x:Null}"
+                             Command="{Binding HomeCommand}"
+                             RenderTransformOrigin="0.5,0.5"
+                             Style="{StaticResource ButtonIcon}"
+                             Visibility="Collapsed"
+                             >
+                                <Button.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="180" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Button.RenderTransform>
+                            </Button>
+                            <syncfusion:HierarchyNavigator x:Name="hierarchicalNavigator" Width="auto" />
+
+
+                        </Grid>
+
+                                <Grid Margin="0,40,0,0">
                                     <DataGrid
                                      x:Name="InnerList"
                                      Margin="0,-15,0,0"
@@ -837,8 +841,7 @@
                                         </hc:Interaction.Triggers>
                                     </DataGrid>
                                 </Grid>
-                            </hc:TabItem>
-                        </hc:TabControl>
+                 
                     </Grid>
                 </Grid>
             </Grid>

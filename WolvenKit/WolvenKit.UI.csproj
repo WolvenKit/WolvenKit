@@ -301,6 +301,7 @@
     <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.57" />
     <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.57" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.57" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />

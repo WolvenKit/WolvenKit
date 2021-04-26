@@ -41,12 +41,13 @@
                     <local:ClosedCaptionsChannelConverter x:Key="ClosedCaptionsChannelConverter" />
                 </ResourceDictionary>
 
-                
+
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeGrid/SfTreeGrid.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeNavigator/SfTreeNavigator.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfNavigationDrawer/SfNavigationDrawer.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/HierarchyNavigator/HierarchyNavigator.xaml" />
 
-                
+
                 <!--  Resource Dictionaries  -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
