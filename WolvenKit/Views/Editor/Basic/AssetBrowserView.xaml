@@ -782,66 +782,73 @@
 
                         </Grid>
 
-                                <Grid Margin="0,40,0,0">
-                                    <DataGrid
-                                     x:Name="InnerList"
-                                     Margin="0,-15,0,0"
-                                     AutoGenerateColumns="False"
-                                     Background="Transparent"
-                                     BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-                                     CanUserSortColumns="False"
-                                     ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStylez}"
-                                     IsManipulationEnabled="False"
-                                     ItemsSource="{Binding CurrentNodeFiles}"
-                                     SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
-                                     SelectionChanged="ListView_SelectionChanged"
-                                     Style="{DynamicResource DataGridz}"
-                                     >
+                        <Grid Margin="0,40,0,0">
+                            <syncfusion:SfDataGrid
+                             x:Name="InnerList"
+                             Margin="0,-15,0,0"
+                             AllowDeleting="False"
+                             AllowDraggingColumns="False"
+                             AllowDraggingRows="False"
+                             AllowEditing="False"
+                             AllowResizingColumns="False"
+                             AllowSorting="False"
+                             AutoGenerateColumns="False"
+                             Background="Transparent"
+                             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+                             ColumnSizer="Star"
+                             IsManipulationEnabled="False"
+                             ItemsSource="{Binding CurrentNodeFiles}"
+                             SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                             >
 
 
-                                        <DataGrid.Resources>
-                                            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
-                                        </DataGrid.Resources>
+                                <syncfusion:SfDataGrid.Resources>
+                                    <converters:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+                                </syncfusion:SfDataGrid.Resources>
 
-                                        <DataGrid.Columns>
 
-                                            <DataGridTemplateColumn Width="25" CanUserResize="False">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <svgc:SvgViewbox
-                                                         Width="25"
-                                                         Height="18"
-                                                         Margin="5,5,0,0"
-                                                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                                                         Stretch="Uniform"
-                                                         />
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
-                                            <DataGridTextColumn
-                                             Width="auto"
-                                             Binding="{Binding Name}"
-                                             CellStyle="{DynamicResource DataGridCellStyle}"
-                                             Header="Name"
-                                             IsReadOnly="True"
-                                             />
-                                            <DataGridTextColumn
-                                             Width="auto"
-                                             Binding="{Binding Size}"
-                                             CellStyle="{DynamicResource DataGridCellStyle}"
-                                             Header="Size"
-                                             IsReadOnly="True"
-                                             />
 
-                                        </DataGrid.Columns>
-                                        <hc:Interaction.Triggers>
-                                            <hc:EventTrigger EventName="MouseDoubleClick">
-                                                <hc:EventToCommand Command="{Binding ImportFileCommand}" />
-                                            </hc:EventTrigger>
-                                        </hc:Interaction.Triggers>
-                                    </DataGrid>
-                                </Grid>
-                 
+
+                                <syncfusion:SfDataGrid.Columns>
+                                    <syncfusion:GridImageColumn
+                                     Width="22"
+                                     ColumnSizer="Auto"
+                                     HeaderText=""
+                                     ImageHeight="15"
+                                     ImageWidth="15"
+                                     IsReadOnly="True"
+                                     MappingName="Extension"
+                                     Stretch="Uniform"
+                                     TextAlignment="Center"
+                                     ValueBinding="{Binding Extension, Converter={StaticResource ExtensionToBmp}}"
+                                     />
+
+
+
+
+
+                                    <syncfusion:GridTextColumn
+                                     AllowFiltering="True"
+                                     ColumnSizer="Star"
+                                     IsReadOnly="True"
+                                     MappingName="Name"
+                                     />
+                                    <syncfusion:GridTextColumn
+                                     AllowFiltering="True"
+                                     ColumnSizer="Auto"
+                                     IsReadOnly="True"
+                                     MappingName="Size"
+                                     />
+
+                                </syncfusion:SfDataGrid.Columns>
+                                <hc:Interaction.Triggers>
+                                    <hc:EventTrigger EventName="MouseDoubleClick">
+                                        <hc:EventToCommand Command="{Binding ImportFileCommand}" />
+                                    </hc:EventTrigger>
+                                </hc:Interaction.Triggers>
+                            </syncfusion:SfDataGrid>
+                        </Grid>
+
                     </Grid>
                 </Grid>
             </Grid>
