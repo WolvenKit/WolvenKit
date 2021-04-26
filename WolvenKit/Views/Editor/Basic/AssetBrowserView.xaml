@@ -556,7 +556,7 @@
 
 
 
-                            <TreeView
+                            <!-- <TreeView
                              pu:TreeViewHelper.ExpandMode="SingleClick"
                              pu:TreeViewHelper.ExpandedBrush="{DynamicResource MahApps.Brushes.Accent3}"
                              pu:TreeViewHelper.ItemHeight="25"
@@ -585,7 +585,7 @@
                                         </StackPanel>
                                     </HierarchicalDataTemplate>
                                 </TreeView.ItemTemplate>
-                            </TreeView>
+                            </TreeView>-->
 
                             <syncfusion:SfTreeNavigator
                              x:Name="TreeNavSF"
@@ -648,6 +648,7 @@
                          VerticalAlignment="Top"
                          Background="Transparent"
                          >
+
                             <hc:UniformSpacingPanel VerticalAlignment="Center">
                                 <Button
                                  Width="40"
@@ -681,6 +682,7 @@
                                  Foreground="White"
                                  PathSeparator="\"
                                  SetCurrentNodeCommand="{Binding Path=SetCurrentNodeCommand}"
+                                 Visibility="Collapsed"
                                  />
 
 
@@ -689,35 +691,7 @@
 
 
 
-                                <Border BorderBrush="Gray" BorderThickness="0,0,0,1">
-                                    <Grid>
-                                        <StackPanel Orientation="Horizontal">
-                                            <hc:SearchBar
-                                             Width="auto"
-                                             MinWidth="88"
-                                             Padding="0,0,-25,0"
-                                             VerticalAlignment="Center"
-                                             hc:InfoElement.Placeholder="Search something"
-                                             Background="Transparent"
-                                             BorderBrush="Transparent"
-                                             FlowDirection="LeftToRight"
-                                             >
 
-                                                <hc:Interaction.Triggers>
-                                                    <hc:EventTrigger EventName="SearchStarted">
-                                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
-                                                    </hc:EventTrigger>
-                                                </hc:Interaction.Triggers>
-                                            </hc:SearchBar>
-                                            <iconPacks:PackIconMaterial
-                                             Margin="0,5,0,0"
-                                             VerticalAlignment="Center"
-                                             BorderThickness="0"
-                                             Kind="LayersSearchOutline"
-                                             />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
 
 
 
@@ -758,31 +732,84 @@
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Top"
                          >
-                            <Button
-                             Width="40"
-                             hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
-                             Background="Transparent"
-                             BorderBrush="{x:Null}"
-                             Command="{Binding HomeCommand}"
-                             RenderTransformOrigin="0.5,0.5"
-                             Style="{StaticResource ButtonIcon}"
-                             Visibility="Collapsed"
+                            <Border
+                             Height="36"
+                             Padding="2,0,5,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             BorderBrush="{DynamicResource BackgroundBrush}"
+                             BorderThickness="0"
                              >
-                                <Button.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform />
-                                        <SkewTransform />
-                                        <RotateTransform Angle="180" />
-                                        <TranslateTransform />
-                                    </TransformGroup>
-                                </Button.RenderTransform>
-                            </Button>
-                            <syncfusion:HierarchyNavigator x:Name="hierarchicalNavigator" Width="auto" />
+                                <Grid>
+                                    <Button
+                                     Width="30"
+                                     Height="36"
+                                     Margin="120,0,0,0"
+                                     Padding="5,-7,5,-5"
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Top"
+                                     hc:IconElement.Geometry="{DynamicResource AssetBrowserHome}"
+                                     Background="Transparent"
+                                     BorderBrush="{DynamicResource SecondaryBorderBrush}"
+                                     BorderThickness="0,0,1,0"
+                                     Command="{Binding HomeCommand}"
+                                     RenderTransformOrigin="0.5,0.5"
+                                     Style="{StaticResource ButtonIcon}"
+                                     Visibility="Visible"
+                                     >
+                                        <Button.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform />
+                                                <SkewTransform />
+                                                <RotateTransform Angle="180" />
+                                                <TranslateTransform />
+                                            </TransformGroup>
+                                        </Button.RenderTransform>
+                                    </Button>
+                                    <StackPanel Orientation="Horizontal">
+                                        <hc:SearchBar
+                                         x:Name="SBBar"
+                                         Width="auto"
+                                         MinWidth="102"
+                                         MaxWidth="102"
+                                         Padding="0,0,-25,0"
+                                         VerticalAlignment="Center"
+                                         Background="Transparent"
+                                         BorderBrush="Transparent"
+                                         FlowDirection="LeftToRight"
+                                         MouseDown="SearchBar_MouseDown"
+                                         PreviewTextInput="SBBar_PreviewTextInput"
+                                         Text="Search"
+                                         >
+
+                                            <hc:Interaction.Triggers>
+                                                <hc:EventTrigger EventName="SearchStarted">
+                                                    <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                                                </hc:EventTrigger>
+                                            </hc:Interaction.Triggers>
+                                        </hc:SearchBar>
+                                        <iconPacks:PackIconMaterial
+                                         Margin="0,5,0,0"
+                                         VerticalAlignment="Center"
+                                         BorderThickness="0"
+                                         Kind="LayersSearchOutline"
+                                         />
+                                    </StackPanel>
+
+
+                                </Grid>
+                            </Border>
+
+                            <syncfusion:HierarchyNavigator
+                             x:Name="hierarchicalNavigator"
+                             Width="auto"
+                             Margin="150,0,0,0"
+                             />
 
 
                         </Grid>
 
-                        <Grid Margin="0,40,0,0">
+                        <Grid Margin="0,51,0,0">
                             <syncfusion:SfDataGrid
                              x:Name="InnerList"
                              Margin="0,-15,0,0"
@@ -794,7 +821,6 @@
                              AllowSorting="False"
                              AutoGenerateColumns="False"
                              Background="Transparent"
-                             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                              ColumnSizer="Star"
                              IsManipulationEnabled="False"
                              ItemsSource="{Binding CurrentNodeFiles}"

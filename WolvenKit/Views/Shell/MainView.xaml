@@ -114,13 +114,13 @@
                     </ad:PanesTemplateSelector.BulkEditorTemplate>
                     -->
 
-                    <!--  Code Editor WIP
+                    <!--  Code Editor WIP  -->
                     <ad:PanesTemplateSelector.CodeEditorTemplate>
                         <DataTemplate>
                             <cr2weditor1:CodeEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.CodeEditorTemplate>
-                    -->
+
 
                     <ad:PanesTemplateSelector.CsvEditorTemplate>
                         <DataTemplate>

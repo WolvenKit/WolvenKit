@@ -134,5 +134,21 @@ namespace WolvenKit.Views.Editor
                 //vm.NavigateTo(vm.CurrentNode.FullPath);
             }
         }
+
+        private void SearchBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (string.Equals(SBBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
+            {
+                SBBar.SetCurrentValue(TextBox.TextProperty, "");
+            }
+        }
+
+        private void SBBar_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            if (string.Equals(SBBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
+            {
+                SBBar.SetCurrentValue(TextBox.TextProperty, "");
+            }
+        }
     }
 }

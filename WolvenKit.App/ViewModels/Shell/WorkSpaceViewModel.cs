@@ -87,6 +87,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
             ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
             ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
+            ShowAudioToolCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
@@ -190,6 +191,9 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
 
+            commandManager.RegisterCommand(AppCommands.Application.ShowCodeEditor, ShowCodeEditorCommand, this);
+
+
             commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowGameDebuggerTool, ShowGameDebuggerToolCommand, this);
@@ -270,6 +274,7 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the BulkEditor.
         /// </summary>
         public ICommand ShowBulkEditorCommand { get; private set; }
+        public ICommand ShowCodeEditorCommand { get; private set; }
 
         /// <summary>
         /// Displays the AssetBrowser.
@@ -395,6 +400,8 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowCR2WToTextTool() => false;
 
         private bool CanShowCsvEditor() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowCodeEditor() => _projectManager.ActiveProject is EditorProject;
+
 
         private bool CanShowGameDebuggerTool() => false;
 
@@ -434,6 +441,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             // TODO: Implement this
         }
+        private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
 
         private void ExecuteBulkEditor() => BulkEditorVM.IsVisible = false;
 
