@@ -1,10 +1,6 @@
 name: WolvenKit-CLI-release
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-      - dev
  
 jobs:
 
