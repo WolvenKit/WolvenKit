@@ -365,7 +365,8 @@
                                 <ListView Margin="20" ItemsSource="{Binding Imports}">
                                     <hc:Interaction.Triggers>
                                         <hc:EventTrigger EventName="MouseDoubleClick">
-                                            <hc:EventToCommand Command="{Binding OpenImportCommand}" PassEventArgsToCommand="True" />
+                                            <hc:EventToCommand Command="{Binding OpenImportCommand}"
+                                                               PassEventArgsToCommand="True" />
                                         </hc:EventTrigger>
                                     </hc:Interaction.Triggers>
 
@@ -377,6 +378,7 @@
                                 </ListView>
 
                             </Grid>
+
                             <Grid x:Name="BUFFERSVISIBILITY" Visibility="Collapsed">
                                 <ListView ItemsSource="{Binding Buffers}">
                                     <hc:Interaction.Triggers>
@@ -478,40 +480,6 @@
 
 
                         </syncfusion:SfTreeGrid>
-
-
-                        <!--TreeView x:Name="PropertyTreeView" ItemsSource="{Binding SelectedChunk.ChildrenProperties}">
-                <TreeView.ItemContainerStyle>
-                    <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                        <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                    </Style>
-                </TreeView.ItemContainerStyle>
-
-                <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkPropertyViewModel}" ItemsSource="{Binding Children}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0" Text="{Binding Property.REDName}" />
-                            <TextBlock Grid.Column="1" Text="{Binding Property.REDType}" />
-                            <ContentControl
-                             x:Name="PART_ContentControl"
-                             Grid.Column="2"
-                             Content="{Binding Property}"
-                             ContentTemplateSelector="{StaticResource dataTemplateSelector}"
-                             />
-                        </Grid>
-                    </HierarchicalDataTemplate>
-                </TreeView.Resources>
-
-
-            </TreeView-->
                     </Grid>
 
                 </Grid>

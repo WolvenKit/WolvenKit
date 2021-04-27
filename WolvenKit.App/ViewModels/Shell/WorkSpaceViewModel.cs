@@ -87,7 +87,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
             ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
             ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
-            ShowAudioToolCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
+            ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);

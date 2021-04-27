@@ -131,6 +131,8 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.ShowAudioTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowVideoTool);
 
+            _commandManager.CreateCommand(AppCommands.Application.ShowCodeEditor);
+
             _commandManager.CreateCommand(AppCommands.Application.ShowImporterTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowCR2WToTextTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowGameDebuggerTool);

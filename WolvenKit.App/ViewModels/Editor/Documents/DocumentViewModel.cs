@@ -74,7 +74,7 @@ namespace WolvenKit.ViewModels.Editor
 
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor, CanOpenEditor);
             OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer, CanOpenBuffer);
-            OpenImportCommand = new RelayCommand(ExecuteOpenImport, CanOpenImport);
+            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport, CanOpenImport);
 
 
         }
@@ -119,7 +119,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private bool CanOpenEditor() => true;
 
-        private bool CanOpenImport() => true;
+        private bool CanOpenImport(ICR2WImport input) => true;
 
         private void ExecuteOpenBuffer()
         {
@@ -131,9 +131,15 @@ namespace WolvenKit.ViewModels.Editor
             // TODO: Handle command logic here
         }
 
-        private void ExecuteOpenImport()
+        private void ExecuteOpenImport(ICR2WImport input)
         {
+            //AssetBrowserViewModel.AddToMod()
+
             // TODO: Handle command logic here
+
+
+
+
         }
 
         #endregion commands
