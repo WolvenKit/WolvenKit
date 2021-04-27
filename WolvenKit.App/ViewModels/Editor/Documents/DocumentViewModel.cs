@@ -16,6 +16,7 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
@@ -119,7 +120,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private bool CanOpenEditor() => true;
 
-        private bool CanOpenImport(ICR2WImport input) => true;
+        private bool CanOpenImport(ICR2WImport args) => true;
 
         private void ExecuteOpenBuffer()
         {
@@ -133,13 +134,19 @@ namespace WolvenKit.ViewModels.Editor
 
         private void ExecuteOpenImport(ICR2WImport input)
         {
-            //AssetBrowserViewModel.AddToMod()
+            var depotpath = input.DepotPathStr;
+            var foundItems = new List<IGameFile>();
+            foreach (var manager in MainController.Get().GetManagers(false)
+                .Where(manager => manager.Items.ContainsKey(depotpath)))
+            {
+                foundItems.AddRange(manager.Items[depotpath]);
+            }
 
-            // TODO: Handle command logic here
-
-
-
-
+            var itemToImport = foundItems.FirstOrDefault();
+            if (itemToImport != null)
+            {
+                AssetBrowserViewModel.AddToMod(itemToImport);
+            }
         }
 
         #endregion commands
@@ -259,7 +266,22 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        
+        private ICR2WImport _selectedImport;
+        public ICR2WImport SelectedImport
+        {
+            get => _selectedImport;
+            set
+            {
+                if (_selectedImport != value)
+                {
+                    var oldValue = _selectedImport;
+                    _selectedImport = value;
+                    RaisePropertyChanged(() => SelectedImport, oldValue, value);
+                }
+            }
+        }
+
+
 
         private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file) => new();
 

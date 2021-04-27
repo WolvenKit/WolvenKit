@@ -763,7 +763,6 @@ namespace WolvenKit.MVVM.Model
         /// and adds it to the depot, optionally copying to the project
         /// </summary>
         /// <param name="relativePath"></param>
-        /// <param name="isDLC"></param>
         /// <param name="projectFolder"></param>
         /// <param name="bundleType"></param>
         /// <param name="alternateOutDirectory"></param>

@@ -1,5 +1,4 @@
 <catel:UserControl
- x:Class="WolvenKit.Views.Editor.DocumentView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior"
@@ -18,7 +17,9 @@
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
- d:DataContext="{d:DesignInstance Type=editor:DocumentViewModel}"
+ xmlns:local="clr-namespace:WolvenKit.Views.Editor"
+ x:Class="WolvenKit.Views.Editor.DocumentView"
+ d:DataContext="{d:DesignInstance Type={x:Type editor:DocumentViewModel}}"
  d:DesignHeight="450"
  d:DesignWidth="800"
  IsVisibleChanged="UserControl_IsVisibleChanged"
@@ -26,6 +27,16 @@
  >
     <catel:UserControl.Resources>
         <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources RequestedTheme="Dark" />
+                <hc:Theme />
+
+
+
+            </ResourceDictionary.MergedDictionaries>
+
+
             <DrawingBrush x:Key="SortByCategoryDrawingBrush" o:Freeze="True">
                 <DrawingBrush.Drawing>
                     <DrawingGroup o:Freeze="True">
@@ -90,17 +101,17 @@
                 </DrawingBrush.Drawing>
             </DrawingBrush>
 
-            <Style TargetType="syncfusion:AdvancedFilterControl">
+            <Style TargetType="{x:Type syncfusion:AdvancedFilterControl}">
                 <Setter Property="CanGenerateUniqueItems" Value="False" />
             </Style>
 
 
-            <Style x:Key="PropertyItemBaseStyle" TargetType="hc:PropertyItem">
+            <Style x:Key="PropertyItemBaseStyle" TargetType="{x:Type hc:PropertyItem}">
                 <Setter Property="Focusable" Value="False" />
                 <Setter Property="Margin" Value="0,0,0,6" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="hc:PropertyItem">
+                        <ControlTemplate TargetType="{x:Type hc:PropertyItem}">
 
                             <GroupBox
                              Margin="5,5,0,0"
@@ -137,12 +148,12 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="PropertyItemsControlBaseStyle" TargetType="hc:PropertyItemsControl">
+            <Style x:Key="PropertyItemsControlBaseStyle" TargetType="{x:Type hc:PropertyItemsControl}">
                 <Setter Property="ItemContainerStyle" Value="{StaticResource PropertyItemBaseStyle}" />
                 <Setter Property="Focusable" Value="False" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="hc:PropertyItemsControl">
+                        <ControlTemplate TargetType="{x:Type hc:PropertyItemsControl}">
                             <hc:ScrollViewer Focusable="false" HorizontalScrollBarVisibility="Disabled">
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </hc:ScrollViewer>
@@ -156,12 +167,12 @@
                 </Style.Triggers>
             </Style>
 
-            <Style x:Key="PropertyGroupItemBaseStyle" TargetType="GroupItem">
+            <Style x:Key="PropertyGroupItemBaseStyle" TargetType="{x:Type GroupItem}">
                 <Setter Property="Margin" Value="0,0,0,6" />
                 <Setter Property="Padding" Value="10,6,6,0" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="GroupItem">
+                        <ControlTemplate TargetType="{x:Type GroupItem}">
                             <Expander Header="{Binding Name}" IsExpanded="True">
                                 <Border
                                  Background="{DynamicResource RegionBrush}"
@@ -177,7 +188,7 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="PropertyGridBaseStylez" TargetType="hc:PropertyGrid">
+            <Style x:Key="PropertyGridBaseStylez" TargetType="{x:Type hc:PropertyGrid}">
                 <Setter Property="MaxTitleWidth" Value="200" />
 
                 <Setter Property="Focusable" Value="False" />
@@ -186,7 +197,7 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="hc:PropertyGrid">
+                        <ControlTemplate TargetType="{x:Type hc:PropertyGrid}">
                             <Border
                              Background="{TemplateBinding Background}"
                              BorderBrush="{TemplateBinding BorderBrush}"
@@ -201,7 +212,7 @@
                                         <hc:ButtonGroup
                                          Margin="0,0,6,0"
                                          Style="{StaticResource ButtonGroupBaseStyle}"
-                                         Visibility="{Binding ShowSortButton, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}"
+                                         Visibility="{Binding ShowSortButton, Converter={StaticResource Boolean2VisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"
                                          >
                                             <RadioButton Command="hc:ControlCommands.SortByCategory">
                                                 <Rectangle
@@ -241,14 +252,6 @@
                 </Setter>
             </Style>
 
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources RequestedTheme="Dark" />
-                <hc:Theme />
-
-
-
-            </ResourceDictionary.MergedDictionaries>
-
 
         </ResourceDictionary>
 
@@ -266,46 +269,6 @@
 
 
         <syncfusion:SfNavigationDrawer x:Name="navigationDrawer" DisplayMode="Expanded">
-            <syncfusion:NavigationItem
-             Header="Chunks"
-             IsExpanded="True"
-             IsSelected="True"
-             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown"
-             >
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconVaadinIcons Margin="10,5,5,5" Kind="Cubes" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
-            <syncfusion:NavigationItem
-             Header="Imports"
-             IsExpanded="True"
-             IsSelected="False"
-             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_1"
-             >
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconMaterialDesign Margin="10,5,5,5" Kind="ImportExport" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
-            <syncfusion:NavigationItem
-             Header="Buffers"
-             IsExpanded="True"
-             IsSelected="False"
-             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_2"
-             >
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="Buffer" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
-            <syncfusion:NavigationItem
-             Header="Editors"
-             IsExpanded="True"
-             IsSelected="False"
-             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_3"
-             >
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="BriefcaseEditOutline" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
             <syncfusion:SfNavigationDrawer.ContentView>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -321,10 +284,29 @@
 
                             <Grid x:Name="CHUNKSVISIBILITY">
                                 <TreeView
-                                 Name="TreeView"
+                                 x:Name="TreeView"
                                  ItemsSource="{Binding Chunks}"
                                  Style="{DynamicResource TreeView}"
                                  >
+
+                                    <TreeView.Resources>
+                                        <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkViewModel}" ItemsSource="{Binding Children}">
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <ei:Interaction.Triggers>
+                                                    <ei:EventTrigger EventName="PreviewMouseRightButtonDown">
+                                                        <ei:ChangePropertyAction
+                                                         PropertyName="IsSelected"
+                                                         TargetObject="{Binding}"
+                                                         Value="true"
+                                                         />
+                                                    </ei:EventTrigger>
+                                                </ei:Interaction.Triggers>
+
+                                                <TextBlock Text="{Binding Name}" />
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+                                    </TreeView.Resources>
                                     <ei:Interaction.Behaviors>
                                         <behavior:TreeViewBehavior />
                                     </ei:Interaction.Behaviors>
@@ -341,40 +323,26 @@
                                         </Style>
                                     </TreeView.ItemContainerStyle>
 
-                                    <TreeView.Resources>
-                                        <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkViewModel}" ItemsSource="{Binding Children}">
-                                            <StackPanel Orientation="Horizontal">
-
-                                                <TextBlock Text="{Binding Path=Name}" />
-                                                <ei:Interaction.Triggers>
-                                                    <ei:EventTrigger EventName="PreviewMouseRightButtonDown">
-                                                        <ei:ChangePropertyAction
-                                                         PropertyName="IsSelected"
-                                                         TargetObject="{Binding}"
-                                                         Value="true"
-                                                         />
-                                                    </ei:EventTrigger>
-                                                </ei:Interaction.Triggers>
-                                            </StackPanel>
-                                        </HierarchicalDataTemplate>
-                                    </TreeView.Resources>
                                 </TreeView>
                             </Grid>
 
                             <Grid x:Name="IMPORTSVISISBILITY" Visibility="Collapsed">
-                                <ListView Margin="20" ItemsSource="{Binding Imports}">
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="MouseDoubleClick">
-                                            <hc:EventToCommand Command="{Binding OpenImportCommand}"
-                                                               PassEventArgsToCommand="True" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
+                                <ListView Margin="20" ItemsSource="{Binding Imports}"
+                                          SelectedItem="{Binding SelectedImport}">
 
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding DepotPathStr}" Header="Name" />
                                         </GridView>
                                     </ListView.View>
+
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="MouseDoubleClick">
+                                            <hc:EventToCommand Command="{Binding OpenImportCommand }"
+                                                               CommandParameter="{Binding SelectedImport}"
+                                            />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
                                 </ListView>
 
                             </Grid>
@@ -383,13 +351,14 @@
                                 <ListView ItemsSource="{Binding Buffers}">
                                     <hc:Interaction.Triggers>
                                         <hc:EventTrigger EventName="MouseDoubleClick">
-                                            <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True" />
+                                            <hc:EventToCommand Command="{Binding OpenBufferCommand}"
+                                                               PassEventArgsToCommand="True" />
                                         </hc:EventTrigger>
                                     </hc:Interaction.Triggers>
 
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Index}" Header="Name" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
@@ -487,6 +456,46 @@
 
 
             </syncfusion:SfNavigationDrawer.ContentView>
+            <syncfusion:NavigationItem
+             Header="Chunks"
+             IsExpanded="True"
+             IsSelected="True"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown"
+             >
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconVaadinIcons Margin="10,5,5,5" Kind="Cubes" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem
+             Header="Imports"
+             IsExpanded="True"
+             IsSelected="False"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_1"
+             >
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconMaterialDesign Margin="10,5,5,5" Kind="ImportExport" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem
+             Header="Buffers"
+             IsExpanded="True"
+             IsSelected="False"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_2"
+             >
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="Buffer" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem
+             Header="Editors"
+             IsExpanded="True"
+             IsSelected="False"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_3"
+             >
+                <syncfusion:NavigationItem.Icon>
+                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="BriefcaseEditOutline" />
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
         </syncfusion:SfNavigationDrawer>
 
 
