@@ -4,7 +4,7 @@ using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Model;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models.Wizards;

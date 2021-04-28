@@ -9,7 +9,7 @@ using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;

@@ -2,7 +2,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
 using HandyControl.Controls;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -64,7 +64,10 @@ namespace WolvenKit.Views.Wizards
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (StepMain.StepIndex == 0 && RSV.AllProjectFieldIsValid() && RSV.ViewModel is RequiredSettingsViewModel vm)
+            {
                 vm.EditorProject.Save();
+            }
+
             StepMain.Next();
             ShowPage();
         }

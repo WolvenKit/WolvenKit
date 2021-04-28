@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
 using DynamicData;
-using Orc.ProjectManagement;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
@@ -22,7 +23,7 @@ namespace WolvenManager.App.Services
     /// <summary>
     /// This service watches certain locations in the game files and notifies changes
     /// </summary>
-    public class WatcherService : IWatcherService
+    public class WatcherService : ReactiveObject, IWatcherService
     {
         #region fields
 
@@ -39,38 +40,24 @@ namespace WolvenManager.App.Services
         {
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
 
-            _projectManager.ProjectClosedAsync += ProjectManagerOnProjectClosedAsync;
-            _projectManager.ProjectLoadedAsync += async delegate (object sender, ProjectEventArgs args)
+            _projectManager.WhenAnyValue(_ => _.IsLoaded).Subscribe(async loaded =>
             {
-                await ProjectManagerOnProjectLoadedAsync(sender, args);
-            };
-            
-        }
+                if (loaded)
+                {
+                    WatchLocation(_projectManager.ActiveProject.FileDirectory);
+                    await RefreshAsync(_projectManager.ActiveProject);
+                }
+                else
+                {
+                    UnwatchLocation();
+                }
 
-        private async Task ProjectManagerOnProjectLoadedAsync(object sender, ProjectEventArgs e)
-        {
-            var a = MainController.Get().ActiveMod;
-            if (e.Project is EditorProject proj)
-            {
-                WatchLocation(proj.FileDirectory);
-                await RefreshAsync(proj);
-            }
-            
-            return;
-        }
-
-
-        private Task ProjectManagerOnProjectClosedAsync(object sender, ProjectEventArgs e)
-        {
-            UnwatchLocation();
-            return Task.CompletedTask;
+            });
         }
 
 
         private void WatchLocation(string location)
         {
-  
-
             _modsWatcher = new FileSystemWatcher(location, "*")
             {
                 NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Attributes | NotifyFilters.DirectoryName,
@@ -85,6 +72,11 @@ namespace WolvenManager.App.Services
 
         private void UnwatchLocation()
         {
+            if (_modsWatcher == null)
+            {
+                return;
+            }
+
             _modsWatcher.EnableRaisingEvents = false;
 
             _modsWatcher.Created -= OnChanged;

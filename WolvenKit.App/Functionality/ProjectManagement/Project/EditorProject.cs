@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
-    public abstract class EditorProject : ProjectBase, IEquatable<EditorProject>
+    public abstract class EditorProject : IEquatable<EditorProject>
     {
         #region Fields
 
@@ -21,26 +21,28 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region Constructors
 
-        protected EditorProject(string location)
-                    : base(location)
+        public EditorProject(string location)
         {
-        }
-
-        protected EditorProject() : base("")
-        {
+            Location = location;
         }
 
         #endregion Constructors
 
         #region Methods
 
-        public abstract void Load(string path);
+        public abstract Task<bool> Load(string path);
 
-        public abstract void Save(string path = null);
+        public abstract Task<bool> Save(string path = null);
 
         #endregion Methods
 
         #region properties
+
+        public string Location { get; protected init; }
+
+        [XmlIgnore]
+        public bool IsDirty { get; set; }
+
 
         [XmlIgnore]
         public GameType GameType;

@@ -1,40 +1,66 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Catel;
-using Orc.ProjectManagement;
+using Catel.Data;
+using Catel.IoC;
 using Orchestra.Services;
+using ReactiveUI;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenManager.App.Services;
 
-namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
+namespace WolvenKit.Functionality.Services
 {
-    public class ProjectReader : ProjectReaderBase
+    public class ProjectManager : ObservableObject, IProjectManager
     {
-        #region Fields
 
-        private readonly IGrowlNotificationService _notificationService;
-        private readonly IWatcherService _watcherService;
 
-        #endregion Fields
+        public IObservable<bool> IsLoadedObservable =>
+            this.WhenAnyValue(
+                x => x.IsLoaded);
 
-        #region Constructors
 
-        public ProjectReader(IGrowlNotificationService notificationService, IWatcherService watcherService)
+
+        public IObservable<bool> IsUnloadedObservable =>
+            this.WhenAnyValue(
+                x => x.IsLoaded,
+                (x) => x != true);
+
+
+        public bool IsLoaded { get; set; }
+
+
+        public EditorProject ActiveProject { get; private set; }
+
+
+        public async Task<bool> SaveAsync() => await ActiveProject.Save();
+
+        public async Task<bool> LoadAsync(string location)
         {
-            Argument.IsNotNull(() => notificationService);
-            Argument.IsNotNull(() => watcherService);
-
-            _notificationService = notificationService;
-            _watcherService = watcherService;
+            IsLoaded = false;
+            await ReadFromLocationAsync(location).ContinueWith(_ =>
+            {
+                if (_.IsCompletedSuccessfully)
+                {
+                    ActiveProject = _.Result;
+                    IsLoaded = true;
+                }
+                else
+                {
+                    
+                }
+            });
+            return true;
         }
 
-        #endregion Constructors
-
-        #region Methods
-
-        protected override async Task<IProject> ReadFromLocationAsync(string location)
+        private static async Task<EditorProject> ReadFromLocationAsync(string location)
         {
+            var notificationService = ServiceLocator.Default.ResolveType<IGrowlNotificationService>();
+            var watcherService = ServiceLocator.Default.ResolveType<IWatcherService>();
+
             try
             {
                 var fi = new FileInfo(location);
@@ -53,11 +79,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
                         await MainController.SetGame(new Tw3Controller())
                             .ContinueWith(t =>
                             {
-                                _notificationService.Success(
+                                notificationService.Success(
                                     "Project " + Path.GetFileNameWithoutExtension(location) +
                                     " loaded!");
-                                //_watcherService.WatchLocation(MainController.Get().ActiveMod.FileDirectory);
-                                //_watcherService.RefreshAsync(MainController.Get().ActiveMod.FileDirectory);
 
                             }, TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
@@ -70,29 +94,24 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
                             .ContinueWith(
                                 t =>
                                 {
-                                    _notificationService.Success("Project " +
+                                    notificationService.Success("Project " +
                                                                  Path.GetFileNameWithoutExtension(location) +
                                                                  " loaded!");
 
-
-                                    //_watcherService.WatchLocation(MainController.Get().ActiveMod.FileDirectory);
-                                    //_watcherService.RefreshAsync(MainController.Get().ActiveMod.FileDirectory);
                                 },
                                 TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
                     }
                 }
 
-                return await Task.FromResult<IProject>(project);
+                return await Task.FromResult(project);
             }
             catch (IOException ex)
             {
-                _notificationService.Error(ex.Message);
+                notificationService.Error(ex.Message);
             }
 
             return null;
         }
-
-        #endregion Methods
     }
 }

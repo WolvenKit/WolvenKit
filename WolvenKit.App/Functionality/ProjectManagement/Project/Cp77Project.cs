@@ -48,27 +48,47 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
-        public override void Load(string path)
+        public override async Task<bool> Load(string path)
         {
-            using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-            var ser = new XmlSerializer(typeof(CP77Mod));
-            var obj = (CP77Mod)ser.Deserialize(lf);
-            Name = obj.Name;
-            Version = obj.Version;
-            Author = obj.Author;
-            Email = obj.Email;
-            GameType = GameType.Cyberpunk2077;
-            Data = obj;
-            Data.FileName = path;
+            try
+            {
+                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                var obj = (CP77Mod)ser.Deserialize(lf);
+                Name = obj.Name;
+                Version = obj.Version;
+                Author = obj.Author;
+                Email = obj.Email;
+                GameType = GameType.Cyberpunk2077;
+                Data = obj;
+                Data.FileName = path;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to load project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
         }
 
-        public override void Save(string path)
+        public override async Task<bool> Save(string path)
         {
-            if (path == null)
-                path = Location;
-            using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
-            var ser = new XmlSerializer(typeof(CP77Mod));
-            ser.Serialize(sf, (CP77Mod)Data);
+            try
+            {
+                path ??= Location;
+
+                await using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                ser.Serialize(sf, (CP77Mod)Data);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to save project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
         }
 
         #region Directories

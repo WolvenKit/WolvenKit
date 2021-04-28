@@ -9,7 +9,7 @@ using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
 using HandyControl.Controls;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;

@@ -9,7 +9,7 @@ using Catel.IoC;
 using Catel.Linq;
 using Catel.Logging;
 using Newtonsoft.Json;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using ProtoBuf;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;

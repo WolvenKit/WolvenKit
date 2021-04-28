@@ -14,7 +14,7 @@ using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common.Services;
@@ -151,15 +151,11 @@ namespace WolvenKit.ViewModels.Shell
 
         protected override async Task InitializeAsync()
         {
-            _projectManager.ProjectActivationAsync += OnProjectActivationAsync;
-
             await base.InitializeAsync();
         }
 
         protected override Task OnClosingAsync()
         {
-            _projectManager.ProjectActivationAsync -= OnProjectActivationAsync;
-
             return base.OnClosingAsync();
         }
 
@@ -1004,17 +1000,6 @@ namespace WolvenKit.ViewModels.Shell
 
             ActiveDocument.SaveCommand.SafeExecute();
             ActiveDocument.SetIsDirty(false);
-        }
-
-        private Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
-        {
-            var newProject = (EditorProject)e.NewProject;
-            if (newProject is not null)
-            {
-                EditorProject = newProject;
-            }
-
-            return Task.CompletedTask;
         }
 
         private async Task RequestFileOpen(FileViewModel model)

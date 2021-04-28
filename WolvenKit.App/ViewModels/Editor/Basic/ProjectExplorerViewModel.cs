@@ -16,7 +16,7 @@ using Catel.Services;
 using DynamicData;
 using DynamicData.Binding;
 using Orc.FileSystem;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using ReactiveUI;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor.Basic;

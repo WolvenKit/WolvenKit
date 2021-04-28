@@ -6,13 +6,10 @@ using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
 using Catel.Services;
-using Orc.ProjectManagement;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Model.ProjectManagement;
-using WolvenKit.MVVM.Model.ProjectManagement.Serializers;
-using WolvenKit.MVVM.Model.ProjectManagement.Watchers;
 using WolvenManager.App.Services;
 
 namespace WolvenKit.Functionality.Services
@@ -62,7 +59,6 @@ namespace WolvenKit.Functionality.Services
             RegisterTypes();
             InitializeFonts();
             InitializeCommands();
-            InitializeWatchers();
 
             // async
             await RunAndWaitAsync(new Func<Task>[]
@@ -175,8 +171,6 @@ namespace WolvenKit.Functionality.Services
             return Task.CompletedTask;
         }
 
-        private void InitializeWatchers() => _serviceLocator.RegisterTypeAndInstantiate<RecentlyUsedItemsProjectWatcher>();
-
         private async Task LoadProjectAsync()
         {
             using (_pleaseWaitService.PushInScope())
@@ -188,28 +182,21 @@ namespace WolvenKit.Functionality.Services
                     Log.Error(error);
                     throw new Exception(error);
                 }
-
-                await projectManager.InitializeAsync();
             }
         }
 
         private void RegisterTypes()
         {
-            // project management
             _serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
 
-            _serviceLocator.RegisterType<IProjectSerializerSelector, ProjectSerializerSelector>();  //TODO: not needed?
-            _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
-            _serviceLocator.RegisterType<IInitialProjectLocationService, MVVM.Model.ProjectManagement.InitialProjectLocationService>();
-            _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
+            // singletons
+            _serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
 
 
 
 
             //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO:
-            //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
-
-            _serviceLocator.RegisterTypeAndInstantiate<ProjectManagementCloseApplicationWatcher>();
+           
 
             // Orchestra
             _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();

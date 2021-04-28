@@ -11,7 +11,7 @@ using Catel.Configuration;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Threading;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using Orc.Squirrel;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
@@ -70,7 +70,6 @@ namespace WolvenKit.ViewModels.Shell
         {
             _configurationService.ConfigurationChanged -= OnConfigurationChanged;
             _updateService.UpdateInstalled -= OnUpdateInstalled;
-            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
 
             await base.CloseAsync();
         }
@@ -81,7 +80,6 @@ namespace WolvenKit.ViewModels.Shell
             StaticReferencesVM.GlobalStatusBar = this;
             _configurationService.ConfigurationChanged += OnConfigurationChanged;
             _updateService.UpdateInstalled += OnUpdateInstalled;
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
 
             IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
             //Version = VersionHelper.GetCurrentVersion(); //TODO
@@ -101,17 +99,6 @@ namespace WolvenKit.ViewModels.Shell
             {
                 UpdateAutoUpdateInfo();
             }
-        }
-
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
-        {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-            {
-                return TaskHelper.Completed;
-            }
-
-            return TaskHelper.Completed;
         }
 
         private void OnUpdateInstalled(object sender, EventArgs e) => IsUpdatedInstalled = _updateService.IsUpdatedInstalled;

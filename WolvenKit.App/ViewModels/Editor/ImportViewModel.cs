@@ -10,7 +10,7 @@ using Catel;
 using Catel.Services;
 using Catel.Threading;
 using CsvHelper;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
@@ -40,9 +40,6 @@ namespace WolvenKit.ViewModels.Editor
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
-
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
-            _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
 
             SetupCommands();
             SetupToolDefaults();
@@ -443,19 +440,6 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
         }
-
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
-        {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-            {
-                return TaskHelper.Completed;
-            }
-
-            return TaskHelper.Completed;
-        }
-
-        private Task ProjectManagerOnProjectRefreshedAsync(object sender, ProjectEventArgs e) => TaskHelper.Completed;
 
         private void RegisterXBMDump()
         {
