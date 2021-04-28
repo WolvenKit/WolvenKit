@@ -1767,4 +1767,7 @@
       <HintPath>..\Libs\AutoUpdater.NET.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functionality\Behavior\" />
+  </ItemGroup>
 </Project>

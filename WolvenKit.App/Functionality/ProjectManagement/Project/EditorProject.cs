@@ -89,6 +89,41 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         [XmlIgnore]
         [ReadOnly(true)]
         [Browsable(false)]
+        public string DlcDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "DLC");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
+        public string ModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "Mod");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+
+        [XmlIgnore]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public List<string> Files
         {
             get

@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -13,22 +13,26 @@ using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
-using Catel.Threading;
-using Open.ChannelExtensions;
+using DynamicData;
+using DynamicData.Binding;
 using Orc.FileSystem;
 using Orc.ProjectManagement;
+using ReactiveUI;
+using WolvenKit.Models;
+using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
-using WolvenKit.MVVM.Model.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Dialogs;
+using WolvenManager.App.Services;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -47,13 +51,13 @@ namespace WolvenKit.ViewModels.Editor
         public const string ToolTitle = "Project Explorer";
 
         private readonly ICommandManager _commandManager;
-        private readonly ConcurrentDictionary<ulong, FileSystemInfoModel> _flatNodeDictionary;
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
-        private readonly IProjectRefresherSelector _refresherSelector;
+        private readonly IWatcherService _watcherService;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
+        private readonly ReadOnlyObservableCollection<FileViewModel> _modelTree;
 
         #endregion fields
 
@@ -63,42 +67,191 @@ namespace WolvenKit.ViewModels.Editor
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ICommandManager commandManager,
-            IProjectRefresherSelector refresherSelector
+            IWatcherService watcherService,
+            ICommandManager commandManager
             ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => refresherSelector);
+            Argument.IsNotNull(() => watcherService);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
             _commandManager = commandManager;
-            _refresherSelector = refresherSelector;
-            if (_refresherSelector is MyProjectRefresherSelector myrefresher)
-            {
-                myrefresher.ProjectRefresherUpdatedAsync += OnProjectRefresherUpdatedAsync;
-            }
+            _watcherService = watcherService;
+ 
 
             SetupCommands();
             SetupToolDefaults();
 
-            _flatNodeDictionary = new ConcurrentDictionary<ulong, FileSystemInfoModel>();
-            Treenodes = new BindingList<FileSystemInfoModel>();
-            Treenodes.ListChanged += new ListChangedEventHandler(Treenodes_ListChanged);
+            //BoundCollection = new ObservableCollection<FileViewModel>();
+
+            // raw file list bound
+
+            //_watcherService
+            //    .Connect()
+            //    .Transform(_ => new FileViewModel(_))
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Bind(out _bindingdata)
+            //    .Subscribe(_ =>
+            //{
+            //    foreach (var change in _)
+            //    {
+            //        EvaluateChange2(change);
+            //    }
+            //});
+
+
+
+            _watcherService
+                .Connect()
+                .TransformToTree(m => m.ParentHash)
+                .Transform(_ => new FileViewModel(_))
+                //.Transform(_ => _.Item)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _modelTree)
+                //.Bind(out _reactivetree)
+                .Subscribe(OnNext);
+
         }
+
+        private void OnNext(IChangeSet<FileViewModel, ulong> obj)
+        {
+
+
+        }
+
+        public ReadOnlyObservableCollection<FileViewModel> ModelTree => _modelTree;
+
+
+        //public ReadOnlyObservableCollection<FileViewModel> ReactiveTree => _modeltree;
+        //public ObservableCollection<FileViewModel> BoundCollection { get; set; }
+
+
+        //private readonly Dictionary<ulong, FileViewModel> _flatFileViewModels = new();
+        //private void EvaluateChange2(Change<FileViewModel, ulong> change)
+        //{
+        //    //dbg
+        //    var childsHash = _bindingdata
+        //        .ToLookup(x => x.ParentHash);
+        //    foreach (var x in _bindingdata)
+        //    {
+        //        x.Children.AddOrUpdate(childsHash[x.Hash]);
+        //    }
+        //}
+
+        //private void EvaluateChange(Change<FileModel, ulong> change)
+        //{
+
+
+
+        //    var model = change.Current;
+        //    var key = change.Key;
+
+        //    switch (change.Reason)
+        //    {
+        //        case ChangeReason.Add:
+        //            Add();
+        //            break;
+        //        case ChangeReason.Update:
+        //            if (_flatFileViewModels.ContainsKey(key))
+        //            {
+
+        //            }
+        //            else
+        //            {
+        //                Debugger.Break();
+        //                return;
+        //            }
+        //            break;
+        //        case ChangeReason.Remove:
+        //            if (_flatFileViewModels.ContainsKey(key))
+        //            {
+        //                // get parent and remove that child
+
+        //                var parenthash = _flatFileViewModels[key].ParentHash;
+        //                var v = _flatFileViewModels[parenthash].Children.Remove(_flatFileViewModels[key]);
+        //                // remove the child from the lookup
+        //                _flatFileViewModels.Remove(key);
+
+        //            }
+        //            else
+        //            {
+        //                Debugger.Break();
+        //                return;
+        //            }
+        //            break;
+        //        case ChangeReason.Refresh:
+        //            Debugger.Break();
+        //            break;
+        //        case ChangeReason.Moved:
+        //            Debugger.Break();
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException();
+
+
+
+        //    }
+
+        //    void Add()
+        //    {
+        //        var queue = new Queue<ulong>();
+
+        //        // generate Branch from Model
+        //        while (model.Parent != null)
+        //        {
+        //            var hash = model.Hash;
+
+        //            // this viewmodel is already in tree
+        //            if (_flatFileViewModels.ContainsKey(hash))
+        //            {
+        //                if (queue.Count > 0)
+        //                {
+        //                    var lastVm = _flatFileViewModels[queue.Dequeue()];
+        //                    lastVm.ParentHash = hash;
+        //                    _flatFileViewModels[hash].Children.Add(lastVm);
+        //                    return;
+        //                }
+        //                // else it's the file in the tree
+        //            }
+        //            else
+        //            {
+        //                // create new Viewmodel
+        //                var viewmodel = new FileViewModel(model);
+        //                viewmodel.IsExpanded = true;
+        //                _flatFileViewModels.Add(hash, viewmodel);
+
+        //                if (queue.Count > 0)
+        //                {
+        //                    var lastVm = _flatFileViewModels[queue.Dequeue()];
+        //                    lastVm.ParentHash = hash;
+        //                    _flatFileViewModels[hash].Children.Add(lastVm);
+        //                }
+
+        //                queue.Enqueue(hash);
+        //            }
+
+        //            model = new FileModel(model.Parent);
+        //            if (string.IsNullOrEmpty(model.RelativeName))
+        //            {
+        //                BoundCollection.Add(_flatFileViewModels[hash]);
+        //                return;
+        //            }
+        //        }
+        //    }
+        //}
 
         #endregion constructors
 
         #region properties
 
-        private FileSystemInfoModel _selectedItem;
-        private BindingList<FileSystemInfoModel> _treenodes = null;
+        private FileViewModel _selectedItem;
 
-        public FileSystemInfoModel SelectedItem
+        public FileViewModel SelectedItem
         {
             get => _selectedItem;
             set
@@ -112,103 +265,11 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        public BindingList<FileSystemInfoModel> Treenodes
-        {
-            get => _treenodes;
-            set
-            {
-                if (_treenodes != value)
-                {
-                    var oldValue = _treenodes;
-                    _treenodes = value;
-                    RaisePropertyChanged(() => Treenodes, oldValue, value);
-                }
-            }
-        }
+        
 
         #endregion properties
 
         #region commands
-
-        /// <summary>
-        /// Refresh a node in the ProjectExplorer tree with a given physical path
-        /// </summary>
-        public ICommand RefreshNodeCommand { get; private set; }
-
-        private bool CanRefreshNode(string path) => true;
-
-        private void ExecuteRefreshNode(string path)
-        {
-            var dir = new DirectoryInfo(path);
-            var fi = new FileInfo(path);
-            if (string.IsNullOrEmpty(path))
-            {
-                return;
-            }
-
-            if (fi.Exists)
-            {
-                dir = fi.Directory;
-            }
-
-            if (!dir.Exists)
-            {
-                return;
-            }
-
-            // get parents
-            var dirlist = new List<DirectoryInfo>();
-            var currentdir = dir;
-            while (currentdir.Parent != null && currentdir.FullName != ActiveMod.FileDirectory)
-            {
-                dirlist.Add(currentdir);
-                currentdir = currentdir.Parent;
-            }
-            dirlist.Reverse();
-
-            if (dirlist.Count < 1)
-            {
-                return;
-            }
-
-            // descend down and update last
-            var m = Treenodes.FirstOrDefault(_ => _.IsDirectory && _.FullName == dirlist.First().FullName);
-            if (m == null)
-            {
-                return;
-            }
-
-            m.IsExpanded = true;
-            for (var i = 1; i < dirlist.Count; i++)
-            {
-                var node = dirlist[i];
-                var x = m.Children.FirstOrDefault(_ => _.IsDirectory && _.FullName == node.FullName);
-                if (x == null)
-                {
-                    if (i < dirlist.Count - 1)
-                    {
-                        //TODO: make this better
-                        m.ReloadSync();
-                        x = m.Children.FirstOrDefault(_ => _.IsDirectory && _.FullName == node.FullName);
-                        if (x == null)
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                m = x;
-                if (!m.IsExpanded)
-                {
-                    m.IsExpanded = true;
-                }
-            }
-
-            m?.RaiseRequestRefresh();
-        }
 
         #region general commands
 
@@ -314,19 +375,19 @@ namespace WolvenKit.ViewModels.Editor
 
         private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
-        private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
+        //private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
 
         private void ExecuteCollapseAll()
         {
-            foreach (var node in Treenodes)
-            {
-                node.CollapseChildren(true);
-            }
+            //foreach (var node in Treenodes)
+            //{
+            //    node.CollapseChildren(true);
+            //}
         }
 
         private void ExecuteCopyRelPath()
         {
-            if (SelectedItem.IsFile)
+            if (!SelectedItem.IsDirectory)
             {
                 Clipboard.SetText(GetArchivePath(SelectedItem.FullName));
             }
@@ -365,19 +426,19 @@ namespace WolvenKit.ViewModels.Editor
             try
             {
                 // TODO
-                var _fileService = ServiceLocator.Default.ResolveType<IFileService>();
-                var _directoryService = ServiceLocator.Default.ResolveType<IDirectoryService>();
+                var fileService = ServiceLocator.Default.ResolveType<IFileService>();
+                var directoryService = ServiceLocator.Default.ResolveType<IDirectoryService>();
 
                 if (SelectedItem.IsDirectory)
                 {
-                    _directoryService.Delete(fullpath);
+                    directoryService.Delete(fullpath);
                     //Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
                     //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                     //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
                 else
                 {
-                    _fileService.Delete(fullpath);
+                    fileService.Delete(fullpath);
                     //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
                     //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                     //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
@@ -393,14 +454,15 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
         private void ExecuteExpand() => SelectedItem.ExpandChildren(true);
 
         private void ExecuteExpandAll()
         {
-            foreach (var node in Treenodes)
-            {
-                node.ExpandChildren(true);
-            }
+            //foreach (var node in Treenodes)
+            //{
+            //    node.ExpandChildren(true);
+            //}
         }
 
         private void ExecuteOpenInFileExplorer()
@@ -533,21 +595,22 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ICommand OpenInAssetBrowserCommand { get; private set; }
 
+
         private async void AddAllImports() => await WccHelper.AddAllImportsAsync(SelectedItem.FullName, true);
 
-        private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && SelectedItem.IsFile;
+        private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && !SelectedItem.IsDirectory;
 
         // legacy
         private bool CanCook() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
 
         private bool CanExportJson() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
-            && SelectedItem.IsFile;
+            && !SelectedItem.IsDirectory;
 
         private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null
-            && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
+            && !SelectedItem.IsDirectory && SelectedItem.Extension == ".w2mesh";
 
         private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
-            && SelectedItem.IsFile && SelectedItem.Extension == ".w2mesh";
+            && !SelectedItem.IsDirectory && SelectedItem.Extension == ".w2mesh";
 
         private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
 
@@ -578,7 +641,7 @@ namespace WolvenKit.ViewModels.Editor
 
         protected override async Task CloseAsync()
         {
-            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
+            //_projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
 
             await base.CloseAsync();
         }
@@ -593,56 +656,8 @@ namespace WolvenKit.ViewModels.Editor
             commandManager.RegisterCommand(AppCommands.ProjectExplorer.Expand, ExpandCommand, this);
             commandManager.RegisterCommand(AppCommands.ProjectExplorer.Collapse, CollapseCommand, this);
 
-            _projectManager.ProjectRefreshRequiredAsync += ProjectManagerOnProjectRefreshRequiredAsync;
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
         }
 
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
-        {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-            {
-                return TaskHelper.Completed;
-            }
-
-            RepopulateTreeView();
-
-            return TaskHelper.Completed;
-        }
-
-        /// <summary>
-        /// Is raised when the PorjectRefresher registers a filesytem change.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        private async Task OnProjectRefresherUpdatedAsync(object sender, ProjectEventArgs e)
-        {
-            if (e is ProjectFileSystemEventArgs args)
-            {
-                await Channel
-                    .CreateBounded<string>(50000)
-                    .Source(args.FileNames)
-                    .ReadAllAsync(async path => await Task.Run(() => RefreshNodeCommand.SafeExecute(path)));
-            }
-        }
-
-        private Task ProjectManagerOnProjectRefreshRequiredAsync(object sender, ProjectEventArgs e) => Task.CompletedTask;
-
-        private void RepopulateTreeView()
-        {
-            if (ActiveMod == null)
-            {
-                return;
-            }
-
-            Treenodes.Clear();
-            var fileDirectoryInfo = new DirectoryInfo(ActiveMod.FileDirectory);
-            foreach (var fileSystemInfo in fileDirectoryInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
-            {
-                Treenodes.Add(new FileSystemInfoModel(fileSystemInfo, null));
-            }
-        }
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
         {
@@ -762,9 +777,6 @@ namespace WolvenKit.ViewModels.Editor
             CollapseAllCommand = new RelayCommand(ExecuteCollapseAll, CanCollapseAll);
             ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
             CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
-
-            RefreshNodeCommand = new DelegateCommand<string>(ExecuteRefreshNode, CanRefreshNode);
-            _commandManager.RegisterCommand(AppCommands.ProjectExplorer.Refresh, RefreshNodeCommand, this);
         }
 
         /// <summary>
@@ -772,10 +784,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
-        private void Treenodes_ListChanged(object sender, ListChangedEventArgs e)
-        {
-            //RaisePropertyChanged(nameof(Treenodes));
-        }
 
         #endregion Methods
     }

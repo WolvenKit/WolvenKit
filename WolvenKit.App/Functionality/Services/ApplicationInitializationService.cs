@@ -13,6 +13,7 @@ using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Model.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Serializers;
 using WolvenKit.MVVM.Model.ProjectManagement.Watchers;
+using WolvenManager.App.Services;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -201,8 +202,9 @@ namespace WolvenKit.Functionality.Services
             _serviceLocator.RegisterType<ISaveProjectChangesService, SaveProjectChangesService>();
             _serviceLocator.RegisterType<IInitialProjectLocationService, MVVM.Model.ProjectManagement.InitialProjectLocationService>();
             _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
-            _serviceLocator.RegisterType<IProjectRefresherSelector, MyProjectRefresherSelector>();
-            _serviceLocator.RegisterType<IProjectRefresher, WolvenKitProjectRefresher>(RegistrationType.Transient);
+
+
+
 
             //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO:
             //_serviceLocator.RegisterType<IProjectValidator, WkitProjectValidator>();
@@ -217,6 +219,8 @@ namespace WolvenKit.Functionality.Services
 
             var config = SettingsManager.Load();
             _serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
+            _serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
+
         }
 
         #endregion methods

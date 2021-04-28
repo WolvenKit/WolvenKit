@@ -93,39 +93,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region Top-level Dirs
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string DlcDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "DLC");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string ModDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "Mod");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
+        
 
         #endregion Top-level Dirs
 
@@ -275,10 +243,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return Task.CompletedTask;
         }
 
-        #endregion methods
-
-        #region Methods
-
         public object Clone()
         {
             var clone = new Cp77Project()
@@ -294,6 +258,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override string ToString() => Location;
 
-        #endregion Methods
+        #endregion methods
     }
 }

@@ -15,6 +15,8 @@ using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
 using Orc.ProjectManagement;
+using WolvenKit.Models;
+using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common.Services;
 using WolvenKit.CR2W;
 using WolvenKit.Functionality.Commands;
@@ -99,7 +101,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            OpenFileCommand = new DelegateCommand<FileSystemInfoModel>(
+            OpenFileCommand = new DelegateCommand<FileViewModel>(
                 async (p) => await ExecuteOpenFile(p),
                 (p) => CanOpenFile(p));
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
@@ -381,7 +383,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanNewFile() => true;
 
-        private bool CanOpenFile(FileSystemInfoModel model) => true;
+        private bool CanOpenFile(FileViewModel model) => true;
 
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
 
@@ -466,14 +468,15 @@ namespace WolvenKit.ViewModels.Shell
             //TODO
         }
 
-        private async Task ExecuteOpenFile(FileSystemInfoModel model)
+        private async Task ExecuteOpenFile(FileViewModel model)
         {
             if (model == null)
             {
                 var dlg = new OpenFileDialog();
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
-                    model = new FileSystemInfoModel(new FileInfo(dlg.FileName), null);
+                    //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
+                    //TODO
                     ActiveDocument = await OpenAsync(model);
                 }
             }
@@ -483,11 +486,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     model.IsExpanded = !model.IsExpanded;
                 }
-                else if (model.IsFile)
+                else if (!model.IsDirectory)
                 {
                     // TODO: make this a background task
                     await RequestFileOpen(model);
-                    //await Task.Run(() => RequestFileOpen(model));
                 }
             }
         }
@@ -954,7 +956,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<DocumentViewModel> OpenAsync(FileSystemInfoModel model)
+        public async Task<DocumentViewModel> OpenAsync(FileViewModel model)
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
@@ -1015,7 +1017,7 @@ namespace WolvenKit.ViewModels.Shell
             return Task.CompletedTask;
         }
 
-        private async Task RequestFileOpen(FileSystemInfoModel model)
+        private async Task RequestFileOpen(FileViewModel model)
         {
             var fullpath = model.FullName;
 
