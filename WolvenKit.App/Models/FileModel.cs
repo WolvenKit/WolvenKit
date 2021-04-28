@@ -19,66 +19,57 @@ namespace WolvenKit.Models
 
         public FileModel(string path)
         {
+            FullName = path;
+            var parentfullname = "";
+
             if (Directory.Exists(path))
             {
-                Wrapped = new DirectoryInfo(path);
+                IsDirectory = true;
+                var di = new DirectoryInfo(path);
+                parentfullname = di.Parent.FullName;
+                Name = di.Name;
+                Extension = di.Extension;
             }
             else if (File.Exists(path))
             {
-                Wrapped = new FileInfo(path);
+                IsDirectory = false;
+                var fi = new FileInfo(path);
+                parentfullname = fi.Directory.FullName;
+                Name = fi.Name;
+                Extension = fi.Extension;
             }
             else
             {
                 throw new FileNotFoundException();
             }
 
-            Init();
-        } 
-
-        public FileModel(FileSystemInfo wrapped)
-        {
-            Wrapped = wrapped;
-
-            Init();
-        }
-
-
-        private void Init()
-        {
             RelativeName = GetRelativeName(FullName);
-            IsDirectory = Wrapped.IsDirectory();
-            Parent = Wrapped.GetParent();
             Hash = FNV1A64HashAlgorithm.HashString(RelativeName);
-            ParentHash = Parent != null
-                ? FNV1A64HashAlgorithm.HashString( GetRelativeName(Parent.FullName))
+            ParentHash = !string.IsNullOrEmpty(GetRelativeName(parentfullname))
+                ? FNV1A64HashAlgorithm.HashString(GetRelativeName(parentfullname))
                 : 0;
         }
 
         #region properties
 
-        private FileSystemInfo Wrapped { get; }
+        public string FullName { get; }
 
-        public DirectoryInfo Parent { get; private set; }
+        public string Name { get; }
 
-        public string Name => Wrapped.Name;
+        public string RelativeName { get; }
 
-        public string FullName => Wrapped.FullName;
+        public string Extension { get; }
 
-        public string RelativeName { get; private set; }
+        public bool IsDirectory { get; }
 
-        public bool IsDirectory { get; private set; }
+        public ulong Hash { get; }
 
-        public string Extension => Wrapped.Extension;
-
-        public ulong Hash { get; private set; }
-        public ulong ParentHash { get; private set; }
+        public ulong ParentHash { get; }
 
         #endregion
 
 
         public override int GetHashCode() => (int)Hash;
-
-        private DirectoryInfo GetParent() => IsDirectory ? (Wrapped as DirectoryInfo).Parent : (Wrapped as FileInfo).Directory;
 
         public static string GetRelativeName(string fullname)
         {

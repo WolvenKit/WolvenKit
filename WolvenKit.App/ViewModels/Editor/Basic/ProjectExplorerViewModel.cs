@@ -57,7 +57,10 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IWatcherService _watcherService;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
-        private readonly ReadOnlyObservableCollection<FileViewModel> _modelTree;
+        private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
+        
+        private readonly ReadOnlyObservableCollection<FileViewModel> topnodes;
+        public ReadOnlyObservableCollection<FileViewModel> BindingModel => topnodes;
 
         #endregion fields
 
@@ -87,183 +90,41 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-            //BoundCollection = new ObservableCollection<FileViewModel>();
-
-            // raw file list bound
-
-            //_watcherService
-            //    .Connect()
-            //    .Transform(_ => new FileViewModel(_))
-            //    .ObserveOn(RxApp.MainThreadScheduler)
-            //    .Bind(out _bindingdata)
-            //    .Subscribe(_ =>
-            //{
-            //    foreach (var change in _)
-            //    {
-            //        EvaluateChange2(change);
-            //    }
-            //});
-
-
-
-            _watcherService
-                .Connect()
-                .TransformToTree(m => m.ParentHash)
+            _watcherService.Files.Connect()
                 .Transform(_ => new FileViewModel(_))
-                //.Transform(_ => _.Item)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _modelTree)
-                //.Bind(out _reactivetree)
-                .Subscribe(OnNext);
+               .Bind(out _bindingModel)
+               .Subscribe();
+
+
+            var o = _bindingModel.ToObservableChangeSet()
+                .ForEachChange(Action2)
+                .Filter(_ => _.ParentHash == 0)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out topnodes)
+                .Subscribe();
 
         }
 
-        private void OnNext(IChangeSet<FileViewModel, ulong> obj)
+        private void Action2(Change<FileViewModel> obj)
         {
-
-
+            var lookup = _bindingModel.ToLookup(x => x.ParentHash);
+            foreach (var model in _bindingModel)
+            {
+                model.ChildrenCache.Edit(inner =>
+                {
+                    inner.Clear();
+                    inner.AddOrUpdate(lookup[model.Hash]);
+                }
+                );
+            }
         }
-
-        public ReadOnlyObservableCollection<FileViewModel> ModelTree => _modelTree;
-
-
-        //public ReadOnlyObservableCollection<FileViewModel> ReactiveTree => _modeltree;
-        //public ObservableCollection<FileViewModel> BoundCollection { get; set; }
-
-
-        //private readonly Dictionary<ulong, FileViewModel> _flatFileViewModels = new();
-        //private void EvaluateChange2(Change<FileViewModel, ulong> change)
-        //{
-        //    //dbg
-        //    var childsHash = _bindingdata
-        //        .ToLookup(x => x.ParentHash);
-        //    foreach (var x in _bindingdata)
-        //    {
-        //        x.Children.AddOrUpdate(childsHash[x.Hash]);
-        //    }
-        //}
-
-        //private void EvaluateChange(Change<FileModel, ulong> change)
-        //{
-
-
-
-        //    var model = change.Current;
-        //    var key = change.Key;
-
-        //    switch (change.Reason)
-        //    {
-        //        case ChangeReason.Add:
-        //            Add();
-        //            break;
-        //        case ChangeReason.Update:
-        //            if (_flatFileViewModels.ContainsKey(key))
-        //            {
-
-        //            }
-        //            else
-        //            {
-        //                Debugger.Break();
-        //                return;
-        //            }
-        //            break;
-        //        case ChangeReason.Remove:
-        //            if (_flatFileViewModels.ContainsKey(key))
-        //            {
-        //                // get parent and remove that child
-
-        //                var parenthash = _flatFileViewModels[key].ParentHash;
-        //                var v = _flatFileViewModels[parenthash].Children.Remove(_flatFileViewModels[key]);
-        //                // remove the child from the lookup
-        //                _flatFileViewModels.Remove(key);
-
-        //            }
-        //            else
-        //            {
-        //                Debugger.Break();
-        //                return;
-        //            }
-        //            break;
-        //        case ChangeReason.Refresh:
-        //            Debugger.Break();
-        //            break;
-        //        case ChangeReason.Moved:
-        //            Debugger.Break();
-        //            break;
-        //        default:
-        //            throw new ArgumentOutOfRangeException();
-
-
-
-        //    }
-
-        //    void Add()
-        //    {
-        //        var queue = new Queue<ulong>();
-
-        //        // generate Branch from Model
-        //        while (model.Parent != null)
-        //        {
-        //            var hash = model.Hash;
-
-        //            // this viewmodel is already in tree
-        //            if (_flatFileViewModels.ContainsKey(hash))
-        //            {
-        //                if (queue.Count > 0)
-        //                {
-        //                    var lastVm = _flatFileViewModels[queue.Dequeue()];
-        //                    lastVm.ParentHash = hash;
-        //                    _flatFileViewModels[hash].Children.Add(lastVm);
-        //                    return;
-        //                }
-        //                // else it's the file in the tree
-        //            }
-        //            else
-        //            {
-        //                // create new Viewmodel
-        //                var viewmodel = new FileViewModel(model);
-        //                viewmodel.IsExpanded = true;
-        //                _flatFileViewModels.Add(hash, viewmodel);
-
-        //                if (queue.Count > 0)
-        //                {
-        //                    var lastVm = _flatFileViewModels[queue.Dequeue()];
-        //                    lastVm.ParentHash = hash;
-        //                    _flatFileViewModels[hash].Children.Add(lastVm);
-        //                }
-
-        //                queue.Enqueue(hash);
-        //            }
-
-        //            model = new FileModel(model.Parent);
-        //            if (string.IsNullOrEmpty(model.RelativeName))
-        //            {
-        //                BoundCollection.Add(_flatFileViewModels[hash]);
-        //                return;
-        //            }
-        //        }
-        //    }
-        //}
 
         #endregion constructors
 
         #region properties
 
-        private FileViewModel _selectedItem;
-
-        public FileViewModel SelectedItem
-        {
-            get => _selectedItem;
-            set
-            {
-                if (_selectedItem != value)
-                {
-                    var oldValue = _selectedItem;
-                    _selectedItem = value;
-                    RaisePropertyChanged(() => SelectedItem, oldValue, value);
-                }
-            }
-        }
+        public FileViewModel SelectedItem { get; set; }
 
         
 

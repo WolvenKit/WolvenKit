@@ -14,6 +14,7 @@ using Splat;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ViewModels.Editor.Basic;
 
 namespace WolvenManager.App.Services
 {
@@ -24,8 +25,8 @@ namespace WolvenManager.App.Services
     {
         #region fields
 
-        private readonly SourceCache<FileModel, ulong> _files;
-        public IObservable<IChangeSet<FileModel, ulong>> Connect() => _files.Connect();
+        private readonly SourceCache<FileModel, ulong> _files = new(_ => _.Hash);
+        public IObservableCache<FileModel, ulong> Files => _files;
 
         private readonly IProjectManager _projectManager;
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
@@ -43,8 +44,6 @@ namespace WolvenManager.App.Services
                 await ProjectManagerOnProjectActivatedAsync(sender, args);
             } ;
             _projectManager.ProjectClosedAsync += ProjectManagerOnProjectClosedAsync;
-
-            _files = new SourceCache<FileModel, ulong>(_ => _.Hash);
         }
 
         private Task ProjectManagerOnProjectClosedAsync(object sender, ProjectEventArgs e)

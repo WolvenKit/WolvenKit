@@ -1,14 +1,5 @@
-using System.Diagnostics;
-using System.IO;
 using System.Windows;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using Syncfusion.UI.Xaml.TreeView;
-using Syncfusion.UI.Xaml.TreeView.Engine;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Models;
-using WolvenKit.RED4.MeshFile;
-using WolvenKit.RED4.MorphTargetFile;
-using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Editor
 {
@@ -23,7 +14,7 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
 
-            TreeView.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
+            //SfTreeView.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
             //TreeView.NodePopulationMode = TreeNodePopulationMode.Instant;
             //TreeView.ExpandActionTrigger = ExpandActionTrigger.Node;
             //TreeView.ItemTemplateDataContextType = ItemTemplateDataContextType.Item;

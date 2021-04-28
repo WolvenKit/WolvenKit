@@ -12,74 +12,43 @@ using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Editor.Basic
 {
-    //https://dynamic-data.org/2015/07/07/reactive-tree-using-dynamic-data/
     public class FileViewModel : ObservableObject, IEquatable<FileViewModel>
     {
-        public FileViewModel(Node<FileModel, ulong> node, FileViewModel parent = null)
+        private FileModel Item { get; }
+
+        public FileViewModel(FileModel model)
         {
-            Hash = node.Key;
-            Name = node.Item.Name;
-            Depth = node.Depth;
-            ParentHash = node.Item.ParentHash;
-            Parent = parent;
+            Item = model;
 
-            FullName = node.Item.FullName;
-            IsDirectory = node.Item.IsDirectory;
-            Extension = node.Item.Extension;
+            this.ChildrenCache.Connect().Bind(out _children).Subscribe();
 
-            var childrenLoader = new Lazy<IDisposable>(() => node.Children.Connect()
-                .Transform(e => new FileViewModel(e,  this))
-                .Bind(out _children)
-                .DisposeMany()
-                .Subscribe());
-
-            var shouldExpand = node.IsRoot
-                ? Observable.Return(true)
-                : Parent.Value.WhenValueChanged(This => This.IsExpanded);
-
-
-            var expander = shouldExpand
-                .Where(isExpanded => isExpanded)
-                .Take(1)
-                .Subscribe(_ =>
-                {
-                    var x = childrenLoader.Value;
-                });
         }
-
-        
-
 
         // Data
 
-        public string Name { get; }
+        public string Name => Item.Name;
 
-        public string FullName { get; }
+        public string FullName => Item.FullName;
 
-        public bool IsDirectory { get; }
+        public string Extension => Item.Extension;
 
-        public string Extension { get; }
+        public bool IsDirectory => Item.IsDirectory;
 
         // Hierarchy
 
-        public ulong Hash { get; }
+        public ulong Hash => Item.Hash;
 
-        public int Depth { get; }
-
-        public ulong ParentHash { get; }
-
-        public Optional<FileViewModel> Parent { get; }
+        public ulong ParentHash => Item.ParentHash;
 
         private ReadOnlyObservableCollection<FileViewModel> _children;
-
         public ReadOnlyObservableCollection<FileViewModel> Children => _children;
+
+        public SourceCache<FileViewModel, ulong> ChildrenCache { get; } = new(_ => _.Hash);
 
         // UI
 
         public bool IsExpanded { get; set; }
-
-        
-
+        public bool IsSelected { get; set; }
 
         //public string ComputedFullName => Parent == null ? Name : Path
         //    .Combine(Parent.ComputedFullName, Name)
@@ -87,12 +56,8 @@ namespace WolvenKit.ViewModels.Editor.Basic
 
         public string IconPath =>
             IsDirectory
-                ? Children is {Count: > 0} ? "FolderOpened" : "Folder"
+                ? Children is { Count: > 0 } ? "FolderOpened" : "Folder"
                 : "File";
-
-
-
-
 
         #region methods
 
@@ -152,7 +117,6 @@ namespace WolvenKit.ViewModels.Editor.Basic
         public static bool operator !=(FileViewModel left, FileViewModel right) => !Equals(left, right);
 
         #endregion
-
     }
 
 }

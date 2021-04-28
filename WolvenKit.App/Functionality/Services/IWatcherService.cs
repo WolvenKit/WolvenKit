@@ -13,7 +13,8 @@ namespace WolvenManager.App.Services
     {
         public bool IsSuspended { get; set; }
 
-        public IObservable<IChangeSet<FileModel, ulong>> Connect();
+        //public IObservable<IChangeSet<FileModel, ulong>> Connect();
+        public IObservableCache<FileModel, ulong> Files { get; }
 
         public Task RefreshAsync();
     }
