@@ -11,10 +11,10 @@ using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED3.CR2W;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
 

@@ -11,8 +11,8 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.MVVM.Model
 {

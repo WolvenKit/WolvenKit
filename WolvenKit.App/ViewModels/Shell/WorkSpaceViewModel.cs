@@ -18,12 +18,12 @@ using Orc.ProjectManagement;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED3.CR2W;
 using WolvenKit.ViewModels.Editor;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 

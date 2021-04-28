@@ -5,10 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CsvHelper;
+using CsvHelper.Configuration;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.Models
 {
@@ -35,9 +36,12 @@ namespace WolvenKit.Models
                 using var ms = new MemoryStream();
                 using var writer = new StreamWriter(ms, Encoding.UTF8);
                 using var reader = new StreamReader(ms);
-                using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HasHeaderRecord = useHeader,
+                };
+                using var csv = new CsvWriter(writer, config);
                 RegisterClassMap(wrappedArray.InnerType, csv);
-                csv.Configuration.HasHeaderRecord = useHeader;
                 csv.WriteRecords(wrappedArray);
 
                 writer.Flush();
@@ -57,9 +61,12 @@ namespace WolvenKit.Models
         {
             try
             {
-                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HasHeaderRecord = useHeader,
+                };
+                using var csv = new CsvReader(reader, config);
                 RegisterClassMap(type, csv);
-                csv.Configuration.HasHeaderRecord = useHeader;
 
                 var records = csv.GetRecords(type).ToList();
                 // TODO: is there a way without recreating all?
@@ -77,62 +84,62 @@ namespace WolvenKit.Models
         {
             if (type == typeof(CName))
             {
-                csv.Configuration.RegisterClassMap<CNameMap>();
+                csv.Context.RegisterClassMap<CNameMap>();
             }
 
             if (type == typeof(CString))
             {
-                csv.Configuration.RegisterClassMap<CStringMap>();
+                csv.Context.RegisterClassMap<CStringMap>();
             }
 
             if (type == typeof(CBool))
             {
-                csv.Configuration.RegisterClassMap<CBoolMap>();
+                csv.Context.RegisterClassMap<CBoolMap>();
             }
 
             if (type == typeof(CFloat))
             {
-                csv.Configuration.RegisterClassMap<CFloatMap>();
+                csv.Context.RegisterClassMap<CFloatMap>();
             }
 
             if (type == typeof(CUInt8))
             {
-                csv.Configuration.RegisterClassMap<CUInt8Map>();
+                csv.Context.RegisterClassMap<CUInt8Map>();
             }
 
             if (type == typeof(CUInt16))
             {
-                csv.Configuration.RegisterClassMap<CUInt16Map>();
+                csv.Context.RegisterClassMap<CUInt16Map>();
             }
 
             if (type == typeof(CUInt32))
             {
-                csv.Configuration.RegisterClassMap<CUInt32Map>();
+                csv.Context.RegisterClassMap<CUInt32Map>();
             }
 
             if (type == typeof(CUInt64))
             {
-                csv.Configuration.RegisterClassMap<CUInt64Map>();
+                csv.Context.RegisterClassMap<CUInt64Map>();
             }
 
             if (type == typeof(CInt8))
             {
-                csv.Configuration.RegisterClassMap<CInt8Map>();
+                csv.Context.RegisterClassMap<CInt8Map>();
             }
 
             if (type == typeof(CInt16))
             {
-                csv.Configuration.RegisterClassMap<CInt16Map>();
+                csv.Context.RegisterClassMap<CInt16Map>();
             }
 
             if (type == typeof(CInt32))
             {
-                csv.Configuration.RegisterClassMap<CInt32Map>();
+                csv.Context.RegisterClassMap<CInt32Map>();
             }
 
             if (type == typeof(CInt64))
             {
-                csv.Configuration.RegisterClassMap<CInt64Map>();
+                csv.Context.RegisterClassMap<CInt64Map>();
             }
         }
 
@@ -140,7 +147,7 @@ namespace WolvenKit.Models
         {
             if (type == typeof(CName))
             {
-                csv.Configuration.RegisterClassMap<CNameMap>();
+                csv.Context.RegisterClassMap<CNameMap>();
             }
         }
 

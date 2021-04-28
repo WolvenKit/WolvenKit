@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
 using WolvenKit.Models;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenManager.App.Services
 {
@@ -16,6 +17,6 @@ namespace WolvenManager.App.Services
         //public IObservable<IChangeSet<FileModel, ulong>> Connect();
         public IObservableCache<FileModel, ulong> Files { get; }
 
-        public Task RefreshAsync();
+        public Task RefreshAsync(EditorProject proj);
     }
 }

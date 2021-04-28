@@ -12,6 +12,7 @@ using Orc.ProjectManagement;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor.Basic;
@@ -29,7 +30,6 @@ namespace WolvenManager.App.Services
         public IObservableCache<FileModel, ulong> Files => _files;
 
         private readonly IProjectManager _projectManager;
-        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
 
         private FileSystemWatcher _modsWatcher;
 
@@ -39,12 +39,26 @@ namespace WolvenManager.App.Services
         {
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
 
-            _projectManager.ProjectActivatedAsync += async delegate(object sender, ProjectUpdatedEventArgs args)
-            {
-                await ProjectManagerOnProjectActivatedAsync(sender, args);
-            } ;
             _projectManager.ProjectClosedAsync += ProjectManagerOnProjectClosedAsync;
+            _projectManager.ProjectLoadedAsync += async delegate (object sender, ProjectEventArgs args)
+            {
+                await ProjectManagerOnProjectLoadedAsync(sender, args);
+            };
+            
         }
+
+        private async Task ProjectManagerOnProjectLoadedAsync(object sender, ProjectEventArgs e)
+        {
+            var a = MainController.Get().ActiveMod;
+            if (e.Project is EditorProject proj)
+            {
+                WatchLocation(proj.FileDirectory);
+                await RefreshAsync(proj);
+            }
+            
+            return;
+        }
+
 
         private Task ProjectManagerOnProjectClosedAsync(object sender, ProjectEventArgs e)
         {
@@ -52,20 +66,10 @@ namespace WolvenManager.App.Services
             return Task.CompletedTask;
         }
 
-        private async Task ProjectManagerOnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
-        {
-            WatchLocation(ActiveMod.FileDirectory);
-            await RefreshAsync();
-            return;
-        }
-
 
         private void WatchLocation(string location)
         {
-            if (ActiveMod == null)
-            {
-                return;
-            }
+  
 
             _modsWatcher = new FileSystemWatcher(location, "*")
             {
@@ -96,12 +100,12 @@ namespace WolvenManager.App.Services
         /// <summary>
         /// initial refresh
         /// </summary>
-        public async Task RefreshAsync() => await Task.Run(DetectProjectFiles);
+        public async Task RefreshAsync(EditorProject proj) => await Task.Run(() => DetectProjectFiles(proj));
 
-        private void DetectProjectFiles()
+        private void DetectProjectFiles(EditorProject proj)
         {
             var allFiles = Directory
-                    .GetFileSystemEntries(ActiveMod.FileDirectory, "*", SearchOption.AllDirectories)
+                    .GetFileSystemEntries(proj.FileDirectory, "*", SearchOption.AllDirectories)
                 ;
 
             _files.Edit(innerList =>

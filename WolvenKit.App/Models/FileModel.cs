@@ -71,13 +71,22 @@ namespace WolvenKit.Models
 
         public override int GetHashCode() => (int)Hash;
 
-        public static string GetRelativeName(string fullname)
+        public static string GetRelativeName(string fullname, EditorProject proj = null)
         {
             var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
+            var project = proj;
+            if (proj == null)
+            {
+                project = pm.ActiveProject as EditorProject;
+                if (project == null)
+                {
+                    throw new NotImplementedException();
+                }
+            }
 
-            var filedir = (pm.ActiveProject as EditorProject).FileDirectory;
-            var moddir = (pm.ActiveProject as EditorProject).ModDirectory;
-            var dlcdir = (pm.ActiveProject as EditorProject).DlcDirectory;
+            var filedir = project.FileDirectory;
+            var moddir = project.ModDirectory;
+            var dlcdir = project.DlcDirectory;
 
             if (fullname.Equals(filedir, StringComparison.Ordinal))
             {

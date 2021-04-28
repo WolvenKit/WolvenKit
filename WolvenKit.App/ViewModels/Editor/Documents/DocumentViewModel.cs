@@ -15,11 +15,11 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED3.CR2W.SRT;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor

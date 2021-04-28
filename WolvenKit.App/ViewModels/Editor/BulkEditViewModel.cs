@@ -9,10 +9,10 @@ using System.Windows.Input;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.RED3.CR2W;
+using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor.Old

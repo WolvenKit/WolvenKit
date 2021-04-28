@@ -5,6 +5,7 @@ using Orc.ProjectManagement;
 using Orchestra.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenManager.App.Services;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
 {
@@ -13,16 +14,19 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
         #region Fields
 
         private readonly IGrowlNotificationService _notificationService;
+        private readonly IWatcherService _watcherService;
 
         #endregion Fields
 
         #region Constructors
 
-        public ProjectReader(IGrowlNotificationService notificationService)
+        public ProjectReader(IGrowlNotificationService notificationService, IWatcherService watcherService)
         {
             Argument.IsNotNull(() => notificationService);
+            Argument.IsNotNull(() => watcherService);
 
             _notificationService = notificationService;
+            _watcherService = watcherService;
         }
 
         #endregion Constructors
@@ -52,6 +56,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
                                 _notificationService.Success(
                                     "Project " + Path.GetFileNameWithoutExtension(location) +
                                     " loaded!");
+                                //_watcherService.WatchLocation(MainController.Get().ActiveMod.FileDirectory);
+                                //_watcherService.RefreshAsync(MainController.Get().ActiveMod.FileDirectory);
 
                             }, TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;
@@ -67,6 +73,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Serializers
                                     _notificationService.Success("Project " +
                                                                  Path.GetFileNameWithoutExtension(location) +
                                                                  " loaded!");
+
+
+                                    //_watcherService.WatchLocation(MainController.Get().ActiveMod.FileDirectory);
+                                    //_watcherService.RefreshAsync(MainController.Get().ActiveMod.FileDirectory);
                                 },
                                 TaskContinuationOptions.OnlyOnRanToCompletion);
                         break;

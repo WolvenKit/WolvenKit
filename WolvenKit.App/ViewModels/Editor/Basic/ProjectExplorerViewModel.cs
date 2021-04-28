@@ -59,8 +59,8 @@ namespace WolvenKit.ViewModels.Editor
         private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
         private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
         
-        private readonly ReadOnlyObservableCollection<FileViewModel> topnodes;
-        public ReadOnlyObservableCollection<FileViewModel> BindingModel => topnodes;
+        private readonly ReadOnlyObservableCollection<FileViewModel> _topnodes;
+        public ReadOnlyObservableCollection<FileViewModel> BindingModel => _topnodes;
 
         #endregion fields
 
@@ -97,11 +97,11 @@ namespace WolvenKit.ViewModels.Editor
                .Subscribe();
 
 
-            var o = _bindingModel.ToObservableChangeSet()
+            _bindingModel.ToObservableChangeSet()
                 .ForEachChange(Action2)
                 .Filter(_ => _.ParentHash == 0)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out topnodes)
+                .Bind(out _topnodes)
                 .Subscribe();
 
         }

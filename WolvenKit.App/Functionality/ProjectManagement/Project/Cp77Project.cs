@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
 using Catel.Logging;
-
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {

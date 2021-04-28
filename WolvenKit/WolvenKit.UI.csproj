@@ -290,14 +290,14 @@
   </ItemGroup>
   <ItemGroup>
 
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7760" />
+    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7763" />
 
 
-    <PackageReference Include="Ab3d.DXEngine" Version="4.3.7760" />
-    <PackageReference Include="Ab3d.PowerToys" Version="9.5.7760" />
-    <PackageReference Include="Catel.Core" Version="5.12.12" />
-    <PackageReference Include="Catel.MVVM" Version="5.12.12" />
-    <PackageReference Include="Catel.Fody" Version="4.7.0-alpha0115" PrivateAssets="all" />
+    <PackageReference Include="Ab3d.DXEngine" Version="4.3.7763" />
+    <PackageReference Include="Ab3d.PowerToys" Version="9.5.7763" />
+    <PackageReference Include="Catel.Core" Version="5.12.13" />
+    <PackageReference Include="Catel.MVVM" Version="5.12.13" />
+    <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="CatFacts.Net" Version="0.1.1" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
     <PackageReference Include="Dirkster.WSF" Version="1.2.0" />
@@ -305,52 +305,52 @@
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
     <PackageReference Include="FFME.Windows" Version="4.3.340" />
-    <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all" />
-    <PackageReference Include="CsvHelper" Version="16.1.0" />
+    <PackageReference Include="Fody" Version="6.5.1" PrivateAssets="all" />
+    <PackageReference Include="CsvHelper" Version="27.0.2" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.23.3" />
-    <PackageReference Include="Magick.NET.SystemDrawing" Version="2.0.14" />
-    <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="3.0.8" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.3" />
+    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.23.4" />
+    <PackageReference Include="Magick.NET.SystemDrawing" Version="2.0.15" />
+    <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="3.0.9" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.5" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.664.37" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
-    <PackageReference Include="NAudio" Version="1.10.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.818.41" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="NAudio" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NodeNetwork" Version="5.1.2" />
     <PackageReference Include="NodeNetworkToolkit" Version="5.1.2" />
    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="Octokit" Version="0.48.0" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="Open.ChannelExtensions" Version="3.5.0" />
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
     <PackageReference Include="Orc.CsvTextEditor" Version="4.1.0" />
     <PackageReference Include="Orc.LogViewer" Version="4.1.0" />
-    <PackageReference Include="Orc.ProjectManagement" Version="4.1.1" />
+    <PackageReference Include="Orc.ProjectManagement" Version="4.1.3" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
     <PackageReference Include="Panuon.UI.Silver" Version="1.1.3.4" />
     <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.1" />
-    <PackageReference Include="Pfim" Version="0.9.1" />
-    <PackageReference Include="protobuf-net" Version="3.0.73" />
+    <PackageReference Include="Pfim" Version="0.10.0" />
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="2.80.2" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.57" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.57" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.58" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
@@ -359,12 +359,12 @@
     <PackageReference Include="WolvenKit.AssetBrowserBar" Version="1.0.1" />
     <PackageReference Include="WolvenKit.AvalonDock.Themes.VS2013" Version="4.50.4" />
     <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
-    <PackageReference Include="WolvenKit.ExplorerControl" Version="1.3.0" />
+    <PackageReference Include="WolvenKit.ExplorerControl" Version="1.4.0" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
     <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.6" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
-    <PackageReference Include="WpfAnalyzers" Version="3.5.2" PrivateAssets="all">
+    <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
