@@ -9,17 +9,12 @@ namespace WolvenKit.Functionality.Services
 {
     public interface IProjectManager
     {
-        public bool IsLoaded { get; set; }
+        public bool IsProjectLoaded { get; set; }
 
         EditorProject ActiveProject { get; }
 
         Task<bool> SaveAsync();
 
         Task<bool> LoadAsync(string location);
-
-
-        public IObservable<bool> IsLoadedObservable { get; }
-
-        public IObservable<bool> IsUnloadedObservable { get; }
     }
 }

@@ -40,7 +40,7 @@ namespace WolvenManager.App.Services
         {
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
 
-            _projectManager.WhenAnyValue(_ => _.IsLoaded).Subscribe(async loaded =>
+            _projectManager.WhenAnyValue(_ => _.IsProjectLoaded).Subscribe(async loaded =>
             {
                 if (loaded)
                 {

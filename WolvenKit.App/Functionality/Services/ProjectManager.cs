@@ -16,37 +16,34 @@ namespace WolvenKit.Functionality.Services
 {
     public class ProjectManager : ObservableObject, IProjectManager
     {
+        public ProjectManager()
+        {
+            this.WhenAnyValue(x => x.ActiveProject.Data).Subscribe(async _ =>
+            {
+                if (IsProjectLoaded)
+                {
+                    await SaveAsync();
+                }
+            });
+        }
 
-
-        public IObservable<bool> IsLoadedObservable =>
-            this.WhenAnyValue(
-                x => x.IsLoaded);
-
-
-
-        public IObservable<bool> IsUnloadedObservable =>
-            this.WhenAnyValue(
-                x => x.IsLoaded,
-                (x) => x != true);
-
-
-        public bool IsLoaded { get; set; }
-
+        public bool IsProjectLoaded { get; set; }
 
         public EditorProject ActiveProject { get; private set; }
+
 
 
         public async Task<bool> SaveAsync() => await ActiveProject.Save();
 
         public async Task<bool> LoadAsync(string location)
         {
-            IsLoaded = false;
+            IsProjectLoaded = false;
             await ReadFromLocationAsync(location).ContinueWith(_ =>
             {
                 if (_.IsCompletedSuccessfully)
                 {
                     ActiveProject = _.Result;
-                    IsLoaded = true;
+                    IsProjectLoaded = true;
                 }
                 else
                 {

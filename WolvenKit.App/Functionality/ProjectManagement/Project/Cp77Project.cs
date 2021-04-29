@@ -32,13 +32,14 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _logger = LogManager.GetCurrentClassLogger();
+
             if (File.Exists(location))
             {
                 Load(location);
             }
         }
 
-        public Cp77Project() : base("")
+        private Cp77Project() : base("")
         {
         }
 
@@ -47,49 +48,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         #region properties
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
-
-        public override async Task<bool> Load(string path)
-        {
-            try
-            {
-                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                var obj = (CP77Mod)ser.Deserialize(lf);
-                Name = obj.Name;
-                Version = obj.Version;
-                Author = obj.Author;
-                Email = obj.Email;
-                GameType = GameType.Cyberpunk2077;
-                Data = obj;
-                Data.FileName = path;
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to load project. Exception: {e.Message}");
-                return false;
-            }
-
-            return true;
-        }
-
-        public override async Task<bool> Save(string path)
-        {
-            try
-            {
-                path ??= Location;
-
-                await using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                ser.Serialize(sf, (CP77Mod)Data);
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to save project. Exception: {e.Message}");
-                return false;
-            }
-
-            return true;
-        }
 
         #region Directories
 
@@ -201,6 +159,49 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         #endregion properties
 
         #region methods
+
+        public override async Task<bool> Load(string path)
+        {
+            try
+            {
+                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                var obj = (CP77Mod)ser.Deserialize(lf);
+                Name = obj.Name;
+                Version = obj.Version;
+                Author = obj.Author;
+                Email = obj.Email;
+                GameType = GameType.Cyberpunk2077;
+                Data = obj;
+                Data.FileName = path;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to load project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
+        }
+
+        public override async Task<bool> Save(string path)
+        {
+            try
+            {
+                path ??= Location;
+
+                await using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                ser.Serialize(sf, (CP77Mod)Data);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to save project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
+        }
 
         // TODO: debug
         public override void Check() => _logger.Error($"{initializeTask.Status.ToString()}");

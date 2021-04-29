@@ -11,7 +11,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
-    public abstract class EditorProject : IEquatable<EditorProject>
+    public abstract class EditorProject : ObservableObject, IEquatable<EditorProject>
     {
         #region Fields
 

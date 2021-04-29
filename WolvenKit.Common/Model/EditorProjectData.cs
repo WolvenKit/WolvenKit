@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace WolvenKit.Common.Model
 {
-    public abstract class EditorProjectData
+    public abstract class EditorProjectData : ObservableObject
     {
         #region Fields
 
