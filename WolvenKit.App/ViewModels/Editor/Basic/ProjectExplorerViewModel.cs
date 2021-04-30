@@ -92,7 +92,7 @@ namespace WolvenKit.ViewModels.Editor
             SetupToolDefaults();
 
             _watcherService.Connect()
-                .SubscribeOnDispatcher()
+                .Filter(_ => _.ParentHash == 0)
                 .Bind(out _bindOut)
                 .Subscribe();
         }

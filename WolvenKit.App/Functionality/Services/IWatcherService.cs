@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,10 +16,8 @@ namespace WolvenManager.App.Services
     {
         public bool IsSuspended { get; set; }
 
-        //public IObservable<IChangeSet<FileModel, ulong>> Connect();
-        public IObservable<IChangeSet<FileViewModel, ulong>> Connect();
+        public IObservable<IChangeSet<FileViewModel>> Connect();
 
-        public IObservableCache<FileModel, ulong> Files { get; }
 
         public Task RefreshAsync(EditorProject proj);
     }

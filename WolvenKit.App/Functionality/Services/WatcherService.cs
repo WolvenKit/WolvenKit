@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Functionality.Services;
@@ -37,11 +38,7 @@ namespace WolvenManager.App.Services
         private FileSystemWatcher _modsWatcher;
 
         private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
-        private readonly SourceCache<FileViewModel, ulong> _topnodes = new(_ => _.Hash);
-
-        public IObservable<IChangeSet<FileViewModel, ulong>> Connect() => _topnodes.Connect();
-
-
+        public IObservable<IChangeSet<FileViewModel>> Connect() => _bindingModel.ToObservableChangeSet();
 
         #endregion
 
@@ -63,6 +60,7 @@ namespace WolvenManager.App.Services
 
             });
 
+            
 
             Files.Connect()
                 .Transform(_ => new FileViewModel(_))
@@ -76,8 +74,7 @@ namespace WolvenManager.App.Services
         private void OnNext(IChangeSet<FileViewModel, ulong> obj)
         {
             var lookup = _bindingModel.ToLookup(x => x.ParentHash);
-            var x = new List<FileViewModel>(_bindingModel);
-            foreach (var model in x)
+            foreach (var model in _bindingModel)
             {
                 model.ChildrenCache.Edit(inner =>
                     {
@@ -86,14 +83,6 @@ namespace WolvenManager.App.Services
                     }
                 );
             }
-            _topnodes.Edit(inner =>
-            {
-                foreach (var fileViewModel in x.Where(_ => _.ParentHash == 0))
-                {
-                    _topnodes.AddOrUpdate(fileViewModel);
-
-                }
-            });
         }
 
         private void WatchLocation(string location)
@@ -147,6 +136,19 @@ namespace WolvenManager.App.Services
             });
         }
 
+        private IEnumerable<ulong> GetChildrenKeysRecursive(ulong key)
+        {
+            var x = new List<ulong>();
+            var lookup = _files.Items.ToLookup(x => x.ParentHash);
+
+            foreach (var fileModel in lookup[key])
+            {
+                x.Add(fileModel.Hash);
+                x.AddRange(GetChildrenKeysRecursive(fileModel.Hash));
+            }
+            return x;
+        }
+
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             if (IsSuspended)
@@ -163,7 +165,11 @@ namespace WolvenManager.App.Services
                 }
                 case WatcherChangeTypes.Deleted:
                     var hash = FNV1A64HashAlgorithm.HashString(FileModel.GetRelativeName(e.FullPath));
-                    _files.Remove(hash);
+                    _files.Edit(inner =>
+                    {
+                        inner.RemoveKeys(GetChildrenKeysRecursive(hash));
+                        inner.Remove(hash);
+                    });
                     break;
                 case WatcherChangeTypes.Renamed:
                     break;
