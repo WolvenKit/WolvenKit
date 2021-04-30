@@ -56,11 +56,12 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
 
-        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
-        private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
-        
-        private readonly ReadOnlyObservableCollection<FileViewModel> _topnodes;
-        public ReadOnlyObservableCollection<FileViewModel> BindingModel => _topnodes;
+        private EditorProject ActiveMod => _projectManager.ActiveProject;
+
+
+        private readonly ReadOnlyObservableCollection<FileViewModel> _bindOut;
+        public ReadOnlyObservableCollection<FileViewModel> BindingModel => _bindOut;
+
 
         #endregion fields
 
@@ -90,35 +91,15 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-            _watcherService.Files.Connect()
-                .Transform(_ => new FileViewModel(_))
-                .ObserveOn(RxApp.MainThreadScheduler)
-               .Bind(out _bindingModel)
-               .Subscribe();
-
-
-            _bindingModel.ToObservableChangeSet()
-                .ForEachChange(Action2)
-                .Filter(_ => _.ParentHash == 0)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _topnodes)
+            _watcherService.Connect()
+                .SubscribeOnDispatcher()
+                .Bind(out _bindOut)
                 .Subscribe();
-
         }
 
-        private void Action2(Change<FileViewModel> obj)
-        {
-            var lookup = _bindingModel.ToLookup(x => x.ParentHash);
-            foreach (var model in _bindingModel)
-            {
-                model.ChildrenCache.Edit(inner =>
-                {
-                    inner.Clear();
-                    inner.AddOrUpdate(lookup[model.Hash]);
-                }
-                );
-            }
-        }
+
+
+        
 
         #endregion constructors
 

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +36,13 @@ namespace WolvenManager.App.Services
 
         private FileSystemWatcher _modsWatcher;
 
+        private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
+        private readonly SourceCache<FileViewModel, ulong> _topnodes = new(_ => _.Hash);
+
+        public IObservable<IChangeSet<FileViewModel, ulong>> Connect() => _topnodes.Connect();
+
+
+
         #endregion
 
         public WatcherService()
@@ -53,8 +62,39 @@ namespace WolvenManager.App.Services
                 }
 
             });
+
+
+            Files.Connect()
+                .Transform(_ => new FileViewModel(_))
+                .ObserveOnDispatcher()
+                .Bind(out _bindingModel)
+                .Subscribe(OnNext);
+
         }
 
+        // this runs on the dispatcher thread :/
+        private void OnNext(IChangeSet<FileViewModel, ulong> obj)
+        {
+            var lookup = _bindingModel.ToLookup(x => x.ParentHash);
+            var x = new List<FileViewModel>(_bindingModel);
+            foreach (var model in x)
+            {
+                model.ChildrenCache.Edit(inner =>
+                    {
+                        inner.Clear();
+                        inner.AddOrUpdate(lookup[model.Hash]);
+                    }
+                );
+            }
+            _topnodes.Edit(inner =>
+            {
+                foreach (var fileViewModel in x.Where(_ => _.ParentHash == 0))
+                {
+                    _topnodes.AddOrUpdate(fileViewModel);
+
+                }
+            });
+        }
 
         private void WatchLocation(string location)
         {
