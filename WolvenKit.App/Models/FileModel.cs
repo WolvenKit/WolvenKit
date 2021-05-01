@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 using Catel.Data;
 using Catel.IoC;
 using ReactiveUI;
+using WolvenKit.Common;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.Models
 {
-    public class FileModel //: ObservableObject
+    public class FileModel : ObservableObject
     {
 
         public FileModel(string path)
@@ -28,7 +30,7 @@ namespace WolvenKit.Models
                 var di = new DirectoryInfo(path);
                 parentfullname = di.Parent.FullName;
                 Name = di.Name;
-                Extension = di.Extension;
+                Extension = ECustomImageKeys.OpenDirImageKey.ToString();
             }
             else if (File.Exists(path))
             {
@@ -66,7 +68,21 @@ namespace WolvenKit.Models
 
         public ulong ParentHash { get; }
 
+
+        public bool IsExpanded { get; set; }
+
+
         #endregion
+
+        public void CollapseChildren(bool b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ExpandChildren(bool b)
+        {
+            throw new NotImplementedException();
+        }
 
 
         public override int GetHashCode() => (int)Hash;

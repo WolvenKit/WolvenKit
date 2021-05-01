@@ -1,5 +1,13 @@
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models;
+using WolvenKit.RED4.MeshFile;
+using WolvenKit.RED4.MorphTargetFile;
+using WolvenKit.ViewModels.Editor;
+using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Editor
 {
@@ -10,19 +18,14 @@ namespace WolvenKit.Views.Editor
     {
         #region Constructors
 
+        private ProjectExplorerViewModel _viewModel => ViewModel as ProjectExplorerViewModel;
+
         public ProjectExplorerView()
         {
             InitializeComponent();
-
-            //SfTreeView.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
-            //TreeView.NodePopulationMode = TreeNodePopulationMode.Instant;
-            //TreeView.ExpandActionTrigger = ExpandActionTrigger.Node;
-            //TreeView.ItemTemplateDataContextType = ItemTemplateDataContextType.Item;
         }
 
         #endregion Constructors
-
-        #region Methods
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -32,28 +35,22 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        #endregion Methods
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-        }
-
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (TreeView.SelectedItem != null)
+            if (this.TreeGrid.SelectedItem != null)
             {
-                //var z = TreeView.SelectedItem as FileViewModel;
-                //if (z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
-                //{
+                var z = TreeGrid.SelectedItem as FileModel;
+                if (z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
+                {
 
-                //    var q = MESH.ExportMeshWithoutRigPreviewer(z.FullName);
-                //    if (q.Length > 0)
-                //    {
-                //        var meshexporter = new SimpleMeshExporterDialog(TreeView.SelectedItem);
-                //        meshexporter.LoadModel(q);
-                //        meshexporter.Show();
-                //    }
-                //}
+                    var q = MESH.ExportMeshWithoutRigPreviewer(z.FullName);
+                    if (q.Length > 0)
+                    {
+                        var meshexporter = new SimpleMeshExporterDialog(TreeGrid.SelectedItem);
+                        meshexporter.LoadModel(q);
+                        meshexporter.Show();
+                    }
+                }
 
 
 
@@ -64,82 +61,100 @@ namespace WolvenKit.Views.Editor
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            if (TreeView.SelectedItem != null)
+            if (TreeGrid.SelectedItem != null)
             {
-                //var z = TreeView.SelectedItem as FileViewModel;
-                //if (z.FullName.Contains(".morphtarget", System.StringComparison.OrdinalIgnoreCase))
-                //{
-                //    // EXPORT Morphtarget
-                //    string outp;
+                var z = TreeGrid.SelectedItem as FileModel;
+                if (z.FullName.Contains(".morphtarget", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    // EXPORT Morphtarget
+                    string outp;
 
-                //    using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
-                //    {
-                //        dialog.IsFolderPicker = true;
-                //        dialog.Multiselect = false;
-                //        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                //        {
-                //            outp = dialog.FileName;
+                    using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
+                    {
+                        dialog.IsFolderPicker = true;
+                        dialog.Multiselect = false;
+                        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                        {
+                            outp = dialog.FileName;
 
-                //            var TargetStream = new FileStream(z.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                            var TargetStream = new FileStream(z.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-                //            var xa = new FileInfo(outp + "\\" + z.Name);
-                //            Trace.WriteLine(xa);
-                //            TARGET.ExportTargets(TargetStream, xa);
-                //        }
-                //    }
-
-
+                            var xa = new FileInfo(outp + "\\" + z.Name);
+                            Trace.WriteLine(xa);
+                            TARGET.ExportTargets(TargetStream, xa);
+                        }
+                    }
 
 
-                //}
+
+
+                }
             }
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            if (TreeView.SelectedItem != null)
+            if (TreeGrid.SelectedItem != null)
             {
-                //var z = TreeView.SelectedItem as FileViewModel;
-                //if (z.FullName.Contains(".wem", System.StringComparison.OrdinalIgnoreCase))
-                //{
-                //    // EXPORT WEM
-                //    string outp;
-                //    using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
-                //    {
-                //        dialog.IsFolderPicker = true;
-                //        dialog.Multiselect = false;
-                //        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                //        {
-                //            outp = dialog.FileName;
+                var z = TreeGrid.SelectedItem as FileModel;
+                if (z.FullName.Contains(".wem", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    // EXPORT WEM
+                    string outp;
+                    using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
+                    {
+                        dialog.IsFolderPicker = true;
+                        dialog.Multiselect = false;
+                        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                        {
+                            outp = dialog.FileName;
 
 
-                //            //Clean directory
+                            //Clean directory
 
 
-                //            var outf = Path.Combine(outp, Path.GetFileNameWithoutExtension(z.FullName) + ".wav");
-                //            var arg = z.FullName + " -o " + outf;
-                //            var si = new ProcessStartInfo(
-                //                    "vgmstream\\test.exe",
-                //                    arg
-                //                )
-                //            {
-                //                CreateNoWindow = true,
-                //                WindowStyle = ProcessWindowStyle.Hidden,
-                //                UseShellExecute = false
-                //            };
-                //            var proc = Process.Start(si);
-                //            proc.WaitForExit();
+                            var outf = Path.Combine(outp, Path.GetFileNameWithoutExtension(z.FullName) + ".wav");
+                            var arg = z.FullName + " -o " + outf;
+                            var si = new ProcessStartInfo(
+                                    "vgmstream\\test.exe",
+                                    arg
+                                )
+                            {
+                                CreateNoWindow = true,
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                UseShellExecute = false
+                            };
+                            var proc = Process.Start(si);
+                            proc.WaitForExit();
 
 
 
-                //        }
-                //    }
+                        }
+                    }
 
 
-                //}
+                }
             }
 
 
         }
+
+        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
+        {
+            var model = _viewModel.SelectedItem;
+            var node = TreeGrid.View.Nodes.GetNode(model);
+            TreeGrid.ExpandAllNodes(node);
+        }
+
+        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
+        {
+            var model = _viewModel.SelectedItem;
+            var node = TreeGrid.View.Nodes.GetNode(model);
+            TreeGrid.CollapseAllNodes(node);
+        }
+
+        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => TreeGrid.ExpandAllNodes();
+
+        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => TreeGrid.CollapseAllNodes();
     }
 }

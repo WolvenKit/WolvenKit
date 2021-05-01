@@ -12,6 +12,7 @@
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:system="clr-namespace:System;assembly=mscorlib"
+ xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
@@ -551,7 +552,7 @@
                     <Grid Grid.Column="0">
                         <Grid Grid.Column="0">
                             <Grid.Resources>
-                                <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                                <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                             </Grid.Resources>
 
 
@@ -829,7 +830,7 @@
 
 
                                 <syncfusion:SfDataGrid.Resources>
-                                    <converters:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+                                    <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
                                 </syncfusion:SfDataGrid.Resources>
 
 

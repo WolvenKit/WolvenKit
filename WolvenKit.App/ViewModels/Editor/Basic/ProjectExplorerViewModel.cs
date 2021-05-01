@@ -59,8 +59,10 @@ namespace WolvenKit.ViewModels.Editor
         private EditorProject ActiveMod => _projectManager.ActiveProject;
 
 
-        private readonly ReadOnlyObservableCollection<FileViewModel> _bindOut;
-        public ReadOnlyObservableCollection<FileViewModel> BindingModel => _bindOut;
+        //private readonly ReadOnlyObservableCollection<FileViewModel> _bindOut;
+        //public ReadOnlyObservableCollection<FileViewModel> BindingModel => _bindOut;
+        private readonly ReadOnlyObservableCollection<FileModel> _bindGrid;
+        public ReadOnlyObservableCollection<FileModel> BindGrid => _bindGrid;
 
 
         #endregion fields
@@ -91,21 +93,52 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-            _watcherService.Connect()
-                .Filter(_ => _.ParentHash == 0)
-                .Bind(out _bindOut)
+            //_watcherService.Connect()
+            //    .Filter(_ => _.ParentHash == 0)
+            //    .Bind(out _bindOut)
+            //    .Subscribe();
+
+            _watcherService.Files
+                .Connect()
+                .Bind(out _bindGrid)
                 .Subscribe();
         }
 
+        /// <summary>
+        /// Initialize commands for this window.
+        /// </summary>
+        private void SetupCommands()
+        {
+            CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
+            CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
+            PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
+            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
+            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
+            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
+            OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
+
+            CookCommand = new RelayCommand(Cook, CanCook);
+            FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
+            ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
+            AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
+            ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
+            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
+
+        }
+
+        /// <summary>
+        /// Initialize Avalondock specific defaults that are specific to this tool window.
+        /// </summary>
+        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
 
-        
+
 
         #endregion constructors
 
         #region properties
 
-        public FileViewModel SelectedItem { get; set; }
+        public FileModel SelectedItem { get; set; }
 
         
 
@@ -116,73 +149,55 @@ namespace WolvenKit.ViewModels.Editor
         #region general commands
 
         /// <summary>
-        /// Collapses all nodes in the treeview.
-        /// </summary>
-        public ICommand CollapseAllCommand { get; private set; }
-
-        /// <summary>
-        /// Collapses all children of the selected node.
-        /// </summary>
-        public ICommand CollapseCommand { get; private set; }
-
-        /// <summary>
         /// Copies selected node to the clipboard.
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
+        private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
+        private void ExecuteCopyRelPath()
+        {
+            Clipboard.SetText(SelectedItem.Name);
+
+            string GetArchivePath(string s)
+            {
+                if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
+                {
+                    var relpath = s[(ActiveMod.FileDirectory.Length + 1)..];
+                    return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
+                }
+                else
+                {
+                    return s;
+                }
+            }
+        }
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
+        private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
+        private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
         /// <summary>
         /// Cuts selected node to the clipboard.
         /// </summary>
         public ICommand CutFileCommand { get; private set; }
+        private bool CanCutFile() => _projectManager.ActiveProject != null && SelectedItem != null;
+        private void ExecuteCutFile()
+        {
+
+
+
+
+        }
 
         /// <summary>
         /// Delets selected node.
         /// </summary>
         public ICommand DeleteFileCommand { get; private set; }
-
-        /// <summary>
-        /// Expands all nodes in the treeview.
-        /// </summary>
-        public ICommand ExpandAllCommand { get; private set; }
-
-        /// <summary>
-        /// Expands all children of the selected node.
-        /// </summary>
-        public ICommand ExpandCommand { get; private set; }
-
-        /// <summary>
-        /// Opens selected node in File Explorer.
-        /// </summary>
-        public ICommand OpenInFileExplorerCommand { get; private set; }
-
-        /// <summary>
-        /// Pastes a file from the clipboard into selected node.
-        /// </summary>
-        public ICommand PasteFileCommand { get; private set; }
-
-        /// <summary>
-        /// Renames selected node.
-        /// </summary>
-        public ICommand RenameFileCommand { get; private set; }
-
-        private bool CanCollapse() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private bool CanCollapseAll() => _projectManager.ActiveProject is EditorProject;
-
-        private bool CanCopyFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private bool CanCopyRelPath() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private bool CanCutFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
         private bool CanDeleteFile()
         {
-            var b = _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+            var b = _projectManager.ActiveProject != null && SelectedItem != null;
             if (!b)
             {
                 return false;
@@ -204,54 +219,6 @@ namespace WolvenKit.ViewModels.Editor
 
             return b;
         }
-
-        private bool CanExpand() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private bool CanExpandAll() => _projectManager.ActiveProject is EditorProject;
-
-        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private bool CanPasteFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null && Clipboard.ContainsText();
-
-        private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
-
-        private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
-
-        //private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
-
-        private void ExecuteCollapseAll()
-        {
-            //foreach (var node in Treenodes)
-            //{
-            //    node.CollapseChildren(true);
-            //}
-        }
-
-        private void ExecuteCopyRelPath()
-        {
-            if (!SelectedItem.IsDirectory)
-            {
-                Clipboard.SetText(GetArchivePath(SelectedItem.FullName));
-            }
-
-            string GetArchivePath(string s)
-            {
-                if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
-                {
-                    var relpath = s[(ActiveMod.FileDirectory.Length + 1)..];
-                    return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
-                }
-                else
-                {
-                    return s;
-                }
-            }
-        }
-
-        private void ExecuteCutFile() =>
-            // TODO: Handle command logic here
-            throw new NotImplementedException();
-
         private async void ExecuteDeleteFile()
         {
             //// TODO: close open documents
@@ -296,17 +263,11 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        private void ExecuteCollapse() => SelectedItem.CollapseChildren(true);
-        private void ExecuteExpand() => SelectedItem.ExpandChildren(true);
-
-        private void ExecuteExpandAll()
-        {
-            //foreach (var node in Treenodes)
-            //{
-            //    node.ExpandChildren(true);
-            //}
-        }
-
+        /// <summary>
+        /// Opens selected node in File Explorer.
+        /// </summary>
+        public ICommand OpenInFileExplorerCommand { get; private set; }
+        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
@@ -319,7 +280,57 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        private async void ExecuteRenameFile() // Is not MVVM ?
+        /// <summary>
+        /// Pastes a file from the clipboard into selected node.
+        /// </summary>
+        public ICommand PasteFileCommand { get; private set; }
+        private bool CanPasteFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null && Clipboard.ContainsText();
+        private void PasteFile()
+        {
+            if (File.Exists(Clipboard.GetText()))
+            {
+                var attr = File.GetAttributes(SelectedItem.FullName);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    SafeCopy(Clipboard.GetText(), SelectedItem.FullName + "\\" + Path.GetFileName(Clipboard.GetText()));
+                }
+                else
+                {
+                    SafeCopy(Clipboard.GetText(), Path.GetDirectoryName(SelectedItem.FullName) + "\\" + Path.GetFileName(Clipboard.GetText()));
+                }
+            }
+
+            static void SafeCopy(string src, string dest)
+            {
+                foreach (var path in FallbackPaths(dest).Where(path => !File.Exists(path)))
+                {
+                    File.Copy(src, path);
+                    break;
+                }
+            }
+
+            static IEnumerable<string> FallbackPaths(string path)
+            {
+                yield return path;
+
+                var dir = Path.GetDirectoryName(path);
+                var file = Path.GetFileNameWithoutExtension(path);
+                var ext = Path.GetExtension(path);
+
+                yield return Path.Combine(dir, file + " - Copy" + ext);
+                for (var i = 2; ; i++)
+                {
+                    yield return Path.Combine(dir, file + " - Copy " + i + ext);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Renames selected node.
+        /// </summary>
+        public ICommand RenameFileCommand { get; private set; }
+        private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+        private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
 
@@ -364,46 +375,6 @@ namespace WolvenKit.ViewModels.Editor
                     //SelectedItem.RaiseRequestRefresh();
                 }
             });
-        }
-
-        private void PasteFile()
-        {
-            if (File.Exists(Clipboard.GetText()))
-            {
-                var attr = File.GetAttributes(SelectedItem.FullName);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                {
-                    SafeCopy(Clipboard.GetText(), SelectedItem.FullName + "\\" + Path.GetFileName(Clipboard.GetText()));
-                }
-                else
-                {
-                    SafeCopy(Clipboard.GetText(), Path.GetDirectoryName(SelectedItem.FullName) + "\\" + Path.GetFileName(Clipboard.GetText()));
-                }
-            }
-
-            static void SafeCopy(string src, string dest)
-            {
-                foreach (var path in FallbackPaths(dest).Where(path => !File.Exists(path)))
-                {
-                    File.Copy(src, path);
-                    break;
-                }
-            }
-
-            static IEnumerable<string> FallbackPaths(string path)
-            {
-                yield return path;
-
-                var dir = Path.GetDirectoryName(path);
-                var file = Path.GetFileNameWithoutExtension(path);
-                var ext = Path.GetExtension(path);
-
-                yield return Path.Combine(dir, file + " - Copy" + ext);
-                for (var i = 2; ; i++)
-                {
-                    yield return Path.Combine(dir, file + " - Copy " + i + ext);
-                }
-            }
         }
 
         #endregion general commands
@@ -481,24 +452,9 @@ namespace WolvenKit.ViewModels.Editor
 
         #region Methods
 
-        protected override async Task CloseAsync()
-        {
-            //_projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
+        protected override async Task CloseAsync() => await base.CloseAsync();
 
-            await base.CloseAsync();
-        }
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            var commandManager = ServiceLocator.Default.ResolveType<ICommandManager>();
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.ExpandAll, ExpandAllCommand, this);
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.CollapseAll, CollapseAllCommand, this);
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Expand, ExpandCommand, this);
-            commandManager.RegisterCommand(AppCommands.ProjectExplorer.Collapse, CollapseCommand, this);
-
-        }
+        protected override async Task InitializeAsync() => await base.InitializeAsync();
 
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
@@ -594,38 +550,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        /// <summary>
-        /// Initialize commands for this window.
-        /// </summary>
-        private void SetupCommands()
-        {
-            CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
-            CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
-            PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
-            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
-            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
-            OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
-
-            CookCommand = new RelayCommand(Cook, CanCook);
-            FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
-            ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
-            AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
-            ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
-            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
-
-            // global commands
-            ExpandAllCommand = new RelayCommand(ExecuteExpandAll, CanExpandAll);
-            CollapseAllCommand = new RelayCommand(ExecuteCollapseAll, CanCollapseAll);
-            ExpandCommand = new RelayCommand(ExecuteExpand, CanExpand);
-            CollapseCommand = new RelayCommand(ExecuteCollapse, CanCollapse);
-        }
-
-        /// <summary>
-        /// Initialize Avalondock specific defaults that are specific to this tool window.
-        /// </summary>
-        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
-
+        
 
         #endregion Methods
     }

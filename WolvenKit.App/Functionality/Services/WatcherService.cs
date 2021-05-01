@@ -37,8 +37,8 @@ namespace WolvenManager.App.Services
 
         private FileSystemWatcher _modsWatcher;
 
-        private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
-        public IObservable<IChangeSet<FileViewModel>> Connect() => _bindingModel.ToObservableChangeSet();
+        //private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
+        //public IObservable<IChangeSet<FileViewModel>> Connect() => _bindingModel.ToObservableChangeSet();
 
         #endregion
 
@@ -62,28 +62,28 @@ namespace WolvenManager.App.Services
 
             
 
-            Files.Connect()
-                .Transform(_ => new FileViewModel(_))
-                .ObserveOnDispatcher()
-                .Bind(out _bindingModel)
-                .Subscribe(OnNext);
+            //Files.Connect()
+            //    .Transform(_ => new FileViewModel(_))
+            //    .ObserveOnDispatcher()
+            //    .Bind(out _bindingModel)
+            //    .Subscribe(OnNext);
 
         }
 
         // this runs on the dispatcher thread :/
-        private void OnNext(IChangeSet<FileViewModel, ulong> obj)
-        {
-            var lookup = _bindingModel.ToLookup(x => x.ParentHash);
-            foreach (var model in _bindingModel)
-            {
-                model.ChildrenCache.Edit(inner =>
-                    {
-                        inner.Clear();
-                        inner.AddOrUpdate(lookup[model.Hash]);
-                    }
-                );
-            }
-        }
+        //private void OnNext(IChangeSet<FileViewModel, ulong> obj)
+        //{
+        //    var lookup = _bindingModel.ToLookup(x => x.ParentHash);
+        //    foreach (var model in _bindingModel)
+        //    {
+        //        model.ChildrenCache.Edit(inner =>
+        //            {
+        //                inner.Clear();
+        //                inner.AddOrUpdate(lookup[model.Hash]);
+        //            }
+        //        );
+        //    }
+        //}
 
         private void WatchLocation(string location)
         {
@@ -172,6 +172,7 @@ namespace WolvenManager.App.Services
                     });
                     break;
                 case WatcherChangeTypes.Renamed:
+                    _files.AddOrUpdate(new FileModel(e.FullPath));
                     break;
                 case WatcherChangeTypes.All:
                     break;

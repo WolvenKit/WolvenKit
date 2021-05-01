@@ -14,7 +14,7 @@
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
- xmlns:basic="clr-namespace:WolvenKit.ViewModels.Editor.Basic;assembly=WolvenKit.App"
+ xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  d:DesignHeight="450"
  d:DesignWidth="400"
  IsVisibleChanged="UserControl_IsVisibleChanged"
@@ -33,19 +33,112 @@
     </catel:UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+
         <Grid.Resources>
-            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+            <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
         </Grid.Resources>
 
         <Grid VerticalAlignment="Top" Visibility="Collapsed">
             <hc:SearchBar Margin="3" />
         </Grid>
 
-        <TreeView  x:Name="TreeView"
+        <syncfusion:SfTreeGrid  Name="TreeGrid"
+                               ItemsSource="{Binding BindGrid}"
+                               SelectedItem="{Binding SelectedItem}"
+                               ChildPropertyName="ParentHash"
+                               ParentPropertyName="Hash"
+                               SelfRelationRootValue="0" 
+
+                               AutoGenerateColumns="False"
+                               ColumnSizer="Star"
+                               AutoExpandMode="RootNodesExpanded"
+
+                               AllowResizingColumns="False"
+                               AllowFiltering="True"
+                               AllowEditing="False"
+                               
+        >
+
+            <syncfusion:SfTreeGrid.Columns>
+                <syncfusion:TreeGridTextColumn
+                    HeaderText="Name"
+                    HorizontalHeaderContentAlignment="Left"
+                    MappingName="Name"
+                    >
+                    <syncfusion:TreeGridTextColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="*" />
+
+                                </Grid.ColumnDefinitions>
+                                <svgc:SvgViewbox
+                                    Width="12"
+                                    Height="12"
+                                    Margin="0"
+                                    Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                    Stretch="Uniform"
+                                />
+                                <TextBlock
+                                      Grid.Column="1"
+                                      Margin="2"
+                                      VerticalAlignment="Center"
+                                      Text="{Binding Path=Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </syncfusion:TreeGridTextColumn.CellTemplate>
+                </syncfusion:TreeGridTextColumn>
+            </syncfusion:SfTreeGrid.Columns>
+
+            <syncfusion:SfTreeGrid.ContextMenu>
+                <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
+                    <MenuItem
+                        Margin="0"
+                        Command="{catel:CommandManagerBinding Application.OpenFile}"
+                        CommandParameter="{Binding SelectedItem}"
+                        Header="Open"
+                    />
+                    <Separator Margin="-15" />
+
+                    <MenuItem Margin="0" Header="Actions">
+
+                        <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
+                        <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
+                    </MenuItem>
+
+                    <MenuItem Header="Export">
+                        <MenuItem Click="MenuItem_Click_2" Header="Wem" />
+                        <MenuItem Click="MenuItem_Click_1" Header="Morphtarget" />
+
+                        <MenuItem Click="MenuItem_Click" Header="Export Mesh" />
+
+                    </MenuItem>
+
+                    <Separator Margin="-15" />
+                    <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
+                    <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
+                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
+                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
+                    <Separator Margin="-15" />
+                    <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
+                    <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
+                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
+                    <Separator Margin="-15" />
+                    
+                    <Separator Margin="-15" />
+                    <MenuItem Click="ExpandChildren_OnClick" Header="Expand children" />
+                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse children"/>
+                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all"/>
+                </ContextMenu>
+            </syncfusion:SfTreeGrid.ContextMenu>
+
+        </syncfusion:SfTreeGrid>
+
+        <!--<TreeView  x:Name="TreeView"
                    ItemsSource="{Binding BindingModel}"
+                   
         >
 
             <TreeView.Resources>
@@ -85,46 +178,8 @@
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
 
-            <TreeView.ContextMenu>
-                <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
-                    <MenuItem
-                        Margin="0"
-                        Command="{catel:CommandManagerBinding Application.OpenFile}"
-                        CommandParameter="{Binding SelectedItem}"
-                        Header="Open"
-                    />
-                    <Separator Margin="-15" />
+            
 
-                    <MenuItem Margin="0" Header="Actions">
-
-                        <MenuItem Command="{Binding AddAllCommand}" Header="Add all dependencies" />
-                        <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
-                    </MenuItem>
-
-                    <MenuItem Header="Export">
-                        <MenuItem Click="MenuItem_Click_2" Header="Wem" />
-                        <MenuItem Click="MenuItem_Click_1" Header="Morphtarget" />
-
-                        <MenuItem Click="MenuItem_Click" Header="Export Mesh" />
-
-                    </MenuItem>
-
-                    <Separator Margin="-15" />
-                    <MenuItem Command="{Binding CopyCommand}" Header="Copy" />
-                    <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
-                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
-                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
-                    <Separator Margin="-15" />
-                    <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
-                    <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
-                    <Separator Margin="-15" />
-                    <MenuItem Command="{Binding ExpandCommand}" Header="Expand children" />
-                    <MenuItem Command="{Binding CollapseCommand}" Header="Collapse children" />
-                    <Separator Margin="-15" />
-                </ContextMenu>
-            </TreeView.ContextMenu>
-
-        </TreeView>
+        </TreeView>-->
     </Grid>
 </catel:UserControl>

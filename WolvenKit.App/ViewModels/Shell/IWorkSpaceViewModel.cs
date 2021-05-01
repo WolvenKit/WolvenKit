@@ -57,7 +57,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="filepath"></param>
         /// <returns></returns>
-        Task<DocumentViewModel> OpenAsync(FileViewModel model);
+        Task<DocumentViewModel> OpenAsync(FileModel model);
 
         /// <summary>
         /// Saves a document and resets the dirty flag.

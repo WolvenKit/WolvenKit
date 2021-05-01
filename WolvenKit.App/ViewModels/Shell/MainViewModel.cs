@@ -48,7 +48,6 @@ namespace WolvenKit.ViewModels.Shell
             DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
             CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
             BackupProjectCommand = new RelayCommand(BackupProject, CanBackupProject);
-            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
         }
 
         #endregion Constructors
@@ -129,7 +128,6 @@ namespace WolvenKit.ViewModels.Shell
         #region Commands
 
         public ICommand BackupProjectCommand { get; }
-        public ICommand Command1 { get; }
         public ICommand CreateCr2wFileCommand { get; }
         public ICommand DdsToCacheCommand { get; }
 
@@ -237,8 +235,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanDdsToCacheCommand() => true;
 
-        private bool CanRunCommand1() => true;
-
         private void CreateCr2w(bool b) => CreateCustomCr2wFile(b);
 
         private void DdsToCache()
@@ -252,10 +248,6 @@ namespace WolvenKit.ViewModels.Shell
 
             // Installing
             InstallMod();
-        }
-
-        private void RunCommand1()
-        {
         }
 
         #endregion CommandsImplementation

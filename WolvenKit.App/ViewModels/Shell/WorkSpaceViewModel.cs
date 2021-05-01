@@ -101,7 +101,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            OpenFileCommand = new DelegateCommand<FileViewModel>(
+            OpenFileCommand = new DelegateCommand<FileModel>(
                 async (p) => await ExecuteOpenFile(p),
                 (p) => CanOpenFile(p));
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
@@ -379,7 +379,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanNewFile() => true;
 
-        private bool CanOpenFile(FileViewModel model) => true;
+        private bool CanOpenFile(FileModel model) => true;
 
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
 
@@ -464,7 +464,7 @@ namespace WolvenKit.ViewModels.Shell
             //TODO
         }
 
-        private async Task ExecuteOpenFile(FileViewModel model)
+        private async Task ExecuteOpenFile(FileModel model)
         {
             if (model == null)
             {
@@ -952,7 +952,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<DocumentViewModel> OpenAsync(FileViewModel model)
+        public async Task<DocumentViewModel> OpenAsync(FileModel model)
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
@@ -1002,7 +1002,7 @@ namespace WolvenKit.ViewModels.Shell
             ActiveDocument.SetIsDirty(false);
         }
 
-        private async Task RequestFileOpen(FileViewModel model)
+        private async Task RequestFileOpen(FileModel model)
         {
             var fullpath = model.FullName;
 

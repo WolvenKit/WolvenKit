@@ -16,7 +16,8 @@
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
- xmlns:local="clr-namespace:WolvenKit.Views.Editor"
+ xmlns:local="clr-namespace:WolvenKit.Views.Editor" 
+ xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  x:Class="WolvenKit.Views.Editor.DocumentView"
  d:DataContext="{d:DesignInstance Type={x:Type editor:DocumentViewModel}}"
  d:DesignHeight="450"
@@ -259,7 +260,7 @@
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
-            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+            <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
         </Grid.Resources>
 
 

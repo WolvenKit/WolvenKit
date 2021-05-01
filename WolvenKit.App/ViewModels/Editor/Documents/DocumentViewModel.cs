@@ -40,13 +40,13 @@ namespace WolvenKit.ViewModels.Editor
         private ChunkViewModel _selectedChunk;
         private string _textContent = string.Empty;
         private IWorkSpaceViewModel _workSpaceViewModel = null;
-        private FileViewModel fileinfo;
+        private FileModel fileinfo;
 
         #endregion fields
 
         #region ctors
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel, FileViewModel model, bool isExistingInFileSystem) : this(workSpaceViewModel)
+        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem) : this(workSpaceViewModel)
         {
             fileinfo = model;
             _initialPath = fileinfo.FullName;

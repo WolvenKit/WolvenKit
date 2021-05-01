@@ -144,11 +144,6 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.BackupMod);
             _commandManager.CreateCommand(AppCommands.Application.PublishMod);
 
-            // Project Explorer Viewmodel
-            _commandManager.CreateCommand(AppCommands.ProjectExplorer.ExpandAll);
-            _commandManager.CreateCommand(AppCommands.ProjectExplorer.Expand);
-            _commandManager.CreateCommand(AppCommands.ProjectExplorer.CollapseAll);
-            _commandManager.CreateCommand(AppCommands.ProjectExplorer.Collapse);
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.Refresh);
 
             _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
