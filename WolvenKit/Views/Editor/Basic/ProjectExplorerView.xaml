@@ -7,7 +7,7 @@
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
+ xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" 
@@ -47,7 +47,8 @@
                                SelectedItem="{Binding SelectedItem}"
                                ChildPropertyName="ParentHash"
                                ParentPropertyName="Hash"
-                               SelfRelationRootValue="0" 
+                               SelfRelationRootValue="0"
+                               ExpandStateMappingName="IsExpanded"
 
                                AutoGenerateColumns="False"
                                ColumnSizer="Star"
@@ -57,7 +58,16 @@
                                AllowFiltering="True"
                                AllowEditing="False"
                                
+                               
         >
+            <ei:Interaction.Triggers>
+                <ei:EventTrigger EventName="CellDoubleTapped">
+                    <catel:EventToCommand Command="{catel:CommandManagerBinding Application.OpenFile}"
+                                          CommandParameter="{Binding SelectedItem}"
+                                          DisableAssociatedObjectOnCannotExecute="False" />
+                </ei:EventTrigger>
+            </ei:Interaction.Triggers>
+
 
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
@@ -73,18 +83,20 @@
                                     <ColumnDefinition Width="*" />
 
                                 </Grid.ColumnDefinitions>
-                                <svgc:SvgViewbox
+                                <!--<svgc:SvgViewbox
                                     Width="12"
                                     Height="12"
                                     Margin="0"
                                     Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                     Stretch="Uniform"
-                                />
-                                <TextBlock
+                                />-->
+                                <TextBlock x:Name="TemplateTextBlock"
                                       Grid.Column="1"
                                       Margin="2"
                                       VerticalAlignment="Center"
-                                      Text="{Binding Path=Name}" />
+                                      Text="{Binding Path=Name}">
+                                    
+                                </TextBlock>
                             </Grid>
                         </DataTemplate>
                     </syncfusion:TreeGridTextColumn.CellTemplate>
@@ -135,51 +147,5 @@
             </syncfusion:SfTreeGrid.ContextMenu>
 
         </syncfusion:SfTreeGrid>
-
-        <!--<TreeView  x:Name="TreeView"
-                   ItemsSource="{Binding BindingModel}"
-                   
-        >
-
-            <TreeView.Resources>
-                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                    <Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                </Style>
-
-                <HierarchicalDataTemplate DataType="{x:Type basic:FileViewModel}"
-                                          ItemsSource="{Binding Children}">
-                    <Grid x:Name="grid">
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="20" />
-                            </Grid.ColumnDefinitions>
-                            <Grid>
-                                <iconPacks:PackIconCodicons Kind="{Binding IconPath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                                            Width="16"
-                                                            Height="16"
-                                />
-                            </Grid>
-                            <Grid Grid.Column="1"
-                                  Margin="1,0,0,0"
-                                  VerticalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name}"
-                                               FontSize="14"
-                                               VerticalAlignment="Center" 
-                                               Padding="0,0,10,0"
-                                    />
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-
-            
-
-        </TreeView>-->
     </Grid>
 </catel:UserControl>

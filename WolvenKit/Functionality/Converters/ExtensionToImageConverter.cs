@@ -20,24 +20,21 @@ namespace WolvenKit.Functionality.Converters
 
             var extension = value.ToString();
 
-            if (!string.IsNullOrEmpty(extension))
+            if (string.IsNullOrEmpty(extension))
             {
-                var result = GetSmallIconForFileType(extension);
-                if (result == null)
-                {
-                    result = "Icons/Files/default.svg";
-                }
-
-                Trace.WriteLine("Resources/Media/Images/" + result);
-
-                var uri = new Uri("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
-                //var svgDoc = SvgDocument.Open("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
-                //var Image = new Bitmap(svgDoc.Draw());
-
-                return uri;
+                return string.Empty;
             }
 
-            return string.Empty;
+            var result = GetSmallIconForFileType(extension) ?? "Icons/Files/default.svg";
+
+            Trace.WriteLine("Resources/Media/Images/" + result);
+
+            var uri = new Uri("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
+            //var svgDoc = SvgDocument.Open("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
+            //var Image = new Bitmap(svgDoc.Draw());
+
+            return uri;
+
         }
 
         // No need to implement converting back on a one-way binding

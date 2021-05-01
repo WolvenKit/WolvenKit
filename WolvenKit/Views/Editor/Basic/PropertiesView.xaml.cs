@@ -18,7 +18,7 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 namespace WolvenKit.Views.Editor
 {
     /// <summary>
-    /// Interaction logic for ProjectExplorerView.xaml
+    /// Interaction logic for PropertiesView.xaml
     /// </summary>
     public partial class PropertiesView
     {

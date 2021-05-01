@@ -14,10 +14,13 @@
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
  xmlns:visuals="clr-namespace:Ab3d.Visuals;assembly=Ab3d.PowerToys"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  d:DesignHeight="450"
  d:DesignWidth="800"
  FontSize="10"
  mc:Ignorable="d"
+ d:DataContext="{d:DesignInstance Type=editor:PropertiesViewModel}"
+
  >
 
     <catel:UserControl.Resources>

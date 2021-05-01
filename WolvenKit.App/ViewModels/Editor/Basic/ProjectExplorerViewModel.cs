@@ -267,7 +267,7 @@ namespace WolvenKit.ViewModels.Editor
         /// Opens selected node in File Explorer.
         /// </summary>
         public ICommand OpenInFileExplorerCommand { get; private set; }
-        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+        private bool CanOpenInFileExplorer() => _projectManager.ActiveProject != null && SelectedItem != null;
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
@@ -284,7 +284,7 @@ namespace WolvenKit.ViewModels.Editor
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
         public ICommand PasteFileCommand { get; private set; }
-        private bool CanPasteFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null && Clipboard.ContainsText();
+        private bool CanPasteFile() => _projectManager.ActiveProject != null && SelectedItem != null && Clipboard.ContainsText();
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -329,7 +329,7 @@ namespace WolvenKit.ViewModels.Editor
         /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
-        private bool CanRenameFile() => _projectManager.ActiveProject is EditorProject && SelectedItem != null;
+        private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null;
         private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
