@@ -43,13 +43,16 @@ namespace WolvenKit.RED4.GeneralStructs
         public UInt32[] unknownOffsets { get; set; }
         public UInt32[] indicesOffsets { get; set; }
         public UInt32[] vpStrides { get; set; }
-
         public UInt32[] weightcounts { get; set; }
+        public bool[] extraExists { get; set; }
         public Vector4 qTrans { get; set; }
         public Vector4 qScale { get; set; }
         public int meshC { get; set; }
         public UInt32[] LODLvl { get; set; }
         public List<Appearance> appearances { get; set; }
+        public UInt32 vertBufferSize { get; set; }
+        public UInt32 indexBufferSize { get; set; }
+        public UInt32 indexBufferOffset { get; set; }
     }
     public class RawMeshContainer
     {
@@ -61,7 +64,9 @@ namespace WolvenKit.RED4.GeneralStructs
         public Vector4[] tangents { get; set; }
         public Vector4[] colors { get; set; }
         public float[,] weights { get; set; }
+        public bool extraExist { get; set; }
         public UInt16[,] boneindices { get; set; }
+        public Vector3[] extradata { get; set; }
         public string name;
         public UInt32 weightcount { get; set; }
         public string[] appNames { get; set; }
@@ -80,6 +85,8 @@ namespace WolvenKit.RED4.GeneralStructs
         public Byte[,] boneindices { get; set; }
         public string name;
         public UInt32 weightcount { get; set; }
+        public UInt16[,] extraData { get; set; }
+        public bool extraExist;
     }
     
     public class RawTargetContainer

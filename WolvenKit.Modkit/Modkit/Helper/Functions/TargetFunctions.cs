@@ -101,6 +101,9 @@ namespace WolvenKit.RED4.MorphTargetFile
             {
                 File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds",textureStreams[i].ToArray());
             }
+
+            targetStream.Dispose();
+            targetStream.Close();
         }
         static TargetsInfo GetTargetInfos(CR2WFile cr2w, int SubMeshC)
         {
@@ -211,11 +214,11 @@ namespace WolvenKit.RED4.MorphTargetFile
                 for (int e = 0; e < diffsCount; e++)
                 {
                     Vec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
-                    vertexDelta[e] = new Vec3(v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X, v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y, v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z);
+                    vertexDelta[e] = new Vec3((v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X), (v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z), -(v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y));
                     Vec4 n = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                    normalDelta[e] = new Vec3(n.X, n.Y, n.Z);
+                    normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
                     Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                    tangentDelta[e] = new Vec3(t.X, t.Y, t.Z);
+                    tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
                 }
 
                 UInt16[] vertexMapping = new UInt16[diffsCount];
@@ -360,7 +363,7 @@ namespace WolvenKit.RED4.MorphTargetFile
                 var obj = new { targetNames = names }; // anonymous variable/obj
 
                 expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                scene.AddRigidMesh(expmesh, System.Numerics.Matrix4x4.CreateFromQuaternion(new System.Numerics.Quaternion((float)-0.707107, 0, 0, (float)0.707107)));
+                scene.AddRigidMesh(expmesh, System.Numerics.Matrix4x4.Identity);
             }
             var model = scene.ToGltf2();
 

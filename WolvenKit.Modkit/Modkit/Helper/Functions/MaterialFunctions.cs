@@ -1,19 +1,20 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Threading;
 using CP77.CR2W;
-using SharpGLTF.IO;
-using SharpGLTF.Schema2;
-using WolvenKit.Common.DDS;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Oodle;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.GeneralStructs;
-using WolvenKit.RED4.MaterialSetupFile;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.Common.Oodle;
+using System.Collections.Generic;
+using SharpGLTF.Schema2;
+using WolvenKit.RED4.MeshFile;
 using WolvenKit.RED4.MeshFile.Materials.MaterialTypes;
+using WolvenKit.Common.DDS;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4.MaterialSetupFile;
+using SharpGLTF.IO;
+using System.Threading;
 
 namespace WolvenKit.RED4.MeshFile.Materials
 {
@@ -21,7 +22,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
     {
         static string cacheDir = Path.GetTempPath() + "WolvenKit\\Material\\Temp\\";
         public static List<Archive> archives;
-        public void ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName, FileInfo outfile, bool isGLBinary = true, bool copyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
+        public void ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName, FileInfo outfile, bool isGLBinary = true,bool copyTextures = false,EUncookExtension eUncookExtension = EUncookExtension.dds , bool LodFilter = true)
         {
             Directory.CreateDirectory(cacheDir);
 
@@ -35,7 +36,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
                 RawMeshContainer mesh = MESH.ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name = _meshName + "_" + i;
+                mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
                 mesh.materialNames = new string[meshinfo.appearances.Count];
@@ -59,6 +60,9 @@ namespace WolvenKit.RED4.MeshFile.Materials
                 model.SaveGLTF(outfile.FullName);
 
             Directory.Delete(cacheDir, true);
+
+            meshStream.Dispose();
+            meshStream.Close();
         }
         public void ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
         {
@@ -74,7 +78,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
                 RawMeshContainer mesh = MESH.ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name = _meshName + "_" + i;
+                mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
                 mesh.materialNames = new string[meshinfo.appearances.Count];
@@ -98,8 +102,10 @@ namespace WolvenKit.RED4.MeshFile.Materials
                 model.SaveGLTF(outfile.FullName);
 
             Directory.Delete(cacheDir, true);
+            meshStream.Dispose();
+            meshStream.Close();
         }
-        static void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib, bool useAssetLib)
+        static void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies,ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib, bool useAssetLib)
         {
             var cr2w = ModTools.TryReadCr2WFile(meshStream);
 
@@ -115,10 +121,10 @@ namespace WolvenKit.RED4.MeshFile.Materials
             List<CMaterialInstance> ExternalMaterial = new List<CMaterialInstance>();
             for (int i = 0; i < (cr2w.Chunks[index].data as CMesh).ExternalMaterials.Count; i++)
             {
-                if (useAssetLib)
+                if(useAssetLib)
                 {
                     string path = assetLib.FullName + (cr2w.Chunks[index].data as CMesh).ExternalMaterials[i].DepotPath;
-                    if (File.Exists(path))
+                    if(File.Exists(path))
                     {
                         FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
                         var micr2w = ModTools.TryReadCr2WFile(fs);
@@ -215,10 +221,10 @@ namespace WolvenKit.RED4.MeshFile.Materials
                         LocalMaterial.Add(cr2w.Chunks[i].data as CMaterialInstance);
                     }
                 }
-                for (int i = 0; i < cr2w.Imports.Count; i++)
+                for(int i = 0; i < cr2w.Imports.Count; i++)
                 {
                     bool notFound = true;
-                    for (int e = 0; e < primaryDependencies.Count; e++)
+                    for(int e = 0; e < primaryDependencies.Count; e++)
                     {
                         if (primaryDependencies[e] == cr2w.Imports[i].DepotPathStr)
                             notFound = false;
@@ -239,14 +245,14 @@ namespace WolvenKit.RED4.MeshFile.Materials
                     materialEntries.Add(ExternalMaterial[Entry.Index.Value]);
             }
         }
-        static void ParseMaterialsUsingAssetLib(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, DirectoryInfo AssetLib, bool CopyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        static void ParseMaterialsUsingAssetLib(Stream meshStream, ref ModelRoot model,DirectoryInfo outDir, DirectoryInfo AssetLib, bool CopyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             List<string> primaryDependencies = new List<string>();
 
             List<string> materialEntryNames = new List<string>();
             List<CMaterialInstance> materialEntries = new List<CMaterialInstance>();
 
-            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, AssetLib, true);
+            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries,AssetLib,true);
 
             List<string> mlSetupNames = new List<string>();
             List<Multilayer_Setup> mlSetups = new List<Multilayer_Setup>();
@@ -359,26 +365,26 @@ namespace WolvenKit.RED4.MeshFile.Materials
                     MaterialTemplates.Add(new Template(mlTemplates[i], mlTemplateNames[i]));
                 }
 
-                if (RawMaterials.Count > 0)
+                if(RawMaterials.Count > 0)
                 {
-                    if (MaterialSetups.Count > 0)
+                    if(MaterialSetups.Count > 0)
                     {
-                        if (MaterialTemplates.Count > 0)
+                        if(MaterialTemplates.Count > 0)
                         {
-                            var obj = new { AssetLib = AssetLib.FullName, CopyTextures, ValueToBeIgnored = 9999, RawMaterials, MaterialSetups, MaterialTemplates };
+                            var obj = new { AssetLib = AssetLib.FullName, CopyTextures, ValueToBeIgnored = 9999, RawMaterials, MaterialSetups, MaterialTemplates};
                             model.Extras = JsonContent.Serialize(obj);
                             File.WriteAllText(outDir.FullName + "Material.json", JsonContent.Serialize(obj).ToJson());
                         }
                         else
                         {
-                            var obj = new { AssetLib = AssetLib.FullName, CopyTextures, ValueToBeIgnored = 9999, RawMaterials, MaterialSetups };
+                            var obj = new { AssetLib = AssetLib.FullName, CopyTextures, ValueToBeIgnored = 9999, RawMaterials, MaterialSetups};
                             model.Extras = JsonContent.Serialize(obj);
                             File.WriteAllText(outDir.FullName + "Material.json", JsonContent.Serialize(obj).ToJson());
                         }
                     }
                     else
                     {
-                        var obj = new { AssetLib = AssetLib.FullName, CopyTextures, ValueToBeIgnored = 9999, RawMaterials };
+                        var obj = new { AssetLib = AssetLib.FullName, CopyTextures, ValueToBeIgnored = 9999, RawMaterials};
                         model.Extras = JsonContent.Serialize(obj);
                         File.WriteAllText(outDir.FullName + "Material.json", JsonContent.Serialize(obj).ToJson());
                     }
@@ -404,7 +410,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
 
             string[] files = Directory.GetFiles(cacheDir, ext);
             for (int i = 0; i < files.Length; i++)
-                File.Move(files[i], outDir.FullName + Path.GetFileName(files[i]), true);
+                File.Move(files[i], outDir.FullName + Path.GetFileName(files[i]),true);
         }
         static void ParseMaterialsUsingArchives(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
@@ -413,7 +419,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
             List<string> materialEntryNames = new List<string>();
             List<CMaterialInstance> materialEntries = new List<CMaterialInstance>();
 
-            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, new DirectoryInfo(cacheDir), false);
+            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries,new DirectoryInfo(cacheDir), false);
 
             List<string> mlSetupNames = new List<string>();
             List<Multilayer_Setup> mlSetups = new List<Multilayer_Setup>();
@@ -440,7 +446,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
                     ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                     foreach (Archive ar in archives)
                         ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir), eUncookExtension);
-
+                    
                 }
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
@@ -563,7 +569,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
             if (eUncookExtension == EUncookExtension.tga)
                 ext = "*.tga";
 
-            string[] files = Directory.GetFiles(cacheDir, ext, SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(cacheDir, ext,SearchOption.AllDirectories);
 
             for (int i = 0; i < files.Length; i++)
                 File.Move(files[i], outDir.FullName + Path.GetFileName(files[i]), true);
@@ -605,28 +611,145 @@ namespace WolvenKit.RED4.MeshFile.Materials
 
             return rawMaterial;
         }
-        static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
+        static MemoryStream GetMaterialStream(Stream ms,CR2WFile cr2w)
         {
-            MemoryStream materialStream = new MemoryStream();
-
-            var buffers = cr2w.Buffers;
-            for (var i = 0; i < buffers.Count; i++)
+            int Index = 0;
+            for (int i = 0; i < cr2w.Chunks.Count; i++)
             {
-                var b = buffers[i];
-                ms.Seek(b.Offset, SeekOrigin.Begin);
-
-                MemoryStream outstream = new MemoryStream();
-                // copy to some outstream
-                ms.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
-                BinaryReader outreader = new BinaryReader(outstream);
-                outstream.Position = 161;
-                if (new string(BitConverter.ToString(outreader.ReadBytes(17))) == "43-4D-61-74-65-72-69-61-6C-49-6E-73-74-61-6E-63-65") // CMaterialInstance
+                if (cr2w.Chunks[i].REDType == "CMesh")
                 {
-                    materialStream = outstream;
-                    break;
+                    Index = i;
+                }
+
+            }
+
+            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].data as CMesh).LocalMaterialBuffer.RawData.Buffer.Bytes);
+            var b = cr2w.Buffers[p - 1];
+            ms.Seek(b.Offset, SeekOrigin.Begin);
+            MemoryStream materialStream = new MemoryStream();
+            ms.DecompressAndCopySegment(materialStream, b.DiskSize, b.MemSize);
+            return materialStream;
+        }
+        public static void UnpackLocalBufferMaterials(Stream meshStream, DirectoryInfo unpackDir)
+        {
+            var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(meshStream);
+            int index = 0;
+            for (int i = 0; i < cr2w.Chunks.Count; i++)
+            {
+                if (cr2w.Chunks[i].REDType == "CMesh")
+                {
+                    index = i;
                 }
             }
-            return materialStream;
+
+            int Count = (cr2w.Chunks[index].data as CMesh).LocalMaterialBuffer.RawDataHeaders.Count;
+            if(Count == 0)
+            {
+                throw new Exception("Provided .mesh doesn't contain any local material buffer");
+            }
+            else
+            {
+                byte[] bytes = GetMaterialStream(meshStream, cr2w).ToArray();
+                List<string> names = new List<string>();
+                for(int i = 0; i < (cr2w.Chunks[index].data as CMesh).MaterialEntries.Count; i++)
+                {
+                    if((cr2w.Chunks[index].data as CMesh).MaterialEntries[i].IsLocalInstance.Value)
+                    {
+                        names.Add((cr2w.Chunks[index].data as CMesh).MaterialEntries[i].Name.Value);
+                    }
+                }
+                for (int i = 0; i < Count; i++)
+                {
+                    UInt32 offset = (cr2w.Chunks[index].data as CMesh).LocalMaterialBuffer.RawDataHeaders[i].Offset.Value;
+                    UInt32 size = (cr2w.Chunks[index].data as CMesh).LocalMaterialBuffer.RawDataHeaders[i].Size.Value;
+                    MemoryStream ms = new MemoryStream(bytes, (int)offset, (int)size);
+
+                    File.WriteAllBytes(unpackDir.FullName + "\\" + names[i] + ".mi",ms.ToArray());
+                }
+            }
+            meshStream.Dispose();
+            meshStream.Close();
+        }
+        public static void PackMaterialToLocalBuffer(DirectoryInfo packDir, Stream inmeshStream, FileInfo outMeshFile)
+        {
+            var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(inmeshStream);
+            int index = 0;
+            for (int i = 0; i < cr2w.Chunks.Count; i++)
+            {
+                if (cr2w.Chunks[i].REDType == "CMesh")
+                {
+                    index = i;
+                }
+            }
+
+            int Count = (cr2w.Chunks[index].data as CMesh).LocalMaterialBuffer.RawDataHeaders.Count;
+            if (Count == 0)
+            {
+                throw new Exception("Provided .mesh doesn't contain any local material buffer");
+            }
+            else
+            {
+                List<string> names = new List<string>();
+                for (int i = 0; i < (cr2w.Chunks[index].data as CMesh).MaterialEntries.Count; i++)
+                {
+                    if ((cr2w.Chunks[index].data as CMesh).MaterialEntries[i].IsLocalInstance.Value)
+                    {
+                        names.Add((cr2w.Chunks[index].data as CMesh).MaterialEntries[i].Name.Value);
+                    }
+                }
+
+                string[] mifiles = Directory.GetFiles(packDir.FullName, "*.mi");
+                if(mifiles.Length != names.Count)
+                {
+                    throw new Exception("Provided .mi files doesn't match the number of local material entries in the provided mesh file");
+                }
+                MemoryStream buffer = new MemoryStream();
+                BinaryWriter writer = new BinaryWriter(buffer);
+                for(int i = 0; i < names.Count; i++)
+                {
+                    bool notfound = true;
+                    for(int e = 0; e < mifiles.Length; e++)
+                    {
+                        if(Path.GetFileNameWithoutExtension(mifiles[e]) == names[i])
+                        {
+                            notfound = false;
+                            (cr2w.Chunks[index].data as CMesh).LocalMaterialBuffer.RawDataHeaders[i].Offset.Value = Convert.ToUInt32(buffer.Length);
+                            byte[] bytes = File.ReadAllBytes(mifiles[e]);
+                            writer.Write(bytes);
+                            (cr2w.Chunks[index].data as CMesh).LocalMaterialBuffer.RawDataHeaders[i].Size.Value = Convert.ToUInt32(bytes.Length);
+
+                        }
+                    }
+                    if(notfound)
+                    {
+                        throw new Exception("One or more names of .mi files doesn't match the names of material enteries in provided mesh file");
+                    }
+                }
+
+                UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[index].data as CMesh).LocalMaterialBuffer.RawData.Buffer.Bytes);
+
+                var compressed = new MemoryStream();
+                using var buff = new BinaryWriter(compressed);
+                var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                cr2w.Buffers[p - 1].DiskSize = zsize;
+                cr2w.Buffers[p - 1].Crc32 = crc;
+                cr2w.Buffers[p - 1].MemSize = (UInt32)buffer.Length;
+                var off = cr2w.Buffers[p - 1].Offset;
+                cr2w.Buffers[p - 1].Offset = 0;
+                cr2w.Buffers[p - 1].ReadData(new BinaryReader(compressed));
+                cr2w.Buffers[p - 1].Offset = off;
+
+
+                MemoryStream ms = new MemoryStream();
+                BinaryWriter bw = new BinaryWriter(ms);
+                cr2w.Write(bw);
+
+                File.WriteAllBytes(outMeshFile.FullName, ms.ToArray());
+            }
+            inmeshStream.Dispose();
+            inmeshStream.Close();
+
         }
         public MATERIAL(List<Archive> _Archives)
         {
