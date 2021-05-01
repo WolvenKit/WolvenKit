@@ -48,6 +48,8 @@
         <PackageReference Include="WolvenKit.Witcher3Game" Version="1.0.0" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+    <PackageReference Include="ZeroFormatter" Version="1.6.4" />
+    <PackageReference Include="ZeroFormatter.Analyzer" Version="1.1.1" />
 
 
 

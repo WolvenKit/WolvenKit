@@ -80,7 +80,7 @@ namespace WolvenKit.Functionality.Converters
                 case "bnk":
                 case "buffer":
                 case "camcurveset":
-                case "cfoliage":
+
                 case "charcustpreset":
                 case "cminimap":
                 case "community":
@@ -239,6 +239,8 @@ namespace WolvenKit.Functionality.Converters
                 case "w2rig":
                 case "w2scene":
                 case "w3app":
+                case "cfoilage":
+
 
                     return $"Icons/Files/{extension}.svg";
 

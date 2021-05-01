@@ -140,6 +140,9 @@
     <Resource Include="Resources\Media\Images\Icons\Files\redwpset.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\spatial_representation.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\w2em.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -1112,6 +1115,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\smartobject.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\smartobjects.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\sp.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\spatial_representation.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Spawntree.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\srt.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\streamingquerydata.svg" />
