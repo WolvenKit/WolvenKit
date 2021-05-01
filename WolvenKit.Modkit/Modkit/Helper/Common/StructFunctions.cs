@@ -111,9 +111,16 @@ namespace WolvenKit.RED4.GeneralStructs
         }
         public static UInt32 Vec4ToU32(Vector4 v) // reversing for 10bit nors and tans
         {
-            UInt32 a = (UInt32)(v.X * 511 + 511);
-            UInt32 b = (UInt32)(v.Y * 511 + 511) << 10;
-            UInt32 c = (UInt32)(v.Z * 511 + 511) << 20;
+            if (v.X < -0.998046f)
+                v.X = -0.998046f;
+            if (v.Y < -0.998046f)
+                v.Y = -0.998046f;
+            if (v.Z < -0.998046f)
+                v.Z = -0.998046f;
+
+            UInt32 a = Convert.ToUInt32(v.X * 512 + 511);
+            UInt32 b = Convert.ToUInt32(v.Y * 512 + 511) << 10;
+            UInt32 c = Convert.ToUInt32(v.Z * 512 + 511) << 20;
             UInt32 d = 0; // for tangents in bits its 00000000000000000000000000000000
             if (v.W == 0)
                 d = 1073741824;  // for normals in bits its 01000000000000000000000000000000
