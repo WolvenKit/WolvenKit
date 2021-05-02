@@ -283,44 +283,29 @@
                         <Grid>
 
                             <Grid x:Name="CHUNKSVISIBILITY">
-                                <TreeView
+                                <syncfusion:SfTreeGrid
                                  x:Name="TreeView"
                                  ItemsSource="{Binding Chunks}"
                                  Style="{DynamicResource TreeView}"
-                                 >
+                                 SelectedItem="{Binding SelectedChunk}"
+                                 ChildPropertyName="Children"
 
-                                    <TreeView.Resources>
-                                        <HierarchicalDataTemplate DataType="{x:Type cmodel:ChunkViewModel}" ItemsSource="{Binding Children}">
-                                            <StackPanel Orientation="Horizontal">
+                                 AutoGenerateColumns="False"
+                                 ColumnSizer="SizeToCells"
+                                 AutoExpandMode="RootNodesExpanded"
 
-                                                <ei:Interaction.Triggers>
-                                                    <ei:EventTrigger EventName="PreviewMouseRightButtonDown">
-                                                        <ei:ChangePropertyAction
-                                                         PropertyName="IsSelected"
-                                                         TargetObject="{Binding}"
-                                                         Value="true"
-                                                         />
-                                                    </ei:EventTrigger>
-                                                </ei:Interaction.Triggers>
+                                 AllowResizingColumns="False"
+                                 AllowFiltering="True"
+                                 AllowEditing="False"
+                                >
 
-                                                <TextBlock Text="{Binding Name}" />
-                                            </StackPanel>
-                                        </HierarchicalDataTemplate>
-                                    </TreeView.Resources>
+                                    <syncfusion:SfTreeGrid.Columns>
+                                        <syncfusion:TreeGridTextColumn MappingName="Name" HeaderText="Chunks"/>
+                                    </syncfusion:SfTreeGrid.Columns>
 
-                                    <TreeView.ContextMenu>
-                                        <ContextMenu />
-                                    </TreeView.ContextMenu>
 
-                                    <TreeView.ItemContainerStyle>
-                                        <Style BasedOn="{StaticResource TreeViewItemBaseStyle}" TargetType="{x:Type TreeViewItem}">
-                                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                                            <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                                        </Style>
-                                    </TreeView.ItemContainerStyle>
 
-                                </TreeView>
+                                </syncfusion:SfTreeGrid>
                             </Grid>
 
                             <Grid x:Name="IMPORTSVISISBILITY" Visibility="Collapsed">
@@ -426,7 +411,6 @@
                                  HeaderText="Name"
                                  MappingName="Name"
                                  />
-
                                 <syncfusion:TreeGridTemplateColumn
                                  AllowEditing="False"
                                  AllowSorting="False"
@@ -453,39 +437,47 @@
 
 
             </syncfusion:SfNavigationDrawer.ContentView>
-            <syncfusion:NavigationItem
-             Header="Chunks"
-             IsExpanded="True"
-             IsSelected="True"
-             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown"
-             >
+
+            <syncfusion:NavigationItem x:Name="NavigationItemChunks"
+                                       Header="Chunks"
+                                       ToolTip="Chunks"
+                                       IsExpanded="False"
+                                       IsSelected="True"
+                                       MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown"
+            >
                 <syncfusion:NavigationItem.Icon>
                     <iconPacks:PackIconVaadinIcons Margin="10,5,5,5" Kind="Cubes" />
                 </syncfusion:NavigationItem.Icon>
             </syncfusion:NavigationItem>
-            <syncfusion:NavigationItem
-             Header="Imports"
-             IsExpanded="True"
-             IsSelected="False"
-             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_1"
-             >
+
+            <syncfusion:NavigationItem x:Name="NavigationItemImports"
+                                       Header="{Binding}"
+                                       ToolTip="Imports"
+                                       IsExpanded="False"
+                                       IsSelected="False"
+                                       Command="{Binding ViewImportsCommand}"
+            >
                 <syncfusion:NavigationItem.Icon>
                     <iconPacks:PackIconMaterialDesign Margin="10,5,5,5" Kind="ImportExport" />
                 </syncfusion:NavigationItem.Icon>
             </syncfusion:NavigationItem>
+
             <syncfusion:NavigationItem
              Header="Buffers"
-             IsExpanded="True"
+             ToolTip="Buffers"
+             IsExpanded="False"
              IsSelected="False"
              MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_2"
-             >
+            >
                 <syncfusion:NavigationItem.Icon>
                     <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="Buffer" />
                 </syncfusion:NavigationItem.Icon>
             </syncfusion:NavigationItem>
+
             <syncfusion:NavigationItem
              Header="Editors"
-             IsExpanded="True"
+             ToolTip="Editors"
+             IsExpanded="False"
              IsSelected="False"
              MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_3"
              >

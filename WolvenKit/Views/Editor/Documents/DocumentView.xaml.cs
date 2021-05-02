@@ -28,6 +28,8 @@ namespace WolvenKit.Views.Editor
 
             WeakEventManager<FrameworkElement, RoutedEventArgs>
                 .AddHandler(this, "Loaded", View_LoadedAsync);
+
+            
         }
 
         #endregion Constructors
@@ -53,6 +55,9 @@ namespace WolvenKit.Views.Editor
                 {
                     vm.CloseCommand.Execute(null);
                 }
+
+                NavigationItemChunks.DataContext = ViewModel as DocumentViewModel;
+                NavigationItemImports.DataContext = ViewModel as DocumentViewModel;
             }
             catch
             {

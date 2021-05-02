@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.RED4.MeshFile;
@@ -156,5 +158,17 @@ namespace WolvenKit.Views.Editor
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => TreeGrid.ExpandAllNodes();
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => TreeGrid.CollapseAllNodes();
+
+        private void TreeGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+        {
+            if (StaticReferences.GlobalPropertiesView != null)
+            {
+
+                StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+                StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
+            }
+        }
     }
 }

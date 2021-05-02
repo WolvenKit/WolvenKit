@@ -57,7 +57,8 @@
                                AllowResizingColumns="False"
                                AllowFiltering="True"
                                AllowEditing="False"
-                               
+
+                               SelectionChanged="TreeGrid_OnSelectionChanged"
                                
         >
             <ei:Interaction.Triggers>

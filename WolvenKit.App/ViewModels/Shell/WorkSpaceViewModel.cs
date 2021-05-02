@@ -962,7 +962,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // open file
-            fileViewModel = new DocumentViewModel(this as IWorkSpaceViewModel, model, true);
+            fileViewModel = new DocumentViewModel(this, model, true);
             var result = await fileViewModel.OpenFileAsync(model.FullName);
 
             if (result)

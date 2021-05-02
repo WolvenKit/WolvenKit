@@ -71,9 +71,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             IsDirty = false;
 
-            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor, CanOpenEditor);
-            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer, CanOpenBuffer);
-            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport, CanOpenImport);
+            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
+            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
+            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+
+            OpenImportCommand = new RelayCommand(ExecuteViewImports, CanViewImports);
 
 
         }
@@ -81,6 +83,18 @@ namespace WolvenKit.ViewModels.Editor
         #endregion ctors
 
         #region commands
+
+        public ICommand ViewImportsCommand { get; private set; }
+        private bool CanViewImports() => true;
+        private void ExecuteViewImports()
+        {
+            // TODO: Handle command logic here
+        }
+
+        private bool CanOpenBuffer() => true;
+
+        private bool CanOpenEditor() => true;
+
 
         public ICommand OpenBufferCommand { get; private set; }
         public ICommand OpenEditorCommand { get; private set; }
@@ -114,11 +128,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        private bool CanOpenBuffer() => true;
-
-        private bool CanOpenEditor() => true;
-
-        private bool CanOpenImport(ICR2WImport args) => true;
+        
 
         private void ExecuteOpenBuffer()
         {
