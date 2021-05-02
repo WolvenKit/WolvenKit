@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("runTime")] 		public CFloat RunTime { get; set;}
 
-		public CGateEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CGateEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CGateEntity(cr2w, parent, name);
 

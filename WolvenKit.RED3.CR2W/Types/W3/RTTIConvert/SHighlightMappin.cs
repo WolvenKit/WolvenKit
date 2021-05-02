@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("MappinState")] 		public CBool MappinState { get; set;}
 
-		public SHighlightMappin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SHighlightMappin(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SHighlightMappin(cr2w, parent, name);
 

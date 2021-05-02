@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("eventResetTriggerName")] 		public CName EventResetTriggerName { get; set;}
 
-		public CBehTreeNodeAtomicPlayAnimationEventDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeAtomicPlayAnimationEventDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeAtomicPlayAnimationEventDefinition(cr2w, parent, name);
 

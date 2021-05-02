@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("forceMeshAlternatives")] 		public CBool ForceMeshAlternatives { get; set;}
 
-		public CFXTrackItemMaterialOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFXTrackItemMaterialOverride(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFXTrackItemMaterialOverride(cr2w, parent, name);
 

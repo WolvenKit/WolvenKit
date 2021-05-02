@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("cachedPoseWeightNode")] 		public CPtr<CBehaviorGraphValueNode> CachedPoseWeightNode { get; set;}
 
-		public CBehaviorGraphMimicPoseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphMimicPoseNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphMimicPoseNode(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("params")] 		public CHandle<CAISailorMoveToActionParams> Params { get; set;}
 
-		public CAISailorMoveToAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAISailorMoveToAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAISailorMoveToAction(cr2w, parent, name);
 

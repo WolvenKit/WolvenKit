@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("APPEARANCE_DESTROYED")] 		public CName APPEARANCE_DESTROYED { get; set;}
 
-		public W3ArachasEggCustom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ArachasEggCustom(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ArachasEggCustom(cr2w, parent, name);
 

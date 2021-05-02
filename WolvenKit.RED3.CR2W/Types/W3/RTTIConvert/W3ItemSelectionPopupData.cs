@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("overrideQuestItemRestrictions")] 		public CBool OverrideQuestItemRestrictions { get; set;}
 
-		public W3ItemSelectionPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ItemSelectionPopupData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ItemSelectionPopupData(cr2w, parent, name);
 

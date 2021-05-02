@@ -41,7 +41,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(15)] [RED("setTime")] 		public GameTime SetTime { get; set;}
 
-		public SExternalEncounterTaskParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SExternalEncounterTaskParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SExternalEncounterTaskParams(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		public CHorseParkingActionPointSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CHorseParkingActionPointSelector(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CHorseParkingActionPointSelector(cr2w, parent, name);
 

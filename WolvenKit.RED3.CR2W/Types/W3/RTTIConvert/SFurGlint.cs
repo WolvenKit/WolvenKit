@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("glintExponent")] 		public CFloat GlintExponent { get; set;}
 
-		public SFurGlint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFurGlint(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFurGlint(cr2w, parent, name);
 

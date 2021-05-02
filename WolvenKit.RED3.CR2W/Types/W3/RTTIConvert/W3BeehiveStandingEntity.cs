@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("wasInteracted")] 		public CBool WasInteracted { get; set;}
 
-		public W3BeehiveStandingEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3BeehiveStandingEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3BeehiveStandingEntity(cr2w, parent, name);
 

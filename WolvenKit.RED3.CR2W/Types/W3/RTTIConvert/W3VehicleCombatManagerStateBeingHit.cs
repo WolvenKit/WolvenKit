@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3VehicleCombatManagerStateBeingHit : CScriptableState
 	{
-		public W3VehicleCombatManagerStateBeingHit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3VehicleCombatManagerStateBeingHit(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3VehicleCombatManagerStateBeingHit(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("keys", 2,0)] 		public CArray<CStorySceneEventMorphInterpolationKey> Keys { get; set;}
 
-		public CStorySceneEventMorphInterpolation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneEventMorphInterpolation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEventMorphInterpolation(cr2w, parent, name);
 

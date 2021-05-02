@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("skeleton")] 		public CHandle<CSkeleton> Skeleton { get; set;}
 
-		public CBehaviorGraphRetargetCharacterNodeMethod_SkeletonMapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphRetargetCharacterNodeMethod_SkeletonMapper(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphRetargetCharacterNodeMethod_SkeletonMapper(cr2w, parent, name);
 

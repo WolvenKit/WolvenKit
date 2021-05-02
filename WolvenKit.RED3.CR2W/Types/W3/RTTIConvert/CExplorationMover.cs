@@ -141,7 +141,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(65)] [RED("m_ZeroV")] 		public Vector M_ZeroV { get; set;}
 
-		public CExplorationMover(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationMover(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationMover(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("Phase2")] 		public CBool Phase2 { get; set;}
 
-		public CAINpcCaranthirTacticTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcCaranthirTacticTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcCaranthirTacticTree(cr2w, parent, name);
 

@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("signOwner")] 		public CHandle<W3SignOwnerBTTaskCastSign> SignOwner { get; set;}
 
-		public CBTTaskCastSign(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskCastSign(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskCastSign(cr2w, parent, name);
 

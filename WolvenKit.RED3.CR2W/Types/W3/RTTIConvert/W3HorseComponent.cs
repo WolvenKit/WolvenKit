@@ -103,7 +103,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(46)] [RED("collidedActors", 2,0)] 		public CArray<CollsionActorStruct> CollidedActors { get; set;}
 
-		public W3HorseComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3HorseComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3HorseComponent(cr2w, parent, name);
 

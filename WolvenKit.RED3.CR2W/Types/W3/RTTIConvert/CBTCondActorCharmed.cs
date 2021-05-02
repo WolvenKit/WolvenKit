@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBTCondActorCharmed : IBehTreeTask
 	{
-		public CBTCondActorCharmed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTCondActorCharmed(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTCondActorCharmed(cr2w, parent, name);
 

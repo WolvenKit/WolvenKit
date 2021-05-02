@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("hitsToDeath")] 		public CInt32 HitsToDeath { get; set;}
 
-		public W3ArchesporBulb(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ArchesporBulb(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ArchesporBulb(cr2w, parent, name);
 

@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("m_LastTimesPressFArr", 2,0)] 		public CArray<CFloat> M_LastTimesPressFArr { get; set;}
 
-		public CInputAxisDoubleTap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CInputAxisDoubleTap(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CInputAxisDoubleTap(cr2w, parent, name);
 

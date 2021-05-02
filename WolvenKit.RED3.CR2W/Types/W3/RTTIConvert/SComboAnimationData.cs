@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("blendOut")] 		public CFloat BlendOut { get; set;}
 
-		public SComboAnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SComboAnimationData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SComboAnimationData(cr2w, parent, name);
 

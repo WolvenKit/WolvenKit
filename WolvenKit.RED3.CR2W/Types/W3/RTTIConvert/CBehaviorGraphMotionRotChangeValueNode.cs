@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("radOrDeg")] 		public CBool RadOrDeg { get; set;}
 
-		public CBehaviorGraphMotionRotChangeValueNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphMotionRotChangeValueNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphMotionRotChangeValueNode(cr2w, parent, name);
 

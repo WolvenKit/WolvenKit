@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("combatTarget")] 		public CHandle<CActor> CombatTarget { get; set;}
 
-		public CHorseRiderSharedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CHorseRiderSharedParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CHorseRiderSharedParams(cr2w, parent, name);
 

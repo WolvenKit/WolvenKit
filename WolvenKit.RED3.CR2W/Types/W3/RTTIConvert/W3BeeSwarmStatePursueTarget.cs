@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3BeeSwarmStatePursueTarget : CScriptableState
 	{
-		public W3BeeSwarmStatePursueTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3BeeSwarmStatePursueTarget(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3BeeSwarmStatePursueTarget(cr2w, parent, name);
 

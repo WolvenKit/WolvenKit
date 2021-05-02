@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("valueToReturnIfNoGA")] 		public CBool ValueToReturnIfNoGA { get; set;}
 
-		public BTCondIsInGuardAreaDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondIsInGuardAreaDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondIsInGuardAreaDef(cr2w, parent, name);
 

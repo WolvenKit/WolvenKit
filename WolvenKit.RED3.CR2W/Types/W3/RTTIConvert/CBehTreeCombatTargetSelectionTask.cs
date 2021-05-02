@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("ForceTarget")] 		public CHandle<CActor> ForceTarget { get; set;}
 
-		public CBehTreeCombatTargetSelectionTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeCombatTargetSelectionTask(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeCombatTargetSelectionTask(cr2w, parent, name);
 

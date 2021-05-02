@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("m_managerRef")] 		public CHandle<W3ContextManager> M_managerRef { get; set;}
 
-		public W3UIContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3UIContext(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3UIContext(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3Effect_AutoPanicRegen : W3AutoRegenEffect
 	{
-		public W3Effect_AutoPanicRegen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_AutoPanicRegen(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_AutoPanicRegen(cr2w, parent, name);
 

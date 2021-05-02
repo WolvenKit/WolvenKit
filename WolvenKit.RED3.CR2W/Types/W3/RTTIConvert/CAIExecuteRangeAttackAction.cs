@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("projectileName")] 		public CName ProjectileName { get; set;}
 
-		public CAIExecuteRangeAttackAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIExecuteRangeAttackAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIExecuteRangeAttackAction(cr2w, parent, name);
 

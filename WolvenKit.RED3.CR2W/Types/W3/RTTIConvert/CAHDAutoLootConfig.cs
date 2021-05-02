@@ -101,7 +101,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(45)] [RED("updateMsgParams", 2,0)] 		public CArray<CString> UpdateMsgParams { get; set;}
 
-		public CAHDAutoLootConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAHDAutoLootConfig(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAHDAutoLootConfig(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("sign")] 		public CEnum<ESignType> Sign { get; set;}
 
-		public BTCondPlayerIsCastingSignDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondPlayerIsCastingSignDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondPlayerIsCastingSignDef(cr2w, parent, name);
 

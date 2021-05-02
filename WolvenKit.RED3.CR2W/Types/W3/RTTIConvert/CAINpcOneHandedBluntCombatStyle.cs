@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAINpcOneHandedBluntCombatStyle : CAINpcCombatStyle
 	{
-		public CAINpcOneHandedBluntCombatStyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcOneHandedBluntCombatStyle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcOneHandedBluntCombatStyle(cr2w, parent, name);
 

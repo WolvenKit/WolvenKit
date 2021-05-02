@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3AardObstacleStateWallStageThree : CScriptableState
 	{
-		public W3AardObstacleStateWallStageThree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3AardObstacleStateWallStageThree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3AardObstacleStateWallStageThree(cr2w, parent, name);
 

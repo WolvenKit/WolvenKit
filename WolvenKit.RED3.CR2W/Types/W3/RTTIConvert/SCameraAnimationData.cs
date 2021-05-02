@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("loop")] 		public CBool Loop { get; set;}
 
-		public SCameraAnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCameraAnimationData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCameraAnimationData(cr2w, parent, name);
 

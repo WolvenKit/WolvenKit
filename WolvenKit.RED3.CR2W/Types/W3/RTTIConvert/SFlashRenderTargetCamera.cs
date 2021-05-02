@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("zoom")] 		public CFloat Zoom { get; set;}
 
-		public SFlashRenderTargetCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFlashRenderTargetCamera(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFlashRenderTargetCamera(cr2w, parent, name);
 

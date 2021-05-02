@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("listData", 2,0)] 		public CArray<SModUiListItem> ListData { get; set;}
 
-		public IModUiEditableListCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IModUiEditableListCallback(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IModUiEditableListCallback(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3BridgeStateOnDestroy : W3DestroyableTerrainStateOnDestroy
 	{
-		public W3BridgeStateOnDestroy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3BridgeStateOnDestroy(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3BridgeStateOnDestroy(cr2w, parent, name);
 

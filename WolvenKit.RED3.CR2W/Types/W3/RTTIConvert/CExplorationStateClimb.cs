@@ -251,7 +251,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(120)] [RED("restoreUsableItemLAtEnd")] 		public CBool RestoreUsableItemLAtEnd { get; set;}
 
-		public CExplorationStateClimb(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateClimb(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateClimb(cr2w, parent, name);
 

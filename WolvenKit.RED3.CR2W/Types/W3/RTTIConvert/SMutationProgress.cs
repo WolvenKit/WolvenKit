@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("overallProgress")] 		public CInt32 OverallProgress { get; set;}
 
-		public SMutationProgress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMutationProgress(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMutationProgress(cr2w, parent, name);
 

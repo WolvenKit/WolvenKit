@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3WitcherBedStateSleep : CScriptableState
 	{
-		public W3WitcherBedStateSleep(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3WitcherBedStateSleep(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3WitcherBedStateSleep(cr2w, parent, name);
 

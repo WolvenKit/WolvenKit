@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("factsNames", 2,0)] 		public CArray<CString> FactsNames { get; set;}
 
-		public W3QuestCond_WasMeditating(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3QuestCond_WasMeditating(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3QuestCond_WasMeditating(cr2w, parent, name);
 

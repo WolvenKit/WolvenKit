@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("m_wasDestroyed")] 		public CBool M_wasDestroyed { get; set;}
 
-		public W3IllusionSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3IllusionSpawner(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3IllusionSpawner(cr2w, parent, name);
 

@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("resistance")] 		public CEnum<ECharacterDefenseStats> Resistance { get; set;}
 
-		public SDoTDamage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SDoTDamage(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SDoTDamage(cr2w, parent, name);
 

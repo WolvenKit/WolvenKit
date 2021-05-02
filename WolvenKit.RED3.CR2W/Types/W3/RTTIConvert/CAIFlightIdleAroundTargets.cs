@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("idleFlightHeightMax")] 		public CFloat IdleFlightHeightMax { get; set;}
 
-		public CAIFlightIdleAroundTargets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIFlightIdleAroundTargets(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIFlightIdleAroundTargets(cr2w, parent, name);
 

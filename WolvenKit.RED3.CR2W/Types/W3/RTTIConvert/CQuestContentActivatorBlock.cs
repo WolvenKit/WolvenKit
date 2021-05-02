@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("playGoChunk")] 		public CName PlayGoChunk { get; set;}
 
-		public CQuestContentActivatorBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestContentActivatorBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestContentActivatorBlock(cr2w, parent, name);
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("blendInTime")] 		public CFloat BlendInTime { get; set;}
 
-		public CStorySceneEventModifyEnv(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneEventModifyEnv(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEventModifyEnv(cr2w, parent, name);
 

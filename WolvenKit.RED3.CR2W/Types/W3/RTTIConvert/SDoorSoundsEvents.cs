@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("closingStop")] 		public CString ClosingStop { get; set;}
 
-		public SDoorSoundsEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SDoorSoundsEvents(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SDoorSoundsEvents(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("isTamed")] 		public CBool IsTamed { get; set;}
 
-		public CBTCondHorseIsTamed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTCondHorseIsTamed(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTCondHorseIsTamed(cr2w, parent, name);
 

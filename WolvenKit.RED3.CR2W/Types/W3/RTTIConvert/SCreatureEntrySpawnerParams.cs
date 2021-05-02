@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("spawnpointDelay")] 		public CFloat SpawnpointDelay { get; set;}
 
-		public SCreatureEntrySpawnerParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCreatureEntrySpawnerParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCreatureEntrySpawnerParams(cr2w, parent, name);
 

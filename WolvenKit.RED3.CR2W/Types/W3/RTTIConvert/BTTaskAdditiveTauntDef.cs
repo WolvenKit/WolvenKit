@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("distMax")] 		public CFloat DistMax { get; set;}
 
-		public BTTaskAdditiveTauntDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskAdditiveTauntDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskAdditiveTauntDef(cr2w, parent, name);
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("pursuitRange")] 		public CFloat PursuitRange { get; set;}
 
-		public IQuestCombatManagerBaseBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IQuestCombatManagerBaseBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IQuestCombatManagerBaseBlock(cr2w, parent, name);
 

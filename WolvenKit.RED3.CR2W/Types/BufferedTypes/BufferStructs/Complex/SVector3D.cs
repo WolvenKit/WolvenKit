@@ -16,7 +16,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1)] [RED] public CFloat Y { get; set; }
         [Ordinal(2)] [RED] public CFloat Z { get; set; }
 
-        public SVector3D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SVector3D(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             X = new CFloat(cr2w, this, nameof(X)) { IsSerialized = true };
             Y = new CFloat(cr2w, this, nameof(Y)) { IsSerialized = true };

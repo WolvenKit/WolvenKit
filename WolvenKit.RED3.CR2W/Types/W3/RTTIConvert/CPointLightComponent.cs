@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("dynamicShadowsFaceMask")] 		public CEnum<ELightCubeSides> DynamicShadowsFaceMask { get; set;}
 
-		public CPointLightComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPointLightComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPointLightComponent(cr2w, parent, name);
 

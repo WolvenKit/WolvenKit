@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("debugCodeBreak_Deact")] 		public CBool DebugCodeBreak_Deact { get; set;}
 
-		public CBehaviorGraphNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphNode(cr2w, parent, name);
 

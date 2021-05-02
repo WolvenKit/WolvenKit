@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("leaveTangent")] 		public Vector LeaveTangent { get; set;}
 
-		public InterpCurvePointV(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public InterpCurvePointV(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new InterpCurvePointV(cr2w, parent, name);
 

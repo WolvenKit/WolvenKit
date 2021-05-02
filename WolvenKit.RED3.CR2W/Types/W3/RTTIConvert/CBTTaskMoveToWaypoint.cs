@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("gotTarget")] 		public CBool GotTarget { get; set;}
 
-		public CBTTaskMoveToWaypoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskMoveToWaypoint(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskMoveToWaypoint(cr2w, parent, name);
 

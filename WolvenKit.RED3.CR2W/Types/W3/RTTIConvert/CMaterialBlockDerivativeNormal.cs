@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("derivativeToNormal")] 		public CBool DerivativeToNormal { get; set;}
 
-		public CMaterialBlockDerivativeNormal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMaterialBlockDerivativeNormal(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMaterialBlockDerivativeNormal(cr2w, parent, name);
 

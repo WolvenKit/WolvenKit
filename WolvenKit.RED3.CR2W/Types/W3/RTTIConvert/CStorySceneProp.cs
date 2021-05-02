@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("useMimics")] 		public CBool UseMimics { get; set;}
 
-		public CStorySceneProp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneProp(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneProp(cr2w, parent, name);
 

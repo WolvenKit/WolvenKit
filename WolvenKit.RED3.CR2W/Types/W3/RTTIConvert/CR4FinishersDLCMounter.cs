@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("finishers", 2,0)] 		public CArray<CPtr<CR4FinisherDLC>> Finishers { get; set;}
 
-		public CR4FinishersDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4FinishersDLCMounter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4FinishersDLCMounter(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("isUsed")] 		public CBool IsUsed { get; set;}
 
-		public W3IgniProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3IgniProjectile(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3IgniProjectile(cr2w, parent, name);
 

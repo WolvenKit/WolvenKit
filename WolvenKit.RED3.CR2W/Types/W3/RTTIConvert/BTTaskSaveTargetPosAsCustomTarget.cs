@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("snapToGround")] 		public CBool SnapToGround { get; set;}
 
-		public BTTaskSaveTargetPosAsCustomTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskSaveTargetPosAsCustomTarget(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskSaveTargetPosAsCustomTarget(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("outValue")] 		public CFloat OutValue { get; set;}
 
-		public SBehaviorGraphMapToDiscreteMapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehaviorGraphMapToDiscreteMapper(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehaviorGraphMapToDiscreteMapper(cr2w, parent, name);
 

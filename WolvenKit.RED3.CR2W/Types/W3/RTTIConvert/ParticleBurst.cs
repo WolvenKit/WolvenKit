@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("repeatTime")] 		public CFloat RepeatTime { get; set;}
 
-		public ParticleBurst(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public ParticleBurst(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ParticleBurst(cr2w, parent, name);
 

@@ -129,7 +129,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(59)] [RED("hackKnockBackAlways")] 		public CBool HackKnockBackAlways { get; set;}
 
-		public CExplorationSharedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationSharedData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationSharedData(cr2w, parent, name);
 

@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("findTime")] 		public CFloat FindTime { get; set;}
 
-		public CBTTaskSearchForThrowable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSearchForThrowable(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSearchForThrowable(cr2w, parent, name);
 

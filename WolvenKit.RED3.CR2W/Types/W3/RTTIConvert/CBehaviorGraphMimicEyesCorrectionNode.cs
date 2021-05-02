@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("trackEyeRight_Right")] 		public CString TrackEyeRight_Right { get; set;}
 
-		public CBehaviorGraphMimicEyesCorrectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphMimicEyesCorrectionNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphMimicEyesCorrectionNode(cr2w, parent, name);
 

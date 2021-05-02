@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("wasIncluded")] 		public CBool WasIncluded { get; set;}
 
-		public CEntityBodyPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEntityBodyPart(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEntityBodyPart(cr2w, parent, name);
 

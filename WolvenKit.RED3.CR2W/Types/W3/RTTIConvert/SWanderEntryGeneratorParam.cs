@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("wanderPointsGroupTag")] 		public CName WanderPointsGroupTag { get; set;}
 
-		public SWanderEntryGeneratorParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SWanderEntryGeneratorParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWanderEntryGeneratorParam(cr2w, parent, name);
 

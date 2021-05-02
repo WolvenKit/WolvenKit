@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("m_timeBetweenRandomDestroyMax")] 		public CInt32 M_timeBetweenRandomDestroyMax { get; set;}
 
-		public W3DestroyableTerrain(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3DestroyableTerrain(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DestroyableTerrain(cr2w, parent, name);
 

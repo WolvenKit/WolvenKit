@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("hoursPerMinute")] 		public CFloat HoursPerMinute { get; set;}
 
-		public CModStoryBoardUi(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardUi(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardUi(cr2w, parent, name);
 

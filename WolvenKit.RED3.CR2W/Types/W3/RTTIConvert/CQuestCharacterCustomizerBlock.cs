@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("operations", 2,0)] 		public CArray<CPtr<ICharacterCustomizationOperation>> Operations { get; set;}
 
-		public CQuestCharacterCustomizerBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestCharacterCustomizerBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestCharacterCustomizerBlock(cr2w, parent, name);
 

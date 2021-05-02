@@ -61,7 +61,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(25)] [RED("projectile")] 		public CHandle<W3AdvancedProjectile> Projectile { get; set;}
 
-		public CBTTaskProjectileAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskProjectileAttack(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskProjectileAttack(cr2w, parent, name);
 

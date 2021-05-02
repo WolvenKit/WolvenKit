@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("criticalHitChanceBonus")] 		public CFloat CriticalHitChanceBonus { get; set;}
 
-		public W3ConfuseEffectCustomParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ConfuseEffectCustomParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ConfuseEffectCustomParams(cr2w, parent, name);
 

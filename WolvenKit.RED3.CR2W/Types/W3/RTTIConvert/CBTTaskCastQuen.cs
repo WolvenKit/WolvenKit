@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("playEffectTimeStamp")] 		public CFloat PlayEffectTimeStamp { get; set;}
 
-		public CBTTaskCastQuen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskCastQuen(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskCastQuen(cr2w, parent, name);
 

@@ -18,7 +18,7 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta()]
     public abstract class CArrayBase<T> : CVariable, IArrayAccessor<T>, IList<T> where T : IEditableVariable
     {
-        public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CArrayBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         #region Properties
         public List<T> Elements { get; set; } = new List<T>();

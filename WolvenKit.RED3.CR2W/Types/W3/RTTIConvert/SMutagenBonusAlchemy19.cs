@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("count")] 		public CInt32 Count { get; set;}
 
-		public SMutagenBonusAlchemy19(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMutagenBonusAlchemy19(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMutagenBonusAlchemy19(cr2w, parent, name);
 

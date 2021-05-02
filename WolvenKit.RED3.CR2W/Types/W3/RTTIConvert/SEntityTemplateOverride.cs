@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("overriddenProperties", 2,0)] 		public CArray<CName> OverriddenProperties { get; set;}
 
-		public SEntityTemplateOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SEntityTemplateOverride(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SEntityTemplateOverride(cr2w, parent, name);
 

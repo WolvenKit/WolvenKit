@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("terrainHeightApproximationRange")] 		public CFloat TerrainHeightApproximationRange { get; set;}
 
-		public CPathLibSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPathLibSettings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPathLibSettings(cr2w, parent, name);
 

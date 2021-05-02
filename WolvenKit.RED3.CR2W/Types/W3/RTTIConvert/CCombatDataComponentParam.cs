@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("attackersPoolMaxSize")] 		public CUInt32 AttackersPoolMaxSize { get; set;}
 
-		public CCombatDataComponentParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCombatDataComponentParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCombatDataComponentParam(cr2w, parent, name);
 

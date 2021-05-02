@@ -19,6 +19,6 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(3)] [RED] public CUInt8 paddin1 { get; set; }
         [Ordinal(4)] [RED] public CUInt16 paddin2 { get; set; }
 
-        public SBlockDataDimmer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SBlockDataDimmer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

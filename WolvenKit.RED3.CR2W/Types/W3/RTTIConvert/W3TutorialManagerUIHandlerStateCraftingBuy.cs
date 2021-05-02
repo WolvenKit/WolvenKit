@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("isClosing")] 		public CBool IsClosing { get; set;}
 
-		public W3TutorialManagerUIHandlerStateCraftingBuy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3TutorialManagerUIHandlerStateCraftingBuy(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TutorialManagerUIHandlerStateCraftingBuy(cr2w, parent, name);
 

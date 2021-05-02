@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
             
         }
 
-        public CUInt64(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CUInt64(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -73,7 +73,7 @@ namespace WolvenKit.RED3.CR2W.Types
             
         }
 
-        public CUInt32(CR2WFile cr2w, CVariable parent, string name)
+        public CUInt32(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -130,7 +130,7 @@ namespace WolvenKit.RED3.CR2W.Types
             
         }
 
-        public CUInt16(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CUInt16(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -187,7 +187,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CUInt8(CR2WFile cr2w, CVariable parent, string name)
+        public CUInt8(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -243,7 +243,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CInt64(CR2WFile cr2w, CVariable parent, string name)
+        public CInt64(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -299,7 +299,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CInt32(CR2WFile cr2w, CVariable parent, string name)
+        public CInt32(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -357,7 +357,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CInt16(CR2WFile cr2w, CVariable parent, string name)
+        public CInt16(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -413,7 +413,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CInt8(CR2WFile cr2w, CVariable parent, string name)
+        public CInt8(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -469,7 +469,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CDynamicInt(CR2WFile cr2w, CVariable parent, string name)
+        public CDynamicInt(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -532,7 +532,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CVLQInt32(CR2WFile cr2w, CVariable parent, string name)
+        public CVLQInt32(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -590,7 +590,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             
         }
-        public CBool(CR2WFile cr2w, CVariable parent, string name)
+        public CBool(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }

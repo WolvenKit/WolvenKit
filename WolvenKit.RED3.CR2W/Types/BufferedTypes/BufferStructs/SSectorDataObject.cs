@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(5)] [RED] public CFloat positionY { get; set; }
         [Ordinal(6)] [RED] public CFloat positionZ { get; set; }
 
-        public CSectorDataObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSectorDataObject(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }

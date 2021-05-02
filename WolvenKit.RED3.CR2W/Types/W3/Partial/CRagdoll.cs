@@ -45,7 +45,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(17)] [RED("projectionIterations")] 		public CInt32 ProjectionIterations { get; set;}
 
-		public CRagdoll(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CRagdoll(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CRagdoll(cr2w, parent, name);
 

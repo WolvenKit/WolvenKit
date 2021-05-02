@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("dyePreviewSlots", 2,0)] 		public CArray<SItemUniqueId> DyePreviewSlots { get; set;}
 
-		public W3GuiPlayerInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3GuiPlayerInventoryComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3GuiPlayerInventoryComponent(cr2w, parent, name);
 

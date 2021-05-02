@@ -217,7 +217,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(103)] [RED("costconstIncinerationRes")] 		public CFloat CostconstIncinerationRes { get; set;}
 
-		public W2BalanceCalc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W2BalanceCalc(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W2BalanceCalc(cr2w, parent, name);
 

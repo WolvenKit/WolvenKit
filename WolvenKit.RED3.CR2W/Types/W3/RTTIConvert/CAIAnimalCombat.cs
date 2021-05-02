@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("neutralIsDanger")] 		public CBool NeutralIsDanger { get; set;}
 
-		public CAIAnimalCombat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIAnimalCombat(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIAnimalCombat(cr2w, parent, name);
 

@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("disableLookAtOnDeactivate")] 		public CBool DisableLookAtOnDeactivate { get; set;}
 
-		public BTTaskUpdateLookatTargetDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskUpdateLookatTargetDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskUpdateLookatTargetDef(cr2w, parent, name);
 

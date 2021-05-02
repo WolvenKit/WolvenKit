@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("m_timeAtLastUpdateEntities")] 		public CFloat M_timeAtLastUpdateEntities { get; set;}
 
-		public BTTaskGetFoodNearby(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskGetFoodNearby(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskGetFoodNearby(cr2w, parent, name);
 

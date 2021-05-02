@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("guardedRegistered")] 		public CBool GuardedRegistered { get; set;}
 
-		public BTCondIsTargetGuarded(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondIsTargetGuarded(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondIsTargetGuarded(cr2w, parent, name);
 

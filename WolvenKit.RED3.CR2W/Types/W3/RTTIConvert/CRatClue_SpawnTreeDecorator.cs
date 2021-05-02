@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CRatClue_SpawnTreeDecorator : ISpawnTreeScriptedDecorator
 	{
-		public CRatClue_SpawnTreeDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CRatClue_SpawnTreeDecorator(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CRatClue_SpawnTreeDecorator(cr2w, parent, name);
 

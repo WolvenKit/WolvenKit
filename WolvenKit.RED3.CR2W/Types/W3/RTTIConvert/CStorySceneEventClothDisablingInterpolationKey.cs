@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("volatile")] 		public CBool Volatile { get; set;}
 
-		public CStorySceneEventClothDisablingInterpolationKey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneEventClothDisablingInterpolationKey(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEventClothDisablingInterpolationKey(cr2w, parent, name);
 

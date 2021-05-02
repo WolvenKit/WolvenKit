@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("lifetime")] 		public CFloat Lifetime { get; set;}
 
-		public W3Blood(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Blood(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Blood(cr2w, parent, name);
 

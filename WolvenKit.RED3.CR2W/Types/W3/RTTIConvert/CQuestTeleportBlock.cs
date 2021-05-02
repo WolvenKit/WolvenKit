@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("actorsTags")] 		public TagList ActorsTags { get; set;}
 
-		public CQuestTeleportBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestTeleportBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestTeleportBlock(cr2w, parent, name);
 

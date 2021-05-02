@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		public CBTTaskIsHostileAndNoFriendlyNearTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskIsHostileAndNoFriendlyNearTarget(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskIsHostileAndNoFriendlyNearTarget(cr2w, parent, name);
 

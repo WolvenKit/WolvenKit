@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		public CBTTaskFairytaleWitchActions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskFairytaleWitchActions(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskFairytaleWitchActions(cr2w, parent, name);
 

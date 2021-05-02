@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("wasKnockedDown")] 		public CBool WasKnockedDown { get; set;}
 
-		public W3Effect_Frozen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_Frozen(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_Frozen(cr2w, parent, name);
 

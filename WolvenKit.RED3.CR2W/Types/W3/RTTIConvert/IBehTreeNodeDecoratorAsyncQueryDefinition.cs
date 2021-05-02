@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("queryValidFor")] 		public CFloat QueryValidFor { get; set;}
 
-		public IBehTreeNodeDecoratorAsyncQueryDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IBehTreeNodeDecoratorAsyncQueryDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IBehTreeNodeDecoratorAsyncQueryDefinition(cr2w, parent, name);
 

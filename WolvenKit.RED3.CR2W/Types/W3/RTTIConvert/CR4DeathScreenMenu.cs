@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("m_fxShowInputFeedback")] 		public CHandle<CScriptedFlashFunction> M_fxShowInputFeedback { get; set;}
 
-		public CR4DeathScreenMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4DeathScreenMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4DeathScreenMenu(cr2w, parent, name);
 

@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("debugString")] public CString DebugString { get; set; }
 
-		public CStorySceneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEvent(cr2w, parent, name);
 

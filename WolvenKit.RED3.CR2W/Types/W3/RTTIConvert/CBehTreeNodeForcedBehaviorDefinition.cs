@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeForcedBehaviorDefinition : CBehTreeNodeBaseForcedBehaviorDefinition
 	{
-		public CBehTreeNodeForcedBehaviorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeForcedBehaviorDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeForcedBehaviorDefinition(cr2w, parent, name);
 

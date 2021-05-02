@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("adjustmentActiveVar")] 		public CName AdjustmentActiveVar { get; set;}
 
-		public CExtAnimLocationAdjustmentEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExtAnimLocationAdjustmentEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExtAnimLocationAdjustmentEvent(cr2w, parent, name);
 

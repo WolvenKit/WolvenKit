@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("requiredValue")] 		public CFloat RequiredValue { get; set;}
 
-		public SAchievement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SAchievement(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SAchievement(cr2w, parent, name);
 

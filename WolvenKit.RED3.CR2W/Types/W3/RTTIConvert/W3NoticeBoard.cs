@@ -51,7 +51,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(20)] [RED("hack_fromAreaEnter")] 		public CBool Hack_fromAreaEnter { get; set;}
 
-		public W3NoticeBoard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3NoticeBoard(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3NoticeBoard(cr2w, parent, name);
 

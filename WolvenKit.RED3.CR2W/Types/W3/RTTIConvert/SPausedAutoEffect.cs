@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("timeLeft")] 		public CFloat TimeLeft { get; set;}
 
-		public SPausedAutoEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPausedAutoEffect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPausedAutoEffect(cr2w, parent, name);
 

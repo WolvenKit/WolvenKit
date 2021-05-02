@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("active")] 		public CBool Active { get; set;}
 
-		public CJournalStoryBookPage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CJournalStoryBookPage(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJournalStoryBookPage(cr2w, parent, name);
 

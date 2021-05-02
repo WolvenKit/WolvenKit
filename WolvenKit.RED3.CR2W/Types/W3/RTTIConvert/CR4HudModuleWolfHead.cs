@@ -95,7 +95,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(42)] [RED("playStaminaSoundCue")] 		public CBool PlayStaminaSoundCue { get; set;}
 
-		public CR4HudModuleWolfHead(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleWolfHead(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleWolfHead(cr2w, parent, name);
 

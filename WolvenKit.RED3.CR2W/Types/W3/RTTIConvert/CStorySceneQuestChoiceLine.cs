@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("action")] 		public CPtr<IStorySceneChoiceLineAction> Action { get; set;}
 
-		public CStorySceneQuestChoiceLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneQuestChoiceLine(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneQuestChoiceLine(cr2w, parent, name);
 

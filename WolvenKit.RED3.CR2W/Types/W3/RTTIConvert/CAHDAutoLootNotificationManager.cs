@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("AHDAL_KNOWN_SUFFIX")] 		public CString AHDAL_KNOWN_SUFFIX { get; set;}
 
-		public CAHDAutoLootNotificationManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAHDAutoLootNotificationManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAHDAutoLootNotificationManager(cr2w, parent, name);
 

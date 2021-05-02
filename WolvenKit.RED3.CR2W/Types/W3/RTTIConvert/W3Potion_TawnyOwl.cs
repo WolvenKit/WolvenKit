@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3Potion_TawnyOwl : W3RegenEffect
 	{
-		public W3Potion_TawnyOwl(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Potion_TawnyOwl(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Potion_TawnyOwl(cr2w, parent, name);
 

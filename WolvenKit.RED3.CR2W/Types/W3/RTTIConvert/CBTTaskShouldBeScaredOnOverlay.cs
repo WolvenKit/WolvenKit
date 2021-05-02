@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("jobTreeType")] 		public CEnum<EJobTreeType> JobTreeType { get; set;}
 
-		public CBTTaskShouldBeScaredOnOverlay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskShouldBeScaredOnOverlay(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskShouldBeScaredOnOverlay(cr2w, parent, name);
 

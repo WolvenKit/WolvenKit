@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("weatherBonuses", 2,0)] 		public CArray<SWeatherBonus> WeatherBonuses { get; set;}
 
-		public W3NonPlayerAbilityManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3NonPlayerAbilityManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3NonPlayerAbilityManager(cr2w, parent, name);
 

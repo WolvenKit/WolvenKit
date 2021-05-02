@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("entityName")] 		public CName EntityName { get; set;}
 
-		public W3QuestCond_WasNoticeboardVisited(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3QuestCond_WasNoticeboardVisited(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3QuestCond_WasNoticeboardVisited(cr2w, parent, name);
 

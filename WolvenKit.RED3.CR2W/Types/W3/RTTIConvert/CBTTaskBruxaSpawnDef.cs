@@ -73,7 +73,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(31)] [RED("maxTeleportDistFromTarget")] 		public CFloat MaxTeleportDistFromTarget { get; set;}
 
-		public CBTTaskBruxaSpawnDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskBruxaSpawnDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskBruxaSpawnDef(cr2w, parent, name);
 

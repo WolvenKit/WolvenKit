@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("curves", 2,0)] 		public CArray<SDropPhysicsCurves> Curves { get; set;}
 
-		public CDropPhysicsSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CDropPhysicsSetup(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CDropPhysicsSetup(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAINpcCombatRetreatActionTree : CAICombatActionTree
 	{
-		public CAINpcCombatRetreatActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcCombatRetreatActionTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcCombatRetreatActionTree(cr2w, parent, name);
 

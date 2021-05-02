@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		public CBTTaskFindActorsByTagDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskFindActorsByTagDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskFindActorsByTagDef(cr2w, parent, name);
 

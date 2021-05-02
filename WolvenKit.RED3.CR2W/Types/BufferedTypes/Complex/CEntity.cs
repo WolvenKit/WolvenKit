@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         private bool isCreatedFromTemplate;
 
-        public CEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Components = new CArray<CPtr<CComponent>>(cr2w, this, nameof(Components)) {IsSerialized = true, Elementtype = "ptr:CComponent"};
             BufferV1 = new CCompressedBuffer<SEntityBufferType1>(cr2w, this, nameof(BufferV1)) { IsSerialized = true };

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CMajorPlaceOfPowerEntityStatePlaceOfPower_Idle : CScriptableState
 	{
-		public CMajorPlaceOfPowerEntityStatePlaceOfPower_Idle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMajorPlaceOfPowerEntityStatePlaceOfPower_Idle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMajorPlaceOfPowerEntityStatePlaceOfPower_Idle(cr2w, parent, name);
 

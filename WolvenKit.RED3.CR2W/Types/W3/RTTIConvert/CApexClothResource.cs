@@ -57,7 +57,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(23)] [RED("graphicalLodLevelInfo", 2,0)] 		public CArray<SMeshTypeResourceLODLevel> GraphicalLodLevelInfo { get; set;}
 
-		public CApexClothResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CApexClothResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CApexClothResource(cr2w, parent, name);
 

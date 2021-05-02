@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAIIceGiantEp2Defaults : CAIMonsterDefaults
 	{
-		public CAIIceGiantEp2Defaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIIceGiantEp2Defaults(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIIceGiantEp2Defaults(cr2w, parent, name);
 

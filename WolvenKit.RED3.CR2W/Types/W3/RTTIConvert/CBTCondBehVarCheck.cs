@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("compareOperation")] 		public CEnum<ECompareOp> CompareOperation { get; set;}
 
-		public CBTCondBehVarCheck(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTCondBehVarCheck(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTCondBehVarCheck(cr2w, parent, name);
 

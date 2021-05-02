@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("encounterSpawnPhase")] 		public CName EncounterSpawnPhase { get; set;}
 
-		public CQuestEncounterPhaseBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestEncounterPhaseBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestEncounterPhaseBlock(cr2w, parent, name);
 

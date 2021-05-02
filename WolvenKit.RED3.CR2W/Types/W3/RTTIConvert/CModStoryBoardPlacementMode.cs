@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("theController")] 		public CHandle<CModStoryBoardInteractivePlacement> TheController { get; set;}
 
-		public CModStoryBoardPlacementMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardPlacementMode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardPlacementMode(cr2w, parent, name);
 

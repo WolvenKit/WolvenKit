@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("cachedInputNode")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedInputNode { get; set;}
 
-		public CBehaviorGraphVectorValueBaseNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphVectorValueBaseNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphVectorValueBaseNode(cr2w, parent, name);
 

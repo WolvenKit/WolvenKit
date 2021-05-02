@@ -59,7 +59,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(24)] [RED("INTERACTION_COMPONENT_NAME")] 		public CString INTERACTION_COMPONENT_NAME { get; set;}
 
-		public W3MonsterClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3MonsterClue(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3MonsterClue(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("sheathWeaponsOnStart")] 		public CBool SheathWeaponsOnStart { get; set;}
 
-		public CAIGoToExplorationActionDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIGoToExplorationActionDecorator(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIGoToExplorationActionDecorator(cr2w, parent, name);
 

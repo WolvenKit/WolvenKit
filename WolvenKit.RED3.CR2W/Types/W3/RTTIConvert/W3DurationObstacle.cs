@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("simplyStopEffect")] 		public CBool SimplyStopEffect { get; set;}
 
-		public W3DurationObstacle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3DurationObstacle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DurationObstacle(cr2w, parent, name);
 

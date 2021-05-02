@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("afterFirstChoice")] 		public CBool AfterFirstChoice { get; set;}
 
-		public BTTaskManageCombatPhases(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskManageCombatPhases(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskManageCombatPhases(cr2w, parent, name);
 

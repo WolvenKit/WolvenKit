@@ -41,7 +41,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(15)] [RED("initializeServerCounter")] 		public CInt32 InitializeServerCounter { get; set;}
 
-		public W3RiddleNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3RiddleNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3RiddleNode(cr2w, parent, name);
 

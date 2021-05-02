@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("times", 2,0)] 		public CArray<CFloat> Times { get; set;}
 
-		public CLineMotionExtraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CLineMotionExtraction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CLineMotionExtraction(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1001)] [REDBuffer(true)] public CBufferVLQInt32<CName> Collisiontypes { get; set; }
         [Ordinal(1002)] [REDBuffer(true)] public CBytes Data { get; set; }
 
-        public CPhysicalCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) 
+        public CPhysicalCollision(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) 
         {
             Unk1 = new CUInt32(cr2w, this, nameof(Unk1) ) { IsSerialized = true };
             Data = new CBytes(cr2w, this, nameof(Data) ) { IsSerialized = true };

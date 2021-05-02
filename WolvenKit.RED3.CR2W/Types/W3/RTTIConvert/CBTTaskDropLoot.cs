@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("saveLockID")] 		public CInt32 SaveLockID { get; set;}
 
-		public CBTTaskDropLoot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskDropLoot(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskDropLoot(cr2w, parent, name);
 

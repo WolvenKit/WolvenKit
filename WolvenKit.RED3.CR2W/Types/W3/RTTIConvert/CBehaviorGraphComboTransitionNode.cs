@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("comboInterface")] 		public CPtr<CBehaviorGraphComboTransitionInterface> ComboInterface { get; set;}
 
-		public CBehaviorGraphComboTransitionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphComboTransitionNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphComboTransitionNode(cr2w, parent, name);
 

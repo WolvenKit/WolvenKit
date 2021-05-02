@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("usedFocus")] 		public CBool UsedFocus { get; set;}
 
-		public W3SignEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SignEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SignEntity(cr2w, parent, name);
 

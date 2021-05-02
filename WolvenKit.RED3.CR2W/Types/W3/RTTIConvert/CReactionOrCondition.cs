@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("conditions", 2,0)] 		public CArray<CPtr<IReactionCondition>> Conditions { get; set;}
 
-		public CReactionOrCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CReactionOrCondition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CReactionOrCondition(cr2w, parent, name);
 

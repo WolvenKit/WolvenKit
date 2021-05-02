@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("tree")] 		public CSoft<CSRTBaseTree> Tree { get; set;}
 
-		public SSwitchableFoliageEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSwitchableFoliageEntry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSwitchableFoliageEntry(cr2w, parent, name);
 

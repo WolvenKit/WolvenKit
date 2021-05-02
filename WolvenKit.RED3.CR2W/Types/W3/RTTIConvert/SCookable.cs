@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("cnt")] 		public CInt32 Cnt { get; set;}
 
-		public SCookable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCookable(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCookable(cr2w, parent, name);
 

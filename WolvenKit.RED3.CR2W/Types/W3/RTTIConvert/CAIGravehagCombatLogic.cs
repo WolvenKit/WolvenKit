@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAIGravehagCombatLogic : CAIMonsterCombatLogic
 	{
-		public CAIGravehagCombatLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIGravehagCombatLogic(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIGravehagCombatLogic(cr2w, parent, name);
 

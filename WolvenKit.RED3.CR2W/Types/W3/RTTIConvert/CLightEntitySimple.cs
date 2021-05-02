@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("isOn")] 		public CBool IsOn { get; set;}
 
-		public CLightEntitySimple(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CLightEntitySimple(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CLightEntitySimple(cr2w, parent, name);
 

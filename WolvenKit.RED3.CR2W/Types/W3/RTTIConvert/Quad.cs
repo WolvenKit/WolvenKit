@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("p4")] 		public Vector P4 { get; set;}
 
-		public Quad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public Quad(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new Quad(cr2w, parent, name);
 

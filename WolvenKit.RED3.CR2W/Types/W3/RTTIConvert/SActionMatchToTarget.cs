@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SActionMatchToTarget : CVariable
 	{
-		public SActionMatchToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SActionMatchToTarget(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SActionMatchToTarget(cr2w, parent, name);
 

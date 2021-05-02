@@ -39,7 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("animset")] 		public CSoft<CSkeletalAnimationSet> Animset { get; set;}
 
-		public VirtualAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public VirtualAnimation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new VirtualAnimation(cr2w, parent, name);
 

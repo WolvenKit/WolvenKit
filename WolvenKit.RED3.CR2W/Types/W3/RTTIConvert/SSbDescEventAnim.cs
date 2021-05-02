@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("prodAnimId")] 		public CString ProdAnimId { get; set;}
 
-		public SSbDescEventAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSbDescEventAnim(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSbDescEventAnim(cr2w, parent, name);
 

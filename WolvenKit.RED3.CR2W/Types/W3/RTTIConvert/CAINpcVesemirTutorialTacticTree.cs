@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAINpcVesemirTutorialTacticTree : CAINpcCustomTacticTree
 	{
-		public CAINpcVesemirTutorialTacticTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcVesemirTutorialTacticTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcVesemirTutorialTacticTree(cr2w, parent, name);
 

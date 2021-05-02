@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("presetName")] 		public CName PresetName { get; set;}
 
-		public SSlidingMaterialNamesToPresets(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSlidingMaterialNamesToPresets(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSlidingMaterialNamesToPresets(cr2w, parent, name);
 

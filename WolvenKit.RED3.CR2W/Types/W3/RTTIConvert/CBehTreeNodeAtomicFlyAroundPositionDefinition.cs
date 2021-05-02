@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeAtomicFlyAroundPositionDefinition : IBehTreeNodeAtomicFlyAroundBaseDefinition
 	{
-		public CBehTreeNodeAtomicFlyAroundPositionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeAtomicFlyAroundPositionDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeAtomicFlyAroundPositionDefinition(cr2w, parent, name);
 

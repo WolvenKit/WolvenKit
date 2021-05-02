@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1001)] [REDBuffer] public CBufferVLQInt32<CString> Strings1 { get; set; }
         [Ordinal(1002)] [REDBuffer] public CBufferVLQInt32<CBufferVLQInt32<CString>> Strings2 { get; set; }
 
-        public CIndexed2dArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CIndexed2dArray(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }

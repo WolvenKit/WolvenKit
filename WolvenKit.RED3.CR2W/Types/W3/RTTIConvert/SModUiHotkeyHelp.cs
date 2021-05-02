@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("help")] 		public CString Help { get; set;}
 
-		public SModUiHotkeyHelp(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SModUiHotkeyHelp(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SModUiHotkeyHelp(cr2w, parent, name);
 

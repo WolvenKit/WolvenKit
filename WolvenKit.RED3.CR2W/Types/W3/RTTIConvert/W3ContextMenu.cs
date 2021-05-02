@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("curActionNavCode")] 		public CString CurActionNavCode { get; set;}
 
-		public W3ContextMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ContextMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ContextMenu(cr2w, parent, name);
 

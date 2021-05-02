@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("textColor")] 		public CColor TextColor { get; set;}
 
-		public CStickerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStickerComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStickerComponent(cr2w, parent, name);
 

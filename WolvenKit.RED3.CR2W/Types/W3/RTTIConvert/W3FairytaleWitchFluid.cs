@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("damageVal")] 		public CFloat DamageVal { get; set;}
 
-		public W3FairytaleWitchFluid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3FairytaleWitchFluid(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3FairytaleWitchFluid(cr2w, parent, name);
 

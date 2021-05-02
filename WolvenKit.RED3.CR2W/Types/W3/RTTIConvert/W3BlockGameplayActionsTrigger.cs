@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("sheatheWeaponIfDrawn")] 		public CBool SheatheWeaponIfDrawn { get; set;}
 
-		public W3BlockGameplayActionsTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3BlockGameplayActionsTrigger(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3BlockGameplayActionsTrigger(cr2w, parent, name);
 

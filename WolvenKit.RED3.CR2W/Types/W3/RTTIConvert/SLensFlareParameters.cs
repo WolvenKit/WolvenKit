@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("elements", 2,0)] 		public CArray<SLensFlareElementParameters> Elements { get; set;}
 
-		public SLensFlareParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SLensFlareParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SLensFlareParameters(cr2w, parent, name);
 

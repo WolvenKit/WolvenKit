@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("displayNotifications")] 		public CBool DisplayNotifications { get; set;}
 
-		public AutoApplyOilsFunctions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public AutoApplyOilsFunctions(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new AutoApplyOilsFunctions(cr2w, parent, name);
 

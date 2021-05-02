@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("RIGHT_Y")] 		public CFloat RIGHT_Y { get; set;}
 
-		public W3TutorialManagerUIHandlerStateRunewords(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3TutorialManagerUIHandlerStateRunewords(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TutorialManagerUIHandlerStateRunewords(cr2w, parent, name);
 

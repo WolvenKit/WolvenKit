@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("m_tickCounter")] 		public CFloat M_tickCounter { get; set;}
 
-		public CR4HudModuleBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleBase(cr2w, parent, name);
 

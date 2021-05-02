@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("isExploding")] 		public CBool IsExploding { get; set;}
 
-		public W3ToxicCloudStateArmed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ToxicCloudStateArmed(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ToxicCloudStateArmed(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAINpcHoldGroundTacticTree : CAINpcMeleeTacticTree
 	{
-		public CAINpcHoldGroundTacticTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcHoldGroundTacticTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcHoldGroundTacticTree(cr2w, parent, name);
 

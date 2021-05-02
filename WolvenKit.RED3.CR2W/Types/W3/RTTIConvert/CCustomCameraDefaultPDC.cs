@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("dampFactor")] 		public CFloat DampFactor { get; set;}
 
-		public CCustomCameraDefaultPDC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCustomCameraDefaultPDC(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCustomCameraDefaultPDC(cr2w, parent, name);
 

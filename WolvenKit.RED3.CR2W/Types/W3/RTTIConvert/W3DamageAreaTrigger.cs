@@ -67,7 +67,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(28)] [RED("pos")] 		public Vector Pos { get; set;}
 
-		public W3DamageAreaTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3DamageAreaTrigger(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DamageAreaTrigger(cr2w, parent, name);
 

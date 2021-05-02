@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("entity")] 		public CGUID Entity { get; set;}
 
-		public SActionPointId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SActionPointId(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SActionPointId(cr2w, parent, name);
 

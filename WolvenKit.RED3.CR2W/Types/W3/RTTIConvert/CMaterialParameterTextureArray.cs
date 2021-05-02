@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("texture")] 		public CHandle<CTextureArray> Texture { get; set;}
 
-		public CMaterialParameterTextureArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMaterialParameterTextureArray(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMaterialParameterTextureArray(cr2w, parent, name);
 

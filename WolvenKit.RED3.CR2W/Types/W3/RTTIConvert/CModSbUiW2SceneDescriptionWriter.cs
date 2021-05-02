@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("backslash")] 		public CString Backslash { get; set;}
 
-		public CModSbUiW2SceneDescriptionWriter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModSbUiW2SceneDescriptionWriter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModSbUiW2SceneDescriptionWriter(cr2w, parent, name);
 

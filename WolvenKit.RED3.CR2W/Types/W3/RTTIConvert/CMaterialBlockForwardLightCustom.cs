@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("lightUsageMask")] 		public CEnum<ELightUsageMask> LightUsageMask { get; set;}
 
-		public CMaterialBlockForwardLightCustom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMaterialBlockForwardLightCustom(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMaterialBlockForwardLightCustom(cr2w, parent, name);
 

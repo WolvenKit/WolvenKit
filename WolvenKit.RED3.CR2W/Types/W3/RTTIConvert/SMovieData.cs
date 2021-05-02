@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("showLogo")] 		public CBool ShowLogo { get; set;}
 
-		public SMovieData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMovieData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMovieData(cr2w, parent, name);
 

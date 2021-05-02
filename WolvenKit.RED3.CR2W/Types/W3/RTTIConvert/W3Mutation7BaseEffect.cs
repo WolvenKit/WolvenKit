@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("apBonus")] 		public CFloat ApBonus { get; set;}
 
-		public W3Mutation7BaseEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Mutation7BaseEffect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Mutation7BaseEffect(cr2w, parent, name);
 

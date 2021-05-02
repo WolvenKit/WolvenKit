@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("stopDistance")] 		public CFloat StopDistance { get; set;}
 
-		public CAIMoveAlongPathAwareOfTailParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIMoveAlongPathAwareOfTailParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIMoveAlongPathAwareOfTailParams(cr2w, parent, name);
 

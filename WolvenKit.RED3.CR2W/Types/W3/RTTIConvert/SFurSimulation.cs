@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("gravityDir")] 		public Vector GravityDir { get; set;}
 
-		public SFurSimulation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFurSimulation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFurSimulation(cr2w, parent, name);
 

@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("actorOptional")] 		public CBool ActorOptional { get; set;}
 
-		public CStorySceneVoicetagMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneVoicetagMapping(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneVoicetagMapping(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("conditionType")] 		public CEnum<EFastTravelConditionType> ConditionType { get; set;}
 
-		public CQuestUsedFastTravelCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestUsedFastTravelCondition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestUsedFastTravelCondition(cr2w, parent, name);
 

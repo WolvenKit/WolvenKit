@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("startingBehaviorPriority")] 		public CInt32 StartingBehaviorPriority { get; set;}
 
-		public CAIRiderStartingBehaviorParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIRiderStartingBehaviorParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIRiderStartingBehaviorParameters(cr2w, parent, name);
 

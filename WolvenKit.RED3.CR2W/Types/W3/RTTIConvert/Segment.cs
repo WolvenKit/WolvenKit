@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("direction")] 		public Vector Direction { get; set;}
 
-		public Segment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public Segment(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new Segment(cr2w, parent, name);
 

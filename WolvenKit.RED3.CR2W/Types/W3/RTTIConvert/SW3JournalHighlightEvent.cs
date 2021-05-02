@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SW3JournalHighlightEvent : SJournalEvent
 	{
-		public SW3JournalHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SW3JournalHighlightEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SW3JournalHighlightEvent(cr2w, parent, name);
 

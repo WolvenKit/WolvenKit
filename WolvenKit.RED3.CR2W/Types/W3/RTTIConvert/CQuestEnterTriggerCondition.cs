@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("onAreaEntry")] 		public CBool OnAreaEntry { get; set;}
 
-		public CQuestEnterTriggerCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestEnterTriggerCondition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestEnterTriggerCondition(cr2w, parent, name);
 

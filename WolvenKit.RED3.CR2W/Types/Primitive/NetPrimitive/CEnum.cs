@@ -14,7 +14,7 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta()]
     public class CEnum<T> : CVariable, IEnumAccessor<T> where T : Enum
     {
-        public CEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CEnum(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         private T _value;

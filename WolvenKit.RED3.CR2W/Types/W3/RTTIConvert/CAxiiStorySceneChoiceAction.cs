@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("level")] 		public CInt32 Level { get; set;}
 
-		public CAxiiStorySceneChoiceAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAxiiStorySceneChoiceAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAxiiStorySceneChoiceAction(cr2w, parent, name);
 

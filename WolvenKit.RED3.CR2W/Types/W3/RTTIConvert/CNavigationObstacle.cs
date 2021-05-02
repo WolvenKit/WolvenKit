@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("shapes", 2,0)] 		public CArray<SNavigationObstacleShape> Shapes { get; set;}
 
-		public CNavigationObstacle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CNavigationObstacle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CNavigationObstacle(cr2w, parent, name);
 

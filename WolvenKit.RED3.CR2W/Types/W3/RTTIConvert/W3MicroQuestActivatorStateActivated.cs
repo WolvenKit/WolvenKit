@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3MicroQuestActivatorStateActivated : CScriptableState
 	{
-		public W3MicroQuestActivatorStateActivated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3MicroQuestActivatorStateActivated(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3MicroQuestActivatorStateActivated(cr2w, parent, name);
 

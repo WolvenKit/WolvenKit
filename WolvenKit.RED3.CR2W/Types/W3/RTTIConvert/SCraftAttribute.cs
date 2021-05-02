@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("displayPercAdd")] 		public CBool DisplayPercAdd { get; set;}
 
-		public SCraftAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCraftAttribute(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCraftAttribute(cr2w, parent, name);
 

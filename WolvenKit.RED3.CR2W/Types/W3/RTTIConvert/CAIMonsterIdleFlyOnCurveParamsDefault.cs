@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("maxYawOutput")] 		public CFloat MaxYawOutput { get; set;}
 
-		public CAIMonsterIdleFlyOnCurveParamsDefault(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIMonsterIdleFlyOnCurveParamsDefault(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIMonsterIdleFlyOnCurveParamsDefault(cr2w, parent, name);
 

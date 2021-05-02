@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("speedTreeEnabled")] 		public CBool SpeedTreeEnabled { get; set;}
 
-		public CWindParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CWindParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CWindParameters(cr2w, parent, name);
 

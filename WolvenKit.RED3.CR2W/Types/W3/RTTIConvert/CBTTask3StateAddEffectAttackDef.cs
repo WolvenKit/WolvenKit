@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("effectPercentValue")] 		public CFloat EffectPercentValue { get; set;}
 
-		public CBTTask3StateAddEffectAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTask3StateAddEffectAttackDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTask3StateAddEffectAttackDef(cr2w, parent, name);
 

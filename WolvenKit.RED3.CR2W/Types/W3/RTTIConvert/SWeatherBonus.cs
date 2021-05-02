@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("ability")] 		public CName Ability { get; set;}
 
-		public SWeatherBonus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SWeatherBonus(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWeatherBonus(cr2w, parent, name);
 

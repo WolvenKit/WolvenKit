@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("bbox")] 		public Box Bbox { get; set;}
 
-		public CNavmesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CNavmesh(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CNavmesh(cr2w, parent, name);
 

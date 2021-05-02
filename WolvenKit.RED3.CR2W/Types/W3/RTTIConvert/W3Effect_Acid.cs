@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3Effect_Acid : W3DamageOverTimeEffect
 	{
-		public W3Effect_Acid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_Acid(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_Acid(cr2w, parent, name);
 

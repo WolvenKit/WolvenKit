@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("hasDrinkingMinigame")] 		public CBool HasDrinkingMinigame { get; set;}
 
-		public CAINpcRiderDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcRiderDefaults(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcRiderDefaults(cr2w, parent, name);
 

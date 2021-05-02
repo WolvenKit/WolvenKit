@@ -49,7 +49,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(19)] [RED("focusInteractionsInterval")] 		public CFloat FocusInteractionsInterval { get; set;}
 
-		public CFocusModeController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFocusModeController(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFocusModeController(cr2w, parent, name);
 

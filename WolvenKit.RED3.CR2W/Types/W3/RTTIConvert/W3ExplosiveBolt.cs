@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("insideToxicClouds", 2,0)] 		public CArray<CHandle<W3ToxicCloud>> InsideToxicClouds { get; set;}
 
-		public W3ExplosiveBolt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ExplosiveBolt(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ExplosiveBolt(cr2w, parent, name);
 

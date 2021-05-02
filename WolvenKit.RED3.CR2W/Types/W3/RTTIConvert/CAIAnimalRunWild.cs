@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("leaderRegroupEvent")] 		public CName LeaderRegroupEvent { get; set;}
 
-		public CAIAnimalRunWild(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIAnimalRunWild(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIAnimalRunWild(cr2w, parent, name);
 

@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("trackName")] 		public CString TrackName { get; set;}
 
-		public CExtAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExtAnimEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExtAnimEvent(cr2w, parent, name);
 

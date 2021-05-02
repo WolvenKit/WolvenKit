@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("jobTreeType")] 		public CEnum<EJobTreeType> JobTreeType { get; set;}
 
-		public W3MusicBandActivatorArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3MusicBandActivatorArea(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3MusicBandActivatorArea(cr2w, parent, name);
 

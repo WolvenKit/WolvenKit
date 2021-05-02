@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("m_shouldEnableAutoRotation")] 		public CBool M_shouldEnableAutoRotation { get; set;}
 
-		public CR4PlayerStateSailing(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4PlayerStateSailing(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4PlayerStateSailing(cr2w, parent, name);
 

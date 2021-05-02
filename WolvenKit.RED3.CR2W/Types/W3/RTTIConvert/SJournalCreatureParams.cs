@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("droppedItems", 2,0)] 		public CArray<CName> DroppedItems { get; set;}
 
-		public SJournalCreatureParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SJournalCreatureParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SJournalCreatureParams(cr2w, parent, name);
 

@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("elementShown")] 		public CBool ElementShown { get; set;}
 
-		public CR4HudModuleHorsePanicBar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleHorsePanicBar(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleHorsePanicBar(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("reactionTree")] 		public CHandle<CAIMonsterCombatReactionsTree> ReactionTree { get; set;}
 
-		public CAIFlyingMonsterCombatParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIFlyingMonsterCombatParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIFlyingMonsterCombatParams(cr2w, parent, name);
 

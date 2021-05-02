@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("changeDirectionOnBlockDelay")] 		public CFloat ChangeDirectionOnBlockDelay { get; set;}
 
-		public CMoveSTStrafeTargetRandomly(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMoveSTStrafeTargetRandomly(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSTStrafeTargetRandomly(cr2w, parent, name);
 

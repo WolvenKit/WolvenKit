@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("tempNpcGroupType")] 		public CEnum<ENPCGroupType> TempNpcGroupType { get; set;}
 
-		public CAINpcDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcDefaults(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcDefaults(cr2w, parent, name);
 

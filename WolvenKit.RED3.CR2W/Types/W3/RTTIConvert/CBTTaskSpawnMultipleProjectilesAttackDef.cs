@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("dodgeable")] 		public CBool Dodgeable { get; set;}
 
-		public CBTTaskSpawnMultipleProjectilesAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSpawnMultipleProjectilesAttackDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSpawnMultipleProjectilesAttackDef(cr2w, parent, name);
 

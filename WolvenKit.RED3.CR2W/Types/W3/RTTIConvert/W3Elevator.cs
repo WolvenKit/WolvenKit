@@ -57,7 +57,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(23)] [RED("deniedArea3")] 		public CHandle<CEntity> DeniedArea3 { get; set;}
 
-		public W3Elevator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Elevator(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Elevator(cr2w, parent, name);
 

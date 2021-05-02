@@ -97,7 +97,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(43)] [RED("shadowDistanceOverride")] 		public CFloat ShadowDistanceOverride { get; set;}
 
-		public CDestructionSystemComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CDestructionSystemComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CDestructionSystemComponent(cr2w, parent, name);
 

@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("contextMenuPosition_y")] 		public CFloat ContextMenuPosition_y { get; set;}
 
-		public W3InventoryItemContext(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3InventoryItemContext(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3InventoryItemContext(cr2w, parent, name);
 

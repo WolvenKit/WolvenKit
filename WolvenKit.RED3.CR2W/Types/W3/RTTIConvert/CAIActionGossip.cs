@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("inInWorkBranch")] 		public CBool InInWorkBranch { get; set;}
 
-		public CAIActionGossip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIActionGossip(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIActionGossip(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("burningChance")] 		public CFloat BurningChance { get; set;}
 
-		public W3DragonsDream(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3DragonsDream(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DragonsDream(cr2w, parent, name);
 

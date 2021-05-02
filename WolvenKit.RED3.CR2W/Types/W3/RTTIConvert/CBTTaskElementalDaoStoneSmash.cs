@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
 
-		public CBTTaskElementalDaoStoneSmash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskElementalDaoStoneSmash(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskElementalDaoStoneSmash(cr2w, parent, name);
 

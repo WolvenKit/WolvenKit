@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("enabled")] 		public CBool Enabled { get; set;}
 
-		public SMenuButtonDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMenuButtonDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMenuButtonDef(cr2w, parent, name);
 

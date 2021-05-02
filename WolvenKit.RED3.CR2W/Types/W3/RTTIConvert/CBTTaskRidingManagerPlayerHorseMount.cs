@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBTTaskRidingManagerPlayerHorseMount : CBTTaskRidingManagerHorseMount
 	{
-		public CBTTaskRidingManagerPlayerHorseMount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskRidingManagerPlayerHorseMount(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskRidingManagerPlayerHorseMount(cr2w, parent, name);
 

@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("animElems", 2,0)] 		public CArray<SBehaviorComboElem> AnimElems { get; set;}
 
-		public CBehaviorGraphSimpleDefensiveComboStateNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphSimpleDefensiveComboStateNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphSimpleDefensiveComboStateNode(cr2w, parent, name);
 

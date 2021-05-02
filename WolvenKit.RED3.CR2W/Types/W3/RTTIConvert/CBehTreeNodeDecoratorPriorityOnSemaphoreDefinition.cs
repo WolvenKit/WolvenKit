@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("comparison")] 		public CEnum<ECompareFunc> Comparison { get; set;}
 
-		public CBehTreeNodeDecoratorPriorityOnSemaphoreDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeDecoratorPriorityOnSemaphoreDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeDecoratorPriorityOnSemaphoreDefinition(cr2w, parent, name);
 

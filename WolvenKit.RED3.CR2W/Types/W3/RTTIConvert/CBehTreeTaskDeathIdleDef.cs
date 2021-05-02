@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("disableRagdollAfter")] 		public CBehTreeValFloat DisableRagdollAfter { get; set;}
 
-		public CBehTreeTaskDeathIdleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeTaskDeathIdleDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeTaskDeathIdleDef(cr2w, parent, name);
 

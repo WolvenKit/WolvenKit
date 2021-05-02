@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("height")] 		public CFloat Height { get; set;}
 
-		public CCollisionShapeCapsule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCollisionShapeCapsule(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCollisionShapeCapsule(cr2w, parent, name);
 

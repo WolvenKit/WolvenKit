@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("repoPoseId")] 		public CString RepoPoseId { get; set;}
 
-		public SSbDescProdIdlePose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSbDescProdIdlePose(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSbDescProdIdlePose(cr2w, parent, name);
 

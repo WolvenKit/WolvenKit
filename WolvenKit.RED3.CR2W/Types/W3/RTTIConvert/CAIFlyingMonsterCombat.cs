@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("params")] 		public CHandle<CAIFlyingMonsterCombatParams> Params { get; set;}
 
-		public CAIFlyingMonsterCombat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIFlyingMonsterCombat(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIFlyingMonsterCombat(cr2w, parent, name);
 

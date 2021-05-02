@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("animStartTimePrecent")] 		public CFloat AnimStartTimePrecent { get; set;}
 
-		public CBehaviorGraphRandomAnimTimeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphRandomAnimTimeNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphRandomAnimTimeNode(cr2w, parent, name);
 

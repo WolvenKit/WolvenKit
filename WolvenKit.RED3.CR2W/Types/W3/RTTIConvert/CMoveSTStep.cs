@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("stepNotification")] 		public CName StepNotification { get; set;}
 
-		public CMoveSTStep(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMoveSTStep(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSTStep(cr2w, parent, name);
 

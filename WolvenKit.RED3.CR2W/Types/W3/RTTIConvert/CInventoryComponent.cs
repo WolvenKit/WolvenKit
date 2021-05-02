@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("listeners", 2,0)] 		public CArray<CHandle<IInventoryScriptedListener>> Listeners { get; set;}
 
-		public CInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CInventoryComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CInventoryComponent(cr2w, parent, name);
 

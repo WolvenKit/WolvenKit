@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("notifyPlayerInsteadOfCombatTarget")] 		public CBool NotifyPlayerInsteadOfCombatTarget { get; set;}
 
-		public CBTTaskHorseSendInfoDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskHorseSendInfoDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskHorseSendInfoDef(cr2w, parent, name);
 

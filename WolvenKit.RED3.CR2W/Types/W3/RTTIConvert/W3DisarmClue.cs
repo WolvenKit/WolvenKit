@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("connectedTripwire")] 		public CHandle<W3TripwireSwitch> ConnectedTripwire { get; set;}
 
-		public W3DisarmClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3DisarmClue(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DisarmClue(cr2w, parent, name);
 

@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("playerMode")] 		public CEnum<EPlayerMode> PlayerMode { get; set;}
 
-		public W3PlayerModeTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3PlayerModeTrigger(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3PlayerModeTrigger(cr2w, parent, name);
 

@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("limitToBaseArea")] 		public CBool LimitToBaseArea { get; set;}
 
-		public SPositioningFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPositioningFilter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPositioningFilter(cr2w, parent, name);
 

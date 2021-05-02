@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("victimCanBeHitByFists")] 		public CBool VictimCanBeHitByFists { get; set;}
 
-		public W3DamageManagerProcessor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3DamageManagerProcessor(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DamageManagerProcessor(cr2w, parent, name);
 

@@ -39,7 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("eventName")] 		public CName EventName { get; set;}
 
-		public CBTTaskSignalReactionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSignalReactionEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSignalReactionEvent(cr2w, parent, name);
 

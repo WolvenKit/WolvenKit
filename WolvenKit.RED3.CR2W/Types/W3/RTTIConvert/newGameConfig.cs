@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("import_save_index")] 		public CInt32 Import_save_index { get; set;}
 
-		public newGameConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public newGameConfig(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new newGameConfig(cr2w, parent, name);
 

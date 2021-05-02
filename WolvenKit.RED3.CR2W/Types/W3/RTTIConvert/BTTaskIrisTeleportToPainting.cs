@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("percentageToHeal")] 		public CFloat PercentageToHeal { get; set;}
 
-		public BTTaskIrisTeleportToPainting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskIrisTeleportToPainting(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskIrisTeleportToPainting(cr2w, parent, name);
 

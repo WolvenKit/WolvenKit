@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("assetManager")] 		public CHandle<CModStoryBoardAssetManager> AssetManager { get; set;}
 
-		public CModStoryBoardAssetWorkModeStateSbUi_AssetManaging(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardAssetWorkModeStateSbUi_AssetManaging(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardAssetWorkModeStateSbUi_AssetManaging(cr2w, parent, name);
 

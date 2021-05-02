@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintNodeFloorIKWeightHandler : CVariable
 	{
-		public SBehaviorConstraintNodeFloorIKWeightHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehaviorConstraintNodeFloorIKWeightHandler(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehaviorConstraintNodeFloorIKWeightHandler(cr2w, parent, name);
 

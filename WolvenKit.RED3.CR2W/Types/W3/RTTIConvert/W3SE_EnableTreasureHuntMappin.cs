@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("commonMapManager")] 		public CHandle<CCommonMapManager> CommonMapManager { get; set;}
 
-		public W3SE_EnableTreasureHuntMappin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SE_EnableTreasureHuntMappin(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SE_EnableTreasureHuntMappin(cr2w, parent, name);
 

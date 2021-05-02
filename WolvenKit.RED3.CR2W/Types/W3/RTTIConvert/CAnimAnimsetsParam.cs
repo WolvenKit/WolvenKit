@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("animationSets", 2,0)] 		public CArray<CHandle<CSkeletalAnimationSet>> AnimationSets { get; set;}
 
-		public CAnimAnimsetsParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimAnimsetsParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimAnimsetsParam(cr2w, parent, name);
 

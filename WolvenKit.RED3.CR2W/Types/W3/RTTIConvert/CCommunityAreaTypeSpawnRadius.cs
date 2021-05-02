@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("dontRestore")] 		public CBool DontRestore { get; set;}
 
-		public CCommunityAreaTypeSpawnRadius(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCommunityAreaTypeSpawnRadius(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCommunityAreaTypeSpawnRadius(cr2w, parent, name);
 

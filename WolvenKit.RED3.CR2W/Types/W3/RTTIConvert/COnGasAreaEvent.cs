@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("entered")] 		public CBool Entered { get; set;}
 
-		public COnGasAreaEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public COnGasAreaEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new COnGasAreaEvent(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("condition")] 		public CEnum<EQuestPlayerSkillCondition> Condition { get; set;}
 
-		public SQuestPlayerSkill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SQuestPlayerSkill(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SQuestPlayerSkill(cr2w, parent, name);
 

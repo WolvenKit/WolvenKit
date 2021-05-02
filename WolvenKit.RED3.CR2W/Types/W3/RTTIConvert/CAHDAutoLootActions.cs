@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("invItemList", 2,0)] 		public CArray<SItemUniqueId> InvItemList { get; set;}
 
-		public CAHDAutoLootActions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAHDAutoLootActions(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAHDAutoLootActions(cr2w, parent, name);
 

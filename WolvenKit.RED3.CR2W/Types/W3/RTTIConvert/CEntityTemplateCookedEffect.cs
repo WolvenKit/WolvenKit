@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("buffer")] 		public SharedDataBuffer Buffer { get; set;}
 
-		public CEntityTemplateCookedEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEntityTemplateCookedEffect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEntityTemplateCookedEffect(cr2w, parent, name);
 

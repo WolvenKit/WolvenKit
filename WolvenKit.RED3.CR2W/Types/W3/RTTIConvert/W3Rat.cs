@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("hasCollision")] 		public CBool HasCollision { get; set;}
 
-		public W3Rat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Rat(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Rat(cr2w, parent, name);
 

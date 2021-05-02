@@ -105,7 +105,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(47)] [RED("localSpaceCameraTurnPercent")] 		public CFloat LocalSpaceCameraTurnPercent { get; set;}
 
-		public CBoatComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBoatComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBoatComponent(cr2w, parent, name);
 

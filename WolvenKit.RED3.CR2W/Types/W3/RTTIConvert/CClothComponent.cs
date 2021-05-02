@@ -57,7 +57,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(23)] [RED("shadowDistanceOverride")] 		public CFloat ShadowDistanceOverride { get; set;}
 
-		public CClothComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CClothComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CClothComponent(cr2w, parent, name);
 

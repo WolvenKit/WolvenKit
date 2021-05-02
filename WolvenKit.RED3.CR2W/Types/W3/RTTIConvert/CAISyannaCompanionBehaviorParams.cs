@@ -59,7 +59,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(24)] [RED("animName_4_stop")] 		public CName AnimName_4_stop { get; set;}
 
-		public CAISyannaCompanionBehaviorParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAISyannaCompanionBehaviorParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAISyannaCompanionBehaviorParams(cr2w, parent, name);
 

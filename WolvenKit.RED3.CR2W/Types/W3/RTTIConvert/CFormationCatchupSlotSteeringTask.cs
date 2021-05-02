@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("cachupSpeed")] 		public CFloat CachupSpeed { get; set;}
 
-		public CFormationCatchupSlotSteeringTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFormationCatchupSlotSteeringTask(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFormationCatchupSlotSteeringTask(cr2w, parent, name);
 

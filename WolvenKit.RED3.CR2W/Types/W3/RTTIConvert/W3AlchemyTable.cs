@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("m_tableState")] 		public CEnum<W3TableState> M_tableState { get; set;}
 
-		public W3AlchemyTable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3AlchemyTable(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3AlchemyTable(cr2w, parent, name);
 

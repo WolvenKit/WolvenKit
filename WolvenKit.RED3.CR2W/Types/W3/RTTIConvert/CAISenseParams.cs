@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("detectOnlyHostiles")] 		public CBool DetectOnlyHostiles { get; set;}
 
-		public CAISenseParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAISenseParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAISenseParams(cr2w, parent, name);
 

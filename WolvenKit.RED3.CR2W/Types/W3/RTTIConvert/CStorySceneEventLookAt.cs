@@ -43,7 +43,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(16)] [RED("resetCloth")] 		public CEnum<EDialogResetClothAndDanglesType> ResetCloth { get; set;}
 
-		public CStorySceneEventLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneEventLookAt(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEventLookAt(cr2w, parent, name);
 

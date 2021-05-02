@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("objectiveEntry")] 		public CHandle<CJournalQuestObjective> ObjectiveEntry { get; set;}
 
-		public SJournalQuestObjectiveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SJournalQuestObjectiveData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SJournalQuestObjectiveData(cr2w, parent, name);
 

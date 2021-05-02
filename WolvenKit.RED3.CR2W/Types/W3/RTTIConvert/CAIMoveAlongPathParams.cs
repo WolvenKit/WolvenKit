@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("tolerance")] 		public CFloat Tolerance { get; set;}
 
-		public CAIMoveAlongPathParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIMoveAlongPathParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIMoveAlongPathParams(cr2w, parent, name);
 

@@ -65,7 +65,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(27)] [RED("importUnitsScale")] 		public CFloat ImportUnitsScale { get; set;}
 
-		public CFurMeshResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFurMeshResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFurMeshResource(cr2w, parent, name);
 

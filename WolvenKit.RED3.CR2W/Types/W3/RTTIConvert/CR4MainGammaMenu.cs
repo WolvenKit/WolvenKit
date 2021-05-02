@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("m_fxSetCurrentUsername")] 		public CHandle<CScriptedFlashFunction> M_fxSetCurrentUsername { get; set;}
 
-		public CR4MainGammaMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4MainGammaMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4MainGammaMenu(cr2w, parent, name);
 

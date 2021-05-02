@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("groupType")] 		public CBehTreeValInt GroupType { get; set;}
 
-		public SetNPCTypeEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SetNPCTypeEffector(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SetNPCTypeEffector(cr2w, parent, name);
 

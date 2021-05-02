@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("u8", 2,0)] 		public CByteArray U8 { get; set;}
 
-		public CModConverter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModConverter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModConverter(cr2w, parent, name);
 

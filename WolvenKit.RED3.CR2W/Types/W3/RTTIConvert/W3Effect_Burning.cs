@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("glyphword12NotBurnedEntities", 2,0)] 		public CArray<CHandle<CGameplayEntity>> Glyphword12NotBurnedEntities { get; set;}
 
-		public W3Effect_Burning(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_Burning(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_Burning(cr2w, parent, name);
 

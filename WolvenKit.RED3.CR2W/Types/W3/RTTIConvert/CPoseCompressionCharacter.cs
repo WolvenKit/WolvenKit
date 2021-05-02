@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("rightWeapon")] 		public CInt32 RightWeapon { get; set;}
 
-		public CPoseCompressionCharacter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPoseCompressionCharacter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPoseCompressionCharacter(cr2w, parent, name);
 

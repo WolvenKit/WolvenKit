@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("pauseType")] 		public CEnum<EMenuPauseType> PauseType { get; set;}
 
-		public CMenuPauseParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMenuPauseParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMenuPauseParam(cr2w, parent, name);
 

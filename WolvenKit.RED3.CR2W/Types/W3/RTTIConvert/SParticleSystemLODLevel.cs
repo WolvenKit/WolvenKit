@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		public SParticleSystemLODLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SParticleSystemLODLevel(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SParticleSystemLODLevel(cr2w, parent, name);
 

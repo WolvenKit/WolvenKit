@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("inTrigger")] 		public CBool InTrigger { get; set;}
 
-		public SSwarmVictim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSwarmVictim(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSwarmVictim(cr2w, parent, name);
 

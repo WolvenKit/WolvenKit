@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3ElevatorStateOnStartPos : CScriptableState
 	{
-		public W3ElevatorStateOnStartPos(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ElevatorStateOnStartPos(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ElevatorStateOnStartPos(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("maxUpgradedItems", 2,0)] 		public CArray<SItemUniqueId> MaxUpgradedItems { get; set;}
 
-		public W3GuiAddSocketsInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3GuiAddSocketsInventoryComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3GuiAddSocketsInventoryComponent(cr2w, parent, name);
 

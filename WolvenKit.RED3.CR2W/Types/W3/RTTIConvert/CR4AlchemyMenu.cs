@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("itemsQuantity", 2,0)] 		public CArray<CInt32> ItemsQuantity { get; set;}
 
-		public CR4AlchemyMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4AlchemyMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4AlchemyMenu(cr2w, parent, name);
 

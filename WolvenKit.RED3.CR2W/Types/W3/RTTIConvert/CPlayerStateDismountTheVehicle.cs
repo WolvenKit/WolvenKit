@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("dismountType")] 		public CEnum<EDismountType> DismountType { get; set;}
 
-		public CPlayerStateDismountTheVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPlayerStateDismountTheVehicle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlayerStateDismountTheVehicle(cr2w, parent, name);
 

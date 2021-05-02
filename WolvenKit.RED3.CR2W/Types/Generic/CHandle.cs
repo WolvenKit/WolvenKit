@@ -22,7 +22,7 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta()]
     public class CHandle<T> : CVariable, IHandleAccessor where T : IEditableVariable
     {
-        public CHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CHandle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

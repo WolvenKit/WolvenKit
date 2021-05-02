@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("sharpenAmount")] 		public CFloat SharpenAmount { get; set;}
 
-		public SWorldMotionBlurSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SWorldMotionBlurSettings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWorldMotionBlurSettings(cr2w, parent, name);
 

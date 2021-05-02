@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CFactsDB : IGameSystem
 	{
-		public CFactsDB(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFactsDB(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFactsDB(cr2w, parent, name);
 

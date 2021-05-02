@@ -211,7 +211,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(100)] [RED("timeToRespawnParticlesMax")] 		public CFloat TimeToRespawnParticlesMax { get; set;}
 
-		public CExplorationStateSlide(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateSlide(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateSlide(cr2w, parent, name);
 

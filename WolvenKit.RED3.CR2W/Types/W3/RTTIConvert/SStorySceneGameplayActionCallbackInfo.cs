@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("inActor")] 		public CHandle<CActor> InActor { get; set;}
 
-		public SStorySceneGameplayActionCallbackInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStorySceneGameplayActionCallbackInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStorySceneGameplayActionCallbackInfo(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("m_fxSetSubtitlesHackSFF")] 		public CHandle<CScriptedFlashFunction> M_fxSetSubtitlesHackSFF { get; set;}
 
-		public CR4PosterMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4PosterMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4PosterMenu(cr2w, parent, name);
 

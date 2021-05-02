@@ -43,7 +43,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(16)] [RED("sideIsLeft")] 		public CBool SideIsLeft { get; set;}
 
-		public CExplorationStateSkatingDrift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateSkatingDrift(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateSkatingDrift(cr2w, parent, name);
 

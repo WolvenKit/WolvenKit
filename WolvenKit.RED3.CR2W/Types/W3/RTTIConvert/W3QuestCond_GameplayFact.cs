@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("listener")] 		public CHandle<W3QuestCond_GameplayFact_Listener> Listener { get; set;}
 
-		public W3QuestCond_GameplayFact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3QuestCond_GameplayFact(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3QuestCond_GameplayFact(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPointCloudLookAtTransition_Spherical : IBehaviorGraphPointCloudLookAtTransition_Vector
 	{
-		public CBehaviorGraphPointCloudLookAtTransition_Spherical(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphPointCloudLookAtTransition_Spherical(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphPointCloudLookAtTransition_Spherical(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("isAvailableWhenInPursuitRange")] 		public CBool IsAvailableWhenInPursuitRange { get; set;}
 
-		public CBehTreeNodeDecoratorGuardRetreatDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeDecoratorGuardRetreatDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeDecoratorGuardRetreatDefinition(cr2w, parent, name);
 

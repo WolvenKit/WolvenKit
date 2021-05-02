@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("requiredDistanceFromLine")] 		public CFloat RequiredDistanceFromLine { get; set;}
 
-		public BTCondIsInTheWay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondIsInTheWay(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondIsInTheWay(cr2w, parent, name);
 

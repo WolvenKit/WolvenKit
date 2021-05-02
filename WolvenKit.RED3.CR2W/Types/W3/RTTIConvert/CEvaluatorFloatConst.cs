@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("value")] 		public CFloat Value { get; set;}
 
-		public CEvaluatorFloatConst(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEvaluatorFloatConst(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEvaluatorFloatConst(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("lockName")] 		public CName LockName { get; set;}
 
-		public CActionLockerByCounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CActionLockerByCounter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CActionLockerByCounter(cr2w, parent, name);
 

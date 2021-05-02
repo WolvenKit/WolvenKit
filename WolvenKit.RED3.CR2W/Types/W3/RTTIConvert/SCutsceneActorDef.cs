@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("animationAtFinalPosition")] 		public CName AnimationAtFinalPosition { get; set;}
 
-		public SCutsceneActorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCutsceneActorDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCutsceneActorDef(cr2w, parent, name);
 

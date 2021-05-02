@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("virtualIKs", 2,0)] 		public CArray<VirtualAnimationPoseIK> VirtualIKs { get; set;}
 
-		public CVirtualSkeletalAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CVirtualSkeletalAnimation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CVirtualSkeletalAnimation(cr2w, parent, name);
 

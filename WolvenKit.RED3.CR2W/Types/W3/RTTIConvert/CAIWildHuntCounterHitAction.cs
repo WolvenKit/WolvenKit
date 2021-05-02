@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAIWildHuntCounterHitAction : CAINpcDefenseAction
 	{
-		public CAIWildHuntCounterHitAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIWildHuntCounterHitAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIWildHuntCounterHitAction(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("ropeLength")] 		public CFloat RopeLength { get; set;}
 
-		public CCustomCameraRopePPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCustomCameraRopePPC(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCustomCameraRopePPC(cr2w, parent, name);
 

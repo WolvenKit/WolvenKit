@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("usageMask")] 		public CEnum<ECameraLightBitfield> UsageMask { get; set;}
 
-		public SStorySceneCameraLightMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStorySceneCameraLightMod(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStorySceneCameraLightMod(cr2w, parent, name);
 

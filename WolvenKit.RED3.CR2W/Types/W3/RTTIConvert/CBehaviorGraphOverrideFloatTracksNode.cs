@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("overrideZeros")] 		public CBool OverrideZeros { get; set;}
 
-		public CBehaviorGraphOverrideFloatTracksNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphOverrideFloatTracksNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphOverrideFloatTracksNode(cr2w, parent, name);
 

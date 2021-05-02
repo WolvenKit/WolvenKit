@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("repoAnimId")] 		public CString RepoAnimId { get; set;}
 
-		public SSbDescProdAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSbDescProdAnimation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSbDescProdAnimation(cr2w, parent, name);
 

@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using static WolvenKit.RED3.CR2W.Types.Enums;
 using WolvenKit.RED3.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -17,7 +18,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1001)] [REDBuffer] public CUInt8 Flag1 { get; set; }
         [Ordinal(1001)] [REDBuffer] public CUInt8 Flag2 { get; set; }
 
-        public SUmbraTileData(CR2WFile cr2w, CVariable parent, string name) :
+        public SUmbraTileData(IRed3EngineFile cr2w, CVariable parent, string name) :
             base(cr2w, parent, name)
         {
 

@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("audio")] 		public SStoryBoardAudioSettings Audio { get; set;}
 
-		public SStoryBoardShotAssetSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStoryBoardShotAssetSettings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStoryBoardShotAssetSettings(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("runewords", 2,0)] 		public CArray<Runeword> Runewords { get; set;}
 
-		public W3RunewordManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3RunewordManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3RunewordManager(cr2w, parent, name);
 

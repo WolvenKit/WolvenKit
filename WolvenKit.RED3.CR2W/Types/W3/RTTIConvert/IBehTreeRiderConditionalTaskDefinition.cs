@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IBehTreeRiderConditionalTaskDefinition : IBehTreeConditionalTaskDefinition
 	{
-		public IBehTreeRiderConditionalTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IBehTreeRiderConditionalTaskDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IBehTreeRiderConditionalTaskDefinition(cr2w, parent, name);
 

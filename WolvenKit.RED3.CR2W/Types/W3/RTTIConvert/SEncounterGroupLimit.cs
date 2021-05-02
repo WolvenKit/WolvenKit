@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("limit")] 		public CUInt32 Limit { get; set;}
 
-		public SEncounterGroupLimit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SEncounterGroupLimit(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SEncounterGroupLimit(cr2w, parent, name);
 

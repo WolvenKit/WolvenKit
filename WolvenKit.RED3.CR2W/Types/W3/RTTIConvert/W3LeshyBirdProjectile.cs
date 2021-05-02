@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("projExpired")] 		public CBool ProjExpired { get; set;}
 
-		public W3LeshyBirdProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3LeshyBirdProjectile(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3LeshyBirdProjectile(cr2w, parent, name);
 

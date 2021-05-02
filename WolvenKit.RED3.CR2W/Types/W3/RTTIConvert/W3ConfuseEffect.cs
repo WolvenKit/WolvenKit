@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("criticalHitBonus")] 		public CFloat CriticalHitBonus { get; set;}
 
-		public W3ConfuseEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ConfuseEffect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ConfuseEffect(cr2w, parent, name);
 

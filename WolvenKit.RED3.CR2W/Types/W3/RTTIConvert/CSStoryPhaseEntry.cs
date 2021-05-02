@@ -41,7 +41,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(15)] [RED("cachedMapPinPosition")] 		public Vector CachedMapPinPosition { get; set;}
 
-		public CSStoryPhaseEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSStoryPhaseEntry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSStoryPhaseEntry(cr2w, parent, name);
 

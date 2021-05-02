@@ -79,7 +79,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(34)] [RED("defaultSelectionWeights")] 		public STargetSelectionWeights DefaultSelectionWeights { get; set;}
 
-		public SR4PlayerTargetingIn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SR4PlayerTargetingIn(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SR4PlayerTargetingIn(cr2w, parent, name);
 

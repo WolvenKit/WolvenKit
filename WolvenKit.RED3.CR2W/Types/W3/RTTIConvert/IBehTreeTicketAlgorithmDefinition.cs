@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IBehTreeTicketAlgorithmDefinition : CObject
 	{
-		public IBehTreeTicketAlgorithmDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IBehTreeTicketAlgorithmDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IBehTreeTicketAlgorithmDefinition(cr2w, parent, name);
 

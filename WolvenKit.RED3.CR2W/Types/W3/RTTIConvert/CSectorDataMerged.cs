@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CSectorDataMerged : CSectorData
 	{
-		public CSectorDataMerged(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSectorDataMerged(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSectorDataMerged(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("entries", 2,0)] 		public CArray<SIdleAEntryGeneratorParam> Entries { get; set;}
 
-		public CIdleAIEntryGenerator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CIdleAIEntryGenerator(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CIdleAIEntryGenerator(cr2w, parent, name);
 

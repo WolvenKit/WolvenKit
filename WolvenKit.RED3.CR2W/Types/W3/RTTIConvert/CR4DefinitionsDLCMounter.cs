@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("definitionXmlFilePath")] 		public CString DefinitionXmlFilePath { get; set;}
 
-		public CR4DefinitionsDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4DefinitionsDLCMounter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4DefinitionsDLCMounter(cr2w, parent, name);
 

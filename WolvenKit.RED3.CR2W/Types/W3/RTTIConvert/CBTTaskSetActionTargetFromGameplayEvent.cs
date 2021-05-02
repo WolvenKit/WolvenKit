@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("sender")] 		public CHandle<CActor> Sender { get; set;}
 
-		public CBTTaskSetActionTargetFromGameplayEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSetActionTargetFromGameplayEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSetActionTargetFromGameplayEvent(cr2w, parent, name);
 

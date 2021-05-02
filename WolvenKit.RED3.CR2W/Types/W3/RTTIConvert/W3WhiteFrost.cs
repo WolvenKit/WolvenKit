@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("waveProjectile")] 		public CHandle<W3WhiteFrostWaveProjectile> WaveProjectile { get; set;}
 
-		public W3WhiteFrost(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3WhiteFrost(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3WhiteFrost(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("appearanceAttachments", 2,0)] 		public CArray<SAppearanceAttachments> AppearanceAttachments { get; set;}
 
-		public CAppearanceComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAppearanceComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAppearanceComponent(cr2w, parent, name);
 

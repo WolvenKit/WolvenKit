@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("m_Npc")] 		public CHandle<W3NightWraithIris> M_Npc { get; set;}
 
-		public BTTaskIrisRequestPortal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskIrisRequestPortal(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskIrisRequestPortal(cr2w, parent, name);
 

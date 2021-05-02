@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("term3")] 		public CFloat Term3 { get; set;}
 
-		public SItemDamageCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SItemDamageCurve(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SItemDamageCurve(cr2w, parent, name);
 

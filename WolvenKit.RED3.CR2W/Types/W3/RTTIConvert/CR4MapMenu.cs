@@ -47,7 +47,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(18)] [RED("ALL_QUEST_OBJECTIVES_ON_MAP___ANOTHER_MOD_CHANGES_MAPMENU_WS_FILE___USE_SCRIPT_MERGER_TO_DETECT_AND_FIX_THE_CONFLICT")] 		public CInt32 ALL_QUEST_OBJECTIVES_ON_MAP___ANOTHER_MOD_CHANGES_MAPMENU_WS_FILE___USE_SCRIPT_MERGER_TO_DETECT_AND_FIX_THE_CONFLICT { get; set;}
 
-		public CR4MapMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4MapMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4MapMenu(cr2w, parent, name);
 

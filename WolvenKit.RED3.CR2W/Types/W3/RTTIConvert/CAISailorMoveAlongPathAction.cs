@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("params")] 		public CHandle<CAISailorMoveAlongPathActionParams> Params { get; set;}
 
-		public CAISailorMoveAlongPathAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAISailorMoveAlongPathAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAISailorMoveAlongPathAction(cr2w, parent, name);
 

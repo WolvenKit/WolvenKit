@@ -39,7 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("swingDir")] 		public CInt32 SwingDir { get; set;}
 
-		public CBTTaskPerformParry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskPerformParry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskPerformParry(cr2w, parent, name);
 

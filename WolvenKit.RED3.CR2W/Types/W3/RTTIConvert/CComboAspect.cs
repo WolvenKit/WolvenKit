@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("strings", 2,0)] 		public CArray<CPtr<CComboString>> Strings { get; set;}
 
-		public CComboAspect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CComboAspect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CComboAspect(cr2w, parent, name);
 

@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("MenuState")] 		public CName MenuState { get; set;}
 
-		public SMenuTab(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMenuTab(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMenuTab(cr2w, parent, name);
 

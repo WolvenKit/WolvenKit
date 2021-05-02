@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAIActionAllySearchesTarget : CAIMonsterActionSubtree
 	{
-		public CAIActionAllySearchesTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIActionAllySearchesTarget(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIActionAllySearchesTarget(cr2w, parent, name);
 

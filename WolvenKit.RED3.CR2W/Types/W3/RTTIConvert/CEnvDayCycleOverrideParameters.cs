@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("customSunRotation")] 		public EulerAngles CustomSunRotation { get; set;}
 
-		public CEnvDayCycleOverrideParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEnvDayCycleOverrideParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnvDayCycleOverrideParameters(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("envAutoHideGroup")] 		public CEnum<EEnvAutoHideGroup> EnvAutoHideGroup { get; set;}
 
-		public CParticleComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CParticleComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CParticleComponent(cr2w, parent, name);
 

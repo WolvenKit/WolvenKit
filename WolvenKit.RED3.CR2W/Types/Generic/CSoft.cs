@@ -18,7 +18,7 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta()]
     public class CSoft<T> : CVariable, ISoftAccessor where T : CVariable
     {
-        public CSoft(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSoft(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

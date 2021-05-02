@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("carrySubAction")] 		public CHandle<IAIActionTree> CarrySubAction { get; set;}
 
-		public CAICarryMiscreantActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAICarryMiscreantActionTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAICarryMiscreantActionTree(cr2w, parent, name);
 

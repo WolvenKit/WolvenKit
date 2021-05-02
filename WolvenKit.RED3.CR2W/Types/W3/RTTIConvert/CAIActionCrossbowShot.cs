@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAIActionCrossbowShot : CAINpcActionSubtree
 	{
-		public CAIActionCrossbowShot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIActionCrossbowShot(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIActionCrossbowShot(cr2w, parent, name);
 

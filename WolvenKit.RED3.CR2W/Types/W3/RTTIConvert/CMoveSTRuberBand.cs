@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("minAllowedSpeed")] 		public CFloat MinAllowedSpeed { get; set;}
 
-		public CMoveSTRuberBand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMoveSTRuberBand(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSTRuberBand(cr2w, parent, name);
 

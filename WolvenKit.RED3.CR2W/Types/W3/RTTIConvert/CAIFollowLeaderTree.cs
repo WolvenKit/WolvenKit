@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("dontOverrideLeftHand")] 		public CBool DontOverrideLeftHand { get; set;}
 
-		public CAIFollowLeaderTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIFollowLeaderTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIFollowLeaderTree(cr2w, parent, name);
 

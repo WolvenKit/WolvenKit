@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3IceWall : CGameplayEntity
 	{
-		public W3IceWall(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3IceWall(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3IceWall(cr2w, parent, name);
 

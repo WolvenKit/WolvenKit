@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("offset")] 		public Vector Offset { get; set;}
 
-		public SCustomCameraPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCustomCameraPreset(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCustomCameraPreset(cr2w, parent, name);
 

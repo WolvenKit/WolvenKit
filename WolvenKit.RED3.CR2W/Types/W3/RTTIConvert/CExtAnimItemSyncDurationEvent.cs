@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("action")] 		public CEnum<EItemLatentAction> Action { get; set;}
 
-		public CExtAnimItemSyncDurationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExtAnimItemSyncDurationEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExtAnimItemSyncDurationEvent(cr2w, parent, name);
 

@@ -1,6 +1,6 @@
+using Catel.Data;
 using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
-using Newtonsoft.Json;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
@@ -16,8 +17,9 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Interfaces.Core;
+using WolvenKit.RED3.CR2W.Helpers;
 using WolvenKit.RED3.CR2W.Reflection;
-using WolvenKit.Utils;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -30,7 +32,7 @@ namespace WolvenKit.RED3.CR2W.Types
             accessor = TypeAccessor.Create(this.GetType());
         }
 
-        protected CVariable(CR2WFile cr2w, CVariable parent, string name)
+        protected CVariable(IRed3EngineFile cr2w, CVariable parent, string name)
         {
             this.Cr2wFile = cr2w;
             this.ParentVar = parent;
@@ -56,7 +58,7 @@ namespace WolvenKit.RED3.CR2W.Types
         /// used a lot
         /// </summary>
         [JsonIgnore]
-        public CR2WFile cr2w => Cr2wFile as CR2WFile;
+        public IRed3EngineFile cr2w => Cr2wFile as IRed3EngineFile;
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -387,7 +389,7 @@ namespace WolvenKit.RED3.CR2W.Types
             }
         }
 
-        public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
+        public List<IEditableVariable> UnknownCVariables { get; set; } = new();
 
         /// <summary>
         /// Instantiates and reads all REDVariables and REDBuffers in a CVariable 
@@ -527,7 +529,7 @@ namespace WolvenKit.RED3.CR2W.Types
                                 // check if healthy? don't know how
 
                                 // finally: write to stream
-                                CR2WFile.WriteVariable(file, av);
+                                Cr2wHelper.WriteVariable(file, av);
                             }
                             else
                             {
@@ -592,11 +594,8 @@ namespace WolvenKit.RED3.CR2W.Types
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual IEditableVariable Copy(ICR2WCopyAction icontext)
+        public virtual IEditableVariable Copy(ICR2WCopyAction context)
         {
-            if (icontext is not CR2WCopyAction context)
-                throw new InvalidParsingException("Tried copying cp77 assets.");
-
             // creates a new instance of the CVariable
             // with a new destination cr2wFile and a new parent CVariable if needed
             var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent as CVariable, false);

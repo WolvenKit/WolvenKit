@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("combatStyleId")] 		public CInt32 CombatStyleId { get; set;}
 
-		public CBehTreeMetanodeDecorateOnCombatstyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeMetanodeDecorateOnCombatstyle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeMetanodeDecorateOnCombatstyle(cr2w, parent, name);
 

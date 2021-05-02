@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Interfaces.Core;
 using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W.Types
@@ -44,11 +45,8 @@ namespace WolvenKit.RED3.CR2W.Types
         /// <param name="parentVariable">The class owning this attribute</param>
         /// <param name="readUnknownAsBytes"></param>
         /// <returns></returns>
-        public static CVariable Create(string typename, string varname, IWolvenkitFile icr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
+        public static CVariable Create(string typename, string varname, IWolvenkitFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
-            if (icr2w is not CR2WFile cr2w)
-                throw new InvalidGameContextException("Tried parsing a CP77 file in TW3 context.");
-
             typename = REDReflection.GetWKitBaseTypeFromREDBaseType(typename);
             var fullname = typename;
 
@@ -120,7 +118,7 @@ namespace WolvenKit.RED3.CR2W.Types
                                 //byte arrays, these can be huge, using ordinary arrays is just too slow.
                                 if (body == "Uint8" || body == "Int8")
                                 {
-                                    var bytearray = new CByteArray(cr2w, parentVariable, varname);
+                                    var bytearray = new CByteArray(cr2w as IRed3EngineFile, parentVariable as CVariable, varname);
                                     // save the actual redengine type for serialization: e.g. array:2,0,Uint8
                                     bytearray.InternalType = typename;
                                     return bytearray;
@@ -224,13 +222,13 @@ namespace WolvenKit.RED3.CR2W.Types
                 {
                     cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden E3 files! These files are special." +
                         $" If you edited this file and are experiencing errors, please contact a member of the WKit Team. Error code: {fullname}");
-                    return new SItem(cr2w, parentVariable, varname);
+                    return new SItem(cr2w as IRed3EngineFile, parentVariable, varname);
                 }
                 else if (fullname.Contains("#CEnvironmentDefinition"))
                 {
                     cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden E3 files! These files are special." +
                         $" If you edited this file and are experiencing errors, please contact a member of the WKit Team. Error code: {fullname}");
-                    return new CHandle<CEnvironmentDefinition>(cr2w, parentVariable, varname);
+                    return new CHandle<CEnvironmentDefinition>(cr2w as IRed3EngineFile, parentVariable, varname);
                 }
                 else
                 {
@@ -250,7 +248,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
                     if (readUnknownAsBytes)
                     {
-                        return new CBytes(cr2w, parentVariable, $"UNKNOWN:{typename}:{varname}");
+                        return new CBytes(cr2w as IRed3EngineFile, parentVariable, $"UNKNOWN:{typename}:{varname}");
                     }
                     else
                         return null;

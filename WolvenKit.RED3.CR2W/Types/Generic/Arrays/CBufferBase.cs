@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta()]
     public abstract class CBufferBase<T> : CVariable, IList<T>, IList, IBufferAccessor where T : CVariable
     {
-        public CBufferBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CBufferBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         #region Properties
         public List<T> elements { get; set; } = new List<T>();

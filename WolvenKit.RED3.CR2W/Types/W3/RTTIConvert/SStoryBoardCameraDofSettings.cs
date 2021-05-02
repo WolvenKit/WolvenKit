@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("focusFar")] 		public CFloat FocusFar { get; set;}
 
-		public SStoryBoardCameraDofSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStoryBoardCameraDofSettings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStoryBoardCameraDofSettings(cr2w, parent, name);
 

@@ -43,7 +43,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(16)] [RED("collisionGroupsNames", 2,0)] 		public CArray<CName> CollisionGroupsNames { get; set;}
 
-		public CBTTaskShadowDash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskShadowDash(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskShadowDash(cr2w, parent, name);
 

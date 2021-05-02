@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("gameDifficulty")] 		public CEnum<EAIMinigameDifficulty> GameDifficulty { get; set;}
 
-		public CAIMinigameParamsWristWrestling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIMinigameParamsWristWrestling(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIMinigameParamsWristWrestling(cr2w, parent, name);
 

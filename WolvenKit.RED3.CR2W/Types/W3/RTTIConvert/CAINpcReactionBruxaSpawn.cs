@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("distanceToInterrupt")] 		public CInt32 DistanceToInterrupt { get; set;}
 
-		public CAINpcReactionBruxaSpawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcReactionBruxaSpawn(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcReactionBruxaSpawn(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("lowFrequencyMotorSpeed")] 		public CFloat LowFrequencyMotorSpeed { get; set;}
 
-		public CFXTrackItemForceFeedback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFXTrackItemForceFeedback(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFXTrackItemForceFeedback(cr2w, parent, name);
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("animStateCallback")] 		public CHandle<IModSbUiAnimStateCallback> AnimStateCallback { get; set;}
 
-		public CModStoryBoardAnimationDirector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardAnimationDirector(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardAnimationDirector(cr2w, parent, name);
 

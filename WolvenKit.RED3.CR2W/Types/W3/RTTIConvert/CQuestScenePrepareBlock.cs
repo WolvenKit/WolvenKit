@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("storyScenes", 2,0)] 		public CArray<StorySceneDefinition> StoryScenes { get; set;}
 
-		public CQuestScenePrepareBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestScenePrepareBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestScenePrepareBlock(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("projectileTemplate")] 		public CHandle<CEntityTemplate> ProjectileTemplate { get; set;}
 
-		public W3EnvironmentThrowable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3EnvironmentThrowable(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3EnvironmentThrowable(cr2w, parent, name);
 

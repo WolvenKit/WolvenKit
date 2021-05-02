@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("effectValueMultWhileSprinting")] 		public SAbilityAttributeValue EffectValueMultWhileSprinting { get; set;}
 
-		public W3Effect_AirDrainDive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_AirDrainDive(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_AirDrainDive(cr2w, parent, name);
 

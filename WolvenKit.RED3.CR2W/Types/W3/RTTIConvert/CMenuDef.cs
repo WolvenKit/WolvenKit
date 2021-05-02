@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("renderParam")] 		public CPtr<IMenuDisplayParam> RenderParam { get; set;}
 
-		public CMenuDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMenuDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMenuDef(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("cutsceneActorDef")] 		public SCutsceneActorDef CutsceneActorDef { get; set;}
 
-		public SCutsceneActorOverrideMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCutsceneActorOverrideMapping(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCutsceneActorOverrideMapping(cr2w, parent, name);
 

@@ -59,7 +59,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(24)] [RED("parryHitLevel3")] 		public CFloat ParryHitLevel3 { get; set;}
 
-		public SBehaviorComboAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehaviorComboAttack(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehaviorComboAttack(cr2w, parent, name);
 

@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("moveTypeAfterMaxDistanceReached")] 		public CBehTreeValEMoveType MoveTypeAfterMaxDistanceReached { get; set;}
 
-		public CBehTreeNodePredefinedPathWithCompanionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodePredefinedPathWithCompanionDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodePredefinedPathWithCompanionDefinition(cr2w, parent, name);
 

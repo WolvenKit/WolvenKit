@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("addedValue")] 		public CFloat AddedValue { get; set;}
 
-		public CCustomCameraAdditivePDC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCustomCameraAdditivePDC(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCustomCameraAdditivePDC(cr2w, parent, name);
 

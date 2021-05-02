@@ -79,7 +79,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(34)] [RED("m_checkedForEntities")] 		public CBool M_checkedForEntities { get; set;}
 
-		public BTTaskManageObjectsInPhantomComponentSlots(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskManageObjectsInPhantomComponentSlots(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskManageObjectsInPhantomComponentSlots(cr2w, parent, name);
 

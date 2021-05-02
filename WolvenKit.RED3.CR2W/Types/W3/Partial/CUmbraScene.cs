@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("localUmbraOccThresholdMul")] 		public CHandle<CResourceSimplexTree> LocalUmbraOccThresholdMul { get; set;}
 
-		public CUmbraScene(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CUmbraScene(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CUmbraScene(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("alarmSoundString")] 		public CString AlarmSoundString { get; set;}
 
-		public W3TrapAlarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3TrapAlarm(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TrapAlarm(cr2w, parent, name);
 

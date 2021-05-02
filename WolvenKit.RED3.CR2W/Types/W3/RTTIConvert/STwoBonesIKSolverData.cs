@@ -53,7 +53,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(21)] [RED("Joint bend dir in lower's BS")] 		public Vector Joint_bend_dir_in_lower_s_BS { get; set;}
 
-		public STwoBonesIKSolverData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public STwoBonesIKSolverData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STwoBonesIKSolverData(cr2w, parent, name);
 

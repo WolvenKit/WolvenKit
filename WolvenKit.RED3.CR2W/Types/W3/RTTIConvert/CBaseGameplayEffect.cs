@@ -97,7 +97,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(43)] [RED("vibratePadHighFreq")] 		public CFloat VibratePadHighFreq { get; set;}
 
-		public CBaseGameplayEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBaseGameplayEffect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBaseGameplayEffect(cr2w, parent, name);
 

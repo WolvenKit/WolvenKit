@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("poi")] 		public CHandle<W3PointOfInterestEntity> Poi { get; set;}
 
-		public CFoodBoidPointOfInterest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFoodBoidPointOfInterest(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFoodBoidPointOfInterest(cr2w, parent, name);
 

@@ -76,7 +76,7 @@ namespace WolvenKit.RED3.CR2W.Types
 		/// </summary>
 		[Ordinal(29)] [RED("teleportAwayFromRequestedFacingDirection ")] 		public CBool TeleportAwayFromRequestedFacingDirection { get; set;}
 
-		public CBTTaskTeleportDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskTeleportDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskTeleportDef(cr2w, parent, name);
 

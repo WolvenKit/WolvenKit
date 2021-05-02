@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("rveTypeR")] 		public CUInt16 RveTypeR { get; set;}
 
-		public SCurveDataEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCurveDataEntry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCurveDataEntry(cr2w, parent, name);
 

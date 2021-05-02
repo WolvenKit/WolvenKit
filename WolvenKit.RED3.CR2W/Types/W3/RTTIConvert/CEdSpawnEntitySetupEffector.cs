@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("extraTags")] 		public TagList ExtraTags { get; set;}
 
-		public CEdSpawnEntitySetupEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEdSpawnEntitySetupEffector(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEdSpawnEntitySetupEffector(cr2w, parent, name);
 

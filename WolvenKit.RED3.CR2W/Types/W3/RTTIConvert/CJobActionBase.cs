@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("isSkippable")] 		public CBool IsSkippable { get; set;}
 
-		public CJobActionBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CJobActionBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJobActionBase(cr2w, parent, name);
 

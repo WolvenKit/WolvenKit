@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("condition")] 		public CHandle<W3QuestCond_IsItemQuantityMet> Condition { get; set;}
 
-		public W3QuestCond_IsItemQuantityMet_GlobalListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3QuestCond_IsItemQuantityMet_GlobalListener(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3QuestCond_IsItemQuantityMet_GlobalListener(cr2w, parent, name);
 

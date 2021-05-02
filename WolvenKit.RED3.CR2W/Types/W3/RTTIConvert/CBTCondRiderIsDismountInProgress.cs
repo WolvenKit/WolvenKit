@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("riderData")] 		public CHandle<CAIStorageRiderData> RiderData { get; set;}
 
-		public CBTCondRiderIsDismountInProgress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTCondRiderIsDismountInProgress(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTCondRiderIsDismountInProgress(cr2w, parent, name);
 

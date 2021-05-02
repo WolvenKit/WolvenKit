@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("speedLimitOnRotation")] 		public CFloat SpeedLimitOnRotation { get; set;}
 
-		public CMoveSTMatchHeadingOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMoveSTMatchHeadingOrientation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSTMatchHeadingOrientation(cr2w, parent, name);
 

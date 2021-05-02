@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("typeMask")] 		public CEnum<EDismembermentEffectTypeFlag> TypeMask { get; set;}
 
-		public SDismembermentEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SDismembermentEffect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SDismembermentEffect(cr2w, parent, name);
 

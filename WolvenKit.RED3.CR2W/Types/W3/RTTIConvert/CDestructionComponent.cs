@@ -65,7 +65,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(27)] [RED("disableObstacleOnDestruction")] 		public CBool DisableObstacleOnDestruction { get; set;}
 
-		public CDestructionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CDestructionComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CDestructionComponent(cr2w, parent, name);
 

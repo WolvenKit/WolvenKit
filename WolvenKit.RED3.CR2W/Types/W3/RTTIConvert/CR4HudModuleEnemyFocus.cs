@@ -65,7 +65,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(27)] [RED("m_lastUseMutation8Icon")] 		public CBool M_lastUseMutation8Icon { get; set;}
 
-		public CR4HudModuleEnemyFocus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleEnemyFocus(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleEnemyFocus(cr2w, parent, name);
 

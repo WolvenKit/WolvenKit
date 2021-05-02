@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("pivotZSmoothTime")] 		public CFloat PivotZSmoothTime { get; set;}
 
-		public ICustomCameraPivotPositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public ICustomCameraPivotPositionController(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ICustomCameraPivotPositionController(cr2w, parent, name);
 

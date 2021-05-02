@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("isMoving")] 		public CBool IsMoving { get; set;}
 
-		public W3PhysicalDamageMechanism(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3PhysicalDamageMechanism(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3PhysicalDamageMechanism(cr2w, parent, name);
 

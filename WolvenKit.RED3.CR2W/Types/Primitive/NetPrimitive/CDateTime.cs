@@ -50,7 +50,7 @@ namespace WolvenKit.RED3.CR2W.Types
         /// Initialise a new instance of the CDateTime.
         /// </summary>
         /// <param name="value"></param>
-        public CDateTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CDateTime(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("W")] 		public Vector W { get; set;}
 
-		public CMatrix(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMatrix(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMatrix(cr2w, parent, name);
 

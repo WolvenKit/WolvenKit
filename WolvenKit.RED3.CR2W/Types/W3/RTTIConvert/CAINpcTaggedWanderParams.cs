@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("wanderPointsGroupTag")] 		public CName WanderPointsGroupTag { get; set;}
 
-		public CAINpcTaggedWanderParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcTaggedWanderParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcTaggedWanderParams(cr2w, parent, name);
 

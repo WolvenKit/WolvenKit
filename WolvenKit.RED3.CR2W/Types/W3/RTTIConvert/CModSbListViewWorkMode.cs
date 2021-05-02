@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("popupCallback")] 		public CHandle<CModSbWorkModePopupCallback> PopupCallback { get; set;}
 
-		public CModSbListViewWorkMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModSbListViewWorkMode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModSbListViewWorkMode(cr2w, parent, name);
 

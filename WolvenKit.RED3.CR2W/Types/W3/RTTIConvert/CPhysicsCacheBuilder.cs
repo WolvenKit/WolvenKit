@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CPhysicsCacheBuilder : IResourceBasedCacheBuilder
 	{
-		public CPhysicsCacheBuilder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPhysicsCacheBuilder(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPhysicsCacheBuilder(cr2w, parent, name);
 

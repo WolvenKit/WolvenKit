@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("currentSceneDelay")] 		public CFloat CurrentSceneDelay { get; set;}
 
-		public W3GenericSceneArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3GenericSceneArea(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3GenericSceneArea(cr2w, parent, name);
 

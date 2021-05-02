@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("instanceCount")] 		public CUInt32 InstanceCount { get; set;}
 
-		public SFoliageInstanceStatistics(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFoliageInstanceStatistics(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFoliageInstanceStatistics(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("end")] 		public GameTime End { get; set;}
 
-		public GameTimeInterval(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public GameTimeInterval(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new GameTimeInterval(cr2w, parent, name);
 

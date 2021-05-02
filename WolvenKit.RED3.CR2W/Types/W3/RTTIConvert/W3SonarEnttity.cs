@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("sonarComponent")] 		public CHandle<CComponent> SonarComponent { get; set;}
 
-		public W3SonarEnttity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SonarEnttity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SonarEnttity(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("timeMultiplier")] 		public CFloat TimeMultiplier { get; set;}
 
-		public CBehaviorNodeSyncData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorNodeSyncData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorNodeSyncData(cr2w, parent, name);
 

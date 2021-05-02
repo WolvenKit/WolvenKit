@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("ambientEnvScale")] 		public CFloat AmbientEnvScale { get; set;}
 
-		public SFurColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFurColor(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFurColor(cr2w, parent, name);
 

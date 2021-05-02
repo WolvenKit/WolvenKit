@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("bonesToOverride_Right", 2,0)] 		public CArray<CString> BonesToOverride_Right { get; set;}
 
-		public CBehaviorMimicCloseEyesConstraint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorMimicCloseEyesConstraint(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorMimicCloseEyesConstraint(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("globalDefaults", 2,0)] 		public CArray<CHandle<IAISpawnTreeSubParameters>> GlobalDefaults { get; set;}
 
-		public CEncounterParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEncounterParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEncounterParameters(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("radius")] 		public CFloat Radius { get; set;}
 
-		public CAnimDangleConstraint_Hood(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimDangleConstraint_Hood(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimDangleConstraint_Hood(cr2w, parent, name);
 

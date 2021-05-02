@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
 
-		public W3TrapProjectileArea_CreateEntityHelper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3TrapProjectileArea_CreateEntityHelper(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TrapProjectileArea_CreateEntityHelper(cr2w, parent, name);
 

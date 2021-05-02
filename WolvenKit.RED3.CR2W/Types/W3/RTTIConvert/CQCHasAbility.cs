@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("ability")] 		public CName Ability { get; set;}
 
-		public CQCHasAbility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQCHasAbility(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQCHasAbility(cr2w, parent, name);
 

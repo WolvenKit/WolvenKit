@@ -95,7 +95,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(42)] [RED("_ignoreNewItemNotifications")] 		public CBool _ignoreNewItemNotifications { get; set;}
 
-		public CR4GuiManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4GuiManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4GuiManager(cr2w, parent, name);
 

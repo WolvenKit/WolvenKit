@@ -49,7 +49,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(19)] [RED("itemsQuantity", 2,0)] 		public CArray<CInt32> ItemsQuantity { get; set;}
 
-		public CR4CraftingMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4CraftingMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4CraftingMenu(cr2w, parent, name);
 

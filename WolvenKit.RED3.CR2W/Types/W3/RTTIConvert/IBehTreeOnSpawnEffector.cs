@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IBehTreeOnSpawnEffector : IBehTreeObjectDefinition
 	{
-		public IBehTreeOnSpawnEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IBehTreeOnSpawnEffector(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IBehTreeOnSpawnEffector(cr2w, parent, name);
 

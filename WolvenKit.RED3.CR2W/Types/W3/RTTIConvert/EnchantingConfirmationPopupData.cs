@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("m_Price")] 		public CFloat M_Price { get; set;}
 
-		public EnchantingConfirmationPopupData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public EnchantingConfirmationPopupData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new EnchantingConfirmationPopupData(cr2w, parent, name);
 

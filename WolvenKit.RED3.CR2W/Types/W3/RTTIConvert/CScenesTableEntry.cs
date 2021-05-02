@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("forbiddenFact")] 		public CString ForbiddenFact { get; set;}
 
-		public CScenesTableEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CScenesTableEntry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CScenesTableEntry(cr2w, parent, name);
 

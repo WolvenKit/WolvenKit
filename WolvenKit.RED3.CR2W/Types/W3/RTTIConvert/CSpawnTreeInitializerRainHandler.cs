@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("ratioWhenRaining")] 		public CFloat RatioWhenRaining { get; set;}
 
-		public CSpawnTreeInitializerRainHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSpawnTreeInitializerRainHandler(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSpawnTreeInitializerRainHandler(cr2w, parent, name);
 

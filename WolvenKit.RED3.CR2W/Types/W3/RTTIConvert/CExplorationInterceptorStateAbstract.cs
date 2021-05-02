@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("m_InterceptStateN")] 		public CName M_InterceptStateN { get; set;}
 
-		public CExplorationInterceptorStateAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationInterceptorStateAbstract(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationInterceptorStateAbstract(cr2w, parent, name);
 

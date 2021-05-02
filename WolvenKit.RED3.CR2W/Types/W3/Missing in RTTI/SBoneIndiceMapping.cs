@@ -20,7 +20,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("boneIndex")] 		public CUInt32 BoneIndex { get; set;}
 
-		public SBoneIndiceMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBoneIndiceMapping(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBoneIndiceMapping(cr2w, parent, name);
 

@@ -49,7 +49,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(19)] [RED("TARGETS_CHECK_DT")] 		public CFloat TARGETS_CHECK_DT { get; set;}
 
-		public W3BeeSwarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3BeeSwarm(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3BeeSwarm(cr2w, parent, name);
 

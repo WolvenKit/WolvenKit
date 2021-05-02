@@ -255,7 +255,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(122)] [RED("csNormallyStoppedBuff")] 		public CBool CsNormallyStoppedBuff { get; set;}
 
-		public CPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPlayer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlayer(cr2w, parent, name);
 

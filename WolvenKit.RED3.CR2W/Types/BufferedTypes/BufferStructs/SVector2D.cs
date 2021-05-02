@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(0)] [RED] public CFloat x { get; set; }
         [Ordinal(1)] [RED] public CFloat y { get; set; }
 
-        public SVector2D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SVector2D(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         public override CVariable SetValue(object val)
@@ -27,11 +27,6 @@ namespace WolvenKit.RED3.CR2W.Types
             }
 
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SVector2D(cr2w, parent, name);
         }
 
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("m_recipeList", 2,0)] 		public CArray<SAlchemyRecipe> M_recipeList { get; set;}
 
-		public CR4RyanAlchemyMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4RyanAlchemyMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4RyanAlchemyMenu(cr2w, parent, name);
 

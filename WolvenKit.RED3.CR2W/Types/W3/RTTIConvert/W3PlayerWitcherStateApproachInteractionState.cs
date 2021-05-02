@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("switchAnimationType")] 		public CEnum<PhysicalSwitchAnimationType> SwitchAnimationType { get; set;}
 
-		public W3PlayerWitcherStateApproachInteractionState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3PlayerWitcherStateApproachInteractionState(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3PlayerWitcherStateApproachInteractionState(cr2w, parent, name);
 

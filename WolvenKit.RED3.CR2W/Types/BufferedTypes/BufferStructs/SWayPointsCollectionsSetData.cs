@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(0)] [RED] public CGUID Guid { get; set; }
         [Ordinal(1)] [RED] public CHandle<CWayPointsCollection> Handle { get; set; }
 
-        public SWayPointsCollectionsSetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SWayPointsCollectionsSetData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }

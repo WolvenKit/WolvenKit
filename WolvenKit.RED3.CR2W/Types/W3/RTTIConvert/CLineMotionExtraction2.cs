@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("flags")] 		public CUInt8 Flags { get; set;}
 
-		public CLineMotionExtraction2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CLineMotionExtraction2(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CLineMotionExtraction2(cr2w, parent, name);
 

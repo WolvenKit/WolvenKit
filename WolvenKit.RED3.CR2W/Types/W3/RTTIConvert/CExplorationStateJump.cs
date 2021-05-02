@@ -199,7 +199,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(94)] [RED("jumpIdleWhenObstructed")] 		public CBool JumpIdleWhenObstructed { get; set;}
 
-		public CExplorationStateJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateJump(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateJump(cr2w, parent, name);
 

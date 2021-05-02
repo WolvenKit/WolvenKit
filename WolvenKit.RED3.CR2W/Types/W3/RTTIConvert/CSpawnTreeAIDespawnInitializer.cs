@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("aiPriority")] 		public CEnum<ETopLevelAIPriorities> AiPriority { get; set;}
 
-		public CSpawnTreeAIDespawnInitializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSpawnTreeAIDespawnInitializer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSpawnTreeAIDespawnInitializer(cr2w, parent, name);
 

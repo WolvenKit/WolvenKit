@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("spawnPOI")] 		public CName SpawnPOI { get; set;}
 
-		public W3FlyingSwarmCreateGroupRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3FlyingSwarmCreateGroupRequest(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3FlyingSwarmCreateGroupRequest(cr2w, parent, name);
 

@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("nestRebuildSchedule")] 		public GameTimeWrapper NestRebuildSchedule { get; set;}
 
-		public SMonsterNestUpdateDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMonsterNestUpdateDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMonsterNestUpdateDefinition(cr2w, parent, name);
 

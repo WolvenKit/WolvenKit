@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("playNormalHitOnCritical")] 		public CBool PlayNormalHitOnCritical { get; set;}
 
-		public BTTaskSetAdditiveHitFlagDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskSetAdditiveHitFlagDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskSetAdditiveHitFlagDef(cr2w, parent, name);
 

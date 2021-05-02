@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("m_fxSetPassiveAbilString")] 		public CHandle<CScriptedFlashFunction> M_fxSetPassiveAbilString { get; set;}
 
-		public CR4DeckBuilderMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4DeckBuilderMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4DeckBuilderMenu(cr2w, parent, name);
 

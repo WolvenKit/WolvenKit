@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("m_waitingForEventEnd")] 		public CBool M_waitingForEventEnd { get; set;}
 
-		public BTTaskSetAdditiveHitFlag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskSetAdditiveHitFlag(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskSetAdditiveHitFlag(cr2w, parent, name);
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("actionPointMoveType")] 		public CEnum<EMoveType> ActionPointMoveType { get; set;}
 
-		public SWorkSmartAIEntryGeneratorNodeParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SWorkSmartAIEntryGeneratorNodeParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWorkSmartAIEntryGeneratorNodeParam(cr2w, parent, name);
 

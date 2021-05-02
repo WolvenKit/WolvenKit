@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("active")] 		public CBool Active { get; set;}
 
-		public CJournalTutorial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CJournalTutorial(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJournalTutorial(cr2w, parent, name);
 

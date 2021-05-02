@@ -293,7 +293,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(141)] [RED("vectorZero")] 		public Vector VectorZero { get; set;}
 
-		public CClimbProbe(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CClimbProbe(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CClimbProbe(cr2w, parent, name);
 

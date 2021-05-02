@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("horseComp")] 		public CHandle<W3HorseComponent> HorseComp { get; set;}
 
-		public CBTTaskRiderNotifyHorseAboutMounting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskRiderNotifyHorseAboutMounting(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskRiderNotifyHorseAboutMounting(cr2w, parent, name);
 

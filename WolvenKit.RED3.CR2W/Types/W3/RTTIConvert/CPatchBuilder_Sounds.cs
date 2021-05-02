@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CPatchBuilder_Sounds : IBasePatchContentBuilder
 	{
-		public CPatchBuilder_Sounds(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPatchBuilder_Sounds(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPatchBuilder_Sounds(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("label")] 		public CString Label { get; set;}
 
-		public UserMessageActionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public UserMessageActionData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new UserMessageActionData(cr2w, parent, name);
 

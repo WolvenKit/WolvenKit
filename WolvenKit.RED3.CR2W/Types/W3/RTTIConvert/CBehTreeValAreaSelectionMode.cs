@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("value")] 		public CEnum<EAIAreaSelectionMode> Value { get; set;}
 
-		public CBehTreeValAreaSelectionMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeValAreaSelectionMode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeValAreaSelectionMode(cr2w, parent, name);
 

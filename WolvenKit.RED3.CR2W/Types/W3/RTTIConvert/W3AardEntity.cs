@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("processThrow_alternateCast")] 		public CBool ProcessThrow_alternateCast { get; set;}
 
-		public W3AardEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3AardEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3AardEntity(cr2w, parent, name);
 

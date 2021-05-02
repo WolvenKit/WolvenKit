@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("originalAttachment")] 		public CPtr<IAttachment> OriginalAttachment { get; set;}
 
-		public CExternalProxyAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExternalProxyAttachment(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExternalProxyAttachment(cr2w, parent, name);
 

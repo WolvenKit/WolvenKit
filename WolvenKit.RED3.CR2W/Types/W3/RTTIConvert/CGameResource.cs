@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("playGoChunksToActivate", 2,0)] 		public CArray<CName> PlayGoChunksToActivate { get; set;}
 
-		public CGameResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CGameResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CGameResource(cr2w, parent, name);
 

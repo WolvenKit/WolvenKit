@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("pickTargetDistance")] 		public CBehTreeValFloat PickTargetDistance { get; set;}
 
-		public IBehTreeNodeAtomicFlyAroundBaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IBehTreeNodeAtomicFlyAroundBaseDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IBehTreeNodeAtomicFlyAroundBaseDefinition(cr2w, parent, name);
 

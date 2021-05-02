@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("isWorkingSingle")] 		public CBool IsWorkingSingle { get; set;}
 
-		public W3NPCBackground(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3NPCBackground(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3NPCBackground(cr2w, parent, name);
 

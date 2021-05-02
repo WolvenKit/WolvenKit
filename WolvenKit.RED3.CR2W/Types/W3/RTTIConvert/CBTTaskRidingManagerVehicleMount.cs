@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("attachSlot")] 		public CName AttachSlot { get; set;}
 
-		public CBTTaskRidingManagerVehicleMount(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskRidingManagerVehicleMount(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskRidingManagerVehicleMount(cr2w, parent, name);
 

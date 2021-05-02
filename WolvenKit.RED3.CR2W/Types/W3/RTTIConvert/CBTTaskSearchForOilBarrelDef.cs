@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBTTaskSearchForOilBarrelDef : CBTTaskSearchForObjectDef
 	{
-		public CBTTaskSearchForOilBarrelDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSearchForOilBarrelDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSearchForOilBarrelDef(cr2w, parent, name);
 

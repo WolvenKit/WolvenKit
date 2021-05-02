@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("bokehDofParamsEnd")] 		public SBokehDofParams BokehDofParamsEnd { get; set;}
 
-		public CExtAnimCutsceneBokehDofBlendEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExtAnimCutsceneBokehDofBlendEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExtAnimCutsceneBokehDofBlendEvent(cr2w, parent, name);
 

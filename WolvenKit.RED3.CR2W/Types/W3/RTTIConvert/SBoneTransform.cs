@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("transform")] 		public EngineTransform Transform { get; set;}
 
-		public SBoneTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBoneTransform(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBoneTransform(cr2w, parent, name);
 

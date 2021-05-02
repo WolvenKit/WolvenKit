@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("delay")] 		public CFloat Delay { get; set;}
 
-		public SWanderAndWorkEntryGeneratorCommon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SWanderAndWorkEntryGeneratorCommon(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWanderAndWorkEntryGeneratorCommon(cr2w, parent, name);
 

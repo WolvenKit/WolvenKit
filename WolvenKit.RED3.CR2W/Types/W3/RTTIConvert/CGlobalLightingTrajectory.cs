@@ -39,7 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("moonShaftsEndHour")] 		public CFloat MoonShaftsEndHour { get; set;}
 
-		public CGlobalLightingTrajectory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CGlobalLightingTrajectory(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CGlobalLightingTrajectory(cr2w, parent, name);
 

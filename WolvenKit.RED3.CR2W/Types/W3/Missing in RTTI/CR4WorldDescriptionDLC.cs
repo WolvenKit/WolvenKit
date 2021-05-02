@@ -78,7 +78,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(31)] [RED("worldPreviewHeight")] 		public CFloat WorldPreviewHeight { get; set;}
 
-		public CR4WorldDescriptionDLC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4WorldDescriptionDLC(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4WorldDescriptionDLC(cr2w, parent, name);
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("data", 2,0)] 		public CByteArray Data { get; set;}
 
-		public SStreamedAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStreamedAttachment(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStreamedAttachment(cr2w, parent, name);
 

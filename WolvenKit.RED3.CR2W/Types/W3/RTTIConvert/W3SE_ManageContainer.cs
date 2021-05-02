@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("containerEnabled")] 		public CBool ContainerEnabled { get; set;}
 
-		public W3SE_ManageContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SE_ManageContainer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SE_ManageContainer(cr2w, parent, name);
 

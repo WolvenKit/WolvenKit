@@ -81,7 +81,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(35)] [RED("dontAutoCallOnOpeningMenuInOnConfigUIHaxxor")] 		public CBool DontAutoCallOnOpeningMenuInOnConfigUIHaxxor { get; set;}
 
-		public CR4MenuBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4MenuBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4MenuBase(cr2w, parent, name);
 

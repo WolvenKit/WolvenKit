@@ -24,7 +24,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(999)] [REDBuffer(true)] public CBytes unk1 { get; set; }
 
 
-        public SBlockDataDecal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SBlockDataDecal(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             unk1 = new CBytes(cr2w, parent, nameof(unk1));
 

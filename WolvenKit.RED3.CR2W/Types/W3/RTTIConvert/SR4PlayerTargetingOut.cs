@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("forceDisableUpdatePosition")] 		public CBool ForceDisableUpdatePosition { get; set;}
 
-		public SR4PlayerTargetingOut(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SR4PlayerTargetingOut(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SR4PlayerTargetingOut(cr2w, parent, name);
 

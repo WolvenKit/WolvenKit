@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("lootName")] 		public CName LootName { get; set;}
 
-		public SR4LootNameProperty(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SR4LootNameProperty(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SR4LootNameProperty(cr2w, parent, name);
 

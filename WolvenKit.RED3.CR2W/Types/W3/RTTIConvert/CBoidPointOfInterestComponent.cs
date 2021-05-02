@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("crawlingSwarmDebug")] 		public CBool CrawlingSwarmDebug { get; set;}
 
-		public CBoidPointOfInterestComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBoidPointOfInterestComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBoidPointOfInterestComponent(cr2w, parent, name);
 

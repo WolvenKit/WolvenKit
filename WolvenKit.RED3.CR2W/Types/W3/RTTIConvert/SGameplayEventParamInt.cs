@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("value")] 		public CInt32 Value { get; set;}
 
-		public SGameplayEventParamInt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SGameplayEventParamInt(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SGameplayEventParamInt(cr2w, parent, name);
 

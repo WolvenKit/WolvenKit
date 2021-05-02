@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("speedValue")] 		public CFloat SpeedValue { get; set;}
 
-		public SHeadingHistory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SHeadingHistory(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SHeadingHistory(cr2w, parent, name);
 

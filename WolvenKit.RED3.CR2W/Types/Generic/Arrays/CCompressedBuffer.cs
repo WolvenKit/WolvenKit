@@ -14,7 +14,7 @@ namespace WolvenKit.RED3.CR2W.Types
     public class CCompressedBuffer<T> : CBufferBase<T> where T : CVariable
     {
 
-        public CCompressedBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CCompressedBuffer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

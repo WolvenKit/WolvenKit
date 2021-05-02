@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("m_RefreshTargetDelay")] 		public CFloat M_RefreshTargetDelay { get; set;}
 
-		public BTTaskCaretakerManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskCaretakerManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskCaretakerManager(cr2w, parent, name);
 

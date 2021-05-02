@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("m_summonedEntityCmp")] 		public CHandle<W3SummonedEntityComponent> M_summonedEntityCmp { get; set;}
 
-		public W3SpawnMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SpawnMarker(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SpawnMarker(cr2w, parent, name);
 

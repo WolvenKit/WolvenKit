@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("releaseOnCompletion")] 		public CBool ReleaseOnCompletion { get; set;}
 
-		public CBehTreeNodeCombatTicketReleaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeCombatTicketReleaseDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeCombatTicketReleaseDefinition(cr2w, parent, name);
 

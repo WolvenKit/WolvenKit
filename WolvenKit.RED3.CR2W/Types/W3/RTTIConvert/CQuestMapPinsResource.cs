@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("mappinsInfo", 2,0)] 		public CArray<SQuestMapPinInfo> MappinsInfo { get; set;}
 
-		public CQuestMapPinsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestMapPinsResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestMapPinsResource(cr2w, parent, name);
 

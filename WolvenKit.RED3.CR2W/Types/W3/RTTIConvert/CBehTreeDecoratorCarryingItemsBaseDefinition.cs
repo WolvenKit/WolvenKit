@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("storeTag")] 		public CBehTreeValCName StoreTag { get; set;}
 
-		public CBehTreeDecoratorCarryingItemsBaseDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeDecoratorCarryingItemsBaseDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeDecoratorCarryingItemsBaseDefinition(cr2w, parent, name);
 

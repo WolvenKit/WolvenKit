@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("soundbank")] 		public CString Soundbank { get; set;}
 
-		public SMutation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMutation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMutation(cr2w, parent, name);
 

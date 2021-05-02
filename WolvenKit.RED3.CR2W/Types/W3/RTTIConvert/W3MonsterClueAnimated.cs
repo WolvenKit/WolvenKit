@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("animStarted")] 		public CBool AnimStarted { get; set;}
 
-		public W3MonsterClueAnimated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3MonsterClueAnimated(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3MonsterClueAnimated(cr2w, parent, name);
 

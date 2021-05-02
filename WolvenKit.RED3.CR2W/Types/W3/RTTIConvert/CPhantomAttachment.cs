@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("takeVertexSimulationPosition")] 		public CBool TakeVertexSimulationPosition { get; set;}
 
-		public CPhantomAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPhantomAttachment(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPhantomAttachment(cr2w, parent, name);
 

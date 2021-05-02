@@ -171,7 +171,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(80)] [RED("m_storedInteractionPri")] 		public CEnum<EInteractionPriority> M_storedInteractionPri { get; set;}
 
-		public CNewNPC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CNewNPC(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CNewNPC(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IEvaluatorFloat : IEvaluator
 	{
-		public IEvaluatorFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IEvaluatorFloat(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IEvaluatorFloat(cr2w, parent, name);
 

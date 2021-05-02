@@ -63,7 +63,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(26)] [RED("gameplayEventReceived")] 		public CBool GameplayEventReceived { get; set;}
 
-		public CBTTaskPlayEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskPlayEffect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskPlayEffect(cr2w, parent, name);
 

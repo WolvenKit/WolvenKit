@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("attitudesXMLFilePath")] 		public CString AttitudesXMLFilePath { get; set;}
 
-		public CR4AttitudesDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4AttitudesDLCMounter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4AttitudesDLCMounter(cr2w, parent, name);
 

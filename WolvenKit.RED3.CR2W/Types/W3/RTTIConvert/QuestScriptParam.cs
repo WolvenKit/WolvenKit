@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("softHandle")] 		public CBool SoftHandle { get; set;}
 
-		public QuestScriptParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public QuestScriptParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new QuestScriptParam(cr2w, parent, name);
 

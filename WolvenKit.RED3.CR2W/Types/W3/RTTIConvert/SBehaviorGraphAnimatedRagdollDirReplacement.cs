@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("index")] 		public CUInt32 Index { get; set;}
 
-		public SBehaviorGraphAnimatedRagdollDirReplacement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehaviorGraphAnimatedRagdollDirReplacement(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehaviorGraphAnimatedRagdollDirReplacement(cr2w, parent, name);
 

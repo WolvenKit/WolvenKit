@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("Roll")] 		public CFloat Roll { get; set;}
 
-		public EulerAngles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public EulerAngles(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new EulerAngles(cr2w, parent, name);
 

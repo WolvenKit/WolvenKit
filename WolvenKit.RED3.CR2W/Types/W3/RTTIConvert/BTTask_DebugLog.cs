@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("taskName")] 		public CString TaskName { get; set;}
 
-		public BTTask_DebugLog(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTask_DebugLog(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTask_DebugLog(cr2w, parent, name);
 

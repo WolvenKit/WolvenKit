@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("steeringGraph")] 		public CHandle<CMoveSteeringBehavior> SteeringGraph { get; set;}
 
-		public CFormation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFormation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFormation(cr2w, parent, name);
 

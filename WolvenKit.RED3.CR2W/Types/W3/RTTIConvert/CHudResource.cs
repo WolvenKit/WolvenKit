@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("hudFlashSwf")] 		public CSoft<CSwfResource> HudFlashSwf { get; set;}
 
-		public CHudResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CHudResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CHudResource(cr2w, parent, name);
 

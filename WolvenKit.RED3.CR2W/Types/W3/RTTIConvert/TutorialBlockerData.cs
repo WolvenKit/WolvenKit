@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("managerRef")] 		public CHandle<CR4TutorialSystem> ManagerRef { get; set;}
 
-		public TutorialBlockerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public TutorialBlockerData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new TutorialBlockerData(cr2w, parent, name);
 

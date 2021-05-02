@@ -12,6 +12,8 @@ namespace WolvenKit.RED4.CR2W.Reflection
     public interface IRed4EngineFile : IWolvenkitFile
     {
         public bool CreatePropertyOnAccess { get; set; }
+        public List<string> UnknownVars { get; set; }
+
 
         public int GetStringIndex(string name, bool addnew = false);
 

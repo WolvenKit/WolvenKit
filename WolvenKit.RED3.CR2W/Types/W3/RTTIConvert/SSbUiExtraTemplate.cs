@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("subCategory2")] 		public CString SubCategory2 { get; set;}
 
-		public SSbUiExtraTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSbUiExtraTemplate(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSbUiExtraTemplate(cr2w, parent, name);
 

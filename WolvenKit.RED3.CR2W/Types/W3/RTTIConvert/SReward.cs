@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("comment")] 		public CString Comment { get; set;}
 
-		public SReward(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SReward(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SReward(cr2w, parent, name);
 

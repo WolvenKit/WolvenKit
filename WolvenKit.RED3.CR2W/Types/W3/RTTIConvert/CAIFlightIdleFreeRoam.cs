@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("flightAreaOptionalTag")] 		public CName FlightAreaOptionalTag { get; set;}
 
-		public CAIFlightIdleFreeRoam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIFlightIdleFreeRoam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIFlightIdleFreeRoam(cr2w, parent, name);
 

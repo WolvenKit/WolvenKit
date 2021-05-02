@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("hudResource")] 		public CSoft<CHudResource> HudResource { get; set;}
 
-		public SHudDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SHudDescription(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SHudDescription(cr2w, parent, name);
 

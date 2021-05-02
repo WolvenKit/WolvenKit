@@ -51,7 +51,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(20)] [RED("POS_RADIAL_Y")] 		public CFloat POS_RADIAL_Y { get; set;}
 
-		public W3TutorialManagerUIHandlerStateTutHandlerBaseState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3TutorialManagerUIHandlerStateTutHandlerBaseState(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TutorialManagerUIHandlerStateTutHandlerBaseState(cr2w, parent, name);
 

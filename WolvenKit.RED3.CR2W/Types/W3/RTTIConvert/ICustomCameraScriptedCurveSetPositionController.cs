@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
 
-		public ICustomCameraScriptedCurveSetPositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public ICustomCameraScriptedCurveSetPositionController(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ICustomCameraScriptedCurveSetPositionController(cr2w, parent, name);
 

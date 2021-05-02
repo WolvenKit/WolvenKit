@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("boneIndex", 2,0)] 		public CArray<CInt32> BoneIndex { get; set;}
 
-		public CPoseBBoxGenerator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPoseBBoxGenerator(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPoseBBoxGenerator(cr2w, parent, name);
 

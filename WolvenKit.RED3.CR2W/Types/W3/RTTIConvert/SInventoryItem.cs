@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("dyePreviewColorName")] 		public CName DyePreviewColorName { get; set;}
 
-		public SInventoryItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SInventoryItem(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SInventoryItem(cr2w, parent, name);
 

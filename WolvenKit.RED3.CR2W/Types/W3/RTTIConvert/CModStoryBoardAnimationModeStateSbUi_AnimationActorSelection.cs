@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardAnimationModeStateSbUi_AnimationActorSelection : CModStoryBoardAssetSelectionBasedWorkModeStateSbUi_AssetSelection
 	{
-		public CModStoryBoardAnimationModeStateSbUi_AnimationActorSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardAnimationModeStateSbUi_AnimationActorSelection(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardAnimationModeStateSbUi_AnimationActorSelection(cr2w, parent, name);
 

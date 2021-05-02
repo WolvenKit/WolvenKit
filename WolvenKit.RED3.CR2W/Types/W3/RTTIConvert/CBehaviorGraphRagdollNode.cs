@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("cachedRootBoneImpulseVariable")] 		public CPtr<CBehaviorGraphVectorValueNode> CachedRootBoneImpulseVariable { get; set;}
 
-		public CBehaviorGraphRagdollNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphRagdollNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphRagdollNode(cr2w, parent, name);
 

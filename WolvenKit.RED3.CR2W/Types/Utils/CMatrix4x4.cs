@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
         public CVariable[] fields;
         public CFloat ax, ay, az, aw, bx, by, bz, bw, cx, cy, cz, cw, dx, dy, dz, dw;
 
-        public CMatrix4x4(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CMatrix4x4(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
             fields = new CVariable[] {

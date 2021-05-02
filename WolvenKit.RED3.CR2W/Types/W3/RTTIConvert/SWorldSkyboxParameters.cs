@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("cloudsMaterial")] 		public CHandle<CMaterialInstance> CloudsMaterial { get; set;}
 
-		public SWorldSkyboxParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SWorldSkyboxParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWorldSkyboxParameters(cr2w, parent, name);
 

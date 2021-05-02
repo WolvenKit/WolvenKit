@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IFactory : CObject
 	{
-		public IFactory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IFactory(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IFactory(cr2w, parent, name);
 

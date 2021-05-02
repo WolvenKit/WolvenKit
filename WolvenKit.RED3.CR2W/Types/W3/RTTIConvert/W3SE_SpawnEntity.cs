@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("m_spawnedEntities", 2,0)] 		public CArray<CHandle<CEntity>> M_spawnedEntities { get; set;}
 
-		public W3SE_SpawnEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SE_SpawnEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SE_SpawnEntity(cr2w, parent, name);
 

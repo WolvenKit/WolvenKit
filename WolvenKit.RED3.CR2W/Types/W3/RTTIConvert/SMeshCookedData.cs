@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("indexBufferOffset")] 		public CUInt32 IndexBufferOffset { get; set;}
 
-		public SMeshCookedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SMeshCookedData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMeshCookedData(cr2w, parent, name);
 

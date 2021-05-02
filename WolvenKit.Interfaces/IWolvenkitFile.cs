@@ -26,7 +26,6 @@ namespace WolvenKit.Common.Model
 
         //List<ICR2WEmbedded> Embedded { get; }
         public List<string> UnknownTypes { get; }
-        public List<string> UnknownVars { get; set; }
 
         #region Methods
 

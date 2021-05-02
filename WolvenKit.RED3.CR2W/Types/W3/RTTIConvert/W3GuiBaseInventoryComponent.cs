@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("ITEM_NEED_REPAIR_DISPLAY_VALUE")] 		public CInt32 ITEM_NEED_REPAIR_DISPLAY_VALUE { get; set;}
 
-		public W3GuiBaseInventoryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3GuiBaseInventoryComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3GuiBaseInventoryComponent(cr2w, parent, name);
 

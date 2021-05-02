@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("isTransitionAnimation")] 		public CBool IsTransitionAnimation { get; set;}
 
-		public CBehTreeNodeAtomicPlayAnimationManualMotionExtractionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeAtomicPlayAnimationManualMotionExtractionDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeAtomicPlayAnimationManualMotionExtractionDefinition(cr2w, parent, name);
 

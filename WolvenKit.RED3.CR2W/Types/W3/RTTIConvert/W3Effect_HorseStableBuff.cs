@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("m_ownerHorse")] 		public CHandle<CNewNPC> M_ownerHorse { get; set;}
 
-		public W3Effect_HorseStableBuff(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_HorseStableBuff(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_HorseStableBuff(cr2w, parent, name);
 

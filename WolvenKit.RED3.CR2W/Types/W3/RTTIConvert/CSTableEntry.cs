@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("guid")] 		public CGUID Guid { get; set;}
 
-		public CSTableEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSTableEntry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSTableEntry(cr2w, parent, name);
 

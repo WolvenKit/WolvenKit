@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("sourcesNames", 2,0)] 		public CArray<CName> SourcesNames { get; set;}
 
-		public CreaturesGroupDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CreaturesGroupDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CreaturesGroupDef(cr2w, parent, name);
 

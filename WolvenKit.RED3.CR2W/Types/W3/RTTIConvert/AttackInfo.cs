@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("attackCount")] 		public CInt32 AttackCount { get; set;}
 
-		public AttackInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public AttackInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new AttackInfo(cr2w, parent, name);
 

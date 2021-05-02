@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IEffectManagmentPerformableAction : IEntityTargetingAction
 	{
-		public IEffectManagmentPerformableAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IEffectManagmentPerformableAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IEffectManagmentPerformableAction(cr2w, parent, name);
 

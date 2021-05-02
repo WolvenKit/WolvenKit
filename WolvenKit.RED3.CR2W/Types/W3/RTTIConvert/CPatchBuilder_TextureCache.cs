@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CPatchBuilder_TextureCache : IBasePatchContentBuilder
 	{
-		public CPatchBuilder_TextureCache(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPatchBuilder_TextureCache(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPatchBuilder_TextureCache(cr2w, parent, name);
 

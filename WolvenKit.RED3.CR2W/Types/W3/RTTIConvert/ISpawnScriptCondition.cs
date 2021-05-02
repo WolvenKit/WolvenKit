@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class ISpawnScriptCondition : ISpawnCondition
 	{
-		public ISpawnScriptCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public ISpawnScriptCondition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ISpawnScriptCondition(cr2w, parent, name);
 

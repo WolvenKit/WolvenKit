@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("bootstrap")] 		public CHandle<CModBootstrap> Bootstrap { get; set;}
 
-		public CModBootstrapW3ReplacerCiri(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModBootstrapW3ReplacerCiri(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModBootstrapW3ReplacerCiri(cr2w, parent, name);
 

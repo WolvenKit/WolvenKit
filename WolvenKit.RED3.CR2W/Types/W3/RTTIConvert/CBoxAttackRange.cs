@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("rangeWidth")] 		public CFloat RangeWidth { get; set;}
 
-		public CBoxAttackRange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBoxAttackRange(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBoxAttackRange(cr2w, parent, name);
 

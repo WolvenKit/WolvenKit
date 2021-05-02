@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("m_lastGlobalFastTravelPosition")] 		public Vector M_lastGlobalFastTravelPosition { get; set;}
 
-		public CCommonMapManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCommonMapManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCommonMapManager(cr2w, parent, name);
 

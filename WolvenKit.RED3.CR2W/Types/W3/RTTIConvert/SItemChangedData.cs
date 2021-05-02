@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("informGui")] 		public CBool InformGui { get; set;}
 
-		public SItemChangedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SItemChangedData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SItemChangedData(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("isEffectOn")] 		public CBool IsEffectOn { get; set;}
 
-		public SExternalRiddleEffectEntityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SExternalRiddleEffectEntityDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SExternalRiddleEffectEntityDef(cr2w, parent, name);
 

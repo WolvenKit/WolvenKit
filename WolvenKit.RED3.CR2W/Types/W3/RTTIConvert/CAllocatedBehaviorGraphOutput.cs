@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAllocatedBehaviorGraphOutput : CVariable
 	{
-		public CAllocatedBehaviorGraphOutput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAllocatedBehaviorGraphOutput(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAllocatedBehaviorGraphOutput(cr2w, parent, name);
 

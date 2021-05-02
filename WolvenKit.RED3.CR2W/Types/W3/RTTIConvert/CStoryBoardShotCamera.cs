@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("gameDofSettings")] 		public SStoryBoardCameraDofSettings GameDofSettings { get; set;}
 
-		public CStoryBoardShotCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStoryBoardShotCamera(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStoryBoardShotCamera(cr2w, parent, name);
 

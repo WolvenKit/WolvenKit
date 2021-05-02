@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("m_DefaultRange")] 		public CFloat M_DefaultRange { get; set;}
 
-		public W3PostFXOnGroundComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3PostFXOnGroundComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3PostFXOnGroundComponent(cr2w, parent, name);
 

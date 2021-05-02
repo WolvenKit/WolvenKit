@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAINpcDettlaffMinionCombatStyle : CAINpcCombatStyle
 	{
-		public CAINpcDettlaffMinionCombatStyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcDettlaffMinionCombatStyle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcDettlaffMinionCombatStyle(cr2w, parent, name);
 

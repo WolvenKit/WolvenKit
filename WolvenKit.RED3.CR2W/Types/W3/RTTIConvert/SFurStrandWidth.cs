@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("widthNoise")] 		public CFloat WidthNoise { get; set;}
 
-		public SFurStrandWidth(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFurStrandWidth(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFurStrandWidth(cr2w, parent, name);
 

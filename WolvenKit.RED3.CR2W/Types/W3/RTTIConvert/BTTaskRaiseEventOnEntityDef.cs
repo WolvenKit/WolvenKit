@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("raiseSameEventOnOwner")] 		public CBool RaiseSameEventOnOwner { get; set;}
 
-		public BTTaskRaiseEventOnEntityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskRaiseEventOnEntityDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskRaiseEventOnEntityDef(cr2w, parent, name);
 

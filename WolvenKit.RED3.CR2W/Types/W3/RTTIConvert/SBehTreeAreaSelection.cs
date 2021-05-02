@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("optionalAreaTag")] 		public CBehTreeValCName OptionalAreaTag { get; set;}
 
-		public SBehTreeAreaSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehTreeAreaSelection(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehTreeAreaSelection(cr2w, parent, name);
 

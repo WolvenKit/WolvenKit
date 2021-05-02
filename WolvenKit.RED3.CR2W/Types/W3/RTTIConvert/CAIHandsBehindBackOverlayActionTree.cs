@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("interruptScriptedActionOnDurationEnd")] 		public CBool InterruptScriptedActionOnDurationEnd { get; set;}
 
-		public CAIHandsBehindBackOverlayActionTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIHandsBehindBackOverlayActionTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIHandsBehindBackOverlayActionTree(cr2w, parent, name);
 

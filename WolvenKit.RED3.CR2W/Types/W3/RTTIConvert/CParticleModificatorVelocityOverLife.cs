@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("absolute")] 		public CBool Absolute { get; set;}
 
-		public CParticleModificatorVelocityOverLife(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CParticleModificatorVelocityOverLife(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CParticleModificatorVelocityOverLife(cr2w, parent, name);
 

@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("itemVisibility", 2,0)] 		public CArray<SSbDescEventVisibility> ItemVisibility { get; set;}
 
-		public SSbDescStoryboardShot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSbDescStoryboardShot(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSbDescStoryboardShot(cr2w, parent, name);
 

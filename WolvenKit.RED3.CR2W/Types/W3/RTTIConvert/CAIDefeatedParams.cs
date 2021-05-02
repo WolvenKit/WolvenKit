@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("unconsciousTree")] 		public CHandle<CAINpcUnconsciousTree> UnconsciousTree { get; set;}
 
-		public CAIDefeatedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIDefeatedParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIDefeatedParams(cr2w, parent, name);
 

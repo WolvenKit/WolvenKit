@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("m_fxUpdateExpansionIcon")] 		public CHandle<CScriptedFlashFunction> M_fxUpdateExpansionIcon { get; set;}
 
-		public CR4JournalQuestMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4JournalQuestMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4JournalQuestMenu(cr2w, parent, name);
 

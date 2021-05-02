@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("attackInfos", 2,0)] 		public CArray<AttackInfo> AttackInfos { get; set;}
 
-		public CExtendedAICombatStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExtendedAICombatStorage(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExtendedAICombatStorage(cr2w, parent, name);
 

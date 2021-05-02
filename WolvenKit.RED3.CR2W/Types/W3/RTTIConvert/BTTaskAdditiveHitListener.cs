@@ -41,7 +41,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(15)] [RED("counterStaminaCost")] 		public CFloat CounterStaminaCost { get; set;}
 
-		public BTTaskAdditiveHitListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskAdditiveHitListener(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskAdditiveHitListener(cr2w, parent, name);
 

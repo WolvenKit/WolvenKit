@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBehTreeNodeRiderIdleDynamicRootDefinition : CBehTreeNodeBaseIdleDynamicRootDefinition
 	{
-		public CBehTreeNodeRiderIdleDynamicRootDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeRiderIdleDynamicRootDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeRiderIdleDynamicRootDefinition(cr2w, parent, name);
 

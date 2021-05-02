@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("child")] 		public CHandle<CJournalPath> Child { get; set;}
 
-		public CJournalPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CJournalPath(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJournalPath(cr2w, parent, name);
 

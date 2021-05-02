@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("callback")] 		public CHandle<CModUiExampleMod> Callback { get; set;}
 
-		public CModUiExampleListCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModUiExampleListCallback(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModUiExampleListCallback(cr2w, parent, name);
 

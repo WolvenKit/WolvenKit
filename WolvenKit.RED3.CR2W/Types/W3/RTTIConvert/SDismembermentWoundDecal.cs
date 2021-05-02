@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("applyToFillMesh")] 		public CBool ApplyToFillMesh { get; set;}
 
-		public SDismembermentWoundDecal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SDismembermentWoundDecal(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SDismembermentWoundDecal(cr2w, parent, name);
 

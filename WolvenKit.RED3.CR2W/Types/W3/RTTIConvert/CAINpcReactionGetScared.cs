@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("tryToBeHostileFirst")] 		public CBool TryToBeHostileFirst { get; set;}
 
-		public CAINpcReactionGetScared(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcReactionGetScared(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcReactionGetScared(cr2w, parent, name);
 

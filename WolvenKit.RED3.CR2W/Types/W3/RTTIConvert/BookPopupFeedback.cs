@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("curInventory")] 		public CHandle<CInventoryComponent> CurInventory { get; set;}
 
-		public BookPopupFeedback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BookPopupFeedback(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BookPopupFeedback(cr2w, parent, name);
 

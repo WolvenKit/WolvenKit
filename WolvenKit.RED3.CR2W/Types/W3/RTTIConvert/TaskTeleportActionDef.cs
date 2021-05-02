@@ -71,7 +71,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(30)] [RED("minDistanceFromTaggedEntities")] 		public CFloat MinDistanceFromTaggedEntities { get; set;}
 
-		public TaskTeleportActionDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public TaskTeleportActionDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new TaskTeleportActionDef(cr2w, parent, name);
 

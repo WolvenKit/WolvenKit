@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("nameAsCName")] 		public CName NameAsCName { get; set;}
 
-		public SSkeletonTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSkeletonTrack(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSkeletonTrack(cr2w, parent, name);
 

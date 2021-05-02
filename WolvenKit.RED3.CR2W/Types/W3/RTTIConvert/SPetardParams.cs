@@ -53,7 +53,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(21)] [RED("decalComponentScaleModifier")] 		public CFloat DecalComponentScaleModifier { get; set;}
 
-		public SPetardParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPetardParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPetardParams(cr2w, parent, name);
 

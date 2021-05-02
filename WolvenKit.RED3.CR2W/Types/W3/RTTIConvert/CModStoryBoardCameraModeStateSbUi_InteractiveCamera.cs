@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("lastDofCenterActorId")] 		public CString LastDofCenterActorId { get; set;}
 
-		public CModStoryBoardCameraModeStateSbUi_InteractiveCamera(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardCameraModeStateSbUi_InteractiveCamera(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardCameraModeStateSbUi_InteractiveCamera(cr2w, parent, name);
 

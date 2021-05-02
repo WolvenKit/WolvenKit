@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("childNode")] 		public CPtr<ISpawnTreeBaseNode> ChildNode { get; set;}
 
-		public ISpawnTreeDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public ISpawnTreeDecorator(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ISpawnTreeDecorator(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CR4JournalMonsterHuntingMenu : CR4JournalQuestMenu
 	{
-		public CR4JournalMonsterHuntingMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4JournalMonsterHuntingMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4JournalMonsterHuntingMenu(cr2w, parent, name);
 

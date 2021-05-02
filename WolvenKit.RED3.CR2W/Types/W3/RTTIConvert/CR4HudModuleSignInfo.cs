@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("m_fxEnableSFF")] 		public CHandle<CScriptedFlashFunction> M_fxEnableSFF { get; set;}
 
-		public CR4HudModuleSignInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleSignInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleSignInfo(cr2w, parent, name);
 

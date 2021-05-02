@@ -61,7 +61,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(25)] [RED("m_CanStartSummon")] 		public CBool M_CanStartSummon { get; set;}
 
-		public BTTaskFrostSnakeAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskFrostSnakeAttack(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskFrostSnakeAttack(cr2w, parent, name);
 

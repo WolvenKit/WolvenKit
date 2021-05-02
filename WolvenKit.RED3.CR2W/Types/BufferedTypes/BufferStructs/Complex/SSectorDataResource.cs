@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
         //public CUInt64 patchHash;
         [Ordinal(7)] [RED] public CString pathHash { get; set; }
 
-        public CSectorDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSectorDataResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             box0 = new CFloat(cr2w, this, nameof(box0)) { IsSerialized = true };
             box1 = new CFloat(cr2w, this, nameof(box1)) { IsSerialized = true };

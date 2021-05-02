@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("texture")] 		public CString Texture { get; set;}
 
-		public CNotifyPlayerEnteredInteriorEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CNotifyPlayerEnteredInteriorEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CNotifyPlayerEnteredInteriorEvent(cr2w, parent, name);
 

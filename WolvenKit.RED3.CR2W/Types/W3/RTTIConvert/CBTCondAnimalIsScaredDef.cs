@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBTCondAnimalIsScaredDef : IBehTreeHorseConditionalTaskDefinition
 	{
-		public CBTCondAnimalIsScaredDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTCondAnimalIsScaredDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTCondAnimalIsScaredDef(cr2w, parent, name);
 

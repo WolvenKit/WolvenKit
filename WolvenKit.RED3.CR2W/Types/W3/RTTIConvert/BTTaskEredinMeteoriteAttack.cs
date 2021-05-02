@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("collisionGroups", 2,0)] 		public CArray<CName> CollisionGroups { get; set;}
 
-		public BTTaskEredinMeteoriteAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskEredinMeteoriteAttack(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskEredinMeteoriteAttack(cr2w, parent, name);
 

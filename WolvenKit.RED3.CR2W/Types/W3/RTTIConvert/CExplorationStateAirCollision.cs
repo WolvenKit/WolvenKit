@@ -83,7 +83,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(36)] [RED("behAnimCanFall")] 		public CName BehAnimCanFall { get; set;}
 
-		public CExplorationStateAirCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateAirCollision(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateAirCollision(cr2w, parent, name);
 

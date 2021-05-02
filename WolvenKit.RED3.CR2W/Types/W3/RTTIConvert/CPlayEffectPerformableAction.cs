@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("boneName")] 		public CName BoneName { get; set;}
 
-		public CPlayEffectPerformableAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPlayEffectPerformableAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlayEffectPerformableAction(cr2w, parent, name);
 

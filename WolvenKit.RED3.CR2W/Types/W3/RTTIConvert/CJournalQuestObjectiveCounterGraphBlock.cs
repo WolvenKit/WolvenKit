@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("showInfoOnScreen")] 		public CBool ShowInfoOnScreen { get; set;}
 
-		public CJournalQuestObjectiveCounterGraphBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CJournalQuestObjectiveCounterGraphBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJournalQuestObjectiveCounterGraphBlock(cr2w, parent, name);
 

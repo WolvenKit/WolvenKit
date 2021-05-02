@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CSpawnTreeInitializerSmartDynamicWanderAI : ISpawnTreeInitializerIdleSmartAI
 	{
-		public CSpawnTreeInitializerSmartDynamicWanderAI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSpawnTreeInitializerSmartDynamicWanderAI(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSpawnTreeInitializerSmartDynamicWanderAI(cr2w, parent, name);
 

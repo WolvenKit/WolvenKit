@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("computedGoingToWater")] 		public CBool ComputedGoingToWater { get; set;}
 
-		public CollisionTrajectory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CollisionTrajectory(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CollisionTrajectory(cr2w, parent, name);
 

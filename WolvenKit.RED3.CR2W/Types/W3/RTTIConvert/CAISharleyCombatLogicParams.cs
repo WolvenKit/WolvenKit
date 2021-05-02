@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("prioritizePlayerAsTarget")] 		public CBool PrioritizePlayerAsTarget { get; set;}
 
-		public CAISharleyCombatLogicParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAISharleyCombatLogicParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAISharleyCombatLogicParams(cr2w, parent, name);
 

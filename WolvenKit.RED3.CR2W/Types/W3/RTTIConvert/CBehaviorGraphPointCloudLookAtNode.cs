@@ -79,7 +79,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(34)] [RED("cachedDurationNode")] 		public CPtr<CBehaviorGraphValueNode> CachedDurationNode { get; set;}
 
-		public CBehaviorGraphPointCloudLookAtNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphPointCloudLookAtNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphPointCloudLookAtNode(cr2w, parent, name);
 

@@ -18,7 +18,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1)] [RED] public CUInt16 unk2 { get; set; }
         [Ordinal(2)] [RED] public CUInt16 unk3 { get; set; }
 
-        public SAnimPointCloudLookAtParamData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SAnimPointCloudLookAtParamData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }

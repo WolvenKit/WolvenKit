@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("useGuardArea")] 		public CBehTreeValBool UseGuardArea { get; set;}
 
-		public CBehTreeNodeDynamicWanderingTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeDynamicWanderingTargetDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeDynamicWanderingTargetDefinition(cr2w, parent, name);
 

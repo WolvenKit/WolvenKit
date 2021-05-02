@@ -81,7 +81,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(35)] [RED("eventReceived")] 		public CBool EventReceived { get; set;}
 
-		public CBTTaskBruxaSpawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskBruxaSpawn(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskBruxaSpawn(cr2w, parent, name);
 

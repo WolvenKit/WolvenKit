@@ -13,12 +13,14 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Interfaces.Core;
+using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.RED3.CR2W.Types.Utils;
 
 namespace WolvenKit.RED3.CR2W
 {
-    public class CR2WFile : ObservableObject, IWolvenkitFile
+    public class CR2WFile : ObservableObject, IRed3EngineFile
     {
         #region Enums
 
@@ -44,7 +46,7 @@ namespace WolvenKit.RED3.CR2W
 
         public CR2WFile()
         {
-            Names = new List<CR2WNameWrapper>();            //block 2
+            Names = new List<ICR2WName>();            //block 2
             Imports = new List<ICR2WImport>();              //block 3
             Properties = new List<CR2WPropertyWrapper>();   //block 4
             Chunks = new List<ICR2WExport>();               //block 5
@@ -90,8 +92,8 @@ namespace WolvenKit.RED3.CR2W
 
         #region Properties
 
-        public readonly List<string> UnknownTypes = new List<string>();
-        public List<LocalizedString> LocalizedStrings = new List<LocalizedString>();
+        public List<string> UnknownTypes { get; } = new();
+        public List<LocalizedString> LocalizedStrings = new();
         public List<ICR2WBuffer> Buffers { get; private set; }
         public List<ICR2WExport> Chunks { get; private set; }
         public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }
@@ -116,7 +118,7 @@ namespace WolvenKit.RED3.CR2W
         public ILoggerService Logger { get; }
 
         // Tables
-        public List<CR2WNameWrapper> Names { get; private set; }
+        public List<ICR2WName> Names { get; private set; }
 
         public List<CR2WPropertyWrapper> Properties { get; private set; }
 
@@ -126,30 +128,11 @@ namespace WolvenKit.RED3.CR2W
 
         #region Supporting Functions
 
-        public static void WriteVariable(BinaryWriter file, IEditableVariable ivar)
-        {
-            if (ivar is CVariable cvar)
-            {
-                file.Write(cvar.GetnameId());
-                file.Write(cvar.GettypeId());
-
-                var pos = file.BaseStream.Position;
-                file.Write((uint)0); // size placeholder
-
-                cvar.Write(file);
-                var endpos = file.BaseStream.Position;
-
-                file.Seek((int)pos, SeekOrigin.Begin);
-                var actualsize = (uint)(endpos - pos);
-                file.Write(actualsize); // Write size
-                file.Seek((int)endpos, SeekOrigin.Begin);
-            }
-            else
-                throw new SerializationException();
-        }
+        
 
         // Does not reindex /TODO
-        public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, CVariable cvar = null)
+        public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null,
+            ICR2WExport virtualparent = null, IEditableVariable cvar = null)
         {
             var chunk = new CR2WExportWrapper(this, type, parent) as ICR2WExport;
             if (cvar != null)
@@ -234,7 +217,7 @@ namespace WolvenKit.RED3.CR2W
 
         public CR2WTable[] GetTableHeaders() => m_tableheaders;
 
-        public CVariable ReadVariable(BinaryReader file, CVariable parent)
+        public IEditableVariable ReadVariable(BinaryReader file, IEditableVariable parent)
         {
             // Read Name
             var nameId = file.ReadUInt16();
@@ -259,7 +242,7 @@ namespace WolvenKit.RED3.CR2W
             if (typename == "ptr:IBehTreeNodeDefinition" && varname == "rootNode" && parent.REDType == "CBehTree")
                 typename = "handle:IBehTreeNodeDefinition";
 
-            var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent);
+            var parsedvar = CR2WTypeManager.Create(typename, varname, this, parent as CVariable);
             // The "size" variable read is something a bit strange : it takes itself into account.
             //try
             //{
@@ -489,7 +472,7 @@ namespace WolvenKit.RED3.CR2W
             m_strings = ReadStringsBuffer(file.BaseStream);
 
             // read the other tables
-            Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList(); // block 2
+            Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this) as ICR2WName).ToList(); // block 2
             Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this) as ICR2WImport).ToList(); // block 3
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList(); // block 4
             Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList(); // block 5
@@ -582,7 +565,7 @@ namespace WolvenKit.RED3.CR2W
             m_strings = ReadStringsBuffer(file.BaseStream);
 
             // read tables
-            Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this)).ToList();
+            Names = ReadTable<CR2WName>(file.BaseStream, 1).Select(_ => new CR2WNameWrapper(_, this) as ICR2WName).ToList();
             Imports = ReadTable<CR2WImport>(file.BaseStream, 2).Select(_ => new CR2WImportWrapper(_, this) as ICR2WImport).ToList();
             Properties = ReadTable<CR2WProperty>(file.BaseStream, 3).Select(_ => new CR2WPropertyWrapper(_)).ToList();
             Chunks = ReadTable<CR2WExport>(file.BaseStream, 4).Select(_ => new CR2WExportWrapper(_, this) as ICR2WExport).ToList();
@@ -738,7 +721,7 @@ namespace WolvenKit.RED3.CR2W
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
             //m_fileheader.numChunks = (uint)chunks.Count;          //this is weird, I don't think it actually is the number of chunks
-            var nn = new List<CR2WNameWrapper>(Names);
+            //var nn = new List<ICR2WName>(Names);
 
             #region Update Tables
 
@@ -775,7 +758,7 @@ namespace WolvenKit.RED3.CR2W
                     //me: Why hash and not name??
                     hash = hash,
                     value = newoffset
-                }, this));
+                }, this) as ICR2WName);
             }
 
             #endregion Names
@@ -1537,7 +1520,7 @@ namespace WolvenKit.RED3.CR2W
 
             m_tableheaders[1].itemCount = (uint)Names.Count;
             m_tableheaders[1].offset = (uint)file.BaseStream.Position;
-            WriteTable<CR2WName>(file.BaseStream, Names.Select(_ => _.Name).ToArray(), 1);
+            WriteTable<CR2WName>(file.BaseStream, Names.Select(_ => (_ as CR2WNameWrapper).Name).ToArray(), 1);
 
             m_tableheaders[2].itemCount = (uint)Imports.Count;
             m_tableheaders[2].offset = Imports.Count > 0 ? (uint)file.BaseStream.Position : 0;

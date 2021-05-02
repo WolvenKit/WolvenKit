@@ -61,7 +61,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(25)] [RED("HINT_DURATION_SHORT")] 		public CFloat HINT_DURATION_SHORT { get; set;}
 
-		public CR4TutorialSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4TutorialSystem(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4TutorialSystem(cr2w, parent, name);
 

@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("surroundMoveType")] 		public CBehTreeValEMoveType SurroundMoveType { get; set;}
 
-		public CBehTreeStrafingAlgorithmFastSurroundDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeStrafingAlgorithmFastSurroundDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeStrafingAlgorithmFastSurroundDefinition(cr2w, parent, name);
 

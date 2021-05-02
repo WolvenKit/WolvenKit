@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("onlyOneActor")] 		public CBool OnlyOneActor { get; set;}
 
-		public CBaseQuestScriptedActionsBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBaseQuestScriptedActionsBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBaseQuestScriptedActionsBlock(cr2w, parent, name);
 

@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("playerTemplate")] 		public CString PlayerTemplate { get; set;}
 
-		public CModStoryBoardW2SceneDescrCreator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardW2SceneDescrCreator(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardW2SceneDescrCreator(cr2w, parent, name);
 

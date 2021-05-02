@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("price")] 		public CInt32 Price { get; set;}
 
-		public W3WeatherShrine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3WeatherShrine(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3WeatherShrine(cr2w, parent, name);
 

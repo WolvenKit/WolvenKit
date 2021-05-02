@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("saveTargetOnGameplayEvent")] 		public CBehTreeValCName SaveTargetOnGameplayEvent { get; set;}
 
-		public BTCondThreatLevelDifferenceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondThreatLevelDifferenceDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondThreatLevelDifferenceDef(cr2w, parent, name);
 

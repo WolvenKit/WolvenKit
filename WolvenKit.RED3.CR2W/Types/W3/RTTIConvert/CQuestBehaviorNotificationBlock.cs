@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("notifications", 2,0)] 		public CArray<CPtr<SQuestBehaviorNotification>> Notifications { get; set;}
 
-		public CQuestBehaviorNotificationBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestBehaviorNotificationBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestBehaviorNotificationBlock(cr2w, parent, name);
 

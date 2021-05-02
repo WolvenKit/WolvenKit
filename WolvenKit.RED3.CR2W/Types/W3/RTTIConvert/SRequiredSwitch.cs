@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("switchState")] 		public CEnum<ERequiredSwitchState> SwitchState { get; set;}
 
-		public SRequiredSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SRequiredSwitch(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SRequiredSwitch(cr2w, parent, name);
 

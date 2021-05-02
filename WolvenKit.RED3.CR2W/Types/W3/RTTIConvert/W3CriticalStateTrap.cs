@@ -39,7 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("enterTimestamp")] 		public CFloat EnterTimestamp { get; set;}
 
-		public W3CriticalStateTrap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3CriticalStateTrap(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3CriticalStateTrap(cr2w, parent, name);
 

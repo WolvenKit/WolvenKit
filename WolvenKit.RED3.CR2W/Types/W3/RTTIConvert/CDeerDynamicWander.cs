@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CDeerDynamicWander : CAIDynamicWander
 	{
-		public CDeerDynamicWander(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CDeerDynamicWander(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CDeerDynamicWander(cr2w, parent, name);
 

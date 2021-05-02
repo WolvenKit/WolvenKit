@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("status")] 		public CEnum<EBTNodeStatus> Status { get; set;}
 
-		public SBTNodeResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBTNodeResult(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBTNodeResult(cr2w, parent, name);
 

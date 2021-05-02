@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("areaType")] 		public CEnum<EAreaName> AreaType { get; set;}
 
-		public SAreaLootParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SAreaLootParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SAreaLootParams(cr2w, parent, name);
 

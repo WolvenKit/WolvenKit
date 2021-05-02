@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("componentName")] 		public CString ComponentName { get; set;}
 
-		public SPartyWaypointHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPartyWaypointHandle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPartyWaypointHandle(cr2w, parent, name);
 

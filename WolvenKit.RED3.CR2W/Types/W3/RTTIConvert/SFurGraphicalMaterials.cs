@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("shadow")] 		public SFurShadow Shadow { get; set;}
 
-		public SFurGraphicalMaterials(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFurGraphicalMaterials(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFurGraphicalMaterials(cr2w, parent, name);
 

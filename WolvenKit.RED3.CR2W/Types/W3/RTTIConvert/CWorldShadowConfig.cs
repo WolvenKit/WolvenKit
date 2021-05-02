@@ -83,7 +83,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(36)] [RED("terrainMeshShadowFadeRange")] 		public CFloat TerrainMeshShadowFadeRange { get; set;}
 
-		public CWorldShadowConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CWorldShadowConfig(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CWorldShadowConfig(cr2w, parent, name);
 

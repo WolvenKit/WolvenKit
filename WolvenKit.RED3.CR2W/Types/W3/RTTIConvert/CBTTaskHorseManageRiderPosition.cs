@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("activation_distance")] 		public CFloat Activation_distance { get; set;}
 
-		public CBTTaskHorseManageRiderPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskHorseManageRiderPosition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskHorseManageRiderPosition(cr2w, parent, name);
 

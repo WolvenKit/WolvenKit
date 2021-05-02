@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("path")] 		public CString Path { get; set;}
 
-		public SEffectIconType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SEffectIconType(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SEffectIconType(cr2w, parent, name);
 

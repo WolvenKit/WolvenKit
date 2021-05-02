@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("volumeLocalPosition")] 		public Vector VolumeLocalPosition { get; set;}
 
-		public SBoatDestructionVolume(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBoatDestructionVolume(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBoatDestructionVolume(cr2w, parent, name);
 

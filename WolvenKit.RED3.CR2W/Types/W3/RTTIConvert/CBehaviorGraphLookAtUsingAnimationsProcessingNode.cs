@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("cachedLookAtBlendTimeNode")] 		public CPtr<CBehaviorGraphValueNode> CachedLookAtBlendTimeNode { get; set;}
 
-		public CBehaviorGraphLookAtUsingAnimationsProcessingNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphLookAtUsingAnimationsProcessingNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphLookAtUsingAnimationsProcessingNode(cr2w, parent, name);
 

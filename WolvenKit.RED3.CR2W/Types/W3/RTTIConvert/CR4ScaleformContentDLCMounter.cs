@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("scaleformDirectoryPath")] 		public CString ScaleformDirectoryPath { get; set;}
 
-		public CR4ScaleformContentDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4ScaleformContentDLCMounter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4ScaleformContentDLCMounter(cr2w, parent, name);
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("weights", 2,0)] 		public CArray<CFloat> Weights { get; set;}
 
-		public VirtualAnimationPoseIK(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public VirtualAnimationPoseIK(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new VirtualAnimationPoseIK(cr2w, parent, name);
 

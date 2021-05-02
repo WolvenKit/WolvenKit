@@ -53,7 +53,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(21)] [RED("soundEventsOnSkip", 2,0)] 		public CArray<CName> SoundEventsOnSkip { get; set;}
 
-		public CStoryScene(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStoryScene(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStoryScene(cr2w, parent, name);
 

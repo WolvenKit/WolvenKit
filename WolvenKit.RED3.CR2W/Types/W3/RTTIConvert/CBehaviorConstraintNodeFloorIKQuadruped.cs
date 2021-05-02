@@ -49,7 +49,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(19)] [RED("headMaintainLook")] 		public SBehaviorConstraintNodeFloorIKMaintainLookBoneData HeadMaintainLook { get; set;}
 
-		public CBehaviorConstraintNodeFloorIKQuadruped(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorConstraintNodeFloorIKQuadruped(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorConstraintNodeFloorIKQuadruped(cr2w, parent, name);
 

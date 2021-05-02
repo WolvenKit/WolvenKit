@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("listProvider")] 		public CHandle<CModUiFilteredList> ListProvider { get; set;}
 
-		public CModSbListViewWorkModeStateSbUi_FilteredListSelect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModSbListViewWorkModeStateSbUi_FilteredListSelect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModSbListViewWorkModeStateSbUi_FilteredListSelect(cr2w, parent, name);
 

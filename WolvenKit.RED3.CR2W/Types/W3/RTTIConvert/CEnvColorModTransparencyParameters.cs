@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("autoHideCustom3")] 		public CEnvDistanceRangeParameters AutoHideCustom3 { get; set;}
 
-		public CEnvColorModTransparencyParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEnvColorModTransparencyParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnvColorModTransparencyParameters(cr2w, parent, name);
 

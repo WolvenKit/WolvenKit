@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class BTTaskResetLastMealDelayDef : IBehTreeTaskDefinition
 	{
-		public BTTaskResetLastMealDelayDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskResetLastMealDelayDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskResetLastMealDelayDef(cr2w, parent, name);
 

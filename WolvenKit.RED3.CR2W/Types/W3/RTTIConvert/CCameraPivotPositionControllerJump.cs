@@ -123,7 +123,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(56)] [RED("zeroVector")] 		public Vector ZeroVector { get; set;}
 
-		public CCameraPivotPositionControllerJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCameraPivotPositionControllerJump(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCameraPivotPositionControllerJump(cr2w, parent, name);
 

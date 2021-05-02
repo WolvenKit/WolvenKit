@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("schemName")] 		public CName SchemName { get; set;}
 
-		public SCraftingSchematic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCraftingSchematic(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCraftingSchematic(cr2w, parent, name);
 

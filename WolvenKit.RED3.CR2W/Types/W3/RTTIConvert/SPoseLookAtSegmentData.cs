@@ -47,7 +47,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(18)] [RED("maxAngleHorToRefPose")] 		public CFloat MaxAngleHorToRefPose { get; set;}
 
-		public SPoseLookAtSegmentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPoseLookAtSegmentData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPoseLookAtSegmentData(cr2w, parent, name);
 

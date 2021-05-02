@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("combatTarget")] 		public CBool CombatTarget { get; set;}
 
-		public CBehTreeNodeDecoratorSetSteeringNamedTargetNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeDecoratorSetSteeringNamedTargetNodeDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeDecoratorSetSteeringNamedTargetNodeDefinition(cr2w, parent, name);
 

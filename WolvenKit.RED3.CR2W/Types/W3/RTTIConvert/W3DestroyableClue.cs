@@ -41,7 +41,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(15)] [RED("destroyed")] 		public CBool Destroyed { get; set;}
 
-		public W3DestroyableClue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3DestroyableClue(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3DestroyableClue(cr2w, parent, name);
 

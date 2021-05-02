@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("blendOffset")] 		public CFloat BlendOffset { get; set;}
 
-		public SStripeControlPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStripeControlPoint(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStripeControlPoint(cr2w, parent, name);
 

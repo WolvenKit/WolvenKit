@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("importance")] 		public CFloat Importance { get; set;}
 
-		public CBehTreeDistanceBasedTicketAlgorithmField(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeDistanceBasedTicketAlgorithmField(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeDistanceBasedTicketAlgorithmField(cr2w, parent, name);
 

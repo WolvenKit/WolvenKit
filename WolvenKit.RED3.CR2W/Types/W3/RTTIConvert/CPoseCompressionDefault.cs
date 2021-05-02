@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("compressTranslationType")] 		public CEnum<ECompressTranslationType> CompressTranslationType { get; set;}
 
-		public CPoseCompressionDefault(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPoseCompressionDefault(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPoseCompressionDefault(cr2w, parent, name);
 

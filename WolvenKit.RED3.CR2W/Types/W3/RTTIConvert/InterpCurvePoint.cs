@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("interpMode")] 		public CEnum<EInterpCurveMode> InterpMode { get; set;}
 
-		public InterpCurvePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public InterpCurvePoint(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new InterpCurvePoint(cr2w, parent, name);
 

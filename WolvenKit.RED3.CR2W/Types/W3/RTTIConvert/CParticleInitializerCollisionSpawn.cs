@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("parentEmitterName")] 		public CName ParentEmitterName { get; set;}
 
-		public CParticleInitializerCollisionSpawn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CParticleInitializerCollisionSpawn(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CParticleInitializerCollisionSpawn(cr2w, parent, name);
 

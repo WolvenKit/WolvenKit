@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("staticPoints", 2,0)] 		public CArray<CHandle<CEntity>> StaticPoints { get; set;}
 
-		public CModStoryBoardLookAtDirector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardLookAtDirector(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardLookAtDirector(cr2w, parent, name);
 

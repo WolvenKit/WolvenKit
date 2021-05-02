@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("conditions", 2,0)] 		public CArray<MerchantNPCEmbeddedScenesConditions> Conditions { get; set;}
 
-		public MerchantNPCEmbeddedScenes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public MerchantNPCEmbeddedScenes(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new MerchantNPCEmbeddedScenes(cr2w, parent, name);
 

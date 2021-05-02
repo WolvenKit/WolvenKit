@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("setOnDeactivate")] 		public CBool SetOnDeactivate { get; set;}
 
-		public CBTTaskAnimalSetIsScaredDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskAnimalSetIsScaredDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskAnimalSetIsScaredDef(cr2w, parent, name);
 

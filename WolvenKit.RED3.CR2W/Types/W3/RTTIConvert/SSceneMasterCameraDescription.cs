@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("cameraShots", 2,0)] 		public CArray<SSceneCameraShotDescription> CameraShots { get; set;}
 
-		public SSceneMasterCameraDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSceneMasterCameraDescription(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSceneMasterCameraDescription(cr2w, parent, name);
 

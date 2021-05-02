@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("CHAR_DEV_OPEN")] 		public CName CHAR_DEV_OPEN { get; set;}
 
-		public W3TutorialManagerUIHandlerStateCharacterDevelopmentFastMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3TutorialManagerUIHandlerStateCharacterDevelopmentFastMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3TutorialManagerUIHandlerStateCharacterDevelopmentFastMenu(cr2w, parent, name);
 

@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("effectsTickTime")] 		public CFloat EffectsTickTime { get; set;}
 
-		public SGameplayLODConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SGameplayLODConfig(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SGameplayLODConfig(cr2w, parent, name);
 

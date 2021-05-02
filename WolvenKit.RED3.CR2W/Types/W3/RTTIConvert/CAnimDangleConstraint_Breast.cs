@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("rotationBoneWeight")] 		public CFloat RotationBoneWeight { get; set;}
 
-		public CAnimDangleConstraint_Breast(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimDangleConstraint_Breast(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimDangleConstraint_Breast(cr2w, parent, name);
 

@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("action")] 		public CHandle<W3DamageAction> Action { get; set;}
 
-		public W3EredinFrostProjectile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3EredinFrostProjectile(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3EredinFrostProjectile(cr2w, parent, name);
 

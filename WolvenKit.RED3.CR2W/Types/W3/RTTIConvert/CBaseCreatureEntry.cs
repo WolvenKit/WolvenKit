@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("recalculateDelay")] 		public GameTime RecalculateDelay { get; set;}
 
-		public CBaseCreatureEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBaseCreatureEntry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBaseCreatureEntry(cr2w, parent, name);
 

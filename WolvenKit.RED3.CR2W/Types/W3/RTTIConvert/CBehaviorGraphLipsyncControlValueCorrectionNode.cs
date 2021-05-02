@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("startCorrEventName")] 		public CName StartCorrEventName { get; set;}
 
-		public CBehaviorGraphLipsyncControlValueCorrectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphLipsyncControlValueCorrectionNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphLipsyncControlValueCorrectionNode(cr2w, parent, name);
 

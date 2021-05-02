@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("slot")] 		public CName Slot { get; set;}
 
-		public CPlayerStateAttached(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPlayerStateAttached(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlayerStateAttached(cr2w, parent, name);
 

@@ -249,7 +249,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(119)] [RED("woundDirectionWeight")] 		public CFloat WoundDirectionWeight { get; set;}
 
-		public SGameplayConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SGameplayConfig(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SGameplayConfig(cr2w, parent, name);
 

@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("rightLegIK")] 		public STwoBonesIKSolverData RightLegIK { get; set;}
 
-		public CBehaviorConstraintNodeFloorIK(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorConstraintNodeFloorIK(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorConstraintNodeFloorIK(cr2w, parent, name);
 

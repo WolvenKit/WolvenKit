@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("areaNumber")] 		public CInt32 AreaNumber { get; set;}
 
-		public CBTIsPlayerInsideSelectedDiveAttackArea(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTIsPlayerInsideSelectedDiveAttackArea(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTIsPlayerInsideSelectedDiveAttackArea(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAINpcStyleOneHandedAxeParams : CAINpcCombatStyleParams
 	{
-		public CAINpcStyleOneHandedAxeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAINpcStyleOneHandedAxeParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAINpcStyleOneHandedAxeParams(cr2w, parent, name);
 

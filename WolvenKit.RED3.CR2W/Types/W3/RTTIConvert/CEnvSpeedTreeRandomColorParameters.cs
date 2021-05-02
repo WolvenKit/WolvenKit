@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("saturation2")] 		public SSimpleCurve Saturation2 { get; set;}
 
-		public CEnvSpeedTreeRandomColorParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEnvSpeedTreeRandomColorParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnvSpeedTreeRandomColorParameters(cr2w, parent, name);
 

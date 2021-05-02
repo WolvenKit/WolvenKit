@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("value")] 		public CUInt32 Value { get; set;}
 
-		public SItemUniqueId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SItemUniqueId(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SItemUniqueId(cr2w, parent, name);
 

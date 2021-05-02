@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("fadeTime")] 		public CFloat FadeTime { get; set;}
 
-		public CPlaySoundOnActorRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPlaySoundOnActorRequest(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPlaySoundOnActorRequest(cr2w, parent, name);
 

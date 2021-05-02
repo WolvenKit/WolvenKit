@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("parts", 2,0)] 		public CArray<CPtr<IAnimationBuffer>> Parts { get; set;}
 
-		public CAnimationBufferMultipart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimationBufferMultipart(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimationBufferMultipart(cr2w, parent, name);
 

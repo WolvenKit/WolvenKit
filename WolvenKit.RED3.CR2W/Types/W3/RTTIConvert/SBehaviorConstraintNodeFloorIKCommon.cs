@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SBehaviorConstraintNodeFloorIKCommon : CVariable
 	{
-		public SBehaviorConstraintNodeFloorIKCommon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehaviorConstraintNodeFloorIKCommon(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehaviorConstraintNodeFloorIKCommon(cr2w, parent, name);
 

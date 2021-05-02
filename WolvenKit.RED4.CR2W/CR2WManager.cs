@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Services;
@@ -45,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         private static Dictionary<string, Type> m_enums;
 
-        private static ILoggerService m_logger;
+        //private static ILoggerService m_logger;
 
         private static DirectoryInfo m_projectinfo;
 
@@ -136,6 +137,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// </summary>
         public static void ReloadAssembly()
         {
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
                 var (count, csharpstring) = InterpretScriptClasses();
@@ -144,12 +146,12 @@ namespace WolvenKit.RED4.CR2W.Types
                 m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
                 if (m_assembly != null)
                 {
-                    m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
+                    logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
                     LoadTypes();
                     LoadEnums();
                 }
                 else
-                    m_logger.LogString($"Custom class assembly could not be compiled. An error occured", Logtype.Error);
+                    logger.LogString($"Custom class assembly could not be compiled. An error occured", Logtype.Error);
             }
         }
 
@@ -254,6 +256,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         private static (int, string) InterpretScriptClasses()
         {
+            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             List<string> importedClasses = new List<string>();
             List<string> importedEnums = new List<string>();
             string output = "";
@@ -424,8 +427,7 @@ namespace WolvenKit.RED4.CR2W.Types
             }
 
             if (importedClasses.Count > 0)
-                if (m_logger != null)
-                    m_logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
+                    logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
 $"{string.Join(", ", importedClasses)}", Logtype.Success);
             return (importedClasses.Count, output);
         }

@@ -53,7 +53,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(21)] [RED("globalSkyBrightness")] 		public SSimpleCurve GlobalSkyBrightness { get; set;}
 
-		public CEnvGlobalSkyParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEnvGlobalSkyParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnvGlobalSkyParameters(cr2w, parent, name);
 

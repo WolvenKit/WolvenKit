@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("timeParam")] 		public CPtr<IPopupTimeParam> TimeParam { get; set;}
 
-		public CPopupDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPopupDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPopupDef(cr2w, parent, name);
 

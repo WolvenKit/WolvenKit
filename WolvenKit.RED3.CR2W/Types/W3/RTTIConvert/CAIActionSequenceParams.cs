@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("actions", 2,0)] 		public CArray<CHandle<IAIActionTree>> Actions { get; set;}
 
-		public CAIActionSequenceParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIActionSequenceParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIActionSequenceParams(cr2w, parent, name);
 

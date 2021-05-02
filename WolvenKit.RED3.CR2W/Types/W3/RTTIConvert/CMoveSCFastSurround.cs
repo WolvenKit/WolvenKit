@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("speedMinLimitToBreak")] 		public CFloat SpeedMinLimitToBreak { get; set;}
 
-		public CMoveSCFastSurround(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMoveSCFastSurround(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSCFastSurround(cr2w, parent, name);
 

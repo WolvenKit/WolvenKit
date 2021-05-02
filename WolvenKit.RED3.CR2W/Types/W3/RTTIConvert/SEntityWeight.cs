@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("weight")] 		public CFloat Weight { get; set;}
 
-		public SEntityWeight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SEntityWeight(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SEntityWeight(cr2w, parent, name);
 

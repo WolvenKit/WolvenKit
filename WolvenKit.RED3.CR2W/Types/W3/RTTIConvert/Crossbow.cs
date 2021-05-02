@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("reloadAtStartComplete")] 		public CBool ReloadAtStartComplete { get; set;}
 
-		public Crossbow(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public Crossbow(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new Crossbow(cr2w, parent, name);
 

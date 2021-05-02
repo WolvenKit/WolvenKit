@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBTTaskCaranthirMeteorDef : CBTTaskProjectileAttackDef
 	{
-		public CBTTaskCaranthirMeteorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskCaranthirMeteorDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskCaranthirMeteorDef(cr2w, parent, name);
 

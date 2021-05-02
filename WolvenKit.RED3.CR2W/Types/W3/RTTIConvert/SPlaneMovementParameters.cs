@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("m_BrakeDotF")] 		public CFloat M_BrakeDotF { get; set;}
 
-		public SPlaneMovementParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPlaneMovementParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPlaneMovementParameters(cr2w, parent, name);
 

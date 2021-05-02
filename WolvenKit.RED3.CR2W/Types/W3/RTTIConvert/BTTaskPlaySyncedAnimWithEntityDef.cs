@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("syncAnimName")] 		public CName SyncAnimName { get; set;}
 
-		public BTTaskPlaySyncedAnimWithEntityDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskPlaySyncedAnimWithEntityDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskPlaySyncedAnimWithEntityDef(cr2w, parent, name);
 

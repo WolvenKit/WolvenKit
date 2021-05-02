@@ -89,7 +89,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(39)] [RED("m_SmoothedVelocityV")] 		public Vector M_SmoothedVelocityV { get; set;}
 
-		public CExplorationStateManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateManager(cr2w, parent, name);
 

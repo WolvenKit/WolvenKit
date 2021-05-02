@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("val2")] 		public Vector Val2 { get; set;}
 
-		public STerrainTextureParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public STerrainTextureParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STerrainTextureParameters(cr2w, parent, name);
 

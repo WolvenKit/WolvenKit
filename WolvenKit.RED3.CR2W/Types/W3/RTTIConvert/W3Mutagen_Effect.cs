@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("toxicityOffset")] 		public CFloat ToxicityOffset { get; set;}
 
-		public W3Mutagen_Effect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Mutagen_Effect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Mutagen_Effect(cr2w, parent, name);
 

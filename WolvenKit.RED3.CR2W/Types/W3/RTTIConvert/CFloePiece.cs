@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("currPosition")] 		public Vector CurrPosition { get; set;}
 
-		public CFloePiece(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFloePiece(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFloePiece(cr2w, parent, name);
 

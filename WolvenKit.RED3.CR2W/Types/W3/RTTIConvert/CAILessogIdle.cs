@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAILessogIdle : CAIMonsterIdle
 	{
-		public CAILessogIdle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAILessogIdle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAILessogIdle(cr2w, parent, name);
 

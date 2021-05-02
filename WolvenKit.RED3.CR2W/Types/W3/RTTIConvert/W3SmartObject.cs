@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("possibleItemSlots", 2,0)] 		public CArray<CName> PossibleItemSlots { get; set;}
 
-		public W3SmartObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SmartObject(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SmartObject(cr2w, parent, name);
 

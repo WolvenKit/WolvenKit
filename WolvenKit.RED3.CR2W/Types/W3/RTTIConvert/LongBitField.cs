@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("mem", 2,0)] 		public CArray<CUInt32> Mem { get; set;}
 
-		public LongBitField(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public LongBitField(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new LongBitField(cr2w, parent, name);
 

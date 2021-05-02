@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("actor")] 		public CHandle<CActor> Actor { get; set;}
 
-		public CBTTaskLockViewToDettlaffDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskLockViewToDettlaffDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskLockViewToDettlaffDef(cr2w, parent, name);
 

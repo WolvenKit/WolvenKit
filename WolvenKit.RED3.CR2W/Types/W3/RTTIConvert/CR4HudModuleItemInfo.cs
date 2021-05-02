@@ -57,7 +57,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(23)] [RED("m_previousSetItemInfo", 2,0)] 		public CArray<SHudItemInfo> M_previousSetItemInfo { get; set;}
 
-		public CR4HudModuleItemInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleItemInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleItemInfo(cr2w, parent, name);
 

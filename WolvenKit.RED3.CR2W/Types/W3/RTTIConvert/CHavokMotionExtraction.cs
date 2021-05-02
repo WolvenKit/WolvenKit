@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("duration")] 		public CFloat Duration { get; set;}
 
-		public CHavokMotionExtraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CHavokMotionExtraction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CHavokMotionExtraction(cr2w, parent, name);
 

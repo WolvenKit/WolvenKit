@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("teleportedBones", 2,0)] 		public CArray<STeleportBone> TeleportedBones { get; set;}
 
-		public CTeleportDetectorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CTeleportDetectorData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CTeleportDetectorData(cr2w, parent, name);
 

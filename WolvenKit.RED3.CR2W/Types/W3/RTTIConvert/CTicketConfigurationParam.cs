@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("tickets", 2,0)] 		public CArray<CTicketSourceConfiguration> Tickets { get; set;}
 
-		public CTicketConfigurationParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CTicketConfigurationParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CTicketConfigurationParam(cr2w, parent, name);
 

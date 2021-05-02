@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("behaviorInstanceSlots", 2,0)] 		public CArray<SBehaviorGraphInstanceSlot> BehaviorInstanceSlots { get; set;}
 
-		public CAnimMimicParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimMimicParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimMimicParam(cr2w, parent, name);
 

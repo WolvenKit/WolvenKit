@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("updateDelay")] 		public CFloat UpdateDelay { get; set;}
 
-		public CBehTreeNodeConditionIsEnemyAroundDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeConditionIsEnemyAroundDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeConditionIsEnemyAroundDefinition(cr2w, parent, name);
 

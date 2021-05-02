@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("spawnsetType")] 		public CEnum<ECommunitySpawnsetType> SpawnsetType { get; set;}
 
-		public CCommunity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCommunity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCommunity(cr2w, parent, name);
 

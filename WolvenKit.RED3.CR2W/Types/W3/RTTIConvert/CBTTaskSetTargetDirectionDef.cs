@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("completeOnAllowBlend")] 		public CBool CompleteOnAllowBlend { get; set;}
 
-		public CBTTaskSetTargetDirectionDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSetTargetDirectionDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSetTargetDirectionDef(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("teleportDetectionAxisLS")] 		public CEnum<EAxis> TeleportDetectionAxisLS { get; set;}
 
-		public STeleportBone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public STeleportBone(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new STeleportBone(cr2w, parent, name);
 

@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("m_bottom")] 		public CInt32 M_bottom { get; set;}
 
-		public Rect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public Rect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new Rect(cr2w, parent, name);
 

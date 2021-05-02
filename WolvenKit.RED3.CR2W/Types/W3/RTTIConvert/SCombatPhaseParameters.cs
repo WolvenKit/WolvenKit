@@ -33,7 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("deactivationGameplayEvent")] 		public CName DeactivationGameplayEvent { get; set;}
 
-		public SCombatPhaseParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCombatPhaseParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCombatPhaseParameters(cr2w, parent, name);
 

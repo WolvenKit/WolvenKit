@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("finisherEnabled")] 		public CBool FinisherEnabled { get; set;}
 
-		public CBehTreeHLTaskUnconscious(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeHLTaskUnconscious(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeHLTaskUnconscious(cr2w, parent, name);
 

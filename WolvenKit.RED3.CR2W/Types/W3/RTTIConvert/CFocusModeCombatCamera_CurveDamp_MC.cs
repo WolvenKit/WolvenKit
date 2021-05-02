@@ -43,7 +43,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(16)] [RED("timeScale")] 		public CFloat TimeScale { get; set;}
 
-		public CFocusModeCombatCamera_CurveDamp_MC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CFocusModeCombatCamera_CurveDamp_MC(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CFocusModeCombatCamera_CurveDamp_MC(cr2w, parent, name);
 

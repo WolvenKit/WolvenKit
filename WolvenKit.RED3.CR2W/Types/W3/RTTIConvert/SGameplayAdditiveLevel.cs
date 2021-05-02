@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("animations", 2,0)] 		public CArray<SGameplayAdditiveAnimation> Animations { get; set;}
 
-		public SGameplayAdditiveLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SGameplayAdditiveLevel(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SGameplayAdditiveLevel(cr2w, parent, name);
 

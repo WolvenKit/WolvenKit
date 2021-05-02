@@ -45,7 +45,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(17)] [RED("npc")] 		public CHandle<CNewNPC> Npc { get; set;}
 
-		public CBTTaskSpawnObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSpawnObject(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSpawnObject(cr2w, parent, name);
 

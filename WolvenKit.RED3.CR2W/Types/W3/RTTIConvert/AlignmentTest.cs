@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("a")] 		public Vector A { get; set;}
 
-		public AlignmentTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public AlignmentTest(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new AlignmentTest(cr2w, parent, name);
 

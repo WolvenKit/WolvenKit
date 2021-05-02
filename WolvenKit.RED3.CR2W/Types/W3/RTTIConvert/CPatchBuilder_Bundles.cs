@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CPatchBuilder_Bundles : IBasePatchContentBuilder
 	{
-		public CPatchBuilder_Bundles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPatchBuilder_Bundles(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPatchBuilder_Bundles(cr2w, parent, name);
 

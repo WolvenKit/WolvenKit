@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("_initData")] 		public CHandle<W3ItemSelectMenuInitData> _initData { get; set;}
 
-		public CR4MenuItemSelect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4MenuItemSelect(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4MenuItemSelect(cr2w, parent, name);
 

@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("fxType")] 		public CInt32 FxType { get; set;}
 
-		public SFXSurfacePostParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFXSurfacePostParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFXSurfacePostParams(cr2w, parent, name);
 

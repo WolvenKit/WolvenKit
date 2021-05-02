@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("externalRiddleFx")] 		public SExternalRiddleEffectEntityDef ExternalRiddleFx { get; set;}
 
-		public SPairedRiddleNodeDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPairedRiddleNodeDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPairedRiddleNodeDef(cr2w, parent, name);
 

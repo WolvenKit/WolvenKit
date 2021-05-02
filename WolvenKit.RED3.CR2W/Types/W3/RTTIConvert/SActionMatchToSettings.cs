@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("matchEventName")] 		public CName MatchEventName { get; set;}
 
-		public SActionMatchToSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SActionMatchToSettings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SActionMatchToSettings(cr2w, parent, name);
 

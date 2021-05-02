@@ -85,7 +85,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(37)] [RED("hasLoopFrostDamage")] 		public CBool HasLoopFrostDamage { get; set;}
 
-		public W3Petard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Petard(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Petard(cr2w, parent, name);
 

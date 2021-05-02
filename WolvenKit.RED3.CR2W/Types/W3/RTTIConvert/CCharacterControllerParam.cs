@@ -43,7 +43,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(16)] [RED("significance")] 		public CFloat Significance { get; set;}
 
-		public CCharacterControllerParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCharacterControllerParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCharacterControllerParam(cr2w, parent, name);
 

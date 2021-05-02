@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("sucess")] 		public CBool Sucess { get; set;}
 
-		public BTTaskCompleteOnGameplayEventDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskCompleteOnGameplayEventDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskCompleteOnGameplayEventDef(cr2w, parent, name);
 

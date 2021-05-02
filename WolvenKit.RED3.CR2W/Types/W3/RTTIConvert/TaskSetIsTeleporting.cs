@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("SetToFalseOnDeactivate")] 		public CBool SetToFalseOnDeactivate { get; set;}
 
-		public TaskSetIsTeleporting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public TaskSetIsTeleporting(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new TaskSetIsTeleporting(cr2w, parent, name);
 

@@ -71,7 +71,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(30)] [RED("tutorialTriggered")] 		public CBool TutorialTriggered { get; set;}
 
-		public CR4EnchantingMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4EnchantingMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4EnchantingMenu(cr2w, parent, name);
 

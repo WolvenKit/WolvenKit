@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("attackVertSpeedImpulse")] 		public CFloat AttackVertSpeedImpulse { get; set;}
 
-		public CExplorationStateSkateJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateSkateJump(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateSkateJump(cr2w, parent, name);
 

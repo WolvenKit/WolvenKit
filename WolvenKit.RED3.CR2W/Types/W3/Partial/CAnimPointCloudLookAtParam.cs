@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("refPose", 133,0)] 		public CArray<EngineQsTransform> RefPose { get; set;}
 
-		public CAnimPointCloudLookAtParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimPointCloudLookAtParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimPointCloudLookAtParam(cr2w, parent, name);
 

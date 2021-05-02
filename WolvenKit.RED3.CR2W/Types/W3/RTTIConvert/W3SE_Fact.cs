@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("validFor")] 		public CInt32 ValidFor { get; set;}
 
-		public W3SE_Fact(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SE_Fact(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SE_Fact(cr2w, parent, name);
 

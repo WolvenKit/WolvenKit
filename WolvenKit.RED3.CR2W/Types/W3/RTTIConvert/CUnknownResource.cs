@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CUnknownResource : CResource
 	{
-		public CUnknownResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CUnknownResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CUnknownResource(cr2w, parent, name);
 

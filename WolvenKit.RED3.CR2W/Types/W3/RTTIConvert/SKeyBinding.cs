@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("IsHold")] 		public CBool IsHold { get; set;}
 
-		public SKeyBinding(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SKeyBinding(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SKeyBinding(cr2w, parent, name);
 

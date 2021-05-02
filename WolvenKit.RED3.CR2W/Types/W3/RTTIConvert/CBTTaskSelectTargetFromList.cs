@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("targetToSelect")] 		public CHandle<CNode> TargetToSelect { get; set;}
 
-		public CBTTaskSelectTargetFromList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskSelectTargetFromList(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskSelectTargetFromList(cr2w, parent, name);
 

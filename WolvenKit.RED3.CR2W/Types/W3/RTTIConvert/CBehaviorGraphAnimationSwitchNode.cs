@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("syncOnSwitchMethod")] 		public CPtr<IBehaviorSyncMethod> SyncOnSwitchMethod { get; set;}
 
-		public CBehaviorGraphAnimationSwitchNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphAnimationSwitchNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphAnimationSwitchNode(cr2w, parent, name);
 

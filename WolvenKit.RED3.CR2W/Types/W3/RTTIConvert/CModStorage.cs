@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("data", 2,0)] 		public CArray<CHandle<IModStorageData>> Data { get; set;}
 
-		public CModStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStorage(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStorage(cr2w, parent, name);
 

@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("max")] 		public CFloat Max { get; set;}
 
-		public SItemAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SItemAttribute(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SItemAttribute(cr2w, parent, name);
 

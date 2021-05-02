@@ -27,7 +27,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("selectedId")] 		public CString SelectedId { get; set;}
 
-		public CModUiFilteredList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModUiFilteredList(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModUiFilteredList(cr2w, parent, name);
 

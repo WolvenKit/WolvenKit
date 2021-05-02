@@ -35,7 +35,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("isItemUpdate")] 		public CBool IsItemUpdate { get; set;}
 
-		public SJournalUpdate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SJournalUpdate(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SJournalUpdate(cr2w, parent, name);
 

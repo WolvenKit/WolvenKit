@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("isDefault")] 		public CBool IsDefault { get; set;}
 
-		public SSoundInfoMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSoundInfoMapping(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSoundInfoMapping(cr2w, parent, name);
 

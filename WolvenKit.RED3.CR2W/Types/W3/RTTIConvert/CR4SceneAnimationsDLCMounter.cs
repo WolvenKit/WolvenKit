@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("sceneAnimationsMimicsEmoStatesFilePath")] 		public CString SceneAnimationsMimicsEmoStatesFilePath { get; set;}
 
-		public CR4SceneAnimationsDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4SceneAnimationsDLCMounter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4SceneAnimationsDLCMounter(cr2w, parent, name);
 

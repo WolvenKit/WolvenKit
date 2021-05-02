@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("time")] 		public CFloat Time { get; set;}
 
-		public SSimpleCurvePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSimpleCurvePoint(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSimpleCurvePoint(cr2w, parent, name);
 

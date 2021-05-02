@@ -49,7 +49,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(19)] [RED("collisionEntity")] 		public CHandle<CEntity> CollisionEntity { get; set;}
 
-		public CRiftEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CRiftEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CRiftEntity(cr2w, parent, name);
 

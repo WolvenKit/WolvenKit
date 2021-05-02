@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("lair")] 		public CHandle<CFlyingSwarmMasterLair> Lair { get; set;}
 
-		public CBTCondSwarmShieldAvailable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTCondSwarmShieldAvailable(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTCondSwarmShieldAvailable(cr2w, parent, name);
 

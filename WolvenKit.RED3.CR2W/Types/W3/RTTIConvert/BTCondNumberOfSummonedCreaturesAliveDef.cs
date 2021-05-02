@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("operator")] 		public CEnum<EOperator> Operator { get; set;}
 
-		public BTCondNumberOfSummonedCreaturesAliveDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondNumberOfSummonedCreaturesAliveDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondNumberOfSummonedCreaturesAliveDef(cr2w, parent, name);
 

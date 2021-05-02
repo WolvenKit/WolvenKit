@@ -51,7 +51,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(20)] [RED("MAX_MASTER_MUTATION_STAGE")] 		public CInt32 MAX_MASTER_MUTATION_STAGE { get; set;}
 
-		public CR4CharacterMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4CharacterMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4CharacterMenu(cr2w, parent, name);
 

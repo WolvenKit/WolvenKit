@@ -91,7 +91,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(40)] [RED("cachedInitialGroupDirMSValueNode")] 		public CPtr<CBehaviorGraphValueNode> CachedInitialGroupDirMSValueNode { get; set;}
 
-		public CBehaviorGraphDirectionalMovementNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphDirectionalMovementNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphDirectionalMovementNode(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("gameParameterValue")] 		public CFloat GameParameterValue { get; set;}
 
-		public SSoundGameParameterValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSoundGameParameterValue(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSoundGameParameterValue(cr2w, parent, name);
 

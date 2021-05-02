@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("newPose")] 		public SStoryBoardPoseSettings NewPose { get; set;}
 
-		public CModStoryBoardAnimationModeStateSbUi_ActorIdlePose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardAnimationModeStateSbUi_ActorIdlePose(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardAnimationModeStateSbUi_ActorIdlePose(cr2w, parent, name);
 

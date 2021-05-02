@@ -61,7 +61,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(25)] [RED("MUTATION_SKILL_GROUP_ID")] 		public CInt32 MUTATION_SKILL_GROUP_ID { get; set;}
 
-		public W3PlayerAbilityManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3PlayerAbilityManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3PlayerAbilityManager(cr2w, parent, name);
 

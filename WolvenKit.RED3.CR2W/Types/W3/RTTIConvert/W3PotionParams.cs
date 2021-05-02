@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("potionItemName")] 		public CName PotionItemName { get; set;}
 
-		public W3PotionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3PotionParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3PotionParams(cr2w, parent, name);
 

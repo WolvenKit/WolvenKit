@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("m_seconds")] 		public CInt32 M_seconds { get; set;}
 
-		public GameTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public GameTime(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new GameTime(cr2w, parent, name);
 

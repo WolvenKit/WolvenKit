@@ -16,7 +16,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         [Ordinal(1000)] [REDBuffer(true)] public CHandle<CLayerGroup> ParentGroup { get; set; }
 
-        public CLayerInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CLayerInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             ParentGroup = new CHandle<CLayerGroup>(cr2w, this, nameof(ParentGroup)) { IsSerialized = true };
         }

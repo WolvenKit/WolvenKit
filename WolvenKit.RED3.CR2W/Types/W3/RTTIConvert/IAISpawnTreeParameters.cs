@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IAISpawnTreeParameters : IAIParameters
 	{
-		public IAISpawnTreeParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IAISpawnTreeParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IAISpawnTreeParameters(cr2w, parent, name);
 

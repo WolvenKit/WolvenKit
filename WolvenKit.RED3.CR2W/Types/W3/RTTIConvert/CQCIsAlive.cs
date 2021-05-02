@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CQCIsAlive : IActorConditionType
 	{
-		public CQCIsAlive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQCIsAlive(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQCIsAlive(cr2w, parent, name);
 

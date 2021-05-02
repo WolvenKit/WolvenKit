@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("alwaysOnTopOfStack")] 		public CBool AlwaysOnTopOfStack { get; set;}
 
-		public SBehaviorGraphInstanceSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehaviorGraphInstanceSlot(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehaviorGraphInstanceSlot(cr2w, parent, name);
 

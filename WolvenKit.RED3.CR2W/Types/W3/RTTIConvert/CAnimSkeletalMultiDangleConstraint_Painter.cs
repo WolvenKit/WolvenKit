@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAnimSkeletalMultiDangleConstraint_Painter : CAnimSkeletalMultiDangleConstraint
 	{
-		public CAnimSkeletalMultiDangleConstraint_Painter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimSkeletalMultiDangleConstraint_Painter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimSkeletalMultiDangleConstraint_Painter(cr2w, parent, name);
 

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SNavigationCollectCollisionInCircleData : CVariable
 	{
-		public SNavigationCollectCollisionInCircleData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SNavigationCollectCollisionInCircleData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SNavigationCollectCollisionInCircleData(cr2w, parent, name);
 

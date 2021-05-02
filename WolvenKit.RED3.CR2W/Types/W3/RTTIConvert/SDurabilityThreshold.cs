@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("difficulty")] 		public CEnum<EDifficultyMode> Difficulty { get; set;}
 
-		public SDurabilityThreshold(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SDurabilityThreshold(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SDurabilityThreshold(cr2w, parent, name);
 

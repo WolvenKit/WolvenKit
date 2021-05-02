@@ -79,7 +79,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(34)] [RED("extractedMotionDisabled")] 		public CBool ExtractedMotionDisabled { get; set;}
 
-		public CBTTaskAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskAttack(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskAttack(cr2w, parent, name);
 

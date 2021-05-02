@@ -45,7 +45,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(17)] [RED("canTriggerFrenzySlowmo")] 		public CBool CanTriggerFrenzySlowmo { get; set;}
 
-		public BTTaskFrostSnakeAttackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskFrostSnakeAttackDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskFrostSnakeAttackDef(cr2w, parent, name);
 

@@ -58,6 +58,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj" />
   </ItemGroup>
 

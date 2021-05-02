@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
     public class CArrayFixedSize<T> : CArray<T> where T : CVariable
     {
-        public CArrayFixedSize(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CArrayFixedSize(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override string REDType
         {

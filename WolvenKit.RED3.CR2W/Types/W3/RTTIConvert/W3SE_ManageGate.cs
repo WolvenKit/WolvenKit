@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("speedModifier")] 		public CFloat SpeedModifier { get; set;}
 
-		public W3SE_ManageGate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SE_ManageGate(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SE_ManageGate(cr2w, parent, name);
 

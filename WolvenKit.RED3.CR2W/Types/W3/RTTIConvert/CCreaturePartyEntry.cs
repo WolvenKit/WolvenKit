@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("synchronizeWork")] 		public CBool SynchronizeWork { get; set;}
 
-		public CCreaturePartyEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCreaturePartyEntry(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCreaturePartyEntry(cr2w, parent, name);
 

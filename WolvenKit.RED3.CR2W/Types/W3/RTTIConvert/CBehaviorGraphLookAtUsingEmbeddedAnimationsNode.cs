@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("Pairs", 2,0)] 		public CArray<SLookAtAnimationPairDefinition> Pairs { get; set;}
 
-		public CBehaviorGraphLookAtUsingEmbeddedAnimationsNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphLookAtUsingEmbeddedAnimationsNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphLookAtUsingEmbeddedAnimationsNode(cr2w, parent, name);
 

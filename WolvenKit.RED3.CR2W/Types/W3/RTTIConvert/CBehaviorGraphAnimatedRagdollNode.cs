@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("cachedNodes", 2,0)] 		public CArray<CPtr<CBehaviorGraphNode>> CachedNodes { get; set;}
 
-		public CBehaviorGraphAnimatedRagdollNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphAnimatedRagdollNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphAnimatedRagdollNode(cr2w, parent, name);
 

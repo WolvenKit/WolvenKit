@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("gameplayVisibilityFlag")] 		public CBool GameplayVisibilityFlag { get; set;}
 
-		public W3Effect_Hypnotized(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_Hypnotized(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_Hypnotized(cr2w, parent, name);
 

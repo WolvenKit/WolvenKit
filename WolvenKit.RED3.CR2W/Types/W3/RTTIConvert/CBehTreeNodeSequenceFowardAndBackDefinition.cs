@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("checkFrequency")] 		public CFloat CheckFrequency { get; set;}
 
-		public CBehTreeNodeSequenceFowardAndBackDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeNodeSequenceFowardAndBackDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeNodeSequenceFowardAndBackDefinition(cr2w, parent, name);
 

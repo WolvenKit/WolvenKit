@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("cachedThresholdNode")] 		public CPtr<CBehaviorGraphValueNode> CachedThresholdNode { get; set;}
 
-		public CBehaviorGraphSpeedModulationNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphSpeedModulationNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphSpeedModulationNode(cr2w, parent, name);
 

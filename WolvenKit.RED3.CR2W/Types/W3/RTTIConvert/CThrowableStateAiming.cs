@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("collisionGroupsNames", 2,0)] 		public CArray<CName> CollisionGroupsNames { get; set;}
 
-		public CThrowableStateAiming(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CThrowableStateAiming(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CThrowableStateAiming(cr2w, parent, name);
 

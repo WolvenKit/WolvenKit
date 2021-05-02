@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("m_fxSetAutosaveMessage")] 		public CHandle<CScriptedFlashFunction> M_fxSetAutosaveMessage { get; set;}
 
-		public CR4AutosaveWarningMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4AutosaveWarningMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4AutosaveWarningMenu(cr2w, parent, name);
 

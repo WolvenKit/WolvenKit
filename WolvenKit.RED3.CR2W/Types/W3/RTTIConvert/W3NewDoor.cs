@@ -37,7 +37,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("enableDeniedAreaInCombat")] 		public CBool EnableDeniedAreaInCombat { get; set;}
 
-		public W3NewDoor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3NewDoor(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3NewDoor(cr2w, parent, name);
 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("registeredAchievements", 2,0)] 		public CArray<SAchievement> RegisteredAchievements { get; set;}
 
-		public SStatistic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStatistic(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStatistic(cr2w, parent, name);
 

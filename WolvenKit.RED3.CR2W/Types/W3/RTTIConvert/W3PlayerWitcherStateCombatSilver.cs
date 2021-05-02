@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class W3PlayerWitcherStateCombatSilver : W3PlayerWitcherStateCombatSword
 	{
-		public W3PlayerWitcherStateCombatSilver(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3PlayerWitcherStateCombatSilver(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3PlayerWitcherStateCombatSilver(cr2w, parent, name);
 

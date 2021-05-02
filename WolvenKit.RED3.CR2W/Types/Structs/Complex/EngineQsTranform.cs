@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(9)] [RED] public CFloat Y { get; set; }
         [Ordinal(10)] [RED] public CFloat Z { get; set; }
 
-        public EngineQsTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public EngineQsTransform(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             X = new CFloat(cr2w, this, nameof(X));
             Y = new CFloat(cr2w, this, nameof(Y));

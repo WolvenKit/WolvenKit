@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("isSet")] 		public CBool IsSet { get; set;}
 
-		public CCameraPivotPositionControllerKeepRelative(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCameraPivotPositionControllerKeepRelative(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
 		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCameraPivotPositionControllerKeepRelative(cr2w, parent, name);
 
