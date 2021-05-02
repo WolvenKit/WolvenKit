@@ -26,7 +26,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Catel.Core" Version="5.12.11" />
+    <PackageReference Include="Catel.Core" Version="5.12.13" />
     <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageReference Include="FastMember" Version="1.5.0" />
