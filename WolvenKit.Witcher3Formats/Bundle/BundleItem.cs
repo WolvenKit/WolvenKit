@@ -50,6 +50,7 @@ namespace WolvenKit.Bundles
         public string DateString { get; set; }
         public uint Empty { get; set; }
         public byte[] Hash { get; set; }
+        public string ArchiveName { get; set; }
         public string Name { get; set; }
 
         /// <summary>

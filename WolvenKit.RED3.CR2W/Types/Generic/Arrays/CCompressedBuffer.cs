@@ -18,7 +18,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCompressedBuffer<T>(cr2w, parent, name);
+        
 
         public new void Read(BinaryReader file, uint size, int count)
         {

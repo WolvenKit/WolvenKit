@@ -44,11 +44,6 @@ namespace WolvenKit.RED3.CR2W.Types
             unk1.Write(file);
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new EntityHandle(cr2w, parent, name);
-        }
-
         public override string ToString()
         {
             return $"[{id.ToString()}]:{guid.ToString()}";

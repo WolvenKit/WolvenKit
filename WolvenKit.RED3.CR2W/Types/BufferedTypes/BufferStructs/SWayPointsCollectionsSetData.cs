@@ -22,6 +22,6 @@ namespace WolvenKit.RED3.CR2W.Types
 
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SWayPointsCollectionsSetData(cr2w, parent, name);
+        
     }
 }

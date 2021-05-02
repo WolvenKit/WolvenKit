@@ -86,6 +86,6 @@ namespace WolvenKit.RED3.CR2W.Types
         }
 
         public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CVariantSizeTypeName(cr2w, parent, name);
+        
     }
 }

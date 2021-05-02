@@ -39,6 +39,7 @@ namespace WolvenKit.Cache
 
         public IGameArchive Archive { get; set; }
         public string CompressionType => "Zlib";
+        public string ArchiveName { get; set; }
         public string Name { get; set; }
 
         /// <summary>

@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
-
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using static WolvenKit.RED3.CR2W.Types.Enums;
 using WolvenKit.RED3.CR2W.Reflection;
 using FastMember;
-using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace WolvenKit.RED3.CR2W.Types
+namespace WolvenKit.Interfaces.Core
 {
     [Serializable]
     public class InvalidPtrException : Exception

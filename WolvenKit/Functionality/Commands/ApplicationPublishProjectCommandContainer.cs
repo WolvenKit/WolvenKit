@@ -4,6 +4,7 @@ using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
+using WolvenKit.Common;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;

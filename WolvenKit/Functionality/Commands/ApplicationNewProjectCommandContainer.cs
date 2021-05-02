@@ -4,6 +4,7 @@ using Catel.MVVM;
 using Catel.Services;
 using WolvenKit.Functionality.Services;
 using Orchestra.Services;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.ViewModels.Others;

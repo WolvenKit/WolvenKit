@@ -4,6 +4,7 @@ using Catel.IoC;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Interfaces.Core;
 using ZeroFormatter;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -25,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public FileEntry(BinaryReader br, IGameArchive parent)
         {
-            ArchiveName = parent.Name;
+            Archive = parent;
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
 
             Read(br, mainController);
@@ -57,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public uint ResourceDependenciesEnd { get; set; }
         public byte[] SHA1Hash { get; set; }
 
-        public string ArchiveName { get; set; }
+        public IGameArchive Archive { get; set; }
 
         public uint Size { get; set; }
         public uint ZSize { get; set; }
@@ -71,6 +72,16 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion Properties
 
         #region Methods
+
+        public void Extract(Stream output)
+        {
+            if (Archive is not Archive ar)
+            {
+                throw new InvalidParsingException($"{Archive.ArchiveAbsolutePath} is not a cyberpunk77 archive.");
+            }
+
+            ar.CopyFileToStream(output, NameHash64, false);
+        }
 
         public void Write(BinaryWriter bw)
         {

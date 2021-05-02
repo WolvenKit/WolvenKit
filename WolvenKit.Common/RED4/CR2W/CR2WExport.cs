@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.Interfaces.Extensions;
 
 [assembly: ContractNamespaceAttribute("", ClrNamespace = "WolvenKit.RED4.CR2W")]
 

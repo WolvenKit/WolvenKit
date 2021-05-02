@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 
 using System.Diagnostics;
@@ -32,11 +32,6 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             handlename.Write(file);
             handle.Write(file);
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new IdHandle(cr2w, parent, name);
         }
 
         public override string ToString()

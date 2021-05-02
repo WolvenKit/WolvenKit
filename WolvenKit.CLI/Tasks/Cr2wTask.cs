@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.RED4.CR2W.Extensions;
 using Newtonsoft.Json;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks

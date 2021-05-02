@@ -9,7 +9,8 @@ namespace WolvenKit.Common
     {
         #region Properties
 
-        string ArchiveName { get; set; }
+        public IGameArchive Archive { get; set; }
+
         string Name { get; }
 
         /// <summary>
@@ -22,8 +23,10 @@ namespace WolvenKit.Common
         /// </summary>
         uint ZSize { get; set; }
 
+
         #endregion Properties
 
+        public void Extract(Stream output);
     }
 
 

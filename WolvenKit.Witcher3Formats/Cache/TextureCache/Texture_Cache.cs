@@ -41,6 +41,7 @@ namespace WolvenKit.Cache
         private uint Version;
 
         public string ArchiveAbsolutePath { get; set; }
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
         public EArchiveType TypeName => EArchiveType.TextureCache;
 
         #endregion Properties

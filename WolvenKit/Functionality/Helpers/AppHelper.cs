@@ -19,7 +19,6 @@ using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Others;
-using WolvenKit.Views.Others.PropertyGridEditors;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Wizards;
 
@@ -31,8 +30,6 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static async Task InitializeMVVM()
         {
-            PropertyGridResolver.Initialize();
-
             ApplicationHelper.StartProfileOptimization();
 
             var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");

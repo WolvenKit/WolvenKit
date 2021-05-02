@@ -105,7 +105,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public SBufferWaypoints(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferWaypoints(cr2w, parent, name);
+        
     }
     #endregion
 
@@ -119,7 +119,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public SBufferComponentsMappings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferComponentsMappings(cr2w, parent, name);
+        
     }
     #endregion
 
@@ -134,7 +134,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 
         public SBufferwaypointsGroup(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferwaypointsGroup(cr2w, parent, name);
+        
     }
     #endregion
 

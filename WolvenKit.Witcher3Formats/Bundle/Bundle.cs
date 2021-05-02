@@ -53,6 +53,7 @@ namespace WolvenKit.Bundles
         public uint GetSize => this.bundlesize;
         public Dictionary<string, BundleItem> Items { get; set; }
         public List<IGameFile> Patchedfiles { get; set; } = new List<IGameFile>();
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
         public EArchiveType TypeName { get { return EArchiveType.Bundle; } }
 
         #endregion Properties

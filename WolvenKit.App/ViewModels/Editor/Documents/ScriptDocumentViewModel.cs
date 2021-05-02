@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.RED3.CR2W;

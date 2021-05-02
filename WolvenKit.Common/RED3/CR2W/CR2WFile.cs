@@ -14,6 +14,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.Interfaces.RED3;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.RED3.CR2W.Types.Utils;
@@ -93,7 +94,7 @@ namespace WolvenKit.RED3.CR2W
         #region Properties
 
         public List<string> UnknownTypes { get; } = new();
-        public List<LocalizedString> LocalizedStrings = new();
+        public List<ILocalizedString> LocalizedStrings { get; } = new();
         public List<ICR2WBuffer> Buffers { get; private set; }
         public List<ICR2WExport> Chunks { get; private set; }
         public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }

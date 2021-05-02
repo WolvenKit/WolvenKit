@@ -859,12 +859,7 @@ namespace CP77.MSTests
             {
                 try
                 {
-                    if (file.Archive is not Archive ar)
-#if IS_PARALLEL
-                        return;
-#else
-                        continue;
-#endif
+                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath];
                     using var originalStream = new MemoryStream();
                     ar.CopyFileToStream(originalStream, file.NameHash64, false);
                     originalStream.Seek(0, SeekOrigin.Begin);
@@ -993,7 +988,7 @@ namespace CP77.MSTests
             sb.AppendLine(
                 $"{nameof(FileEntry.NameHash64)}," +
                 $"{nameof(FileEntry.FileName)}," +
-                $"{nameof(FileEntry.ArchiveName)}," +
+                $"{nameof(FileEntry.Archive.Name)}," +
                 $"{nameof(WriteTestResult)}," +
                 $"{nameof(WriteTestResult.Success)}," +
                 //$"{nameof(WriteTestResult.HasIncorrectStringTable)}," +
@@ -1006,7 +1001,7 @@ namespace CP77.MSTests
                 sb.AppendLine(
                     $"{r.FileEntry.NameHash64}," +
                     $"{r.FileEntry.FileName}," +
-                    $"{r.FileEntry.ArchiveName}," +
+                    $"{r.FileEntry.Archive.Name}," +
                     $"{r.WriteResult}," +
                     $"{r.Success}," +
                     //$"{r.HasIncorrectStringTable}," +

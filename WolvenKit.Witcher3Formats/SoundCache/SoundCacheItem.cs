@@ -31,6 +31,8 @@ namespace WolvenKit.Wwise
         public IGameArchive Archive { get; set; }
         public string CompressionType => "None";
 
+        public string ArchiveName { get; set; }
+
         /// <summary>
         /// Name of the bundled item in the archive.
         /// </summary>

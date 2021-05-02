@@ -586,7 +586,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
 
             // register all custom classes
-            CR2WManager.Init(FileDirectory, MainController.Get().Logger);
+            CR2WManager.Init(FileDirectory);
             _logger.Info("Finished additional tasks...");
 
             NotificationHelper.Growl.Success($"Project {Name} has finished loading.");

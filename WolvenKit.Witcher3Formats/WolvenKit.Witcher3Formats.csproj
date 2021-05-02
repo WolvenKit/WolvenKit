@@ -83,6 +83,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+        <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj" />
+        <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj" />
     </ItemGroup>
 
 
@@ -93,13 +95,6 @@
       <None Update="vgmstream\README.md">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-    </ItemGroup>
-
-
-    <ItemGroup>
-      <Reference Include="WolvenKit.RED3.CR2W">
-        <HintPath>..\WolvenKit.RED3.CR2W\bin\Release\net5.0\WolvenKit.RED3.CR2W.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>

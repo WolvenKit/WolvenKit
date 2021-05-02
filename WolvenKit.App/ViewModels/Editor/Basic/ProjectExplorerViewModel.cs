@@ -255,7 +255,7 @@ namespace WolvenKit.ViewModels.Editor
             }
             catch (Exception)
             {
-                MainController.LogString("Failed to delete " + fullpath + ".\r\n", Common.Services.Logtype.Error);
+                MainController.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
             }
             finally
             {

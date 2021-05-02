@@ -26,11 +26,6 @@ namespace WolvenKit.RED3.CR2W.Types
 
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CSectorDataObject(cr2w, parent, name);
-        }
-
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
         public override void Write(BinaryWriter file) => base.Write(file);

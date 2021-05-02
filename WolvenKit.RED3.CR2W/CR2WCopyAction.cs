@@ -5,6 +5,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.RED3.CR2W
@@ -103,9 +104,9 @@ namespace WolvenKit.RED3.CR2W
             {
                 SourceChunk = sourcechunk;
                 //Create the related chunk
-                var newchunk = (DestinationFile as CR2WFile).CreateChunk(
+                var newchunk = (DestinationFile as IRed3EngineFile).CreateChunk(
                         sourcechunk.data.REDType,
-                        (DestinationFile as CR2WFile).GetLastChildrenIndexRecursive(DestinationChunk) + 1);
+                        (DestinationFile as IRed3EngineFile).GetLastChildrenIndexRecursive(DestinationChunk) + 1);
 
                 if (!chunkTranslation.ContainsKey(sourcechunk))
                 {
@@ -222,10 +223,10 @@ namespace WolvenKit.RED3.CR2W
             Parent = null;
             foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
             {
-                var newchunk = (DestinationFile as CR2WFile).CreateChunk(
+                var newchunk = (DestinationFile as IRed3EngineFile).CreateChunk(
                     sourcevirtualchildchunk.data.REDType,
                     inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
-                            : (destinationchunk.data.Cr2wFile as CR2WFile).GetLastChildrenIndexRecursive(destinationchunk) + 1);
+                            : (destinationchunk.data.Cr2wFile as IRed3EngineFile).GetLastChildrenIndexRecursive(destinationchunk) + 1);
 
                 if (!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
                 {

@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -36,11 +37,6 @@ namespace WolvenKit.RED3.CR2W.Types
                 dz = new CFloat(cr2w, this, "dz"),
                 dw = new CFloat(cr2w, this, "dw")
             };
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CMatrix4x4(cr2w, parent, name);
         }
 
         public override List<IEditableVariable> GetEditableVariables()

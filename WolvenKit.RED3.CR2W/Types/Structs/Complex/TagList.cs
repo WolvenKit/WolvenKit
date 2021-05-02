@@ -38,11 +38,6 @@ namespace WolvenKit.RED3.CR2W.Types
             }
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new TagList(cr2w, parent, name);
-        }
-
         public override void AddVariable(IEditableVariable var)
         {
             if (var is CName)

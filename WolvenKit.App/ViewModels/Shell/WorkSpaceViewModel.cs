@@ -14,6 +14,7 @@ using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
+using WolvenKit.Common;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor.Basic;

@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.RED3.CR2W.Types;
 using CR2WTypeManager = WolvenKit.RED3.CR2W.Types.CR2WTypeManager;
 using CVariable = WolvenKit.RED3.CR2W.Types.CVariable;
 

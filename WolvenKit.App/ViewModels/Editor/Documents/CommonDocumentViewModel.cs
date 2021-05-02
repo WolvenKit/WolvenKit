@@ -131,12 +131,13 @@ namespace WolvenKit.ViewModels.Editor
                 // switch between cr2wfiles and others (e.g. srt)
                 if (Path.GetExtension(filename) == ".srt")
                 {
-                    File = new Srtfile()
-                    {
-                        FileName = filename
-                    };
-                    errorcode = await File.Read(reader);
-                    RaisePropertyChanged(nameof(File));
+                    //File = new Srtfile()
+                    //{
+                    //    FileName = filename
+                    //};
+                    //errorcode = await File.Read(reader);
+                    //RaisePropertyChanged(nameof(File));
+                    errorcode = EFileReadErrorCodes.NoCr2w;
                 }
                 else
                 {

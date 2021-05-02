@@ -1,14 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Common.Model.Cr2w;
 
-namespace WolvenKit.RED3.CR2W.Types
+namespace WolvenKit.Interfaces.RED3
 {
-    
+    public interface ILocalizedString
+    {
+
+    }
 
     public interface IPtrAccessor : IChunkPtrAccessor
     {

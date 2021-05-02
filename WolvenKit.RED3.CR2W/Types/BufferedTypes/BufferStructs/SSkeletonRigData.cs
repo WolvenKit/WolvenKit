@@ -24,13 +24,6 @@ namespace WolvenKit.RED3.CR2W.Types
         }
 
 
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SSkeletonRigData(cr2w, parent, name);
-        }
-
-
         public override string ToString()
         {
             return $"[{Position.ToString()}, {Rotation.ToString()}, {Scale.ToString()}]";

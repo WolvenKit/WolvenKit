@@ -124,6 +124,7 @@ namespace WolvenKit.W3Speech
         public LanguageSpecificID id { get; set; }
 
         public UInt32 id_high { get; set; }
+        public string ArchiveName { get; set; }
         public string Name { get; set; }
 
         public long PageOffset { get; set; }
@@ -211,6 +212,7 @@ namespace WolvenKit.W3Speech
         /// </summary>
         public W3LanguageKey language_key { get; set; }
 
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
         public EArchiveType TypeName => EArchiveType.Speech;
 
         /// <summary>

@@ -11,10 +11,12 @@ using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
 using Newtonsoft.Json;
+using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77Tools.Tasks

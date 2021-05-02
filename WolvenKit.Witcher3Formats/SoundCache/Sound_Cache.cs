@@ -70,6 +70,7 @@ namespace WolvenKit.Wwise
         #region Properties
 
         public string ArchiveAbsolutePath { get; set; }
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
         public EArchiveType TypeName => EArchiveType.SoundCache;
 
         #endregion Properties

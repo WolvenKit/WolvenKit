@@ -87,11 +87,6 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SVector3D(cr2w, parent, name);
-        }
-
         public override string ToString()
         {
             return String.Format(CultureInfo.InvariantCulture, "V3[{0:0.00}, {1:0.00}, {2:0.00}]", X.val, Y.val, Z.val);

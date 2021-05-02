@@ -10,6 +10,7 @@ using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Extensions;
 using Luna.ConsoleProgressBar;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools

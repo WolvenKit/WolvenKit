@@ -58,7 +58,7 @@ namespace WolvenKit.RED3.CR2W.Types
         /// Initialise a new instance of the CDateTime object using a .NET <see cref="System.DateTime"/> object.
         /// </summary>
         /// <param name="value"></param>
-        public CDateTime(DateTime value, CVariable parent, string name, CR2WFile cr2w = null) : base(cr2w, parent, name)
+        public CDateTime(DateTime value, CVariable parent, string name, IRed3EngineFile cr2w = null) : base(cr2w, parent, name)
         {
             m_value = value;
         }
@@ -68,7 +68,7 @@ namespace WolvenKit.RED3.CR2W.Types
         /// If the value is formatted incorrectly, Min value will be used.
         /// </summary>
         /// <param name="value">A formatted UInt64 representing a datetime value.</param>
-        public CDateTime(UInt64 value, CVariable parent, string name, CR2WFile cr2w = null) : base(cr2w, parent, name)
+        public CDateTime(UInt64 value, CVariable parent, string name, IRed3EngineFile cr2w = null) : base(cr2w, parent, name)
         {
             TryParse(this, value);
         }
@@ -200,7 +200,7 @@ namespace WolvenKit.RED3.CR2W.Types
             file.Write(this.ToUInt64());
         }
 
-        //public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name)
+        //
         //{
         //    return new CDateTime(cr2w, parent, name);
         //}

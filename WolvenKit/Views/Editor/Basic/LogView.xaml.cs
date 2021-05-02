@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using Catel.Logging;
 using ControlzEx.Theming;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 

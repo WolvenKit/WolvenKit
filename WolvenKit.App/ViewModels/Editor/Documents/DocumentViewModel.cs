@@ -329,11 +329,12 @@ namespace WolvenKit.ViewModels.Editor
 
                     if (Path.GetExtension(path) == ".srt")
                     {
-                        File = new Srtfile()
-                        {
-                            FileName = path
-                        };
-                        errorcode = await File.Read(reader);
+                        //File = new Srtfile()
+                        //{
+                        //    FileName = path
+                        //};
+                        //errorcode = await File.Read(reader);
+
                     }
                     else
                     {
