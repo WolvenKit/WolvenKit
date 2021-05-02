@@ -233,6 +233,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hudRedLineAnimation, value);
 		}
 
-		public vehicleInteriorUIGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public vehicleInteriorUIGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

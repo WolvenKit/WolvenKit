@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldEditorDebugFilterSettings : ISerializable
 	{
 
-		public worldEditorDebugFilterSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldEditorDebugFilterSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _healthbar, value);
 		}
 
-		public GodModeStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public GodModeStatListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

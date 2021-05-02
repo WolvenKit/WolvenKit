@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ProjectileTickEvent : gameTickableEvent
 	{
 
-		public ProjectileTickEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ProjectileTickEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

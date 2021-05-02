@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class IsInVehicle : AIVehicleConditionAbstract
 	{
 
-		public IsInVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public IsInVehicle(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

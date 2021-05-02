@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class RenderProxyCustomData_Garment : IRenderProxyCustomData
 	{
 
-		public RenderProxyCustomData_Garment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public RenderProxyCustomData_Garment(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

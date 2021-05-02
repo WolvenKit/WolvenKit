@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldTrafficLanesSpotsResource_ : resStreamedResource
 	{
 
-		public worldTrafficLanesSpotsResource_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldTrafficLanesSpotsResource_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

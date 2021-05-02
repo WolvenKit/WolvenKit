@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class GoToFloor : ActionBool
 	{
 
-		public GoToFloor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public GoToFloor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

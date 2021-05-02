@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class entSkinningBinding : entISourceBinding
 	{
 
-		public entSkinningBinding(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entSkinningBinding(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

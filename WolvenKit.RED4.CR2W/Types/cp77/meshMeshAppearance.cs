@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tags, value);
 		}
 
-		public meshMeshAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public meshMeshAppearance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

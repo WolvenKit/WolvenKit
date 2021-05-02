@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _objectThatNoticed, value);
 		}
 
-		public OnBeingNoticed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public OnBeingNoticed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameEffectExecutor_PhysicalImpulseFromInstigator : gameEffectExecutor
 	{
 
-		public gameEffectExecutor_PhysicalImpulseFromInstigator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameEffectExecutor_PhysicalImpulseFromInstigator(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

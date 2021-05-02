@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class RenderProxyCustomData_MiscMeshParams : IRenderProxyCustomData
 	{
 
-		public RenderProxyCustomData_MiscMeshParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public RenderProxyCustomData_MiscMeshParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

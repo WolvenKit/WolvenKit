@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _requestingDevice, value);
 		}
 
-		public HighlightConnectionsRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public HighlightConnectionsRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _text, value);
 		}
 
-		public LabeledCursorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LabeledCursorData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

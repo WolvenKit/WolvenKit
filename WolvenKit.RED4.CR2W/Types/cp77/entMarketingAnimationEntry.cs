@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frame, value);
 		}
 
-		public entMarketingAnimationEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entMarketingAnimationEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

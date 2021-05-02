@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameInventoryListenerData_Base : CVariable
 	{
 
-		public gameInventoryListenerData_Base(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameInventoryListenerData_Base(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

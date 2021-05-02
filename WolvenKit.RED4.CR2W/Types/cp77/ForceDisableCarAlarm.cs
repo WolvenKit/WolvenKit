@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ForceDisableCarAlarm : ActionBool
 	{
 
-		public ForceDisableCarAlarm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ForceDisableCarAlarm(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

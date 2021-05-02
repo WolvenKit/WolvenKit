@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _idleControlCameraMs, value);
 		}
 
-		public scnfppGenderSpecificParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnfppGenderSpecificParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

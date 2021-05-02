@@ -98,6 +98,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _onEndLoop, value);
 		}
 
-		public SWidgetAnimationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SWidgetAnimationData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

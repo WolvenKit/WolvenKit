@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animLookAtParams_Remove : ISerializable
 	{
 
-		public animLookAtParams_Remove(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animLookAtParams_Remove(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

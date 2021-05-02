@@ -215,6 +215,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugQueryNumber, value);
 		}
 
-		public NetworkSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public NetworkSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkMenuLogicController : inkWidgetLogicController
 	{
 
-		public inkMenuLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkMenuLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

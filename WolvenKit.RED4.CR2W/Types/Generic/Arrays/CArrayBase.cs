@@ -15,11 +15,10 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
-    [Editor(typeof(ICollectionEditor), typeof(IPropertyEditorBase))]
     [REDMeta()]
     public abstract class CArrayBase<T> : CVariable, IArrayAccessor<T>, IList<T> where T : IEditableVariable
     {
-        public CArrayBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CArrayBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         #region Properties
         public List<T> Elements { get; set; } = new List<T>();

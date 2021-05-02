@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SetPendingReactionBB : StatusEffectTasks
 	{
 
-		public SetPendingReactionBB(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SetPendingReactionBB(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AICTreeInstance : CVariable
 	{
 
-		public AICTreeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AICTreeInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -89,6 +89,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dismembermentStrenght, value);
 		}
 
-		public questCharacterManagerCombat_Kill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questCharacterManagerCombat_Kill(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

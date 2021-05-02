@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIUtilsCombatSpaceHelper : CVariable
 	{
 
-		public AIUtilsCombatSpaceHelper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIUtilsCombatSpaceHelper(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

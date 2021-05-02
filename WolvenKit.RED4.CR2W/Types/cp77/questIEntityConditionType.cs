@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questIEntityConditionType : questIConditionType
 	{
 
-		public questIEntityConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questIEntityConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

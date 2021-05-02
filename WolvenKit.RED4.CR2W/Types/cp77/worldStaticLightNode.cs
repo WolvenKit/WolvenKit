@@ -422,6 +422,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _autoHideDistance, value);
 		}
 
-		public worldStaticLightNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldStaticLightNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

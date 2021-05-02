@@ -107,6 +107,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _upload_program_listener_id, value);
 		}
 
-		public AccessPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AccessPoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sensorObjectType, value);
 		}
 
-		public senseSensorObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public senseSensorObject(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

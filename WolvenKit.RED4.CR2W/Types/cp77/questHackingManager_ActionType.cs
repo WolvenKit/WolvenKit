@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questHackingManager_ActionType : ISerializable
 	{
 
-		public questHackingManager_ActionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questHackingManager_ActionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

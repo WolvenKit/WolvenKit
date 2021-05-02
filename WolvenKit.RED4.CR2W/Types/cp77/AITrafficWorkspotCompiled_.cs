@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AITrafficWorkspotCompiled_ : worldTrafficSpotCompiled
 	{
 
-		public AITrafficWorkspotCompiled_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AITrafficWorkspotCompiled_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

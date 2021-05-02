@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DisposeBody : ActionDisposal
 	{
 
-		public DisposeBody(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DisposeBody(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

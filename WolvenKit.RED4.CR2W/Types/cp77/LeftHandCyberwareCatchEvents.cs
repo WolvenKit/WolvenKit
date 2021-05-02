@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LeftHandCyberwareCatchEvents : LeftHandCyberwareEventsTransition
 	{
 
-		public LeftHandCyberwareCatchEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LeftHandCyberwareCatchEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

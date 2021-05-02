@@ -188,6 +188,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _collectionCountText, value);
 		}
 
-		public WorldMapTooltipController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public WorldMapTooltipController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

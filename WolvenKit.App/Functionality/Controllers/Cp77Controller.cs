@@ -156,28 +156,30 @@ namespace WolvenKit.Functionality.Controllers
             logger.Info("Loading archive Manager ... ");
             try
             {
-                var chachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive_cache.json");
+                var chachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive_cache.bin");
                 if (File.Exists(chachePath))
                 {
                     using var file = File.OpenText(chachePath);
-                    var serializer = new JsonSerializer
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        TypeNameHandling = TypeNameHandling.Auto
-                    };
-                    ArchiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
+                    //var serializer = new JsonSerializer
+                    //{
+                    //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    //    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                    //    TypeNameHandling = TypeNameHandling.Auto
+                    //};
+                    //ArchiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
+
                 }
                 else
                 {
                     ArchiveManager = new ArchiveManager();
                     ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
-                    File.WriteAllText(chachePath, JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        TypeNameHandling = TypeNameHandling.Auto
-                    }));
+                    //File.WriteAllText(chachePath, JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
+                    //{
+                    //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    //    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                    //    TypeNameHandling = TypeNameHandling.Auto
+                    //}));
+
                     settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
                 }
             }

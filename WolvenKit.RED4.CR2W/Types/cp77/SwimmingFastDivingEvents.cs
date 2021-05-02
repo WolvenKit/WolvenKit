@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lapsedTime, value);
 		}
 
-		public SwimmingFastDivingEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SwimmingFastDivingEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

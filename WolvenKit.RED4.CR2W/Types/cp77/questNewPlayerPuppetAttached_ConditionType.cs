@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questNewPlayerPuppetAttached_ConditionType : questISceneConditionType
 	{
 
-		public questNewPlayerPuppetAttached_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questNewPlayerPuppetAttached_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

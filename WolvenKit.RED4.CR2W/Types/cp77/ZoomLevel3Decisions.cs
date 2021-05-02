@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ZoomLevel3Decisions : ZoomDecisionsTransition
 	{
 
-		public ZoomLevel3Decisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ZoomLevel3Decisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

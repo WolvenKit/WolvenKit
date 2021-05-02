@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _perkType, value);
 		}
 
-		public RemovePerk(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public RemovePerk(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class BurstEvents : WeaponEventsTransition
 	{
 
-		public BurstEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public BurstEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

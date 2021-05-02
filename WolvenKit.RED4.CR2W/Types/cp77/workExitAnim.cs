@@ -89,6 +89,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disableRandomExit, value);
 		}
 
-		public workExitAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public workExitAnim(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

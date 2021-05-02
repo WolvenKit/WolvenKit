@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using Catel.IoC;
+using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Model.Cr2w;
@@ -13,10 +14,9 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta]
-    [Editor(typeof(IEnumEditor), typeof(IPropertyEditorBase))]
     public class CEnum<T> : CVariable, IEnumAccessor<T> where T : Enum
     {
-        public CEnum(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CEnum(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         private T _value;

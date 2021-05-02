@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class TestFalseConditon : workIScriptedCondition
 	{
 
-		public TestFalseConditon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public TestFalseConditon(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questIEntityManagerSetDestructionState_NodeSubType : questIEntityManager_NodeSubType
 	{
 
-		public questIEntityManagerSetDestructionState_NodeSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questIEntityManagerSetDestructionState_NodeSubType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

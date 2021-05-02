@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cycle_out, value);
 		}
 
-		public RadialAnimData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public RadialAnimData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

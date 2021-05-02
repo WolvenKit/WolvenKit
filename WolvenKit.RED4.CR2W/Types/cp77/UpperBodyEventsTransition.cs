@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _counter, value);
 		}
 
-		public UpperBodyEventsTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public UpperBodyEventsTransition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

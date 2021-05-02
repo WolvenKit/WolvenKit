@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameStatusEffectComponent : gameComponent
 	{
 
-		public gameStatusEffectComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameStatusEffectComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

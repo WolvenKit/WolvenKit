@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkScreenProjectionCallback : inkCallbackBase
 	{
 
-		public inkScreenProjectionCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkScreenProjectionCallback(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

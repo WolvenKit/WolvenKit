@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DriveDecisions : VehicleTransition
 	{
 
-		public DriveDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DriveDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

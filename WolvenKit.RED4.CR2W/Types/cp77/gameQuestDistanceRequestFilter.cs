@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _distanceSquared, value);
 		}
 
-		public gameQuestDistanceRequestFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameQuestDistanceRequestFilter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

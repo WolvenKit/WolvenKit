@@ -31,10 +31,11 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0020" />
 		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0020" />
+		<PackageReference Include="ZeroFormatter" Version="1.6.4" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+		<ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _compiledGeometryBuffer, value);
 		}
 
-		public physicsColliderMesh_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public physicsColliderMesh_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _indices, value);
 		}
 
-		public GeometryShapeFace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public GeometryShapeFace(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

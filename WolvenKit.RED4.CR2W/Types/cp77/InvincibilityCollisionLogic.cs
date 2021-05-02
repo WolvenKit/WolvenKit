@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class InvincibilityCollisionLogic : BonusCollisionLogic
 	{
 
-		public InvincibilityCollisionLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public InvincibilityCollisionLogic(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

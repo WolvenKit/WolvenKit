@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _margin, value);
 		}
 
-		public gamePopupSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamePopupSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

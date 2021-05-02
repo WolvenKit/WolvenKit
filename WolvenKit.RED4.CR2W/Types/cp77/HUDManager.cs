@@ -413,6 +413,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousStickInput, value);
 		}
 
-		public HUDManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public HUDManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class EquipmentBaseTransition : DefaultTransition
 	{
 
-		public EquipmentBaseTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public EquipmentBaseTransition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

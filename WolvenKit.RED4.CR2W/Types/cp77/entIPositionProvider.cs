@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class entIPositionProvider : IScriptable
 	{
 
-		public entIPositionProvider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entIPositionProvider(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

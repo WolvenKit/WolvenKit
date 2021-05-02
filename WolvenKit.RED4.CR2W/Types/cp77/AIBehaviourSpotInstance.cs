@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIBehaviourSpotInstance : AISmartSpotInstance
 	{
 
-		public AIBehaviourSpotInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIBehaviourSpotInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

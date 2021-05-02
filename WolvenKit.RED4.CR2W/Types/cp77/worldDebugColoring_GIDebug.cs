@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gITransparentColor, value);
 		}
 
-		public worldDebugColoring_GIDebug(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldDebugColoring_GIDebug(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

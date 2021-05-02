@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MenuScenario_ClippedMenu : inkMenuScenario
 	{
 
-		public MenuScenario_ClippedMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MenuScenario_ClippedMenu(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

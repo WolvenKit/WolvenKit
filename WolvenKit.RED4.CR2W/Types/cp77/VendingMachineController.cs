@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class VendingMachineController : ScriptableDC
 	{
 
-		public VendingMachineController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public VendingMachineController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

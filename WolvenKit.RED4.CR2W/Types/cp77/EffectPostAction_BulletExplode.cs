@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class EffectPostAction_BulletExplode : gameEffectPostAction_Scripted
 	{
 
-		public EffectPostAction_BulletExplode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public EffectPostAction_BulletExplode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

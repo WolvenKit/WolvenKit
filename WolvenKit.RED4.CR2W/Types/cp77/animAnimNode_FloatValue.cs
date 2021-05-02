@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animAnimNode_FloatValue : animAnimNode_Base
 	{
 
-		public animAnimNode_FloatValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimNode_FloatValue(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

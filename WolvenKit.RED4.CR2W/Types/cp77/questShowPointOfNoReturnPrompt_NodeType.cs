@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questShowPointOfNoReturnPrompt_NodeType : questIUIManagerNodeType
 	{
 
-		public questShowPointOfNoReturnPrompt_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questShowPointOfNoReturnPrompt_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

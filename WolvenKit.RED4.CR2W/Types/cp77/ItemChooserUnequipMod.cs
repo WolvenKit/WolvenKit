@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _slotID, value);
 		}
 
-		public ItemChooserUnequipMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ItemChooserUnequipMod(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

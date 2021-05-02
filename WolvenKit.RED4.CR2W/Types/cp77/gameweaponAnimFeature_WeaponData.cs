@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isTriggerDown, value);
 		}
 
-		public gameweaponAnimFeature_WeaponData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameweaponAnimFeature_WeaponData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

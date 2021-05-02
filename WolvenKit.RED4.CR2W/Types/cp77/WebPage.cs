@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hOME_TEXT_NAME, value);
 		}
 
-		public WebPage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public WebPage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

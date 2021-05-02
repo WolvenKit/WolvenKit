@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+    <ItemGroup>
+        
+        <PackageReference Include="FastMember" Version="1.5.0" />
+        <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
+
+    </ItemGroup>
+
+</Project>

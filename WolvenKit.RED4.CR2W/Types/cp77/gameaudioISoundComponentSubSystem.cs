@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameaudioISoundComponentSubSystem : gameaudioIAudioSubSystem
 	{
 
-		public gameaudioISoundComponentSubSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameaudioISoundComponentSubSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataVehicleFxWheelsDecalsMaterial_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataVehicleFxWheelsDecalsMaterial_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataVehicleFxWheelsDecalsMaterial_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

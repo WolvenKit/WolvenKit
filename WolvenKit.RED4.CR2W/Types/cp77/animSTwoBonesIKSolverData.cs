@@ -197,6 +197,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _joint_bend_dir_in_lower_s_BS, value);
 		}
 
-		public animSTwoBonesIKSolverData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animSTwoBonesIKSolverData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataDeviceAreaAttack_Record : gamedataAttack_GameEffect_Record
 	{
 
-		public gamedataDeviceAreaAttack_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataDeviceAreaAttack_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mesh4, value);
 		}
 
-		public VirtualItem_TEMP(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public VirtualItem_TEMP(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -188,6 +188,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bbLastAttemptedChoiceCallbackId, value);
 		}
 
-		public interactionWidgetGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public interactionWidgetGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

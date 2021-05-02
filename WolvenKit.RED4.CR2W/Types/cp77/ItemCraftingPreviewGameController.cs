@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ItemCraftingPreviewGameController : gameuiItemPreviewGameController
 	{
 
-		public ItemCraftingPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ItemCraftingPreviewGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

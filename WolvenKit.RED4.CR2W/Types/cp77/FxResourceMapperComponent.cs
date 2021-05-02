@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dEBUG_copiedDataFromFXStruct, value);
 		}
 
-		public FxResourceMapperComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public FxResourceMapperComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

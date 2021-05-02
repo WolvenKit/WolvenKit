@@ -98,6 +98,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _startStateFromBreath, value);
 		}
 
-		public audioBreathingTemporaryStateMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public audioBreathingTemporaryStateMetadata(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -350,6 +350,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isDead, value);
 		}
 
-		public gameObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameObject(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

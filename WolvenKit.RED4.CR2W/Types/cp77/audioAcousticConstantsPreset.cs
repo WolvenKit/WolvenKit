@@ -170,6 +170,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxWindowOffset, value);
 		}
 
-		public audioAcousticConstantsPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public audioAcousticConstantsPreset(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

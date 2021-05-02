@@ -233,6 +233,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isOptional, value);
 		}
 
-		public ObjectiveEntryLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ObjectiveEntryLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

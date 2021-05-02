@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ProjectileLauncherRoundBreachEvent : redEvent
 	{
 
-		public ProjectileLauncherRoundBreachEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ProjectileLauncherRoundBreachEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

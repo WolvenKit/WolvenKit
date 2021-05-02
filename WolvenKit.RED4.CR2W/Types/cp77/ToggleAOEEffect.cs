@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ToggleAOEEffect : ActionBool
 	{
 
-		public ToggleAOEEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ToggleAOEEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

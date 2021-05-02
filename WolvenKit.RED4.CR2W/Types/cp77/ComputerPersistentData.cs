@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openedFolderIDX, value);
 		}
 
-		public ComputerPersistentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ComputerPersistentData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

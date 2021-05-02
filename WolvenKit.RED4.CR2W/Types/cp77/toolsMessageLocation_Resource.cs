@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _path, value);
 		}
 
-		public toolsMessageLocation_Resource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public toolsMessageLocation_Resource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

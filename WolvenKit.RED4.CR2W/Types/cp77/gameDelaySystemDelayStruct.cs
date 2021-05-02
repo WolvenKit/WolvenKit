@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameDelaySystemDelayStruct : ISerializable
 	{
 
-		public gameDelaySystemDelayStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameDelaySystemDelayStruct(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LeftHandCyberwareChargeDecisions : LeftHandCyberwareTransition
 	{
 
-		public LeftHandCyberwareChargeDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LeftHandCyberwareChargeDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

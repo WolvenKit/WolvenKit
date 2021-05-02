@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _boneRotationLs, value);
 		}
 
-		public animCompareBone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animCompareBone(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

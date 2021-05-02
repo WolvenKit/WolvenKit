@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class effectExposureScalePlayData : effectPlacedTrackItemPlayData
 	{
 
-		public effectExposureScalePlayData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public effectExposureScalePlayData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

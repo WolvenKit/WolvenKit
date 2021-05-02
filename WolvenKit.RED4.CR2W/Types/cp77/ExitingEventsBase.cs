@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ExitingEventsBase : VehicleEventsTransition
 	{
 
-		public ExitingEventsBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ExitingEventsBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

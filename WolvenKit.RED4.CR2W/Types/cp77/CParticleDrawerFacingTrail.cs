@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CParticleDrawerFacingTrail : CParticleDrawerTrail
 	{
 
-		public CParticleDrawerFacingTrail(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CParticleDrawerFacingTrail(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

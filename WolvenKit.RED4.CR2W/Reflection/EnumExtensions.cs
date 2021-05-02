@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.RED4.CR2W.Reflection
@@ -31,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Reflection
         /// <param name="enumType">The enum type to convert to.</param>
         /// <param name="names">The collection of CNames</param>
         /// <returns>The Enum value</returns>
-        public static object ConvertToEnum(Type enumType, IEnumerable<CName> names)
+        public static object ConvertToEnum(Type enumType, IEnumerable<IREDString> names)
         {
             if (!enumType.IsEnum)
             {
@@ -39,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Reflection
             }
             try
             {
-                var enumString = String.Join<CName>(", ", names);
+                var enumString = String.Join<IREDString>(", ", names);
                 return Enum.Parse(enumType, enumString);
             }
             catch

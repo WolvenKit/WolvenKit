@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DodgeReactionTask : AIbehaviortaskScript
 	{
 
-		public DodgeReactionTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DodgeReactionTask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

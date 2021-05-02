@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _metalLevelsOut, value);
 		}
 
-		public Multilayer_LayerOverrideSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Multilayer_LayerOverrideSelection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

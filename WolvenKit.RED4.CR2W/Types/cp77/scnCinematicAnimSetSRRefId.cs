@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class scnCinematicAnimSetSRRefId : scnSRRefId
 	{
 
-		public scnCinematicAnimSetSRRefId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnCinematicAnimSetSRRefId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

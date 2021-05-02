@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LeftHandCyberwareQuickActionDecisions : LeftHandCyberwareActionAbstractDecisions
 	{
 
-		public LeftHandCyberwareQuickActionDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LeftHandCyberwareQuickActionDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

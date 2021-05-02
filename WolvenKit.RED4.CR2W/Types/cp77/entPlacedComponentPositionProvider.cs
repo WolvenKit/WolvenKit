@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class entPlacedComponentPositionProvider : entIPositionProvider
 	{
 
-		public entPlacedComponentPositionProvider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entPlacedComponentPositionProvider(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

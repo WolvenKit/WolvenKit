@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MenuScenario_BoothMode : MenuScenario_PreGameSubMenu
 	{
 
-		public MenuScenario_BoothMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MenuScenario_BoothMode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

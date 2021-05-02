@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animIKTargetParams_Update : ISerializable
 	{
 
-		public animIKTargetParams_Update(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animIKTargetParams_Update(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

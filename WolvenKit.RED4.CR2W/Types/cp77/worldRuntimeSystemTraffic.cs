@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldRuntimeSystemTraffic : worldIRuntimeSystem
 	{
 
-		public worldRuntimeSystemTraffic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldRuntimeSystemTraffic(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

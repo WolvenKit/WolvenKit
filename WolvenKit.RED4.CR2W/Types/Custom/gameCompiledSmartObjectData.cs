@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unknown4, value);
         }
 
-        public gameCompiledSmartObjectData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public gameCompiledSmartObjectData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {

@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _cookedDeviceData, value);
         }
 
-        public gameDeviceResourceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public gameDeviceResourceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             CookedDeviceData = CR2WTypeManager.Create("array:gameCookedDeviceDataCompressed",
                 nameof(CookedDeviceData), cr2w, this) as CArray<gameCookedDeviceDataCompressed>;
@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _nodePosition, value);
         }
 
-        public gameCookedDeviceDataCompressed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public gameCookedDeviceDataCompressed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Parents = new CArrayCompressed<CUInt64>(cr2w, this, nameof(Parents)) { IsSerialized = true };
             Children = new CArrayCompressed<CUInt64>(cr2w, this, nameof(Children)) { IsSerialized = true };

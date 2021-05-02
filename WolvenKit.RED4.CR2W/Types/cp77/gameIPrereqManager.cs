@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameIPrereqManager : gameIGameSystem
 	{
 
-		public gameIPrereqManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameIPrereqManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

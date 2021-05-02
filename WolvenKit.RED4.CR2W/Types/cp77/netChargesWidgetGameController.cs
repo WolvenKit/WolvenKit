@@ -125,6 +125,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _chargeList, value);
 		}
 
-		public netChargesWidgetGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public netChargesWidgetGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

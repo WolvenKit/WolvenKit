@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ActionHacking : ActionSkillCheck
 	{
 
-		public ActionHacking(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ActionHacking(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

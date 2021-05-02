@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamemappinsInteractionMappin : gamemappinsRuntimeMappin
 	{
 
-		public gamemappinsInteractionMappin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamemappinsInteractionMappin(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

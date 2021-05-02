@@ -16,6 +16,6 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _segmentEndNodeId, value);
         }
 
-        public animAnimNode_ConditionalSegmentBegin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public animAnimNode_ConditionalSegmentBegin(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

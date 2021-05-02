@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIRole : IScriptable
 	{
 
-		public AIRole(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIRole(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

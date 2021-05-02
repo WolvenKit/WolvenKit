@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class lookAtPresetGunBaseDecisions : LookAtPresetBaseDecisions
 	{
 
-		public lookAtPresetGunBaseDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public lookAtPresetGunBaseDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

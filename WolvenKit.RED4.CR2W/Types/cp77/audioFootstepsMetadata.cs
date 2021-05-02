@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _onExitSound, value);
 		}
 
-		public audioFootstepsMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public audioFootstepsMetadata(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class EffectPreAction_PreAttack_WithFriendlyFire : EffectPreAction_PreAttack
 	{
 
-		public EffectPreAction_PreAttack_WithFriendlyFire(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public EffectPreAction_PreAttack_WithFriendlyFire(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ScriptableDC : gameDeviceComponent
 	{
 
-		public ScriptableDC(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ScriptableDC(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _target, value);
 		}
 
-		public AIQuickHackAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIQuickHackAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

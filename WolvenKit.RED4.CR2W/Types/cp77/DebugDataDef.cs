@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vehicle_BlockSwitchSeats, value);
 		}
 
-		public DebugDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DebugDataDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

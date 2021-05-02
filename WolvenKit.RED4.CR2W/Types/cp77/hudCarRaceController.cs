@@ -125,6 +125,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _factCallbackID, value);
 		}
 
-		public hudCarRaceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public hudCarRaceController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

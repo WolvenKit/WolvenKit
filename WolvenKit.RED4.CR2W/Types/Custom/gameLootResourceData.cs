@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _values, value);
         }
 
-        public gameLootResourceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public gameLootResourceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Values = new CArrayCompressed<CookedLootData>(cr2w, this, nameof(Values)) {IsSerialized = true};
         }
@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.CR2W.Types
         private CArrayVLQInt32<TweakDBID> _lootTableIds;
         private TweakDBID _contentAssignment;
 
-        public CookedLootData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CookedLootData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Key.IsSerialized = true;
             LootTableIds.IsSerialized = true;

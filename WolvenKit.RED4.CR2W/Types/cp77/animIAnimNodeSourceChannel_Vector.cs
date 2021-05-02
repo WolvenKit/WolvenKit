@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animIAnimNodeSourceChannel_Vector : ISerializable
 	{
 
-		public animIAnimNodeSourceChannel_Vector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animIAnimNodeSourceChannel_Vector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

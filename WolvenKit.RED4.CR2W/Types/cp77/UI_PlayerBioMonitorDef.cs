@@ -89,6 +89,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _memoryPercent, value);
 		}
 
-		public UI_PlayerBioMonitorDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public UI_PlayerBioMonitorDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitShapeType, value);
 		}
 
-		public HitData_Base(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public HitData_Base(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataId, value);
 		}
 
-		public scnWorkspotData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnWorkspotData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

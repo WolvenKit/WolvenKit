@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DispenseFreeItem : redEvent
 	{
 
-		public DispenseFreeItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DispenseFreeItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

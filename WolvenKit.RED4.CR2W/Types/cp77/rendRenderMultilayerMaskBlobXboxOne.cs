@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class rendRenderMultilayerMaskBlobXboxOne : rendRenderMultilayerMaskBlob
 	{
 
-		public rendRenderMultilayerMaskBlobXboxOne(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public rendRenderMultilayerMaskBlobXboxOne(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

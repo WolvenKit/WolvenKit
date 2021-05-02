@@ -152,6 +152,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stopSnapToTerrainBlendTime, value);
 		}
 
-		public AICTreeNodeActionAnimationCurvePathDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AICTreeNodeActionAnimationCurvePathDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

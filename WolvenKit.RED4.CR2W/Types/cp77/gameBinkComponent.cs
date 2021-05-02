@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isEnabled, value);
 		}
 
-		public gameBinkComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameBinkComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

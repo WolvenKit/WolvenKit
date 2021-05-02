@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CRenderTerrainCellCollector : ISceneStorageCustomData
 	{
 
-		public CRenderTerrainCellCollector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CRenderTerrainCellCollector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

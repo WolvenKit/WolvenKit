@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultColor, value);
 		}
 
-		public worldDebugColoring_Device(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldDebugColoring_Device(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

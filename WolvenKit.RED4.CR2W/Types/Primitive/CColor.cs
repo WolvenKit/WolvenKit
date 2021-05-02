@@ -7,11 +7,10 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
-    [Editor(typeof(IColorEditor), typeof(IPropertyEditorBase))]
     [REDMeta()]
     public class CColor : CColor_, IREDColor
     {
-        public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CColor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public Color Value
         {

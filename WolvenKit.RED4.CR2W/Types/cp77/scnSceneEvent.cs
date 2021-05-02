@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scalingData, value);
 		}
 
-		public scnSceneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnSceneEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

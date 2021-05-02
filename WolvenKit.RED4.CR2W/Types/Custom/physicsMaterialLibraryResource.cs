@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _resourceHandles, value);
         }
 
-        public physicsMaterialLibraryResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public physicsMaterialLibraryResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             ResourceHandles = new CArrayCompressed<CHandle<physicsMaterialResource>>(cr2w, this, nameof(ResourceHandles))
                 { IsSerialized = true };

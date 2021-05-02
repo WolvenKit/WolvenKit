@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animAnimNodeSourceChannel_SocketQuat : animIAnimNodeSourceChannel_Quat
 	{
 
-		public animAnimNodeSourceChannel_SocketQuat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimNodeSourceChannel_SocketQuat(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _position, value);
 		}
 
-		public interopTerrainImportedTile(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public interopTerrainImportedTile(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

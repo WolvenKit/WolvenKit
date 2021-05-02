@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameprojectileAcceleratedMovementEvent : gameprojectileLinearMovementEvent
 	{
 
-		public gameprojectileAcceleratedMovementEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameprojectileAcceleratedMovementEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

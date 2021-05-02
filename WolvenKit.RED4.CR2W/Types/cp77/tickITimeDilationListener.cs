@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class tickITimeDilationListener : IScriptable
 	{
 
-		public tickITimeDilationListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public tickITimeDilationListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

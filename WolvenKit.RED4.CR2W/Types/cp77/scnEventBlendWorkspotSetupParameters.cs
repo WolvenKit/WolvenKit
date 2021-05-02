@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemOverride, value);
 		}
 
-		public scnEventBlendWorkspotSetupParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnEventBlendWorkspotSetupParameters(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

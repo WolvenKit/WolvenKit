@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataMappinUIRuntimeProfile_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataMappinUIRuntimeProfile_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataMappinUIRuntimeProfile_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

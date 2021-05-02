@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SortComparatorTemplate : IScriptable
 	{
 
-		public SortComparatorTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SortComparatorTemplate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

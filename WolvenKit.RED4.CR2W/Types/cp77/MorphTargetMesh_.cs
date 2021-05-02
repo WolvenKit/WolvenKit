@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _baseTexture, value);
 		}
 
-		public MorphTargetMesh_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MorphTargetMesh_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

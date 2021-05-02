@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class Sample_Class_2_16_0 : ISerializable
 	{
 
-		public Sample_Class_2_16_0(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Sample_Class_2_16_0(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -179,6 +179,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _streamingDistance, value);
 		}
 
-		public entRenderToTextureCameraComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entRenderToTextureCameraComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

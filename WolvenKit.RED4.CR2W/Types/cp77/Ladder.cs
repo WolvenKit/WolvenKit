@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class Ladder : InteractiveDevice
 	{
 
-		public Ladder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Ladder(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

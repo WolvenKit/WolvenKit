@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ActionsSequencer : InteractiveMasterDevice
 	{
 
-		public ActionsSequencer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ActionsSequencer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

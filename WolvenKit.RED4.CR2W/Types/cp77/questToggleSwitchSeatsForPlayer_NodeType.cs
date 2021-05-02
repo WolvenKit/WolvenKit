@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questToggleSwitchSeatsForPlayer_NodeType : questIVehicleManagerNodeType
 	{
 
-		public questToggleSwitchSeatsForPlayer_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questToggleSwitchSeatsForPlayer_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

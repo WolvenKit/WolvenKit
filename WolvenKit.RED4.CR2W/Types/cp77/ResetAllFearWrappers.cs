@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ResetAllFearWrappers : AIbehaviortaskScript
 	{
 
-		public ResetAllFearWrappers(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ResetAllFearWrappers(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

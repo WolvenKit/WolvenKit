@@ -9,7 +9,7 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public class CName : CVariable, IREDPrimitive
+    public class CName : CVariable, IREDString
     {
         public CName()
         {

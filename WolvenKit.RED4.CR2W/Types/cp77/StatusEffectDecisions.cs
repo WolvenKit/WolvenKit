@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class StatusEffectDecisions : LocomotionGroundDecisions
 	{
 
-		public StatusEffectDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public StatusEffectDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

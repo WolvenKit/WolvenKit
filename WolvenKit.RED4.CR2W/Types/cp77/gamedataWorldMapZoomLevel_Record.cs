@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataWorldMapZoomLevel_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataWorldMapZoomLevel_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataWorldMapZoomLevel_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

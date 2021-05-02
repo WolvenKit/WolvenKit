@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class HitIsBodyPartHeadPrereqState : GenericHitPrereqState
 	{
 
-		public HitIsBodyPartHeadPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public HitIsBodyPartHeadPrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

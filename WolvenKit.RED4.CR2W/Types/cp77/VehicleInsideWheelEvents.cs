@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class VehicleInsideWheelEvents : QuickSlotsHoldEvents
 	{
 
-		public VehicleInsideWheelEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public VehicleInsideWheelEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

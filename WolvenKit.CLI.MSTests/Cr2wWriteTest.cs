@@ -993,7 +993,7 @@ namespace CP77.MSTests
             sb.AppendLine(
                 $"{nameof(FileEntry.NameHash64)}," +
                 $"{nameof(FileEntry.FileName)}," +
-                $"{nameof(FileEntry.Archive)}," +
+                $"{nameof(FileEntry.ArchiveName)}," +
                 $"{nameof(WriteTestResult)}," +
                 $"{nameof(WriteTestResult.Success)}," +
                 //$"{nameof(WriteTestResult.HasIncorrectStringTable)}," +
@@ -1006,7 +1006,7 @@ namespace CP77.MSTests
                 sb.AppendLine(
                     $"{r.FileEntry.NameHash64}," +
                     $"{r.FileEntry.FileName}," +
-                    $"{Path.GetFileName(r.FileEntry.Archive.ArchiveAbsolutePath)}," +
+                    $"{r.FileEntry.ArchiveName}," +
                     $"{r.WriteResult}," +
                     $"{r.Success}," +
                     //$"{r.HasIncorrectStringTable}," +

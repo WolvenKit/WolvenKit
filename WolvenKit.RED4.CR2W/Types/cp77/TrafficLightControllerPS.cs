@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class TrafficLightControllerPS : ScriptableDeviceComponentPS
 	{
 
-		public TrafficLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public TrafficLightControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

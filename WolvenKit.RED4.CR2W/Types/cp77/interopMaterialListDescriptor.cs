@@ -107,6 +107,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _availableMaterials, value);
 		}
 
-		public interopMaterialListDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public interopMaterialListDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

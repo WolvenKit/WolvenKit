@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class TCSUpdate : gameScriptableSystemRequest
 	{
 
-		public TCSUpdate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public TCSUpdate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lookAtAxis, value);
 		}
 
-		public animDyngConstraintLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animDyngConstraintLink(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

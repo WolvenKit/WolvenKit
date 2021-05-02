@@ -125,6 +125,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _easeOut, value);
 		}
 
-		public scneventsPlayerLookAtEventParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scneventsPlayerLookAtEventParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

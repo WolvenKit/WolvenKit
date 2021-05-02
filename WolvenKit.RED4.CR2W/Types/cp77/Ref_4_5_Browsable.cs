@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class Ref_4_5_Browsable : Ref_4_5_Browsable_Base
 	{
 
-		public Ref_4_5_Browsable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Ref_4_5_Browsable(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

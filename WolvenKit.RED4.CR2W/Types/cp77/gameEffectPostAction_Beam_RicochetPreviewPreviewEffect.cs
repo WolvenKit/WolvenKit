@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forwardOffset, value);
 		}
 
-		public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataWorkspotStatusEffect_Record : gamedataStatusEffect_Record
 	{
 
-		public gamedataWorkspotStatusEffect_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataWorkspotStatusEffect_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

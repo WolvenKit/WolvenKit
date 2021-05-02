@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _movement, value);
 		}
 
-		public gameTransformAnimation_MoveOnSpline(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameTransformAnimation_MoveOnSpline(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

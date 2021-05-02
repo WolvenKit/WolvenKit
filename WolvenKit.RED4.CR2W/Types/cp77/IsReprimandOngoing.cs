@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class IsReprimandOngoing : AIAutonomousConditions
 	{
 
-		public IsReprimandOngoing(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public IsReprimandOngoing(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

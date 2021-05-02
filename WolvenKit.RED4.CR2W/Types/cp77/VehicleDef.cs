@@ -242,6 +242,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isTargetingFriendly, value);
 		}
 
-		public VehicleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public VehicleDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

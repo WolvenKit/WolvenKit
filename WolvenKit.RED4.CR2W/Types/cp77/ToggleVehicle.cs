@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ToggleVehicle : ActionBool
 	{
 
-		public ToggleVehicle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ToggleVehicle(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

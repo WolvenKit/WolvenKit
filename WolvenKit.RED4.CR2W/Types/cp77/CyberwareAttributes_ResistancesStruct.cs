@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _resistanceTooltip, value);
 		}
 
-		public CyberwareAttributes_ResistancesStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CyberwareAttributes_ResistancesStruct(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

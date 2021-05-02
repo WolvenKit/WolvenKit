@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class GAMEOBJECT_Actor : gameHudActor
 	{
 
-		public GAMEOBJECT_Actor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public GAMEOBJECT_Actor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

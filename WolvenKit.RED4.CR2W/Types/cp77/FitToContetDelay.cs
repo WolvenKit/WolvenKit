@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class FitToContetDelay : redEvent
 	{
 
-		public FitToContetDelay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public FitToContetDelay(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

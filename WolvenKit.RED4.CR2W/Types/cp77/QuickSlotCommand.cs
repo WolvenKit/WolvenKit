@@ -179,6 +179,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _interactiveActionOwner, value);
 		}
 
-		public QuickSlotCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public QuickSlotCommand(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

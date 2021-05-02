@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldWeatherAreaNotifierInstance : worldITriggerAreaNotiferInstance
 	{
 
-		public worldWeatherAreaNotifierInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldWeatherAreaNotifierInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

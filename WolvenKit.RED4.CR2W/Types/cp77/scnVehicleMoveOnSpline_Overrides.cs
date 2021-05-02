@@ -80,6 +80,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exitMarker, value);
 		}
 
-		public scnVehicleMoveOnSpline_Overrides(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnVehicleMoveOnSpline_Overrides(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

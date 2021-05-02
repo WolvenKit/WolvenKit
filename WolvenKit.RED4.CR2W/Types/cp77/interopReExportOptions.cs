@@ -296,6 +296,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _preferSmallProxiesTreshold, value);
 		}
 
-		public interopReExportOptions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public interopReExportOptions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

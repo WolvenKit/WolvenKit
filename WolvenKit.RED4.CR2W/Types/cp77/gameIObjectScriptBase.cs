@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameObject, value);
 		}
 
-		public gameIObjectScriptBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameIObjectScriptBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ownerEffect, value);
 		}
 
-		public ApplyShaderOnEquipmentEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ApplyShaderOnEquipmentEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

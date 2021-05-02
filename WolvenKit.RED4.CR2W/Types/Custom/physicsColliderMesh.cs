@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unk3, value);
         }
 
-        public physicsColliderMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public physicsColliderMesh(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
@@ -50,6 +50,6 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unk1, value);
         }
 
-        public physicsColliderMeshData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public physicsColliderMeshData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dyngConstraint, value);
 		}
 
-		public animDangleConstraint_SimulationDyng_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animDangleConstraint_SimulationDyng_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

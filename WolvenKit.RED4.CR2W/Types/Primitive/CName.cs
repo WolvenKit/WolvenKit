@@ -11,10 +11,9 @@ using WolvenKit.Common.Services;
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta()]
-    [Editor(typeof(INameEditor), typeof(IPropertyEditorBase))]
     public class CName : CVariable, IREDString
     {
-        public CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CName(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Value = "";
         }

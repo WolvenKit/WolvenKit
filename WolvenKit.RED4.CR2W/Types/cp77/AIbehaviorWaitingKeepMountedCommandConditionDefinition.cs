@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIbehaviorWaitingKeepMountedCommandConditionDefinition : AIbehaviorConditionDefinition
 	{
 
-		public AIbehaviorWaitingKeepMountedCommandConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIbehaviorWaitingKeepMountedCommandConditionDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

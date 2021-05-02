@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CheckHitReactionStimID : CheckStimID
 	{
 
-		public CheckHitReactionStimID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CheckHitReactionStimID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

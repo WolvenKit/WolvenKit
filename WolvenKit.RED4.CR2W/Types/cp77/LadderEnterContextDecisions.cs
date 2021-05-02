@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LadderEnterContextDecisions : InputContextTransitionDecisions
 	{
 
-		public LadderEnterContextDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LadderEnterContextDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

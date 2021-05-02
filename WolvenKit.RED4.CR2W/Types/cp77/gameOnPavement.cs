@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameOnPavement : redEvent
 	{
 
-		public gameOnPavement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameOnPavement(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataRearWheelsFrictionModifier_Record : gamedataDriveHelper_Record
 	{
 
-		public gamedataRearWheelsFrictionModifier_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataRearWheelsFrictionModifier_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

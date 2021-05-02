@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class scnRidAnimationContainerSRRefId : CVariable
 	{
 
-		public scnRidAnimationContainerSRRefId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnRidAnimationContainerSRRefId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

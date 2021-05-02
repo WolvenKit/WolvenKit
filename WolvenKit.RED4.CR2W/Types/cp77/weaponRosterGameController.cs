@@ -395,6 +395,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _genderName, value);
 		}
 
-		public weaponRosterGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public weaponRosterGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

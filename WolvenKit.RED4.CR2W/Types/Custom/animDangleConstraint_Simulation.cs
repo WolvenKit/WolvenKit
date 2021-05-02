@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _drawDebugCollisionShapes, value);
         }
 
-        public animDangleConstraint_Simulation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public animDangleConstraint_Simulation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

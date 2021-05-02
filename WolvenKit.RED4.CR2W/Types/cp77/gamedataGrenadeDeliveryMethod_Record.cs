@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataGrenadeDeliveryMethod_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataGrenadeDeliveryMethod_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataGrenadeDeliveryMethod_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

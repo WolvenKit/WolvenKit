@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ConfessionBoothController : BasicDistractionDeviceController
 	{
 
-		public ConfessionBoothController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ConfessionBoothController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

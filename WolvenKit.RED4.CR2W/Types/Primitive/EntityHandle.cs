@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
         public CGUID guid;
         public CBytes unk1;
 
-        public EntityHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public EntityHandle(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             id = new CUInt16(cr2w, this, nameof(id));
             guid = new CGUID(cr2w, this, nameof(guid));

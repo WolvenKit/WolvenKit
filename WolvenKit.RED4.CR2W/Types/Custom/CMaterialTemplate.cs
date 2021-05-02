@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types
@@ -9,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
 	public class CMaterialTemplate : CMaterialTemplate_
     {
-        public CMaterialTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CMaterialTemplate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         private List<CMaterialTemplateCustomdata> customData = new ();
         public override void Read(BinaryReader file, uint size)

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SmartWindowController : ComputerController
 	{
 
-		public SmartWindowController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SmartWindowController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

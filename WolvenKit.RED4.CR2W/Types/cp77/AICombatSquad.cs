@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AICombatSquad : AISquadBase
 	{
 
-		public AICombatSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AICombatSquad(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

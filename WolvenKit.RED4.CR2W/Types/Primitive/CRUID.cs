@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
     {
         
 
-        public CRUID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CRUID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Id = new CUInt64(cr2w, this, nameof(Id));
         }

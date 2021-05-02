@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class HasVehicleAssigned : AIVehicleConditionAbstract
 	{
 
-		public HasVehicleAssigned(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public HasVehicleAssigned(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

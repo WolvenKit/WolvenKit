@@ -152,6 +152,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numWrinkles, value);
 		}
 
-		public animFacialSetup_OneSermoBufferInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animFacialSetup_OneSermoBufferInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

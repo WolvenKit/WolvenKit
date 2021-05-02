@@ -385,6 +385,8 @@
                                 <TextBox Padding="5" Text="{Binding Property.Value}" />
                             </DataTemplate>
 
+
+
                             <templates:EditableVariableDataTemplateSelector
                              x:Key="DataTemplateSelector"
                              CommmonTemplate="{StaticResource CommmonTemplate}"

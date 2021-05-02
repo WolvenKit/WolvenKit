@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animIAnimNodeSourceChannel_QsTransform : ISerializable
 	{
 
-		public animIAnimNodeSourceChannel_QsTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animIAnimNodeSourceChannel_QsTransform(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

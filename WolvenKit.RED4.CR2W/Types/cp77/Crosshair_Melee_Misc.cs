@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetColorChange, value);
 		}
 
-		public Crosshair_Melee_Misc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Crosshair_Melee_Misc(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

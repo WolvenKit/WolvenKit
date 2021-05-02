@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
     {
 
 
-        public TweakDBID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public TweakDBID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Id = new CUInt64(cr2w, this, nameof(Id));
         }

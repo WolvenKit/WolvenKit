@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldDestructibleProxyMeshNodeInstance : worldPrefabProxyMeshNodeInstance
 	{
 
-		public worldDestructibleProxyMeshNodeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldDestructibleProxyMeshNodeInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

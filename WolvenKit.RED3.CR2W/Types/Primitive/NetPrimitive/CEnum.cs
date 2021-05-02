@@ -11,7 +11,6 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
-    [Editor(typeof(IEnumEditor), typeof(IPropertyEditorBase))]
     [REDMeta()]
     public class CEnum<T> : CVariable, IEnumAccessor<T> where T : Enum
     {

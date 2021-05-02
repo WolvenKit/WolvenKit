@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SmartWindowInkGameController : ComputerInkGameController
 	{
 
-		public SmartWindowInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SmartWindowInkGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

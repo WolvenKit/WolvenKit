@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unknown2, value);
         }
 
-        public gameSmartObjectAnimationDatabase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public gameSmartObjectAnimationDatabase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _smartObjectPointType, value);
         }
 
-        public gameAnimationExtractedData_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public gameAnimationExtractedData_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void ReadWithoutMeta(BinaryReader file, uint size)
         {
@@ -154,7 +154,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _animsetHash, value);
         }
 
-        public gameAnimationTransforms_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public gameAnimationTransforms_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void ReadWithoutMeta(BinaryReader file, uint size)
         {
@@ -203,7 +203,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _overrides, value);
         }
 
-        public gameBodyTypeData_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public gameBodyTypeData_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void ReadWithoutMeta(BinaryReader file, uint size)
         {
@@ -241,7 +241,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _variables, value);
         }
 
-        public gameAnimsetOverrideData_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public gameAnimsetOverrideData_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void ReadWithoutMeta(BinaryReader file, uint size)
         {
@@ -281,7 +281,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _animsetPath, value);
         }
 
-        public gameSmartObjectAnimationDatabaseUnknownClass1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public gameSmartObjectAnimationDatabaseUnknownClass1(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void ReadWithoutMeta(BinaryReader file, uint size)
         {

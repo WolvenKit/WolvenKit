@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.RED3.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED3.CR2W.Types
 {

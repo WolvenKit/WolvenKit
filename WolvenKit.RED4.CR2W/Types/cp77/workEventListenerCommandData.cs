@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class workEventListenerCommandData : workIWorkspotCommandData
 	{
 
-		public workEventListenerCommandData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public workEventListenerCommandData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

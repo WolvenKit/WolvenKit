@@ -89,6 +89,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _auxiliaryRelativePoint, value);
 		}
 
-		public scnChoiceNodeNsAdaptiveLookAtParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnChoiceNodeNsAdaptiveLookAtParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

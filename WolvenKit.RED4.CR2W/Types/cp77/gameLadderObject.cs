@@ -80,6 +80,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _enterOffset, value);
 		}
 
-		public gameLadderObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameLadderObject(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

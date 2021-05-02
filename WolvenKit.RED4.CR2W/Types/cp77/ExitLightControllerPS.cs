@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ExitLightControllerPS : ScriptableDeviceComponentPS
 	{
 
-		public ExitLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ExitLightControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }
