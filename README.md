@@ -82,10 +82,12 @@ This repository was created to demonstrate how the proprietary game engine of CD
    1. If, for some reason, the LFS quota is depleted, the renderer prerequisite libs can be acquired here: https://outwa.it/lib.zip
 
 4. **Build Required Projects**
-   1. Build the Formats project and Wolvenkit.Radish with the "Release | any CPU" configuration
+   1. From the top-level directory, build `WolvenKitFormats.sln` with drop-down menus set to Release:Any CPU.
+   2. Open the WolvenKitRadish folder and build `WolvenKitRadish.csproj` with drop-down menus set to Release: Any CPU) 
 
 5. **Build and Run**
-   1. Now you can build WolvenKit.UI in Debug | Any CPU configuration and run it
+   1. From the top-level directory, build `WolvenKit.sln` with drop-down menu set to Debug/Any CPU.
+   2. Locate the binary `WolvenKit.exe` in `WolvenKit\WolvenKit\bin\Debug\net5.0-windows\win-x64\` and run it.
 
 <div id="contributing">&zwnj;</div>
 <h3 align="center">Contribute</h3>
