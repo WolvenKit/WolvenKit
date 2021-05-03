@@ -84,7 +84,7 @@ This repository was created to demonstrate how the proprietary game engine of CD
 4. **Build Required Projects**
    1. From the top-level directory:
       1. Build `WolvenKitFormats.sln` with drop-down menu set to *Release:Any CPU*.
-      2. Navigate to the `WolvenKitRadish` folder and build `WolvenKitRadish.csproj` with drop-down menu set to *Release:Any CPU*.
+      2. Navigate to the `WolvenKit.Radish` folder and build `WolvenKit.Radish.csproj` with drop-down menu set to *Release:Any CPU*.
 
 5. **Build and Run**
    1. From the top-level directory:
