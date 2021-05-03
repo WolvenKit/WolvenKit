@@ -89,8 +89,6 @@ This repository was created to demonstrate how the proprietary game engine of CD
    5. Run `WolvenKit.exe` (in `WolvenKit\bin\<Debug|Release>\net5.0-windows\win-x64\`).
    6. Profit.
 
-If prompted by a pop-up notification window to save a new \*.sln file, do not save.
-
 <div id="contributing">&zwnj;</div>
 <h3 align="center">Contribute</h3>
 
