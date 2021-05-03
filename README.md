@@ -81,15 +81,13 @@ This repository was created to demonstrate how the proprietary game engine of CD
    1. All the required files are either nuget packages, which will automatically be downloaded once Build is pressed, or readily included in the package in the [Libs directory](/Libs/).
    1. If, for some reason, the LFS quota is depleted, the renderer prerequisite libs can be acquired here: https://outwa.it/lib.zip
 
-4. **Build Required Projects**
-   1. From the top-level directory:
-      1. Build `WolvenKitFormats.sln` with drop-down menu set to *Release:Any CPU*.
-      2. Navigate to the `WolvenKit.Radish` folder and build `WolvenKit.Radish.csproj` with drop-down menu set to *Release:Any CPU*.
-
-5. **Build and Run**
-   1. From the top-level directory:
-      1. Build `WolvenKit.sln` with drop-down menu set to *Debug:Any CPU*.
-      2. Navigate to `WolvenKit\bin\Debug\net5.0-windows\win-x64\` and run `WolvenKit.exe`.
+4. **Build and Run**
+   1. Open WolvenKitFormats.sln
+   2. Build WolvenKitFormats on Release (not Debug) < This is the problem causer
+   3. Switch to WolvenKit.sln
+   4. Build WolvenKit.sln on Debug or release doesn't matter.
+   5. Run `WolvenKit.exe` (in `WolvenKit\bin\<Debug|Release>\net5.0-windows\win-x64\`.
+   6. Profit.
 
 If prompted by a pop-up notification window to save a new \*.sln file, do not save.
 
