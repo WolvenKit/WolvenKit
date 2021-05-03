@@ -9,9 +9,10 @@ using CP77.CR2W;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using ProtoBuf;
+using ProtoBuf.Meta;
 using WolvenKit.CLI.MSTests;
+using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
-using ZeroFormatter;
 
 namespace CP77.MSTests
 {
@@ -37,12 +38,13 @@ namespace CP77.MSTests
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
-            var totalCount = s_bm.Archives.SelectMany(_ => _.Value.Files.Keys).Count();
+            var totalCount = s_bm.Items.Count();
             var results = new ConcurrentBag<ArchiveTestResult>();
 
             Parallel.ForEach(s_bm.Archives, file =>
             {
-                var (archivename, archive) = file;
+                var archivename = file.Key;
+                var archive = file.Value as Archive;
                 Parallel.ForEach(archive.Files, keyvalue =>
                 {
                     var (hash, _) = keyvalue;
@@ -93,7 +95,7 @@ namespace CP77.MSTests
         }
 
         [TestMethod]
-        [DataRow(Serialization.NewtonsoftJson)]
+        //[DataRow(Serialization.NewtonsoftJson)]
         //[DataRow(Serialization.Zeroformatting)]
         [DataRow(Serialization.Protobuf)]
         public void Test_Serialization(Serialization method)
@@ -116,9 +118,9 @@ namespace CP77.MSTests
                 }
                 case Serialization.Zeroformatting:
                 {
-                    var chachePath = Path.Combine(resultDir, "archive_cache.zero");
-                    using var fs = new FileStream(chachePath, FileMode.Create);
-                    ZeroFormatterSerializer.Serialize(fs, s_bm);
+                    //var chachePath = Path.Combine(resultDir, "archive_cache.zero");
+                    //using var fs = new FileStream(chachePath, FileMode.Create);
+                    //ZeroFormatterSerializer.Serialize(fs, s_bm);
                     break;
                 }
                 case Serialization.Json:
@@ -126,8 +128,8 @@ namespace CP77.MSTests
                 case Serialization.Protobuf:
                 {
                     var chachePath = Path.Combine(resultDir, "archive_cache.bin");
-                    using var fs = new FileStream(chachePath, FileMode.Create);
-                    Serializer.Serialize(fs, s_bm);
+                    using var file = File.Create(chachePath);
+                    Serializer.Serialize(file, s_bm);
                     break;
                 }
                 default:
@@ -136,7 +138,7 @@ namespace CP77.MSTests
         }
         
         [TestMethod]
-        [DataRow(Serialization.NewtonsoftJson)]
+        //[DataRow(Serialization.NewtonsoftJson)]
         //[DataRow(Serialization.Zeroformatting)]
         [DataRow(Serialization.Protobuf)]
         public void Test_Deserialization(Serialization method)
@@ -160,9 +162,9 @@ namespace CP77.MSTests
                 }
                 case Serialization.Zeroformatting:
                 {
-                    var chachePath = Path.Combine(resultDir, "archive_cache.zero");
-                    using var fs = new FileStream(chachePath, FileMode.Open);
-                    var x = ZeroFormatterSerializer.Deserialize<ArchiveManager>(fs);
+                    //var chachePath = Path.Combine(resultDir, "archive_cache.zero");
+                    //using var fs = new FileStream(chachePath, FileMode.Open);
+                    //var x = ZeroFormatterSerializer.Deserialize<ArchiveManager>(fs);
                     break;
                 }
                 case Serialization.Json:
@@ -170,8 +172,8 @@ namespace CP77.MSTests
                 case Serialization.Protobuf:
                 {
                     var chachePath = Path.Combine(resultDir, "archive_cache.bin");
-                    using var fs = new FileStream(chachePath, FileMode.Create);
-                    var x = Serializer.Deserialize<ArchiveManager>(fs);
+                    using var file = File.OpenRead(chachePath);
+                    var x = Serializer.Deserialize<ArchiveManager>(file);
                     break;
                 }
                 default:

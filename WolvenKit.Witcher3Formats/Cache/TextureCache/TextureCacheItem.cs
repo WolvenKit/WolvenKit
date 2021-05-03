@@ -5,6 +5,7 @@ using System.IO.MemoryMappedFiles;
 using Ionic.Zlib;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Cache
 {
@@ -35,7 +36,7 @@ namespace WolvenKit.Cache
         //unused
     }
 
-    public class TextureCacheItem : IGameFile
+    public class TextureCacheItem : Tw3GameFile
     {
         #region Fields
 
@@ -72,6 +73,8 @@ namespace WolvenKit.Cache
 
         #region Properties
 
+        public ulong Key => FNV1A64HashAlgorithm.HashString(Name);
+
         public IGameArchive Archive { get; set; }
         public string CompressionType => "Zlib";
         public string DateString { get; set; }
@@ -80,6 +83,8 @@ namespace WolvenKit.Cache
 
         public string ArchiveName { get; set; }
         public string Name { get; set; }
+        public string Extension => Path.GetExtension(Name);
+
 
         /// <summary>
         /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
@@ -92,6 +97,7 @@ namespace WolvenKit.Cache
         #endregion Properties
 
         #region Methods
+
 
         public void Extract(Stream output)
         {

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.W3Strings;
 
 namespace WolvenKit.W3Speech
@@ -99,6 +101,7 @@ namespace WolvenKit.W3Speech
 
         #region Properties
 
+        public ulong Key => FNV1A64HashAlgorithm.HashString(Name);
         public IGameArchive Archive { get; set; }
 
         public string CompressionType => "None";
@@ -126,6 +129,7 @@ namespace WolvenKit.W3Speech
         public UInt32 id_high { get; set; }
         public string ArchiveName { get; set; }
         public string Name { get; set; }
+        public string Extension => Path.GetExtension(Name);
 
         public long PageOffset { get; set; }
 
@@ -169,7 +173,7 @@ namespace WolvenKit.W3Speech
     /// <summary>
     /// Describes the w3speech format.
     /// </summary>
-    public class W3Speech : IGameArchive
+    public class W3Speech : IWitcherGameArchive
     {
         #region Constructors
 
@@ -188,13 +192,14 @@ namespace WolvenKit.W3Speech
             this.id = id;
             this.version = version;
             this.language_key = language_key;
-            this.item_infos = item_infos;
+            this.Files = item_infos.ToDictionary(_ => _.Key, _ => _ as IGameFile);
         }
 
         #endregion Constructors
 
         #region Properties
 
+        public Dictionary<ulong, IGameFile> Files { get; } = new();
         public string ArchiveAbsolutePath { get; set; }
 
         /// <summary>
@@ -202,10 +207,6 @@ namespace WolvenKit.W3Speech
         /// </summary>
         public String id { get; set; }
 
-        /// <summary>
-        /// Information about the items.
-        /// </summary>
-        public IEnumerable<SpeechEntry> item_infos { get; set; }
 
         /// <summary>
         /// Language key.
@@ -226,10 +227,11 @@ namespace WolvenKit.W3Speech
 
         public override string ToString()
         {
-            return $"Info({id},{version},{language_key},[{String.Join(",", item_infos)}])";
+            return $"Info({id},{version},{language_key},[{String.Join(",", Files.Values)}])";
         }
 
         #endregion Methods
+
     }
 
     /// <summary>

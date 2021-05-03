@@ -33,24 +33,28 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Functionality\Behavior\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <Compile Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
+    <EmbeddedResource Remove="Functionality\Behavior\**" />
     <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
+    <None Remove="Functionality\Behavior\**" />
     <None Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <None Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <None Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
+    <Page Remove="Functionality\Behavior\**" />
     <Page Remove="Views\Editor\Editors\Nodes\Audio\**" />
     <Page Remove="Views\Editor\Editors\Nodes\Quest\**" />
     <Page Remove="Views\Editor\Editors\Nodes\Scene\**" />
@@ -1764,8 +1768,5 @@
     <Reference Include="AutoUpdater.NET">
       <HintPath>..\Libs\AutoUpdater.NET.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Functionality\Behavior\" />
   </ItemGroup>
 </Project>

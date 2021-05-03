@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json.Serialization;
 using Catel.IO;
 using Catel.IoC;
 using ProtoBuf;
 using WolvenKit.RED4.CR2W.Archive;
 using RED.CRC64;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using ZeroFormatter;
 
 namespace CP77Tools.Model
 {
@@ -15,13 +14,16 @@ namespace CP77Tools.Model
     /// <summary>
     /// An entry in Index 3 (DependencyTable)
     /// </summary>
-    [ZeroFormattable]
     [ProtoContract]
     public class Dependency
     {
         #region Constructors
 
-        [JsonConstructor]
+        public Dependency()
+        {
+            
+        }
+
         public Dependency(ulong hash)
         {
             Hash = hash;
@@ -29,17 +31,15 @@ namespace CP77Tools.Model
 
         public Dependency(BinaryReader br, int idx)
         {
-            var mainController = ServiceLocator.Default.ResolveType<IHashService>();
-
-            Read(br, mainController);
+            Read(br);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        [Index(0)] [ProtoMember(1)] public virtual ulong Hash { get; set; }
-        [Index(1)] [ProtoMember(2)] public virtual string HashStr { get; private set; }
+        [ProtoMember(1)] public ulong Hash { get; set; }
+        [ProtoMember(2)] public string HashStr { get; private set; }
 
         #endregion Properties
 
@@ -50,8 +50,10 @@ namespace CP77Tools.Model
             bw.Write(Hash);
         }
 
-        private void Read(BinaryReader br, IHashService hashService)
+        private void Read(BinaryReader br)
         {
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+
             Hash = br.ReadUInt64();
             HashStr = hashService?.Get(Hash);
         }
@@ -63,12 +65,15 @@ namespace CP77Tools.Model
     /// An entry in Index 2 (OffsetTable)
     /// </summary>
     [ProtoContract]
-    [ZeroFormattable]
     public class FileSegment
     {
         #region Constructors
 
-        [JsonConstructor]
+        public FileSegment()
+        {
+            
+        }
+
         public FileSegment(ulong offset, uint zsize, uint size)
         {
             Offset = offset;
@@ -78,8 +83,6 @@ namespace CP77Tools.Model
 
         public FileSegment(BinaryReader br, int idx)
         {
-            Idx = idx;
-
             Read(br);
         }
 
@@ -87,10 +90,9 @@ namespace CP77Tools.Model
 
         #region Properties
 
-        [Index(0)] [ProtoMember(1)] public virtual int Idx { get; private set; }
-        [Index(1)] [ProtoMember(2)] public virtual ulong Offset { get; private set; }
-        [Index(2)] [ProtoMember(3)] public virtual uint Size { get; private set; }
-        [Index(3)] [ProtoMember(4)] public virtual uint ZSize { get; private set; }
+        [ProtoMember(1)] public ulong Offset { get; private set; }
+        [ProtoMember(2)] public uint Size { get; private set; }
+        [ProtoMember(3)] public uint ZSize { get; private set; }
 
         #endregion Properties
 
@@ -115,7 +117,6 @@ namespace CP77Tools.Model
     }
 
     [ProtoContract]
-    [ZeroFormattable]
     public class Index
     {
         #region Constructors
@@ -140,15 +141,15 @@ namespace CP77Tools.Model
 
         #region Properties
 
-        [Index(0)] [ProtoMember(1)] public virtual ulong Crc { get; private set; }
-        [Index(1)] [ProtoMember(2)] public virtual List<Dependency> Dependencies { get; private set; }
-        [Index(2)] [ProtoMember(3)] public virtual Dictionary<ulong, FileEntry> FileEntries { get; private set; }
-        [Index(3)] [ProtoMember(4)] public virtual uint FileEntryCount { get; private set; }
-        [Index(4)] [ProtoMember(5)] public virtual uint FileSegmentCount { get; private set; }
-        [Index(5)] [ProtoMember(6)] public virtual List<FileSegment> FileSegments { get; private set; }
-        [Index(6)] [ProtoMember(7)] public virtual uint FileTableOffset { get; private set; }
-        [Index(7)] [ProtoMember(8)] public virtual uint FileTableSize { get; set; }
-        [Index(8)] [ProtoMember(9)] public virtual uint ResourceDependencyCount { get; private set; }
+        [ProtoMember(1)] public ulong Crc { get; private set; }
+        [ProtoMember(2)] public List<Dependency> Dependencies { get; private set; }
+        [ProtoMember(3)] public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
+        [ProtoMember(4)] public uint FileEntryCount { get; private set; }
+        [ProtoMember(5)] public uint FileSegmentCount { get; private set; }
+        [ProtoMember(6)] public List<FileSegment> FileSegments { get; private set; }
+        [ProtoMember(7)] public uint FileTableOffset { get; private set; }
+        [ProtoMember(8)] public uint FileTableSize { get; set; }
+        [ProtoMember(9)] public uint ResourceDependencyCount { get; private set; }
 
         #endregion Properties
 

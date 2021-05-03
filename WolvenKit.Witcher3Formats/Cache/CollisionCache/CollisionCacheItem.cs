@@ -4,6 +4,7 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using Ionic.Zlib;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.Cache
@@ -11,7 +12,7 @@ namespace WolvenKit.Cache
     /// <summary>
     /// Files packed into Collision.cache. Zlib compressed nxb/p3d file.
     /// </summary>
-    public class CollisionCacheItem : IGameFile
+    public class CollisionCacheItem : Tw3GameFile
     {
         #region Fields
 
@@ -37,6 +38,7 @@ namespace WolvenKit.Cache
 
         #region Properties
 
+        public ulong Key => FNV1A64HashAlgorithm.HashString(Name);
         public IGameArchive Archive { get; set; }
         public string CompressionType => "Zlib";
         public string ArchiveName { get; set; }
@@ -53,6 +55,8 @@ namespace WolvenKit.Cache
         #endregion Properties
 
         #region Methods
+
+        public string Extension => Path.GetExtension(Name);
 
         public void Extract(Stream output)
         {

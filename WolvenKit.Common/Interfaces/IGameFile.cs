@@ -11,6 +11,8 @@ namespace WolvenKit.Common
 
         public IGameArchive Archive { get; set; }
 
+        ulong Key { get; }
+
         string Name { get; }
 
         /// <summary>
@@ -23,6 +25,8 @@ namespace WolvenKit.Common
         /// </summary>
         uint ZSize { get; set; }
 
+        public string Extension { get; }
+
 
         #endregion Properties
 
@@ -33,7 +37,12 @@ namespace WolvenKit.Common
 
     public interface Cp77GameFile : IGameFile
     {
+        public uint SegmentsStart { get; set; }
+        public uint SegmentsEnd { get; set; }
 
+        public string FileName { get; }
+
+        public void Write(BinaryWriter bw);
     }
 
     public interface Tw3GameFile : IGameFile

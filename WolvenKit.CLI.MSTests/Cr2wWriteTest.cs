@@ -800,7 +800,7 @@ namespace CP77.MSTests
                 {
                     if (ulong.TryParse(line.Split(',').First(), out var hash))
                     {
-                        filesToTest.AddRange(s_bm.Files[hash]);
+                        filesToTest.AddRange(s_bm.Items[hash].Cast<FileEntry>());
                     }
                 }
             }
@@ -859,7 +859,7 @@ namespace CP77.MSTests
             {
                 try
                 {
-                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath];
+                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
                     using var originalStream = new MemoryStream();
                     ar.CopyFileToStream(originalStream, file.NameHash64, false);
                     originalStream.Seek(0, SeekOrigin.Begin);

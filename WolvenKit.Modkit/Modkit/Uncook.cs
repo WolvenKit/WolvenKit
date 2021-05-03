@@ -56,7 +56,8 @@ namespace CP77.CR2W
             ExtractSingleToStream(ar, hash, ms);
 
             // write main file
-            var name = ar.Files[hash].FileName;
+            var entry = ar.Files[hash] as FileEntry;
+            var name = entry.FileName;
             if (string.IsNullOrEmpty(Path.GetExtension(name)))
             {
                 name += ".bin";
@@ -98,10 +99,10 @@ namespace CP77.CR2W
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
 
             // check search pattern then regex
-            IEnumerable<FileEntry> finalmatches = ar.Files.Values;
+            IEnumerable<FileEntry> finalmatches = ar.Files.Values.Cast<FileEntry>();
             if (!string.IsNullOrEmpty(pattern))
             {
-                finalmatches = ar.Files.Values.MatchesWildcard(item => item.FileName, pattern);
+                finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
             }
 
             if (!string.IsNullOrEmpty(regex))

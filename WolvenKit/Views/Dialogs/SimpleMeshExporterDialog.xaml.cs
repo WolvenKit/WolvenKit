@@ -337,7 +337,7 @@ namespace WolvenKit.Views.Dialogs
                     if (ExportMaterials && UseMaterialsRepository && CopyTextures)
                     {
 
-                        var M = new MATERIAL(list);
+                        var M = new MATERIAL(list.Cast<Archive>().ToList());
                         if (ReturnThisForMe() != null)
                         {
                             M.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem, true, true);
@@ -346,7 +346,7 @@ namespace WolvenKit.Views.Dialogs
                     }
                     if (ExportMaterials && UseMaterialsRepository)
                     {
-                        var M = new MATERIAL(list);
+                        var M = new MATERIAL(list.Cast<Archive>().ToList());
                         if (ReturnThisForMe() != null)
                         {
                             M.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem);
@@ -355,7 +355,7 @@ namespace WolvenKit.Views.Dialogs
                     }
                     if (ExportMaterials)
                     {
-                        var M = new MATERIAL(list);
+                        var M = new MATERIAL(list.Cast<Archive>().ToList());
                         M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
                     }
 

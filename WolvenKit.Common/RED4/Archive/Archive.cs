@@ -8,14 +8,12 @@ using ProtoBuf;
 using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using ZeroFormatter;
 using Index = CP77Tools.Model.Index;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
     [ProtoContract]
-    [ZeroFormattable]
-    public class Archive : IGameArchive
+    public class Archive : ICyberGameArchive
     {
         #region constructors
 
@@ -40,21 +38,21 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
 
-        [Index(0)] [ProtoMember(1)] public virtual string ArchiveAbsolutePath { get; set; }
+        [ProtoMember(1)] public string ArchiveAbsolutePath { get; set; }
 
-        [Index(1)] [ProtoMember(2)] public virtual Header Header { get; set; }
+        [ProtoMember(2)] public Header Header { get; set; }
 
-        [Index(2)] [ProtoMember(3)] public virtual Index Index { get; set; }
+        [ProtoMember(3)] public Index Index { get; set; }
 
+        public Dictionary<ulong, IGameFile> Files => Index?.FileEntries
+            .Values.ToDictionary(_ => _.NameHash64, _ => _ as IGameFile);
 
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
 
-        [IgnoreFormat] public Dictionary<ulong, FileEntry> Files => Index?.FileEntries;
+        public EArchiveType TypeName => EArchiveType.Archive;
 
-        [IgnoreFormat] public string Name => Path.GetFileName(ArchiveAbsolutePath);
+        public int FileCount => Files?.Count ?? 0;
 
-        [IgnoreFormat] public EArchiveType TypeName => EArchiveType.Archive;
-
-        [IgnoreFormat] public int FileCount => Files?.Count ?? 0;
 
 
         #endregion properties
@@ -68,11 +66,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return false;
             }
 
-            var archiveItem = Files[hash];
+            var archiveItem = Files[hash] as FileEntry;
             var hasBuffers = (archiveItem.SegmentsEnd - archiveItem.SegmentsStart) > 1;
 
             var values = Enum.GetNames(typeof(ECookedFileFormat));
-            var b = values.Any(e => e == Path.GetExtension(Files[hash].FileName)?[1..]) || hasBuffers;
+            var b = values.Any(e => e == Path.GetExtension(archiveItem.FileName)?[1..]) || hasBuffers;
             return b;
         }
 
@@ -83,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var entry = Files[hash];
+            var entry = Files[hash] as FileEntry;
             var startIndex = (int)entry.SegmentsStart;
             var nextIndex = (int)entry.SegmentsEnd;
 

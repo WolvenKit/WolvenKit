@@ -14,7 +14,7 @@ using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.Cache
 {
-    public class TextureCache : IGameArchive
+    public class TextureCache : IWitcherGameArchive
     {
         #region Properties
 
@@ -22,7 +22,6 @@ namespace WolvenKit.Cache
         public static byte[] Magic = { (byte)'H', (byte)'C', (byte)'X', (byte)'T' };
 
         //The images packed into these Texture cache files
-        public List<TextureCacheItem> Files;
 
         private const uint MagicInt = 1415070536;
 
@@ -48,11 +47,13 @@ namespace WolvenKit.Cache
 
         #region Constructors
 
+        public Dictionary<ulong, IGameFile> Files { get; } = new();
+
+
         public TextureCache()
         {
             MipOffsets = new List<uint>();
             Names = new List<string>();
-            Files = new List<TextureCacheItem>();
 
             Version = 6;
         }
@@ -65,7 +66,6 @@ namespace WolvenKit.Cache
         {
             MipOffsets = new List<uint>();
             Names = new List<string>();
-            Files = new List<TextureCacheItem>();
 
             this.Read(filename);
         }
@@ -82,7 +82,6 @@ namespace WolvenKit.Cache
                 MipOffsets = new List<uint>();
                 using (var br = new BinaryReader(new FileStream(filepath, FileMode.Open)))
                 {
-                    Files = new List<TextureCacheItem>();
                     Names = new List<string>();
 
                     #region Footer
@@ -164,13 +163,13 @@ namespace WolvenKit.Cache
                             Unk1 = br.ReadByte()
                         };
                         ti.Format = CommonImageTools.GetEFormatFromREDEngineByte(ti.Type1);
-                        Files.Add(ti);
+                        Files.Add(ti.Key, ti);
                     }
 
                     #endregion EntryTable
 
                     //BUG: "C:\\Users\\bence.hambalko\\Documents\\The Witcher 3\\bin\\x64\\..\\..\\Mods\\modW3EE\\content\\texture.cache" dies here! Investigate!!!!!!!!!!!!!
-                    foreach (var t in Files)
+                    foreach (var t in Files.Values.OfType<TextureCacheItem>())
                     {
                         br.BaseStream.Seek(t.PageOffset * 4096, SeekOrigin.Begin);
                         t.ZSize = br.ReadUInt32(); //Compressed size
@@ -251,7 +250,7 @@ namespace WolvenKit.Cache
                 writer.WriteLine(head);
 
                 // write info elements
-                foreach (var x in Files)
+                foreach (var x in Files.Values.OfType<TextureCacheItem>())
                 {
                     string ext = x.Name.Split('.').Last();
 
@@ -400,7 +399,7 @@ namespace WolvenKit.Cache
 
                         #endregion Create Table Item
 
-                        Files.Add(ti);
+                        Files.Add(ti.Key, ti);
                         Names.Add(ti.Name);
 
                         logger?.LogString($"Cached {ti.Name}", Logtype.Normal);
@@ -419,6 +418,7 @@ namespace WolvenKit.Cache
 
         public ulong DBG_crc => CalculateMyChecksum();
 
+
         /// <summary>
         ///
         /// </summary>
@@ -436,7 +436,7 @@ namespace WolvenKit.Cache
 
                 #region Write Compressed Files
 
-                foreach (var ti in Files)
+                foreach (var ti in Files.Values.Cast<TextureCacheItem>())
                 {
                     ti.ParentFile = outpath;
                     var ddsfile = ti.FullName;
@@ -634,7 +634,7 @@ namespace WolvenKit.Cache
                     // string table
                     //updates this.StringTableSize and all textureCacheItem.StringTableOffset
                     //startpos = ms.Position;
-                    foreach (var textureCacheItem in Files)
+                    foreach (var textureCacheItem in Files.Values.Cast<TextureCacheItem>())
                     {
                         var filename = textureCacheItem.Name;
                         bw.WriteCR2WString(filename);
@@ -645,7 +645,7 @@ namespace WolvenKit.Cache
 
                     // entry table
                     startpos = ms.Position;
-                    foreach (var textureCacheItem in Files)
+                    foreach (var textureCacheItem in Files.Values.Cast<TextureCacheItem>())
                     {
                         textureCacheItem.Write(bw);
                     }
@@ -746,7 +746,7 @@ namespace WolvenKit.Cache
 
                 // entry table
                 startpos = ms.Position;
-                foreach (var textureCacheItem in Files)
+                foreach (var textureCacheItem in Files.Values.Cast<TextureCacheItem>())
                 {
                     textureCacheItem.Write(bw);
                 }

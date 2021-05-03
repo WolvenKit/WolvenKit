@@ -53,11 +53,12 @@ namespace CP77Tools.Tasks
                         continue;
                     }
 
-                    var file = bm.Files[hash];
+                    var file = bm.Items[hash];
 
-                    foreach (var fileEntry in file)
+                    foreach (var ifileEntry in file)
                     {
-                        var ar = bm.Archives[fileEntry.Archive.ArchiveAbsolutePath];
+                        var fileEntry = ifileEntry as FileEntry;
+                        var ar = bm.Archives[fileEntry.Archive.ArchiveAbsolutePath] as Archive;
 
                         using var ms = new MemoryStream();
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);

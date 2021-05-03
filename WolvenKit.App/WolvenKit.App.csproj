@@ -50,8 +50,6 @@
         <PackageReference Include="Pfim" Version="0.10.0" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
-    <PackageReference Include="ZeroFormatter" Version="1.6.4" />
-    <PackageReference Include="ZeroFormatter.Analyzer" Version="1.1.1" />
     <PackageReference Include="WolvenKit.RED3.CR2W" Version="3.0.0" />
     <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.0.0" />
 

@@ -5,6 +5,8 @@ using System.IO;
 using Catel.IoC;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProtoBuf.Meta;
+using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W.Archive;
@@ -31,6 +33,9 @@ namespace WolvenKit.CLI.MSTests
 
         protected static void Setup(TestContext context)
         {
+            //protobuf
+            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+
             Console.WriteLine("BaseTestClass.BaseTestInitialize()");
 
             s_config = new ConfigurationBuilder()
@@ -80,7 +85,7 @@ namespace WolvenKit.CLI.MSTests
             ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
 
-            _ = ServiceLocator.Default.ResolveType<IHashService>();
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
 
             DirectoryInfo gameArchiveDir;
             try

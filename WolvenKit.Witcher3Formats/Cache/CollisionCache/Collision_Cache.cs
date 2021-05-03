@@ -10,7 +10,7 @@ using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.Cache
 {
-    public class CollisionCache : IGameArchive
+    public class CollisionCache : IWitcherGameArchive
     {
         #region Fields
 
@@ -26,7 +26,6 @@ namespace WolvenKit.Cache
         public ulong Buffersize;
         public ulong CheckSum;
         public List<string> FileNames = new List<string>();
-        public List<CollisionCacheItem> Files = new List<CollisionCacheItem>();
         public uint InfoOffset;
         public uint NamesSize;
         public uint NameTableOffset;
@@ -51,6 +50,7 @@ namespace WolvenKit.Cache
 
         #region Properties
 
+        public Dictionary<ulong, IGameFile> Files { get; } = new();
         public string ArchiveAbsolutePath { get; set; }
         public string Name => Path.GetFileName(ArchiveAbsolutePath);
         public EArchiveType TypeName => EArchiveType.CollisionCache;
@@ -243,10 +243,11 @@ namespace WolvenKit.Cache
             }))
             {
                 //Console.WriteLine("Filename: " + ci.Name);
-                Files.Add(ci);
+                Files.Add(ci.Key, ci);
             }
         }
 
         #endregion Methods
+
     }
 }

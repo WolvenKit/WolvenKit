@@ -789,7 +789,7 @@ namespace CP77.MSTests
             {
                 try
                 {
-                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath];
+                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
                     using var ms = new MemoryStream();
                     ar.CopyFileToStream(ms, file.NameHash64, false);
 

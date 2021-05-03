@@ -6,18 +6,16 @@ using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
-using ZeroFormatter;
 using ServiceLocator = Catel.IoC.ServiceLocator;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    [ZeroFormattable]
     [ProtoContract]
-    public class FileEntry : IGameFile
+    public class FileEntry : Cp77GameFile
     {
         #region Fields
 
-        private string _nameStr;
+        [ProtoMember(11)] private string _nameStr;
 
         #endregion Fields
 
@@ -51,25 +49,26 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Properties
 
-        [Index(0)] [ProtoMember(1)] public virtual ulong NameHash64 { get; set; }
-        [Index(1)] [ProtoMember(2)] public virtual DateTime Timestamp { get; set; }
-        [Index(2)] [ProtoMember(3)] public virtual uint NumInlineBufferSegments { get; set; }
-        [Index(3)] [ProtoMember(4)] public virtual uint SegmentsStart { get; set; }
-        [Index(4)] [ProtoMember(5)] public virtual uint SegmentsEnd { get; set; }
-        [Index(5)] [ProtoMember(6)] public virtual uint ResourceDependenciesStart { get; set; }
-        [Index(6)] [ProtoMember(7)] public virtual uint ResourceDependenciesEnd { get; set; }
-        [Index(7)] [ProtoMember(8)] public virtual byte[] SHA1Hash { get; set; }
+        [ProtoMember(1)] public ulong NameHash64 { get; set; }
+        [ProtoMember(2)] public DateTime Timestamp { get; set; }
+        [ProtoMember(3)] public uint NumInlineBufferSegments { get; set; }
+        [ProtoMember(4)] public uint SegmentsStart { get; set; }
+        [ProtoMember(5)] public uint SegmentsEnd { get; set; }
+        [ProtoMember(6)] public uint ResourceDependenciesStart { get; set; }
+        [ProtoMember(7)] public uint ResourceDependenciesEnd { get; set; }
+        [ProtoMember(8)] public byte[] SHA1Hash { get; set; }
 
-        [IgnoreFormat] public virtual IGameArchive Archive { get; set; }
+        public IGameArchive Archive { get; set; }
 
-        [Index(9)] [ProtoMember(10)] public virtual uint Size { get; set; }
-        [Index(10)] [ProtoMember(11)] public virtual uint ZSize { get; set; }
+        [ProtoMember(9)] public uint Size { get; set; }
+        [ProtoMember(10)] public uint ZSize { get; set; }
 
-        [IgnoreFormat] public string Name => !string.IsNullOrEmpty(_nameStr) ? _nameStr : NameHash64.ToString();
-        [IgnoreFormat] public string bytesAsString => BitConverter.ToString(SHA1Hash);
-        [IgnoreFormat] public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
-        [IgnoreFormat] public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
-        [IgnoreFormat] public string Extension => Path.GetExtension(FileName);
+        public ulong Key => NameHash64;
+        public string Name => !string.IsNullOrEmpty(_nameStr) ? _nameStr : NameHash64.ToString();
+        public string bytesAsString => BitConverter.ToString(SHA1Hash);
+        public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
+        public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
+        public string Extension => Path.GetExtension(FileName);
 
         #endregion Properties
 

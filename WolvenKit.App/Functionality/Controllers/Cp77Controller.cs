@@ -11,6 +11,7 @@ using CP77.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using Newtonsoft.Json;
+using ProtoBuf;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
@@ -154,56 +155,35 @@ namespace WolvenKit.Functionality.Controllers
                 return null;
             }
             logger.Info("Loading archive Manager ... ");
+            var chachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive_cache.bin");
             try
             {
-                var chachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive_cache.bin");
+                
                 if (File.Exists(chachePath))
                 {
-                    using var fs = new FileStream(chachePath, FileMode.Open);
-                    ZeroFormatter.ZeroFormatterSerializer.Deserialize<ArchiveManager>(fs);
-
-                    // json
-                    //var serializer = new JsonSerializer
-                    //{
-                    //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    //    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                    //    TypeNameHandling = TypeNameHandling.Auto
-                    //};
-                    //ArchiveManager = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
-
+                    using var file = File.OpenRead(chachePath);
+                    ArchiveManager = Serializer.Deserialize<ArchiveManager>(file);
                 }
                 else
                 {
                     ArchiveManager = new ArchiveManager();
                     ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
 
-                    using var fs = new FileStream(chachePath, FileMode.Create);
-                    ZeroFormatter.ZeroFormatterSerializer.Serialize(fs, ArchiveManager);
-
-                    // json
-                    //File.WriteAllText(chachePath, JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
-                    //{
-                    //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    //    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                    //    TypeNameHandling = TypeNameHandling.Auto
-                    //}));
+                    using var file = File.Create(chachePath);
+                    Serializer.Serialize(file, ArchiveManager);
 
                     settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
                 }
             }
             catch (Exception e)
             {
-                logger.Error("------------------------- Finished loading archive manager.");
-                throw;
-                
-
-                if (File.Exists(GetManagerPath(EManagerType.ArchiveManager)))
-                {
-                    File.Delete(GetManagerPath(EManagerType.ArchiveManager));
-                }
-
                 ArchiveManager = new ArchiveManager();
                 ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
+
+                using var file = File.Create(chachePath);
+                Serializer.Serialize(file, ArchiveManager);
+
+                settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
             }
             logger.Info("Finished loading archive manager.");
 

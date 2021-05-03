@@ -3,12 +3,10 @@ using System.IO;
 using System.Linq;
 using ProtoBuf;
 using WolvenKit.Common;
-using ZeroFormatter;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    [ZeroFormattable]
     [ProtoContract]
     public class ArchiveManager : CyberArchiveManager
     {
@@ -24,9 +22,6 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public ArchiveManager()
         {
-            Archives = new Dictionary<string, Archive>();
-            //Files = new Dictionary<ulong, IEnumerable<FileEntry>>();
-            Items = new Dictionary<string, List<IGameFile>>();
         }
 
         public ArchiveManager(DirectoryInfo indir)
@@ -40,25 +35,34 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
 
-        [Index(0)] [ProtoMember(1)] public virtual Dictionary<string, Archive> Archives { get; set; }
+        //[ProtoMember(1)] public Dictionary<string, Archive> Archives { get; set; }
+        [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
 
-        [IgnoreFormat]
-        public Dictionary<ulong, IEnumerable<FileEntry>> Files =>  Archives.Values
-                .SelectMany(_ => _.Files)
-                .GroupBy(_ => _.Key)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value));
-
-        [IgnoreFormat]
         public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
             Archives.Values
-                .SelectMany(_ => _.Files)
-                .GroupBy(_ => _.Value.Extension)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value));
+                .SelectMany(_ => _.Files.Values)
+                .GroupBy(_ => _.Extension)
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
 
 
         #endregion properties
 
         #region methods
+
+        [ProtoAfterDeserialization]
+        public void AfterDeserializationCallback()
+        {
+            foreach (var archive in Archives.Values)
+            {
+                foreach (var file in archive.Files.Values)
+                {
+                    file.Archive = archive;
+                }
+
+            }
+
+            RebuildRootNode();
+        }
 
         public override EArchiveType TypeName => EArchiveType.Archive;
 
@@ -96,17 +100,17 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var bundle = new Archive(filename);
-            foreach (var (key, value) in bundle.Files)
-            {
-                // add new key if the file isn't already in another bundle
-                if (!Items.ContainsKey(value.Name))
-                {
-                    Items.Add(value.Name, new List<IGameFile>());
-                }
+            //foreach (var (key, value) in bundle.Files)
+            //{
+            //    // add new key if the file isn't already in another bundle
+            //    if (!Items.ContainsKey(value.Name))
+            //    {
+            //        Items.Add(value.Name, new List<IGameFile>());
+            //    }
 
-                Items[value.Name].Add(value);
-            }
-            Archives.Add(filename, bundle);
+            //    Items[value.Name].Add(value);
+            //}
+            Archives.Add(bundle.ArchiveAbsolutePath, bundle);
         }
 
         /// <summary>
@@ -173,7 +177,9 @@ namespace WolvenKit.RED4.CR2W.Archive
         public void Reload(DirectoryInfo indir = null)
         {
             if (indir != null)
+            {
                 _parentDirectoryInfo = indir;
+            }
 
             var archives = _parentDirectoryInfo.GetFiles("*.archive").ToList();
             Archives.Clear();
@@ -182,7 +188,6 @@ namespace WolvenKit.RED4.CR2W.Archive
                 Archives.Add(fi.FullName, new Archive(fi.FullName));
             }
 
-            //ReloadFiles();
         }
 
         #endregion methods

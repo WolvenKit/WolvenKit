@@ -7,9 +7,12 @@ using Catel.Logging;
 using Catel.MVVM;
 using Catel.Services;
 using Orchestra.Services;
+using ProtoBuf.Meta;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Model.ProjectManagement;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenManager.App.Services;
 
 namespace WolvenKit.Functionality.Services
@@ -55,6 +58,9 @@ namespace WolvenKit.Functionality.Services
 
         public override async Task InitializeBeforeCreatingShellAsync()
         {
+            //protobuf
+            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+
             // Non-async first
             RegisterTypes();
             InitializeFonts();
