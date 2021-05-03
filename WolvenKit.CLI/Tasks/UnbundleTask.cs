@@ -20,7 +20,7 @@ namespace CP77Tools.Tasks
         #region Methods
 
         public static void UnbundleTask(string[] path, string outpath,
-            string hash, string pattern, string regex)
+            string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             if (path == null || path.Length < 1)
             {
@@ -30,12 +30,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                UnbundleTaskInner(file, outpath, hash, pattern, regex);
+                UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
             });
         }
 
         private static void UnbundleTaskInner(string path, string outpath,
-            string hash, string pattern, string regex)
+            string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             #region checks
 
@@ -122,7 +122,7 @@ namespace CP77Tools.Tasks
                         Logtype.Normal);
                     foreach (var hash_num in hashlist)
                     {
-                        ar.ExtractSingle(hash_num, outDir);
+                        ar.ExtractSingle(hash_num, outDir, DEBUG_decompress);
                         logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
                     }
 
@@ -130,12 +130,12 @@ namespace CP77Tools.Tasks
                 }
                 else if (isHash && hashNumber != 0)
                 {
-                    ar.ExtractSingle(hashNumber, outDir);
+                    ar.ExtractSingle(hashNumber, outDir, DEBUG_decompress);
                     logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
                 }
                 else
                 {
-                    var r = ar.ExtractAll(outDir, pattern, regex);
+                    var r = ar.ExtractAll(outDir, pattern, regex, DEBUG_decompress);
                     logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
                         Logtype.Success);
                 }

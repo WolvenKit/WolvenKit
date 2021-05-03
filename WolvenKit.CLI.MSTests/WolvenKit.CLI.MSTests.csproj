@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>

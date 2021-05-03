@@ -22,8 +22,9 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
             AddOption(new Option<string>(new[] { "--hash" }, "Extract single file with a given hash. If a path is supplied, all hashes will be extracted."));
+            AddOption(new Option<bool>(new[] { "--DEBUG_decompress" }, "Decompresses all buffers in the unbundled files."));
 
-            Handler = CommandHandler.Create<string[], string, string, string, string>(ConsoleFunctions.UnbundleTask);
+            Handler = CommandHandler.Create<string[], string, string, string, string, bool>(ConsoleFunctions.UnbundleTask);
         }
 
         #endregion Constructors

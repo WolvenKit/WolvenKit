@@ -80,7 +80,7 @@ namespace CP77.CR2W
             if (!outpath.Exists)
                 return null;
 
-            var outfile = Path.Combine(outpath.FullName, $"basegame_{infolder.Name}.archive");
+            var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
             var ar = new Archive
             {
                 ArchiveAbsolutePath = outfile,
@@ -121,7 +121,12 @@ namespace CP77.CR2W
                 var relpath = fileInfo.FullName.RelativePath(infolder);
                 var hash = FNV1A64HashAlgorithm.HashString(relpath);
                 if (fileInfo.Extension.ToLower() == ".bin")
-                    hash = ulong.Parse(Path.GetFileNameWithoutExtension(relpath));
+                {
+                    if (!ulong.TryParse(Path.GetFileNameWithoutExtension(relpath), out hash))
+                    {
+                        continue;
+                    }
+                }
 
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
                 using var fileBinaryReader = new BinaryReader(fileStream);

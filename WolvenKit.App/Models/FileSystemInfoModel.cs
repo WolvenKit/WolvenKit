@@ -292,6 +292,7 @@ namespace WolvenKit.Models
         /// <param name="e"></param>
         private void FileSystemObject_RequestRefresh(object sender, EventArgs e)
         {
+
             if (Parent == null || sender is not FileSystemInfoModel oldModel)
             {
                 return;
@@ -312,11 +313,21 @@ namespace WolvenKit.Models
 
             //expand child with sender name
             //TODO: make this better?
-            var oldNode = Children.FirstOrDefault(_ => _.FullName == oldModel.FullName);
-            if (oldNode != null)
+            try
             {
-                oldNode.IsExpanded = true;
+
+
+                var oldNode = Children.FirstOrDefault(_ => _.FullName == oldModel.FullName);
+                if (oldNode != null)
+                {
+                    oldNode.IsExpanded = true;
+                }
             }
+            catch
+            {
+                // #LogMe
+            }
+
         }
 
         private void FileSystemObjectInfo_PropertyChanged(object sender, PropertyChangedEventArgs e)

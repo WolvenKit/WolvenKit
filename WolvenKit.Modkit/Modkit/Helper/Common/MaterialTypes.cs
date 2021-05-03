@@ -1,4 +1,4 @@
-using WolvenKit.RED4.CR2W.Types;
+﻿using WolvenKit.RED4.CR2W.Types;
 using System;
 namespace WolvenKit.RED4.MeshFile.Materials.MaterialTypes
 {

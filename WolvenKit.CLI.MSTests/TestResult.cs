@@ -25,14 +25,14 @@ namespace CP77.MSTests
 
         #region Properties
 
-        public int AdditionalBytes { get; set; }
-        public FileEntry FileEntry { get; set; }
+        public int AdditionalBytes { get; init; }
+        public FileEntry FileEntry { get; init; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public ReadResultType ReadResult { get; set; }
+        public ReadResultType ReadResult { get; init; }
 
-        public int UnknownBytes { get; set; }
-        public List<string> UnknownTypes { get; set; }
+        public int UnknownBytes { get; init; }
+        public List<string> UnknownTypes { get; init; }
 
         #endregion Properties
     }
@@ -41,9 +41,9 @@ namespace CP77.MSTests
     {
         #region Properties
 
-        public Type ExceptionType { get; set; }
-        public string Message { get; set; }
-        public bool Success { get; set; }
+        public Type ExceptionType { get; init; }
+        public string Message { get; init; }
+        public bool Success { get; init; }
 
         #endregion Properties
     }
@@ -68,14 +68,20 @@ namespace CP77.MSTests
 
         #region Properties
 
-        public FileEntry FileEntry { get; set; }
+        public FileEntry FileEntry { get; init; }
 
         //public bool HasIncorrectStringTable { get; set; }
-        public bool IsNotBinaryEqual { get; set; }
+        public bool IsNotBinaryEqual { get; init; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public WriteResultType WriteResult { get; set; }
+        public WriteResultType WriteResult { get; init; }
 
         #endregion Properties
+    }
+
+    public class ArchiveTestResult : TestResult
+    {
+        public string ArchiveName { get; init; }
+        public string Hash { get; init; }
     }
 }

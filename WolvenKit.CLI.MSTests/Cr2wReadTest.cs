@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.CLI.MSTests;
 using WolvenKit.Common;
 
 namespace CP77.MSTests
@@ -875,14 +876,14 @@ namespace CP77.MSTests
 
         private static void Test_Extension(string extension)
         {
-            var resultDir = Path.Combine(Environment.CurrentDirectory, TestResultsDirectory);
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
             // Run Test
-            var results = Read_Archive_Items(GroupedFiles[extension]).ToList();
+            var results = Read_Archive_Items(s_groupedFiles[extension]).ToList();
 
             // Write
-            if (WriteToFile)
+            if (s_writeToFile)
             {
                 if (results.Any(r => !r.Success))
                 {
@@ -896,7 +897,7 @@ namespace CP77.MSTests
             // Logging
             // Evaluate
             var successCount = results.Count(r => r.Success);
-            int totalCount = GroupedFiles[extension].Count;
+            int totalCount = s_groupedFiles[extension].Count;
             var sb = new StringBuilder();
             var msg = "";
 

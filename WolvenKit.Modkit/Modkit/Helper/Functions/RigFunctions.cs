@@ -36,7 +36,8 @@ namespace WolvenKit.RED4.RigFile
             for (int i = 0; i < Rig.BoneCount; i++)
             {
                 fs.Position = offset + i * 48;
-                Rig.LocalPosn[i] = new Vec3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+                Vec3 v = new Vec3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+                Rig.LocalPosn[i] = new Vec3(v.X,v.Z, - v.Y);
             }
 
             Rig.LocalRot = new Quat[Rig.BoneCount];
@@ -44,7 +45,8 @@ namespace WolvenKit.RED4.RigFile
             for (int i = 0; i < Rig.BoneCount; i++)
             {
                 fs.Position = offset + i * 48 + 16;
-                Rig.LocalRot[i] = new Quat(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+                Quat q = new Quat(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+                Rig.LocalRot[i] = new Quat(q.X,q.Z,-q.Y,q.W);
             }
 
             Rig.LocalScale = new Vec3[Rig.BoneCount];
@@ -97,13 +99,13 @@ namespace WolvenKit.RED4.RigFile
                     float x = (cr2w.Chunks[0].data as animRig).APoseMS[i].Translation.X.Value;
                     float y = (cr2w.Chunks[0].data as animRig).APoseMS[i].Translation.Y.Value;
                     float z = (cr2w.Chunks[0].data as animRig).APoseMS[i].Translation.Z.Value;
-                    Rig.AposeMSTrans[i] = new Vec3(x, y, z);
+                    Rig.AposeMSTrans[i] = new Vec3(x, z, -y);
                     Mat Tra = Mat.CreateTranslation(Rig.AposeMSTrans[i]);
                     float I = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.I.Value;
                     float J = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.J.Value;
                     float K = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.K.Value;
                     float R = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.R.Value;
-                    Rig.AposeMSRot[i] = new Quat(I, J, K, R);
+                    Rig.AposeMSRot[i] = new Quat(I, K, -J, R);
                     Mat Rot = Mat.CreateFromQuaternion(Rig.AposeMSRot[i]);
                     float t = (cr2w.Chunks[0].data as animRig).APoseMS[i].Scale.X.Value;
                     float u = (cr2w.Chunks[0].data as animRig).APoseMS[i].Scale.Y.Value;
@@ -133,13 +135,13 @@ namespace WolvenKit.RED4.RigFile
                     float x = (cr2w.Chunks[0].data as animRig).APoseLS[i].Translation.X.Value;
                     float y = (cr2w.Chunks[0].data as animRig).APoseLS[i].Translation.Y.Value;
                     float z = (cr2w.Chunks[0].data as animRig).APoseLS[i].Translation.Z.Value;
-                    Rig.AposeLSTrans[i] = new Vec3(x, y, z);
+                    Rig.AposeLSTrans[i] = new Vec3(x, z, -y);
                     Mat Tra = Mat.CreateTranslation(Rig.AposeLSTrans[i]);
                     float I = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.I.Value;
                     float J = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.J.Value;
                     float K = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.K.Value;
                     float R = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.R.Value;
-                    Rig.AposeLSRot[i] = new Quat(I, J, K, R);
+                    Rig.AposeLSRot[i] = new Quat(I, K, -J, R);
                     Mat Rot = Mat.CreateFromQuaternion(Rig.AposeLSRot[i]);
                     float t = (cr2w.Chunks[0].data as animRig).APoseLS[i].Scale.X.Value;
                     float u = (cr2w.Chunks[0].data as animRig).APoseLS[i].Scale.Y.Value;
@@ -312,12 +314,6 @@ namespace WolvenKit.RED4.RigFile
             {
                 CombinedRig.WorldMat[i] = matrix4Xes[i];
             }
-            /*
-            for (int i = 0; i < CombinedRig.BoneCount; i++)
-            {
-                Console.WriteLine(CombinedRig.Names[i] + " " + CombinedRig.Parent[i]);
-            }
-            */
             return CombinedRig;
         }
         public static Dictionary<int, NodeBuilder> ExportNodes(RawArmature rig)
@@ -355,10 +351,7 @@ namespace WolvenKit.RED4.RigFile
                 var s = new Vec3(srcBones.AposeLSScale[srcIndex].X, srcBones.AposeLSScale[srcIndex].Y, srcBones.AposeLSScale[srcIndex].Z);
                 var r = new Quat(srcBones.AposeLSRot[srcIndex].X, srcBones.AposeLSRot[srcIndex].Y, srcBones.AposeLSRot[srcIndex].Z, srcBones.AposeLSRot[srcIndex].W);
                 var t = new Vec3(srcBones.AposeLSTrans[srcIndex].X, srcBones.AposeLSTrans[srcIndex].Y, srcBones.AposeLSTrans[srcIndex].Z);
-
-                if (srcBones.Names[srcIndex] == "Root")
-                    r = new Quat((float)-0.707107, 0, 0, (float)0.707107); // to rotate rig +Z up
-
+                
                 dstNode.WithLocalTranslation(t).WithLocalRotation(r).WithLocalScale(s);
             }
             else
@@ -366,9 +359,7 @@ namespace WolvenKit.RED4.RigFile
                 var s = new Vec3(srcBones.LocalScale[srcIndex].X, srcBones.LocalScale[srcIndex].Y, srcBones.LocalScale[srcIndex].Z);
                 var r = new Quat(srcBones.LocalRot[srcIndex].X, srcBones.LocalRot[srcIndex].Y, srcBones.LocalRot[srcIndex].Z, srcBones.LocalRot[srcIndex].W);
                 var t = new Vec3(srcBones.LocalPosn[srcIndex].X, srcBones.LocalPosn[srcIndex].Y, srcBones.LocalPosn[srcIndex].Z);
-
-                if (srcBones.Names[srcIndex] == "Root")
-                    r = new Quat((float)-0.707107, 0, 0, (float)0.707107);   // to rotate rig +Z up
+                
                 dstNode.WithLocalTranslation(t).WithLocalRotation(r).WithLocalScale(s);
             }
             return dstNode;
