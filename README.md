@@ -85,8 +85,8 @@ This repository was created to demonstrate how the proprietary game engine of CD
    1. Open WolvenKitFormats.sln
    2. Build WolvenKitFormats on Release (not Debug) < This is the problem causer
    3. Switch to WolvenKit.sln
-   4. Build WolvenKit.sln on Debug or release doesn't matter.
-   5. Run `WolvenKit.exe` (in `WolvenKit\bin\<Debug|Release>\net5.0-windows\win-x64\`.
+   4. Build WolvenKit.sln on Debug or Release doesn't matter.
+   5. Run `WolvenKit.exe` (in `WolvenKit\bin\<Debug|Release>\net5.0-windows\win-x64\`).
    6. Profit.
 
 If prompted by a pop-up notification window to save a new \*.sln file, do not save.
