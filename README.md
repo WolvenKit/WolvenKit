@@ -88,7 +88,7 @@ This repository was created to demonstrate how the proprietary game engine of CD
 
 5. **Build and Run**
    1. From the top-level directory:
-      1. Build `WolvenKit.sln` with drop-down menu set to *Debug/Any CPU*.
+      1. Build `WolvenKit.sln` with drop-down menu set to *Debug:Any CPU*.
       2. Navigate to `WolvenKit\bin\Debug\net5.0-windows\win-x64\` and run `WolvenKit.exe`.
 
 If prompted by a pop-up notification window to save a new \*.sln file, do not save.
