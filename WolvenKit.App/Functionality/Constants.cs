@@ -84,10 +84,6 @@ namespace WolvenKit.Functionality.WKitGlobal
         {
             #region Fields
 
-            public const string Collapse = "ProjectExplorer.Collapse";
-            public const string CollapseAll = "ProjectExplorer.CollapseAll";
-            public const string Expand = "ProjectExplorer.Expand";
-            public const string ExpandAll = "ProjectExplorer.ExpandAll";
             public const string Refresh = "ProjectExplorer.Refresh";
 
             #endregion Fields

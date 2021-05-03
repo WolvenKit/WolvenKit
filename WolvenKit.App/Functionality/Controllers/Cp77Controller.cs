@@ -12,10 +12,9 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
 using Newtonsoft.Json;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor;
@@ -157,9 +156,10 @@ namespace WolvenKit.Functionality.Controllers
             logger.Info("Loading archive Manager ... ");
             try
             {
-                if (File.Exists(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager)))
+                var chachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive_cache.json");
+                if (File.Exists(chachePath))
                 {
-                    using var file = File.OpenText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager));
+                    using var file = File.OpenText(chachePath);
                     var serializer = new JsonSerializer
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -172,7 +172,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     ArchiveManager = new ArchiveManager();
                     ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
-                    File.WriteAllText(Cp77Controller.GetManagerPath(EManagerType.ArchiveManager), JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
+                    File.WriteAllText(chachePath, JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -181,8 +181,12 @@ namespace WolvenKit.Functionality.Controllers
                     settings.ManagerVersions[(int)EManagerType.ArchiveManager] = ArchiveManager.SerializationVersion;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.Error("------------------------- Finished loading archive manager.");
+                throw;
+                
+
                 if (File.Exists(GetManagerPath(EManagerType.ArchiveManager)))
                 {
                     File.Delete(GetManagerPath(EManagerType.ArchiveManager));
@@ -197,7 +201,7 @@ namespace WolvenKit.Functionality.Controllers
             // StaticReferences.GlobalStatusBar.LoadingString = "loading";
             // init asset browser here after the manager has loaded
             var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
-            assetBrowserViewModel.ReInit();
+            assetBrowserViewModel.ReInit(false);
 
             return ArchiveManager;
         }

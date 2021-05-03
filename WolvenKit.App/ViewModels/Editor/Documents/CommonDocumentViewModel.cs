@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.RED3.CR2W;
+using WolvenKit.RED3.CR2W.SRT;
 
 namespace WolvenKit.ViewModels.Editor
 {

@@ -1,4 +1,3 @@
-//using SymbolicLinkSupport;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,13 +15,13 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Common.WinFormsEnums;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Reflection;
-using WolvenKit.CR2W.Types;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
+using WolvenKit.RED3.CR2W;
+using WolvenKit.RED3.CR2W.Reflection;
+using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.Wwise;
 using WolvenKit.Wwise.Wwise;
@@ -49,7 +48,6 @@ namespace WolvenKit.ViewModels.Shell
             DdsToCacheCommand = new RelayCommand(DdsToCache, CanDdsToCacheCommand);
             CreateCr2wFileCommand = new DelegateCommand<bool>(CreateCr2w, CanCreateCr2w);
             BackupProjectCommand = new RelayCommand(BackupProject, CanBackupProject);
-            Command1 = new RelayCommand(RunCommand1, CanRunCommand1);
         }
 
         #endregion Constructors
@@ -130,7 +128,6 @@ namespace WolvenKit.ViewModels.Shell
         #region Commands
 
         public ICommand BackupProjectCommand { get; }
-        public ICommand Command1 { get; }
         public ICommand CreateCr2wFileCommand { get; }
         public ICommand DdsToCacheCommand { get; }
 
@@ -238,8 +235,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanDdsToCacheCommand() => true;
 
-        private bool CanRunCommand1() => true;
-
         private void CreateCr2w(bool b) => CreateCustomCr2wFile(b);
 
         private void DdsToCache()
@@ -253,10 +248,6 @@ namespace WolvenKit.ViewModels.Shell
 
             // Installing
             InstallMod();
-        }
-
-        private void RunCommand1()
-        {
         }
 
         #endregion CommandsImplementation

@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Catel.IoC;
 using Catel.Logging;
-
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
@@ -33,13 +32,14 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _logger = LogManager.GetCurrentClassLogger();
+
             if (File.Exists(location))
             {
                 Load(location);
             }
         }
 
-        public Cp77Project() : base("")
+        private Cp77Project() : base("")
         {
         }
 
@@ -48,29 +48,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         #region properties
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
-
-        public override void Load(string path)
-        {
-            using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-            var ser = new XmlSerializer(typeof(CP77Mod));
-            var obj = (CP77Mod)ser.Deserialize(lf);
-            Name = obj.Name;
-            Version = obj.Version;
-            Author = obj.Author;
-            Email = obj.Email;
-            GameType = GameType.Cyberpunk2077;
-            Data = obj;
-            Data.FileName = path;
-        }
-
-        public override void Save(string path)
-        {
-            if (path == null)
-                path = Location;
-            using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
-            var ser = new XmlSerializer(typeof(CP77Mod));
-            ser.Serialize(sf, (CP77Mod)Data);
-        }
 
         #region Directories
 
@@ -93,39 +70,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region Top-level Dirs
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string DlcDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "DLC");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string ModDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "Mod");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
+        
 
         #endregion Top-level Dirs
 
@@ -215,6 +160,49 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region methods
 
+        public override async Task<bool> Load(string path)
+        {
+            try
+            {
+                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                var obj = (CP77Mod)ser.Deserialize(lf);
+                Name = obj.Name;
+                Version = obj.Version;
+                Author = obj.Author;
+                Email = obj.Email;
+                GameType = GameType.Cyberpunk2077;
+                Data = obj;
+                Data.FileName = path;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to load project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
+        }
+
+        public override async Task<bool> Save(string path)
+        {
+            try
+            {
+                path ??= Location;
+
+                await using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                ser.Serialize(sf, (CP77Mod)Data);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to save project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
+        }
+
         // TODO: debug
         public override void Check() => _logger.Error($"{initializeTask.Status.ToString()}");
 
@@ -275,10 +263,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return Task.CompletedTask;
         }
 
-        #endregion methods
-
-        #region Methods
-
         public object Clone()
         {
             var clone = new Cp77Project()
@@ -294,6 +278,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override string ToString() => Location;
 
-        #endregion Methods
+        #endregion methods
     }
 }

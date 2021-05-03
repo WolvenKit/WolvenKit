@@ -11,8 +11,8 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.MVVM.Model
 {
@@ -763,7 +763,6 @@ namespace WolvenKit.MVVM.Model
         /// and adds it to the depot, optionally copying to the project
         /// </summary>
         /// <param name="relativePath"></param>
-        /// <param name="isDLC"></param>
         /// <param name="projectFolder"></param>
         /// <param name="bundleType"></param>
         /// <param name="alternateOutDirectory"></param>

@@ -14,14 +14,16 @@ using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
+using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED3.CR2W;
 using WolvenKit.ViewModels.Editor;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
@@ -87,6 +89,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
             ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
             ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
+            ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
@@ -98,7 +101,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            OpenFileCommand = new DelegateCommand<FileSystemInfoModel>(
+            OpenFileCommand = new DelegateCommand<FileModel>(
                 async (p) => await ExecuteOpenFile(p),
                 (p) => CanOpenFile(p));
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
@@ -148,15 +151,11 @@ namespace WolvenKit.ViewModels.Shell
 
         protected override async Task InitializeAsync()
         {
-            _projectManager.ProjectActivationAsync += OnProjectActivationAsync;
-
             await base.InitializeAsync();
         }
 
         protected override Task OnClosingAsync()
         {
-            _projectManager.ProjectActivationAsync -= OnProjectActivationAsync;
-
             return base.OnClosingAsync();
         }
 
@@ -189,6 +188,9 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
+
+            commandManager.RegisterCommand(AppCommands.Application.ShowCodeEditor, ShowCodeEditorCommand, this);
+
 
             commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
@@ -270,6 +272,7 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the BulkEditor.
         /// </summary>
         public ICommand ShowBulkEditorCommand { get; private set; }
+        public ICommand ShowCodeEditorCommand { get; private set; }
 
         /// <summary>
         /// Displays the AssetBrowser.
@@ -376,7 +379,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanNewFile() => true;
 
-        private bool CanOpenFile(FileSystemInfoModel model) => true;
+        private bool CanOpenFile(FileModel model) => true;
 
         private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
 
@@ -395,6 +398,8 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowCR2WToTextTool() => false;
 
         private bool CanShowCsvEditor() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowCodeEditor() => _projectManager.ActiveProject is EditorProject;
+
 
         private bool CanShowGameDebuggerTool() => false;
 
@@ -434,6 +439,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             // TODO: Implement this
         }
+        private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
 
         private void ExecuteBulkEditor() => BulkEditorVM.IsVisible = false;
 
@@ -458,14 +464,15 @@ namespace WolvenKit.ViewModels.Shell
             //TODO
         }
 
-        private async Task ExecuteOpenFile(FileSystemInfoModel model)
+        private async Task ExecuteOpenFile(FileModel model)
         {
             if (model == null)
             {
                 var dlg = new OpenFileDialog();
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
-                    model = new FileSystemInfoModel(new FileInfo(dlg.FileName), null);
+                    //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
+                    //TODO
                     ActiveDocument = await OpenAsync(model);
                 }
             }
@@ -475,11 +482,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     model.IsExpanded = !model.IsExpanded;
                 }
-                else if (model.IsFile)
+                else if (!model.IsDirectory)
                 {
                     // TODO: make this a background task
                     await RequestFileOpen(model);
-                    //await Task.Run(() => RequestFileOpen(model));
                 }
             }
         }
@@ -946,7 +952,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<DocumentViewModel> OpenAsync(FileSystemInfoModel model)
+        public async Task<DocumentViewModel> OpenAsync(FileModel model)
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
@@ -956,7 +962,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // open file
-            fileViewModel = new DocumentViewModel(this as IWorkSpaceViewModel, model, true);
+            fileViewModel = new DocumentViewModel(this, model, true);
             var result = await fileViewModel.OpenFileAsync(model.FullName);
 
             if (result)
@@ -996,18 +1002,7 @@ namespace WolvenKit.ViewModels.Shell
             ActiveDocument.SetIsDirty(false);
         }
 
-        private Task OnProjectActivationAsync(object sender, ProjectUpdatingCancelEventArgs e)
-        {
-            var newProject = (EditorProject)e.NewProject;
-            if (newProject is not null)
-            {
-                EditorProject = newProject;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        private async Task RequestFileOpen(FileSystemInfoModel model)
+        private async Task RequestFileOpen(FileModel model)
         {
             var fullpath = model.FullName;
 
@@ -1109,8 +1104,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 // AUDIO
 
-                case ".BNK":
-                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
+
                 case ".WEM":
                     OpenAudioFile(fullpath);
                     break;
@@ -1127,6 +1121,8 @@ namespace WolvenKit.ViewModels.Shell
                     //usmplayer.Show(dockPanel, DockState.Document);
                     break;
                 }
+                //case ".BNK":
+                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
 
                 default:
                     ActiveDocument = await OpenAsync(model);

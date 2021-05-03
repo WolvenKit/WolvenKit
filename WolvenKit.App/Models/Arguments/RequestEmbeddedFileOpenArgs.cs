@@ -1,6 +1,6 @@
 using System;
-using WolvenKit.CR2W;
-using WolvenKit.CR2W.Types;
+using WolvenKit.RED3.CR2W;
+using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.Models.Arguments
 {

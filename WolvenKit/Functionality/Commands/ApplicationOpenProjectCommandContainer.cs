@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -6,11 +7,12 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.FileSystem;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Functionality.Commands
@@ -57,10 +59,7 @@ namespace WolvenKit.Functionality.Commands
             if (_projectManager.ActiveProject != null && parameter != null)
             {
                 var a = _projectManager.ActiveProject;
-                if (parameter.ToString().Contains(a.Title))
-                {
-                    return;
-                }
+                Debugger.Break();
             }
 
             try

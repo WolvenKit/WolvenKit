@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
@@ -56,7 +57,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="filepath"></param>
         /// <returns></returns>
-        Task<DocumentViewModel> OpenAsync(FileSystemInfoModel model);
+        Task<DocumentViewModel> OpenAsync(FileModel model);
 
         /// <summary>
         /// Saves a document and resets the dirty flag.

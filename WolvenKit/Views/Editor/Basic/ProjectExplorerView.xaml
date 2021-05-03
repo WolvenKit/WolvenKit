@@ -2,20 +2,25 @@
  x:Class="WolvenKit.Views.Editor.ProjectExplorerView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:behavior="clr-namespace:WolvenKit.Functionality.Behavior"
  xmlns:c="clr-namespace:WolvenKit.Functionality.WKitGlobal.Helpers"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
+ xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
- xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+ xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" 
+ xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
+ xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  d:DesignHeight="450"
- d:DesignWidth="800"
+ d:DesignWidth="400"
  IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d"
+ d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
+
  >
 
     <catel:UserControl.Resources>
@@ -28,40 +33,90 @@
     </catel:UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+
         <Grid.Resources>
-            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+            <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
         </Grid.Resources>
 
         <Grid VerticalAlignment="Top" Visibility="Collapsed">
             <hc:SearchBar Margin="3" />
         </Grid>
 
-        <TreeView
-         Name="TreeView"
-         Margin="0,0,0,0"
-         BorderBrush="Transparent"
-         FontSize="11"
-         ItemsSource="{Binding Treenodes}"
-         SelectedItemChanged="TreeView_SelectedItemChanged"
-         Style="{DynamicResource TreeView}"
-         >
-            <i1:Interaction.Behaviors>
-                <behavior:TreeViewBehavior />
-            </i1:Interaction.Behaviors>
+        <syncfusion:SfTreeGrid  Name="TreeGrid"
+                               ItemsSource="{Binding BindGrid}"
+                               SelectedItem="{Binding SelectedItem}"
+                               ChildPropertyName="ParentHash"
+                               ParentPropertyName="Hash"
+                               SelfRelationRootValue="0"
+                               ExpandStateMappingName="IsExpanded"
 
-            <TreeView.ContextMenu>
+                               AutoGenerateColumns="False"
+                               ColumnSizer="Star"
+                               AutoExpandMode="RootNodesExpanded"
+
+                               AllowResizingColumns="False"
+                               AllowFiltering="True"
+                               AllowEditing="False"
+
+                               SelectionChanged="TreeGrid_OnSelectionChanged"
+                               
+        >
+            <ei:Interaction.Triggers>
+                <ei:EventTrigger EventName="CellDoubleTapped">
+                    <catel:EventToCommand Command="{catel:CommandManagerBinding Application.OpenFile}"
+                                          CommandParameter="{Binding SelectedItem}"
+                                          DisableAssociatedObjectOnCannotExecute="False" />
+                </ei:EventTrigger>
+            </ei:Interaction.Triggers>
+
+
+            <syncfusion:SfTreeGrid.Columns>
+                <syncfusion:TreeGridTextColumn
+                    HeaderText="Name"
+                    HorizontalHeaderContentAlignment="Left"
+                    MappingName="Name"
+                    >
+                    <syncfusion:TreeGridTextColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="*" />
+
+                                </Grid.ColumnDefinitions>
+                                <!--<svgc:SvgViewbox
+                                    Width="12"
+                                    Height="12"
+                                    Margin="0"
+                                    Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
+                                    Stretch="Uniform"
+                                />-->
+                                <TextBlock x:Name="TemplateTextBlock"
+                                      Grid.Column="1"
+                                      Margin="2"
+                                      VerticalAlignment="Center"
+                                      Text="{Binding Path=Name}">
+                                    
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </syncfusion:TreeGridTextColumn.CellTemplate>
+                </syncfusion:TreeGridTextColumn>
+            </syncfusion:SfTreeGrid.Columns>
+
+            <syncfusion:SfTreeGrid.ContextMenu>
                 <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
                     <MenuItem
-                     Margin="0"
-                     Command="{catel:CommandManagerBinding Application.OpenFile}"
-                     CommandParameter="{Binding SelectedItem}"
-                     Header="Open"
-                     />
+                        Margin="0"
+                        Command="{catel:CommandManagerBinding Application.OpenFile}"
+                        CommandParameter="{Binding SelectedItem}"
+                        Header="Open"
+                    />
                     <Separator Margin="-15" />
 
                     <MenuItem Margin="0" Header="Actions">
 
-                        <MenuItem Command="{Binding AddAllCommand}" Header="Add all dependencies" />
+                        <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
 
@@ -74,8 +129,7 @@
                     </MenuItem>
 
                     <Separator Margin="-15" />
-                    <!--<MenuItem Header="Cut" Command="{Binding CutFileCommand}" />-->
-                    <MenuItem Command="{Binding CopyCommand}" Header="Copy" />
+                    <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
                     <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
                     <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
                     <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
@@ -84,50 +138,15 @@
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
                     <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
                     <Separator Margin="-15" />
-                    <MenuItem Command="{Binding ExpandCommand}" Header="Expand children" />
-                    <MenuItem Command="{Binding CollapseCommand}" Header="Collapse children" />
+                    
                     <Separator Margin="-15" />
+                    <MenuItem Click="ExpandChildren_OnClick" Header="Expand children" />
+                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse children"/>
+                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all"/>
                 </ContextMenu>
-            </TreeView.ContextMenu>
+            </syncfusion:SfTreeGrid.ContextMenu>
 
-            <TreeView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource MahApps.Styles.TreeViewItem}" TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-
-            <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type model:FileSystemInfoModel}" ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel.InputBindings>
-                            <MouseBinding
-                             Command="{catel:CommandManagerBinding Application.OpenFile}"
-                             CommandParameter="{Binding}"
-                             MouseAction="LeftDoubleClick"
-                             />
-                        </StackPanel.InputBindings>
-                        <svgc:SvgViewbox
-                         Width="22"
-                         Height="15"
-                         Margin="0"
-                         Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
-                         Stretch="Uniform"
-                         />
-                        <TextBlock Text="{Binding Path=Name}" />
-                        <i1:Interaction.Triggers>
-                            <i1:EventTrigger EventName="PreviewMouseRightButtonDown">
-                                <i1:ChangePropertyAction
-                                 PropertyName="IsSelected"
-                                 TargetObject="{Binding}"
-                                 Value="true"
-                                 />
-                            </i1:EventTrigger>
-                        </i1:Interaction.Triggers>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-        </TreeView>
+        </syncfusion:SfTreeGrid>
     </Grid>
 </catel:UserControl>

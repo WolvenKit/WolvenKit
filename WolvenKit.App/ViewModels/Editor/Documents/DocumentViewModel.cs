@@ -9,15 +9,17 @@ using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
 using HandyControl.Controls;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED3.CR2W.SRT;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
@@ -38,16 +40,13 @@ namespace WolvenKit.ViewModels.Editor
         private ChunkViewModel _selectedChunk;
         private string _textContent = string.Empty;
         private IWorkSpaceViewModel _workSpaceViewModel = null;
-        private FileSystemInfoModel fileinfo;
+        private FileModel fileinfo;
 
         #endregion fields
 
         #region ctors
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel,
-                                FileSystemInfoModel model,
-                                bool isExistingInFileSystem)
-            : this(workSpaceViewModel)
+        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem) : this(workSpaceViewModel)
         {
             fileinfo = model;
             _initialPath = fileinfo.FullName;
@@ -72,9 +71,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             IsDirty = false;
 
-            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor, CanOpenEditor);
-            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer, CanOpenBuffer);
-            OpenImportCommand = new RelayCommand(ExecuteOpenImport, CanOpenImport);
+            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
+            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
+            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+
+            OpenImportCommand = new RelayCommand(ExecuteViewImports, CanViewImports);
 
 
         }
@@ -82,6 +83,18 @@ namespace WolvenKit.ViewModels.Editor
         #endregion ctors
 
         #region commands
+
+        public ICommand ViewImportsCommand { get; private set; }
+        private bool CanViewImports() => true;
+        private void ExecuteViewImports()
+        {
+            // TODO: Handle command logic here
+        }
+
+        private bool CanOpenBuffer() => true;
+
+        private bool CanOpenEditor() => true;
+
 
         public ICommand OpenBufferCommand { get; private set; }
         public ICommand OpenEditorCommand { get; private set; }
@@ -115,11 +128,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        private bool CanOpenBuffer() => true;
-
-        private bool CanOpenEditor() => true;
-
-        private bool CanOpenImport() => true;
+        
 
         private void ExecuteOpenBuffer()
         {
@@ -131,9 +140,21 @@ namespace WolvenKit.ViewModels.Editor
             // TODO: Handle command logic here
         }
 
-        private void ExecuteOpenImport()
+        private void ExecuteOpenImport(ICR2WImport input)
         {
-            // TODO: Handle command logic here
+            var depotpath = input.DepotPathStr;
+            var foundItems = new List<IGameFile>();
+            foreach (var manager in MainController.Get().GetManagers(false)
+                .Where(manager => manager.Items.ContainsKey(depotpath)))
+            {
+                foundItems.AddRange(manager.Items[depotpath]);
+            }
+
+            var itemToImport = foundItems.FirstOrDefault();
+            if (itemToImport != null)
+            {
+                AssetBrowserViewModel.AddToMod(itemToImport);
+            }
         }
 
         #endregion commands
@@ -253,7 +274,22 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        
+        private ICR2WImport _selectedImport;
+        public ICR2WImport SelectedImport
+        {
+            get => _selectedImport;
+            set
+            {
+                if (_selectedImport != value)
+                {
+                    var oldValue = _selectedImport;
+                    _selectedImport = value;
+                    RaisePropertyChanged(() => SelectedImport, oldValue, value);
+                }
+            }
+        }
+
+
 
         private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file) => new();
 

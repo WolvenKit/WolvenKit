@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using Catel;
 using Catel.Services;
 using NAudio.Wave;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.Views.Editor.AudioTool;

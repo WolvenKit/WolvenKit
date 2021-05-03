@@ -4,7 +4,7 @@ using Catel;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -114,7 +114,7 @@ namespace WolvenKit.Functionality.Commands
                                         Version = "1.0"
                                     }
                                 };
-                                np.Save(location);
+                                await np.Save(location);
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);
                                 break;
@@ -133,7 +133,7 @@ namespace WolvenKit.Functionality.Commands
                                         Version = "1.0"
                                     }
                                 };
-                                np.Save(location);
+                                await np.Save(location);
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);
                                 break;

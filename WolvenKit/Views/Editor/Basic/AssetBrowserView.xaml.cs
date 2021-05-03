@@ -1,6 +1,6 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.Common;
@@ -17,6 +17,15 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
             NotifyPropertyChanged();
+            TreeNavSF.DrillDownItems.CollectionChanged += DrillDownItems_CollectionChanged;
+            VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+
+
+        }
+
+        private void DrillDownItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion Constructors
@@ -58,6 +67,7 @@ namespace WolvenKit.Views.Editor
         {
             if (StaticReferences.GlobalPropertiesView != null)
             {
+
                 StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
@@ -65,6 +75,80 @@ namespace WolvenKit.Views.Editor
             }
         }
 
+        //private object PreviousItem;
 
+        private void SfTreeNavigator_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is AssetBrowserViewModel vm)
+            {
+                if (TreeNavSF.DrillDownItem.Header as string != "Depot")
+                {
+                    VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                }
+
+                // var x = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
+
+                // Trace.WriteLine(x.Name);
+                vm.CurrentNode = TreeNavSF.SelectedItem as GameFileTreeNode;
+                vm.CurrentNodeFiles = (TreeNavSF.SelectedItem as GameFileTreeNode)?.ToAssetBrowserData();
+
+
+                //vm.NavigateTo(vm.CurrentNode.FullPath);
+            }
+        }
+
+
+
+        private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (DataContext is AssetBrowserViewModel vm)
+            {
+                if (TreeNavSF.DrillDownItem.Header as string != "Depot")
+                {
+
+                    var x = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
+
+                    Trace.WriteLine(x.Name);
+                    vm.CurrentNode = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
+                    vm.CurrentNodeFiles = (TreeNavSF.DrillDownItem.Header as GameFileTreeNode)?.ToAssetBrowserData();
+                    TreeNavSF.GoBack();
+                    if (TreeNavSF.DrillDownItem.Header as string == "Depot")
+                    {
+                        VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+
+                    }
+                }
+                else
+                {
+                }
+
+
+
+
+                //vm.NavigateTo(vm.CurrentNode.FullPath);
+            }
+        }
+
+        private void SearchBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (string.Equals(SBBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
+            {
+                SBBar.SetCurrentValue(TextBox.TextProperty, "");
+            }
+        }
+
+        private void SBBar_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            if (string.Equals(SBBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
+            {
+                SBBar.SetCurrentValue(TextBox.TextProperty, "");
+            }
+        }
     }
 }

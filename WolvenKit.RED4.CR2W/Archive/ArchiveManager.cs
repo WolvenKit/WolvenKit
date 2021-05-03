@@ -39,7 +39,9 @@ namespace WolvenKit.RED4.CR2W.Archive
         #region properties
 
         public Dictionary<string, Archive> Archives { get; set; }
+
         public Dictionary<ulong, List<FileEntry>> Files { get; }
+
 
         public Dictionary<string, List<FileEntry>> GroupedFiles =>
 

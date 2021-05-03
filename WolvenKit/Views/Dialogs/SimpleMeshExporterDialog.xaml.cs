@@ -14,11 +14,10 @@ using Ab3d.Common.Cameras;
 using Ab3d.Utilities;
 using Assimp;
 using Catel.IoC;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.MeshFile;
@@ -45,7 +44,7 @@ namespace WolvenKit.Views.Dialogs
         public DirectoryInfo LibText { get; set; }
 
 
-        public FileSystemInfoModel SelectedItem { get; set; }
+        public FileModel SelectedItem { get; set; }
 
         public string OutPath { get; set; }
         public bool ExtractRigged { get; set; }
@@ -64,7 +63,7 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
             AssimpLoader.LoadAssimpNativeLibrary();
-            SelectedItem = selectedItem as FileSystemInfoModel;
+            SelectedItem = selectedItem as FileModel;
             ExtractRiggedMeshRadio.IsChecked = false;
             ExportMaterialsCheckbox.IsChecked = false;
             ExtractRigged = false;
@@ -72,7 +71,7 @@ namespace WolvenKit.Views.Dialogs
             CopyTextures = false;
             UseMaterialsRepository = false;
             DataContext = this;
-            SelectedItem = selectedItem as FileSystemInfoModel;
+            SelectedItem = selectedItem as FileModel;
             SelectedRigFile = new List<Stream>();
             SelectedMeshFiles = new List<Stream>();
 

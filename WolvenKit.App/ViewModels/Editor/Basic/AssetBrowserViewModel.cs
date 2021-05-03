@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,13 +16,14 @@ using Catel.Services;
 using Feather.Commands;
 using Feather.Controls;
 using HandyControl.Data;
-using Orc.ProjectManagement;
 using Orchestra.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
@@ -148,7 +148,7 @@ namespace WolvenKit.ViewModels.Editor
             HomeCommand = new RelayCommand(ExecuteHome, CanHome);
 
             SetupToolDefaults();
-            ReInit();
+            ReInit(false);
         }
 
         #endregion ctor
@@ -245,7 +245,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Initializes the Asset Browser and populates the data nodes.
         /// </summary>
-        public void ReInit()
+        public void ReInit(bool loadmods)
         {
             LoadVisibility = Visibility.Visible;
             SetCurrentNodeCommand = new RelayCommand<LazyObservableTreeNode<GameFileTreeNode>>(
@@ -258,7 +258,7 @@ namespace WolvenKit.ViewModels.Editor
             });
 
             SelectedFiles = new List<IGameFile>();
-            Managers = MainController.Get().GetManagers(true);
+            Managers = MainController.Get().GetManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
             foreach (var mngr in Managers)
@@ -272,7 +272,7 @@ namespace WolvenKit.ViewModels.Editor
 
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
             RootNode = CurrentNode;
-            Extensions = MainController.Get().GetManagers(true).SelectMany(x => x.Extensions).ToList();
+            Extensions = MainController.Get().GetManagers(loadmods).SelectMany(x => x.Extensions).ToList();
             Classes = MainController.GetGame().GetAvaliableClasses();
             PreviewVisible = false;
 
@@ -306,9 +306,11 @@ namespace WolvenKit.ViewModels.Editor
 
         protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
 
-        private static void AddToMod(IGameFile file)
+        public static void AddToMod(IGameFile file)
         {
             var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
+
+            NotificationHelper.Growl.Info($"Importing file: {file.Name}");
             var project = (EditorProject)pm.ActiveProject;
             switch (project.GameType)
             {
@@ -395,7 +397,6 @@ namespace WolvenKit.ViewModels.Editor
                             }
                         }
                     }));
-                    _notificationService.Info($"Importing file: {item.Name}");
 
                     break;
                 }

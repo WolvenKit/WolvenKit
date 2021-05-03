@@ -74,7 +74,7 @@
         <PackageReference Include="doboz4net" Version="1.0.1" NoWarn="NU1701" />
         <PackageReference Include="lz4net" Version="1.0.15.93" />
         <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
-        <PackageReference Include="protobuf-net" Version="3.0.73" />
+        <PackageReference Include="protobuf-net" Version="3.0.101" />
         <PackageReference Include="Snappy.NET" Version="1.1.1.8" NoWarn="NU1701" />
         <PackageReference Include="Crc32C.NET" Version="1.0.5" NoWarn="NU1701" />
         <PackageReference Include="ini-parser" Version="2.5.2" NoWarn="NU1701" />

@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.ViewModels.Editor
 {

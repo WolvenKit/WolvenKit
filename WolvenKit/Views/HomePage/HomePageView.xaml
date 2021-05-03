@@ -456,7 +456,8 @@
          Orientation="Horizontal"
          >
             <Button
-             Margin="25,-5,25,3"
+             Margin="0,-5,0,3"
+             Padding="25,0,25,0"
              Background="Transparent"
              BorderBrush="Transparent"
              Command="{Binding MinimizeWindow}"
@@ -475,7 +476,8 @@
             </Button>
 
             <Button
-             Margin="25,-5,25,3"
+             Margin="0,-5,0,3"
+             Padding="25,0,25,0"
              Background="Transparent"
              BorderBrush="Transparent"
              Command="{Binding RestoreWindow}"
@@ -494,7 +496,8 @@
             </Button>
 
             <Button
-             Margin="25,-5,0,3"
+             Margin="0,-5,0,3"
+             Padding="25,0,10,0"
              Background="Transparent"
              BorderBrush="Transparent"
              Command="hc:ControlCommands.ShutdownApp"

@@ -2,9 +2,11 @@ using System.Threading.Tasks;
 using Catel;
 using Catel.Services;
 using Catel.Threading;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.ViewModels.Shell;
+using ReactiveUI;
+
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -25,9 +27,6 @@ namespace WolvenKit.ViewModels.Editor
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
-
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
-            _projectManager.ProjectRefreshedAsync += ProjectManagerOnProjectRefreshedAsync;
 
             SetupCommands();
             SetupToolDefaults();
@@ -67,19 +66,6 @@ namespace WolvenKit.ViewModels.Editor
         #region Methods
 
         public string BTitle { get; set; }
-
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
-        {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-            {
-                return TaskHelper.Completed;
-            }
-
-            return TaskHelper.Completed;
-        }
-
-        private Task ProjectManagerOnProjectRefreshedAsync(object sender, ProjectEventArgs e) => TaskHelper.Completed;
 
         /// <summary>
         /// Initialize commands for this window.

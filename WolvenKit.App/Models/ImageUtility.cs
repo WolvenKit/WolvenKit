@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.Common.DDS;
-using WolvenKit.CR2W.Types;
+using WolvenKit.RED3.CR2W.Types;
 using ImageFormat = Pfim.ImageFormat;
 
 namespace WolvenKit.Models

@@ -11,10 +11,10 @@ using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.CR2W;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED3.CR2W;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
 
@@ -59,27 +59,47 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
 
-        public override void Load(string path)
+        public override async Task<bool> Load(string path)
         {
-            using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-            var ser = new XmlSerializer(typeof(W3Mod));
-            var obj = (W3Mod)ser.Deserialize(lf);
-            Name = obj.Name;
-            Version = obj.Version;
-            Author = obj.Author;
-            Email = obj.Email;
-            GameType = GameType.Witcher3;
-            Data = obj;
-            Data.FileName = path;
+            try
+            {
+                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
+                var ser = new XmlSerializer(typeof(W3Mod));
+                var obj = (W3Mod)ser.Deserialize(lf);
+                Name = obj.Name;
+                Version = obj.Version;
+                Author = obj.Author;
+                Email = obj.Email;
+                GameType = GameType.Witcher3;
+                Data = obj;
+                Data.FileName = path;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to load project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
         }
 
-        public override void Save(string path)
+        public override async Task<bool> Save(string path)
         {
-            if (path == null)
-                path = Location;
-            using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
-            var ser = new XmlSerializer(typeof(W3Mod));
-            ser.Serialize(sf, (W3Mod)Data);
+            try
+            {
+                path ??= Location;
+
+                await using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
+                var ser = new XmlSerializer(typeof(W3Mod));
+                ser.Serialize(sf, (W3Mod)Data);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to save project. Exception: {e.Message}");
+                return false;
+            }
+
+            return true;
         }
 
         [XmlIgnore]
@@ -107,40 +127,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         #region Top-level Dirs
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string DlcDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "DLC");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string ModDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "Mod");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
 
         [XmlIgnore]
         [ReadOnly(true)]

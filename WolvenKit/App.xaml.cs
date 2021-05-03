@@ -3,12 +3,15 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.Messaging;
 using FFmpeg.AutoGen;
 using NodeNetwork;
 using Orchestra.Services;
+using Syncfusion.SfSkinManager;
+using Syncfusion.Themes.MaterialDark.WPF;
 using Unosquare.FFME;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -43,6 +46,7 @@ namespace WolvenKit
                                                              licenseType: "FreeNonCommercialLicense-TeamDeveloperLicense",
                                                              license: "F564-4078-3E78-F218-D27F-B191-4A32-AD76-2002-F1B1-EE27-7B15-5316-4CEA-5281-FF84-5B56-BECD-12CA-F307-E847-E014-7378-032C");
 
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");
 
 
 
@@ -119,6 +123,12 @@ namespace WolvenKit
             Log.Info("Initializing NodeNetwork");
             NNViewRegistrar.RegisterSplat();
 
+
+            MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
+            themeSettings.PrimaryBackground = new SolidColorBrush(Colors.Gray);
+            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+
+
             NotificationHelper.InitializeNotificationHelper();
 
             string path = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -132,7 +142,7 @@ namespace WolvenKit
             }
 
 
-
+            SfSkinManager.ApplyStylesOnApplication = true;
 
             Log.Info("Check for new updates");
             AppHelper.CheckForUpdates();

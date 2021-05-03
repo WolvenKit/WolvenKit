@@ -3,7 +3,7 @@ using Catel.Data;
 using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Model;
 using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
