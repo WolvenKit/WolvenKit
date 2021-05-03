@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ProtoBuf;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using ZeroFormatter;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
     [ZeroFormattable]
+    [ProtoContract]
     public class ArchiveManager : CyberArchiveManager
     {
         #region Fields
@@ -24,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public ArchiveManager()
         {
             Archives = new Dictionary<string, Archive>();
-            Files = new Dictionary<ulong, List<FileEntry>>();
+            //Files = new Dictionary<ulong, IEnumerable<FileEntry>>();
             Items = new Dictionary<string, List<IGameFile>>();
         }
 
@@ -32,8 +33,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             : this()
         {
             _parentDirectoryInfo = indir;
-
-            // load files
             Reload(indir);
         }
 
@@ -41,22 +40,21 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
 
-        [Index(0)] public Dictionary<string, Archive> Archives { get; set; }
+        [Index(0)] [ProtoMember(1)] public virtual Dictionary<string, Archive> Archives { get; set; }
 
-        [Index(1)] public Dictionary<ulong, List<FileEntry>> Files { get; }
+        [IgnoreFormat]
+        public Dictionary<ulong, IEnumerable<FileEntry>> Files =>  Archives.Values
+                .SelectMany(_ => _.Files)
+                .GroupBy(_ => _.Key)
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value));
 
+        [IgnoreFormat]
+        public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
+            Archives.Values
+                .SelectMany(_ => _.Files)
+                .GroupBy(_ => _.Value.Extension)
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value));
 
-
-        public Dictionary<string, List<FileEntry>> GroupedFiles =>
-
-            Files.Values.GroupBy(
-                f => f.FirstOrDefault().Extension,
-                file => file,
-                (ext, items) => new
-                {
-                    Key = ext,
-                    File = items.Where(_ => _.FirstOrDefault().Extension == ext).SelectMany(_ => _).ToList()
-                }).ToDictionary(_ => _.Key, _ => _.File);
 
         #endregion properties
 
@@ -72,7 +70,10 @@ namespace WolvenKit.RED4.CR2W.Archive
         {
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
+            {
                 return;
+            }
+
             var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
 
             foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
@@ -90,14 +91,20 @@ namespace WolvenKit.RED4.CR2W.Archive
         public override void LoadArchive(string filename, bool ispatch = false)
         {
             if (Archives.ContainsKey(filename))
+            {
                 return;
+            }
+
             var bundle = new Archive(filename);
-            foreach (KeyValuePair<ulong, FileEntry> item in bundle.Files)
+            foreach (var (key, value) in bundle.Files)
             {
                 // add new key if the file isn't already in another bundle
-                if (!Items.ContainsKey(item.Value.Name))
-                    Items.Add(item.Value.Name, new List<IGameFile>());
-                Items[item.Value.Name].Add(item.Value);
+                if (!Items.ContainsKey(value.Name))
+                {
+                    Items.Add(value.Name, new List<IGameFile>());
+                }
+
+                Items[value.Name].Add(value);
             }
             Archives.Add(filename, bundle);
         }
@@ -175,31 +182,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 Archives.Add(fi.FullName, new Archive(fi.FullName));
             }
 
-            ReloadFiles();
-        }
-
-        /// <summary>
-        /// Reloads file list from stored archives
-        /// </summary>
-        private void ReloadFiles()
-        {
-            Files.Clear();
-            Extensions.Clear();
-
-            foreach (var archive in Archives)
-            {
-                foreach (var (hash, value) in archive.Value.Files)
-                {
-                    // add file
-                    if (!Files.ContainsKey(hash))
-                        Files.Add(hash, new List<FileEntry>());
-                    Files[hash].Add(value);
-
-                    // add extension
-                    if (!Extensions.Contains(value.Extension))
-                        Extensions.Add(value.Extension);
-                }
-            }
+            //ReloadFiles();
         }
 
         #endregion methods

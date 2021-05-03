@@ -159,7 +159,10 @@ namespace WolvenKit.Functionality.Controllers
                 var chachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "archive_cache.bin");
                 if (File.Exists(chachePath))
                 {
-                    using var file = File.OpenText(chachePath);
+                    using var fs = new FileStream(chachePath, FileMode.Open);
+                    ZeroFormatter.ZeroFormatterSerializer.Deserialize<ArchiveManager>(fs);
+
+                    // json
                     //var serializer = new JsonSerializer
                     //{
                     //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -173,6 +176,11 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     ArchiveManager = new ArchiveManager();
                     ArchiveManager.LoadAll(Path.GetDirectoryName(settings.CP77ExecutablePath));
+
+                    using var fs = new FileStream(chachePath, FileMode.Create);
+                    ZeroFormatter.ZeroFormatterSerializer.Serialize(fs, ArchiveManager);
+
+                    // json
                     //File.WriteAllText(chachePath, JsonConvert.SerializeObject(ArchiveManager, Formatting.None, new JsonSerializerSettings()
                     //{
                     //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,

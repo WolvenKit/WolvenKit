@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using CP77Tools.Model;
+using ProtoBuf;
 using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
@@ -12,6 +13,7 @@ using Index = CP77Tools.Model.Index;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
+    [ProtoContract]
     [ZeroFormattable]
     public class Archive : IGameArchive
     {
@@ -38,21 +40,21 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
 
-        [Index(0)] public string ArchiveAbsolutePath { get; set; }
+        [Index(0)] [ProtoMember(1)] public virtual string ArchiveAbsolutePath { get; set; }
 
-        [Index(1)] public Header Header { get; set; }
+        [Index(1)] [ProtoMember(2)] public virtual Header Header { get; set; }
 
-        [Index(2)] public Index Index { get; set; }
+        [Index(2)] [ProtoMember(3)] public virtual Index Index { get; set; }
 
 
 
-        public Dictionary<ulong, FileEntry> Files => Index?.FileEntries;
+        [IgnoreFormat] public Dictionary<ulong, FileEntry> Files => Index?.FileEntries;
 
-        public string Name => Path.GetFileName(ArchiveAbsolutePath);
+        [IgnoreFormat] public string Name => Path.GetFileName(ArchiveAbsolutePath);
 
-        public EArchiveType TypeName => EArchiveType.Archive;
+        [IgnoreFormat] public EArchiveType TypeName => EArchiveType.Archive;
 
-        public int FileCount => Files?.Count ?? 0;
+        [IgnoreFormat] public int FileCount => Files?.Count ?? 0;
 
 
         #endregion properties

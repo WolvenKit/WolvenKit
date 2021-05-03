@@ -806,7 +806,7 @@ namespace CP77.MSTests
             }
             else
             {
-                filesToTest = s_groupedFiles[extension];
+                filesToTest = s_groupedFiles[extension].ToList();
             }
 
             results = Write_Archive_Items(filesToTest).ToList();
@@ -825,7 +825,7 @@ namespace CP77.MSTests
             }
 
             // Logging
-            var totalCount = s_groupedFiles[extension].Count;
+            var totalCount = s_groupedFiles[extension].Count();
             var sb = new StringBuilder();
             sb.AppendLine(
                 $"{extension} -> Successful Writes: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");

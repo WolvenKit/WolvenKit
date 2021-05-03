@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Catel.IoC;
+using ProtoBuf;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
@@ -11,6 +12,7 @@ using ServiceLocator = Catel.IoC.ServiceLocator;
 namespace WolvenKit.RED4.CR2W.Archive
 {
     [ZeroFormattable]
+    [ProtoContract]
     public class FileEntry : IGameFile
     {
         #region Fields
@@ -49,25 +51,25 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Properties
 
-        public ulong NameHash64 { get; set; }
-        public DateTime Timestamp { get; set; }
-        public uint NumInlineBufferSegments { get; set; }
-        public uint SegmentsStart { get; set; }
-        public uint SegmentsEnd { get; set; }
-        public uint ResourceDependenciesStart { get; set; }
-        public uint ResourceDependenciesEnd { get; set; }
-        public byte[] SHA1Hash { get; set; }
+        [Index(0)] [ProtoMember(1)] public virtual ulong NameHash64 { get; set; }
+        [Index(1)] [ProtoMember(2)] public virtual DateTime Timestamp { get; set; }
+        [Index(2)] [ProtoMember(3)] public virtual uint NumInlineBufferSegments { get; set; }
+        [Index(3)] [ProtoMember(4)] public virtual uint SegmentsStart { get; set; }
+        [Index(4)] [ProtoMember(5)] public virtual uint SegmentsEnd { get; set; }
+        [Index(5)] [ProtoMember(6)] public virtual uint ResourceDependenciesStart { get; set; }
+        [Index(6)] [ProtoMember(7)] public virtual uint ResourceDependenciesEnd { get; set; }
+        [Index(7)] [ProtoMember(8)] public virtual byte[] SHA1Hash { get; set; }
 
-        public IGameArchive Archive { get; set; }
+        [IgnoreFormat] public virtual IGameArchive Archive { get; set; }
 
-        public uint Size { get; set; }
-        public uint ZSize { get; set; }
+        [Index(9)] [ProtoMember(10)] public virtual uint Size { get; set; }
+        [Index(10)] [ProtoMember(11)] public virtual uint ZSize { get; set; }
 
-        public string Name => !string.IsNullOrEmpty(_nameStr) ? _nameStr : NameHash64.ToString();
-        public string bytesAsString => BitConverter.ToString(SHA1Hash);
-        public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
-        public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
-        public string Extension => Path.GetExtension(FileName);
+        [IgnoreFormat] public string Name => !string.IsNullOrEmpty(_nameStr) ? _nameStr : NameHash64.ToString();
+        [IgnoreFormat] public string bytesAsString => BitConverter.ToString(SHA1Hash);
+        [IgnoreFormat] public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
+        [IgnoreFormat] public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
+        [IgnoreFormat] public string Extension => Path.GetExtension(FileName);
 
         #endregion Properties
 

@@ -1,10 +1,12 @@
 using System.IO;
+using ProtoBuf;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Types;
 using ZeroFormatter;
 
 namespace CP77Tools.Model
 {
+    [ProtoContract]
     [ZeroFormattable]
     public class Header
     {
@@ -34,13 +36,13 @@ namespace CP77Tools.Model
 
         #region Properties
 
-        [Index(0)] public ulong DebugPosition { get; private set; }
-        [Index(1)] public uint DebugSize { get; private set; }
-        [Index(2)] public ulong Filesize { get; set; }
-        [Index(3)] public ulong IndexPosition { get; set; }
-        [Index(4)] public uint IndexSize { get; set; }
-        [Index(5)] public uint Magic { get; private set; }
-        [Index(6)] public uint Version { get; private set; }
+        [Index(0)] [ProtoMember(1)] public virtual ulong DebugPosition { get; private set; }
+        [Index(1)] [ProtoMember(2)] public virtual uint DebugSize { get; private set; }
+        [Index(2)] [ProtoMember(3)] public virtual ulong Filesize { get; set; }
+        [Index(3)] [ProtoMember(4)] public virtual ulong IndexPosition { get; set; }
+        [Index(4)] [ProtoMember(5)] public virtual uint IndexSize { get; set; }
+        [Index(5)] [ProtoMember(6)] public virtual uint Magic { get; private set; }
+        [Index(6)] [ProtoMember(7)] public virtual uint Version { get; private set; }
 
         #endregion Properties
 

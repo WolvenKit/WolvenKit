@@ -7,14 +7,25 @@ using System.Text;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+using ProtoBuf;
 using WolvenKit.CLI.MSTests;
 using WolvenKit.RED4.CR2W.Archive;
+using ZeroFormatter;
 
 namespace CP77.MSTests
 {
     [TestClass]
     public class ArchiveTests : GameUnitTest
     {
+        public enum Serialization
+        {
+            Json,
+            NewtonsoftJson,
+            Protobuf,
+            Zeroformatting
+        }
+
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
@@ -79,6 +90,93 @@ namespace CP77.MSTests
         public void Test_Uncook()
         {
             
+        }
+
+        [TestMethod]
+        [DataRow(Serialization.NewtonsoftJson)]
+        //[DataRow(Serialization.Zeroformatting)]
+        [DataRow(Serialization.Protobuf)]
+        public void Test_Serialization(Serialization method)
+        {
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            switch (method)
+            {
+                
+                case Serialization.NewtonsoftJson:
+                {
+                    var chachePath = Path.Combine(resultDir, "archive_cache.json");
+                    //using var fs = new FileStream(chachePath, FileMode.Create);
+                    File.WriteAllText(chachePath, JsonConvert.SerializeObject(s_bm, Formatting.None, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    }));
+                    break;
+                }
+                case Serialization.Zeroformatting:
+                {
+                    var chachePath = Path.Combine(resultDir, "archive_cache.zero");
+                    using var fs = new FileStream(chachePath, FileMode.Create);
+                    ZeroFormatterSerializer.Serialize(fs, s_bm);
+                    break;
+                }
+                case Serialization.Json:
+                    break;
+                case Serialization.Protobuf:
+                {
+                    var chachePath = Path.Combine(resultDir, "archive_cache.bin");
+                    using var fs = new FileStream(chachePath, FileMode.Create);
+                    Serializer.Serialize(fs, s_bm);
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(method), method, null);
+            }
+        }
+        
+        [TestMethod]
+        [DataRow(Serialization.NewtonsoftJson)]
+        //[DataRow(Serialization.Zeroformatting)]
+        [DataRow(Serialization.Protobuf)]
+        public void Test_Deserialization(Serialization method)
+        {
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            switch (method)
+            {
+
+                case Serialization.NewtonsoftJson:
+                {
+                    var chachePath = Path.Combine(resultDir, "archive_cache.json");
+                    using var file = File.OpenText(chachePath);
+                    var serializer = new JsonSerializer
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+                    var x = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
+                    break;
+                }
+                case Serialization.Zeroformatting:
+                {
+                    var chachePath = Path.Combine(resultDir, "archive_cache.zero");
+                    using var fs = new FileStream(chachePath, FileMode.Open);
+                    var x = ZeroFormatterSerializer.Deserialize<ArchiveManager>(fs);
+                    break;
+                }
+                case Serialization.Json:
+                    break;
+                case Serialization.Protobuf:
+                {
+                    var chachePath = Path.Combine(resultDir, "archive_cache.bin");
+                    using var fs = new FileStream(chachePath, FileMode.Create);
+                    var x = Serializer.Deserialize<ArchiveManager>(fs);
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(method), method, null);
+            }
         }
 
         #endregion Methods

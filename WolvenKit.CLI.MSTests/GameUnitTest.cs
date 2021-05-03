@@ -18,7 +18,7 @@ namespace WolvenKit.CLI.MSTests
 
         internal const string s_testResultsDirectory = "_CR2WTestResults";
         internal static ArchiveManager s_bm;
-        internal static Dictionary<string, List<FileEntry>> s_groupedFiles;
+        internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles;
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";
         private const string s_writeToFileSetting = "WriteToFile";

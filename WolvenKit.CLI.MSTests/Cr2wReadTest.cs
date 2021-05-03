@@ -895,7 +895,7 @@ namespace CP77.MSTests
             // Logging
             // Evaluate
             var successCount = results.Count(r => r.Success);
-            int totalCount = s_groupedFiles[extension].Count;
+            int totalCount = s_groupedFiles[extension].Count();
             var sb = new StringBuilder();
             var msg = "";
 

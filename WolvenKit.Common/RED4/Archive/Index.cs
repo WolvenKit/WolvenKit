@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 using Catel.IO;
 using Catel.IoC;
+using ProtoBuf;
 using WolvenKit.RED4.CR2W.Archive;
 using RED.CRC64;
 using WolvenKit.Common.Services;
@@ -15,6 +16,7 @@ namespace CP77Tools.Model
     /// An entry in Index 3 (DependencyTable)
     /// </summary>
     [ZeroFormattable]
+    [ProtoContract]
     public class Dependency
     {
         #region Constructors
@@ -36,8 +38,8 @@ namespace CP77Tools.Model
 
         #region Properties
 
-        [Index(0)] public ulong Hash { get; set; }
-        [Index(1)] public string HashStr { get; private set; }
+        [Index(0)] [ProtoMember(1)] public virtual ulong Hash { get; set; }
+        [Index(1)] [ProtoMember(2)] public virtual string HashStr { get; private set; }
 
         #endregion Properties
 
@@ -60,6 +62,7 @@ namespace CP77Tools.Model
     /// <summary>
     /// An entry in Index 2 (OffsetTable)
     /// </summary>
+    [ProtoContract]
     [ZeroFormattable]
     public class FileSegment
     {
@@ -84,10 +87,10 @@ namespace CP77Tools.Model
 
         #region Properties
 
-        [Index(0)] public int Idx { get; private set; }
-        [Index(1)] public ulong Offset { get; private set; }
-        [Index(2)] public uint Size { get; private set; }
-        [Index(3)] public uint ZSize { get; private set; }
+        [Index(0)] [ProtoMember(1)] public virtual int Idx { get; private set; }
+        [Index(1)] [ProtoMember(2)] public virtual ulong Offset { get; private set; }
+        [Index(2)] [ProtoMember(3)] public virtual uint Size { get; private set; }
+        [Index(3)] [ProtoMember(4)] public virtual uint ZSize { get; private set; }
 
         #endregion Properties
 
@@ -111,6 +114,7 @@ namespace CP77Tools.Model
         #endregion Methods
     }
 
+    [ProtoContract]
     [ZeroFormattable]
     public class Index
     {
@@ -136,15 +140,15 @@ namespace CP77Tools.Model
 
         #region Properties
 
-        [Index(0)] public ulong Crc { get; private set; }
-        [Index(1)] public List<Dependency> Dependencies { get; private set; }
-        [Index(2)] public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
-        [Index(3)] public uint FileEntryCount { get; private set; }
-        [Index(4)] public uint FileSegmentCount { get; private set; }
-        [Index(5)] public List<FileSegment> FileSegments { get; private set; }
-        [Index(6)] public uint FileTableOffset { get; private set; }
-        [Index(7)] public uint FileTableSize { get; set; }
-        [Index(8)] public uint ResourceDependencyCount { get; private set; }
+        [Index(0)] [ProtoMember(1)] public virtual ulong Crc { get; private set; }
+        [Index(1)] [ProtoMember(2)] public virtual List<Dependency> Dependencies { get; private set; }
+        [Index(2)] [ProtoMember(3)] public virtual Dictionary<ulong, FileEntry> FileEntries { get; private set; }
+        [Index(3)] [ProtoMember(4)] public virtual uint FileEntryCount { get; private set; }
+        [Index(4)] [ProtoMember(5)] public virtual uint FileSegmentCount { get; private set; }
+        [Index(5)] [ProtoMember(6)] public virtual List<FileSegment> FileSegments { get; private set; }
+        [Index(6)] [ProtoMember(7)] public virtual uint FileTableOffset { get; private set; }
+        [Index(7)] [ProtoMember(8)] public virtual uint FileTableSize { get; set; }
+        [Index(8)] [ProtoMember(9)] public virtual uint ResourceDependencyCount { get; private set; }
 
         #endregion Properties
 

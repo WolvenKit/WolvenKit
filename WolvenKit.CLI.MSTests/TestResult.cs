@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using WolvenKit.RED4.CR2W.Archive;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace CP77.MSTests
 {
@@ -28,7 +27,6 @@ namespace CP77.MSTests
         public int AdditionalBytes { get; init; }
         public FileEntry FileEntry { get; init; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public ReadResultType ReadResult { get; init; }
 
         public int UnknownBytes { get; init; }
@@ -73,7 +71,6 @@ namespace CP77.MSTests
         //public bool HasIncorrectStringTable { get; set; }
         public bool IsNotBinaryEqual { get; init; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public WriteResultType WriteResult { get; init; }
 
         #endregion Properties
