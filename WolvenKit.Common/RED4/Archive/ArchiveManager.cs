@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using ZeroFormatter;
 using Path = System.IO.Path;
 

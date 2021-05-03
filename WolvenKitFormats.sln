@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.CR2W", "Wolv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED3.CR2W", "WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj", "{EAD9C049-8885-4501-9371-3C79A9156ABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Interfaces", "WolvenKit.Interfaces\WolvenKit.Interfaces.csproj", "{F7DD2DB4-C161-4BCA-850D-5ED8385C1C46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Core", "WolvenKit.Core\WolvenKit.Core.csproj", "{F7DD2DB4-C161-4BCA-850D-5ED8385C1C46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

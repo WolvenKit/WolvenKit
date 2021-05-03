@@ -6,6 +6,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
 using ZeroFormatter;
+using ServiceLocator = Catel.IoC.ServiceLocator;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
@@ -27,9 +28,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         public FileEntry(BinaryReader br, IGameArchive parent)
         {
             Archive = parent;
-            var mainController = ServiceLocator.Default.ResolveType<IHashService>();
 
-            Read(br, mainController);
+            Read(br);
         }
 
         public FileEntry(ulong hash, DateTime datetime, uint flags
@@ -95,8 +95,9 @@ namespace WolvenKit.RED4.CR2W.Archive
             bw.Write(SHA1Hash);
         }
 
-        private void Read(BinaryReader br, IHashService hashService)
+        private void Read(BinaryReader br)
         {
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             NameHash64 = br.ReadUInt64();
             _nameStr = hashService?.Get(NameHash64);
 

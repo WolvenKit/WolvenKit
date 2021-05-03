@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Catel.IO;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types

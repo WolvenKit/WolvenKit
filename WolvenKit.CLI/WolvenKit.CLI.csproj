@@ -26,6 +26,7 @@
     <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
     <PackageReference Include="CsvHelper" Version="27.0.2" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
   </ItemGroup>
 
@@ -34,7 +35,7 @@
     </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.Interfaces\WolvenKit.Interfaces.csproj" />
+    <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
   </ItemGroup>

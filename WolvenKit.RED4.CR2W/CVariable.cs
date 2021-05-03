@@ -8,16 +8,15 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using Catel.IoC;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Helpers;
 using WolvenKit.RED4.CR2W.Reflection;
-using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -97,7 +96,7 @@ namespace WolvenKit.RED4.CR2W.Types
                     {
                         ParentVar.IsSerialized = true;
                     }
-                    RaisePropertyChanged(nameof(IsSerialized), oldValue, value);
+                    //RaisePropertyChanged(nameof(IsSerialized), oldValue, value);
                 }
             }
         }
@@ -658,8 +657,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 }
             }
             //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            Logger.LogString($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}", Logtype.Error);
+            Logger.Error($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}");
             
             
             return false;

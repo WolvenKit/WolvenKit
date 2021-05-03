@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json.Serialization;
 using Catel.IO;
 using Catel.IoC;
 using WolvenKit.RED4.CR2W.Archive;
-using Newtonsoft.Json;
 using RED.CRC64;
 using WolvenKit.Common.Services;
 using ZeroFormatter;

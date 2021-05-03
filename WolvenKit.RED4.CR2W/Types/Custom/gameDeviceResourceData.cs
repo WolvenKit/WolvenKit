@@ -1,7 +1,7 @@
 using System.IO;
-using Catel.IO;
 using WolvenKit.RED4.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.RED4.CR2W.Types
 {

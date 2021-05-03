@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED3.CR2W.Types;

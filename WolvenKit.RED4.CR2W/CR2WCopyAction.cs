@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
@@ -160,7 +159,7 @@ namespace WolvenKit.RED4.CR2W
         /// <returns></returns>
         public ICR2WExport TryLookupReference(ICR2WExport oldExportWrapper, IEditableVariable targetVariable = null)
         {
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            //var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             if (oldExportWrapper == null)
             {
@@ -203,12 +202,12 @@ namespace WolvenKit.RED4.CR2W
             }
             else if (targetchunk.Count > 1)
             {
-                logger.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                //logger.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
                 return null;
             }
             else
             {
-                logger.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
+                //logger.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}", Logtype.Error);
                 return null;
             }
         }

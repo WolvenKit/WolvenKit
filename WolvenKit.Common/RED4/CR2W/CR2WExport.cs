@@ -1,15 +1,12 @@
-//using RED.CRC32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-
-//using System.Linq;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
-using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
@@ -162,21 +159,10 @@ namespace WolvenKit.RED4.CR2W
             {
                 var vars = data.GetEditableVariables();
                 var firstString = vars
-                        .Where(_ => _ is CString)
-                        .Cast<CString>()
+                        .OfType<IREDString>()
                         .FirstOrDefault(_ => _.Value != null)
                     ;
-                if (firstString != null)
-                {
-                    return firstString.Value;
-                }
-
-                var firstName = vars
-                        .Where(_ => (_ is CName))
-                        .Cast<CName>()
-                        .FirstOrDefault(_ => _.Value != null)
-                    ;
-                return firstName != null ? firstName.Value : "";
+                return firstString is {Value: { }} ? firstString.Value : "";
             }
         }
 

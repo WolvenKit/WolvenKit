@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
@@ -194,7 +193,7 @@ namespace WolvenKit.RED3.CR2W
                 _.GetFullChunkTypeDependencyString() == chunkdepstring)
                 .ToList();
 
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            //var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             if (targetchunk.Count == 1)
             {
                 //Logger?.LogString($"Found exactly one chunk target. Please double check pointer targets in {vardepstring}", Logtype.Success);
@@ -202,12 +201,12 @@ namespace WolvenKit.RED3.CR2W
             }
             else if (targetchunk.Count > 1)
             {
-                logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
+                //logger?.LogString($"More than one chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
                 return null;
             }
             else
             {
-                logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
+                //logger?.LogString($"No chunk target found, please set pointer target manually in {(targetVariable != null ? vardepstring : chunkdepstring)}.", Logtype.Error);
                 return null;
             }
         }

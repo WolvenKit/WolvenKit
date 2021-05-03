@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
@@ -124,32 +123,32 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public static void Init(string projectpath)
         {
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            //var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             m_projectinfo = new DirectoryInfo(projectpath);
 
-            ReloadAssembly(logger);
+            ReloadAssembly();
         }
 
         /// <summary>
         /// Completely reloads a custom assembly
         /// from .ws scripts and compiles all classes
         /// </summary>
-        public static void ReloadAssembly(ILoggerService logger = null)
+        public static void ReloadAssembly()
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
                 var (count, csharpstring) = InterpretScriptClasses();
                 if (count <= 0)
                     return;
-                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly, logger);
+                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
                 if (m_assembly != null)
                 {
-                    logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}.", Logtype.Success);
+                    //logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}.", Logtype.Success);
                     LoadTypes();
                     LoadEnums();
                 }
-                else
-                    logger.LogString($"Custom class assembly could not be compiled. An error occurred.", Logtype.Error);
+                //else
+                //    logger.LogString($"Custom class assembly could not be compiled. An error occurred.", Logtype.Error);
             }
         }
 
@@ -254,7 +253,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         private static (int, string) InterpretScriptClasses()
         {
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            //var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             List<string> importedClasses = new List<string>();
             List<string> importedEnums = new List<string>();
             string output = "";
@@ -425,8 +424,11 @@ namespace WolvenKit.RED3.CR2W.Types
             }
 
             if (importedClasses.Count > 0)
-                    logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
-$"{string.Join(", ", importedClasses)}", Logtype.Success);
+            {
+                //logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
+                //                 $"{string.Join(", ", importedClasses)}", Logtype.Success);
+            }
+
             return (importedClasses.Count, output);
         }
 

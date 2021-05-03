@@ -6,6 +6,7 @@ using System.Linq;
 using CP77Tools.Model;
 using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Services;
 using ZeroFormatter;
 using Index = CP77Tools.Model.Index;
 

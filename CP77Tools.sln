@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.CLI", "WolvenKit.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Modkit", "WolvenKit.Modkit\WolvenKit.Modkit.csproj", "{EA5E25AA-DD58-4DD5-A99C-C4457392A4B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Interfaces", "WolvenKit.Interfaces\WolvenKit.Interfaces.csproj", "{F1802584-C95D-4000-8AB1-0ECA78E3C696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Core", "WolvenKit.Core\WolvenKit.Core.csproj", "{F1802584-C95D-4000-8AB1-0ECA78E3C696}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

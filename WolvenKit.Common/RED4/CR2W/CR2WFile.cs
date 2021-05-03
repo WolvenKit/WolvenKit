@@ -8,18 +8,14 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.RED4.CR2W.Types;
-using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
-using Catel.Data;
-using FastMember;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
-using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Exceptions;
@@ -68,9 +64,6 @@ namespace WolvenKit.RED4.CR2W
                 version = 162,
             };
 
-
-            Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
             StringDictionary = new Dictionary<uint, string>();
             m_tableheaders = new CR2WTable[10];
         }
@@ -103,8 +96,8 @@ namespace WolvenKit.RED4.CR2W
 
         public CR2WFileHeader Header => m_fileheader;
 
-        [JsonIgnore]
-        public ILoggerService Logger { get; }
+        //[JsonIgnore]
+        //public ILoggerService Logger { get; }
 
         [JsonIgnore]
         public IVariableEditor EditorController { get; set; }
