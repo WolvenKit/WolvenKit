@@ -42,7 +42,16 @@
 
 ---
 
-This repository was created to demonstrate how the proprietary game engine of CDPR, **REDEngine**, reads and writes file formats, and experiment with how their games running on this engine (**The Witcher 3: The Wild Hunt** and **Cyberpunk 2077** currently) work. This tool suite is being made fully for research and educational purposes, and the dev team is in no way responsible of a hypothetical malfunction regarding the game or PC of the end user. It's completely open source, licensed under GPL v3.0, and in no way is it made to generate revenue. The precursor to this tool, W3EDit, was initially [developed by Sarcen](http://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions/58758-mod-editor) in 2015, around the time The Witcher 3 first came out. After Sarcen stopped working on it, a few of us picked it up and continued from there. Currently, it allows reading and writing nearly every REDEngine file format to some extent. It can be used to create file modifications to the assets of the game. This is heavy WIP, so do make sure to check on it regularly. Our primary focus at the moment is progressing with support for the new game, Cyberpunk 2077.
+This repository was created to demonstrate how [CDPR](https://en.wikipedia.org/wiki/CD_Projekt)'s proprietary [**REDEngine**](https://en.wikipedia.org/wiki/CD_Projekt#REDengine) reads and writes file formats.
+And to experiment with the working of games running on this engine i.e. **The Witcher 3: The Wild Hunt** and **Cyberpunk 2077**. 
+This toolkit is being made solely for research and educational purposes, and the dev team is in no way responsible for any malfunctions that occur from its use.
+Its completely open source, licensed under GPL v3.0, and in no way is it made to generate revenue.
+An ancestor to this tool was [W3Edit](https://drive.google.com/file/d/0B3axqSlhNHOOYmpkWk83TXRkZmM/view), initially developed by [Sarcen](http://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions/58758-mod-editor) in 2015, around the time The Witcher 3 first came out.
+After Sarcen stopped working on it, a few of us picked it up and continued from there.
+
+Currently, WolvenKit allows reading and writing nearly every REDEngine file format to some extent. 
+It can also be used to create file modifications to the assets of the game, though this is currently beign actively worked upon, so do make sure to check it regularly.
+Our primary focus at the moment is progressing with support for the new game, Cyberpunk 2077.
 
 <div id="how-to-use">&zwnj;</div>
 <h3 align="center">How to Use</h3>
@@ -64,7 +73,7 @@ This repository was created to demonstrate how the proprietary game engine of CD
    1. Get the latest release here: https://github.com/WolvenKit/Wolvenkit/releases/latest.
 
 2. **Launch the installer.**
-   1. Double click on the .exe to start the installation procedure. The program will take care of the rest.
+   1. Double click on the .exe to start the installation procedure and the program will take care of the rest.
 
 <div id="building">&zwnj;</div>
 <h3 align="center">Build WolvenKit</h3>
@@ -78,7 +87,7 @@ This repository was created to demonstrate how the proprietary game engine of CD
    1. https://visualstudio.microsoft.com/downloads/
 
 3. **Required files**
-   1. All the required files are either nuget packages, which will automatically be downloaded once Build is pressed, or readily included in the package in the [Libs directory](/Libs/).
+   1. All the required files are either NuGet packages, which will automatically be downloaded on pressing `Build`, or readily included in the package in the [Libs directory](/Libs/).
    1. If, for some reason, the LFS quota is depleted, the renderer prerequisite libs can be acquired here: https://outwa.it/lib.zip
 
 4. **Build and Run**
@@ -94,12 +103,14 @@ This repository was created to demonstrate how the proprietary game engine of CD
 
 ---
 
-Please do! Fork the project and please commit your changes in small incremental steps with descriptive messages. Code quality is not the biggest concern but refrain from stupid mistakes that may lead to the denial of the pull request. It's a good idea create an issue when implementing a feature so people don't work on the same feature/issue in an asynchronous manner.
+Please do! Fork the project and please commit your changes in small incremental steps with descriptive messages.
+Code quality is not the biggest concern but refrain from stupid mistakes that may lead to the denial of the pull request.
+It's a good idea to create an issue when implementing a feature so people don't work on the same feature/issue in an asynchronous manner.
 
 For any questions
 - PM Traderain#3279 on Discord,
 - Mail hambalko.bence@gmail.com,
-- Join the [Cyberpunk 2077 Modding Server](https://discord.gg/cp77modding) for active development, or [the old server](https://discordapp.com/invite/tdSUQQe) for general chatting.
+- Join the [Cyberpunk 2077 Modding Server](discord.gg/Epkq79kd96) for active development, or [the old server](https://discordapp.com/invite/tdSUQQe) for general chatting.
 
 <div id="team">&zwnj;</div>
 <h3 align="center">The WolvenKit Team</h3>
