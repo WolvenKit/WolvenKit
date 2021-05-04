@@ -4,6 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+ xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -12,7 +13,6 @@
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:system="clr-namespace:System;assembly=mscorlib"
- xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  BorderBrush="{x:Null}"
  IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
@@ -827,6 +827,15 @@
                              ItemsSource="{Binding CurrentNodeFiles}"
                              SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
                              >
+
+                                <syncfusion:SfDataGrid.HeaderStyle>
+                                    <Style TargetType="syncfusion:GridHeaderCellControl">
+                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                    </Style>
+                                </syncfusion:SfDataGrid.HeaderStyle>
+
+
 
 
                                 <syncfusion:SfDataGrid.Resources>
