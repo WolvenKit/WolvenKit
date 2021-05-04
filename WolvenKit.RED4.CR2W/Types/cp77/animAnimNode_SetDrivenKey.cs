@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _provider, value);
 		}
 
-		public animAnimNode_SetDrivenKey(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimNode_SetDrivenKey(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

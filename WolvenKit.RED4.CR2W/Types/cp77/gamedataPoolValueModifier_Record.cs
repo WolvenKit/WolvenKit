@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataPoolValueModifier_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataPoolValueModifier_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataPoolValueModifier_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

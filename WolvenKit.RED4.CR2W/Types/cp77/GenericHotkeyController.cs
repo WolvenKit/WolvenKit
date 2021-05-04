@@ -98,6 +98,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _factListenerId, value);
 		}
 
-		public GenericHotkeyController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public GenericHotkeyController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

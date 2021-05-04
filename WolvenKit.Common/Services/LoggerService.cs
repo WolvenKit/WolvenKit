@@ -4,15 +4,6 @@ using System.ComponentModel;
 
 namespace WolvenKit.Common.Services
 {
-    public enum Logtype
-    {
-        Normal,
-        Error,
-        Important,
-        Success,
-        Wcc
-    }
-
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class LoggerService : ObservableObject, ILoggerService
     {
@@ -305,23 +296,5 @@ namespace WolvenKit.Common.Services
         #endregion Methods
     }
 
-    public class LogStringEventArgs
-    {
-        #region Constructors
-
-        public LogStringEventArgs(string message, Logtype logtype)
-        {
-            Message = message;
-            Logtype = logtype;
-        }
-
-        #endregion Constructors
-
-        #region Properties
-
-        public Logtype Logtype { get; private set; }
-        public string Message { get; private set; }
-
-        #endregion Properties
-    }
+    
 }

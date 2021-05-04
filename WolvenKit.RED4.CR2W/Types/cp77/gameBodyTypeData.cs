@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _overrides, value);
 		}
 
-		public gameBodyTypeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameBodyTypeData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

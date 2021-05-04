@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questTriggerNotifier_QuestInstance : worldITriggerAreaNotiferInstance
 	{
 
-		public questTriggerNotifier_QuestInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questTriggerNotifier_QuestInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

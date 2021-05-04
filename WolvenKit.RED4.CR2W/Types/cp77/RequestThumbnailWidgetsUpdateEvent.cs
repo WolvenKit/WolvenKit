@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class RequestThumbnailWidgetsUpdateEvent : RequestWidgetUpdateEvent
 	{
 
-		public RequestThumbnailWidgetsUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public RequestThumbnailWidgetsUpdateEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

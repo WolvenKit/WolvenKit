@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataAIActionSequence_Record : gamedataAINode_Record
 	{
 
-		public gamedataAIActionSequence_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataAIActionSequence_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

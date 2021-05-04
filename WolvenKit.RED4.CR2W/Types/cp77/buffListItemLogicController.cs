@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _label, value);
 		}
 
-		public buffListItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public buffListItemLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

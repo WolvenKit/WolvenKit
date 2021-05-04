@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CommunityProxyPS : MasterControllerPS
 	{
 
-		public CommunityProxyPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CommunityProxyPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

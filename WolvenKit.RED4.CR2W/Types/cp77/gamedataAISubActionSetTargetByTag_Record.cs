@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataAISubActionSetTargetByTag_Record : gamedataAISubAction_Record
 	{
 
-		public gamedataAISubActionSetTargetByTag_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataAISubActionSetTargetByTag_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

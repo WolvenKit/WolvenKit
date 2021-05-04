@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class GrappleBreakFreeDecisions : GrappleStandEvents
 	{
 
-		public GrappleBreakFreeDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public GrappleBreakFreeDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

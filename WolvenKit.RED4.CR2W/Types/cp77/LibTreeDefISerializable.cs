@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _v, value);
 		}
 
-		public LibTreeDefISerializable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LibTreeDefISerializable(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

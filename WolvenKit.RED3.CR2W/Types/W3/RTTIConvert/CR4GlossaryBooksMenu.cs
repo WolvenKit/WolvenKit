@@ -25,9 +25,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("SORT_WEIGHT_TH")] 		public CInt32 SORT_WEIGHT_TH { get; set;}
 
-		public CR4GlossaryBooksMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4GlossaryBooksMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4GlossaryBooksMenu(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

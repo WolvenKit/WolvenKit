@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isCrowd, value);
 		}
 
-		public animAnimFeature_CrowdLocomotion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimFeature_CrowdLocomotion(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("maxFrequency")] 		public CFloat MaxFrequency { get; set;}
 
-		public CBTTaskPlayScreamSoundDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskPlayScreamSoundDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskPlayScreamSoundDef(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

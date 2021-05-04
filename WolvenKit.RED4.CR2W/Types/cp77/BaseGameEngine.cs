@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class BaseGameEngine : CBaseEngine
 	{
 
-		public BaseGameEngine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public BaseGameEngine(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

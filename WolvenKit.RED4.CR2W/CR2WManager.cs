@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools;
+using WolvenKit.Core;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -44,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         private static Dictionary<string, Type> m_enums;
 
-        private static LoggerService m_logger;
+        //private static ILoggerService m_logger;
 
         private static DirectoryInfo m_projectinfo;
 
@@ -122,34 +124,35 @@ namespace WolvenKit.RED4.CR2W.Types
             return type;
         }
 
-        public static void Init(string projectpath, LoggerService logger)
+        public static void Init(string projectpath)
         {
-            m_logger = logger;
             m_projectinfo = new DirectoryInfo(projectpath);
 
-            ReloadAssembly(logger);
+            ReloadAssembly();
         }
 
         /// <summary>
         /// Completely reloads a custom assembly
         /// from .ws scripts and compiles all classes
         /// </summary>
-        public static void ReloadAssembly(ILoggerService logger = null)
+        public static void ReloadAssembly()
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
                 var (count, csharpstring) = InterpretScriptClasses();
                 if (count <= 0)
                     return;
-                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly, logger);
+                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
                 if (m_assembly != null)
                 {
-                    m_logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}", Logtype.Success);
+                    Logger.Success($"Successfully compiled custom assembly {m_assembly.GetName()}");
                     LoadTypes();
                     LoadEnums();
                 }
                 else
-                    m_logger.LogString($"Custom class assembly could not be compiled. An error occured", Logtype.Error);
+                {
+                    Logger.Error($"Custom class assembly could not be compiled. An error occured");
+                }
             }
         }
 
@@ -424,9 +427,11 @@ namespace WolvenKit.RED4.CR2W.Types
             }
 
             if (importedClasses.Count > 0)
-                if (m_logger != null)
-                    m_logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
-$"{string.Join(", ", importedClasses)}", Logtype.Success);
+            {
+                Logger.Success($"Sucessfully parsed {importedClasses.Count} custom classes: " +
+                                 $"{string.Join(", ", importedClasses)}");
+            }
+
             return (importedClasses.Count, output);
         }
 
@@ -514,4 +519,6 @@ $"{string.Join(", ", importedClasses)}", Logtype.Success);
 
         #endregion Enums
     }
+
+    
 }

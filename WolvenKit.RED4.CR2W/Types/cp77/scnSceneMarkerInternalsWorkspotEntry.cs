@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exits, value);
 		}
 
-		public scnSceneMarkerInternalsWorkspotEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnSceneMarkerInternalsWorkspotEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

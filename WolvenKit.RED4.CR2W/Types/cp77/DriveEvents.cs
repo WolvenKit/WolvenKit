@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DriveEvents : VehicleEventsTransition
 	{
 
-		public DriveEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DriveEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

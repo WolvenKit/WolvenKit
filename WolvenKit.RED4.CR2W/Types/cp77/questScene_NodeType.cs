@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _entityReference, value);
 		}
 
-		public questScene_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questScene_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

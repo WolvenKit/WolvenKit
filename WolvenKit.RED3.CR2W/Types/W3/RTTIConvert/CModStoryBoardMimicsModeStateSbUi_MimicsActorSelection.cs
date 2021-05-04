@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CModStoryBoardMimicsModeStateSbUi_MimicsActorSelection : CModStoryBoardAssetSelectionBasedWorkModeStateSbUi_AssetSelection
 	{
-		public CModStoryBoardMimicsModeStateSbUi_MimicsActorSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardMimicsModeStateSbUi_MimicsActorSelection(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardMimicsModeStateSbUi_MimicsActorSelection(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

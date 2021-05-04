@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class QuestForceSecuritySystemArmed : ActionBool
 	{
 
-		public QuestForceSecuritySystemArmed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public QuestForceSecuritySystemArmed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceEquipWeapon, value);
 		}
 
-		public GameplayEquipRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public GameplayEquipRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

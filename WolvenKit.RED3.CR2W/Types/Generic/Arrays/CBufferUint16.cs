@@ -13,11 +13,11 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta()]
     public class CBufferUInt16<T> : CBufferBase<T> where T : CVariable
     {
-        public CBufferUInt16(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CBufferUInt16(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBufferUInt16<T>(cr2w, parent, name);
+        
 
         public override void Read(BinaryReader file, uint size)
         {

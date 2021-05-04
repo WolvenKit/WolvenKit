@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("maxTime")] 		public CFloat MaxTime { get; set;}
 
-		public CBTTask3StateIdleDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTask3StateIdleDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTask3StateIdleDef(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

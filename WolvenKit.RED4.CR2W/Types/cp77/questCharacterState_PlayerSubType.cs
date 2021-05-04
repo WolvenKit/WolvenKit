@@ -116,6 +116,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _takedownState, value);
 		}
 
-		public questCharacterState_PlayerSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questCharacterState_PlayerSubType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class entPlaceholderComponent : entIPlacedComponent
 	{
 
-		public entPlaceholderComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entPlaceholderComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

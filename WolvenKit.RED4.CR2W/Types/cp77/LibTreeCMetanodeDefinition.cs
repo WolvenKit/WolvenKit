@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LibTreeCMetanodeDefinition : LibTreeINodeDefinition
 	{
 
-		public LibTreeCMetanodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LibTreeCMetanodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

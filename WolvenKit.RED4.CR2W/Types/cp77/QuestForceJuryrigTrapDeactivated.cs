@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class QuestForceJuryrigTrapDeactivated : ActionBool
 	{
 
-		public QuestForceJuryrigTrapDeactivated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public QuestForceJuryrigTrapDeactivated(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

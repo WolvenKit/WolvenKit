@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataAISquadItemPriorityFilter_Record : gamedataAITicketFilter_Record
 	{
 
-		public gamedataAISquadItemPriorityFilter_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataAISquadItemPriorityFilter_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

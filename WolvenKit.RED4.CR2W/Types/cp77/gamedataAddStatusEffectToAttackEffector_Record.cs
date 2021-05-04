@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataAddStatusEffectToAttackEffector_Record : gamedataEffector_Record
 	{
 
-		public gamedataAddStatusEffectToAttackEffector_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataAddStatusEffectToAttackEffector_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

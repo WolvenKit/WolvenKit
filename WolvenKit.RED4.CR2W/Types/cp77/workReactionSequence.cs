@@ -89,6 +89,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _facialIdleKey_FemaleAnimation, value);
 		}
 
-		public workReactionSequence(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public workReactionSequence(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

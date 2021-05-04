@@ -152,6 +152,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialLoadingID, value);
 		}
 
-		public LoadListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LoadListItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

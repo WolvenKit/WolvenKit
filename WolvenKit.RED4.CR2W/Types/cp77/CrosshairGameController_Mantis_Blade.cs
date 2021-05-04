@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _aimAnim, value);
 		}
 
-		public CrosshairGameController_Mantis_Blade(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CrosshairGameController_Mantis_Blade(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

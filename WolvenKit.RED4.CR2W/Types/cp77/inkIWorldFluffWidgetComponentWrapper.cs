@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkIWorldFluffWidgetComponentWrapper : inkIWorldWidgetComponentWrapper
 	{
 
-		public inkIWorldFluffWidgetComponentWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkIWorldFluffWidgetComponentWrapper(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

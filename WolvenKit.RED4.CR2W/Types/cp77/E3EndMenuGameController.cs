@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class E3EndMenuGameController : gameuiMenuItemListGameController
 	{
 
-		public E3EndMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public E3EndMenuGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

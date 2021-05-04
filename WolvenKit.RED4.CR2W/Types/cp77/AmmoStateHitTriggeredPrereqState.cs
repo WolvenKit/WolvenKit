@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AmmoStateHitTriggeredPrereqState : GenericHitPrereqState
 	{
 
-		public AmmoStateHitTriggeredPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AmmoStateHitTriggeredPrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

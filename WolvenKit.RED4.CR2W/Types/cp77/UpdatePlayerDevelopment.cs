@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class UpdatePlayerDevelopment : gamePlayerScriptableSystemRequest
 	{
 
-		public UpdatePlayerDevelopment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public UpdatePlayerDevelopment(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -23,9 +23,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("logLevel")] 		public CEnum<EModLogLevel> LogLevel { get; set;}
 
-		public CMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMod(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMod(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

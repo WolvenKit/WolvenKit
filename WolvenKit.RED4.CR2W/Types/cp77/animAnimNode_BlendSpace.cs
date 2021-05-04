@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isLooped, value);
 		}
 
-		public animAnimNode_BlendSpace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimNode_BlendSpace(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

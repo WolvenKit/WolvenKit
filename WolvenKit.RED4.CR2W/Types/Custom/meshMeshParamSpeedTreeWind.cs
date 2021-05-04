@@ -1,6 +1,7 @@
 using System.IO;
 using WolvenKit.RED4.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -26,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unk2, value);
         }
 
-        public meshMeshParamSpeedTreeWind(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public meshMeshParamSpeedTreeWind(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Unk2 = new CArrayCompressed<CFloat>(cr2w, this, nameof(Unk2)) {IsSerialized = true};
         }

@@ -42,7 +42,7 @@ namespace WolvenKit.RED3.CR2W.Types
             }
         }
 
-        public IdTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public IdTag(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {

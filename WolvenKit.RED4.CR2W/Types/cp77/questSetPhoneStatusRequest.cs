@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _status, value);
 		}
 
-		public questSetPhoneStatusRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questSetPhoneStatusRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

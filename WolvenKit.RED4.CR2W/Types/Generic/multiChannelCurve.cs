@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
     {
         
 
-        public multiChannelCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public multiChannelCurve(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             //NumChannels = new CUInt32(cr2w, this, nameof(NumChannels));
             InterPolationType = new CEnum<Enums.EInterPolationType>(cr2w, this, nameof(InterPolationType));

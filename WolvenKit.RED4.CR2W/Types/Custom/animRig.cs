@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unk2, value);
         }
 
-        public animRig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public animRig(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {

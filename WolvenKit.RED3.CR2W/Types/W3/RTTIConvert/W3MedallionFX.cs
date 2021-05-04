@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("medallionComponent")] 		public CHandle<CComponent> MedallionComponent { get; set;}
 
-		public W3MedallionFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3MedallionFX(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3MedallionFX(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

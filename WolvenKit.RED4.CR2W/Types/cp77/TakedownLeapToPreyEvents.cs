@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class TakedownLeapToPreyEvents : LocomotionTakedownEvents
 	{
 
-		public TakedownLeapToPreyEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public TakedownLeapToPreyEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

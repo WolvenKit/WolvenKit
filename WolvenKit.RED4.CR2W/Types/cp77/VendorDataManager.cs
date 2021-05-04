@@ -107,6 +107,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openTime, value);
 		}
 
-		public VendorDataManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public VendorDataManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

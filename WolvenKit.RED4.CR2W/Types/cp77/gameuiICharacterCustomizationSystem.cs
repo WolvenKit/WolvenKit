@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameuiICharacterCustomizationSystem : gameIGameSystem
 	{
 
-		public gameuiICharacterCustomizationSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameuiICharacterCustomizationSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

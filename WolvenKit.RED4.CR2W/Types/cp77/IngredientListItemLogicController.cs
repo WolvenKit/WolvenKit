@@ -143,6 +143,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemAmount, value);
 		}
 
-		public IngredientListItemLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public IngredientListItemLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

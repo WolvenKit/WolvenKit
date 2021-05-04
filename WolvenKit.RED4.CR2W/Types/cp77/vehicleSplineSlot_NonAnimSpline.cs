@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class vehicleSplineSlot_NonAnimSpline : CVariable
 	{
 
-		public vehicleSplineSlot_NonAnimSpline(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public vehicleSplineSlot_NonAnimSpline(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

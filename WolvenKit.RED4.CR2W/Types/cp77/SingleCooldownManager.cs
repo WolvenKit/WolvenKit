@@ -188,6 +188,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_EXCLUDED_STATUS_EFFECT_NAME, value);
 		}
 
-		public SingleCooldownManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SingleCooldownManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

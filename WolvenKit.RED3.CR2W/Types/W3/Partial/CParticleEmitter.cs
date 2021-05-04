@@ -55,9 +55,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(22)] [RED("lods", 2,0)] 		public CArray<SParticleEmitterLODLevel> Lods { get; set;}
 
-		public CParticleEmitter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CParticleEmitter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CParticleEmitter(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

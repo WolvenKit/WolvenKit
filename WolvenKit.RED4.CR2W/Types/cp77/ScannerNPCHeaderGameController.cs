@@ -98,6 +98,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isValidArchetype, value);
 		}
 
-		public ScannerNPCHeaderGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ScannerNPCHeaderGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

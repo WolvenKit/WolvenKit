@@ -18,16 +18,9 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1)] [RED] public SVector4D Rotation { get; set; }
         [Ordinal(2)] [RED] public SVector4D Scale { get; set; }
 
-        public SSkeletonRigData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SSkeletonRigData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
-        }
-
-
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SSkeletonRigData(cr2w, parent, name);
         }
 
 

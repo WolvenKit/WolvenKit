@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(2)] [RED] public CFloat Z { get; set; }
         [Ordinal(3)] [RED] public CFloat W { get; set; }
 
-        public SVector4D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SVector4D(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         public override string ToString()

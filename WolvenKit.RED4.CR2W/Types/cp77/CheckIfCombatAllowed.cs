@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CheckIfCombatAllowed : AIDebugConditions
 	{
 
-		public CheckIfCombatAllowed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CheckIfCombatAllowed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

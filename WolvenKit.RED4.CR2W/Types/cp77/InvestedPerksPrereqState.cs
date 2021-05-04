@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class InvestedPerksPrereqState : gamePrereqState
 	{
 
-		public InvestedPerksPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public InvestedPerksPrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

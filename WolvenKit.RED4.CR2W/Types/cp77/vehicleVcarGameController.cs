@@ -629,6 +629,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _interiorFluff2Anim2WidgetPath, value);
 		}
 
-		public vehicleVcarGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public vehicleVcarGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

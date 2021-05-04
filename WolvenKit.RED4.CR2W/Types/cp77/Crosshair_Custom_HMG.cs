@@ -215,6 +215,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forcedCooldownOptions, value);
 		}
 
-		public Crosshair_Custom_HMG(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Crosshair_Custom_HMG(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

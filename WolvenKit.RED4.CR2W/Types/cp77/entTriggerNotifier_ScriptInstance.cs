@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class entTriggerNotifier_ScriptInstance : worldITriggerAreaNotiferInstance
 	{
 
-		public entTriggerNotifier_ScriptInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entTriggerNotifier_ScriptInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

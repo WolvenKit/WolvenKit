@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AICTreeNodeSharedVarsBaseDecoratorDefinition : AICTreeNodeDecoratorDefinition
 	{
 
-		public AICTreeNodeSharedVarsBaseDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AICTreeNodeSharedVarsBaseDecoratorDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

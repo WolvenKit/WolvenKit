@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
     {
         public IEditableVariable Variant { get; set; }
 
-        public CVariantSizeNameType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CVariantSizeNameType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -87,6 +87,6 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
         public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CVariantSizeNameType(cr2w, parent, name);
+        public static CVariable Create(IRed4EngineFile cr2w, CVariable parent, string name) => new CVariantSizeNameType(cr2w, parent, name);
     }
 }

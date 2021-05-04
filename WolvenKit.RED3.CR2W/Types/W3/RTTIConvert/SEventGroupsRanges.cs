@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("endIndex")] 		public CUInt32 EndIndex { get; set;}
 
-		public SEventGroupsRanges(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SEventGroupsRanges(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SEventGroupsRanges(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _s, value);
 		}
 
-		public Ref_4_3_Defaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Ref_4_3_Defaults(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

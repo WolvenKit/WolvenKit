@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameIScriptableSystemsContainer : gameIGameSystem
 	{
 
-		public gameIScriptableSystemsContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameIScriptableSystemsContainer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

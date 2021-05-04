@@ -119,9 +119,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(54)] [RED("torso3UpDir")] 		public CEnum<EAxis> Torso3UpDir { get; set;}
 
-		public TCrDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public TCrDefinition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new TCrDefinition(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

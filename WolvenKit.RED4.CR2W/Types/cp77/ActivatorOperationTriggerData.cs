@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ActivatorOperationTriggerData : DeviceOperationTriggerData
 	{
 
-		public ActivatorOperationTriggerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ActivatorOperationTriggerData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

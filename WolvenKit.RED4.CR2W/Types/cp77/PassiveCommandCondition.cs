@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cmdCbId, value);
 		}
 
-		public PassiveCommandCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public PassiveCommandCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questIBaseCondition : graphIGraphNodeCondition
 	{
 
-		public questIBaseCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questIBaseCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animAnimNode_IntValue : animAnimNode_Base
 	{
 
-		public animAnimNode_IntValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimNode_IntValue(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class vehicleToggleQuestForceBrakingEvent : redEvent
 	{
 
-		public vehicleToggleQuestForceBrakingEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public vehicleToggleQuestForceBrakingEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

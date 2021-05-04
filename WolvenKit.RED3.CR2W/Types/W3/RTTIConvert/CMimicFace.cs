@@ -29,9 +29,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("headIndex")] 		public CInt32 HeadIndex { get; set;}
 
-		public CMimicFace(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMimicFace(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMimicFace(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

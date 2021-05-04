@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questTransformAnimatorNode_ActionType : questIBaseNodeType
 	{
 
-		public questTransformAnimatorNode_ActionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questTransformAnimatorNode_ActionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CheckIfSearchAllowed : AIDebugConditions
 	{
 
-		public CheckIfSearchAllowed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CheckIfSearchAllowed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

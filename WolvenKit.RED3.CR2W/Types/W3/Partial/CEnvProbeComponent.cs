@@ -29,9 +29,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("textureCacheHashes", 4)] 		public CStatic<CUInt32> TextureCacheHashes { get; set;}
 
-		public CEnvProbeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEnvProbeComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnvProbeComponent(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

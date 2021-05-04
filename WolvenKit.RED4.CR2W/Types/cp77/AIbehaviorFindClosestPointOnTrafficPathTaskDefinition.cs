@@ -89,6 +89,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _joinTrafficSettings, value);
 		}
 
-		public AIbehaviorFindClosestPointOnTrafficPathTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIbehaviorFindClosestPointOnTrafficPathTaskDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -23,9 +23,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("statesDefined")] 		public CBool StatesDefined { get; set;}
 
-		public W3QuestCond_CheckBrazierPuzzleState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3QuestCond_CheckBrazierPuzzleState(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3QuestCond_CheckBrazierPuzzleState(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

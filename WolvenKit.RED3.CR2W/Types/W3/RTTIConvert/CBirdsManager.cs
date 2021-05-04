@@ -39,9 +39,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("birdTemplate")] 		public CHandle<CEntityTemplate> BirdTemplate { get; set;}
 
-		public CBirdsManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBirdsManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBirdsManager(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

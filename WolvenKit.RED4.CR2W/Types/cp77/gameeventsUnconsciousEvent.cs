@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameeventsUnconsciousEvent : redEvent
 	{
 
-		public gameeventsUnconsciousEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameeventsUnconsciousEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

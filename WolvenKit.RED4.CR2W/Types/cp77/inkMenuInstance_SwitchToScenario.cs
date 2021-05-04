@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkMenuInstance_SwitchToScenario : redEvent
 	{
 
-		public inkMenuInstance_SwitchToScenario(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkMenuInstance_SwitchToScenario(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

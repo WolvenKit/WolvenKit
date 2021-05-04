@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedatadevice_role_action_desctiption_Record : gamedataScannableData_Record
 	{
 
-		public gamedatadevice_role_action_desctiption_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedatadevice_role_action_desctiption_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

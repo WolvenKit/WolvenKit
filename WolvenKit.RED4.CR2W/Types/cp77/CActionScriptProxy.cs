@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CActionScriptProxy : IScriptable
 	{
 
-		public CActionScriptProxy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CActionScriptProxy(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

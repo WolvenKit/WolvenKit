@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIAvoidLineOfSightCoverSelection : AICoverSelectionParameters
 	{
 
-		public AIAvoidLineOfSightCoverSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIAvoidLineOfSightCoverSelection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

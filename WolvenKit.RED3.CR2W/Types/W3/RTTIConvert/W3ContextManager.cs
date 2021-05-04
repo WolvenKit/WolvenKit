@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("m_commonMenuRef")] 		public CHandle<CR4CommonMenu> M_commonMenuRef { get; set;}
 
-		public W3ContextManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3ContextManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3ContextManager(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

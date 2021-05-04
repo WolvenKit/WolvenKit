@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AICoverScoringData : CVariable
 	{
 
-		public AICoverScoringData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AICoverScoringData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

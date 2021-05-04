@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameEffectExecutor_TriggerDestruction : gameEffectExecutor
 	{
 
-		public gameEffectExecutor_TriggerDestruction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameEffectExecutor_TriggerDestruction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

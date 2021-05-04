@@ -80,6 +80,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _duration, value);
 		}
 
-		public DrawNetworkSquadEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DrawNetworkSquadEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

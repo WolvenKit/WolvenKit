@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _horsepower, value);
 		}
 
-		public ScannerVehicleHorsepower(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ScannerVehicleHorsepower(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

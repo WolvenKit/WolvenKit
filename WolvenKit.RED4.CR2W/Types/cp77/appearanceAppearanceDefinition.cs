@@ -161,6 +161,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _censorFlags, value);
 		}
 
-		public appearanceAppearanceDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public appearanceAppearanceDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

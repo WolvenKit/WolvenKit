@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
     {
         
 
-        public LocalizationString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public LocalizationString(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Unk1 = new CUInt64(cr2w, this, nameof(Unk1));
             Value = new CString(cr2w, this, nameof(Value));

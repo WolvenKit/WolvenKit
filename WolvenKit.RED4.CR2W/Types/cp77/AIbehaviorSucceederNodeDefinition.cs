@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIbehaviorSucceederNodeDefinition : AIbehaviorLeafTreeNodeDefinition
 	{
 
-		public AIbehaviorSucceederNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIbehaviorSucceederNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

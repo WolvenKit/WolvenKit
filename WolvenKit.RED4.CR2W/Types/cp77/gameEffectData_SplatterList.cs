@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameEffectData_SplatterList : CVariable
 	{
 
-		public gameEffectData_SplatterList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameEffectData_SplatterList(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("m_collisionType")] 		public CPhysicalCollision M_collisionType { get; set;}
 
-		public SPhysicsDestructionAdditionalInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SPhysicsDestructionAdditionalInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SPhysicsDestructionAdditionalInfo(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

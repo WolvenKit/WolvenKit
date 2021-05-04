@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBehaviorGraphPositionControllerWithDampNode : CBehaviorGraphPositionControllerBaseNode
 	{
-		public CBehaviorGraphPositionControllerWithDampNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphPositionControllerWithDampNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphPositionControllerWithDampNode(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

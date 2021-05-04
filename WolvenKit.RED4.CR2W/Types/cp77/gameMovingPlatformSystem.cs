@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameMovingPlatformSystem : gameIMovingPlatformSystem
 	{
 
-		public gameMovingPlatformSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameMovingPlatformSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

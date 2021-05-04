@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameuiHolocallStartEvent : redEvent
 	{
 
-		public gameuiHolocallStartEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameuiHolocallStartEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

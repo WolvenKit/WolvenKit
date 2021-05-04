@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CMaterialBlockNoise2D : CMaterialBlock
 	{
-		public CMaterialBlockNoise2D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMaterialBlockNoise2D(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMaterialBlockNoise2D(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

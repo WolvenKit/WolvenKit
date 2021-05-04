@@ -8,6 +8,7 @@ using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.RED3.CR2W.Reflection;
 using static WolvenKit.RED3.CR2W.Types.Enums;
 using FastMember;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -16,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         [Ordinal(1000)] [REDBuffer(true)] public CBufferVLQInt32<IReferencable> Data { get; set; }
 
-        public SAppearanceAttachment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SAppearanceAttachment(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Data = new CBufferVLQInt32<IReferencable>(cr2w, this, nameof(Data)) { IsSerialized = true };
         }

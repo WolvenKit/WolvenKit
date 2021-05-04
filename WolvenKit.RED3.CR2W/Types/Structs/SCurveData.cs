@@ -22,13 +22,13 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(4)] [RED("is looped")] public CBool Is_looped { get; set; }
 
 
-        public SCurveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SCurveData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 
         public override void Write(BinaryWriter file) => base.Write(file);
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCurveData(cr2w, parent, name);
+        
 
     }
 
@@ -46,10 +46,10 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(7)] [REDBuffer] public CUInt32 unk1 { get; set; }
 
 
-        public SCurveBufferData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SCurveBufferData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCurveBufferData(cr2w, parent, name);
+        
 
     }
 }

@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _index, value);
 		}
 
-		public ProficiencyButtonController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ProficiencyButtonController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

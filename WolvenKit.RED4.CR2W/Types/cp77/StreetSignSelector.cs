@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class StreetSignSelector : inkTweakDBIDSelector
 	{
 
-		public StreetSignSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public StreetSignSelector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

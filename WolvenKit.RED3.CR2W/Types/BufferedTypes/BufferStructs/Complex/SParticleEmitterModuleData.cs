@@ -32,7 +32,7 @@ namespace WolvenKit.RED3.CR2W.Types
         public CBool collision_use_gpu, collision_kill_when_collide, collision_disable_gravity, sizeKeepRatio, spawnWorldSpace, spawnSurfaceOnly, velocity_world_space, velocity_spread_conserve_momentum;
         public CBool spawn_positive_x, spawn_negative_x, spawn_positive_y, spawn_negative_y, spawn_positive_z, spawn_negative_z, spawn_velocity, modulate;
 
-        public SParticleEmitterModuleData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SParticleEmitterModuleData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             fields = new CVariable[] {
                 // CParticleInitializerAlpha
@@ -153,11 +153,6 @@ namespace WolvenKit.RED3.CR2W.Types
                 alphaByDistanceFar = new CFloat(cr2w, this, nameof(alphaByDistanceFar)),
                 alphaByDistanceNear = new CFloat(cr2w, this, nameof(alphaByDistanceNear))
             };
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SParticleEmitterModuleData(cr2w, parent, name);
         }
 
         public override List<IEditableVariable> GetEditableVariables()

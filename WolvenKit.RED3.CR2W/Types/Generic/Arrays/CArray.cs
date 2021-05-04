@@ -16,7 +16,7 @@ namespace WolvenKit.RED3.CR2W.Types
     public class CArray<T> : CArrayBase<T> where T : CVariable
     {
 
-        public CArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CArray(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }

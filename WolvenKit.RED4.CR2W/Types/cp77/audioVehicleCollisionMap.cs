@@ -116,6 +116,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _collisionSettings, value);
 		}
 
-		public audioVehicleCollisionMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public audioVehicleCollisionMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

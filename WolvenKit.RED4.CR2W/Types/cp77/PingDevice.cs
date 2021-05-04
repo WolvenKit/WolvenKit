@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldForward, value);
 		}
 
-		public PingDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public PingDevice(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _eventResent, value);
 		}
 
-		public HandleReactionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public HandleReactionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

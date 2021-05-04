@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("distance")] 		public CFloat Distance { get; set;}
 
-		public CBTTaskJumpBackDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskJumpBackDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskJumpBackDef(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

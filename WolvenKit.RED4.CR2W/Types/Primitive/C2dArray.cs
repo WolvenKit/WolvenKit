@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
     public class C2dArray : C2dArray_
     {
-        public C2dArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public C2dArray(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         /// <summary>
         /// Converts the data to a csv file

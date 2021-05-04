@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkanimStopVideoEvent : inkanimEvent
 	{
 
-		public inkanimStopVideoEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkanimStopVideoEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

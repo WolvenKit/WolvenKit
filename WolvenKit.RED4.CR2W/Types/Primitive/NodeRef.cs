@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
     {
 
 
-        public NodeRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public NodeRef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Value = new CString(cr2w, this, nameof(Value));
         }

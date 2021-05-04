@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CVisualDebug : IScriptable
 	{
 
-		public CVisualDebug(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CVisualDebug(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

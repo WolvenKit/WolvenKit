@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataVehicleDestructionPointDamper_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataVehicleDestructionPointDamper_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataVehicleDestructionPointDamper_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

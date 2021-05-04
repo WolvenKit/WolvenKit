@@ -116,6 +116,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disappearingAnimProxy, value);
 		}
 
-		public activityLogEntryLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public activityLogEntryLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

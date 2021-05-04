@@ -27,9 +27,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("m_noItemMessageStringKey")] 		public CName M_noItemMessageStringKey { get; set;}
 
-		public W3HouseDecorationBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3HouseDecorationBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3HouseDecorationBase(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

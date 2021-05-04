@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1002)] [REDBuffer(true)] public CUInt8 unk { get; set; }
         [Ordinal(1003)] [REDBuffer(true)] public CCompressedBuffer<CBufferUInt16<CFloat>> buffer { get; set; }
 
-        public CFXTrackItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CFXTrackItem(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             buffername = new CName(cr2w, this, nameof(buffername)) { IsSerialized = true };
             count = new CDynamicInt(cr2w, this, nameof(count)) { IsSerialized = true };

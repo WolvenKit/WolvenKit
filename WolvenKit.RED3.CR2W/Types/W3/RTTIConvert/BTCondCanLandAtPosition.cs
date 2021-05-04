@@ -23,9 +23,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("m_ObstaclesGroupNames", 2,0)] 		public CArray<CName> M_ObstaclesGroupNames { get; set;}
 
-		public BTCondCanLandAtPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondCanLandAtPosition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondCanLandAtPosition(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

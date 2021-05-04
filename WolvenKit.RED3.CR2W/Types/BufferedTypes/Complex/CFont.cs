@@ -22,7 +22,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
 
 
-        public CFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CFont(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Unicodemapping = new CArray<CUInt16>(cr2w, this, nameof(Unicodemapping)) { IsSerialized = true, Elementtype = "Uint16" };
             Linedist = new CInt32(cr2w, this, nameof(Linedist)) { IsSerialized = true };

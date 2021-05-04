@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _enemyPrograms, value);
 		}
 
-		public NetworkMinigameData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public NetworkMinigameData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

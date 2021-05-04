@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gsmMenuState_FindSessions : gsmMenuState
 	{
 
-		public gsmMenuState_FindSessions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gsmMenuState_FindSessions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

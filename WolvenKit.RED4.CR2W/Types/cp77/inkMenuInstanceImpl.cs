@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkMenuInstanceImpl : inkMenuInstance
 	{
 
-		public inkMenuInstanceImpl(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkMenuInstanceImpl(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

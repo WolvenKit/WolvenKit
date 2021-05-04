@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class workRegisterCleanupCommandData : workIWorkspotCommandData
 	{
 
-		public workRegisterCleanupCommandData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public workRegisterCleanupCommandData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

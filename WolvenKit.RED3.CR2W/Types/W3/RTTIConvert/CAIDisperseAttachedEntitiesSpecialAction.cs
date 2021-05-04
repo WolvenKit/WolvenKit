@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CAIDisperseAttachedEntitiesSpecialAction : CAISpecialAction
 	{
-		public CAIDisperseAttachedEntitiesSpecialAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIDisperseAttachedEntitiesSpecialAction(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIDisperseAttachedEntitiesSpecialAction(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

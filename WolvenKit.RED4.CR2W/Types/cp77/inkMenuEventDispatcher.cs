@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkMenuEventDispatcher : IScriptable
 	{
 
-		public inkMenuEventDispatcher(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkMenuEventDispatcher(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.MVVM.Model

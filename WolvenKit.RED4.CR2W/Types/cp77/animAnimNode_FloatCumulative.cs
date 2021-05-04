@@ -116,6 +116,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _normalize180Input, value);
 		}
 
-		public animAnimNode_FloatCumulative(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimNode_FloatCumulative(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

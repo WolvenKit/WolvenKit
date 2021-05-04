@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _voices, value);
 		}
 
-		public audioNpcGunChoirSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public audioNpcGunChoirSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

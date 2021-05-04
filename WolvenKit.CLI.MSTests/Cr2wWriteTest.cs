@@ -800,13 +800,13 @@ namespace CP77.MSTests
                 {
                     if (ulong.TryParse(line.Split(',').First(), out var hash))
                     {
-                        filesToTest.AddRange(s_bm.Files[hash]);
+                        filesToTest.AddRange(s_bm.Items[hash].Cast<FileEntry>());
                     }
                 }
             }
             else
             {
-                filesToTest = s_groupedFiles[extension];
+                filesToTest = s_groupedFiles[extension].ToList();
             }
 
             results = Write_Archive_Items(filesToTest).ToList();
@@ -825,7 +825,7 @@ namespace CP77.MSTests
             }
 
             // Logging
-            var totalCount = s_groupedFiles[extension].Count;
+            var totalCount = s_groupedFiles[extension].Count();
             var sb = new StringBuilder();
             sb.AppendLine(
                 $"{extension} -> Successful Writes: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");
@@ -859,12 +859,7 @@ namespace CP77.MSTests
             {
                 try
                 {
-                    if (file.Archive is not Archive ar)
-#if IS_PARALLEL
-                        return;
-#else
-                        continue;
-#endif
+                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
                     using var originalStream = new MemoryStream();
                     ar.CopyFileToStream(originalStream, file.NameHash64, false);
                     originalStream.Seek(0, SeekOrigin.Begin);
@@ -993,7 +988,7 @@ namespace CP77.MSTests
             sb.AppendLine(
                 $"{nameof(FileEntry.NameHash64)}," +
                 $"{nameof(FileEntry.FileName)}," +
-                $"{nameof(FileEntry.Archive)}," +
+                $"{nameof(FileEntry.Archive.Name)}," +
                 $"{nameof(WriteTestResult)}," +
                 $"{nameof(WriteTestResult.Success)}," +
                 //$"{nameof(WriteTestResult.HasIncorrectStringTable)}," +
@@ -1006,7 +1001,7 @@ namespace CP77.MSTests
                 sb.AppendLine(
                     $"{r.FileEntry.NameHash64}," +
                     $"{r.FileEntry.FileName}," +
-                    $"{Path.GetFileName(r.FileEntry.Archive.ArchiveAbsolutePath)}," +
+                    $"{r.FileEntry.Archive.Name}," +
                     $"{r.WriteResult}," +
                     $"{r.Success}," +
                     //$"{r.HasIncorrectStringTable}," +

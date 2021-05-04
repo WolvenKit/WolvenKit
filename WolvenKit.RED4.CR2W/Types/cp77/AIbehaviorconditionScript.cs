@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIbehaviorconditionScript : AIbehaviorScriptBase
 	{
 
-		public AIbehaviorconditionScript(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIbehaviorconditionScript(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

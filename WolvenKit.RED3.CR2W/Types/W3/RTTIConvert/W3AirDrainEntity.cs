@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("factOnDeactivated")] 		public CString FactOnDeactivated { get; set;}
 
-		public W3AirDrainEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3AirDrainEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3AirDrainEntity(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

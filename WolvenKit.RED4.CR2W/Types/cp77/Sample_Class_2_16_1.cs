@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _arrayOfInts, value);
 		}
 
-		public Sample_Class_2_16_1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Sample_Class_2_16_1(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

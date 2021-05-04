@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SetDeviceUnpowered : ActionBool
 	{
 
-		public SetDeviceUnpowered(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SetDeviceUnpowered(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

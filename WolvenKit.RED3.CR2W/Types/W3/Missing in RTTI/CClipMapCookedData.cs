@@ -12,7 +12,6 @@ namespace WolvenKit.RED3.CR2W.Types
 	public partial class CClipMapCookedData : ISerializable
 	{
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CClipMapCookedData(cr2w, parent, name);
 
 		
 

@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("originalAngle")] 		public CFloat OriginalAngle { get; set;}
 
-		public CDoorAttachment_AngleAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CDoorAttachment_AngleAnimation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CDoorAttachment_AngleAnimation(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

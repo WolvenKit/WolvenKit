@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldgeometryaverageNormalDetectionHelperResult : IScriptable
 	{
 
-		public worldgeometryaverageNormalDetectionHelperResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldgeometryaverageNormalDetectionHelperResult(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -107,6 +107,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animOptions3, value);
 		}
 
-		public ElevatorArrowsLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ElevatorArrowsLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

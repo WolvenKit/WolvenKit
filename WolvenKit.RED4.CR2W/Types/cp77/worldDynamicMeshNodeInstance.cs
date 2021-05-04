@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldDynamicMeshNodeInstance : worldMeshNodeInstance
 	{
 
-		public worldDynamicMeshNodeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldDynamicMeshNodeInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

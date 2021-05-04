@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ConsumableStartupDecisions : ConsumableTransitions
 	{
 
-		public ConsumableStartupDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ConsumableStartupDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

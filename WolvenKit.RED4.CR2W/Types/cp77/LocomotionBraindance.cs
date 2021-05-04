@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LocomotionBraindance : LocomotionTransition
 	{
 
-		public LocomotionBraindance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LocomotionBraindance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

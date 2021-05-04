@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Catel.IO;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types
@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
     {
         private const uint Version = 0;
 
-		public gameLocationResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameLocationResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {

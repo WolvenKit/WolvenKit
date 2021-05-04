@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questIAudioNodeType : ISerializable
 	{
 
-		public questIAudioNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questIAudioNodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

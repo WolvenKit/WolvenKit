@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.RED3.CR2W;
@@ -83,7 +84,7 @@ namespace WolvenKit.ViewModels.Editor
             MainController.LogString(FilePath + " saved!", Logtype.Normal);
 
             // register all new classes
-            CR2WManager.ReloadAssembly(MainController.Get().Logger);
+            CR2WManager.ReloadAssembly();
 
             IsUnsaved = false;
             FormTitle = Path.GetFileName(FilePath);

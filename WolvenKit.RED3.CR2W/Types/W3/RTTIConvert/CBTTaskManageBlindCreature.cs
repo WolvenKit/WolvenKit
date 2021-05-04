@@ -61,9 +61,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(25)] [RED("NAVIGATION_SEARCH_TIMEOUT")] 		public CFloat NAVIGATION_SEARCH_TIMEOUT { get; set;}
 
-		public CBTTaskManageBlindCreature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskManageBlindCreature(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskManageBlindCreature(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class QuestForceEnabled : ActionBool
 	{
 
-		public QuestForceEnabled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public QuestForceEnabled(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

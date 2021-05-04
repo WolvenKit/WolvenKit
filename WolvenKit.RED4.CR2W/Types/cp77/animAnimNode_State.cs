@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _requiredQualityDistanceCategory, value);
 		}
 
-		public animAnimNode_State(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimNode_State(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

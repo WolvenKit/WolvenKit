@@ -9,14 +9,14 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public class CName : CVariable, IREDPrimitive
+    public class CName : CVariable, IREDString
     {
         public CName()
         {
 
         }
 
-        public CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CName(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

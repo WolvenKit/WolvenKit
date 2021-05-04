@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _limits, value);
 		}
 
-		public audioVoiceTriggerLimitsMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public audioVoiceTriggerLimitsMapItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

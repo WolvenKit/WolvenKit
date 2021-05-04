@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkRectangleWidget : inkBaseShapeWidget
 	{
 
-		public inkRectangleWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkRectangleWidget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

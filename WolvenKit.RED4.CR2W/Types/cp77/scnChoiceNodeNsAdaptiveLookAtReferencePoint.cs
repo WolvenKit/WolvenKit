@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _constantWeight, value);
 		}
 
-		public scnChoiceNodeNsAdaptiveLookAtReferencePoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnChoiceNodeNsAdaptiveLookAtReferencePoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

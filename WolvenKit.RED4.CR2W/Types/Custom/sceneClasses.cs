@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public scnbExternalLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbExternalLayer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta]
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public scnbExternalLayerEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbExternalLayerEventData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 
@@ -153,7 +153,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _phaseName, value);
         }
 
-        public scnbPerformerInScene_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbPerformerInScene_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta]
@@ -169,7 +169,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _playerGenderMask, value);
         }
 
-        public scnbScreenplayLineUsage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbScreenplayLineUsage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
     public class scnbVoicetagId : CVariable
@@ -184,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _id, value);
         }
 
-        public scnbVoicetagId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbVoicetagId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
     public class scnbgraphSectionNode : CVariable
@@ -244,7 +244,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _titleFixedSize, value);
         }
 
-        public scnbgraphSectionNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbgraphSectionNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     
     [REDMeta]
@@ -359,7 +359,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _glitchEffect, value);
         }
 
-        public scnbeventsVFXBraindanceEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbeventsVFXBraindanceEventDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
 	public class scnbeventsVFXEventDescriptor : CVariable
@@ -482,7 +482,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _muteSound, value);
         }
 
-        public scnbeventsVFXEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbeventsVFXEventDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 	
@@ -508,7 +508,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _val, value);
         }
 
-        public scnblocSignature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnblocSignature(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 	[REDMeta]
@@ -533,7 +533,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _sceneEffectId, value);
         }
 
-        public scnbEffectEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbEffectEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class scnblocLocstringId : CVariable
@@ -548,7 +548,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _ruid, value);
         }
 
-        public scnblocLocstringId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnblocLocstringId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 	[REDMeta]
@@ -591,7 +591,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _name, value);
         }
 
-        public scnbSceneActorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbSceneActorData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 	[REDMeta]
@@ -607,7 +607,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _ruid, value);
         }
 
-        public scnblocVariantId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnblocVariantId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class scnblocVariant : CVariable
@@ -650,7 +650,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public scnblocVariant(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnblocVariant(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 	[REDMeta]
@@ -666,7 +666,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _id, value);
         }
 
-        public scnbSceneEffectId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbSceneEffectId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class scnbGenderMask : CVariable
@@ -681,7 +681,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _mask, value);
         }
 
-        public scnbGenderMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbGenderMask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class scnbAudioLayer : CVariable
@@ -705,7 +705,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _audioEventNodes, value);
         }
 
-        public scnbAudioLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbAudioLayer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class scnbPresetsDataWrapper : CVariable
@@ -720,7 +720,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _data, value);
         }
 
-        public scnbPresetsDataWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbPresetsDataWrapper(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class scnbAudioLayerNodeData : CVariable
@@ -753,7 +753,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _audioEvent, value);
         }
 
-        public scnbAudioLayerNodeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbAudioLayerNodeData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 	
@@ -879,7 +879,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public scnbeventsVFXDurationEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbeventsVFXDurationEventDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 	[REDMeta]
@@ -895,7 +895,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _id, value);
         }
 
-        public scnbSceneEventsGroupID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public scnbSceneEventsGroupID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	
 

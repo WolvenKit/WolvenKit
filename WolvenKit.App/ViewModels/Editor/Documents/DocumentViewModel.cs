@@ -12,6 +12,7 @@ using HandyControl.Controls;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
@@ -143,11 +144,12 @@ namespace WolvenKit.ViewModels.Editor
         private void ExecuteOpenImport(ICR2WImport input)
         {
             var depotpath = input.DepotPathStr;
+            var key = FNV1A64HashAlgorithm.HashString(depotpath);
             var foundItems = new List<IGameFile>();
             foreach (var manager in MainController.Get().GetManagers(false)
-                .Where(manager => manager.Items.ContainsKey(depotpath)))
+                .Where(manager => manager.Items.ContainsKey(key)))
             {
-                foundItems.AddRange(manager.Items[depotpath]);
+                foundItems.AddRange(manager.Items[key]);
             }
 
             var itemToImport = foundItems.FirstOrDefault();
@@ -329,11 +331,12 @@ namespace WolvenKit.ViewModels.Editor
 
                     if (Path.GetExtension(path) == ".srt")
                     {
-                        File = new Srtfile()
-                        {
-                            FileName = path
-                        };
-                        errorcode = await File.Read(reader);
+                        //File = new Srtfile()
+                        //{
+                        //    FileName = path
+                        //};
+                        //errorcode = await File.Read(reader);
+
                     }
                     else
                     {

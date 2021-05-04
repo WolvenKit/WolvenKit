@@ -31,9 +31,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(10)] [RED("looped")] 		public CBool Looped { get; set;}
 
-		public CJobTreeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CJobTreeNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJobTreeNode(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

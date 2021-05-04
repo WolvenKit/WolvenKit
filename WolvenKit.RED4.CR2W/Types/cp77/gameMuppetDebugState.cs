@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _subStepsData, value);
 		}
 
-		public gameMuppetDebugState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameMuppetDebugState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

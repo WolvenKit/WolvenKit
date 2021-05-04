@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bumpType, value);
 		}
 
-		public animAnimFeature_Bump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimFeature_Bump(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

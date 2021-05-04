@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameChildEffectsMovingInCone_State : CVariable
 	{
 
-		public gameChildEffectsMovingInCone_State(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameChildEffectsMovingInCone_State(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

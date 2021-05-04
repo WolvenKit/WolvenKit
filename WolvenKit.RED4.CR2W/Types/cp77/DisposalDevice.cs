@@ -152,6 +152,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workspotDuration, value);
 		}
 
-		public DisposalDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DisposalDevice(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

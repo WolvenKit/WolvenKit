@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SecurityTurretController : SensorDeviceController
 	{
 
-		public SecurityTurretController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SecurityTurretController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

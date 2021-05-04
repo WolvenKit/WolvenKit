@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _points, value);
 		}
 
-		public gameuiPhoneWaveformData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameuiPhoneWaveformData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

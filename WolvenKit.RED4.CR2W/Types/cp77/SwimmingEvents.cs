@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SwimmingEvents : HighLevelTransition
 	{
 
-		public SwimmingEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SwimmingEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gsmState_ReconnectController : gsmState
 	{
 
-		public gsmState_ReconnectController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gsmState_ReconnectController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

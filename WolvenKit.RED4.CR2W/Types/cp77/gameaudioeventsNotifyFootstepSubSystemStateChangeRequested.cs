@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameaudioeventsNotifyFootstepSubSystemStateChangeRequested : redEvent
 	{
 
-		public gameaudioeventsNotifyFootstepSubSystemStateChangeRequested(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameaudioeventsNotifyFootstepSubSystemStateChangeRequested(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

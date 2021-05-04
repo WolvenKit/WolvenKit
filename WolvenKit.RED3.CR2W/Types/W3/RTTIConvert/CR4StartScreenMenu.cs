@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CR4StartScreenMenu : CR4StartScreenMenuBase
 	{
-		public CR4StartScreenMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4StartScreenMenu(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4StartScreenMenu(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

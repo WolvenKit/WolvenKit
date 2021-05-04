@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class VehicleOpenHood : ActionBool
 	{
 
-		public VehicleOpenHood(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public VehicleOpenHood(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

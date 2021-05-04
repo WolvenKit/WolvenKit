@@ -10,6 +10,7 @@ using Catel;
 using Catel.Services;
 using Catel.Threading;
 using CsvHelper;
+using WolvenKit.Common;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;

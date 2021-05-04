@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class FistsLookAtEvents : LookAtPresetMeleeBaseEvents
 	{
 
-		public FistsLookAtEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public FistsLookAtEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

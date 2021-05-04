@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _emptyDuration, value);
 		}
 
-		public AnimFeature_WeaponReload(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AnimFeature_WeaponReload(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

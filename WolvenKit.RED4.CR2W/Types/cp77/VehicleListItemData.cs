@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _icon, value);
 		}
 
-		public VehicleListItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public VehicleListItemData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

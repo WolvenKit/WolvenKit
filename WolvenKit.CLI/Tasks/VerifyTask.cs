@@ -6,6 +6,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Helpers;
 using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77Tools.Tasks
@@ -52,14 +53,12 @@ namespace CP77Tools.Tasks
                         continue;
                     }
 
-                    var file = bm.Files[hash];
+                    var file = bm.Items[hash];
 
-                    foreach (var fileEntry in file)
+                    foreach (var ifileEntry in file)
                     {
-                        if (fileEntry.Archive is not Archive ar)
-                        {
-                            continue;
-                        }
+                        var fileEntry = ifileEntry as FileEntry;
+                        var ar = bm.Archives[fileEntry.Archive.ArchiveAbsolutePath] as Archive;
 
                         using var ms = new MemoryStream();
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
@@ -93,7 +92,7 @@ namespace CP77Tools.Tasks
                             c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
 
                         var oldst = c.StringDictionary.Values.ToList();
-                        var newst = c.GenerateStringtable().Item1.Values.ToList();
+                        var newst = Cr2wHelpers.GenerateStringtable(c).Item1.Values.ToList();
                         var compstr = "OLD,NEW";
                         var correctStringTable = oldst.Count == newst.Count;
 

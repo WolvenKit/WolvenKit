@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DefaultTest : gamestateMachineFunctor
 	{
 
-		public DefaultTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DefaultTest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

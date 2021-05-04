@@ -134,6 +134,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponBlurIntensity_aim, value);
 		}
 
-		public AnimFeature_WeaponBlur(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AnimFeature_WeaponBlur(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

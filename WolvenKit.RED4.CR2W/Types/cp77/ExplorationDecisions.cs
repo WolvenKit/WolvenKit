@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ExplorationDecisions : HighLevelTransition
 	{
 
-		public ExplorationDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ExplorationDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questCharacterManagerVisuals_PrefetchEntityAppearance : questCharacterManagerVisuals_EntityAppearanceOperationBase
 	{
 
-		public questCharacterManagerVisuals_PrefetchEntityAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questCharacterManagerVisuals_PrefetchEntityAppearance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

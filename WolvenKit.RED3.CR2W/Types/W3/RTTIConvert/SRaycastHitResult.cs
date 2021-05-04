@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("component")] 		public CHandle<CComponent> Component { get; set;}
 
-		public SRaycastHitResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SRaycastHitResult(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SRaycastHitResult(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

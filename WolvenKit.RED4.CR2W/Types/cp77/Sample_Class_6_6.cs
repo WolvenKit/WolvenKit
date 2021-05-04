@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class Sample_Class_6_6 : CVariable
 	{
 
-		public Sample_Class_6_6(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Sample_Class_6_6(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activate, value);
 		}
 
-		public gameVisionModeActivationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameVisionModeActivationEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

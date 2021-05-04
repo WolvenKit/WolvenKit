@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamestateMachineparameterTypeActionLocomotionBraindanceParameters : gamestateMachineparameterTypeActionLocomotionParameters
 	{
 
-		public gamestateMachineparameterTypeActionLocomotionBraindanceParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamestateMachineparameterTypeActionLocomotionBraindanceParameters(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

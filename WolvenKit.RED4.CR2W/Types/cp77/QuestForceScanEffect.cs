@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class QuestForceScanEffect : ActionBool
 	{
 
-		public QuestForceScanEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public QuestForceScanEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

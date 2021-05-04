@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectName, value);
 		}
 
-		public entReleasePreloadedEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entReleasePreloadedEffectEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

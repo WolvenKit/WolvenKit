@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class userSettingsVarListName : userSettingsVar
 	{
 
-		public userSettingsVarListName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public userSettingsVarListName(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

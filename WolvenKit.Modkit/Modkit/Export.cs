@@ -1,4 +1,5 @@
 using System.IO;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 

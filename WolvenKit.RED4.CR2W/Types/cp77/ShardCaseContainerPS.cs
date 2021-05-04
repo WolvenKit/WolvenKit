@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ShardCaseContainerPS : gameLootContainerBasePS
 	{
 
-		public ShardCaseContainerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ShardCaseContainerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

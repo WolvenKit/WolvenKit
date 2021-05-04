@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldGIShapeNodeInstance : worldGeometryShapeNodeInstance
 	{
 
-		public worldGIShapeNodeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldGIShapeNodeInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

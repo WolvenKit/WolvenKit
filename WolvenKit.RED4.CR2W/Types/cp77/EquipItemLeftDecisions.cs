@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class EquipItemLeftDecisions : DefaultTransition
 	{
 
-		public EquipItemLeftDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public EquipItemLeftDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

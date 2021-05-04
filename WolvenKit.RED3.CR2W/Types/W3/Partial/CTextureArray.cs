@@ -15,7 +15,6 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("textureGroup")] 		public CName TextureGroup { get; set;}
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CTextureArray(cr2w, parent, name);
 
 	}
 }

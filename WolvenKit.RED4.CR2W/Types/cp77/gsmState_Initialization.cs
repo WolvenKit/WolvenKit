@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gsmState_Initialization : gsmState
 	{
 
-		public gsmState_Initialization(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gsmState_Initialization(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

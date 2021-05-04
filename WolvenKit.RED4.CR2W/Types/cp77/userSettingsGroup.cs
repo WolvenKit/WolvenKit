@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class userSettingsGroup : IScriptable
 	{
 
-		public userSettingsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public userSettingsGroup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

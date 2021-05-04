@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameinteractionsvisIGroupedVisualizerLogic : gameinteractionsvisIVisualizerLogicInterface
 	{
 
-		public gameinteractionsvisIGroupedVisualizerLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameinteractionsvisIGroupedVisualizerLogic(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

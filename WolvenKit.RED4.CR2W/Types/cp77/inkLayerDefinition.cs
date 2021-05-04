@@ -80,6 +80,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inputContext, value);
 		}
 
-		public inkLayerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkLayerDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkDeleteRequestResult : inkCallbackBase
 	{
 
-		public inkDeleteRequestResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkDeleteRequestResult(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

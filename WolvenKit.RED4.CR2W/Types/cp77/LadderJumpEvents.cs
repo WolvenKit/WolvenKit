@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LadderJumpEvents : LocomotionAirEvents
 	{
 
-		public LadderJumpEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LadderJumpEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

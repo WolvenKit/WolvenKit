@@ -29,7 +29,6 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("hasEmbeddedLayerInfo")] 		public CBool HasEmbeddedLayerInfo { get; set;}
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CLayerInfo(cr2w, parent, name);
 
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkUserData : IScriptable
 	{
 
-		public inkUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkUserData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

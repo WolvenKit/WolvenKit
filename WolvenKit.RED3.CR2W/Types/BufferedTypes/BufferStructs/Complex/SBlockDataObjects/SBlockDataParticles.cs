@@ -21,6 +21,6 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(5)] [RED] public CUInt8 transparencySortGroup { get; set; }
         [Ordinal(6)] [RED] public CFloat globalEmissionScale { get; set; }
 
-        public SBlockDataParticles(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SBlockDataParticles(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

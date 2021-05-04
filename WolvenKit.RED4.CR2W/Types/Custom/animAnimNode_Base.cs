@@ -108,6 +108,6 @@ namespace WolvenKit.RED4.CR2W.Types
         //[Ordinal(1001)] [RED("debug")] public CBool Debug { get; set; }
         //[Ordinal(1002)] [RED("debugDrawingEnabled")] public CBool DebugDrawingEnabled { get; set; }
 
-        public animAnimNode_Base(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public animAnimNode_Base(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

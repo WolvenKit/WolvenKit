@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class InventoryQuickSlotsDisplay : inkWidgetLogicController
 	{
 
-		public InventoryQuickSlotsDisplay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public InventoryQuickSlotsDisplay(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

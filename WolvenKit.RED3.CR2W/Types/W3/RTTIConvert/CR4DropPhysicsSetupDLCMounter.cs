@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("dropSetups", 2,0)] 		public CArray<CHandle<CDropPhysicsSetup>> DropSetups { get; set;}
 
-		public CR4DropPhysicsSetupDLCMounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4DropPhysicsSetupDLCMounter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4DropPhysicsSetupDLCMounter(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

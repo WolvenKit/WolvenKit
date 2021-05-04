@@ -21,9 +21,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("spawnHandler")] 		public CHandle<CCreateEntityHelper> SpawnHandler { get; set;}
 
-		public SFishSpawnpoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFishSpawnpoint(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFishSpawnpoint(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

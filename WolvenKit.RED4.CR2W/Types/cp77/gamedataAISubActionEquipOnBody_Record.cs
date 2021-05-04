@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataAISubActionEquipOnBody_Record : gamedataAISubActionCharacterRecordEquip_Record
 	{
 
-		public gamedataAISubActionEquipOnBody_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataAISubActionEquipOnBody_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

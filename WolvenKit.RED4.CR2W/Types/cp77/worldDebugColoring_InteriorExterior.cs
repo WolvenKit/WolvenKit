@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exteriorColor, value);
 		}
 
-		public worldDebugColoring_InteriorExterior(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldDebugColoring_InteriorExterior(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

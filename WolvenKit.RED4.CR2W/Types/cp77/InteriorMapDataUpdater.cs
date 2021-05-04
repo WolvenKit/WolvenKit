@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class InteriorMapDataUpdater : ISceneStorageCustomData
 	{
 
-		public InteriorMapDataUpdater(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public InteriorMapDataUpdater(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

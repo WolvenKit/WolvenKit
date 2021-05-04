@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class vehicleDriver : CVariable
 	{
 
-		public vehicleDriver(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public vehicleDriver(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

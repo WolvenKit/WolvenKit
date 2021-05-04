@@ -69,9 +69,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(29)] [RED("m_zBody")] 		public CFloat M_zBody { get; set;}
 
-		public CR4GuiSceneController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4GuiSceneController(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4GuiSceneController(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

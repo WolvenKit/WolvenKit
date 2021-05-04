@@ -458,6 +458,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _allowDistantLight, value);
 		}
 
-		public worldAdvertisementLightData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldAdvertisementLightData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

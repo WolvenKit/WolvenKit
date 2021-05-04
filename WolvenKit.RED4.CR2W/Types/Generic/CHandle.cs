@@ -20,13 +20,12 @@ namespace WolvenKit.RED4.CR2W.Types
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [Editor(typeof(IHandleEditor), typeof(IPropertyEditorBase))]
     [REDMeta()]
     public class CHandle<T> : CVariable, IHandleAccessor where T : IEditableVariable
     {
         private ICR2WExport _reference;
 
-        public CHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CHandle(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

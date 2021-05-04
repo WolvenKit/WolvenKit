@@ -11,10 +11,12 @@ using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
 using Newtonsoft.Json;
+using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77Tools.Tasks
@@ -98,7 +100,7 @@ namespace CP77Tools.Tasks
                     //     ar.Filepath.GetHashMD5(), 0,
                     //     MemoryMappedFileAccess.Read);
 
-                    var fileinfo = ar.Files.Values;
+                    var fileinfo = ar.Files.Values.Cast<FileEntry>();
                     var query = fileinfo.GroupBy(
                         ext => Path.GetExtension(ext.FileName),
                         file => file,
@@ -123,7 +125,7 @@ namespace CP77Tools.Tasks
                             Parallel.ForEach(result.File, fi =>
                             {
                                 using var ms = new MemoryStream();
-                                ar.CopyFileToStream(ms, fi.NameHash64, false);
+                                ar.CopyFileToStream(ms, (fi as FileEntry).NameHash64, false);
                                 var cr2w = ModTools.TryReadCr2WFile(ms);
                                 if (cr2w == null)
                                 {
@@ -163,7 +165,8 @@ namespace CP77Tools.Tasks
 
                     Parallel.For(0, count, i =>
                     {
-                        var (hash, fileEntry) = ar.Files.ToList()[i];
+                        var (hash, ifileEntry) = ar.Files.ToList()[i];
+                        var fileEntry = ifileEntry as FileEntry;
                         var filename = string.IsNullOrEmpty(fileEntry.FileName) ? hash.ToString() : fileEntry.FileName;
 
                         if (imports)
@@ -190,7 +193,7 @@ namespace CP77Tools.Tasks
                             if (!string.IsNullOrEmpty(fileEntry.FileName) && fileEntry.FileName.Contains(".xbm"))
                             {
                                 using var ms = new MemoryStream();
-                                ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
+                                ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
                                 var cr2w = ModTools.TryReadCr2WFile(ms);
 
                                 if (cr2w?.Chunks.FirstOrDefault()?.data is not CBitmapTexture xbm ||
@@ -296,9 +299,9 @@ namespace CP77Tools.Tasks
 
                 if (list)
                 {
-                    foreach (var entry in ar.Files)
+                    foreach (var entry in ar.Files.Values.Cast<FileEntry>())
                     {
-                        logger.LogString(entry.Value.FileName, Logtype.Normal);
+                        logger.LogString(entry.FileName, Logtype.Normal);
                     }
                 }
             }
@@ -368,7 +371,7 @@ namespace CP77Tools.Tasks
                     var ctr = 0;
                     foreach (var (hash, fileInfoEntry) in ar.Files)
                     {
-                        if (fileInfoEntry.NameOrHash == hash.ToString())
+                        if ((fileInfoEntry as FileEntry).NameOrHash == hash.ToString())
                         {
                             mwriter.WriteLine(hash);
                             ctr++;

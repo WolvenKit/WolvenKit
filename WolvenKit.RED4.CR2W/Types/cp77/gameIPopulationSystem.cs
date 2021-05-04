@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameIPopulationSystem : gameIGameSystem
 	{
 
-		public gameIPopulationSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameIPopulationSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameEffectExecutor_DamageProjection : gameEffectExecutor
 	{
 
-		public gameEffectExecutor_DamageProjection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameEffectExecutor_DamageProjection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

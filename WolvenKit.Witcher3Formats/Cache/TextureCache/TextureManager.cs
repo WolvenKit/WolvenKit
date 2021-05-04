@@ -12,12 +12,6 @@ namespace WolvenKit.Cache
 
         public TextureManager()
         {
-            Items = new Dictionary<string, List<IGameFile>>();
-            Archives = new Dictionary<string, TextureCache>();
-            FileList = new List<IGameFile>();
-
-            Extensions = new List<string>();
-            AutocompleteSource = new List<string>();
         }
 
         #endregion Constructors
@@ -26,7 +20,7 @@ namespace WolvenKit.Cache
 
         public static string SerializationVersion => "1.1";
         public override EArchiveType TypeName => EArchiveType.TextureCache;
-        private Dictionary<string, TextureCache> Archives { get; }
+        public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
 
         #endregion Properties
 
@@ -86,13 +80,13 @@ namespace WolvenKit.Cache
 
             var bundle = new TextureCache(filename);
 
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(item.Name))
-                    Items.Add(item.Name, new List<IGameFile>());
+            //foreach (var item in bundle.Files.Values)
+            //{
+            //    if (!Items.ContainsKey(item.Name))
+            //        Items.Add(item.Name, new List<IGameFile>());
 
-                Items[item.Name].Add(item);
-            }
+            //    Items[item.Name].Add(item);
+            //}
 
             Archives.Add(filename, bundle);
         }
@@ -108,13 +102,13 @@ namespace WolvenKit.Cache
 
             var bundle = new TextureCache(filename);
 
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
+            //foreach (var item in bundle.Files.Values)
+            //{
+            //    if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
+            //        Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
 
-                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
-            }
+            //    Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
+            //}
 
             Archives.Add(filename, bundle);
         }
@@ -129,7 +123,6 @@ namespace WolvenKit.Cache
             // this is slow
             Archives.Clear();
             Items.Clear();
-            FileList.Clear();
 
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);

@@ -51,9 +51,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(20)] [RED("mergedGeometry")] 		public CPtr<CMergedWorldGeometry> MergedGeometry { get; set;}
 
-		public CWorld(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CWorld(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CWorld(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

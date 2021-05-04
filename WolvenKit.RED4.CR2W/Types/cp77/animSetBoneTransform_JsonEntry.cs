@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offset, value);
 		}
 
-		public animSetBoneTransform_JsonEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animSetBoneTransform_JsonEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

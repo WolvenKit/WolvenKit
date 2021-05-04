@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MediaDeviceStatus : BaseDeviceStatus
 	{
 
-		public MediaDeviceStatus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MediaDeviceStatus(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

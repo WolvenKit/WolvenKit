@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIEnemy : ISerializable
 	{
 
-		public AIEnemy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIEnemy(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

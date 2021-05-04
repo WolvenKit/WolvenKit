@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SpiderbotDisarmExplosiveDevice : ActionBool
 	{
 
-		public SpiderbotDisarmExplosiveDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SpiderbotDisarmExplosiveDevice(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataPreventionFallbackUnitData_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataPreventionFallbackUnitData_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataPreventionFallbackUnitData_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

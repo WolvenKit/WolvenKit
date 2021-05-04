@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameEntityStubComponentPlacedProxy : entIPlacedComponent
 	{
 
-		public gameEntityStubComponentPlacedProxy(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameEntityStubComponentPlacedProxy(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

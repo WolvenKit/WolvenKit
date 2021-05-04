@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class moveMoveComponentVelocityProvider : entIVelocityProvider
 	{
 
-		public moveMoveComponentVelocityProvider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public moveMoveComponentVelocityProvider(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

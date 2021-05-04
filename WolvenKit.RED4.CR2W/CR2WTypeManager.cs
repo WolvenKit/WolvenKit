@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Catel.IoC;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -50,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <param name="parentVariable">The class owning this attribute</param>
         /// <param name="readUnknownAsBytes"></param>
         /// <returns></returns>
-        public static CVariable Create(string typename, string varname, CR2WFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
+        public static CVariable Create(string typename, string varname, IRed4EngineFile cr2w, CVariable parentVariable, bool readUnknownAsBytes = true)
         {
             typename = REDReflection.GetWKitBaseTypeFromREDBaseType(typename);
             var fullname = typename;
@@ -194,17 +196,21 @@ namespace WolvenKit.RED4.CR2W.Types
                 // this should never happen
 
                 if (!cr2w.UnknownTypes.Contains(fullname))
+                {
                     cr2w.UnknownTypes.Add(fullname);
+                }
 
-                var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                Logger.LogString($"UNKNOWN:{typename}:{varname}", Logtype.Error);
+                //var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+                //Logger.LogString($"UNKNOWN:{typename}:{varname}", Logtype.Error);
 
                 if (readUnknownAsBytes)
                 {
                     return new CBytes(cr2w, parentVariable, $"UNKNOWN:{typename}:{varname}");
                 }
                 else
+                {
                     return null;
+                }
             }
 
             #region LOCAL FUNCTIONS
@@ -269,7 +275,7 @@ namespace WolvenKit.RED4.CR2W.Types
             #endregion LOCAL FUNCTIONS
         }
 
-        private static Type GetGenericType(string redtypename, CR2WFile cr2w)
+        private static Type GetGenericType(string redtypename, IRed4EngineFile cr2w)
         {
             var typename = REDReflection.GetWKitBaseTypeFromREDBaseType(redtypename);
             var typ = AssemblyDictionary.GetTypeByName(typename);

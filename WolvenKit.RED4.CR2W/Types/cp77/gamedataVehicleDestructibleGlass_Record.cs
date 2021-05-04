@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataVehicleDestructibleGlass_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataVehicleDestructibleGlass_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataVehicleDestructibleGlass_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

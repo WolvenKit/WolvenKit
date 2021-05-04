@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exclusionPaletteEntries, value);
 		}
 
-		public worldAmbientPaletteExclusionAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldAmbientPaletteExclusionAreaNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

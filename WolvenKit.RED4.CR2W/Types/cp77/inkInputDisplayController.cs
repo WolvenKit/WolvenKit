@@ -98,6 +98,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fixedIconHeight, value);
 		}
 
-		public inkInputDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkInputDisplayController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

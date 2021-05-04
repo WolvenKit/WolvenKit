@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CR4PlayerStateSkating : CR4PlayerStateExtendedMovable
 	{
-		public CR4PlayerStateSkating(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4PlayerStateSkating(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4PlayerStateSkating(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

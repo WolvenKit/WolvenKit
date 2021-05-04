@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _max, value);
 		}
 
-		public questDeviceManager_ActionProperty(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questDeviceManager_ActionProperty(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

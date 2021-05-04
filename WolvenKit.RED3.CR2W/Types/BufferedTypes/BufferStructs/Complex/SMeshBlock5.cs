@@ -18,7 +18,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(0)] [RED] public CUInt16 bytesize { get; set; }
         [Ordinal(1)] [RED] public CBytes unk1 { get; set; }
 
-        public SMeshBlock5(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SMeshBlock5(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             bytesize = new CUInt16(cr2w, this, nameof(bytesize)) { IsSerialized = true };
             unk1 = new CBytes(cr2w, this, nameof(unk1)) { IsSerialized = true };
@@ -38,11 +38,6 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             bytesize.Write(file);
             unk1.Write(file);
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SMeshBlock5(cr2w, parent, name);
         }
 
         public override string ToString()

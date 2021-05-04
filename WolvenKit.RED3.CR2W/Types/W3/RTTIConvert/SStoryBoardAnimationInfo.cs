@@ -25,9 +25,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("frames")] 		public CInt32 Frames { get; set;}
 
-		public SStoryBoardAnimationInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStoryBoardAnimationInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStoryBoardAnimationInfo(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

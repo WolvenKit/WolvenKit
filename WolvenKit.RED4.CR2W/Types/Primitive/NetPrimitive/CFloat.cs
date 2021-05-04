@@ -7,10 +7,9 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
-    [Editor(typeof(ITextEditor<float>), typeof(IPropertyEditorBase))]
     public class CFloat : CVariable, IREDIntegerType<float>
     {
-        public CFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CFloat(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public float Value { get; set; }
 

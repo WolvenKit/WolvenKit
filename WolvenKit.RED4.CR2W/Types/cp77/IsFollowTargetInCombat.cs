@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class IsFollowTargetInCombat : AIAutonomousConditions
 	{
 
-		public IsFollowTargetInCombat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public IsFollowTargetInCombat(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

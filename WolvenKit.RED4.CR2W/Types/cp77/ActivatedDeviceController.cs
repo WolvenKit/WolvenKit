@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ActivatedDeviceController : ScriptableDC
 	{
 
-		public ActivatedDeviceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ActivatedDeviceController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

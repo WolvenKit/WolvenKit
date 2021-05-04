@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class TargetKilledPrereq : GenericHitPrereq
 	{
 
-		public TargetKilledPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public TargetKilledPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

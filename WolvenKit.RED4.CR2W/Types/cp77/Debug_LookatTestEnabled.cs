@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class Debug_LookatTestEnabled : AIDebugConditions
 	{
 
-		public Debug_LookatTestEnabled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Debug_LookatTestEnabled(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

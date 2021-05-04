@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ResetFrameDamage : redEvent
 	{
 
-		public ResetFrameDamage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ResetFrameDamage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

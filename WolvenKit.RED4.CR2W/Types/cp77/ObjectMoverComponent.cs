@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ObjectMoverComponent : gameScriptableComponent
 	{
 
-		public ObjectMoverComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ObjectMoverComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

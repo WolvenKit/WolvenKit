@@ -25,7 +25,6 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(7)] [RED("partyWaypoints", 2,0)] 		public CArray<SPartyWaypointData> PartyWaypoints { get; set;}
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CWayPointsCollection(cr2w, parent, name);
 
 	}
 }

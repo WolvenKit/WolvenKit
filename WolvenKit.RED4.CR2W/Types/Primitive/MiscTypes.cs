@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
     public class SharedDataBuffer : CVariable, IDataBufferAccessor
     {
         
-        public SharedDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SharedDataBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public CBytes Buffer { get; set; }
 
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
     public class DataBuffer : CVariable, IDataBufferAccessor
     {
         
-        public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public DataBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public CBytes Buffer { get; set; }
 
@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.CR2W.Types
     public class serializationDeferredDataBuffer : CVariable, IDataBufferAccessor
     {
         
-        public serializationDeferredDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public serializationDeferredDataBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public CBytes Buffer { get; set; }
 
@@ -87,7 +87,7 @@ namespace WolvenKit.RED4.CR2W.Types
     public class AITrafficWorkspotCompiled : worldTrafficSpotCompiled
     {
 
-        public AITrafficWorkspotCompiled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public AITrafficWorkspotCompiled(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public CBytes Buffer { get; set; }
 
@@ -112,7 +112,7 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class MessageResourcePath : CVariable
     {
-        public MessageResourcePath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public MessageResourcePath(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -128,7 +128,7 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class EditorObjectID : CVariable
     {
-        public EditorObjectID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public EditorObjectID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {

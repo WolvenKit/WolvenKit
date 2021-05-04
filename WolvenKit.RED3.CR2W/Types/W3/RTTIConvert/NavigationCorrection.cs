@@ -21,9 +21,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("color")] 		public CColor Color { get; set;}
 
-		public NavigationCorrection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public NavigationCorrection(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new NavigationCorrection(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

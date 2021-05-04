@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ResetLookatReactionEvent : redEvent
 	{
 
-		public ResetLookatReactionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ResetLookatReactionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -12,7 +12,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         [RED] public CBufferVLQInt32<CName> tags { get; set; }
 
-        public TagList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {
+        public TagList(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {
             tags = new CBufferVLQInt32<CName>(cr2w, this, nameof(tags));
         }
 
@@ -36,11 +36,6 @@ namespace WolvenKit.RED3.CR2W.Types
             {
                 tags[i].Write(file);
             }
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new TagList(cr2w, parent, name);
         }
 
         public override void AddVariable(IEditableVariable var)

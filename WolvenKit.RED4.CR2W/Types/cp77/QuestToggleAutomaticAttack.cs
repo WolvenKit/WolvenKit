@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class QuestToggleAutomaticAttack : ActionBool
 	{
 
-		public QuestToggleAutomaticAttack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public QuestToggleAutomaticAttack(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIItemHandlingCondition : AIbehaviorconditionScript
 	{
 
-		public AIItemHandlingCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIItemHandlingCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("setExactValue")] 		public CBool SetExactValue { get; set;}
 
-		public CQuestFactsDBChangingBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CQuestFactsDBChangingBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CQuestFactsDBChangingBlock(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

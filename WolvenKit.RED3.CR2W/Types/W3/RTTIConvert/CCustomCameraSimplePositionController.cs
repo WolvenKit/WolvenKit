@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("collisionController2")] 		public CPtr<ICustomCameraCollisionController> CollisionController2 { get; set;}
 
-		public CCustomCameraSimplePositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CCustomCameraSimplePositionController(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CCustomCameraSimplePositionController(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

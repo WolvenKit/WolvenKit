@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class BountyManager : IScriptable
 	{
 
-		public BountyManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public BountyManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

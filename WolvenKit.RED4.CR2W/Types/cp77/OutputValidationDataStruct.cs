@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _breachedAreas, value);
 		}
 
-		public OutputValidationDataStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public OutputValidationDataStruct(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

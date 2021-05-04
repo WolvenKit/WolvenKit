@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class EffectExecutor_NanowireGrenadePull : gameEffectExecutor_Scripted
 	{
 
-		public EffectExecutor_NanowireGrenadePull(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public EffectExecutor_NanowireGrenadePull(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

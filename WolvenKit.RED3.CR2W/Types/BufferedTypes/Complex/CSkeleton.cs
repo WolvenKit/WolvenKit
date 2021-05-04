@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         [Ordinal(1000)] [REDBuffer(true)] public CCompressedBuffer<SSkeletonRigData> rigdata { get; set; }
 
-        public CSkeleton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSkeleton(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             rigdata = new CCompressedBuffer<SSkeletonRigData>(cr2w, this, nameof(rigdata)) { IsSerialized = true };
         }

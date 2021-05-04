@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class redPackageRUIDSerializer : redPackageCustomTypeSerializer
 	{
 
-		public redPackageRUIDSerializer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public redPackageRUIDSerializer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

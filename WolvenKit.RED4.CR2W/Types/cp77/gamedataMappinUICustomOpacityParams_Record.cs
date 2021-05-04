@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataMappinUICustomOpacityParams_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataMappinUICustomOpacityParams_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataMappinUICustomOpacityParams_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

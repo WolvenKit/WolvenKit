@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _tracksRootId, value);
         }
 
-        public toolsTimeLineBaseDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsTimeLineBaseDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _items, value);
         }
 
-        public toolsTimeLineItemCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsTimeLineItemCollection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -186,7 +186,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _prop, value);
         }
 
-        public toolsAudioEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsAudioEventDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class internalSceneEventIdsPool : CVariable
@@ -201,7 +201,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _idsPool, value);
         }
 
-        public internalSceneEventIdsPool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public internalSceneEventIdsPool(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsSceneEventIdsPool : CVariable
@@ -216,7 +216,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _idsPool, value);
         }
 
-        public toolsSceneEventIdsPool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsSceneEventIdsPool(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsPartsCategory : CVariable
@@ -249,7 +249,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _parts, value);
         }
 
-        public toolsPartsCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsPartsCategory(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta]
@@ -257,7 +257,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 
 
-        public toolsIGraphNodeDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsIGraphNodeDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsAudioDurationEventDescriptor : CVariable
@@ -353,7 +353,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _playbackDirectionSupport, value);
         }
 
-        public toolsAudioDurationEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsAudioDurationEventDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta]
@@ -424,7 +424,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public toolsSocketDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsSocketDescription(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
 	public class houdiniVehicleDestructionMeshEntry : CVariable
@@ -448,7 +448,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _position, value);
         }
 
-        public houdiniVehicleDestructionMeshEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public houdiniVehicleDestructionMeshEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
 	public class houdiniVehicleGridSettings : CVariable
@@ -518,12 +518,12 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public houdiniVehicleGridSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public houdiniVehicleGridSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
 	public class toolsPresetsData : CVariable
 	{
-        public toolsPresetsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsPresetsData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -548,7 +548,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _grids, value);
         }
 
-        public houdiniVehicleDestructionSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public houdiniVehicleDestructionSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsSceneEventID : CVariable
@@ -563,7 +563,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _id, value);
         }
 
-        public toolsSceneEventID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsSceneEventID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 
@@ -598,7 +598,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _lines, value);
         }
 
-        public toolsScreenplaySection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsScreenplaySection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 
@@ -625,7 +625,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public toolsUniqueNodeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsUniqueNodeData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsSocketVisibilityData : CVariable
@@ -667,7 +667,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _hidden, value);
         }
 
-        public toolsSocketVisibilityData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsSocketVisibilityData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsSectionClipboardDataHolder : CVariable
@@ -728,7 +728,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public toolsSectionClipboardDataHolder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsSectionClipboardDataHolder(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -789,7 +789,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _usage, value);
         }
 
-        public toolsScreenplayLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsScreenplayLine(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -814,7 +814,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _ragdollNames, value);
         }
 
-        public toolsRagdollExportData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsRagdollExportData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsVisualTagsRoot : CVariable
@@ -829,7 +829,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _schemas, value);
         }
 
-        public toolsVisualTagsRoot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsVisualTagsRoot(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsPartsCategories : CVariable
@@ -844,7 +844,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _categories, value);
         }
 
-        public toolsPartsCategories(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsPartsCategories(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsAppearanceNamingParser : CVariable
@@ -868,7 +868,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _captureGroups, value);
         }
 
-        public toolsAppearanceNamingParser(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsAppearanceNamingParser(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
 	public class toolsAppearanceConfigMapping : CVariable
@@ -947,7 +947,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public toolsAppearanceConfigMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsAppearanceConfigMapping(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsVisualTagsSchema : CVariable
@@ -980,7 +980,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _presets, value);
         }
 
-        public toolsVisualTagsSchema(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsVisualTagsSchema(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -996,7 +996,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _mappings, value);
         }
 
-        public toolsAppearancesConfig(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsAppearancesConfig(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -1012,7 +1012,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _name, value);
         }
 
-        public toolsVisualTagsDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsVisualTagsDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsPresetSectionData : CVariable
@@ -1027,7 +1027,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _sectionNames, value);
         }
 
-        public toolsPresetSectionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsPresetSectionData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsSceneRecorderPresetData : CVariable
@@ -1060,7 +1060,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _sectionData, value);
         }
 
-        public toolsSceneRecorderPresetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsSceneRecorderPresetData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsVisualTagsGroup : CVariable
@@ -1084,7 +1084,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _tags, value);
         }
 
-        public toolsVisualTagsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsVisualTagsGroup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsAppearanceNamingCaptureGroup : CVariable
@@ -1135,12 +1135,12 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _allowedValueType, value);
         }
 
-        public toolsAppearanceNamingCaptureGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsAppearanceNamingCaptureGroup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 	[REDMeta]
 	public class toolsTimeLineItemDescription : CVariable
 	{
-        public toolsTimeLineItemDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsTimeLineItemDescription(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
 	[REDMeta]
@@ -1174,7 +1174,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _runtimeEvent, value);
         }
 
-        public toolsAnimTimelineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsAnimTimelineEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta]
@@ -1191,12 +1191,12 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        public toolsSceneTrackID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsSceneTrackID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
     public class toolsEventDescriptor : CVariable
     {
-        public toolsEventDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsEventDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
     [REDMeta]
 	public class toolsTimeLineTrackBaseItem : CVariable
@@ -1256,6 +1256,6 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _children, value);
         }
 
-        public toolsTimeLineTrackBaseItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public toolsTimeLineTrackBaseItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

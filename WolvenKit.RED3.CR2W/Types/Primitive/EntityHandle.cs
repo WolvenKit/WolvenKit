@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
         public CGUID guid;
         public CBytes unk1;
 
-        public EntityHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public EntityHandle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             id = new CUInt16(cr2w, this, nameof(id));
             guid = new CGUID(cr2w, this, nameof(guid));
@@ -42,11 +42,6 @@ namespace WolvenKit.RED3.CR2W.Types
             id.Write(file);
             guid.Write(file);
             unk1.Write(file);
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new EntityHandle(cr2w, parent, name);
         }
 
         public override string ToString()

@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _entity, value);
 		}
 
-		public gameMovingPlatformDetachEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameMovingPlatformDetachEntity(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

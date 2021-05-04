@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataCompoundSelectionPreset_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataCompoundSelectionPreset_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataCompoundSelectionPreset_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

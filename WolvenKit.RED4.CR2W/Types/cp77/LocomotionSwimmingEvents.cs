@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LocomotionSwimmingEvents : LocomotionEventsTransition
 	{
 
-		public LocomotionSwimmingEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public LocomotionSwimmingEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

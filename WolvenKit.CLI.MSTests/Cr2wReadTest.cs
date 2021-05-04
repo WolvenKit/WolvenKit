@@ -789,9 +789,7 @@ namespace CP77.MSTests
             {
                 try
                 {
-                    if (file.Archive is not Archive ar)
-                        return;
-
+                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
                     using var ms = new MemoryStream();
                     ar.CopyFileToStream(ms, file.NameHash64, false);
 
@@ -897,7 +895,7 @@ namespace CP77.MSTests
             // Logging
             // Evaluate
             var successCount = results.Count(r => r.Success);
-            int totalCount = s_groupedFiles[extension].Count;
+            int totalCount = s_groupedFiles[extension].Count();
             var sb = new StringBuilder();
             var msg = "";
 
@@ -938,7 +936,7 @@ namespace CP77.MSTests
             sb.AppendLine(
                 $"{nameof(FileEntry.NameHash64)}," +
                 $"{nameof(FileEntry.FileName)}," +
-                $"{nameof(FileEntry.Archive)}," +
+                $"{nameof(FileEntry.Archive.Name)}," +
                 $"{nameof(ReadTestResult.ReadResult)}," +
                 $"{nameof(ReadTestResult.Success)}," +
                 $"{nameof(ReadTestResult.AdditionalBytes)}," +
@@ -951,7 +949,7 @@ namespace CP77.MSTests
                 sb.AppendLine(
                     $"{r.FileEntry.NameHash64}," +
                     $"{r.FileEntry.FileName}," +
-                    $"{Path.GetFileName(r.FileEntry.Archive.ArchiveAbsolutePath)}," +
+                    $"{r.FileEntry.Archive.Name}," +
                     $"{r.ReadResult}," +
                     $"{r.Success}," +
                     $"{r.AdditionalBytes}," +

@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Interfaces.Core;
+using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -17,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
        
 
-        public CPtr(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CPtr(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

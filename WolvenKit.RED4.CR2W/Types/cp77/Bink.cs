@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class Bink : CResource
 	{
 
-		public Bink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Bink(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("crowdThroughVar")] 		public CName CrowdThroughVar { get; set;}
 
-		public CMoveSTForwardCollisionResponse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CMoveSTForwardCollisionResponse(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CMoveSTForwardCollisionResponse(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

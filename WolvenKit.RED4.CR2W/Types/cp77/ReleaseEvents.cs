@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ReleaseEvents : CarriedObjectEvents
 	{
 
-		public ReleaseEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ReleaseEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

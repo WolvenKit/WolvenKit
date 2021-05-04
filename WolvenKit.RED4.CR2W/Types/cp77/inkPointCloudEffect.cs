@@ -80,6 +80,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _depthToBrightness, value);
 		}
 
-		public inkPointCloudEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public inkPointCloudEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

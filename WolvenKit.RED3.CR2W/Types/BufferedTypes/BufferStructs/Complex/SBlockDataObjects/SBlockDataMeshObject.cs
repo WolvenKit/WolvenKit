@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.RED3.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -22,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         [Ordinal(999)] [REDBuffer(true)] public CBytes unk1 { get; set; }
 
-        public SBlockDataMeshObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {
+        public SBlockDataMeshObject(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {
             unk1 = new CBytes(cr2w, parent, nameof(unk1));
 
         }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ResetNPCIncapacitatedDelayedRequest : gameScriptableSystemRequest
 	{
 
-		public ResetNPCIncapacitatedDelayedRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ResetNPCIncapacitatedDelayedRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

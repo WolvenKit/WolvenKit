@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _connectedFragments, value);
 		}
 
-		public worldTrafficLaneCrowdCreationInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldTrafficLaneCrowdCreationInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

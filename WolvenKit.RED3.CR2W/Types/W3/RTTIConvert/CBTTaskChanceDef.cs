@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("chancePerOpponent")] 		public CInt32 ChancePerOpponent { get; set;}
 
-		public CBTTaskChanceDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskChanceDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskChanceDef(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

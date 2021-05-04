@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldSaveSanitizationForbiddenAreaNodeInstance : worldTriggerAreaNodeInstance
 	{
 
-		public worldSaveSanitizationForbiddenAreaNodeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldSaveSanitizationForbiddenAreaNodeInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

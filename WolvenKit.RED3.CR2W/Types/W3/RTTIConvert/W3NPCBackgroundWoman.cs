@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("work")] 		public CEnum<EBackgroundNPCWomanWork> Work { get; set;}
 
-		public W3NPCBackgroundWoman(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3NPCBackgroundWoman(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3NPCBackgroundWoman(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

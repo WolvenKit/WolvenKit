@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MenuScenario_Storage : MenuScenario_BaseMenu
 	{
 
-		public MenuScenario_Storage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MenuScenario_Storage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

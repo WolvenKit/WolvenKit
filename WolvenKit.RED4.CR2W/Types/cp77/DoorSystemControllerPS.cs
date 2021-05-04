@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DoorSystemControllerPS : BaseNetworkSystemControllerPS
 	{
 
-		public DoorSystemControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DoorSystemControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

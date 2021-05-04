@@ -30,11 +30,11 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(4)] [RED] public CFloat Pitch { get; set; }
         [Ordinal(5)] [RED] public CFloat Roll { get; set; }
 
-        public SFoliageInstanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SFoliageInstanceData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFoliageInstanceData(cr2w, parent, name);
+        
     }
 }

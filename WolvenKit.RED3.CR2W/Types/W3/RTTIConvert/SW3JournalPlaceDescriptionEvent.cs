@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SW3JournalPlaceDescriptionEvent : SW3BaseStatusEvent
 	{
-		public SW3JournalPlaceDescriptionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SW3JournalPlaceDescriptionEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SW3JournalPlaceDescriptionEvent(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

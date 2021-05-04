@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("All inbound tags required?")] 		public CBool All_inbound_tags_required_ { get; set;}
 
-		public SBehaviorGraphStateBehaviorGraphSyncInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SBehaviorGraphStateBehaviorGraphSyncInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBehaviorGraphStateBehaviorGraphSyncInfo(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

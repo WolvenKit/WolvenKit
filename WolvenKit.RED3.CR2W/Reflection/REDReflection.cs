@@ -6,6 +6,7 @@ using System.Reflection;
 using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
 using WolvenKit.RED3.CR2W.Types;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.RED3.CR2W.Reflection
 {

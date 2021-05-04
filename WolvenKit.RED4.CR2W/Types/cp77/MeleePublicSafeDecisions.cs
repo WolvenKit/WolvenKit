@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MeleePublicSafeDecisions : MeleeTransition
 	{
 
-		public MeleePublicSafeDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MeleePublicSafeDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

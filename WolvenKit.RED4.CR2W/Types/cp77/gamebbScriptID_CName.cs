@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamebbScriptID_CName : gamebbScriptID
 	{
 
-		public gamebbScriptID_CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamebbScriptID_CName(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

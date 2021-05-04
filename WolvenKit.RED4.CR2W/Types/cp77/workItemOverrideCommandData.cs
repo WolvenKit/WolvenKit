@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class workItemOverrideCommandData : workIWorkspotCommandData
 	{
 
-		public workItemOverrideCommandData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public workItemOverrideCommandData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

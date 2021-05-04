@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("slot")] 		public CInt32 Slot { get; set;}
 
-		public W3SaveGameConfirmation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3SaveGameConfirmation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3SaveGameConfirmation(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

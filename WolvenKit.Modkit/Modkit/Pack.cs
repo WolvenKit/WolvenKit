@@ -7,6 +7,7 @@ using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Extensions;
 using CP77Tools.Model;
 using RED.CRC32;
+using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;

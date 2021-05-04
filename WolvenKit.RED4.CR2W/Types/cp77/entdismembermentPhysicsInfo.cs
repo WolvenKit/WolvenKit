@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _densityScale, value);
 		}
 
-		public entdismembermentPhysicsInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entdismembermentPhysicsInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

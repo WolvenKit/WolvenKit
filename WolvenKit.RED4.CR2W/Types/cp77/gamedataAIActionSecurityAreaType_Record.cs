@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataAIActionSecurityAreaType_Record : gamedataTweakDBRecord
 	{
 
-		public gamedataAIActionSecurityAreaType_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataAIActionSecurityAreaType_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

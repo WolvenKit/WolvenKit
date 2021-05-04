@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class TierIVContextDecisions : CameraContextBaseDecisions
 	{
 
-		public TierIVContextDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public TierIVContextDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

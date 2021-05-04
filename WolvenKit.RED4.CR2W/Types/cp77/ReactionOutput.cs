@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workspotReactionType, value);
 		}
 
-		public ReactionOutput(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ReactionOutput(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

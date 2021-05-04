@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
         public string InternalType { get; set; }
         public override string REDType => string.IsNullOrEmpty(InternalType) ? base.REDType : InternalType;
 
-        public CByteArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CByteArray(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public byte[] Bytes { get; set; }
         public byte[] GetBytes() => Bytes;

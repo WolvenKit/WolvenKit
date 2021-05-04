@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unknown6, value);
         }
 
-        public worldStreamingSector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public worldStreamingSector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {

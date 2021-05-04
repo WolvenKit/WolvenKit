@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class EvaluateMappinsVisualStateEvent : redEvent
 	{
 
-		public EvaluateMappinsVisualStateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public EvaluateMappinsVisualStateEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

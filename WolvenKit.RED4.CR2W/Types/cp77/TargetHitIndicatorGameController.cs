@@ -260,6 +260,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isAimingDownSights, value);
 		}
 
-		public TargetHitIndicatorGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public TargetHitIndicatorGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

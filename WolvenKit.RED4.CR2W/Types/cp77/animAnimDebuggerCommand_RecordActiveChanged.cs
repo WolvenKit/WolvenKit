@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class animAnimDebuggerCommand_RecordActiveChanged : animIAnimDebuggerCommand
 	{
 
-		public animAnimDebuggerCommand_RecordActiveChanged(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimDebuggerCommand_RecordActiveChanged(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

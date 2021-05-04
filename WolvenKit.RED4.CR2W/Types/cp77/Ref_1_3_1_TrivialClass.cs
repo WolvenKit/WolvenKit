@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class Ref_1_3_1_TrivialClass : IScriptable
 	{
 
-		public Ref_1_3_1_TrivialClass(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Ref_1_3_1_TrivialClass(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

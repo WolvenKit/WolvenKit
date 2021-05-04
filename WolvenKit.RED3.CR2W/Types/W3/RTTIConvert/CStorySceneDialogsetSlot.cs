@@ -47,9 +47,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(18)] [RED("setupAction", 2,0)] 		public CArray<CPtr<CStorySceneAction>> SetupAction { get; set;}
 
-		public CStorySceneDialogsetSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneDialogsetSlot(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneDialogsetSlot(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

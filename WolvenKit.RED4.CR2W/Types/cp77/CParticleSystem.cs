@@ -98,6 +98,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _particleDamage, value);
 		}
 
-		public CParticleSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CParticleSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

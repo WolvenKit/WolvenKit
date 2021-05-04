@@ -7,6 +7,7 @@ using System.Reflection;
 using WolvenKit.RED4.CR2W.Types;
 using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.RED4.CR2W.Reflection
 {
@@ -25,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Reflection
 
         #region Methods
 
-        public static CVariable GetPropertyByREDName(this CVariable cvar, string propertyName)
+        public static IEditableVariable GetPropertyByREDName(this IEditableVariable cvar, string propertyName)
         {
             foreach (var member in GetMembers(cvar))
             {
@@ -40,18 +41,18 @@ namespace WolvenKit.RED4.CR2W.Reflection
                     continue;
                 }
 
-                return (CVariable)cvar.accessor[cvar, member.Name];
+                return (IEditableVariable)cvar.accessor[cvar, member.Name];
             }
 
             return null;
         }
 
-        public static IEnumerable<Member> GetREDBuffers(this CVariable cvar) =>
+        public static IEnumerable<Member> GetREDBuffers(this IEditableVariable cvar) =>
             GetMembers(cvar)
                 .Where(p => GetREDAttribute(p) is REDBufferAttribute)
                 .OrderBy(GetOrdinal);
 
-        public static IEnumerable<Member> GetREDMembers(this CVariable cvar, bool includeBuffers) =>
+        public static IEnumerable<Member> GetREDMembers(this IEditableVariable cvar, bool includeBuffers) =>
             GetMembers(cvar)
                 .Where(p =>
                 {
@@ -106,7 +107,7 @@ namespace WolvenKit.RED4.CR2W.Reflection
                 _ => typename
             };
 
-        public static MemberSet GetMembers(CVariable cvar) =>
+        public static MemberSet GetMembers(IEditableVariable cvar) =>
             MembersCache.GetOrAdd(cvar.GetType(), new Lazy<MemberSet>(() => cvar.accessor.GetMembers())).Value;
 
         public static REDAttribute GetREDAttribute(Member member)

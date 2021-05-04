@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MeleeHoldEvents : MeleeEventsTransition
 	{
 
-		public MeleeHoldEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MeleeHoldEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

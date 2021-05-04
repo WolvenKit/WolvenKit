@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attachmentSlot, value);
 		}
 
-		public InstanceDataMappedToReferenceName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public InstanceDataMappedToReferenceName(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

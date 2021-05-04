@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CBehTreeTicketData : CVariable
 	{
-		public CBehTreeTicketData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeTicketData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeTicketData(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

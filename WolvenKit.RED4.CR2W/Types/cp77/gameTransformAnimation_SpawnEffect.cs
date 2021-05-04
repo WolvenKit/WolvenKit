@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _persistOnDetach, value);
 		}
 
-		public gameTransformAnimation_SpawnEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameTransformAnimation_SpawnEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

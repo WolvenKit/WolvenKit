@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _phase, value);
 		}
 
-		public SpreadFearEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SpreadFearEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

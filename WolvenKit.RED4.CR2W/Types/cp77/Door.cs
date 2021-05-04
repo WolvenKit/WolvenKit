@@ -386,6 +386,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerInWorkspot, value);
 		}
 
-		public Door(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Door(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -12,7 +12,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
        
 
-        public StringAnsi(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public StringAnsi(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -39,11 +39,6 @@ namespace WolvenKit.RED3.CR2W.Types
                 this.val = cvar.val;
             }
             return this;
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new StringAnsi(cr2w, parent, name);
         }
 
         public override CVariable Copy(ICR2WCopyAction context)

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class IdleTier4Decisions : LocomotionGroundDecisions
 	{
 
-		public IdleTier4Decisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public IdleTier4Decisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

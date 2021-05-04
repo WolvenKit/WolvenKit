@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CustomEventSender : AISignalSenderTask
 	{
 
-		public CustomEventSender(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public CustomEventSender(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

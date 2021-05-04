@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questIEntityManager_NodeSubType : questObjectNodeType
 	{
 
-		public questIEntityManager_NodeSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questIEntityManager_NodeSubType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

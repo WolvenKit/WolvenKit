@@ -21,9 +21,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("groupID")] 		public CInt32 GroupID { get; set;}
 
-		public SSkillSlot(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SSkillSlot(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SSkillSlot(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SW3JournalQuestObjectiveCounterTrackEvent : SJournalEvent
 	{
-		public SW3JournalQuestObjectiveCounterTrackEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SW3JournalQuestObjectiveCounterTrackEvent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SW3JournalQuestObjectiveCounterTrackEvent(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

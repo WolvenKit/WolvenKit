@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerGenderAlt, value);
 		}
 
-		public animAnimEvent_Sound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimEvent_Sound(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

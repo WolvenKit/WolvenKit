@@ -26,6 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _propId, value);
 		}
 
-		public scnChoiceNodeNsDeprecatedParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnChoiceNodeNsDeprecatedParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

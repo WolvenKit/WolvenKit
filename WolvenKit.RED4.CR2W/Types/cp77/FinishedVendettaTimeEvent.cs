@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class FinishedVendettaTimeEvent : redEvent
 	{
 
-		public FinishedVendettaTimeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public FinishedVendettaTimeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

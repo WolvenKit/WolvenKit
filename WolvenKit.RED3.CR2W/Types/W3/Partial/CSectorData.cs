@@ -11,7 +11,6 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta(EREDMetaInfo.REDStruct)]
 	public partial class CSectorData : ISerializable
 	{
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSectorData(cr2w, parent, name);
 
 	}
 }

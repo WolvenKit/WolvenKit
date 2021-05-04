@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stanceState, value);
 		}
 
-		public questCharacterState_PuppetSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questCharacterState_PuppetSubType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

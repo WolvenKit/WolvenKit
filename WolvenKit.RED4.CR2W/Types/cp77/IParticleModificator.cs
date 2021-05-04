@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class IParticleModificator : IParticleInitializer
 	{
 
-		public IParticleModificator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public IParticleModificator(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

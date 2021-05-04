@@ -35,6 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ikChainSettings, value);
 		}
 
-		public animTEMP_IKTargetsControllerBodyType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animTEMP_IKTargetsControllerBodyType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

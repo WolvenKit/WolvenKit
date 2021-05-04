@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _name, value);
 		}
 
-		public PSD_DetectorPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public PSD_DetectorPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

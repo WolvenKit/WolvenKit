@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("leadSubtree")] 		public CHandle<CAIIdleTree> LeadSubtree { get; set;}
 
-		public CAILeadFormationTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAILeadFormationTree(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAILeadFormationTree(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

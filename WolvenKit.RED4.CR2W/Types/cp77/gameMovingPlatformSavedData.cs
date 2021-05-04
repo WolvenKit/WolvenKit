@@ -62,6 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mountedPlayerEntityID, value);
 		}
 
-		public gameMovingPlatformSavedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameMovingPlatformSavedData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

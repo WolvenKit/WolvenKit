@@ -140,7 +140,7 @@ namespace WolvenKit.ViewModels.Shell
             // check if there is a mod project loaded
             if (ActiveMod == null)
             {
-                MainController.LogString($"No mod project loaded.", Common.Services.Logtype.Error);
+                MainController.LogString($"No mod project loaded.", Logtype.Error);
                 return;
             }
 
@@ -164,13 +164,13 @@ namespace WolvenKit.ViewModels.Shell
             var trygetgit = await ProcessHelper.RunCommandLineAsync(Logger, "", "git --version");
             if (trygetgit != 0)
             {
-                MainController.LogString($"Git is not properly installed. Aborting.", Common.Services.Logtype.Error);
+                MainController.LogString($"Git is not properly installed. Aborting.", Logtype.Error);
                 return;
             }
 
             MainController.Get().ProjectStatus = EProjectStatus.Busy;
             MainController.Get().StatusProgress = 0;
-            MainController.LogString($"Backing up mod project. Please wait...", Common.Services.Logtype.Important);
+            MainController.LogString($"Backing up mod project. Please wait...", Logtype.Important);
 
             // create git repo - rerunning git init is safe
             //MainController.LogString($"Running git init command...", Logtype.Important);
@@ -185,7 +185,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
                 MainController.Get().StatusProgress = 100;
-                MainController.LogString($"Error creating Git repository for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                MainController.LogString($"Error creating Git repository for project {ActiveMod.Name}.", Logtype.Error);
                 return;
             }
 
@@ -195,36 +195,36 @@ namespace WolvenKit.ViewModels.Shell
             var archivePath = Path.Combine(ActiveMod.BackupDirectory, archiveName);
 
             // commit new files
-            MainController.LogString($"Running Git commit command...", Common.Services.Logtype.Important);
+            MainController.LogString($"Running Git commit command...", Logtype.Important);
             var resultCommit = await GitHelper.Commit(Logger, ActiveMod.ProjectDirectory, commitMessage);
             if (resultCommit)
             {
                 MainController.Get().StatusProgress = 50;
                 MainController.LogString($"Successfully committed Git repo for project {ActiveMod.Name}.",
-                    Common.Services.Logtype.Success);
+                    Logtype.Success);
             }
             else
             {
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
                 MainController.Get().StatusProgress = 100;
-                MainController.LogString($"Git repo failed to commit for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                MainController.LogString($"Git repo failed to commit for project {ActiveMod.Name}.", Logtype.Error);
                 return;
             }
 
             // git archive zip to ./_backups
-            MainController.LogString($"Running Git archive command...", Common.Services.Logtype.Important);
+            MainController.LogString($"Running Git archive command...", Logtype.Important);
             var resultArchive = await GitHelper.Archive(Logger, ActiveMod.ProjectDirectory, archivePath);
             if (resultArchive)
             {
                 MainController.Get().StatusProgress = 100;
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
-                MainController.LogString($"Successfully created git archive for project ({ActiveMod.Name}) at {archivePath}.", Common.Services.Logtype.Success);
+                MainController.LogString($"Successfully created git archive for project ({ActiveMod.Name}) at {archivePath}.", Logtype.Success);
             }
             else
             {
                 MainController.Get().StatusProgress = 100;
                 MainController.Get().ProjectStatus = EProjectStatus.Ready;
-                MainController.LogString($"Error creating Git archive for project {ActiveMod.Name}.", Common.Services.Logtype.Error);
+                MainController.LogString($"Error creating Git archive for project {ActiveMod.Name}.", Logtype.Error);
                 return;
             }
         }
@@ -374,7 +374,7 @@ namespace WolvenKit.ViewModels.Shell
             using (var writer = new BinaryWriter(fs))
             {
                 cr2w.Write(writer);
-                MainController.LogString($"Succesfully created file {newfilepath}.", Common.Services.Logtype.Success);
+                MainController.LogString($"Succesfully created file {newfilepath}.", Logtype.Success);
             }
 
             return cr2w;

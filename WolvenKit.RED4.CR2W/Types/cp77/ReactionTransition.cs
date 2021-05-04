@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ReactionTransition : DefaultTransition
 	{
 
-		public ReactionTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ReactionTransition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

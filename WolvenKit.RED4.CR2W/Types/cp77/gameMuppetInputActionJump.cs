@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameMuppetInputActionJump : gameIMuppetInputAction
 	{
 
-		public gameMuppetInputActionJump(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameMuppetInputActionJump(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

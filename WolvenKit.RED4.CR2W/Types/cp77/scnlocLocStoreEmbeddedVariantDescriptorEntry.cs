@@ -53,6 +53,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vpeIndex, value);
 		}
 
-		public scnlocLocStoreEmbeddedVariantDescriptorEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public scnlocLocStoreEmbeddedVariantDescriptorEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

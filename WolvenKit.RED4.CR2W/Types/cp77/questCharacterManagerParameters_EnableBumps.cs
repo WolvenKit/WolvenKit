@@ -44,6 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _policy, value);
 		}
 
-		public questCharacterManagerParameters_EnableBumps(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public questCharacterManagerParameters_EnableBumps(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

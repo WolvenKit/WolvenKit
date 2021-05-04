@@ -17,6 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldOpen, value);
 		}
 
-		public ToggleLock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ToggleLock(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

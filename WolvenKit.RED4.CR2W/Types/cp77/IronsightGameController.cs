@@ -521,6 +521,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attitude, value);
 		}
 
-		public IronsightGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public IronsightGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

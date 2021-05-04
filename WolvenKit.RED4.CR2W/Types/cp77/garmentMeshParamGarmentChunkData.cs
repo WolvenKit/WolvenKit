@@ -71,6 +71,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _garmentFlags, value);
 		}
 
-		public garmentMeshParamGarmentChunkData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public garmentMeshParamGarmentChunkData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

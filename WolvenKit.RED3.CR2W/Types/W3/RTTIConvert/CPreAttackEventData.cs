@@ -45,9 +45,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(17)] [RED("cameraAnimOnMissedHit")] 		public CName CameraAnimOnMissedHit { get; set;}
 
-		public CPreAttackEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CPreAttackEventData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CPreAttackEventData(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

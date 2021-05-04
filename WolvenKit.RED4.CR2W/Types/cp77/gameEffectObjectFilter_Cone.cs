@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameEffectObjectFilter_Cone : gameEffectObjectSingleFilter
 	{
 
-		public gameEffectObjectFilter_Cone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameEffectObjectFilter_Cone(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

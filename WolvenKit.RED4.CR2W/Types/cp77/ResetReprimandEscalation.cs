@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ResetReprimandEscalation : AIbehaviortaskScript
 	{
 
-		public ResetReprimandEscalation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public ResetReprimandEscalation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

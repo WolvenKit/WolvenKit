@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class QuestDisableFixing : ActionBool
 	{
 
-		public QuestDisableFixing(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public QuestDisableFixing(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

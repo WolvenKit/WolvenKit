@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class NightPreset : SmartHousePreset
 	{
 
-		public NightPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public NightPreset(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

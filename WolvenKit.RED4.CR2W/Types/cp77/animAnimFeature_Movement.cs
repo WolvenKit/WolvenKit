@@ -89,6 +89,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _locomotionState, value);
 		}
 
-		public animAnimFeature_Movement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public animAnimFeature_Movement(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

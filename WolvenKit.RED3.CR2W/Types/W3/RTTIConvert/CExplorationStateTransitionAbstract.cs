@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("m_TransitionEndStateN")] 		public CName M_TransitionEndStateN { get; set;}
 
-		public CExplorationStateTransitionAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CExplorationStateTransitionAbstract(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CExplorationStateTransitionAbstract(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

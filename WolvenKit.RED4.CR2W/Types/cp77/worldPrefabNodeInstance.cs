@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldPrefabNodeInstance : worldSnappableNodeInstance
 	{
 
-		public worldPrefabNodeInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldPrefabNodeInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

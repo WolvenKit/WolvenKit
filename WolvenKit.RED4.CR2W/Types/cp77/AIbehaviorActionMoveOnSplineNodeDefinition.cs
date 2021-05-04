@@ -134,6 +134,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useOffMeshLinkReservation, value);
 		}
 
-		public AIbehaviorActionMoveOnSplineNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AIbehaviorActionMoveOnSplineNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SetPlayerAsKiller : AIbehaviortaskScript
 	{
 
-		public SetPlayerAsKiller(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SetPlayerAsKiller(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -170,6 +170,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tHandle, value);
 		}
 
-		public Sample_All_Supported_Replicated_Types(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Sample_All_Supported_Replicated_Types(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -98,6 +98,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentLocomotionWrapper, value);
 		}
 
-		public DroneComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public DroneComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

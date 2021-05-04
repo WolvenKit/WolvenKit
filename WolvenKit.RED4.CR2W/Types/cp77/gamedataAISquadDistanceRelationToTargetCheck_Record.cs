@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gamedataAISquadDistanceRelationToTargetCheck_Record : gamedataAITicketCheck_Record
 	{
 
-		public gamedataAISquadDistanceRelationToTargetCheck_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gamedataAISquadDistanceRelationToTargetCheck_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -55,9 +55,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(22)] [RED("behVarValue")] 		public CFloat BehVarValue { get; set;}
 
-		public CBTTaskKill(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskKill(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskKill(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class worldCompiledNodeInstanceSetupInfoBuffer : CVariable
 	{
 
-		public worldCompiledNodeInstanceSetupInfoBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public worldCompiledNodeInstanceSetupInfoBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

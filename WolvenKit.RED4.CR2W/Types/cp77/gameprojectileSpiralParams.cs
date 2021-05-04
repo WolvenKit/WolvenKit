@@ -107,6 +107,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _randomizeDirection, value);
 		}
 
-		public gameprojectileSpiralParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public gameprojectileSpiralParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

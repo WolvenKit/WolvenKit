@@ -107,6 +107,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lookat_offset_vertical, value);
 		}
 
-		public AnimFeature_CameraBodyOffset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public AnimFeature_CameraBodyOffset(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

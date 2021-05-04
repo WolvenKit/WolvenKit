@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MotorcycleComponent : VehicleComponent
 	{
 
-		public MotorcycleComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public MotorcycleComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

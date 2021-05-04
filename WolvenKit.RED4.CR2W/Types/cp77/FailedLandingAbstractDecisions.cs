@@ -6,6 +6,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class FailedLandingAbstractDecisions : AbstractLandDecisions
 	{
 
-		public FailedLandingAbstractDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public FailedLandingAbstractDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

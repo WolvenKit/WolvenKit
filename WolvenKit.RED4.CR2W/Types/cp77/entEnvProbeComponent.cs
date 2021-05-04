@@ -170,6 +170,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _volumeChannels, value);
 		}
 
-		public entEnvProbeComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public entEnvProbeComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

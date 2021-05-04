@@ -80,6 +80,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _chargeBBID, value);
 		}
 
-		public Crosshair_ChargeBar(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public Crosshair_ChargeBar(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

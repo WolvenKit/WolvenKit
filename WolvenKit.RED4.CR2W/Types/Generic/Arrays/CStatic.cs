@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
     public class CStatic<T> : CArray<T> where T : CVariable
     {
-        public CStatic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CStatic(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override string REDType => REDReflection.GetREDTypeString(GetType(), Flags.ToArray());
     }

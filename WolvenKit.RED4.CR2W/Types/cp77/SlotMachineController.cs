@@ -107,6 +107,6 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldWinNextTime, value);
 		}
 
-		public SlotMachineController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		public SlotMachineController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

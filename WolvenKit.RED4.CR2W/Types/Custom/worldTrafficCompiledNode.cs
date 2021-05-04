@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unknown2, value);
         }
 
-        public worldTrafficCompiledNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public worldTrafficCompiledNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unknown5, value);
         }
 
-        public worldTrafficCompiledNode_UnkClass1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public worldTrafficCompiledNode_UnkClass1(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void ReadWithoutMeta(BinaryReader file, uint size)
         {
@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
             set => SetProperty(ref _unknown2, value);
         }
 
-        public worldTrafficCompiledNode_UnkClass2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public worldTrafficCompiledNode_UnkClass2(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void ReadWithoutMeta(BinaryReader file, uint size)
         {
