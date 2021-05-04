@@ -62,19 +62,18 @@ namespace WolvenKit.Functionality.Commands
             {
                 var location = parameter as string;
                 var filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj| Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj";
-                if (location == null && parameter is ProjectWizardModel.TypeAndPath)
+                if (location == null && parameter is ProjectWizardModel.TypeAndPath res)
                 {
-                    var res = parameter as ProjectWizardModel.TypeAndPath;
                     location = Path.Combine(res.Path, res.Name);
                     if (res.Type == ProjectWizardModel.WitcherGameName)
                     {
                         filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj";
-                        location = location + ".w3modproj";
+                        location += ".w3modproj";
                     }
                     else if (res.Type == ProjectWizardModel.CyberpunkGameName)
                     {
                         filter = "Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj";
-                        location = location + ".cpmodproj";
+                        location += ".cpmodproj";
                     }
                 }
                 else

@@ -74,16 +74,6 @@ namespace WolvenKit.Models
 
         #endregion
 
-        public void CollapseChildren(bool b)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ExpandChildren(bool b)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public override int GetHashCode() => (int)Hash;
 

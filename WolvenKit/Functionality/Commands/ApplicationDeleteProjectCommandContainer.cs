@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Catel;
 using Catel.IoC;
 using Catel.MVVM;
@@ -70,17 +71,12 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                RecentlyUsedItem projectToDel = null;
-                foreach (var project in _recentlyUsedItemsService.Items)
-                {
-                    if (project.Name == parameter?.ToString())
-                    {
-                        projectToDel = project;
-                        break;
-                    }
-                }
+                var projectToDel = _recentlyUsedItemsService.Items
+                    .FirstOrDefault(project => project.Name == parameter?.ToString());
                 if (projectToDel != null)
+                {
                     _recentlyUsedItemsService.RemoveItem(projectToDel);
+                }
             }
             catch (Exception ex)
             {

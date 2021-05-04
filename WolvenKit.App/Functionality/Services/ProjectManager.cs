@@ -4,13 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Catel.Data;
 using Catel.IoC;
+using Orchestra.Models;
 using Orchestra.Services;
 using ReactiveUI;
+using WolvenKit.Common;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenManager.App.Services;
+using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -37,19 +39,34 @@ namespace WolvenKit.Functionality.Services
 
         public async Task<bool> LoadAsync(string location)
         {
+            var recentlyUsedItemsService = WolvenServiceLocator.Default.ResolveType<IRecentlyUsedItemsService>();
+
             IsProjectLoaded = false;
             await ReadFromLocationAsync(location).ContinueWith(_ =>
             {
                 if (_.IsCompletedSuccessfully)
                 {
-                    ActiveProject = _.Result;
-                    IsProjectLoaded = true;
+                    if (_.Result == null)
+                    {
+                    }
+                    else
+                    {
+                        ActiveProject = _.Result;
+                        IsProjectLoaded = true;
+
+                        if (recentlyUsedItemsService.Items.All(item => item.Name != location))
+                        {
+                            recentlyUsedItemsService.AddItem(new RecentlyUsedItem(location, DateTime.Now));
+                        }
+                    }
                 }
                 else
                 {
                     
                 }
             });
+
+
             return true;
         }
 
