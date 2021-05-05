@@ -1,16 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catel.Data;
 using Catel.IoC;
-using ReactiveUI;
 using WolvenKit.Common;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using ObservableObject = Catel.Data.ObservableObject;
 
@@ -60,7 +53,7 @@ namespace WolvenKit.Models
 
         public string RelativeName { get; }
 
-        public string Extension { get; }
+        public string Extension { get; } = ".default";
 
         public bool IsDirectory { get; }
 
@@ -125,6 +118,6 @@ namespace WolvenKit.Models
             throw new System.NullReferenceException();
         }
 
-        
+
     }
 }

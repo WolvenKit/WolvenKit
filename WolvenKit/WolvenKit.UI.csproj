@@ -153,6 +153,27 @@
     <Content Include="Resources\Media\Images\Icons\Files\bnk.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Media\Images\Icons\Files\env.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\gidata.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\gradient.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\lipmap.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mlmask.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mltemplate.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2animev.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Editor\Basic\default.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -1647,6 +1668,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\default.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\dtex.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\ent.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\env.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\envprob b.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\envprob_b.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\es.svg" />
@@ -1660,6 +1682,8 @@
     <None Remove="Resources\Media\Images\Icons\Files\garmentlayerparams.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\genericanimdb.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\geometry_cache.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\gidata.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\gradient.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Grassmask.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\guiconfig.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\hitrepresentation.svg" />
@@ -1668,10 +1692,13 @@
     <None Remove="Resources\Media\Images\Icons\Files\joke.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\json2.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\lane_spots.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\lipmap.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\locopaths.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\materialinstance2.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\menu.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\mlmask.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\mlsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\mltemplate.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\morphtarget.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\mt.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Navconfig.svg" />
@@ -1713,6 +1740,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\subs.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\terrainsetup.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Usm.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2animev.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2em.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2ent.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2fnt.svg" />
