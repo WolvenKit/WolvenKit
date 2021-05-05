@@ -605,13 +605,15 @@
                                          Orientation="Horizontal"
                                          >
                                             <svgc:SvgViewbox
-                                             Width="12"
-                                             Height="12"
-                                             Margin="0"
+                                             Width="17"
+                                             Height="17"
+                                             Margin="-5,0,5,0"
+                                             VerticalAlignment="Center"
                                              Source="{Binding Extension, Converter={StaticResource ExtensionToImageConverter}}"
                                              Stretch="Uniform"
                                              />
                                             <TextBlock
+                                             VerticalAlignment="Center"
                                              Background="Transparent"
                                              FontSize="11"
                                              Foreground="White"
@@ -834,6 +836,7 @@
                              ColumnSizer="Star"
                              IsManipulationEnabled="False"
                              ItemsSource="{Binding CurrentNodeFiles}"
+                             RowHeight="22"
                              SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
                              >
 
@@ -871,11 +874,11 @@
                                      />-->
 
 
-                                    <syncfusion:GridTemplateColumn Width="30">
+                                    <syncfusion:GridTemplateColumn Width="22">
                                         <syncfusion:GridTemplateColumn.CellTemplate>
 
                                             <DataTemplate>
-                                                <Image Width="22" Margin="5,0,0,0">
+                                                <Image Width="17" Margin="5,0,0,0">
                                                     <Image.Style>
                                                         <Style TargetType="Image">
                                                             <Style.Triggers>
