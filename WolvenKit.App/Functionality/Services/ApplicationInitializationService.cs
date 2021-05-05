@@ -11,7 +11,6 @@ using ProtoBuf.Meta;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.MVVM.Model.ProjectManagement;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenManager.App.Services;
 
@@ -123,6 +122,7 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.ShowPackageInstaller);
             _commandManager.CreateCommand(AppCommands.Application.ShowMimicsTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowCR2WEditor);
+            _commandManager.CreateCommand(AppCommands.Application.ShowImportExportTool);
 
             _commandManager.CreateCommand(AppCommands.Application.ShowAssetBrowser);
             _commandManager.CreateCommand(AppCommands.Application.ShowBulkEditor);
@@ -197,7 +197,7 @@ namespace WolvenKit.Functionality.Services
 
 
             //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO:
-           
+
 
             // Orchestra
             _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();

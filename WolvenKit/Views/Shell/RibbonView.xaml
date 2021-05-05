@@ -244,12 +244,12 @@
             </fluent:RibbonTabItem>
 
             <!--  Editors Tab  -->
-            <fluent:RibbonTabItem Header="Editors" Visibility="Collapsed">
+            <fluent:RibbonTabItem Header="Editors" Visibility="Visible">
                 <fluent:RibbonGroupBox Header="Quick Access">
                     <fluent:Button
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     Command="{catel:CommandManagerBinding Application.ShowVisualEditor}"
+                     Command="{catel:CommandManagerBinding Application.ShowImportExportTool}"
                      Header="Visual Editor"
                      >
                         <fluent:Button.LargeIcon>

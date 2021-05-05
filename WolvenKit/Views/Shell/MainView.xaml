@@ -71,15 +71,16 @@
             <DockingManager.LayoutItemTemplateSelector>
 
                 <ad:PanesTemplateSelector>
-
-                    <!--  DocumentView
                     <ad:PanesTemplateSelector.FileViewTemplate>
                         <DataTemplate>
                             <editor:DocumentView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.FileViewTemplate>
-
-                      LogView-->
+                    <ad:PanesTemplateSelector.ImportExportToolTemplate>
+                        <DataTemplate>
+                            <views1:ImportExportView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.ImportExportToolTemplate>
                     <ad:PanesTemplateSelector.PropertiesTemplate>
                         <DataTemplate>
                             <views1:PropertiesView />
@@ -262,18 +263,7 @@
 
 
 
-        <Grid>
-            <syncfusion:DockingManager x:Name="dockingManager">
-                <ContentControl x:Name="SolutionExplorer">
-                    <editor:DocumentView />
 
-                </ContentControl>
-                <ContentControl x:Name="ToolBox" />
-                <ContentControl x:Name="Properties" />
-                <ContentControl x:Name="Output" />
-                <ContentControl x:Name="StartPage" />
-            </syncfusion:DockingManager>
-        </Grid>
 
 
 

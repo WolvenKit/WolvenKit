@@ -32,6 +32,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string SaveProject = "Application.SaveProject";
             public const string SaveFile = "Application.SaveFile";
             public const string SaveAll = "Application.SaveAll";
+            public const string ShowImportExportTool = "Application.ShowImportExportTool";
 
             public const string ShowAbout = "Application.ShowAbout";
             public const string ShowAnimationTool = "Application.ShowAnimationTool";

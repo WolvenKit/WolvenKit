@@ -15,12 +15,10 @@ using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
 using WolvenKit.Common;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -92,6 +90,9 @@ namespace WolvenKit.ViewModels.Shell
             ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
             ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
+            ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
+
+
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
             ShowGameDebuggerToolCommand = new RelayCommand(ExecuteGameDebuggerTool, CanShowGameDebuggerTool);
@@ -128,6 +129,7 @@ namespace WolvenKit.ViewModels.Shell
                 ImportViewModel,
                 AssetBrowserVM,
                 BulkEditorVM,
+                ImportExportToolVM,
                 CsvEditorVM,
                 HexEditorVM,
                 CodeEditorVM,
@@ -189,6 +191,8 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
+
+            commandManager.RegisterCommand(AppCommands.Application.ShowImportExportTool, ShowImportExportToolCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.ShowCodeEditor, ShowCodeEditorCommand, this);
 
@@ -289,6 +293,7 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowGameDebuggerToolCommand { get; private set; }
+        public ICommand ShowImportExportToolCommand { get; private set; }
 
         /// <summary>
         /// Displays the AssetBrowser.
@@ -431,6 +436,10 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowVisualEditor() => false;
 
         private bool CanShowWccTool() => false;
+
+        private bool CanShowImportExportTool() => _projectManager.ActiveProject is EditorProject;
+
+        private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
         private void ExecuteAnimationTool() => AnimationToolVM.IsVisible = false;
 
@@ -644,6 +653,7 @@ namespace WolvenKit.ViewModels.Shell
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private RadishToolViewModel _RadishToolVM = null;
+        private ImportExportViewModel _importExportToolViewModel = null;
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
@@ -724,7 +734,6 @@ namespace WolvenKit.ViewModels.Shell
                 return _CsvEditorVM;
             }
         }
-
         public GameDebuggerToolViewModel GameDebuggerToolVM
         {
             get
@@ -732,6 +741,16 @@ namespace WolvenKit.ViewModels.Shell
                 _GameDebuggerToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<GameDebuggerToolViewModel>();
                 _GameDebuggerToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _GameDebuggerToolVM;
+            }
+        }
+
+        public ImportExportViewModel ImportExportToolVM
+        {
+            get
+            {
+                _importExportToolViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportExportViewModel>();
+                _importExportToolViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
+                return _importExportToolViewModel;
             }
         }
 
