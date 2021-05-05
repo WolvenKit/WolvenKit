@@ -70,6 +70,15 @@
 
                 <!--  Project  -->
                 <fluent:RibbonGroupBox Header="Project">
+                    <fluent:Button
+                     Command="{catel:CommandManagerBinding Application.ShowCodeEditor}"
+                     Header="Code Editor"
+                     Size="Middle"
+                     >
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="CodeSquare" />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.OpenProject}" Header="Open Project">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
@@ -80,6 +89,7 @@
                              Kind="GoToFile"
                              />
                         </fluent:Button.LargeIcon>
+
                         <fluent:Button.Icon>
                             <iconPacks:PackIconCodicons
                              Width="25"
@@ -288,15 +298,7 @@
                         </fluent:Button.Icon>
                     </fluent:Button>
 
-                    <fluent:Button
-                     Command="{catel:CommandManagerBinding Application.ShowCodeEditor}"
-                     Header="Code Editor"
-                     Size="Middle"
-                     >
-                        <fluent:Button.Icon>
-                            <iconPacks:PackIconBootstrapIcons Kind="CodeSquare" />
-                        </fluent:Button.Icon>
-                    </fluent:Button>
+
 
                     <fluent:Button
                      Command="{catel:CommandManagerBinding Application.ShowHexEditor}"
@@ -455,17 +457,24 @@
                      >
                         <Grid Height="70">
                             <TextBlock
+                             Width="90"
+                             Margin="0"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Bottom"
                              Text="Browse Material Repository"
-                                TextAlignment="Center"
-                                TextWrapping="Wrap"
-                                Width="90"
-                                Margin="0"
+                             TextAlignment="Center"
+                             TextWrapping="Wrap"
                              />
 
 
-                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Top" Margin="6" Height="28" Width="28" Kind="Image" />
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="28"
+                             Height="28"
+                             Margin="6"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Top"
+                             Kind="Image"
+                             />
 
                         </Grid>
 

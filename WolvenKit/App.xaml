@@ -48,6 +48,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfNavigationDrawer/SfNavigationDrawer.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/HierarchyNavigator/HierarchyNavigator.xaml" />
 
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/EditControl/EditControl.xaml" />
 
                 <!--  Resource Dictionaries  -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
