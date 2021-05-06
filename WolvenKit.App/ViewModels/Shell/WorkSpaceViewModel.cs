@@ -606,6 +606,11 @@ namespace WolvenKit.ViewModels.Shell
         private GameDebuggerToolViewModel _GameDebuggerToolVM = null;
 
         /// <summary>
+        /// Gets an instance of the ImportExportViewModel.
+        /// </summary>
+        private ImportExportViewModel _importExportToolViewModel = null;
+
+        /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
         private HexEditorViewModel _HexEditorVM = null;
