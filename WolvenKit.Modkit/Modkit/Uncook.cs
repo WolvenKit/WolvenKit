@@ -123,7 +123,7 @@ namespace CP77.CR2W
 
             Thread.Sleep(1000);
             int progress = 0;
-            logger.LogProgress(0);
+            _progressService.Report(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
                 if (ar.UncookSingle(info.NameHash64, outDir, uncookext, flip))
@@ -131,7 +131,7 @@ namespace CP77.CR2W
                 else
                     failedList.Add(info.FileName);
                 Interlocked.Increment(ref progress);
-                logger.LogProgress(progress / (float)finalMatchesList.Count);
+                _progressService.Report(progress / (float)finalMatchesList.Count);
             });
 
             foreach (var failed in failedList)

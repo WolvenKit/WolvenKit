@@ -38,18 +38,6 @@ namespace WolvenKit.CLI
             }
         }
 
-        public void LogProgress(float f)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LogProgress(float f, string msg)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
         // Normal
         public void Log(string msg, Logtype type = Logtype.Normal) => LogString(msg, type);
 

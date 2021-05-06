@@ -110,6 +110,7 @@ namespace WolvenKit.Functionality.Commands
                                     Version = "1.0"
                                     
                                 };
+                                _projectManager.ActiveProject = np;
                                 await _projectManager.SaveAsync();
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);
@@ -124,6 +125,7 @@ namespace WolvenKit.Functionality.Commands
                                     Email = "",
                                     Version = "1.0"
                                 };
+                                _projectManager.ActiveProject = np;
                                 await _projectManager.SaveAsync();
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);

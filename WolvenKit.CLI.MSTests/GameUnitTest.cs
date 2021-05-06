@@ -33,7 +33,9 @@ namespace WolvenKit.CLI.MSTests
 
         protected static void Setup(TestContext context)
         {
+            ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
 
 
             //protobuf
@@ -87,7 +89,6 @@ namespace WolvenKit.CLI.MSTests
 
             
 
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
 
             DirectoryInfo gameArchiveDir;
             try

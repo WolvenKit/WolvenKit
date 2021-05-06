@@ -116,7 +116,7 @@ namespace CP77.CR2W
 
             Thread.Sleep(1000);
             int progress = 0;
-            Logger.LogProgress(0);
+            _progressService.Report(0);
             foreach (var fileInfo in fileInfos)
             {
                 var relpath = fileInfo.FullName.RelativePath(infolder);
@@ -222,7 +222,7 @@ namespace CP77.CR2W
                 ar.Index.FileEntries.Add(hash, item);
 
                 Interlocked.Increment(ref progress);
-                Logger.LogProgress(progress / (float)fileInfos.Count);
+                _progressService.Report(progress / (float)fileInfos.Count);
             };
 
             #endregion write files

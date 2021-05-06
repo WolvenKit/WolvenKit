@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
@@ -23,7 +19,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region properties
 
-        public string Location { get; protected init; }
+        public string Location { get; set; }
 
         public string Author { get; set; }
 
@@ -37,16 +33,15 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region not serialized
 
-        [XmlIgnore] public abstract GameType GameType { get; }
+        public abstract GameType GameType { get; }
 
-        [XmlIgnore] public abstract string PackedDlcDirectory { get; }
+        public abstract string PackedDlcDirectory { get; }
 
-        [XmlIgnore] public abstract string PackedModDirectory { get; }
+        public abstract string PackedModDirectory { get; }
 
 
-        [XmlIgnore] public bool IsDirty { get; set; }
+        public bool IsDirty { get; set; }
 
-        [XmlIgnore]
         public string FileDirectory
         {
             get
@@ -61,7 +56,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string DlcDirectory
         {
             get
@@ -76,7 +70,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string ModDirectory
         {
             get
@@ -91,7 +84,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string BackupDirectory
         {
             get
@@ -109,7 +101,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         
 
 
-        [XmlIgnore]
         public List<string> Files
         {
             get
@@ -124,7 +115,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public List<string> DLCFiles
         {
             get
@@ -139,7 +129,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public List<string> ModFiles
         {
             get
@@ -154,7 +143,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(Location), Name);
 
         #endregion not serialized

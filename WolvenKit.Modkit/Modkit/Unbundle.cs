@@ -38,7 +38,7 @@ namespace CP77.CR2W
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
 
             // check search pattern then regex
-            IEnumerable<FileEntry> finalmatches = ar.Files.Values.Cast<FileEntry>();
+            var finalmatches = ar.Files.Values.Cast<FileEntry>();
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -57,11 +57,11 @@ namespace CP77.CR2W
             }
 
             var finalMatchesList = finalmatches.ToList();
-            logger.LogString($"Found {finalMatchesList.Count} bundle entries to extract.", Logtype.Important);
+            //logger.LogString($"Found {finalMatchesList.Count} bundle entries to extract.", Logtype.Important);
 
             Thread.Sleep(1000);
             var progress = 0;
-            logger.LogProgress(0);
+            _progressService.Report(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
                 var extracted = ar.ExtractSingle(info.NameHash64, outDir, decompressBuffers);
@@ -76,8 +76,9 @@ namespace CP77.CR2W
                 }
 
                 Interlocked.Increment(ref progress);
-                logger.LogProgress(progress / (float)finalMatchesList.Count);
+                _progressService.Report(progress / (float)finalMatchesList.Count);
             });
+            _progressService.Report(1.2);
 
             return (extractedList.ToList(), finalMatchesList.Count);
         }

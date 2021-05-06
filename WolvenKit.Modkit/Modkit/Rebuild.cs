@@ -51,7 +51,7 @@ namespace CP77.CR2W
 
             Thread.Sleep(1000);
             var progress = 0;
-            Logger.LogProgress(0);
+            _progressService.Report(0);
 
             // loop through the buffersDict
             foreach (var (parentPath, buffers) in buffersDict)
@@ -79,7 +79,7 @@ namespace CP77.CR2W
                 }
 
                 Interlocked.Increment(ref progress);
-                Logger.LogProgress(progress / (float)buffersDict.Count);
+                _progressService.Report(progress / (float)buffersDict.Count);
             }
 
             Logger.LogString($"Successfully rebuilt {buffersDict.Count.ToString()} file(s).", Logtype.Success);

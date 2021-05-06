@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
-using Luna.ConsoleProgressBar;
+using Microsoft.Extensions.Logging;
 using WolvenKit.CLI;
+using WolvenKit.CLI.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
@@ -21,11 +22,26 @@ namespace CP77Tools
         [STAThread]
         public static void Main(string[] args)
         {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddFilter("Microsoft", LogLevel.Warning)
+                    .AddFilter("System", LogLevel.Warning)
+                    .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
+                    .AddConsole();
+            });
+
+            ILogger mLogger = loggerFactory.CreateLogger<MicrosoftLoggerService>();
+
+            ServiceLocator.Default.RegisterInstance(typeof(ILogger<MicrosoftLoggerService>), mLogger);
             ServiceLocator.Default.RegisterType<ILoggerService, MicrosoftLoggerService>();
+            //ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(true));
+
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
+            ServiceLocator.Default.RegisterInstance(typeof(IProgress<double>), new ProgressBar());
 
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+
 
             var rootCommand = new RootCommand
             {
@@ -43,15 +59,14 @@ namespace CP77Tools
                 new OodleCommand(),
             };
 
-            //await ConsoleFunctions.UpdateHashesAsync();
-            _ = ServiceLocator.Default.ResolveType<IHashService>();
 
             // try get oodle dll from game
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
+                var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
                 logger.Log("Could not automatically find oo2ext_7_win64.dll. " +
-                                 "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
-                                 $"{AppDomain.CurrentDomain.BaseDirectory}.");
+                           "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
+                           $"{AppDomain.CurrentDomain.BaseDirectory}.");
             }
 
 

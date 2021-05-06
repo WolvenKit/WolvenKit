@@ -1,27 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using Catel;
-using Catel.IoC;
 using DynamicData;
-using DynamicData.Binding;
 using ReactiveUI;
-using Splat;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.ViewModels.Editor.Basic;
 
-namespace WolvenManager.App.Services
+namespace WolvenKit.Functionality.Services
 {
     /// <summary>
     /// This service watches certain locations in the game files and notifies changes

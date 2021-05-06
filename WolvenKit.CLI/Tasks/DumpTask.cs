@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -89,7 +90,8 @@ namespace CP77Tools.Tasks
             }
 
             var mainController = ServiceLocator.Default.ResolveType<IHashService>();
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+            var progressService = (IProgress<double>)ServiceLocator.Default.ResolveType(typeof(IProgress<double>));
+
             var typedict = new ConcurrentDictionary<string, IEnumerable<string>>();
 
             // Parallel
@@ -116,7 +118,7 @@ namespace CP77Tools.Tasks
 
                     Thread.Sleep(1000);
                     int progress = 0;
-                    logger.LogProgress(0);
+                    progressService.Report(0);
 
                     // foreach extension
                     Parallel.ForEach(query, result =>
@@ -142,7 +144,7 @@ namespace CP77Tools.Tasks
                         }
 
                         Interlocked.Increment(ref progress);
-                        logger.LogProgress(progress / (float)total);
+                        progressService.Report(progress / (float)total);
 
                         logger.LogString($"Dumped extension {result.Key}", Logtype.Normal);
                     });
@@ -162,7 +164,7 @@ namespace CP77Tools.Tasks
 
                     Thread.Sleep(1000);
                     int progress = 0;
-                    logger.LogProgress(0);
+                    progressService.Report(0);
 
                     Parallel.For(0, count, i =>
                     {
@@ -222,7 +224,7 @@ namespace CP77Tools.Tasks
                         }
 
                         Interlocked.Increment(ref progress);
-                        logger.LogProgress(progress / (float)count);
+                        progressService.Report(progress / (float)count);
                     });
 
                     // write

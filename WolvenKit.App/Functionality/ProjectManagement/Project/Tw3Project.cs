@@ -2,20 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Catel.IoC;
-using Catel.Logging;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.RED3.CR2W;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
+
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
@@ -31,10 +20,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
         }
 
-        [XmlIgnore]
         public WitcherPackSettings PackSettings { get; set; } = new WitcherPackSettings();
 
-        [XmlIgnore]
         public string RadishDirectory
         {
             get
@@ -49,7 +36,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string RawDirectory
         {
             get
@@ -64,7 +50,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string ModCookedDirectory
         {
             get
@@ -78,7 +63,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string ModUncookedDirectory
         {
             get
@@ -92,7 +76,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string DlcCookedDirectory
         {
             get
@@ -106,7 +89,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string DlcUncookedDirectory
         {
             get
@@ -120,7 +102,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string RawDlcDirectory
         {
             get
@@ -134,7 +115,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string RawModDirectory
         {
             get
@@ -149,7 +129,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
 
-        [XmlIgnore]
         public string CookedDlcDirectory
         {
             get
@@ -168,7 +147,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public string CookedModDirectory
         {
             get
@@ -186,7 +164,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override GameType GameType => GameType.Witcher3;
 
-        [XmlIgnore]
         public override string PackedDlcDirectory
         {
             get
@@ -205,7 +182,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public override string PackedModDirectory
         {
             get
@@ -221,7 +197,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
        
-        [XmlIgnore]
         public List<string> RadishFiles
         {
             get
@@ -236,7 +211,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public List<string> RawFiles
         {
             get

@@ -14,6 +14,7 @@ using Catel.Services;
 using DynamicData;
 using Orc.FileSystem;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -23,7 +24,6 @@ using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
-using WolvenManager.App.Services;
 
 namespace WolvenKit.ViewModels.Editor
 {

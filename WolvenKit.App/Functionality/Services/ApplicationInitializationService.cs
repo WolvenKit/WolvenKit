@@ -8,11 +8,11 @@ using Catel.MVVM;
 using Catel.Services;
 using Orchestra.Services;
 using ProtoBuf.Meta;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenManager.App.Services;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -188,16 +188,7 @@ namespace WolvenKit.Functionality.Services
 
         private void RegisterTypes()
         {
-            _serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
-
-            // singletons
-            _serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
-
-
-
-
-            //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO:
-
+            
 
             // Orchestra
             _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
@@ -207,7 +198,6 @@ namespace WolvenKit.Functionality.Services
 
             var config = SettingsManager.Load();
             _serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
-            _serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
 
         }
 

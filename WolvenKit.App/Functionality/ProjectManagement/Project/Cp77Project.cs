@@ -1,17 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Catel.IoC;
-using Catel.Logging;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.RED4.CR2W;
+
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
@@ -26,10 +16,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
         }
 
-
         public override GameType GameType => GameType.Cyberpunk2077;
 
-        [XmlIgnore]
         public override string PackedDlcDirectory
         {
             get
@@ -48,7 +36,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
         public override string PackedModDirectory
         {
             get

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Catel.IoC;
 using WolvenKit.Common.Services;
@@ -11,6 +12,8 @@ namespace CP77.CR2W
         #region Fields
 
         private static readonly ILoggerService Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
+        private static readonly IProgress<double> _progressService =
+            (IProgress<double>)ServiceLocator.Default.ResolveType(typeof(IProgress<double>));
 
         #endregion Fields
 

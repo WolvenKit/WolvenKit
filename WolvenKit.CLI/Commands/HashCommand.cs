@@ -19,8 +19,9 @@ namespace CP77Tools.Commands
         {
             AddOption(new Option<string[]>(new[] { "--input", "-i" }, "Create FNV1A hash of a given string."));
             AddOption(new Option<bool>(new[] { "--missing", "-m" }, "List missing hashes."));
+            AddOption(new Option<string>(new[] { "--prepare", "-p" }, "[Debug] Prepares a hash list for packing."));
 
-            Handler = CommandHandler.Create<string[], bool>(ConsoleFunctions.HashTask);
+            Handler = CommandHandler.Create<string[], bool, string>(ConsoleFunctions.HashTask);
         }
 
         #endregion Constructors

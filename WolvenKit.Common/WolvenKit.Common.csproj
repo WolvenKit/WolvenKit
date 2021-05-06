@@ -29,15 +29,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\hash_cache_0.zip" />
+    <None Remove="Resources\hash_cache_1.zip" />
+    <None Remove="Resources\hash_cache_10.zip" />
+    <None Remove="Resources\hash_cache_2.zip" />
+    <None Remove="Resources\hash_cache_3.zip" />
+    <None Remove="Resources\hash_cache_4.zip" />
+    <None Remove="Resources\hash_cache_5.zip" />
+    <None Remove="Resources\hash_cache_6.zip" />
+    <None Remove="Resources\hash_cache_7.zip" />
+    <None Remove="Resources\hash_cache_8.zip" />
+    <None Remove="Resources\hash_cache_9.zip" />
+    <None Remove="Resources\hash_keys.bin" />
+    <None Remove="Resources\hash_lookup.bin" />
     <None Remove="Tools\DDS\texconv.exe" />
-    <None Remove="Resources\archivehashes.zip" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Resources\archivehashes.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\hash_cache_0.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_1.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_10.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_2.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_3.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_4.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_5.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_6.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_7.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_8.zip" />
+    <EmbeddedResource Include="Resources\hash_cache_9.zip" />
+    <EmbeddedResource Include="Resources\hash_keys.bin" />
+    <EmbeddedResource Include="Resources\hash_lookup.bin" />
   </ItemGroup>
 
   <ItemGroup>

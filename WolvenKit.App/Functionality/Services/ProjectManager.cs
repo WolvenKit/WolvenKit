@@ -10,12 +10,12 @@ using Catel.IoC;
 using Orchestra.Models;
 using Orchestra.Services;
 using ReactiveUI;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenManager.App.Services;
 using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.Functionality.Services
@@ -27,7 +27,6 @@ namespace WolvenKit.Functionality.Services
     {
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IGrowlNotificationService _notificationService;
-        private readonly IWatcherService _watcherService;
         private readonly ILoggerService _loggerService;
 
         
@@ -37,13 +36,11 @@ namespace WolvenKit.Functionality.Services
         public ProjectManager(
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IGrowlNotificationService notificationService,
-            IWatcherService watcherService,
             ILoggerService loggerService
         )
         {
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _notificationService = notificationService;
-            _watcherService = watcherService;
             _loggerService = loggerService;
 
             this.WhenAnyValue(x => x.ActiveProject).Subscribe(async _ =>
@@ -57,7 +54,7 @@ namespace WolvenKit.Functionality.Services
 
         public bool IsProjectLoaded { get; set; }
 
-        public EditorProject ActiveProject { get; private set; }
+        public EditorProject ActiveProject { get; set; }
 
         public async Task<bool> SaveAsync() => await Save();
 
@@ -92,6 +89,9 @@ namespace WolvenKit.Functionality.Services
             return true;
         }
 
+
+
+
         private async Task<EditorProject> ReadFromLocationAsync(string location)
         {
             try
@@ -107,7 +107,8 @@ namespace WolvenKit.Functionality.Services
                 {
                     case ".w3modproj":
                     {
-                        project = new Tw3Project(location);
+                        //project = new Tw3Project(location);
+                        project = await Load<Tw3Project>(location);
                         ServiceLocator.Default.RegisterType<IGameController, Tw3Controller>();
 
                         await ServiceLocator.Default.ResolveType<IGameController>().HandleStartup()
@@ -122,7 +123,8 @@ namespace WolvenKit.Functionality.Services
                     }
                     case ".cpmodproj":
                     {
-                        project = new Cp77Project(location);
+                        //project = new Cp77Project(location);
+                        project = await Load<Cp77Project>(location);
                         ServiceLocator.Default.RegisterType<IGameController, Cp77Controller>();
                         await ServiceLocator.Default.ResolveType<IGameController>().HandleStartup()
                             .ContinueWith(
@@ -153,9 +155,34 @@ namespace WolvenKit.Functionality.Services
             try
             {
                 await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(T));
-                var obj = (T)ser.Deserialize(lf);
-                return obj;
+                var ser = new XmlSerializer(typeof(SerializationData));
+                var obj = (SerializationData)ser.Deserialize(lf);
+                if (obj == null)
+                {
+                    return null;
+                }
+
+                if (typeof(T) == typeof(Tw3Project))
+                {
+                    return new Tw3Project(path)
+                    {
+                        Author = obj.Author,
+                        Email = obj.Email,
+                        Name = obj.Name,
+                        Version = obj.Version,
+                    };
+                }
+                else if (typeof(T) == typeof(Cp77Project))
+                {
+                    return new Cp77Project(path)
+                    {
+                        Author = obj.Author,
+                        Email = obj.Email,
+                        Name = obj.Name,
+                        Version = obj.Version,
+                    };
+                }
+                return null;
             }
             catch (Exception e)
             {
@@ -169,8 +196,9 @@ namespace WolvenKit.Functionality.Services
             try
             {
                 await using var sf = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(EditorProject));
-                ser.Serialize(sf, ActiveProject);
+                var ser = new XmlSerializer(typeof(SerializationData));
+                ser.Serialize(sf, new SerializationData(ActiveProject));
+
             }
             catch (Exception e)
             {
@@ -179,6 +207,29 @@ namespace WolvenKit.Functionality.Services
             }
 
             return true;
+        }
+
+        public class SerializationData
+        {
+            public SerializationData()
+            {
+                
+            }
+            public SerializationData(EditorProject project)
+            {
+                Author = project.Author;
+                Email = project.Email;
+                Name = project.Name;
+                Version = project.Version;
+            }
+
+            public string Author { get; set; }
+
+            public string Email { get; set; }
+
+            public string Name { get; set; }
+
+            public string Version { get; set; }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Catel.IoC;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
@@ -16,9 +17,21 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
+
+        serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
+        serviceLocator.RegisterInstance(typeof(IProgress<double>), new MockProgressService());
+        serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
+
+        // singletons
+
+        //private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
+
+        serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
+
+
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
         serviceLocator.RegisterType<IHashService, HashService>();
-        serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
     }
 
     #endregion Methods

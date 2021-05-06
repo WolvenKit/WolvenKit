@@ -11,7 +11,7 @@ namespace WolvenKit.Functionality.Services
     {
         public bool IsProjectLoaded { get; set; }
 
-        EditorProject ActiveProject { get; }
+        EditorProject ActiveProject { get; set; }
 
         Task<bool> SaveAsync();
 

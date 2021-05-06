@@ -85,7 +85,6 @@ namespace CP77Tools.Tasks
 
             Thread.Sleep(1000);
             int progress = 0;
-            logger.LogProgress(0);
             Parallel.ForEach(finalMatchesList, fileInfo =>
             {
                 var outputDirInfo = string.IsNullOrEmpty(outpath)
@@ -118,7 +117,6 @@ namespace CP77Tools.Tasks
                 }
 
                 Interlocked.Increment(ref progress);
-                logger.LogProgress(progress / (float)finalMatchesList.Count);
             });
 
             watch.Stop();

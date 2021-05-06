@@ -138,8 +138,7 @@ namespace CP77Tools.Tasks
                 else
                 {
                     var r = ar.ExtractAll(outDir, pattern, regex, DEBUG_decompress);
-                    logger.LogString($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.",
-                        Logtype.Success);
+                    logger.Success($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.");
                 }
             }
 

@@ -264,6 +264,9 @@ W3Edit.Render/Models/**
 # Ignore nuget packages
 packages/**
 
+# Ignore launch settings
+launchSettings.json
+
 #Ignore doxygen doc
 docs/doxygen_doc_html/*
 docs/doxygen.warnings
