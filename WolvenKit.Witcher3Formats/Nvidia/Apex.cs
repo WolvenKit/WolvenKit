@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using WolvenKit.Common.Exceptions;
 using WolvenKit.RED3.CR2W;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.Nvidia.HairWorks;

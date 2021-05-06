@@ -4,19 +4,23 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.MVVM.Model
 {
-    public static class WccHelper
+    public class WccHelperService : IWccService
     {
         #region Fields
 
@@ -25,21 +29,37 @@ namespace WolvenKit.MVVM.Model
         private const string db_modfiles = "db_modfiles";
         private const string db_modtextures = "db_modtextures";
 
+        private readonly ILoggerService Logger;
+        private readonly IProjectManager _projectManager;
+        private readonly ISettingsManager _settingsManager;
+        private readonly IGameController _gameController;
+
+
+
+        private Tw3Project ActiveMod => _projectManager.ActiveProject as Tw3Project;
+
         #endregion Fields
 
-        #region Properties
 
-        private static W3Mod ActiveMod => (W3Mod)MainController.Get().ActiveMod;
-        private static LoggerService Logger => MainController.Get().Logger;
+        public WccHelperService(ILoggerService loggerService,
+            IProjectManager projectManager,
+            ISettingsManager settingsManager,
+            IGameController gameController
+        )
+        {
+            Logger = loggerService;
+            _projectManager = projectManager;
+            _settingsManager = settingsManager;
+            _gameController = gameController;
 
-        #endregion Properties
+        }
 
         #region Methods
 
         /// <summary>
         /// Always call this first to clean the directories.
         /// </summary>
-        public static void CleanupDirectories()
+        public void CleanupDirectories()
         {
             // cleanup packed folders
             CleanupInner(Path.Combine(ActiveMod.ProjectDirectory, "packed"));
@@ -48,10 +68,10 @@ namespace WolvenKit.MVVM.Model
             CleanupInner(Path.Combine(ActiveMod.ProjectDirectory, "cooked"));
 
             // delete existing cook dbs
-            var dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlcfiles);
-            var dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlctextures);
-            var mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modfiles);
-            var mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modtextures);
+            var dlc_files_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_dlcfiles);
+            var dlc_tex_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_dlctextures);
+            var mod_files_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_modfiles);
+            var mod_tex_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_modtextures);
             if (Directory.Exists(dlc_files_db))
             {
                 Directory.Delete(dlc_files_db, true);
@@ -106,13 +126,12 @@ namespace WolvenKit.MVVM.Model
         /// Cooks Files in the ModProject's folders (Bunde, TextureCache etc...)
         /// </summary>
         /// <returns></returns>
-        public static async Task<int> Cook()
+        public async Task<int> Cook()
         {
-            var cfg = MainController.Get().Configuration;
-            var dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlcfiles);
-            //string dlc_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_dlctextures);
-            var mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modfiles);
-            //string mod_tex_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), db_modtextures);
+            var dlc_files_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_dlcfiles);
+            //string dlc_tex_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_dlctextures);
+            var mod_files_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_modfiles);
+            //string mod_tex_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), db_modtextures);
 
             var finished = 1;
 
@@ -160,7 +179,7 @@ namespace WolvenKit.MVVM.Model
                     if (Directory.Exists(dir_uncooked) && Directory.GetFiles(dir_uncooked, "*", SearchOption.AllDirectories).Any())
                     {
                         Logger.LogString($"======== Cooking {type} ======== \n", Logtype.Important);
-                        //MainController.Get().ProjectStatus = $"Cooking {type}";
+                        //ProjectStatus = $"Cooking {type}";
 
                         if (!Directory.Exists(dir_cooked))
                         {
@@ -185,7 +204,7 @@ namespace WolvenKit.MVVM.Model
                             cook.basedir = dir_uncooked; //cfg.DepotPath?
                         }
 
-                        return await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
+                        return await Task.Run(() => RunCommand(cook));
                     }
                     else
                     {
@@ -209,7 +228,7 @@ namespace WolvenKit.MVVM.Model
         /// Manually creates a seedfile for cooking
         /// </summary>
         /// <param name="seedfile"></param>
-        public static void CreateFallBackSeedFile(string seedfile)
+        public void CreateFallBackSeedFile(string seedfile)
         {
             if (File.Exists(seedfile))
             {
@@ -262,7 +281,7 @@ namespace WolvenKit.MVVM.Model
         /// <param name="packmod"></param>
         /// <param name="dlcmod"></param>
         /// <returns></returns>
-        public static async Task<int> CreateMetaData(bool packmod, bool dlcmod)
+        public async Task<int> CreateMetaData(bool packmod, bool dlcmod)
         {
             var finished = 1;
 
@@ -288,14 +307,14 @@ namespace WolvenKit.MVVM.Model
                     if (Directory.GetFiles(outDir, "*.bundle", SearchOption.AllDirectories).Any())
                     {
                         Logger.LogString($"======== Packing {type} metadata ======== \n", Logtype.Important);
-                        //MainController.Get().ProjectStatus = $"Packing {type} metadata";
+                        //ProjectStatus = $"Packing {type} metadata";
 
                         var metadata = new Wcc_lite.metadatastore()
                         {
                             Directory = outDir
                         };
 
-                        return await Task.Run(() => MainController.Get().WccHelper.RunCommand(metadata));
+                        return await Task.Run(() => RunCommand(metadata));
                     }
                     else
                     {
@@ -321,7 +340,7 @@ namespace WolvenKit.MVVM.Model
         /// Creates virtual links (mklink junction) between the project dlc folder
         /// and the modkit r4Data/dlc folder
         /// </summary>
-        public static void CreateVirtualLinks()
+        public void CreateVirtualLinks()
         {
             if (string.IsNullOrEmpty(ActiveMod.GetDlcName()))
             {
@@ -334,7 +353,7 @@ namespace WolvenKit.MVVM.Model
             }
 
             // hack to determine if older project
-            var r4link = Path.Combine(MainController.Get().Configuration.DepotPath, "dlc", ActiveMod.GetDlcName());
+            var r4link = Path.Combine(_settingsManager.DepotPath, "dlc", ActiveMod.GetDlcName());
             var projlink = Path.Combine(ActiveMod.DlcUncookedDirectory, ActiveMod.GetDlcUncookedRelativePath());
             if (new DirectoryInfo(ActiveMod.DlcUncookedDirectory).GetDirectories().Any(_ => _.Name == "dlc"))
             {
@@ -366,19 +385,19 @@ namespace WolvenKit.MVVM.Model
         /// <param name="packmod"></param>
         /// <param name="packdlc"></param>
         /// <returns></returns>
-        public static async Task<int> GenerateCache(EArchiveType cachetype, bool packmod, bool packdlc)
+        public async Task<int> GenerateCache(EArchiveType cachetype, bool packmod, bool packdlc)
         {
             //const string db_dlcfiles = "db_dlcfiles";
             //const string db_dlctextures = "db_dlctextures";
             //const string db_modfiles = "db_modfiles";
             //const string db_modtextures = "db_modtextures";
 
-            var dlc_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_dlcfiles");
-            var mod_files_db = Path.Combine(Path.GetFullPath(MainController.Get().ActiveMod.ProjectDirectory), "db_modfiles");
+            var dlc_files_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), "db_dlcfiles");
+            var mod_files_db = Path.Combine(Path.GetFullPath(ActiveMod.ProjectDirectory), "db_modfiles");
             var moddbfile = Path.Combine(mod_files_db, "cook.db");
             var dlcdbfile = Path.Combine(dlc_files_db, "cook.db");
             var modbasedir = ActiveMod.ModUncookedDirectory;
-            var dlcbasedir = MainController.Get().Configuration.DepotPath;
+            var dlcbasedir = _settingsManager.DepotPath;
 
             var cbuilder = cachebuilder.textures;
             var filename = "";
@@ -426,7 +445,7 @@ namespace WolvenKit.MVVM.Model
                     if (File.Exists(dbfile))
                     {
                         Logger.LogString($"======== Generating {type} {cachetype} cache ======== \n", Logtype.Important);
-                        //MainController.Get().ProjectStatus = $"Generating {type} {cachetype} cache";
+                        //ProjectStatus = $"Generating {type} {cachetype} cache";
 
                         var buildcache = new Wcc_lite.buildcache()
                         {
@@ -436,7 +455,7 @@ namespace WolvenKit.MVVM.Model
                             DataBase = dbfile,
                             Out = $"{packDir}\\{filename}"
                         };
-                        return await Task.Run(() => MainController.Get().WccHelper.RunCommand(buildcache));
+                        return await Task.Run(() => RunCommand(buildcache));
                     }
                     else
                     {
@@ -462,7 +481,7 @@ namespace WolvenKit.MVVM.Model
         /// <param name="packmod"></param>
         /// <param name="packdlc"></param>
         /// <returns></returns>
-        public static async Task<int> Pack(bool packmod, bool packdlc)
+        public async Task<int> Pack(bool packmod, bool packdlc)
         {
             var finished = 1;
 
@@ -486,14 +505,14 @@ namespace WolvenKit.MVVM.Model
                     if (Directory.Exists(inputDir) && Directory.GetFiles(inputDir, "*", SearchOption.AllDirectories).Any())
                     {
                         Logger.LogString($"======== Packing {type} bundles ======== \n", Logtype.Important);
-                        //MainController.Get().ProjectStatus = $"Packing {type} bundles";
+                        //ProjectStatus = $"Packing {type} bundles";
 
                         var pack = new Wcc_lite.pack()
                         {
                             Directory = inputDir,
                             Outdir = outputDir
                         };
-                        return await Task.Run(() => MainController.Get().WccHelper.RunCommand(pack));
+                        return await Task.Run(() => RunCommand(pack));
                     }
                     else
                     {
@@ -526,7 +545,7 @@ namespace WolvenKit.MVVM.Model
         /// <param name="silent"></param>
         /// <param name="alternateOutDirectory"></param>
         /// <returns></returns>
-        public static async Task AddAllImportsAsync(string importfilepath,
+        public async Task AddAllImportsAsync(string importfilepath,
             bool recursive = false, bool silent = false, string alternateOutDirectory = "", bool logonly = false)
         {
             if (!File.Exists(importfilepath))
@@ -563,7 +582,7 @@ namespace WolvenKit.MVVM.Model
                 var filename = Path.GetFileName(import.DepotPathStr);
                 if (logonly)
                 {
-                    MainController.LogString(filename, Logtype.Important);
+                    Logger.LogString(filename, Logtype.Important);
                 }
 
                 var path = UnbundleFile(import.DepotPathStr, isDLC, projectFolder, EArchiveType.Bundle, alternateOutDirectory, false, silent);
@@ -620,9 +639,9 @@ namespace WolvenKit.MVVM.Model
         /// <param name="outfolder"></param>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static async Task DumpFile(string folder, string outfolder, string file = "")
+        public async Task DumpFile(string folder, string outfolder, string file = "")
         {
-            MainController.Get().ProjectStatus = EProjectStatus.Busy;
+            //ProjectStatus = EProjectStatus.Busy;
             WCC_Command cmd = null;
             try
             {
@@ -642,14 +661,14 @@ namespace WolvenKit.MVVM.Model
                         Out = outfolder
                     };
                 }
-                await Task.Run(() => MainController.Get().WccHelper.RunCommand(cmd));
+                await Task.Run(() => RunCommand(cmd));
             }
             catch (Exception ex)
             {
                 Logger.LogString(ex.ToString() + "\n", Logtype.Error);
             }
 
-            MainController.Get().ProjectStatus = EProjectStatus.Ready;
+            //ProjectStatus = EProjectStatus.Ready;
         }
 
         /// <summary>
@@ -657,9 +676,9 @@ namespace WolvenKit.MVVM.Model
         /// </summary>
         /// <param name="fullpath"></param>
         /// <returns></returns>
-        public static async Task ExportFileToMod(string fullpath)
+        public async Task ExportFileToMod(string fullpath)
         {
-            var workDir = Path.GetFullPath($"{MainController.WorkDir}_export");
+            var workDir = Path.GetFullPath($"{IGameController.WorkDir}_export");
             if (!Directory.Exists(workDir))
             {
                 Directory.CreateDirectory(workDir);
@@ -697,7 +716,7 @@ namespace WolvenKit.MVVM.Model
             // add all imports to
 
             //string workDir = "";                                            // add to mod
-            //string workDir = MainController.Get().Configuration.DepotPath;  // r4depot
+            //string workDir = Configuration.DepotPath;  // r4depot
 
             await AddAllImportsAsync(fullpath, true, true, workDir);
 
@@ -716,7 +735,7 @@ namespace WolvenKit.MVVM.Model
                     Out = exportpath,
                     Depot = workDir
                 };
-                await Task.Run(() => MainController.Get().WccHelper.RunCommand(export));
+                await Task.Run(() => RunCommand(export));
 
                 if (File.Exists(exportpath))
                 {
@@ -735,7 +754,7 @@ namespace WolvenKit.MVVM.Model
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static async void RequestWccliteFileDumpfile(object sender, RequestFileOpenArgs e)
+        public async void RequestWccliteFileDumpfile(object sender, RequestFileOpenArgs e)
         {
             var filename = e.File;
             if (!File.Exists(filename) && !Directory.Exists(filename))
@@ -769,7 +788,7 @@ namespace WolvenKit.MVVM.Model
         /// <param name="loadmods"></param>
         /// <param name="silent"></param>
         /// <returns></returns>
-        public static string UnbundleFile(string relativePath, bool isDlc, EProjectFolders projectFolder, EArchiveType bundleType = EArchiveType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
+        public string UnbundleFile(string relativePath, bool isDlc, EProjectFolders projectFolder, EArchiveType bundleType = EArchiveType.Bundle, string alternateOutDirectory = "", bool loadmods = false, bool silent = false)
         {
             var extension = Path.GetExtension(relativePath);
             var filename = Path.GetFileName(relativePath);
@@ -784,7 +803,7 @@ namespace WolvenKit.MVVM.Model
             //    UnbundleFile(relativePath, isDLC, projectFolder, EBundleType.TextureCache, alternateOutDirectory,
             //        loadmods, silent);
             //}
-            var manager = MainController.Get().GetManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
+            var manager = _gameController.GetArchiveManagersManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
 
             if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {
@@ -838,7 +857,7 @@ namespace WolvenKit.MVVM.Model
 
                     // for xbms check if a file with the current export extensions exists
                     if (!File.Exists(newpath) && (extension != ".xbm" || !File.Exists(Path.ChangeExtension(newpath,
-                        MainController.Get().Configuration.UncookExtension.ToString()))))
+                        imageformat.tga.ToString()))))
                     {
                         using (var fs = new FileStream(newpath, FileMode.Create))
                         {
@@ -870,12 +889,12 @@ namespace WolvenKit.MVVM.Model
         /// <param name="newpath"></param>
         /// <param name="indir"></param>
         /// <returns></returns>
-        public static async Task<int> UncookFileToPath(string basedir, string relativePath, bool isDLC, string alternateOutDirectory = "")
+        public async Task<int> UncookFileToPath(string basedir, string relativePath, bool isDLC, string alternateOutDirectory = "")
         {
             #region Unbundle relative file directory to temp dir
 
             // create temporary uncooked directory
-            var outdir = Path.GetFullPath(MainController.WorkDir);
+            var outdir = Path.GetFullPath(IGameController.WorkDir);
             if (Directory.Exists(outdir))
             {
                 Directory.Delete(outdir, true);
@@ -887,22 +906,15 @@ namespace WolvenKit.MVVM.Model
 
             // try get uncook extension from settings
             var imgfmt = imageformat.tga;
-            try
-            {
-                imgfmt = (imageformat)Enum.Parse(typeof(imageformat), MainController.Get().Configuration.UncookExtension.ToString());
-            }
-            catch (Exception)
-            {
-            }
 
             var relativeParentDir = Path.GetDirectoryName(relativePath);
 
             // uncook the folder with wcc
             // check if mod or vanilla file
             var indir = isDLC
-                ? Path.GetFullPath(MainController.Get().Configuration.W3GameDlcDir)
-                : Path.GetFullPath(MainController.Get().Configuration.W3ExePath);
-            if (basedir.Contains(Path.GetFullPath(MainController.Get().Configuration.W3GameModDir)))
+                ? Path.GetFullPath(_settingsManager.W3GameDlcDir)
+                : Path.GetFullPath(_settingsManager.W3ExecutablePath);
+            if (basedir.Contains(Path.GetFullPath(_settingsManager.W3GameModDir)))
             {
                 indir = basedir;
             }
@@ -915,7 +927,7 @@ namespace WolvenKit.MVVM.Model
                 Imgfmt = imgfmt,
                 //UncookExtensions = Path.GetExtension(newpath).TrimStart('.'),
             };
-            await Task.Run(() => MainController.Get().WccHelper.RunCommand(wccuncook));
+            await Task.Run(() => RunCommand(wccuncook));
 
             #endregion Unbundle relative file directory to temp dir
 
@@ -984,5 +996,118 @@ namespace WolvenKit.MVVM.Model
         }
 
         #endregion Wcc Tasks
+
+        #region Methods
+
+        /// <summary>
+        /// runs wcc_lite with specified command
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public async Task<int> RunCommand(WCC_Command cmd)
+        {
+            string args = cmd.Arguments;
+            return await Task.Run(() => RunCommand(cmd.Name, args));
+        }
+
+        /// <summary>
+        /// Runs wcc_lite with specified arguments
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private int RunCommand(string cmdName, string args)
+        {
+            EWccStatus status = EWccStatus.NotRun;
+            using (Process process = new Process())
+            {
+                try
+                {
+                    Logger.LogString($"-----------------------------------------------------", Logtype.Important);
+                    Logger.LogString($"WCC_TASK: {args}", Logtype.Important);
+
+                    process.StartInfo.FileName = _settingsManager.WccLitePath;
+                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(_settingsManager.WccLitePath);
+                    process.StartInfo.Arguments = args;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.CreateNoWindow = true;
+
+                    using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
+                    {
+                        process.OutputDataReceived += (sender, e) =>
+                        {
+                            if (e.Data == null)
+                            {
+                                outputWaitHandle.Close();
+                                //Handle Errors
+                                //if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error) &&
+                                //    _logger.ErrorLog.Any(x => x.Value.Contains("WCC operation failed.")))
+                                //{
+                                //    _logger.LogString("Did not complete.\r\n", Logtype.Error);
+                                //    status = EWccStatus.NotRun;
+                                //}
+                                //else if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Error))
+                                //{
+                                //    _logger.LogString("Finished with errors.\r\n", Logtype.Error);
+                                //    status = EWccStatus.Error;
+                                //}
+                                //else if (_logger.ErrorLog.Any(x => x.Flag == WccLogFlag.WLF_Warning))
+                                //{
+                                //    _logger.LogString("Finished with warnings.\r\n", Logtype.Important);
+                                //    status = EWccStatus.Finished;
+                                //}
+                                //else
+                                //{
+                                //    _logger.LogString("Finished succesfully.\r\n", Logtype.Success);
+                                //    status = EWccStatus.Finished;
+                                //}
+                            }
+                            else
+                            {
+                                //_logger.LogExtended(SystemLogFlag.SLF_Interpretable, ToolLogFlag.TLF_Wcc, cmdName, $"{e.Data}");
+
+                                Logtype wkitflag = Logtype.Wcc;
+                                //if (_logger.ErrorLog.Count > 0)
+                                //{
+                                //    var flag = _logger.ErrorLog.Last().Flag;
+                                //    switch (flag)
+                                //    {
+                                //        case WccLogFlag.WLF_Error:
+                                //            wkitflag = Logtype.Error;
+                                //            break;
+
+                                //        case WccLogFlag.WLF_Warning:
+                                //            wkitflag = Logtype.Important;
+                                //            break;
+
+                                //        case WccLogFlag.WLF_Default:
+                                //        case WccLogFlag.WLF_Info:
+                                //        default:
+                                //            break;
+                                //    }
+                                //}
+
+                                Logger.LogString(e.Data, wkitflag);
+                            }
+                        };
+
+                        process.Start();
+                        process.BeginOutputReadLine();
+                        process.WaitForExit();
+                    }
+                    if (status != EWccStatus.NotRun)
+                        return 1;
+                    else
+                        return 0;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogString(ex.ToString(), Logtype.Error);
+                    throw;
+                }
+            }
+        }
+
+        #endregion Methods
     }
 }

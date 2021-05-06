@@ -15,6 +15,10 @@ using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
 using WolvenKit.Common;
+using WolvenKit.Common.Exceptions;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
+using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -40,6 +44,8 @@ namespace WolvenKit.ViewModels.Shell
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
+        private readonly IGameController _gameController;
+
         private readonly DocumentViewModelDelegate addfiledel;
         private DocumentViewModel _activeDocument = null;
 
@@ -56,8 +62,9 @@ namespace WolvenKit.ViewModels.Shell
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ICommandManager commandManager
-            )
+            ICommandManager commandManager,
+            IGameController gameController
+        )
         {
             #region dependency injection
 
@@ -65,10 +72,12 @@ namespace WolvenKit.ViewModels.Shell
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => commandManager);
             Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => gameController);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
+            _gameController = gameController;
 
             #endregion dependency injection
 
@@ -98,7 +107,6 @@ namespace WolvenKit.ViewModels.Shell
             ShowGameDebuggerToolCommand = new RelayCommand(ExecuteGameDebuggerTool, CanShowGameDebuggerTool);
             ShowMenuCreatorToolCommand = new RelayCommand(ExecuteMenuCreatorTool, CanShowMenuCreatorTool);
             ShowPluginManagerCommand = new RelayCommand(ExecutePluginManagerTool, CanShowPluginManagerTool);
-            ShowRadishToolCommand = new RelayCommand(ExecuteRadishTool, CanShowRadishTool);
             ShowWccToolCommand = new RelayCommand(ExecuteWccTool, CanShowWccTool);
 
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
@@ -142,7 +150,6 @@ namespace WolvenKit.ViewModels.Shell
                 GameDebuggerToolVM,
                 MenuCreatorToolVM,
                 PluginManagerVM,
-                RadishToolVM,
                 WccToolVM,
                 MimicsToolVM,
             };
@@ -379,7 +386,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        private static void ExecutePackMod() => MainController.GetGame().PackAndInstallProject();
+        private void ExecutePackMod() => _gameController.PackAndInstallProject();
 
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
 
@@ -517,7 +524,6 @@ namespace WolvenKit.ViewModels.Shell
             //  }
         }
 
-        private void ExecuteRadishTool() => RadishToolVM.IsVisible = !RadishToolVM.IsVisible;
 
         private void ExecuteShowImportUtility() => ImportViewModel.IsVisible = !ImportViewModel.IsVisible;
 
@@ -652,12 +658,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
-        private RadishToolViewModel _RadishToolVM = null;
-        private ImportExportViewModel _importExportToolViewModel = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
         private VisualEditorViewModel _VisualEditorVM = null;
 
         /// <summary>
@@ -842,16 +843,6 @@ namespace WolvenKit.ViewModels.Shell
             {
                 _propertiesViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<PropertiesViewModel>();
                 return _propertiesViewModel;
-            }
-        }
-
-        public RadishToolViewModel RadishToolVM
-        {
-            get
-            {
-                _RadishToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<RadishToolViewModel>();
-                _RadishToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _RadishToolVM;
             }
         }
 

@@ -42,9 +42,9 @@ namespace WolvenManager.App.Services
 
         #endregion
 
-        public WatcherService()
+        public WatcherService(IProjectManager projectManager)
         {
-            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+            _projectManager = projectManager;
 
             _projectManager.WhenAnyValue(_ => _.IsProjectLoaded).Subscribe(async loaded =>
             {

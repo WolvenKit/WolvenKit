@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace WolvenKit.RED4.CR2W.Extensions
+namespace WolvenKit.Common.Extensions
 {
     // https://stackoverflow.com/a/3102439
     public static class EnumerableExtensions
@@ -17,12 +17,10 @@ namespace WolvenKit.RED4.CR2W.Extensions
             return sequence.Where(item => Regex.IsMatch(expression(item), regEx));
         }
 
-        public static string WildcardToRegex(string pattern)
-        {
-            return "^" + Regex.Escape(pattern).
+        public static string WildcardToRegex(string pattern) =>
+            "^" + Regex.Escape(pattern).
                 Replace("\\*", ".*").
                 Replace("\\?", ".") + "$";
-        }
 
         #endregion Methods
     }

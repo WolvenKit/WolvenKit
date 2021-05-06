@@ -1,6 +1,6 @@
 using System;
 
-namespace WolvenKit.RED4.CR2W.Exceptions
+namespace WolvenKit.Common.Exceptions
 {
     public class TypeMismatchException : Exception
     {

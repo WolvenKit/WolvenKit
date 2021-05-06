@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.CR2W.Extensions;
 using WolvenKit.RED4.CR2W.Types;
 using CP77.CR2W.Uncooker;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W

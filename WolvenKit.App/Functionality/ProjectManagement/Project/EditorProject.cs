@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,12 +12,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
     public abstract class EditorProject : ObservableObject, IEquatable<EditorProject>
     {
-        #region Fields
-
-        public EditorProjectData Data;
-
-        #endregion Fields
-
         #region Constructors
 
         public EditorProject(string location)
@@ -28,52 +21,32 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #endregion Constructors
 
-        #region Methods
-
-        public abstract Task<bool> Load(string path);
-
-        public abstract Task<bool> Save(string path = null);
-
-        #endregion Methods
-
         #region properties
 
         public string Location { get; protected init; }
 
-        [XmlIgnore]
-        public bool IsDirty { get; set; }
-
-
-        [XmlIgnore]
-        public GameType GameType;
-
-        [Category("About")]
-        [Description("The name of your mod.")]
         public string Author { get; set; }
 
-        [Category("About")]
-        [Description("Your contact email.")]
         public string Email { get; set; }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public abstract bool IsInitialized { get; }
-
-        [Category("About")]
-        [Description("The name of your mod.")]
         public string Name { get; set; }
 
-        [Browsable(false)]
-        [Category("About")]
-        [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
-        public string Version { get; set; } = "0.62";
+        public string Version { get; set; }
+
+
 
         #region not serialized
 
+        [XmlIgnore] public abstract GameType GameType { get; }
+
+        [XmlIgnore] public abstract string PackedDlcDirectory { get; }
+
+        [XmlIgnore] public abstract string PackedModDirectory { get; }
+
+
+        [XmlIgnore] public bool IsDirty { get; set; }
+
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string FileDirectory
         {
             get
@@ -89,8 +62,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string DlcDirectory
         {
             get
@@ -106,8 +77,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string ModDirectory
         {
             get
@@ -122,10 +91,25 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        [XmlIgnore]
+        public string BackupDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "_backups");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        
+
 
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public List<string> Files
         {
             get
@@ -141,8 +125,36 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
+        public List<string> DLCFiles
+        {
+            get
+            {
+                if (!Directory.Exists(DlcDirectory))
+                {
+                    Directory.CreateDirectory(DlcDirectory);
+                }
+                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file[(DlcDirectory.Length + 1)..])
+                    .ToList();
+            }
+        }
+
+        [XmlIgnore]
+        public List<string> ModFiles
+        {
+            get
+            {
+                if (!Directory.Exists(ModDirectory))
+                {
+                    Directory.CreateDirectory(ModDirectory);
+                }
+                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file[(ModDirectory.Length + 1)..])
+                    .ToList();
+            }
+        }
+
+        [XmlIgnore]
         public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(Location), Name);
 
         #endregion not serialized
@@ -151,9 +163,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region Methods
 
-        public abstract void Check();
-
-        public abstract Task Initialize();
+        public override string ToString() => Location;
 
         #endregion Methods
 
@@ -193,8 +203,5 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #endregion implements IEquatable
 
-        public void SetIsDirty(bool isDirty) => IsDirty = isDirty;
-
-        public override string ToString() => Location;
     }
 }

@@ -12,7 +12,7 @@ using Catel.IoC;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    public abstract class GameControllerBase
+    public interface IGameController
     {
         #region Properties
 
@@ -24,102 +24,41 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Methods
 
-        public static string GetManagerPath(EManagerType type)
-        {
-            switch (type)
+        public static string GetManagerPath(EManagerType type) =>
+            type switch
             {
-                case EManagerType.BundleManager:
-                    return Path.Combine(ManagerCacheDir, "bundle_cache.json");
+                EManagerType.BundleManager => Path.Combine(ManagerCacheDir, "bundle_cache.json"),
+                EManagerType.CollisionManager => Path.Combine(ManagerCacheDir, "collision_cache.json"),
+                EManagerType.SoundManager => Path.Combine(ManagerCacheDir, "sound_cache.json"),
+                EManagerType.W3StringManager => Path.Combine(ManagerCacheDir, "string_cache.bin"),
+                EManagerType.TextureManager => Path.Combine(ManagerCacheDir, "texture_cache.json"),
+                EManagerType.ArchiveManager => Path.Combine(ManagerCacheDir, "archive_cache.json"),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
 
-                case EManagerType.CollisionManager:
-                    return Path.Combine(ManagerCacheDir, "collision_cache.json");
-
-                case EManagerType.SoundManager:
-                    return Path.Combine(ManagerCacheDir, "sound_cache.json");
-
-                case EManagerType.W3StringManager:
-                    return Path.Combine(ManagerCacheDir, "string_cache.bin");
-
-                case EManagerType.TextureManager:
-                    return Path.Combine(ManagerCacheDir, "texture_cache.json");
-
-                case EManagerType.ArchiveManager:
-                    return Path.Combine(ManagerCacheDir, "archive_cache.json");
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
-        }
-
-        public static string GetManagerVersion(EManagerType type)
-        {
-            switch (type)
+        public static string GetManagerVersion(EManagerType type) =>
+            type switch
             {
-                case EManagerType.BundleManager:
-                    return BundleManager.SerializationVersion;
+                EManagerType.BundleManager => BundleManager.SerializationVersion,
+                EManagerType.CollisionManager => CollisionManager.SerializationVersion,
+                EManagerType.SoundManager => SoundManager.SerializationVersion,
+                EManagerType.W3StringManager => W3StringManager.SerializationVersion,
+                EManagerType.TextureManager => TextureManager.SerializationVersion,
+                EManagerType.ArchiveManager => ArchiveManager.SerializationVersion,
+                EManagerType.Max => throw new ArgumentOutOfRangeException(nameof(type), type, null),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
 
-                case EManagerType.CollisionManager:
-                    return CollisionManager.SerializationVersion;
+        public List<string> GetAvaliableClasses();
 
-                case EManagerType.SoundManager:
-                    return SoundManager.SerializationVersion;
+        public Task HandleStartup();
 
-                case EManagerType.W3StringManager:
-                    return W3StringManager.SerializationVersion;
-
-                case EManagerType.TextureManager:
-                    return TextureManager.SerializationVersion;
-
-                case EManagerType.ArchiveManager:
-                    return ArchiveManager.SerializationVersion;
-
-                case EManagerType.Max:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
-        }
-
-        public abstract List<IGameArchiveManager> GetArchiveManagersManagers();
-
-        public abstract List<string> GetAvaliableClasses();
-
-        public abstract Task HandleStartup();
-
-        public virtual Task<bool> PackageMod()
-        {
-            var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
-            var data = MainController.Get().ActiveMod;
-            var headerBackground = System.Drawing.Color.FromArgb(
-                pwm.HeaderBackground.A,
-                pwm.HeaderBackground.R,
-                pwm.HeaderBackground.G,
-                pwm.HeaderBackground.B
-            );
-            var iconBackground = System.Drawing.Color.FromArgb(
-                pwm.IconBackground.A,
-                pwm.IconBackground.R,
-                pwm.IconBackground.G,
-                pwm.IconBackground.B
-            );
-            var author = Tuple.Create<string, string, string, string, string, string>(
-                data.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
-            );
-            var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
-                data.Version,
-                data.Name,
-                author,
-                pwm.Description,
-                pwm.LargeDescription,
-                pwm.License,
-                (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
-                new List<System.Xml.Linq.XElement> { }
-            );
-            
-            return Task.FromResult(true);
-        }
-
-        public abstract Task<bool> PackAndInstallProject();
+        public Task<bool> PackAndInstallProject();
 
         #endregion Methods
+
+        List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods);
+        Task<bool> PackageMod();
+        void InstallMod();
     }
 }

@@ -173,7 +173,6 @@ namespace WolvenKit.Functionality.Layout
             ImporterToolViewModel _ => ImporterToolTemplate,
             MenuCreatorToolViewModel _ => MenuToolTemplate,
             PluginManagerViewModel _ => PluginManagerTemplate,
-            RadishToolViewModel _ => RadishToolTemplate,
             WccToolViewModel _ => WccToolTemplate,
             CR2WEditorViewModel _ => CR2WEditorTemplate,
 

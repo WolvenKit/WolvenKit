@@ -70,6 +70,10 @@ namespace WolvenKit.ViewModels.Editor
 
         public DocumentViewModel()
         {
+
+
+
+
             IsDirty = false;
 
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
@@ -77,8 +81,6 @@ namespace WolvenKit.ViewModels.Editor
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
 
             OpenImportCommand = new RelayCommand(ExecuteViewImports, CanViewImports);
-
-
         }
 
         #endregion ctors
@@ -146,7 +148,8 @@ namespace WolvenKit.ViewModels.Editor
             var depotpath = input.DepotPathStr;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
             var foundItems = new List<IGameFile>();
-            foreach (var manager in MainController.Get().GetManagers(false)
+            var gamecontroller = ServiceLocator.Default.ResolveType<IGameController>();
+            foreach (var manager in gamecontroller.GetArchiveManagersManagers(false)
                 .Where(manager => manager.Items.ContainsKey(key)))
             {
                 foundItems.AddRange(manager.Items[key]);
@@ -321,7 +324,7 @@ namespace WolvenKit.ViewModels.Editor
                 // FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
                 var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                logger.LogString("Opening file: " + path + "...");
+                logger.Log("Opening file: " + path + "...");
 
                 //TODO
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))

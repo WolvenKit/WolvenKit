@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace WolvenKit.Common
+namespace WolvenKit.Common.Extensions
 {
     public static class AssemblyExtensions
     {

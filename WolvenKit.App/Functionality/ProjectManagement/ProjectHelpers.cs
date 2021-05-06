@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IoC;
 using Catel.Services;
 using Orchestra.Models;
 using Orchestra.Services;
@@ -20,9 +21,9 @@ namespace WolvenKit.Functionality.ProjectManagement
         /// <returns></returns>
         public static async Task<string> LocateMissingProjectAsync(string parameter)
         {
-            var recentlyUsedItemsService = WolvenServiceLocator.Default.ResolveType<IRecentlyUsedItemsService>();
-            var openFileService = WolvenServiceLocator.Default.ResolveType<IOpenFileService>();
-            var messageService = WolvenServiceLocator.Default.ResolveType<IMessageService>();
+            var recentlyUsedItemsService = ServiceLocator.Default.ResolveType<IRecentlyUsedItemsService>();
+            var openFileService = ServiceLocator.Default.ResolveType<IOpenFileService>();
+            var messageService = ServiceLocator.Default.ResolveType<IMessageService>();
 
             switch (await messageService.ShowAsync("The file doesn't seem to exist. Would you like to locate it?" +
                                                    "Select No to remove the project from your recent items.",

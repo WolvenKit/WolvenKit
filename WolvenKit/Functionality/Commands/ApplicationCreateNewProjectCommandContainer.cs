@@ -25,6 +25,7 @@ namespace WolvenKit.Functionality.Commands
         private readonly ILoggerService _loggerService;
         private readonly ISaveFileService _saveFileService;
 
+
         #endregion Fields
 
         #region Constructors
@@ -34,7 +35,7 @@ namespace WolvenKit.Functionality.Commands
             IProjectManager projectManager,
             ISaveFileService saveFileService,
             IGrowlNotificationService notificationService,
-            ILoggerService loggerService)
+                ILoggerService loggerService)
             : base(AppCommands.Application.CreateNewProject, commandManager, projectManager, notificationService, loggerService)
         {
             Argument.IsNotNull(() => loggerService);
@@ -104,16 +105,12 @@ namespace WolvenKit.Functionality.Commands
                                 var np = new Tw3Project(location)
                                 {
                                     Name = Path.GetFileNameWithoutExtension(location),
-                                    Data = new W3Mod()
-                                    {
-                                        FileName = location,
-                                        Name = Path.GetFileNameWithoutExtension(location),
-                                        Author = "WolvenKit",
-                                        Email = "",
-                                        Version = "1.0"
-                                    }
+                                    Author = "WolvenKit",
+                                    Email = "",
+                                    Version = "1.0"
+                                    
                                 };
-                                await np.Save(location);
+                                await _projectManager.SaveAsync();
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);
                                 break;
@@ -123,16 +120,11 @@ namespace WolvenKit.Functionality.Commands
                                 var np = new Cp77Project(location)
                                 {
                                     Name = Path.GetFileNameWithoutExtension(location),
-                                    Data = new CP77Mod()
-                                    {
-                                        FileName = location,
-                                        Name = Path.GetFileNameWithoutExtension(location),
-                                        Author = "WolvenKit",
-                                        Email = "",
-                                        Version = "1.0"
-                                    }
+                                    Author = "WolvenKit",
+                                    Email = "",
+                                    Version = "1.0"
                                 };
-                                await np.Save(location);
+                                await _projectManager.SaveAsync();
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);
                                 break;

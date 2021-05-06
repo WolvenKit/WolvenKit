@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using RED.CRC32;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;

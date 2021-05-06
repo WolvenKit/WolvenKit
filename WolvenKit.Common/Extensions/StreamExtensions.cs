@@ -1,14 +1,14 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using RED.CRC32;
 
-namespace WolvenKit.Common
+namespace WolvenKit.Common.Extensions
 
 {
     public static class StreamExtensions
     {
-        #region Methods
-
+        
         //https://stackoverflow.com/a/13022108
         public static void CopyToWithLength(this Stream input, Stream output, int bytes)
         {
@@ -22,7 +22,9 @@ namespace WolvenKit.Common
             }
         }
 
-        public static T ReadStruct<T>(this Stream m_stream) where T : struct
+        #region Methods
+
+        public static T ReadStruct<T>(this Stream m_stream, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
 
@@ -32,12 +34,15 @@ namespace WolvenKit.Common
             var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
             var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
+            if (crc32 != null)
+                crc32.Append(m_temp);
+
             handle.Free();
 
             return item;
         }
 
-        public static T[] ReadStructs<T>(this Stream m_stream, uint count) where T : struct
+        public static T[] ReadStructs<T>(this Stream m_stream, uint count, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
             var items = new T[count];
@@ -50,13 +55,16 @@ namespace WolvenKit.Common
                 var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
                 items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
+                if (crc32 != null)
+                    crc32.Append(m_temp);
+
                 handle.Free();
             }
 
             return items;
         }
 
-        public static void WriteStruct<T>(this Stream m_stream, T value) where T : struct
+        public static void WriteStruct<T>(this Stream m_stream, T value, Crc32Algorithm crc32 = null) where T : struct
         {
             var m_temp = new byte[Marshal.SizeOf<T>()];
             var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
@@ -64,10 +72,13 @@ namespace WolvenKit.Common
             Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), true);
             m_stream.Write(m_temp, 0, m_temp.Length);
 
+            if (crc32 != null)
+                crc32.Append(m_temp);
+
             handle.Free();
         }
 
-        public static void WriteStructs<T>(this Stream m_stream, T[] array) where T : struct
+        public static void WriteStructs<T>(this Stream m_stream, T[] array, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();
             var m_temp = new byte[size];
@@ -77,6 +88,9 @@ namespace WolvenKit.Common
 
                 Marshal.StructureToPtr(array[i], handle.AddrOfPinnedObject(), true);
                 m_stream.Write(m_temp, 0, m_temp.Length);
+
+                if (crc32 != null)
+                    crc32.Append(m_temp);
 
                 handle.Free();
             }

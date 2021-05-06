@@ -219,7 +219,7 @@ namespace WolvenKit.RED4.CR2W.Types
                     if (!found)
                     {
                         //throw new InvalidParsingException($"Tried setting enum value {s} in {WrappedEnum.GetType().Name}");
-                        Logger.Error($"Tried setting enum value {s} in {Value.GetType().Name}");
+                        //Logger.Error($"Tried setting enum value {s} in {Value.GetType().Name}");
                     }
                 }
             }

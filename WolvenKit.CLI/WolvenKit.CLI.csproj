@@ -2,10 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyVersion>1.3.0.0</AssemblyVersion>
     <FileVersion>1.3.0.0</FileVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <PackAsTool>true</PackAsTool>
+      <ToolCommandName>cp77tools</ToolCommandName>
+      <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +28,7 @@
   <ItemGroup>
     <PackageReference Include="Luna.ConsoleProgressBar" Version="1.0.29" />
     <PackageReference Include="CsvHelper" Version="27.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
