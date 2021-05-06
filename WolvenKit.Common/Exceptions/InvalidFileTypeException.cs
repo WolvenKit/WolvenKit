@@ -1,6 +1,6 @@
 using System;
 
-namespace WolvenKit.RED3.CR2W
+namespace WolvenKit.Common.Exceptions
 {
     public class InvalidFileTypeException : Exception
     {

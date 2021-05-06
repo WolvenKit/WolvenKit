@@ -832,9 +832,6 @@ namespace CP77.MSTests
 
             var success = results.All(r => r.Success);
 
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            sb.AppendLine(logger.ErrorLogStr);
-
             var logPath = Path.Combine(resultDir, $"w_logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
             File.WriteAllText(logPath, sb.ToString());
             Console.WriteLine(sb.ToString());

@@ -6,11 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Catel.MVVM;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.RED3.CR2W;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.ViewModels.Shell;
@@ -88,20 +90,29 @@ namespace WolvenKit.ViewModels.Editor.Old
         #endregion Properties
     }
 
-    public class BulkEditorViewModel : ViewModel
+    public class BulkEditorViewModel : ToolViewModel
     {
+        /// <summary>
+        /// Identifies the caption string used for this tool window.
+        /// </summary>
+        public const string ToolTitle = "Bulk Editor";
+
         #region Fields
 
-        private readonly MainViewModel MainVM;
+        private readonly IProjectManager _projectManager;
+        private readonly ILoggerService Logger;
 
         #endregion Fields
 
         #region Constructors
 
-        public BulkEditorViewModel(IWindowFactory windowFactory, MainViewModel mainViewModel) : base(windowFactory)
+        public BulkEditorViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService
+            ) : base(ToolTitle)
         {
-            MainVM = mainViewModel;
-            Logger = MainController.Get().Logger;
+            _projectManager = projectManager;
+            Logger = loggerService;
 
             RunCommand = new RelayCommand(Run, CanRun);
             Options = new BulkEditOptions();
@@ -124,14 +135,6 @@ namespace WolvenKit.ViewModels.Editor.Old
         protected void OnResetRequest() => PerformStep?.Invoke(this, new EventArgs());
 
         #endregion Methods
-
-
-
-        #region Fields
-
-        private /*readonly*/ LoggerService Logger;
-
-        #endregion Fields
 
         #region Properties
 
@@ -169,11 +172,11 @@ namespace WolvenKit.ViewModels.Editor.Old
 
         protected bool CanRun()
         {
-            if (MainVM.GetOpenDocuments().Any())
-            {
-                Logger.LogString("Please close all open documents before running the bulk editor.", Logtype.Error);
-                return false;
-            }
+            //if (MainVM.GetOpenDocuments().Any())
+            //{
+            //    Logger.LogString("Please close all open documents before running the bulk editor.", Logtype.Error);
+            //    return false;
+            //}
             if (!(Options.Name != null && Options.Value != null && Options.ChunkName != null))
             {
                 Logger.LogString("Please fill in all required variables.", Logtype.Error);
@@ -195,20 +198,11 @@ namespace WolvenKit.ViewModels.Editor.Old
                 Logger.LogString("Please fill in all required variables.", Logtype.Error);
                 return 0;
             }
-            if (Logger == null)
-            {
-                Logger = MainController.Get().Logger;
-            }
 
-            if (MainController.Get().ActiveMod == null)
-            {
-                return 0;
-            }
-
-            var files = MainController.Get().ActiveMod.Files;
+            var files = _projectManager.ActiveProject.Files;
             if (opts.Extension != null)
             {
-                files = MainController.Get().ActiveMod.Files.Where(_ => Path.GetExtension(_).Contains(opts.Extension)).ToList();
+                files = _projectManager.ActiveProject.Files.Where(_ => Path.GetExtension(_).Contains(opts.Extension)).ToList();
             }
 
             Logger.LogString($"Starting bulk edit. Found {files.Count} files to edit. \r\n", Logtype.Success);
@@ -219,7 +213,7 @@ namespace WolvenKit.ViewModels.Editor.Old
 
             foreach (var path in files)
             {
-                var fullpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, path);
+                var fullpath = Path.Combine(_projectManager.ActiveProject.FileDirectory, path);
 
                 CR2WFile cr2w;
                 using (var fs = new FileStream(fullpath, FileMode.Open, FileAccess.Read))

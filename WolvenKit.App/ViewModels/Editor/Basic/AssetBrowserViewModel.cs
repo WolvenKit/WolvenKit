@@ -51,22 +51,13 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IMessageService _messageService;
         private readonly IGrowlNotificationService _notificationService;
         private readonly IProjectManager _projectManager;
+        private readonly IGameController _gameController;
+
+        
+
+
         private List<IGameArchiveManager> Managers { get; set; }
         private ITreeNode<GameFileTreeNode> _currentNode;
-
-        public ICommand SetCurrentNodeCommand { get; set; }
-
-        public ICommand OpenDirectoryCommand { get; set; }
-
-        public ITreeNode<GameFileTreeNode> BreadCrumbCurrentNode
-        {
-            get => _currentNode;
-            set
-            {
-                _currentNode = value;
-                RaisePropertyChanged(() => BreadCrumbCurrentNode);
-            }
-        }
 
         private bool _stillLoading;
 
@@ -81,6 +72,39 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         #endregion fields
+
+        #region ctor
+
+        public AssetBrowserViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IMessageService messageService,
+            IGrowlNotificationService notificationService,
+            IGameController gameController
+        ) : base(ToolTitle)
+        {
+            Argument.IsNotNull(() => projectManager);
+            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => notificationService);
+            Argument.IsNotNull(() => gameController);
+
+            _projectManager = projectManager;
+            _loggerService = loggerService;
+            _messageService = messageService;
+            _notificationService = notificationService;
+            _gameController = gameController;
+
+            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
+            TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
+            ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
+            HomeCommand = new RelayCommand(ExecuteHome, CanHome);
+
+            SetupToolDefaults();
+            ReInit(false);
+        }
+
+        #endregion ctor
 
         #region properties
 
@@ -122,36 +146,21 @@ namespace WolvenKit.ViewModels.Editor
         public List<AssetBrowserData> SelectedNodes { get; set; }
         // ReSharper restore MemberCanBePrivate.Global
 
-        #endregion properties
+        public ICommand SetCurrentNodeCommand { get; set; }
 
-        #region ctor
+        public ICommand OpenDirectoryCommand { get; set; }
 
-        public AssetBrowserViewModel(
-            IProjectManager projectManager,
-            ILoggerService loggerService,
-            IMessageService messageService,
-            IGrowlNotificationService notificationService
-        ) : base(ToolTitle)
+        public ITreeNode<GameFileTreeNode> BreadCrumbCurrentNode
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => notificationService);
-            _projectManager = projectManager;
-            _loggerService = loggerService;
-            _messageService = messageService;
-            _notificationService = notificationService;
-
-            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
-            TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
-            ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
-            HomeCommand = new RelayCommand(ExecuteHome, CanHome);
-
-            SetupToolDefaults();
-            ReInit(false);
+            get => _currentNode;
+            set
+            {
+                _currentNode = value;
+                RaisePropertyChanged(() => BreadCrumbCurrentNode);
+            }
         }
 
-        #endregion ctor
+        #endregion properties
 
         #region commands
 
@@ -258,7 +267,7 @@ namespace WolvenKit.ViewModels.Editor
             });
 
             SelectedFiles = new List<IGameFile>();
-            Managers = MainController.Get().GetManagers(loadmods);
+            Managers = _gameController.GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
             foreach (var mngr in Managers)
@@ -272,12 +281,12 @@ namespace WolvenKit.ViewModels.Editor
 
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
             RootNode = CurrentNode;
-            Extensions = MainController.Get().GetManagers(loadmods).SelectMany(x => x.Extensions).ToList();
-            Classes = MainController.GetGame().GetAvaliableClasses();
+            Extensions = _gameController.GetArchiveManagersManagers(loadmods).SelectMany(x => x.Extensions).ToList();
+            Classes = _gameController.GetAvaliableClasses();
             PreviewVisible = false;
 
             IsLoaded = true;
-            if (MainController.GetGame() is not MockGameController)
+            if (_gameController is not MockGameController)
             {
                 _notificationService.Success($"Asset Browser is initialized");
                 LoadVisibility = Visibility.Collapsed;
@@ -481,6 +490,7 @@ namespace WolvenKit.ViewModels.Editor
     {
         Task<bool> RefreshAsync();
     }
+
     public class LazyObservableTreeNode<T> : BindableBase, ITreeNode<T>, IRefreshable
     {
         private bool _isRefreshing;

@@ -20,12 +20,15 @@
 
   <ItemGroup>
     <Compile Remove="Extensions\PropertyGridEditors\**" />
+    <Compile Remove="Model\Cr2w\**" />
     <EmbeddedResource Remove="Extensions\PropertyGridEditors\**" />
+    <EmbeddedResource Remove="Model\Cr2w\**" />
     <None Remove="Extensions\PropertyGridEditors\**" />
+    <None Remove="Model\Cr2w\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="DDS\texconv.exe" />
+    <None Remove="Tools\DDS\texconv.exe" />
     <None Remove="Resources\archivehashes.zip" />
   </ItemGroup>
 
@@ -49,10 +52,6 @@
     <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.0.0" />
     <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\Cr2w\" />
   </ItemGroup>
 
   <ItemGroup>

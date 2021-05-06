@@ -1,6 +1,6 @@
 using System;
 
-namespace WolvenKit.RED4.CR2W
+namespace WolvenKit.Common.Exceptions
 {
     public class InvalidChunkTypeException : Exception
     {

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 
 namespace CP77.Common.Image
 {

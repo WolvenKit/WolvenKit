@@ -5,21 +5,25 @@ using WolvenKit.Common;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    internal class MockGameController : GameControllerBase
+    internal class MockGameController : IGameController
     {
         #region Methods
 
-        public override List<IGameArchiveManager> GetArchiveManagersManagers() => new List<IGameArchiveManager>();
+        public List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods) => new List<IGameArchiveManager>();
 
-        public override List<string> GetAvaliableClasses() => new List<string>();
+        public List<string> GetAvaliableClasses() => new List<string>();
 
-        public override async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
+        public async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
 
-        public override Task<bool> PackageMod() =>
+        public Task<bool> PackageMod() =>
             //Nothing to do here :)
             Task.FromResult(true);
 
-        public override Task<bool> PackAndInstallProject() =>
+        public void InstallMod()
+        {
+        }
+
+        public Task<bool> PackAndInstallProject() =>
             //Nothing to do here :)
             new Task<bool>(new Func<bool>(() => true));
 

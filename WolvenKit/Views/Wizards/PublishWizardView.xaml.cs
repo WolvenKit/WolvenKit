@@ -23,6 +23,7 @@ namespace WolvenKit.Views.Wizards
 
         private RequiredSettingsView RSV;
 
+
         #endregion Fields
 
         #region Constructors
@@ -63,9 +64,10 @@ namespace WolvenKit.Views.Wizards
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
             if (StepMain.StepIndex == 0 && RSV.AllProjectFieldIsValid() && RSV.ViewModel is RequiredSettingsViewModel vm)
             {
-                vm.EditorProject.Save();
+                projectManager.SaveAsync();
             }
 
             StepMain.Next();

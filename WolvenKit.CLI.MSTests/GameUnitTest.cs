@@ -33,6 +33,9 @@ namespace WolvenKit.CLI.MSTests
 
         protected static void Setup(TestContext context)
         {
+            ServiceLocator.Default.RegisterType<IHashService, HashService>();
+
+
             //protobuf
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
@@ -82,8 +85,7 @@ namespace WolvenKit.CLI.MSTests
 
             s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value);
 
-            ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
 

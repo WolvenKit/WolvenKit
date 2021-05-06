@@ -16,6 +16,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
 
@@ -111,7 +112,7 @@ namespace CP77Tools.Tasks
                         }).ToList();
 
                     var total = query.Count;
-                    logger.LogString($"Exporting {total} bundle entries ");
+                    logger.Log($"Exporting {total} bundle entries ");
 
                     Thread.Sleep(1000);
                     int progress = 0;
@@ -157,7 +158,7 @@ namespace CP77Tools.Tasks
 
                     // get info
                     var count = ar.FileCount;
-                    logger.LogString($"Exporting {count} bundle entries ");
+                    logger.Log($"Exporting {count} bundle entries ");
 
                     Thread.Sleep(1000);
                     int progress = 0;

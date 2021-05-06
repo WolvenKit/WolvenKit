@@ -203,7 +203,7 @@ namespace WolvenKit.Functionality.Services
             _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
 
             // Wkit
-            _serviceLocator.RegisterType<ILoggerService, LoggerService>();
+            _serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
 
             var config = SettingsManager.Load();
             _serviceLocator.RegisterInstance(typeof(ISettingsManager), config);

@@ -15,14 +15,17 @@ using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED3.CR2W;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
@@ -31,7 +34,10 @@ using WolvenKit.Wwise.Wwise;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    public class Tw3Controller : GameControllerBase
+    /// <summary>
+    /// Service, should live in singleton scope?
+    /// </summary>
+    public class Tw3Controller : IGameController
     {
         #region Fields
 
@@ -42,21 +48,112 @@ namespace WolvenKit.Functionality.Controllers
         private static TextureManager textureManager;
         private static W3StringManager w3StringManager;
 
+        private readonly IProjectManager _projectManager;
+        private readonly ILoggerService _logger;
+        private readonly ISettingsManager _settings;
+        private readonly IWccService WccHelper;
+
         #endregion Fields
+
+        public Tw3Controller(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            ISettingsManager settings,
+            IWccService wccService
+        )
+        {
+            _projectManager = projectManager;
+            _logger = loggerService;
+            _settings = settings;
+            WccHelper = wccService;
+
+        }
 
         #region Methods
 
-        public static BundleManager LoadBundleManager()
+        public async Task HandleStartup()
         {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            ILog _logger = LogManager.GetCurrentClassLogger();
+            await Task.Run( LoadStringsManager);
 
+            var todo = new List<Func<IGameArchiveManager>>()
+            {
+                LoadBundleManager,
+                LoadTextureManager,
+                LoadCollisionManager,
+                LoadSoundManager,
+                LoadSpeechManager
+            };
+            Parallel.ForEach(todo, _ => Task.Run(_));
+            await Task.CompletedTask;
+
+        }
+
+
+        //private async Task InitializeAsync()
+        //{
+
+
+        //    // Hash all filepaths
+        //    _logger.Info("Starting additional tasks...");
+        //    var relativepaths = ModFiles
+        //        .Select(_ => _[(_.IndexOf(Path.DirectorySeparatorChar) + 1)..])
+        //        .ToList();
+        //    Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
+
+        //    // register all custom classes
+        //    CR2WManager.Init(FileDirectory);
+        //    _logger.Info("Finished additional tasks...");
+
+        //    NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
+        //}
+
+        private W3StringManager LoadStringsManager()
+        {
+            _logger.Info("Loading strings manager ... ");
+            try
+            {
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(IGameController.GetManagerPath(EManagerType.W3StringManager)).Length > 0)
+                {
+                    using var file = File.Open(IGameController.GetManagerPath(EManagerType.W3StringManager), FileMode.Open);
+                    w3StringManager = Serializer.Deserialize<W3StringManager>(file);
+                }
+                else
+                {
+                    w3StringManager = new W3StringManager();
+                    w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    Directory.CreateDirectory(IGameController.ManagerCacheDir);
+                    using (var file = File.Open(IGameController.GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
+                    {
+                        Serializer.Serialize(file, w3StringManager);
+                    }
+
+                    _settings.ManagerVersions[(int)EManagerType.W3StringManager] = W3StringManager.SerializationVersion;
+                }
+            }
+            catch (System.Exception)
+            {
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.W3StringManager)))
+                {
+                    File.Delete(IGameController.GetManagerPath(EManagerType.W3StringManager));
+                }
+
+                w3StringManager = new W3StringManager();
+                w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
+            }
+            _logger.Info("Finished loading strings manager.");
+            return w3StringManager;
+        }
+
+
+
+        private BundleManager LoadBundleManager()
+        {
             _logger.Info("Loading bundle manager... ");
             try
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.BundleManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.BundleManager)))
                 {
-                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.BundleManager));
+                    using var file = File.OpenText(IGameController.GetManagerPath(EManagerType.BundleManager));
                     var serializer = new JsonSerializer
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -70,7 +167,7 @@ namespace WolvenKit.Functionality.Controllers
                     bundleManager = new BundleManager();
                     bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
                     using (var writer = new StreamWriter(
-                        new FileStream(Tw3Controller.GetManagerPath(EManagerType.BundleManager), FileMode.Open)))
+                        new FileStream(IGameController.GetManagerPath(EManagerType.BundleManager), FileMode.Open)))
                     {
                         writer.Write(JsonConvert.SerializeObject(bundleManager, Formatting.None, new JsonSerializerSettings()
                         {
@@ -84,9 +181,9 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (Exception)
             {
-                if (File.Exists(GetManagerPath(EManagerType.BundleManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.BundleManager)))
                 {
-                    File.Delete(GetManagerPath(EManagerType.BundleManager));
+                    File.Delete(IGameController.GetManagerPath(EManagerType.BundleManager));
                 }
 
                 bundleManager = new BundleManager();
@@ -96,17 +193,14 @@ namespace WolvenKit.Functionality.Controllers
             return bundleManager;
         }
 
-        public static CollisionManager LoadCollisionManager()
+        private CollisionManager LoadCollisionManager()
         {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            ILog _logger = LogManager.GetCurrentClassLogger();
-
             _logger.Info("Loading collision manager... ");
             try
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.CollisionManager)))
                 {
-                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager));
+                    using var file = File.OpenText(IGameController.GetManagerPath(EManagerType.CollisionManager));
                     var serializer = new JsonSerializer
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -119,7 +213,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     collisionManager = new CollisionManager();
                     collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.CollisionManager), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
+                    File.WriteAllText(IGameController.GetManagerPath(EManagerType.CollisionManager), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -130,9 +224,9 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (System.Exception)
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.CollisionManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.CollisionManager)))
                 {
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.CollisionManager));
+                    File.Delete(IGameController.GetManagerPath(EManagerType.CollisionManager));
                 }
 
                 collisionManager = new CollisionManager();
@@ -143,17 +237,14 @@ namespace WolvenKit.Functionality.Controllers
             return collisionManager;
         }
 
-        public static SoundManager LoadSoundManager()
+        private SoundManager LoadSoundManager()
         {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            ILog _logger = LogManager.GetCurrentClassLogger();
-
             _logger.Info("Loading sound manager... ");
             try
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.SoundManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.SoundManager)))
                 {
-                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.SoundManager));
+                    using var file = File.OpenText(IGameController.GetManagerPath(EManagerType.SoundManager));
                     var serializer = new JsonSerializer
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -166,7 +257,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     soundManager = new SoundManager();
                     soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.SoundManager), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
+                    File.WriteAllText(IGameController.GetManagerPath(EManagerType.SoundManager), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -177,9 +268,9 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (Exception)
             {
-                if (File.Exists(GetManagerPath(EManagerType.SoundManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.SoundManager)))
                 {
-                    File.Delete(GetManagerPath(EManagerType.SoundManager));
+                    File.Delete(IGameController.GetManagerPath(EManagerType.SoundManager));
                 }
 
                 soundManager = new SoundManager();
@@ -190,70 +281,25 @@ namespace WolvenKit.Functionality.Controllers
             return soundManager;
         }
 
-        public static SpeechManager LoadSpeechManager()
+        private SpeechManager LoadSpeechManager()
         {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            ILog _logger = LogManager.GetCurrentClassLogger();
-
             _logger.Info("Loading speech manager ... ");
             speechManager = new SpeechManager();
             speechManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-            _logger.Info("Finished loading speech manager.", Logtype.Success);
+            _logger.Info("Finished loading speech manager.");
 
             return speechManager;
         }
 
-        public static W3StringManager LoadStringsManager()
+        private TextureManager LoadTextureManager()
         {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            ILog _logger = LogManager.GetCurrentClassLogger();
-
-            _logger.Info("Loading strings manager ... ");
-            try
-            {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)) && new FileInfo(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)).Length > 0)
-                {
-                    using var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Open);
-                    w3StringManager = Serializer.Deserialize<W3StringManager>(file);
-                }
-                else
-                {
-                    w3StringManager = new W3StringManager();
-                    w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    Directory.CreateDirectory(Tw3Controller.ManagerCacheDir);
-                    using (var file = File.Open(Tw3Controller.GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
-                    {
-                        Serializer.Serialize(file, w3StringManager);
-                    }
-
-                    _settings.ManagerVersions[(int)EManagerType.W3StringManager] = W3StringManager.SerializationVersion;
-                }
-            }
-            catch (System.Exception)
-            {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.W3StringManager)))
-                {
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.W3StringManager));
-                }
-
-                w3StringManager = new W3StringManager();
-                w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
-            }
-            _logger.Info("Finished loading strings manager.");
-            return w3StringManager;
-        }
-
-        public static TextureManager LoadTextureManager()
-        {
-            var _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            ILog _logger = LogManager.GetCurrentClassLogger();
 
             _logger.Info("Loading texture manager... ");
             try
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.TextureManager)))
                 {
-                    using var file = File.OpenText(Tw3Controller.GetManagerPath(EManagerType.TextureManager));
+                    using var file = File.OpenText(IGameController.GetManagerPath(EManagerType.TextureManager));
                     var serializer = new JsonSerializer
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -266,7 +312,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     textureManager = new TextureManager();
                     textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    File.WriteAllText(Tw3Controller.GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
+                    File.WriteAllText(IGameController.GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -277,9 +323,9 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (System.Exception)
             {
-                if (File.Exists(Tw3Controller.GetManagerPath(EManagerType.TextureManager)))
+                if (File.Exists(IGameController.GetManagerPath(EManagerType.TextureManager)))
                 {
-                    File.Delete(Tw3Controller.GetManagerPath(EManagerType.TextureManager));
+                    File.Delete(IGameController.GetManagerPath(EManagerType.TextureManager));
                 }
 
                 textureManager = new TextureManager();
@@ -290,7 +336,7 @@ namespace WolvenKit.Functionality.Controllers
             return textureManager;
         }
 
-        public override List<IGameArchiveManager> GetArchiveManagersManagers() => new()
+        public List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods) => new()
         {
             bundleManager,
             textureManager,
@@ -299,30 +345,50 @@ namespace WolvenKit.Functionality.Controllers
             speechManager
         };
 
-        public override List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
 
-        //TODO: make this async Tasks?
-        public override async Task HandleStartup()
+
+
+        public Task<bool> PackageMod()
         {
-            var todo = new List<Func<IGameArchiveManager>>()
-            {
-                LoadBundleManager,
-                LoadTextureManager,
-                LoadCollisionManager,
-                LoadSoundManager,
-                LoadSpeechManager
-            };
-            Parallel.ForEach(todo, _ => Task.Run(_));
-            await Task.CompletedTask;
+            var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
+            var headerBackground = System.Drawing.Color.FromArgb(
+                pwm.HeaderBackground.A,
+                pwm.HeaderBackground.R,
+                pwm.HeaderBackground.G,
+                pwm.HeaderBackground.B
+            );
+            var iconBackground = System.Drawing.Color.FromArgb(
+                pwm.IconBackground.A,
+                pwm.IconBackground.R,
+                pwm.IconBackground.G,
+                pwm.IconBackground.B
+            );
+            var author = Tuple.Create<string, string, string, string, string, string>(
+                _projectManager.ActiveProject.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
+            );
+            var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
+                _projectManager.ActiveProject.Version,
+                _projectManager.ActiveProject.Name,
+                author,
+                pwm.Description,
+                pwm.LargeDescription,
+                pwm.License,
+                (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
+                new List<System.Xml.Linq.XElement> { }
+            );
+
+            return Task.FromResult(true);
         }
 
-        public override Task<bool> PackageMod()
-            => base.PackageMod();
 
-        public override async Task<bool> PackAndInstallProject()
+        public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
+
+        //TODO: make this async Tasks?
+
+        public async Task<bool> PackAndInstallProject()
         {
-            var ActiveMod = MainController.Get().ActiveMod;
-            ILog _logger = LogManager.GetCurrentClassLogger();
+            var ActiveMod = _projectManager.ActiveProject as Tw3Project;
+            
             if (ActiveMod == null)
             {
                 return false;
@@ -334,16 +400,15 @@ namespace WolvenKit.Functionality.Controllers
                 return false;
             }
 
-            var projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
             WitcherPackSettings packsettings = null;
-            if (projectManager?.ActiveProject is Tw3Project tw3p)
+            if (_projectManager?.ActiveProject is Tw3Project tw3p)
             {
                 packsettings = tw3p.PackSettings;
             }
             if (packsettings != null)
             {
-                MainController.Get().ProjectStatus = EProjectStatus.Busy;
-                MainController.Get().StatusProgress = 0;
+                //ProjectStatus = EProjectStatus.Busy;
+                //StatusProgress = 0;
 
                 //IsToolStripBtnPackEnabled = false;
 
@@ -399,7 +464,7 @@ namespace WolvenKit.Functionality.Controllers
                                 Out = seedfile,
                                 reddlc = reddlcfile
                             };
-                            statusanalyzedlc *= await Task.Run(() => MainController.Get().WccHelper.RunCommand(analyze));
+                            statusanalyzedlc *= await Task.Run(() => WccHelper.RunCommand(analyze));
 
                             if (statusanalyzedlc == 0)
                             {
@@ -417,7 +482,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Pre Cooking
 
-                MainController.Get().StatusProgress = 5;
+                //MainController.Get().StatusProgress = 5;
 
                 //------------------------- COOKING -------------------------------------//
 
@@ -437,7 +502,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Cooking
 
-                MainController.Get().StatusProgress = 15;
+                //MainController.Get().StatusProgress = 15;
 
                 //------------------------- POST COOKING --------------------------------//
 
@@ -446,7 +511,7 @@ namespace WolvenKit.Functionality.Controllers
                 // copy mod files from Archive (cooked files) to \cooked
                 if (Directory.GetFiles(ActiveMod.ModCookedDirectory, "*", SearchOption.AllDirectories).Any())
                 {
-                    _logger.Info($"======== Adding cooked mod files ======== \n", Logtype.Important);
+                    _logger.Info($"======== Adding cooked mod files ======== \n");
                     try
                     {
                         var di = new DirectoryInfo(ActiveMod.ModCookedDirectory);
@@ -513,7 +578,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Copy Cooked Files
 
-                MainController.Get().StatusProgress = 20;
+                //MainController.Get().StatusProgress = 20;
 
                 //------------------------- PACKING -------------------------------------//
 
@@ -542,7 +607,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Packing
 
-                MainController.Get().StatusProgress = 40;
+                //MainController.Get().StatusProgress = 40;
 
                 //------------------------ METADATA -------------------------------------//
 
@@ -571,7 +636,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Metadata
 
-                MainController.Get().StatusProgress = 50;
+                //MainController.Get().StatusProgress = 50;
 
                 //------------------------ POST COOKING ---------------------------------//
 
@@ -628,7 +693,7 @@ namespace WolvenKit.Functionality.Controllers
                                         //TODO: Fix this somehow
                                         //var bytes = MainController.ImportFile(bnk.Path, MainController.Get().SoundManager);
                                         //File.WriteAllBytes(Path.Combine(soundmoddir, bnk.Path), bytes[0].ToArray());
-                                        MainController.Get().Logger.LogString("Imported " + bnk.Path + " for rebuilding with the modded wem files!");
+                                        _logger.Log("Imported " + bnk.Path + " for rebuilding with the modded wem files!");
                                     }
                                     break;
                                 }
@@ -690,7 +755,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Buildcache
 
-                MainController.Get().StatusProgress = 60;
+                //MainController.Get().StatusProgress = 60;
 
                 //---------------------------- SCRIPTS ----------------------------------//
 
@@ -744,7 +809,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Scripts
 
-                MainController.Get().StatusProgress = 80;
+                //MainController.Get().StatusProgress = 80;
 
                 //---------------------------- STRINGS ----------------------------------//
 
@@ -768,15 +833,15 @@ namespace WolvenKit.Functionality.Controllers
 
                 #endregion Strings
 
-                MainController.Get().StatusProgress = 90;
+                //MainController.Get().StatusProgress = 90;
 
                 //---------------------------- FINALIZE ---------------------------------//
 
                 InstallMod();
 
                 //Report that we are done
-                MainController.Get().StatusProgress = 100;
-                MainController.Get().ProjectStatus = EProjectStatus.Ready;
+                //MainController.Get().StatusProgress = 100;
+                //MainController.Get().ProjectStatus = EProjectStatus.Ready;
                 return true;
             }
             else
@@ -785,10 +850,10 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private static void InstallMod()
+        public void InstallMod()
         {
-            var ActiveMod = MainController.Get().ActiveMod;
-            ILog _logger = LogManager.GetCurrentClassLogger();
+            var ActiveMod = _projectManager.ActiveProject;
+            
             try
             {
                 //Check if we have installed this mod before. If so do a little cleanup.
@@ -841,13 +906,13 @@ namespace WolvenKit.Functionality.Controllers
                 var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
                 if (Directory.Exists(packedmoddir))
                 {
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.W3GameModDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settings.W3GameModDir, true));
                 }
 
                 var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
                 {
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.W3GameDlcDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, _settings.W3GameDlcDir, true));
                 }
 
                 installlog.Root.Add(fileroot);

@@ -7,12 +7,12 @@ using System.Text.RegularExpressions;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Services;
-using WolvenKit.Core;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED4.CR2W
 {
-    public sealed class CR2WManager
+    public sealed class CR2WManager : ICr2wCompiler
     {
         #region Fields
 
@@ -41,36 +41,28 @@ namespace WolvenKit.RED4.CR2W.Types
 ";
 
         private static readonly Func<string, string> funcCtor = (x) => $"\t\tpublic {x}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)\r\n\t\t{{\r\n\t\t}}\r\n";
-        private static readonly CR2WManager instance = new CR2WManager();
+
         private static Assembly m_assembly;
 
         private static Dictionary<string, Type> m_enums;
-
-        //private static ILoggerService m_logger;
 
         private static DirectoryInfo m_projectinfo;
 
         private static Dictionary<string, Type> m_types;
 
+        private ILoggerService _loggerService;
+
         #endregion Fields
 
         #region Constructors
 
-        static CR2WManager()
-        {
-        }
-
-        private CR2WManager()
-        {
-        }
 
         #endregion Constructors
 
-        #region Properties
-
-        public static CR2WManager Instance => instance;
-
-        #endregion Properties
+        public CR2WManager(ILoggerService loggerService)
+        {
+            _loggerService = loggerService;
+        }
 
         #region Methods
 
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.CR2W.Types
             return type;
         }
 
-        public static void Init(string projectpath)
+        public void Init(string projectpath)
         {
             m_projectinfo = new DirectoryInfo(projectpath);
 
@@ -135,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// Completely reloads a custom assembly
         /// from .ws scripts and compiles all classes
         /// </summary>
-        public static void ReloadAssembly()
+        public void ReloadAssembly()
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
@@ -145,13 +137,13 @@ namespace WolvenKit.RED4.CR2W.Types
                 m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
                 if (m_assembly != null)
                 {
-                    Logger.Success($"Successfully compiled custom assembly {m_assembly.GetName()}");
+                    _loggerService.Success($"Successfully compiled custom assembly {m_assembly.GetName()}");
                     LoadTypes();
                     LoadEnums();
                 }
                 else
                 {
-                    Logger.Error($"Custom class assembly could not be compiled. An error occured");
+                    _loggerService.Error($"Custom class assembly could not be compiled. An error occured");
                 }
             }
         }
@@ -255,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
             return csline;
         }
 
-        private static (int, string) InterpretScriptClasses()
+        private (int, string) InterpretScriptClasses()
         {
             List<string> importedClasses = new List<string>();
             List<string> importedEnums = new List<string>();
@@ -428,8 +420,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             if (importedClasses.Count > 0)
             {
-                Logger.Success($"Sucessfully parsed {importedClasses.Count} custom classes: " +
-                                 $"{string.Join(", ", importedClasses)}");
+                _loggerService.Success($"Sucessfully parsed {importedClasses.Count} custom classes: " +
+                                       $"{string.Join(", ", importedClasses)}");
             }
 
             return (importedClasses.Count, output);

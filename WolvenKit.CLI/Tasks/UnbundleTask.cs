@@ -7,6 +7,7 @@ using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 
 namespace CP77Tools.Tasks
 {

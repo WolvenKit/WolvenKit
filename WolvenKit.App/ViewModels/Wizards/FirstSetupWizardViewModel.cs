@@ -72,7 +72,7 @@ namespace WolvenKit.ViewModels.Wizards
             //TODO: handle this case!
             if (!TryCopyOodleLib())
             {
-                loggerService.LogString($"Oodle DLL not found.");
+                loggerService.Log($"Oodle DLL not found.");
             }
         }
 

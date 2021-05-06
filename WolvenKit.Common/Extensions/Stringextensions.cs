@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace WolvenKit.RED4.CR2W.Extensions
+namespace WolvenKit.Common.Extensions
 {
     public static class StringExtensions
     {

@@ -6,27 +6,18 @@ namespace WolvenKit.RED4.CR2W
 {
     public static class CR2WReaderExtensions
     {
+
+
+
+
+
+
+
+
+
         #region Methods
 
-        public static void AddUnique(this Dictionary<string, uint> dic, string str, uint val)
-        {
-            if (str == null)
-                str = "";
-
-            if (!dic.ContainsKey(str))
-            {
-                dic.Add(str, val);
-            }
-        }
-
-        public static uint Get(this Dictionary<string, uint> dic, string str)
-        {
-            if (str == null)
-                str = "";
-
-            return dic[str];
-        }
-
+        
         /// <summary>
         ///     Read null terminated string
         /// </summary>

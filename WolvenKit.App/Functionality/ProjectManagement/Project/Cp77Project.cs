@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,68 +17,20 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
     public sealed class Cp77Project : EditorProject, ICloneable
     {
-        #region fields
-
-        private readonly ILog _logger;
-        private readonly ISettingsManager _settings;
-        private Task initializeTask;
-
-        #endregion fields
-
-        #region Constructors
 
         public Cp77Project(string location) : base(location)
         {
-            _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            _logger = LogManager.GetCurrentClassLogger();
-
-            if (File.Exists(location))
-            {
-                Load(location);
-            }
         }
 
         private Cp77Project() : base("")
         {
         }
 
-        #endregion Constructors
 
-        #region properties
-
-        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
-
-        #region Directories
+        public override GameType GameType => GameType.Cyberpunk2077;
 
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string BackupDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(ProjectDirectory, "_backups");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        #region Top-level Dirs
-
-        
-
-        #endregion Top-level Dirs
-
-        #region Cooked and Packed Directories
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string PackedDlcDirectory
+        public override string PackedDlcDirectory
         {
             get
             {
@@ -98,9 +49,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string PackedModDirectory
+        public override string PackedModDirectory
         {
             get
             {
@@ -114,153 +63,16 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Cooked and Packed Directories
-
-        #endregion Directories
-
-        #region Files
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public List<string> DLCFiles
-        {
-            get
-            {
-                if (!Directory.Exists(DlcDirectory))
-                {
-                    Directory.CreateDirectory(DlcDirectory);
-                }
-                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file[(DlcDirectory.Length + 1)..])
-                    .ToList();
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public List<string> ModFiles
-        {
-            get
-            {
-                if (!Directory.Exists(ModDirectory))
-                {
-                    Directory.CreateDirectory(ModDirectory);
-                }
-                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file[(ModDirectory.Length + 1)..])
-                    .ToList();
-            }
-        }
-
-        #endregion Files
-
-        #endregion properties
 
         #region methods
 
-        public override async Task<bool> Load(string path)
-        {
-            try
-            {
-                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                var obj = (CP77Mod)ser.Deserialize(lf);
-                Name = obj.Name;
-                Version = obj.Version;
-                Author = obj.Author;
-                Email = obj.Email;
-                GameType = GameType.Cyberpunk2077;
-                Data = obj;
-                Data.FileName = path;
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to load project. Exception: {e.Message}");
-                return false;
-            }
-
-            return true;
-        }
-
-        public override async Task<bool> Save(string path)
-        {
-            try
-            {
-                path ??= Location;
-
-                await using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                ser.Serialize(sf, (CP77Mod)Data);
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to save project. Exception: {e.Message}");
-                return false;
-            }
-
-            return true;
-        }
-
-        // TODO: debug
-        public override void Check() => _logger.Error($"{initializeTask.Status.ToString()}");
+        public string GetDlcName() => $"dlc{Name}";
 
         public void CreateDefaultDirectories()
         {
             // create top-level directories
             _ = ModDirectory;
             _ = DlcDirectory;
-        }
-
-        /// <summary>
-        /// Returns the first relative folder path in the ActiveMod/dlc directory
-        /// Does not support multiple DLC
-        /// </summary>
-        /// <returns></returns>
-        public string GetDlcName() => $"dlc{Name}";
-
-        public sealed override Task Initialize()
-        {
-            // if initializeTask is null
-            if (initializeTask == null)
-            {
-                initializeTask = Task.Run(() => InitializeAsync());
-            }
-            else
-            {
-                // TODO: needed?
-                if (initializeTask.IsCompleted == false &&
-                    initializeTask.Status != TaskStatus.Running &&
-                    initializeTask.Status != TaskStatus.WaitingToRun &&
-                    initializeTask.Status != TaskStatus.WaitingForActivation)
-                {
-                }
-                else
-                {
-                }
-            }
-
-            return initializeTask;
-        }
-
-        private Task InitializeAsync()
-        {
-            ILog _logger = LogManager.GetCurrentClassLogger();
-            // Hash all filepaths
-            _logger.Info("Starting additional tasks...");
-            var relativepaths = ModFiles
-                .Select(_ => _[(_.IndexOf(Path.DirectorySeparatorChar) + 1)..])
-                .ToList();
-            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
-
-            // register all custom classes
-            CR2WManager.Init(FileDirectory);
-            _logger.Info("Finished additional tasks...");
-
-            NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
-
-            return Task.CompletedTask;
         }
 
         public object Clone()

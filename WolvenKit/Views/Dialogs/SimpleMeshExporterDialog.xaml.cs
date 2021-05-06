@@ -300,9 +300,10 @@ namespace WolvenKit.Views.Dialogs
 
         private void ExportButton_OnClick(object sender, RoutedEventArgs e)
         {
+            var gamecontroller = ServiceLocator.Default.ResolveType<IGameController>();
             // var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
             var Item = SelectedItem;
-            var x = MainController.GetGame().GetArchiveManagersManagers();
+            var x = gamecontroller.GetArchiveManagersManagers(false);
             var z = (ArchiveManager)x[0];
             var list = z.Archives.Values.ToList();
 
