@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<gameFastTravelPointData> _linkedFastTravelPoint;
 		private CEnum<EFastTravelTriggerType> _triggerType;
+		private CEnum<EFastTravelDeviceType> _fastTravelDeviceType;
 
 		[Ordinal(103)] 
 		[RED("linkedFastTravelPoint")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _triggerType);
 			set => SetProperty(ref _triggerType, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("fastTravelDeviceType")] 
+		public CEnum<EFastTravelDeviceType> FastTravelDeviceType
+		{
+			get => GetProperty(ref _fastTravelDeviceType);
+			set => SetProperty(ref _fastTravelDeviceType, value);
 		}
 
 		public DataTermControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
