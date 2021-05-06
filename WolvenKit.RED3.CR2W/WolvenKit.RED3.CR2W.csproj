@@ -16,6 +16,7 @@
     <PackageTags>wolvenkit, witcher3</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>3.0.0</Version>
+      <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

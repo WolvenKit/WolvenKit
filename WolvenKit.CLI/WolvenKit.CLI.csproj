@@ -5,10 +5,21 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyVersion>1.3.0.0</AssemblyVersion>
     <FileVersion>1.3.0.0</FileVersion>
+      <Version>1.3.0</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <PackAsTool>true</PackAsTool>
       <ToolCommandName>cp77tools</ToolCommandName>
       <PackageOutputPath>./nupkg</PackageOutputPath>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <PackageId>WolvenKit.CLI</PackageId>
+      <Company>WolvenKit</Company>
+      <Product>WolvenKit.CLI</Product>
+      <Description>Command line modding tool for Cyberpunk 2077.</Description>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PackageProjectUrl>https://github.com/WolvenKit/Wolven-kit</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+      <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

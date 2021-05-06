@@ -54,10 +54,8 @@ namespace CP77Tools
                                  $"{AppDomain.CurrentDomain.BaseDirectory}.");
             }
 
-           
-            {
-                rootCommand.InvokeAsync(args).Wait();
-            }
+
+            rootCommand.InvokeAsync(args).Wait();
         }
 
         private delegate void StrDelegate(string value);
