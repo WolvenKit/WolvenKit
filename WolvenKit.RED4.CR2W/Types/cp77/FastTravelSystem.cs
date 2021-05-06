@@ -13,6 +13,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<FastTravelSystemLock> _fastTravelLocks;
 		private CUInt32 _loadingScreenCallbackID;
 		private CBool _requestAutoSafeAfterLoadingScreen;
+		private CName _lockLisenerID;
+		private CName _unlockLisenerID;
+		private CName _removeAllLocksLisenerID;
 
 		[Ordinal(0)] 
 		[RED("fastTravelNodes")] 
@@ -60,6 +63,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _requestAutoSafeAfterLoadingScreen);
 			set => SetProperty(ref _requestAutoSafeAfterLoadingScreen, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("lockLisenerID")] 
+		public CName LockLisenerID
+		{
+			get => GetProperty(ref _lockLisenerID);
+			set => SetProperty(ref _lockLisenerID, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("unlockLisenerID")] 
+		public CName UnlockLisenerID
+		{
+			get => GetProperty(ref _unlockLisenerID);
+			set => SetProperty(ref _unlockLisenerID, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("removeAllLocksLisenerID")] 
+		public CName RemoveAllLocksLisenerID
+		{
+			get => GetProperty(ref _removeAllLocksLisenerID);
+			set => SetProperty(ref _removeAllLocksLisenerID, value);
 		}
 
 		public FastTravelSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
