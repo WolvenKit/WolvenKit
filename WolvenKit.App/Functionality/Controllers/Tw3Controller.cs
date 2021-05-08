@@ -384,6 +384,8 @@ namespace WolvenKit.Functionality.Controllers
             return Task.FromResult(true);
         }
 
+        public void AddToMod(IGameFile file) => throw new NotImplementedException();
+
         public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
 
         public async Task<bool> PackAndInstallProject()

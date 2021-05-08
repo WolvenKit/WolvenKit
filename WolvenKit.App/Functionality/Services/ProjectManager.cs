@@ -1,20 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Catel.IoC;
 using Orchestra.Models;
 using Orchestra.Services;
 using ReactiveUI;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using ObservableObject = Catel.Data.ObservableObject;
 
@@ -28,22 +20,16 @@ namespace WolvenKit.Functionality.Services
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IGrowlNotificationService _notificationService;
         private readonly ILoggerService _loggerService;
-        private readonly Tw3Controller _tw3Controller;
-        private readonly Cp77Controller _cp77Controller;
 
         public ProjectManager(
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IGrowlNotificationService notificationService,
-            Tw3Controller tw3Controller,
-            Cp77Controller cp77Controller,
             ILoggerService loggerService
         )
         {
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _notificationService = notificationService;
             _loggerService = loggerService;
-            _tw3Controller = tw3Controller;
-            _cp77Controller = cp77Controller;
 
             this.WhenAnyValue(x => x.ActiveProject).Subscribe(async _ =>
             {
@@ -101,38 +87,12 @@ namespace WolvenKit.Functionality.Services
                     return null;
                 }
 
-                EditorProject project = null;
-                switch (fi.Extension)
+                var project = fi.Extension switch
                 {
-                    case ".w3modproj":
-                    {
-                        project = await Load<Tw3Project>(location);
-                        await _tw3Controller.HandleStartup()
-                            .ContinueWith(t =>
-                            {
-                                _notificationService.Success(
-                                    "Project " + Path.GetFileNameWithoutExtension(location) +
-                                    " loaded!");
-
-                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                    }
-                    case ".cpmodproj":
-                    {
-                        project = await Load<Cp77Project>(location);
-                        await _cp77Controller.HandleStartup()
-                            .ContinueWith(
-                                t =>
-                                {
-                                    _notificationService.Success("Project " +
-                                                                 Path.GetFileNameWithoutExtension(location) +
-                                                                 " loaded!");
-
-                                },
-                                TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                    }
-                }
+                    ".w3modproj" => await Load<Tw3Project>(location),
+                    ".cpmodproj" => await Load<Cp77Project>(location),
+                    _ => null
+                };
 
                 return await Task.FromResult(project);
             }
@@ -150,8 +110,7 @@ namespace WolvenKit.Functionality.Services
             {
                 await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
                 var ser = new XmlSerializer(typeof(SerializationData));
-                var obj = (SerializationData)ser.Deserialize(lf);
-                if (obj == null)
+                if (ser.Deserialize(lf) is not SerializationData obj)
                 {
                     return null;
                 }

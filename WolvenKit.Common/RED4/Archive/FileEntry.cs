@@ -25,13 +25,6 @@ namespace WolvenKit.RED4.CR2W.Archive
         {
         }
 
-        public FileEntry(BinaryReader br, IGameArchive parent)
-        {
-            Archive = parent;
-
-            Read(br);
-        }
-
         public FileEntry(ulong hash, DateTime datetime, uint flags
             , uint segmentsStart, uint segmentsEnd, uint resourceDependenciesStart, uint resourceDependenciesEnd, byte[] sha1hash)
         {
@@ -84,44 +77,9 @@ namespace WolvenKit.RED4.CR2W.Archive
             ar.CopyFileToStream(output, NameHash64, false);
         }
 
-        public void Write(BinaryWriter bw)
-        {
-            bw.Write(NameHash64);
-            bw.Write(Timestamp.ToFileTime());
-            bw.Write(NumInlineBufferSegments);
-            bw.Write(SegmentsStart);
-            bw.Write(SegmentsEnd);
-            bw.Write(ResourceDependenciesStart);
-            bw.Write(ResourceDependenciesEnd);
-            bw.Write(SHA1Hash);
-        }
+        public void SetNameStr(string s) => _nameStr = s;
 
-        private void Read(BinaryReader br)
-        {
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            NameHash64 = br.ReadUInt64();
-            _nameStr = hashService?.Get(NameHash64);
 
-            // x-platform support
-            if (System.Runtime.InteropServices.RuntimeInformation
-                .IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
-            {
-                if (!string.IsNullOrEmpty(_nameStr) && _nameStr.Contains('\\'))
-                {
-                    _nameStr = _nameStr.Replace('\\', Path.DirectorySeparatorChar);
-                }
-            }
-
-            Timestamp = DateTime.FromFileTime(br.ReadInt64());
-
-            NumInlineBufferSegments = br.ReadUInt32();
-            SegmentsStart = br.ReadUInt32();
-            SegmentsEnd = br.ReadUInt32();
-            ResourceDependenciesStart = br.ReadUInt32();
-            ResourceDependenciesEnd = br.ReadUInt32();
-
-            SHA1Hash = br.ReadBytes(20);
-        }
 
         #endregion Methods
     }

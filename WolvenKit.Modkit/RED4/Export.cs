@@ -38,7 +38,7 @@ namespace CP77.CR2W
             var cr2w = ModTools.TryReadCr2WFile(br);
             if (cr2w == null)
             {
-                Logger.LogString($"Failed to read cr2w file {cr2wfile.FullName}", Logtype.Error);
+                _loggerService.LogString($"Failed to read cr2w file {cr2wfile.FullName}", Logtype.Error);
                 return false;
             }
             cr2w.FileName = cr2wfile.FullName;

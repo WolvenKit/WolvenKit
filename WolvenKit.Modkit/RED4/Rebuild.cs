@@ -48,7 +48,7 @@ namespace CP77.CR2W
                 GetBuffers();
             if (useTextures)
                 GetTextures();
-            Logger.LogString($"Found {buffersDict.Count.ToString()} file(s) to rebuild.", Logtype.Important);
+            _loggerService.LogString($"Found {buffersDict.Count.ToString()} file(s) to rebuild.", Logtype.Important);
 
             Thread.Sleep(1000);
             var progress = 0;
@@ -69,21 +69,21 @@ namespace CP77.CR2W
                 else if (import && canImport)
                 {
                     //TODO: switch and call import
-                    Logger.LogString("Importing raw files into redengine files is not yet implemented.", Logtype.Error);
+                    _loggerService.LogString("Importing raw files into redengine files is not yet implemented.", Logtype.Error);
                 }
 
                 // if clean is selected, delete the buffer files
                 if (clean)
                 {
                     //TODO: loop and delet buffers
-                    Logger.LogString("Deleting raw files after rebuilding is not yet implemented.", Logtype.Error);
+                    _loggerService.LogString("Deleting raw files after rebuilding is not yet implemented.", Logtype.Error);
                 }
 
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)buffersDict.Count);
             }
 
-            Logger.LogString($"Successfully rebuilt {buffersDict.Count.ToString()} file(s).", Logtype.Success);
+            _loggerService.LogString($"Successfully rebuilt {buffersDict.Count.ToString()} file(s).", Logtype.Success);
             return true;
 
             #region local methods
@@ -139,7 +139,7 @@ namespace CP77.CR2W
                 var cr2w = ModTools.TryReadCr2WFileHeaders(fileReader);
                 if (cr2w == null)
                 {
-                    Logger.LogString($"Failed to read cr2w file {parentPath}", Logtype.Error);
+                    _loggerService.LogString($"Failed to read cr2w file {parentPath}", Logtype.Error);
                     return false;
                 }
 
@@ -206,7 +206,7 @@ namespace CP77.CR2W
                 }
                 else
                 {
-                    Logger.LogString("Importing raw files into redengine files is not yet implemented.", Logtype.Error);
+                    _loggerService.LogString("Importing raw files into redengine files is not yet implemented.", Logtype.Error);
                     //TODO: switch and call import with existing
                     return false;
                 }

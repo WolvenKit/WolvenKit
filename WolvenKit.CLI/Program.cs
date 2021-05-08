@@ -1,47 +1,54 @@
 using System;
 using System.CommandLine;
+using System.CommandLine.Builder;
+using System.CommandLine.Hosting;
+using System.CommandLine.Invocation;
+using System.CommandLine.Parsing;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Catel.IoC;
+using CP77.CR2W;
 using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WolvenKit.CLI;
 using WolvenKit.CLI.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
+using WolvenKit.RED4.MeshFile.Materials;
 
 namespace CP77Tools
 {
     internal class Program
     {
         [STAThread]
-        public static void Main(string[] args)
+        public static /*void*/ Task Main(string[] args)
         {
-            using var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder
-                    .AddFilter("Microsoft", LogLevel.Warning)
-                    .AddFilter("System", LogLevel.Warning)
-                    .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
-                    .AddConsole();
-            });
+            //using var loggerFactory = LoggerFactory.Create(builder =>
+            //{
+            //    builder
+            //        .AddFilter("Microsoft", LogLevel.Warning)
+            //        .AddFilter("System", LogLevel.Warning)
+            //        .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
+            //        .AddConsole();
+            //});
 
-            ILogger mLogger = loggerFactory.CreateLogger<MicrosoftLoggerService>();
+            //ILogger mLogger = loggerFactory.CreateLogger<MicrosoftLoggerService>();
 
-            ServiceLocator.Default.RegisterInstance(typeof(ILogger<MicrosoftLoggerService>), mLogger);
-            ServiceLocator.Default.RegisterType<ILoggerService, MicrosoftLoggerService>();
-            //ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(true));
+            //ServiceLocator.Default.RegisterInstance(typeof(ILogger<MicrosoftLoggerService>), mLogger);
+            //ServiceLocator.Default.RegisterType<ILoggerService, MicrosoftLoggerService>();
+            ////ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(true));
 
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
-            ServiceLocator.Default.RegisterInstance(typeof(IProgress<double>), new ProgressBar());
-
-
+            //ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            //ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
+            ////ServiceLocator.Default.RegisterInstance(typeof(IProgress<double>), new ProgressBar());
+            //ServiceLocator.Default.RegisterInstance(typeof(IProgress<double>), new MockProgressService());
 
             var rootCommand = new RootCommand
             {
@@ -59,7 +66,6 @@ namespace CP77Tools
                 new OodleCommand(),
             };
 
-
             // try get oodle dll from game
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
@@ -69,8 +75,30 @@ namespace CP77Tools
                            $"{AppDomain.CurrentDomain.BaseDirectory}.");
             }
 
+            var parser = new CommandLineBuilder(rootCommand)
+                .UseDefaults()
+                .UseHost(Host.CreateDefaultBuilder, host =>
+                {
+                    host
+                        .ConfigureLogging(logging =>
+                        {
+                            logging.ClearProviders();
+                            logging.AddConsole();
+                        })
+                        .ConfigureServices((hostContext, services) =>
+                        {
+                            services.AddScoped<ILoggerService, MicrosoftLoggerService>();
+                            services.AddSingleton<IHashService, HashService>();
+                            services.AddScoped<IWolvenkitFileService, Cp77FileService>();
+                            services.AddScoped<IProgress<double>, MockProgressService>();
+                            services.AddScoped<MaterialRepository>();
+                            services.AddScoped<ModTools>();
+                        });
+                })
+                .Build();
 
-            rootCommand.InvokeAsync(args).Wait();
+            return parser.InvokeAsync(args);
+            //rootCommand.InvokeAsync(args).Wait();
         }
 
         private delegate void StrDelegate(string value);

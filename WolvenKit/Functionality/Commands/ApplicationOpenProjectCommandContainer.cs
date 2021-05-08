@@ -11,6 +11,7 @@ using Orc.FileSystem;
 using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.RED4.CR2W.Types;
@@ -27,6 +28,11 @@ namespace WolvenKit.Functionality.Commands
         private readonly IOpenFileService _openFileService;
         private new readonly IPleaseWaitService _pleaseWaitService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        private readonly Cp77Controller _cp77Controller;
+        private readonly Tw3Controller _tw3Controller;
+
+        
+        
 
         #endregion Fields
 
@@ -40,7 +46,10 @@ namespace WolvenKit.Functionality.Commands
             IPleaseWaitService pleaseWaitService,
             IGrowlNotificationService notificationService,
             IRecentlyUsedItemsService recentlyUsedItemsService,
-            ILoggerService loggerService)
+            ILoggerService loggerService,
+            Tw3Controller tw3Controller,
+            Cp77Controller cp77Controller
+            )
             : base(AppCommands.Application.OpenProject, commandManager, projectManager, notificationService,
                 loggerService)
         {
@@ -53,6 +62,8 @@ namespace WolvenKit.Functionality.Commands
             _openFileService = openFileService;
             _fileService = fileService;
             _recentlyUsedItemsService = recentlyUsedItemsService;
+            _tw3Controller = tw3Controller;
+            _cp77Controller = cp77Controller;
         }
 
         #endregion Constructors
@@ -119,8 +130,33 @@ namespace WolvenKit.Functionality.Commands
                 using (_pleaseWaitService.PushInScope())
                 {
                     StaticReferences.MainView.OnLoadLayoutAsync();
-
                     await _projectManager.LoadAsync(location);
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                            await _tw3Controller.HandleStartup().ContinueWith(t =>
+                            {
+                                _notificationService.Success(
+                                    "Project " + Path.GetFileNameWithoutExtension(location) +
+                                    " loaded!");
+
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        case ".cpmodproj":
+                            await _cp77Controller.HandleStartup().ContinueWith(
+                                t =>
+                                {
+                                    _notificationService.Success("Project " +
+                                                                 Path.GetFileNameWithoutExtension(location) +
+                                                                 " loaded!");
+
+                                },
+                                TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        default:
+                            break;
+                    }
+
                     var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
                     btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
 

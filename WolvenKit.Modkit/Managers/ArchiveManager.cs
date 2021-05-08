@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using ProtoBuf;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -15,20 +16,19 @@ namespace WolvenKit.RED4.CR2W.Archive
         public static string SerializationVersion = "1.1";
 
         private DirectoryInfo _parentDirectoryInfo;
-
+        private readonly IHashService _hashService;
         #endregion Fields
 
         #region Constructors
 
         public ArchiveManager()
         {
+            
         }
 
-        public ArchiveManager(DirectoryInfo indir)
-            : this()
+        public ArchiveManager(IHashService hashService)
         {
-            _parentDirectoryInfo = indir;
-            Reload(indir);
+            _hashService = hashService;
         }
 
         #endregion Constructors
@@ -99,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var bundle = new Archive(filename);
+            var bundle = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
             //foreach (var (key, value) in bundle.Files)
             //{
             //    // add new key if the file isn't already in another bundle
@@ -185,7 +185,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             Archives.Clear();
             foreach (var fi in archives)
             {
-                Archives.Add(fi.FullName, new Archive(fi.FullName));
+                Archives.Add(fi.FullName, Red4ParserServiceExtensions.ReadArchive(fi.FullName, _hashService));
             }
 
         }

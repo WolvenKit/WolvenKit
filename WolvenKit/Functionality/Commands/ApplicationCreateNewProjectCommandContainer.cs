@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
 using Catel.MVVM;
@@ -9,6 +10,7 @@ using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
@@ -24,7 +26,8 @@ namespace WolvenKit.Functionality.Commands
 
         private readonly ILoggerService _loggerService;
         private readonly ISaveFileService _saveFileService;
-
+        private readonly Cp77Controller _cp77Controller;
+        private readonly Tw3Controller _tw3Controller;
 
         #endregion Fields
 
@@ -35,7 +38,10 @@ namespace WolvenKit.Functionality.Commands
             IProjectManager projectManager,
             ISaveFileService saveFileService,
             IGrowlNotificationService notificationService,
-                ILoggerService loggerService)
+            ILoggerService loggerService,
+            Tw3Controller tw3Controller,
+            Cp77Controller cp77Controller
+            )
             : base(AppCommands.Application.CreateNewProject, commandManager, projectManager, notificationService, loggerService)
         {
             Argument.IsNotNull(() => loggerService);
@@ -43,6 +49,8 @@ namespace WolvenKit.Functionality.Commands
 
             _loggerService = loggerService;
             _saveFileService = saveFileService;
+            _tw3Controller = tw3Controller;
+            _cp77Controller = cp77Controller;
         }
 
         #endregion Constructors
@@ -139,7 +147,31 @@ namespace WolvenKit.Functionality.Commands
                     StaticReferences.MainView.OnLoadLayoutAsync();
 
                     await _projectManager.LoadAsync(location);
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                            await _tw3Controller.HandleStartup().ContinueWith(t =>
+                            {
+                                _notificationService.Success(
+                                    "Project " + Path.GetFileNameWithoutExtension(location) +
+                                    " loaded!");
 
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        case ".cpmodproj":
+                            await _cp77Controller.HandleStartup().ContinueWith(
+                                t =>
+                                {
+                                    _notificationService.Success("Project " +
+                                                                 Path.GetFileNameWithoutExtension(location) +
+                                                                 " loaded!");
+
+                                },
+                                TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        default:
+                            break;
+                    }
 
                 }
             }

@@ -60,7 +60,7 @@ namespace CP77.CR2W
 
             #region write header
 
-            ar.Header.Write(bw);
+            bw.WriteHeader(ar.Header);
             bw.Write(new byte[132]); // some weird padding
 
             #endregion write header
@@ -80,7 +80,7 @@ namespace CP77.CR2W
                 .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
                 .ToList();
 
-            Logger.LogString($"Found {fileInfos.Count} bundle entries to pack.", Logtype.Important);
+            _loggerService.LogString($"Found {fileInfos.Count} bundle entries to pack.", Logtype.Important);
 
             Thread.Sleep(1000);
             int progress = 0;
@@ -201,7 +201,7 @@ namespace CP77.CR2W
 
             // write tables
             var tableoffset = bw.BaseStream.Position;
-            ar.Index.Write(bw);
+            bw.WriteIndex(ar.Index);
             var tablesize = bw.BaseStream.Position - tableoffset;
 
             // padding to page (4096 bytes)
@@ -213,7 +213,7 @@ namespace CP77.CR2W
             ar.Header.IndexSize = (uint)tablesize;
             ar.Header.Filesize = (ulong)filesize;
             bw.BaseStream.Seek(0, SeekOrigin.Begin);
-            ar.Header.Write(bw);
+            bw.WriteHeader(ar.Header);
 
             #endregion write footer
 

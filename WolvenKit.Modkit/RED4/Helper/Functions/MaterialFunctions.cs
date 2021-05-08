@@ -15,6 +15,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.MaterialSetupFile;
 using SharpGLTF.IO;
 using System.Threading;
+using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
 namespace WolvenKit.RED4.MeshFile.Materials
@@ -770,10 +771,19 @@ namespace WolvenKit.RED4.MeshFile.Materials
     public class MaterialRepository
     {
         private readonly ModTools ModTools;
+        private readonly IHashService _hashService;
 
-        public MaterialRepository(ModTools modTools)
+        
+
+
+
+        public MaterialRepository(
+            ModTools modTools,
+            IHashService hashService
+            )
         {
             ModTools = modTools;
+            _hashService = hashService;
         }
 
         public Thread Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
@@ -789,13 +799,15 @@ namespace WolvenKit.RED4.MeshFile.Materials
 
         private void GenerateInBG()
         {
-            string[] filenames = Directory.GetFiles(GameArchiveDir.FullName, "*.archive", SearchOption.AllDirectories);
-            List<Archive> archives = new List<Archive>();
+            var filenames = Directory.GetFiles(GameArchiveDir.FullName, "*.archive", SearchOption.AllDirectories);
+            var archives = new List<Archive>();
 
             for (int i = 0; i < filenames.Length; i++)
-                archives.Add(new Archive(filenames[i]));
+            {
+                archives.Add(Red4ParserServiceExtensions.ReadArchive(filenames[i], _hashService));
+            }
 
-            foreach (Archive ar in archives)
+            foreach (var ar in archives)
             {
                 ModTools.ExtractAll(ar, MaterialRepoDir, "*.gradient");
                 ModTools.ExtractAll(ar, MaterialRepoDir, "*.w2mi");

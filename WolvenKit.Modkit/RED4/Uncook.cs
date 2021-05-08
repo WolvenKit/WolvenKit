@@ -172,7 +172,7 @@ namespace CP77.CR2W
             var cr2w = TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
-                Logger.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
+                _loggerService.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
                 return false;
             }
             cr2w.FileName = cr2wFileName.FullName;
@@ -198,7 +198,7 @@ namespace CP77.CR2W
             var cr2w = TryReadCr2WFileHeaders(cr2wStream);
             if (cr2w == null)
             {
-                Logger.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);
+                _loggerService.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);
                 return false;
             }
             cr2w.FileName = cr2wFileName.FullName;

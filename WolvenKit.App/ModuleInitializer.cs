@@ -4,7 +4,6 @@ using CP77.CR2W;
 using Orchestra.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED3;
 using WolvenKit.MVVM.Model;
@@ -39,17 +38,16 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
 
         // singletons
-
-        //private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
-
-        serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
-
-
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
         serviceLocator.RegisterType<IHashService, HashService>();
-        
+
+        serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
+        serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
+        serviceLocator.RegisterType<MockGameController>();
+
+
         // red4 modding tools
+        serviceLocator.RegisterType<ModTools>();
         serviceLocator.RegisterType<ModTools>();
         serviceLocator.RegisterType<MaterialRepository>();
         serviceLocator.RegisterType<Cp77Controller>();
@@ -58,8 +56,10 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<Red3ModTools>();
         serviceLocator.RegisterType<Tw3Controller>();
 
-        serviceLocator.RegisterType<IGameControllerFactory, GameControllerFactory>();
+        
 
+
+        serviceLocator.RegisterType<IGameControllerFactory, GameControllerFactory>();
 
     }
 

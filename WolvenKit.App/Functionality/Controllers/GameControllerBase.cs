@@ -24,6 +24,8 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Methods
 
+        public void AddToMod(IGameFile file);
+
         public static string GetManagerPath(EManagerType type) =>
             type switch
             {

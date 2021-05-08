@@ -18,7 +18,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W.SRT;
@@ -165,7 +164,7 @@ namespace WolvenKit.ViewModels.Editor
             var itemToImport = foundItems.FirstOrDefault();
             if (itemToImport != null)
             {
-                AssetBrowserViewModel.AddToMod(itemToImport);
+                _gameControllerFactory.GetController().AddToMod(itemToImport);
             }
         }
 
@@ -336,7 +335,6 @@ namespace WolvenKit.ViewModels.Editor
                 //TODO
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    EFileReadErrorCodes errorcode;
                     using var reader = new BinaryReader(stream);
 
                     if (Path.GetExtension(path) == ".srt")

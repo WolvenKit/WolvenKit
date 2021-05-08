@@ -23,17 +23,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             Index = new Index();
         }
 
-        /// <summary>
-        /// Creates and reads an archive from a path
-        /// </summary>
-        /// <param name="path"></param>
-        public Archive(string path)
-        {
-            ArchiveAbsolutePath = path;
-
-            ReadTables();
-        }
-
         #endregion constructors
 
         #region properties
@@ -43,6 +32,9 @@ namespace WolvenKit.RED4.CR2W.Archive
         [ProtoMember(2)] public Header Header { get; set; }
 
         [ProtoMember(3)] public Index Index { get; set; }
+
+
+
 
         public Dictionary<ulong, IGameFile> Files => Index?.FileEntries
             .Values.ToDictionary(_ => _.NameHash64, _ => _ as IGameFile);
@@ -59,6 +51,11 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         public bool CanUncook(ulong hash)
         {
             if (!Files.ContainsKey(hash))
@@ -74,6 +71,12 @@ namespace WolvenKit.RED4.CR2W.Archive
             return b;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="hash"></param>
+        /// <param name="decompressBuffers"></param>
         public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
         {
             if (!Files.ContainsKey(hash))
@@ -94,13 +97,6 @@ namespace WolvenKit.RED4.CR2W.Archive
                 var offsetEntry = this.Index.FileSegments[j];
                 CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers);
             }
-        }
-
-        /// <summary>
-        /// Serializes this archive to a redengine .archive file
-        /// </summary>
-        public void Serialize()
-        {
         }
 
         /// <summary>
@@ -125,26 +121,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 var size = offsetEntry.Size;
                 vs.DecompressAndCopySegment(outStream, zSize, size);
-            }
-        }
-
-        /// <summary>
-        /// Reads the tables info to the archive.
-        /// </summary>
-        private void ReadTables()
-        {
-            using var mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open);
-
-            using (var vs = mmf.CreateViewStream(
-                0, Header.SIZE, MemoryMappedFileAccess.Read))
-            {
-                Header = new Header(new BinaryReader(vs));
-            }
-
-            using (var vs = mmf.CreateViewStream(
-                (long)Header.IndexPosition, Header.IndexSize, MemoryMappedFileAccess.Read))
-            {
-                Index = new Index(new BinaryReader(vs), this);
             }
         }
 

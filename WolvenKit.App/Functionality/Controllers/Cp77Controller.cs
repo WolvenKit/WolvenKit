@@ -14,6 +14,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
@@ -26,22 +27,28 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
         private readonly ModTools _modTools;
+        private readonly IHashService _hashService;
+
+        
+
 
         public Cp77Controller(ILoggerService loggerService,
             IProjectManager projectManager,
             ISettingsManager settingsManager,
+            IHashService hashService,
             ModTools modTools
             )
         {
             _loggerService = loggerService;
             _projectManager = projectManager;
             _settingsManager = settingsManager;
+            _hashService = hashService;
             _modTools = modTools;
         }
 
         #region Properties
 
-        private static ArchiveManager ArchiveManager { get; set; } = new ArchiveManager();
+        private static ArchiveManager ArchiveManager { get; set; }
 
         #endregion Properties
 
@@ -85,7 +92,7 @@ namespace WolvenKit.Functionality.Controllers
                 }
                 else
                 {
-                    ArchiveManager = new ArchiveManager();
+                    ArchiveManager = new ArchiveManager(_hashService);
                     ArchiveManager.LoadAll(Path.GetDirectoryName(_settingsManager.CP77ExecutablePath));
 
                     using var file = File.Create(chachePath);
@@ -96,7 +103,8 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (Exception e)
             {
-                ArchiveManager = new ArchiveManager();
+                _loggerService.Log(e.Message);
+                ArchiveManager = new ArchiveManager(_hashService);
                 ArchiveManager.LoadAll(Path.GetDirectoryName(_settingsManager.CP77ExecutablePath));
 
                 using var file = File.Create(chachePath);
@@ -247,6 +255,51 @@ namespace WolvenKit.Functionality.Controllers
                 ServiceLocator.Default.RemoveType<IWolvenkitFileService>();
             }
             ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
+        }
+
+
+        public void AddToMod(IGameFile file)
+        {
+            NotificationHelper.Growl.Info($"Importing file: {file.Name}");
+            var project = _projectManager.ActiveProject;
+            switch (project.GameType)
+            {
+                case GameType.Witcher3:
+                {
+                    if (project is Tw3Project witcherProject)
+                    {
+                        var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
+                        if (diskPathInfo.Directory == null)
+                        {
+                            break;
+                        }
+
+                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                        file.Extract(fs);
+                    }
+                    break;
+                }
+                case GameType.Cyberpunk2077:
+                {
+                    if (project is Cp77Project cyberpunkProject)
+                    {
+                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, file.Name));
+                        if (diskPathInfo.Directory == null)
+                        {
+                            break;
+                        }
+
+                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                        file.Extract(fs);
+                    }
+
+                    break;
+                }
+                default:
+                    break;
+            }
         }
 
         #endregion Methods

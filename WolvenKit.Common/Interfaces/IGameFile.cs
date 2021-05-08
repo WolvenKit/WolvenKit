@@ -41,8 +41,6 @@ namespace WolvenKit.Common
         public uint SegmentsEnd { get; set; }
 
         public string FileName { get; }
-
-        public void Write(BinaryWriter bw);
     }
 
     public interface Tw3GameFile : IGameFile

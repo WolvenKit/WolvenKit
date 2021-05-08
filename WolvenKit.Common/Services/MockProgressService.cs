@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.Common.Services
 {
     public class MockProgressService : IProgress<double>
     {

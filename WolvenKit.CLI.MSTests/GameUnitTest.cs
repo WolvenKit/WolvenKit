@@ -101,7 +101,8 @@ namespace WolvenKit.CLI.MSTests
                 throw;
             }
 
-            s_bm = new ArchiveManager(gameArchiveDir);
+            s_bm = new ArchiveManager(hashService);
+            s_bm.LoadAll(gameArchiveDir.FullName);
             s_groupedFiles = s_bm.GroupedFiles;
         }
 

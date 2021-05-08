@@ -52,7 +52,7 @@ namespace WolvenKit.Functionality.Services
         {
             await base.InitializeAfterShowingShellAsync();
 
-            await LoadProjectAsync();
+            LoadProject();
         }
 
         public override async Task InitializeBeforeCreatingShellAsync()
@@ -171,7 +171,7 @@ namespace WolvenKit.Functionality.Services
             return Task.CompletedTask;
         }
 
-        private async Task LoadProjectAsync()
+        private void LoadProject()
         {
             using (_pleaseWaitService.PushInScope())
             {

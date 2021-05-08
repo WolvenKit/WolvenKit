@@ -146,6 +146,7 @@ namespace CP77Tools.Tasks
                         Interlocked.Increment(ref progress);
                         progressService.Report(progress / (float)total);
 
+                        
                         logger.LogString($"Dumped extension {result.Key}", Logtype.Normal);
                     });
                 }

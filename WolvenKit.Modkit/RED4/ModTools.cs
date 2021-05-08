@@ -9,16 +9,22 @@ namespace CP77.CR2W
 {
     public partial class ModTools
     {
-        private readonly ILoggerService Logger;
+        private readonly ILoggerService _loggerService;
         private readonly IProgress<double> _progressService;
+        private readonly IHashService _hashService;
+
+
 
         public ModTools(
             ILoggerService loggerService,
-            IProgress<double> progressService
+            IProgress<double> progressService,
+            IHashService hashService
         )
         {
-            Logger = loggerService;
+            _loggerService = loggerService;
             _progressService = progressService;
+            _hashService = hashService;
+
         }
 
 

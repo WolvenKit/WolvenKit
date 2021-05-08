@@ -53,9 +53,6 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameController;
 
-        
-
-
         private List<IGameArchiveManager> Managers { get; set; }
         private ITreeNode<GameFileTreeNode> _currentNode;
 
@@ -100,6 +97,8 @@ namespace WolvenKit.ViewModels.Editor
             ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
             HomeCommand = new RelayCommand(ExecuteHome, CanHome);
 
+            SelectedFiles = new List<IGameFile>();
+
             SetupToolDefaults();
             ReInit(false);
         }
@@ -126,10 +125,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public Visibility LoadVisibility
         {
-            get
-            {
-                return _loadVisibility;
-            }
+            get => _loadVisibility;
             set
             {
                 _loadVisibility = value;
@@ -266,7 +262,7 @@ namespace WolvenKit.ViewModels.Editor
                 await SetCurrentNodeAsync(node);
             });
 
-            SelectedFiles = new List<IGameFile>();
+            
             Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
@@ -296,10 +292,10 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService.Success($"Asset Browser is initialized");
             LoadVisibility = Visibility.Collapsed;
 
-            InitializeCurrentNodeAsync(RootNode);
+            _ = InitializeCurrentNodeAsync(RootNode);
         }
 
-        public async void NavigateTo(string path)
+        public void NavigateTo(string path)
         {
             SetCurrentNodeCommand.Execute(RootNode);
             var split = path.Split("\\");
@@ -318,52 +314,6 @@ namespace WolvenKit.ViewModels.Editor
             base.CloseAsync();
 
         protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
-
-        public static void AddToMod(IGameFile file)
-        {
-            var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-
-            NotificationHelper.Growl.Info($"Importing file: {file.Name}");
-            var project = pm.ActiveProject;
-            switch (project.GameType)
-            {
-                case GameType.Witcher3:
-                {
-                    if (project is Tw3Project witcherProject)
-                    {
-                        var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
-                        if (diskPathInfo.Directory == null)
-                        {
-                            break;
-                        }
-
-                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                    }
-                    break;
-                }
-                case GameType.Cyberpunk2077:
-                {
-                    if (project is Cp77Project cyberpunkProject)
-                    {
-                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, file.Name));
-                        if (diskPathInfo.Directory == null)
-                        {
-                            break;
-                        }
-
-                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                    }
-
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
 
         private static IEnumerable<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
         {
@@ -405,7 +355,7 @@ namespace WolvenKit.ViewModels.Editor
                                 {
                                     var it = item.This.Files.FirstOrDefault(x => x.Key == item.Name);
                                     if(it.Value.Count > 0)
-                                        AddToMod(it.Value.First());
+                                        _gameController.GetController().AddToMod(it.Value.First());
                                 }
                             }
                         }
