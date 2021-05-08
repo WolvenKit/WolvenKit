@@ -16,7 +16,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -32,13 +32,13 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return 0;
             }
             var inputFileInfo = new FileInfo(path);
             if (!inputFileInfo.Exists)
             {
-                _loggerService.LogString("Input file does not exist.", Logtype.Error);
+                _loggerService.Warning("Input file does not exist.");
                 return 0;
             }
 
@@ -51,12 +51,12 @@ namespace CP77Tools.Tasks
 
             {
                 watch.Stop();
-                _loggerService.LogString($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.", Logtype.Success);
+                _loggerService.Success($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.");
             }
             else
             {
                 watch.Stop();
-                _loggerService.LogString($"Failed to export {path}.", Logtype.Error);
+                _loggerService.Error($"Failed to export {path}.");
             }
 
             return 1;

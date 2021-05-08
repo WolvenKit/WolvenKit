@@ -63,7 +63,7 @@ namespace CP77.CR2W
                 {
                     if (ddsPath.Length > 255)
                     {
-                        _loggerService.LogString($"{ddsPath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.", Logtype.Error);
+                        _loggerService.Error($"{ddsPath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.");
                         return null;
                     }
                     TexconvWrapper.Convert(rawFile.Directory.FullName, $"{ddsPath}", EUncookExtension.dds);

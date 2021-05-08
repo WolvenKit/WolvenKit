@@ -19,7 +19,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -45,18 +45,18 @@ namespace CP77Tools.Tasks
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                _loggerService.LogString("Input path does not exist.", Logtype.Error);
+                _loggerService.Warning("Input path does not exist.");
                 return;
             }
 
             if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
-                _loggerService.LogString("Input file is not an .archive.", Logtype.Error);
+                _loggerService.Warning("Input file is not an .archive.");
                 return;
             }
             else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
             {
-                _loggerService.LogString("No .archive file to process in the input directory", Logtype.Error);
+                _loggerService.Warning("No .archive file to process in the input directory");
                 return;
             }
 
@@ -111,13 +111,12 @@ namespace CP77Tools.Tasks
                 if (hash != 0)
                 {
                     _modTools.UncookSingle(ar, hash, outDir, uext, flip);
-                    _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}", Logtype.Success);
+                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}");
                 }
                 else
                 {
                     var r = _modTools.UncookAll(ar, outDir, pattern, regex, uext, flip);
-                    _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.",
-                        Logtype.Success);
+                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
                 }
             }
 

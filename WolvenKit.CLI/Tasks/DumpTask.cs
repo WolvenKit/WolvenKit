@@ -38,7 +38,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return 0;
             }
 
@@ -144,7 +144,7 @@ namespace CP77Tools.Tasks
                         _progress.Report(progress / (float)total);
 
                         
-                        _loggerService.LogString($"Dumped extension {result.Key}", Logtype.Normal);
+                        _loggerService.Log($"Dumped extension {result.Key}");
                     });
                 }
                 if (imports || texinfo)
@@ -257,7 +257,7 @@ namespace CP77Tools.Tasks
                             }
                         }
 
-                        _loggerService.LogString($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.", Logtype.Success);
+                        _loggerService.Success($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.");
 
                         //write
                         File.WriteAllText($"{ar.ArchiveAbsolutePath}.json.",
@@ -267,7 +267,7 @@ namespace CP77Tools.Tasks
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        _loggerService.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json.", Logtype.Success);
+                        _loggerService.Success($"Finished. Dump file written to {inputFileInfo.FullName}.json.");
                     }
 
                     if (texinfo)
@@ -280,7 +280,7 @@ namespace CP77Tools.Tasks
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        _loggerService.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
+                        _loggerService.Success($"Finished. Dump file written to {inputFileInfo.FullName}.json");
                     }
                 }
 
@@ -295,14 +295,14 @@ namespace CP77Tools.Tasks
                             TypeNameHandling = TypeNameHandling.None
                         }));
 
-                    _loggerService.LogString($"Finished dumping {ar.ArchiveAbsolutePath}.", Logtype.Success);
+                    _loggerService.Success($"Finished dumping {ar.ArchiveAbsolutePath}.");
                 }
 
                 if (list)
                 {
                     foreach (var entry in ar.Files.Values.Cast<FileEntry>())
                     {
-                        _loggerService.LogString(entry.FileName, Logtype.Normal);
+                        _loggerService.Info(entry.FileName);
                     }
                 }
             }
@@ -359,7 +359,7 @@ namespace CP77Tools.Tasks
                         TypeNameHandling = TypeNameHandling.None
                     }));
 
-                _loggerService.LogString("Done.", Logtype.Success);
+                _loggerService.Success("Done.");
             }
             if (missinghashes)
             {
@@ -378,7 +378,7 @@ namespace CP77Tools.Tasks
                             ctr++;
                         }
                     }
-                    _loggerService.LogString($"{ar.ArchiveAbsolutePath} - missing: {ctr}", Logtype.Normal);
+                    _loggerService.Info($"{ar.ArchiveAbsolutePath} - missing: {ctr}");
                 }
             }
 

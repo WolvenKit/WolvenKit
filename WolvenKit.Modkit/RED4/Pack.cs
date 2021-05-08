@@ -80,7 +80,7 @@ namespace CP77.CR2W
                 .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
                 .ToList();
 
-            _loggerService.LogString($"Found {fileInfos.Count} bundle entries to pack.", Logtype.Important);
+            _loggerService.Info($"Found {fileInfos.Count} bundle entries to pack.");
 
             Thread.Sleep(1000);
             int progress = 0;

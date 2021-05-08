@@ -24,12 +24,19 @@ namespace WolvenKit.CLI
                 case Logtype.Normal:
                     _logger.LogDebug(message);
                     break;
+
+
                 case Logtype.Success:
-                case Logtype.Important:
                     _logger.LogInformation(message);
                     break;
-                case Logtype.Error:
+                case Logtype.Important:
+                    _logger.LogWarning(message);
+                    break;
+                case Logtype.Warning:
                     _logger.LogError(message);
+                    break;
+                case Logtype.Error:
+                    _logger.LogCritical(message);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -41,11 +48,11 @@ namespace WolvenKit.CLI
 
         
         public void Success(string msg) => LogString(msg, Logtype.Success);
-        public void Info(string s) => Success(s);
 
-        public void Important(string msg) => LogString(msg, Logtype.Important);
-        public void Warning(string s) => Important(s);
+        public void Info(string s) => LogString(s, Logtype.Important);
+        public void Important(string s) => LogString(s, Logtype.Important);
 
+        public void Warning(string s) => _logger.LogError(s);
 
         public void Error(string msg) => LogString(msg, Logtype.Error);
 

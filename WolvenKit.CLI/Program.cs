@@ -65,7 +65,15 @@ namespace CP77Tools
                         host.ConfigureLogging(logging =>
                             {
                                 logging.ClearProviders();
-                                logging.AddConsole();
+                                logging.AddColorConsoleLogger(configuration =>
+                                {
+                                    // info
+                                    configuration.LogLevels.Add(LogLevel.Warning, ConsoleColor.DarkYellow);
+                                    // warning
+                                    configuration.LogLevels.Add(LogLevel.Error, ConsoleColor.DarkMagenta);
+                                    // error
+                                    configuration.LogLevels.Add(LogLevel.Critical, ConsoleColor.Red);
+                                });
                             })
                             .ConfigureServices((hostContext, services) =>
                             {
@@ -73,6 +81,7 @@ namespace CP77Tools
                                 services.AddSingleton<IHashService, HashService>();
                                 services.AddScoped<IWolvenkitFileService, Cp77FileService>();
                                 services.AddScoped<IProgress<double>, MockProgressService>();
+                                //services.AddScoped<IProgress<double>, ProgressBar>();
                                 services.AddScoped<MaterialRepository>();
                                 services.AddScoped<ModTools>();
                                 services.AddScoped<ConsoleFunctions>();

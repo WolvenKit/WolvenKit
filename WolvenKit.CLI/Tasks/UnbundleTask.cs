@@ -21,7 +21,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -38,7 +38,7 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -47,18 +47,18 @@ namespace CP77Tools.Tasks
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                _loggerService.LogString("Input path does not exist.", Logtype.Error);
+                _loggerService.Warning("Input path does not exist.");
                 return;
             }
 
             if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
-                _loggerService.LogString("Input file is not an .archive.", Logtype.Error);
+                _loggerService.Warning("Input file is not an .archive.");
                 return;
             }
             else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
             {
-                _loggerService.LogString("No .archive file to process in the input directory.", Logtype.Error);
+                _loggerService.Warning("No .archive file to process in the input directory.");
                 return;
             }
 
@@ -116,20 +116,19 @@ namespace CP77Tools.Tasks
                 {
                     var hashlist = File.ReadAllLines(hash)
                         .ToList().Select(_ => ulong.TryParse(_, out ulong res) ? res : 0);
-                    _loggerService.LogString($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...",
-                        Logtype.Normal);
+                    _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
                     foreach (var hash_num in hashlist)
                     {
                         _modTools.ExtractSingle(ar, hash_num, outDir, DEBUG_decompress);
-                        _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}");
                     }
 
-                    _loggerService.LogString($"Bulk extraction from hashlist file completed.", Logtype.Success);
+                    _loggerService.Success($"Bulk extraction from hashlist file completed.");
                 }
                 else if (isHash && hashNumber != 0)
                 {
                     _modTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
-                    _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
+                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
                 }
                 else
                 {

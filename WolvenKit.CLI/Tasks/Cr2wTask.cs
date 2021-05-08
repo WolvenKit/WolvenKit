@@ -20,7 +20,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace CP77Tools.Tasks
 
             if (!isDirectory && !isFile)
             {
-                _loggerService.LogString("Input file does not exist.", Logtype.Error);
+                _loggerService.Error("Input file does not exist.");
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace CP77Tools.Tasks
             }
 
             var finalMatchesList = finalmatches.ToList();
-            _loggerService.LogString($"Found {finalMatchesList.Count} files to dump.", Logtype.Important);
+            _loggerService.Info($"Found {finalMatchesList.Count} files to dump.");
 
             Thread.Sleep(1000);
             int progress = 0;
@@ -92,7 +92,7 @@ namespace CP77Tools.Tasks
                     : new DirectoryInfo(outpath);
                 if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
-                    _loggerService.LogString("Invalid output directory.", Logtype.Error);
+                    _loggerService.Error("Invalid output directory.");
                     return;
                 }
 
@@ -120,9 +120,8 @@ namespace CP77Tools.Tasks
             });
 
             watch.Stop();
-            _loggerService.LogString(
-                $"Finished. Dumped {finalMatchesList.Count} files to JSON in {watch.ElapsedMilliseconds.ToString()}ms.",
-                Logtype.Success);
+            _loggerService.Success(
+                $"Finished. Dumped {finalMatchesList.Count} files to JSON in {watch.ElapsedMilliseconds.ToString()}ms.");
         }
 
         #endregion Methods

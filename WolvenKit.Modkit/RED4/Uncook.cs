@@ -125,7 +125,7 @@ namespace CP77.CR2W
             }
 
             var finalMatchesList = finalmatches.Where(_ => ar.CanUncook(_.NameHash64)).ToList();
-            _loggerService.LogString($"Found {finalMatchesList.Count} bundle entries to uncook.", Logtype.Important);
+            _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to uncook.");
 
             Thread.Sleep(1000);
             int progress = 0;
@@ -142,7 +142,7 @@ namespace CP77.CR2W
 
             foreach (var failed in failedList)
             {
-                _loggerService.LogString($"Failed to uncook {failed}.", Logtype.Error);
+                _loggerService.Warning($"Failed to uncook {failed}.");
             }
 
             return (extractedList.ToList(), finalMatchesList.Count);
@@ -170,7 +170,7 @@ namespace CP77.CR2W
             var cr2w = TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
-                _loggerService.LogString($"Failed to read cr2w file {cr2wFileName.FullName}", Logtype.Error);
+                _loggerService.Error($"Failed to read cr2w file {cr2wFileName.FullName}");
                 return false;
             }
             cr2w.FileName = cr2wFileName.FullName;
@@ -196,7 +196,7 @@ namespace CP77.CR2W
             var cr2w = TryReadCr2WFileHeaders(cr2wStream);
             if (cr2w == null)
             {
-                _loggerService.LogString($"Failed to read cr2w {cr2wFileName.FullName}", Logtype.Error);
+                _loggerService.Error($"Failed to read cr2w {cr2wFileName.FullName}");
                 return false;
             }
             cr2w.FileName = cr2wFileName.FullName;

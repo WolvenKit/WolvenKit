@@ -19,7 +19,7 @@ namespace CP77Tools.Tasks
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -35,14 +35,14 @@ namespace CP77Tools.Tasks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
             var inputDirInfo = new DirectoryInfo(path);
             if (!Directory.Exists(path) || !inputDirInfo.Exists)
             {
-                _loggerService.LogString("Input path does not exist.", Logtype.Error);
+                _loggerService.Warning("Input path does not exist.");
                 return;
             }
 
@@ -71,11 +71,11 @@ namespace CP77Tools.Tasks
             var ar = _modTools.Pack(basedir, outDir);
             if (ar != null)
             {
-                _loggerService.LogString($"Finished packing {ar.ArchiveAbsolutePath}.", Logtype.Success);
+                _loggerService.Success($"Finished packing {ar.ArchiveAbsolutePath}.");
             }
             else
             {
-                _loggerService.LogString($"Packing failed.", Logtype.Error);
+                _loggerService.Error($"Packing failed.");
             }
 
             return;

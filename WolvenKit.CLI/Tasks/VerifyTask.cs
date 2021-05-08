@@ -33,11 +33,11 @@ namespace CP77Tools.Tasks
                     using var fs = new FileStream(s, FileMode.Open, FileAccess.Read);
                     if (VerifyFile(fs, s))
                     {
-                        _loggerService.LogString($"{s} - No problems found.", Logtype.Success);
+                        _loggerService.Success($"{s} - No problems found.");
                     }
                     else
                     {
-                        _loggerService.LogString($"{s} - Verification failed, files not binary equal.", Logtype.Error);
+                        _loggerService.Error($"{s} - Verification failed, files not binary equal.");
                     }
                 }
             }
@@ -64,11 +64,11 @@ namespace CP77Tools.Tasks
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                         if (VerifyFile(ms))
                         {
-                            _loggerService.LogString($"{fileEntry.NameOrHash} - No errors found.", Logtype.Success);
+                            _loggerService.Success($"{fileEntry.NameOrHash} - No errors found.");
                         }
                         else
                         {
-                            _loggerService.LogString($"{fileEntry.NameOrHash} - Verification failed, files not binary equal.", Logtype.Error);
+                            _loggerService.Error($"{fileEntry.NameOrHash} - Verification failed, files not binary equal.");
                         }
                     }
                 }

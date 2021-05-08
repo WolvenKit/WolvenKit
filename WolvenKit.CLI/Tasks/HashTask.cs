@@ -22,7 +22,7 @@ namespace CP77Tools.Tasks
                 {
                     if (!string.IsNullOrEmpty(s))
                     {
-                        _loggerService.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), Logtype.Normal);
+                        _loggerService.Info(FNV1A64HashAlgorithm.HashString(s).ToString());
                     }
                 }
             }

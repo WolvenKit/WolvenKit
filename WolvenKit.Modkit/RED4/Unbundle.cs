@@ -56,7 +56,7 @@ namespace CP77.CR2W
             }
 
             var finalMatchesList = finalmatches.ToList();
-            _loggerService.LogString($"Found {finalMatchesList.Count} bundle entries to extract.", Logtype.Important);
+            _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to extract.");
 
             Thread.Sleep(1000);
             var progress = 0;

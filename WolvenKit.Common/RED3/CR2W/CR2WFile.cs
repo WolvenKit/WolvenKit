@@ -528,7 +528,7 @@ namespace WolvenKit.RED3.CR2W
                 additionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
             }
 
-            Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n", Logtype.Normal);
+            Logger?.Info($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
             stopwatch1.Stop();
             //m_stream = null;
             return await Task.FromResult(EFileReadErrorCodes.NoError);
