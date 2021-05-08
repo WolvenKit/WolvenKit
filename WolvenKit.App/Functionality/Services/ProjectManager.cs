@@ -28,20 +28,22 @@ namespace WolvenKit.Functionality.Services
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IGrowlNotificationService _notificationService;
         private readonly ILoggerService _loggerService;
-
-        
-        
-
+        private readonly Tw3Controller _tw3Controller;
+        private readonly Cp77Controller _cp77Controller;
 
         public ProjectManager(
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IGrowlNotificationService notificationService,
+            Tw3Controller tw3Controller,
+            Cp77Controller cp77Controller,
             ILoggerService loggerService
         )
         {
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _notificationService = notificationService;
             _loggerService = loggerService;
+            _tw3Controller = tw3Controller;
+            _cp77Controller = cp77Controller;
 
             this.WhenAnyValue(x => x.ActiveProject).Subscribe(async _ =>
             {
@@ -89,9 +91,6 @@ namespace WolvenKit.Functionality.Services
             return true;
         }
 
-
-
-
         private async Task<EditorProject> ReadFromLocationAsync(string location)
         {
             try
@@ -107,11 +106,8 @@ namespace WolvenKit.Functionality.Services
                 {
                     case ".w3modproj":
                     {
-                        //project = new Tw3Project(location);
                         project = await Load<Tw3Project>(location);
-                        ServiceLocator.Default.RegisterType<IGameController, Tw3Controller>();
-
-                        await ServiceLocator.Default.ResolveType<IGameController>().HandleStartup()
+                        await _tw3Controller.HandleStartup()
                             .ContinueWith(t =>
                             {
                                 _notificationService.Success(
@@ -123,10 +119,8 @@ namespace WolvenKit.Functionality.Services
                     }
                     case ".cpmodproj":
                     {
-                        //project = new Cp77Project(location);
                         project = await Load<Cp77Project>(location);
-                        ServiceLocator.Default.RegisterType<IGameController, Cp77Controller>();
-                        await ServiceLocator.Default.ResolveType<IGameController>().HandleStartup()
+                        await _cp77Controller.HandleStartup()
                             .ContinueWith(
                                 t =>
                                 {

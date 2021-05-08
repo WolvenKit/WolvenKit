@@ -14,14 +14,14 @@ using Catel.Services;
 using DynamicData;
 using Orc.FileSystem;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Common;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -48,7 +48,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IWatcherService _watcherService;
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
-        private readonly IWccService _wccService;
+        private readonly Tw3Controller _tw3Controller;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
 
@@ -71,7 +71,7 @@ namespace WolvenKit.ViewModels.Editor
             ICommandManager commandManager,
             IDirectoryService directoryService,
             IFileService fileService,
-            IWccService wccService
+            Tw3Controller tw3Controller
             ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
@@ -81,7 +81,7 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => watcherService);
             Argument.IsNotNull(() => directoryService);
             Argument.IsNotNull(() => fileService);
-            Argument.IsNotNull(() => wccService);
+            Argument.IsNotNull(() => tw3Controller);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -90,7 +90,7 @@ namespace WolvenKit.ViewModels.Editor
             _watcherService = watcherService;
             _directoryService = directoryService;
             _fileService = fileService;
-            _wccService = wccService;
+            _tw3Controller = tw3Controller;
 
             SetupCommands();
             SetupToolDefaults();
@@ -408,7 +408,7 @@ namespace WolvenKit.ViewModels.Editor
         public ICommand OpenInAssetBrowserCommand { get; private set; }
 
 
-        private async void AddAllImports() => await _wccService.AddAllImportsAsync(SelectedItem.FullName, true);
+        private async void AddAllImports() => await _tw3Controller.AddAllImportsAsync(SelectedItem.FullName, true);
 
         private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && !SelectedItem.IsDirectory;
 
@@ -443,7 +443,7 @@ namespace WolvenKit.ViewModels.Editor
             // TODO: Handle command logic here
         }
 
-        private async void ExportMesh() => await Task.Run(() => _wccService.ExportFileToMod(SelectedItem.FullName));
+        private async void ExportMesh() => await Task.Run(() => _tw3Controller.ExportFileToMod(SelectedItem.FullName));
 
         #endregion Tw3 Commands
 
@@ -541,7 +541,7 @@ namespace WolvenKit.ViewModels.Editor
                     basedir = dir,
                     outdir = cookedtargetDir
                 };
-                await Task.Run(() => _wccService.RunCommand(cook));
+                await Task.Run(() => _tw3Controller.RunCommand(cook));
             }
             catch (Exception)
             {

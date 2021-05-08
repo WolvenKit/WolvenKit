@@ -14,12 +14,12 @@ using WolvenKit.Common;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
+using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W;
 using WolvenKit.RED3.CR2W.Types;
@@ -44,7 +44,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
-        private readonly IWccService _wccService;
+        private readonly Tw3Controller _tw3Controller;
 
 
         private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
@@ -60,20 +60,20 @@ namespace WolvenKit.ViewModels.Editor
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            IWccService wccService,
+            Tw3Controller tw3Controller,
             ISettingsManager settingsManager
         ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => wccService);
+            Argument.IsNotNull(() => tw3Controller);
             Argument.IsNotNull(() => settingsManager);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
-            _wccService = wccService;
+            _tw3Controller = tw3Controller;
             _settingsManager = settingsManager;
 
             SetupCommands();
@@ -197,7 +197,7 @@ namespace WolvenKit.ViewModels.Editor
                     Depot = _settingsManager.DepotPath,
                     texturegroup = file.TextureGroup
                 };
-                await Task.Run(() => _wccService.RunCommand(import));
+                await Task.Run(() => _tw3Controller.RunCommand(import));
             }
 
             string GetNewPath(ImportableFile file)

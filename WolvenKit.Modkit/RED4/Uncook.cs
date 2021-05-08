@@ -20,10 +20,18 @@ using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
 {
+    public static class ModToolsExtensions
+    {
+
+    }
+
+
+
+
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
-    public static partial class ModTools
+    public partial class ModTools
     {
 
 
@@ -33,9 +41,9 @@ namespace CP77.CR2W
         /// <param name="ar"></param>
         /// <param name="hash"></param>
         /// <param name="stream"></param>
-        public static void UncookSingleToStream(Archive ar, ulong hash, Stream stream)
+        public void UncookSingleToStream(Archive ar, ulong hash, Stream stream)
         {
-
+            throw new NotImplementedException();
         }
 
 
@@ -48,7 +56,7 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public static bool UncookSingle(this Archive ar, ulong hash, DirectoryInfo outDir,
+        public bool UncookSingle(Archive ar, ulong hash, DirectoryInfo outDir,
             EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             // extract the main file with uncompressed buffers
@@ -89,7 +97,7 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public static (List<string>, int) UncookAll(this Archive ar, DirectoryInfo outDir, string pattern = "",
+        public (List<string>, int) UncookAll(Archive ar, DirectoryInfo outDir, string pattern = "",
             string regex = "", EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
@@ -126,7 +134,7 @@ namespace CP77.CR2W
             _progressService.Report(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                if (ar.UncookSingle(info.NameHash64, outDir, uncookext, flip))
+                if (UncookSingle(ar, info.NameHash64, outDir, uncookext, flip))
                     extractedList.Add(info.FileName);
                 else
                     failedList.Add(info.FileName);
@@ -148,7 +156,7 @@ namespace CP77.CR2W
         /// uncooks buffers to raw format and
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static bool Uncook(Stream cr2wStream, FileInfo cr2wFileName, string ext,
+        public bool Uncook(Stream cr2wStream, FileInfo cr2wFileName, string ext,
             EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
@@ -184,7 +192,7 @@ namespace CP77.CR2W
             };
         }
 
-        private static bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
+        private bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
         {
             // read the cr2wfile
             var cr2w = TryReadCr2WFileHeaders(cr2wStream);

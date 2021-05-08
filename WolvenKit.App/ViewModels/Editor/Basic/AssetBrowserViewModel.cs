@@ -17,12 +17,12 @@ using Feather.Commands;
 using Feather.Controls;
 using HandyControl.Data;
 using Orchestra.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
@@ -51,7 +51,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IMessageService _messageService;
         private readonly IGrowlNotificationService _notificationService;
         private readonly IProjectManager _projectManager;
-        private readonly IGameController _gameController;
+        private readonly IGameControllerFactory _gameController;
 
         
 
@@ -80,7 +80,7 @@ namespace WolvenKit.ViewModels.Editor
             ILoggerService loggerService,
             IMessageService messageService,
             IGrowlNotificationService notificationService,
-            IGameController gameController
+            IGameControllerFactory gameController
         ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
@@ -267,7 +267,7 @@ namespace WolvenKit.ViewModels.Editor
             });
 
             SelectedFiles = new List<IGameFile>();
-            Managers = _gameController.GetArchiveManagersManagers(loadmods);
+            Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
             foreach (var mngr in Managers)
@@ -281,16 +281,20 @@ namespace WolvenKit.ViewModels.Editor
 
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
             RootNode = CurrentNode;
-            Extensions = _gameController.GetArchiveManagersManagers(loadmods).SelectMany(x => x.Extensions).ToList();
-            Classes = _gameController.GetAvaliableClasses();
+            Extensions = _gameController
+                .GetController()
+                .GetArchiveManagersManagers(loadmods)
+                .SelectMany(x => x.Extensions)
+                .ToList();
+            Classes = _gameController
+                .GetController()
+                .GetAvaliableClasses();
             PreviewVisible = false;
 
             IsLoaded = true;
-            if (_gameController is not MockGameController)
-            {
-                _notificationService.Success($"Asset Browser is initialized");
-                LoadVisibility = Visibility.Collapsed;
-            }
+
+            _notificationService.Success($"Asset Browser is initialized");
+            LoadVisibility = Visibility.Collapsed;
 
             InitializeCurrentNodeAsync(RootNode);
         }
@@ -320,7 +324,7 @@ namespace WolvenKit.ViewModels.Editor
             var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
 
             NotificationHelper.Growl.Info($"Importing file: {file.Name}");
-            var project = (EditorProject)pm.ActiveProject;
+            var project = pm.ActiveProject;
             switch (project.GameType)
             {
                 case GameType.Witcher3:

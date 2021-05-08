@@ -6,18 +6,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catel.IoC;
-using Catel.Logging;
 using CP77.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using Newtonsoft.Json;
 using ProtoBuf;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
@@ -29,17 +25,18 @@ namespace WolvenKit.Functionality.Controllers
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
+        private readonly ModTools _modTools;
 
-        
         public Cp77Controller(ILoggerService loggerService,
             IProjectManager projectManager,
-            ISettingsManager settingsManager
+            ISettingsManager settingsManager,
+            ModTools modTools
             )
         {
             _loggerService = loggerService;
             _projectManager = projectManager;
             _settingsManager = settingsManager;
-
+            _modTools = modTools;
         }
 
         #region Properties
@@ -52,7 +49,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task HandleStartup()
         {
-            RegisterServices();
+            UpdateService();
 
             var todo = new List<Func<IGameArchiveManager>>()
             {
@@ -164,9 +161,9 @@ namespace WolvenKit.Functionality.Controllers
                 return Task.FromResult(false);
             }
             _loggerService.Info("Rebuilding necessary files....");
-            ModTools.Recombine(new DirectoryInfo(cp77Proj.ModDirectory), true, true, true, true, true, true);
+            _modTools.Recombine(new DirectoryInfo(cp77Proj.ModDirectory), true, true, true, true, true, true);
             _loggerService.Info("Rebuilding done, packing files into archive(s)....");
-            ModTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory),
+            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory),
                 new DirectoryInfo(cp77Proj.PackedModDirectory));
             _loggerService.Info("Packing complete!");
             InstallMod();
@@ -243,7 +240,7 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private static void RegisterServices()
+        private static void UpdateService()
         {
             if (ServiceLocator.Default.IsTypeRegistered<IWolvenkitFileService>())
             {

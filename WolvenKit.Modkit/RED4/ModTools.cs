@@ -7,15 +7,20 @@ using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
 {
-    public static partial class ModTools
+    public partial class ModTools
     {
-        #region Fields
+        private readonly ILoggerService Logger;
+        private readonly IProgress<double> _progressService;
 
-        private static readonly ILoggerService Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-        private static readonly IProgress<double> _progressService =
-            (IProgress<double>)ServiceLocator.Default.ResolveType(typeof(IProgress<double>));
+        public ModTools(
+            ILoggerService loggerService,
+            IProgress<double> progressService
+        )
+        {
+            Logger = loggerService;
+            _progressService = progressService;
+        }
 
-        #endregion Fields
 
         #region Methods
 

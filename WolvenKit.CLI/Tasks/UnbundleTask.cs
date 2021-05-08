@@ -13,11 +13,6 @@ namespace CP77Tools.Tasks
 {
     public static partial class ConsoleFunctions
     {
-        #region Fields
-
-        private static readonly ILoggerService logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-        #endregion Fields
 
         #region Methods
 
@@ -124,7 +119,7 @@ namespace CP77Tools.Tasks
                         Logtype.Normal);
                     foreach (var hash_num in hashlist)
                     {
-                        ar.ExtractSingle(hash_num, outDir, DEBUG_decompress);
+                        ExtractSingle(ar, hash_num, outDir, DEBUG_decompress);
                         logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
                     }
 
@@ -137,7 +132,7 @@ namespace CP77Tools.Tasks
                 }
                 else
                 {
-                    var r = ar.ExtractAll(outDir, pattern, regex, DEBUG_decompress);
+                    var r = ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
                     logger.Success($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.");
                 }
             }

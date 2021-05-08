@@ -18,15 +18,11 @@ using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED3.CR2W;
 using WolvenKit.ViewModels.Editor;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
@@ -44,7 +40,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
-        private readonly IGameController _gameController;
+        //private readonly IGameController _gameController;
 
         private readonly DocumentViewModelDelegate addfiledel;
         private DocumentViewModel _activeDocument = null;
@@ -62,8 +58,8 @@ namespace WolvenKit.ViewModels.Shell
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ICommandManager commandManager,
-            IGameController gameController
+            ICommandManager commandManager//,
+            //IGameController gameController
         )
         {
             #region dependency injection
@@ -72,12 +68,12 @@ namespace WolvenKit.ViewModels.Shell
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => commandManager);
             Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => gameController);
+            //Argument.IsNotNull(() => gameController);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
-            _gameController = gameController;
+            //_gameController = gameController;
 
             #endregion dependency injection
 
@@ -209,7 +205,7 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowGameDebuggerTool, ShowGameDebuggerToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMenuCreatorTool, ShowMenuCreatorToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowPluginManager, ShowPluginManagerCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowRadishTool, ShowRadishToolCommand, this);
+            //commandManager.RegisterCommand(AppCommands.Application.ShowRadishTool, ShowRadishToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowWccTool, ShowWccToolCommand, this);
 
             // Home Tab
@@ -360,7 +356,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Displays the AssetBrowser.
         /// </summary>
-        public ICommand ShowRadishToolCommand { get; private set; }
+        //public ICommand ShowRadishToolCommand { get; private set; }
 
         /// <summary>
         /// Displays the AssetBrowser.
@@ -386,7 +382,8 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        private void ExecutePackMod() => _gameController.PackAndInstallProject();
+        private void ExecutePackMod(){}
+        //_gameController.PackAndInstallProject();
 
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
 
@@ -400,7 +397,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowAnimationTool() => false;
 
-        private bool CanShowAssetBrowser() => AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
+        private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
         private bool CanShowAudioTool() => _projectManager.ActiveProject is EditorProject;
         private bool CanShowVideoTool() => _projectManager.ActiveProject is EditorProject;
@@ -438,7 +435,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowProperties() => _projectManager.ActiveProject is EditorProject;
 
-        private bool CanShowRadishTool() => false;
+        //private bool CanShowRadishTool() => false;
 
         private bool CanShowVisualEditor() => false;
 

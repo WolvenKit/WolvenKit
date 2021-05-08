@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ using WolvenKit.RED4.RigFile;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.CR2W;
 using CP77.CR2W;
+using WolvenKit.Modkit.RED4;
 
 namespace WolvenKit.RED4.MeshFile
 {

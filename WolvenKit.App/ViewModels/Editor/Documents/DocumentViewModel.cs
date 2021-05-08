@@ -9,6 +9,7 @@ using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
 using HandyControl.Controls;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
@@ -43,18 +44,26 @@ namespace WolvenKit.ViewModels.Editor
         private IWorkSpaceViewModel _workSpaceViewModel = null;
         private FileModel fileinfo;
 
+        private readonly IGameControllerFactory _gameControllerFactory;
+        private readonly IProjectManager _projectManager;
+
+        
+        
+
+
         #endregion fields
 
         #region ctors
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem) : this(workSpaceViewModel)
+        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem)
+            : this(workSpaceViewModel)
         {
             fileinfo = model;
             _initialPath = fileinfo.FullName;
 
             try
             {
-                Title = System.IO.Path.GetFileName(fileinfo.FullName);
+                Title = Path.GetFileName(fileinfo.FullName);
             }
             catch { }
 
@@ -70,9 +79,8 @@ namespace WolvenKit.ViewModels.Editor
 
         public DocumentViewModel()
         {
-
-
-
+            _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
+            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
 
             IsDirty = false;
 
@@ -148,8 +156,7 @@ namespace WolvenKit.ViewModels.Editor
             var depotpath = input.DepotPathStr;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
             var foundItems = new List<IGameFile>();
-            var gamecontroller = ServiceLocator.Default.ResolveType<IGameController>();
-            foreach (var manager in gamecontroller.GetArchiveManagersManagers(false)
+            foreach (var manager in _gameControllerFactory.GetController().GetArchiveManagersManagers(false)
                 .Where(manager => manager.Items.ContainsKey(key)))
             {
                 foundItems.AddRange(manager.Items[key]);

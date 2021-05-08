@@ -11,6 +11,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using Index = CP77Tools.Model.Index;
 
@@ -19,7 +20,7 @@ namespace CP77.CR2W
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
-    public static partial class ModTools
+    public partial class ModTools
     {
         #region Fields
 
@@ -33,40 +34,7 @@ namespace CP77.CR2W
 
         #region Methods
 
-        /// <summary>
-        /// Kraken-compresses a buffer and writes it to a stream.
-        /// </summary>
-        /// <param name="bw"></param>
-        /// <param name="inbuffer"></param>
-        /// <returns></returns>
-        public static (uint, uint) CompressAndWrite(this BinaryWriter bw, byte[] inbuffer)
-        {
-            var size = (uint)inbuffer.Length;
-            if (size < 255)
-            {
-                var crc = Crc32Algorithm.Compute(inbuffer);
-                bw.Write(inbuffer);
-
-                return (size, crc);
-            }
-            else
-            {
-                IEnumerable<byte> outBuffer = new List<byte>();
-                var r = OodleHelper.Compress(
-                    inbuffer,
-                    (int)size,
-                    ref outBuffer,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal);
-
-                var b = outBuffer.ToArray();
-
-                var crc = Crc32Algorithm.Compute(b);
-                bw.Write(b);
-
-                return ((uint)r, crc);
-            }
-        }
+        
 
         /// <summary>
         /// Creates and archive from a folder and packs all files inside into it
@@ -74,7 +42,7 @@ namespace CP77.CR2W
         /// <param name="infolder"></param>
         /// <param name="outpath"></param>
         /// <returns></returns>
-        public static Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath)
+        public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath)
         {
             if (!infolder.Exists)
                 return null;

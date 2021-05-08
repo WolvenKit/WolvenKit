@@ -16,7 +16,7 @@ namespace CP77.CR2W
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
-    public static partial class ModTools
+    public partial class ModTools
     {
         #region Methods
 
@@ -29,9 +29,8 @@ namespace CP77.CR2W
         /// <param name="regex"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static (List<string>, int) ExtractAll(this Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
+        public (List<string>, int) ExtractAll(Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
         {
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
@@ -64,7 +63,7 @@ namespace CP77.CR2W
             _progressService.Report(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                var extracted = ar.ExtractSingle(info.NameHash64, outDir, decompressBuffers);
+                var extracted = ExtractSingle(ar, info.NameHash64, outDir, decompressBuffers);
 
                 if (extracted != 0)
                 {
@@ -91,7 +90,7 @@ namespace CP77.CR2W
         /// <param name="outDir"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static int ExtractSingle(this Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false)
+        public int ExtractSingle(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false)
         {
             // get filename
             var entry = ar.Files[hash] as FileEntry;

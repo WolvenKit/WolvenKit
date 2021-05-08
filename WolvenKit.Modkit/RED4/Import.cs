@@ -11,7 +11,7 @@ namespace CP77.CR2W
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
-    public static partial class ModTools
+    public partial class ModTools
     {
         
         /// <summary>

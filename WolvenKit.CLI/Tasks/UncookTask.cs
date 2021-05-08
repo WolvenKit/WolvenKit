@@ -109,12 +109,12 @@ namespace CP77Tools.Tasks
                 // run
                 if (hash != 0)
                 {
-                    ar.UncookSingle(hash, outDir, uext, flip);
+                    UncookSingle(ar, hash, outDir, uext, flip);
                     logger.LogString($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}", Logtype.Success);
                 }
                 else
                 {
-                    var r = ar.UncookAll(outDir, pattern, regex, uext, flip);
+                    var r = UncookAll(ar, outDir, pattern, regex, uext, flip);
                     logger.LogString($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.",
                         Logtype.Success);
                 }

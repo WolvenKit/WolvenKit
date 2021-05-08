@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
@@ -12,7 +13,7 @@ namespace CP77.CR2W
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
-    public static partial class ModTools
+    public partial class ModTools
     {
         #region Methods
 
@@ -28,7 +29,7 @@ namespace CP77.CR2W
         /// <param name="unsaferaw"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public static bool Recombine(DirectoryInfo infolder,
+        public bool Recombine(DirectoryInfo infolder,
             bool useBuffers,
             bool useTextures,
             bool import,    //create new

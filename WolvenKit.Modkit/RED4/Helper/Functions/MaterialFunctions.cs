@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using CP77.CR2W;
 using WolvenKit.RED4.GeneralStructs;
@@ -15,11 +15,25 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.MaterialSetupFile;
 using SharpGLTF.IO;
 using System.Threading;
+using WolvenKit.Modkit.RED4;
 
 namespace WolvenKit.RED4.MeshFile.Materials
 {
     public class MATERIAL
     {
+        private readonly ModTools ModTools;
+
+
+        public MATERIAL(List<Archive> _Archives) : base()
+        {
+            archives = _Archives;
+        }
+        public MATERIAL(ModTools modTools)
+        {
+            ModTools = modTools;
+        }
+
+
         static string cacheDir = Path.GetTempPath() + "WolvenKit\\Material\\Temp\\";
         public static List<Archive> archives;
         public void ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName, FileInfo outfile, bool isGLBinary = true,bool copyTextures = false,EUncookExtension eUncookExtension = EUncookExtension.dds , bool LodFilter = true)
@@ -105,7 +119,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
             meshStream.Dispose();
             meshStream.Close();
         }
-        static void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies,ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib, bool useAssetLib)
+        void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies,ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib, bool useAssetLib)
         {
             var cr2w = ModTools.TryReadCr2WFile(meshStream);
 
@@ -245,7 +259,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
                     materialEntries.Add(ExternalMaterial[Entry.Index.Value]);
             }
         }
-        static void ParseMaterialsUsingAssetLib(Stream meshStream, ref ModelRoot model,DirectoryInfo outDir, DirectoryInfo AssetLib, bool CopyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        void ParseMaterialsUsingAssetLib(Stream meshStream, ref ModelRoot model,DirectoryInfo outDir, DirectoryInfo AssetLib, bool CopyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             List<string> primaryDependencies = new List<string>();
 
@@ -412,7 +426,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
             for (int i = 0; i < files.Length; i++)
                 File.Move(files[i], outDir.FullName + Path.GetFileName(files[i]),true);
         }
-        static void ParseMaterialsUsingArchives(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        void ParseMaterialsUsingArchives(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             List<string> primaryDependencies = new List<string>();
 
@@ -751,30 +765,29 @@ namespace WolvenKit.RED4.MeshFile.Materials
             inmeshStream.Close();
 
         }
-        public MATERIAL(List<Archive> _Archives)
-        {
-            archives = _Archives;
-        }
-        public MATERIAL()
-        {
-
-        }
+        
     }
     public class MaterialRepository
     {
-        public static Thread Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
+        private readonly ModTools ModTools;
+
+        public MaterialRepository(ModTools modTools)
+        {
+            ModTools = modTools;
+        }
+
+        public Thread Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
         {
             GameArchiveDir = gameArchiveDir;
             MaterialRepoDir = materialRepoDir;
             TexturesExtension = texturesExtension;
 
-            Thread thread = new Thread(GenerateInBG);
-            thread.IsBackground = true;
+            var thread = new Thread(GenerateInBG) {IsBackground = true};
             thread.Start();
             return thread;
         }
 
-        static void GenerateInBG()
+        private void GenerateInBG()
         {
             string[] filenames = Directory.GetFiles(GameArchiveDir.FullName, "*.archive", SearchOption.AllDirectories);
             List<Archive> archives = new List<Archive>();

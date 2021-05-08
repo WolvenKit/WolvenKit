@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.MVVM.Model;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
@@ -22,7 +22,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService Logger;
-        private readonly IWccService _wccService;
+        private readonly Tw3Controller _tw3Controller;
 
         #endregion Fields
 
@@ -31,12 +31,12 @@ namespace WolvenKit.ViewModels.Editor
         public ModkitViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IWccService wccService
+            Tw3Controller tw3Controller
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
             Logger = loggerService;
-            _wccService = wccService;
+            _tw3Controller = tw3Controller;
 
             RunCommand = new Functionality.Commands.RelayCommand(Run, CanRun);
 
@@ -88,7 +88,7 @@ namespace WolvenKit.ViewModels.Editor
 
         protected bool CanRun() => true;
 
-        protected async void Run() => await Task.Run(() => _wccService.RunCommand(SelectedObject));
+        protected async void Run() => await Task.Run(() => _tw3Controller.RunCommand(SelectedObject));
 
         #endregion Commands Implementation
     }

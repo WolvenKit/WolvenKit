@@ -8,7 +8,7 @@ namespace CP77.CR2W
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
-    public static partial class ModTools
+    public partial class ModTools
     {
         #region Methods
 
@@ -17,7 +17,7 @@ namespace CP77.CR2W
         /// </summary>
         /// <param name="cr2wfile"></param>
         /// <param name="outpath"></param>
-        public static bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
+        public bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
             #region checks
 

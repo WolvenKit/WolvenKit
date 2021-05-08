@@ -61,7 +61,6 @@ namespace WolvenKit.Functionality.Services
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
             // Non-async first
-            RegisterTypes();
             InitializeFonts();
             InitializeCommands();
 
@@ -141,7 +140,7 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.ShowGameDebuggerTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowMenuCreatorTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowPluginManager);
-            _commandManager.CreateCommand(AppCommands.Application.ShowRadishTool);
+            //_commandManager.CreateCommand(AppCommands.Application.ShowRadishTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowWccTool);
 
             _commandManager.CreateCommand(AppCommands.Application.OpenFile);
@@ -184,21 +183,6 @@ namespace WolvenKit.Functionality.Services
                     throw new Exception(error);
                 }
             }
-        }
-
-        private void RegisterTypes()
-        {
-            
-
-            // Orchestra
-            _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
-
-            // Wkit
-            _serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
-
-            var config = SettingsManager.Load();
-            _serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
-
         }
 
         #endregion methods
