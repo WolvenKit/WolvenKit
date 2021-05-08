@@ -8,11 +8,11 @@ using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 
-        public static int HashTask(string[] input, bool missing, string prepare)
+        public int HashTask(string[] input, bool missing, string prepare)
         {
             #region checks
 
@@ -22,7 +22,7 @@ namespace CP77Tools.Tasks
                 {
                     if (!string.IsNullOrEmpty(s))
                     {
-                        logger.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), Logtype.Normal);
+                        _loggerService.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), Logtype.Normal);
                     }
                 }
             }
@@ -59,8 +59,7 @@ namespace CP77Tools.Tasks
 
             if (!string.IsNullOrEmpty(prepare))
             {
-                var hs = ServiceLocator.Default.ResolveType<IHashService>();
-                hs.Serialize(prepare);
+                _hashService.Serialize(prepare);
             }
 
             return 1;

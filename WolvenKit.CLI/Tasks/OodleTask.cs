@@ -5,7 +5,7 @@ using WolvenKit.Common.Oodle;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 

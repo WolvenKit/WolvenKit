@@ -4,6 +4,8 @@ using WolvenKit.RED4.GeneralStructs;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
 using System.IO;
+using Catel.IoC;
+using CP77.CR2W;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.MeshFile;
 using WolvenKit.Common.Oodle;
@@ -24,9 +26,16 @@ namespace WolvenKit.RED4.MorphTargetFile
     using VCT = VertexColor1Texture2;
     public class TARGET
     {
-        public static void ExportTargets(Stream targetStream,FileInfo outfile, bool isGLBinary = true)
+        private readonly ModTools ModTools;
+
+        public TARGET()
         {
-            var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(targetStream);
+            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
+        }
+
+        public void ExportTargets(Stream targetStream,FileInfo outfile, bool isGLBinary = true)
+        {
+            var cr2w = ModTools.TryReadCr2WFile(targetStream);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             MemoryStream meshbuffer = MESH.GetMeshBufferStream(targetStream, cr2w);

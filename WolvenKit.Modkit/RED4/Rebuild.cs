@@ -136,7 +136,7 @@ namespace CP77.CR2W
                 using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
                 using var fileReader = new BinaryReader(fileStream);
 
-                var cr2w = ModTools.TryReadCr2WFileHeaders(fileReader);
+                var cr2w = TryReadCr2WFileHeaders(fileReader);
                 if (cr2w == null)
                 {
                     _loggerService.LogString($"Failed to read cr2w file {parentPath}", Logtype.Error);

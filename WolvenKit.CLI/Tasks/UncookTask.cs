@@ -10,16 +10,16 @@ using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 
-        public static void UncookTask(string[] path, string outpath,
+        public void UncookTask(string[] path, string outpath,
             EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -29,14 +29,14 @@ namespace CP77Tools.Tasks
             });
         }
 
-        private static void UncookTaskInner(string path, string outpath,
+        private void UncookTaskInner(string path, string outpath,
             EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -45,18 +45,18 @@ namespace CP77Tools.Tasks
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                logger.LogString("Input path does not exist.", Logtype.Error);
+                _loggerService.LogString("Input path does not exist.", Logtype.Error);
                 return;
             }
 
             if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
-                logger.LogString("Input file is not an .archive.", Logtype.Error);
+                _loggerService.LogString("Input file is not an .archive.", Logtype.Error);
                 return;
             }
             else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
             {
-                logger.LogString("No .archive file to process in the input directory", Logtype.Error);
+                _loggerService.LogString("No .archive file to process in the input directory", Logtype.Error);
                 return;
             }
 
@@ -68,7 +68,8 @@ namespace CP77Tools.Tasks
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
-                var archiveManager = new ArchiveManager(basedir);
+                var archiveManager = new ArchiveManager();
+                archiveManager.LoadAll(basedir.FullName);
                 // TODO: use the manager here?
                 archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
@@ -104,18 +105,18 @@ namespace CP77Tools.Tasks
                 }
 
                 // read archive
-                var ar = new Archive(processedarchive.FullName);
+                var ar = Red4ParserServiceExtensions.ReadArchive(processedarchive.FullName, _hashService);
 
                 // run
                 if (hash != 0)
                 {
-                    UncookSingle(ar, hash, outDir, uext, flip);
-                    logger.LogString($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}", Logtype.Success);
+                    _modTools.UncookSingle(ar, hash, outDir, uext, flip);
+                    _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}", Logtype.Success);
                 }
                 else
                 {
-                    var r = UncookAll(ar, outDir, pattern, regex, uext, flip);
-                    logger.LogString($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.",
+                    var r = _modTools.UncookAll(ar, outDir, pattern, regex, uext, flip);
+                    _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.",
                         Logtype.Success);
                 }
             }

@@ -12,15 +12,15 @@ using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 
-        public static void Cr2wTask(string[] path, string outpath, bool chunks, string pattern, string regex)
+        public void Cr2wTask(string[] path, string outpath, bool chunks, string pattern, string regex)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -30,13 +30,13 @@ namespace CP77Tools.Tasks
             });
         }
 
-        private static void Cr2wTaskInner(string path, string outpath, bool chunks, string pattern = "", string regex = "")
+        private void Cr2wTaskInner(string path, string outpath, bool chunks, string pattern = "", string regex = "")
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace CP77Tools.Tasks
 
             if (!isDirectory && !isFile)
             {
-                logger.LogString("Input file does not exist.", Logtype.Error);
+                _loggerService.LogString("Input file does not exist.", Logtype.Error);
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace CP77Tools.Tasks
             }
 
             var finalMatchesList = finalmatches.ToList();
-            logger.LogString($"Found {finalMatchesList.Count} files to dump.", Logtype.Important);
+            _loggerService.LogString($"Found {finalMatchesList.Count} files to dump.", Logtype.Important);
 
             Thread.Sleep(1000);
             int progress = 0;
@@ -92,7 +92,7 @@ namespace CP77Tools.Tasks
                     : new DirectoryInfo(outpath);
                 if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
-                    logger.LogString("Invalid output directory.", Logtype.Error);
+                    _loggerService.LogString("Invalid output directory.", Logtype.Error);
                     return;
                 }
 
@@ -100,7 +100,7 @@ namespace CP77Tools.Tasks
                 {
                     var f = File.ReadAllBytes(fileInfo.FullName);
                     using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
-                    var cr2w = ModTools.TryReadCr2WFile(fs);
+                    var cr2w = _modTools.TryReadCr2WFile(fs);
                     if (cr2w == null)
                     {
                         return;
@@ -120,7 +120,7 @@ namespace CP77Tools.Tasks
             });
 
             watch.Stop();
-            logger.LogString(
+            _loggerService.LogString(
                 $"Finished. Dumped {finalMatchesList.Count} files to JSON in {watch.ElapsedMilliseconds.ToString()}ms.",
                 Logtype.Success);
         }

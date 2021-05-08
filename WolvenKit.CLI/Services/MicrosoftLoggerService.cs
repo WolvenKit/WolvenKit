@@ -25,13 +25,11 @@ namespace WolvenKit.CLI
                     _logger.LogDebug(message);
                     break;
                 case Logtype.Success:
+                case Logtype.Important:
                     _logger.LogInformation(message);
                     break;
-                case Logtype.Important:
-                    _logger.LogError(message);
-                    break;
                 case Logtype.Error:
-                    _logger.LogCritical(message);
+                    _logger.LogError(message);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

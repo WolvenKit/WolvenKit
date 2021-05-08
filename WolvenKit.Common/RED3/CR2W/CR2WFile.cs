@@ -60,8 +60,6 @@ namespace WolvenKit.RED3.CR2W
                 version = 162,
             };
 
-            //Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
             StringDictionary = new Dictionary<uint, string>();
             m_tableheaders = new CR2WTable[10];
         }

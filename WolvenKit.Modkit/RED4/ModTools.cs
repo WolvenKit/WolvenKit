@@ -12,31 +12,32 @@ namespace CP77.CR2W
         private readonly ILoggerService _loggerService;
         private readonly IProgress<double> _progressService;
         private readonly IHashService _hashService;
-
+        private readonly IWolvenkitFileService _wolvenkitFileService;
 
 
         public ModTools(
             ILoggerService loggerService,
             IProgress<double> progressService,
-            IHashService hashService
+            IHashService hashService,
+            IWolvenkitFileService wolvenkitFileService
         )
         {
             _loggerService = loggerService;
             _progressService = progressService;
             _hashService = hashService;
-
+            _wolvenkitFileService = wolvenkitFileService;
         }
 
 
         #region Methods
 
-        public static CR2WFile TryReadCr2WFile(Stream stream) => ServiceLocator.Default.ResolveType<IWolvenkitFileService>().TryReadCr2WFile(stream) as CR2WFile;
+        public CR2WFile TryReadCr2WFile(Stream stream) => _wolvenkitFileService.TryReadCr2WFile(stream) as CR2WFile;
 
-        public static CR2WFile TryReadCr2WFile(BinaryReader br) => ServiceLocator.Default.ResolveType<IWolvenkitFileService>().TryReadCr2WFile(br) as CR2WFile;
+        public CR2WFile TryReadCr2WFile(BinaryReader br) => _wolvenkitFileService.TryReadCr2WFile(br) as CR2WFile;
 
-        public static CR2WFile TryReadCr2WFileHeaders(Stream stream) => ServiceLocator.Default.ResolveType<IWolvenkitFileService>().TryReadCr2WFileHeaders(stream) as CR2WFile;
+        public CR2WFile TryReadCr2WFileHeaders(Stream stream) => _wolvenkitFileService.TryReadCr2WFileHeaders(stream) as CR2WFile;
 
-        public static CR2WFile TryReadCr2WFileHeaders(BinaryReader br) => ServiceLocator.Default.ResolveType<IWolvenkitFileService>().TryReadCr2WFileHeaders(br) as CR2WFile;
+        public CR2WFile TryReadCr2WFileHeaders(BinaryReader br) => _wolvenkitFileService.TryReadCr2WFileHeaders(br) as CR2WFile;
 
         #endregion Methods
     }

@@ -319,7 +319,7 @@ namespace WolvenKit.Views.Dialogs
                 {
                     if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
                     {
-                        MESH.ExportMeshWithoutRig(stream, Item.Name, FIItem);
+                        (new MESH()).ExportMeshWithoutRig(stream, Item.Name, FIItem);
                     }
 
                     if (ExtractRigged)
@@ -333,7 +333,7 @@ namespace WolvenKit.Views.Dialogs
                             xz.Add(Path.GetFileName(fs.Name));
 
                         }
-                        MESH.ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
+                        (new MESH()).ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
                     }
                     if (ExportMaterials && UseMaterialsRepository && CopyTextures)
                     {

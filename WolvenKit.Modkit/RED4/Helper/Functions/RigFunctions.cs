@@ -6,6 +6,8 @@ using WolvenKit.RED4.GeneralStructs;
 using SharpGLTF.Scenes;
 using System.Collections.Generic;
 using System.Linq;
+using Catel.IoC;
+using CP77.CR2W;
 
 namespace WolvenKit.RED4.RigFile
 {
@@ -15,11 +17,18 @@ namespace WolvenKit.RED4.RigFile
 
     public class RIG
     {
-        public static RawArmature ProcessRig(Stream fs)
+        private readonly ModTools ModTools;
+
+        public RIG()
+        {
+            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
+        }
+
+        public RawArmature ProcessRig(Stream fs)
         {
             BinaryReader br = new BinaryReader(fs);
 
-            var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(fs);
+            var cr2w = ModTools.TryReadCr2WFile(fs);
 
             RawArmature Rig = new RawArmature();
             Rig.Names = GetboneNames(cr2w, "animRig");

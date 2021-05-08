@@ -1,6 +1,9 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using CP77Tools.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace CP77Tools.Commands
 {
@@ -24,7 +27,14 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--hash" }, "Extract single file with a given hash. If a path is supplied, all hashes will be extracted."));
             AddOption(new Option<bool>(new[] { "--DEBUG_decompress" }, "Decompresses all buffers in the unbundled files."));
 
-            Handler = CommandHandler.Create<string[], string, string, string, string, bool>(ConsoleFunctions.UnbundleTask);
+            Handler = CommandHandler.Create<string[], string, string, string, string, bool, IHost>(Action);
+        }
+
+        private void Action(string[] path, string outpath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)
+        {
+            var serviceProvider = host.Services;
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            consoleFunctions.UnbundleTask(path, outpath, pattern, regex, hash, DEBUG_decompress);
         }
 
         #endregion Constructors

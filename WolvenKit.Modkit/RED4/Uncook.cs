@@ -100,8 +100,6 @@ namespace CP77.CR2W
         public (List<string>, int) UncookAll(Archive ar, DirectoryInfo outDir, string pattern = "",
             string regex = "", EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
         {
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
@@ -127,7 +125,7 @@ namespace CP77.CR2W
             }
 
             var finalMatchesList = finalmatches.Where(_ => ar.CanUncook(_.NameHash64)).ToList();
-            logger.LogString($"Found {finalMatchesList.Count} bundle entries to uncook.", Logtype.Important);
+            _loggerService.LogString($"Found {finalMatchesList.Count} bundle entries to uncook.", Logtype.Important);
 
             Thread.Sleep(1000);
             int progress = 0;
@@ -144,7 +142,7 @@ namespace CP77.CR2W
 
             foreach (var failed in failedList)
             {
-                logger.LogString($"Failed to uncook {failed}.", Logtype.Error);
+                _loggerService.LogString($"Failed to uncook {failed}.", Logtype.Error);
             }
 
             return (extractedList.ToList(), finalMatchesList.Count);

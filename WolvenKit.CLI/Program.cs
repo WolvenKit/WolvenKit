@@ -13,6 +13,7 @@ using Catel.IoC;
 using CP77.CR2W;
 using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
+using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -30,28 +31,18 @@ namespace CP77Tools
         [STAThread]
         public static /*void*/ Task Main(string[] args)
         {
-            //using var loggerFactory = LoggerFactory.Create(builder =>
-            //{
-            //    builder
-            //        .AddFilter("Microsoft", LogLevel.Warning)
-            //        .AddFilter("System", LogLevel.Warning)
-            //        .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
-            //        .AddConsole();
-            //});
-
-            //ILogger mLogger = loggerFactory.CreateLogger<MicrosoftLoggerService>();
-
-            //ServiceLocator.Default.RegisterInstance(typeof(ILogger<MicrosoftLoggerService>), mLogger);
-            //ServiceLocator.Default.RegisterType<ILoggerService, MicrosoftLoggerService>();
-            ////ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(true));
-
-            //ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            //ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
-            ////ServiceLocator.Default.RegisterInstance(typeof(IProgress<double>), new ProgressBar());
-            //ServiceLocator.Default.RegisterInstance(typeof(IProgress<double>), new MockProgressService());
+            // try get oodle dll from game
+            if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
+            {
+                Console.WriteLine("Could not automatically find oo2ext_7_win64.dll. " +
+                           "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
+                           $"{AppDomain.CurrentDomain.BaseDirectory}.");
+                return Task.CompletedTask;
+            }
 
             var rootCommand = new RootCommand
             {
+                
                 new UnbundleCommand(),
                 new UncookCommand(),
                 new RebuildCommand(),
@@ -66,39 +57,32 @@ namespace CP77Tools
                 new OodleCommand(),
             };
 
-            // try get oodle dll from game
-            if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
-            {
-                var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                logger.Log("Could not automatically find oo2ext_7_win64.dll. " +
-                           "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
-                           $"{AppDomain.CurrentDomain.BaseDirectory}.");
-            }
-
+            //var clb = new CommandLineBuilder(new RootCommand {Handler = CommandHandler.Create<IHost>(Action
             var parser = new CommandLineBuilder(rootCommand)
                 .UseDefaults()
                 .UseHost(Host.CreateDefaultBuilder, host =>
-                {
-                    host
-                        .ConfigureLogging(logging =>
-                        {
-                            logging.ClearProviders();
-                            logging.AddConsole();
-                        })
-                        .ConfigureServices((hostContext, services) =>
-                        {
-                            services.AddScoped<ILoggerService, MicrosoftLoggerService>();
-                            services.AddSingleton<IHashService, HashService>();
-                            services.AddScoped<IWolvenkitFileService, Cp77FileService>();
-                            services.AddScoped<IProgress<double>, MockProgressService>();
-                            services.AddScoped<MaterialRepository>();
-                            services.AddScoped<ModTools>();
-                        });
-                })
+                    {
+                        host.ConfigureLogging(logging =>
+                            {
+                                logging.ClearProviders();
+                                logging.AddConsole();
+                            })
+                            .ConfigureServices((hostContext, services) =>
+                            {
+                                services.AddScoped<ILoggerService, MicrosoftLoggerService>();
+                                services.AddSingleton<IHashService, HashService>();
+                                services.AddScoped<IWolvenkitFileService, Cp77FileService>();
+                                services.AddScoped<IProgress<double>, MockProgressService>();
+                                services.AddScoped<MaterialRepository>();
+                                services.AddScoped<ModTools>();
+                                services.AddScoped<ConsoleFunctions>();
+                            });
+                    })
                 .Build();
 
+            
+
             return parser.InvokeAsync(args);
-            //rootCommand.InvokeAsync(args).Wait();
         }
 
         private delegate void StrDelegate(string value);

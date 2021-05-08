@@ -8,6 +8,7 @@ using System.Windows.Media;
 using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
+using CP77.CR2W;
 using HandyControl.Controls;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -45,16 +46,15 @@ namespace WolvenKit.ViewModels.Editor
 
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IProjectManager _projectManager;
-
-        
-        
+        private readonly ModTools _modTools;
 
 
         #endregion fields
 
         #region ctors
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem)
+        public DocumentViewModel(
+            IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem)
             : this(workSpaceViewModel)
         {
             fileinfo = model;
@@ -80,6 +80,7 @@ namespace WolvenKit.ViewModels.Editor
         {
             _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+            _modTools = ServiceLocator.Default.ResolveType<ModTools>();
 
             IsDirty = false;
 
@@ -354,7 +355,7 @@ namespace WolvenKit.ViewModels.Editor
                         switch (pm.ActiveProject)
                         {
                             case Cp77Project cp77proj:
-                                var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(reader);
+                                var cr2w = _modTools.TryReadCr2WFile(reader);
                                 if (cr2w == null)
                                 {
                                     logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);

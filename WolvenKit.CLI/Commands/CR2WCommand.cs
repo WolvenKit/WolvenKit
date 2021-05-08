@@ -1,5 +1,8 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using CP77Tools.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
@@ -22,7 +25,14 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
 
-            Handler = CommandHandler.Create<string[], string, bool, string, string>(Tasks.ConsoleFunctions.Cr2wTask);
+            Handler = CommandHandler.Create<string[], string, bool, string, string, IHost>(Action);
+        }
+
+        private void Action(string[] path, string outpath, bool chunks, string pattern, string regex, IHost host)
+        {
+            var serviceProvider = host.Services;
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            consoleFunctions.Cr2wTask(path, outpath, chunks, pattern, regex);
         }
 
         #endregion Constructors

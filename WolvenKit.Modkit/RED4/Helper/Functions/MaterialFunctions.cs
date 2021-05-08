@@ -15,6 +15,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.MaterialSetupFile;
 using SharpGLTF.IO;
 using System.Threading;
+using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
@@ -25,13 +26,13 @@ namespace WolvenKit.RED4.MeshFile.Materials
         private readonly ModTools ModTools;
 
 
-        public MATERIAL(List<Archive> _Archives) : base()
+        public MATERIAL(List<Archive> _Archives) : this()
         {
             archives = _Archives;
         }
-        public MATERIAL(ModTools modTools)
+        public MATERIAL()
         {
-            ModTools = modTools;
+            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
         }
 
 
@@ -42,7 +43,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
             Directory.CreateDirectory(cacheDir);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var mesh_cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(meshStream);
+            var mesh_cr2w = ModTools.TryReadCr2WFile(meshStream);
 
             MemoryStream ms = MESH.GetMeshBufferStream(meshStream, mesh_cr2w);
             MeshesInfo meshinfo = MESH.GetMeshesinfo(mesh_cr2w);
@@ -84,7 +85,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
             Directory.CreateDirectory(cacheDir);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var mesh_cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(meshStream);
+            var mesh_cr2w = ModTools.TryReadCr2WFile(meshStream);
 
             MemoryStream ms = MESH.GetMeshBufferStream(meshStream, mesh_cr2w);
             MeshesInfo meshinfo = MESH.GetMeshesinfo(mesh_cr2w);
@@ -645,9 +646,9 @@ namespace WolvenKit.RED4.MeshFile.Materials
             ms.DecompressAndCopySegment(materialStream, b.DiskSize, b.MemSize);
             return materialStream;
         }
-        public static void UnpackLocalBufferMaterials(Stream meshStream, DirectoryInfo unpackDir)
+        public void UnpackLocalBufferMaterials(Stream meshStream, DirectoryInfo unpackDir)
         {
-            var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(meshStream);
+            var cr2w = ModTools.TryReadCr2WFile(meshStream);
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {
@@ -685,9 +686,9 @@ namespace WolvenKit.RED4.MeshFile.Materials
             meshStream.Dispose();
             meshStream.Close();
         }
-        public static void PackMaterialToLocalBuffer(DirectoryInfo packDir, Stream inmeshStream, FileInfo outMeshFile)
+        public void PackMaterialToLocalBuffer(DirectoryInfo packDir, Stream inmeshStream, FileInfo outMeshFile)
         {
-            var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(inmeshStream);
+            var cr2w = ModTools.TryReadCr2WFile(inmeshStream);
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {

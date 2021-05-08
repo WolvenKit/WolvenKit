@@ -1,6 +1,8 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using CP77Tools.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using WolvenKit.Common.DDS;
 
 namespace CP77Tools.Commands
@@ -26,9 +28,16 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--flip", "-f" }, "Flip textures vertically (can help with legibility if there's text)."));
             AddOption(new Option<ulong>(new[] { "--hash" }, "Extract single file with a given hash."));
 
-            Handler = CommandHandler.Create<string[], string,
-                EUncookExtension, bool, ulong, string, string>(ConsoleFunctions.UncookTask);
+            Handler = CommandHandler.Create<string[], string, EUncookExtension, bool, ulong, string, string, IHost>(Action);
         }
+
+        private void Action(string[] path, string outpath, EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, IHost host)
+        {
+            var serviceProvider = host.Services;
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            consoleFunctions.UncookTask(path, outpath, uext, flip, hash, pattern, regex);
+        }
+
 
         #endregion Constructors
     }

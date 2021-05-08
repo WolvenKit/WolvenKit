@@ -6,7 +6,7 @@ using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 
@@ -15,11 +15,11 @@ namespace CP77Tools.Tasks
         /// </summary>
         /// <param name="path"></param>
         /// <param name="outpath"></param>
-        public static void PackTask(string[] path, string outpath)
+        public void PackTask(string[] path, string outpath)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -29,20 +29,20 @@ namespace CP77Tools.Tasks
             });
         }
 
-        private static void PackTaskInner(string path, string outpath, int cp = 0)
+        private void PackTaskInner(string path, string outpath, int cp = 0)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
             var inputDirInfo = new DirectoryInfo(path);
             if (!Directory.Exists(path) || !inputDirInfo.Exists)
             {
-                logger.LogString("Input path does not exist.", Logtype.Error);
+                _loggerService.LogString("Input path does not exist.", Logtype.Error);
                 return;
             }
 
@@ -68,14 +68,14 @@ namespace CP77Tools.Tasks
 
             #endregion checks
 
-            var ar = ModTools.Pack(basedir, outDir);
+            var ar = _modTools.Pack(basedir, outDir);
             if (ar != null)
             {
-                logger.LogString($"Finished packing {ar.ArchiveAbsolutePath}.", Logtype.Success);
+                _loggerService.LogString($"Finished packing {ar.ArchiveAbsolutePath}.", Logtype.Success);
             }
             else
             {
-                logger.LogString($"Packing failed.", Logtype.Error);
+                _loggerService.LogString($"Packing failed.", Logtype.Error);
             }
 
             return;

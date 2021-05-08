@@ -142,13 +142,6 @@ namespace WolvenKit.Common.DDS
             int mipmaps = 0
             )
         {
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-
-            if (filepath.Length > 255)
-            {
-                logger.LogString($"{filepath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.", Logtype.Error);
-                return "";
-            }
 
             var proc = new ProcessStartInfo(textconvpath)
             {
@@ -167,7 +160,6 @@ namespace WolvenKit.Common.DDS
             var fi = new FileInfo(Path.Combine(outDir, $"{Path.GetFileNameWithoutExtension(filepath)}.{filetype}"));
             if (!fi.Exists)
             {
-                logger.LogString($"Could not convert {fi.FullName}.", Logtype.Error);
                 return null;
             }
 

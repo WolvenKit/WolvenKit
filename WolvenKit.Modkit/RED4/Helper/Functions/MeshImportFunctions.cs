@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Catel.IoC;
 using WolvenKit.RED4.GeneralStructs;
 using SharpGLTF.Schema2;
 using SharpGLTF.IO;
@@ -19,13 +20,20 @@ namespace WolvenKit.RED4.MeshFile
     using Vec3 = System.Numerics.Vector3;
     public class MESHIMPORTER
     {
-        public static void Import(FileInfo inGltfFile, Stream inmeshStream, FileInfo outMeshFile)
+        private readonly ModTools ModTools;
+
+        public MESHIMPORTER()
+        {
+            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
+        }
+
+        public void Import(FileInfo inGltfFile, Stream inmeshStream, FileInfo outMeshFile)
         {
             var model = ModelRoot.Load(inGltfFile.FullName);
 
             VerifyGLTF(model);
 
-            var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(inmeshStream);
+            var cr2w = ModTools.TryReadCr2WFile(inmeshStream);
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
 
             for (int i = 0; i < model.LogicalMeshes.Count; i++)

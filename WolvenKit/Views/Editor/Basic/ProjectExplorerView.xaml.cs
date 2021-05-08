@@ -45,7 +45,7 @@ namespace WolvenKit.Views.Editor
                 if (z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
                 {
 
-                    var q = MESH.ExportMeshWithoutRigPreviewer(z.FullName);
+                    var q = (new MESH()).ExportMeshWithoutRigPreviewer(z.FullName);
                     if (q.Length > 0)
                     {
                         var meshexporter = new SimpleMeshExporterDialog(TreeGrid.SelectedItem);
@@ -83,7 +83,7 @@ namespace WolvenKit.Views.Editor
 
                             var xa = new FileInfo(outp + "\\" + z.Name);
                             Trace.WriteLine(xa);
-                            TARGET.ExportTargets(TargetStream, xa);
+                            (new TARGET()).ExportTargets(TargetStream, xa);
                         }
                     }
 

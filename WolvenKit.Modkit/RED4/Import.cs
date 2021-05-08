@@ -20,7 +20,7 @@ namespace CP77.CR2W
         /// <param name="path"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static CR2WFile Import(FileInfo rawFile, string textureGroup = null)
+        public CR2WFile Import(FileInfo rawFile, string textureGroup = null)
         {
             #region checks
             
@@ -51,7 +51,7 @@ namespace CP77.CR2W
             }
         }
 
-        private static CR2WFile ImportXbm(FileInfo rawFile, string textureGroup = null)
+        private CR2WFile ImportXbm(FileInfo rawFile, string textureGroup = null)
         {
             var rawExt = rawFile.Extension;
             // TODO: do this in a working directory?
@@ -61,6 +61,11 @@ namespace CP77.CR2W
             {
                 try
                 {
+                    if (ddsPath.Length > 255)
+                    {
+                        _loggerService.LogString($"{ddsPath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.", Logtype.Error);
+                        return null;
+                    }
                     TexconvWrapper.Convert(rawFile.Directory.FullName, $"{ddsPath}", EUncookExtension.dds);
                 }
                 catch (Exception)

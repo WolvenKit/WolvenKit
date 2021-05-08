@@ -11,17 +11,17 @@ using WolvenKit.Core.Services;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
 
         #region Methods
 
-        public static void UnbundleTask(string[] path, string outpath,
+        public void UnbundleTask(string[] path, string outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -31,14 +31,14 @@ namespace CP77Tools.Tasks
             });
         }
 
-        private static void UnbundleTaskInner(string path, string outpath,
+        private void UnbundleTaskInner(string path, string outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.LogString("Please fill in an input path.", Logtype.Error);
                 return;
             }
 
@@ -47,18 +47,18 @@ namespace CP77Tools.Tasks
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                logger.LogString("Input path does not exist.", Logtype.Error);
+                _loggerService.LogString("Input path does not exist.", Logtype.Error);
                 return;
             }
 
             if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
-                logger.LogString("Input file is not an .archive.", Logtype.Error);
+                _loggerService.LogString("Input file is not an .archive.", Logtype.Error);
                 return;
             }
             else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
             {
-                logger.LogString("No .archive file to process in the input directory.", Logtype.Error);
+                _loggerService.LogString("No .archive file to process in the input directory.", Logtype.Error);
                 return;
             }
 
@@ -70,7 +70,8 @@ namespace CP77Tools.Tasks
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
-                var archiveManager = new ArchiveManager(basedir);
+                var archiveManager = new ArchiveManager();
+                archiveManager.LoadAll(basedir.FullName);
                 // TODO: use the manager here?
                 archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
@@ -106,7 +107,7 @@ namespace CP77Tools.Tasks
                 }
 
                 // read archive
-                var ar = new Archive(processedarchive.FullName);
+                var ar = Red4ParserServiceExtensions.ReadArchive(processedarchive.FullName, _hashService);
 
                 var isHash = ulong.TryParse(hash, out ulong hashNumber);
 
@@ -115,25 +116,25 @@ namespace CP77Tools.Tasks
                 {
                     var hashlist = File.ReadAllLines(hash)
                         .ToList().Select(_ => ulong.TryParse(_, out ulong res) ? res : 0);
-                    logger.LogString($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...",
+                    _loggerService.LogString($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...",
                         Logtype.Normal);
                     foreach (var hash_num in hashlist)
                     {
-                        ExtractSingle(ar, hash_num, outDir, DEBUG_decompress);
-                        logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
+                        _modTools.ExtractSingle(ar, hash_num, outDir, DEBUG_decompress);
+                        _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}", Logtype.Success);
                     }
 
-                    logger.LogString($"Bulk extraction from hashlist file completed.", Logtype.Success);
+                    _loggerService.LogString($"Bulk extraction from hashlist file completed.", Logtype.Success);
                 }
                 else if (isHash && hashNumber != 0)
                 {
-                    ar.ExtractSingle(hashNumber, outDir, DEBUG_decompress);
-                    logger.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
+                    _modTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
+                    _loggerService.LogString($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}", Logtype.Success);
                 }
                 else
                 {
-                    var r = ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
-                    logger.Success($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.");
+                    var r = _modTools.ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
+                    _loggerService.Success($"{ar.ArchiveAbsolutePath}: Extracted {r.Item1.Count}/{r.Item2} files.");
                 }
             }
 

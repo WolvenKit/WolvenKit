@@ -107,7 +107,7 @@ namespace CP77.CR2W
                 uint lastoffsetidx = (uint)ar.Index.FileSegments.Count;
                 int flags = 0;
 
-                var cr2w = ModTools.TryReadCr2WFileHeaders(fileBinaryReader);
+                var cr2w = TryReadCr2WFileHeaders(fileBinaryReader);
                 if (cr2w != null)
                 {
                     //register imports
