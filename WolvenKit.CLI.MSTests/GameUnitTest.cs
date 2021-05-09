@@ -25,7 +25,7 @@ namespace WolvenKit.CLI.MSTests
         private const string s_gameDirectorySetting = "GameDirectory";
         private const string s_writeToFileSetting = "WriteToFile";
         private static IConfigurationRoot s_config;
-        private static string s_gameDirectoryPath;
+        public static string s_gameDirectoryPath;
 
         #endregion Fields
 
@@ -88,21 +88,8 @@ namespace WolvenKit.CLI.MSTests
             s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value);
 
             
-
-
-            DirectoryInfo gameArchiveDir;
-            try
-            {
-                gameArchiveDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
             s_bm = new ArchiveManager(hashService);
-            s_bm.LoadAll(gameArchiveDir.FullName);
+            s_bm.LoadAll(gameBinDir.FullName);
             s_groupedFiles = s_bm.GroupedFiles;
         }
 

@@ -21,6 +21,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         {
             Header = new Header();
             Index = new Index();
+            Files = new Dictionary<ulong, IGameFile>();
         }
 
         #endregion constructors
@@ -34,10 +35,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         [ProtoMember(3)] public Index Index { get; set; }
 
 
-
-
-        public Dictionary<ulong, IGameFile> Files => Index?.FileEntries
-            .Values.ToDictionary(_ => _.NameHash64, _ => _ as IGameFile);
+        public Dictionary<ulong, IGameFile> Files { get; }
 
         public string Name => Path.GetFileName(ArchiveAbsolutePath);
 
@@ -77,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="stream"></param>
         /// <param name="hash"></param>
         /// <param name="decompressBuffers"></param>
-        public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
+        public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers, MemoryMappedFile mmf = null)
         {
             if (!Files.ContainsKey(hash))
             {
@@ -89,13 +87,13 @@ namespace WolvenKit.RED4.CR2W.Archive
             var nextIndex = (int)entry.SegmentsEnd;
 
             // decompress main file
-            CopyFileSegmentToStream(stream, this.Index.FileSegments[startIndex], true);
+            CopyFileSegmentToStream(stream, this.Index.FileSegments[startIndex], true, mmf);
 
             // get buffers, optionally decompressing them
             for (var j = startIndex + 1; j < nextIndex; j++)
             {
                 var offsetEntry = this.Index.FileSegments[j];
-                CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers);
+                CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers, mmf);
             }
         }
 
@@ -105,22 +103,37 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="outStream"></param>
         /// <param name="offsetEntry"></param>
         /// <param name="decompress"></param>
-        private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress)
+        private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mf = null)
         {
             var zSize = offsetEntry.ZSize;
 
-            using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite,0x1000, FileOptions.None);
-            using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
-            using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
-
-            if (!decompress)
+            if (mf != null)
             {
-                vs.CopyTo(outStream);
+                using var vs = mf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
+                if (!decompress)
+                {
+                    vs.CopyTo(outStream);
+                }
+                else
+                {
+                    var size = offsetEntry.Size;
+                    vs.DecompressAndCopySegment(outStream, zSize, size);
+                }
             }
             else
             {
-                var size = offsetEntry.Size;
-                vs.DecompressAndCopySegment(outStream, zSize, size);
+                using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
+                using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
+                if (!decompress)
+                {
+                    vs.CopyTo(outStream);
+                }
+                else
+                {
+                    var size = offsetEntry.Size;
+                    vs.DecompressAndCopySegment(outStream, zSize, size);
+                }
             }
         }
 

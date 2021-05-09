@@ -17,7 +17,10 @@ namespace WolvenKit.Common.Services
     {
        public static Archive ReadArchive(string path, IHashService _hashService)
        {
-            var ar = new Archive() {ArchiveAbsolutePath = path};
+            var ar = new Archive()
+            {
+                ArchiveAbsolutePath = path
+            };
 
             using var mmf = MemoryMappedFile.CreateFromFile(path, FileMode.Open);
 
@@ -26,7 +29,6 @@ namespace WolvenKit.Common.Services
             {
                 ar.Header = ReadHeader(br);
             }
-
 
             using (var vs = mmf.CreateViewStream((long)ar.Header.IndexPosition, ar.Header.IndexSize,
             MemoryMappedFileAccess.Read))
@@ -38,6 +40,7 @@ namespace WolvenKit.Common.Services
             foreach (var file in ar.Index.FileEntries.Values)
             {
                 file.Archive = ar;
+                ar.Files.Add(file.Key, file);
             }
 
             return ar;

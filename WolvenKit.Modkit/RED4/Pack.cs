@@ -45,15 +45,19 @@ namespace CP77.CR2W
         public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath)
         {
             if (!infolder.Exists)
+            {
                 return null;
+            }
+
             if (!outpath.Exists)
+            {
                 return null;
+            }
 
             var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
             var ar = new Archive
             {
                 ArchiveAbsolutePath = outfile,
-                Index = new Index()
             };
             using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
