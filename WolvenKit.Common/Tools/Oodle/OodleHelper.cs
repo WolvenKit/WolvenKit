@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Tools.Oodle;
 
 namespace WolvenKit.Common.Oodle
 {
@@ -56,6 +57,10 @@ namespace WolvenKit.Common.Oodle
                 throw new ArgumentNullException(nameof(outputBuffer));
             }
 
+            
+
+
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var compressedBufferSizeNeeded = OodleHelper.GetCompressedBufferSizeNeeded(inputCount);
@@ -66,18 +71,36 @@ namespace WolvenKit.Common.Oodle
                 var outputHandle = GCHandle.Alloc(compressedBuffer, GCHandleType.Pinned);
                 var outputAddress = outputHandle.AddrOfPinnedObject();
 
-                var result = (int)OodleNative.Compress(
-                    (int)algo,
-                    inputAddress,
-                    inputCount,
-                    outputAddress,
-                    (int)level,
-                    IntPtr.Zero,
-                    IntPtr.Zero,
-                    IntPtr.Zero,
-                    IntPtr.Zero,
-                    0
+                var result = 0;
+                if (true)
+                {
+                    result = (int)OodleLoadLib.OodleLZ_Compress(
+                        inputAddress,
+                        outputAddress,
+                        inputCount,
+                        algo,
+                        level
                     );
+                }
+                else
+#pragma warning disable 162
+                {
+                    result = (int)OodleNative.Compress(
+                        (int)algo,
+                        inputAddress,
+                        inputCount,
+                        outputAddress,
+                        (int)level,
+                        IntPtr.Zero,
+                        IntPtr.Zero,
+                        IntPtr.Zero,
+                        IntPtr.Zero,
+                        0
+                    );
+                }
+#pragma warning restore 162
+
+                
 
                 inputHandle.Free();
                 outputHandle.Free();
@@ -137,10 +160,30 @@ namespace WolvenKit.Common.Oodle
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var r = OodleNative.OodleLZ_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
-                    outputBuffer.Length, OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No,
-                    OodleNative.OodleLZ_Verbosity.None, 0, 0, 0, 0, 0, 0, OodleNative.OodleLZ_Decode.Unthreaded);
+
+                if (true)
+                {
+                    return OodleLoadLib.OodleLZ_Decompress(inputBuffer, outputBuffer);
+                }
+
+#pragma warning disable 162
+                var r = OodleNative.OodleLZ_Decompress(
+                    inputBuffer,
+                    inputBuffer.Length,
+                    outputBuffer,
+                    outputBuffer.Length,
+                    OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No,
+                    OodleNative.OodleLZ_Verbosity.None,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    OodleNative.OodleLZ_Decode.Unthreaded);
                 return r;
+#pragma warning restore 162
+
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
@@ -221,7 +264,7 @@ namespace WolvenKit.Common.Oodle
         /// <param name="count"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static int GetCompressedBufferSizeNeeded(int count)
+        private static int GetCompressedBufferSizeNeeded(int count)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

@@ -40,7 +40,6 @@
     <None Remove="Resources\hash_cache_7.zip" />
     <None Remove="Resources\hash_cache_8.zip" />
     <None Remove="Resources\hash_cache_9.zip" />
-    <None Remove="Resources\hash_keys.bin" />
     <None Remove="Resources\hash_lookup.bin" />
     <None Remove="Tools\DDS\texconv.exe" />
   </ItemGroup>
@@ -63,7 +62,6 @@
     <EmbeddedResource Include="Resources\hash_cache_7.zip" />
     <EmbeddedResource Include="Resources\hash_cache_8.zip" />
     <EmbeddedResource Include="Resources\hash_cache_9.zip" />
-    <EmbeddedResource Include="Resources\hash_keys.bin" />
     <EmbeddedResource Include="Resources\hash_lookup.bin" />
   </ItemGroup>
 

@@ -9,6 +9,7 @@ using ProtoBuf.Meta;
 using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.CLI.MSTests
@@ -33,19 +34,10 @@ namespace WolvenKit.CLI.MSTests
 
         protected static void Setup(TestContext context)
         {
+            // IoC
             ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-
-
-            //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
-
-            Console.WriteLine("BaseTestClass.BaseTestInitialize()");
-
-            s_config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
 
             // check for CP77_DIR environment variable first
             // overrides hardcoded appsettings.json
@@ -70,27 +62,40 @@ namespace WolvenKit.CLI.MSTests
                 throw new ConfigurationErrorsException($"'{s_gameDirectorySetting}' is not a valid directory");
             }
 
-            // copy oodle dll
+            // Oodle
             var gameBinDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "bin", "x64"));
             var oodleInfo = new FileInfo(Path.Combine(gameBinDir.FullName, "oo2ext_7_win64.dll"));
             if (!oodleInfo.Exists)
             {
-                throw new DecompressionException("Could not find oo2ext_7_win64.dll.");
+                Assert.Fail("Could not find oo2ext_7_win64.dll.");
             }
-
             var ass = AppDomain.CurrentDomain.BaseDirectory;
-            var destFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
-            if (!File.Exists(destFileName))
+            var appOodleFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
+            if (!File.Exists(appOodleFileName))
             {
-                oodleInfo.CopyTo(destFileName);
+                oodleInfo.CopyTo(appOodleFileName);
+            }
+            if (!OodleLoadLib.Load(appOodleFileName))
+            {
+                Assert.Fail("Could not load oo2ext_7_win64.dll.");
             }
 
-            s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value);
+            //protobuf
+            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
             
             s_bm = new ArchiveManager(hashService);
             s_bm.LoadAll(gameBinDir.FullName);
             s_groupedFiles = s_bm.GroupedFiles;
+
+
+            // Init
+            Console.WriteLine("BaseTestClass.BaseTestInitialize()");
+            s_config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value);
+
         }
 
         #endregion Methods

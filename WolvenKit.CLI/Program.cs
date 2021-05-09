@@ -21,6 +21,7 @@ using WolvenKit.CLI;
 using WolvenKit.CLI.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.MeshFile.Materials;
 
@@ -39,6 +40,10 @@ namespace CP77Tools
                            $"{AppDomain.CurrentDomain.BaseDirectory}.");
                 return Task.CompletedTask;
             }
+
+            var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
+            OodleLoadLib.Load(oodlePath);
+
 
             var rootCommand = new RootCommand
             {
