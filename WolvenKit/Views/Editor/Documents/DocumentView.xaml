@@ -392,13 +392,16 @@
                                 <TextBox Padding="5" Text="{Binding Property.Value}" />
                             </DataTemplate>
 
-
+                            <DataTemplate x:Key="EnumTemplate">
+                                <templates:EnumTemplateView RedEnum="{Binding Property}" />
+                            </DataTemplate>
 
                             <templates:EditableVariableDataTemplateSelector
                              x:Key="DataTemplateSelector"
                              CommmonTemplate="{StaticResource CommmonTemplate}"
                              NumericTemplate="{StaticResource NumericTemplate}"
                              RedboolTemplate="{StaticResource RedboolTemplate}"
+                             EnumTemplate="{StaticResource EnumTemplate}"
                              />
                         </Grid.Resources>
 

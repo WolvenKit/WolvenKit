@@ -16,6 +16,7 @@ namespace WolvenKit.Views.Templates
         public DataTemplate CommmonTemplate { get; set; }
         public DataTemplate RedboolTemplate { get; set; }
         public DataTemplate NumericTemplate { get; set; }
+        public DataTemplate EnumTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
             item is not ChunkPropertyViewModel editableVariable
@@ -25,6 +26,7 @@ namespace WolvenKit.Views.Templates
                     IREDBool => RedboolTemplate,
                     IREDString => RedboolTemplate,
                     IREDIntegerType => NumericTemplate,
+                    IEnumAccessor => EnumTemplate,
                     _ => CommmonTemplate
                 };
     }
