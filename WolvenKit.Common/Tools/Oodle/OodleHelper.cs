@@ -156,18 +156,18 @@ namespace WolvenKit.Common.Oodle
         /// <param name="outputBuffer"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static int Decompress(byte[] inputBuffer, byte[] outputBuffer)
+        public static unsafe int Decompress(byte[] inputBuffer, byte[] outputBuffer)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+#pragma warning disable 162
 
                 if (true)
                 {
                     return OodleLoadLib.OodleLZ_Decompress(inputBuffer, outputBuffer);
                 }
 
-#pragma warning disable 162
-                var r = OodleNative.OodleLZ_Decompress(
+                return OodleNative.OodleLZ_Decompress(
                     inputBuffer,
                     inputBuffer.Length,
                     outputBuffer,
@@ -181,15 +181,13 @@ namespace WolvenKit.Common.Oodle
                     0,
                     0,
                     OodleNative.OodleLZ_Decode.Unthreaded);
-                return r;
 #pragma warning restore 162
 
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                var r = OozNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
+                return OozNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer,
                     outputBuffer.Length);
-                return r;
             }
             else
             {
@@ -224,7 +222,9 @@ namespace WolvenKit.Common.Oodle
                     }
 
                     var inputBuffer = new byte[(int)zSize - 8];
-                    stream.Read(inputBuffer);
+                    var inputBufferSpan = new Span<byte>(inputBuffer);
+
+                    stream.Read(inputBufferSpan);
                     var outputBuffer = new byte[size];
 
                     long unpackedSize = OodleHelper.Decompress(inputBuffer, outputBuffer);
@@ -235,7 +235,8 @@ namespace WolvenKit.Common.Oodle
                             $"Unpacked size {unpackedSize} doesn't match real size {size}.");
                     }
 
-                    outStream.Write(outputBuffer);
+                    var outputBufferSpan = new Span<byte>(outputBuffer);
+                    outStream.Write(outputBufferSpan);
 
                     // try
                     // {

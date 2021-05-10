@@ -107,33 +107,28 @@ namespace WolvenKit.RED4.CR2W.Archive
         {
             var zSize = offsetEntry.ZSize;
 
-            if (mf != null)
+            if (mf == null)
             {
-                using var vs = mf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
-                if (!decompress)
-                {
-                    vs.CopyTo(outStream);
-                }
-                else
-                {
-                    var size = offsetEntry.Size;
-                    vs.DecompressAndCopySegment(outStream, zSize, size);
-                }
+                using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite,
+                    FileShare.ReadWrite);
+                mf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite,
+                    HandleInheritability.None, false);
+
+            }
+
+            using var vs = mf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
+            if (!decompress)
+            {
+                vs.CopyTo(outStream);
             }
             else
             {
-                using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
-                using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
-                if (!decompress)
-                {
-                    vs.CopyTo(outStream);
-                }
-                else
-                {
-                    var size = offsetEntry.Size;
-                    vs.DecompressAndCopySegment(outStream, zSize, size);
-                }
+                var size = offsetEntry.Size;
+                vs.DecompressAndCopySegment(outStream, zSize, size);
+
+                // no streams
+
+
             }
         }
 

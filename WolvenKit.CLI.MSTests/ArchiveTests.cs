@@ -173,9 +173,10 @@ namespace CP77.MSTests
         public void Test_Deserialization(Serialization method)
         {
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            ArchiveManager x;
+
             switch (method)
             {
-
                 case Serialization.NewtonsoftJson:
                 {
                     var chachePath = Path.Combine(resultDir, "archive_cache.json");
@@ -186,28 +187,26 @@ namespace CP77.MSTests
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                         TypeNameHandling = TypeNameHandling.Auto
                     };
-                    var x = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
+                    x = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
                     break;
                 }
-                case Serialization.Zeroformatting:
-                {
-                    //var chachePath = Path.Combine(resultDir, "archive_cache.zero");
-                    //using var fs = new FileStream(chachePath, FileMode.Open);
-                    //var x = ZeroFormatterSerializer.Deserialize<ArchiveManager>(fs);
-                    break;
-                }
-                case Serialization.Json:
-                    break;
                 case Serialization.Protobuf:
                 {
                     var chachePath = Path.Combine(resultDir, "archive_cache.bin");
                     using var file = File.OpenRead(chachePath);
-                    var x = Serializer.Deserialize<ArchiveManager>(file);
+                    x = Serializer.Deserialize<ArchiveManager>(file);
                     break;
                 }
+                case Serialization.Zeroformatting:
+                case Serialization.Json:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);
             }
+
+            // some lazy checks
+            Assert.AreEqual(x.Archives.Count(), s_bm.Archives.Count());
+            Assert.AreEqual(x.FileList.Count(), s_bm.FileList.Count());
+            Assert.AreEqual(x.GroupedFiles.Count(), s_bm.GroupedFiles.Count());
         }
 
         #endregion Methods

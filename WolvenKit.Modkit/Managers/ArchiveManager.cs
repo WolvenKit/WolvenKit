@@ -54,11 +54,12 @@ namespace WolvenKit.RED4.CR2W.Archive
         {
             foreach (var archive in Archives.Values)
             {
-                foreach (var file in archive.Files.Values)
+                var fileEntries = (archive as Archive).Index.FileEntries.Values;
+                foreach (var file in fileEntries)
                 {
                     file.Archive = archive;
+                    archive.Files.Add(file.Key, file);
                 }
-
             }
 
             RebuildRootNode();

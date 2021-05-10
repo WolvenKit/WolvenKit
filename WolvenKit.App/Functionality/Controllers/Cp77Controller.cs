@@ -10,9 +10,11 @@ using CP77.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using ProtoBuf;
+using WolvenKit.Bundles;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -56,7 +58,12 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task HandleStartup()
         {
-            UpdateService();
+            var dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+            var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
+            if (!OodleLoadLib.Load(destFileName))
+            {
+                throw new MissingCompressionException($"oo2ext_7_win64.dll not found in {dir}");
+            }
 
             var todo = new List<Func<IGameArchiveManager>>()
             {
@@ -247,16 +254,6 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Error(ex + "\n");
             }
         }
-
-        private static void UpdateService()
-        {
-            if (ServiceLocator.Default.IsTypeRegistered<IWolvenkitFileService>())
-            {
-                ServiceLocator.Default.RemoveType<IWolvenkitFileService>();
-            }
-            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
-        }
-
 
         public void AddToMod(IGameFile file)
         {
