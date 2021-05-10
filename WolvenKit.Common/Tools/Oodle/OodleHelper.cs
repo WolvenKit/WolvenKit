@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools.Oodle;
 
@@ -258,6 +259,72 @@ namespace WolvenKit.Common.Oodle
                 }
             }
         }
+
+        /// <summary>
+        /// Decompresses and copies a segment of zsize bytes from a stream to another stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="outStream"></param>
+        /// <param name="zSize"></param>
+        /// <param name="size"></param>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="DecompressionException"></exception>
+        public static async Task DecompressAndCopySegmentAsync(this Stream stream, Stream outStream, uint zSize, uint size)
+        {
+            if (zSize == size)
+            {
+                stream.CopyToWithLength(outStream, (int)zSize);
+            }
+            else
+            {
+                var oodleCompression = stream.ReadStruct<uint>();
+                if (oodleCompression == KARK)
+                {
+                    var headerSize = stream.ReadStruct<uint>();
+                    if (headerSize != size)
+                    {
+                        throw new Exception($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
+                    }
+
+                    var inputBuffer = new byte[(int)zSize - 8];
+                    //var inputBufferSpan = new Span<byte>(inputBuffer);
+
+                    stream.Read(inputBuffer);
+                    var outputBuffer = new byte[size];
+
+                    long unpackedSize =  await Task.Run(() => OodleHelper.Decompress(inputBuffer, outputBuffer));
+
+                    if (unpackedSize != size)
+                    {
+                        throw new DecompressionException(
+                            $"Unpacked size {unpackedSize} doesn't match real size {size}.");
+                    }
+
+                    //var outputBufferSpan = new Span<byte>(outputBuffer);
+                    outStream.Write(outputBuffer);
+
+                    // try
+                    // {
+                    //
+                    // }
+                    // catch (DecompressionException)
+                    // {
+                    //     //logger.LogString(e.Message, Logtype.Error);
+                    //     //logger.LogString(
+                    //     //    $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
+                    //     //    Logtype.Error);
+                    //     stream.CopyTo(outStream);
+                    // }
+                }
+                else
+                {
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.CopyToWithLength(outStream, (int)zSize);
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Gets the max buffer size needed for oodle compression

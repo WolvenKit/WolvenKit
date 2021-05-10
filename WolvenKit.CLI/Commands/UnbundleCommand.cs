@@ -1,5 +1,9 @@
+#define IS_ASYNC
+//#undef IS_ASYNC
+
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,7 +38,12 @@ namespace CP77Tools.Commands
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+
+#if IS_ASYNC
+            Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, pattern, regex, hash, DEBUG_decompress)).Wait();
+#else
             consoleFunctions.UnbundleTask(path, outpath, pattern, regex, hash, DEBUG_decompress);
+#endif
         }
 
         #endregion Constructors

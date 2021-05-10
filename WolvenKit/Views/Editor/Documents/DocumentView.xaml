@@ -461,10 +461,10 @@
 
             <syncfusion:NavigationItem
              x:Name="NavigationItemImports"
-             Command="{Binding ViewImportsCommand}"
-             Header="{Binding}"
+             Header="Imports"
              IsExpanded="False"
              IsSelected="False"
+             MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_1"
              ToolTip="Imports"
              >
                 <syncfusion:NavigationItem.Icon>
