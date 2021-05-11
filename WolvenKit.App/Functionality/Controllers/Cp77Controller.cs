@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
 using Catel.IoC;
 using CP77.CR2W;
@@ -81,6 +82,8 @@ namespace WolvenKit.Functionality.Controllers
 
         private ArchiveManager LoadArchiveManager()
         {
+            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+            assetBrowserViewModel.LoadVisibility = Visibility.Visible;
 
             if (!File.Exists(_settingsManager.CP77ExecutablePath))
             {
@@ -124,7 +127,7 @@ namespace WolvenKit.Functionality.Controllers
             //start LOAD INDICATOR
             // StaticReferences.GlobalStatusBar.LoadingString = "loading";
             // init asset browser here after the manager has loaded
-            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+            //var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
             assetBrowserViewModel.ReInit(false);
 
             return ArchiveManager;

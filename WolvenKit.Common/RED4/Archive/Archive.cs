@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
@@ -90,12 +91,53 @@ namespace WolvenKit.RED4.CR2W.Archive
             // decompress main file
             CopyFileSegmentToStream(stream, this.Index.FileSegments[startIndex], true, mmf);
 
-            // get buffers, optionally decompressing them
+            //var bufferSegments = new List<FileSegment>();
             for (var j = startIndex + 1; j < nextIndex; j++)
             {
                 var offsetEntry = this.Index.FileSegments[j];
                 CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers, mmf);
             }
+            //for (var j = startIndex + 1; j < nextIndex; j++)
+            //{
+            //    bufferSegments.Add(Index.FileSegments[j]);
+            //}
+
+            //if (bufferSegments.Count < 1)
+            //{
+            //    return;
+            //}
+
+            //var cOffsets = new List<ulong> {bufferSegments[0].Offset};
+            //var cSizes = new List<ulong>();
+
+            //var lastOffset = bufferSegments[0].Offset;
+            //ulong currentSize = 0;
+            //foreach (var segment in bufferSegments)
+            //{
+            //    if (lastOffset == segment.Offset)
+            //    {
+            //        lastOffset += segment.ZSize;
+            //    }
+            //    else
+            //    {
+            //        cSizes.Add(currentSize);
+            //        cOffsets.Add(segment.Offset);
+            //        lastOffset = segment.Offset + segment.ZSize;
+            //        currentSize = 0;
+            //    }
+
+            //    currentSize += segment.ZSize;
+            //}
+            //cSizes.Add(currentSize);
+
+            //for (var i = 0; i < cOffsets.Count; i++)
+            //{
+            //    var curOffset = cOffsets[i];
+            //    var curSize = cSizes[i];
+
+            //    using var vs = mmf.CreateViewStream((long)curOffset, (long)curSize, MemoryMappedFileAccess.Read);
+            //    vs.CopyTo(stream);
+            //}
         }
 
         /// <summary>
@@ -118,11 +160,47 @@ namespace WolvenKit.RED4.CR2W.Archive
             // decompress main file
             await CopyFileSegmentToStreamAsync(stream, this.Index.FileSegments[startIndex], true, mmf);
 
-            // get buffers, optionally decompressing them
+            var bufferSegments = new List<FileSegment>();
             for (var j = startIndex + 1; j < nextIndex; j++)
             {
-                var offsetEntry = this.Index.FileSegments[j];
-                await CopyFileSegmentToStreamAsync(stream, offsetEntry, decompressBuffers, mmf);
+                bufferSegments.Add(Index.FileSegments[j]);
+            }
+
+            if (bufferSegments.Count < 1)
+            {
+                return;
+            }
+
+            var cOffsets = new List<ulong> { bufferSegments[0].Offset };
+            var cSizes = new List<ulong>();
+
+            var lastOffset = bufferSegments[0].Offset;
+            ulong currentSize = 0;
+            foreach (var segment in bufferSegments)
+            {
+                if (lastOffset == segment.Offset)
+                {
+                    lastOffset += segment.ZSize;
+                }
+                else
+                {
+                    cSizes.Add(currentSize);
+                    cOffsets.Add(segment.Offset);
+                    lastOffset = segment.Offset + segment.ZSize;
+                    currentSize = 0;
+                }
+
+                currentSize += segment.ZSize;
+            }
+            cSizes.Add(currentSize);
+
+            for (var i = 0; i < cOffsets.Count; i++)
+            {
+                var curOffset = cOffsets[i];
+                var curSize = cSizes[i];
+
+                await using var vs = mmf.CreateViewStream((long)curOffset, (long)curSize, MemoryMappedFileAccess.Read);
+                await vs.CopyToAsync(stream);
             }
         }
 

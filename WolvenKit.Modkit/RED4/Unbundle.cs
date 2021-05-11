@@ -66,6 +66,23 @@ namespace CP77.CR2W
             var progress = 0;
             _progressService.Report(0);
 
+            //foreach (var info in finalMatchesList)
+            //{
+            //    var extracted = ExtractSingle(ar, info.NameHash64, outDir, decompressBuffers, mmf);
+
+            //    if (extracted != 0)
+            //    {
+            //        extractedList.Add(info.FileName);
+            //    }
+            //    else
+            //    {
+            //        failedList.Add(info.FileName);
+            //    }
+
+            //    Interlocked.Increment(ref progress);
+            //    _progressService.Report(progress / (float)finalMatchesList.Count);
+            //}
+
             Parallel.ForEach(finalMatchesList, info =>
             {
                 var extracted = ExtractSingle(ar, info.NameHash64, outDir, decompressBuffers, mmf);

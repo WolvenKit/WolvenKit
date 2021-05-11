@@ -277,23 +277,32 @@ namespace WolvenKit.ViewModels.Wizards
                     {
                         if (programName.ToString().Contains("Witcher 3 Mod Tools"))
                         {
-                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
-                                SearchOption.AllDirectories).First();
+                            if (File.Exists(installLocation.ToString()))
+                            {
+                                wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
+                                    SearchOption.AllDirectories).First();
+                            }
                         }
 
                         if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
                             programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
-                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
-                                SearchOption.AllDirectories).First();
+                            if (File.Exists(installLocation.ToString()))
+                            {
+                                w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                    SearchOption.AllDirectories).First();
+                            }
                         }
 
                         if (programName.ToString().Contains("Cyberpunk 2077"))
                         {
                             if (Directory.Exists(installLocation.ToString()))
                             {
-                                cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
-                                    SearchOption.AllDirectories).First();
+                                if (File.Exists(installLocation.ToString()))
+                                {
+                                    cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
+                                        SearchOption.AllDirectories).First();
+                                }
                             }
                         }
                     }

@@ -86,8 +86,8 @@ namespace CP77Tools
                                 services.AddSingleton<IHashService, HashService>();
                                 services.AddScoped<IWolvenkitFileService, Cp77FileService>();
 
-                                //services.AddScoped<IProgress<double>, MockProgressService>();
-                                services.AddScoped<IProgress<double>, ProgressBar>();
+                                services.AddScoped<IProgress<double>, MockProgressService>();
+                                //services.AddScoped<IProgress<double>, ProgressBar>();
 
                                 services.AddScoped<MaterialRepository>();
                                 services.AddScoped<ModTools>();

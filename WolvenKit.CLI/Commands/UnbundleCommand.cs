@@ -1,5 +1,5 @@
 #define IS_ASYNC
-//#undef IS_ASYNC
+#undef IS_ASYNC
 
 using System.CommandLine;
 using System.CommandLine.Invocation;

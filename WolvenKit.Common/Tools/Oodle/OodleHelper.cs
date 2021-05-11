@@ -150,6 +150,33 @@ namespace WolvenKit.Common.Oodle
             }
         }
 
+        private static long Decompress(Span<byte> inputBufferSpan, Span<byte> outputBufferSpan)
+        {
+            unsafe
+            {
+                fixed (byte* bpi = &inputBufferSpan.GetPinnableReference())
+                fixed (byte* bpo = &outputBufferSpan.GetPinnableReference())
+                {
+                    IntPtr pInputBufferSpan = (IntPtr)bpi;
+                    IntPtr pOutputBufferSpan = (IntPtr)bpo;
+
+                    var r = OodleLoadLib.OodleLZ_Decompress(pInputBufferSpan,
+                        pOutputBufferSpan,
+                        inputBufferSpan.Length,
+                        outputBufferSpan.Length
+                    );
+
+                    return r;
+
+                }
+            }
+            
+
+
+            
+        }
+
+
         /// <summary>
         /// Wrapper around Oodle Kraken Decompress. Decompresses an inputBuffer to an outputBuffer of correct size
         /// </summary>
@@ -165,7 +192,23 @@ namespace WolvenKit.Common.Oodle
 
                 if (true)
                 {
-                    return OodleLoadLib.OodleLZ_Decompress(inputBuffer, outputBuffer);
+                    var inputHandle = GCHandle.Alloc(inputBuffer, GCHandleType.Pinned);
+                    var inputAddress = inputHandle.AddrOfPinnedObject();
+                    var outputHandle = GCHandle.Alloc(outputBuffer, GCHandleType.Pinned);
+                    var outputAddress = outputHandle.AddrOfPinnedObject();
+
+
+
+                    var r= OodleLoadLib.OodleLZ_Decompress(inputAddress,
+                        outputAddress,
+                        inputBuffer.Length,
+                        outputBuffer.Length
+                        );
+
+                    inputHandle.Free();
+                    outputHandle.Free();
+
+                    return r;
                 }
 
                 return OodleNative.OodleLZ_Decompress(
@@ -219,38 +262,27 @@ namespace WolvenKit.Common.Oodle
                     var headerSize = stream.ReadStruct<uint>();
                     if (headerSize != size)
                     {
-                        throw new Exception($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
+                        throw new DecompressionException($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
                     }
 
-                    var inputBuffer = new byte[(int)zSize - 8];
-                    var inputBufferSpan = new Span<byte>(inputBuffer);
+                    const int SPAN_LEN = 5333;//32768;
+                    var length = (int)zSize - 8;
+                    
+                    var inputBufferSpan = length <= SPAN_LEN
+                        ? stackalloc byte[length]
+                        : new byte[length];
+                    var outputBufferSpan = size <= SPAN_LEN ? stackalloc byte[(int)size] : new byte[size];
 
                     stream.Read(inputBufferSpan);
-                    var outputBuffer = new byte[size];
 
-                    long unpackedSize = OodleHelper.Decompress(inputBuffer, outputBuffer);
-
+                    long unpackedSize = OodleHelper.Decompress(inputBufferSpan, outputBufferSpan);
                     if (unpackedSize != size)
                     {
                         throw new DecompressionException(
                             $"Unpacked size {unpackedSize} doesn't match real size {size}.");
                     }
 
-                    var outputBufferSpan = new Span<byte>(outputBuffer);
                     outStream.Write(outputBufferSpan);
-
-                    // try
-                    // {
-                    //
-                    // }
-                    // catch (DecompressionException)
-                    // {
-                    //     //logger.LogString(e.Message, Logtype.Error);
-                    //     //logger.LogString(
-                    //     //    $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
-                    //     //    Logtype.Error);
-                    //     stream.CopyTo(outStream);
-                    // }
                 }
                 else
                 {
@@ -287,7 +319,6 @@ namespace WolvenKit.Common.Oodle
                     }
 
                     var inputBuffer = new byte[(int)zSize - 8];
-                    //var inputBufferSpan = new Span<byte>(inputBuffer);
 
                     stream.Read(inputBuffer);
                     var outputBuffer = new byte[size];
@@ -300,21 +331,7 @@ namespace WolvenKit.Common.Oodle
                             $"Unpacked size {unpackedSize} doesn't match real size {size}.");
                     }
 
-                    //var outputBufferSpan = new Span<byte>(outputBuffer);
                     outStream.Write(outputBuffer);
-
-                    // try
-                    // {
-                    //
-                    // }
-                    // catch (DecompressionException)
-                    // {
-                    //     //logger.LogString(e.Message, Logtype.Error);
-                    //     //logger.LogString(
-                    //     //    $"Unable to decompress file {hash.ToString()}. Exporting uncompressed file",
-                    //     //    Logtype.Error);
-                    //     stream.CopyTo(outStream);
-                    // }
                 }
                 else
                 {

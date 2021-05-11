@@ -266,7 +266,7 @@
 
 
 
-        <syncfusion:SfNavigationDrawer x:Name="navigationDrawer" DisplayMode="Expanded">
+        <syncfusion:SfNavigationDrawer x:Name="navigationDrawer" DisplayMode="Compact">
             <syncfusion:SfNavigationDrawer.ContentView>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -283,6 +283,7 @@
                             <Grid x:Name="CHUNKSVISIBILITY">
                                 <syncfusion:SfTreeGrid
                                  x:Name="TreeView"
+                                 EditTrigger="OnTap"
                                  AllowEditing="False"
                                  AllowFiltering="True"
                                  AllowResizingColumns="False"
@@ -396,12 +397,17 @@
                                 <templates:EnumTemplateView RedEnum="{Binding Property}" />
                             </DataTemplate>
 
+                            <DataTemplate x:Key="HandleTemplate">
+                                <templates:HandleTemplateView RedChunkPtr="{Binding Property}" />
+                            </DataTemplate>
+
                             <templates:EditableVariableDataTemplateSelector
                              x:Key="DataTemplateSelector"
                              CommmonTemplate="{StaticResource CommmonTemplate}"
                              NumericTemplate="{StaticResource NumericTemplate}"
                              RedboolTemplate="{StaticResource RedboolTemplate}"
                              EnumTemplate="{StaticResource EnumTemplate}"
+                             HandleTemplateView="{StaticResource HandleTemplate}"
                              />
                         </Grid.Resources>
 
@@ -413,8 +419,8 @@
                          ChildPropertyName="Children"
                          ColumnSizer="Star"
                          ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
+                         Style="{DynamicResource SyncfusionSfTreeGridStyle}"
                          >
-
                             <syncfusion:SfTreeGrid.Columns>
                                 <syncfusion:TreeGridTextColumn
                                  AllowEditing="False"

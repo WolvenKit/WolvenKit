@@ -76,8 +76,13 @@ namespace WolvenKit.Functionality.Commands
         {
             var location = parameter as string;
             // switch from one active project to another
+            
             if (_projectManager.ActiveProject != null && !string.IsNullOrEmpty(location))
             {
+                if (_projectManager.ActiveProject.Location == location)
+                {
+                    return;
+                }
                 var a = _projectManager.ActiveProject;
                 Debugger.Break();
             }

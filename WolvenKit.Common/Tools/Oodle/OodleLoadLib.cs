@@ -26,7 +26,7 @@ namespace WolvenKit.Common.Tools.Oodle
     public static class OodleLoadLib
     {
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate int DecompressDelegate(byte[] buffer, long bufferSize, byte[] outputBuffer, long outputBufferSize,
+        private delegate int DecompressDelegate(IntPtr buffer, long bufferSize, IntPtr outputBuffer, long outputBufferSize,
             OodleNative.OodleLZ_FuzzSafe fuzzSafetyFlag,
             OodleNative.OodleLZ_CheckCRC crcCheckFlag,
             OodleNative.OodleLZ_Verbosity logVerbosityFlag,
@@ -100,13 +100,16 @@ namespace WolvenKit.Common.Tools.Oodle
 
         public static bool Free() => NativeMethods.FreeLibrary(s_pDll);
 
-
-        public static int OodleLZ_Decompress(byte[] inputBuffer, byte[] outputBuffer) =>
+        public static int OodleLZ_Decompress(
+            IntPtr inputBuffer,
+            IntPtr outputBuffer,
+            long inputBufferSize,
+            long outputBufferSize) =>
             s_decompress(
                 inputBuffer,
-                inputBuffer.Length,
+                inputBufferSize,
                 outputBuffer,
-                outputBuffer.Length,
+                outputBufferSize,
                 OodleNative.OodleLZ_FuzzSafe.No,
                 OodleNative.OodleLZ_CheckCRC.No,
                 OodleNative.OodleLZ_Verbosity.None,
@@ -136,5 +139,7 @@ namespace WolvenKit.Common.Tools.Oodle
                 IntPtr.Zero,
                 0
             );
+
+        
     }
 }

@@ -100,6 +100,7 @@ namespace WolvenKit.Functionality.Services
         /// <summary>
         /// Gets/Sets the author's profile image brush.
         /// </summary>
+        [JsonIgnore]
         public System.Windows.Media.ImageBrush ProfileImageBrush
         {
             get => _profileImageBrush;

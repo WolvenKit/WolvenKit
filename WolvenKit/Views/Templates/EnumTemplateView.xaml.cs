@@ -1,23 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ReactiveUI;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Reflection;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WolvenKit.Views.Templates
@@ -64,8 +51,22 @@ namespace WolvenKit.Views.Templates
 
             view.BindingCollection.Clear();
 
-            dynamic en = view.RedEnum;
-            Type enumtype = en.Value.GetType();
+            //dynamic en = view.RedEnum;
+            //Type enumtype = en.Value.GetType();
+            Type enumtype = null;
+            if (AssemblyDictionary.EnumExists(view.RedEnum.REDType))
+            {
+                enumtype = AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
+            }
+            else if (RED3.CR2W.Reflection.AssemblyDictionary.EnumExists(view.RedEnum.REDType))
+            {
+                enumtype = RED3.CR2W.Reflection.AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
+            }
+            if (enumtype == null)
+            {
+                return;
+            }
+            
             var vals = Enum.GetNames(enumtype);
 
             foreach (var s in vals)
@@ -85,11 +86,13 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            if (cvar.REDValue != SelectedItem)
+            if (cvar.REDValue == SelectedItem)
             {
-                cvar.SetValue(new List<string>() { SelectedItem });
-                cvar.IsSerialized = true;
+                return;
             }
+
+            cvar.SetValue(new List<string>() { SelectedItem });
+            cvar.IsSerialized = true;
         }
     }
 }
