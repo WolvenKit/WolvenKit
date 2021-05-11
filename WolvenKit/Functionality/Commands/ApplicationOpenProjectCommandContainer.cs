@@ -132,7 +132,7 @@ namespace WolvenKit.Functionality.Commands
                 }
 
                 // if a valid location has been set
-                using (_pleaseWaitService.PushInScope())
+                //using (_pleaseWaitService.PushInScope())
                 {
                     StaticReferences.MainView.OnLoadLayoutAsync();
                     await _projectManager.LoadAsync(location);
