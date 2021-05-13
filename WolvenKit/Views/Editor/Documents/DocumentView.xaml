@@ -414,8 +414,7 @@
                             <templates:EditableVariableDataTemplateSelector
                              x:Key="DataTemplateSelector"
                              CommmonTemplate="{StaticResource CommmonTemplate}"
-                             EnumTemplate="{StaticResource EnumTemplate}"
-                             HandleTemplateView="{StaticResource HandleTemplate}"
+                      
                              NumericTemplate="{StaticResource NumericTemplate}"
                              RedboolTemplate="{StaticResource RedboolTemplate}"
                              EnumTemplate="{StaticResource EnumTemplate}"
