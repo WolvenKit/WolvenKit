@@ -16,6 +16,7 @@ namespace WolvenKit.Views
     using Unosquare.FFME.ClosedCaptions;
     using Unosquare.FFME.Common;
     using ViewModels;
+    using WolvenKit.Functionality.WKitGlobal.Helpers;
     using ImageFormat = System.Drawing.Imaging.ImageFormat;
 
     /// <summary>
@@ -508,7 +509,7 @@ namespace WolvenKit.Views
                         var bmp = Media.CaptureBitmapAsync().GetAwaiter().GetResult();
 
                         // prevent firther processing if we did not get a bitmap.
-                        bmp?.Save(App.GetCaptureFilePath("Screenshot", "png"), ImageFormat.Png);
+                        bmp?.Save(AppHelper.VideoPlayer_GetCaptureFilePath("Screenshot", "png"), ImageFormat.Png);
                         ViewModel.NotificationMessage = "Captured screenshot.";
                     }
                     catch (Exception ex)
@@ -541,7 +542,7 @@ namespace WolvenKit.Views
                 {
                     if (StreamRecorder == null && Media.IsOpen)
                     {
-                        StreamRecorder = new TransportStreamRecorder(App.GetCaptureFilePath("Capture", "ts"), Media);
+                        StreamRecorder = new TransportStreamRecorder(AppHelper.VideoPlayer_GetCaptureFilePath("Capture", "ts"), Media);
                         ViewModel.NotificationMessage = "Stream recording initiated.";
                     }
                     else
