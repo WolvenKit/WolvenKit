@@ -18,6 +18,7 @@ namespace WolvenKit.Views.Templates
         public DataTemplate NumericTemplate { get; set; }
         public DataTemplate EnumTemplate { get; set; }
         public DataTemplate HandleTemplateView { get; set; }
+        public DataTemplate ArrayTemplateView { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
             item is not ChunkPropertyViewModel editableVariable
@@ -29,6 +30,7 @@ namespace WolvenKit.Views.Templates
                     IREDIntegerType => NumericTemplate,
                     IEnumAccessor => EnumTemplate,
                     IChunkPtrAccessor => HandleTemplateView,
+                    IArrayAccessor => ArrayTemplateView,
                     _ => CommmonTemplate
                 };
     }

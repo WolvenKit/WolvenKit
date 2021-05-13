@@ -1,9 +1,11 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.RED4.MeshFile;
@@ -20,11 +22,33 @@ namespace WolvenKit.Views.Editor
     {
         #region Constructors
 
-        private ProjectExplorerViewModel _viewModel => ViewModel as ProjectExplorerViewModel;
-
         public ProjectExplorerView()
         {
             InitializeComponent();
+
+        }
+
+        protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (ViewModel is not ProjectExplorerViewModel viewModel)
+            {
+                return;
+            }
+
+            var name = e.PropertyName;
+            switch (name)
+            {
+                case nameof(viewModel.IsTreeBeingEdited):
+                    if (viewModel.IsTreeBeingEdited)
+                    {
+                        TreeGrid.View.BeginInit(TreeViewRefreshMode.DeferRefresh);
+                    }
+                    else
+                    {
+                        TreeGrid.View.EndInit();
+                    }
+                    break;
+            }
         }
 
         #endregion Constructors
@@ -39,118 +63,118 @@ namespace WolvenKit.Views.Editor
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (this.TreeGrid.SelectedItem != null)
+            if (this.TreeGrid.SelectedItem == null)
             {
-                var z = TreeGrid.SelectedItem as FileModel;
-                if (z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
-                {
-
-                    var q = (new MESH()).ExportMeshWithoutRigPreviewer(z.FullName);
-                    if (q.Length > 0)
-                    {
-                        var meshexporter = new SimpleMeshExporterDialog(TreeGrid.SelectedItem);
-                        meshexporter.LoadModel(q);
-                        meshexporter.Show();
-                    }
-                }
-
-
-
+                return;
             }
 
+            var z = TreeGrid.SelectedItem as FileModel;
+            if (!z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
 
+            var q = (new MESH()).ExportMeshWithoutRigPreviewer(z.FullName);
+            if (q.Length <= 0)
+            {
+                return;
+            }
+
+            var meshexporter = new SimpleMeshExporterDialog(TreeGrid.SelectedItem);
+            meshexporter.LoadModel(q);
+            meshexporter.Show();
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            if (TreeGrid.SelectedItem != null)
+            if (TreeGrid.SelectedItem == null)
             {
-                var z = TreeGrid.SelectedItem as FileModel;
-                if (z.FullName.Contains(".morphtarget", System.StringComparison.OrdinalIgnoreCase))
-                {
-                    // EXPORT Morphtarget
-                    string outp;
-
-                    using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
-                    {
-                        dialog.IsFolderPicker = true;
-                        dialog.Multiselect = false;
-                        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                        {
-                            outp = dialog.FileName;
-
-                            var TargetStream = new FileStream(z.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
-                            var xa = new FileInfo(outp + "\\" + z.Name);
-                            Trace.WriteLine(xa);
-                            (new TARGET()).ExportTargets(TargetStream, xa);
-                        }
-                    }
-
-
-
-
-                }
+                return;
             }
+
+            var z = TreeGrid.SelectedItem as FileModel;
+            if (!z.FullName.Contains(".morphtarget", System.StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            // EXPORT Morphtarget
+
+            using var dialog = new CommonOpenFileDialog {IsFolderPicker = true, Multiselect = false};
+            if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
+            {
+                return;
+            }
+
+            var outp = dialog.FileName;
+
+            var targetStream = new FileStream(z.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            var xa = new FileInfo(outp + "\\" + z.Name);
+            Trace.WriteLine(xa);
+            (new TARGET()).ExportTargets(targetStream, xa);
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            if (TreeGrid.SelectedItem != null)
+            if (TreeGrid.SelectedItem == null)
             {
-                var z = TreeGrid.SelectedItem as FileModel;
-                if (z.FullName.Contains(".wem", System.StringComparison.OrdinalIgnoreCase))
-                {
-                    // EXPORT WEM
-                    string outp;
-                    using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
-                    {
-                        dialog.IsFolderPicker = true;
-                        dialog.Multiselect = false;
-                        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                        {
-                            outp = dialog.FileName;
-
-
-                            //Clean directory
-
-
-                            var outf = Path.Combine(outp, Path.GetFileNameWithoutExtension(z.FullName) + ".wav");
-                            var arg = z.FullName + " -o " + outf;
-                            var si = new ProcessStartInfo(
-                                    "vgmstream\\test.exe",
-                                    arg
-                                )
-                            {
-                                CreateNoWindow = true,
-                                WindowStyle = ProcessWindowStyle.Hidden,
-                                UseShellExecute = false
-                            };
-                            var proc = Process.Start(si);
-                            proc.WaitForExit();
-
-
-
-                        }
-                    }
-
-
-                }
+                return;
             }
 
+            var z = TreeGrid.SelectedItem as FileModel;
+            if (!z.FullName.Contains(".wem", System.StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
 
+            // EXPORT WEM
+            string outp;
+            using var dialog = new CommonOpenFileDialog {IsFolderPicker = true, Multiselect = false};
+            if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
+            {
+                return;
+            }
+
+            outp = dialog.FileName;
+
+
+            //Clean directory
+            var outf = Path.Combine(outp, Path.GetFileNameWithoutExtension(z.FullName) + ".wav");
+            var arg = z.FullName + " -o " + outf;
+            var si = new ProcessStartInfo(
+                "vgmstream\\test.exe",
+                arg
+            )
+            {
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false
+            };
+            var proc = Process.Start(si);
+            proc.WaitForExit();
         }
 
         private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
         {
-            var model = _viewModel.SelectedItem;
+            if (ViewModel is not ProjectExplorerViewModel viewModel)
+            {
+                return;
+            }
+
+            var model = viewModel.SelectedItem;
             var node = TreeGrid.View.Nodes.GetNode(model);
             TreeGrid.ExpandAllNodes(node);
         }
 
         private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
         {
-            var model = _viewModel.SelectedItem;
+            if (ViewModel is not ProjectExplorerViewModel viewModel)
+            {
+                return;
+            }
+
+            var model = viewModel.SelectedItem;
             var node = TreeGrid.View.Nodes.GetNode(model);
             TreeGrid.CollapseAllNodes(node);
         }

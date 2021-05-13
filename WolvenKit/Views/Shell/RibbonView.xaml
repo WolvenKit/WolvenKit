@@ -70,8 +70,7 @@
 
                 <!--  Project  -->
                 <fluent:RibbonGroupBox Header="Project">
-                    <fluent:Button
-                     Command="{catel:CommandManagerBinding Application.ShowCodeEditor}"
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.ShowCodeEditor}"
                      Header="Code Editor"
                      Size="Middle"
                      >
@@ -86,7 +85,7 @@
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="GoToFile"
+                             Kind="FolderOpened"
                              />
                         </fluent:Button.LargeIcon>
 
@@ -96,7 +95,7 @@
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="GoToFile"
+                             Kind="FolderOpened"
                              />
                         </fluent:Button.Icon>
                     </fluent:Button>
@@ -107,7 +106,7 @@
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="NewFile"
+                             Kind="NewFolder"
                              />
                         </fluent:Button.LargeIcon>
                         <fluent:Button.Icon>
@@ -116,7 +115,7 @@
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="NewFile"
+                             Kind="NewFolder"
                              />
                         </fluent:Button.Icon>
                     </fluent:Button>
@@ -125,6 +124,26 @@
 
                 <!--  File  -->
                 <fluent:RibbonGroupBox Header="File">
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.NewFile}" Header="New File">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="NewFile"
+                            />
+                        </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="NewFile"
+                            />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.SaveFile}" Header="Save File">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons

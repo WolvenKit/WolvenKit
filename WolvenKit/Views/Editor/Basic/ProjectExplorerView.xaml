@@ -51,6 +51,7 @@
          ChildPropertyName="ParentHash"
          ColumnSizer="Star"
          ExpandStateMappingName="IsExpanded"
+         LiveNodeUpdateMode="AllowDataShaping"
          ItemsSource="{Binding BindGrid1}"
          ParentPropertyName="Hash"
          RowHeight="17"

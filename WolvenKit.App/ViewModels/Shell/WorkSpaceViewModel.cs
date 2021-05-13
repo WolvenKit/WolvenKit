@@ -475,6 +475,9 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteNewFile()
         {
+
+
+
             //TODO
         }
 

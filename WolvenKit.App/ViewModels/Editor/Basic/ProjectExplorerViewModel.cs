@@ -111,17 +111,17 @@ namespace WolvenKit.ViewModels.Editor
                 .Subscribe(OnNext);
         }
 
+
+        public bool IsTreeBeingEdited { get; set; }
         private void OnNext(IChangeSet<FileModel, ulong> obj)
         {
+            IsTreeBeingEdited = true;
             BindGrid1.Clear();
-
             foreach (var fileModel in BindGrid)
             {
                 BindGrid1.Add(fileModel);
             }
-
-
-
+            IsTreeBeingEdited = false;
         }
 
         /// <summary>

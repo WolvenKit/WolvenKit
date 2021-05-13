@@ -70,18 +70,17 @@ namespace WolvenKit.Views.Templates
 
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (RedChunkPtr is not IChunkPtrAccessor cvar)
+            if (SelectedItem == null)
+            {
+                return;
+            }
+            if (RedChunkPtr.Reference == SelectedItem)
             {
                 return;
             }
 
-            if (cvar.Reference == SelectedItem)
-            {
-                return;
-            }
-
-            cvar.SetValue(SelectedItem);
-            cvar.IsSerialized = true;
+            RedChunkPtr.SetValue(SelectedItem);
+            RedChunkPtr.IsSerialized = true;
         }
     }
 }
