@@ -41,14 +41,7 @@
                     <local:ClosedCaptionsChannelConverter x:Key="ClosedCaptionsChannelConverter" />
                 </ResourceDictionary>
 
-                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfDataGrid/SfDataGrid.xaml" />
 
-                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeGrid/SfTreeGrid.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeNavigator/SfTreeNavigator.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfNavigationDrawer/SfNavigationDrawer.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/HierarchyNavigator/HierarchyNavigator.xaml" />
-
-                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/EditControl/EditControl.xaml" />
 
                 <!--  Resource Dictionaries  -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
@@ -62,6 +55,16 @@
                 <!--  Theme setting  -->
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
+
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfDataGrid/SfDataGrid.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeGrid/SfTreeGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeNavigator/SfTreeNavigator.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfNavigationDrawer/SfNavigationDrawer.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/HierarchyNavigator/HierarchyNavigator.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/EditControl/EditControl.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
 

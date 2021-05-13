@@ -261,7 +261,11 @@
 
 
 
-        <syncfusion:SfNavigationDrawer x:Name="navigationDrawer" DisplayMode="Compact">
+        <syncfusion:SfNavigationDrawer
+         x:Name="navigationDrawer"
+         DisplayMode="Expanded"
+         IsOpen="False"
+         >
             <syncfusion:SfNavigationDrawer.ContentView>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -278,7 +282,6 @@
                             <Grid x:Name="CHUNKSVISIBILITY">
                                 <syncfusion:SfTreeGrid
                                  x:Name="TreeView"
-                                 EditTrigger="OnTap"
                                  AllowEditing="False"
                                  AllowFiltering="True"
                                  AllowResizingColumns="False"
@@ -286,6 +289,7 @@
                                  AutoGenerateColumns="False"
                                  ChildPropertyName="Children"
                                  ColumnSizer="SizeToCells"
+                                 EditTrigger="OnTap"
                                  ItemsSource="{Binding Chunks}"
                                  SelectedItem="{Binding SelectedChunk}"
                                  Style="{DynamicResource SyncfusionSfTreeGridStyle}"
@@ -378,14 +382,25 @@
 
                             <DataTemplate x:Key="RedboolTemplate">
                                 <CheckBox
+                                 Margin="0"
                                  Padding="5"
                                  HorizontalAlignment="Left"
                                  IsChecked="{Binding Property.Value}"
+                                 Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}"
                                  />
                             </DataTemplate>
 
                             <DataTemplate x:Key="NumericTemplate">
-                                <TextBox Padding="5" Text="{Binding Property.Value}" />
+                                <TextBox
+                                 Height="22"
+                                 Margin="0"
+                                 Padding="3,3,0,0"
+                                 VerticalAlignment="Center"
+                                 Background="Transparent"
+                                 BorderBrush="Transparent"
+                                 Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
+                                 Text="{Binding Property.Value}"
+                                 />
                             </DataTemplate>
 
                             <DataTemplate x:Key="EnumTemplate">
@@ -399,6 +414,8 @@
                             <templates:EditableVariableDataTemplateSelector
                              x:Key="DataTemplateSelector"
                              CommmonTemplate="{StaticResource CommmonTemplate}"
+                             EnumTemplate="{StaticResource EnumTemplate}"
+                             HandleTemplateView="{StaticResource HandleTemplate}"
                              NumericTemplate="{StaticResource NumericTemplate}"
                              RedboolTemplate="{StaticResource RedboolTemplate}"
                              EnumTemplate="{StaticResource EnumTemplate}"
