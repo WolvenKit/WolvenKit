@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,6 +14,7 @@ using Catel.MVVM;
 using Catel.Services;
 using DynamicData;
 using Orc.FileSystem;
+using ReactiveUI;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Common;
@@ -58,6 +60,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ReadOnlyObservableCollection<FileModel> _bindGrid;
         public ReadOnlyObservableCollection<FileModel> BindGrid => _bindGrid;
 
+        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
+
 
         #endregion fields
 
@@ -102,8 +106,22 @@ namespace WolvenKit.ViewModels.Editor
 
             _watcherService.Files
                 .Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _bindGrid)
-                .Subscribe();
+                .Subscribe(OnNext);
+        }
+
+        private void OnNext(IChangeSet<FileModel, ulong> obj)
+        {
+            BindGrid1.Clear();
+
+            foreach (var fileModel in BindGrid)
+            {
+                BindGrid1.Add(fileModel);
+            }
+
+
+
         }
 
         /// <summary>

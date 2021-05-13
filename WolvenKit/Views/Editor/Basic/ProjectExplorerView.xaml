@@ -51,7 +51,7 @@
          ChildPropertyName="ParentHash"
          ColumnSizer="Star"
          ExpandStateMappingName="IsExpanded"
-         ItemsSource="{Binding BindGrid}"
+         ItemsSource="{Binding BindGrid1}"
          ParentPropertyName="Hash"
          RowHeight="17"
          SelectedItem="{Binding SelectedItem}"

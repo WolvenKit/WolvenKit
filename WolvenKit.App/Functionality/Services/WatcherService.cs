@@ -102,6 +102,8 @@ namespace WolvenKit.Functionality.Services
             _modsWatcher.Deleted -= OnChanged;
             _modsWatcher.Renamed -= OnRenamed;
             _modsWatcher.EnableRaisingEvents = false;
+
+            //_files.Clear();
         }
 
         public bool IsSuspended { get; set; }
@@ -117,6 +119,15 @@ namespace WolvenKit.Functionality.Services
             var allFiles = Directory
                     .GetFileSystemEntries(proj.FileDirectory, "*", SearchOption.AllDirectories)
                 ;
+
+            //_files.Clear();
+            //foreach (var file in allFiles)
+            //{
+            //    var m = new FileModel(file);
+            //    _files.AddOrUpdate(m);
+            //}
+
+            //_files.AddOrUpdate(allFiles.Select(_ => new FileModel(_)));
 
             _files.Edit(innerList =>
             {

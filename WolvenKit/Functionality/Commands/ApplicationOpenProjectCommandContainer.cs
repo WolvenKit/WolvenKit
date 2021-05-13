@@ -83,8 +83,6 @@ namespace WolvenKit.Functionality.Commands
                 {
                     return;
                 }
-                var a = _projectManager.ActiveProject;
-                Debugger.Break();
             }
 
             try

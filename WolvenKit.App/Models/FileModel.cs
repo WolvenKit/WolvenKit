@@ -115,7 +115,7 @@ namespace WolvenKit.Models
                 return fullname[(filedir.Length + 1)..];
             }
 
-            throw new System.NullReferenceException();
+            throw new System.NullReferenceException("fuzzy exception");
         }
 
 
