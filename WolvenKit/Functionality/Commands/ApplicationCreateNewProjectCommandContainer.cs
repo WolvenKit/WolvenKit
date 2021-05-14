@@ -17,6 +17,7 @@ using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Functionality.Commands
 {

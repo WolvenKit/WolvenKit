@@ -13,6 +13,7 @@ using Orchestra.Views;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using Unosquare.FFME;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shared;
@@ -20,7 +21,7 @@ using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
 
-namespace WolvenKit.Functionality.WKitGlobal.Helpers
+namespace WolvenKit.Functionality.Initialization
 {
     public static class Initializations
     {

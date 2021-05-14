@@ -13,6 +13,7 @@ using Ab3d.DXEngine;
 using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.Editor

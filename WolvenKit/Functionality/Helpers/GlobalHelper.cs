@@ -5,7 +5,7 @@ using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Editor;
 using WolvenKit.Views.Shell;
 
-namespace WolvenKit.Functionality.WKitGlobal.Helpers
+namespace WolvenKit.Functionality.Helpers
 {
     public enum ProjectWorkFlowActionStatus
     { Queued, Started, Finished, Failed, }
@@ -24,9 +24,37 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         #endregion Fields
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public class GlobalHelper
     {
-    } // Template.
+    }
+
+
+    // Template.
 
     /// <summary>
     /// Below is WIP piece of me (Offline) ,,,, The idea behind it is to create preset workflows (Automated actions in WolvenKit)

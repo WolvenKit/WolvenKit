@@ -11,7 +11,7 @@ using Octokit;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.Views.HomePage.Pages;
 
-namespace WolvenKit.Functionality.WKitGlobal.Helpers
+namespace WolvenKit.Functionality.Helpers
 {
     public static class GithubHelper
     {

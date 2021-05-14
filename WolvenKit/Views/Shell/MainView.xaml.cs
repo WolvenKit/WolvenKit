@@ -7,6 +7,7 @@ using System.Windows.Input;
 using AvalonDock.Layout.Serialization;
 using Catel.Data;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Layout.MLib;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;

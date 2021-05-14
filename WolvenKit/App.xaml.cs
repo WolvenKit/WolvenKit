@@ -11,6 +11,8 @@ using HandyControl.Tools;
 using NodeNetwork;
 using Orchestra.Services;
 using Unosquare.FFME;
+using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views;
@@ -90,17 +92,21 @@ namespace WolvenKit
             Log.Info("Initializing FFME");
             Initializations.InitializeFFME();
 
-            // Temp Fix for MainViewModel.OnClosing
-            if (MainWindow != null)
-            { MainWindow.Closing += OnClosing; }
 
             Log.Info("Check for new updates");
             AppHelper.CheckForUpdates();
+
+
+
+            // Temp Fix for MainViewModel.OnClosing
+            if (MainWindow != null)
+            { MainWindow.Closing += OnClosing; }
+            // Create WebView Data Folder.
             Directory.CreateDirectory(@"C:\WebViewData");
-
-
+            // Message system for video tool.
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
             mediator.Register<int>(this, onmessage);
+            // Init FFMPEG libraries.
             await Task.Run(async () =>
             {
                 try
@@ -132,6 +138,7 @@ namespace WolvenKit
             });
         }
 
+        // Sets the VideTool as current main window on demand.
         private void onmessage(int obj)
         {
             if (obj == 0)
@@ -139,11 +146,9 @@ namespace WolvenKit
                 if (MainX == null)
                 {
                     MainX = new MainWindow();
-
                     Current.MainWindow = MainX;
                     Current.MainWindow.Loaded += (snd, eva) => ViewModel.OnApplicationLoaded();
                     Current.MainWindow.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
-
                     Current.MainWindow.Show();
                 }
 

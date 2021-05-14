@@ -7,20 +7,20 @@
  xmlns:cameras="clr-namespace:Ab3d.Cameras;assembly=Ab3d.PowerToys"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+ xmlns:converters2="clr-namespace:WolvenKit.Functionality.Converters"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:dxControls="clr-namespace:Ab3d.DirectX.Controls;assembly=Ab3d.DXEngine.Wpf"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
  xmlns:visuals="clr-namespace:Ab3d.Visuals;assembly=Ab3d.PowerToys"
- xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
+ d:DataContext="{d:DesignInstance Type=editor:PropertiesViewModel}"
  d:DesignHeight="450"
  d:DesignWidth="800"
  FontSize="10"
  mc:Ignorable="d"
- d:DataContext="{d:DesignInstance Type=editor:PropertiesViewModel}"
-
  >
 
     <catel:UserControl.Resources>
@@ -29,10 +29,10 @@
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
-            <c:ValueConverterGroup x:Key="DateTimeVisi">
+            <converters2:ValueConverterGroup x:Key="DateTimeVisi">
                 <hc:Object2StringConverter />
                 <hc:String2VisibilityConverter />
-            </c:ValueConverterGroup>
+            </converters2:ValueConverterGroup>
         </ResourceDictionary>
     </catel:UserControl.Resources>
     <hc:ScrollViewer x:Name="fish">

@@ -7,6 +7,7 @@ using Ab3d.DirectX.Client.Settings;
 using Ab3d.DXEngine.Wpf.Samples;
 using Catel.Data;
 using Orchestra;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs;
