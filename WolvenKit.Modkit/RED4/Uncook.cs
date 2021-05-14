@@ -220,7 +220,7 @@ namespace CP77.CR2W
             return true;
         }
 
-        private static bool UncookTexarray(Stream cr2wStream, CR2WFile cr2w)
+        private bool UncookTexarray(Stream cr2wStream, CR2WFile cr2w)
         {
             if (!(cr2w.Chunks.FirstOrDefault()?.data is CTextureArray texa) ||
                 !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
@@ -247,7 +247,7 @@ namespace CP77.CR2W
                 compression = texa.Setup.Compression.Value;
             }
 
-            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
+            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
             var cr2wFileName = new FileInfo(cr2w.FileName);
             if (cr2wFileName.Directory != null)
@@ -305,7 +305,7 @@ namespace CP77.CR2W
             return true;
         }
 
-        private static bool UncookCubeMap(Stream cr2wStream, CR2WFile cr2w)
+        private bool UncookCubeMap(Stream cr2wStream, CR2WFile cr2w)
         {
             if (!(cr2w.Chunks.FirstOrDefault()?.data is CCubeTexture ctex) ||
                 !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
@@ -334,7 +334,7 @@ namespace CP77.CR2W
                 compression = ctex.Setup.Compression.Value;
             }
 
-            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
+            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
             var cr2wFileName = new FileInfo(cr2w.FileName);
             if (cr2wFileName.Directory != null)
@@ -382,7 +382,7 @@ namespace CP77.CR2W
             return true;
         }
 
-        private static bool UncookXbm(Stream cr2wStream, CR2WFile cr2w, EUncookExtension uncookext, bool flip)
+        private bool UncookXbm(Stream cr2wStream, CR2WFile cr2w, EUncookExtension uncookext, bool flip)
         {
             if (cr2w.StringDictionary[1] != "CBitmapTexture")
             {
@@ -429,7 +429,7 @@ namespace CP77.CR2W
             {
             }
 
-            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt);
+            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
             #endregion
 
