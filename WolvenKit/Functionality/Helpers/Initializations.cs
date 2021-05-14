@@ -25,22 +25,19 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     public static class Initializations
     {
 
+        // Initialize Github RPC
         public static async void InitializeGitHub()
         {
-            GithubHelper.GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit"))
-            {
-                Credentials = GithubHelper.GhubAuth("wolvenbot", "botwolven1")
-            };
+            GithubHelper.GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit")) { Credentials = GithubHelper.GhubAuth("wolvenbot", "botwolven1") };
             await GithubHelper.GhubLastReleaseAsync();
         }
 
+
+        // Initialize everything related to Theming.
         public static void InitializeThemeHelper()
         {
             HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
-            var tr = new HandyControl.Themes.ThemeResources
-            {
-                AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3")
-            };
+            var tr = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
 
             MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
             themeSettings.PrimaryBackground = new SolidColorBrush(Colors.Gray);
@@ -49,6 +46,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         }
 
+        // Initialize FFME
         public static void InitializeFFME()
         {
 
@@ -58,6 +56,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             Library.EnableWpfMultiThreadedVideo = false; // !
 
         }
+
+        // Initialize Licenses
         public static void InitializeLicenses()
         {            //ShellService.GivenPoop = new StartupViewer();
 
@@ -72,13 +72,14 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         }
 
+        // Initialize Shell
         public static async Task InitializeShell()
         {
             await ShellInnerInit();
             ThemeInnerInit();
         }
 
-
+        // Initialize MVVM (Catel)
         public static async Task InitializeMVVM()
         {
 
@@ -172,6 +173,10 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
             viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
         }
+
+
+
+
 
 
         private static async Task ShellInnerInit()

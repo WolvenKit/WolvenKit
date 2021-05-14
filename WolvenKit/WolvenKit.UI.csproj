@@ -364,6 +364,8 @@
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="2.80.2" />
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.59" />
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.59" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.59" />
     <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.59" />
