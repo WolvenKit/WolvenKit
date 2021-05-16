@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -11,20 +12,17 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
-using Catel.IoC;
 using Catel.Services;
 using Feather.Commands;
 using Feather.Controls;
 using HandyControl.Data;
 using Orchestra.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
 namespace WolvenKit.ViewModels.Editor
@@ -101,6 +99,9 @@ namespace WolvenKit.ViewModels.Editor
 
             SetupToolDefaults();
             ReInit(false);
+
+
+
         }
 
         #endregion ctor
@@ -243,6 +244,7 @@ namespace WolvenKit.ViewModels.Editor
             await rootNode.RefreshAsync();
 
             BreadCrumbCurrentNode = rootNode;
+           
 
             await ((IRefreshable)CurrentNode).RefreshAsync();
         }
@@ -262,7 +264,7 @@ namespace WolvenKit.ViewModels.Editor
                 await SetCurrentNodeAsync(node);
             });
 
-            
+
             Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
@@ -354,7 +356,7 @@ namespace WolvenKit.ViewModels.Editor
                                 if (item.This.Files.ContainsKey(item.Name))
                                 {
                                     var it = item.This.Files.FirstOrDefault(x => x.Key == item.Name);
-                                    if(it.Value.Count > 0)
+                                    if (it.Value.Count > 0)
                                         _gameController.GetController().AddToMod(it.Value.First());
                                 }
                             }
@@ -533,6 +535,63 @@ namespace WolvenKit.ViewModels.Editor
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+
+
+
+
+
+
+    public class HierarchicalItemsSource : ObservableCollection<HierarchyItem>
+    {
+        public HierarchicalItemsSource()
+        {
+            this.Add(new HierarchyItem("Syncfusion",
+            new HierarchyItem("User Interface",
+            new HierarchyItem("Silverlight"),
+            new HierarchyItem("WPF"),
+            new HierarchyItem("ASP .Net"),
+            new HierarchyItem("MVC")),
+            new HierarchyItem("Reporting Edition",
+            new HierarchyItem("IO"),
+            new HierarchyItem("PDF generator"),
+            new HierarchyItem("WPF")
+            )));
+        }
+    }
+
+
+
+
+
+
+
+
+    public class HierarchyItem
+    {
+        public string ContentString { get; set; }
+        public HierarchyItem(string content, params HierarchyItem[] myItems)
+        {
+            this.ContentString = content;
+            itemsObservableCollection = new ObservableCollection<HierarchyItem>();
+            foreach (var item in myItems)
+            {
+                itemsObservableCollection.Add(item);
+            }
+            HierarchyItems = itemsObservableCollection;
+        }
+        private ObservableCollection<HierarchyItem> itemsObservableCollection;
+        public ObservableCollection<HierarchyItem> HierarchyItems
+        {
+            get { return itemsObservableCollection; }
+            set
+            {
+                if (itemsObservableCollection != value)
+                {
+                    itemsObservableCollection = value;
+                }
+            }
         }
     }
 }

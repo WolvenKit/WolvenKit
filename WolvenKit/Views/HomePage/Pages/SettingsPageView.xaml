@@ -5,6 +5,7 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
  xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  >
@@ -109,12 +110,59 @@
              >
 
                 <syncfusion:SfAccordionItem Header="General">
-                    <syncfusion:PropertyGrid
-                     x:Name="GeneralSettingsPG"
-                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                     SelectedObject="{Binding generalSettingsPGModel}"
-                     SortDirection="{x:Null}"
-                     />
+                    <StackPanel Margin="0">
+
+                        <syncfusion:PropertyGrid
+                         x:Name="GeneralSettingsPG"
+                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+                         SelectedObject="{Binding generalSettingsPGModel}"
+                         SortDirection="{x:Null}"
+                         />
+
+
+                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
+                            <TextBlock
+                             Margin="5,5,5,5"
+                             FontSize="11"
+                             Text="Theme Creator"
+                             />
+                            <mah:ColorPicker
+                             Width="250"
+                             HorizontalAlignment="Left"
+                             BorderBrush="Transparent"
+                             SelectedColor="{Binding SelectedTheme, Delay=100}"
+                             />
+                            <Button
+                             Margin="5,0,0,0"
+                             Content="Save Theme"
+                             FontSize="11"
+                             />
+                            <Button
+                             Margin="5,0,0,0"
+                             Content="Restart and Apply Theme"
+                             FontSize="11"
+                             />
+
+                        </StackPanel>
+                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
+
+
+                            <TextBlock
+                             Margin="5,5,5,5"
+                             FontSize="11"
+                             Text="Current Theme"
+                             />
+                            <mah:ColorPicker
+                             Width="250"
+                             HorizontalAlignment="Left"
+                             BorderBrush="Transparent"
+                             IsEnabled="False"
+                             SelectedColor="Green"
+                             />
+                        </StackPanel>
+
+                    </StackPanel>
+
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Editor">

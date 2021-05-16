@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Media;
 using Catel.MVVM;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
@@ -66,9 +67,11 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         public string MaterialDepotPath { get; set; }
 
 
-
+        [Editable(false)]
+        [Category("Theme")]
+        [Display(Name = "Application theme accent.")]
+        public Brush BrushProperty { get; set; }
     }
-
     public enum AutoUpdateChannel
     {
         Global,
