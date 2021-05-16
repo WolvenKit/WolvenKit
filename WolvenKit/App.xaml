@@ -65,6 +65,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/HierarchyNavigator/HierarchyNavigator.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfAccordion/SfAccordion.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/PropertyGrid/PropertyGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/Ribbon/Ribbon.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/EditControl/EditControl.xaml" />
 

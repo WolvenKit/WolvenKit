@@ -23,6 +23,9 @@ namespace WolvenKit.Views.Shell
         {
             InitializeComponent();
 
+
+
+
             ribbon.AddAboutButton();
 
             StaticReferences.RibbonViewInstance = this;
@@ -30,7 +33,13 @@ namespace WolvenKit.Views.Shell
             DXEngineSettings.Initialize(dxEngineSettingsStorage);
             this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
+
+            //  _ribbon.BackStageButton. += BackStageButton_MouseDown;
+
+
         }
+
+
 
         protected override void OnViewModelChanged() => base.OnViewModelChanged();
 
@@ -181,6 +190,28 @@ namespace WolvenKit.Views.Shell
             var z = new MaterialsRepositoryDialog();
             z.Show();
 
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+            //Application.Current.Resources["PrimaryLight"] = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
+
+
+
+
+        }
+
+        private void _ribbon_Loaded(object sender, RoutedEventArgs e)
+        {
+
+
+
+        }
+
+        private void BackStageButton_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

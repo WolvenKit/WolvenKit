@@ -41,7 +41,14 @@ namespace WolvenKit.Functionality.Initialization
             var tr = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
 
             MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
-            themeSettings.PrimaryBackground = new SolidColorBrush(Colors.Gray);
+            themeSettings.PrimaryBackground = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
+            themeSettings.BodyFontSize = 11;
+            themeSettings.HeaderFontSize = 14;
+            themeSettings.SubHeaderFontSize = 13;
+            themeSettings.TitleFontSize = 13;
+            themeSettings.SubTitleFontSize = 12;
+            themeSettings.BodyAltFontSize = 11;
+            themeSettings.FontFamily = new FontFamily("Segoe UI");
             SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
             SfSkinManager.ApplyStylesOnApplication = true;
 
@@ -216,7 +223,7 @@ namespace WolvenKit.Functionality.Initialization
 
 
 
-        private static void ThemeInnerInit()
+        public static void ThemeInnerInit()
         {
             var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
             if (SettingsManag.ThemeAccent != default)
@@ -224,12 +231,40 @@ namespace WolvenKit.Functionality.Initialization
                 ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
                     ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark",
                         SettingsManag.ThemeAccent, false));
+
+
+                MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
+                themeSettings.PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent);
+                themeSettings.BodyFontSize = 11;
+                themeSettings.HeaderFontSize = 14;
+                themeSettings.SubHeaderFontSize = 13;
+                themeSettings.TitleFontSize = 13;
+                themeSettings.SubTitleFontSize = 12;
+                themeSettings.BodyAltFontSize = 11;
+                themeSettings.FontFamily = new FontFamily("Segoe UI");
+                SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+                SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
+
+
             }
             else
             {
                 ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
                     ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark",
                         (Color)ColorConverter.ConvertFromString("#DF2935"), false));
+
+                MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
+                themeSettings.PrimaryBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935"));
+                themeSettings.BodyFontSize = 11;
+                themeSettings.HeaderFontSize = 14;
+                themeSettings.SubHeaderFontSize = 13;
+                themeSettings.TitleFontSize = 13;
+                themeSettings.SubTitleFontSize = 12;
+                themeSettings.BodyAltFontSize = 11;
+                themeSettings.FontFamily = new FontFamily("Segoe UI");
+                SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+
+                SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
             }
         }
 
