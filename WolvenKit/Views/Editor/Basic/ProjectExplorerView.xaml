@@ -51,12 +51,13 @@
          ChildPropertyName="ParentHash"
          ColumnSizer="Star"
          ExpandStateMappingName="IsExpanded"
-         LiveNodeUpdateMode="AllowDataShaping"
          ItemsSource="{Binding BindGrid1}"
+         LiveNodeUpdateMode="AllowDataShaping"
          ParentPropertyName="Hash"
          RowHeight="17"
          SelectedItem="{Binding SelectedItem}"
          SelectionChanged="TreeGrid_OnSelectionChanged"
+         SelectionMode="Extended"
          SelfRelationRootValue="0"
          >
 

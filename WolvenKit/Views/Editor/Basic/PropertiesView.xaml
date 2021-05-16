@@ -40,7 +40,7 @@
         <Grid>
 
             <StackPanel>
-                <Grid Name="RootGrid" Height="250">
+                <Grid Name="RootGrid" Height="350">
                     <Border Name="ViewportBorder" Background="Transparent">
                         <dxControls:DXViewportView
                          Name="MainDXViewportView"
@@ -104,7 +104,6 @@
                      MoveOnlyHorizontally="True"
                      QuickZoomConditions="ShiftKey, LeftMouseButtonPressed"
                      RotateCameraConditions="LeftMouseButtonPressed"
-                     ShowRotationCenterMarker="True"
                      TargetCamera="{Binding ElementName=Camera1}"
                      ZoomMode="Viewport3DCenter"
                      />

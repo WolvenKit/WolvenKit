@@ -262,7 +262,7 @@
 
 
 
-
+        <!--
 
         <syncfusion:DockingManager
          x:Name="dockingManager"
@@ -309,8 +309,7 @@
             </ContentControl>
             <ContentControl x:Name="StartPage" />
         </syncfusion:DockingManager>
-
-
+        -->
 
 
     </Grid>
