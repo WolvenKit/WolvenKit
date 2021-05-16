@@ -38,7 +38,7 @@
          x:Name="LogRichTextBox"
          Margin="-3,0,-3,0"
          AutoScroll="True"
-         Background="Transparent"
+         Background="{DynamicResource ContentBackgroundAlt2}"
          BorderBrush="Transparent"
          BorderThickness="0"
          DebugMessageBrush="Purple"

@@ -264,7 +264,51 @@
 
 
 
+        <syncfusion:DockingManager
+         x:Name="dockingManager"
+         Background="Transparent"
+         DraggingType="BorderDragging"
+         Visibility="Collapsed"
+         >
+            <ContentControl
+             x:Name="SFProjectExplorer"
+             syncfusion:DockingManager.DesiredWidthInDockedMode="350"
+             syncfusion:DockingManager.Header="Project Explorer"
+             >
+                <views1:ProjectExplorerView Background="{DynamicResource ContentBackgroundAlt2}" />
+            </ContentControl>
+            <ContentControl
+             x:Name="SFAssetBrowser"
+             syncfusion:DockingManager.DesiredHeightInDockedMode="350"
+             syncfusion:DockingManager.Header="Asset Browser"
+             syncfusion:DockingManager.SideInDockedMode="Bottom"
+             >
+                <views1:AssetBrowserView Background="{DynamicResource ContentBackgroundAlt2}" />
 
+            </ContentControl>
+            <ContentControl
+             x:Name="SFProperties"
+             syncfusion:DockingManager.DesiredWidthInDockedMode="30"
+             syncfusion:DockingManager.Header="Properties"
+             syncfusion:DockingManager.SideInDockedMode="Right"
+             syncfusion:DockingManager.TargetNameInDockedMode="SFAssetBrowser"
+             >
+                <views1:PropertiesView Background="{DynamicResource ContentBackgroundAlt2}" />
+
+            </ContentControl>
+            <ContentControl
+             x:Name="SFLog"
+             syncfusion:DockingManager.DesiredHeightInDockedMode="65"
+             syncfusion:DockingManager.DesiredWidthInDockedMode="350"
+             syncfusion:DockingManager.Header="Application Log"
+             syncfusion:DockingManager.SideInDockedMode="Bottom"
+             syncfusion:DockingManager.TargetNameInDockedMode="SFProjectExplorer"
+             >
+                <views1:LogView />
+
+            </ContentControl>
+            <ContentControl x:Name="StartPage" />
+        </syncfusion:DockingManager>
 
 
 
