@@ -60,7 +60,7 @@
          IsEnabled="True"
          IsVirtualizingAnchorable="True"
          IsVirtualizingDocument="True"
-         Visibility="Visible"
+         Visibility="Hidden"
          >
             <!--  Global Theme  -->
             <DockingManager.Theme>
@@ -76,39 +76,40 @@
                             <editor:DocumentView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.FileViewTemplate>
+
                     <ad:PanesTemplateSelector.ImportExportToolTemplate>
                         <DataTemplate>
                             <views1:ImportExportView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.ImportExportToolTemplate>
+
                     <ad:PanesTemplateSelector.PropertiesTemplate>
                         <DataTemplate>
                             <views1:PropertiesView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.PropertiesTemplate>
 
-                    <!--  LogView  -->
+
                     <ad:PanesTemplateSelector.LogViewTemplate>
                         <DataTemplate>
                             <views1:LogView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.LogViewTemplate>
 
-                    <!--  ProjectExplorerView  -->
                     <ad:PanesTemplateSelector.ProjectExplorerTemplate>
                         <DataTemplate>
                             <views1:ProjectExplorerView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.ProjectExplorerTemplate>
 
-                    <!--  Assetbrowser  -->
+
                     <ad:PanesTemplateSelector.AssetBrowserTemplate>
                         <DataTemplate>
                             <views1:AssetBrowserView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.AssetBrowserTemplate>
 
-                    <!--  Bulk Editor WIP
+                    <!--   Bulk Editor WIP
                     <ad:PanesTemplateSelector.BulkEditorTemplate>
                         <DataTemplate>
                             <cr2weditor1:BulkEditorView />
@@ -262,13 +263,13 @@
 
 
 
-        <!--
 
-        <syncfusion:DockingManager
+
+        <!--<syncfusion:DockingManager
          x:Name="dockingManager"
          Background="Transparent"
          DraggingType="BorderDragging"
-         Visibility="Collapsed"
+         Visibility="Visible"
          >
             <ContentControl
              x:Name="SFProjectExplorer"
@@ -276,6 +277,14 @@
              syncfusion:DockingManager.Header="Project Explorer"
              >
                 <views1:ProjectExplorerView Background="{DynamicResource ContentBackgroundAlt2}" />
+            </ContentControl>
+            <ContentControl
+             x:Name="CR2W"
+             syncfusion:DockingManager.DesiredWidthInDockedMode="350"
+             syncfusion:DockingManager.Header="CR2W Explorer"
+             syncfusion:DockingManager.State="Document"
+             >
+                <editor:DocumentView />
             </ContentControl>
             <ContentControl
              x:Name="SFAssetBrowser"
@@ -308,8 +317,8 @@
 
             </ContentControl>
             <ContentControl x:Name="StartPage" />
-        </syncfusion:DockingManager>
-        -->
+        </syncfusion:DockingManager>-->
+
 
 
     </Grid>
