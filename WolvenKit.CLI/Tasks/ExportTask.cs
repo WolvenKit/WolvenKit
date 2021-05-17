@@ -8,15 +8,15 @@ using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 
-        public static void ExportTask(string[] path, EUncookExtension uncookext, bool flip)
+        public void ExportTask(string[] path, EUncookExtension uncookext, bool flip)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -26,19 +26,19 @@ namespace CP77Tools.Tasks
             });
         }
 
-        private static int ExportTaskInner(string path, EUncookExtension uncookext, bool flip)
+        private int ExportTaskInner(string path, EUncookExtension uncookext, bool flip)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return 0;
             }
             var inputFileInfo = new FileInfo(path);
             if (!inputFileInfo.Exists)
             {
-                logger.LogString("Input file does not exist.", Logtype.Error);
+                _loggerService.Warning("Input file does not exist.");
                 return 0;
             }
 
@@ -47,16 +47,16 @@ namespace CP77Tools.Tasks
             Stopwatch watch = new();
             watch.Restart();
 
-            if (ModTools.Export(new FileInfo(path), uncookext, flip))
+            if (_modTools.Export(new FileInfo(path), uncookext, flip))
 
             {
                 watch.Stop();
-                logger.LogString($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.", Logtype.Success);
+                _loggerService.Success($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.");
             }
             else
             {
                 watch.Stop();
-                logger.LogString($"Failed to export {path}.", Logtype.Error);
+                _loggerService.Error($"Failed to export {path}.");
             }
 
             return 1;

@@ -201,11 +201,15 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
             if (SettingsManag.ThemeAccent != default)
             {
-                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.ThemeAccent, false));
+                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current,
+                    ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark",
+                        SettingsManag.ThemeAccent, false));
             }
             else
             {
-                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", (Color)ColorConverter.ConvertFromString("#DF2935"), false));
+                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current,
+                    ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark",
+                        (Color)ColorConverter.ConvertFromString("#DF2935"), false));
             }
         }
 

@@ -49,7 +49,7 @@
          InfoMessageBrush="LightGray"
          ScrollMode="AutoScrollPriority"
          ShowDebug="False"
-         ShowError="False"
+         ShowError="True"
          ShowInfo="True"
          ShowMultilineMessagesExpanded="True"
          ShowWarning="True"

@@ -1,136 +1,27 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Catel.IoC;
-using Catel.Logging;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.RED3.CR2W;
-using WolvenKit.W3Speech;
-using WolvenKit.W3Strings;
+
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
     public sealed class Tw3Project : EditorProject, ICloneable
     {
-        #region fields
-
-        private readonly ILog _logger;
-        private readonly ISettingsManager _settings;
-        private BundleManager BundleManager;
-        private CollisionManager CollisionManager;
-        private Task initializeTask;
-
-        private SoundManager SoundManager;
-        private TextureManager TextureManager;
-        private W3StringManager W3StringManager;
-        private SpeechManager SpeechManager { get; set; }
-
-        #endregion fields
-
-        #region Constructors
-
+        
         public Tw3Project(string location) : base(location)
         {
-            _settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            _logger = LogManager.GetCurrentClassLogger();
-            if (File.Exists(location))
-            {
-                Load(location);
-            }
+
         }
 
         public Tw3Project() : base("")
         {
         }
 
-        #endregion Constructors
-
-        #region properties
-
-        public override bool IsInitialized => initializeTask?.Status == TaskStatus.RanToCompletion;
-
-        public override async Task<bool> Load(string path)
-        {
-            try
-            {
-                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(W3Mod));
-                var obj = (W3Mod)ser.Deserialize(lf);
-                Name = obj.Name;
-                Version = obj.Version;
-                Author = obj.Author;
-                Email = obj.Email;
-                GameType = GameType.Witcher3;
-                Data = obj;
-                Data.FileName = path;
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to load project. Exception: {e.Message}");
-                return false;
-            }
-
-            return true;
-        }
-
-        public override async Task<bool> Save(string path)
-        {
-            try
-            {
-                path ??= Location;
-
-                await using var sf = new FileStream(path, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(W3Mod));
-                ser.Serialize(sf, (W3Mod)Data);
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to save project. Exception: {e.Message}");
-                return false;
-            }
-
-            return true;
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public WitcherPackSettings PackSettings { get; set; } = new WitcherPackSettings();
 
-        #region Directories
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string BackupDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(ProjectDirectory, "_backups");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        #region Top-level Dirs
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string RadishDirectory
         {
             get
@@ -145,9 +36,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string RawDirectory
         {
             get
@@ -162,13 +50,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Top-level Dirs
-
-        #region Mod-level Dirs
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string ModCookedDirectory
         {
             get
@@ -182,9 +63,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string ModUncookedDirectory
         {
             get
@@ -198,13 +76,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Mod-level Dirs
-
-        #region DLC-level Dirs
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string DlcCookedDirectory
         {
             get
@@ -218,9 +89,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string DlcUncookedDirectory
         {
             get
@@ -234,13 +102,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion DLC-level Dirs
-
-        #region RAW-level Dirs
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string RawDlcDirectory
         {
             get
@@ -254,9 +115,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string RawModDirectory
         {
             get
@@ -270,13 +128,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion RAW-level Dirs
 
-        #region Cooked and Packed Directories
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string CookedDlcDirectory
         {
             get
@@ -295,9 +147,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public string CookedModDirectory
         {
             get
@@ -312,10 +161,10 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string PackedDlcDirectory
+
+        public override GameType GameType => GameType.Witcher3;
+
+        public override string PackedDlcDirectory
         {
             get
             {
@@ -333,10 +182,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string PackedModDirectory
+        public override string PackedModDirectory
         {
             get
             {
@@ -350,49 +196,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Cooked and Packed Directories
-
-        #endregion Directories
-
-        #region Files
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public List<string> DLCFiles
-        {
-            get
-            {
-                if (!Directory.Exists(DlcDirectory))
-                {
-                    Directory.CreateDirectory(DlcDirectory);
-                }
-                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file[(DlcDirectory.Length + 1)..])
-                    .ToList();
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public List<string> ModFiles
-        {
-            get
-            {
-                if (!Directory.Exists(ModDirectory))
-                {
-                    Directory.CreateDirectory(ModDirectory);
-                }
-                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file[(ModDirectory.Length + 1)..])
-                    .ToList();
-            }
-        }
-
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
+       
         public List<string> RadishFiles
         {
             get
@@ -407,9 +211,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
         public List<string> RawFiles
         {
             get
@@ -424,14 +225,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        #endregion Files
-
-        #endregion properties
 
         #region methods
-
-        // TODO: debug
-        public override void Check() => _logger.Error($"{initializeTask.Status.ToString()}");
 
         public void CreateDefaultDirectories()
         {
@@ -544,57 +339,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             return relpath;
         }
 
-        public sealed override Task Initialize()
-        {
-            // if initializeTask is null
-            if (initializeTask == null)
-            {
-                initializeTask = Task.Run(() => InitializeAsync());
-            }
-            else
-            {
-                // TODO: needed?
-                if (initializeTask.IsCompleted == false &&
-                    initializeTask.Status != TaskStatus.Running &&
-                    initializeTask.Status != TaskStatus.WaitingToRun &&
-                    initializeTask.Status != TaskStatus.WaitingForActivation)
-                {
-                }
-                else
-                {
-                }
-            }
-
-            return initializeTask;
-        }
-
-        private async Task InitializeAsync()
-        {
-            ILog _logger = LogManager.GetCurrentClassLogger();
-            BundleManager ??= await Task.Run(() => Tw3Controller.LoadBundleManager()).ConfigureAwait(false);
-            W3StringManager ??= await Task.Run(() => Tw3Controller.LoadStringsManager()).ConfigureAwait(false);
-            TextureManager ??= await Task.Run(() => Tw3Controller.LoadTextureManager()).ConfigureAwait(false);
-            CollisionManager ??= await Task.Run(() => Tw3Controller.LoadCollisionManager()).ConfigureAwait(false);
-            SoundManager ??= await Task.Run(() => Tw3Controller.LoadSoundManager()).ConfigureAwait(false);
-            SpeechManager ??= await Task.Run(() => Tw3Controller.LoadSpeechManager()).ConfigureAwait(false);
-
-            // Hash all filepaths
-            _logger.Info("Starting additional tasks...");
-            var relativepaths = ModFiles
-                .Select(_ => _[(_.IndexOf(Path.DirectorySeparatorChar) + 1)..])
-                .ToList();
-            Cr2wResourceManager.Get().RegisterAndWriteCustomPaths(relativepaths);
-
-            // register all custom classes
-            CR2WManager.Init(FileDirectory);
-            _logger.Info("Finished additional tasks...");
-
-            NotificationHelper.Growl.Success($"Project {Name} has finished loading.");
-        }
+        
 
         #endregion methods
-
-        #region Methods
 
         public object Clone()
         {
@@ -611,6 +358,5 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override string ToString() => Location;
 
-        #endregion Methods
     }
 }

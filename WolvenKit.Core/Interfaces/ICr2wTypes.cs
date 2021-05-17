@@ -104,18 +104,17 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface IREDString : IREDPrimitive, IEditorBindable<string> { }
     public interface IREDBool : IREDPrimitive, IEditorBindable<bool> { }
 
-    public interface IEnumAccessor : IEditorBindable
+    public interface IEnumAccessor : IEditorBindable, IEditableVariable
     {
         List<string> EnumValueList { get; set; }
         bool IsFlag { get; }
 
         string GetAttributeVal();
     }
-
     public interface IEnumAccessor<T> : IEditorBindable<T>, IEnumAccessor where T : Enum
     {
         string EnumToString();
-        IEditableVariable SetValue(object val);
+        
         Type GetEnumType();
     }
 
@@ -128,19 +127,16 @@ namespace WolvenKit.Common.Model.Cr2w
         string Elementtype { get; set; }
         Type InnerType { get; }
     }
-
     public interface IArrayAccessor<T> : IArrayAccessor
     {
         List<T> Elements { get; set; }
     }
-
     public interface IBufferAccessor : IArrayAccessor { }
 
     public interface IVariantAccessor
     {
         IEditableVariable Variant { get; set; }
     }
-
     public interface IBufferVariantAccessor : IVariantAccessor { }
 
     public interface IChunkPtrAccessor : IEditableVariable
@@ -148,7 +144,6 @@ namespace WolvenKit.Common.Model.Cr2w
         ICR2WExport Reference { get; set; }
         string ReferenceType { get; }
     }
-
     public interface IHandleAccessor : IChunkPtrAccessor
     {
         bool ChunkHandle { get; set; }

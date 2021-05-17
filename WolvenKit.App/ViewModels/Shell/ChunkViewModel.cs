@@ -70,7 +70,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private IREDBool Prop => Property as IREDBool;
 
-        public bool Value
+        public new bool Value
         {
             get => Prop.Value;
             set
@@ -91,7 +91,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private IREDString Prop => Property as IREDString;
 
-        public string Value
+        public new string Value
         {
             get => Prop.Value;
             set

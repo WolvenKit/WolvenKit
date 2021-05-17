@@ -43,6 +43,6 @@ namespace WolvenKit.Common.Model.Cr2w
         void Write(BinaryWriter file);
         IEditableVariable Copy(ICR2WCopyAction context);
 
-
+        public IEditableVariable SetValue(object val);
     }
 }

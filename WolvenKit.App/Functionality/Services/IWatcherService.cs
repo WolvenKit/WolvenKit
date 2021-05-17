@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.ViewModels.Editor.Basic;
 
-namespace WolvenManager.App.Services
+namespace WolvenKit.Functionality.Services
 {
     public interface IWatcherService
     {

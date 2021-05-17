@@ -40,7 +40,7 @@ namespace WolvenKit.Interfaces.Core
             }
             catch (Exception ex)
             {
-                logger?.LogString(ex.ToString(), Logtype.Error);
+                logger?.Error(ex.ToString());
             }
 
             return assembly;

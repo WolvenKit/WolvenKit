@@ -1,6 +1,8 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using CP77Tools.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
@@ -25,7 +27,14 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--dump", "-d" }, "Dump archive information."));
             AddOption(new Option<bool>(new[] { "--list", "-l" }, "List archive contents."));
 
-            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool>(ConsoleFunctions.DumpTask);
+            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool, IHost>(Action);
+        }
+
+        private void Action(string[] path, bool imports, bool missinghashes, bool texinfo, bool classinfo, bool dump, bool list, IHost host)
+        {
+            var serviceProvider = host.Services;
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            consoleFunctions.DumpTask(path, imports, missinghashes, texinfo, classinfo, dump, list);
         }
 
         #endregion Constructors

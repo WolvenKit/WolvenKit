@@ -32,6 +32,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string SaveProject = "Application.SaveProject";
             public const string SaveFile = "Application.SaveFile";
             public const string SaveAll = "Application.SaveAll";
+            public const string ShowImportExportTool = "Application.ShowImportExportTool";
 
             public const string ShowAbout = "Application.ShowAbout";
             public const string ShowAnimationTool = "Application.ShowAnimationTool";
@@ -57,7 +58,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string ShowPluginManager = "Application.ShowPluginManager";
             public const string ShowProjectExplorer = "Application.ShowProjectExplorer";
             public const string ShowProperties = "Application.ShowProperties";
-            public const string ShowRadishTool = "Application.ShowRadishTool";
+            //public const string ShowRadishTool = "Application.ShowRadishTool";
             public const string ShowSettings = "Application.ShowSettings";
             public const string ShowVisualEditor = "Application.ShowVisualEditor";
             public const string ShowWccTool = "Application.ShowWccTool";

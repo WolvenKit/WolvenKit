@@ -300,9 +300,10 @@ namespace WolvenKit.Views.Dialogs
 
         private void ExportButton_OnClick(object sender, RoutedEventArgs e)
         {
+            var gamecontroller = ServiceLocator.Default.ResolveType<Cp77Controller>();
             // var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
             var Item = SelectedItem;
-            var x = MainController.GetGame().GetArchiveManagersManagers();
+            var x = gamecontroller.GetArchiveManagersManagers(false);
             var z = (ArchiveManager)x[0];
             var list = z.Archives.Values.ToList();
 
@@ -318,7 +319,7 @@ namespace WolvenKit.Views.Dialogs
                 {
                     if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
                     {
-                        MESH.ExportMeshWithoutRig(stream, Item.Name, FIItem);
+                        (new MESH()).ExportMeshWithoutRig(stream, Item.Name, FIItem);
                     }
 
                     if (ExtractRigged)
@@ -332,7 +333,7 @@ namespace WolvenKit.Views.Dialogs
                             xz.Add(Path.GetFileName(fs.Name));
 
                         }
-                        MESH.ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
+                        (new MESH()).ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
                     }
                     if (ExportMaterials && UseMaterialsRepository && CopyTextures)
                     {

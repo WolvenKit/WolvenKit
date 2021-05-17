@@ -124,6 +124,7 @@ namespace WolvenKit.Functionality.Layout
         /// Gets/sets the view instance of the Properties.
         /// </summary>
         public DataTemplate PropertiesTemplate { get; set; }
+        public DataTemplate ImportExportToolTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the RadishTool.
@@ -159,6 +160,8 @@ namespace WolvenKit.Functionality.Layout
             ProjectExplorerViewModel _ => ProjectExplorerTemplate,
             AssetBrowserViewModel _ => AssetBrowserTemplate,
             BulkEditorViewModel _ => BulkEditorTemplate,
+            ImportExportViewModel _ => ImportExportToolTemplate,
+
             CodeEditorViewModel _ => CodeEditorTemplate,
             CsvEditorViewModel _ => CsvEditorTemplate,
             HexEditorViewModel _ => HexEditorTemplate,
@@ -170,7 +173,6 @@ namespace WolvenKit.Functionality.Layout
             ImporterToolViewModel _ => ImporterToolTemplate,
             MenuCreatorToolViewModel _ => MenuToolTemplate,
             PluginManagerViewModel _ => PluginManagerTemplate,
-            RadishToolViewModel _ => RadishToolTemplate,
             WccToolViewModel _ => WccToolTemplate,
             CR2WEditorViewModel _ => CR2WEditorTemplate,
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -14,25 +13,19 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using DynamicData;
-using DynamicData.Binding;
 using Orc.FileSystem;
-using WolvenKit.Functionality.Services;
 using ReactiveUI;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Dialogs;
-using WolvenManager.App.Services;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -55,6 +48,9 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
+        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
+        private readonly Tw3Controller _tw3Controller;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
 
@@ -63,6 +59,8 @@ namespace WolvenKit.ViewModels.Editor
         //public ReadOnlyObservableCollection<FileViewModel> BindingModel => _bindOut;
         private readonly ReadOnlyObservableCollection<FileModel> _bindGrid;
         public ReadOnlyObservableCollection<FileModel> BindGrid => _bindGrid;
+
+        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
 
 
         #endregion fields
@@ -74,7 +72,10 @@ namespace WolvenKit.ViewModels.Editor
             ILoggerService loggerService,
             IMessageService messageService,
             IWatcherService watcherService,
-            ICommandManager commandManager
+            ICommandManager commandManager,
+            IDirectoryService directoryService,
+            IFileService fileService,
+            Tw3Controller tw3Controller
             ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
@@ -82,13 +83,18 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => commandManager);
             Argument.IsNotNull(() => watcherService);
+            Argument.IsNotNull(() => directoryService);
+            Argument.IsNotNull(() => fileService);
+            Argument.IsNotNull(() => tw3Controller);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
             _commandManager = commandManager;
             _watcherService = watcherService;
- 
+            _directoryService = directoryService;
+            _fileService = fileService;
+            _tw3Controller = tw3Controller;
 
             SetupCommands();
             SetupToolDefaults();
@@ -100,8 +106,22 @@ namespace WolvenKit.ViewModels.Editor
 
             _watcherService.Files
                 .Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _bindGrid)
-                .Subscribe();
+                .Subscribe(OnNext);
+        }
+
+
+        public bool IsTreeBeingEdited { get; set; }
+        private void OnNext(IChangeSet<FileModel, ulong> obj)
+        {
+            IsTreeBeingEdited = true;
+            BindGrid1.Clear();
+            foreach (var fileModel in BindGrid)
+            {
+                BindGrid1.Add(fileModel);
+            }
+            IsTreeBeingEdited = false;
         }
 
         /// <summary>
@@ -157,18 +177,18 @@ namespace WolvenKit.ViewModels.Editor
         {
             Clipboard.SetText(SelectedItem.Name);
 
-            string GetArchivePath(string s)
-            {
-                if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
-                {
-                    var relpath = s[(ActiveMod.FileDirectory.Length + 1)..];
-                    return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
-                }
-                else
-                {
-                    return s;
-                }
-            }
+            //string GetArchivePath(string s)
+            //{
+            //    if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
+            //    {
+            //        var relpath = s[(ActiveMod.FileDirectory.Length + 1)..];
+            //        return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
+            //    }
+            //    else
+            //    {
+            //        return s;
+            //    }
+            //}
         }
 
         /// <summary>
@@ -234,20 +254,17 @@ namespace WolvenKit.ViewModels.Editor
             var fullpath = SelectedItem.FullName;
             try
             {
-                // TODO
-                var fileService = ServiceLocator.Default.ResolveType<IFileService>();
-                var directoryService = ServiceLocator.Default.ResolveType<IDirectoryService>();
-
+               
                 if (SelectedItem.IsDirectory)
                 {
-                    directoryService.Delete(fullpath);
+                    _directoryService.Delete(fullpath);
                     //Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
                     //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                     //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
                 else
                 {
-                    fileService.Delete(fullpath);
+                    _fileService.Delete(fullpath);
                     //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
                     //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                     //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
@@ -255,7 +272,7 @@ namespace WolvenKit.ViewModels.Editor
             }
             catch (Exception)
             {
-                MainController.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
+                _loggerService.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
             }
             finally
             {
@@ -409,7 +426,7 @@ namespace WolvenKit.ViewModels.Editor
         public ICommand OpenInAssetBrowserCommand { get; private set; }
 
 
-        private async void AddAllImports() => await WccHelper.AddAllImportsAsync(SelectedItem.FullName, true);
+        private async void AddAllImports() => await _tw3Controller.AddAllImportsAsync(SelectedItem.FullName, true);
 
         private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && !SelectedItem.IsDirectory;
 
@@ -444,7 +461,7 @@ namespace WolvenKit.ViewModels.Editor
             // TODO: Handle command logic here
         }
 
-        private async void ExportMesh() => await Task.Run(() => WccHelper.ExportFileToMod(SelectedItem.FullName));
+        private async void ExportMesh() => await Task.Run(() => _tw3Controller.ExportFileToMod(SelectedItem.FullName));
 
         #endregion Tw3 Commands
 
@@ -542,11 +559,11 @@ namespace WolvenKit.ViewModels.Editor
                     basedir = dir,
                     outdir = cookedtargetDir
                 };
-                await Task.Run(() => MainController.Get().WccHelper.RunCommand(cook));
+                await Task.Run(() => _tw3Controller.RunCommand(cook));
             }
             catch (Exception)
             {
-                MainController.LogString("Error cooking files.", Logtype.Error);
+                _loggerService.LogString("Error cooking files.", Logtype.Error);
             }
         }
 

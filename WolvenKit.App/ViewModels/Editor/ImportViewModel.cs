@@ -19,6 +19,8 @@ using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
+using WolvenKit.MVVM.Model;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W;
 using WolvenKit.RED3.CR2W.Types;
 
@@ -26,33 +28,6 @@ namespace WolvenKit.ViewModels.Editor
 {
     public class ImportViewModel : ToolViewModel
     {
-        #region constructors
-
-        public ImportViewModel(
-            IProjectManager projectManager,
-            ILoggerService loggerService,
-            IMessageService messageService
-        ) : base(ToolTitle)
-        {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => loggerService);
-
-            _projectManager = projectManager;
-            _loggerService = loggerService;
-            _messageService = messageService;
-
-            SetupCommands();
-            SetupToolDefaults();
-
-            Importableobjects = new BindingList<ImportableFile>();
-            UseLocalResourcesCommand.SafeExecute();
-            xbmdict = new Dictionary<string, XBMDumpRecord>();
-            RegisterXBMDump();
-        }
-
-        #endregion constructors
-
         #region Fields
 
         /// <summary>
@@ -68,6 +43,9 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
+        private readonly ISettingsManager _settingsManager;
+        private readonly Tw3Controller _tw3Controller;
+
 
         private readonly List<string> importableexts = Enum.GetNames(typeof(EImportable)).Select(_ => $".{_}".ToLower()).ToList();
 
@@ -75,6 +53,41 @@ namespace WolvenKit.ViewModels.Editor
         private DirectoryInfo importdepot;
 
         #endregion Fields
+
+        #region constructors
+
+        public ImportViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IMessageService messageService,
+            Tw3Controller tw3Controller,
+            ISettingsManager settingsManager
+        ) : base(ToolTitle)
+        {
+            Argument.IsNotNull(() => projectManager);
+            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => tw3Controller);
+            Argument.IsNotNull(() => settingsManager);
+
+            _projectManager = projectManager;
+            _loggerService = loggerService;
+            _messageService = messageService;
+            _tw3Controller = tw3Controller;
+            _settingsManager = settingsManager;
+
+            SetupCommands();
+            SetupToolDefaults();
+
+            Importableobjects = new BindingList<ImportableFile>();
+            UseLocalResourcesCommand.SafeExecute();
+            xbmdict = new Dictionary<string, XBMDumpRecord>();
+            RegisterXBMDump();
+        }
+
+        #endregion constructors
+
+        
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
 
@@ -117,14 +130,19 @@ namespace WolvenKit.ViewModels.Editor
 
         private bool CanImport() => Importableobjects != null;
 
-        private bool CanOpenFolder() => MainController.Get().ActiveMod != null;
+        private bool CanOpenFolder() => _projectManager.ActiveProject != null;
 
         private bool CanTryGetTextureGroups() => Importableobjects != null;
 
-        private bool CanUseLocalResources() => MainController.Get().ActiveMod != null;
+        private bool CanUseLocalResources() => _projectManager.ActiveProject != null;
 
         private async void Import()
         {
+            if (_projectManager.ActiveProject is not Tw3Project tw3Project)
+            {
+                return;
+            }
+
             var filesToImport = Importableobjects.Where(_ => _.IsSelected).ToList();
 
             foreach (var file in filesToImport)
@@ -153,11 +171,11 @@ namespace WolvenKit.ViewModels.Editor
                         using var fs = new FileStream(exNewpath, FileMode.Create, FileAccess.ReadWrite);
                         using var writer = new BinaryWriter(fs);
                         cr2w.Write(writer);
-                        MainController.LogString($"Succesfully imported {fullpath}.", Logtype.Success);
+                        _loggerService.LogString($"Succesfully imported {fullpath}.", Logtype.Success);
                     }
                     else
                     {
-                        MainController.LogString($"Failed to import {fullpath}.", Logtype.Error);
+                        _loggerService.LogString($"Failed to import {fullpath}.", Logtype.Error);
                     }
                 }
                 else
@@ -176,18 +194,18 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     File = filepath,
                     Out = newpath,
-                    Depot = MainController.Get().Configuration.DepotPath,
+                    Depot = _settingsManager.DepotPath,
                     texturegroup = file.TextureGroup
                 };
-                await Task.Run(() => MainController.Get().WccHelper.RunCommand(import));
+                await Task.Run(() => _tw3Controller.RunCommand(import));
             }
 
             string GetNewPath(ImportableFile file)
             {
                 var (relPath, isDlc) = file.GetREDRelativePath();
                 var newpath = isDlc
-                    ? Path.Combine(MainController.Get().ActiveMod.DlcUncookedDirectory, relPath)
-                    : Path.Combine(MainController.Get().ActiveMod.ModUncookedDirectory, relPath);
+                    ? Path.Combine(tw3Project.DlcUncookedDirectory, relPath)
+                    : Path.Combine(tw3Project.ModUncookedDirectory, relPath);
 
                 return newpath;
             }
@@ -250,8 +268,13 @@ namespace WolvenKit.ViewModels.Editor
 
         private void UseLocalResources()
         {
+            if (_projectManager.ActiveProject is not Tw3Project tw3Project)
+            {
+                return;
+            }
+
             var importablefiles = new List<string>();
-            foreach (var file in MainController.Get().ActiveMod.RawFiles)
+            foreach (var file in tw3Project.RawFiles)
             {
                 var originalExt = Path.GetExtension(file);
                 var lowerExt = originalExt.ToLower();
@@ -260,7 +283,7 @@ namespace WolvenKit.ViewModels.Editor
                     if (originalExt != lowerExt)
                     {
                         // rename file first because wcc can't handle uppercase file extensions
-                        var oldpath = Path.Combine(MainController.Get().ActiveMod.FileDirectory, file);
+                        var oldpath = Path.Combine(_projectManager.ActiveProject.FileDirectory, file);
                         var newpath = Path.ChangeExtension(oldpath, lowerExt);
                         File.Move(oldpath, newpath);
                     }
@@ -268,7 +291,7 @@ namespace WolvenKit.ViewModels.Editor
                     importablefiles.Add(Path.ChangeExtension(file, lowerExt));
                 }
             }
-            AddObjects(importablefiles, MainController.Get().ActiveMod.FileDirectory);
+            AddObjects(importablefiles, _projectManager.ActiveProject.FileDirectory);
 
             //TryGetTextureGroupsCommand.SafeExecute();
             RaisePropertyChanged(nameof(Importableobjects));
@@ -326,7 +349,7 @@ namespace WolvenKit.ViewModels.Editor
 
             // create mipmaps with texconv?
             // create a temporary dds
-            var tempdir = MainController.WorkDir;
+            var tempdir = IGameController.WorkDir;
             var textureformat = ImageUtility.GetEFormatFromCompression(compression);
             var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
@@ -355,7 +378,7 @@ namespace WolvenKit.ViewModels.Editor
             // check if not a power of 2
             if (height % 2 != 0)
             {
-                MainController.LogString("Texture dimensions not a power of 2. Please resize appropriately.", Logtype.Error);
+                _loggerService.LogString("Texture dimensions not a power of 2. Please resize appropriately.", Logtype.Error);
                 return null;
             }
 
@@ -444,7 +467,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private void RegisterXBMDump()
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MainController.XBMDumpPath);
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, IGameController.XBMDumpPath);
             using var fr = new FileStream(path, FileMode.Open, FileAccess.Read);
             using var sr = new StreamReader(fr);
             using var csv = new CsvReader(sr, CultureInfo.InvariantCulture);

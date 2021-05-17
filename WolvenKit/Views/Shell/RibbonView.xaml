@@ -70,6 +70,14 @@
 
                 <!--  Project  -->
                 <fluent:RibbonGroupBox Header="Project">
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.ShowCodeEditor}"
+                     Header="Code Editor"
+                     Size="Middle"
+                     >
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconBootstrapIcons Kind="CodeSquare" />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.OpenProject}" Header="Open Project">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
@@ -77,16 +85,17 @@
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="GoToFile"
+                             Kind="FolderOpened"
                              />
                         </fluent:Button.LargeIcon>
+
                         <fluent:Button.Icon>
                             <iconPacks:PackIconCodicons
                              Width="25"
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="GoToFile"
+                             Kind="FolderOpened"
                              />
                         </fluent:Button.Icon>
                     </fluent:Button>
@@ -97,7 +106,7 @@
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="NewFile"
+                             Kind="NewFolder"
                              />
                         </fluent:Button.LargeIcon>
                         <fluent:Button.Icon>
@@ -106,7 +115,7 @@
                              Height="25"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Kind="NewFile"
+                             Kind="NewFolder"
                              />
                         </fluent:Button.Icon>
                     </fluent:Button>
@@ -115,6 +124,26 @@
 
                 <!--  File  -->
                 <fluent:RibbonGroupBox Header="File">
+                    <fluent:Button Command="{catel:CommandManagerBinding Application.NewFile}" Header="New File">
+                        <fluent:Button.LargeIcon>
+                            <iconPacks:PackIconCodicons
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="NewFile"
+                            />
+                        </fluent:Button.LargeIcon>
+                        <fluent:Button.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="NewFile"
+                            />
+                        </fluent:Button.Icon>
+                    </fluent:Button>
                     <fluent:Button Command="{catel:CommandManagerBinding Application.SaveFile}" Header="Save File">
                         <fluent:Button.LargeIcon>
                             <iconPacks:PackIconCodicons
@@ -234,12 +263,12 @@
             </fluent:RibbonTabItem>
 
             <!--  Editors Tab  -->
-            <fluent:RibbonTabItem Header="Editors" Visibility="Collapsed">
+            <fluent:RibbonTabItem Header="Editors" Visibility="Visible">
                 <fluent:RibbonGroupBox Header="Quick Access">
                     <fluent:Button
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     Command="{catel:CommandManagerBinding Application.ShowVisualEditor}"
+                     Command="{catel:CommandManagerBinding Application.ShowImportExportTool}"
                      Header="Visual Editor"
                      >
                         <fluent:Button.LargeIcon>
@@ -288,15 +317,7 @@
                         </fluent:Button.Icon>
                     </fluent:Button>
 
-                    <fluent:Button
-                     Command="{catel:CommandManagerBinding Application.ShowCodeEditor}"
-                     Header="Code Editor"
-                     Size="Middle"
-                     >
-                        <fluent:Button.Icon>
-                            <iconPacks:PackIconBootstrapIcons Kind="CodeSquare" />
-                        </fluent:Button.Icon>
-                    </fluent:Button>
+
 
                     <fluent:Button
                      Command="{catel:CommandManagerBinding Application.ShowHexEditor}"
@@ -455,17 +476,24 @@
                      >
                         <Grid Height="70">
                             <TextBlock
+                             Width="90"
+                             Margin="0"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Bottom"
                              Text="Browse Material Repository"
-                                TextAlignment="Center"
-                                TextWrapping="Wrap"
-                                Width="90"
-                                Margin="0"
+                             TextAlignment="Center"
+                             TextWrapping="Wrap"
                              />
 
 
-                            <iconPacks:PackIconBootstrapIcons HorizontalAlignment="Center" VerticalAlignment="Top" Margin="6" Height="28" Width="28" Kind="Image" />
+                            <iconPacks:PackIconBootstrapIcons
+                             Width="28"
+                             Height="28"
+                             Margin="6"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Top"
+                             Kind="Image"
+                             />
 
                         </Grid>
 

@@ -120,43 +120,43 @@ namespace WolvenKit.Views.Shell
         private bool CanLoadLayout(object parameter) => LayoutLoader.CanLoadLayout();
 
         private void OnLayoutLoaded_Event(object sender, LayoutLoadedEventArgs layoutLoadedEvent) => Application.Current.Dispatcher.Invoke(() =>
-                                                                                                   {
-                                                                                                       try
-                                                                                                       {
-                                                                                                           // Process the finally block since we have nothing to do here
-                                                                                                           var result = layoutLoadedEvent?.Result;
-                                                                                                           if (result == null)
-                                                                                                           {
-                                                                                                               return;
-                                                                                                           }
+       {
+           try
+           {
+               // Process the finally block since we have nothing to do here
+               var result = layoutLoadedEvent?.Result;
+               if (result == null)
+               {
+                   return;
+               }
 
-                                                                                                           if (result.LoadwasSuccesful)
-                                                                                                           {
-                                                                                                               // Make sure AvalonDock control is visible at the end of restoring layout
-                                                                                                               var stringLayoutSerializer = new XmlLayoutSerializer(dockManager);
+               if (result.LoadwasSuccesful)
+               {
+                   // Make sure AvalonDock control is visible at the end of restoring layout
+                   var stringLayoutSerializer = new XmlLayoutSerializer(dockManager);
 
-                                                                                                               using var reader = new StringReader(result.XmlContent);
-                                                                                                               stringLayoutSerializer.Deserialize(reader);
-                                                                                                           }
-                                                                                                       }
-                                                                                                       catch (Exception exception)
-                                                                                                       {
-                                                                                                           Debug.WriteLine(exception);
-                                                                                                       }
-                                                                                                       finally
-                                                                                                       {
-                                                                                                           // Make sure AvalonDock control is visible at the end of restoring layout
-                                                                                                           dockManager.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                   using var reader = new StringReader(result.XmlContent);
+                   stringLayoutSerializer.Deserialize(reader);
+               }
+           }
+           catch (Exception exception)
+           {
+               Debug.WriteLine(exception);
+           }
+           finally
+           {
+               // Make sure AvalonDock control is visible at the end of restoring layout
+               dockManager.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-                                                                                                           // show default tools
-                                                                                                           //ServiceLocator.Default.ResolveType<ICommandManager>()
-                                                                                                           //    .GetCommand(AppCommands.Application.ShowLog)
-                                                                                                           //    .SafeExecute(true);
-                                                                                                           //ServiceLocator.Default.ResolveType<ICommandManager>()
-                                                                                                           //    .GetCommand(AppCommands.Application.ShowProjectExplorer)
-                                                                                                           //    .SafeExecute(true);
-                                                                                                       }
-                                                                                                   }, System.Windows.Threading.DispatcherPriority.Background);
+               // show default tools
+               //ServiceLocator.Default.ResolveType<ICommandManager>()
+               //    .GetCommand(AppCommands.Application.ShowLog)
+               //    .SafeExecute(true);
+               //ServiceLocator.Default.ResolveType<ICommandManager>()
+               //    .GetCommand(AppCommands.Application.ShowProjectExplorer)
+               //    .SafeExecute(true);
+           }
+       }, System.Windows.Threading.DispatcherPriority.Background);
 
         #endregion LoadLayoutCommand
 

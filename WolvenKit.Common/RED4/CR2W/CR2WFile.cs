@@ -12,13 +12,14 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Catel.IoC;
 using WolvenKit.Common;
+using WolvenKit.Common.Exceptions;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.RED4.CR2W.Exceptions;
 using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W

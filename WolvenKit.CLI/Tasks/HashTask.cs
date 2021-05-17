@@ -1,25 +1,29 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 
-        public static int HashTask(string[] input, bool missing)
+        public int HashTask(string[] input, bool missing, string prepare)
         {
             #region checks
 
-            foreach (var s in input)
+            if (input is {Length: > 0})
             {
-                if (!string.IsNullOrEmpty(s))
+                foreach (var s in input)
                 {
-                    logger.LogString(FNV1A64HashAlgorithm.HashString(s).ToString(), Logtype.Normal);
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        _loggerService.Info(FNV1A64HashAlgorithm.HashString(s).ToString());
+                    }
                 }
             }
 
@@ -51,6 +55,11 @@ namespace CP77Tools.Tasks
                         }
                     }
                 }
+            }
+
+            if (!string.IsNullOrEmpty(prepare))
+            {
+                _hashService.Serialize(prepare);
             }
 
             return 1;

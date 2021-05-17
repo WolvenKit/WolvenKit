@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -16,12 +17,13 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Fields
 
@@ -31,12 +33,12 @@ namespace CP77Tools.Tasks
 
         #region Methods
 
-        public static void DumpTask(string[] path, bool imports, bool missinghashes,
+        public void DumpTask(string[] path, bool imports, bool missinghashes,
             bool texinfo, bool classinfo, bool dump, bool list)
         {
             if (path == null || path.Length < 1)
             {
-                logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
@@ -46,14 +48,14 @@ namespace CP77Tools.Tasks
             });
         }
 
-        public static int DumpTaskInner(string path, bool imports, bool missinghashes,
+        public int DumpTaskInner(string path, bool imports, bool missinghashes,
             bool texinfo, bool classinfo, bool dump, bool list)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                ConsoleFunctions.logger.LogString("Please fill in an input path.", Logtype.Error);
+                _loggerService.Warning("Please fill in an input path.");
                 return 0;
             }
 
@@ -80,15 +82,13 @@ namespace CP77Tools.Tasks
             {
                 archives.AddRange(inputDirInfo
                     .GetFiles("*.archive", SearchOption.AllDirectories)
-                    .Select(_ => new Archive(_.FullName)));
+                    .Select(_ => Red4ParserServiceExtensions.ReadArchive(_.FullName, _hashService)));
             }
             else
             {
-                archives.Add(new Archive(inputFileInfo.FullName));
+                archives.Add(Red4ParserServiceExtensions.ReadArchive(inputFileInfo.FullName, _hashService));
             }
 
-            var mainController = ServiceLocator.Default.ResolveType<IHashService>();
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             var typedict = new ConcurrentDictionary<string, IEnumerable<string>>();
 
             // Parallel
@@ -111,11 +111,11 @@ namespace CP77Tools.Tasks
                         }).ToList();
 
                     var total = query.Count;
-                    logger.LogString($"Exporting {total} bundle entries ");
+                    _loggerService.Log($"Exporting {total} bundle entries ");
 
                     Thread.Sleep(1000);
                     int progress = 0;
-                    logger.LogProgress(0);
+                    _progress.Report(0);
 
                     // foreach extension
                     Parallel.ForEach(query, result =>
@@ -126,7 +126,7 @@ namespace CP77Tools.Tasks
                             {
                                 using var ms = new MemoryStream();
                                 ar.CopyFileToStream(ms, (fi as FileEntry).NameHash64, false);
-                                var cr2w = ModTools.TryReadCr2WFile(ms);
+                                var cr2w = _modTools.TryReadCr2WFile(ms);
                                 if (cr2w == null)
                                 {
                                     return;
@@ -141,9 +141,10 @@ namespace CP77Tools.Tasks
                         }
 
                         Interlocked.Increment(ref progress);
-                        logger.LogProgress(progress / (float)total);
+                        _progress.Report(progress / (float)total);
 
-                        logger.LogString($"Dumped extension {result.Key}", Logtype.Normal);
+                        
+                        _loggerService.Log($"Dumped extension {result.Key}");
                     });
                 }
                 if (imports || texinfo)
@@ -157,11 +158,11 @@ namespace CP77Tools.Tasks
 
                     // get info
                     var count = ar.FileCount;
-                    logger.LogString($"Exporting {count} bundle entries ");
+                    _loggerService.Log($"Exporting {count} bundle entries ");
 
                     Thread.Sleep(1000);
                     int progress = 0;
-                    logger.LogProgress(0);
+                    _progress.Report(0);
 
                     Parallel.For(0, count, i =>
                     {
@@ -173,7 +174,7 @@ namespace CP77Tools.Tasks
                         {
                             using var ms = new MemoryStream();
                             ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
-                            var cr2w = ModTools.TryReadCr2WFileHeaders(ms);
+                            var cr2w = _modTools.TryReadCr2WFileHeaders(ms);
                             if (cr2w == null)
                             {
                                 return;
@@ -194,7 +195,7 @@ namespace CP77Tools.Tasks
                             {
                                 using var ms = new MemoryStream();
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
-                                var cr2w = ModTools.TryReadCr2WFile(ms);
+                                var cr2w = _modTools.TryReadCr2WFile(ms);
 
                                 if (cr2w?.Chunks.FirstOrDefault()?.data is not CBitmapTexture xbm ||
                                     !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
@@ -221,7 +222,7 @@ namespace CP77Tools.Tasks
                         }
 
                         Interlocked.Increment(ref progress);
-                        logger.LogProgress(progress / (float)count);
+                        _progress.Report(progress / (float)count);
                     });
 
                     // write
@@ -250,13 +251,13 @@ namespace CP77Tools.Tasks
                         foreach (var str in allimports.Distinct())
                         {
                             var hash = FNV1A64HashAlgorithm.HashString(str);
-                            if (!mainController.Contains(hash))
+                            if (!_hashService.Contains(hash))
                             {
                                 hwriter.WriteLine($"{str},{hash}");
                             }
                         }
 
-                        logger.LogString($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.", Logtype.Success);
+                        _loggerService.Success($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.");
 
                         //write
                         File.WriteAllText($"{ar.ArchiveAbsolutePath}.json.",
@@ -266,7 +267,7 @@ namespace CP77Tools.Tasks
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json.", Logtype.Success);
+                        _loggerService.Success($"Finished. Dump file written to {inputFileInfo.FullName}.json.");
                     }
 
                     if (texinfo)
@@ -279,7 +280,7 @@ namespace CP77Tools.Tasks
                                 PreserveReferencesHandling = PreserveReferencesHandling.None,
                                 TypeNameHandling = TypeNameHandling.None
                             }));
-                        logger.LogString($"Finished. Dump file written to {inputFileInfo.FullName}.json", Logtype.Success);
+                        _loggerService.Success($"Finished. Dump file written to {inputFileInfo.FullName}.json");
                     }
                 }
 
@@ -294,14 +295,14 @@ namespace CP77Tools.Tasks
                             TypeNameHandling = TypeNameHandling.None
                         }));
 
-                    logger.LogString($"Finished dumping {ar.ArchiveAbsolutePath}.", Logtype.Success);
+                    _loggerService.Success($"Finished dumping {ar.ArchiveAbsolutePath}.");
                 }
 
                 if (list)
                 {
                     foreach (var entry in ar.Files.Values.Cast<FileEntry>())
                     {
-                        logger.LogString(entry.FileName, Logtype.Normal);
+                        _loggerService.Info(entry.FileName);
                     }
                 }
             }
@@ -358,7 +359,7 @@ namespace CP77Tools.Tasks
                         TypeNameHandling = TypeNameHandling.None
                     }));
 
-                logger.LogString("Done.", Logtype.Success);
+                _loggerService.Success("Done.");
             }
             if (missinghashes)
             {
@@ -377,7 +378,7 @@ namespace CP77Tools.Tasks
                             ctr++;
                         }
                     }
-                    logger.LogString($"{ar.ArchiveAbsolutePath} - missing: {ctr}", Logtype.Normal);
+                    _loggerService.Info($"{ar.ArchiveAbsolutePath} - missing: {ctr}");
                 }
             }
 

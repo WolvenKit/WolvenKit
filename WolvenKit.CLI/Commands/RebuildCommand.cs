@@ -1,5 +1,8 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using CP77Tools.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
@@ -31,7 +34,14 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--unsaferaw" },
                 "Optionally add raw assets (DDS textures, FBX models) as buffers without check."));
 
-            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool>(Tasks.ConsoleFunctions.RebuildTask);
+            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool, IHost>(Action);
+        }
+
+        private void Action(string[] path, bool buffers, bool textures, bool import, bool keep, bool clean, bool unsaferaw, IHost host)
+        {
+            var serviceProvider = host.Services;
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            consoleFunctions.RebuildTask(path, buffers, textures, import, keep, clean, unsaferaw);
         }
 
         #endregion Constructors

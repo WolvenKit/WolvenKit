@@ -1,27 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using Catel;
-using Catel.IoC;
 using DynamicData;
-using DynamicData.Binding;
 using ReactiveUI;
-using Splat;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.ViewModels.Editor.Basic;
 
-namespace WolvenManager.App.Services
+namespace WolvenKit.Functionality.Services
 {
     /// <summary>
     /// This service watches certain locations in the game files and notifies changes
@@ -42,9 +31,9 @@ namespace WolvenManager.App.Services
 
         #endregion
 
-        public WatcherService()
+        public WatcherService(IProjectManager projectManager)
         {
-            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+            _projectManager = projectManager;
 
             _projectManager.WhenAnyValue(_ => _.IsProjectLoaded).Subscribe(async loaded =>
             {
@@ -113,6 +102,8 @@ namespace WolvenManager.App.Services
             _modsWatcher.Deleted -= OnChanged;
             _modsWatcher.Renamed -= OnRenamed;
             _modsWatcher.EnableRaisingEvents = false;
+
+            //_files.Clear();
         }
 
         public bool IsSuspended { get; set; }
@@ -128,6 +119,15 @@ namespace WolvenManager.App.Services
             var allFiles = Directory
                     .GetFileSystemEntries(proj.FileDirectory, "*", SearchOption.AllDirectories)
                 ;
+
+            //_files.Clear();
+            //foreach (var file in allFiles)
+            //{
+            //    var m = new FileModel(file);
+            //    _files.AddOrUpdate(m);
+            //}
+
+            //_files.AddOrUpdate(allFiles.Select(_ => new FileModel(_)));
 
             _files.Edit(innerList =>
             {

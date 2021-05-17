@@ -32,53 +32,37 @@ namespace WolvenKit.Models
 
         public static string ToCsvString(this IArrayAccessor wrappedArray, bool useHeader = false)
         {
-            try
+            using var ms = new MemoryStream();
+            using var writer = new StreamWriter(ms, Encoding.UTF8);
+            using var reader = new StreamReader(ms);
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                using var ms = new MemoryStream();
-                using var writer = new StreamWriter(ms, Encoding.UTF8);
-                using var reader = new StreamReader(ms);
-                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-                {
-                    HasHeaderRecord = useHeader,
-                };
-                using var csv = new CsvWriter(writer, config);
-                RegisterClassMap(wrappedArray.InnerType, csv);
-                csv.WriteRecords(wrappedArray);
+                HasHeaderRecord = useHeader,
+            };
+            using var csv = new CsvWriter(writer, config);
+            RegisterClassMap(wrappedArray.InnerType, csv);
+            csv.WriteRecords(wrappedArray);
 
-                writer.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
+            writer.Flush();
+            ms.Seek(0, SeekOrigin.Begin);
 
-                var s = reader.ReadToEnd();
-                return s;
-            }
-            catch (Exception)
-            {
-                MainController.LogString("Creating Csv file failed, please double-check your input.", Logtype.Error);
-                return null;
-            }
+            var s = reader.ReadToEnd();
+            return s;
         }
 
         private static IEnumerable<object> FromCsvInner(Type type, TextReader reader, bool useHeader = false)
         {
-            try
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-                {
-                    HasHeaderRecord = useHeader,
-                };
-                using var csv = new CsvReader(reader, config);
-                RegisterClassMap(type, csv);
+                HasHeaderRecord = useHeader,
+            };
+            using var csv = new CsvReader(reader, config);
+            RegisterClassMap(type, csv);
 
-                var records = csv.GetRecords(type).ToList();
-                // TODO: is there a way without recreating all?
+            var records = csv.GetRecords(type).ToList();
+            // TODO: is there a way without recreating all?
 
-                return records;
-            }
-            catch (Exception)
-            {
-                MainController.LogString("Creating Csv file failed, please double-check your input.", Logtype.Error);
-                return null;
-            }
+            return records;
         }
 
         private static void RegisterClassMap(Type type, CsvWriter csv)

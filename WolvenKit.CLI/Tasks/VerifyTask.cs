@@ -11,13 +11,12 @@ using StreamExtensions = Catel.IO.StreamExtensions;
 
 namespace CP77Tools.Tasks
 {
-    public static partial class ConsoleFunctions
+    public partial class ConsoleFunctions
     {
         #region Methods
 
-        public static int VerifyTask(string[] path, ulong[] hashes)
+        public int VerifyTask(string[] path, ulong[] hashes)
         {
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             var gameDirectory = new DirectoryInfo(CP77_DIR);
             var gameArchiveDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
@@ -34,21 +33,22 @@ namespace CP77Tools.Tasks
                     using var fs = new FileStream(s, FileMode.Open, FileAccess.Read);
                     if (VerifyFile(fs, s))
                     {
-                        logger.LogString($"{s} - No problems found.", Logtype.Success);
+                        _loggerService.Success($"{s} - No problems found.");
                     }
                     else
                     {
-                        logger.LogString($"{s} - Verification failed, files not binary equal.", Logtype.Error);
+                        _loggerService.Error($"{s} - Verification failed, files not binary equal.");
                     }
                 }
             }
 
             if (hashes != null)
             {
-                var bm = new ArchiveManager(gameArchiveDir);
+                var bm =  new ArchiveManager();
+                bm.LoadAll(gameArchiveDir.FullName);
                 foreach (var hash in hashes)
                 {
-                    if (!hashService.Contains(hash))
+                    if (!_hashService.Contains(hash))
                     {
                         continue;
                     }
@@ -64,11 +64,11 @@ namespace CP77Tools.Tasks
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                         if (VerifyFile(ms))
                         {
-                            logger.LogString($"{fileEntry.NameOrHash} - No errors found.", Logtype.Success);
+                            _loggerService.Success($"{fileEntry.NameOrHash} - No errors found.");
                         }
                         else
                         {
-                            logger.LogString($"{fileEntry.NameOrHash} - Verification failed, files not binary equal.", Logtype.Error);
+                            _loggerService.Error($"{fileEntry.NameOrHash} - Verification failed, files not binary equal.");
                         }
                     }
                 }

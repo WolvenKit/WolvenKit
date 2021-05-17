@@ -24,7 +24,6 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
             if (projectManager.ActiveProject is EditorProject ep)
             {
                 EditorProject = ep;
-                EditorProjectData = ep.Data;
             }
 
             PublishWizardModel = serviceLocator.ResolveType<PublishWizardModel>();
@@ -33,15 +32,6 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
         #endregion constructors
 
         #region properties
-
-        /// <summary>
-        /// Gets or sets the EditorProjectData.
-        /// </summary>
-        [Model]
-        [Expose("Name")]
-        [Expose("Version")]
-        [Expose("Author")]
-        public EditorProjectData EditorProjectData { get; set; }
 
         /// <summary>
         /// Gets or sets the EditorProject.

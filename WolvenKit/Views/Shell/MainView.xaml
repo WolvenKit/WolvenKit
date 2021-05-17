@@ -10,6 +10,7 @@
  xmlns:editor="clr-namespace:WolvenKit.Views.Editor"
  xmlns:importertool1="clr-namespace:WolvenKit.Views.Editor"
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+ xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:views1="clr-namespace:WolvenKit.Views.Editor"
  xmlns:visualeditorz="clr-namespace:WolvenKit.Views.Editor.VisualEditor"
  IsVisibleChanged="UserControl_IsVisibleChanged_1"
@@ -70,15 +71,16 @@
             <DockingManager.LayoutItemTemplateSelector>
 
                 <ad:PanesTemplateSelector>
-
-                    <!--  DocumentView  -->
                     <ad:PanesTemplateSelector.FileViewTemplate>
                         <DataTemplate>
                             <editor:DocumentView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.FileViewTemplate>
-
-                    <!--  LogView  -->
+                    <ad:PanesTemplateSelector.ImportExportToolTemplate>
+                        <DataTemplate>
+                            <views1:ImportExportView />
+                        </DataTemplate>
+                    </ad:PanesTemplateSelector.ImportExportToolTemplate>
                     <ad:PanesTemplateSelector.PropertiesTemplate>
                         <DataTemplate>
                             <views1:PropertiesView />

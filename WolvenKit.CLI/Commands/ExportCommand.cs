@@ -1,6 +1,8 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using CP77Tools.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using WolvenKit.Common.DDS;
 
 namespace CP77Tools.Commands
@@ -22,7 +24,14 @@ namespace CP77Tools.Commands
             AddOption(new Option<EUncookExtension>(new[] { "--uext" }, "Format to uncook textures into (tga, bmp, jpg, png, dds), TGA by default."));
             AddOption(new Option<bool>(new[] { "--flip", "-f" }, "Flips textures vertically (can help with legibility if there's text)."));
 
-            Handler = CommandHandler.Create<string[], EUncookExtension, bool>(ConsoleFunctions.ExportTask);
+            Handler = CommandHandler.Create<string[], EUncookExtension, bool, IHost>(Action);
+        }
+
+        private void Action(string[] path, EUncookExtension uext, bool flip, IHost host)
+        {
+            var serviceProvider = host.Services;
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            consoleFunctions.ExportTask(path, uext, flip);
         }
 
         #endregion Constructors

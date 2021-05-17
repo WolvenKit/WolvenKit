@@ -6,12 +6,13 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W
 {
-    public sealed class CR2WManager
+    public sealed class CR2WManager: ICr2wCompiler
     {
         #region Fields
 
@@ -40,7 +41,7 @@ namespace WolvenKit.RED3.CR2W.Types
 ";
 
         private static readonly Func<string, string> funcCtor = (x) => $"\t\tpublic {x}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)\r\n\t\t{{\r\n\t\t}}\r\n";
-        private static readonly CR2WManager instance = new CR2WManager();
+
         private static Assembly m_assembly;
 
         private static Dictionary<string, Type> m_enums;
@@ -49,25 +50,19 @@ namespace WolvenKit.RED3.CR2W.Types
 
         private static Dictionary<string, Type> m_types;
 
+        private ILoggerService _loggerService;
+
         #endregion Fields
 
         #region Constructors
 
-        static CR2WManager()
+        public CR2WManager(ILoggerService loggerService)
         {
-        }
-
-        private CR2WManager()
-        {
+            _loggerService = loggerService;
         }
 
         #endregion Constructors
 
-        #region Properties
-
-        public static CR2WManager Instance => instance;
-
-        #endregion Properties
 
         #region Methods
 
@@ -121,9 +116,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return type;
         }
 
-        public static void Init(string projectpath)
+        public void Init(string projectpath)
         {
-            //var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             m_projectinfo = new DirectoryInfo(projectpath);
 
             ReloadAssembly();
@@ -133,22 +127,27 @@ namespace WolvenKit.RED3.CR2W.Types
         /// Completely reloads a custom assembly
         /// from .ws scripts and compiles all classes
         /// </summary>
-        public static void ReloadAssembly()
+        public void ReloadAssembly()
         {
             if (m_projectinfo != null && m_projectinfo.Exists)
             {
                 var (count, csharpstring) = InterpretScriptClasses();
                 if (count <= 0)
+                {
                     return;
+                }
+
                 m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
                 if (m_assembly != null)
                 {
-                    //logger.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}.", Logtype.Success);
+                    _loggerService.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}.", Logtype.Success);
                     LoadTypes();
                     LoadEnums();
                 }
-                //else
-                //    logger.LogString($"Custom class assembly could not be compiled. An error occurred.", Logtype.Error);
+                else
+                {
+                    _loggerService.LogString($"Custom class assembly could not be compiled. An error occurred.", Logtype.Error);
+                }
             }
         }
 
@@ -251,9 +250,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return csline;
         }
 
-        private static (int, string) InterpretScriptClasses()
+        private (int, string) InterpretScriptClasses()
         {
-            //var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
             List<string> importedClasses = new List<string>();
             List<string> importedEnums = new List<string>();
             string output = "";
@@ -425,8 +423,8 @@ namespace WolvenKit.RED3.CR2W.Types
 
             if (importedClasses.Count > 0)
             {
-                //logger.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
-                //                 $"{string.Join(", ", importedClasses)}", Logtype.Success);
+                _loggerService.LogString($"Sucessfully parsed {importedClasses.Count} custom classes: " +
+                                 $"{string.Join(", ", importedClasses)}", Logtype.Success);
             }
 
             return (importedClasses.Count, output);

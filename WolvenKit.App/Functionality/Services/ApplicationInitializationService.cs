@@ -8,12 +8,11 @@ using Catel.MVVM;
 using Catel.Services;
 using Orchestra.Services;
 using ProtoBuf.Meta;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.MVVM.Model.ProjectManagement;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenManager.App.Services;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -53,7 +52,7 @@ namespace WolvenKit.Functionality.Services
         {
             await base.InitializeAfterShowingShellAsync();
 
-            await LoadProjectAsync();
+            LoadProject();
         }
 
         public override async Task InitializeBeforeCreatingShellAsync()
@@ -62,7 +61,6 @@ namespace WolvenKit.Functionality.Services
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
             // Non-async first
-            RegisterTypes();
             InitializeFonts();
             InitializeCommands();
 
@@ -123,6 +121,7 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.ShowPackageInstaller);
             _commandManager.CreateCommand(AppCommands.Application.ShowMimicsTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowCR2WEditor);
+            _commandManager.CreateCommand(AppCommands.Application.ShowImportExportTool);
 
             _commandManager.CreateCommand(AppCommands.Application.ShowAssetBrowser);
             _commandManager.CreateCommand(AppCommands.Application.ShowBulkEditor);
@@ -141,7 +140,7 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.ShowGameDebuggerTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowMenuCreatorTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowPluginManager);
-            _commandManager.CreateCommand(AppCommands.Application.ShowRadishTool);
+            //_commandManager.CreateCommand(AppCommands.Application.ShowRadishTool);
             _commandManager.CreateCommand(AppCommands.Application.ShowWccTool);
 
             _commandManager.CreateCommand(AppCommands.Application.OpenFile);
@@ -172,7 +171,7 @@ namespace WolvenKit.Functionality.Services
             return Task.CompletedTask;
         }
 
-        private async Task LoadProjectAsync()
+        private void LoadProject()
         {
             using (_pleaseWaitService.PushInScope())
             {
@@ -184,31 +183,6 @@ namespace WolvenKit.Functionality.Services
                     throw new Exception(error);
                 }
             }
-        }
-
-        private void RegisterTypes()
-        {
-            _serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
-
-            // singletons
-            _serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
-
-
-
-
-            //_serviceLocator.RegisterType<IMainWindowTitleService, MainWindowTitleService>();      //TODO:
-           
-
-            // Orchestra
-            _serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
-
-            // Wkit
-            _serviceLocator.RegisterType<ILoggerService, LoggerService>();
-
-            var config = SettingsManager.Load();
-            _serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
-            _serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
-
         }
 
         #endregion methods

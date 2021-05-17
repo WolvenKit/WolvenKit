@@ -4,9 +4,9 @@ using Catel.Fody;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Model;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Others;
@@ -18,6 +18,9 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
         #region fields
 
         private readonly IOpenFileService _openFileService;
+        private readonly IGameControllerFactory _gameControllerFactory;
+        private readonly IProjectManager _projectManager;
+
 
         #endregion fields
 
@@ -26,17 +29,17 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
         public FinalizeSetupViewModel(
             IServiceLocator serviceLocator,
             IProjectManager projectManager,
-            IOpenFileService openFileService)
+            IOpenFileService openFileService,
+            IGameControllerFactory gameControllerFactory
+        )
         {
             Argument.IsNotNull(() => serviceLocator);
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => openFileService);
 
+            _projectManager = projectManager;
+            _gameControllerFactory = gameControllerFactory;
             _openFileService = openFileService;
-            if (projectManager.ActiveProject is EditorProject ep)
-            {
-                EditorProjectData = ep.Data;
-            }
 
             PublishWizardModel = serviceLocator.ResolveType<PublishWizardModel>();
 
@@ -47,15 +50,6 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
         #endregion constructors
 
         #region properties
-
-        /// <summary>
-        /// Gets or sets the EditorProjectData.
-        /// </summary>
-        [Model]
-        [Expose("Name")]
-        [Expose("Version")]
-        [Expose("Author")]
-        public EditorProjectData EditorProjectData { get; set; }
 
         /// <summary>
         /// Gets or sets the PublishWizardModel.
@@ -96,8 +90,8 @@ namespace WolvenKit.ViewModels.Wizards.PublishWizard
             if (result.Result)
             {
                 //result.DirectoryName;
-                await MainController.GetGame().PackAndInstallProject();
-                await MainController.GetGame().PackageMod();
+                await _gameControllerFactory.GetController().PackAndInstallProject();
+                await _gameControllerFactory.GetController().PackageMod();
                 var host = ServiceLocator.Default.ResolveType<UserControlHostWindowViewModel>();
                 host?.CloseViewModelAsync(true);
             }

@@ -153,6 +153,27 @@
     <Content Include="Resources\Media\Images\Icons\Files\bnk.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Media\Images\Icons\Files\env.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\gidata.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\gradient.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\lipmap.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mlmask.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\mltemplate.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\w2animev.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Editor\Basic\default.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -297,8 +318,8 @@
 
     <PackageReference Include="Ab3d.DXEngine" Version="4.3.7763" />
     <PackageReference Include="Ab3d.PowerToys" Version="9.5.7763" />
-    <PackageReference Include="Catel.Core" Version="5.12.13" />
-    <PackageReference Include="Catel.MVVM" Version="5.12.13" />
+    <PackageReference Include="Catel.Core" Version="5.12.14" />
+    <PackageReference Include="Catel.MVVM" Version="5.12.14" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="CatFacts.Net" Version="0.1.1" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
@@ -321,8 +342,8 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
     <PackageReference Include="NAudio" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NodeNetwork" Version="5.1.2" />
-    <PackageReference Include="NodeNetworkToolkit" Version="5.1.2" />
+    <PackageReference Include="NodeNetwork" Version="5.2.0" />
+    <PackageReference Include="NodeNetworkToolkit" Version="5.2.0" />
    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -335,22 +356,23 @@
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
     <PackageReference Include="Panuon.UI.Silver" Version="1.1.3.4" />
-    <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.1" />
+    <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.2" />
     <PackageReference Include="Pfim" Version="0.10.0" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="2.80.2" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.58" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.58" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.59" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />
@@ -1647,6 +1669,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\default.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\dtex.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\ent.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\env.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\envprob b.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\envprob_b.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\es.svg" />
@@ -1660,6 +1683,8 @@
     <None Remove="Resources\Media\Images\Icons\Files\garmentlayerparams.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\genericanimdb.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\geometry_cache.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\gidata.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\gradient.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Grassmask.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\guiconfig.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\hitrepresentation.svg" />
@@ -1668,10 +1693,13 @@
     <None Remove="Resources\Media\Images\Icons\Files\joke.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\json2.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\lane_spots.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\lipmap.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\locopaths.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\materialinstance2.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\menu.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\mlmask.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\mlsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\mltemplate.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\morphtarget.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\mt.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Navconfig.svg" />
@@ -1713,6 +1741,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\subs.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\terrainsetup.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Usm.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\w2animev.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2em.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2ent.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2fnt.svg" />
@@ -1768,5 +1797,13 @@
     <Reference Include="AutoUpdater.NET">
       <HintPath>..\Libs\AutoUpdater.NET.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PathIcon.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\Templates\HandleTemplateView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 </Project>

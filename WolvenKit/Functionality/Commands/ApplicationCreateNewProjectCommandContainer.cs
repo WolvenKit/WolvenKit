@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
 using Catel.MVVM;
@@ -9,6 +10,7 @@ using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
@@ -24,6 +26,8 @@ namespace WolvenKit.Functionality.Commands
 
         private readonly ILoggerService _loggerService;
         private readonly ISaveFileService _saveFileService;
+        private readonly Cp77Controller _cp77Controller;
+        private readonly Tw3Controller _tw3Controller;
 
         #endregion Fields
 
@@ -34,7 +38,10 @@ namespace WolvenKit.Functionality.Commands
             IProjectManager projectManager,
             ISaveFileService saveFileService,
             IGrowlNotificationService notificationService,
-            ILoggerService loggerService)
+            ILoggerService loggerService,
+            Tw3Controller tw3Controller,
+            Cp77Controller cp77Controller
+            )
             : base(AppCommands.Application.CreateNewProject, commandManager, projectManager, notificationService, loggerService)
         {
             Argument.IsNotNull(() => loggerService);
@@ -42,6 +49,8 @@ namespace WolvenKit.Functionality.Commands
 
             _loggerService = loggerService;
             _saveFileService = saveFileService;
+            _tw3Controller = tw3Controller;
+            _cp77Controller = cp77Controller;
         }
 
         #endregion Constructors
@@ -62,19 +71,18 @@ namespace WolvenKit.Functionality.Commands
             {
                 var location = parameter as string;
                 var filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj| Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj";
-                if (location == null && parameter is ProjectWizardModel.TypeAndPath)
+                if (location == null && parameter is ProjectWizardModel.TypeAndPath res)
                 {
-                    var res = parameter as ProjectWizardModel.TypeAndPath;
                     location = Path.Combine(res.Path, res.Name);
                     if (res.Type == ProjectWizardModel.WitcherGameName)
                     {
                         filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj";
-                        location = location + ".w3modproj";
+                        location += ".w3modproj";
                     }
                     else if (res.Type == ProjectWizardModel.CyberpunkGameName)
                     {
                         filter = "Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj";
-                        location = location + ".cpmodproj";
+                        location += ".cpmodproj";
                     }
                 }
                 else
@@ -105,16 +113,13 @@ namespace WolvenKit.Functionality.Commands
                                 var np = new Tw3Project(location)
                                 {
                                     Name = Path.GetFileNameWithoutExtension(location),
-                                    Data = new W3Mod()
-                                    {
-                                        FileName = location,
-                                        Name = Path.GetFileNameWithoutExtension(location),
-                                        Author = "WolvenKit",
-                                        Email = "",
-                                        Version = "1.0"
-                                    }
+                                    Author = "WolvenKit",
+                                    Email = "",
+                                    Version = "1.0"
+                                    
                                 };
-                                await np.Save(location);
+                                _projectManager.ActiveProject = np;
+                                await _projectManager.SaveAsync();
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);
                                 break;
@@ -124,16 +129,12 @@ namespace WolvenKit.Functionality.Commands
                                 var np = new Cp77Project(location)
                                 {
                                     Name = Path.GetFileNameWithoutExtension(location),
-                                    Data = new CP77Mod()
-                                    {
-                                        FileName = location,
-                                        Name = Path.GetFileNameWithoutExtension(location),
-                                        Author = "WolvenKit",
-                                        Email = "",
-                                        Version = "1.0"
-                                    }
+                                    Author = "WolvenKit",
+                                    Email = "",
+                                    Version = "1.0"
                                 };
-                                await np.Save(location);
+                                _projectManager.ActiveProject = np;
+                                await _projectManager.SaveAsync();
                                 np.CreateDefaultDirectories();
                                 saveProjectImg(location);
                                 break;
@@ -146,7 +147,31 @@ namespace WolvenKit.Functionality.Commands
                     StaticReferences.MainView.OnLoadLayoutAsync();
 
                     await _projectManager.LoadAsync(location);
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                            await _tw3Controller.HandleStartup().ContinueWith(t =>
+                            {
+                                _notificationService.Success(
+                                    "Project " + Path.GetFileNameWithoutExtension(location) +
+                                    " loaded!");
 
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        case ".cpmodproj":
+                            await _cp77Controller.HandleStartup().ContinueWith(
+                                t =>
+                                {
+                                    _notificationService.Success("Project " +
+                                                                 Path.GetFileNameWithoutExtension(location) +
+                                                                 " loaded!");
+
+                                },
+                                TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        default:
+                            break;
+                    }
 
                 }
             }

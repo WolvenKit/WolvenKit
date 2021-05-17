@@ -1,40 +1,34 @@
 using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WolvenKit.Common;
 
 namespace WolvenKit.Common.Services
 {
-    public interface ILoggerService : INotifyPropertyChanged, INotifyPropertyChanging
+    public interface ILoggerService
     {
-        #region Events
+        void LogString(string msg, Logtype type);
 
-        event EventHandler<LogStringEventArgs> OnStringLogged;
+        public void Log(string msg, Logtype type = Logtype.Normal);
 
-        #endregion Events
+        public void Info(string s);
 
-        #region Properties
+        public void Warning(string s);
 
-        ObservableCollection<InterpretedLogMessage> ErrorLog { get; }
-        string ErrorLogStr { get; }
-        string Log { get; }
-        public Tuple<float, string> Progress { get; }
+        public void Error(string msg);
 
-        #endregion Properties
+        public void Important(string msg);
 
-        #region Methods
+        public void Success(string msg);
 
-        void Clear();
 
-        void LogExtended(SystemLogFlag sflag, ToolLogFlag lflag, string cmdName, string value);
 
-        void LogProgress(float value);
 
-        void LogProgress(float value, string str);
 
-        void LogProgressInc(float value, string str);
 
-        void LogString(string value, Logtype type = Logtype.Normal);
 
-        #endregion Methods
+
     }
 }

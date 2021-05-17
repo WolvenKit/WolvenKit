@@ -17,12 +17,12 @@ using Feather.Commands;
 using Feather.Controls;
 using HandyControl.Data;
 using Orchestra.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
@@ -51,22 +51,10 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IMessageService _messageService;
         private readonly IGrowlNotificationService _notificationService;
         private readonly IProjectManager _projectManager;
+        private readonly IGameControllerFactory _gameController;
+
         private List<IGameArchiveManager> Managers { get; set; }
         private ITreeNode<GameFileTreeNode> _currentNode;
-
-        public ICommand SetCurrentNodeCommand { get; set; }
-
-        public ICommand OpenDirectoryCommand { get; set; }
-
-        public ITreeNode<GameFileTreeNode> BreadCrumbCurrentNode
-        {
-            get => _currentNode;
-            set
-            {
-                _currentNode = value;
-                RaisePropertyChanged(() => BreadCrumbCurrentNode);
-            }
-        }
 
         private bool _stillLoading;
 
@@ -81,6 +69,41 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         #endregion fields
+
+        #region ctor
+
+        public AssetBrowserViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IMessageService messageService,
+            IGrowlNotificationService notificationService,
+            IGameControllerFactory gameController
+        ) : base(ToolTitle)
+        {
+            Argument.IsNotNull(() => projectManager);
+            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => notificationService);
+            Argument.IsNotNull(() => gameController);
+
+            _projectManager = projectManager;
+            _loggerService = loggerService;
+            _messageService = messageService;
+            _notificationService = notificationService;
+            _gameController = gameController;
+
+            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
+            TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
+            ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
+            HomeCommand = new RelayCommand(ExecuteHome, CanHome);
+
+            SelectedFiles = new List<IGameFile>();
+
+            SetupToolDefaults();
+            ReInit(false);
+        }
+
+        #endregion ctor
 
         #region properties
 
@@ -102,10 +125,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public Visibility LoadVisibility
         {
-            get
-            {
-                return _loadVisibility;
-            }
+            get => _loadVisibility;
             set
             {
                 _loadVisibility = value;
@@ -122,36 +142,21 @@ namespace WolvenKit.ViewModels.Editor
         public List<AssetBrowserData> SelectedNodes { get; set; }
         // ReSharper restore MemberCanBePrivate.Global
 
-        #endregion properties
+        public ICommand SetCurrentNodeCommand { get; set; }
 
-        #region ctor
+        public ICommand OpenDirectoryCommand { get; set; }
 
-        public AssetBrowserViewModel(
-            IProjectManager projectManager,
-            ILoggerService loggerService,
-            IMessageService messageService,
-            IGrowlNotificationService notificationService
-        ) : base(ToolTitle)
+        public ITreeNode<GameFileTreeNode> BreadCrumbCurrentNode
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => notificationService);
-            _projectManager = projectManager;
-            _loggerService = loggerService;
-            _messageService = messageService;
-            _notificationService = notificationService;
-
-            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
-            TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
-            ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
-            HomeCommand = new RelayCommand(ExecuteHome, CanHome);
-
-            SetupToolDefaults();
-            ReInit(false);
+            get => _currentNode;
+            set
+            {
+                _currentNode = value;
+                RaisePropertyChanged(() => BreadCrumbCurrentNode);
+            }
         }
 
-        #endregion ctor
+        #endregion properties
 
         #region commands
 
@@ -257,8 +262,8 @@ namespace WolvenKit.ViewModels.Editor
                 await SetCurrentNodeAsync(node);
             });
 
-            SelectedFiles = new List<IGameFile>();
-            Managers = MainController.Get().GetManagers(loadmods);
+            
+            Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
             foreach (var mngr in Managers)
@@ -272,21 +277,25 @@ namespace WolvenKit.ViewModels.Editor
 
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
             RootNode = CurrentNode;
-            Extensions = MainController.Get().GetManagers(loadmods).SelectMany(x => x.Extensions).ToList();
-            Classes = MainController.GetGame().GetAvaliableClasses();
+            Extensions = _gameController
+                .GetController()
+                .GetArchiveManagersManagers(loadmods)
+                .SelectMany(x => x.Extensions)
+                .ToList();
+            Classes = _gameController
+                .GetController()
+                .GetAvaliableClasses();
             PreviewVisible = false;
 
             IsLoaded = true;
-            if (MainController.GetGame() is not MockGameController)
-            {
-                _notificationService.Success($"Asset Browser is initialized");
-                LoadVisibility = Visibility.Collapsed;
-            }
 
-            InitializeCurrentNodeAsync(RootNode);
+            _notificationService.Success($"Asset Browser is initialized");
+            LoadVisibility = Visibility.Collapsed;
+
+            _ = InitializeCurrentNodeAsync(RootNode);
         }
 
-        public async void NavigateTo(string path)
+        public void NavigateTo(string path)
         {
             SetCurrentNodeCommand.Execute(RootNode);
             var split = path.Split("\\");
@@ -305,52 +314,6 @@ namespace WolvenKit.ViewModels.Editor
             base.CloseAsync();
 
         protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
-
-        public static void AddToMod(IGameFile file)
-        {
-            var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-
-            NotificationHelper.Growl.Info($"Importing file: {file.Name}");
-            var project = (EditorProject)pm.ActiveProject;
-            switch (project.GameType)
-            {
-                case GameType.Witcher3:
-                {
-                    if (project is Tw3Project witcherProject)
-                    {
-                        var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
-                        if (diskPathInfo.Directory == null)
-                        {
-                            break;
-                        }
-
-                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                    }
-                    break;
-                }
-                case GameType.Cyberpunk2077:
-                {
-                    if (project is Cp77Project cyberpunkProject)
-                    {
-                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, file.Name));
-                        if (diskPathInfo.Directory == null)
-                        {
-                            break;
-                        }
-
-                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                    }
-
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
 
         private static IEnumerable<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
         {
@@ -392,7 +355,7 @@ namespace WolvenKit.ViewModels.Editor
                                 {
                                     var it = item.This.Files.FirstOrDefault(x => x.Key == item.Name);
                                     if(it.Value.Count > 0)
-                                        AddToMod(it.Value.First());
+                                        _gameController.GetController().AddToMod(it.Value.First());
                                 }
                             }
                         }
@@ -481,6 +444,7 @@ namespace WolvenKit.ViewModels.Editor
     {
         Task<bool> RefreshAsync();
     }
+
     public class LazyObservableTreeNode<T> : BindableBase, ITreeNode<T>, IRefreshable
     {
         private bool _isRefreshing;

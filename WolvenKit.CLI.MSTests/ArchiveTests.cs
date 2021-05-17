@@ -33,22 +33,51 @@ namespace CP77.MSTests
         #region Methods
 
         [TestMethod]
-        public void Test_Unbundle()
+        //[DataRow("audio_1_general.archive")]
+        //[DataRow("audio_2_soundbanks.archive")]
+        [DataRow("basegame_1_engine.archive")]
+        [DataRow("basegame_2_mainmenu.archive")]
+        //[DataRow("basegame_3_nightcity.archive")]
+        //[DataRow("basegame_3_nightcity_gi.archive")]
+        //[DataRow("basegame_3_nightcity_terrain.archive")]
+        [DataRow("basegame_4_animation.archive")]
+        //[DataRow("basegame_4_appearance.archive")]
+        //[DataRow("basegame_4_gamedata.archive")]
+        //[DataRow("basegame_5_video.archive")]
+        //[DataRow("lang_ar_text.archive")]
+        //[DataRow("lang_cs_text.archive")]
+        //[DataRow("lang_de_text.archive")]
+        //[DataRow("lang_en_text.archive")]
+        //[DataRow("lang_en_voice.archive")]
+        //[DataRow("lang_es-es_text.archive")]
+        //[DataRow("lang_es-mx_text.archive")]
+        //[DataRow("lang_fr_text.archive")]
+        //[DataRow("lang_hu_text.archive")]
+        //[DataRow("lang_it_text.archive")]
+        //[DataRow("lang_ja_text.archive")]
+        //[DataRow("lang_ko_text.archive")]
+        //[DataRow("lang_pl_text.archive")]
+        //[DataRow("lang_pt_text.archive")]
+        //[DataRow("lang_ru_text.archive")]
+        //[DataRow("lang_th_text.archive")]
+        //[DataRow("lang_tr_text.archive")]
+        //[DataRow("lang_zh-cn_text.archive")]
+        //[DataRow("lang_zh-tw_text.archive")]
+        public void Test_Unbundle(string archivename)
         {
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
             var totalCount = s_bm.Items.Count();
             var results = new ConcurrentBag<ArchiveTestResult>();
+            var archiveFullName = Path.Combine(s_gameDirectoryPath, "archive", "pc", "content", archivename);
 
-            Parallel.ForEach(s_bm.Archives, file =>
+            var archive = s_bm.Archives[archiveFullName] as Archive;
+            Parallel.ForEach(archive.Files, keyvalue =>
             {
-                var archivename = file.Key;
-                var archive = file.Value as Archive;
-                Parallel.ForEach(archive.Files, keyvalue =>
+                var (hash, _) = keyvalue;
+                using (var ms = new MemoryStream())
                 {
-                    var (hash, _) = keyvalue;
-                    var ms = new MemoryStream();
                     try
                     {
                         ModTools.ExtractSingleToStream(archive, hash, ms);
@@ -70,7 +99,7 @@ namespace CP77.MSTests
                             Message = $"{e.Message}"
                         });
                     }
-                });
+                }
             });
 
             // Check success
@@ -144,9 +173,10 @@ namespace CP77.MSTests
         public void Test_Deserialization(Serialization method)
         {
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            ArchiveManager x;
+
             switch (method)
             {
-
                 case Serialization.NewtonsoftJson:
                 {
                     var chachePath = Path.Combine(resultDir, "archive_cache.json");
@@ -157,28 +187,26 @@ namespace CP77.MSTests
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                         TypeNameHandling = TypeNameHandling.Auto
                     };
-                    var x = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
+                    x = (ArchiveManager)serializer.Deserialize(file, typeof(ArchiveManager));
                     break;
                 }
-                case Serialization.Zeroformatting:
-                {
-                    //var chachePath = Path.Combine(resultDir, "archive_cache.zero");
-                    //using var fs = new FileStream(chachePath, FileMode.Open);
-                    //var x = ZeroFormatterSerializer.Deserialize<ArchiveManager>(fs);
-                    break;
-                }
-                case Serialization.Json:
-                    break;
                 case Serialization.Protobuf:
                 {
                     var chachePath = Path.Combine(resultDir, "archive_cache.bin");
                     using var file = File.OpenRead(chachePath);
-                    var x = Serializer.Deserialize<ArchiveManager>(file);
+                    x = Serializer.Deserialize<ArchiveManager>(file);
                     break;
                 }
+                case Serialization.Zeroformatting:
+                case Serialization.Json:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);
             }
+
+            // some lazy checks
+            Assert.AreEqual(x.Archives.Count(), s_bm.Archives.Count());
+            Assert.AreEqual(x.FileList.Count(), s_bm.FileList.Count());
+            Assert.AreEqual(x.GroupedFiles.Count(), s_bm.GroupedFiles.Count());
         }
 
         #endregion Methods

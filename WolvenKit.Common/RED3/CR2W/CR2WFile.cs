@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using RED.CRC32;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
@@ -58,8 +59,6 @@ namespace WolvenKit.RED3.CR2W
             {
                 version = 162,
             };
-
-            //Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             StringDictionary = new Dictionary<uint, string>();
             m_tableheaders = new CR2WTable[10];
@@ -452,7 +451,6 @@ namespace WolvenKit.RED3.CR2W
             #region Read Headers
 
             var startpos = file.BaseStream.Position;
-            Logger?.LogProgress(1, "Reading headers...");
 
             // read file header
             var id = file.BaseStream.ReadStruct<uint>();
@@ -485,13 +483,11 @@ namespace WolvenKit.RED3.CR2W
                 Handle = StringDictionary[_.path],
             }).ToList(); // block 7
 
-            Logger?.LogProgress(100);
 
             #endregion Read Headers
 
             #region Read Data
 
-            Logger?.LogProgress(1, "Reading chunks...");
             // Read object data //block 5
             for (int i = 0; i < Chunks.Count; i++)
             {
@@ -500,7 +496,6 @@ namespace WolvenKit.RED3.CR2W
                 chunk.ReadData(file);
 
                 int percentprogress = (int)((float)i / (float)Chunks.Count * 100.0);
-                Logger?.LogProgress(percentprogress, $"Reading chunk {chunk.REDName}...");
             }
             // Read buffer data //block 6
             if (m_hasInternalBuffer)
@@ -511,7 +506,6 @@ namespace WolvenKit.RED3.CR2W
                     buffer.ReadData(file);
 
                     int percentprogress = (int)((float)i / (float)Buffers.Count * 100.0);
-                    Logger?.LogProgress(percentprogress);
                 }
             }
             // Read embedded files //block 7
@@ -521,7 +515,6 @@ namespace WolvenKit.RED3.CR2W
                 emb.ReadData(file);
 
                 int percentprogress = (int)((float)i / (float)Embedded.Count * 100.0);
-                Logger?.LogProgress(percentprogress, $"Reading embedded file {emb.ClassName}...");
             }
 
             #endregion Read Data
@@ -535,7 +528,7 @@ namespace WolvenKit.RED3.CR2W
                 additionalCr2WFileBytes = file.ReadBytes((int)bytesleft);
             }
 
-            Logger?.LogString($"File {FileName} loaded in: {stopwatch1.Elapsed}\n", Logtype.Normal);
+            Logger?.Info($"File {FileName} loaded in: {stopwatch1.Elapsed}\n");
             stopwatch1.Stop();
             //m_stream = null;
             return await Task.FromResult(EFileReadErrorCodes.NoError);

@@ -100,7 +100,8 @@ namespace WolvenKit.Functionality.Services
         /// <summary>
         /// Gets/Sets the author's profile image brush.
         /// </summary>
-        public System.Windows.Media.ImageBrush ProfileImageBrush
+        [JsonIgnore]
+        public ImageBrush ProfileImageBrush
         {
             get => _profileImageBrush;
             set
@@ -137,6 +138,17 @@ namespace WolvenKit.Functionality.Services
                 RaisePropertyChanged(nameof(WccLitePath));
             }
         }
+
+
+
+        public string W3GameContentDir => Path.Combine(W3GameRootDir, "content");
+
+        public string W3GameDlcDir => Path.Combine(W3GameRootDir, "DLC");
+
+        public string W3GameModDir => Path.Combine(W3GameRootDir, "Mods");
+
+        public string W3GameRootDir => Path.Combine(W3ExecutablePath, @"..\..\..\");
+
 
         #endregion properties
 
@@ -178,13 +190,13 @@ namespace WolvenKit.Functionality.Services
             {
                 var savedversions = config.ManagerVersions[j];
                 var e = (EManagerType)j;
-                var curversion = MainController.GetManagerVersion(e);
+                var curversion = IGameController.GetManagerVersion(e);
 
                 if (savedversions != curversion)
                 {
-                    if (File.Exists(MainController.GetManagerPath(e)))
+                    if (File.Exists(IGameController.GetManagerPath(e)))
                     {
-                        File.Delete(MainController.GetManagerPath(e));
+                        File.Delete(IGameController.GetManagerPath(e));
                     }
                 }
             }

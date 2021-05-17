@@ -657,7 +657,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 }
             }
             //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            Logger.Error($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}");
+            //Logger.Error($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}");
             
             
             return false;

@@ -7,6 +7,7 @@ namespace WolvenKit.Common
         Error,
         Important,
         Success,
+        Warning,
         Wcc
     }
 

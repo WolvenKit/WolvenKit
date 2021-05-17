@@ -8,7 +8,9 @@ using System.Windows.Media;
 using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
+using CP77.CR2W;
 using HandyControl.Controls;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
@@ -17,7 +19,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W.SRT;
@@ -43,18 +44,25 @@ namespace WolvenKit.ViewModels.Editor
         private IWorkSpaceViewModel _workSpaceViewModel = null;
         private FileModel fileinfo;
 
+        private readonly IGameControllerFactory _gameControllerFactory;
+        private readonly IProjectManager _projectManager;
+        private readonly ModTools _modTools;
+
+
         #endregion fields
 
         #region ctors
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem) : this(workSpaceViewModel)
+        public DocumentViewModel(
+            IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem)
+            : this(workSpaceViewModel)
         {
             fileinfo = model;
             _initialPath = fileinfo.FullName;
 
             try
             {
-                Title = System.IO.Path.GetFileName(fileinfo.FullName);
+                Title = Path.GetFileName(fileinfo.FullName);
             }
             catch { }
 
@@ -70,6 +78,10 @@ namespace WolvenKit.ViewModels.Editor
 
         public DocumentViewModel()
         {
+            _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
+            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+            _modTools = ServiceLocator.Default.ResolveType<ModTools>();
+
             IsDirty = false;
 
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
@@ -77,8 +89,6 @@ namespace WolvenKit.ViewModels.Editor
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
 
             OpenImportCommand = new RelayCommand(ExecuteViewImports, CanViewImports);
-
-
         }
 
         #endregion ctors
@@ -146,7 +156,7 @@ namespace WolvenKit.ViewModels.Editor
             var depotpath = input.DepotPathStr;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
             var foundItems = new List<IGameFile>();
-            foreach (var manager in MainController.Get().GetManagers(false)
+            foreach (var manager in _gameControllerFactory.GetController().GetArchiveManagersManagers(false)
                 .Where(manager => manager.Items.ContainsKey(key)))
             {
                 foundItems.AddRange(manager.Items[key]);
@@ -155,7 +165,7 @@ namespace WolvenKit.ViewModels.Editor
             var itemToImport = foundItems.FirstOrDefault();
             if (itemToImport != null)
             {
-                AssetBrowserViewModel.AddToMod(itemToImport);
+                _gameControllerFactory.GetController().AddToMod(itemToImport);
             }
         }
 
@@ -321,12 +331,11 @@ namespace WolvenKit.ViewModels.Editor
                 // FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
                 var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                logger.LogString("Opening file: " + path + "...");
+                logger.Log("Opening file: " + path + "...");
 
                 //TODO
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    EFileReadErrorCodes errorcode;
                     using var reader = new BinaryReader(stream);
 
                     if (Path.GetExtension(path) == ".srt")
@@ -346,7 +355,7 @@ namespace WolvenKit.ViewModels.Editor
                         switch (pm.ActiveProject)
                         {
                             case Cp77Project cp77proj:
-                                var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(reader);
+                                var cr2w = _modTools.TryReadCr2WFile(reader);
                                 if (cr2w == null)
                                 {
                                     logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);

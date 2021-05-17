@@ -12,7 +12,6 @@ using Catel.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
@@ -20,7 +19,7 @@ using WolvenKit.ViewModels.Editor;
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
     // #SortNameSpace
-    public class RibbonViewModel : ViewModel
+    public class RibbonViewModel : ViewModelBase
     {
         #region fields
 
@@ -94,8 +93,8 @@ namespace WolvenKit.ViewModels.Shell
                     _selectedTheme = value;
                     var color = new SolidColorBrush(value);
                     ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
-                    ILog _logger = LogManager.GetCurrentClassLogger();
-                    _logger.Info("Changed theme : " + value.ToString());
+
+                    _loggerService.Info("Changed theme : " + value.ToString());
                     _settingsManager.ThemeAccent = value;
                     _settingsManager.Save();
                 }
