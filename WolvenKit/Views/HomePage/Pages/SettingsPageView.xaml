@@ -115,6 +115,8 @@
                         <syncfusion:PropertyGrid
                          x:Name="GeneralSettingsPG"
                          CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+                         EnableGrouping="True"
+                            
                          SelectedObject="{Binding generalSettingsPGModel}"
                          SortDirection="{x:Null}"
                          />
@@ -166,19 +168,35 @@
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Editor">
-                    <syncfusion:PropertyGrid x:Name="EditorSettingsPG" SelectedObject="{Binding demomodel}" />
+                    <syncfusion:PropertyGrid
+                     x:Name="EditorSettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding demomodel}"
+                     />
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Tools">
-                    <syncfusion:PropertyGrid x:Name="ToolsSettingsPG" SelectedObject="{Binding demomodel}" />
+                    <syncfusion:PropertyGrid
+                     x:Name="ToolsSettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding demomodel}"
+                     />
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Cyberpunk 2077">
-                    <syncfusion:PropertyGrid x:Name="CP77SettingsPG" SelectedObject="{Binding cp77SettingsPGModel}" />
+                    <syncfusion:PropertyGrid
+                     x:Name="CP77SettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding cp77SettingsPGModel}"
+                     />
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="The Witcher 3">
-                    <syncfusion:PropertyGrid x:Name="TW3SettingsPG" SelectedObject="{Binding tw3SettingsPGModel}" />
+                    <syncfusion:PropertyGrid
+                     x:Name="TW3SettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding tw3SettingsPGModel}"
+                     />
                 </syncfusion:SfAccordionItem>
 
             </syncfusion:SfAccordion>

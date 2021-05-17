@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -185,8 +184,12 @@ namespace WolvenKit.ViewModels.Editor
 
         private void ExecuteImportFile() => ImportFile(SelectedNode);
 
+
+
+
         private void ExecuteSearchStartedCommand(object arg)
         {
+
             if (arg is FunctionEventArgs<string> e)
             {
                 PerformSearch(e.Info);
@@ -244,7 +247,7 @@ namespace WolvenKit.ViewModels.Editor
             await rootNode.RefreshAsync();
 
             BreadCrumbCurrentNode = rootNode;
-           
+
 
             await ((IRefreshable)CurrentNode).RefreshAsync();
         }
@@ -399,7 +402,11 @@ namespace WolvenKit.ViewModels.Editor
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
         }
 
-        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+        private void SetupToolDefaults()
+        {
+            ContentId = ToolContentId;
+
+        }        // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         #endregion methods
     }
@@ -540,26 +547,6 @@ namespace WolvenKit.ViewModels.Editor
 
 
 
-
-
-
-    public class HierarchicalItemsSource : ObservableCollection<HierarchyItem>
-    {
-        public HierarchicalItemsSource()
-        {
-            this.Add(new HierarchyItem("Syncfusion",
-            new HierarchyItem("User Interface",
-            new HierarchyItem("Silverlight"),
-            new HierarchyItem("WPF"),
-            new HierarchyItem("ASP .Net"),
-            new HierarchyItem("MVC")),
-            new HierarchyItem("Reporting Edition",
-            new HierarchyItem("IO"),
-            new HierarchyItem("PDF generator"),
-            new HierarchyItem("WPF")
-            )));
-        }
-    }
 
 
 

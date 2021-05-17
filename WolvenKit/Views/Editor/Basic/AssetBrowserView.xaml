@@ -197,7 +197,6 @@
                              Width="auto"
                              Margin="160,0,0,0"
                              IsEnableHistory="False"
-                             ItemsSource="{Binding RootNode.SubDirectories, Mode=OneWay, TargetNullValue=bone}"
                              >
                                 <syncfusion:HierarchyNavigator.ItemTemplate>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
@@ -206,6 +205,7 @@
                                 </syncfusion:HierarchyNavigator.ItemTemplate>
                             </syncfusion:HierarchyNavigator>
 
+                            <!--  ItemsSource="{Binding RootNode.SubDirectories, Mode=OneWay, TargetNullValue=bone}"  -->
 
                         </Grid>
 
