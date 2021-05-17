@@ -16,8 +16,10 @@ namespace WolvenKit.Functionality.Controllers
     {
         #region Properties
 
-        public static string ManagerCacheDir => Path.Combine(AppContext.BaseDirectory, "Config");
-        public static string WorkDir => Path.Combine(AppContext.BaseDirectory, "tmp_workdir");
+        private static string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding","WolvenKit");
+
+        public static string ManagerCacheDir => Path.Combine(WKitAppData, "Config");
+        public static string WorkDir => Path.Combine(WKitAppData, "tmp_workdir");
         public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
 
         #endregion Properties
