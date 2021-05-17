@@ -546,15 +546,6 @@ namespace WolvenKit.ViewModels.Editor
     }
 
 
-
-
-
-
-
-
-
-
-
     public class HierarchyItem
     {
         public string ContentString { get; set; }

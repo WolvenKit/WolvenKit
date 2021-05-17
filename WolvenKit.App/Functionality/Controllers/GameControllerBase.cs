@@ -20,7 +20,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public static string ManagerCacheDir => Path.Combine(WKitAppData, "Config");
         public static string WorkDir => Path.Combine(WKitAppData, "tmp_workdir");
-        public static string XBMDumpPath => Path.Combine(ManagerCacheDir, "__xbmdump_3768555366.csv");
+        public static string XBMDumpPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "__xbmdump_3768555366.csv");
 
         #endregion Properties
 
