@@ -933,6 +933,110 @@
                                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3app.svg}" />
                                                                 </DataTrigger>
 
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".spatial_representation">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/spatial_representation.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".mlsetup">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlsetup.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".opusinfo">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/opusinfo.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w3fac">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3fac.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".actionanimdb">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/actionanimdb.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".acousticdata">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/acousticdata.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".cellmap">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cellmap.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".csv">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/csv.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".ent">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/ent.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".guiconfig">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/guiconfig.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".hud">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/hud.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".navgraph">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navgraph.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".reddest">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reddest.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".redicsv">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redicsv.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".redswf">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redswf.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".redwpset">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redwpset.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2em">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2em.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2ent">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2ent.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2fnt">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2fnt.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2je">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2je.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2job">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2job.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2p">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2p.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2qm">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2qm.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2rig">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2rig.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w2scene">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2scene.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value=".w3app">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3app.svg}" />
+                                                                </DataTrigger>
+
                                                             </Style.Triggers>
                                                         </Style>
                                                     </Image.Style>

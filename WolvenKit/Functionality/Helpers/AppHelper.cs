@@ -1,11 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using AutoUpdaterDotNET;
+using Catel.IoC;
+using Orchestra.Services;
+using Orchestra.Views;
+using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.Views.Others;
 using WolvenKit.Views.Wizards;
@@ -66,6 +71,52 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             }
         }
 
+        private static async Task ShellInnerInit()
+        {
+            HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
+            var shellService = ServiceLocator.Default.ResolveType<IShellService>();
+
+            await shellService.CreateAsync<ShellWindow>();
+            var sh = (ShellWindow)shellService.Shell;
+            StaticReferences.GlobalShell = sh;
+            sh.MinWidth = 1;
+            sh.MinHeight = 1;
+         
+            sh.WindowState = WindowState.Maximized;
+            sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            Binding ws = new Binding();
+            ws.Source = HomePageViewModel.GlobalHomePageVM;
+            ws.Path = new PropertyPath("CurrentWindowState");
+            ws.Mode = BindingMode.TwoWay;
+            ws.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            BindingOperations.SetBinding(sh, ShellWindow.WindowStateProperty, ws);
+            sh.Closed += Sh_Closed;
+
+            StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
+            StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
+        }
+
+        private static void Sh_Closed(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private static void ThemeInnerInit()
+        {
+            var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            if (SettingsManag.ThemeAccent != default)
+            {
+                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current,
+                    ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark",
+                        SettingsManag.ThemeAccent, false));
+            }
+            else
+            {
+                ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current,
+                    ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark",
+                        (Color)ColorConverter.ConvertFromString("#DF2935"), false));
+            }
+        }
     }
 
 

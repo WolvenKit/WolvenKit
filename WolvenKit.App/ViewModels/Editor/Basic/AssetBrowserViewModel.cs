@@ -16,12 +16,14 @@ using Feather.Commands;
 using Feather.Controls;
 using HandyControl.Data;
 using Orchestra.Services;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
 namespace WolvenKit.ViewModels.Editor
@@ -98,9 +100,6 @@ namespace WolvenKit.ViewModels.Editor
 
             SetupToolDefaults();
             ReInit(false);
-
-
-
         }
 
         #endregion ctor
@@ -267,7 +266,7 @@ namespace WolvenKit.ViewModels.Editor
                 await SetCurrentNodeAsync(node);
             });
 
-
+            
             Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
