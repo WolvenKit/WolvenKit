@@ -6,7 +6,9 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:rv1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.FeedbackWizard"
- IsVisibleChanged="UserControl_IsVisibleChanged">
+ Margin="-1,-105,0,0"
+ IsVisibleChanged="UserControl_IsVisibleChanged"
+ >
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,19 +21,21 @@
      MinWidth="300"
      Margin="5,5,2,5"
      HorizontalAlignment="Stretch"
-     VerticalAlignment="Center"
-     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+     VerticalAlignment="Stretch"
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+     >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
             <RowDefinition Height="90*" />
-            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <StackPanel
-         Margin="5,0,5,0"
+         Margin="15,0,0,0"
          HorizontalAlignment="Stretch"
-         Orientation="Horizontal">
+         VerticalAlignment="Stretch"
+         Orientation="Horizontal"
+         >
             <Grid>
                 <iconPacks:PackIconCodicons
                  Grid.Row="0"
@@ -43,26 +47,30 @@
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  Kind="Hubot"
                  Spin="False"
-                 SpinAutoReverse="False" />
+                 SpinAutoReverse="False"
+                 />
             </Grid>
 
             <StackPanel
              HorizontalAlignment="Stretch"
-             VerticalAlignment="Bottom"
-             Orientation="Vertical">
+             VerticalAlignment="Stretch"
+             Orientation="Vertical"
+             >
 
                 <TextBlock
                  Grid.Row="0"
-                 Margin="10,10,0,0"
+                 Margin="10,0,0,0"
                  HorizontalAlignment="Left"
-                 VerticalAlignment="Center"
+                 VerticalAlignment="Stretch"
                  FontSize="20"
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                 Text="Rate your WolvenKit experience!" />
+                 Text="Rate your WolvenKit experience!"
+                 />
                 <hc:Divider
                  Margin="0,10,0,0"
                  HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch" />
+                 VerticalAlignment="Stretch"
+                 />
             </StackPanel>
         </StackPanel>
 

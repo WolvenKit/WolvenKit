@@ -118,7 +118,7 @@
          Grid.Row="0"
          Margin="0,0,0,0"
          Panel.ZIndex="0"
-         Visibility="Visible"
+         Visibility="Collapsed"
          >
 
 
@@ -917,7 +917,7 @@
          LayoutMode="Normal"
          Loaded="_ribbon_Loaded"
          MinimizeButtonVisibility="Collapsed"
-         Visibility="Collapsed"
+         Visibility="Visible"
          >
 
 
@@ -1669,11 +1669,107 @@
 
             <!--  OPTIONS TAB  -->
             <syncfusion:RibbonTab Caption="OPTIONS" IsChecked="False">
+
+
+                <!--  Options bar  -->
                 <syncfusion:RibbonBar
-                 Name="ThemeOptions"
+                 Name="Options"
                  Width="auto"
-                 Header="Theme"
-                 />
+                 Header="Options"
+                 >
+
+                    <!--  Settings Button  -->
+                    <syncfusion:RibbonButton
+                     Command="{catel:CommandManagerBinding Application.ShowSettings}"
+                     IconStretch="Fill"
+                     IconType="Icon"
+                     Label="Settings"
+                     SizeForm="Large"
+                     >
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                 Width="auto"
+                                 Height="auto"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Stretch"
+                                 Kind="Settings"
+                                 />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+                </syncfusion:RibbonBar>
+                <!--  Help bar  -->
+                <syncfusion:RibbonBar
+                 Name="Help"
+                 Width="auto"
+                 Header="Help"
+                 >
+
+                    <!--  BugReport Button  -->
+                    <syncfusion:RibbonButton
+                     Command="{catel:CommandManagerBinding Application.BugReport}"
+                     IconStretch="Fill"
+                     IconType="Icon"
+                     Label="Bug Report"
+                     SizeForm="Large"
+                     >
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                 Width="auto"
+                                 Height="auto"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Stretch"
+                                 Kind="Bug"
+                                 />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Feedback Button  -->
+                    <syncfusion:RibbonButton
+                     Command="{catel:CommandManagerBinding Application.ShowFeedback}"
+                     IconStretch="Fill"
+                     IconType="Icon"
+                     Label="Feedback"
+                     SizeForm="Large"
+                     >
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                 Width="auto"
+                                 Height="auto"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Stretch"
+                                 Kind="Feedback"
+                                 />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  About Button  -->
+                    <syncfusion:RibbonButton
+                     Command="{catel:CommandManagerBinding Application.ShowAbout}"
+                     IconStretch="Fill"
+                     IconType="Icon"
+                     Label="About"
+                     SizeForm="Large"
+                     >
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                 Width="auto"
+                                 Height="auto"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Stretch"
+                                 Kind="Info"
+                                 />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+                </syncfusion:RibbonBar>
+
             </syncfusion:RibbonTab>
 
 

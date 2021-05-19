@@ -12,7 +12,7 @@ using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Functionality.Commands
 {
-    public class ApplicationBugReportCommandContainer : CommandContainerBase
+    class ApplicationShowFeedbackCommandContainer : CommandContainerBase
     {
         #region Fields
 
@@ -27,7 +27,7 @@ namespace WolvenKit.Functionality.Commands
 
         #region Constructors
 
-        public ApplicationBugReportCommandContainer(
+        public ApplicationShowFeedbackCommandContainer(
             ICommandManager commandManager,
             INavigationService navigationService,
             IProjectManager projectManager,
@@ -37,7 +37,7 @@ namespace WolvenKit.Functionality.Commands
             IViewModelFactory viewModelFactory,
             IMessageService messageService,
             ILoggerService loggerService)
-            : base(AppCommands.Application.BugReport, commandManager)
+            : base(AppCommands.Application.ShowFeedback, commandManager)
         {
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => loggerService);
@@ -61,14 +61,14 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                var vm = new UserControlHostWindowViewModel(new BugReportWizard(), 600, 1000);
+                var vm = new UserControlHostWindowViewModel(new FeedbackWizardView(), 450, 1000);
 
                 var result = await _uIVisualizerService.ShowDialogAsync(vm);
             }
             catch (Exception ex)
             {
                 _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to create Bug Report Wizard.", Logtype.Error);
+                _loggerService.LogString("Failed to create Feedback Wizard.", Logtype.Error);
             }
         }
 
