@@ -216,7 +216,7 @@
                                  Height="16"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Stretch"
-                                 Kind="FolderOpened"
+                                 Kind="GoToFile"
                                  />
                                 <TextBlock Margin="2,0,0,0" Text="Recent Projects" />
 
@@ -1420,8 +1420,8 @@
              Height="500"
              Background="{DynamicResource RegionBrush}"
              BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-             BorderThickness="0,2,0,2"
-             CornerRadius="15"
+             BorderThickness="0,2,0,0"
+             CornerRadius="0"
              >
                 <Grid>
 
