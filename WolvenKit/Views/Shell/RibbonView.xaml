@@ -15,6 +15,7 @@
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:tools="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Tools.WPF"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
+ GotFocus="UserControl_GotFocus"
  IsVisibleChanged="UserControl_IsVisibleChanged"
  >
 
@@ -110,9 +111,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-
-
         <fluent:Ribbon
          x:Name="ribbon"
          Grid.Row="0"
@@ -120,9 +118,6 @@
          Panel.ZIndex="0"
          Visibility="Collapsed"
          >
-
-
-
             <!--  StartScreen  -->
             <fluent:Ribbon.StartScreen>
                 <fluent:StartScreen
@@ -133,30 +128,6 @@
                     <HomeView:HomePageView x:Name="HMPV" />
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
-
-            <fluent:Ribbon.Menu>
-                <ToggleButton
-                 x:Name="FileDrawer"
-                 Grid.Row="0"
-                 Grid.Column="1"
-                 Width="50"
-                 Margin="70,0,0,0"
-                 HorizontalAlignment="Stretch"
-                 Content="File"
-                 IsChecked="{Binding IsOpen, ElementName=DrawerTop}"
-                 Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                 />
-
-
-
-
-
-            </fluent:Ribbon.Menu>
-
-
-
-
-
         </fluent:Ribbon>
 
         <syncfusion:Ribbon
@@ -164,18 +135,17 @@
          Margin="4,0,0,0"
          VerticalAlignment="Stretch"
          Panel.ZIndex="0"
-         BackStageHeader="Recent"
+         syncfusion:Ribbon.IsAutoSizeFormEnabled="True"
+         BackStageCornerImageVisibility="Collapsed"
+         BackStageHeader="Menu"
          ContextAdornerStyle="{StaticResource SyncfusionTemplatedAdornerInternalControlStyle2}"
+         EnableMoreCommands="True"
          LayoutMode="Normal"
          Loaded="_ribbon_Loaded"
          MinimizeButtonVisibility="Collapsed"
+         ShowCustomizeRibbon="True"
          Visibility="Visible"
          >
-
-
-
-
-
 
 
             <syncfusion:Ribbon.QuickAccessToolBar>
@@ -217,12 +187,241 @@
             </syncfusion:Ribbon.ContextTabGroups>
 
 
+            <!--  Recent Projects Button  -->
+            <syncfusion:Ribbon.ApplicationMenu>
+                <syncfusion:ApplicationMenu
+                 Name="_applicationMenu"
+                 Width="38"
+                 Height="38"
+                 syncfusion:Ribbon.KeyTip="F"
+                 Header="Menu"
+                 IsBelowAppButton="True"
+                 IsPopupOpen="False"
+                 >
+                    <syncfusion:RibbonMenuGroup Header="Project">
+                        <!--  Recent Projects Button  -->
+                        <ToggleButton
+                         x:Name="FileDrawer2"
+                         Grid.Row="0"
+                         Grid.Column="1"
+                         Width="auto"
+                         Margin="2,0,0,0"
+                         HorizontalAlignment="Left"
+                         IsChecked="{Binding IsOpen, ElementName=DrawerTop}"
+                         Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+                         >
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconCodicons
+                                 Width="16"
+                                 Height="16"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Stretch"
+                                 Kind="FolderOpened"
+                                 />
+                                <TextBlock Margin="2,0,0,0" Text="Recent Projects" />
+
+                            </StackPanel>
+
+                        </ToggleButton>
+                        <!--  Open Project Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.OpenProject}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="Open Project"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Foreground="{DynamicResource MaterialDarkRibbonBackgroundBrush}"
+                                     Kind="FolderOpened"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+
+                        <!--  New Project Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.NewProject}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="New Project"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="NewFolder"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+                        <!--  Pack Project Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.PackMod}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="Pack Project"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="Play"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+
+                        <!--  Publish Project Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.PublishProject}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="Publish Project"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconMaterial
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="CloudUploadOutline"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+                        <!--  Backup Project Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.BackupMod}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="Backup Project"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="Archive"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+
+                        <!--  Package installer Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="Install Project"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="Package"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+
+                    </syncfusion:RibbonMenuGroup>
+
+                    <syncfusion:RibbonMenuGroup Header="File">
+
+                        <!--  New File Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.NewFile}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="New File"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="NewFile"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+
+                        <!--  Save File Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.SaveFile}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="Save File"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="Save"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
 
 
+                        <!--  Save All Button  -->
+                        <syncfusion:RibbonButton
+                         Command="{catel:CommandManagerBinding Application.SaveAll}"
+                         IconStretch="Fill"
+                         IconType="Icon"
+                         Label="Save All"
+                         SizeForm="Small"
+                         >
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                     Width="auto"
+                                     Height="auto"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Stretch"
+                                     Kind="SaveAll"
+                                     />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
+                    </syncfusion:RibbonMenuGroup>
 
+                </syncfusion:ApplicationMenu>
 
+            </syncfusion:Ribbon.ApplicationMenu>
 
 
             <!--  GENERAL TAB  -->

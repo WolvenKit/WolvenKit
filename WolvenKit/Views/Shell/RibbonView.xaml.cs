@@ -1,12 +1,12 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using Ab3d.DirectX;
 using Ab3d.DirectX.Client.Settings;
 using Ab3d.DXEngine.Wpf.Samples;
 using Catel.Data;
-using Orchestra;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
@@ -21,24 +21,33 @@ namespace WolvenKit.Views.Shell
     {
         public RibbonView()
         {
+
             InitializeComponent();
 
 
 
-
-            ribbon.AddAboutButton();
+            //ribbon.AddAboutButton();
 
             StaticReferences.RibbonViewInstance = this;
             var dxEngineSettingsStorage = new DXEngineSettingsStorage();
             DXEngineSettings.Initialize(dxEngineSettingsStorage);
             this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
-
+            SetRibbonUI();
             //  _ribbon.BackStageButton. += BackStageButton_MouseDown;
-
 
         }
 
+        private void SetRibbonUI()
+        {
+            while (_ribbon.BackStageButton.IsVisible)
+            {
+                _ribbon.BackStageButton.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+            }
+            Trace.WriteLine("Disabled File Button");
+
+        }
 
 
         protected override void OnViewModelChanged() => base.OnViewModelChanged();
@@ -127,6 +136,8 @@ namespace WolvenKit.Views.Shell
             {
                 DiscordHelper.SetDiscordRPCStatus("Ribbon/Backstage");
             }
+
+
         }
 
         private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -190,6 +201,7 @@ namespace WolvenKit.Views.Shell
             var z = new MaterialsRepositoryDialog();
             z.Show();
 
+
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -212,6 +224,21 @@ namespace WolvenKit.Views.Shell
         private void BackStageButton_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            // SetRibbonUI();
+        }
+
+        private void ApplicationMenu_IsPopupOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
         }
     }
 }
