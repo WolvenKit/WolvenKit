@@ -151,5 +151,50 @@ namespace WolvenKit.Views.Editor
                 SBBar.SetCurrentValue(TextBox.TextProperty, "");
             }
         }
+
+        static readonly int FileImportLimit = 100;
+        static int idx = 0;
+
+        private void executeFile(AssetBrowserViewModel vm, Common.Model.AssetBrowserData selectedData)
+        {
+            switch (selectedData.Type)
+            {
+                case Common.Model.EntryType.Directory:
+                {
+                    foreach (var data in selectedData.Children.ToAssetBrowserData())
+                    {
+                        executeFile(vm, data);
+                    }
+                    break;
+                }
+                case Common.Model.EntryType.File:
+                {
+                    if (idx >= FileImportLimit)
+                        return;
+                    idx++;
+                    vm.SelectedNode = selectedData;
+                    vm.ImportFileCommand.Execute(selectedData);
+                    break;
+                }
+            }
+        }
+
+        private void MenuItem_ImportAll_Click(object sender, RoutedEventArgs e)
+        {
+            var mi = sender as MenuItem;
+            var gridRecordContextMenuInfo = mi?.DataContext as Syncfusion.UI.Xaml.Grid.GridRecordContextMenuInfo;
+            var vm = ViewModel as AssetBrowserViewModel;
+            if (gridRecordContextMenuInfo != null && vm != null)
+            {
+                idx = 0;
+                foreach (var selectedItem in gridRecordContextMenuInfo.DataGrid.SelectedItems)
+                {
+                    var selectedData = selectedItem as Common.Model.AssetBrowserData;
+                    if (selectedData == null)
+                        continue;
+                    executeFile(vm, selectedData);
+                }
+            }
+        }
     }
 }
