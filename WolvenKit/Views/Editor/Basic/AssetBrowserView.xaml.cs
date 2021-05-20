@@ -24,6 +24,19 @@ namespace WolvenKit.Views.Editor
 
         }
 
+        protected override void OnViewModelChanged()
+        {
+            if (ViewModel is AssetBrowserViewModel vm)
+            {
+                vm.SelectItemInTreeNavSF += (obj) => {
+                    TreeNavSF.SetCurrentValue(Syncfusion.Windows.Controls.Navigation.SfTreeNavigator.SelectedItemProperty, obj);
+                };
+                vm.GoBackInTreeNavSF += () => {
+                    TreeNavSF.GoBack();
+                };
+            }
+        }
+
         private void DrillDownItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             throw new System.NotImplementedException();

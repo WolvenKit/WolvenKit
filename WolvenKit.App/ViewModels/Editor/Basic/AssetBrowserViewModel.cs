@@ -209,6 +209,10 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        public event Action<object> SelectItemInTreeNavSF;
+
+        public event Action GoBackInTreeNavSF;
+
         #endregion commands
 
         #region methods
@@ -344,6 +348,7 @@ namespace WolvenKit.ViewModels.Editor
                     CurrentNode = item.Children;
                     CurrentNode.Parent = item.This;
                     CurrentNodeFiles = item.Children.ToAssetBrowserData();
+                    SelectItemInTreeNavSF?.Invoke(CurrentNode);
                     //NavigateTo(CurrentNode.FullPath);
                     break;
                 }
@@ -373,6 +378,7 @@ namespace WolvenKit.ViewModels.Editor
                     {
                         CurrentNode = item.Parent;
                         CurrentNodeFiles = item.Parent.ToAssetBrowserData();
+                        GoBackInTreeNavSF?.Invoke();
                         //NavigateTo(CurrentNode.FullPath);
                     }
                     break;
