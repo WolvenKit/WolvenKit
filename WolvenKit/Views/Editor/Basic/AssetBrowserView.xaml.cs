@@ -116,9 +116,9 @@ namespace WolvenKit.Views.Editor
                     var x = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
 
                     Trace.WriteLine(x.Name);
+                    TreeNavSF.GoBack();
                     vm.CurrentNode = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
                     vm.CurrentNodeFiles = (TreeNavSF.DrillDownItem.Header as GameFileTreeNode)?.ToAssetBrowserData();
-                    TreeNavSF.GoBack();
                     if (TreeNavSF.DrillDownItem.Header as string == "Depot")
                     {
                         VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
@@ -179,7 +179,7 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        private void MenuItem_ImportAll_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_ImportSelected_Click(object sender, RoutedEventArgs e)
         {
             var mi = sender as MenuItem;
             var gridRecordContextMenuInfo = mi?.DataContext as Syncfusion.UI.Xaml.Grid.GridRecordContextMenuInfo;
