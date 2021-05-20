@@ -124,8 +124,6 @@ namespace WolvenKit.Views.HomePage
         {
             guide.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             guide.Reset();
-
-
         }
     }
 }

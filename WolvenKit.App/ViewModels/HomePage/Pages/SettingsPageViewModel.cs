@@ -1,14 +1,17 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using System.Windows.Data;
 using System.Windows.Media;
 using Catel.MVVM;
+using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.Controls;
+using WolvenKit.ViewModels.Editor.Tools;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
     public class SettingsPageViewModel : ViewModelBase
     {
-
-
         public GeneralSettingsPGModel generalSettingsPGModel
         {
             get { return new GeneralSettingsPGModel(); }
@@ -25,19 +28,21 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             set { }
         }
 
-
-
-
-
-
+        public AddPathDialogViewModel AddPathDialogViewModel
+        {
+            get { return new AddPathDialogViewModel(); }
+            set { }
+        }
     }
 
+    [Editor(typeof(string), typeof(PathEditor))]
     public class CP77SettingsPGModel
     {
         [Category("General")]
         public string Game_Executable_Path { get; set; }
     }
 
+    [Editor(typeof(string), typeof(PathEditor))]
     public class TW3SettingsPGModel
     {
         [Category("General")]
@@ -47,6 +52,47 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
     }
 
+    public class PathEditor : ITypeEditor
+    {
+        AddPathDialogView addPathDialogView;
+
+        public void Attach(PropertyViewItem property, PropertyItem info)
+        {
+            if (info.CanWrite)
+            {
+                var binding = new Binding("Path")
+                {
+                    Mode = BindingMode.TwoWay,
+                    Source = info,
+                    ValidatesOnExceptions = true,
+                    ValidatesOnDataErrors = true
+                };
+                BindingOperations.SetBinding(addPathDialogView, AddPathDialogView.PathProperty, binding);
+            }
+            else
+            {
+                addPathDialogView.IsEnabled = false;
+                var binding = new Binding("Path")
+                {
+                    Source = info,
+                    ValidatesOnExceptions = true,
+                    ValidatesOnDataErrors = true
+                };
+                BindingOperations.SetBinding(addPathDialogView, AddPathDialogView.PathProperty, binding);
+            }
+        }
+        public object Create(PropertyInfo PropertyInfo)
+        {
+            addPathDialogView = new AddPathDialogView();
+            addPathDialogView.Path = "";
+            return addPathDialogView;
+        }
+
+        public void Detach(PropertyViewItem property)
+        {
+
+        }
+    }
 
     public class GeneralSettingsPGModel
     {
