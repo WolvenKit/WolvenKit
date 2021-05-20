@@ -7,5 +7,6 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
         }
+
     }
 }
