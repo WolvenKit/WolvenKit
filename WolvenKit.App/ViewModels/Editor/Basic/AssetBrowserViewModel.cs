@@ -16,14 +16,12 @@ using Feather.Commands;
 using Feather.Controls;
 using HandyControl.Data;
 using Orchestra.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
 namespace WolvenKit.ViewModels.Editor
@@ -120,17 +118,9 @@ namespace WolvenKit.ViewModels.Editor
 
         public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
 
-        private Visibility _loadVisibility = Visibility.Visible;
 
-        public Visibility LoadVisibility
-        {
-            get => _loadVisibility;
-            set
-            {
-                _loadVisibility = value;
-                RaisePropertyChanged(() => LoadVisibility);
-            }
-        }
+        public Visibility LoadVisibility { get; set; } = Visibility.Visible;
+        
 
         public GameFileTreeNode RootNode { get; set; }
 
@@ -179,6 +169,9 @@ namespace WolvenKit.ViewModels.Editor
         {
             CurrentNode = RootNode;
             CurrentNodeFiles = RootNode.ToAssetBrowserData();
+
+            GoToRootInTreeNavSF();
+
         }
 
         private void ExecuteImportFile() => ImportFile(SelectedNode);
@@ -212,6 +205,9 @@ namespace WolvenKit.ViewModels.Editor
         public event Action<object> SelectItemInTreeNavSF;
 
         public event Action GoBackInTreeNavSF;
+
+        public event Action GoToRootInTreeNavSF;
+
 
         #endregion commands
 
@@ -270,7 +266,7 @@ namespace WolvenKit.ViewModels.Editor
                 await SetCurrentNodeAsync(node);
             });
 
-            
+
             Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };

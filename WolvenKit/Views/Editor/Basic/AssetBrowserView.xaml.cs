@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +11,8 @@ namespace WolvenKit.Views.Editor
 {
     public partial class AssetBrowserView : INotifyPropertyChanged
     {
-        #region Constructors
+
+
 
         public AssetBrowserView()
         {
@@ -28,11 +28,22 @@ namespace WolvenKit.Views.Editor
         {
             if (ViewModel is AssetBrowserViewModel vm)
             {
-                vm.SelectItemInTreeNavSF += (obj) => {
+                vm.SelectItemInTreeNavSF += (obj) =>
+                {
                     TreeNavSF.SetCurrentValue(Syncfusion.Windows.Controls.Navigation.SfTreeNavigator.SelectedItemProperty, obj);
                 };
-                vm.GoBackInTreeNavSF += () => {
+                vm.GoBackInTreeNavSF += () =>
+                {
                     TreeNavSF.GoBack();
+                    if (TreeNavSF.DrillDownItem.Header as string == "Depot")
+                    {
+                        VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+
+                    }
+                };
+                vm.GoToRootInTreeNavSF += () =>
+                {
+                    // ? :)
                 };
             }
         }
@@ -42,15 +53,7 @@ namespace WolvenKit.Views.Editor
             throw new System.NotImplementedException();
         }
 
-        #endregion Constructors
-
-        #region Events
-
         public new event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Events
-
-        #region Methods
 
         private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -64,7 +67,6 @@ namespace WolvenKit.Views.Editor
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        // Begin dragging the window//this.DragMove();
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (DataContext is AssetBrowserViewModel vm)
@@ -74,8 +76,6 @@ namespace WolvenKit.Views.Editor
                 //vm.NavigateTo(vm.CurrentNode.FullPath);
             }
         }
-
-        #endregion Methods
 
         private void ListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -89,7 +89,6 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        //private object PreviousItem;
 
         private void SfTreeNavigator_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -100,14 +99,8 @@ namespace WolvenKit.Views.Editor
                     VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 }
 
-                // var x = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
-
-                // Trace.WriteLine(x.Name);
                 vm.CurrentNode = TreeNavSF.SelectedItem as GameFileTreeNode;
                 vm.CurrentNodeFiles = (TreeNavSF.SelectedItem as GameFileTreeNode)?.ToAssetBrowserData();
-
-
-                //vm.NavigateTo(vm.CurrentNode.FullPath);
             }
         }
 
@@ -125,27 +118,19 @@ namespace WolvenKit.Views.Editor
             {
                 if (TreeNavSF.DrillDownItem.Header as string != "Depot")
                 {
-
-                    var x = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
-
-                    Trace.WriteLine(x.Name);
                     TreeNavSF.GoBack();
-                    vm.CurrentNode = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
-                    vm.CurrentNodeFiles = (TreeNavSF.DrillDownItem.Header as GameFileTreeNode)?.ToAssetBrowserData();
                     if (TreeNavSF.DrillDownItem.Header as string == "Depot")
                     {
+                        vm.CurrentNode = vm.RootNode;
+                        vm.CurrentNodeFiles = vm.RootNode.ToAssetBrowserData();
                         VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
-
+                    }
+                    else
+                    {
+                        vm.CurrentNode = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
+                        vm.CurrentNodeFiles = (TreeNavSF.DrillDownItem.Header as GameFileTreeNode)?.ToAssetBrowserData();
                     }
                 }
-                else
-                {
-                }
-
-
-
-
-                //vm.NavigateTo(vm.CurrentNode.FullPath);
             }
         }
 

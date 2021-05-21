@@ -6,10 +6,10 @@
  xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
- xmlns:local="clr-namespace:WolvenKit.Views.Editor"
  xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:local="clr-namespace:WolvenKit.Views.Editor"
  xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -232,7 +232,7 @@
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Import selected" Click="MenuItem_ImportSelected_Click" />
+                                        <MenuItem Click="MenuItem_ImportSelected_Click" Header="Import selected" />
                                     </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
 

@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
-using WolvenKit.Functionality;
+using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Views.Others
