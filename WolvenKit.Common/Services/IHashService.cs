@@ -11,6 +11,7 @@ namespace WolvenKit.Common.Services
 
         void Serialize(string path);
 
+        void Add(string path);
 
         #endregion Methods
     }

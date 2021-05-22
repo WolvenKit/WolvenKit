@@ -20,7 +20,7 @@ namespace WolvenKit.Modkit.RED4
         public static (uint, uint) CompressAndWrite(this BinaryWriter bw, byte[] inbuffer)
         {
             var size = (uint)inbuffer.Length;
-            if (size < 255)
+            if (size < 256)
             {
                 var crc = Crc32Algorithm.Compute(inbuffer);
                 bw.Write(inbuffer);
@@ -32,7 +32,7 @@ namespace WolvenKit.Modkit.RED4
                 IEnumerable<byte> outBuffer = new List<byte>();
                 var r = OodleHelper.Compress(
                     inbuffer,
-                    (int)size,
+                    inbuffer.Length,
                     ref outBuffer,
                     OodleNative.OodleLZ_Compressor.Kraken,
                     OodleNative.OodleLZ_Compression.Normal);
