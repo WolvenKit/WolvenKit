@@ -232,7 +232,10 @@
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Click="MenuItem_ImportSelected_Click" Header="Import selected" />
+                                        <MenuItem Click="MenuItem_ImportSelected_Click" Header="Add selected items to Project" />
+                                        <MenuItem Header="Export selected - Simple" />
+                                        <MenuItem Header="Export selected - Advanced" />
+
                                     </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
 
