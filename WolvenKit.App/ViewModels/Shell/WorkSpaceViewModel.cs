@@ -16,12 +16,11 @@ using Catel.Services;
 using Microsoft.Win32;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
@@ -59,7 +58,7 @@ namespace WolvenKit.ViewModels.Shell
             ILoggerService loggerService,
             IMessageService messageService,
             ICommandManager commandManager//,
-            //IGameController gameController
+                                          //IGameController gameController
         )
         {
             #region dependency injection
@@ -382,7 +381,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        private void ExecutePackMod(){}
+        private void ExecutePackMod() { }
         //_gameController.PackAndInstallProject();
 
         private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
@@ -437,7 +436,7 @@ namespace WolvenKit.ViewModels.Shell
 
         //private bool CanShowRadishTool() => false;
 
-        private bool CanShowVisualEditor() => false;
+        private bool CanShowVisualEditor() => _projectManager.ActiveProject is EditorProject;
 
         private bool CanShowWccTool() => false;
 

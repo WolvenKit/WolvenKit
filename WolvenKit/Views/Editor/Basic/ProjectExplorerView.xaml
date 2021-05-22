@@ -803,12 +803,18 @@
 
             <syncfusion:SfTreeGrid.ContextMenu>
                 <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
-                    <MenuItem
-                     Margin="0"
-                     Command="{catel:CommandManagerBinding Application.OpenFile}"
-                     CommandParameter="{Binding SelectedItem}"
-                     Header="Open"
-                     />
+                    <MenuItem Header="File">
+                        <MenuItem
+                         Command="{catel:CommandManagerBinding Application.OpenFile}"
+                         CommandParameter="{Binding SelectedItem}"
+                         Header="Open"
+                         />
+                        <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
+                        <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
+                        <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
+                        <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
+                    </MenuItem>
+
                     <Separator Margin="-15" />
 
                     <MenuItem Margin="0" Header="Actions">
@@ -816,6 +822,8 @@
                         <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
+                    <MenuItem Header="Export selected - Simple" />
+                    <MenuItem Header="Export selected - Advanced" />
 
                     <MenuItem Header="Export">
                         <MenuItem Click="MenuItem_Click_2" Header="Wem" />
@@ -826,10 +834,7 @@
                     </MenuItem>
 
                     <Separator Margin="-15" />
-                    <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
-                    <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
-                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
-                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
+
                     <Separator Margin="-15" />
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
