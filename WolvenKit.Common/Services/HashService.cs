@@ -157,7 +157,14 @@ namespace WolvenKit.Common.Services
 
         }
 
-        public void Add(string path) => cacheList[10].Add(FNV1A64HashAlgorithm.HashString(path), path);
+        public void Add(string path)
+        {
+            var hash = FNV1A64HashAlgorithm.HashString(path);
+            if (!Contains(hash))
+            {
+                cacheList[10].Add(hash, path);
+            }
+        }
 
 
         public void ReloadLocally() => throw new System.NotImplementedException();

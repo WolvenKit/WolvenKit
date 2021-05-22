@@ -107,6 +107,13 @@ namespace WolvenKit.Common.Oodle
                 inputHandle.Free();
                 outputHandle.Free();
 
+                if (result == 0 || result > inputCount)
+                {
+                    outputBuffer = inputBytes;
+                    return outputBuffer.Count();
+                }
+
+
                 if (useREDHeader)
                 {
                     //resize buffer
