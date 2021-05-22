@@ -102,10 +102,6 @@ namespace WolvenKit.Functionality.Helpers
             }
         }
 
-        protected void OnFileDropped(string fileName)
-        {
-            if (FileDropped != null)
-                FileDropped(this, new FileDroppedEventArgs(fileName));
-        }
+        protected void OnFileDropped(string fileName) => FileDropped?.Invoke(this, new FileDroppedEventArgs(fileName));
     }
 }

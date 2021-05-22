@@ -1,20 +1,21 @@
 using System;
-using System.Windows;
+using Catel.Logging;
 using Microsoft.Web.WebView2.Core;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class WikiPageView
     {
-        #region Constructors
-
+        // Constructor
         public WikiPageView()
         {
             InitializeComponent();
-            dome();
+            InitializeWebviev();
         }
 
-        private async void dome()
+        // initialize webviev for Wiki page.
+        private async void InitializeWebviev()
         {
             try
             {
@@ -22,20 +23,10 @@ namespace WolvenKit.Views.HomePage.Pages
                 await cal.EnsureCoreWebView2Async(objCoreWebView2Environment);
                 cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://wiki.cybermods.net/wolvenkit/"));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // TODO: handle this
+                StaticReferences.Logger.Error(e);
             }
         }
-
-        #endregion Constructors
-
-        #region Methods
-
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-        }
-
-        #endregion Methods
     }
 }

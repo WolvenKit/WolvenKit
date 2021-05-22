@@ -22,8 +22,5 @@ namespace WolvenKit.Functionality.Helpers
 
             return targetFilePath;
         }
-
-
-
     }
 }

@@ -5,7 +5,6 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  >
 
     <Grid
@@ -17,7 +16,7 @@
         <Grid Margin="3,75,3,0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
-                <wv2:WebView2 x:Name="cal"  />
+                <wv2:WebView2 x:Name="cal" />
             </hc:TransitioningContentControl>
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">

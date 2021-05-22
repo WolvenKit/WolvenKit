@@ -10,10 +10,12 @@ namespace WolvenKit.Functionality.Helpers
         // load assimp libraries.
         public static void LoadAssimpNativeLibrary()
         {
-            var assimp32Folder = AppDomain.CurrentDomain.BaseDirectory;
-            var assimp64Folder = assimp32Folder;
             try
-            { AssimpWpfImporter.LoadAssimpNativeLibrary(assimp32Folder, assimp64Folder); }
+            {
+                var assimp32Folder = AppDomain.CurrentDomain.BaseDirectory;
+                var assimp64Folder = assimp32Folder;
+                AssimpWpfImporter.LoadAssimpNativeLibrary(assimp32Folder, assimp64Folder);
+            }
             catch (AssimpException ex)
             {
                 MessageBox.Show(
