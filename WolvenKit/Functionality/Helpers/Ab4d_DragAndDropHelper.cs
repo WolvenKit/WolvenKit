@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Windows;
 
-namespace WolvenKit.Functionality.Ab4d
+namespace WolvenKit.Functionality.Helpers
 {
     public class FileDroppedEventArgs : EventArgs
     {
