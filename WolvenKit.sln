@@ -46,6 +46,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.App", "WolvenKit.App\WolvenKit.App.csproj", "{B850C5FC-1B02-4735-854F-2D45778B856C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeSnippets", "CodeSnippets", "{5752F9DD-6CAD-47EF-8786-93A1F19D74D7}"
+	ProjectSection(SolutionItems) = preProject
+		backup_ProjectWorkflowIdea.cs = backup_ProjectWorkflowIdea.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Witcher3Formats", "WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj", "{EC148C12-0D84-45A9-9EB7-68DB7ABC0574}"
 EndProject

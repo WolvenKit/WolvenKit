@@ -30,7 +30,7 @@ namespace WolvenKit.Views.Editor
 
 
             // Use helper class (defined in this sample project) to load the native assimp libraries
-            AssimpLoader.LoadAssimpNativeLibrary();
+            Helpers.LoadAssimpNativeLibrary();
 
 
             var assimpWpfImporter = new AssimpWpfImporter();

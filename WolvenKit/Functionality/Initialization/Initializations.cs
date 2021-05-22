@@ -27,10 +27,9 @@ namespace WolvenKit.Functionality.Initialization
     {
 
         // Initialize Github RPC
-        public static async void InitializeGitHub()
+        public static void InitializeGitHub()
         {
-            GithubHelper.GhubClient = new GitHubClient(new ProductHeaderValue("WolvenKit")) { Credentials = GithubHelper.GhubAuth("wolvenbot", "botwolven1") };
-            await GithubHelper.GhubLastReleaseAsync();
+            StaticReferences.Githubclient = new GitHubClient(new ProductHeaderValue("WolvenKit")) { Credentials = Github_Helpers.GhubAuth("wolvenbot", "botwolven1") };
         }
 
 

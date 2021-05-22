@@ -31,8 +31,6 @@ namespace WolvenKit
         // Determines if the application is in design mode.
         public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
-        // Get instance of the logger.
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
 
         // Constructor #1
@@ -62,39 +60,39 @@ namespace WolvenKit
             LogManager.AddDebugListener(false);
 #endif
 
-            Log.Info("Starting application");
+            StaticReferences.Logger.Info("Starting application");
 
-            Log.Info("Initializing MVVM");
+            StaticReferences.Logger.Info("Initializing MVVM");
             await Initializations.InitializeMVVM();
 
-            Log.Info("Initializing Theme Helper");
+            StaticReferences.Logger.Info("Initializing Theme Helper");
             Initializations.InitializeThemeHelper();
 
-            Log.Info("Initializing Shell");
+            StaticReferences.Logger.Info("Initializing Shell");
             await Initializations.InitializeShell();
-            AppHelper.ShowFirstTimeSetup();
+            Helpers.ShowFirstTimeSetup();
 
-            Log.Info("Initializing Discord RPC API");
+            StaticReferences.Logger.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            Log.Info("Initializing Github API");
+            StaticReferences.Logger.Info("Initializing Github API");
             Initializations.InitializeGitHub();
 
-            Log.Info("Calling base.OnStartup");
+            StaticReferences.Logger.Info("Calling base.OnStartup");
             base.OnStartup(e); // Some things can only be initialized after base.OnStartup(e);
 
-            Log.Info("Initializing NodeNetwork.");
+            StaticReferences.Logger.Info("Initializing NodeNetwork.");
             NNViewRegistrar.RegisterSplat();
 
-            Log.Info("Initializing Notifications.");
+            StaticReferences.Logger.Info("Initializing Notifications.");
             NotificationHelper.InitializeNotificationHelper();
 
-            Log.Info("Initializing FFME");
+            StaticReferences.Logger.Info("Initializing FFME");
             Initializations.InitializeFFME();
 
 
-            Log.Info("Check for new updates");
-            AppHelper.CheckForUpdates();
+            StaticReferences.Logger.Info("Check for new updates");
+            Helpers.CheckForUpdates();
 
 
 

@@ -16,8 +16,8 @@ using Assimp;
 using Catel.IoC;
 using Orchestra.Services;
 using WolvenKit.Common.DDS;
-using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
@@ -63,7 +63,7 @@ namespace WolvenKit.Views.Dialogs
         public SimpleMeshExporterDialog(object selectedItem)
         {
             InitializeComponent();
-            AssimpLoader.LoadAssimpNativeLibrary();
+            Helpers.LoadAssimpNativeLibrary();
             SelectedItem = selectedItem as FileModel;
             ExtractRiggedMeshRadio.IsChecked = false;
             ExportMaterialsCheckbox.IsChecked = false;
