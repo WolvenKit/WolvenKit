@@ -328,7 +328,7 @@
             </Grid>
         </Grid>
 
-        <Grid Background="{DynamicResource RegionBrush}">
+        <Grid Background="{DynamicResource RegionBrush}" Visibility="Collapsed">
 
             <Label
              Grid.Row="1"

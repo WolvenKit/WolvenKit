@@ -33,7 +33,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
 
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="3*" />
 
             <RowDefinition Height="70" />
 
@@ -98,34 +98,41 @@
             <syncfusion:SfDataGrid
              x:Name="ImporterList"
              Margin="0,20,0,0"
-             BorderBrush="Transparent"
+             BorderBrush="{DynamicResource BorderBrush}"
              />
-            <TextBlock
-             Margin="0"
-             Padding="10,4,10,4"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Top"
-             Background="{DynamicResource ContentBackgroundAlt}"
-             Text="Importer List"
-             TextAlignment="Center"
-             />
+            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+
+                <TextBlock
+                 Margin="0"
+                 Padding="10,4,10,4"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Top"
+                 Background="{DynamicResource ContentBackgroundAlt}"
+                 Text="Importer List"
+                 TextAlignment="Center"
+                 />
+            </Border>
+
         </Grid>
         <Grid Grid.Row="1" Grid.Column="2">
 
             <syncfusion:SfDataGrid
              x:Name="ExporterList"
              Margin="0,20,0,0"
-             BorderBrush="Transparent"
+             BorderBrush="{DynamicResource BorderBrush}"
              />
-            <TextBlock
-             Margin="0"
-             Padding="10,4,10,4"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Top"
-             Background="{DynamicResource ContentBackgroundAlt}"
-             Text="Exporter List"
-             TextAlignment="Center"
-             />
+            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                <TextBlock
+                 Margin="0"
+                 Padding="10,4,10,4"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Top"
+                 Background="{DynamicResource ContentBackgroundAlt}"
+                 Text="Exporter List"
+                 TextAlignment="Center"
+                 />
+            </Border>
+
         </Grid>
 
 
