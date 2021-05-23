@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
 using Catel.IoC;
 using Newtonsoft.Json;
@@ -27,6 +28,7 @@ using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W;
 using WolvenKit.RED3.CR2W.Types;
+using WolvenKit.ViewModels.Editor;
 using WolvenKit.W3Speech;
 using WolvenKit.W3Strings;
 using WolvenKit.Wwise;
@@ -77,19 +79,32 @@ namespace WolvenKit.Functionality.Controllers
 
         public async Task HandleStartup()
         {
-            await Task.Run( LoadStringsManager);
+            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+            assetBrowserViewModel.LoadVisibility = Visibility.Visible;
 
-            var todo = new List<Func<IGameArchiveManager>>()
-            {
-                LoadBundleManager,
-                LoadTextureManager,
-                LoadCollisionManager,
-                LoadSoundManager,
-                LoadSpeechManager
-            };
-            Parallel.ForEach(todo, _ => Task.Run(_));
+            //await Task.Run( LoadStringsManager);
+            LoadStringsManager();
+
+            //var todo = new List<Func<IGameArchiveManager>>()
+            //{
+            //    LoadBundleManager,
+            //    LoadTextureManager,
+            //    LoadCollisionManager,
+            //    LoadSoundManager,
+            //    LoadSpeechManager
+            //};
+            //Parallel.ForEach(todo, _ => Task.Run(_));
+
+
+            LoadBundleManager();
+            LoadTextureManager();
+            LoadCollisionManager();
+            LoadSoundManager();
+            LoadSpeechManager();
+
+            assetBrowserViewModel.ReInit(false);
+
             await Task.CompletedTask;
-
         }
 
 

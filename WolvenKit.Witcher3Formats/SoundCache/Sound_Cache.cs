@@ -192,6 +192,7 @@ namespace WolvenKit.Wwise
             buffsize = br.ReadInt64();
             checksum = br.ReadInt64();
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
+            var itemslist = new List<SoundCacheItem>();
             for (var i = 0; i < FileCount; i++)
             {
                 var sf = new SoundCacheItem(this);
@@ -207,9 +208,10 @@ namespace WolvenKit.Wwise
                     sf.PageOffset = br.ReadUInt32();
                     sf.Size = br.ReadUInt32();
                 }
-                Files.Add(sf.Key, sf);
+                itemslist.Add(sf);
+                
             }
-            foreach (var f in Files.Values.Cast<SoundCacheItem>())
+            foreach (var f in itemslist)
             {
                 br.BaseStream.Seek(NamesOffset + f.NameOffset, SeekOrigin.Begin);
                 f.Name = br.ReadCR2WString();
@@ -218,6 +220,7 @@ namespace WolvenKit.Wwise
                     f.Name = info.StreamedFiles.First(x => x.Id == (f.Name.Split('.')[0])).Path;
                 }
                 f.ParentFile = this.ArchiveAbsolutePath;
+                Files.Add(f.Key, f);
             }
         }
 
