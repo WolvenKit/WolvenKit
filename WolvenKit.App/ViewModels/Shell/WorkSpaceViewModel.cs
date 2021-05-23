@@ -127,7 +127,7 @@ namespace WolvenKit.ViewModels.Shell
                 ProjectExplorer,
                 PropertiesViewModel,
                 //ImportViewModel,
-                //AssetBrowserVM,
+                AssetBrowserVM,
                 //BulkEditorVM,
                 //ImportExportToolVM,
                 //CsvEditorVM,

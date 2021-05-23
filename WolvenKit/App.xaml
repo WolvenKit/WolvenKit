@@ -28,6 +28,11 @@
                             <views:ProjectExplorerView />
                         </Grid>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AssetBrowserViewModel}">
+                        <Grid>
+                            <views:AssetBrowserView />
+                        </Grid>
+                    </DataTemplate>
                 </ResourceDictionary>
 
                 <ResourceDictionary>

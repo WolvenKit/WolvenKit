@@ -10,6 +10,9 @@
     <Grid>
         <syncfusion:DockingManager x:Name="PART_DockingManager"
                                    UseDocumentContainer="True"
-                                   ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"/>
+                                   ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
+                                   DraggingType="BorderDragging"
+                                   Background="Transparent"
+                                   />
     </Grid>
 </UserControl>
