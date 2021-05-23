@@ -4,7 +4,7 @@ using WolvenKit.Models.Docking;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class PaneViewModel : ViewModelBase, IDockElement
+    public abstract class PaneViewModel : ViewModelBase, IDockElement
     {
         #region fields
 
@@ -14,15 +14,6 @@ namespace WolvenKit.ViewModels.Shell
         private string _title = null;
 
         #endregion fields
-
-        #region constructors
-
-        public PaneViewModel()
-        {
-            State = DockState.Dock;
-        }
-
-        #endregion constructors
 
         #region Properties
 

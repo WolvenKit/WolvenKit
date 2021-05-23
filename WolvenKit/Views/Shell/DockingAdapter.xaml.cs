@@ -34,7 +34,12 @@ namespace WolvenKit.Views.Shell
             PART_DockingManager.Loaded += PART_DockingManager_Loaded;
         }
 
-        private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e) => ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
+        private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e)
+        {
+            ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(
+                DocumentContainer.AddTabDocumentAtLastProperty, true);
+            PART_DockingManager.LoadDockState();
+        }
 
         public IDockElement ActiveDocument
         {

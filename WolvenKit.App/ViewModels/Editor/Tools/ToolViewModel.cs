@@ -19,6 +19,8 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="name"></param>
         public ToolViewModel(string name)
         {
+            State = DockState.Dock;
+
             Name = name;
             Title = name;
             Header = name;

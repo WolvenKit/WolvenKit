@@ -33,6 +33,11 @@
                             <views:AssetBrowserView />
                         </Grid>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:DocumentViewModel}">
+                        <Grid>
+                            <views:DocumentView />
+                        </Grid>
+                    </DataTemplate>
                 </ResourceDictionary>
 
                 <ResourceDictionary>

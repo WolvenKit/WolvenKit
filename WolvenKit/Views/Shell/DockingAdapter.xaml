@@ -13,6 +13,8 @@
                                    ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
                                    DraggingType="BorderDragging"
                                    Background="Transparent"
+                                   PersistState="True"
+                                   
                                    />
     </Grid>
 </UserControl>
