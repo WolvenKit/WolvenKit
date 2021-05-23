@@ -13,7 +13,6 @@
  xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
  xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
- xmlns:tools="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Tools.WPF"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
  GotFocus="UserControl_GotFocus"
  IsVisibleChanged="UserControl_IsVisibleChanged"
@@ -25,12 +24,12 @@
             <!--  ContextAdorner Style  -->
             <Style x:Key="SyncfusionTemplatedAdornerInternalControlStyle2" TargetType="{x:Type shared:TemplatedAdornerInternalControl}">
                 <Setter Property="Focusable" Value="False" />
-                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Path=ContextTabGroup.Visibility}" />
-                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
+                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Path=ContextTabGroup.Visibility}" />
+                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
                 <Setter Property="Height" Value="57" />
-                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Converter={StaticResource colorToBrushConverter}, Path=ContextTabGroup.BackColor}" />
+                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Converter={StaticResource colorToBrushConverter}, Path=ContextTabGroup.BackColor}" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
+                <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type shared:TemplatedAdornerInternalControl}">
@@ -53,12 +52,12 @@
                                     <TextBlock
                                      x:Name="PART_Label"
                                      Margin="0,0,0,0"
-                                     HorizontalAlignment="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:Ribbon}}, Path=TabGroupLabelAlignment}"
+                                     HorizontalAlignment="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}, Path=TabGroupLabelAlignment}"
                                      VerticalAlignment="Top"
                                      FontSize="10"
                                      FontWeight="Normal"
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                     Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Path=ContextTabGroup.Label}"
+                                     Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Path=ContextTabGroup.Label}"
                                      TextAlignment="Center"
                                      TextTrimming="CharacterEllipsis"
                                      />
@@ -68,8 +67,8 @@
 
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:RibbonWindow}}, Path=IsGlassActive}" Value="True" />
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:RibbonWindow}}, Path=WindowState}" Value="Normal" />
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, Path=IsGlassActive}" Value="True" />
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, Path=WindowState}" Value="Normal" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter TargetName="PART_Label" Property="BitmapEffect">
                                         <Setter.Value>
@@ -83,13 +82,13 @@
                                 </MultiDataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:Ribbon}}}" Value="Hide" />
+                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}}" Value="Hide" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Margin" Value="0,0,0,-3" />
                                 </MultiDataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:Ribbon}}}" Value="Adorner" />
+                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}}" Value="Adorner" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Margin" Value="0,0,0,-3" />
                                 </MultiDataTrigger>
