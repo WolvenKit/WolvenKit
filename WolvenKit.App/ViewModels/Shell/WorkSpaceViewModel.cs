@@ -381,30 +381,30 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecutePackMod() { }
         //_gameController.PackAndInstallProject();
 
-        private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanBackupMod() => _projectManager.ActiveProject != null;
 
         private bool CanNewFile() => true;
 
         private bool CanOpenFile(FileModel model) => true;
 
-        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanPackMod() => _projectManager.ActiveProject != null;
 
-        private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanPublishMod() => _projectManager.ActiveProject != null;
 
         private bool CanShowAnimationTool() => false;
 
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
-        private bool CanShowAudioTool() => _projectManager.ActiveProject is EditorProject;
-        private bool CanShowVideoTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowAudioTool() => _projectManager.ActiveProject != null;
+        private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
 
 
         private bool CanShowBulkEditor() => false;
 
         private bool CanShowCR2WToTextTool() => false;
 
-        private bool CanShowCsvEditor() => _projectManager.ActiveProject is EditorProject;
-        private bool CanShowCodeEditor() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowCsvEditor() => _projectManager.ActiveProject != null;
+        private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
 
 
         private bool CanShowGameDebuggerTool() => false;
@@ -413,13 +413,13 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowImporterTool() => false;
 
-        private bool CanShowImportUtility() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowImportUtility() => _projectManager.ActiveProject != null;
 
         private bool CanShowInstaller() => false;
 
         private bool CanShowJournalEditor() => false;
 
-        private bool CanShowLog() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowLog() => _projectManager.ActiveProject != null;
 
         private bool CanShowMenuCreatorTool() => false;
 
@@ -427,17 +427,17 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowPluginManagerTool() => false;
 
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowProjectExplorer() => _projectManager.ActiveProject != null;
 
-        private bool CanShowProperties() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowProperties() => _projectManager.ActiveProject != null;
 
         //private bool CanShowRadishTool() => false;
 
-        private bool CanShowVisualEditor() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowVisualEditor() => _projectManager.ActiveProject != null;
 
         private bool CanShowWccTool() => false;
 
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowImportExportTool() => _projectManager.ActiveProject != null;
 
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 

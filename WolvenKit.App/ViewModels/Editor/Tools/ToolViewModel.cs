@@ -56,6 +56,7 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     _isVisible = value;
                     RaisePropertyChanged(() => IsVisible);
+                    State = !_isVisible ? DockState.Hidden : DockState.Dock;
                 }
             }
         }

@@ -3,7 +3,7 @@ namespace WolvenKit.Models.Docking
     public enum DockState
     {
         Dock,
-
+        Hidden,
         Document
     }
 
