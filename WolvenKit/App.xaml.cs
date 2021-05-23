@@ -97,12 +97,12 @@ namespace WolvenKit
             Helpers.CheckForUpdates();
 
 
-            Window window = new Window();
-            window.AllowsTransparency = true;
-            window.Background = new SolidColorBrush(Colors.Transparent);
-            window.Content = new HomePageView();
-            window.WindowStyle = WindowStyle.None;
-            window.Show();
+            //Window window = new Window();
+            //window.AllowsTransparency = true;
+            //window.Background = new SolidColorBrush(Colors.Transparent);
+            //window.Content = new HomePageView();
+            //window.WindowStyle = WindowStyle.None;
+            //window.Show();
 
             // Temp Fix for MainViewModel.OnClosing
             if (MainWindow != null)
