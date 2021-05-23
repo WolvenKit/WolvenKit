@@ -148,13 +148,11 @@
                     </ad:PanesTemplateSelector.JournalEditorTemplate>
                     -->
 
-                    <!--  ProjectExplorerView
                     <ad:PanesTemplateSelector.VisualEditorTemplate>
                         <DataTemplate>
                             <visualeditorz:VisualEditorView />
                         </DataTemplate>
                     </ad:PanesTemplateSelector.VisualEditorTemplate>
-                    -->
 
                     <ad:PanesTemplateSelector.AudioToolTemplate>
                         <DataTemplate>
