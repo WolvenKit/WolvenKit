@@ -1,12 +1,11 @@
 using System.Windows.Media;
 using Catel.MVVM;
+using WolvenKit.Models.Docking;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class PaneViewModel : ViewModelBase
-    { // #MVVM
-        // #SortNameSpace
-
+    public class PaneViewModel : ViewModelBase, IDockElement
+    {
         #region fields
 
         private string _contentId = null;
@@ -20,11 +19,15 @@ namespace WolvenKit.ViewModels.Shell
 
         public PaneViewModel()
         {
+            State = DockState.Dock;
         }
 
         #endregion constructors
 
         #region Properties
+
+        public string Header { get; set; }
+        public DockState State { get; set; }
 
         public string ContentId
         {
@@ -85,5 +88,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         #endregion Properties
+
+        
     }
 }

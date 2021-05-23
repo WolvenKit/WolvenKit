@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -21,6 +22,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
@@ -34,15 +36,12 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region fields
 
-        private readonly ObservableCollection<DocumentViewModel> _files = new();
-
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         //private readonly IGameController _gameController;
 
-        private readonly DocumentViewModelDelegate addfiledel;
-        private DocumentViewModel _activeDocument = null;
+        private DocumentViewModel _activeDocument;
 
         private delegate void DocumentViewModelDelegate(DocumentViewModel value);
 
@@ -108,7 +107,7 @@ namespace WolvenKit.ViewModels.Shell
 
             OpenFileCommand = new DelegateCommand<FileModel>(
                 async (p) => await ExecuteOpenFile(p),
-                (p) => CanOpenFile(p));
+                CanOpenFile);
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
@@ -118,35 +117,33 @@ namespace WolvenKit.ViewModels.Shell
             SaveFileFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
-            addfiledel = vm => _files.Add(vm);
-
             // register as application-wide commands
             RegisterCommands(commandManager);
 
             #endregion commands
 
-            Tools = new ObservableCollection<ToolViewModel> {
+            Tools = new ObservableCollection<IDockElement> {
                 Log,
                 ProjectExplorer,
                 PropertiesViewModel,
-                ImportViewModel,
-                AssetBrowserVM,
-                BulkEditorVM,
-                ImportExportToolVM,
-                CsvEditorVM,
-                HexEditorVM,
-                CodeEditorVM,
-                JournalEditorVM,
-                VisualEditorVM,
-                AnimationToolVM,
-                AudioToolVM,
-                ImporterToolVM,
-                CR2WToTextToolVM,
-                GameDebuggerToolVM,
-                MenuCreatorToolVM,
-                PluginManagerVM,
-                WccToolVM,
-                MimicsToolVM,
+                //ImportViewModel,
+                //AssetBrowserVM,
+                //BulkEditorVM,
+                //ImportExportToolVM,
+                //CsvEditorVM,
+                //HexEditorVM,
+                //CodeEditorVM,
+                //JournalEditorVM,
+                //VisualEditorVM,
+                //AnimationToolVM,
+                //AudioToolVM,
+                //ImporterToolVM,
+                //CR2WToTextToolVM,
+                //GameDebuggerToolVM,
+                //MenuCreatorToolVM,
+                //PluginManagerVM,
+                //WccToolVM,
+                //MimicsToolVM,
             };
         }
 
@@ -897,15 +894,16 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets a collection of all currently available document viewmodels
         /// </summary>
-        public ObservableCollection<DocumentViewModel> Files => _files;
-
-        public EditorProject EditorProject { get; set; }
+        public List<DocumentViewModel> Files => Tools
+            .Where(_ => _.State == DockState.Document)
+            .Cast<DocumentViewModel>()
+            .ToList();
 
 
         /// <summary>
         /// Gets an enumeration of all currently available tool window viewmodels.
         /// </summary>
-        public ObservableCollection<ToolViewModel> Tools { get; set; }
+        public ObservableCollection<IDockElement> Tools { get; set; }
 
         #endregion properties
 
@@ -923,12 +921,12 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // Don't add this twice
-            if (_files.Any(f => f.ContentId == fileToAdd.ContentId))
+            if (Files.Any(f => f.ContentId == fileToAdd.ContentId))
             {
                 return;
             }
 
-            _files.Add(fileToAdd);
+            Tools.Add(fileToAdd);
         }
 
         /// <summary>
@@ -952,14 +950,17 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
 
-            _files.Remove(fileToClose);
+            Tools.Remove(fileToClose);
         }
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
         public void CloseAllDocuments()
         {
             ActiveDocument = null;
-            _files.Clear();
+            foreach (var documentViewModel in Files)
+            {
+                Tools.Remove(documentViewModel);
+            }
         }
 
         /// <summary>
@@ -970,7 +971,7 @@ namespace WolvenKit.ViewModels.Shell
         public async Task<DocumentViewModel> OpenAsync(FileModel model)
         {
             // Check if we have already loaded this file and return it if so
-            var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
+            var fileViewModel = Files.FirstOrDefault(fm => fm.ContentId == model.FullName);
             if (fileViewModel != null)
             {
                 return fileViewModel;
@@ -983,7 +984,7 @@ namespace WolvenKit.ViewModels.Shell
             if (result)
             {
                 // TODO: this is not threadsafe
-                _files.Add(fileViewModel);
+                Tools.Add(fileViewModel);
 
                 //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
                 //{

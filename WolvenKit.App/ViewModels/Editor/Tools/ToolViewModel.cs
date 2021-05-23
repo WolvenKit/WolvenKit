@@ -1,3 +1,4 @@
+using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
@@ -20,6 +21,7 @@ namespace WolvenKit.ViewModels.Editor
         {
             Name = name;
             Title = name;
+            Header = name;
         }
 
         /// <summary>
