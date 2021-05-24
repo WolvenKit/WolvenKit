@@ -1,20 +1,24 @@
-<UserControl x:Class="WolvenKit.Views.Shell.DockingAdapter"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views.Shell"
-             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+<UserControl
+ x:Class="WolvenKit.Views.Shell.DockingAdapter"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:local="clr-namespace:WolvenKit.Views.Shell"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+ d:DesignHeight="300"
+ d:DesignWidth="300"
+ mc:Ignorable="d"
+ >
     <Grid>
-        <syncfusion:DockingManager x:Name="PART_DockingManager"
-                                   UseDocumentContainer="True"
-                                   ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
-                                   DraggingType="BorderDragging"
-                                   Background="Transparent"
-                                   PersistState="True"
-                                   
-                                   />
+        <syncfusion:DockingManager
+         x:Name="PART_DockingManager"
+         ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
+         Background="Transparent"
+         DocumentCloseButtonType="Extended"
+         DraggingType="BorderDragging"
+         PersistState="True"
+         UseDocumentContainer="True"
+         />
     </Grid>
 </UserControl>

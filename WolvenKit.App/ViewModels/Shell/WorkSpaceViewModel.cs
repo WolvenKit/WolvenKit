@@ -766,7 +766,6 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        /// </summary>
         public ImporterToolViewModel ImporterToolVM
         {
             get
