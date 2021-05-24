@@ -7,7 +7,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Models.Docking;
+using WolvenKit.ViewModels.Editor;
 using DockState = WolvenKit.Models.Docking.DockState;
 
 namespace WolvenKit.Views.Shell
@@ -21,6 +23,15 @@ namespace WolvenKit.Views.Shell
         {
             InitializeComponent();
             PART_DockingManager.Loaded += PART_DockingManager_Loaded;
+            PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
+        }
+
+        private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
+        {
+            if (e.TargetItem is ContentControl {Content: DocumentViewModel vm})
+            {
+                vm.CloseCommand.SafeExecute();
+            }
         }
 
         private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e)
