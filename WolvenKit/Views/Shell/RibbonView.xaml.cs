@@ -8,12 +8,8 @@ using Ab3d.DirectX.Client.Settings;
 using Catel.Data;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.Editor;
-using WolvenKit.Views.Editor.AudioTool;
-using WolvenKit.Views.Editor.VisualEditor;
 
 namespace WolvenKit.Views.Shell
 {
@@ -21,20 +17,11 @@ namespace WolvenKit.Views.Shell
     {
         public RibbonView()
         {
-
             InitializeComponent();
-
-
-
-            //ribbon.AddAboutButton();
-
             StaticReferences.RibbonViewInstance = this;
             var dxEngineSettingsStorage = new DXEngineSettingsStorage();
             DXEngineSettings.Initialize(dxEngineSettingsStorage);
             this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
-
-            SetRibbonUI();
-            //  _ribbon.BackStageButton. += BackStageButton_MouseDown;
 
         }
 
@@ -52,9 +39,7 @@ namespace WolvenKit.Views.Shell
 
         protected override void OnViewModelChanged() => base.OnViewModelChanged();
 
-#pragma warning disable WPF0041
-        //backstageTabControl.DataContext = ViewModel;
-#pragma warning restore WPF0041
+
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
@@ -80,46 +65,10 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        private void ShowStartScreen_OnClick(object sender, RoutedEventArgs e) // Convert me to MVVM
-        {
-            // Nope we dont do that here . And I am not removing this >:) lol
-        }
 
-        private void CBAssetBrowserItem_Selected(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void CBCodeEditorItem_Selected(object sender, RoutedEventArgs e)
-        {
-            var codeeditor = new CodeEditorView();
-        }
-
-        private void CBPluginManager_Selected(object sender, RoutedEventArgs e)
-        {
-            var pluginmanager = new PluginManagerView();
-        }
-
-        private void CBVisualEditorItem_Selected(object sender, RoutedEventArgs e)
-        {
-            var visualeditor = new VisualEditorView();
-        }
-
-        private void CBAudioToolItem_Selected(object sender, RoutedEventArgs e)
-        {
-            var audiotool = new AudioToolView();
-        }
-
-        private void CBJournalEditorItem_Selected(object sender, RoutedEventArgs e)
-        {
-            //  JournalEditorView journaleditor = new JournalEditorView();
-            //   journaleditor.Show();
-        }
 
         private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-            //RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
-
             base.OnMouseLeftButtonDown(e);
             StaticReferences.GlobalShell.DragMove();
         }
@@ -130,15 +79,7 @@ namespace WolvenKit.Views.Shell
             RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
         }
 
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible && IsLoaded)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Ribbon/Backstage");
-            }
 
-
-        }
 
         private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -156,10 +97,7 @@ namespace WolvenKit.Views.Shell
 
 
 
-        private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
-        {
-            // No
-        }
+
         private double _selectedDpiScale = double.NaN;
 
         public int MaxBackgroundThreadsCount { get; set; }
@@ -204,42 +142,17 @@ namespace WolvenKit.Views.Shell
 
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-
-            //Application.Current.Resources["PrimaryLight"] = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3");
 
 
 
 
-        }
-
-        private void _ribbon_Loaded(object sender, RoutedEventArgs e)
-        {
 
 
 
-        }
 
-        private void BackStageButton_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
 
-        }
 
-        private void UserControl_GotFocus(object sender, RoutedEventArgs e)
-        {
-            // SetRibbonUI();
-        }
-
-        private void ApplicationMenu_IsPopupOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
     }
 }
 

@@ -14,8 +14,6 @@
  xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
- GotFocus="UserControl_GotFocus"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  >
 
     <!--  Resources  -->
@@ -136,15 +134,15 @@
          Panel.ZIndex="0"
          syncfusion:Ribbon.IsAutoSizeFormEnabled="True"
          BackStageCornerImageVisibility="Collapsed"
-         BackStageHeader="Menu"
+         BackStageHeader="MENU"
          ContextAdornerStyle="{StaticResource SyncfusionTemplatedAdornerInternalControlStyle2}"
          EnableMoreCommands="True"
          LayoutMode="Normal"
-         Loaded="_ribbon_Loaded"
          MinimizeButtonVisibility="Collapsed"
          ShowCustomizeRibbon="True"
          Visibility="Visible"
          >
+
 
 
             <syncfusion:Ribbon.QuickAccessToolBar>
@@ -193,10 +191,11 @@
                  Width="38"
                  Height="38"
                  syncfusion:Ribbon.KeyTip="F"
-                 Header="Menu"
+                 Foreground="{DynamicResource MahApps.Brushes.Accent3}"
                  IsBelowAppButton="True"
                  IsPopupOpen="False"
                  >
+
                     <syncfusion:RibbonMenuGroup Header="Project">
                         <!--  Recent Projects Button  -->
                         <ToggleButton

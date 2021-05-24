@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Editor;
 using DockState = WolvenKit.Models.Docking.DockState;
@@ -28,7 +29,7 @@ namespace WolvenKit.Views.Shell
 
         private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
-            if (e.TargetItem is ContentControl {Content: DocumentViewModel vm})
+            if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
                 vm.CloseCommand.SafeExecute();
             }
@@ -193,14 +194,21 @@ namespace WolvenKit.Views.Shell
 
         private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is ContentControl)
+            if (StaticReferences.GlobalShell != null)
             {
-                var content = e.NewValue as ContentControl;
-                if (((IDockElement)content.Content).State == DockState.Document)
+                if (e.NewValue is ContentControl)
                 {
-                    SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
+                    var content = e.NewValue as ContentControl;
+                    if (((IDockElement)content.Content).State == DockState.Document)
+                    {
+                        SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
+                    }
                 }
             }
+
+
+
+
         }
     }
 }
