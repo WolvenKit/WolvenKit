@@ -24,6 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="FFME.Windows" Version="4.3.340" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
 
     <PackageReference Include="Catel.MVVM" Version="5.12.14" />

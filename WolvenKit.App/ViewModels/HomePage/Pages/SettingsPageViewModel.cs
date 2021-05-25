@@ -134,6 +134,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         }
     }
 
+    [Editor(typeof(string), typeof(PathEditor))]
     public class GeneralSettingsPGModel
     {
         ISettingsManager _settingsManager;
@@ -172,5 +173,9 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     public enum ApplicationLanguage
     {
         English,
+    }
+    public enum AssetBrowserType
+    {
+        None,
     }
 }
