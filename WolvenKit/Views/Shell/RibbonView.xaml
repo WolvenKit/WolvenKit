@@ -153,6 +153,7 @@
             <syncfusion:Ribbon.ContextTabGroups>
                 <!--  Contextual CR2W group  -->
                 <syncfusion:ContextTabGroup
+                 x:Name="cr2wcontextab"
                  Height="90"
                  Margin="14"
                  IsGroupVisible="True"
@@ -163,6 +164,7 @@
                 </syncfusion:ContextTabGroup>
                 <!--  Contextual Project Explorer group  -->
                 <syncfusion:ContextTabGroup
+                 x:Name="projectexplorercontextab"
                  Height="90"
                  Margin="14"
                  IsGroupVisible="True"
@@ -173,6 +175,7 @@
                 </syncfusion:ContextTabGroup>
                 <!--  Contextual Asset Browser group  -->
                 <syncfusion:ContextTabGroup
+                 x:Name="abcontextab"
                  Height="90"
                  Margin="14"
                  IsGroupVisible="True"

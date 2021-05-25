@@ -73,11 +73,11 @@
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
+                    <!--<DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
                         <Grid>
                             <views:CodeEditorView />
                         </Grid>
-                    </DataTemplate>
+                    </DataTemplate>-->
 
                     <DataTemplate DataType="{x:Type viewmodels:CsvEditorViewModel}">
                         <Grid>

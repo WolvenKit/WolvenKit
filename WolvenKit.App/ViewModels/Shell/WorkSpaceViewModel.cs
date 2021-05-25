@@ -132,7 +132,7 @@ namespace WolvenKit.ViewModels.Shell
                 ImportExportToolVM,
                 CsvEditorVM,
                 HexEditorVM,
-                CodeEditorVM,
+                //CodeEditorVM,
                 JournalEditorVM,
                 VisualEditorVM,
                 AnimationToolVM,

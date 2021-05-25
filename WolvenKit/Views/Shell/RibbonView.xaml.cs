@@ -30,7 +30,6 @@ namespace WolvenKit.Views.Shell
             while (_ribbon.BackStageButton.IsVisible)
             {
                 _ribbon.BackStageButton.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-
             }
             Trace.WriteLine("Disabled File Button");
 

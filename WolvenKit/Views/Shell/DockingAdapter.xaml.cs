@@ -296,10 +296,46 @@ namespace WolvenKit.Views.Shell
         {
             if (StaticReferences.GlobalShell != null)
             {
+
+                StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
+                StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
+                StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
+
                 if (e.NewValue is ContentControl content)
                 {
+                    var x = DockingManager.GetHeader((DependencyObject)e.NewValue);
+                    switch (x)
+                    {
+                        case "Project Explorer":
+                            StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+
+                            break;
+                        case "Asset Browser":
+                            StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+
+                            break;
+                        case "CR2W Editor":
+                            break;
+                        case "Visual Editor":
+                            break;
+                        case "Import Export Tool":
+                            break;
+                        case "Audio Tool":
+                            break;
+                        default:
+                            StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+
+                            break;
+
+
+                    }
+
                     if (((IDockElement)content.Content).State == DockState.Document)
                     {
+
+
+
+
                         SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
                     }
                 }
