@@ -26,12 +26,12 @@ namespace WolvenKit.Views.Shell
     public partial class DockingAdapter : UserControl
     {
         private readonly WorkSpaceViewModel viewModel;
-
+        public static DockingAdapter G_Dock;
 
         public DockingAdapter()
         {
             InitializeComponent();
-
+            G_Dock = this;
 
 
 
@@ -67,7 +67,7 @@ namespace WolvenKit.Views.Shell
 
         private bool DebuggingLayouts = false;
 
-        private void SetLayoutToDefault()
+        public void SetLayoutToDefault()
         {
             var reader = XmlReader.Create("Config\\Layout\\DockStatesCR2W.xml");
             var Debugging_A = PART_DockingManager.LoadDockState(reader);

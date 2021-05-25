@@ -1169,6 +1169,34 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
                 </syncfusion:RibbonBar>
+
+                <!--  Layout Bar  -->
+                <syncfusion:RibbonBar
+                 Name="Layout"
+                 Width="auto"
+                 Header="Layout"
+                 >
+                    <syncfusion:RibbonButton
+                     Click="RibbonButton_Click"
+                     IconStretch="Fill"
+                     IconType="Icon"
+                     Label="Reset Layout"
+                     SizeForm="Large"
+                     >
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                 Width="auto"
+                                 Height="auto"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Stretch"
+                                 Kind="DebugRestart"
+                                 />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+                   
+                </syncfusion:RibbonBar>
                 <!--  Help bar  -->
                 <syncfusion:RibbonBar
                  Name="Help"

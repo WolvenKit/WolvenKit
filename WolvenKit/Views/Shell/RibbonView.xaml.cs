@@ -23,6 +23,8 @@ namespace WolvenKit.Views.Shell
             DXEngineSettings.Initialize(dxEngineSettingsStorage);
             this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
+
+
         }
 
         private void SetRibbonUI()
@@ -141,17 +143,12 @@ namespace WolvenKit.Views.Shell
 
         }
 
+        private void RibbonButton_Click(object sender, RoutedEventArgs e)
+        {
+            DockingAdapter.G_Dock.SetLayoutToDefault();
 
 
-
-
-
-
-
-
-
-
-
+        }
     }
 }
 
