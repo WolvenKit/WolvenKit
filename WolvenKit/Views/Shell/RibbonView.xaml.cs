@@ -27,12 +27,7 @@ namespace WolvenKit.Views.Shell
             this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
 
-            OpenFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            OpeninFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            CopyFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            PasteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            DeleteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            RenameFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+
 
         }
 
