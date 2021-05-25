@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
@@ -30,6 +31,11 @@ namespace WolvenKit.Views.Shell
         public DockingAdapter()
         {
             InitializeComponent();
+
+
+
+
+
             PART_DockingManager.Loaded += PART_DockingManager_Loaded;
             PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
             PART_DockingManager.DockStateChanging += PART_DockingManagerOnDockStateChanging;
@@ -58,6 +64,17 @@ namespace WolvenKit.Views.Shell
             }
         }
 
+
+        private bool DebuggingLayouts = false;
+
+        private void SetLayoutToDefault()
+        {
+            var reader = XmlReader.Create("Config\\Layout\\DockStatesCR2W.xml");
+            var Debugging_A = PART_DockingManager.LoadDockState(reader);
+            Trace.WriteLine(Debugging_A);
+            reader.Close();
+        }
+
         private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e)
         {
             ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(
@@ -65,14 +82,31 @@ namespace WolvenKit.Views.Shell
 
 
 
-            XmlReader reader = XmlReader.Create("DockStates.xml");
 
-            PART_DockingManager.LoadDockState(reader);
+            // Add setting to persist State or not ? ( Load Default Docking on Startup : Yes/No )
+            // if (XSETTINGX){ SetLayoutToDefault();}else{
 
-            reader.Close();
-            PART_DockingManager.LoadDockState();
+            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
+            {
+                SetLayoutToDefault();
+
+            }
+            else
+            {
+                var Debugging_A = PART_DockingManager.LoadDockState();
+                Trace.WriteLine(Debugging_A);
+
+            }
 
 
+            if (DebuggingLayouts)
+            {
+                XmlWriter writer = XmlWriter.Create("DockStatesDefault.xml");
+
+                PART_DockingManager.SaveDockState(writer);
+
+                writer.Close();
+            }
             // update the vms
             foreach (FrameworkElement frameworkElement in PART_DockingManager.Children)
             {
