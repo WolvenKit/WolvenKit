@@ -13,13 +13,14 @@ namespace WolvenKit.Views.Editor
     {
 
 
-
+        public static AssetBrowserView GlobalABView;
         public AssetBrowserView()
         {
             InitializeComponent();
             NotifyPropertyChanged();
             TreeNavSF.DrillDownItems.CollectionChanged += DrillDownItems_CollectionChanged;
             VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+            GlobalABView = this;
 
 
         }
@@ -173,6 +174,23 @@ namespace WolvenKit.Views.Editor
                     vm.SelectedNode = selectedData;
                     vm.ImportFileCommand.Execute(selectedData);
                     break;
+                }
+            }
+        }
+
+        public void RevampedImport()
+        {
+
+            var vm = ViewModel as AssetBrowserViewModel;
+            if (vm != null)
+            {
+                idx = 0;
+                foreach (var selectedItem in InnerList.SelectedItems)
+                {
+                    var selectedData = selectedItem as Common.Model.AssetBrowserData;
+                    if (selectedData == null)
+                        continue;
+                    executeFile(vm, selectedData);
                 }
             }
         }

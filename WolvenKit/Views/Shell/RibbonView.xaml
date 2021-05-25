@@ -156,15 +156,113 @@
 
             <!--  Contextual Tabs  -->
             <syncfusion:Ribbon.ContextTabGroups>
+
+                <!--  Contextual CR2W group  -->
+                <syncfusion:ContextTabGroup
+                 x:Name="cr2wcontextab"
+                 Height="90"
+                 Margin="14"
+                 IsGroupVisible="False"
+                 Label="CR2W EDITING"
+                 >
+                    <syncfusion:RibbonTab Caption="EDIT" IsChecked="True" />
+                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
+                </syncfusion:ContextTabGroup>
+
+                <!--  Contextual Asset Browser group  -->
+                <syncfusion:ContextTabGroup
+                 x:Name="abcontextab"
+                 Height="90"
+                 Margin="14"
+                 IsGroupVisible="False"
+                 Label="ASSET BROWSER"
+                 >
+                    <syncfusion:RibbonTab Caption="ACTIONS" IsChecked="True">
+                        <!--  File bar  -->
+                        <syncfusion:RibbonBar
+                         Name="ABFileActions"
+                         Width="auto"
+                         Header="File"
+                         >
+                            <!--  Add selected Items(s) to Project Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="AddSelectedItems"
+                             Click="AddSelectedItems_Click"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Add selected Item(s) to Project"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="File"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                            <!--  Export File - Simple Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExportSimpleContextAB"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             IsEnabled="False"
+                             Label="Simple Export"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Export"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Export File - Advanced Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExportAdvancedContextAB"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             IsEnabled="False"
+                             Label="Advanced Export"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Tools"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                        </syncfusion:RibbonBar>
+                    </syncfusion:RibbonTab>
+                </syncfusion:ContextTabGroup>
                 <!--  Contextual Project Explorer group  -->
                 <syncfusion:ContextTabGroup
                  x:Name="projectexplorercontextab"
                  Height="90"
                  Margin="14"
-                 IsGroupVisible="True"
+                 IsGroupVisible="False"
                  Label="PROJECT EXPLORER"
                  >
-                    <syncfusion:RibbonTab Caption="FILE" IsChecked="True">
+                    <syncfusion:RibbonTab Caption="ACTIONS" IsChecked="True">
                         <!--  File bar  -->
                         <syncfusion:RibbonBar
                          Name="Actions"
@@ -460,31 +558,8 @@
 
 
                     </syncfusion:RibbonTab>
-                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
-                </syncfusion:ContextTabGroup>
-                <!--  Contextual CR2W group  -->
-                <syncfusion:ContextTabGroup
-                 x:Name="cr2wcontextab"
-                 Height="90"
-                 Margin="14"
-                 IsGroupVisible="True"
-                 Label="CR2W EDITING"
-                 >
-                    <syncfusion:RibbonTab Caption="EDIT" IsChecked="True" />
-                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
                 </syncfusion:ContextTabGroup>
 
-                <!--  Contextual Asset Browser group  -->
-                <syncfusion:ContextTabGroup
-                 x:Name="abcontextab"
-                 Height="90"
-                 Margin="14"
-                 IsGroupVisible="True"
-                 Label="ASSET BROWSER"
-                 >
-                    <syncfusion:RibbonTab Caption="FILE" IsChecked="True" />
-                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
-                </syncfusion:ContextTabGroup>
             </syncfusion:Ribbon.ContextTabGroups>
 
 

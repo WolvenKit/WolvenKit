@@ -181,6 +181,12 @@ namespace WolvenKit.Views.Shell
             ProjectExplorerView.GlobalPEView.ExpandChildren();
 
         }
+
+        private void AddSelectedItems_Click(object sender, RoutedEventArgs e)
+        {
+            AssetBrowserView.GlobalABView.RevampedImport();
+
+        }
     }
 }
 
