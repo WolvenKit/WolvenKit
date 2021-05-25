@@ -22,10 +22,12 @@ namespace WolvenKit.Views.Editor
     public partial class ProjectExplorerView
     {
         #region Constructors
+        public static ProjectExplorerView GlobalPEView;
 
         public ProjectExplorerView()
         {
             InitializeComponent();
+            GlobalPEView = this;
 
         }
 
@@ -101,7 +103,7 @@ namespace WolvenKit.Views.Editor
 
             // EXPORT Morphtarget
 
-            using var dialog = new CommonOpenFileDialog {IsFolderPicker = true, Multiselect = false};
+            using var dialog = new CommonOpenFileDialog { IsFolderPicker = true, Multiselect = false };
             if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
             {
                 return;
@@ -131,7 +133,7 @@ namespace WolvenKit.Views.Editor
 
             // EXPORT WEM
             string outp;
-            using var dialog = new CommonOpenFileDialog {IsFolderPicker = true, Multiselect = false};
+            using var dialog = new CommonOpenFileDialog { IsFolderPicker = true, Multiselect = false };
             if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
             {
                 return;
@@ -155,8 +157,7 @@ namespace WolvenKit.Views.Editor
             var proc = Process.Start(si);
             proc.WaitForExit();
         }
-
-        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
+        public void ExpandChildren()
         {
             if (ViewModel is not ProjectExplorerViewModel viewModel)
             {
@@ -168,7 +169,13 @@ namespace WolvenKit.Views.Editor
             TreeGrid.ExpandAllNodes(node);
         }
 
-        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
+        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
+        {
+            ExpandChildren();
+
+        }
+
+        public void CollapseChildren()
         {
             if (ViewModel is not ProjectExplorerViewModel viewModel)
             {
@@ -180,12 +187,31 @@ namespace WolvenKit.Views.Editor
             TreeGrid.CollapseAllNodes(node);
         }
 
-        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => TreeGrid.ExpandAllNodes();
+        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
+        {
+            CollapseChildren();
 
-        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => TreeGrid.CollapseAllNodes();
+        }
+
+
+        public void ExpandAll()
+        {
+            TreeGrid.ExpandAllNodes();
+        }
+        public void CollapseAll()
+        {
+            TreeGrid.CollapseAllNodes();
+        }
+
+        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAll();
+
+        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
 
         private void TreeGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
+
+
+
             if (StaticReferences.GlobalPropertiesView != null)
             {
 

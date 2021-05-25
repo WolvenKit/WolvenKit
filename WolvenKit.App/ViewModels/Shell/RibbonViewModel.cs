@@ -75,6 +75,7 @@ namespace WolvenKit.ViewModels.Shell
             Visible,
         }
 
+
         public bool BackstageIsOpen { get; set; }
         public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
 

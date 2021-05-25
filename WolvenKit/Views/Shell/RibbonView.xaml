@@ -8,15 +8,14 @@
  xmlns:fluent="urn:fluent-ribbon"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:local="clr-namespace:WolvenKit.Views.Editor"
+ xmlns:local1="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
  xmlns:others="clr-namespace:WolvenKit.Views.Others"
  xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
  xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
- xmlns:tools="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Tools.WPF"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
- GotFocus="UserControl_GotFocus"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  >
 
     <!--  Resources  -->
@@ -25,12 +24,12 @@
             <!--  ContextAdorner Style  -->
             <Style x:Key="SyncfusionTemplatedAdornerInternalControlStyle2" TargetType="{x:Type shared:TemplatedAdornerInternalControl}">
                 <Setter Property="Focusable" Value="False" />
-                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Path=ContextTabGroup.Visibility}" />
-                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
+                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Path=ContextTabGroup.Visibility}" />
+                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
                 <Setter Property="Height" Value="57" />
-                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Converter={StaticResource colorToBrushConverter}, Path=ContextTabGroup.BackColor}" />
+                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Converter={StaticResource colorToBrushConverter}, Path=ContextTabGroup.BackColor}" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
+                <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Converter={StaticResource colorToTransparentBrushConverter}, Path=ContextTabGroup.BackColor}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type shared:TemplatedAdornerInternalControl}">
@@ -53,12 +52,12 @@
                                     <TextBlock
                                      x:Name="PART_Label"
                                      Margin="0,0,0,0"
-                                     HorizontalAlignment="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:Ribbon}}, Path=TabGroupLabelAlignment}"
+                                     HorizontalAlignment="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}, Path=TabGroupLabelAlignment}"
                                      VerticalAlignment="Top"
                                      FontSize="10"
                                      FontWeight="Normal"
                                      Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                     Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:ContextAdorner}}, Path=ContextTabGroup.Label}"
+                                     Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ContextAdorner}}, Path=ContextTabGroup.Label}"
                                      TextAlignment="Center"
                                      TextTrimming="CharacterEllipsis"
                                      />
@@ -68,8 +67,8 @@
 
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:RibbonWindow}}, Path=IsGlassActive}" Value="True" />
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:RibbonWindow}}, Path=WindowState}" Value="Normal" />
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, Path=IsGlassActive}" Value="True" />
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, Path=WindowState}" Value="Normal" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter TargetName="PART_Label" Property="BitmapEffect">
                                         <Setter.Value>
@@ -83,13 +82,13 @@
                                 </MultiDataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:Ribbon}}}" Value="Hide" />
+                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}}" Value="Hide" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Margin" Value="0,0,0,-3" />
                                 </MultiDataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type tools:Ribbon}}}" Value="Adorner" />
+                                        <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}}" Value="Adorner" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Margin" Value="0,0,0,-3" />
                                 </MultiDataTrigger>
@@ -103,7 +102,10 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+
         </ResourceDictionary>
+
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource ContentBackgroundAlt2}">
@@ -137,15 +139,15 @@
          Panel.ZIndex="0"
          syncfusion:Ribbon.IsAutoSizeFormEnabled="True"
          BackStageCornerImageVisibility="Collapsed"
-         BackStageHeader="Menu"
+         BackStageHeader="MENU"
          ContextAdornerStyle="{StaticResource SyncfusionTemplatedAdornerInternalControlStyle2}"
          EnableMoreCommands="True"
          LayoutMode="Normal"
-         Loaded="_ribbon_Loaded"
          MinimizeButtonVisibility="Collapsed"
          ShowCustomizeRibbon="True"
          Visibility="Visible"
          >
+
 
 
             <syncfusion:Ribbon.QuickAccessToolBar>
@@ -154,36 +156,409 @@
 
             <!--  Contextual Tabs  -->
             <syncfusion:Ribbon.ContextTabGroups>
+
                 <!--  Contextual CR2W group  -->
                 <syncfusion:ContextTabGroup
+                 x:Name="cr2wcontextab"
                  Height="90"
                  Margin="14"
-                 IsGroupVisible="True"
+                 IsGroupVisible="False"
                  Label="CR2W EDITING"
                  >
                     <syncfusion:RibbonTab Caption="EDIT" IsChecked="True" />
-                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
+                </syncfusion:ContextTabGroup>
+
+                <!--  Contextual Asset Browser group  -->
+                <syncfusion:ContextTabGroup
+                 x:Name="abcontextab"
+                 Height="90"
+                 Margin="14"
+                 IsGroupVisible="False"
+                 Label="ASSET BROWSER"
+                 >
+                    <syncfusion:RibbonTab Caption="ACTIONS" IsChecked="True">
+                        <!--  File bar  -->
+                        <syncfusion:RibbonBar
+                         Name="ABFileActions"
+                         Width="auto"
+                         Header="File"
+                         >
+                            <!--  Add selected Items(s) to Project Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="AddSelectedItems"
+                             Click="AddSelectedItems_Click"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Add selected Item(s) to Project"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="File"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                            <!--  Export File - Simple Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExportSimpleContextAB"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             IsEnabled="False"
+                             Label="Simple Export"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Export"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Export File - Advanced Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExportAdvancedContextAB"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             IsEnabled="False"
+                             Label="Advanced Export"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Tools"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                        </syncfusion:RibbonBar>
+                    </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
                 <!--  Contextual Project Explorer group  -->
                 <syncfusion:ContextTabGroup
+                 x:Name="projectexplorercontextab"
                  Height="90"
                  Margin="14"
-                 IsGroupVisible="True"
+                 IsGroupVisible="False"
                  Label="PROJECT EXPLORER"
                  >
-                    <syncfusion:RibbonTab Caption="FILE" IsChecked="True" />
-                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
+                    <syncfusion:RibbonTab Caption="ACTIONS" IsChecked="True">
+                        <!--  File bar  -->
+                        <syncfusion:RibbonBar
+                         Name="Actions"
+                         Width="auto"
+                         Header="File"
+                         >
+                            <!--  Open File Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="OpenFileContext"
+                             Command="{catel:CommandManagerBinding Application.OpenFile}"
+                             CommandParameter="{Binding SelectedItem}"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Open"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="File"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Copy File Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="CopyFileContext"
+                             Command="{Binding CopyFileCommand}"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Copy"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconVaadinIcons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="CopyOutline"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Paste File Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="PasteFileContext"
+                             Command="{Binding PasteFileCommand}"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Paste"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconVaadinIcons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Paste"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Delete File Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="DeleteFileContext"
+                             Command="{Binding DeleteFileCommand}"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Delete"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconMaterialLight
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Delete"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Rename File Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="RenameFileContext"
+                             Command="{Binding RenameFileCommand}"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Rename"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconBoxIcons
+                                         Width="auto"
+                                         Height="auto"
+                                         MaxWidth="25"
+                                         MaxHeight="34"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="RegularRename"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+
+                            <!--  Open in FileExplorer Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="OpeninFileContext"
+                             Command="{Binding OpenInFileExplorerCommand}"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Open in File Explorer"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="FolderOpened"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Export File - Simple Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExportSimpleContext"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             IsEnabled="False"
+                             Label="Simple Export"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Export"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Export File - Advanced Button  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExportAdvancedContext"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             IsEnabled="False"
+                             Label="Advanced Export"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="Tools"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                        </syncfusion:RibbonBar>
+                        <!--  Tree bar  -->
+                        <syncfusion:RibbonBar
+                         Name="ActionsView"
+                         Width="auto"
+                         Header="View"
+                         >
+                            <!--  Expand All Nodes  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExandAllNodesContext"
+                             Click="ExandAllNodesContext_Click"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Expand all nodes"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="ExpandAll"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Collapse All Nodes  -->
+                            <syncfusion:RibbonButton
+                             x:Name="collapseAllNodesContext"
+                             Click="collapseAllNodesContext_Click"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Collapse all nodes"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="CollapseAll"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Expand Children Nodes  -->
+                            <syncfusion:RibbonButton
+                             x:Name="ExandChildrenContext"
+                             Click="ExandChildrenContext_Click"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Expand Children"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconBootstrapIcons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="ArrowsExpand"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  collapse Children Nodes  -->
+                            <syncfusion:RibbonButton
+                             x:Name="CollapseChildrenContext"
+                             Click="CollapseChildrenContext_Click"
+                             IconStretch="Fill"
+                             IconType="Icon"
+                             Label="Collapse Children"
+                             SizeForm="Large"
+                             >
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconBootstrapIcons
+                                         Width="auto"
+                                         Height="auto"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Stretch"
+                                         Kind="ArrowsCollapse"
+                                         />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                        </syncfusion:RibbonBar>
+
+
+                    </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
-                <!--  Contextual Asset Browser group  -->
-                <syncfusion:ContextTabGroup
-                 Height="90"
-                 Margin="14"
-                 IsGroupVisible="True"
-                 Label="ASSET BROWSER"
-                 >
-                    <syncfusion:RibbonTab Caption="FILE" IsChecked="True" />
-                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
-                </syncfusion:ContextTabGroup>
+
             </syncfusion:Ribbon.ContextTabGroups>
 
 
@@ -194,10 +569,11 @@
                  Width="38"
                  Height="38"
                  syncfusion:Ribbon.KeyTip="F"
-                 Header="Menu"
+                 Foreground="{DynamicResource MahApps.Brushes.Accent3}"
                  IsBelowAppButton="True"
                  IsPopupOpen="False"
                  >
+
                     <syncfusion:RibbonMenuGroup Header="Project">
                         <!--  Recent Projects Button  -->
                         <ToggleButton
@@ -1167,6 +1543,34 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                </syncfusion:RibbonBar>
+
+                <!--  Layout Bar  -->
+                <syncfusion:RibbonBar
+                 Name="Layout"
+                 Width="auto"
+                 Header="Layout"
+                 >
+                    <syncfusion:RibbonButton
+                     Click="RibbonButton_Click"
+                     IconStretch="Fill"
+                     IconType="Icon"
+                     Label="Reset Layout"
+                     SizeForm="Large"
+                     >
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                 Width="auto"
+                                 Height="auto"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Stretch"
+                                 Kind="DebugRestart"
+                                 />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
                 </syncfusion:RibbonBar>
                 <!--  Help bar  -->
                 <syncfusion:RibbonBar

@@ -1,3 +1,4 @@
+using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
@@ -18,8 +19,11 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="name"></param>
         public ToolViewModel(string name)
         {
+            State = DockState.Dock;
+
             Name = name;
             Title = name;
+            Header = name;
         }
 
         /// <summary>
@@ -52,6 +56,7 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     _isVisible = value;
                     RaisePropertyChanged(() => IsVisible);
+                    State = !_isVisible ? DockState.Hidden : DockState.Dock;
                 }
             }
         }

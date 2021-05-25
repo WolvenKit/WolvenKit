@@ -5,12 +5,141 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:local="clr-namespace:WolvenKit.Views.Foundation"
  xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+ xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
+ xmlns:views="clr-namespace:WolvenKit.Views.Editor"
+ xmlns:views1="clr-namespace:WolvenKit.Views.Editor.VisualEditor"
  xmlns:vm="clr-namespace:WolvenKit.Views.ViewModels"
  >
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <DataTemplate DataType="{x:Type viewmodels:LogViewModel}">
+                        <Grid>
+                            <views:LogView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:PropertiesViewModel}">
+                        <Grid>
+                            <views:PropertiesView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:ProjectExplorerViewModel}">
+                        <Grid>
+                            <views:ProjectExplorerView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AssetBrowserViewModel}">
+                        <Grid>
+                            <views:AssetBrowserView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:DocumentViewModel}">
+                        <Grid>
+                            <views:DocumentView />
+                        </Grid>
+                    </DataTemplate>
+
+
+                    <DataTemplate DataType="{x:Type viewmodels:MimicsViewModel}">
+                        <Grid>
+                            <views:MimicsView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:AnimsViewModel}">
+                        <Grid>
+                            <views:AnimsView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ImportViewModel}">
+                        <Grid>
+                            <views:ImportView />
+                        </Grid>
+                    </DataTemplate>
+
+
+                    <DataTemplate DataType="{x:Type viewmodels:ImportExportViewModel}">
+                        <Grid>
+                            <views:ImportExportView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:BulkEditorViewModel}">
+                        <Grid>
+                            <views:BulkEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <!--<DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
+                        <Grid>
+                            <views:CodeEditorView />
+                        </Grid>
+                    </DataTemplate>-->
+
+                    <DataTemplate DataType="{x:Type viewmodels:CsvEditorViewModel}">
+                        <Grid>
+                            <views:CsvEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:HexEditorViewModel}">
+                        <Grid>
+                            <views:HexEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:JournalEditorViewModel}">
+                        <Grid>
+                            <views:JournalEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:VisualEditorViewModel}">
+                        <Grid>
+                            <views1:VisualEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:CR2WToTextToolViewModel}">
+                        <Grid>
+                            <views:CR2WToTextToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:GameDebuggerToolViewModel}">
+                        <Grid>
+                            <views:GameDebuggerToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ImporterToolViewModel}">
+                        <Grid>
+                            <views:ImporterToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:MenuCreatorToolViewModel}">
+                        <Grid>
+                            <views:MenuCreatorToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:WccToolViewModel}">
+                        <Grid>
+                            <views:WccToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:PluginManagerViewModel}">
+                        <Grid>
+                            <views:PluginManagerView />
+                        </Grid>
+                    </DataTemplate>
+                </ResourceDictionary>
+
                 <ResourceDictionary>
                     <vm:RootViewModel x:Key="ViewModel" />
                 </ResourceDictionary>
@@ -67,6 +196,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/PropertyGrid/PropertyGrid.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/Ribbon/Ribbon.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfRadialMenu/SfRadialMenu.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/DockingManager/DockingManager.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/EditControl/EditControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfRichTextBoxAdv/SfRichTextBoxAdv.xaml" />

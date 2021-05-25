@@ -104,9 +104,6 @@ namespace WolvenKit
             //window.WindowStyle = WindowStyle.None;
             //window.Show();
 
-            // Temp Fix for MainViewModel.OnClosing
-            if (MainWindow != null)
-            { MainWindow.Closing += OnClosing; }
             // Create WebView Data Folder.
             Directory.CreateDirectory(@"C:\WebViewData");
             // Message system for video tool.
@@ -162,7 +159,5 @@ namespace WolvenKit
             }
         }
 
-        // TODO: add closing logic here for now since MainViewModel.OnClosing isn't realiable. Investigate this
-        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) => StaticReferences.MainView.OnSaveLayout();
-    }
+       }
 }

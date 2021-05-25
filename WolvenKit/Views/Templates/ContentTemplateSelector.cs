@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Templates
                 : editableVariable.Property switch
                 {
                     IREDBool => RedboolTemplate,
-                    IREDString => RedboolTemplate,
+                    IREDString => CommmonTemplate,
                     IREDIntegerType => NumericTemplate,
                     IEnumAccessor => EnumTemplate,
                     IChunkPtrAccessor => HandleTemplateView,

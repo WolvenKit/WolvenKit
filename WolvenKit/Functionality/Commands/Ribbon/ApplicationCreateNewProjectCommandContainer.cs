@@ -145,7 +145,6 @@ namespace WolvenKit.Functionality.Commands
                                 break;
                         }
                     }
-                    StaticReferences.MainView.OnLoadLayoutAsync();
 
                     await _projectManager.LoadAsync(location);
                     switch (Path.GetExtension(location))
