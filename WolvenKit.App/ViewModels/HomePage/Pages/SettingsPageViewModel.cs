@@ -22,6 +22,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             _settingsManager = settingsManager;
         }
 
+        #region properties
         public GeneralSettingsPGModel generalSettingsPGModel
         {
             get { return new GeneralSettingsPGModel(_settingsManager); }
@@ -38,13 +39,27 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             set { }
         }
 
+        public ToolSettingsPGModel ToolSettingsPGModel
+        {
+            get { return new ToolSettingsPGModel(_settingsManager); }
+            set { }
+        }
+
+        public EditorSettingsPGModel EditorSettingsPGModel
+        {
+            get { return new EditorSettingsPGModel(_settingsManager); }
+            set { }
+        }
+
         public AddPathDialogViewModel AddPathDialogViewModel
         {
             get { return new AddPathDialogViewModel(); }
             set { }
         }
     }
+    #endregion
 
+        #region PropertyGridModels
     [Editor(typeof(string), typeof(PathEditor))]
     public class CP77SettingsPGModel
     {
@@ -56,6 +71,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         }
 
         [Category("General")]
+        [Display(Name = "Game executable path (.exe)")]
         public string Game_Executable_Path
         {
             get => _settingsManager.CP77ExecutablePath;
@@ -78,6 +94,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         }
 
         [Category("General")]
+        [Display(Name = "Game executable path (.exe)")]
         public string Game_Executable_Path
         {
             get => _settingsManager.W3ExecutablePath;
@@ -87,7 +104,11 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                 _settingsManager.Save();
             }
         }
+
+        [Display(Name = "Modkit Path")]
         public string Modkit_Path { get; set; }
+
+        [Display(Name = "Uncooked Depot Path")]
         public string Uncooked_Depot_Path { get; set; }
 
     }
@@ -166,6 +187,55 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         [Display(Name = "Application theme accent.")]
         public Brush BrushProperty { get; set; }
     }
+
+    public class ToolSettingsPGModel
+    {
+        ISettingsManager _settingsManager;
+        public ToolSettingsPGModel(ISettingsManager settingsManager)
+        {
+            _settingsManager = settingsManager;
+        }
+
+        [Category("Asset Browser")]
+        [Display(Name = "Choose Asset Browser type.")]
+        public AssetBrowserType BrowserType { get; set; }
+
+        [Category("Code Editor")]
+        [Display(Name = "Choose Code Editor type.")]
+        public CodeEditorType CodeEditorType { get; set;}
+
+        [Category("Plugin Manager")]
+        [Display(Name = "Choose Plugin manager type.")]
+        public PluginManagerType PluginManagerType { get; set;}
+
+        [Category("Visual Editor")]
+        [Display(Name = "Choose Visual editor type.")]
+        public VisualEditorType VisualEditorType { get; set;}
+    }
+
+    [Editor(typeof(string), typeof(PathEditor))]
+    public class EditorSettingsPGModel
+    {
+        ISettingsManager _settingsManager;
+        public EditorSettingsPGModel(ISettingsManager settingsManager)
+        {
+            _settingsManager = settingsManager;
+        }
+
+        [Display(Name = "Auto-install mods upon creation")]
+        public AutoInstallMods AutoInstallMods { get; set; }
+
+        [Display(Name = "Project auto-saving")]
+        public bool ProjectAutoSaving { get; set; }
+
+        public AutoSaveType AutoSaveType { get; set; }
+
+        [Display(Name = "Editor path")]
+        public string EditorPath { get; set; }
+    }
+    #endregion
+
+        #region enums
     public enum AutoUpdateChannel
     {
         Global,
@@ -178,4 +248,26 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     {
         None,
     }
+    public enum CodeEditorType
+    {
+        None,
+    }
+    public enum PluginManagerType
+    {
+        None,
+    }
+    public enum VisualEditorType
+    {
+        None,
+    }
+    public enum AutoInstallMods
+    {
+        On,
+        Off,
+    }
+    public enum AutoSaveType
+    {
+        Interval,
+    }
+    #endregion
 }

@@ -170,34 +170,19 @@
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Editor">
-                    <StackPanel x:Name="editorStackPanel">
-                        <syncfusion:PropertyGrid
+                    <syncfusion:PropertyGrid
                      x:Name="EditorSettingsPG"
                      EnableGrouping="True"
-                     SelectedObject="{Binding demomodel}"
+                     SelectedObject="{Binding EditorSettingsPGModel}"
                      />
-                        <StackPanel Margin="5,5,0,5">
-                            <sp:GeneralSubSettingsView/>
-                        </StackPanel>
-                    </StackPanel>
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Tools">
-                    <StackPanel>
-                        <syncfusion:PropertyGrid
+                    <syncfusion:PropertyGrid
                      x:Name="ToolsSettingsPG"
                      EnableGrouping="True"
-                     SelectedObject="{Binding demomodel}"
+                     SelectedObject="{Binding ToolSettingsPGModel}"
                      />
-                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
-                            <sp:AssetBrowserSubSettingsView/>
-                            <sp:CodeEditorSubSettingsView/>
-                        </StackPanel>
-                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
-                            <sp:PluginManagerSubSettingsView/>
-                            <sp:VisualEditorSubSettingsView/>
-                        </StackPanel>
-                    </StackPanel>
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Cyberpunk 2077">
