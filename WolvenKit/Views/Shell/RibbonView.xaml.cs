@@ -6,10 +6,13 @@ using System.Windows.Media;
 using Ab3d.DirectX;
 using Ab3d.DirectX.Client.Settings;
 using Catel.Data;
+using Catel.IoC;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Editor;
 
 namespace WolvenKit.Views.Shell
 {
@@ -24,6 +27,12 @@ namespace WolvenKit.Views.Shell
             this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
 
+            OpenFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            OpeninFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            CopyFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            PasteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            DeleteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            RenameFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
 
         }
 
@@ -45,7 +54,12 @@ namespace WolvenKit.Views.Shell
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnViewModelPropertyChanged(e);
-
+            OpenFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            OpeninFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            CopyFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            PasteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            DeleteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
+            RenameFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
             if (e is not AdvancedPropertyChangedEventArgs property)
             {
                 return;
@@ -147,6 +161,29 @@ namespace WolvenKit.Views.Shell
         {
             DockingAdapter.G_Dock.SetLayoutToDefault();
 
+
+        }
+
+        private void ExandAllNodesContext_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectExplorerView.GlobalPEView.ExpandAll();
+        }
+
+        private void collapseAllNodesContext_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectExplorerView.GlobalPEView.CollapseAll();
+
+        }
+
+        private void CollapseChildrenContext_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectExplorerView.GlobalPEView.CollapseChildren();
+
+        }
+
+        private void ExandChildrenContext_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectExplorerView.GlobalPEView.ExpandChildren();
 
         }
     }
