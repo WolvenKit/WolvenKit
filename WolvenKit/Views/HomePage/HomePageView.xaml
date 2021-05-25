@@ -7,7 +7,7 @@
  xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- xmlns:local="clr-namespace:WolvenKit.Functionality.WKitGlobal.Helpers"
+ xmlns:local="clr-namespace:WolvenKit.Functionality.Helpers"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:pages="clr-namespace:WolvenKit.Views.HomePage.Pages"
  mc:Ignorable="av"
@@ -25,7 +25,7 @@
     <Grid
      x:Name="FocusGrid"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"
+     Background="{DynamicResource ContentBackgroundAlt}"
      >
 
         <Grid Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_2" />
@@ -42,12 +42,17 @@
          Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
          >
 
-            <Border Background="{DynamicResource RegionBrush}" CornerRadius="15">
+            <Border
+             Background="{DynamicResource RegionBrush}"
+             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+             BorderThickness="1"
+             CornerRadius="15"
+             >
                 <hc:TransitioningContentControl TransitionMode="Fade">
                     <hc:SideMenu
                      x:Name="LeftSideMenu"
                      Width="200"
-                     Margin="0,90,0,15"
+                     Margin="0,90,0,25"
                      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                      BorderThickness="0"
                      ExpandMode="ShowOne"
@@ -126,6 +131,7 @@
                          Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                          Header="Integrated Tools"
+                         Visibility="Collapsed"
                          >
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons
@@ -159,7 +165,7 @@
                          Margin="0,0,0,0"
                          Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                          Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                         Header="Account"
+                         Header="Profile"
                          IsSelected="False"
                          Visibility="Collapsed"
                          >
@@ -280,10 +286,26 @@
                     </hc:SideMenu>
                 </hc:TransitioningContentControl>
             </Border>
+
+            <Button
+             Margin="0,0,0,0"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Bottom"
+             BorderBrush="Transparent"
+             Click="MenuItem_Click"
+             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+             >
+                <StackPanel Margin="0,0,0,5">
+                    <TextBlock Foreground="White" Text="New? Take a guided tour!" />
+
+
+                </StackPanel>
+
+            </Button>
             <Button
              Width="55"
              Height="55"
-             Margin="-5,0,0,15"
+             Margin="0,0,0,25"
              HorizontalAlignment="Center"
              VerticalAlignment="Bottom"
              BorderBrush="{DynamicResource RegionBrush}"
@@ -343,13 +365,17 @@
         <Border
          Margin="230,25,15,15"
          Background="{DynamicResource RegionBrush}"
+         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+         BorderThickness="1"
          CornerRadius="10"
          Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
+         MouseLeftButtonDown="Grid_MouseLeftButtonDown_2"
          >
+
             <Border
-             Margin="1,15,1,15"
+             Margin="1,25,1,25"
              Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-             CornerRadius="10"
+             CornerRadius="0"
              >
                 <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                     <Grid>
@@ -449,93 +475,113 @@
                 </hc:TransitioningContentControl>
             </Border>
         </Border>
-        <StackPanel
-         Margin="0,13,8,0"
+        <Border
+         Height="25"
+         Margin="0,25,15,0"
          HorizontalAlignment="Right"
          VerticalAlignment="Top"
-         Orientation="Horizontal"
+         Background="{DynamicResource ContentBackgroundAlt}"
+         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+         BorderThickness="1,1,1,0"
+         CornerRadius="5"
          >
-            <Button
-             Margin="0,-5,0,3"
-             Padding="25,0,25,0"
-             Background="Transparent"
-             BorderBrush="Transparent"
-             Command="{Binding MinimizeWindow}"
-             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
+            <StackPanel
+             Margin="0,0,0,0"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Center"
+             Orientation="Horizontal"
              >
-                <iconPacks:PackIconCodicons
-                 Width="13"
-                 Height="13"
-                 Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                 Kind="ChromeMinimize"
-                 >
-                    <iconPacks:PackIconCodicons.Effect>
-                        <DropShadowEffect />
-                    </iconPacks:PackIconCodicons.Effect>
-                </iconPacks:PackIconCodicons>
-            </Button>
-
-            <Button
-             Margin="0,-5,0,3"
-             Padding="25,0,25,0"
-             Background="Transparent"
-             BorderBrush="Transparent"
-             Command="{Binding RestoreWindow}"
-             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-             >
-                <iconPacks:PackIconCodicons
-                 Width="13"
-                 Height="13"
-                 Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                 Kind="ChromeRestore"
-                 >
-                    <iconPacks:PackIconCodicons.Effect>
-                        <DropShadowEffect />
-                    </iconPacks:PackIconCodicons.Effect>
-                </iconPacks:PackIconCodicons>
-            </Button>
-
-            <Button
-             Margin="0,-5,0,3"
-             Padding="25,0,10,0"
-             Background="Transparent"
-             BorderBrush="Transparent"
-             Command="hc:ControlCommands.ShutdownApp"
-             Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-             >
-                <iconPacks:PackIconCodicons
-                 Width="13"
-                 Height="13"
-                 HorizontalAlignment="Center"
+                <Button
+                 Width="75"
                  VerticalAlignment="Center"
-                 Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                 Kind="ChromeClose"
+                 BorderBrush="Transparent"
+                 Command="{Binding MinimizeWindow}"
+                 Style="{DynamicResource ModernButtonStyle}"
                  >
-                    <iconPacks:PackIconCodicons.Effect>
-                        <DropShadowEffect />
-                    </iconPacks:PackIconCodicons.Effect>
-                </iconPacks:PackIconCodicons>
-            </Button>
-        </StackPanel>
+                    <iconPacks:PackIconCodicons
+                     Width="13"
+                     Height="13"
+                     Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
+                     Kind="ChromeMinimize"
+                     >
+                        <iconPacks:PackIconCodicons.Effect>
+                            <DropShadowEffect />
+                        </iconPacks:PackIconCodicons.Effect>
+                    </iconPacks:PackIconCodicons>
+                </Button>
+
+                <Button
+                 Width="75"
+                 VerticalAlignment="Center"
+                 BorderBrush="Transparent"
+                 Command="{Binding RestoreWindow}"
+                 Style="{DynamicResource ModernButtonStyle}"
+                 >
+                    <iconPacks:PackIconCodicons
+                     Width="13"
+                     Height="13"
+                     Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
+                     Kind="ChromeRestore"
+                     >
+                        <iconPacks:PackIconCodicons.Effect>
+                            <DropShadowEffect />
+                        </iconPacks:PackIconCodicons.Effect>
+                    </iconPacks:PackIconCodicons>
+                </Button>
+
+                <Button
+                 Width="75"
+                 VerticalAlignment="Center"
+                 Command="hc:ControlCommands.ShutdownApp"
+                 Style="{DynamicResource ModernButtonStyle}"
+                 >
+                    <iconPacks:PackIconCodicons
+                     Width="13"
+                     Height="13"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
+                     Kind="ChromeClose"
+                     >
+                        <iconPacks:PackIconCodicons.Effect>
+                            <DropShadowEffect />
+                        </iconPacks:PackIconCodicons.Effect>
+                    </iconPacks:PackIconCodicons>
+                </Button>
+            </StackPanel>
+        </Border>
 
 
 
-        <Button
-         Margin="0,0,105,30"
+        <Grid
+         Margin="0,0,25,18"
          HorizontalAlignment="Right"
          VerticalAlignment="Bottom"
-         Background="Transparent"
-         BorderBrush="Transparent"
-         Click="MenuItem_Click"
          >
-            <StackPanel Margin="0,0,0,0">
-                <TextBlock Foreground="Gray" Text="New? Take a guided tour!" />
 
-                <iconPacks:PackIconEntypo Kind="help" />
+            <StackPanel Orientation="Horizontal">
 
+
+                <TextBlock
+                 Margin="5"
+                 VerticalAlignment="Center"
+                 FlowDirection="LeftToRight"
+                 FontSize="10"
+                 Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
+                 IsEnabled="False"
+                 Text="ENTER CURRENT VERSION"
+                 />
+                <iconPacks:PackIconCodicons
+                 Width="20"
+                 Height="20"
+                 VerticalAlignment="Center"
+                 Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
+                 Kind="Versions"
+                 />
             </StackPanel>
 
-        </Button>
+        </Grid>
+
 
 
         <feather:GuidedTour

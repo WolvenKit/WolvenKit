@@ -1,26 +1,20 @@
 using System;
 using System.Windows;
+using Ab3d.Assimp;
 using Assimp;
 
-namespace Ab3d.Assimp
+namespace WolvenKit.Functionality.Helpers
 {
-    public static class AssimpLoader
+    public static partial class Helpers
     {
+        // load assimp libraries.
         public static void LoadAssimpNativeLibrary()
         {
-            // IMPORTANT:
-
-
-            //
-            // 2) Ensure that Visual C++ Redistributable for Visual Studio 2015 in available on the system
-            //
-
-            string assimp32Folder = AppDomain.CurrentDomain.BaseDirectory;
-            string assimp64Folder = assimp32Folder;
-
             try
             {
-                AssimpWpfImporter.LoadAssimpNativeLibrary(assimp32Folder, assimp64Folder); // This method can be called multiple times without problems
+                var assimp32Folder = AppDomain.CurrentDomain.BaseDirectory;
+                var assimp64Folder = assimp32Folder;
+                AssimpWpfImporter.LoadAssimpNativeLibrary(assimp32Folder, assimp64Folder);
             }
             catch (AssimpException ex)
             {
@@ -33,9 +27,7 @@ namespace Ab3d.Assimp
 
                 Please install it manually or contact support of the application.
 
-                Error message:
-                " + ex.Message);
-
+                Error message: " + ex.Message);
                 throw;
             }
         }

@@ -1,7 +1,7 @@
 using System;
 using Ab3d.DirectX.Client.Settings;
 
-namespace Ab3d.DXEngine.Wpf.Samples
+namespace WolvenKit.Functionality.Ab4d
 {
     public class DXEngineSettingsStorage : IDXEngineSettingsStorage
     {

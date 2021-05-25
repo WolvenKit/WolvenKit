@@ -8,17 +8,16 @@ using System.Windows;
 using System.Xml.Linq;
 using Catel.IoC;
 using CP77.CR2W;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using ProtoBuf;
 using WolvenKit.Bundles;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
 
@@ -32,7 +31,7 @@ namespace WolvenKit.Functionality.Controllers
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
 
-        
+
 
 
         public Cp77Controller(ILoggerService loggerService,
@@ -172,7 +171,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject()
         {
-            
+
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _loggerService.Error("Can't pack nor install project (no project/not cyberpunk project)!");
@@ -191,7 +190,7 @@ namespace WolvenKit.Functionality.Controllers
         public void InstallMod()
         {
             var activeMod = _projectManager.ActiveProject;
-            
+
             try
             {
                 //Check if we have installed this mod before. If so do a little cleanup.
@@ -260,8 +259,9 @@ namespace WolvenKit.Functionality.Controllers
 
         public void AddToMod(IGameFile file)
         {
-            NotificationHelper.Growl.Info($"Importing file: {file.Name}");
             var project = _projectManager.ActiveProject;
+            NotificationHelper.Growl.Info($"Added file: {file.Name} to project: {project.Name} ");
+
             switch (project.GameType)
             {
                 case GameType.Witcher3:

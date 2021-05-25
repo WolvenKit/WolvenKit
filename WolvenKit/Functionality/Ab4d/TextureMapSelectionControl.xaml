@@ -1,9 +1,9 @@
 <UserControl
- x:Class="Ab3d.DXEngine.TextureMapSelectionControl"
+ x:Class="WolvenKit.Functionality.Ab4d.TextureMapSelectionControl"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
- xmlns:local="clr-namespace:Ab3d.DXEngine"
+ xmlns:local="clr-namespace:WolvenKit.Functionality.Ab4d"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  d:DesignHeight="100"
  d:DesignWidth="250"

@@ -59,9 +59,9 @@
                  Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
                  >
                     <Border
-                     Margin="5,50,5,5"
+                     Margin="5,55,5,5"
                      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                     CornerRadius="10"
+                     CornerRadius="5"
                      >
                         <local11:RecentlyUsedItemsView Margin="5,-56,5,0" FontSize="14" />
                     </Border>

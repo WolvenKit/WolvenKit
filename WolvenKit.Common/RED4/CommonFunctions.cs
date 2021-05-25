@@ -1,5 +1,6 @@
 using System;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Services;
 using static WolvenKit.RED4.CR2W.Types.Enums;
 
 namespace WolvenKit.RED4.CR2W
@@ -27,7 +28,7 @@ namespace WolvenKit.RED4.CR2W
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static EFormat GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat)
+        public static EFormat GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, ILoggerService logger)
         {
             switch (compression)
             {
@@ -80,10 +81,12 @@ namespace WolvenKit.RED4.CR2W
                             return EFormat.A8_UNORM;
 
                         case ETextureRawFormat.TRF_Grayscale_Font:
-                            throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
+                            //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
                         case ETextureRawFormat.TRF_R32UI:
                             //return EFormat.R32_UINT;
-                            throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");
+                            //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");
+                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
+                            return EFormat.R8G8B8A8_UNORM;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(rawFormat), rawFormat, null);
                     }
@@ -99,7 +102,10 @@ namespace WolvenKit.RED4.CR2W
                 case ETextureCompression.TCM_HalfHDR:
                 case ETextureCompression.TCM_HalfHDR_Signed:
                 case ETextureCompression.TCM_Max:
-                    throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TCM_Max");
+                {
+                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
+                    return EFormat.BC7_UNORM;
+                }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(compression), compression, null);
             }

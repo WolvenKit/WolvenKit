@@ -281,7 +281,7 @@
             <ContentControl
              x:Name="CR2W"
              syncfusion:DockingManager.DesiredWidthInDockedMode="350"
-             syncfusion:DockingManager.Header="CR2W Explorer"
+             syncfusion:DockingManager.Header="CR2W Editor"
              syncfusion:DockingManager.State="Document"
              >
                 <editor:DocumentView />
@@ -316,7 +316,30 @@
                 <views1:LogView />
 
             </ContentControl>
-            <ContentControl x:Name="StartPage" />
+
+
+
+            <ContentControl
+             x:Name="SFAudioTool"
+             syncfusion:DockingManager.DesiredWidthInDockedMode="950"
+             syncfusion:DockingManager.Header="Audio Tool"
+             syncfusion:DockingManager.SideInDockedMode="Right"
+             syncfusion:DockingManager.State="AutoHidden"
+             >
+                <audiotoolz:AudioToolView />
+
+            </ContentControl>
+
+            <ContentControl
+             x:Name="SFCodeEditor"
+             syncfusion:DockingManager.DesiredWidthInDockedMode="950"
+             syncfusion:DockingManager.Header="Code Editor"
+             syncfusion:DockingManager.SideInDockedMode="Right"
+             syncfusion:DockingManager.State="Hidden"
+             >
+                <cr2weditor1:CodeEditorView />
+
+            </ContentControl>
         </syncfusion:DockingManager>-->
 
 

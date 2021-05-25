@@ -51,7 +51,6 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IGameControllerFactory _gameController;
 
         private List<IGameArchiveManager> Managers { get; set; }
-        private ITreeNode<GameFileTreeNode> _currentNode;
 
         private bool _stillLoading;
 
@@ -98,9 +97,6 @@ namespace WolvenKit.ViewModels.Editor
 
             SetupToolDefaults();
             ReInit(false);
-
-
-
         }
 
         #endregion ctor
@@ -118,20 +114,10 @@ namespace WolvenKit.ViewModels.Editor
         // binding properties. do not make private
         // ReSharper disable MemberCanBePrivate.Global
         public bool PreviewVisible { get; set; }
-
         public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
 
-        private Visibility _loadVisibility = Visibility.Visible;
+        public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
-        public Visibility LoadVisibility
-        {
-            get => _loadVisibility;
-            set
-            {
-                _loadVisibility = value;
-                RaisePropertyChanged(() => LoadVisibility);
-            }
-        }
 
         public GameFileTreeNode RootNode { get; set; }
 
@@ -144,17 +130,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public ICommand SetCurrentNodeCommand { get; set; }
 
-        public ICommand OpenDirectoryCommand { get; set; }
 
-        public ITreeNode<GameFileTreeNode> BreadCrumbCurrentNode
-        {
-            get => _currentNode;
-            set
-            {
-                _currentNode = value;
-                RaisePropertyChanged(() => BreadCrumbCurrentNode);
-            }
-        }
 
         #endregion properties
 
@@ -180,6 +156,9 @@ namespace WolvenKit.ViewModels.Editor
         {
             CurrentNode = RootNode;
             CurrentNodeFiles = RootNode.ToAssetBrowserData();
+
+            GoToRootInTreeNavSF();
+
         }
 
         private void ExecuteImportFile() => ImportFile(SelectedNode);
@@ -210,13 +189,19 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        public event Action<object> SelectItemInTreeNavSF;
+
+        public event Action GoBackInTreeNavSF;
+
+        public event Action GoToRootInTreeNavSF;
+
+
         #endregion commands
 
         #region methods
 
         public async Task SetCurrentNodeAsync(LazyObservableTreeNode<GameFileTreeNode> node)
         {
-            BreadCrumbCurrentNode = node;
             UpdateCurrentNode(node.Content);
             //await InitializeCurrentNodeAsync(node.Content);
             await node.RefreshAsync();
@@ -246,7 +231,6 @@ namespace WolvenKit.ViewModels.Editor
 
             await rootNode.RefreshAsync();
 
-            BreadCrumbCurrentNode = rootNode;
 
 
             await ((IRefreshable)CurrentNode).RefreshAsync();
@@ -261,11 +245,7 @@ namespace WolvenKit.ViewModels.Editor
             SetCurrentNodeCommand = new RelayCommand<LazyObservableTreeNode<GameFileTreeNode>>(
                 async node => await SetCurrentNodeAsync(node));
 
-            OpenDirectoryCommand = new RelayCommand<GameFileTreeNode>(async info =>
-            {
-                var node = (LazyObservableTreeNode<GameFileTreeNode>)BreadCrumbCurrentNode.Children.First(item => item.Content.FullPath == info.FullPath);
-                await SetCurrentNodeAsync(node);
-            });
+
 
 
             Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
@@ -300,18 +280,7 @@ namespace WolvenKit.ViewModels.Editor
             _ = InitializeCurrentNodeAsync(RootNode);
         }
 
-        public void NavigateTo(string path)
-        {
-            SetCurrentNodeCommand.Execute(RootNode);
-            var split = path.Split("\\");
-            if (split.Length > 1)
-            {
-                foreach (var part in split.Skip(1))
-                {
-                    OpenDirectoryCommand.Execute(BreadCrumbCurrentNode.Children.First(x => x.Content.Name == part));
-                }
-            }
-        }
+
 
         protected override Task CloseAsync() =>
             // TODO: Unsubscribe from events
@@ -345,7 +314,7 @@ namespace WolvenKit.ViewModels.Editor
                     CurrentNode = item.Children;
                     CurrentNode.Parent = item.This;
                     CurrentNodeFiles = item.Children.ToAssetBrowserData();
-                    //NavigateTo(CurrentNode.FullPath);
+                    SelectItemInTreeNavSF?.Invoke(CurrentNode);
                     break;
                 }
                 case EntryType.File:
@@ -374,7 +343,7 @@ namespace WolvenKit.ViewModels.Editor
                     {
                         CurrentNode = item.Parent;
                         CurrentNodeFiles = item.Parent.ToAssetBrowserData();
-                        //NavigateTo(CurrentNode.FullPath);
+                        GoBackInTreeNavSF?.Invoke();
                     }
                     break;
                 }
@@ -544,15 +513,6 @@ namespace WolvenKit.ViewModels.Editor
             throw new NotImplementedException();
         }
     }
-
-
-
-
-
-
-
-
-
 
 
     public class HierarchyItem

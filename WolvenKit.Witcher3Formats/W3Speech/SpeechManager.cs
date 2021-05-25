@@ -54,7 +54,15 @@ namespace WolvenKit.W3Speech
                     .SelectMany(dir => Directory.GetFiles(dir ?? "", "*.w3speech", SearchOption.AllDirectories)
                         .OrderBy(k => k)))
                 {
-                    LoadArchive(file);
+                    try
+                    {
+                        LoadArchive(file);
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
+                    
                 }
             }
             RebuildRootNode();
