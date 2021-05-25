@@ -48,6 +48,11 @@ namespace WolvenKit.Common.Services
             //get lookup
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_lookupRes);
             _lookup = Serializer.Deserialize<Dictionary<int, ulong>>(stream);
+
+            if (cacheList[10].Count < 1)
+            {
+                Load(10);
+            }
         }
 
         #endregion Constructors
@@ -78,7 +83,7 @@ namespace WolvenKit.Common.Services
                 Load(chacheKey);
             }
 
-            return cacheList[chacheKey].ContainsKey(key);
+            return cacheList[chacheKey].ContainsKey(key) || cacheList[10].ContainsKey(key);
         }
 
         public string Get(ulong key)
@@ -91,8 +96,15 @@ namespace WolvenKit.Common.Services
             {
                 Load(chacheKey);
             }
-            
-            return cacheList[chacheKey].ContainsKey(key) ? cacheList[chacheKey][key] : "";
+
+            if (cacheList[chacheKey].ContainsKey(key))
+            {
+                return cacheList[chacheKey][key];
+            }
+            else
+            {
+                return cacheList[10].ContainsKey(key) ? cacheList[10][key] : "";
+            }
         }
 
 
@@ -155,6 +167,15 @@ namespace WolvenKit.Common.Services
                 Serializer.Serialize(_fs, orderedDict.Select(_ => _.Key));
             }
 
+        }
+
+        public void Add(string path)
+        {
+            var hash = FNV1A64HashAlgorithm.HashString(path);
+            if (!Contains(hash))
+            {
+                cacheList[10].Add(hash, path);
+            }
         }
 
 

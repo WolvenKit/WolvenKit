@@ -41,7 +41,8 @@ namespace WolvenKit.Common.Oodle
             // int outputOffset,
             // int outputCount,
             OodleNative.OodleLZ_Compressor algo = OodleNative.OodleLZ_Compressor.Kraken,
-            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal)
+            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal,
+            bool useREDHeader = true)
         {
             if (inputBytes == null)
             {
@@ -106,15 +107,29 @@ namespace WolvenKit.Common.Oodle
                 inputHandle.Free();
                 outputHandle.Free();
 
-                //resize buffer
-                var writelist = new List<byte>()
+                if (result == 0 || result > inputCount)
                 {
-                    0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
-                };
-                writelist.AddRange(BitConverter.GetBytes(inputCount));
-                writelist.AddRange(compressedBuffer.Take(result));
+                    outputBuffer = inputBytes;
+                    return outputBuffer.Count();
+                }
 
-                outputBuffer = writelist;
+
+                if (useREDHeader)
+                {
+                    //resize buffer
+                    var writelist = new List<byte>()
+                    {
+                        0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
+                    };
+                    writelist.AddRange(BitConverter.GetBytes(inputCount));
+                    writelist.AddRange(compressedBuffer.Take(result));
+
+                    outputBuffer = writelist;
+                }
+                else
+                {
+                    outputBuffer = compressedBuffer.Take(result);
+                }
 
                 return outputBuffer.Count();
             }

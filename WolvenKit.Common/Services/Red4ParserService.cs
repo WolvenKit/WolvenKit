@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using CP77Tools.Model;
+using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.RED4.CR2W.Archive;
 using Index = CP77Tools.Model.Index;
 
@@ -30,6 +32,21 @@ namespace WolvenKit.Common.Services
                 ar.Header = ReadHeader(br);
             }
 
+            // custom
+            using (var vs = mmf.CreateViewStream((long)ar.Header.Filesize, 0, MemoryMappedFileAccess.Read))
+            using (var br = new BinaryReader(vs))
+            {
+                if (br.BaseStream.Length >= LxrsFooter.MIN_LENGTH)
+                {
+                    var lxrs = br.ReadLxrsFooter(_hashService);
+                    foreach (var s in lxrs.FileInfos)
+                    {
+                        _hashService.Add(s);
+                    }
+                }
+            }
+
+
             using (var vs = mmf.CreateViewStream((long)ar.Header.IndexPosition, ar.Header.IndexSize,
             MemoryMappedFileAccess.Read))
             using (var br = new BinaryReader(vs))
@@ -45,6 +62,15 @@ namespace WolvenKit.Common.Services
 
             return ar;
         }
+
+       private static LxrsFooter ReadLxrsFooter(this BinaryReader br, IHashService _hashService)
+       {
+           var customPaths = new List<string>();
+           var footer = new LxrsFooter(customPaths);
+           footer.Read(br);
+
+           return footer;
+       }
 
         private static Index ReadIndex(this BinaryReader br, IHashService _hashService)
         {
