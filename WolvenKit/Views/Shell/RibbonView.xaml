@@ -166,7 +166,6 @@
                  Label="CR2W EDITING"
                  >
                     <syncfusion:RibbonTab Caption="EDIT" IsChecked="True" />
-                    <syncfusion:RibbonTab Caption="??" IsChecked="False" />
                 </syncfusion:ContextTabGroup>
 
                 <!--  Contextual Asset Browser group  -->
