@@ -14,8 +14,10 @@ using Orchestra.Views;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using Unosquare.FFME;
+using WolvenKit.Controls;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Editor.Tools;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
@@ -202,8 +204,14 @@ namespace WolvenKit.Functionality.Initialization
                 viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Wizards.UserWizard.[VW]ViewModel");
 
 
-                viewLocator.NamingConventions.Add("WolvenKit.Views.Others.PropertyGridEditors.[VM]View");
-                viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors.[VW]ViewModel");
+
+            viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
+            viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));
+            viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
+            viewModelLocator.Register(typeof(AddPathDialogView), typeof(AddPathDialogViewModel));
+        }
 
 
                 // Fixes

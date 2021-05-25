@@ -8,6 +8,8 @@
  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
  xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+ xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
+ xmlns:ucontrols="clr-namespace:WolvenKit.Controls;assembly=WolvenKit.App"
  >
 
     <Grid
@@ -16,7 +18,7 @@
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
      >
-        <Grid Margin="3,75,3,0">
+        <Grid Margin="3,75,3,0" x:Name="settingsGrid">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
                 <hc:TabControl
@@ -168,27 +170,44 @@
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Editor">
-                    <syncfusion:PropertyGrid
+                    <StackPanel x:Name="editorStackPanel">
+                        <syncfusion:PropertyGrid
                      x:Name="EditorSettingsPG"
                      EnableGrouping="True"
                      SelectedObject="{Binding demomodel}"
                      />
+                        <StackPanel Margin="5,5,0,5">
+                            <sp:GeneralSubSettingsView/>
+                        </StackPanel>
+                    </StackPanel>
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Tools">
-                    <syncfusion:PropertyGrid
+                    <StackPanel>
+                        <syncfusion:PropertyGrid
                      x:Name="ToolsSettingsPG"
                      EnableGrouping="True"
                      SelectedObject="{Binding demomodel}"
                      />
+                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
+                            <sp:AssetBrowserSubSettingsView/>
+                            <sp:CodeEditorSubSettingsView/>
+                        </StackPanel>
+                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
+                            <sp:PluginManagerSubSettingsView/>
+                            <sp:VisualEditorSubSettingsView/>
+                        </StackPanel>
+                    </StackPanel>
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Cyberpunk 2077">
-                    <syncfusion:PropertyGrid
+                    <StackPanel>
+                        <syncfusion:PropertyGrid
                      x:Name="CP77SettingsPG"
                      EnableGrouping="True"
                      SelectedObject="{Binding cp77SettingsPGModel}"
                      />
+                    </StackPanel>
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="The Witcher 3">
@@ -200,6 +219,7 @@
                 </syncfusion:SfAccordionItem>
 
             </syncfusion:SfAccordion>
+
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 

@@ -1,3 +1,5 @@
+using Feather.Controls;
+
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class SettingsPageView
