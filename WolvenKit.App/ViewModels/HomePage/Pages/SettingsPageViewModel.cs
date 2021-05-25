@@ -6,6 +6,7 @@ using System.Windows.Media;
 using Catel.MVVM;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Controls;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Tools;
 
 namespace WolvenKit.ViewModels.HomePage.Pages

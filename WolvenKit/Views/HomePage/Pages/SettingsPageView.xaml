@@ -221,6 +221,9 @@
             </syncfusion:SfAccordion>
 
         </Grid>
+        <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+            <hc:SearchBar Margin="200,40,200,0" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+        </hc:TransitioningContentControl>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
             <StackPanel
