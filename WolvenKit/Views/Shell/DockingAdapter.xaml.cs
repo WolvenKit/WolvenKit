@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
@@ -38,7 +39,7 @@ namespace WolvenKit.Views.Shell
 
         private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)
         {
-            if (e.SourceElement is ContentControl {Content: PaneViewModel vm})
+            if (e.SourceElement is ContentControl { Content: PaneViewModel vm })
             {
                 vm.State = e.TargetState.ToDockState();
             }
@@ -61,7 +62,17 @@ namespace WolvenKit.Views.Shell
         {
             ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(
                 DocumentContainer.AddTabDocumentAtLastProperty, true);
+
+
+
+            XmlReader reader = XmlReader.Create("DockStates.xml");
+
+            PART_DockingManager.LoadDockState(reader);
+
+            reader.Close();
             PART_DockingManager.LoadDockState();
+
+
             // update the vms
             foreach (FrameworkElement frameworkElement in PART_DockingManager.Children)
             {
@@ -175,8 +186,8 @@ namespace WolvenKit.Views.Shell
             var newstate = obj.Value;
 
             var control = (from ContentControl element in PART_DockingManager.Children
-                where element.Content == item
-                select element).FirstOrDefault();
+                           where element.Content == item
+                           select element).FirstOrDefault();
             var dockstate = DockingManager.GetState(control).ToDockState();
 
             if (dockstate != newstate)
@@ -185,7 +196,7 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        
+
 
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -194,8 +205,8 @@ namespace WolvenKit.Views.Shell
                 foreach (var item in e.OldItems)
                 {
                     var control = (from ContentControl element in PART_DockingManager.Children
-                                              where element.Content == item
-                                              select element).FirstOrDefault();
+                                   where element.Content == item
+                                   select element).FirstOrDefault();
                     PART_DockingManager.Children.Remove(control);
                 }
             }
@@ -253,9 +264,9 @@ namespace WolvenKit.Views.Shell
             {
                 if (e.NewValue is ContentControl content)
                 {
-                    if (((IDockElement) content.Content).State == DockState.Document)
+                    if (((IDockElement)content.Content).State == DockState.Document)
                     {
-                        SetCurrentValue(ActiveDocumentProperty, (IDockElement) content.Content);
+                        SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
                     }
                 }
             }
