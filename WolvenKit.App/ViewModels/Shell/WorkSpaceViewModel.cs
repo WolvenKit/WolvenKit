@@ -894,8 +894,8 @@ namespace WolvenKit.ViewModels.Shell
         /// Gets a collection of all currently available document viewmodels
         /// </summary>
         public List<DocumentViewModel> Files => Tools
+            .OfType<DocumentViewModel>()
             .Where(_ => _.State == DockState.Document)
-            .Cast<DocumentViewModel>()
             .ToList();
 
 
