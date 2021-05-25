@@ -316,12 +316,40 @@ namespace WolvenKit.Views.Shell
                             break;
                         case "CR2W Editor":
                             break;
+                        case "Properties":
+                            break;
+                        case "Log":
+                            break;
                         case "Visual Editor":
                             break;
                         case "Import Export Tool":
                             break;
                         case "Audio Tool":
                             break;
+                        case "Bulk Editor":
+                            break;
+                        case "Mimics":
+                            break;
+                        case "CR2W To Text Tool":
+                            break;
+                        case "WCC Tool":
+                            break;
+                        case "Plugin Manager":
+                            break;
+                        case "Menu Creator Tool":
+                            break;
+                        case "Importer Tool":
+                            break;
+                        case "Code Editor":
+                            break;
+                        case "Csv Editor":
+                            break;
+                        case "Hex Editor":
+                            break;
+                        case "Journal Editor":
+                            break;
+
+
                         default:
                             StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
 

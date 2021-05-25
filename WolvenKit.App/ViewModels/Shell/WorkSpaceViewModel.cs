@@ -126,10 +126,11 @@ namespace WolvenKit.ViewModels.Shell
                 Log,
                 ProjectExplorer,
                 PropertiesViewModel,
-                ImportViewModel,
                 AssetBrowserVM,
-                BulkEditorVM,
                 ImportExportToolVM,
+
+                ImportViewModel,
+                BulkEditorVM,
                 CsvEditorVM,
                 HexEditorVM,
                 //CodeEditorVM,
