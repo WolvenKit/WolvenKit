@@ -42,6 +42,23 @@
                     </DataTemplate>
 
 
+                    <DataTemplate DataType="{x:Type viewmodels:MimicsViewModel}">
+                        <Grid>
+                            <views:MimicsView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:AnimsViewModel}">
+                        <Grid>
+                            <views:AnimsView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ImportViewModel}">
+                        <Grid>
+                            <views:ImportView />
+                        </Grid>
+                    </DataTemplate>
 
 
                     <DataTemplate DataType="{x:Type viewmodels:ImportExportViewModel}">

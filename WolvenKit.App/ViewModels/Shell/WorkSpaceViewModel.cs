@@ -126,7 +126,7 @@ namespace WolvenKit.ViewModels.Shell
                 Log,
                 ProjectExplorer,
                 PropertiesViewModel,
-                //ImportViewModel,
+                ImportViewModel,
                 AssetBrowserVM,
                 BulkEditorVM,
                 ImportExportToolVM,
@@ -135,7 +135,7 @@ namespace WolvenKit.ViewModels.Shell
                 CodeEditorVM,
                 JournalEditorVM,
                 VisualEditorVM,
-                //AnimationToolVM,
+                AnimationToolVM,
                 AudioToolVM,
                 ImporterToolVM,
                 CR2WToTextToolVM,
@@ -143,7 +143,7 @@ namespace WolvenKit.ViewModels.Shell
                 MenuCreatorToolVM,
                 PluginManagerVM,
                 WccToolVM,
-                //MimicsToolVM,
+                MimicsToolVM,
             };
         }
 
