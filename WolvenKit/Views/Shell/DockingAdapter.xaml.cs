@@ -6,11 +6,13 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Editor;
+using WolvenKit.ViewModels.Shell;
 using DockState = WolvenKit.Models.Docking.DockState;
 
 namespace WolvenKit.Views.Shell
@@ -20,13 +22,32 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
+        private readonly WorkSpaceViewModel viewModel;
+
+
         public DockingAdapter()
         {
             InitializeComponent();
             PART_DockingManager.Loaded += PART_DockingManager_Loaded;
             PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
+            PART_DockingManager.DockStateChanging += PART_DockingManagerOnDockStateChanging;
+
+            viewModel = DataContext as WorkSpaceViewModel;
         }
 
+        private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)
+        {
+            if (e.SourceElement is ContentControl {Content: PaneViewModel vm})
+            {
+                vm.State = e.TargetState.ToDockState();
+            }
+        }
+
+        /// <summary>
+        /// fires when a document (but no tool window) gets closed through clicking the close button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
@@ -40,6 +61,25 @@ namespace WolvenKit.Views.Shell
             ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(
                 DocumentContainer.AddTabDocumentAtLastProperty, true);
             PART_DockingManager.LoadDockState();
+            // update the vms
+            foreach (FrameworkElement frameworkElement in PART_DockingManager.Children)
+            {
+                if (frameworkElement is ContentControl contentControl)
+                {
+                    if (contentControl.Content is PaneViewModel vm)
+                    {
+                        try
+                        {
+                            vm.State = DockingManager.GetState(contentControl).ToDockState();
+                        }
+                        catch (Exception exception)
+                        {
+                            Console.WriteLine(exception);
+                            throw;
+                        }
+                    }
+                }
+            }
         }
 
         public IDockElement ActiveDocument
@@ -105,11 +145,13 @@ namespace WolvenKit.Views.Shell
                     var count = 0;
                     foreach (var item in ((IList)e.NewValue))
                     {
-                        if (item is IDockElement)
+                        if (item is IDockElement dockElement)
                         {
-                            ContentControl control = new ContentControl() { Content = item };
-                            DockingManager.SetHeader(control, ((IDockElement)item).Header);
-                            if (((IDockElement)item).State == DockState.Document)
+                            var _ = dockElement.ObservableForProperty(x => x.State).Subscribe(OnStateUpdated);
+
+                            var control = new ContentControl() { Content = item };
+                            DockingManager.SetHeader(control, dockElement.Header);
+                            if (dockElement.State == DockState.Document)
                             {
                                 DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Document);
                             }
@@ -132,13 +174,62 @@ namespace WolvenKit.Views.Shell
             base.OnPropertyChanged(e);
         }
 
+        private void OnStateUpdated(IObservedChange<IDockElement, DockState> obj)
+        {
+            var item = obj.Sender;
+            var newstate = obj.Value;
+
+            var control = (from ContentControl element in PART_DockingManager.Children
+                where element.Content == item
+                select element).FirstOrDefault();
+
+            try
+            {
+                var dockstate = DockingManager.GetState(control).ToDockState();
+            
+            if (dockstate != newstate)
+            {
+                switch (newstate)
+                {
+                    case DockState.Hidden:
+                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Hidden);
+                        break;
+                    case DockState.Dock:
+                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Dock);
+                        break;
+                    case DockState.Float:
+                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Float);
+                        break;
+                    case DockState.AutoHidden:
+                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.AutoHidden);
+                        break;
+                    case DockState.Document:
+                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Document);
+                        break;
+                    default:
+                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Dock);
+                        break;
+                }
+
+
+            }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        
+
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems != null)
             {
                 foreach (var item in e.OldItems)
                 {
-                    ContentControl control = (from ContentControl element in PART_DockingManager.Children
+                    var control = (from ContentControl element in PART_DockingManager.Children
                                               where element.Content == item
                                               select element).FirstOrDefault();
                     PART_DockingManager.Children.Remove(control);
@@ -149,11 +240,11 @@ namespace WolvenKit.Views.Shell
             {
                 foreach (var item in e.NewItems)
                 {
-                    if (item is IDockElement)
+                    if (item is IDockElement element)
                     {
-                        ContentControl control = new ContentControl() { Content = item };
-                        DockingManager.SetHeader(control, ((IDockElement)item).Header);
-                        if (((IDockElement)item).State == DockState.Document)
+                        var control = new ContentControl() { Content = element };
+                        DockingManager.SetHeader(control, element.Header);
+                        if (element.State == DockState.Document)
                         {
                             DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Document);
                         }
@@ -196,19 +287,14 @@ namespace WolvenKit.Views.Shell
         {
             if (StaticReferences.GlobalShell != null)
             {
-                if (e.NewValue is ContentControl)
+                if (e.NewValue is ContentControl content)
                 {
-                    var content = e.NewValue as ContentControl;
-                    if (((IDockElement)content.Content).State == DockState.Document)
+                    if (((IDockElement) content.Content).State == DockState.Document)
                     {
-                        SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
+                        SetCurrentValue(ActiveDocumentProperty, (IDockElement) content.Content);
                     }
                 }
             }
-
-
-
-
         }
     }
 }
