@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
@@ -68,15 +69,7 @@ namespace WolvenKit.Views.Shell
                 {
                     if (contentControl.Content is PaneViewModel vm)
                     {
-                        try
-                        {
-                            vm.State = DockingManager.GetState(contentControl).ToDockState();
-                        }
-                        catch (Exception exception)
-                        {
-                            Console.WriteLine(exception);
-                            throw;
-                        }
+                        vm.State = DockingManager.GetState(contentControl).ToDockState();
                     }
                 }
             }
@@ -112,12 +105,11 @@ namespace WolvenKit.Views.Shell
 
             foreach (FrameworkElement element in adapter.PART_DockingManager.Children)
             {
-                if (element is not ContentControl)
+                if (element is not ContentControl control)
                 {
                     continue;
                 }
 
-                var control = element as ContentControl;
                 if (control.Content != args.NewValue)
                 {
                     continue;
@@ -147,7 +139,10 @@ namespace WolvenKit.Views.Shell
                     {
                         if (item is IDockElement dockElement)
                         {
-                            var _ = dockElement.ObservableForProperty(x => x.State).Subscribe(OnStateUpdated);
+                            var _ = dockElement
+                                .ObservableForProperty(x => x.State)
+                                .ObserveOnDispatcher()
+                                .Subscribe(OnStateUpdated);
 
                             var control = new ContentControl() { Content = item };
                             DockingManager.SetHeader(control, dockElement.Header);
@@ -182,42 +177,11 @@ namespace WolvenKit.Views.Shell
             var control = (from ContentControl element in PART_DockingManager.Children
                 where element.Content == item
                 select element).FirstOrDefault();
+            var dockstate = DockingManager.GetState(control).ToDockState();
 
-            try
-            {
-                var dockstate = DockingManager.GetState(control).ToDockState();
-            
             if (dockstate != newstate)
             {
-                switch (newstate)
-                {
-                    case DockState.Hidden:
-                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Hidden);
-                        break;
-                    case DockState.Dock:
-                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Dock);
-                        break;
-                    case DockState.Float:
-                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Float);
-                        break;
-                    case DockState.AutoHidden:
-                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.AutoHidden);
-                        break;
-                    case DockState.Document:
-                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Document);
-                        break;
-                    default:
-                        DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Dock);
-                        break;
-                }
-
-
-            }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
+                DockingManager.SetState(control, newstate.ToSfDockState());
             }
         }
 
