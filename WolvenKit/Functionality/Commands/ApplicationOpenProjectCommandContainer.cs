@@ -17,6 +17,7 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Functionality.ProjectManagement;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -132,7 +133,6 @@ namespace WolvenKit.Functionality.Commands
                 // if a valid location has been set
                 //using (_pleaseWaitService.PushInScope())
                 {
-                    StaticReferences.MainView.OnLoadLayoutAsync();
                     await _projectManager.LoadAsync(location);
                     switch (Path.GetExtension(location))
                     {

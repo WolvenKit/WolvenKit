@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Windows;
 
-namespace Ab3d.DXEngine
+namespace WolvenKit.Functionality.Helpers
 {
     public class FileDroppedEventArgs : EventArgs
     {
@@ -102,10 +102,6 @@ namespace Ab3d.DXEngine
             }
         }
 
-        protected void OnFileDropped(string fileName)
-        {
-            if (FileDropped != null)
-                FileDropped(this, new FileDroppedEventArgs(fileName));
-        }
+        protected void OnFileDropped(string fileName) => FileDropped?.Invoke(this, new FileDroppedEventArgs(fileName));
     }
 }

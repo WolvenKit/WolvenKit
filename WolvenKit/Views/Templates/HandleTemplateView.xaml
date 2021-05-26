@@ -1,34 +1,46 @@
-<UserControl x:Class="WolvenKit.Views.Templates.HandleTemplateView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views.Templates"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="400"
-             d:DataContext="{d:DesignInstance Type={x:Type local:HandleTemplateView}}"
-            
-             >
+<UserControl
+ x:Class="WolvenKit.Views.Templates.HandleTemplateView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:local="clr-namespace:WolvenKit.Views.Templates"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ d:DataContext="{d:DesignInstance Type={x:Type local:HandleTemplateView}}"
+ d:DesignHeight="100"
+ d:DesignWidth="400"
+ mc:Ignorable="d"
+ >
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-            <ComboBox x:Name="ComboBox"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      SelectionChanged="ComboBox_OnSelectionChanged"
-                      DisplayMemberPath="REDName"
-                      DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HandleTemplateView}}}"
-            />
-            <Button Grid.Column="1" ToolTip="{Binding}"
-                    Background="CadetBlue"
-                    Foreground="Black">
-                <Button.Content>
-                    <iconPacks:Codicons Kind="ArrowRight"/>
-                </Button.Content>
-            </Button>
+        <ComboBox
+         x:Name="ComboBox"
+         Background="{DynamicResource MahApps.Brushes.Accent3}"
+         DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HandleTemplateView}}}"
+         DisplayMemberPath="REDName"
+         ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         SelectionChanged="ComboBox_OnSelectionChanged"
+         Style="{DynamicResource MahApps.Styles.ComboBox.DataGrid.Editing}"
+         />
+        <Button
+         Grid.Column="1"
+         Width="35"
+         Background="{DynamicResource MahApps.Brushes.Accent}"
+         Foreground="Black"
+         ToolTip="{Binding}"
+         >
+            <Button.Content>
+                <iconPacks:Codicons
+                 Width="10"
+                 Height="15"
+                 Kind="ArrowRight"
+                 />
+            </Button.Content>
+        </Button>
     </Grid>
 </UserControl>

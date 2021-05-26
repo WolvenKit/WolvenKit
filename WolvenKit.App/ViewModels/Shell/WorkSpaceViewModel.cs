@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -16,12 +17,12 @@ using Catel.Services;
 using Microsoft.Win32;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
@@ -35,15 +36,12 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region fields
 
-        private readonly ObservableCollection<DocumentViewModel> _files = new();
-
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         //private readonly IGameController _gameController;
 
-        private readonly DocumentViewModelDelegate addfiledel;
-        private DocumentViewModel _activeDocument = null;
+        private DocumentViewModel _activeDocument;
 
         private delegate void DocumentViewModelDelegate(DocumentViewModel value);
 
@@ -59,7 +57,7 @@ namespace WolvenKit.ViewModels.Shell
             ILoggerService loggerService,
             IMessageService messageService,
             ICommandManager commandManager//,
-            //IGameController gameController
+                                          //IGameController gameController
         )
         {
             #region dependency injection
@@ -109,7 +107,7 @@ namespace WolvenKit.ViewModels.Shell
 
             OpenFileCommand = new DelegateCommand<FileModel>(
                 async (p) => await ExecuteOpenFile(p),
-                (p) => CanOpenFile(p));
+                CanOpenFile);
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
@@ -119,24 +117,23 @@ namespace WolvenKit.ViewModels.Shell
             SaveFileFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
-            addfiledel = vm => _files.Add(vm);
-
             // register as application-wide commands
             RegisterCommands(commandManager);
 
             #endregion commands
 
-            Tools = new ObservableCollection<ToolViewModel> {
+            Tools = new ObservableCollection<IDockElement> {
                 Log,
                 ProjectExplorer,
                 PropertiesViewModel,
-                ImportViewModel,
                 AssetBrowserVM,
-                BulkEditorVM,
                 ImportExportToolVM,
+
+                ImportViewModel,
+                BulkEditorVM,
                 CsvEditorVM,
                 HexEditorVM,
-                CodeEditorVM,
+                //CodeEditorVM,
                 JournalEditorVM,
                 VisualEditorVM,
                 AnimationToolVM,
@@ -382,33 +379,33 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        private void ExecutePackMod(){}
+        private void ExecutePackMod() { }
         //_gameController.PackAndInstallProject();
 
-        private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanBackupMod() => _projectManager.ActiveProject != null;
 
         private bool CanNewFile() => true;
 
         private bool CanOpenFile(FileModel model) => true;
 
-        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanPackMod() => _projectManager.ActiveProject != null;
 
-        private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanPublishMod() => _projectManager.ActiveProject != null;
 
         private bool CanShowAnimationTool() => false;
 
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
-        private bool CanShowAudioTool() => _projectManager.ActiveProject is EditorProject;
-        private bool CanShowVideoTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowAudioTool() => _projectManager.ActiveProject != null;
+        private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
 
 
         private bool CanShowBulkEditor() => false;
 
         private bool CanShowCR2WToTextTool() => false;
 
-        private bool CanShowCsvEditor() => _projectManager.ActiveProject is EditorProject;
-        private bool CanShowCodeEditor() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowCsvEditor() => _projectManager.ActiveProject != null;
+        private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
 
 
         private bool CanShowGameDebuggerTool() => false;
@@ -417,13 +414,13 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowImporterTool() => false;
 
-        private bool CanShowImportUtility() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowImportUtility() => _projectManager.ActiveProject != null;
 
         private bool CanShowInstaller() => false;
 
         private bool CanShowJournalEditor() => false;
 
-        private bool CanShowLog() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowLog() => _projectManager.ActiveProject != null;
 
         private bool CanShowMenuCreatorTool() => false;
 
@@ -431,17 +428,17 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowPluginManagerTool() => false;
 
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowProjectExplorer() => _projectManager.ActiveProject != null;
 
-        private bool CanShowProperties() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowProperties() => _projectManager.ActiveProject != null;
 
         //private bool CanShowRadishTool() => false;
 
-        private bool CanShowVisualEditor() => false;
+        private bool CanShowVisualEditor() => _projectManager.ActiveProject != null;
 
         private bool CanShowWccTool() => false;
 
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowImportExportTool() => _projectManager.ActiveProject != null;
 
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
@@ -770,7 +767,6 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        /// </summary>
         public ImporterToolViewModel ImporterToolVM
         {
             get
@@ -898,15 +894,16 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets a collection of all currently available document viewmodels
         /// </summary>
-        public ObservableCollection<DocumentViewModel> Files => _files;
-
-        public EditorProject EditorProject { get; set; }
+        public List<DocumentViewModel> Files => Tools
+            .OfType<DocumentViewModel>()
+            .Where(_ => _.State == DockState.Document)
+            .ToList();
 
 
         /// <summary>
         /// Gets an enumeration of all currently available tool window viewmodels.
         /// </summary>
-        public ObservableCollection<ToolViewModel> Tools { get; set; }
+        public ObservableCollection<IDockElement> Tools { get; set; }
 
         #endregion properties
 
@@ -924,12 +921,12 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // Don't add this twice
-            if (_files.Any(f => f.ContentId == fileToAdd.ContentId))
+            if (Files.Any(f => f.ContentId == fileToAdd.ContentId))
             {
                 return;
             }
 
-            _files.Add(fileToAdd);
+            Tools.Add(fileToAdd);
         }
 
         /// <summary>
@@ -953,14 +950,17 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
 
-            _files.Remove(fileToClose);
+            Tools.Remove(fileToClose);
         }
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
         public void CloseAllDocuments()
         {
             ActiveDocument = null;
-            _files.Clear();
+            foreach (var documentViewModel in Files)
+            {
+                Tools.Remove(documentViewModel);
+            }
         }
 
         /// <summary>
@@ -971,7 +971,7 @@ namespace WolvenKit.ViewModels.Shell
         public async Task<DocumentViewModel> OpenAsync(FileModel model)
         {
             // Check if we have already loaded this file and return it if so
-            var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
+            var fileViewModel = Files.FirstOrDefault(fm => fm.ContentId == model.FullName);
             if (fileViewModel != null)
             {
                 return fileViewModel;
@@ -984,7 +984,7 @@ namespace WolvenKit.ViewModels.Shell
             if (result)
             {
                 // TODO: this is not threadsafe
-                _files.Add(fileViewModel);
+                Tools.Add(fileViewModel);
 
                 //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
                 //{

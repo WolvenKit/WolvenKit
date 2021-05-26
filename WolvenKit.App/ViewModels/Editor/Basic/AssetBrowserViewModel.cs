@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -11,20 +11,17 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
-using Catel.IoC;
 using Catel.Services;
 using Feather.Commands;
 using Feather.Controls;
 using HandyControl.Data;
 using Orchestra.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
 namespace WolvenKit.ViewModels.Editor
@@ -54,7 +51,6 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IGameControllerFactory _gameController;
 
         private List<IGameArchiveManager> Managers { get; set; }
-        private ITreeNode<GameFileTreeNode> _currentNode;
 
         private bool _stillLoading;
 
@@ -118,20 +114,10 @@ namespace WolvenKit.ViewModels.Editor
         // binding properties. do not make private
         // ReSharper disable MemberCanBePrivate.Global
         public bool PreviewVisible { get; set; }
-
         public System.Windows.GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
 
-        private Visibility _loadVisibility = Visibility.Visible;
+        public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
-        public Visibility LoadVisibility
-        {
-            get => _loadVisibility;
-            set
-            {
-                _loadVisibility = value;
-                RaisePropertyChanged(() => LoadVisibility);
-            }
-        }
 
         public GameFileTreeNode RootNode { get; set; }
 
@@ -144,17 +130,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public ICommand SetCurrentNodeCommand { get; set; }
 
-        public ICommand OpenDirectoryCommand { get; set; }
 
-        public ITreeNode<GameFileTreeNode> BreadCrumbCurrentNode
-        {
-            get => _currentNode;
-            set
-            {
-                _currentNode = value;
-                RaisePropertyChanged(() => BreadCrumbCurrentNode);
-            }
-        }
 
         #endregion properties
 
@@ -180,12 +156,19 @@ namespace WolvenKit.ViewModels.Editor
         {
             CurrentNode = RootNode;
             CurrentNodeFiles = RootNode.ToAssetBrowserData();
+
+            GoToRootInTreeNavSF();
+
         }
 
         private void ExecuteImportFile() => ImportFile(SelectedNode);
 
+
+
+
         private void ExecuteSearchStartedCommand(object arg)
         {
+
             if (arg is FunctionEventArgs<string> e)
             {
                 PerformSearch(e.Info);
@@ -206,13 +189,19 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        public event Action<object> SelectItemInTreeNavSF;
+
+        public event Action GoBackInTreeNavSF;
+
+        public event Action GoToRootInTreeNavSF;
+
+
         #endregion commands
 
         #region methods
 
         public async Task SetCurrentNodeAsync(LazyObservableTreeNode<GameFileTreeNode> node)
         {
-            BreadCrumbCurrentNode = node;
             UpdateCurrentNode(node.Content);
             //await InitializeCurrentNodeAsync(node.Content);
             await node.RefreshAsync();
@@ -242,7 +231,7 @@ namespace WolvenKit.ViewModels.Editor
 
             await rootNode.RefreshAsync();
 
-            BreadCrumbCurrentNode = rootNode;
+
 
             await ((IRefreshable)CurrentNode).RefreshAsync();
         }
@@ -256,13 +245,9 @@ namespace WolvenKit.ViewModels.Editor
             SetCurrentNodeCommand = new RelayCommand<LazyObservableTreeNode<GameFileTreeNode>>(
                 async node => await SetCurrentNodeAsync(node));
 
-            OpenDirectoryCommand = new RelayCommand<GameFileTreeNode>(async info =>
-            {
-                var node = (LazyObservableTreeNode<GameFileTreeNode>)BreadCrumbCurrentNode.Children.First(item => item.Content.FullPath == info.FullPath);
-                await SetCurrentNodeAsync(node);
-            });
 
-            
+
+
             Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
@@ -295,18 +280,7 @@ namespace WolvenKit.ViewModels.Editor
             _ = InitializeCurrentNodeAsync(RootNode);
         }
 
-        public void NavigateTo(string path)
-        {
-            SetCurrentNodeCommand.Execute(RootNode);
-            var split = path.Split("\\");
-            if (split.Length > 1)
-            {
-                foreach (var part in split.Skip(1))
-                {
-                    OpenDirectoryCommand.Execute(BreadCrumbCurrentNode.Children.First(x => x.Content.Name == part));
-                }
-            }
-        }
+
 
         protected override Task CloseAsync() =>
             // TODO: Unsubscribe from events
@@ -340,7 +314,7 @@ namespace WolvenKit.ViewModels.Editor
                     CurrentNode = item.Children;
                     CurrentNode.Parent = item.This;
                     CurrentNodeFiles = item.Children.ToAssetBrowserData();
-                    //NavigateTo(CurrentNode.FullPath);
+                    SelectItemInTreeNavSF?.Invoke(CurrentNode);
                     break;
                 }
                 case EntryType.File:
@@ -354,7 +328,7 @@ namespace WolvenKit.ViewModels.Editor
                                 if (item.This.Files.ContainsKey(item.Name))
                                 {
                                     var it = item.This.Files.FirstOrDefault(x => x.Key == item.Name);
-                                    if(it.Value.Count > 0)
+                                    if (it.Value.Count > 0)
                                         _gameController.GetController().AddToMod(it.Value.First());
                                 }
                             }
@@ -369,7 +343,7 @@ namespace WolvenKit.ViewModels.Editor
                     {
                         CurrentNode = item.Parent;
                         CurrentNodeFiles = item.Parent.ToAssetBrowserData();
-                        //NavigateTo(CurrentNode.FullPath);
+                        GoBackInTreeNavSF?.Invoke();
                     }
                     break;
                 }
@@ -397,7 +371,11 @@ namespace WolvenKit.ViewModels.Editor
             CurrentNodeFiles = CurrentNode.ToAssetBrowserData();
         }
 
-        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+        private void SetupToolDefaults()
+        {
+            ContentId = ToolContentId;
+
+        }        // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         #endregion methods
     }
@@ -533,6 +511,34 @@ namespace WolvenKit.ViewModels.Editor
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+
+
+    public class HierarchyItem
+    {
+        public string ContentString { get; set; }
+        public HierarchyItem(string content, params HierarchyItem[] myItems)
+        {
+            this.ContentString = content;
+            itemsObservableCollection = new ObservableCollection<HierarchyItem>();
+            foreach (var item in myItems)
+            {
+                itemsObservableCollection.Add(item);
+            }
+            HierarchyItems = itemsObservableCollection;
+        }
+        private ObservableCollection<HierarchyItem> itemsObservableCollection;
+        public ObservableCollection<HierarchyItem> HierarchyItems
+        {
+            get { return itemsObservableCollection; }
+            set
+            {
+                if (itemsObservableCollection != value)
+                {
+                    itemsObservableCollection = value;
+                }
+            }
         }
     }
 }

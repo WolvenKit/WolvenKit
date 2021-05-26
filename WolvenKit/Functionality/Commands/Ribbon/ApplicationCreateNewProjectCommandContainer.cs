@@ -17,6 +17,7 @@ using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -144,7 +145,6 @@ namespace WolvenKit.Functionality.Commands
                                 break;
                         }
                     }
-                    StaticReferences.MainView.OnLoadLayoutAsync();
 
                     await _projectManager.LoadAsync(location);
                     switch (Path.GetExtension(location))

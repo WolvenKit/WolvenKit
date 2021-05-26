@@ -3,7 +3,7 @@ using System.Linq;
 using Ab3d.DirectX.Materials;
 
 
-namespace Ab3d.DXEngine
+namespace WolvenKit.Functionality.Ab4d
 {
     public static class KnownTextureFiles
     {

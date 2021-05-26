@@ -5,13 +5,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
 using Catel.IoC;
-using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
@@ -75,6 +74,7 @@ namespace WolvenKit.ViewModels.Shell
             Collapsed,
             Visible,
         }
+
 
         public bool BackstageIsOpen { get; set; }
         public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }

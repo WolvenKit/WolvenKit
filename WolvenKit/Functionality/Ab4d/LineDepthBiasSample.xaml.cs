@@ -13,7 +13,7 @@ using Ab3d.DirectX.Materials;
 using Ab3d.DirectX.Models;
 using Ab3d.Visuals;
 
-namespace Ab3d.DXEngine
+namespace WolvenKit.Functionality.Ab4d
 {
     /// <summary>
     /// Interaction logic for LineDepthBiasSample.xaml

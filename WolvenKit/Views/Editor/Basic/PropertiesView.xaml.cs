@@ -9,11 +9,11 @@ using Ab3d;
 using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
 using Ab3d.DirectX;
-using Ab3d.DXEngine;
 using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Views.Editor
 {
@@ -30,7 +30,7 @@ namespace WolvenKit.Views.Editor
 
 
             // Use helper class (defined in this sample project) to load the native assimp libraries
-            AssimpLoader.LoadAssimpNativeLibrary();
+            Helpers.LoadAssimpNativeLibrary();
 
 
             var assimpWpfImporter = new AssimpWpfImporter();

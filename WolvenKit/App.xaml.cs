@@ -8,149 +8,108 @@ using Catel.IoC;
 using Catel.Logging;
 using Catel.Messaging;
 using FFmpeg.AutoGen;
+using HandyControl.Tools;
 using NodeNetwork;
 using Orchestra.Services;
-using Syncfusion.SfSkinManager;
-using Syncfusion.Themes.MaterialDark.WPF;
 using Unosquare.FFME;
+using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views;
+using WolvenKit.Views.HomePage;
 using WolvenKit.Views.ViewModels;
 
 namespace WolvenKit
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        #region constructors
+        // Static ref to RootVM.
+        public static RootViewModel ViewModel => Current.Resources[nameof(ViewModel)] as RootViewModel;
 
-        // Main Constructor
-        static App()
-        {
-        }
+        // Static ref to MainWindow.
+        public static MainWindow MainX;
 
-        // Alternative Constructor
+        // Determines if the application is in design mode.
+        public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
+
+
+
+        // Constructor #1
+        static App() { }
+
+        // Constructor #2
         public App()
         {
-
-            // FreeNonCommercial license for WolvenKit:
-
-            Ab3d.Licensing.PowerToys.LicenseHelper.SetLicense(licenseOwner: "WolvenKit",
-                                                  licenseType: "FreeNonCommercialLicense-TeamDeveloperLicense",
-                                                  license: "9E18-4A3E-3951-8E9C-3686-ACE4-685B-6145-5799-42A9-F82C-C195-5495-5907-4F8D-38B7-661D-386C-5461-9B7C-70AE-46DC-F3CA-1B12");
-
-            Ab3d.Licensing.DXEngine.LicenseHelper.SetLicense(licenseOwner: "WolvenKit",
-                                                             licenseType: "FreeNonCommercialLicense-TeamDeveloperLicense",
-                                                             license: "F564-4078-3E78-F218-D27F-B191-4A32-AD76-2002-F1B1-EE27-7B15-5316-4CEA-5281-FF84-5B56-BECD-12CA-F307-E847-E014-7378-032C");
-
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");
-
-
-
-
-
-            // Change the default location of the ffmpeg binaries (same directory as application)
-            // You can get the 64-bit binaries here: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
-            // Library.FFmpegDirectory = @"c:\ffmpeg";
-
-            // You can pick which FFmpeg binaries are loaded. See issue #28
-            // For more specific control (issue #414) you can set Library.FFmpegLoadModeFlags to:
-            // FFmpegLoadMode.LibraryFlags["avcodec"] | FFmpegLoadMode.LibraryFlags["avfilter"] | ... etc.
-            // Full Features is already the default.
+            // Set application licenses.
+            Initializations.InitializeLicenses();
+            // Set FFMPEG Properties.
             Library.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
-
-            // Multi-threaded video enables the creation of independent
-            // dispatcher threads to render video frames. This is an experimental feature
-            // and might become deprecated in the future as no real performance enhancements
-            // have been detected.
-            Library.EnableWpfMultiThreadedVideo = false; // !System.Diagnostics.Debugger.IsAttached; // test with true and false
+            Library.EnableWpfMultiThreadedVideo = false;
         }
-        public static RootViewModel ViewModel => Current.Resources[nameof(ViewModel)] as RootViewModel;
-        public static string GetCaptureFilePath(string mediaPrefix, string extension)
-        {
-            var date = DateTime.UtcNow;
-            var dateString = $"{date.Year:0000}-{date.Month:00}-{date.Day:00} {date.Hour:00}-{date.Minute:00}-{date.Second:00}.{date.Millisecond:000}";
-            var targetFolder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                "ffmeplay");
 
-            if (Directory.Exists(targetFolder) == false)
-                Directory.CreateDirectory(targetFolder);
-
-            var targetFilePath = Path.Combine(targetFolder, $"{mediaPrefix} {dateString}.{extension}");
-            if (File.Exists(targetFilePath))
-                File.Delete(targetFilePath);
-
-            return targetFilePath;
-        }
-        /// <summary>
-        /// Determines if the Application is in design mode.
-        /// </summary>
-        public static bool IsInDesignMode => !(Current is App) ||
-            (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
-        #endregion constructors
-
-        // Get Logger.
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        public static MainWindow MainX;
+        // Application OnStartup Override.
         protected override async void OnStartup(StartupEventArgs e)
         {
-            var serviceLocator = ServiceLocator.Default;
-            //ShellService.GivenPoop = new StartupViewer();
+            // Startup speed boosting (HC)
+            ApplicationHelper.StartProfileOptimization();
 
+            // Set service locator.
+            var serviceLocator = ServiceLocator.Default;
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
 
 #if DEBUG
             LogManager.AddDebugListener(false);
 #endif
-            Log.Info("Starting application");
-            Log.Info("Initializing MVVM");
-            await AppHelper.InitializeMVVM();
-            Log.Info("Initializing Theme Helper");
+
+            StaticReferences.Logger.Info("Starting application");
+
+            StaticReferences.Logger.Info("Initializing MVVM");
+            await Initializations.InitializeMVVM();
+
+            StaticReferences.Logger.Info("Initializing Theme Helper");
             Initializations.InitializeThemeHelper();
-            Log.Info("Initializing Shell");
-            await AppHelper.InitializeShell();
-            AppHelper.ShowFirstTimeSetup();
-            Log.Info("Initializing Discord RPC");
+
+            StaticReferences.Logger.Info("Initializing Shell");
+            await Initializations.InitializeShell();
+            Helpers.ShowFirstTimeSetup();
+
+            StaticReferences.Logger.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
-            Log.Info("Initializing Github");
+
+            StaticReferences.Logger.Info("Initializing Github API");
             Initializations.InitializeGitHub();
-            Log.Info("Calling base.OnStartup");
-            base.OnStartup(e);
-            Log.Info("Initializing NodeNetwork");
+
+            StaticReferences.Logger.Info("Calling base.OnStartup");
+            base.OnStartup(e); // Some things can only be initialized after base.OnStartup(e);
+
+            StaticReferences.Logger.Info("Initializing NodeNetwork.");
             NNViewRegistrar.RegisterSplat();
 
-
-            MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings();
-            themeSettings.PrimaryBackground = new SolidColorBrush(Colors.Gray);
-            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-
-
+            StaticReferences.Logger.Info("Initializing Notifications.");
             NotificationHelper.InitializeNotificationHelper();
 
-            string path = System.AppDomain.CurrentDomain.BaseDirectory;
-            Unosquare.FFME.Library.FFmpegDirectory = path + "FFME";
-            Library.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
-            Library.EnableWpfMultiThreadedVideo = false; // !
-            // Temp Fix for MainViewModel.OnClosing
-            if (MainWindow != null)
-            {
-                MainWindow.Closing += OnClosing;
-            }
+            StaticReferences.Logger.Info("Initializing FFME");
+            Initializations.InitializeFFME();
 
 
-            SfSkinManager.ApplyStylesOnApplication = true;
+            StaticReferences.Logger.Info("Check for new updates");
+            Helpers.CheckForUpdates();
 
-            Log.Info("Check for new updates");
-            AppHelper.CheckForUpdates();
-            Directory.CreateDirectory(@"C:\WolvenKitData");
 
+            //Window window = new Window();
+            //window.AllowsTransparency = true;
+            //window.Background = new SolidColorBrush(Colors.Transparent);
+            //window.Content = new HomePageView();
+            //window.WindowStyle = WindowStyle.None;
+            //window.Show();
+
+            // Create WebView Data Folder.
             Directory.CreateDirectory(@"C:\WebViewData");
+            // Message system for video tool.
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
             mediator.Register<int>(this, onmessage);
+            // Init FFMPEG libraries.
             await Task.Run(async () =>
             {
                 try
@@ -182,6 +141,7 @@ namespace WolvenKit
             });
         }
 
+        // Sets the VideTool as current main window on demand.
         private void onmessage(int obj)
         {
             if (obj == 0)
@@ -189,11 +149,9 @@ namespace WolvenKit
                 if (MainX == null)
                 {
                     MainX = new MainWindow();
-
                     Current.MainWindow = MainX;
                     Current.MainWindow.Loaded += (snd, eva) => ViewModel.OnApplicationLoaded();
                     Current.MainWindow.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
-
                     Current.MainWindow.Show();
                 }
 
@@ -201,7 +159,5 @@ namespace WolvenKit
             }
         }
 
-        // TODO: add closing logic here for now since MainViewModel.OnClosing isn't realiable. Investigate this
-        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) => StaticReferences.MainView.OnSaveLayout();
-    }
+       }
 }

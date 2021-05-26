@@ -5,13 +5,17 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages">
+ xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+ xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
+ xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+ >
 
     <Grid
      MinWidth="300"
      MinHeight="300"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+     Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+     >
         <Grid Margin="3,75,3,0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
@@ -22,7 +26,8 @@
                  IsDraggable="False"
                  IsTabFillEnabled="True"
                  SelectionChanged="TabControlDemo_SelectionChanged"
-                 ShowCloseButton="False">
+                 ShowCloseButton="False"
+                 >
                     <hc:TabItem x:Name="GeneralTabItem" IsSelected="True">
                         <hc:TabItem.Header>
                             <StackPanel Orientation="Horizontal">
@@ -71,6 +76,130 @@
                     </hc:TabItem>
                 </hc:TabControl>
             </hc:TransitioningContentControl>
+
+            <!--
+                desktop notif
+                language
+                account
+                nexus account
+                prio account
+                auto update
+                auto update "channel"
+                theme
+                create theme
+                log path
+                view logs
+                Open mode for all tools
+                Auto install mods
+                project auto saving
+                Default Project Folder
+                exec path
+                mat depo path
+
+                tw3 exec path
+                modkit path
+                uncooked depo path
+            -->
+
+
+            <syncfusion:SfAccordion
+             x:Name="SfAccordion"
+             VerticalAlignment="Stretch"
+             Background="{DynamicResource RegionBrush}"
+             Visibility="Visible"
+             >
+
+                <syncfusion:SfAccordionItem Header="General">
+                    <StackPanel Margin="0">
+
+                        <syncfusion:PropertyGrid
+                         x:Name="GeneralSettingsPG"
+                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+                         EnableGrouping="True"
+                            
+                         SelectedObject="{Binding generalSettingsPGModel}"
+                         SortDirection="{x:Null}"
+                         />
+
+
+                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
+                            <TextBlock
+                             Margin="5,5,5,5"
+                             FontSize="11"
+                             Text="Theme Creator"
+                             />
+                            <mah:ColorPicker
+                             Width="250"
+                             HorizontalAlignment="Left"
+                             BorderBrush="Transparent"
+                             SelectedColor="{Binding SelectedTheme, Delay=100}"
+                             />
+                            <Button
+                             Margin="5,0,0,0"
+                             Content="Save Theme"
+                             FontSize="11"
+                             />
+                            <Button
+                             Margin="5,0,0,0"
+                             Content="Restart and Apply Theme"
+                             FontSize="11"
+                             />
+
+                        </StackPanel>
+                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
+
+
+                            <TextBlock
+                             Margin="5,5,5,5"
+                             FontSize="11"
+                             Text="Current Theme"
+                             />
+                            <mah:ColorPicker
+                             Width="250"
+                             HorizontalAlignment="Left"
+                             BorderBrush="Transparent"
+                             IsEnabled="False"
+                             SelectedColor="Green"
+                             />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </syncfusion:SfAccordionItem>
+
+                <syncfusion:SfAccordionItem Header="Editor">
+                    <syncfusion:PropertyGrid
+                     x:Name="EditorSettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding demomodel}"
+                     />
+                </syncfusion:SfAccordionItem>
+
+                <syncfusion:SfAccordionItem Header="Tools">
+                    <syncfusion:PropertyGrid
+                     x:Name="ToolsSettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding demomodel}"
+                     />
+                </syncfusion:SfAccordionItem>
+
+                <syncfusion:SfAccordionItem Header="Cyberpunk 2077">
+                    <syncfusion:PropertyGrid
+                     x:Name="CP77SettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding cp77SettingsPGModel}"
+                     />
+                </syncfusion:SfAccordionItem>
+
+                <syncfusion:SfAccordionItem Header="The Witcher 3">
+                    <syncfusion:PropertyGrid
+                     x:Name="TW3SettingsPG"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding tw3SettingsPGModel}"
+                     />
+                </syncfusion:SfAccordionItem>
+
+            </syncfusion:SfAccordion>
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
@@ -78,19 +207,22 @@
              Margin="5"
              HorizontalAlignment="Right"
              VerticalAlignment="Top"
-             Orientation="Horizontal">
+             Orientation="Horizontal"
+             >
 
                 <TextBlock
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center "
                  FontSize="20"
-                 Text="Settings" />
+                 Text="Settings"
+                 />
                 <hc:Divider
                  Height="45"
                  Margin="15"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Orientation="Vertical" />
+                 Orientation="Vertical"
+                 />
                 <hc:AnimationPath
                  Width="45"
                  Height="45"
@@ -102,7 +234,8 @@
                  Stretch="Uniform"
                  Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  StrokeThickness="1.5"
-                 Duration="00:00:06" />
+                 Duration="00:00:06"
+                 />
             </StackPanel>
         </hc:TransitioningContentControl>
     </Grid>

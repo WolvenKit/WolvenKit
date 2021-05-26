@@ -107,6 +107,11 @@ namespace WolvenKit.Functionality.Controllers
             await Task.CompletedTask;
         }
 
+        void logGenericErrors()
+        {
+            if (!File.Exists(_settings.W3ExecutablePath))
+                _loggerService.Error("Did you forget to set the The Witcher 3 exe path?");
+        }
 
         //private async Task InitializeAsync()
         //{
@@ -159,9 +164,17 @@ namespace WolvenKit.Functionality.Controllers
                 }
 
                 w3StringManager = new W3StringManager();
-                w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
+                try
+                {
+                    w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    _loggerService.Info("Finished loading strings manager.");
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error("Fatal error happened during loading strings manager.");
+                    logGenericErrors();
+                }
             }
-            _loggerService.Info("Finished loading strings manager.");
             return w3StringManager;
         }
 
@@ -206,9 +219,17 @@ namespace WolvenKit.Functionality.Controllers
                 }
 
                 bundleManager = new BundleManager();
-                bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                try
+                {
+                    bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    _loggerService.Info("Finished loading bundle manager.");
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error("Fatal error happened during loading bundle manager.");
+                    logGenericErrors();
+                }
             }
-            _loggerService.Info("Finished loading bundle manager.");
             return bundleManager;
         }
 
@@ -248,10 +269,18 @@ namespace WolvenKit.Functionality.Controllers
                     File.Delete(IGameController.GetManagerPath(EManagerType.CollisionManager));
                 }
 
-                collisionManager = new CollisionManager();
-                collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                try
+                {
+                    collisionManager = new CollisionManager();
+                    collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    _loggerService.Info("Finished loading collision manager.");
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error("Fatal error happened during loading collision manager.");
+                    logGenericErrors();
+                }
             }
-            _loggerService.Info("Finished loading collision manager.");
 
             return collisionManager;
         }
@@ -292,10 +321,18 @@ namespace WolvenKit.Functionality.Controllers
                     File.Delete(IGameController.GetManagerPath(EManagerType.SoundManager));
                 }
 
-                soundManager = new SoundManager();
-                soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                try
+                {
+                    soundManager = new SoundManager();
+                    soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    _loggerService.Info("Finished loading sound manager.");
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error("Fatal error happened during loading sound manager.");
+                    logGenericErrors();
+                }
             }
-            _loggerService.Info("Finished loading sound manager.");
 
             return soundManager;
         }
@@ -304,8 +341,17 @@ namespace WolvenKit.Functionality.Controllers
         {
             _loggerService.Info("Loading speech manager ... ");
             speechManager = new SpeechManager();
-            speechManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
-            _loggerService.Info("Finished loading speech manager.");
+            try
+            {
+                speechManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                _loggerService.Info("Finished loading speech manager.");
+            }
+            catch (Exception)
+            {
+                _loggerService.Error("Fatal error happened during loading speech manager.");
+                if (!File.Exists(_settings.W3ExecutablePath))
+                    _loggerService.Error("Did you forget to set the The Witcher 3 exe path?");
+            }
 
             return speechManager;
         }
@@ -347,10 +393,18 @@ namespace WolvenKit.Functionality.Controllers
                     File.Delete(IGameController.GetManagerPath(EManagerType.TextureManager));
                 }
 
-                textureManager = new TextureManager();
-                textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                try
+                {
+                    textureManager = new TextureManager();
+                    textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    _loggerService.Info("Finished loading texture manager.");
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error("Fatal error during loading texture manager.");
+                    logGenericErrors();
+                }
             }
-            _loggerService.Info("Finished loading texture manager.");
 
             return textureManager;
         }

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Ab3d.DXEngine
+namespace WolvenKit.Functionality.Ab4d
 {
     public class InfoControl : Grid
     {

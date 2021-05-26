@@ -1,6 +1,7 @@
 using System.Windows;
 using Catel.IoC;
 using Feather.Controls;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
