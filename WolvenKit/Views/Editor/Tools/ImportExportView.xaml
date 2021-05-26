@@ -45,94 +45,58 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
+
+        <!--  Main Grid  -->
         <Grid
-         Grid.Row="1"
-         Grid.RowSpan="2"
-         Grid.Column="1"
-         Background="{StaticResource RegionBrush}"
-         />
-
-        <Border
-         Grid.Row="0"
+         Grid.RowSpan="4"
          Grid.ColumnSpan="4"
-         BorderBrush="{DynamicResource RegionBrush}"
-         BorderThickness="0,0,0,4"
+         Background="Gray"
          >
-            <Grid>
-                <Grid Background="{DynamicResource ContentBackgroundAlt2}" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
 
-                <Grid Background="{StaticResource HatchBrush}" />
+            </Grid.RowDefinitions>
 
-                <TextBlock
-                 Margin="0,15,0,0"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 FontSize="15"
-                 Foreground="Gray"
-                 Text="Click Here or Drag 'n Drop file(s) to start.."
-                 />
+            <syncfusion:SfDataGrid Grid.Row="1" />
 
-                <iconPacks:PackIconCodicons
-                 Width="24"
-                 Height="24"
+
+            <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
+                <StackPanel
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 Foreground="Gray"
-                 Kind="Add"
-                 />
-                <Border
-                 x:Name="DragNDropBorder"
-                 Background="Transparent"
-                 BorderThickness="2"
-                 MouseDown="DragNDropBorder_MouseDown"
-                 />
+                 Orientation="Horizontal"
+                 >
+                    <Button
+                     Height="35"
+                     Background="{DynamicResource ContentBackgroundAlt}"
+                     Content="Process Selected"
+                     Style="{DynamicResource MessageBoxButtonStyle}"
+                     />
+                    <Button
+                     Height="35"
+                     Background="{DynamicResource ContentBackgroundAlt}"
+                     Content="Process All"
+                     Style="{DynamicResource MessageBoxButtonStyle}"
+                     />
+                    <Button
+                     Height="35"
+                     Background="{DynamicResource ContentBackgroundAlt}"
+                     Content="Process Imports"
+                     Style="{DynamicResource MessageBoxButtonStyle}"
+                     />
+                    <Button
+                     Height="35"
+                     Background="{DynamicResource ContentBackgroundAlt}"
+                     Content="Process Exports"
+                     Style="{DynamicResource MessageBoxButtonStyle}"
+                     />
+
+                </StackPanel>
+
 
             </Grid>
-
-        </Border>
-
-
-
-        <Grid Grid.Row="1" Grid.Column="0">
-
-            <syncfusion:SfDataGrid
-             x:Name="ImporterList"
-             Margin="0,20,0,0"
-             BorderBrush="{DynamicResource BorderBrush}"
-             />
-            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
-
-                <TextBlock
-                 Margin="0"
-                 Padding="10,4,10,4"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Top"
-                 Background="{DynamicResource ContentBackgroundAlt}"
-                 Text="Importer List"
-                 TextAlignment="Center"
-                 />
-            </Border>
-
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="2">
-
-            <syncfusion:SfDataGrid
-             x:Name="ExporterList"
-             Margin="0,20,0,0"
-             BorderBrush="{DynamicResource BorderBrush}"
-             />
-            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
-                <TextBlock
-                 Margin="0"
-                 Padding="10,4,10,4"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Top"
-                 Background="{DynamicResource ContentBackgroundAlt}"
-                 Text="Exporter List"
-                 TextAlignment="Center"
-                 />
-            </Border>
-
         </Grid>
 
 
@@ -152,63 +116,6 @@
 
 
 
-
-        <StackPanel Grid.Row="2" Grid.Column="2">
-            <Button
-             Margin="2"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Top"
-             Background="{DynamicResource ContentBackgroundAlt}"
-             Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-             >
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconCodicons VerticalAlignment="Center" Kind="FolderOpened" />
-                    <TextBlock FontSize="11" Text=" Select 'OUT' path." />
-                </StackPanel>
-
-            </Button>
-            <Button
-             Margin="2"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Top"
-             Background="{DynamicResource ContentBackgroundAlt}"
-             Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-             >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontSize="11" Text="EXPORT " />
-                    <iconPacks:PackIconCodicons VerticalAlignment="Center" Kind="ArrowRight" />
-
-                </StackPanel>
-
-            </Button>
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Grid.Column="0">
-            <Button
-             Margin="2"
-             VerticalAlignment="Top"
-             Background="{DynamicResource ContentBackgroundAlt}"
-             Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-             >
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconCodicons VerticalAlignment="Center" Kind="FolderOpened" />
-                    <TextBlock FontSize="11" Text=" Select 'IN' path." />
-                </StackPanel>
-
-            </Button>
-            <Button
-             Margin="2"
-             VerticalAlignment="Top"
-             Background="{DynamicResource ContentBackgroundAlt}"
-             Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-             >
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconCodicons VerticalAlignment="Center" Kind="ArrowLeft" />
-                    <TextBlock FontSize="11" Text=" IMPORT" />
-                </StackPanel>
-
-            </Button>
-        </StackPanel>
 
 
 
@@ -325,6 +232,12 @@
              Text="Files are being imported..."
              />
         </Grid>
+
+
+
+
+
+
 
 
     </Grid>
