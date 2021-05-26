@@ -109,6 +109,7 @@
              VerticalAlignment="Stretch"
              Background="{DynamicResource RegionBrush}"
              Visibility="Visible"
+             IsTextSearchEnabled="True"
              >
 
                 <syncfusion:SfAccordionItem Header="General">
@@ -207,7 +208,13 @@
 
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
-            <hc:SearchBar Margin="200,40,200,0" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+            <hc:SearchBar Margin="200,40,200,0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SearchStarted">
+                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </hc:SearchBar>
         </hc:TransitioningContentControl>
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 

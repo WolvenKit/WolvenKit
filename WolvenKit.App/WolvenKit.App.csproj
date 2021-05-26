@@ -40,6 +40,7 @@
     <PackageReference Include="Svg" Version="3.2.3" />
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.59" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />

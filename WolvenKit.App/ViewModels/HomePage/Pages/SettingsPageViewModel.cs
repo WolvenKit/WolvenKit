@@ -1,11 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using Catel.MVVM;
+using HandyControl.Data;
+using HandyControl.Tools;
+using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
+using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Controls;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Tools;
 
@@ -14,15 +25,20 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     public class SettingsPageViewModel : ViewModelBase
     {
         ISettingsManager _settingsManager;
+        ItemCollection subProperties;
 
         public SettingsPageViewModel(
             ISettingsManager settingsManager
         )
         {
             _settingsManager = settingsManager;
+            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
         }
 
         #region properties
+
+        public ItemCollection AccordionItems { get; set; }
+
         public GeneralSettingsPGModel generalSettingsPGModel
         {
             get { return new GeneralSettingsPGModel(_settingsManager); }
@@ -56,10 +72,89 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             get { return new AddPathDialogViewModel(); }
             set { }
         }
-    }
-    #endregion
+        #endregion
 
-        #region PropertyGridModels
+        #region commands
+        public ICommand SearchStartedCommand { get; set; }
+        #endregion
+
+        #region methods
+        private bool CanSearchStartedCommand(object arg) => true;
+
+        private void ExecuteSearchStartedCommand(object arg)
+        {
+            if (arg is FunctionEventArgs<string> e)
+            {
+                var query = e.Info;
+                bool subItemContains = false;
+
+                if (!string.IsNullOrWhiteSpace(query))
+                {
+                    // filters the itemcollection, if an item's header doesn't match with the query, it gets filtered out.
+                    AccordionItems.Filter = item =>
+                    {
+                        SfAccordionItem accordionItem = item as SfAccordionItem;
+                        bool headerContains = accordionItem.Header.ToString().ToLower().Contains(query.ToLower());
+
+                        subProperties = GetPropertyViews(accordionItem);
+
+                        // filters the subCategories aswell based on the Category string.
+                        subProperties.Filter = subItem =>
+                        {
+                            PropertyCategoryViewItemCollection viewItemCollection = subItem as PropertyCategoryViewItemCollection;
+                            subItemContains = viewItemCollection.Category.ToLower().Contains(query.ToLower());
+                            return subItemContains;
+                        };
+
+                        // If theres still an element in the collection after the filter,
+                        // then we still allow the current accordionItem to be shown. 
+                        if (subProperties.Count > 0)
+                            return true;
+
+                        return headerContains;
+                    };
+                    // reseting filter.
+                    subProperties.Filter = null;
+                }
+                else // if the search bar gets emptied out, then all items should be seen again by removing the filter.
+                {
+                    // reseting filter.
+                    AccordionItems.Filter = null;
+                }
+            }
+        }
+
+        // Starting from the AccordionItem, this method recurseviley goes down the visual tree
+        // until it finds the element with the PropertyView type.
+        private ItemCollection GetPropertyViews(DependencyObject currentElement)
+        {
+            int childCount = VisualTreeHelper.GetChildrenCount(currentElement);
+            ItemCollection foundCollection = null;
+
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(currentElement, i);
+                PropertyView childType = child as PropertyView;
+                if (childType == null)
+                {
+                    foundCollection = GetPropertyViews(child);
+                    if (foundCollection != null)
+                        break;
+                }
+                else
+                {
+                    foundCollection = (child as PropertyView).Items;
+                    break;
+                }
+            }
+
+
+            return foundCollection;
+        }
+        #endregion
+    }
+
+    #region PropertyGridModels
     [Editor(typeof(string), typeof(PathEditor))]
     public class CP77SettingsPGModel
     {
@@ -202,15 +297,15 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
         [Category("Code Editor")]
         [Display(Name = "Choose Code Editor type.")]
-        public CodeEditorType CodeEditorType { get; set;}
+        public CodeEditorType CodeEditorType { get; set; }
 
         [Category("Plugin Manager")]
         [Display(Name = "Choose Plugin manager type.")]
-        public PluginManagerType PluginManagerType { get; set;}
+        public PluginManagerType PluginManagerType { get; set; }
 
         [Category("Visual Editor")]
         [Display(Name = "Choose Visual editor type.")]
-        public VisualEditorType VisualEditorType { get; set;}
+        public VisualEditorType VisualEditorType { get; set; }
     }
 
     [Editor(typeof(string), typeof(PathEditor))]
@@ -235,7 +330,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     }
     #endregion
 
-        #region enums
+    #region enums
     public enum AutoUpdateChannel
     {
         Global,
