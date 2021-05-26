@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
@@ -11,10 +8,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Catel.MVVM;
 using HandyControl.Data;
-using HandyControl.Tools;
 using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
-using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -107,7 +102,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                         };
 
                         // If theres still an element in the collection after the filter,
-                        // then we still allow the current accordionItem to be shown. 
+                        // then we still allow the current accordionItem to be shown.
                         if (subProperties.Count > 0)
                             return true;
 
@@ -276,8 +271,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         [Display(Name = "Material depot path.")]
         public string MaterialDepotPath { get; set; }
 
-
-        [Editable(false)]
         [Category("Theme")]
         [Display(Name = "Application theme accent.")]
         public Brush BrushProperty { get; set; }

@@ -3,12 +3,12 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
+ xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
  xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
- xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
  xmlns:ucontrols="clr-namespace:WolvenKit.Controls;assembly=WolvenKit.App"
  >
 
@@ -18,7 +18,7 @@
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
      >
-        <Grid Margin="3,75,3,0" x:Name="settingsGrid">
+        <Grid x:Name="settingsGrid" Margin="3,75,3,0">
             <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
                 <hc:TabControl
@@ -108,66 +108,18 @@
              x:Name="SfAccordion"
              VerticalAlignment="Stretch"
              Background="{DynamicResource RegionBrush}"
-             Visibility="Visible"
              IsTextSearchEnabled="True"
+             Visibility="Visible"
              >
 
                 <syncfusion:SfAccordionItem Header="General">
-                    <StackPanel Margin="0">
-
-                        <syncfusion:PropertyGrid
-                         x:Name="GeneralSettingsPG"
-                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                         EnableGrouping="True"
-                            
-                         SelectedObject="{Binding generalSettingsPGModel}"
-                         SortDirection="{x:Null}"
-                         />
-
-
-                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
-                            <TextBlock
-                             Margin="5,5,5,5"
-                             FontSize="11"
-                             Text="Theme Creator"
-                             />
-                            <mah:ColorPicker
-                             Width="250"
-                             HorizontalAlignment="Left"
-                             BorderBrush="Transparent"
-                             SelectedColor="{Binding SelectedTheme, Delay=100}"
-                             />
-                            <Button
-                             Margin="5,0,0,0"
-                             Content="Save Theme"
-                             FontSize="11"
-                             />
-                            <Button
-                             Margin="5,0,0,0"
-                             Content="Restart and Apply Theme"
-                             FontSize="11"
-                             />
-
-                        </StackPanel>
-                        <StackPanel Margin="5,5,0,5" Orientation="Horizontal">
-
-
-                            <TextBlock
-                             Margin="5,5,5,5"
-                             FontSize="11"
-                             Text="Current Theme"
-                             />
-                            <mah:ColorPicker
-                             Width="250"
-                             HorizontalAlignment="Left"
-                             BorderBrush="Transparent"
-                             IsEnabled="False"
-                             SelectedColor="Green"
-                             />
-                        </StackPanel>
-
-                    </StackPanel>
-
+                    <syncfusion:PropertyGrid
+                     x:Name="GeneralSettingsPG"
+                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+                     EnableGrouping="True"
+                     SelectedObject="{Binding generalSettingsPGModel}"
+                     SortDirection="{x:Null}"
+                     />
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Editor">
@@ -189,10 +141,10 @@
                 <syncfusion:SfAccordionItem Header="Cyberpunk 2077">
                     <StackPanel>
                         <syncfusion:PropertyGrid
-                     x:Name="CP77SettingsPG"
-                     EnableGrouping="True"
-                     SelectedObject="{Binding cp77SettingsPGModel}"
-                     />
+                         x:Name="CP77SettingsPG"
+                         EnableGrouping="True"
+                         SelectedObject="{Binding cp77SettingsPGModel}"
+                         />
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
@@ -208,7 +160,11 @@
 
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
-            <hc:SearchBar Margin="200,40,200,0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <hc:SearchBar
+             Margin="200,40,200,0"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Top"
+             >
                 <hc:Interaction.Triggers>
                     <hc:EventTrigger EventName="SearchStarted">
                         <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
