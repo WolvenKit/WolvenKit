@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using Catel.IoC;
 using Catel.MVVM.Views;
-using DynamicData.Binding;
-using Feather.Controls;
 using Syncfusion.Windows.Controls.Layout;
 using WolvenKit.ViewModels.HomePage.Pages;
 
@@ -52,5 +48,12 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         #endregion Methods
+
+        private void SfAccordionItem_Unselected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
     }
 }

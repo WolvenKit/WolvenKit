@@ -112,14 +112,23 @@
              Visibility="Visible"
              >
 
-                <syncfusion:SfAccordionItem Header="General">
-                    <syncfusion:PropertyGrid
-                     x:Name="GeneralSettingsPG"
-                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                     EnableGrouping="True"
-                     SelectedObject="{Binding generalSettingsPGModel}"
-                     SortDirection="{x:Null}"
-                     />
+                <syncfusion:SfAccordionItem Header="General" Unselected="SfAccordionItem_Unselected">
+                    <StackPanel Orientation="Vertical">
+                        <syncfusion:PropertyGrid
+                         x:Name="GeneralSettingsPG"
+                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+                         EnableGrouping="True"
+                         SelectedObject="{Binding generalSettingsPGModel}"
+                         SortDirection="{x:Null}"
+                         />
+                        <TextBlock
+                         Margin="5"
+                         HorizontalAlignment="Center"
+                         Foreground="Gray"
+                         Text="Theme changes will take affect after restart."
+                         />
+                    </StackPanel>
+
                 </syncfusion:SfAccordionItem>
 
                 <syncfusion:SfAccordionItem Header="Editor">
@@ -166,7 +175,7 @@
              VerticalAlignment="Top"
              >
                 <hc:Interaction.Triggers>
-                    <hc:EventTrigger EventName="SearchStarted">
+                    <hc:EventTrigger EventName="TextChanged">
                         <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
                     </hc:EventTrigger>
                 </hc:Interaction.Triggers>

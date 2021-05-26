@@ -248,6 +248,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     [Editor(typeof(string), typeof(PathEditor))]
     public class GeneralSettingsPGModel
     {
+
         ISettingsManager _settingsManager;
 
         public GeneralSettingsPGModel(ISettingsManager settingsManager)
@@ -273,7 +274,16 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
         [Category("Theme")]
         [Display(Name = "Application theme accent.")]
-        public Brush BrushProperty { get; set; }
+        public Brush BrushProperty
+        {
+            get { return new SolidColorBrush(_settingsManager.ThemeAccent); }
+            set
+            {
+                _settingsManager.ThemeAccent = ((SolidColorBrush)value).Color;
+                _settingsManager.Save();
+
+            }
+        }
     }
 
     public class ToolSettingsPGModel
