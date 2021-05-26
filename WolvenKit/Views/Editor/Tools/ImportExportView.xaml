@@ -8,40 +8,17 @@
  xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  >
-    <catel:UserControl.Resources>
-        <VisualBrush
-         x:Key="HatchBrush"
-         po:Freeze="True"
-         TileMode="Tile"
-         Viewbox="0,0,5,5"
-         ViewboxUnits="Absolute"
-         Viewport="0,0,15,15"
-         ViewportUnits="Absolute"
-         >
-            <VisualBrush.Visual>
-                <Path
-                 Data="M 0 5 L 5 0 M -2 2 L 2 -2 M 3 7 L 7 3"
-                 RenderOptions.EdgeMode="Aliased"
-                 Stroke="{DynamicResource RegionBrush}"
-                 StrokeEndLineCap="Square"
-                 />
-            </VisualBrush.Visual>
-        </VisualBrush>
-    </catel:UserControl.Resources>
+
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
-
             <RowDefinition Height="3*" />
-
             <RowDefinition Height="70" />
-
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="10" />
-
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
@@ -59,8 +36,14 @@
 
             </Grid.RowDefinitions>
 
+
+
+            <!--  Data Grid  -->
             <syncfusion:SfDataGrid Grid.Row="1" />
 
+
+
+            <!--  Bottom Button Panel Main  -->
 
             <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
                 <StackPanel
@@ -98,33 +81,6 @@
 
             </Grid>
         </Grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <!--  Special Import / Export Options  -->
@@ -171,17 +127,32 @@
              Background="{DynamicResource ContentBackgroundAlt}"
              />
 
+        </Grid>
 
+
+        <!--  Exporting/Importing Overlay  -->
+        <Grid
+         Grid.RowSpan="4"
+         Grid.ColumnSpan="4"
+         Background="Gray"
+         Visibility="Collapsed"
+         >
+            <syncfusion:SfBusyIndicator AnimationType="Gear" />
+            <TextBlock
+             x:Name="ImportExportOverlayText"
+             Margin="0,65,0,0"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Text="Files are being processed..."
+             />
         </Grid>
 
 
 
 
 
-
-
-
         <!--  file succesfully/error adding/added window.  -->
+        <!--
         <Grid
          Grid.RowSpan="4"
          Grid.ColumnSpan="4"
@@ -211,27 +182,12 @@
              VerticalAlignment="Center"
              Text="File(s) succesfully added!"
              />
-        </Grid>
+        </Grid>-->
 
 
 
 
-        <!--  Exporting/Importing Overlay  -->
-        <Grid
-         Grid.RowSpan="4"
-         Grid.ColumnSpan="4"
-         Background="Gray"
-         Visibility="Collapsed"
-         >
-            <syncfusion:SfBusyIndicator AnimationType="Gear" />
-            <TextBlock
-             x:Name="ImportExportOverlayText"
-             Margin="0,65,0,0"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center"
-             Text="Files are being imported..."
-             />
-        </Grid>
+
 
 
 
