@@ -227,6 +227,7 @@
                              ItemsSource="{Binding CurrentNodeFiles}"
                              RowHeight="22"
                              SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                             SelectionChanged="InnerList_SelectionChanged"
                              SelectionMode="Extended"
                              >
 

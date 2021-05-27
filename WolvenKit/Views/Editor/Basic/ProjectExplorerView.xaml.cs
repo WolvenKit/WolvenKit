@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
+using Catel.IoC;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
@@ -214,11 +214,23 @@ namespace WolvenKit.Views.Editor
 
             if (StaticReferences.GlobalPropertiesView != null)
             {
+                var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+                propertiesViewModel.PE_MeshPreviewVisible = false;
 
-                StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                propertiesViewModel.PE_SelectedItem = ProjectExplorerView.GlobalPEView.TreeGrid.SelectedItem as FileModel;
+                if (propertiesViewModel.PE_SelectedItem != null)
+                {
+                    if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        propertiesViewModel.PE_MeshPreviewVisible = true;
 
-                StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
+                    }
+                }
+                propertiesViewModel.DecideForMeshPreview();
+
+
+
+
             }
         }
     }

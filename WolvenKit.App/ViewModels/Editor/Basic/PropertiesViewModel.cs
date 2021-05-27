@@ -1,6 +1,5 @@
 using Catel;
 using Catel.Services;
-using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -34,7 +33,7 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-            SetToNull();
+            SetToNullAndResetVisibility();
         }
 
 
@@ -49,10 +48,20 @@ namespace WolvenKit.ViewModels.Editor
 
 
 
-        private void SetToNull()
+        public void SetToNullAndResetVisibility()
         {
-            PE_SelectedItem = null;
+
+            // Asset Browser
             AB_SelectedItem = null;
+            AB_FileInfoVisible = false;
+            AB_MeshPreviewVisible = false;
+
+
+            // Project Explorer
+            PE_SelectedItem = null;
+            PE_FileInfoVisible = false;
+            PE_MeshPreviewVisible = false;
+
         }
 
 
@@ -67,7 +76,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected Item from Asset Browser If Available.
         /// </summary>
-        public IGameFile AB_SelectedItem { get; set; }
+        public Common.Model.AssetBrowserData AB_SelectedItem { get; set; }
 
 
 
@@ -93,7 +102,21 @@ namespace WolvenKit.ViewModels.Editor
         public bool PE_MeshPreviewVisible { get; set; }
 
 
+        /// <summary>
+        /// Decides if the mesh previewer Tab should be visible or not.
+        /// </summary>
+        public bool IsMeshPreviewVisible { get; set; }
 
+
+        public void DecideForMeshPreview()
+        {
+            if (AB_MeshPreviewVisible)
+            { IsMeshPreviewVisible = true; }
+            else if (PE_MeshPreviewVisible)
+            { IsMeshPreviewVisible = true; }
+            else
+            { IsMeshPreviewVisible = false; }
+        }
 
 
 

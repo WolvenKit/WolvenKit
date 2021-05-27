@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -80,14 +81,7 @@ namespace WolvenKit.Views.Editor
 
         private void ListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (StaticReferences.GlobalPropertiesView != null)
-            {
 
-                StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-
-                StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
-            }
         }
 
 
@@ -210,6 +204,30 @@ namespace WolvenKit.Views.Editor
                         continue;
                     executeFile(vm, selectedData);
                 }
+            }
+        }
+
+        private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        {
+
+            if (StaticReferences.GlobalPropertiesView != null)
+            {
+                var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+                propertiesViewModel.AB_MeshPreviewVisible = false;
+
+
+                propertiesViewModel.AB_SelectedItem = AssetBrowserView.GlobalABView.InnerList.SelectedItem as Common.Model.AssetBrowserData;
+                if (propertiesViewModel.AB_SelectedItem != null)
+                {
+                    if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        propertiesViewModel.AB_MeshPreviewVisible = true;
+
+                    }
+                }
+                propertiesViewModel.DecideForMeshPreview();
+
+
             }
         }
     }
