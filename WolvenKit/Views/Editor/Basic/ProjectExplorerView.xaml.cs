@@ -223,7 +223,12 @@ namespace WolvenKit.Views.Editor
                     if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
                     {
                         propertiesViewModel.PE_MeshPreviewVisible = true;
-
+                        MESH m = new MESH();
+                        var q = m.ExportMeshWithoutRigPreviewer(propertiesViewModel.PE_SelectedItem.FullName);
+                        if (q.Length > 0)
+                        {
+                            StaticReferences.GlobalPropertiesView.LoadModel(q);
+                        }
                     }
                 }
                 propertiesViewModel.DecideForMeshPreview();
