@@ -1,9 +1,11 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using Catel.IoC;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
@@ -222,6 +224,13 @@ namespace WolvenKit.Views.Editor
                     if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
                     {
                         propertiesViewModel.AB_MeshPreviewVisible = true;
+
+                        if (propertiesViewModel.AB_SelectedItem.Name != null)
+                        {
+
+
+                            var calculatedHash = FNV1A64HashAlgorithm.HashString(propertiesViewModel.AB_SelectedItem.Name);
+                        }
 
                     }
                 }

@@ -108,6 +108,9 @@ namespace WolvenKit.ViewModels.Editor
         public bool IsMeshPreviewVisible { get; set; }
 
 
+
+
+
         public void DecideForMeshPreview()
         {
             if (AB_MeshPreviewVisible || PE_MeshPreviewVisible)
