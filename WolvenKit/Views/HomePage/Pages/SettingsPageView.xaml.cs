@@ -15,7 +15,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             InitializeComponent();
             var vm = ServiceLocator.Default.ResolveType<SettingsPageViewModel>();
-            AccordionItems = SfAccordion.Items;
+           AccordionItems = SfAccordion.Items;
         }
 
         #endregion Constructors

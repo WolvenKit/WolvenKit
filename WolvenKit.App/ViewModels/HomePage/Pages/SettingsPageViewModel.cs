@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,6 +13,8 @@ using Catel.MVVM;
 using HandyControl.Data;
 using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using WolvenKit.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -20,19 +25,26 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     public class SettingsPageViewModel : ViewModelBase
     {
         ISettingsManager _settingsManager;
-        ItemCollection subProperties;
+        ILoggerService _loggerService;
+        //ItemCollection subProperties;
+        List<SfAccordionItem> originalAccordionItems;
 
         public SettingsPageViewModel(
-            ISettingsManager settingsManager
+            ISettingsManager settingsManager,
+            ILoggerService loggerService
         )
         {
             _settingsManager = settingsManager;
+            _loggerService = loggerService;
             SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
+            originalAccordionItems = new List<SfAccordionItem>();
         }
 
         #region properties
 
         public ItemCollection AccordionItems { get; set; }
+
+        public string SearchText { get; set; }
 
         public GeneralSettingsPGModel generalSettingsPGModel
         {
@@ -78,42 +90,52 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
         private void ExecuteSearchStartedCommand(object arg)
         {
+            
+
             if (arg is FunctionEventArgs<string> e)
             {
                 var query = e.Info;
-                bool subItemContains = false;
+                //bool subItemContains = false;
 
                 if (!string.IsNullOrWhiteSpace(query))
                 {
-                    // filters the itemcollection, if an item's header doesn't match with the query, it gets filtered out.
-                    AccordionItems.Filter = item =>
+                    if (AccordionItems.Count == 0)
                     {
-                        SfAccordionItem accordionItem = item as SfAccordionItem;
-                        bool headerContains = accordionItem.Header.ToString().ToLower().Contains(query.ToLower());
+                        AccordionItems.Filter = null;
+                    }
+                    else
+                    {
+                        // filters the itemcollection, if an item's header doesn't match with the query, it gets filtered out.
 
-                        subProperties = GetPropertyViews(accordionItem);
-
-                        // filters the subCategories aswell based on the Category string.
-                        subProperties.Filter = subItem =>
+                        AccordionItems.Filter = item =>
                         {
-                            PropertyCategoryViewItemCollection viewItemCollection = subItem as PropertyCategoryViewItemCollection;
-                            subItemContains = viewItemCollection.Category.ToLower().Contains(query.ToLower());
-                            return subItemContains;
+                            //SfAccordionItem accordionItem = item as SfAccordionItem;
+                            if (item == null)
+                                return false;
+
+                            return (item as SfAccordionItem).Header.ToString().ToLower().Contains(query.ToLower());
+
+                            //subProperties = GetPropertyViews(accordionItem);
+
+                            //// filters the subCategories aswell based on the Category string.
+                            //subProperties.Filter = subItem =>
+                            //{
+                            //    PropertyCategoryViewItemCollection viewItemCollection = subItem as PropertyCategoryViewItemCollection;
+                            //    subItemContains = viewItemCollection.Category.ToLower().Contains(query.ToLower());
+                            //    return subItemContains;
+                            //};
+
+                            //// If theres still an element in the collection after the filter,
+                            //// then we still allow the current accordionItem to be shown.
+                            //if (subProperties.Count > 0)
+                            //    return true;
+
+                            //return headerContains;
                         };
-
-                        // If theres still an element in the collection after the filter,
-                        // then we still allow the current accordionItem to be shown.
-                        if (subProperties.Count > 0)
-                            return true;
-
-                        return headerContains;
-                    };
-                    // reseting filter.
-                    subProperties.Filter = null;
-                }
+                    }
+                }   // reseting filter.
                 else // if the search bar gets emptied out, then all items should be seen again by removing the filter.
                 {
-                    // reseting filter.
                     AccordionItems.Filter = null;
                 }
             }

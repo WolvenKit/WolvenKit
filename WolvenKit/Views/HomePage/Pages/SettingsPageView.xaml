@@ -11,6 +11,11 @@
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:ucontrols="clr-namespace:WolvenKit.Controls;assembly=WolvenKit.App"
  >
+    <catel:UserControl.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </catel:UserControl.Resources>
 
     <Grid
      MinWidth="300"
@@ -108,16 +113,17 @@
              x:Name="SfAccordion"
              VerticalAlignment="Stretch"
              Background="{DynamicResource RegionBrush}"
+             AccentBrush="{DynamicResource AccentBrush}"
              IsTextSearchEnabled="True"
              Visibility="Visible"
              >
-
                 <syncfusion:SfAccordionItem Header="General" Unselected="SfAccordionItem_Unselected">
+                    
                     <StackPanel Orientation="Vertical">
                         <syncfusion:PropertyGrid
                          x:Name="GeneralSettingsPG"
                          CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                         EnableGrouping="True"
+                            EnableGrouping="True"
                          SelectedObject="{Binding generalSettingsPGModel}"
                          SortDirection="{x:Null}"
                          />
@@ -136,6 +142,7 @@
                      x:Name="EditorSettingsPG"
                      EnableGrouping="True"
                      SelectedObject="{Binding EditorSettingsPGModel}"
+                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                      />
                 </syncfusion:SfAccordionItem>
 
@@ -153,6 +160,7 @@
                          x:Name="CP77SettingsPG"
                          EnableGrouping="True"
                          SelectedObject="{Binding cp77SettingsPGModel}"
+                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                          />
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
@@ -162,6 +170,7 @@
                      x:Name="TW3SettingsPG"
                      EnableGrouping="True"
                      SelectedObject="{Binding tw3SettingsPGModel}"
+                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                      />
                 </syncfusion:SfAccordionItem>
 
@@ -170,12 +179,15 @@
         </Grid>
         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
             <hc:SearchBar
+             x:Name="settingsSearch"
              Margin="200,40,200,0"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Top"
+             BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+             IsRealTime="True"
              >
                 <hc:Interaction.Triggers>
-                    <hc:EventTrigger EventName="TextChanged">
+                    <hc:EventTrigger EventName="SearchStarted">
                         <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
                     </hc:EventTrigger>
                 </hc:Interaction.Triggers>
