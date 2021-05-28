@@ -10,12 +10,27 @@ namespace WolvenKit.ViewModels.Editor
     public class PropertiesViewModel : ToolViewModel
     {
 
-
+        /// <summary>
+        /// Private Logger Service
+        /// </summary>
         private readonly ILoggerService _loggerService;
+
+        /// <summary>
+        /// Private Message Service
+        /// </summary>
         private readonly IMessageService _messageService;
+
+        /// <summary>
+        /// Private ProjectManager
+        /// </summary>
         private readonly IProjectManager _projectManager;
 
-
+        /// <summary>
+        /// Constructor PropertiesViewModel
+        /// </summary>
+        /// <param name="projectManager"></param>
+        /// <param name="loggerService"></param>
+        /// <param name="messageService"></param>
         public PropertiesViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
@@ -42,12 +57,12 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private void SetupCommands()
         {
+            // Unused for Properties so far.
         }
 
-
-
-
-
+        /// <summary>
+        /// Resets stuff each time a new item is selected.
+        /// </summary>
         public void SetToNullAndResetVisibility()
         {
 
@@ -64,10 +79,6 @@ namespace WolvenKit.ViewModels.Editor
 
         }
 
-
-
-
-
         /// <summary>
         /// Selected Item from Project Explorer If Available.
         /// </summary>
@@ -77,8 +88,6 @@ namespace WolvenKit.ViewModels.Editor
         /// Selected Item from Asset Browser If Available.
         /// </summary>
         public Common.Model.AssetBrowserData AB_SelectedItem { get; set; }
-
-
 
         /// <summary>
         /// Decides if Asset browser Selected File info should be visible.
@@ -90,7 +99,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public bool PE_FileInfoVisible { get; set; }
 
-
         /// <summary>
         /// Decides if Asset browser Mesh preview should be visible.
         /// </summary>
@@ -101,16 +109,15 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public bool PE_MeshPreviewVisible { get; set; }
 
-
         /// <summary>
         /// Decides if the mesh previewer Tab should be visible or not.
         /// </summary>
         public bool IsMeshPreviewVisible { get; set; }
 
 
-
-
-
+        /// <summary>
+        /// Decides if the Mesh Previewer should be visible or not.
+        /// </summary>
         public void DecideForMeshPreview()
         {
             if (AB_MeshPreviewVisible || PE_MeshPreviewVisible)
@@ -119,7 +126,6 @@ namespace WolvenKit.ViewModels.Editor
             else
             { IsMeshPreviewVisible = false; }
         }
-
 
 
 
