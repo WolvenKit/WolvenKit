@@ -1,5 +1,8 @@
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +11,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED4.MeshFile;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -225,11 +229,41 @@ namespace WolvenKit.Views.Editor
                     {
                         propertiesViewModel.AB_MeshPreviewVisible = true;
 
-                        if (propertiesViewModel.AB_SelectedItem.Name != null)
+                        if (propertiesViewModel.AB_SelectedItem.AmbigiousFiles != null)
                         {
+                            var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles.FirstOrDefault();
+                            if (q != null)
+                            {
+
+                                string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+
+                                string ManagerCacheDir = Path.Combine(WKitAppData, "Temp");
+                                string EndPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
+                                Directory.CreateDirectory(ManagerCacheDir);
+                                foreach (var f in Directory.GetFiles(ManagerCacheDir))
+                                {
+                                    try{File.Delete(f);}
+                                    catch{
+                                    }
+                                }
+                                using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
+                                q.Extract(fs);
 
 
-                            var calculatedHash = FNV1A64HashAlgorithm.HashString(propertiesViewModel.AB_SelectedItem.Name);
+
+
+                                MESH m = new MESH();
+                                var q2 = m.ExportMeshWithoutRigPreviewer(EndPath);
+                                if (q2.Length > 0)
+                                {
+                                    StaticReferences.GlobalPropertiesView.LoadModel(q2);
+                                }
+
+
+
+
+
+                            }
                         }
 
                     }
