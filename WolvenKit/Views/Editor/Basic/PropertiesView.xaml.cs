@@ -27,26 +27,14 @@ namespace WolvenKit.Views.Editor
         public PropertiesView()
         {
             InitializeComponent();
-
-
-            // Use helper class (defined in this sample project) to load the native assimp libraries
             Helpers.LoadAssimpNativeLibrary();
 
 
             var assimpWpfImporter = new AssimpWpfImporter();
             string[] supportedImportFormats = assimpWpfImporter.SupportedImportFormats;
-
             var assimpWpfExporter = new AssimpWpfExporter();
             string[] supportedExportFormats = assimpWpfExporter.ExportFormatDescriptions.Select(f => f.FileExtension).ToArray();
 
-            FileFormatsTextBlock.Text = string.Format("Using native Assimp library version {0}.\r\n\r\nSupported import formats:\r\n{1}\r\n\r\nSupported export formats:\r\n{2}",
-                                            assimpWpfImporter.AssimpVersion,
-                                            string.Join(", ", supportedImportFormats),
-                                            string.Join(", ", supportedExportFormats));
-
-
-            var dragAndDropHelper = new DragAndDropHelper(this, ".*");
-            dragAndDropHelper.FileDropped += (sender, args) => LoadModel(args.FileName);
             StaticReferences.GlobalPropertiesView = this;
 
 
