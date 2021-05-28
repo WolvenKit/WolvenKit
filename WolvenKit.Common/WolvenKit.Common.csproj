@@ -27,6 +27,8 @@
     <EmbeddedResource Remove="Model\Cr2w\**" />
     <None Remove="Extensions\PropertyGridEditors\**" />
     <None Remove="Model\Cr2w\**" />
+    <None Remove="Resources\archivehashes.kark" />
+    <EmbeddedResource Include="Resources\archivehashes.kark" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,21 +51,6 @@
     <Content Include="texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\hash_cache_0.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_1.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_10.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_2.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_3.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_4.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_5.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_6.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_7.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_8.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_9.zip" />
-    <EmbeddedResource Include="Resources\hash_lookup.bin" />
   </ItemGroup>
 
   <ItemGroup>
