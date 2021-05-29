@@ -34,7 +34,7 @@ namespace CP77Tools.Tasks
         #region Methods
 
         public void DumpTask(string[] path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list, bool diff)
+            bool texinfo, bool classinfo, bool dump, bool list)
         {
             if (path == null || path.Length < 1)
             {
@@ -44,12 +44,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list, diff);
+                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list);
             });
         }
 
         public int DumpTaskInner(string path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list, bool diff)
+            bool texinfo, bool classinfo, bool dump, bool list)
         {
             #region checks
 
@@ -325,18 +325,6 @@ namespace CP77Tools.Tasks
                         //     }));
                         _loggerService.Success($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.textures.csv");
                     }
-                }
-
-                if (diff)
-                {
-                    var json = JsonConvert.SerializeObject(ar, Formatting.Indented,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.None,
-                            TypeNameHandling = TypeNameHandling.None
-                        });
-                    Console.Write(json);
                 }
 
                 if (dump)

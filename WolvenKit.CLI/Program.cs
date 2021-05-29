@@ -47,7 +47,8 @@ namespace CP77Tools
 
             var rootCommand = new RootCommand
             {
-                
+                new ArchiveCommand(),
+
                 new UnbundleCommand(),
                 new UncookCommand(),
                 new RebuildCommand(),
@@ -62,7 +63,6 @@ namespace CP77Tools
                 new OodleCommand(),
             };
 
-            //var clb = new CommandLineBuilder(new RootCommand {Handler = CommandHandler.Create<IHost>(Action
             var parser = new CommandLineBuilder(rootCommand)
                 .UseDefaults()
                 .UseHost(Host.CreateDefaultBuilder, host =>
@@ -72,31 +72,30 @@ namespace CP77Tools
                                 logging.ClearProviders();
                                 logging.AddColorConsoleLogger(configuration =>
                                 {
-                                    // info
                                     configuration.LogLevels.Add(LogLevel.Warning, ConsoleColor.DarkYellow);
-                                    // warning
                                     configuration.LogLevels.Add(LogLevel.Error, ConsoleColor.DarkMagenta);
-                                    // error
                                     configuration.LogLevels.Add(LogLevel.Critical, ConsoleColor.Red);
                                 });
                             })
                             .ConfigureServices((hostContext, services) =>
                             {
                                 services.AddScoped<ILoggerService, MicrosoftLoggerService>();
-                                services.AddSingleton<IHashService, HashService>();
-                                services.AddScoped<IWolvenkitFileService, Cp77FileService>();
-
                                 //services.AddScoped<IProgress<double>, MockProgressService>();
                                 services.AddScoped<IProgress<double>, ProgressBar>();
+
+                                services.AddSingleton<IHashService, HashService>();
+                                services.AddScoped<IWolvenkitFileService, Cp77FileService>();
 
                                 services.AddScoped<MaterialRepository>();
                                 services.AddScoped<ModTools>();
                                 services.AddScoped<ConsoleFunctions>();
-                            });
+                            })
+
+                            ;
                     })
                 .Build();
 
-            
+
 
             return parser.InvokeAsync(args);
         }

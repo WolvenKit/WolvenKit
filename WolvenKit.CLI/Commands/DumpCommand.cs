@@ -26,16 +26,16 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--classinfo" }, "Dump all class info."));
             AddOption(new Option<bool>(new[] { "--dump", "-d" }, "Dump archive information."));
             AddOption(new Option<bool>(new[] { "--list", "-l" }, "List archive contents."));
-            AddOption(new Option<bool>(new[] { "--diff" }, "Dump archive json for diff"));
 
-            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool, bool, IHost>(Action);
+
+            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool, IHost>(Action);
         }
 
-        private void Action(string[] path, bool imports, bool missinghashes, bool texinfo, bool classinfo, bool dump, bool list, bool diff, IHost host)
+        private void Action(string[] path, bool imports, bool missinghashes, bool texinfo, bool classinfo, bool dump, bool list, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.DumpTask(path, imports, missinghashes, texinfo, classinfo, dump, list, diff);
+            consoleFunctions.DumpTask(path, imports, missinghashes, texinfo, classinfo, dump, list);
         }
 
         #endregion Constructors
