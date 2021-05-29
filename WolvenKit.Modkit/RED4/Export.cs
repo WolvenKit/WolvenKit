@@ -22,11 +22,20 @@ namespace CP77.CR2W
             #region checks
 
             if (cr2wfile == null)
+            {
                 return false;
+            }
+
             if (!cr2wfile.Exists)
+            {
                 return false;
-            if (cr2wfile.Directory != null && !cr2wfile.Directory.Exists)
+            }
+
+            if (cr2wfile.Directory is {Exists: false})
+            {
                 return false;
+            }
+
             var ext = Path.GetExtension(cr2wfile.FullName)[1..];
 
             #endregion checks

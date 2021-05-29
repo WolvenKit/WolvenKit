@@ -24,21 +24,33 @@ namespace CP77.CR2W
         {
             #region checks
             
-            if (rawFile == null) return null;
-            if (!rawFile.Exists) return null;
-            if (rawFile.Directory != null && !rawFile.Directory.Exists) return null;
-            if (!Enum.GetNames(typeof(ERawFileFormat)).Contains(rawFile.Extension[1..])) return null;
-            // if (existingCr2w != null)
-            // {
-            //     if (!existingCr2w.Exists) return null;
-            //     if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(rawFile.Extension[1..])) return null;
-            // }
+            if (rawFile == null)
+            {
+                return null;
+            }
+
+            if (!rawFile.Exists)
+            {
+                return null;
+            }
+
+            if (rawFile.Directory is {Exists: false})
+            {
+                return null;
+            }
+
+            if (!Enum.GetNames(typeof(ERawFileFormat)).Contains(rawFile.Extension[1..]))
+            {
+                return null;
+            }
+
+            if (!Enum.TryParse(rawFile.Extension, out ERawFileFormat rawFileFormat))
+            {
+                return null;
+            }
             
             #endregion
-            
-            //switch ERawFileFormat
-            if (!Enum.TryParse(rawFile.Extension, out ERawFileFormat rawFileFormat))
-                return null;
+
             switch (rawFileFormat)
             {
                 case ERawFileFormat.tga:
@@ -74,7 +86,10 @@ namespace CP77.CR2W
                     return null;
                 }
                 
-                if (!File.Exists(ddsPath)) return null;
+                if (!File.Exists(ddsPath))
+                {
+                    return null;
+                }
             }
                 
             // read dds metadata
@@ -132,18 +147,24 @@ namespace CP77.CR2W
                             IsSerialized = true,
                             Value = eTextureGroup
                         };
-                        if (flags == CommonFunctions.ETexGroupFlags.Both || flags == CommonFunctions.ETexGroupFlags.CompressionOnly)
+                        if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
+                        {
                             xbm.Setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, xbm, "setup")
                             {
                                 IsSerialized = true,
                                 Value = compression
                             };
-                        if (flags == CommonFunctions.ETexGroupFlags.Both || flags == CommonFunctions.ETexGroupFlags.RawFormatOnly)
+                        }
+
+                        if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
+                        {
                             xbm.Setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, xbm, "rawFormat")
                             {
                                 IsSerialized = true,
                                 Value = rawformat
                             };
+                        }
+
                         return;
                     }
                 }
@@ -177,8 +198,7 @@ namespace CP77.CR2W
             #endregion
             
         }
-        
-        
-        
+
+        public void Import(FileInfo fi, object textureGroup) => throw new NotImplementedException();
     }
 }

@@ -49,55 +49,57 @@
                         Margin="5,0,5,0"
                         Background="Transparent"
                         Content="IMPORTABLES"
-                        IsChecked="True" />
+                        IsChecked="{Binding IsImportsSelected}" />
                     <RadioButton
                         x:Name="ExportCheckBox"
                         Background="Transparent"
-                        Content="EXPORTABLES" />
+                        Content="EXPORTABLES"
+
+                        />
 
                 </StackPanel>
             </Grid>
 
-            <!--  Data Grid Exports (OG)  -->
+            <!--  Data Grid Exports -->
             <syncfusion:SfDataGrid
                 Grid.Row="1"
-                AllowEditing="False"
+                AllowEditing="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 ColumnSizer="AutoLastColumnFill"
-                ItemsSource="{Binding Items}"
+                ItemsSource="{Binding ExportableItems}"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ExportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked" />
-                    <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" />
-                    <syncfusion:GridTextColumn HeaderText="Export State" MappingName="ExportState" />
+                    <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False" />
+                    <syncfusion:GridTextColumn HeaderText="UncookExtension" MappingName="UncookExtension" AllowEditing="False" />
 
                 </syncfusion:SfDataGrid.Columns>
 
             </syncfusion:SfDataGrid>
 
 
-            <!--  Data Grid Imports (ADJUST ME)  -->
+            <!--  Data Grid Imports  -->
             <syncfusion:SfDataGrid
                 Grid.Row="1"
-                AllowEditing="False"
+                AllowEditing="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 ColumnSizer="AutoLastColumnFill"
-                ItemsSource="{Binding Items}"
+                ItemsSource="{Binding ImportableItems}"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ImportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
-                    <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked" />
-                    <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" />
-                    <syncfusion:GridTextColumn HeaderText="Import State" MappingName="ImportState" />
+                    <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked" AllowEditing="True"/>
+                    <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False"/>
+                    
 
                 </syncfusion:SfDataGrid.Columns>
 
@@ -122,18 +124,6 @@
                         Background="{DynamicResource ContentBackgroundAlt}"
                         Command="{Binding ProcessAllCommand}"
                         Content="Process All"
-                        Style="{DynamicResource MessageBoxButtonStyle}" />
-                    <Button
-                        Height="35"
-                        Background="{DynamicResource ContentBackgroundAlt}"
-                        Command="{Binding ProcessImportsCommand}"
-                        Content="Process Imports"
-                        Style="{DynamicResource MessageBoxButtonStyle}" />
-                    <Button
-                        Height="35"
-                        Background="{DynamicResource ContentBackgroundAlt}"
-                        Command="{Binding ProcessExportsCommand}"
-                        Content="Process Exports"
                         Style="{DynamicResource MessageBoxButtonStyle}" />
 
                 </StackPanel>

@@ -12,6 +12,7 @@ using CP77.CR2W;
 using DynamicData;
 using ReactiveUI;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -28,7 +29,11 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public const string ToolContentId = "ImportExport_Tool";
 
-        private readonly ReadOnlyObservableCollection<ImportExportItemViewModel> _bindGrid;
+        private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
+        public ReadOnlyObservableCollection<ImportableItemViewModel> ImportableItems => _importableItems;
+
+        private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
+        public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
         
 
         /// <summary>
@@ -72,30 +77,28 @@ namespace WolvenKit.ViewModels.Editor
 
             ProcessAllCommand = new RelayCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new RelayCommand(ExecuteProcessSelected, CanProcessSelected);
-            ProcessImportsCommand = new RelayCommand(ExecuteProcessImports, CanProcessImports);
-            ProcessExportsCommand = new RelayCommand(ExecuteProcessExports, CanProcessExports);
 
             _watcherService.Files
                 .Connect()
-                .Filter(_ => _.IsImportable || _.IsExportable)
-                .Transform(_ => _.IsExportable ? new ExportableItemViewModel(_)
-                    : new ImportableItemViewModel(_) as ImportExportItemViewModel)
+                .Filter(_ => _.IsImportable)
+                .Transform(_ => new ImportableItemViewModel(_))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _bindGrid)
+                .Bind(out _importableItems)
+                .Subscribe();
+
+            _watcherService.Files
+                .Connect()
+                .Filter(_ => _.IsExportable)
+                .Transform(_ => new ExportableItemViewModel(_))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _exportableItems)
                 .Subscribe();
 
         }
 
         #endregion Constructors
-        public ReadOnlyObservableCollection<ImportExportItemViewModel> Items => _bindGrid;
 
-        public IEnumerable<ImportableItemViewModel> ImportableFiles => _bindGrid
-            .Where(_ => _.ExportState == EExportState.Importable)
-            .Cast<ImportableItemViewModel>();
-        public IEnumerable<ExportableItemViewModel> ExportableFiles => _bindGrid
-            .Where(_ => _.ExportState == EExportState.Exportable)
-            .Cast<ExportableItemViewModel>();
-
+        public bool IsImportsSelected { get; set; }
 
         #region Commands
 
@@ -104,57 +107,60 @@ namespace WolvenKit.ViewModels.Editor
 
         private void ExecuteProcessAll()
         {
-            
-        }
-
-        public ICommand ProcessSelectedCommand { get; private set; }
-        private bool CanProcessSelected()
-        {
-            return true;
-        }
-        private void ExecuteProcessSelected()
-        {
-            // TODO: Handle command logic here
-        }
-
-        public ICommand ProcessExportsCommand { get; private set; }
-        private bool CanProcessExports() => true;
-
-        private void ExecuteProcessExports()
-        {
-            foreach (var exportableFile in ExportableFiles)
+            if (IsImportsSelected)
             {
-                
+                foreach (var item in ImportableItems)
+                {
+                    var fi = new FileInfo(item.FullName);
+                    if (fi.Exists)
+                    {
+                        _modTools.Import(fi, item.TextureGroup);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in ExportableItems)
+                {
+                    var fi = new FileInfo(item.FullName);
+                    if (fi.Exists)
+                    {
+                        _modTools.Export(fi, item.UncookExtension, item.Flip);
+                    }
+                }
+
             }
         }
 
-        public ICommand ProcessImportsCommand { get; private set; }
-        private bool CanProcessImports()
+        public ICommand ProcessSelectedCommand { get; private set; }
+        private bool CanProcessSelected() => true;
+
+        private void ExecuteProcessSelected()
         {
-            return true;
+            if (IsImportsSelected)
+            {
+                foreach (var item in ImportableItems.Where(_ => _.IsChecked))
+                {
+                    var fi = new FileInfo(item.FullName);
+                    if (fi.Exists)
+                    {
+                        _modTools.Import(fi, item.TextureGroup);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in ExportableItems.Where(_ => _.IsChecked))
+                {
+                    var fi = new FileInfo(item.FullName);
+                    if (fi.Exists)
+                    {
+                        _modTools.Export(fi, item.UncookExtension, item.Flip);
+                    }
+                }
+
+            }
         }
-
-        private void ExecuteProcessImports()
-        {
-            // TODO: Handle command logic here
-        }
-
-
-
-
-
-
-
-
-
-
-        
-
-
-       
-
-        
-
 
 
         #endregion Properties
@@ -201,6 +207,10 @@ namespace WolvenKit.ViewModels.Editor
             BaseFile = model;
         }
 
+        // data
+        public object TextureGroup { get; internal set; }
+
+
     }
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
@@ -209,6 +219,11 @@ namespace WolvenKit.ViewModels.Editor
             BaseFile = model;
         }
 
+
+
+        // make this data
+        public EUncookExtension UncookExtension { get; set; }
+        public bool Flip { get; set; }
     }
 
 
