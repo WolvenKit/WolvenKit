@@ -34,7 +34,7 @@ namespace CP77Tools.Tasks
         #region Methods
 
         public void DumpTask(string[] path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list)
+            bool texinfo, bool classinfo, bool dump, bool list, bool diff)
         {
             if (path == null || path.Length < 1)
             {
@@ -44,12 +44,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list);
+                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list, diff);
             });
         }
 
         public int DumpTaskInner(string path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list)
+            bool texinfo, bool classinfo, bool dump, bool list, bool diff)
         {
             #region checks
 
@@ -143,7 +143,7 @@ namespace CP77Tools.Tasks
                         Interlocked.Increment(ref progress);
                         _progress.Report(progress / (float)total);
 
-                        
+
                         _loggerService.Log($"Dumped extension {result.Key}");
                     });
                 }
@@ -284,16 +284,29 @@ namespace CP77Tools.Tasks
                     }
                 }
 
-                // TODO: add this here
-                if (dump)
+                if (diff)
                 {
-                    File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",
-                        JsonConvert.SerializeObject(ar, Formatting.Indented, new JsonSerializerSettings()
+                    var json = JsonConvert.SerializeObject(ar, Formatting.Indented,
+                        new JsonSerializerSettings()
                         {
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                             PreserveReferencesHandling = PreserveReferencesHandling.None,
                             TypeNameHandling = TypeNameHandling.None
-                        }));
+                        });
+                    Console.Write(json);
+                }
+
+                if (dump)
+                {
+                    var json = JsonConvert.SerializeObject(ar, Formatting.Indented,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                            PreserveReferencesHandling = PreserveReferencesHandling.None,
+                            TypeNameHandling = TypeNameHandling.None
+                        });
+
+                    File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",json);
 
                     _loggerService.Success($"Finished dumping {ar.ArchiveAbsolutePath}.");
                 }
