@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
-using WolvenKit.RED4.GeneralStructs;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
 using System.IO;
 using Catel.IoC;
 using CP77.CR2W;
 using WolvenKit.Common.DDS;
-using WolvenKit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Common.Oodle;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Schema2;
 
-namespace WolvenKit.RED4.MorphTargetFile
+namespace WolvenKit.Modkit.RED4.MorphTargetFile
 {
     using Vec4 = System.Numerics.Vector4;
     using Vec3 = System.Numerics.Vector3;
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.MorphTargetFile
             ModTools = ServiceLocator.Default.ResolveType<ModTools>();
         }
 
-        public void ExportTargets(Stream targetStream,FileInfo outfile, bool isGLBinary = true)
+        public void ExportTargets(Stream targetStream, FileInfo outfile, bool isGLBinary = true)
         {
             var cr2w = ModTools.TryReadCr2WFile(targetStream);
 
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.MorphTargetFile
                     temp_NumVertexDiffsInEachChunk[e] = targetsInfo.NumVertexDiffsInEachChunk[i, e];
                     temp_NumVertexDiffsMappingInEachChunk[e] = targetsInfo.NumVertexDiffsMappingInEachChunk[i, e];
                 }
-                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i],subMeshC));
+                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], subMeshC));
             }
 
             string[] names = new string[targetsInfo.NumTargets];
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.MorphTargetFile
                 names[i] = targetsInfo.Names[i] + "_" + targetsInfo.RegionNames[i];
             }
 
-            List<MemoryStream> textureStreams =  ContainTextureStreams(cr2w, texbuffer);
+            List<MemoryStream> textureStreams = ContainTextureStreams(cr2w, texbuffer);
             ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, names);
 
             if (isGLBinary)
@@ -101,14 +101,14 @@ namespace WolvenKit.RED4.MorphTargetFile
                 model.SaveGLTF(outfile.FullName);
             var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_Textures");
 
-            if(textureStreams.Count > 0)
+            if (textureStreams.Count > 0)
             {
                 Directory.CreateDirectory(dir.FullName);
             }
 
-            for(int i = 0; i < textureStreams.Count; i++)
+            for (int i = 0; i < textureStreams.Count; i++)
             {
-                File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds",textureStreams[i].ToArray());
+                File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds", textureStreams[i].ToArray());
             }
 
             targetStream.Dispose();
@@ -263,7 +263,7 @@ namespace WolvenKit.RED4.MorphTargetFile
         }
         static List<MemoryStream> ContainTextureStreams(CR2WFile cr2w, MemoryStream texbuffer)
         {
-            List <MemoryStream> textureStreams = new List<MemoryStream>();
+            List<MemoryStream> textureStreams = new List<MemoryStream>();
 
             int Index = int.MaxValue;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
@@ -298,7 +298,7 @@ namespace WolvenKit.RED4.MorphTargetFile
                 byte[] bytes = texbr.ReadBytes((int)TargetDiffsDataSize[i]);
 
                 MemoryStream ms = new MemoryStream();
-                DDSMetadata metadata = new DDSMetadata(TargetDiffsWidth[i], TargetDiffsWidth[i], TargetDiffsMipLevelCounts[i], EFormat.BC7_UNORM,16,false,0,true);
+                DDSMetadata metadata = new DDSMetadata(TargetDiffsWidth[i], TargetDiffsWidth[i], TargetDiffsMipLevelCounts[i], EFormat.BC7_UNORM, 16, false, 0, true);
                 DDSUtils.GenerateAndWriteHeader(ms, metadata);
                 BinaryWriter bw = new BinaryWriter(ms);
                 bw.Write(bytes);
