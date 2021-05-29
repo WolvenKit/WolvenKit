@@ -6,7 +6,12 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ d:DataContext="{d:DesignInstance Type=editor:ImportExportViewModel}"
+ mc:Ignorable="d"
  >
 
 
@@ -39,7 +44,26 @@
 
 
             <!--  Data Grid  -->
-            <syncfusion:SfDataGrid Grid.Row="1" />
+            <syncfusion:SfDataGrid Grid.Row="1"
+                    ItemsSource="{Binding Items}"
+                    AutoGenerateColumns="False"
+                    ColumnSizer="AutoLastColumnFill"
+                    AllowResizingColumns="True"
+                    AllowEditing="False"
+                    AllowFiltering="True"
+                    AllowSorting="True"
+                    SelectionMode="Extended"
+                    
+                                   >
+
+                <syncfusion:SfDataGrid.Columns>
+                    <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked" />
+                    <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" />
+                    <syncfusion:GridTextColumn HeaderText="State" MappingName="ExportState" />
+                    
+                </syncfusion:SfDataGrid.Columns>
+
+            </syncfusion:SfDataGrid>
 
 
 
@@ -56,24 +80,28 @@
                      Background="{DynamicResource ContentBackgroundAlt}"
                      Content="Process Selected"
                      Style="{DynamicResource MessageBoxButtonStyle}"
+                     Command="{Binding ProcessSelectedCommand}"
                      />
                     <Button
                      Height="35"
                      Background="{DynamicResource ContentBackgroundAlt}"
                      Content="Process All"
                      Style="{DynamicResource MessageBoxButtonStyle}"
+                     Command="{Binding ProcessAllCommand}"
                      />
                     <Button
                      Height="35"
                      Background="{DynamicResource ContentBackgroundAlt}"
                      Content="Process Imports"
                      Style="{DynamicResource MessageBoxButtonStyle}"
+                     Command="{Binding ProcessImportsCommand}"
                      />
                     <Button
                      Height="35"
                      Background="{DynamicResource ContentBackgroundAlt}"
                      Content="Process Exports"
                      Style="{DynamicResource MessageBoxButtonStyle}"
+                     Command="{Binding ProcessExportsCommand}"
                      />
 
                 </StackPanel>

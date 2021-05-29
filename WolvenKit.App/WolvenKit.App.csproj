@@ -15,6 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\ghost\.nuget\packages\wolvenkit.handycontrol\3.2.0\contentFiles\any\net5.0-windows7.0\LangProvider.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
     <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />

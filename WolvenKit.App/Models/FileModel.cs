@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -64,6 +65,10 @@ namespace WolvenKit.Models
 
         public bool IsExpanded { get; set; }
 
+
+
+        public bool IsImportable => !IsDirectory && Enum.GetNames(typeof(ERawFileFormat)).Contains(Extension[1..]);
+        public bool IsExportable => !IsDirectory && Enum.GetNames(typeof(ECookedFileFormat)).Contains(Extension[1..]);
 
         #endregion
 

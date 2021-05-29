@@ -1,11 +1,21 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Linq;
 using Catel;
 using Catel.Services;
+using CP77.CR2W;
+using DynamicData;
+using ReactiveUI;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -17,11 +27,9 @@ namespace WolvenKit.ViewModels.Editor
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
         public const string ToolContentId = "ImportExport_Tool";
-        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
 
-
-        public ObservableCollection<ImportFile> ImportCollection { get; set; } = new();
-        public ObservableCollection<ExportFile> ExportCollection { get; set; } = new();
+        private readonly ReadOnlyObservableCollection<ImportExportItemViewModel> _bindGrid;
+        
 
         /// <summary>
         /// Identifies the caption string used for this tool window.
@@ -31,6 +39,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
+        private readonly IWatcherService _watcherService;
+        private readonly ModTools _modTools;
 
         #endregion Fields
 
@@ -39,22 +49,113 @@ namespace WolvenKit.ViewModels.Editor
         public ImportExportViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
-           IMessageService messageService) : base(ToolTitle)
+           IMessageService messageService,
+           IWatcherService watcherService,
+           ModTools modTools
+           ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => watcherService);
+            Argument.IsNotNull(() => modTools);
+
+
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
+            _watcherService = watcherService;
+            _modTools = modTools;
+
             SetupToolDefaults();
+
+
+            ProcessAllCommand = new RelayCommand(ExecuteProcessAll, CanProcessAll);
+            ProcessSelectedCommand = new RelayCommand(ExecuteProcessSelected, CanProcessSelected);
+            ProcessImportsCommand = new RelayCommand(ExecuteProcessImports, CanProcessImports);
+            ProcessExportsCommand = new RelayCommand(ExecuteProcessExports, CanProcessExports);
+
+            _watcherService.Files
+                .Connect()
+                .Filter(_ => _.IsImportable || _.IsExportable)
+                .Transform(_ => _.IsExportable ? new ExportableItemViewModel(_)
+                    : new ImportableItemViewModel(_) as ImportExportItemViewModel)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _bindGrid)
+                .Subscribe();
+
         }
 
         #endregion Constructors
+        public ReadOnlyObservableCollection<ImportExportItemViewModel> Items => _bindGrid;
 
-        #region Properties
+        public IEnumerable<ImportableItemViewModel> ImportableFiles => _bindGrid
+            .Where(_ => _.ExportState == EExportState.Importable)
+            .Cast<ImportableItemViewModel>();
+        public IEnumerable<ExportableItemViewModel> ExportableFiles => _bindGrid
+            .Where(_ => _.ExportState == EExportState.Exportable)
+            .Cast<ExportableItemViewModel>();
 
-        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
+
+        #region Commands
+
+        public ICommand ProcessAllCommand { get; private set; }
+        private bool CanProcessAll() => true;
+
+        private void ExecuteProcessAll()
+        {
+            
+        }
+
+        public ICommand ProcessSelectedCommand { get; private set; }
+        private bool CanProcessSelected()
+        {
+            return true;
+        }
+        private void ExecuteProcessSelected()
+        {
+            // TODO: Handle command logic here
+        }
+
+        public ICommand ProcessExportsCommand { get; private set; }
+        private bool CanProcessExports() => true;
+
+        private void ExecuteProcessExports()
+        {
+            foreach (var exportableFile in ExportableFiles)
+            {
+                
+            }
+        }
+
+        public ICommand ProcessImportsCommand { get; private set; }
+        private bool CanProcessImports()
+        {
+            return true;
+        }
+
+        private void ExecuteProcessImports()
+        {
+            // TODO: Handle command logic here
+        }
+
+
+
+
+
+
+
+
+
+
+        
+
+
+       
+
+        
+
+
 
         #endregion Properties
 
@@ -74,30 +175,60 @@ namespace WolvenKit.ViewModels.Editor
 
 
 
-    public class ImportFile
+    public abstract class ImportExportItemViewModel
     {
-        public FileModel BaseFile { get; set; }
-        public FileImportProperties ImportProperties { get; set; }
+        protected FileModel BaseFile { get; set; }
+
+        public ImportExportProperties Properties { get; set; }
+
+        public string Extension => BaseFile.Extension;
+        public string FullName => BaseFile.FullName;
+        public string Name => BaseFile.Name;
+
+
+        public bool IsChecked { get; set; }
+        
+
+        
+        public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
+    }
+
+
+    public class ImportableItemViewModel : ImportExportItemViewModel
+    {
+        public ImportableItemViewModel(FileModel model)
+        {
+            BaseFile = model;
+        }
+
+    }
+    public class ExportableItemViewModel : ImportExportItemViewModel
+    {
+        public ExportableItemViewModel(FileModel model)
+        {
+            BaseFile = model;
+        }
 
     }
 
-    public class FileImportProperties
+
+
+    public abstract class ImportExportProperties
+    {
+
+    }
+
+    public class ImportProperties : ImportExportProperties
     {
     }
 
-    public class ExportFile
-    {
-        public FileModel BaseFile { get; set; }
-        public FileExportProperties ExportProperties { get; set; }
-    }
-
-    public class FileExportProperties
+    public class ExportProperties : ImportExportProperties
     {
         public bool HasSpecialOptions { get; set; }
 
 
 
-        public FileExportProperties()
+        public ExportProperties()
         {
 
         }

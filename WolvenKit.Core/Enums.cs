@@ -38,6 +38,25 @@ namespace WolvenKit.Common
         texarray
     }
 
+    /// <summary>
+    /// Possible file extensions of raw files
+    /// </summary>
+    public enum ERawFileFormat
+    {
+        tga,
+        dds,
+        fbx
+    }
+
+    /// <summary>
+    /// Possible file extensions of raw files
+    /// </summary>
+    public enum EExportState
+    {
+        Exportable,
+        Importable
+    }
+
     public enum ECustomImageKeys
     {
         OpenDirImageKey, //= "<ODIR>";
@@ -68,15 +87,7 @@ namespace WolvenKit.Common
         Raw
     }
 
-    /// <summary>
-    /// Possible file extensions of raw files
-    /// </summary>
-    public enum ERawFileFormat
-    {
-        tga,
-        dds,
-        fbx
-    }
+
 
 
     /// IMPORT FLAGS
