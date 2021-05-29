@@ -149,6 +149,12 @@ namespace CP77Tools.Tasks
                 }
                 if (imports || texinfo)
                 {
+                    if (texinfo && ar.Files.Values.All(_ => _.Extension != ".xbm"))
+                    {
+                        _loggerService.Info($"Skipping {ar.Name}");
+                        continue;
+                    }
+
                     // using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
                     //     ar.Filepath.GetHashMD5(), 0,
                     //     MemoryMappedFileAccess.Read);
@@ -207,14 +213,14 @@ namespace CP77Tools.Tasks
                                 var texinfoObj = new Cr2wTextureInfo()
                                 {
                                     Filename = filename,
-                                    width = blob.Header.SizeInfo.Width.Value,
-                                    height = blob.Header.SizeInfo.Height.Value,
-                                    mips = blob.Header.TextureInfo.MipCount.Value,
-                                    slicecount = blob.Header.TextureInfo.SliceCount.Value,
-                                    alignment = blob.Header.TextureInfo.DataAlignment.Value,
-                                    compression = xbm.Setup.Compression,
-                                    Group = xbm.Setup.Group,
-                                    rawFormat = xbm.Setup.RawFormat,
+                                    width = blob.Header.SizeInfo.Width.IsSerialized ? blob.Header.SizeInfo.Width.Value.ToString() : "null",
+                                    height = blob.Header.SizeInfo.Height.IsSerialized ? blob.Header.SizeInfo.Height.Value.ToString() : "null",
+                                    mips = blob.Header.TextureInfo.MipCount.IsSerialized ? blob.Header.TextureInfo.MipCount.Value.ToString() : "null",
+                                    slicecount = blob.Header.TextureInfo.SliceCount.IsSerialized ? blob.Header.TextureInfo.SliceCount.Value.ToString() : "null",
+                                    alignment = blob.Header.TextureInfo.DataAlignment.IsSerialized ? blob.Header.TextureInfo.DataAlignment.Value.ToString() : "null",
+                                    compression = xbm.Setup.Compression.IsSerialized ? xbm.Setup.Compression.Value.ToString() : "null",
+                                    Group = xbm.Setup.Group.IsSerialized ? xbm.Setup.Group.Value.ToString() : "null",
+                                    rawFormat = xbm.Setup.RawFormat.IsSerialized ? xbm.Setup.RawFormat.Value.ToString(): "null",
                                 };
 
                                 texDictionary.AddOrUpdate(hash, texinfoObj, (arg1, o) => texinfoObj);
@@ -273,14 +279,51 @@ namespace CP77Tools.Tasks
                     if (texinfo)
                     {
                         //write
-                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.textures.json",
-                            JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                PreserveReferencesHandling = PreserveReferencesHandling.None,
-                                TypeNameHandling = TypeNameHandling.None
-                            }));
-                        _loggerService.Success($"Finished. Dump file written to {inputFileInfo.FullName}.json");
+                        using var fs = new FileStream($"{ar.ArchiveAbsolutePath}.textures.csv", FileMode.Create,
+                            FileAccess.Write);
+                        using var sw = new StreamWriter(fs);
+                        sw.WriteLine(
+                            $"Filename;" +
+
+                            $"compression;" +
+                            $"Group;" +
+                            $"rawFormat;" +
+
+                            $"alignment;" +
+                            $"slicecount;" +
+                            $"mips;" +
+
+                            $"height;" +
+                            $"width"
+                        );
+
+                        foreach (var value in arobj.TextureDictionary.Values)
+                        {
+                            sw.WriteLine(
+                                $"{value.Filename};" +
+
+                                $"{value.compression};" +
+                                $"{value.Group};" +
+                                $"{value.rawFormat};" +
+
+                                $"{value.alignment};" +
+                                $"{value.slicecount};" +
+                                $"{value.mips};" +
+
+                                $"{value.height};" +
+                                $"{value.width};"
+                            );
+                        }
+
+
+                        // File.WriteAllText($"{ar.ArchiveAbsolutePath}.textures.json",
+                        //     JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
+                        //     {
+                        //         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        //         PreserveReferencesHandling = PreserveReferencesHandling.None,
+                        //         TypeNameHandling = TypeNameHandling.None
+                        //     }));
+                        _loggerService.Success($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.textures.csv");
                     }
                 }
 
@@ -474,16 +517,16 @@ namespace CP77Tools.Tasks
     {
         #region Properties
 
-        public uint alignment { get; set; }
-        public CEnum<Enums.ETextureCompression> compression { get; set; }
+        public string alignment { get; set; }
+        public string compression { get; set; }
         public string Filename { get; set; }
 
-        public CEnum<Enums.GpuWrapApieTextureGroup> Group { get; set; }
-        public ushort height { get; set; }
-        public byte mips { get; set; }
-        public CEnum<Enums.ETextureRawFormat> rawFormat { get; set; }
-        public ushort slicecount { get; set; }
-        public ushort width { get; set; }
+        public string Group { get; set; }
+        public string height { get; set; }
+        public string mips { get; set; }
+        public string rawFormat { get; set; }
+        public string slicecount { get; set; }
+        public string width { get; set; }
 
         #endregion Properties
     }
