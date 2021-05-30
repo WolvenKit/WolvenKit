@@ -284,11 +284,11 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                 if (Path.GetExtension(primaryDependencies[i]) == ".xbm")
                 {
                     TexturesList.Add(primaryDependencies[i]);
-                    if (File.Exists(AssetLib.FullName + primaryDependencies[i]))
+                    if (File.Exists(AssetLib.FullName + "\\" + primaryDependencies[i]))
                     {
                         if (CopyTextures)
                         {
-                            File.Copy(AssetLib.FullName + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
+                            File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
                             ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), eUncookExtension);
                         }
                     }
@@ -296,20 +296,20 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlmask")
                 {
                     TexturesList.Add(primaryDependencies[i]);
-                    if (File.Exists(AssetLib.FullName + primaryDependencies[i]))
+                    if (File.Exists(AssetLib.FullName + "\\" + primaryDependencies[i]))
                     {
                         if (CopyTextures)
                         {
-                            File.Copy(AssetLib.FullName + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
+                            File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
                             ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), eUncookExtension);
                         }
                     }
                 }
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
-                    if (File.Exists(AssetLib.FullName + primaryDependencies[i]))
+                    if (File.Exists(AssetLib.FullName + "\\" + primaryDependencies[i]))
                     {
-                        FileStream setupFs = new FileStream((AssetLib.FullName + primaryDependencies[i]), FileMode.Open, FileAccess.Read);
+                        FileStream setupFs = new FileStream((AssetLib.FullName + "\\" + primaryDependencies[i]), FileMode.Open, FileAccess.Read);
                         var cr2w = ModTools.TryReadCr2WFile(setupFs);
                         mlSetupNames.Add(Path.GetFileName(primaryDependencies[i]));
                         mlSetups.Add(cr2w.Chunks[0].data as Multilayer_Setup);
@@ -321,20 +321,20 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                             if (Path.GetExtension(cr2w.Imports[e].DepotPathStr) == ".xbm")
                             {
                                 TexturesList.Add(cr2w.Imports[e].DepotPathStr);
-                                if (File.Exists(AssetLib.FullName + cr2w.Imports[e].DepotPathStr))
+                                if (File.Exists(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr))
                                 {
                                     if (CopyTextures)
                                     {
-                                        File.Copy(AssetLib.FullName + cr2w.Imports[e].DepotPathStr, cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr), true);
+                                        File.Copy(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr, cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr), true);
                                         ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr)), eUncookExtension);
                                     }
                                 }
                             }
                             if (Path.GetExtension(cr2w.Imports[e].DepotPathStr) == ".mltemplate")
                             {
-                                if (File.Exists(AssetLib.FullName + cr2w.Imports[e].DepotPathStr))
+                                if (File.Exists(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr))
                                 {
-                                    FileStream templateFs = new FileStream((AssetLib.FullName + cr2w.Imports[e].DepotPathStr), FileMode.Open, FileAccess.Read);
+                                    FileStream templateFs = new FileStream((AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr), FileMode.Open, FileAccess.Read);
                                     var mlTempcr2w = ModTools.TryReadCr2WFile(templateFs);
                                     mlTemplateNames.Add(Path.GetFileName(cr2w.Imports[e].DepotPathStr));
                                     mlTemplates.Add(mlTempcr2w.Chunks[0].data as Multilayer_LayerTemplate);
@@ -344,11 +344,11 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                                     for (int eye = 0; eye < mlTempcr2w.Imports.Count; eye++)
                                     {
                                         TexturesList.Add(mlTempcr2w.Imports[eye].DepotPathStr);
-                                        if (File.Exists(AssetLib.FullName + mlTempcr2w.Imports[eye].DepotPathStr))
+                                        if (File.Exists(AssetLib.FullName + "\\" + mlTempcr2w.Imports[eye].DepotPathStr))
                                         {
                                             if (CopyTextures)
                                             {
-                                                File.Copy(AssetLib.FullName + mlTempcr2w.Imports[eye].DepotPathStr, cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr), true);
+                                                File.Copy(AssetLib.FullName + "\\" + mlTempcr2w.Imports[eye].DepotPathStr, cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr), true);
                                                 ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr)), eUncookExtension);
                                             }
                                         }
