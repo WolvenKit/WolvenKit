@@ -13,6 +13,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
@@ -37,7 +38,7 @@ namespace CP77.CR2W
 
         #region Methods
 
-        
+
 
         /// <summary>
         /// Creates and archive from a folder and packs all files inside into it

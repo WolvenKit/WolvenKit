@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W.Types
@@ -138,17 +139,17 @@ namespace WolvenKit.RED3.CR2W.Types
                 collision_radius = new CFloat(cr2w, this, nameof(collision_radius)),
                 collision_kill_when_collide = new CBool(cr2w, this, nameof(collision_kill_when_collide)),
                 collision_self_emitter_index = new CUInt32(cr2w, this, nameof(collision_self_emitter_index)),
-                
 
-               
 
-                
+
+
+
 
                 //CParticleModificatorCollision
                 collision_spawn_probability = new CFloat(cr2w, this, nameof(collision_spawn_probability)),
                 collision_spawn_parent_emitter_index = new CUInt32(cr2w, this, nameof(collision_spawn_parent_emitter_index)),
 
-                
+
                 //CParticleModificatorAlphaByDistance
                 alphaByDistanceFar = new CFloat(cr2w, this, nameof(alphaByDistanceFar)),
                 alphaByDistanceNear = new CFloat(cr2w, this, nameof(alphaByDistanceNear))
@@ -180,7 +181,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override IEditableVariable Copy(ICR2WCopyAction context)
         {
-            return W3ReaderExtensions.CopyViaBuffer(this, base.Copy(context));
+            return BinaryReaderExtensions.CopyViaBuffer(this, base.Copy(context));
         }
 
         public override CVariable SetValue(object val)

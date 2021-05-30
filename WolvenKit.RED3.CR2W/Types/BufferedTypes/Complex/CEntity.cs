@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using WolvenKit.RED3.CR2W.Reflection;
 using static WolvenKit.RED3.CR2W.Types.Enums;
 using FastMember;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types

@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W.Types
@@ -12,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CUInt64()
         {
-            
+
         }
 
         public CUInt64(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
@@ -70,7 +71,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CUInt32()
         {
-            
+
         }
 
         public CUInt32(IRed3EngineFile cr2w, CVariable parent, string name)
@@ -127,7 +128,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CUInt16()
         {
-            
+
         }
 
         public CUInt16(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
@@ -185,7 +186,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CUInt8()
         {
-            
+
         }
         public CUInt8(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -241,7 +242,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CInt64()
         {
-            
+
         }
         public CInt64(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -297,7 +298,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CInt32()
         {
-            
+
         }
         public CInt32(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -355,7 +356,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CInt16()
         {
-            
+
         }
         public CInt16(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -411,7 +412,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CInt8()
         {
-            
+
         }
         public CInt8(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -467,7 +468,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CDynamicInt()
         {
-            
+
         }
         public CDynamicInt(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -530,7 +531,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CVLQInt32()
         {
-            
+
         }
         public CVLQInt32(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -580,7 +581,7 @@ namespace WolvenKit.RED3.CR2W.Types
             return val.ToString();
         }
 
-      
+
     }
 
     [DataContract(Namespace = "")]
@@ -588,7 +589,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CBool()
         {
-            
+
         }
         public CBool(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)

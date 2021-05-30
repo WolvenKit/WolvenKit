@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W.Reflection;
 

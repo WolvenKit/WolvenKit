@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED3.CR2W.Types;
 
-namespace WolvenKit.RED3.CR2W.Reflection
+namespace WolvenKit.Core.Extensions
 {
     public static class EnumExtensions
     {

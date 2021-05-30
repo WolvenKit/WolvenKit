@@ -27,8 +27,4 @@
 
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="RED3\Types" />
-    </ItemGroup>
-
 </Project>

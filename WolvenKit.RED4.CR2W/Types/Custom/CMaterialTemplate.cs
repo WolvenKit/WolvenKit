@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
 
@@ -64,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 {
                     if (handle.Reference?.data is not CMaterialParameter param) continue;
                     var nam = param.ParameterName;
-                    
+
                     // write
                     if (!Enum.TryParse(param.REDType, out EMaterialTemplateType type))
                         throw new InvalidParsingException(nameof(CMaterialTemplate));

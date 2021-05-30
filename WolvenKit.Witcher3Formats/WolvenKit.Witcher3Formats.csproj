@@ -78,7 +78,7 @@
         <PackageReference Include="Snappy.NET" Version="1.1.1.8" NoWarn="NU1701" />
         <PackageReference Include="Crc32C.NET" Version="1.0.5" NoWarn="NU1701" />
         <PackageReference Include="ini-parser" Version="2.5.2" NoWarn="NU1701" />
-        <PackageReference Include="WolvenKit.RED3.CR2W" Version="3.32.0" />
+
     </ItemGroup>
 
 
@@ -86,6 +86,7 @@
         <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
         <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
         <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
+        <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj" />
     </ItemGroup>
 
 
