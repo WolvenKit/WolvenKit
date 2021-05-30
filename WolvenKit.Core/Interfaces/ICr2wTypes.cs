@@ -1,13 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 
 namespace WolvenKit.Common.Model.Cr2w
@@ -34,10 +30,10 @@ namespace WolvenKit.Common.Model.Cr2w
     {
         public uint Flags { get; }
         public uint Index { get; }
-        public uint Offset { get; set; }
-        public uint DiskSize { get; set; }
-        public uint MemSize { get; set; }
-        public uint Crc32 { get; set; }
+        [JsonIgnore] public uint Offset { get; set; }
+        [JsonIgnore] public uint DiskSize { get; set; }
+        [JsonIgnore] public uint MemSize { get; set; }
+        [JsonIgnore] public uint Crc32 { get; set; }
 
 
         public void ReadData(BinaryReader file);
@@ -50,11 +46,16 @@ namespace WolvenKit.Common.Model.Cr2w
     }
     public interface ICR2WExport
     {
-        public IEditableVariable data { get; }
         public string REDType { get; }
-        public string REDName { get; }
 
-        [JsonIgnore] public IEditableVariable unknownBytes { get; }
+        public int ParentChunkIndex { get; }
+
+        public IEditableVariable Data { get; }
+
+        [JsonIgnore] public string REDName { get; }
+        [JsonIgnore] public int ChunkIndex { get; }
+
+        [JsonIgnore] public IEditableVariable UnknownBytes { get; }
 
         [JsonIgnore] public ICR2WExport ParentChunk { get; set; }
         [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
@@ -64,7 +65,7 @@ namespace WolvenKit.Common.Model.Cr2w
         [JsonIgnore] public List<IChunkPtrAccessor> AbReferences { get; }
         [JsonIgnore] public List<string> UnknownTypes { get; }
 
-        public int ChunkIndex { get; }
+
 
         public void CreateDefaultData(IEditableVariable cvar = null);
         public string GetFullChunkTypeDependencyString();

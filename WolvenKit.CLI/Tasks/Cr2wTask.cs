@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using CP77.CR2W;
 using Newtonsoft.Json;
-using WolvenKit.Common;
+//using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {
@@ -106,14 +107,16 @@ namespace CP77Tools.Tasks
                         return;
                     }
 
-                    //write
-                    File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"),
-                        JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.None,
-                            TypeNameHandling = TypeNameHandling.None
-                        }));
+                    //var json = System.Text.Json.JsonSerializer.Serialize(cr2w, new JsonSerializerOptions { WriteIndented = true, });
+                    var json = JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        // ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        // PreserveReferencesHandling = PreserveReferencesHandling.None,
+                        TypeNameHandling = TypeNameHandling.None
+                    });
+
+                    File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"), json);
                 }
 
                 Interlocked.Increment(ref progress);

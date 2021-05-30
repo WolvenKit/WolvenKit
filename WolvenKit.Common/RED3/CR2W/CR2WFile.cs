@@ -128,7 +128,7 @@ namespace WolvenKit.RED3.CR2W
 
         #region Supporting Functions
 
-        
+
 
         // Does not reindex /TODO
         public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null,
@@ -698,15 +698,7 @@ namespace WolvenKit.RED3.CR2W
             return (newstringtable, newstrings, nameslist, importslist);
         }
 
-        public void GetChunks()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Common.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
-        {
-            throw new NotImplementedException();
-        }
+        public EFileReadErrorCodes Read(BinaryReader file) => throw new NotImplementedException();
 
         public void Write(BinaryWriter file)
         {
@@ -940,11 +932,11 @@ namespace WolvenKit.RED3.CR2W
 
             // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
             // to CHandle<IBehTreeNodeDefinition> RootNode in CBehTree in patch1
-            bool skipnamecheck = Chunks?.Count > 0 && Chunks.First().data is CBehTree;
+            bool skipnamecheck = Chunks?.Count > 0 && Chunks.First().Data is CBehTree;
 
             foreach (var c in Chunks)
             {
-                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
+                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.Data));
             }
 
             newimportslist.AddRange(newsoftlist);
@@ -1019,13 +1011,13 @@ namespace WolvenKit.RED3.CR2W
 
                     case IPtrAccessor p:
                         if (p.Reference != null)
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.data));
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.Data));
                         break;
 
                     case IHandleAccessor h:
                         if (h.ChunkHandle)
                             if (h.Reference != null)
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.Data));
                         break;
 
                     case ISoftAccessor s:
@@ -1044,7 +1036,7 @@ namespace WolvenKit.RED3.CR2W
 
                     case IdHandle i:
                         returnedVariables.Add(new SNameArg(EStringTableMod.None, i));
-                        returnedVariables.Add(new SNameArg(EStringTableMod.None, i.handle.Reference?.data));
+                        returnedVariables.Add(new SNameArg(EStringTableMod.None, i.handle.Reference?.Data));
                         break;
                     // check all other CVariables
                     case CVariable cvar:
@@ -1096,7 +1088,7 @@ namespace WolvenKit.RED3.CR2W
                                 break;
 
                             case CLayerInfo cli:
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cli.ParentGroup.Reference?.data));
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cli.ParentGroup.Reference?.Data));
                                 break;
 
                             case CMaterialInstance cmi:
@@ -1112,36 +1104,36 @@ namespace WolvenKit.RED3.CR2W
                             case CBehaviorGraphContainerNode bgcn:
                                 if (bgcn.Inputnodes != null)
                                     returnedVariables.AddRange(bgcn.Inputnodes.Select(item =>
-                                        new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                        new SNameArg(EStringTableMod.None, (item.Reference?.Data))));
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk1));
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk2));
                                 switch (bgcn)
                                 {
                                     case CBehaviorGraphStageNode bgsn:
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsn.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsn.Outputnode.Reference?.Data));
                                         break;
 
                                     case CBehaviorGraphTopLevelNode bgtln:
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgtln.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgtln.Outputnode.Reference?.Data));
                                         break;
 
                                     case CBehaviorGraphStateNode bgstn:
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgstn.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgstn.Outputnode.Reference?.Data));
                                         break;
 
                                     case CBehaviorGraphStateMachineNode bgsmn:
                                         if (bgsmn.Unk3 != null)
                                             returnedVariables.AddRange(bgsmn.Unk3.Select(item =>
-                                                new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                                new SNameArg(EStringTableMod.None, (item.Reference?.Data))));
                                         if (bgsmn.Unk4 != null)
                                             returnedVariables.AddRange(bgsmn.Unk4.Select(item =>
-                                                new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                                new SNameArg(EStringTableMod.None, (item.Reference?.Data))));
 
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Handle1.Reference?.data));
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Handle1.Reference?.Data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Outputnode.Reference?.Data));
                                         if (bgsmn.Inputnodes != null)
                                             returnedVariables.AddRange(bgsmn.Inputnodes.Select(item =>
-                                                new SNameArg(EStringTableMod.None, item.Reference?.data)));
+                                                new SNameArg(EStringTableMod.None, item.Reference?.Data)));
                                         returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk1));
                                         returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk2));
                                         break;
@@ -1152,13 +1144,13 @@ namespace WolvenKit.RED3.CR2W
                                 break;
 
                             case CBehaviorGraph cbg:
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.Reference?.data));
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.Reference?.Data));
                                 if (cbg.Variables1 != null)
                                     returnedVariables.AddRange(cbg.Variables1.Select(item =>
                                         new SNameArg(EStringTableMod.None, item)));
                                 if (cbg.Descriptions != null)
                                     returnedVariables.AddRange(cbg.Descriptions.Select(item =>
-                                        new SNameArg(EStringTableMod.None, item.Reference?.data)));
+                                        new SNameArg(EStringTableMod.None, item.Reference?.Data)));
                                 if (cbg.Vectorvariables1 != null)
                                     returnedVariables.AddRange(cbg.Vectorvariables1.Select(item =>
                                         new SNameArg(EStringTableMod.None, item)));

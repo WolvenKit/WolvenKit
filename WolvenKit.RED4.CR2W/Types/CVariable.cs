@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
@@ -55,24 +55,67 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Properties
 
+        /// <summary>
+        /// AspectName in frmChunkProperties
+        /// Gets the RedEngine Typename from the WkitType
+        /// e.g. Color from CColor, or Uint64 from CUInt64
+        /// Can be overwritten (e.g. in Array, Ptr and other generic types)
+        /// </summary>
+        public virtual string REDType => REDReflection.GetREDTypeString(GetType());
+
+        public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
+
+        /// <summary>
+        /// Flags inherited from cr2w export (aka chunk)
+        /// 0 means chunk is uncooked (useful for some file types that have
+        /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
+        /// Is set on file read and should not be modified
+        /// </summary>
+        [JsonIgnore] public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
+
+        /// <summary>
+        /// AspectName in frmChunkProperties
+        /// Name of the Variable, is set upon read
+        /// otherwise has to be set manually
+        /// Consider moving this to the constructor
+        /// </summary>
+        [JsonIgnore] public string REDName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new NotImplementedException("REDName");
+                    //return "<NO NAME SET>";
+                }
+                else
+                {
+                    return name;
+                }
+            }
+            private set => name = value;
+        }
+
+
+
 #if DEBUG
-        [JsonIgnore] [Browsable(false)] public int GottenVarChunkIndex => LookUpChunkIndex();
+        [JsonIgnore] public int GottenVarChunkIndex => LookUpChunkIndex();
 #endif
-        [JsonIgnore] [Browsable(false)] public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
+        [JsonIgnore] public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
 
-        [JsonIgnore] [Browsable(false)] public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
 
-        [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
 
-        [JsonIgnore] [Browsable(false)] public List<IEditableVariable> UnknownCVariables { get; set; } = new();
+        [JsonIgnore] public TypeAccessor accessor { get; }
 
-        [JsonIgnore] [Browsable(false)] public IWolvenkitFile Cr2wFile { get; set; }
+        [JsonIgnore] public List<IEditableVariable> UnknownCVariables { get; set; } = new();
+
+        [JsonIgnore] public IWolvenkitFile Cr2wFile { get; set; }
 
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
-        [JsonIgnore] [Browsable(false)] public IRed4EngineFile cr2w => Cr2wFile as IRed4EngineFile;
+        [JsonIgnore] public IRed4EngineFile cr2w => Cr2wFile as IRed4EngineFile;
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -102,22 +145,16 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        [JsonIgnore] [Browsable(false)] public bool IsNulled { get; set; }
+        [JsonIgnore] public bool IsNulled { get; set; }
 
         private ushort _redFlags;
-        /// <summary>
-        /// Flags inherited from cr2w export (aka chunk)
-        /// 0 means chunk is uncooked (useful for some file types that have
-        /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
-        /// Is set on file read and should not be modified
-        /// </summary>
-        [Browsable(false)] public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
+
         public void SetREDFlags(ushort flag) => _redFlags = flag;
 
         /// <summary>
         /// an internal id that is used to track cvariables
         /// </summary>
-        [JsonIgnore] [Browsable(false)] public string UniqueIdentifier => GetFullDependencyStringName();
+        [JsonIgnore] public string UniqueIdentifier => GetFullDependencyStringName();
 
 
 
@@ -128,40 +165,18 @@ namespace WolvenKit.RED4.CR2W.Types
         /// otherwise must be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        [JsonIgnore] [Browsable(false)] public IEditableVariable ParentVar { get; set; }
+        [JsonIgnore] public IEditableVariable ParentVar { get; set; }
 
         /// <summary>
         /// -1 for children CVars, actual chunk index for root cvar aka cr2wexportwrapper.data
         /// </summary>
-        [JsonIgnore] [Browsable(false)] public int VarChunkIndex { get; set; }
+        [JsonIgnore] public int VarChunkIndex { get; set; }
 
 
         private string name;
         private bool _isSerialized;
 
-        /// <summary>
-        /// AspectName in frmChunkProperties
-        /// Name of the Variable, is set upon read
-        /// otherwise has to be set manually
-        /// Consider moving this to the constructor
-        /// </summary>
-        [Browsable(false)]
-        public string REDName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    throw new NotImplementedException("REDName");
-                    //return "<NO NAME SET>";
-                }
-                else
-                {
-                    return name;
-                }
-            }
-            private set => name = value;
-        }
+
 
         /// <summary>
         /// !! Must ONLY be called from CArray type variables!!
@@ -169,18 +184,12 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <param name="val"></param>
         public void SetREDName(string val) => REDName = val;
 
-        /// <summary>
-        /// AspectName in frmChunkProperties
-        /// Gets the RedEngine Typename from the WkitType
-        /// e.g. Color from CColor, or Uint64 from CUInt64
-        /// Can be overwritten (e.g. in Array, Ptr and other generic types)
-        /// </summary>
-        [Browsable(false)] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
+
 
         /// <summary>
         /// AspectName in frmChunkProperties
         /// </summary>
-        [Browsable(false)] public string REDValue => this.ToString();
+        [JsonIgnore] public string REDValue => this.ToString();
         /// <summary>
         /// Exported to database
         /// </summary>
@@ -188,6 +197,18 @@ namespace WolvenKit.RED4.CR2W.Types
         #endregion
 
         #region Methods
+
+        [OnSerializing()]
+        internal void OnSerializingMethod(StreamingContext context)
+        {
+
+        }
+
+        [OnSerialized()]
+        internal void OnSerializedMethod(StreamingContext context)
+        {
+
+        }
 
         protected T GetProperty<T>(ref T backingField, [CallerMemberName] string callerName = "") where T : class
         {

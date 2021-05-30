@@ -9,23 +9,25 @@ namespace WolvenKit.Common.Model.Cr2w
 {
     public interface IEditableVariable : IEditorBindable
     {
-        [Browsable(false)] string REDName { get; }
+        string REDName { get; }
 
-        [Browsable(false)] string REDType { get; }
+        string REDType { get; }
 
-        [JsonIgnore] [Browsable(false)] string REDValue { get; }
+        public List<IEditableVariable> ChildrExistingVariables { get; }
 
-        [JsonIgnore] [Browsable(false)] ushort REDFlags { get; }
+        [JsonIgnore] string REDValue { get; }
 
-        [JsonIgnore] [Browsable(false)] string UniqueIdentifier { get; }
+        [JsonIgnore] ushort REDFlags { get; }
 
-        [JsonIgnore] [Browsable(false)] IEditableVariable ParentVar { get; }
-        
-        [JsonIgnore] [Browsable(false)] int VarChunkIndex { get; set; }
+        [JsonIgnore] string UniqueIdentifier { get; }
 
-        [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
+        [JsonIgnore] IEditableVariable ParentVar { get; }
 
-        [JsonIgnore] [Browsable(false)] List<IEditableVariable> ChildrEditableVariables { get; }
+        [JsonIgnore] int VarChunkIndex { get; set; }
+
+        [JsonIgnore] public TypeAccessor accessor { get; }
+
+        [JsonIgnore] List<IEditableVariable> ChildrEditableVariables { get; }
 
 
 

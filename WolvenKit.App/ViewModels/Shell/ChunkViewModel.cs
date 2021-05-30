@@ -139,7 +139,7 @@ namespace WolvenKit.ViewModels.Shell
         //public List<ChunkPropertyViewModel> ChildrenProperties =>
         //    Data.ChildrEditableVariables.Select(_ => new ChunkPropertyViewModel(_)).ToList();
 
-        public IEditableVariable Data => _export.data;
+        public IEditableVariable Data => _export.Data;
 
         public bool IsSelected { get; set; }
         public bool IsExpanded { get; set; }

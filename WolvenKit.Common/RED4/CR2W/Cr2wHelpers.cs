@@ -137,7 +137,7 @@ namespace WolvenKit.RED4.CR2W
 
             foreach (var c in file.Chunks)
             {
-                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
+                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.Data));
             }
 
             newimportslist.AddRange(newsoftlist);
@@ -199,7 +199,7 @@ namespace WolvenKit.RED4.CR2W
                     case IHandleAccessor h:
                         if (h.ChunkHandle)
                             if (h.Reference != null)
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.Data));
                         break;
                     case ISoftAccessor s:
                         break;

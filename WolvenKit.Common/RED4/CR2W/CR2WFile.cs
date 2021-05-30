@@ -1,32 +1,25 @@
-using Catel;
 using RED.CRC32;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Catel.IoC;
+using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model;
 using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
-using ISerializable = System.Runtime.Serialization.ISerializable;
 
 namespace WolvenKit.RED4.CR2W
 {
-    [Serializable]
-    public class CR2WFile : Catel.Data.ObservableObject, IRed4EngineFile, ISerializable
+    public class CR2WFile : Catel.Data.ObservableObject, IRed4EngineFile
     {
         #region Enums
         public enum EChunkDisplayMode
@@ -46,11 +39,14 @@ namespace WolvenKit.RED4.CR2W
         #endregion
 
         #region Constants
+
         public const uint MAGIC = 0x57325243; // "W2RC"
         private const long MAGIC_SIZE = 4;
         private const long FILEHEADER_SIZE = 36;
         private const long TABLEHEADER_SIZE = 12 * 10;
         private readonly int[] TABLES_SIZES = new int[6] { 8, 8, 16, 24, 24, 24 };
+        private const uint DEADBEEF = 0xDEADBEEF;
+
         #endregion
 
         public CR2WFile()
@@ -72,10 +68,6 @@ namespace WolvenKit.RED4.CR2W
         }
 
         #region Fields
-        // constants
-
-        private const uint DEADBEEF = 0xDEADBEEF;
-
         // IO
         private CR2WFileHeader m_fileheader;
         private CR2WTable[] m_tableheaders;
@@ -88,16 +80,14 @@ namespace WolvenKit.RED4.CR2W
         private EHashVersion hashVersion = EHashVersion.Latest;
 
         private CR2WFile additionalCr2WFile;
-        public byte[] AdditionalCr2WFileBytes;
-
-        [JsonIgnore]
-        public bool CreatePropertyOnAccess { get; set; }= true;
 
         #endregion
 
         #region Properties
 
-        public CR2WFileHeader Header => m_fileheader;
+        [NonSerialized] public byte[] AdditionalCr2WFileBytes;
+
+        [JsonIgnore] public bool CreatePropertyOnAccess { get; set; }= true;
 
         [JsonIgnore] public IVariableEditor EditorController { get; set; }
 
@@ -105,18 +95,36 @@ namespace WolvenKit.RED4.CR2W
 
         [JsonIgnore] public bool IsDirty { get; set; }
 
-        public string FileName { get; set; }
+        [JsonIgnore] public string FileName { get; set; }
         [JsonIgnore] public List<string> UnknownTypes { get; } = new();
         [JsonIgnore] public List<string> UnknownVars { get; set; } = new();
 
         [JsonIgnore] public Dictionary<uint, string> StringDictionary { get; private set; }
 
         [JsonIgnore] public List<ICR2WName> Names { get; private set; }
-        public List<ICR2WImport> Imports { get; private set; }
-        public List<CR2WPropertyWrapper> Properties { get; private set; }
+        [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
+        [JsonIgnore] public List<CR2WPropertyWrapper> Properties { get; private set; }
         public List<ICR2WExport> Chunks { get; private set; }
         public List<ICR2WBuffer> Buffers { get; private set; }
-        public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
+        [JsonIgnore] public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
+
+        [JsonIgnore] public CR2WFileHeader Header => m_fileheader;
+
+        #endregion
+
+        #region methods
+
+        [OnSerializing]
+        internal void OnSerializingMethod(StreamingContext context)
+        {
+
+        }
+
+        [OnSerialized]
+        internal void OnSerializedMethod(StreamingContext context)
+        {
+
+        }
 
         #endregion
 
@@ -131,7 +139,7 @@ namespace WolvenKit.RED4.CR2W
             }
 
             return (types,
-                Chunks.Sum(chunk => (chunk.unknownBytes as CBytes).Bytes.Length));
+                Chunks.Sum(chunk => (chunk.UnknownBytes as CBytes).Bytes.Length));
         }
 
         public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
@@ -976,25 +984,6 @@ namespace WolvenKit.RED4.CR2W
 
 
         #endregion
-
-        Task<EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
-        {
-            throw new NotImplementedException("IWolvenkitFile.Read");
-        }
-
-        public void GetChunks()
-        {
-            throw new NotImplementedException("GetChunks");
-        }
-
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue(nameof(Header), m_fileheader);
-            info.AddValue(nameof(Chunks), Chunks);
-            info.AddValue(nameof(Imports), Imports);
-            info.AddValue(nameof(Buffers), Buffers);
-        }
 
     }
 }

@@ -34,11 +34,11 @@ namespace WolvenKit.RED3.CR2W
         #region Properties
 
         public ICR2WExport DestinationChunk { get; set; }
-        public IEditableVariable DestinationCVar => DestinationChunk.data;
+        public IEditableVariable DestinationCVar => DestinationChunk.Data;
         public IWolvenkitFile DestinationFile { get; set; }
         public IEditableVariable Parent { get; set; }
         public ICR2WExport SourceChunk { get; set; }
-        public IEditableVariable SourceCVar => SourceChunk.data;
+        public IEditableVariable SourceCVar => SourceChunk.Data;
         public IWolvenkitFile SourceFile { get; set; }
 
         #endregion Properties
@@ -73,7 +73,7 @@ namespace WolvenKit.RED3.CR2W
             // Pointers are handled during this.
             foreach (var chunktranslationentry in chunkTranslation)
             {
-                chunktranslationentry.Value.CreateDefaultData(chunktranslationentry.Key.data.Copy(this));
+                chunktranslationentry.Value.CreateDefaultData(chunktranslationentry.Key.Data.Copy(this));
             }
 
             // From root call : reparent copied chunks
@@ -104,7 +104,7 @@ namespace WolvenKit.RED3.CR2W
                 SourceChunk = sourcechunk;
                 //Create the related chunk
                 var newchunk = (DestinationFile as IRed3EngineFile).CreateChunk(
-                        sourcechunk.data.REDType,
+                        sourcechunk.Data.REDType,
                         (DestinationFile as IRed3EngineFile).GetLastChildrenIndexRecursive(DestinationChunk) + 1);
 
                 if (!chunkTranslation.ContainsKey(sourcechunk))
@@ -131,7 +131,7 @@ namespace WolvenKit.RED3.CR2W
             // Pointers are handled during this.
             foreach (var chunktranslationentry in chunkTranslation)
             {
-                var copy = chunktranslationentry.Key.data.Copy(this);
+                var copy = chunktranslationentry.Key.Data.Copy(this);
                 chunktranslationentry.Value.CreateDefaultData(copy);
 
                 // Corner cases :
@@ -223,9 +223,9 @@ namespace WolvenKit.RED3.CR2W
             foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
             {
                 var newchunk = (DestinationFile as IRed3EngineFile).CreateChunk(
-                    sourcevirtualchildchunk.data.REDType,
+                    sourcevirtualchildchunk.Data.REDType,
                     inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
-                            : (destinationchunk.data.Cr2wFile as IRed3EngineFile).GetLastChildrenIndexRecursive(destinationchunk) + 1);
+                            : (destinationchunk.Data.Cr2wFile as IRed3EngineFile).GetLastChildrenIndexRecursive(destinationchunk) + 1);
 
                 if (!chunkTranslation.ContainsKey(sourcevirtualchildchunk))
                 {

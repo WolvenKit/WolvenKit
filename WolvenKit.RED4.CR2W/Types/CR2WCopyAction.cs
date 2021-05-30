@@ -33,11 +33,11 @@ namespace WolvenKit.RED4.CR2W
         #region Properties
 
         public ICR2WExport DestinationChunk { get; set; }
-        public IEditableVariable DestinationCVar => DestinationChunk.data;
+        public IEditableVariable DestinationCVar => DestinationChunk.Data;
         public IWolvenkitFile DestinationFile { get; set; }
         public IEditableVariable Parent { get; set; }
         public ICR2WExport SourceChunk { get; set; }
-        public IEditableVariable SourceCVar => SourceChunk.data;
+        public IEditableVariable SourceCVar => SourceChunk.Data;
         public IWolvenkitFile SourceFile { get; set; }
 
         #endregion Properties
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W
             // Pointers are handled during this.
             foreach (var chunktranslationentry in chunkTranslation)
             {
-                chunktranslationentry.Value.CreateDefaultData(chunktranslationentry.Key.data.Copy(this));
+                chunktranslationentry.Value.CreateDefaultData(chunktranslationentry.Key.Data.Copy(this));
             }
 
             // From root call : reparent copied chunks
@@ -103,7 +103,7 @@ namespace WolvenKit.RED4.CR2W
                 SourceChunk = sourcechunk;
                 //Create the related chunk
                 var newchunk = DestinationFile.CreateChunk(
-                        sourcechunk.data.REDType,
+                        sourcechunk.Data.REDType,
                         Cr2wHelper.GetLastChildrenIndexRecursive(DestinationChunk) + 1);
 
                 if (!chunkTranslation.ContainsKey(sourcechunk))
@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.CR2W
             // Pointers are handled during this.
             foreach (var chunktranslationentry in chunkTranslation)
             {
-                var copy = chunktranslationentry.Key.data.Copy(this);
+                var copy = chunktranslationentry.Key.Data.Copy(this);
                 chunktranslationentry.Value.CreateDefaultData(copy);
 
                 //TODO: no CComponent in cp77
@@ -224,7 +224,7 @@ namespace WolvenKit.RED4.CR2W
             foreach (var sourcevirtualchildchunk in sourcechunk.VirtualChildrenChunks)
             {
                 var newchunk = DestinationFile.CreateChunk(
-                    sourcevirtualchildchunk.data.REDType,
+                    sourcevirtualchildchunk.Data.REDType,
                     inplace ? destinationchunk.ChunkIndex + sourcevirtualchildchunk.ChunkIndex - SourceChunk.ChunkIndex
                             : Cr2wHelper.GetLastChildrenIndexRecursive(destinationchunk) + 1);
 

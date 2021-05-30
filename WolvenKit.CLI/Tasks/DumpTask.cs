@@ -203,8 +203,8 @@ namespace CP77Tools.Tasks
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
                                 var cr2w = _modTools.TryReadCr2WFile(ms);
 
-                                if (cr2w?.Chunks.FirstOrDefault()?.data is not CBitmapTexture xbm ||
-                                    !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                                if (cr2w?.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
+                                    !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
                                 {
                                     return;
                                 }
