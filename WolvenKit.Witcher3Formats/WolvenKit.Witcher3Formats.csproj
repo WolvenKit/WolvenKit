@@ -78,7 +78,7 @@
         <PackageReference Include="Snappy.NET" Version="1.1.1.8" NoWarn="NU1701" />
         <PackageReference Include="Crc32C.NET" Version="1.0.5" NoWarn="NU1701" />
         <PackageReference Include="ini-parser" Version="2.5.2" NoWarn="NU1701" />
-        <PackageReference Include="WolvenKit.RED3.CR2W" Version="3.0.0" />
+        <PackageReference Include="WolvenKit.RED3.CR2W" Version="3.32.0" />
     </ItemGroup>
 
 
