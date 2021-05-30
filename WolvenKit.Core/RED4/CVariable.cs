@@ -13,7 +13,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.Core;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Helpers;
 using WolvenKit.RED4.CR2W.Reflection;

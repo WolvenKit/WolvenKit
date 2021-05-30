@@ -1,6 +1,5 @@
 using System.IO;using System.Runtime.Serialization;
 using WolvenKit.RED4.CR2W.Reflection;
-using static WolvenKit.RED4.CR2W.Types.Enums;
 using FastMember;
 
 namespace WolvenKit.RED4.CR2W.Types

@@ -138,7 +138,7 @@ namespace WolvenKit.RED3.CR2W
                 // - add descending CNewNPC components
                 if (targetarray.REDName == "Components" &&
                     DestinationFile.Chunks[targetarray.LookUpChunkIndex()].REDType == "CNewNPC" &&
-                    copy is CComponent &&
+                    copy.REDType == "CComponent" &&
                     !sourcechunks.Contains(chunktranslationentry.Key))
                 {
                     var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));

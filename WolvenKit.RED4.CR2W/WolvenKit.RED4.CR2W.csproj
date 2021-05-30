@@ -3,7 +3,6 @@
 	<PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Authors>Hambalkó Bence, Moritz Baron</Authors>
 		<Company>WolvenKit</Company>
 		<Description>File formats (Cyberpunk 2077) for the WolvenKit Mod Editor.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -12,9 +11,9 @@
 		<RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
 		<PackageTags>wolvenkit, cyberpunk2077</PackageTags>
         <PackageOutputPath>./nupkg</PackageOutputPath>
-		<AssemblyVersion>3.1.0.0</AssemblyVersion>
-		<FileVersion>3.1.0.0</FileVersion>
-		<Version>3.1.0</Version>
+		<AssemblyVersion>3.22.0.0</AssemblyVersion>
+		<FileVersion>3.22.0.0</FileVersion>
+		<Version>3.22.0</Version>
 		<NoWarn>$(NoWarn);NU5104</NoWarn>
 	</PropertyGroup>
 

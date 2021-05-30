@@ -5,15 +5,15 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Linq;
-using WolvenKit.RED4.CR2W.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
-    [REDMeta()]
+    [REDMeta]
     public class CArray<T> : CArrayBase<T> where T : CVariable
     {
 

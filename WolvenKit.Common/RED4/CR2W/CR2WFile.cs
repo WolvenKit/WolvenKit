@@ -21,10 +21,12 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
+using ISerializable = System.Runtime.Serialization.ISerializable;
 
 namespace WolvenKit.RED4.CR2W
 {
-    public class CR2WFile : Catel.Data.ObservableObject, IRed4EngineFile
+    [Serializable]
+    public class CR2WFile : Catel.Data.ObservableObject, IRed4EngineFile, ISerializable
     {
         #region Enums
         public enum EChunkDisplayMode
@@ -97,27 +99,20 @@ namespace WolvenKit.RED4.CR2W
 
         public CR2WFileHeader Header => m_fileheader;
 
-        //[JsonIgnore]
-        //public ILoggerService Logger { get; }
+        [JsonIgnore] public IVariableEditor EditorController { get; set; }
 
-        [JsonIgnore]
-        public IVariableEditor EditorController { get; set; }
+        [JsonIgnore] private Dictionary<int, ICR2WExport> Chunksdict { get; set; }
 
-        [JsonIgnore]
-        public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }
-
-
+        [JsonIgnore] public bool IsDirty { get; set; }
 
         public string FileName { get; set; }
-        public List<string> UnknownTypes { get; } = new();
-        public List<string> UnknownVars { get; set; } = new();
+        [JsonIgnore] public List<string> UnknownTypes { get; } = new();
+        [JsonIgnore] public List<string> UnknownVars { get; set; } = new();
 
-        public Dictionary<uint, string> StringDictionary { get; private set; }
+        [JsonIgnore] public Dictionary<uint, string> StringDictionary { get; private set; }
 
-        [JsonIgnore]
-        public List<ICR2WName> Names { get; private set; }
+        [JsonIgnore] public List<ICR2WName> Names { get; private set; }
         public List<ICR2WImport> Imports { get; private set; }
-        public bool IsDirty { get; set; }
         public List<CR2WPropertyWrapper> Properties { get; private set; }
         public List<ICR2WExport> Chunks { get; private set; }
         public List<ICR2WBuffer> Buffers { get; private set; }
@@ -338,7 +333,7 @@ namespace WolvenKit.RED4.CR2W
             return removed;
         }
 
-        
+
 
         public int GetStringIndex(string name, bool addnew = false)
         {
@@ -534,7 +529,6 @@ namespace WolvenKit.RED4.CR2W
         /// <returns></returns>
         public EFileReadErrorCodes Read(BinaryReader file)
         {
-            //m_stream = file.BaseStream;
             StringDictionary.Clear();
 
             var stopwatch1 = new Stopwatch();
@@ -718,9 +712,6 @@ namespace WolvenKit.RED4.CR2W
         }
         #endregion
 
-
-
-
         #region Write
         public void Write(BinaryWriter file)
         {
@@ -878,9 +869,9 @@ namespace WolvenKit.RED4.CR2W
             CreatePropertyOnAccess = true;
         }
 
-        
 
-       
+
+
 
 
 
@@ -995,6 +986,16 @@ namespace WolvenKit.RED4.CR2W
         {
             throw new NotImplementedException("GetChunks");
         }
+
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Header), m_fileheader);
+            info.AddValue(nameof(Chunks), Chunks);
+            info.AddValue(nameof(Imports), Imports);
+            info.AddValue(nameof(Buffers), Buffers);
+        }
+
     }
 }
 

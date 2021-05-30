@@ -14,7 +14,7 @@
       <RepositoryType>git</RepositoryType>
       <PackageTags>wolvenkit, witcher3, cyberpunk2077</PackageTags>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <Version>1.1.0</Version>
+      <Version>1.2.0</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
@@ -25,6 +25,10 @@
         <PackageReference Include="CsvHelper" Version="27.0.2" />
         <PackageReference Include="protobuf-net.Core" Version="3.0.101" />
 
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="RED3\Types" />
     </ItemGroup>
 
 </Project>

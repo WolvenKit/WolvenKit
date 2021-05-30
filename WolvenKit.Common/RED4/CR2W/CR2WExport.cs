@@ -11,6 +11,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
+using ISerializable = System.Runtime.Serialization.ISerializable;
 
 [assembly: ContractNamespaceAttribute("", ClrNamespace = "WolvenKit.RED4.CR2W")]
 
@@ -48,7 +49,8 @@ namespace WolvenKit.RED4.CR2W
         public uint crc32;              // created upon write   //done
     }
 
-    public class CR2WExportWrapper : ICR2WExport
+    [Serializable]
+    public class CR2WExportWrapper : ICR2WExport, ISerializable
     {
         #region Constructors
 
@@ -448,19 +450,19 @@ namespace WolvenKit.RED4.CR2W
 
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-        public void SetREDName(string val)
-        {
-            throw new NotImplementedException(nameof(SetREDName));
-        }
+        public void SetREDName(string val) => throw new NotImplementedException(nameof(SetREDName));
 
         public void SetType(ushort val) => _export.className = val;
 
         public override string ToString() => REDName;
 
-        public void Write(BinaryWriter file)
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException(nameof(Write));
+            info.AddValue(nameof(Export), Export);
+            info.AddValue(nameof(data), data.GetExistingVariables(true));
         }
+
+        public void Write(BinaryWriter file) => throw new NotImplementedException(nameof(Write));
 
         public void WriteData(BinaryWriter file)
         {

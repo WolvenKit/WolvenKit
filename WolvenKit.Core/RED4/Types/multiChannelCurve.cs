@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.RED4.CR2W.Reflection;
 using FastMember;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -16,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class multiChannelCurve<T> : CVariable, ICurveDataAccessor where T : CVariable
     {
-        
+
 
         public multiChannelCurve(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {

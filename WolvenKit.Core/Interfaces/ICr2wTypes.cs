@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 
@@ -53,15 +54,15 @@ namespace WolvenKit.Common.Model.Cr2w
         public string REDType { get; }
         public string REDName { get; }
 
-        public IEditableVariable unknownBytes { get; }
+        [JsonIgnore] public IEditableVariable unknownBytes { get; }
 
-        public ICR2WExport ParentChunk { get; set; }
-        public ICR2WExport VirtualParentChunk { get; set; }
-        public List<ICR2WExport> ChildrenChunks { get; }
-        public List<ICR2WExport> VirtualChildrenChunks { get; }
-        public List<IChunkPtrAccessor> AdReferences { get; }
-        public List<IChunkPtrAccessor> AbReferences { get; }
-        public List<string> UnknownTypes { get; }
+        [JsonIgnore] public ICR2WExport ParentChunk { get; set; }
+        [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
+        [JsonIgnore] public List<ICR2WExport> ChildrenChunks { get; }
+        [JsonIgnore] public List<ICR2WExport> VirtualChildrenChunks { get; }
+        [JsonIgnore] public List<IChunkPtrAccessor> AdReferences { get; }
+        [JsonIgnore] public List<IChunkPtrAccessor> AbReferences { get; }
+        [JsonIgnore] public List<string> UnknownTypes { get; }
 
         public int ChunkIndex { get; }
 
@@ -114,7 +115,7 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface IEnumAccessor<T> : IEditorBindable<T>, IEnumAccessor where T : Enum
     {
         string EnumToString();
-        
+
         Type GetEnumType();
     }
 

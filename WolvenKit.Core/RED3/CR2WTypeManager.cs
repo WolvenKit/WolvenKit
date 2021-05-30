@@ -222,13 +222,13 @@ namespace WolvenKit.RED3.CR2W.Types
                 {
                     cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden E3 files! These files are special." +
                         $" If you edited this file and are experiencing errors, please contact a member of the WKit Team. Error code: {fullname}");
-                    return new SItem(cr2w as IRed3EngineFile, parentVariable, varname);
+                    return Create("SItem", varname, cr2w, parentVariable);
                 }
                 else if (fullname.Contains("#CEnvironmentDefinition"))
                 {
                     cr2w.UnknownTypes.Add($"Congratulations! You have found one of the hidden E3 files! These files are special." +
                         $" If you edited this file and are experiencing errors, please contact a member of the WKit Team. Error code: {fullname}");
-                    return new CHandle<CEnvironmentDefinition>(cr2w as IRed3EngineFile, parentVariable, varname);
+                    return Create("handle:CEnvironmentDefinition", varname, cr2w, parentVariable);
                 }
                 else
                 {

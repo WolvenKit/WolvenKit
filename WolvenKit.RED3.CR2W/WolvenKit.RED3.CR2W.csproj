@@ -5,7 +5,6 @@
     <Platforms>AnyCPU;x64</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PackageId>WolvenKit.RED3.CR2W</PackageId>
-    <Authors>Hambalkó Bence, Moritz Baron</Authors>
     <Company>WolvenKit</Company>
     <Product>WolvenKit.RED3.CR2W</Product>
     <Description>File formats (The Witcher 3) for the WolvenKit Mod Editor.</Description>
@@ -15,7 +14,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit, witcher3</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.0</Version>
+    <Version>3.32.0</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
