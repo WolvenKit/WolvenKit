@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.CR2W
     {
         #region Constructors
 
+        public CR2WExportWrapper()
+        {
+            _export = new CR2WExport();
+
+            AdReferences = new List<IChunkPtrAccessor>();
+            AbReferences = new List<IChunkPtrAccessor>();
+        }
+
         /// <summary>
         /// This constructor should be used when manually creating chunks
         /// </summary>

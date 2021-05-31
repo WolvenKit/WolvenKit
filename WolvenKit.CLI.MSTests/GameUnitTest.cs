@@ -34,11 +34,6 @@ namespace WolvenKit.CLI.MSTests
 
         protected static void Setup(TestContext context)
         {
-            // IoC
-            ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-
             // check for CP77_DIR environment variable first
             // overrides hardcoded appsettings.json
             var cp77Dir = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
@@ -83,7 +78,12 @@ namespace WolvenKit.CLI.MSTests
             //protobuf
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-            
+
+            // IoC
+            ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
+            ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+
             s_bm = new ArchiveManager(hashService);
             s_bm.LoadAll(gameBinDir.FullName);
             s_groupedFiles = s_bm.GroupedFiles;

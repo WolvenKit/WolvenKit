@@ -30,7 +30,7 @@ namespace CP77Tools
     internal class Program
     {
         [STAThread]
-        public static /*void*/ Task Main(string[] args)
+        public static void Main(string[] args)
         {
             // try get oodle dll from game
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
@@ -38,7 +38,7 @@ namespace CP77Tools
                 Console.WriteLine("Could not automatically find oo2ext_7_win64.dll. " +
                            "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
                            $"{AppDomain.CurrentDomain.BaseDirectory}.");
-                return Task.CompletedTask;
+                return;
             }
 
             var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
@@ -97,7 +97,7 @@ namespace CP77Tools
 
 
 
-            return parser.InvokeAsync(args);
+            parser.InvokeAsync(args);
         }
 
         private delegate void StrDelegate(string value);

@@ -104,8 +104,12 @@ namespace WolvenKit.RED4.CR2W
         [JsonIgnore] public List<ICR2WName> Names { get; private set; }
         [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
         [JsonIgnore] public List<CR2WPropertyWrapper> Properties { get; private set; }
+
+        [JsonConverter(typeof(ConcreteConverter<List<CR2WExportWrapper>>))]
         public List<ICR2WExport> Chunks { get; private set; }
+        [JsonConverter(typeof(ConcreteConverter<List<CR2WBufferWrapper>>))]
         public List<ICR2WBuffer> Buffers { get; private set; }
+
         [JsonIgnore] public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
 
         [JsonIgnore] public CR2WFileHeader Header => m_fileheader;
@@ -114,14 +118,14 @@ namespace WolvenKit.RED4.CR2W
 
         #region methods
 
-        [OnSerializing]
-        internal void OnSerializingMethod(StreamingContext context)
+        [OnDeserializing()]
+        internal void OnDeserializingMethod(StreamingContext context)
         {
 
         }
 
-        [OnSerialized]
-        internal void OnSerializedMethod(StreamingContext context)
+        [OnDeserialized()]
+        internal void OnDeserializedMethod(StreamingContext context)
         {
 
         }

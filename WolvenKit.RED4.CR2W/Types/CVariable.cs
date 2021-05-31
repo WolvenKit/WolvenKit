@@ -61,9 +61,15 @@ namespace WolvenKit.RED4.CR2W.Types
         /// e.g. Color from CColor, or Uint64 from CUInt64
         /// Can be overwritten (e.g. in Array, Ptr and other generic types)
         /// </summary>
-        public virtual string REDType => REDReflection.GetREDTypeString(GetType());
+        [JsonIgnore] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
 
-        public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
+        [JsonIgnore] public List<IEditableVariable> SerializedProperties => GetExistingVariables(false);
+
+        /// <summary>
+        /// newtonsoft conditional serializing
+        /// </summary>
+        /// <returns></returns>
+        public bool ShouldSerializeSerializedProperties() => (SerializedProperties.Count > 0);
 
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
@@ -125,7 +131,6 @@ namespace WolvenKit.RED4.CR2W.Types
         /// Must also be set when a variable is edited in the editor
         /// </summary>
         [JsonIgnore]
-        [Browsable(false)]
         public bool IsSerialized
         {
             get => _isSerialized;

@@ -21,10 +21,9 @@ namespace WolvenKit.RED4.CR2W.Types
         public CArrayBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         #region Properties
+
         public List<T> Elements { get; set; } = new List<T>();
 
-
-        [Browsable(false)]
         public List<int> Flags { get; set; }
 
         public string Elementtype
@@ -33,9 +32,10 @@ namespace WolvenKit.RED4.CR2W.Types
             set => throw new NotSupportedException();
         }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
+
         #endregion
 
-
+        #region methods
 
         [Browsable(false)]
         public override string REDType => REDReflection.GetREDTypeString(GetType());
@@ -44,7 +44,6 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             return Elements.Cast<IEditableVariable>().ToList();
         }
-
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -143,6 +142,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 Elements.Add(tvar);
             }
         }
+
         public override bool CanRemoveVariable(IEditableVariable child)
         {
             return child is T && Elements.Count > 0;
@@ -212,6 +212,8 @@ namespace WolvenKit.RED4.CR2W.Types
             return copy;
         }
 
+        #endregion
+
         #region interface implements
 
         [Browsable(false)]
@@ -246,7 +248,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException("CarrayBase.Insert"); 
+            throw new NotImplementedException("CarrayBase.Insert");
             //((IList<T>)elements).Insert(index, item);
         }
 

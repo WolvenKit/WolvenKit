@@ -15,7 +15,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.Interfaces.RED3;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.RED3.CR2W.Types.Utils;

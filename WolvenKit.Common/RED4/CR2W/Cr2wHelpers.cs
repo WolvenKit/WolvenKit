@@ -201,7 +201,7 @@ namespace WolvenKit.RED4.CR2W
                             if (h.Reference != null)
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.Data));
                         break;
-                    case ISoftAccessor s:
+                    case IRedRef s:
                         break;
                     case IBufferVariantAccessor ivariant:
                         var mod = EStringTableMod.None;
@@ -307,7 +307,7 @@ namespace WolvenKit.RED4.CR2W
 
                         break;
                     }
-                    case ISoftAccessor soft:
+                    case IRedRef soft:
                     {
                         if (/*!(string.IsNullOrEmpty(s.ClassName) &&*/ !string.IsNullOrEmpty(soft.DepotPath))
                         {

@@ -17,22 +17,18 @@ namespace WolvenKit.RED4.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class raRef<T> : CVariable, ISoftAccessor where T : CVariable
+    public class raRef<T> : CVariable, IRedRef where T : CVariable
     {
         public raRef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
-
         #region Properties
-        [DataMember(EmitDefaultValue = false)]
+
         public string DepotPath { get; set; }
 
-        //[DataMember(EmitDefaultValue = false)]
-        //public string ClassName { get; set; }
-
-        //[DataMember(EmitDefaultValue = false)]
         public EImportFlags Flags { get; set; }
+
         #endregion
 
         #region Methods
@@ -82,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 case ushort o:
                     this.SetValueInternal(o);
                     break;
-                case ISoftAccessor soft:
+                case IRedRef soft:
                     this.DepotPath = soft.DepotPath;
                     //this.ClassName = cvar.ClassName;
                     this.Flags = soft.Flags;

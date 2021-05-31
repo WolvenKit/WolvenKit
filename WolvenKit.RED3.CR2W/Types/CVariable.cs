@@ -146,7 +146,7 @@ namespace WolvenKit.RED3.CR2W.Types
         /// </summary>
         public virtual string REDType => REDReflection.GetREDTypeString(this.GetType());
 
-        public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
+        public List<IEditableVariable> SerializedProperties => GetExistingVariables(false);
 
         /// <summary>
         /// AspectName in frmChunkProperties

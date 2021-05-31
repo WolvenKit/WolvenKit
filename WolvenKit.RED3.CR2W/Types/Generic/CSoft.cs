@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using System.Linq;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -40,7 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             SetValueInternal(file.ReadUInt16());
         }
-        
+
         private void SetValueInternal(ushort value)
         {
             if (value > 0)
@@ -104,7 +103,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override string ToString() => ClassName + ": " + DepotPath;
 
-        
+
         #endregion
 
     }

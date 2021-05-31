@@ -6,17 +6,18 @@ using WolvenKit.RED4.CR2W.Reflection;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
     /// <summary>
-    /// Handles are Int32 that store 
+    /// Handles are Int32 that store
     /// if > 0: a reference to a chunk inside the cr2w file (aka Soft)
     /// if < 0: a reference to a string in the imports table (aka Pointer)
-    /// Exposed are 
-    /// if ChunkHandle: 
+    /// Exposed are
+    /// if ChunkHandle:
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -30,16 +31,18 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
         #region Properties
-        [Browsable(false)] public bool ChunkHandle { get; set; }
 
-        [Browsable(false)] public string DepotPath { get; set; }
+        public int ChunkIndex => Reference?.ChunkIndex ?? -1;
 
-        [Browsable(false)] public string ClassName { get; set; }
+        [JsonIgnore] public bool ChunkHandle { get; set; }
 
-        [Browsable(false)] public ushort Flags { get; set; }
+        [JsonIgnore] public string DepotPath { get; set; }
 
-        [Browsable(false)]
-        public ICR2WExport Reference
+        [JsonIgnore] public string ClassName { get; set; }
+
+        [JsonIgnore] public ushort Flags { get; set; }
+
+        [JsonIgnore] public ICR2WExport Reference
         {
             get => _reference;
             set
@@ -60,7 +63,8 @@ namespace WolvenKit.RED4.CR2W.Types
             }
         }
 
-        [Browsable(false)] public string ReferenceType => REDType.Split(':').Last();
+        [JsonIgnore] public string ReferenceType => REDType.Split(':').Last();
+
         #endregion
 
         #region Methods
@@ -80,12 +84,12 @@ namespace WolvenKit.RED4.CR2W.Types
             // change to external path
             if (ChunkHandle)
             {
-                
+
             }
             // change to chunk handle
             else
             {
-                
+
             }
         }
 
@@ -174,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 if (newref != null)
                     copy.Reference = newref;
             }
-            
+
             return copy;
         }
 

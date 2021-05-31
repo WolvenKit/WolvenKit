@@ -58,11 +58,11 @@ namespace WolvenKit.W3Speech
                     {
                         LoadArchive(file);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        
+
                     }
-                    
+
                 }
             }
             RebuildRootNode();

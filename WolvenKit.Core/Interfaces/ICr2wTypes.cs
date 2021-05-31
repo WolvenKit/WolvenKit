@@ -84,9 +84,7 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IEditorBindable
     {
-        IWolvenkitFile Cr2wFile { get; set; }
 
-        bool IsSerialized { get; set; }
     }
     public interface IEditorBindable<T> : IEditorBindable
     {
@@ -155,6 +153,50 @@ namespace WolvenKit.Common.Model.Cr2w
 
         void ChangeHandleType();
         public IEnumerable<ICR2WExport> GetReferenceChunks();
+    }
+
+    public interface IRedRef
+    {
+        string DepotPath { get; set; }
+        EImportFlags Flags { get; set; }
+
+        string REDName { get; }
+        string REDType { get; }
+    }
+
+
+
+
+    public interface ICurveDataAccessor
+    {
+        string Elementtype { get; }
+    }
+
+    public interface IDataBufferAccessor
+    {
+
+    }
+
+    public interface ILocalizedString
+    {
+
+    }
+
+    public interface IPtrAccessor : IChunkPtrAccessor
+    {
+
+    }
+
+
+
+    public interface ISoftAccessor
+    {
+        string DepotPath { get; set; }
+        string ClassName { get; set; }
+        ushort Flags { get; set; }
+
+        string REDName { get; }
+        string REDType { get; }
     }
 
     #endregion

@@ -7,9 +7,16 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using WolvenKit.CLI;
 //using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Types;
+using Formatting = Newtonsoft.Json.Formatting;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
 
 namespace CP77Tools.Tasks
 {
@@ -99,7 +106,6 @@ namespace CP77Tools.Tasks
 
                 if (chunks)
                 {
-                    var f = File.ReadAllBytes(fileInfo.FullName);
                     using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
                     var cr2w = _modTools.TryReadCr2WFile(fs);
                     if (cr2w == null)
@@ -107,16 +113,31 @@ namespace CP77Tools.Tasks
                         return;
                     }
 
-                    //var json = System.Text.Json.JsonSerializer.Serialize(cr2w, new JsonSerializerOptions { WriteIndented = true, });
-                    var json = JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                        // ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        // PreserveReferencesHandling = PreserveReferencesHandling.None,
-                        TypeNameHandling = TypeNameHandling.None
-                    });
+                    var ojson =
+                        JsonConvert.SerializeObject(
+                            cr2w,
+                            Formatting.Indented,
+                            new JsonSerializerSettings { ContractResolver = new CVarContractResolver() }
+                        );
+                    File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.o.json"), ojson);
 
+
+                    var dto = new Red4W2rcFileDto().FromW2rc(cr2w);
+                    var json =
+                            JsonConvert.SerializeObject(
+                                dto,
+                                Formatting.Indented
+                            );
                     File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"), json);
+
+                    var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
+                    doc.Save(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.xml"));
+
+
+                    // dbg
+
+                    var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
+
                 }
 
                 Interlocked.Increment(ref progress);

@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using System.Linq;
 using WolvenKit.RED3.CR2W.Types.Utils;
 using System.Runtime.Serialization;
 using WolvenKit.RED3.CR2W.Reflection;
 using static WolvenKit.RED3.CR2W.Types.Enums;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types
 {

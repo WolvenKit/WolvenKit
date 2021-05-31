@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Services;
@@ -20,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 
         private T _value;
-        public T Value
+        [JsonIgnore] public T Value
         {
             get => _value;
             set
@@ -30,10 +31,9 @@ namespace WolvenKit.RED4.CR2W.Types
             }
         }
 
-        [DataMember]
         public List<string> EnumValueList { get; set; } = new();
 
-        public bool IsFlag => Value.GetType().IsDefined(typeof(FlagsAttribute), false);
+        [JsonIgnore] public bool IsFlag => Value.GetType().IsDefined(typeof(FlagsAttribute), false);
 
         private void UpdateStringList()
         {
@@ -76,6 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
         public Type GetEnumType() => Value.GetType();
+
         public string EnumToString() => Value.ToString();
 
         public override string REDType => Value.GetType().Name;
@@ -86,6 +87,7 @@ namespace WolvenKit.RED4.CR2W.Types
             numericValue |= Convert.ToUInt64(flag);
             value = (T1)Enum.ToObject(typeof(T1), numericValue);
         }
+
         private static void ClearFlag<T1>(ref T1 value, T1 flag) where T1 : Enum
         {
             ulong numericValue = Convert.ToUInt64(value);
