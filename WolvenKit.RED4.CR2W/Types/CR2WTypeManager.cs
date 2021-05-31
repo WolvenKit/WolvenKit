@@ -215,7 +215,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
             #region LOCAL FUNCTIONS
 
-            IArrayAccessor MakeArray(Type arraytype, string innertypename)
+            IREDArray MakeArray(Type arraytype, string innertypename)
             {
                 Type elementType;
                 var generictype = GetGenericType(innertypename, cr2w);
@@ -247,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
                 var array = System.Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
 
-                return array as IArrayAccessor;
+                return array as IREDArray;
             }
 
             CVariable MakeGenericType(Type gentype, string innertypename)

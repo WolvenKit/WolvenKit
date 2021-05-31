@@ -22,7 +22,6 @@ namespace WolvenKit.RED4.CR2W.Types
         public string Value { get; set; }
         #endregion
 
-
         #region Methods
         public override void Read(BinaryReader file, uint size)
         {
@@ -55,6 +54,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => Value;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

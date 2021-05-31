@@ -21,8 +21,10 @@ namespace WolvenKit.RED3.CR2W.Types
         }
 
         #region Properties
-        [DataMember]
+
+
         public string Value { get; set; }
+
         #endregion
 
 
@@ -49,15 +51,17 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is string)
+            Value = val switch
             {
-                Value = (string)val;
-            }
-            else if (val is CName cval)
-                Value = cval.Value;
+                string s => s,
+                CName cval => cval.Value,
+                _ => Value
+            };
 
             return this;
         }
+
+        public object GetValue() => Value;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {
@@ -66,10 +70,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return var;
         }
 
-        public override string ToString()
-        {
-            return Value;
-        }
+        public override string ToString() => Value;
+
         #endregion
 
     }

@@ -29,6 +29,8 @@ namespace WolvenKit.RED4.CR2W.Types
             return this;
         }
 
+        public object GetValue() => Value;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CFloat) base.Copy(context);

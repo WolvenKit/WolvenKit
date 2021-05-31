@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class CHandle<T> : CVariable, IHandleAccessor where T : IEditableVariable
+    public class CHandle<T> : CVariable, IREDHandle where T : IEditableVariable
     {
         public CHandle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -39,6 +39,8 @@ namespace WolvenKit.RED3.CR2W.Types
 
         // Pointer
         private ICR2WExport _reference;
+
+        public int ChunkIndex => Reference?.ChunkIndex ?? -1;
 
         [JsonIgnore] public ICR2WExport Reference
         {
@@ -144,7 +146,7 @@ namespace WolvenKit.RED3.CR2W.Types
                 case int o:
                     SetValueInternal(o);
                     break;
-                case IHandleAccessor cvar:
+                case IREDHandle cvar:
                     this.ChunkHandle = cvar.ChunkHandle;
                     this.DepotPath = cvar.DepotPath;
                     this.ClassName = cvar.ClassName;
@@ -152,10 +154,14 @@ namespace WolvenKit.RED3.CR2W.Types
 
                     this.Reference = cvar.Reference;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this;
         }
+
+        public object GetValue() => ChunkIndex;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

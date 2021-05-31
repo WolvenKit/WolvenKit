@@ -126,9 +126,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
                                 // all other arrays
                                 CVariable innerobject = Create(body, "", cr2w, null);
-                                IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
+                                IREDArray arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
                                 arrayacc.Flags = new List<int>() { int.Parse(flag1), int.Parse(flag2) };
-                                if (innerobject is IArrayAccessor accessor && accessor.Flags != null)
+                                if (innerobject is IREDArray accessor && accessor.Flags != null)
                                 {
                                     arrayacc.Flags.AddRange(accessor.Flags);
                                 }
@@ -138,7 +138,7 @@ namespace WolvenKit.RED3.CR2W.Types
                             else
                             {
                                 CVariable innerobject = Create(innertype, "", cr2w, null);
-                                IArrayAccessor arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
+                                IREDArray arrayacc = MakeArray(typeof(CArray<>), innerobject.GetType());
                                 arrayacc.Elementtype = body;
                                 return arrayacc as CVariable;
                             }
@@ -260,7 +260,7 @@ namespace WolvenKit.RED3.CR2W.Types
             #region LOCAL FUNCTIONS
 
 
-            IArrayAccessor MakeArray(Type arraytype, Type generictype)
+            IREDArray MakeArray(Type arraytype, Type generictype)
             {
                 Type elementType;
 
@@ -278,7 +278,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
                 var array = Activator.CreateInstance(elementType, cr2w, parentVariable, varname) as CVariable;
 
-                return array as IArrayAccessor;
+                return array as IREDArray;
             }
 
 

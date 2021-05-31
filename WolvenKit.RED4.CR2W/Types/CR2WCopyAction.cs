@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W
         /// <param name="oldparentinghierarchy"></param>
         public void PasteChunksInArray(
             List<ICR2WExport> sourcechunks,
-            IArrayAccessor targetarray,
+            IREDArray targetarray,
             Dictionary<ICR2WExport,
                 (ICR2WExport oldchunkparent, ICR2WExport oldchunkvparent)> oldparentinghierarchy = null)
         {
@@ -142,7 +142,7 @@ namespace WolvenKit.RED4.CR2W
                 //    !sourcechunks.Contains(chunktranslationentry.Key))
                 //{
                 //    var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));
-                //    (uppercopy as IChunkPtrAccessor).Reference = chunktranslationentry.Value;
+                //    (uppercopy as IREDChunkPtr).Reference = chunktranslationentry.Value;
                 //    targetarray.AddVariable(uppercopy);
                 //}
             }

@@ -15,7 +15,7 @@ using System.CodeDom;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public abstract class CBufferBase<T> : CVariable, IList<T>, IList, IBufferAccessor where T : CVariable
+    public abstract class CBufferBase<T> : CVariable, IList<T>, IList, IREDBuffer where T : CVariable
     {
         public CBufferBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -201,7 +201,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
             //((IList<T>)elements).Insert(index, item);
         }
 

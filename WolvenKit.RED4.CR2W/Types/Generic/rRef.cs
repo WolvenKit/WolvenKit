@@ -6,6 +6,7 @@ using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -17,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class rRef<T> : CVariable, IRedRef where T : CVariable
+    public class rRef<T> : CVariable, IREDRef where T : CVariable
     {
         public rRef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -32,10 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
         #endregion
 
         #region Methods
-        public override void Read(BinaryReader file, uint size)
-        {
-            SetValueInternal(file.ReadUInt16());
-        }
+        public override void Read(BinaryReader file, uint size) => SetValueInternal(file.ReadUInt16());
 
         private void SetValueInternal(ushort value)
         {
@@ -53,6 +51,8 @@ namespace WolvenKit.RED4.CR2W.Types
                 DepotPath = "";
                 //ClassName = "";
                 Flags = EImportFlags.Default;
+
+                throw new InvalidParsingException("rRef");
             }
         }
 
@@ -78,15 +78,19 @@ namespace WolvenKit.RED4.CR2W.Types
                 case ushort o:
                     this.SetValueInternal(o);
                     break;
-                case IRedRef soft:
+                case IREDRef soft:
                     this.DepotPath = soft.DepotPath;
                     //this.ClassName = cvar.ClassName;
                     this.Flags = soft.Flags;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this;
         }
+
+        public object GetValue() => DepotPath;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

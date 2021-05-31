@@ -24,14 +24,14 @@ namespace WolvenKit.Views.Templates
 
         public ObservableCollection<ICR2WExport> BindingCollection { get; set; } = new();
 
-        public IChunkPtrAccessor RedChunkPtr
+        public IREDChunkPtr RedChunkPtr
         {
-            get => (IChunkPtrAccessor)GetValue(RedChunkPtrProperty);
+            get => (IREDChunkPtr)GetValue(RedChunkPtrProperty);
             set => SetValue(RedChunkPtrProperty, value);
         }
 
         public static readonly DependencyProperty RedChunkPtrProperty =
-            DependencyProperty.Register(nameof(RedChunkPtr), typeof(IChunkPtrAccessor),
+            DependencyProperty.Register(nameof(RedChunkPtr), typeof(IREDChunkPtr),
                 typeof(HandleTemplateView), new PropertyMetadata(OnRedChunkPtrChanged));
 
 
@@ -45,7 +45,7 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-            if (e.NewValue is not IChunkPtrAccessor iptr)
+            if (e.NewValue is not IREDChunkPtr iptr)
             {
                 return;
             }
@@ -66,7 +66,7 @@ namespace WolvenKit.Views.Templates
             view.SelectedItem = iptr.Reference;
         }
 
-        
+
 
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {

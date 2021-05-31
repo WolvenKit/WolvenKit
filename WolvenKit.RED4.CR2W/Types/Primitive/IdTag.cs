@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
         public byte _type { get; set; }
         public byte[] _guid { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
+
         public string GuidString
         {
             get { return new Guid(_guid).ToString(); }
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
             }
         }
 
-        [DataMember(EmitDefaultValue = false)]
+
         public string TypeString
         {
             get { return Convert.ToString(_type); }

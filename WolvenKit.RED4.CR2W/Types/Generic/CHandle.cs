@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta]
-    public class CHandle<T> : CVariable, IHandleAccessor where T : IEditableVariable
+    public class CHandle<T> : CVariable, IREDHandle where T : IEditableVariable
     {
         private ICR2WExport _reference;
 
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 case int o:
                     SetValueInternal(o);
                     break;
-                case IHandleAccessor cvar:
+                case IREDHandle cvar:
                     this.ChunkHandle = cvar.ChunkHandle;
                     this.DepotPath = cvar.DepotPath;
                     this.ClassName = cvar.ClassName;
@@ -156,10 +156,14 @@ namespace WolvenKit.RED4.CR2W.Types
 
                     this.Reference = cvar.Reference;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this;
         }
+
+        public object GetValue() => ChunkIndex;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

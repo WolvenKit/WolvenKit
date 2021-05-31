@@ -306,7 +306,7 @@ namespace WolvenKit.RED3.CR2W
                 {
                     foreach (var referrer in chunk.AdReferences)
                     {
-                        if (purgereferrers && referrer.ParentVar is IArrayAccessor)
+                        if (purgereferrers && referrer.ParentVar is IREDArray)
                         {
                             referrer.ParentVar.RemoveVariable(referrer as IEditableVariable);
                         }
@@ -984,7 +984,7 @@ namespace WolvenKit.RED3.CR2W
                 // if variable is generic type or some special case
                 switch (ivar)
                 {
-                    case IArrayAccessor a:
+                    case IREDArray a:
                         switch (a)
                         {
                             case CArray<CName> cacn:
@@ -1008,21 +1008,21 @@ namespace WolvenKit.RED3.CR2W
                         }
                         break;
 
-                    case IPtrAccessor p:
+                    case IREDPtr p:
                         if (p.Reference != null)
                             returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.Data));
                         break;
 
-                    case IHandleAccessor h:
+                    case IREDHandle h:
                         if (h.ChunkHandle)
                             if (h.Reference != null)
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.Data));
                         break;
 
-                    case ISoftAccessor s:
+                    case IREDSoft s:
                         break;
 
-                    case IBufferVariantAccessor ivariant:
+                    case IREDBufferVariant ivariant:
                         EStringTableMod mod = EStringTableMod.None;
                         if (ivariant is CVariantSizeType)
                             mod = EStringTableMod.SkipName;
@@ -1044,7 +1044,7 @@ namespace WolvenKit.RED3.CR2W
                         // don't add array type parents, don't add IBufferVariantAccessor type parents
                         if (cvar.ParentVar != null
                             && !cvar.ParentVar.GetType().IsGenericType
-                            && !(cvar.ParentVar is IBufferVariantAccessor)
+                            && !(cvar.ParentVar is IREDBufferVariant)
                             && !(cvar.ParentVar is SEntityBufferType2)
                             && !idlist.Contains(cvar.ParentVar.UniqueIdentifier))
                         {
@@ -1285,7 +1285,7 @@ namespace WolvenKit.RED3.CR2W
                         AddUniqueToTable(tag.Value);
                     }
                 }
-                else if (var is IHandleAccessor h)
+                else if (var is IREDHandle h)
                 {
                     if (!h.ChunkHandle)
                     {
@@ -1309,7 +1309,7 @@ namespace WolvenKit.RED3.CR2W
                         }
                     }
                 }
-                else if (var is ISoftAccessor s)
+                else if (var is IREDSoft s)
                 {
                     if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     {
@@ -1326,13 +1326,13 @@ namespace WolvenKit.RED3.CR2W
                     var n = var as CName;
                     AddUniqueToTable(n.Value);
                 }
-                else if (var is IArrayAccessor a)
+                else if (var is IREDArray a)
                 {
-                    if (var is IBufferAccessor buffer)
+                    if (var is IREDBuffer buffer)
                     {
                         foreach (IEditableVariable ivar in buffer.GetEditableVariables())
                         {
-                            if (ivar is IHandleAccessor ha)
+                            if (ivar is IREDHandle ha)
                             {
                                 if (!ha.ChunkHandle)
                                 {
@@ -1372,7 +1372,7 @@ namespace WolvenKit.RED3.CR2W
                         }
                     }
                 }
-                else if (var is IPtrAccessor)
+                else if (var is IREDPtr)
                 {
                 }
                 else if (var is IdHandle)
@@ -1383,7 +1383,7 @@ namespace WolvenKit.RED3.CR2W
                 {
                     AddUniqueToTable((var as SEntityBufferType1).ComponentName.Value);
                 }
-                else if (var is IEnumAccessor enumAccessor)
+                else if (var is IREDEnum enumAccessor)
                 {
                     foreach (var enumstring in enumAccessor.EnumValueList)
                     {

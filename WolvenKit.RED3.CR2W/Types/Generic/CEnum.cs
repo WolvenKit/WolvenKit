@@ -12,7 +12,7 @@ using WolvenKit.Common.Services;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public class CEnum<T> : CVariable, IEnumAccessor<T> where T : Enum
+    public class CEnum<T> : CVariable, IREDEnum<T> where T : Enum
     {
         public CEnum(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -120,6 +120,8 @@ namespace WolvenKit.RED3.CR2W.Types
             var.Value = Value;
             return var;
         }
+
+        public object GetValue() => EnumValueList;
 
         public override IEditableVariable SetValue(object val)
         {

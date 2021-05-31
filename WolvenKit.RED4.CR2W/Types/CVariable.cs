@@ -63,13 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// </summary>
         [JsonIgnore] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
 
-        [JsonIgnore] public List<IEditableVariable> SerializedProperties => GetExistingVariables(false);
-
-        /// <summary>
-        /// newtonsoft conditional serializing
-        /// </summary>
-        /// <returns></returns>
-        public bool ShouldSerializeSerializedProperties() => (SerializedProperties.Count > 0);
+        [JsonIgnore] public List<IEditableVariable> SerializedProperties => GetExistingVariables();
 
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
@@ -239,7 +233,7 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             var result = (T)System.Activator.CreateInstance(typeof(T), cr2w, this, varName);
 
-            if (result is IArrayAccessor arr)
+            if (result is IREDArray arr)
             {
                 arr.Flags = flags.ToList();
             }
@@ -821,7 +815,7 @@ namespace WolvenKit.RED4.CR2W.Types
             copy.IsSerialized = this.IsSerialized;
 
             // don't try to set children with reflection, it aint gonna work
-            if (this is IArrayAccessor || this is IVariantAccessor)
+            if (this is IREDArray || this is IREDVariant)
                 return copy;
 
             // copy all REDProperties and REDBuffers

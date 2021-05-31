@@ -61,8 +61,8 @@ namespace WolvenKit.Common.Model.Cr2w
         [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
         [JsonIgnore] public List<ICR2WExport> ChildrenChunks { get; }
         [JsonIgnore] public List<ICR2WExport> VirtualChildrenChunks { get; }
-        [JsonIgnore] public List<IChunkPtrAccessor> AdReferences { get; }
-        [JsonIgnore] public List<IChunkPtrAccessor> AbReferences { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AdReferences { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AbReferences { get; }
         [JsonIgnore] public List<string> UnknownTypes { get; }
 
 
@@ -80,38 +80,35 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #region REDtypes
 
-    #region editor interfaces
-
-    public interface IEditorBindable
-    {
-
-    }
-    public interface IEditorBindable<T> : IEditorBindable
-    {
-        public T Value { get; set; } // ???
-    }
-
-    #endregion
-
     #region red primitives
 
-    public interface IREDPrimitive : IEditableVariable { }
+    public interface IREDPrimitive : IEditableVariable
+    {
+        public object GetValue();
+    }
 
-    public interface IREDColor : IEditorBindable<Color> { }
+    public interface IREDPrimitive<T> : IREDPrimitive
+    {
+        public T Value { get; set; }
+    }
+
+    public interface IREDColor : IREDPrimitive<Color> { }
 
     public interface IREDIntegerType : IREDPrimitive { }
-    public interface IREDIntegerType<T> : IREDIntegerType, IEditorBindable<T> { }
-    public interface IREDString : IREDPrimitive, IEditorBindable<string> { }
-    public interface IREDBool : IREDPrimitive, IEditorBindable<bool> { }
+    public interface IREDIntegerType<T> : IREDIntegerType, IREDPrimitive<T> { }
 
-    public interface IEnumAccessor : IEditorBindable, IEditableVariable
+    public interface IREDString : IREDPrimitive<string> { }
+
+    public interface IREDBool : IREDPrimitive<bool> { }
+
+    public interface IREDEnum : IREDPrimitive
     {
         List<string> EnumValueList { get; set; }
         bool IsFlag { get; }
 
         string GetAttributeVal();
     }
-    public interface IEnumAccessor<T> : IEditorBindable<T>, IEnumAccessor where T : Enum
+    public interface IREDEnum<T> : IREDPrimitive<T>, IREDEnum where T : Enum
     {
         string EnumToString();
 
@@ -120,31 +117,46 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #endregion
 
-    public interface IArrayAccessor : IEditableVariable, IList
+    #region arrays
+
+    public interface IREDArray : IEditableVariable, IList
     {
         List<int> Flags { get; set; }
 
         string Elementtype { get; set; }
         Type InnerType { get; }
     }
-    public interface IArrayAccessor<T> : IArrayAccessor
+    public interface IREDArray<T> : IREDArray
     {
         List<T> Elements { get; set; }
     }
-    public interface IBufferAccessor : IArrayAccessor { }
+    public interface IREDBuffer : IREDArray { }
 
-    public interface IVariantAccessor
+    #endregion
+
+    public interface IREDVariant : IEditableVariable
     {
         IEditableVariable Variant { get; set; }
     }
-    public interface IBufferVariantAccessor : IVariantAccessor { }
+    public interface IREDBufferVariant : IREDVariant { }
 
-    public interface IChunkPtrAccessor : IEditableVariable
+
+
+    public interface IREDChunkPtr : IREDPrimitive
     {
+        public int ChunkIndex { get; }
         ICR2WExport Reference { get; set; }
         string ReferenceType { get; }
     }
-    public interface IHandleAccessor : IChunkPtrAccessor
+
+
+    /// <summary>
+    /// RED3, RED4?
+    /// Handles are Int32 that store
+    /// if larger than 0 a reference to a chunk inside the cr2w file (aka Soft)
+    /// if less than 0 a reference to a string in the imports table (aka Pointer)
+    /// </summary>
+    public interface IREDHandle : IREDChunkPtr
     {
         bool ChunkHandle { get; set; }
         string DepotPath { get; set; }
@@ -155,13 +167,36 @@ namespace WolvenKit.Common.Model.Cr2w
         public IEnumerable<ICR2WExport> GetReferenceChunks();
     }
 
-    public interface IRedRef
+    /// <summary>
+    /// RED3
+    /// A pointer to a chunk within the same cr2w file.
+    /// </summary>
+    public interface IREDPtr : IREDChunkPtr
+    {
+
+    }
+
+    /// <summary>
+    /// RED3
+    /// CSofts are Uint16 references to the imports table of a cr2w file
+    /// Imports are paths to a file in the tw3 filesystem
+    /// and can be set manually by DepotPath and Classname
+    /// Imports have flags which are set on write
+    /// </summary>
+    public interface IREDSoft : IREDPrimitive
+    {
+        string DepotPath { get; set; }
+        string ClassName { get; set; }
+        ushort Flags { get; set; }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IREDRef : IREDPrimitive
     {
         string DepotPath { get; set; }
         EImportFlags Flags { get; set; }
-
-        string REDName { get; }
-        string REDType { get; }
     }
 
 
@@ -174,30 +209,17 @@ namespace WolvenKit.Common.Model.Cr2w
 
     public interface IDataBufferAccessor
     {
-
     }
 
     public interface ILocalizedString
     {
-
-    }
-
-    public interface IPtrAccessor : IChunkPtrAccessor
-    {
-
     }
 
 
 
-    public interface ISoftAccessor
-    {
-        string DepotPath { get; set; }
-        string ClassName { get; set; }
-        ushort Flags { get; set; }
 
-        string REDName { get; }
-        string REDType { get; }
-    }
+
+
 
     #endregion
 

@@ -15,7 +15,7 @@ using WolvenKit.Core;
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta]
-    public class CEnum<T> : CVariable, IEnumAccessor<T> where T : Enum
+    public class CEnum<T> : CVariable, IREDEnum<T> where T : Enum
     {
         public CEnum(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -228,6 +228,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => EnumValueList;
 
         public override string ToString() => string.Join(",", this.EnumValueList);
 

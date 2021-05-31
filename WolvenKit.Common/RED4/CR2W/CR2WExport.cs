@@ -57,8 +57,8 @@ namespace WolvenKit.RED4.CR2W
         {
             _export = new CR2WExport();
 
-            AdReferences = new List<IChunkPtrAccessor>();
-            AbReferences = new List<IChunkPtrAccessor>();
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace WolvenKit.RED4.CR2W
             {
                 objectFlags = (ushort)(cooked ? 8192 : 0),
             };
-            AdReferences = new List<IChunkPtrAccessor>();
-            AbReferences = new List<IChunkPtrAccessor>();
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
 
             this.cr2w = file;
             this.REDType = redtype;
@@ -93,8 +93,8 @@ namespace WolvenKit.RED4.CR2W
             _export = export;
 
             REDType = cr2w.Names[export.className].Str;
-            AdReferences = new List<IChunkPtrAccessor>();
-            AbReferences = new List<IChunkPtrAccessor>();
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
         }
 
         #endregion Constructors
@@ -129,14 +129,14 @@ namespace WolvenKit.RED4.CR2W
         /// This is the directed-graph out-edge list :
         /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
         /// </summary>
-        [JsonIgnore] public List<IChunkPtrAccessor> AbReferences { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AbReferences { get; }
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
         /// This is the directed-graph in-edge list :
         /// CVariables, being CPtr or CHandle, which reference this chunk.
         /// </summary>
-        [JsonIgnore] public List<IChunkPtrAccessor> AdReferences { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AdReferences { get; }
 
         [JsonIgnore] public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
 

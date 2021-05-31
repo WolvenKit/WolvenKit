@@ -605,7 +605,7 @@ namespace WolvenKit.RED3.CR2W.Types
             copy.IsSerialized = this.IsSerialized;
 
             // don't try to set children with reflection, it aint gonna work
-            if (this is IArrayAccessor || this is IVariantAccessor)
+            if (this is IREDArray || this is IREDVariant)
                 return copy;
 
             // copy all REDProperties and REDBuffers

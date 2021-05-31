@@ -8,49 +8,48 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public class CString : CVariable, IREDPrimitive
+    public class CString : CVariable, IREDPrimitive<string>
     {
         private bool isWideChar;
 
         public CString()
         {
-            
+
         }
         public CString(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
-        public string val { get; set; }
+        public string Value { get; set; }
 
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadLengthPrefixedString();
+            Value = file.ReadLengthPrefixedString();
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.WriteLengthPrefixedString(val);
+            file.WriteLengthPrefixedString(Value);
         }
 
         public override CVariable SetValue(object val)
         {
-            switch (val)
+            this.Value = val switch
             {
-                case string s:
-                    this.val = s;
-                    break;
-                case CString cvar:
-                    this.val = cvar.val;
-                    break;
-            }
+                string s => s,
+                CString cvar => cvar.Value,
+                _ => this.Value
+            };
 
             return this;
         }
 
+        public object GetValue() => Value;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CString) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             var.isWideChar = isWideChar;
             return var;
         }
@@ -59,7 +58,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override string ToString()
         {
-            return val;
+            return Value;
         }
     }
 }

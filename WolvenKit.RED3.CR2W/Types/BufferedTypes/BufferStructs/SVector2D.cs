@@ -32,7 +32,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "V2[{0:0.00}, {1:0.00}]", x.val, y.val);
+            return String.Format(CultureInfo.InvariantCulture, "V2[{0:0.00}, {1:0.00}]", x.Value, y.Value);
         }
     }
 }

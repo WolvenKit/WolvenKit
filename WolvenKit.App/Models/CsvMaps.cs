@@ -16,7 +16,7 @@ namespace WolvenKit.Models
     {
         #region Constructors
 
-        public CFloatMap() => Map(m => m.val);
+        public CFloatMap() => Map(m => m.Value);
 
         #endregion Constructors
     }
@@ -70,7 +70,7 @@ namespace WolvenKit.Models
     {
         #region Constructors
 
-        public CStringMap() => Map(m => m.val);
+        public CStringMap() => Map(m => m.Value);
 
         #endregion Constructors
     }

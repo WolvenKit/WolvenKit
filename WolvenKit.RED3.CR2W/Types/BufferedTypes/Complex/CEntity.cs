@@ -54,7 +54,7 @@ namespace WolvenKit.RED3.CR2W.Types
                     for (var i = 0; i < elementcount; i++)
                     {
                         var ptr = CR2WTypeManager.Create("ptr:CComponent", i.ToString(), cr2w, Components);
-                        if (ptr is IPtrAccessor iptr)
+                        if (ptr is IREDPtr iptr)
                         {
                             ptr.IsSerialized = true;
                             ptr.Read(file, 0);

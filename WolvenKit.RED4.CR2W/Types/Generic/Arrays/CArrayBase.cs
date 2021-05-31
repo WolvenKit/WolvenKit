@@ -16,7 +16,7 @@ using WolvenKit.Common.Services;
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta()]
-    public abstract class CArrayBase<T> : CVariable, IArrayAccessor<T>, IList<T> where T : IEditableVariable
+    public abstract class CArrayBase<T> : CVariable, IREDArray<T>, IList<T> where T : IEditableVariable
     {
         public CArrayBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 

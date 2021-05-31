@@ -235,7 +235,7 @@ namespace WolvenKit.RED4.CR2W
                 {
                     foreach (var referrer in chunk.AdReferences)
                     {
-                        if (purgereferrers && referrer.ParentVar is IArrayAccessor)
+                        if (purgereferrers && referrer.ParentVar is IREDArray)
                         {
                             referrer.ParentVar.RemoveVariable(referrer as IEditableVariable);
                         }

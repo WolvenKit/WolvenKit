@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
@@ -16,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class CSoft<T> : CVariable, ISoftAccessor where T : CVariable
+    public class CSoft<T> : CVariable, IREDSoft where T : CVariable
     {
         public CSoft(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -24,21 +25,17 @@ namespace WolvenKit.RED3.CR2W.Types
 
 
         #region Properties
-        [DataMember(EmitDefaultValue = false)]
+
         public string DepotPath { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
         public string ClassName { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
         public ushort Flags { get; set; }
+
         #endregion
 
         #region Methods
-        public override void Read(BinaryReader file, uint size)
-        {
-            SetValueInternal(file.ReadUInt16());
-        }
+        public override void Read(BinaryReader file, uint size) => SetValueInternal(file.ReadUInt16());
 
         private void SetValueInternal(ushort value)
         {
@@ -81,15 +78,25 @@ namespace WolvenKit.RED3.CR2W.Types
                 case ushort o:
                     this.SetValueInternal(o);
                     break;
-                case ISoftAccessor cvar:
+                case IREDSoft cvar:
                     this.DepotPath = cvar.DepotPath;
                     this.ClassName = cvar.ClassName;
                     this.Flags = cvar.Flags;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this;
         }
+
+        public object GetValue() => new Dictionary<string, object>()
+        {
+            {nameof(DepotPath), DepotPath},
+            {nameof(ClassName), ClassName},
+            {nameof(Flags), Flags},
+
+        };
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

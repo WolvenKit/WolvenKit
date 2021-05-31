@@ -13,17 +13,13 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CUInt64()
         {
-
         }
 
         public CUInt64(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
-        private ulong _val;
-
-        [DataMember]
-        public ulong val { get => _val; set => _val = value; }
+        public ulong val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -53,6 +49,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt64)base.Copy(context);
@@ -66,7 +64,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CUInt32 : CVariable, IREDPrimitive
     {
         public CUInt32()
@@ -110,6 +108,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt32) base.Copy(context);
@@ -123,7 +123,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CUInt16 : CVariable, IREDPrimitive
     {
         public CUInt16()
@@ -168,6 +168,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt16)base.Copy(context);
@@ -181,7 +183,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CUInt8 : CVariable, IREDPrimitive
     {
         public CUInt8()
@@ -224,6 +226,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt8) base.Copy(context);
@@ -237,7 +241,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt64 : CVariable, IREDPrimitive
     {
         public CInt64()
@@ -280,6 +284,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt64) base.Copy(context);
@@ -293,7 +299,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt32 : CVariable, IREDPrimitive
     {
         public CInt32()
@@ -338,6 +344,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt32) base.Copy(context);
@@ -351,7 +359,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt16 : CVariable, IREDPrimitive
     {
         public CInt16()
@@ -394,6 +402,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt16) base.Copy(context);
@@ -407,7 +417,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt8 : CVariable, IREDPrimitive
     {
         public CInt8()
@@ -450,6 +460,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt8) base.Copy(context);
@@ -463,7 +475,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CDynamicInt : CVariable, IREDPrimitive
     {
         public CDynamicInt()
@@ -506,6 +518,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CDynamicInt) base.Copy(context);
@@ -526,7 +540,7 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CVLQInt32 : CVariable, IREDPrimitive
     {
         public CVLQInt32()
@@ -569,6 +583,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CVLQInt32)base.Copy(context);
@@ -584,7 +600,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
     }
 
-    [DataContract(Namespace = "")]
+
     public class CBool : CVariable, IREDPrimitive
     {
         public CBool()
@@ -633,6 +649,8 @@ namespace WolvenKit.RED3.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => val;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

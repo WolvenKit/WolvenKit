@@ -14,7 +14,7 @@ namespace WolvenKit.RED3.CR2W.Types
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
     [REDMeta]
-    public class CPtr<T> : CVariable, IPtrAccessor where T : CVariable
+    public class CPtr<T> : CVariable, IREDPtr where T : CVariable
     {
 
 
@@ -24,24 +24,16 @@ namespace WolvenKit.RED3.CR2W.Types
 
         #region Properties
 
+        public int ChunkIndex => Reference?.ChunkIndex ?? -1;
         public ICR2WExport Reference { get; set; }
         public string ReferenceType => REDType.Split(':').Last();
+
         #endregion
 
         #region Methods
         public string GetPtrTargetType()
         {
             return ReferenceType;
-            //try
-            //{
-            //    if (Reference == null)
-            //        return "NULL";
-            //    return Reference.REDType;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new InvalidPtrException(ex.Message);
-            //}
         }
 
         /// <summary>
@@ -50,10 +42,7 @@ namespace WolvenKit.RED3.CR2W.Types
         /// </summary>
         /// <param name="file"></param>
         /// <param name="size"></param>
-        public override void Read(BinaryReader file, uint size)
-        {
-            SetValueInternal(file.ReadInt32());
-        }
+        public override void Read(BinaryReader file, uint size) => SetValueInternal(file.ReadInt32());
 
         private void SetValueInternal(int val)
         {
@@ -108,13 +97,17 @@ namespace WolvenKit.RED3.CR2W.Types
                 case ICR2WExport wrapper:
                     Reference = wrapper;
                     break;
-                case IPtrAccessor cval:
+                case IREDPtr cval:
                     Reference = cval.Reference;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this;
         }
+
+        public object GetValue() => ChunkIndex;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {
