@@ -220,6 +220,7 @@ namespace WolvenKit.Views.Editor
             {
                 var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
                 propertiesViewModel.AB_MeshPreviewVisible = false;
+                propertiesViewModel.IsAudioPreviewVisible= false;
 
 
                 propertiesViewModel.AB_SelectedItem = AssetBrowserView.GlobalABView.InnerList.SelectedItem as Common.Model.AssetBrowserData;
@@ -271,6 +272,8 @@ namespace WolvenKit.Views.Editor
                     }
                     if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
                     {
+                        propertiesViewModel.IsAudioPreviewVisible = true;
+
                         if (propertiesViewModel.AB_SelectedItem.AmbigiousFiles != null)
                         {
                             var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles.FirstOrDefault();

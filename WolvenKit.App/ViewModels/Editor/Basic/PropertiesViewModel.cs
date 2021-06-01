@@ -88,6 +88,8 @@ namespace WolvenKit.ViewModels.Editor
             PE_FileInfoVisible = false;
             PE_MeshPreviewVisible = false;
 
+            IsAudioPreviewVisible = false;
+
         }
 
         /// <summary>
@@ -125,6 +127,7 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public bool IsMeshPreviewVisible { get; set; }
 
+        public bool IsAudioPreviewVisible { get; set; }
 
         /// <summary>
         /// Decides if the Mesh Previewer should be visible or not.

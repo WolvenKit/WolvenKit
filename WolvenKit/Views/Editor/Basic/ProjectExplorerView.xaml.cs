@@ -216,7 +216,7 @@ namespace WolvenKit.Views.Editor
             {
                 var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
                 propertiesViewModel.PE_MeshPreviewVisible = false;
-
+                propertiesViewModel.IsAudioPreviewVisible = false;
                 propertiesViewModel.PE_SelectedItem = ProjectExplorerView.GlobalPEView.TreeGrid.SelectedItem as FileModel;
                 if (propertiesViewModel.PE_SelectedItem != null)
                 {
@@ -232,6 +232,7 @@ namespace WolvenKit.Views.Editor
                     }
                     if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
                     {
+                        propertiesViewModel.IsAudioPreviewVisible = true;
 
                         propertiesViewModel.AddAudioItem(propertiesViewModel.PE_SelectedItem.FullName);
                     }
@@ -239,7 +240,7 @@ namespace WolvenKit.Views.Editor
                 }
                 propertiesViewModel.DecideForMeshPreview();
 
-                
+
 
 
             }
