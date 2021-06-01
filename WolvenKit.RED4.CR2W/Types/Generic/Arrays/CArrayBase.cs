@@ -133,6 +133,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is CArrayBase<T> cvar)
             {
                 this.Elements = cvar.Elements;

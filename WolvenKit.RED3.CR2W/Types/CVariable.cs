@@ -623,6 +623,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             if (val is CVariable cvar)
             {
+                this.IsSerialized = true;
                 // set all REDProperties and REDBuffers
                 foreach (IEditableVariable item in cvar.GetEditableVariables())
                 {

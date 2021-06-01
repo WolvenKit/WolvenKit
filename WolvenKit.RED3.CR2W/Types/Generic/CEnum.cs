@@ -125,7 +125,11 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override IEditableVariable SetValue(object val)
         {
-            if (!(val is List<string> l)) return this;
+            this.IsSerialized = true;
+            if (!(val is List<string> l))
+            {
+                return this;
+            }
 
             EnumValueList = l;
 

@@ -26,6 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             Value = val switch
             {
                 Color => Value,

@@ -164,6 +164,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override IEditableVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is not List<string> l)
                 return this;
 

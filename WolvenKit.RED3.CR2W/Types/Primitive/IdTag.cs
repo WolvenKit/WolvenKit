@@ -66,6 +66,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if(val is byte[])
             {
                 _guid = (byte[])val;

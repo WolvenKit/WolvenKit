@@ -65,6 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             //if (val is CVariable)
             //{
             //    Variant = (CVariable)val;
