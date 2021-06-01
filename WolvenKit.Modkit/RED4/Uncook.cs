@@ -17,6 +17,8 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.MeshFile;
+using WolvenKit.RED4.MorphTargetFile;
 
 namespace CP77.CR2W
 {
@@ -178,7 +180,8 @@ namespace CP77.CR2W
             // uncook textures, meshes etc
             return extAsEnum switch
             {
-                ECookedFileFormat.mesh => GenerateBuffers(cr2wStream, cr2wFileName),
+                ECookedFileFormat.mesh => (new MESH()).ExportMeshWithoutRig(cr2wStream,cr2wFileName.Name , (new FileInfo(cr2wFileName.FullName))),
+                ECookedFileFormat.morphtarget => (new TARGET()).ExportTargets(cr2wStream,(new FileInfo(cr2wFileName.FullName))),
                 ECookedFileFormat.xbm => UncookXbm(cr2wStream,cr2w, uncookext, flip),
                 ECookedFileFormat.csv => UncookCsv(cr2wStream, cr2w),
                 ECookedFileFormat.json => false,

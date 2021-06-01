@@ -35,7 +35,8 @@ namespace WolvenKit.Common
         mlmask,
         cubemap,
         envprobe,
-        texarray
+        texarray,
+        morphtarget
     }
 
     /// <summary>

@@ -54,13 +54,12 @@
                         x:Name="ExportCheckBox"
                         Background="Transparent"
                         Content="EXPORTABLES"
-
-                        />
+                        IsChecked="True" />
 
                 </StackPanel>
             </Grid>
 
-            <!--  Data Grid Exports -->
+            <!--  Data Grid Exports  -->
             <syncfusion:SfDataGrid
                 Grid.Row="1"
                 AllowEditing="True"
@@ -75,8 +74,15 @@
 
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked" />
-                    <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False" />
-                    <syncfusion:GridTextColumn HeaderText="UncookExtension" MappingName="UncookExtension" AllowEditing="False" />
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
+                        HeaderText="Name"
+                        MappingName="Name" />
+                    <syncfusion:GridComboBoxColumn
+                        x:Name="GridComboBoxColumnX"
+                        AllowEditing="True"
+                        HeaderText="Export Type"
+                        MappingName="UncookExtension" />
 
                 </syncfusion:SfDataGrid.Columns>
 
@@ -97,9 +103,15 @@
                 Visibility="{Binding Path=IsChecked, ElementName=ImportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
-                    <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked" AllowEditing="True"/>
-                    <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False"/>
-                    
+                    <syncfusion:GridCheckBoxColumn
+                        AllowEditing="True"
+                        HeaderText="#"
+                        MappingName="IsChecked" />
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
+                        HeaderText="Name"
+                        MappingName="Name" />
+
 
                 </syncfusion:SfDataGrid.Columns>
 
@@ -109,22 +121,135 @@
             <!--  Bottom Button Panel Main  -->
 
             <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
-                <StackPanel
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-                    <Button
-                        Height="35"
-                        Background="{DynamicResource ContentBackgroundAlt}"
-                        Command="{Binding ProcessSelectedCommand}"
-                        Content="Process Selected"
-                        Style="{DynamicResource MessageBoxButtonStyle}" />
-                    <Button
-                        Height="35"
-                        Background="{DynamicResource ContentBackgroundAlt}"
-                        Command="{Binding ProcessAllCommand}"
-                        Content="Process All"
-                        Style="{DynamicResource MessageBoxButtonStyle}" />
+
+                <StackPanel Orientation="Vertical">
+                    <StackPanel
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <Button
+                            Margin="5,0,5,0"
+                            Padding="2,0,2,0"
+                            Background="{DynamicResource ContentBackground}"
+                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
+                            BorderThickness="2"
+                            FontSize="12"
+                            Style="{DynamicResource ButtonCustom}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconFontAwesome
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="CheckDoubleSolid" />
+
+                                <TextBlock Text="Select All" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Margin="5,0,5,0"
+                            Padding="2,0,2,0"
+                            Background="{DynamicResource ContentBackground}"
+                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
+                            BorderThickness="2"
+                            Command="{Binding ProcessSelectedCommand}"
+                            FontSize="12"
+                            Style="{DynamicResource ButtonCustom}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="DebugStart" />
+
+                                <TextBlock Text="Process Selected" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Margin="5,0,5,0"
+                            Padding="2,0,2,0"
+                            Background="{DynamicResource ContentBackground}"
+                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
+                            BorderThickness="2"
+                            Command="{Binding ProcessAllCommand}"
+                            FontSize="12"
+                            Style="{DynamicResource ButtonCustom}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="RunAll" />
+
+                                <TextBlock Text="Process All" />
+                            </StackPanel>
+                        </Button>
+
+
+
+                    </StackPanel>
+
+                    <StackPanel
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <ToggleButton
+                            Margin="5,0,5,0"
+                            Padding="2,0,2,0"
+                            VerticalAlignment="Center"
+                            Background="{DynamicResource ContentBackgroundAlt}"
+                            IsChecked="False"
+                            Style="{DynamicResource WPFToggleButtonStyle}"
+                            ToolTip="Lock selected file.">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:BootstrapIcons Kind="Lock" />
+
+                                <TextBlock Text="Lock Selection" />
+                            </StackPanel>
+                        </ToggleButton>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Text="Selected : " />
+                        <hc:Divider Orientation="Vertical" />
+
+                        <Button
+                            Padding="2,0,2,0"
+                            VerticalAlignment="Center"
+                            Background="{DynamicResource ContentBackground}"
+                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
+                            BorderThickness="2"
+                            FontSize="12"
+                            Style="{DynamicResource ButtonCustom}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconForkAwesome
+                                    Width="15"
+                                    Height="15"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="FilesOutline" />
+                                <TextBlock Text="Copy" />
+
+                            </StackPanel>
+                        </Button>
+                        <TextBlock Text="settings from selected file to : " />
+                        <syncfusion:ComboBoxAdv
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            SelectedIndex="0"
+                            Text="apply">
+
+                            <syncfusion:ComboBoxItemAdv Content="Selected in Grid" />
+                            <syncfusion:ComboBoxItemAdv Content="All in Grid" />
+
+                        </syncfusion:ComboBoxAdv>
+
+
+
+                    </StackPanel>
 
                 </StackPanel>
 

@@ -1,5 +1,7 @@
 
 using System;
+using System.Linq;
+using WolvenKit.Common.DDS;
 
 namespace WolvenKit.Views.Editor
 {
@@ -8,6 +10,7 @@ namespace WolvenKit.Views.Editor
         public ImportExportView()
         {
             InitializeComponent();
+            GridComboBoxColumnX.ItemsSource =  Enum.GetValues(typeof(EUncookExtension)).Cast<EUncookExtension>();
         }
 
 

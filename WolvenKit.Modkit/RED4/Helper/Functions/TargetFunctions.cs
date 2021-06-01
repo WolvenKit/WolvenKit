@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.MorphTargetFile
             ModTools = ServiceLocator.Default.ResolveType<ModTools>();
         }
 
-        public void ExportTargets(Stream targetStream,FileInfo outfile, bool isGLBinary = true)
+        public bool ExportTargets(Stream targetStream,FileInfo outfile, bool isGLBinary = true)
         {
             var cr2w = ModTools.TryReadCr2WFile(targetStream);
 
@@ -113,6 +113,7 @@ namespace WolvenKit.RED4.MorphTargetFile
 
             targetStream.Dispose();
             targetStream.Close();
+            return true;
         }
         static TargetsInfo GetTargetInfos(CR2WFile cr2w, int SubMeshC)
         {

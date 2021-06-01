@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.MeshFile
             meshStream.Dispose();
             meshStream.Close();
         }
-        public void ExportMeshWithoutRig(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMeshWithoutRig(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var cr2w = ModTools.TryReadCr2WFile(meshStream);
@@ -216,8 +216,12 @@ namespace WolvenKit.RED4.MeshFile
                 model.SaveGLB(outfile.FullName);
             else
                 model.SaveGLTF(outfile.FullName);
+
+
             meshStream.Dispose();
             meshStream.Close();
+            return true;
+
         }
         public void ExportMultiMeshWithoutRig(List<Stream> meshStreamS, List<string> _meshNameS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
@@ -494,7 +498,7 @@ namespace WolvenKit.RED4.MeshFile
             {
                 extraExists[i] = false;
                 count = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
-                
+
                 for (int e = 0; e < count; e++)
                 {
                     checker = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
@@ -786,7 +790,7 @@ namespace WolvenKit.RED4.MeshFile
                     Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
                     Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
 
-                    
+
                     (int, float)[] bind0 = new (int, float)[8];
                     (int, float)[] bind1 = new (int, float)[8];
                     (int, float)[] bind2 = new (int, float)[8];
