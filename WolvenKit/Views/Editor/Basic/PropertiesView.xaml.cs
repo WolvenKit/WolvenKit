@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,8 +13,12 @@ using Ab3d.DirectX;
 using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
+using Catel.IoC;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.ViewModels.Editor;
+using WolvenKit.Views.Editor.AudioTool;
 
 namespace WolvenKit.Views.Editor
 {
@@ -36,6 +41,13 @@ namespace WolvenKit.Views.Editor
             string[] supportedExportFormats = assimpWpfExporter.ExportFormatDescriptions.Select(f => f.FileExtension).ToArray();
 
             StaticReferences.GlobalPropertiesView = this;
+
+
+            var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
+            Resources.MergedDictionaries.Add(themeResources);
+
+            spectrumAnalyzer.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
+            waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
 
 
         }
@@ -268,5 +280,125 @@ namespace WolvenKit.Views.Editor
             window.Content = textBox;
             window.Show();
         }
+
+
+
+
+
+
+
+
+
+        #region AudioPreview
+
+        private void BrowseButton_Click(object sender, RoutedEventArgs e) => OpenFile();
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            NAudioSimpleEngine.Instance.Dispose();
+            if (NAudioSimpleEngine.Instance.CanStop)
+            {
+                NAudioSimpleEngine.Instance.Stop();
+            }
+        }
+
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+        }
+
+        private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+                DiscordHelper.SetDiscordRPCStatus("Audio Tool");
+            }
+        }
+
+        private void DefaultThemeMenuItem_Checked(object sender, RoutedEventArgs e)
+        {
+            //LoadDefaultTheme();
+        }
+
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
+
+        private void ExpressionDarkMenuItem_Checked(object sender, RoutedEventArgs e)
+        {
+            //LoadExpressionDarkTheme();
+        }
+
+        private void ExpressionLightMenuItem_Checked(object sender, RoutedEventArgs e)
+        {
+            //  LoadExpressionLightTheme();
+        }
+
+
+
+        private void OpenFile()
+        {
+            var openDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "(*.mp3)|*.mp3"
+            };
+            if (openDialog.ShowDialog() == true)
+            {
+                NAudioSimpleEngine.Instance.OpenFile(openDialog.FileName);
+                //FileText.SetCurrentValue(TextBox.TextProperty, openDialog.FileName);
+                RunnerText.SetCurrentValue(ContentProperty, openDialog.FileName);
+            }
+        }
+
+        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e) => OpenFile();
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NAudioSimpleEngine.Instance.CanPause)
+            {
+                NAudioSimpleEngine.Instance.Pause();
+            }
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NAudioSimpleEngine.Instance.CanPlay)
+            {
+                NAudioSimpleEngine.Instance.Play();
+            }
+        }
+
+
+
+
+
+        // Begin dragging the window
+        private void PlayListView_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListBox).SelectedItem;
+            if (item != null)
+            {
+                if (NAudioSimpleEngine.Instance.CanStop)
+                {
+                    NAudioSimpleEngine.Instance.Stop();
+                }
+
+                var path = (item as TextBlock).Text;
+                NAudioSimpleEngine.Instance.OpenFile(path);
+                //FileText.SetCurrentValue(TextBox.TextProperty, openDialog.FileName);
+                NAudioSimpleEngine.Instance.Play();
+            }
+        }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NAudioSimpleEngine.Instance.CanStop)
+            {
+                NAudioSimpleEngine.Instance.Stop();
+            }
+        }
+
+        #endregion
     }
 }

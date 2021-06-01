@@ -230,10 +230,16 @@ namespace WolvenKit.Views.Editor
                             StaticReferences.GlobalPropertiesView.LoadModel(q);
                         }
                     }
+                    if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
+                    {
+
+                        propertiesViewModel.AddAudioItem(propertiesViewModel.PE_SelectedItem.FullName);
+                    }
+
                 }
                 propertiesViewModel.DecideForMeshPreview();
 
-
+                
 
 
             }

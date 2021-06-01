@@ -237,13 +237,15 @@ namespace WolvenKit.Views.Editor
 
                                 string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
 
-                                string ManagerCacheDir = Path.Combine(WKitAppData, "Temp");
+                                string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Mesh");
                                 string EndPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
                                 Directory.CreateDirectory(ManagerCacheDir);
                                 foreach (var f in Directory.GetFiles(ManagerCacheDir))
                                 {
-                                    try{File.Delete(f);}
-                                    catch{
+                                    try
+                                    { File.Delete(f); }
+                                    catch
+                                    {
                                     }
                                 }
                                 using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
@@ -267,8 +269,48 @@ namespace WolvenKit.Views.Editor
                         }
 
                     }
+                    if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (propertiesViewModel.AB_SelectedItem.AmbigiousFiles != null)
+                        {
+                            var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles.FirstOrDefault();
+                            if (q != null)
+                            {
+
+
+                                string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+
+                                string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Audio_import");
+                                string EndPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
+                                Directory.CreateDirectory(ManagerCacheDir);
+                                foreach (var f in Directory.GetFiles(ManagerCacheDir))
+                                {
+                                    try
+                                    { File.Delete(f); }
+                                    catch
+                                    {
+                                    }
+                                }
+                                using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
+                                q.Extract(fs);
+
+
+                                if (File.Exists(EndPath))
+                                {
+                                    Trace.WriteLine("adding audio file");
+                                    propertiesViewModel.AddAudioItem(EndPath);
+
+                                }
+
+                            }
+                        }
+                    }
                 }
                 propertiesViewModel.DecideForMeshPreview();
+
+
+
+
 
 
             }
