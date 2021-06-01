@@ -125,6 +125,8 @@ namespace WolvenKit.Common.Model.Cr2w
 
         string Elementtype { get; set; }
         Type InnerType { get; }
+
+        public IEditableVariable GetElementInstance(string varName);
     }
     public interface IREDArray<T> : IREDArray
     {
@@ -152,7 +154,7 @@ namespace WolvenKit.Common.Model.Cr2w
 
 
     /// <summary>
-    /// RED3, RED4?
+    /// RED3
     /// Handles are Int32 that store
     /// if larger than 0 a reference to a chunk inside the cr2w file (aka Soft)
     /// if less than 0 a reference to a string in the imports table (aka Pointer)
@@ -169,7 +171,7 @@ namespace WolvenKit.Common.Model.Cr2w
     }
 
     /// <summary>
-    /// RED3
+    /// RED3+4
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
     public interface IREDPtr : IREDChunkPtr

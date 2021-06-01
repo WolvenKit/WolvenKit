@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
@@ -21,42 +22,126 @@ using ISerializable = System.Runtime.Serialization.ISerializable;
 
 namespace WolvenKit.CLI
 {
-    public class CVarContractResolver : DefaultContractResolver
+    public static class Red4Serializer
     {
-        public static readonly CVarContractResolver Instance = new CVarContractResolver();
-
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        public static void PopulateCVarData(this IEditableVariable cvar, CVariableDto cVariableDto)
         {
-            var property = base.CreateProperty(member, memberSerialization);
-
-            if (property.PropertyType == null)
+            foreach (var (propertyName, value) in cVariableDto)
             {
-                return property;
-            }
-
-            if (property.PropertyType.IsSubclassOf(typeof(CVariable)))
-            {
-                property.ShouldSerialize = (o) =>
+                var redProperty = GetRedProperty(cvar, propertyName);
+                if (redProperty == null)
                 {
-                    var e = (CVariable)o;
+                    throw new InvalidParsingException("not a CVariable");
+                }
+                redProperty.SetFromJObject(value);
+            }
+        }
 
-                    var s = property.PropertyName;
-                    var p = e.accessor[o,s];
-                    if (p is CVariable x)
+        /// <summary>
+        /// Parse
+        /// </summary>
+        /// <param name="cVariable"></param>
+        /// <param name="value">either a JArray, JObject or primitive value</param>
+        /// <exception cref="InvalidParsingException"></exception>
+        public static void SetFromJObject(this IEditableVariable cVariable, object value)
+        {
+            // switch over the jobject
+            switch (value)
+            {
+                // enums and arrays are JArrays and can be directly deserialized
+                case JArray jArray:
+                    switch (cVariable)
                     {
-                        return x.IsSerialized;
+                        // enums are serialized as list of strings
+                        case IREDEnum:
+                            var enumobj = jArray.ToObject<List<string>>();
+                            if (enumobj == null)
+                            {
+                                throw new InvalidParsingException("not a CVariable");
+                            }
+                            cVariable.SetValue(enumobj);
+                            break;
+                        // arrays
+                        case IREDArray redArray:
+                            var listOfObjects = jArray.ToObject<List<object>>();
+                            if (listOfObjects == null)
+                            {
+                                throw new InvalidParsingException("not a CVariable");
+                            }
+                            for (var i = 0; i < listOfObjects.Count; i++)
+                            {
+                                var jitem = listOfObjects[i];
+                                var element = redArray.GetElementInstance(i.ToString());
+                                // parse the elements according to the array type
+                                element.SetFromJObject(jitem);
+                            }
+                            break;
+                        default:
+                            throw new InvalidParsingException("not a CVariable");
+                    }
+                    break;
+                // complex objects are JObjects and can be deserialized as CVariableDto (recursive)
+                case JObject jObject:
+                    cVariable.PopulateCVarData(jObject.ToObject<CVariableDto>());
+                    break;
+                // does that ever happen?
+                case JToken jToken:
+                    throw new InvalidParsingException("file format not supported");
+                // primitive types can be set directly
+                default:
+                    switch (value)
+                    {
+                        // all numeric values are deserialized as long
+                        case long l:
+                            cVariable.SetValue(l.ToString()); // cast to string to do the parsing in the classes :/
+                            break;
+                        // other primitive types can be set directly
+                        case bool b:
+                            cVariable.SetValue(b);
+                            break;
+                        case string s:
+                            cVariable.SetValue(s);
+                            break;
+                        default:
+                            throw new InvalidParsingException("file format not supported");
                     }
 
-                    return e.IsSerialized;
-                };
+                    break;
+            }
+        }
+
+        public static CVariable GetRedProperty(IEditableVariable cvar, string propertyName)
+        {
+            foreach (var member in REDReflection.GetMembers(cvar))
+            {
+                try
+                {
+                    var redname = REDReflection.GetREDNameString(member);
+                    if (redname != propertyName)
+                    {
+                        continue;
+                    }
+
+                    var prop = cvar.accessor[cvar, member.Name];
+                    var cprop = prop as CVariable;
+
+                    return cprop;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
 
-            return property;
+            return null;
         }
 
 
     }
 
+
+    #region models
 
     public class Red4W2rcFileDto
     {
@@ -66,14 +151,16 @@ namespace WolvenKit.CLI
 
         public List<CR2WBufferWrapperDto> Buffers { get; set; } = new();
 
-
-        public Red4W2rcFileDto FromW2rc(CR2WFile cr2w)
+        public Red4W2rcFileDto()
         {
-            this.Chunks = cr2w.Chunks
-                .ToDictionary(_ => _.REDType, _ => new CR2WExportWrapperDto(_));
-            this.Buffers = cr2w.Buffers.Select(_ => new CR2WBufferWrapperDto(_)).ToList();
 
-            return this;
+        }
+
+        public Red4W2rcFileDto(IWolvenkitFile cr2w)
+        {
+            Chunks = cr2w.Chunks
+                .ToDictionary(_ => _.REDType, _ => new CR2WExportWrapperDto(_));
+            Buffers = cr2w.Buffers.Select(_ => new CR2WBufferWrapperDto(_)).ToList();
         }
 
         public CR2WFile ToW2rc()
@@ -90,19 +177,12 @@ namespace WolvenKit.CLI
             // order so that parent chunks get created first
             var groupedChunks = Chunks
                 .GroupBy(_ => _.Value.ParentChunkIndex);
-            var cr2wChunks = new List<CR2WExportWrapper>();
             foreach (var groupedChunk in groupedChunks)
             {
                 foreach (var (key, value) in groupedChunk.OrderBy(_ => _.Value.ChunkIndex))
                 {
-                    cr2wChunks.Add(value.ToRedExport(cr2w, key));
+                    value.CreateChunkInFile(cr2w, key);
                 }
-            }
-
-            // add to cr2w file
-            foreach (var cr2WExportWrapper in cr2wChunks.OrderBy(_ => _.ChunkIndex))
-            {
-                cr2w.Chunks.Add(cr2WExportWrapper);
             }
 
             return cr2w;
@@ -115,17 +195,19 @@ namespace WolvenKit.CLI
         public int ParentChunkIndex { get; set; }
         public CVariableDto Data { get;set; }
 
+        public CR2WExportWrapperDto()
+        {
 
-        public CR2WExportWrapperDto() { }
+        }
 
         public CR2WExportWrapperDto(ICR2WExport cr2WExport)
         {
             ChunkIndex = cr2WExport.ChunkIndex;
             ParentChunkIndex = cr2WExport.ParentChunkIndex;
-            Data = new CVariableDto().FromCvariable(cr2WExport.Data);
+            Data = new CVariableDto(cr2WExport.Data);
         }
 
-        public CR2WExportWrapper ToRedExport(CR2WFile cr2WFile, string argKey)
+        public void CreateChunkInFile(CR2WFile cr2WFile, string argKey)
         {
             var parentChunk = ParentChunkIndex == -1
                 ? null
@@ -134,103 +216,24 @@ namespace WolvenKit.CLI
             // create wrapped Cvariable
             var cvar = CR2WTypeManager.Create(argKey, argKey, cr2WFile, parentChunk?.Data as CVariable);
             // add data
-            PopulateCVarData(ref cvar, Data);
+            cvar.PopulateCVarData(Data);
 
-            var export = cr2WFile.CreateChunk(cvar, ChunkIndex, parentChunk as CR2WExportWrapper);
-
-            return export;
+            cr2WFile.CreateChunk(cvar, ChunkIndex, parentChunk as CR2WExportWrapper);
         }
 
-        private static void PopulateCVarData(ref CVariable cvar, CVariableDto cVariableDto)
-        {
-            foreach (var (propertyName, value) in cVariableDto)
-            {
-                var cobj = GetRedProperty(cvar, propertyName);
-                if (cobj == null)
-                {
-                    throw new InvalidParsingException("not a CVariable");
-                }
-
-                switch (value)
-                {
-                    // complex objects are JObjects and can be deserialized as CVariableDto (recursive)
-                    case JObject jObject:
-                        var dict = jObject.ToObject<CVariableDto>();
-                        PopulateCVarData(ref cobj, dict);
-                        break;
-                    // simple objects are JTokens and can be directly (needs type info from redproperty)
-                    case JToken jToken:
-                        cobj.SetValue(DeserializeRedValue(cobj, jToken));
-                        break;
-                    // primitive types can be set directly
-                    default:
-                        switch (value)
-                        {
-                            // all numeric values are deserialized as long
-                            case long l:
-                                cobj.SetValue(l.ToString()); // cast to string to do the parsing in the classes :/
-                                break;
-                            // other primitive types can be set directly
-                            case bool b: cobj.SetValue(b); break;
-                            case string s: cobj.SetValue(s); break;
-                            default:
-                                throw new InvalidParsingException("file format not supported");
-                        }
-                        break;
-                }
-            }
-        }
-
-        private static object DeserializeRedValue(CVariable cobj, JToken value)
-        {
-            switch (cobj)
-            {
-                // enums are serialized as list of strings
-                case IREDEnum b:
-                    return value.ToObject<List<string>>();
-                // ???
-                case IREDBool b:
-                    return value.ToObject<bool>();
-                default:
-                    throw new InvalidParsingException("not a CVariable");
-            }
-        }
-
-        private static CVariable GetRedProperty(CVariable cvar, string propertyName)
-        {
-            foreach (var member in REDReflection.GetMembers(cvar))
-            {
-                try
-                {
-                    var redname = REDReflection.GetREDNameString(member);
-                    if (redname != propertyName)
-                    {
-                        continue;
-                    }
-
-                    var prop = cvar.accessor[cvar, member.Name];
-                    return prop as CVariable;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
-
-            return null;
-        }
     }
-
-
-
 
     public class CVariableDto : IDictionary<string,object>
     {
         public Dictionary<string, object> Properties { get; set; } = new();
         public bool ShouldSerializeProperties() => (Properties.Count > 0);
 
-        public CVariableDto FromCvariable(IEditableVariable data)
+        public CVariableDto()
+        {
+
+        }
+
+        public CVariableDto(IEditableVariable data)
         {
             foreach (var cvar in data.SerializedProperties)
             {
@@ -249,17 +252,15 @@ namespace WolvenKit.CLI
                         }
                         var c = dyn
                             .Cast<IEditableVariable>()
-                            .Select(_ => new CVariableDto().FromCvariable(_));
+                            .Select(_ => new CVariableDto(_));
                         Properties.Add(cvar.REDName, c);
                         break;
                     // default for complex properties is as CVariableDto
                     default:
-                        Properties.Add(cvar.REDName, new CVariableDto().FromCvariable(cvar));
+                        Properties.Add(cvar.REDName, new CVariableDto(cvar));
                         break;
                 }
             }
-
-            return this;
         }
 
         #region implements IDictionary
@@ -326,5 +327,7 @@ namespace WolvenKit.CLI
                 index = Index
             });
     }
+
+    #endregion
 
 }

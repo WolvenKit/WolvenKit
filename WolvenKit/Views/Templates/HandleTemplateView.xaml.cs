@@ -63,7 +63,7 @@ namespace WolvenKit.Views.Templates
                 view.BindingCollection.Add(s);
             }
 
-            view.SelectedItem = iptr.Reference;
+            view.SelectedItem = iptr.GetReference();
         }
 
 
@@ -74,7 +74,7 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-            if (RedChunkPtr.Reference == SelectedItem)
+            if (RedChunkPtr.GetReference() == SelectedItem)
             {
                 return;
             }

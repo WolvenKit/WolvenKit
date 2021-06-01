@@ -113,16 +113,16 @@ namespace CP77Tools.Tasks
                         return;
                     }
 
-                    var ojson =
-                        JsonConvert.SerializeObject(
-                            cr2w,
-                            Formatting.Indented,
-                            new JsonSerializerSettings { ContractResolver = new CVarContractResolver() }
-                        );
-                    File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.o.json"), ojson);
+                    // var ojson =
+                    //     JsonConvert.SerializeObject(
+                    //         cr2w,
+                    //         Formatting.Indented,
+                    //         new JsonSerializerSettings { ContractResolver = new CVarContractResolver() }
+                    //     );
+                    // File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.o.json"), ojson);
 
 
-                    var dto = new Red4W2rcFileDto().FromW2rc(cr2w);
+                    var dto = new Red4W2rcFileDto(cr2w);
                     var json =
                             JsonConvert.SerializeObject(
                                 dto,
@@ -130,14 +130,20 @@ namespace CP77Tools.Tasks
                             );
                     File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"), json);
 
-                    // var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
-                    // doc.Save(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.xml"));
+                    var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
+                    doc.Save(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.xml"));
 
 
                     // dbg
 
                     var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
                     var w2rc = newdto.ToW2rc();
+
+                    using var fs2 = new FileStream(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.w2rc"),
+                        FileMode.Create, FileAccess.ReadWrite);
+                    using var bw = new BinaryWriter(fs2);
+
+                    w2rc.Write(bw);
 
                 }
 

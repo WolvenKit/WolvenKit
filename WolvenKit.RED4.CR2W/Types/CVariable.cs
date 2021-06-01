@@ -197,18 +197,6 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Methods
 
-        [OnSerializing()]
-        internal void OnSerializingMethod(StreamingContext context)
-        {
-
-        }
-
-        [OnSerialized()]
-        internal void OnSerializedMethod(StreamingContext context)
-        {
-
-        }
-
         protected T GetProperty<T>(ref T backingField, [CallerMemberName] string callerName = "") where T : class
         {
             if (backingField == null && cr2w.CreatePropertyOnAccess)
@@ -367,23 +355,20 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public List<IEditableVariable> GetExistingVariables(bool includeBuffers = true)
         {
-            List<IEditableVariable> redvariables = new List<IEditableVariable>(UnknownCVariables);
+            var redvariables = new List<IEditableVariable>(UnknownCVariables);
 
-            foreach (Member item in this.GetREDMembers(includeBuffers))
+            foreach (var item in this.GetREDMembers(includeBuffers))
             {
-                // ??
-                //if (includeBuffers && item.GetMemberAttribute<REDBufferAttribute>()==null)
-                //    continue;
-
                 var o = accessor[this, item.Name];
                 if (o is CVariable cvar)
                 {
-                    if (cvar.IsSerialized)
+                    // is buffer
+                    var isbuffer = item.GetMemberAttribute<REDBufferAttribute>() != null;
+
+                    if (cvar.IsSerialized || isbuffer)
+                    {
                         redvariables.Add(cvar);
-                }
-                else // is null
-                {
-                    // do nothing
+                    }
                 }
             }
 

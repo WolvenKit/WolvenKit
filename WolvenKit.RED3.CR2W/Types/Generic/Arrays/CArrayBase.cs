@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -41,6 +42,17 @@ namespace WolvenKit.RED3.CR2W.Types
                     ? BuildTypeName(Elementtype, Flags.ToArray())
                     : BuildTypeName(Elementtype);
             }
+        }
+
+        public IEditableVariable GetElementInstance(string varName)
+        {
+            var element = CR2WTypeManager.Create(Elementtype, varName, cr2w, this);
+            if (element is IEditableVariable evar)
+            {
+                return evar;
+            }
+
+            throw new TypeMismatchException(typeof(T).FullName, "");
         }
 
         private string BuildTypeName(string type, params int[] flags)

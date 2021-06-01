@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class wCHandle<T> : CVariable, IREDHandle where T : IEditableVariable
+    public class wCHandle<T> : CVariable, IREDPtr where T : IEditableVariable
     {
         public wCHandle(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -29,16 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Properties
 
-        //public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
         public int ChunkIndex { get; set; }
-
-        [JsonIgnore] public bool ChunkHandle { get; set; }
-
-        [JsonIgnore] public string DepotPath { get; set; }
-
-        [JsonIgnore] public string ClassName { get; set; }
-
-        [JsonIgnore] public ushort Flags { get; set; }
 
         [JsonIgnore] public string ReferenceType => REDType.Split(':').Last();
 
@@ -71,21 +62,6 @@ namespace WolvenKit.RED4.CR2W.Types
             return Cr2wFile.Chunks.Where(cr2WExport => types.Contains(cr2WExport.REDType)).ToList();
         }
 
-        public void ChangeHandleType()
-        {
-            ChunkHandle = !ChunkHandle;
-            // change to external path
-            if (ChunkHandle)
-            {
-
-            }
-            // change to chunk handle
-            else
-            {
-
-            }
-        }
-
         public override void Read(BinaryReader file, uint size) => SetValueInternal(file.ReadInt32());
 
 
@@ -96,17 +72,9 @@ namespace WolvenKit.RED4.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             var val = 0;
-            if (ChunkHandle)
+            if (GetReference() != null)
             {
-                if (GetReference() != null)
-                {
-                    val = GetReference().ChunkIndex + 1;
-                }
-            }
-            else
-            {
-                var import = cr2w.Imports.FirstOrDefault(_ => _.DepotPathStr == DepotPath && _.ClassNameStr == ClassName);
-                val = -cr2w.Imports.IndexOf(import) - 1;
+                val = GetReference().ChunkIndex + 1;
             }
             file.Write(val);
         }
@@ -115,16 +83,14 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             switch (val)
             {
+                case string s:
+                    SetValueInternal(int.Parse(s));
+                    break;
                 case int o:
                     SetValueInternal(o);
                     break;
-                case IREDHandle cvar:
-                    this.ChunkHandle = cvar.ChunkHandle;
-                    this.DepotPath = cvar.DepotPath;
-                    this.ClassName = cvar.ClassName;
-                    this.Flags = cvar.Flags;
-
-                    this.SetReference(cvar.GetReference());
+                case IREDPtr cvar:
+                    SetReference(cvar.GetReference());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -134,27 +100,12 @@ namespace WolvenKit.RED4.CR2W.Types
         }
         private void SetValueInternal(int val)
         {
-            if (val >= 0)
+            if (val < 0)
             {
-                ChunkHandle = true;
-            }
-
-            if (ChunkHandle)
-            {
-                SetReference(val == 0 ? null : cr2w.Chunks[val - 1]);
-            }
-            else
-            {
-                DepotPath = cr2w.Imports[-val - 1].DepotPathStr;
-
-                var filetype = cr2w.Imports[-val - 1].ClassName;
-                ClassName = cr2w.Names[filetype].Str;
-
-                Flags = cr2w.Imports[-val - 1].Flags;
-
-                //TODO are non-chunk handles used in cp77?
                 throw new NotImplementedException("wCHandle.Read");
             }
+
+            ChunkIndex = val;
         }
 
         public object GetValue() => ChunkIndex;
@@ -162,43 +113,22 @@ namespace WolvenKit.RED4.CR2W.Types
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (wCHandle<T>)base.Copy(context);
-            copy.ChunkHandle = ChunkHandle;
 
-            // Soft
-            copy.DepotPath = DepotPath;
-            copy.ClassName = ClassName;
-            copy.Flags = Flags;
-
-            // Ptr
-            if (ChunkHandle && GetReference() != null)
+            if (GetReference() != null)
             {
-                ICR2WExport newref = context.TryLookupReference(GetReference(), copy);
+                var newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
+                {
                     copy.SetReference(newref);
+                }
             }
 
             return copy;
         }
 
-        public override string ToString()
-        {
-            if (ChunkHandle)
-            {
-                if (GetReference() == null)
-                    return "NULL";
-                else
-                    return $"{GetReference().REDType} #{GetReference().ChunkIndex}";
-            }
+        public override string ToString() => GetReference() == null ? "NULL" : $"{GetReference().REDType} #{GetReference().ChunkIndex}";
 
-            return ClassName + ": " + DepotPath;
-        }
-
-        public override string REDLeanValue()
-        {
-            if (GetReference() == null)
-                return "";
-            return $"{GetReference().ChunkIndex}";
-        }
+        public override string REDLeanValue() => GetReference() == null ? "" : $"{GetReference().ChunkIndex}";
 
         #endregion
     }

@@ -14,6 +14,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
 

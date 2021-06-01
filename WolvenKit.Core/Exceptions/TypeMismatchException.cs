@@ -1,6 +1,6 @@
 using System;
 
-namespace WolvenKit.Common.Exceptions
+namespace WolvenKit.Core.Exceptions
 {
     public class TypeMismatchException : Exception
     {

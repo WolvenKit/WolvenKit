@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -40,20 +41,30 @@ namespace WolvenKit.RED4.CR2W.Types
         [Browsable(false)]
         public override string REDType => REDReflection.GetREDTypeString(GetType());
 
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            return Elements.Cast<IEditableVariable>().ToList();
-        }
+        public override List<IEditableVariable> GetEditableVariables() => Elements.Cast<IEditableVariable>().ToList();
 
         public override void Read(BinaryReader file, uint size)
         {
             throw new NotImplementedException("CArrayBase.Read");
         }
 
+        public IEditableVariable GetElementInstance(string varName)
+        {
+            var element = Create<T>(varName, Array.Empty<int>());
+            if (element is IEditableVariable evar)
+            {
+                return evar;
+            }
+
+            throw new TypeMismatchException(typeof(T).FullName, "");
+        }
+
+
+
         protected void Read(BinaryReader file, uint size, int elementcount)
         {
 
-            for (int i = 0; i < elementcount; i++)
+            for (var i = 0; i < elementcount; i++)
             {
                 var element = Create<T>(i.ToString(), new int[0]);
 
@@ -63,10 +74,12 @@ namespace WolvenKit.RED4.CR2W.Types
 
                 var elementsize = 0;
                 if (element is IDataBufferAccessor)
+                {
                     elementsize = (int) ((size - 4) / elementcount);
+                }
 
                 element.Read(file, (uint)elementsize);
-                if (element is T te)
+                if (element is { } te)
                 {
                     te.IsSerialized = true;
                     Elements.Add(te);

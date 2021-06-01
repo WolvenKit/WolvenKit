@@ -16,32 +16,49 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta]
     public class CPtr<T> : CVariable, IREDPtr where T : CVariable
     {
-        private ICR2WExport _reference;
-
-
         public CPtr(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
         #region Properties
 
-        public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
+        public int ChunkIndex { get; set; }
 
         public void SetReference(ICR2WExport value)
         {
-            _reference = value;
+            SetValueInternal(value.ChunkIndex);
+
+            //Populate the reverse-lookups
+            GetReference().AdReferences.Add(this);
+            cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
+            //Soft mount the chunk except root chunk
+            if (GetReference().ChunkIndex != 0)
+            {
+                GetReference().MountChunkVirtually(LookUpChunkIndex());
+            }
+            //Hard mounts
+            switch (REDName)
+            {
+                case "parent":
+                case "transformParent":
+                    cr2w.Chunks[LookUpChunkIndex()].MountChunkVirtually(GetReference(), true);
+                    break;
+                //   case "child" when Reference.IsVirtuallyMounted:
+                //       //tried for w2ent IAttachments, not the proper way to do it, this is graph viz territory
+                //       Reference.MountChunkVirtually(GetVarChunkIndex(), true);
+                //       break;
+            }
         }
 
-        public ICR2WExport GetReference()
-        {
-            return _reference;
-        }
+        public ICR2WExport GetReference() => ChunkIndex == 0 ? null : cr2w.Chunks[ChunkIndex - 1];
+
 
         public string ReferenceType => REDType.Split(':').Last();
 
         #endregion
 
         #region Methods
+
         public string GetPtrTargetType()
         {
             return ReferenceType;
@@ -57,47 +74,25 @@ namespace WolvenKit.RED3.CR2W.Types
 
         private void SetValueInternal(int val)
         {
-            try
+            if (val < 0)
             {
-                SetReference(val == 0 ? null : cr2w.Chunks[val - 1]);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidPtrException(ex.Message);
+                throw new NotImplementedException("wCHandle.Read");
             }
 
-            // Try reparenting on virtual mountpoint
-            if (GetReference() != null)
-            {
-                //Populate the reverse-lookups
-                GetReference().AdReferences.Add(this);
-                cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                //Soft mount the chunk except root chunk
-                if (GetReference().ChunkIndex != 0)
-                {
-                    GetReference().MountChunkVirtually(LookUpChunkIndex());
-                }
-                //Hard mounts
-                switch (REDName)
-                {
-                    case "parent":
-                    case "transformParent":
-                        cr2w.Chunks[LookUpChunkIndex()].MountChunkVirtually(GetReference(), true);
-                        break;
-                 //   case "child" when Reference.IsVirtuallyMounted:
-                 //       //tried for w2ent IAttachments, not the proper way to do it, this is graph viz territory
-                 //       Reference.MountChunkVirtually(GetVarChunkIndex(), true);
-                 //       break;
-                }
-            }
+            ChunkIndex = val;
         }
 
+        /// <summary>
+        /// Call after the stringtable was generated!
+        /// </summary>
+        /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            int val = 0;
+            var val = 0;
             if (GetReference() != null)
+            {
                 val = GetReference().ChunkIndex + 1;
-
+            }
             file.Write(val);
         }
 
@@ -105,11 +100,14 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             switch (val)
             {
-                case ICR2WExport wrapper:
-                    SetReference(wrapper);
+                case string s:
+                    SetValueInternal(int.Parse(s));
                     break;
-                case IREDPtr cval:
-                    SetReference(cval.GetReference());
+                case int o:
+                    SetValueInternal(o);
+                    break;
+                case IREDPtr cvar:
+                    SetReference(cvar.GetReference());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -126,44 +124,20 @@ namespace WolvenKit.RED3.CR2W.Types
 
             if (GetReference() != null)
             {
-                ICR2WExport newref = context.TryLookupReference(GetReference(), copy);
+                var newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
-                    copy.SetValue(newref);
+                {
+                    copy.SetReference(newref);
+                }
             }
-
 
             return copy;
         }
 
+        public override string ToString() => GetReference() == null ? "NULL" : $"{GetReference().REDType} #{GetReference().ChunkIndex}";
 
+        public override string REDLeanValue() => GetReference() == null ? "" : $"{GetReference().ChunkIndex}";
 
-        public override string ToString()
-        {
-            if (GetReference() == null)
-                return "NULL";
-            return $"{GetReference().REDType} #{GetReference().ChunkIndex}";
-        }
-
-        public override string REDLeanValue()
-        {
-            if (GetReference() == null)
-                return "";
-            return $"{GetReference().ChunkIndex}";
-        }
-
-
-        //public override void SerializeToXml(XmlWriter xw)
-        //{
-        //    DataContractSerializer ser = new DataContractSerializer(GetType());
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        ser.WriteStartObject(xw, this);
-        //        ser.WriteObjectContent(xw, this);
-        //        xw.WriteElementString("PtrTargetType", GetPtrTargetType());
-        //        xw.WriteElementString("Target", ToString());
-        //        ser.WriteEndObject(xw);
-        //    }
-        //}
         #endregion
     }
 
