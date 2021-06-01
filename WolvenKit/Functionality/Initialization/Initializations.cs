@@ -7,6 +7,7 @@ using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
 using FFmpeg.AutoGen;
+using Microsoft.Web.WebView2.Core;
 using Octokit;
 using Orc.Squirrel;
 using Orchestra.Services;
@@ -27,6 +28,14 @@ namespace WolvenKit.Functionality.Initialization
     public static class Initializations
     {
 
+        /// <summary>
+        /// Initialize webview2
+        /// </summary>
+        public async static void InitializeWebview2()
+        {
+          Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, @"C:\WebViewData", null);
+
+        }
         // Initialize Github RPC
         public static void InitializeGitHub()
         {
