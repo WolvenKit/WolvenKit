@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
+using Catel.IoC;
 using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
@@ -304,17 +305,23 @@ namespace WolvenKit.Views.Shell
                 if (e.NewValue is ContentControl content)
                 {
                     var x = DockingManager.GetHeader((DependencyObject)e.NewValue);
+                    var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+
                     switch (x)
                     {
                         case "Project Explorer":
                             StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+                            propertiesViewModel.SetToNullAndResetVisibility();
+                            propertiesViewModel.PE_FileInfoVisible = true;
 
                             break;
                         case "Asset Browser":
                             StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
-
+                            propertiesViewModel.SetToNullAndResetVisibility();
+                            propertiesViewModel.AB_FileInfoVisible = true;
                             break;
                         case "CR2W Editor":
+                            // This never happens as CR2W editor is always named after its active document.
                             break;
                         case "Properties":
                             break;

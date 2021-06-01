@@ -17,6 +17,7 @@ namespace WolvenKit.Common.Model
         public GameFileTreeNode Children { get; set; }
         public string Extension { get; set; }
         public string Name { get; set; }
+        public ulong Hash { get; set; }
         public GameFileTreeNode Parent { get; set; }
         public string Size { get; set; }
         public GameFileTreeNode This { get; set; }

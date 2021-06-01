@@ -109,6 +109,8 @@ namespace WolvenKit.Common
 
             ret.AddRange(Files.Select(f => new AssetBrowserData()
             {
+                AmbigiousFiles = f.Value,
+                Hash = f.Value[0].Key,
                 Name = f.Key,
                 Size = FormatSize(f.Value[0].Size),
                 This = this,

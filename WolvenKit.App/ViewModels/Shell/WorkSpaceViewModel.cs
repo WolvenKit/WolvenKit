@@ -89,7 +89,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
             ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
             ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
-            ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
+            //ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
             ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
             ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
@@ -137,7 +137,7 @@ namespace WolvenKit.ViewModels.Shell
                 JournalEditorVM,
                 VisualEditorVM,
                 AnimationToolVM,
-                AudioToolVM,
+                //AudioToolVM,
                 ImporterToolVM,
                 CR2WToTextToolVM,
                 GameDebuggerToolVM,
@@ -189,7 +189,7 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
+           // commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.ShowImportExportTool, ShowImportExportToolCommand, this);
@@ -369,7 +369,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region command implementation
 
-        public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
+       // public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
         public void ExecuteVideoTool()
         {
@@ -575,7 +575,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
-        private AudioToolViewModel _AudioToolVM = null;
+      //  private AudioToolViewModel _AudioToolVM = null;
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
@@ -688,15 +688,15 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public AudioToolViewModel AudioToolVM
-        {
-            get
-            {
-                _AudioToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AudioToolViewModel>();
-                _AudioToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _AudioToolVM;
-            }
-        }
+        //public AudioToolViewModel AudioToolVM
+        //{
+        //    get
+        //    {
+        //        _AudioToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AudioToolViewModel>();
+        //        _AudioToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
+        //        return _AudioToolVM;
+        //    }
+        //}
 
         public BulkEditorViewModel BulkEditorVM
         {
@@ -1148,11 +1148,11 @@ namespace WolvenKit.ViewModels.Shell
             void OpenAudioFile(string full)
             {
 
+                // commented for testing 
 
-
-                var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
-                ExecuteAudioTool();
-                z.AddAudioItem(full);
+                //var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
+                //ExecuteAudioTool();
+                //z.AddAudioItem(full);
             }
 
             void ShellExecute(string path)
