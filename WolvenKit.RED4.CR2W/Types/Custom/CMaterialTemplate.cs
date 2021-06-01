@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 ushort offset = 0;
                 foreach (var handle in parameter)
                 {
-                    if (handle.Reference?.Data is not CMaterialParameter param) continue;
+                    if (handle.GetReference()?.Data is not CMaterialParameter param) continue;
                     var nam = param.ParameterName;
 
                     // write

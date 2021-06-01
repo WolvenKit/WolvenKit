@@ -145,7 +145,8 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface IREDChunkPtr : IREDPrimitive
     {
         public int ChunkIndex { get; }
-        ICR2WExport Reference { get; set; }
+        void SetReference(ICR2WExport value);
+        ICR2WExport GetReference();
         string ReferenceType { get; }
     }
 

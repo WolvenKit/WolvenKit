@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Properties
 
-        public int ChunkIndex => Reference?.ChunkIndex ?? -1;
+        public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
 
         [JsonIgnore] public bool ChunkHandle { get; set; }
 
@@ -42,26 +42,26 @@ namespace WolvenKit.RED4.CR2W.Types
 
         [JsonIgnore] public ushort Flags { get; set; }
 
-        [JsonIgnore] public ICR2WExport Reference
+        public void SetReference(ICR2WExport value)
         {
-            get => _reference;
-            set
-            {
-                _reference = value;
+            _reference = value;
 
-                if (value != null)
-                {
-                    //Populate the reverse-lookups
-                    Reference.AdReferences.Add(this);
-                    cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                    //Soft mount the chunk except root chunk
-                    if (Reference.ChunkIndex != 0)
-                    {
-                        Reference.MountChunkVirtually(LookUpChunkIndex());
-                    }
-                }
+            if (value == null)
+            {
+                return;
+            }
+
+            //Populate the reverse-lookups
+            GetReference().AdReferences.Add(this);
+            cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
+            //Soft mount the chunk except root chunk
+            if (GetReference().ChunkIndex != 0)
+            {
+                GetReference().MountChunkVirtually(LookUpChunkIndex());
             }
         }
+
+        public ICR2WExport GetReference() => _reference;
 
         [JsonIgnore] public string ReferenceType => REDType.Split(':').Last();
 
@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
             if (ChunkHandle)
             {
-                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
+                SetReference(val == 0 ? null : cr2w.Chunks[val - 1]);
             }
             else
             {
@@ -127,11 +127,13 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            int val = 0;
+            var val = 0;
             if (ChunkHandle)
             {
-                if (Reference != null)
-                    val = Reference.ChunkIndex + 1;
+                if (GetReference() != null)
+                {
+                    val = GetReference().ChunkIndex + 1;
+                }
             }
             else
             {
@@ -145,6 +147,9 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             switch (val)
             {
+                case string s:
+                    SetValueInternal(int.Parse(s));
+                    break;
                 case int o:
                     SetValueInternal(o);
                     break;
@@ -154,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
                     this.ClassName = cvar.ClassName;
                     this.Flags = cvar.Flags;
 
-                    this.Reference = cvar.Reference;
+                    this.SetReference(cvar.GetReference());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -176,11 +181,11 @@ namespace WolvenKit.RED4.CR2W.Types
             copy.Flags = Flags;
 
             // Ptr
-            if (ChunkHandle && Reference != null)
+            if (ChunkHandle && GetReference() != null)
             {
-                ICR2WExport newref = context.TryLookupReference(Reference, copy);
+                ICR2WExport newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
-                    copy.Reference = newref;
+                    copy.SetReference(newref);
             }
 
             return copy;
@@ -190,10 +195,10 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (ChunkHandle)
             {
-                if (Reference == null)
+                if (GetReference() == null)
                     return "NULL";
                 else
-                    return $"{Reference.REDType} #{Reference.ChunkIndex}";
+                    return $"{GetReference().REDType} #{GetReference().ChunkIndex}";
             }
 
             return ClassName + ": " + DepotPath;
@@ -201,9 +206,9 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override string REDLeanValue()
         {
-            if (Reference == null)
+            if (GetReference() == null)
                 return "";
-            return $"{Reference.ChunkIndex}";
+            return $"{GetReference().ChunkIndex}";
         }
 
         #endregion

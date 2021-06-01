@@ -130,13 +130,14 @@ namespace CP77Tools.Tasks
                             );
                     File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"), json);
 
-                    var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
-                    doc.Save(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.xml"));
+                    // var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
+                    // doc.Save(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.xml"));
 
 
                     // dbg
 
                     var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
+                    var w2rc = newdto.ToW2rc();
 
                 }
 

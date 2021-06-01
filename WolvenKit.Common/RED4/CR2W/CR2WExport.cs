@@ -87,7 +87,7 @@ namespace WolvenKit.RED4.CR2W
         /// </summary>
         /// <param name="export"></param>
         /// <param name="file"></param>
-        public CR2WExportWrapper(CR2WExport export, CR2WFile file)
+        internal CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
             this.cr2w = file;
             _export = export;
@@ -224,140 +224,13 @@ namespace WolvenKit.RED4.CR2W
 
             Data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.Data as CVariable);
 
-            if (Data == null || Data is not CVariable cdata)
+            if (Data is not CVariable cdata)
             {
                 throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
             Data.IsSerialized = true;
             cdata.SetREDFlags(Export.objectFlags);
-        }
-
-        public Cr2wVariableDumpObject GetDumpObject(Stream stream)
-        {
-            stream.Seek(Export.dataOffset, SeekOrigin.Begin);
-            using var br = new BinaryReader(stream);
-            var o = new Cr2wVariableDumpObject()
-            {
-                Name = this.REDName,
-                Type = this.REDType,
-                Size = (int)this.Export.dataSize,
-                Offset = br.BaseStream.Position
-            };
-
-            var zero = br.ReadByte();
-            if (zero != 0)
-                return null;
-
-            while (true)
-            {
-                try
-                {
-                    var nameId = br.ReadUInt16();
-                    if (nameId == 0)
-                        break;
-
-                    var variable = new Cr2wVariableDumpObject();
-                    variable.Offset = br.BaseStream.Position - 3;
-
-                    var typeId = (int)br.ReadUInt16();
-                    variable.Size = br.ReadInt32();
-
-                    var endoffset = br.BaseStream.Position + variable.Size - 4;
-
-                    try
-                    {
-                        variable.Name = cr2w.StringDictionary.Values.ToList()[(int)nameId];
-                        variable.Type = cr2w.StringDictionary.Values.ToList()[typeId];
-
-                        if (variable.Type.Contains("array:"))
-                        {
-                            var count = br.ReadUInt32();
-                            for (int i = 0; i < count; i++)
-                            {
-                                // dbg for now
-                                var elementsize = (variable.Size - 8) / count;
-                                if (elementsize > 9)
-                                    variable.Variables = TryGetClassVariables((int)elementsize);
-                            }
-                        }
-                        // may be another class:
-                        else if (variable.Size > 9)
-                        {
-                            variable.Variables = TryGetClassVariables(variable.Size);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // TODO: Are we intentionally swallowing this?
-                    }
-
-                    // go to variable end
-                    br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
-                    o.Variables.Add(variable);
-                }
-                catch (Exception)
-                {
-                    return o;
-                }
-            }
-
-            return o;
-
-            List<Cr2wVariableDumpObject> TryGetClassVariables(int innersize)
-            {
-                var ret = new List<Cr2wVariableDumpObject>();
-                var startpos = br.BaseStream.Position;
-
-                var zero = br.ReadByte();
-                if (zero != 0)
-                    return ret;
-
-                while (true)
-                {
-                    try
-                    {
-                        var nameId = br.ReadUInt16();
-                        if (nameId == 0)
-                            return ret;
-
-                        var variable = new Cr2wVariableDumpObject
-                        {
-                            Offset = br.BaseStream.Position - 3,
-                            Name = cr2w.StringDictionary.Values.ToList()[(int)nameId],
-                            Type = cr2w.StringDictionary.Values.ToList()[(int)br.ReadUInt16()],
-                            Size = br.ReadInt32()
-                        };
-
-                        var endoffset = br.BaseStream.Position + variable.Size - 4;
-
-                        //var buffer = br.ReadBytes(variable.Size - 4);
-                        // try read variable
-                        //array
-                        if (variable.Type.Contains("array:"))
-                        {
-                            var count = br.ReadUInt32();
-                            for (int i = 0; i < count; i++)
-                            {
-                                variable.Variables = TryGetClassVariables(variable.Size);
-                            }
-                        }
-                        // may be another class:
-                        else if (variable.Size > 9)
-                        {
-                            variable.Variables = TryGetClassVariables(variable.Size);
-                        }
-
-                        // go to variable end
-                        br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
-                        ret.Add(variable);
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
-                }
-            }
         }
 
         public virtual List<IEditableVariable> GetEditableVariables()

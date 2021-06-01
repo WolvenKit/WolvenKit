@@ -105,10 +105,8 @@ namespace WolvenKit.RED4.CR2W
         [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
         [JsonIgnore] public List<CR2WPropertyWrapper> Properties { get; private set; }
 
-        [JsonConverter(typeof(ConcreteConverter<List<CR2WExportWrapper>>))]
-        public List<ICR2WExport> Chunks { get; private set; }
-        [JsonConverter(typeof(ConcreteConverter<List<CR2WBufferWrapper>>))]
-        public List<ICR2WBuffer> Buffers { get; private set; }
+        public List<ICR2WExport> Chunks { get; set; }
+        public List<ICR2WBuffer> Buffers { get; set; }
 
         [JsonIgnore] public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
 
@@ -243,7 +241,7 @@ namespace WolvenKit.RED4.CR2W
                         {
                             // This leaves a dangling cptr/chandle in AdReferences,
                             // which needs to be adressed later.
-                            referrer.Reference = null;
+                            referrer.SetReference(null);
                         }
                     }
                 }

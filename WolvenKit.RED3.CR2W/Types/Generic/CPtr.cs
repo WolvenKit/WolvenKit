@@ -16,6 +16,7 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta]
     public class CPtr<T> : CVariable, IREDPtr where T : CVariable
     {
+        private ICR2WExport _reference;
 
 
         public CPtr(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
@@ -24,8 +25,18 @@ namespace WolvenKit.RED3.CR2W.Types
 
         #region Properties
 
-        public int ChunkIndex => Reference?.ChunkIndex ?? -1;
-        public ICR2WExport Reference { get; set; }
+        public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
+
+        public void SetReference(ICR2WExport value)
+        {
+            _reference = value;
+        }
+
+        public ICR2WExport GetReference()
+        {
+            return _reference;
+        }
+
         public string ReferenceType => REDType.Split(':').Last();
 
         #endregion
@@ -48,7 +59,7 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             try
             {
-                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
+                SetReference(val == 0 ? null : cr2w.Chunks[val - 1]);
             }
             catch (Exception ex)
             {
@@ -56,22 +67,22 @@ namespace WolvenKit.RED3.CR2W.Types
             }
 
             // Try reparenting on virtual mountpoint
-            if (Reference != null)
+            if (GetReference() != null)
             {
                 //Populate the reverse-lookups
-                Reference.AdReferences.Add(this);
+                GetReference().AdReferences.Add(this);
                 cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
                 //Soft mount the chunk except root chunk
-                if (Reference.ChunkIndex != 0)
+                if (GetReference().ChunkIndex != 0)
                 {
-                    Reference.MountChunkVirtually(LookUpChunkIndex());
+                    GetReference().MountChunkVirtually(LookUpChunkIndex());
                 }
                 //Hard mounts
                 switch (REDName)
                 {
                     case "parent":
                     case "transformParent":
-                        cr2w.Chunks[LookUpChunkIndex()].MountChunkVirtually(Reference, true);
+                        cr2w.Chunks[LookUpChunkIndex()].MountChunkVirtually(GetReference(), true);
                         break;
                  //   case "child" when Reference.IsVirtuallyMounted:
                  //       //tried for w2ent IAttachments, not the proper way to do it, this is graph viz territory
@@ -84,8 +95,8 @@ namespace WolvenKit.RED3.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             int val = 0;
-            if (Reference != null)
-                val = Reference.ChunkIndex + 1;
+            if (GetReference() != null)
+                val = GetReference().ChunkIndex + 1;
 
             file.Write(val);
         }
@@ -95,10 +106,10 @@ namespace WolvenKit.RED3.CR2W.Types
             switch (val)
             {
                 case ICR2WExport wrapper:
-                    Reference = wrapper;
+                    SetReference(wrapper);
                     break;
                 case IREDPtr cval:
-                    Reference = cval.Reference;
+                    SetReference(cval.GetReference());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -113,9 +124,9 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             var copy = (CPtr<T>)base.Copy(context);
 
-            if (Reference != null)
+            if (GetReference() != null)
             {
-                ICR2WExport newref = context.TryLookupReference(Reference, copy);
+                ICR2WExport newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
                     copy.SetValue(newref);
             }
@@ -128,16 +139,16 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override string ToString()
         {
-            if (Reference == null)
+            if (GetReference() == null)
                 return "NULL";
-            return $"{Reference.REDType} #{Reference.ChunkIndex}";
+            return $"{GetReference().REDType} #{GetReference().ChunkIndex}";
         }
 
         public override string REDLeanValue()
         {
-            if (Reference == null)
+            if (GetReference() == null)
                 return "";
-            return $"{Reference.ChunkIndex}";
+            return $"{GetReference().ChunkIndex}";
         }
 
 

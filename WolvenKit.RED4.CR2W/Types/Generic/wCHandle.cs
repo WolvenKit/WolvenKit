@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 {
     /// <summary>
     /// Handles are Int32 that store
-    /// if > 0: a reference to a chunk inside the cr2w file (aka Soft)
-    /// if < 0: a reference to a string in the imports table (aka Pointer)
+    /// if gt 0: a reference to a chunk inside the cr2w file (aka Soft)
+    /// if lt 0: a reference to a string in the imports table (aka Pointer)
     /// Exposed are
     /// if ChunkHandle:
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
@@ -23,15 +23,14 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta()]
     public class wCHandle<T> : CVariable, IREDHandle where T : IEditableVariable
     {
-        private ICR2WExport _reference;
-
         public wCHandle(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
         #region Properties
 
-        public int ChunkIndex => Reference?.ChunkIndex ?? -1;
+        //public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
+        public int ChunkIndex { get; set; }
 
         [JsonIgnore] public bool ChunkHandle { get; set; }
 
@@ -41,31 +40,27 @@ namespace WolvenKit.RED4.CR2W.Types
 
         [JsonIgnore] public ushort Flags { get; set; }
 
-        [JsonIgnore] public ICR2WExport Reference
-        {
-            get => _reference;
-            set
-            {
-                _reference = value;
-                if (value != null)
-                {
-                    //Populate the reverse-lookups
-                    Reference.AdReferences.Add(this);
-                    cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                    //Soft mount the chunk except root chunk
-                    if (Reference.ChunkIndex != 0)
-                    {
-                        Reference.MountChunkVirtually(LookUpChunkIndex());
-                    }
-                }
-            }
-        }
-
         [JsonIgnore] public string ReferenceType => REDType.Split(':').Last();
 
         #endregion
 
         #region Methods
+
+        public void SetReference(ICR2WExport value)
+        {
+            SetValueInternal(value.ChunkIndex);
+
+            //Populate the reverse-lookups
+            GetReference().AdReferences.Add(this);
+            cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
+            //Soft mount the chunk except root chunk
+            if (GetReference().ChunkIndex != 0)
+            {
+                GetReference().MountChunkVirtually(LookUpChunkIndex());
+            }
+        }
+
+        public ICR2WExport GetReference() => ChunkIndex == 0 ? null : cr2w.Chunks[ChunkIndex - 1];
 
         public IEnumerable<ICR2WExport> GetReferenceChunks()
         {
@@ -93,30 +88,6 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size) => SetValueInternal(file.ReadInt32());
 
-        private void SetValueInternal(int val)
-        {
-            if (val >= 0)
-            {
-                ChunkHandle = true;
-            }
-
-            if (ChunkHandle)
-            {
-                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
-            }
-            else
-            {
-                DepotPath = cr2w.Imports[-val - 1].DepotPathStr;
-
-                var filetype = cr2w.Imports[-val - 1].ClassName;
-                ClassName = cr2w.Names[filetype].Str;
-
-                Flags = cr2w.Imports[-val - 1].Flags;
-
-                //TODO are non-chunk handles used in cp77?
-                throw new NotImplementedException("wCHandle.Read");
-            }
-        }
 
         /// <summary>
         /// Call after the stringtable was generated!
@@ -127,9 +98,9 @@ namespace WolvenKit.RED4.CR2W.Types
             var val = 0;
             if (ChunkHandle)
             {
-                if (Reference != null)
+                if (GetReference() != null)
                 {
-                    val = Reference.ChunkIndex + 1;
+                    val = GetReference().ChunkIndex + 1;
                 }
             }
             else
@@ -153,13 +124,37 @@ namespace WolvenKit.RED4.CR2W.Types
                     this.ClassName = cvar.ClassName;
                     this.Flags = cvar.Flags;
 
-                    this.Reference = cvar.Reference;
+                    this.SetReference(cvar.GetReference());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
             return this;
+        }
+        private void SetValueInternal(int val)
+        {
+            if (val >= 0)
+            {
+                ChunkHandle = true;
+            }
+
+            if (ChunkHandle)
+            {
+                SetReference(val == 0 ? null : cr2w.Chunks[val - 1]);
+            }
+            else
+            {
+                DepotPath = cr2w.Imports[-val - 1].DepotPathStr;
+
+                var filetype = cr2w.Imports[-val - 1].ClassName;
+                ClassName = cr2w.Names[filetype].Str;
+
+                Flags = cr2w.Imports[-val - 1].Flags;
+
+                //TODO are non-chunk handles used in cp77?
+                throw new NotImplementedException("wCHandle.Read");
+            }
         }
 
         public object GetValue() => ChunkIndex;
@@ -175,11 +170,11 @@ namespace WolvenKit.RED4.CR2W.Types
             copy.Flags = Flags;
 
             // Ptr
-            if (ChunkHandle && Reference != null)
+            if (ChunkHandle && GetReference() != null)
             {
-                ICR2WExport newref = context.TryLookupReference(Reference, copy);
+                ICR2WExport newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
-                    copy.Reference = newref;
+                    copy.SetReference(newref);
             }
 
             return copy;
@@ -189,10 +184,10 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (ChunkHandle)
             {
-                if (Reference == null)
+                if (GetReference() == null)
                     return "NULL";
                 else
-                    return $"{Reference.REDType} #{Reference.ChunkIndex}";
+                    return $"{GetReference().REDType} #{GetReference().ChunkIndex}";
             }
 
             return ClassName + ": " + DepotPath;
@@ -200,9 +195,9 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override string REDLeanValue()
         {
-            if (Reference == null)
+            if (GetReference() == null)
                 return "";
-            return $"{Reference.ChunkIndex}";
+            return $"{GetReference().ChunkIndex}";
         }
 
         #endregion

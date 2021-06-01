@@ -40,28 +40,26 @@ namespace WolvenKit.RED3.CR2W.Types
         // Pointer
         private ICR2WExport _reference;
 
-        public int ChunkIndex => Reference?.ChunkIndex ?? -1;
+        public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
 
-        [JsonIgnore] public ICR2WExport Reference
+        public void SetReference(ICR2WExport value)
         {
-            get => _reference;
-            set
-            {
-                _reference = value;
+            _reference = value;
 
-                if (value != null)
+            if (value != null)
+            {
+                //Populate the reverse-lookups
+                GetReference().AdReferences.Add(this);
+                cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
+                //Soft mount the chunk except root chunk
+                if (GetReference().ChunkIndex != 0)
                 {
-                    //Populate the reverse-lookups
-                    Reference.AdReferences.Add(this);
-                    cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                    //Soft mount the chunk except root chunk
-                    if (Reference.ChunkIndex != 0)
-                    {
-                        Reference.MountChunkVirtually(LookUpChunkIndex());
-                    }
+                    GetReference().MountChunkVirtually(LookUpChunkIndex());
                 }
             }
         }
+
+        public ICR2WExport GetReference() => _reference;
 
         [JsonIgnore] public string ReferenceType => REDType.Split(':').Last();
         #endregion
@@ -104,7 +102,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
             if (ChunkHandle)
             {
-                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
+                SetReference(val == 0 ? null : cr2w.Chunks[val - 1]);
             }
             else
             {
@@ -126,9 +124,9 @@ namespace WolvenKit.RED3.CR2W.Types
             var val = 0;
             if (ChunkHandle)
             {
-                if (Reference != null)
+                if (GetReference() != null)
                 {
-                    val = Reference.ChunkIndex + 1;
+                    val = GetReference().ChunkIndex + 1;
                 }
             }
             else
@@ -152,7 +150,7 @@ namespace WolvenKit.RED3.CR2W.Types
                     this.ClassName = cvar.ClassName;
                     this.Flags = cvar.Flags;
 
-                    this.Reference = cvar.Reference;
+                    this.SetReference(cvar.GetReference());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -174,12 +172,12 @@ namespace WolvenKit.RED3.CR2W.Types
             copy.Flags = Flags;
 
             // Ptr
-            if (ChunkHandle && Reference != null)
+            if (ChunkHandle && GetReference() != null)
             {
-                var newref = context.TryLookupReference(Reference, copy);
+                var newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
                 {
-                    copy.Reference = newref;
+                    copy.SetReference(newref);
                 }
             }
 
@@ -190,12 +188,12 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             if (ChunkHandle)
             {
-                return Reference == null ? "NULL" : $"{Reference.REDType} #{Reference.ChunkIndex}";
+                return GetReference() == null ? "NULL" : $"{GetReference().REDType} #{GetReference().ChunkIndex}";
             }
 
             return ClassName + ": " + DepotPath;
         }
-        public override string REDLeanValue() => Reference == null ? "" : $"{Reference.ChunkIndex}";
+        public override string REDLeanValue() => GetReference() == null ? "" : $"{GetReference().ChunkIndex}";
 
         #endregion
     }

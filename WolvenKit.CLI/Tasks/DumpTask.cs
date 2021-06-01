@@ -34,7 +34,7 @@ namespace CP77Tools.Tasks
         #region Methods
 
         public void DumpTask(string[] path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list)
+            bool texinfo, bool dump, bool list)
         {
             if (path == null || path.Length < 1)
             {
@@ -44,12 +44,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list);
+                DumpTaskInner(file, imports, missinghashes, texinfo, dump, list);
             });
         }
 
         public int DumpTaskInner(string path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list)
+            bool texinfo, bool dump, bool list)
         {
             #region checks
 
@@ -94,59 +94,6 @@ namespace CP77Tools.Tasks
             // Parallel
             foreach (var ar in archives)
             {
-                if (classinfo)
-                {
-                    // using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
-                    //     ar.Filepath.GetHashMD5(), 0,
-                    //     MemoryMappedFileAccess.Read);
-
-                    var fileinfo = ar.Files.Values.Cast<FileEntry>();
-                    var query = fileinfo.GroupBy(
-                        ext => Path.GetExtension(ext.FileName),
-                        file => file,
-                        (ext, finfo) => new
-                        {
-                            Key = ext,
-                            File = fileinfo.Where(_ => Path.GetExtension(_.FileName) == ext)
-                        }).ToList();
-
-                    var total = query.Count;
-                    _loggerService.Log($"Exporting {total} bundle entries ");
-
-                    Thread.Sleep(1000);
-                    int progress = 0;
-                    _progress.Report(0);
-
-                    // foreach extension
-                    Parallel.ForEach(query, result =>
-                    {
-                        if (!string.IsNullOrEmpty(result.Key))
-                        {
-                            Parallel.ForEach(result.File, fi =>
-                            {
-                                using var ms = new MemoryStream();
-                                ar.CopyFileToStream(ms, (fi as FileEntry).NameHash64, false);
-                                var cr2w = _modTools.TryReadCr2WFile(ms);
-                                if (cr2w == null)
-                                {
-                                    return;
-                                }
-
-                                foreach (var o in cr2w.Chunks.Select(chunk => (chunk as CR2WExportWrapper).GetDumpObject(ms))
-                                    .Where(o => o != null))
-                                {
-                                    Register(o);
-                                }
-                            });
-                        }
-
-                        Interlocked.Increment(ref progress);
-                        _progress.Report(progress / (float)total);
-
-
-                        _loggerService.Log($"Dumped extension {result.Key}");
-                    });
-                }
                 if (imports || texinfo)
                 {
                     if (texinfo && ar.Files.Values.All(_ => _.Extension != ".xbm"))
@@ -351,60 +298,6 @@ namespace CP77Tools.Tasks
                 }
             }
 
-            if (classinfo)
-            {
-                //write class definitions
-                var outdir = isDirectory
-                ? Path.Combine(inputDirInfo.FullName, "ClassDefinitions")
-                : Path.Combine(inputFileInfo.Directory.FullName, "ClassDefinitions");
-                Directory.CreateDirectory(outdir);
-                var outfile = Path.Combine(outdir, "classdefinitions.txt");
-                var outfileS = Path.Combine(outdir, "classdefinitions_simple.json");
-                var text = "";
-                foreach (var (typename, variables) in typedict)
-                {
-                    //write
-                    var sb = new StringBuilder($"[REDMeta] public class {typename} : CVariable {{\r\n");
-
-                    var variableslist = variables.ToList();
-                    for (int i = 0; i < variableslist.Count; i++)
-                    {
-                        var typ = variableslist[i].Split(' ').First();
-                        var nam = variableslist[i].Split(' ').Last();
-                        var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
-
-                        if (string.IsNullOrEmpty(nam))
-                        {
-                            nam = "Missing";
-                        }
-
-                        if (string.IsNullOrEmpty(typ))
-                        {
-                            typ = "Missing";
-                        }
-
-                        sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
-                    }
-
-                    sb.Append(
-                        $"public {typename}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {{ }}\r\n");
-
-                    sb.Append("}\r\n");
-                    text += sb.ToString();
-                }
-                File.WriteAllText(outfile, text);
-
-                //write
-                File.WriteAllText(outfileS,
-                    JsonConvert.SerializeObject(typedict, Formatting.Indented, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.None,
-                        TypeNameHandling = TypeNameHandling.None
-                    }));
-
-                _loggerService.Success("Done.");
-            }
             if (missinghashes)
             {
                 var missinghashtxt = isDirectory
@@ -427,50 +320,6 @@ namespace CP77Tools.Tasks
             }
 
             return 1;
-
-            void Register(CR2WExportWrapper.Cr2wVariableDumpObject o)
-            {
-                if (o?.Type == null)
-                {
-                    return;
-                }
-
-                o.Variables ??= new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
-
-                IEnumerable<string> vars = o.Variables.Select(_ => _.ToSimpleString());
-                if (typedict.ContainsKey(o.Type))
-                {
-                    var existing = typedict[o.Type];
-                    var newlist = o.Variables.Select(_ => _.ToSimpleString());
-                    if (existing != null)
-                    {
-                        vars = existing.Union(newlist);
-                    }
-                }
-                typedict.AddOrUpdate(o.Type, vars, (arg1, ol) => ol);
-
-                foreach (var oVariable in o.Variables)
-                {
-                    // generic types (arrays, handles, refs)
-                    if (oVariable.Type != null && oVariable.Type.Contains(":"))
-                    {
-                        var gentyp = oVariable.Type.Split(":").First();
-                        var innertype = oVariable.Type.Substring(gentyp.Length + 1);
-                        var innertype2 = oVariable.Type[(gentyp.Length + 1)];
-                        if (gentyp == "array")
-                        {
-                            oVariable.Type = innertype;
-                            Register(oVariable);
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-
-                    Register(oVariable);
-                }
-            }
         }
 
         #endregion Methods

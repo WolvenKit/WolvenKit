@@ -142,7 +142,7 @@ namespace WolvenKit.RED3.CR2W
                     !sourcechunks.Contains(chunktranslationentry.Key))
                 {
                     var uppercopy = CR2WTypeManager.Create("ptr:CComponent", chunktranslationentry.Value.REDName, DestinationFile, (targetarray as CVariable));
-                    (uppercopy as IREDChunkPtr).Reference = chunktranslationentry.Value;
+                    (uppercopy as IREDChunkPtr).SetReference(chunktranslationentry.Value);
                     targetarray.AddVariable(uppercopy);
                 }
             }
