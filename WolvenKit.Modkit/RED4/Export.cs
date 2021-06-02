@@ -1,6 +1,7 @@
 using System.IO;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
@@ -17,7 +18,7 @@ namespace CP77.CR2W
         /// </summary>
         /// <param name="cr2wfile"></param>
         /// <param name="outpath"></param>
-        public bool Export(FileInfo cr2wfile, EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
+        public bool Export(FileInfo cr2wfile, ExportArgs args)
         {
             #region checks
 
@@ -44,7 +45,7 @@ namespace CP77.CR2W
             using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
             using var br = new BinaryReader(fs);
 
-            return Uncook(fs, cr2wfile, ext, uncookext, flip);
+            return Uncook(fs, cr2wfile, ext, args.UncookExtension, args.Flip);
         }
 
         #endregion Methods

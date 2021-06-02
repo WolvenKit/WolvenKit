@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.ViewModels.Editor;
@@ -38,6 +39,11 @@ namespace WolvenKit.Views.Editor
                 AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
             }
 
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }
     }
 }

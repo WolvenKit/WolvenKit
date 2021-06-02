@@ -4,6 +4,7 @@ using System.Linq;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
@@ -13,14 +14,14 @@ namespace CP77.CR2W
     /// </summary>
     public partial class ModTools
     {
-        
         /// <summary>
         /// Imports a raw File to a RedEngine file (e.g. .dds to .xbm, .fbx to .mesh)
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="rawFile"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public CR2WFile Import(FileInfo rawFile, string textureGroup = null)
+        public CR2WFile Import(FileInfo rawFile, ImportArgs args)
         {
             #region checks
             
@@ -198,7 +199,5 @@ namespace CP77.CR2W
             #endregion
             
         }
-
-        public void Import(FileInfo fi, object textureGroup) => throw new NotImplementedException();
     }
 }

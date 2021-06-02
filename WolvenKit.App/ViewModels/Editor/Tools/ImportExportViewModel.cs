@@ -13,7 +13,9 @@ using DynamicData;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -53,6 +55,17 @@ namespace WolvenKit.ViewModels.Editor
         /// Public Exportable items.
         /// </summary>
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
+
+
+
+        public ExportableItemViewModel SelectedExport { get; set; }
+
+        public ImportableItemViewModel SelectedImport { get; set; }
+
+        public ImportExportItemViewModel SelectedObject => IsImportsSelected
+            ? SelectedImport
+            : SelectedExport;
+
 
         /// <summary>
         /// Private Logger service.
@@ -161,7 +174,7 @@ namespace WolvenKit.ViewModels.Editor
                     var fi = new FileInfo(item.FullName);
                     if (fi.Exists)
                     {
-                        _modTools.Import(fi, item.TextureGroup);
+                        _modTools.Import(fi, item.Properties as ImportArgs);
                     }
                 }
             }
@@ -172,7 +185,7 @@ namespace WolvenKit.ViewModels.Editor
                     var fi = new FileInfo(item.FullName);
                     if (fi.Exists)
                     {
-                        _modTools.Export(fi, item.UncookExtension, item.Flip);
+                        _modTools.Export(fi, item.Properties as ExportArgs);
                     }
                 }
 
@@ -202,7 +215,7 @@ namespace WolvenKit.ViewModels.Editor
                     var fi = new FileInfo(item.FullName);
                     if (fi.Exists)
                     {
-                        _modTools.Import(fi, item.TextureGroup);
+                        _modTools.Import(fi, item.Properties as ImportArgs);
                     }
                 }
             }
@@ -213,7 +226,7 @@ namespace WolvenKit.ViewModels.Editor
                     var fi = new FileInfo(item.FullName);
                     if (fi.Exists)
                     {
-                        _modTools.Export(fi, item.UncookExtension, item.Flip);
+                        _modTools.Export(fi, item.Properties as ExportArgs);
                     }
                 }
 
@@ -263,7 +276,7 @@ namespace WolvenKit.ViewModels.Editor
     {
         protected FileModel BaseFile { get; set; }
 
-        public ImportExportProperties Properties { get; set; }
+        public ImportExportArgs Properties { get; set; }
 
         public string Extension => BaseFile.Extension;
         public string FullName => BaseFile.FullName;
@@ -283,34 +296,24 @@ namespace WolvenKit.ViewModels.Editor
         public ImportableItemViewModel(FileModel model)
         {
             BaseFile = model;
+            Properties = new ImportArgs();
         }
-
-        // data
-        public object TextureGroup { get; internal set; }
-
-
     }
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
         public ExportableItemViewModel(FileModel model)
         {
             BaseFile = model;
+            Properties = new ExportArgs();
 
-            ExportTaskIdentifier = DecideDefaultExport(model);
+            //ExportTaskIdentifier = DecideDefaultExport(model);
         }
 
-        public string ExportTaskIdentifier { get; set; }
+        public string ExportTaskIdentifier => Properties.ToString();
 
-
-
-        // make this data
-        public EUncookExtension UncookExtension { get; set; }
-        public bool Flip { get; set; }
-
-
-        private string DecideDefaultExport(FileModel input)
+        private string DecideDefaultExport()
         {
-            var ie = input.Extension;
+            var ie = BaseFile.Extension;
             var deftext = "Default - ";
             if (ie == ".morphtarget")
             {
@@ -331,16 +334,6 @@ namespace WolvenKit.ViewModels.Editor
             return "";
         }
     }
-
-
-
-    public abstract class ImportExportProperties
-    {
-    }
-
-
-
-
 
 
 

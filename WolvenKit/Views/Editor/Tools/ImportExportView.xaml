@@ -70,6 +70,7 @@
                 AutoGenerateColumns="False"
                 CellDoubleTapped="SfDataGrid_CellDoubleTapped"
                 ColumnSizer="Auto"
+                SelectedItem="{Binding SelectedExport}"
                 ItemsSource="{Binding ExportableItems}"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ExportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
@@ -103,6 +104,7 @@
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 ColumnSizer="AutoLastColumnFill"
+                SelectedItem="{Binding SelectedImport}"
                 ItemsSource="{Binding ImportableItems}"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ImportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
@@ -343,6 +345,7 @@
                     Background="{DynamicResource ContentBackgroundAlt}"
                     Content="Confirm"
                     FontSize="12"
+                    Click="ButtonBase_OnClick"
                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}" />
             </Grid>
 
@@ -351,7 +354,9 @@
                 Grid.Row="1"
                 Margin="2"
                 Background="{DynamicResource ContentBackgroundAlt}">
-                <syncfusion:PropertyGrid />
+                <syncfusion:PropertyGrid
+                    SelectedObject="{Binding SelectedObject.Properties, Mode=OneWay}"
+                    />
             </Grid>
 
         </Grid>

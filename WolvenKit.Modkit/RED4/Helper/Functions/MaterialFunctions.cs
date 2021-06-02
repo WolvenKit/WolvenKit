@@ -16,6 +16,7 @@ using WolvenKit.Modkit.RED4.MaterialSetupFile;
 using SharpGLTF.IO;
 using System.Threading;
 using Catel.IoC;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.MeshFile;
@@ -290,7 +291,8 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                         if (CopyTextures)
                         {
                             File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
-                            ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), eUncookExtension);
+                            var exportArgs = new ExportArgs() {UncookExtension = eUncookExtension};
+                            ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
                         }
                     }
                 }
@@ -302,7 +304,8 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                         if (CopyTextures)
                         {
                             File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
-                            ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), eUncookExtension);
+                            var exportArgs = new ExportArgs() { UncookExtension = eUncookExtension };
+                            ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
                         }
                     }
                 }
@@ -327,7 +330,8 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                                     if (CopyTextures)
                                     {
                                         File.Copy(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr, cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr), true);
-                                        ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr)), eUncookExtension);
+                                        var exportArgs = new ExportArgs() { UncookExtension = eUncookExtension };
+                                        ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr)), exportArgs);
                                     }
                                 }
                             }
@@ -350,7 +354,8 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                                             if (CopyTextures)
                                             {
                                                 File.Copy(AssetLib.FullName + "\\" + mlTempcr2w.Imports[eye].DepotPathStr, cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr), true);
-                                                ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr)), eUncookExtension);
+                                                var exportArgs = new ExportArgs() { UncookExtension = eUncookExtension };
+                                                ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr)), exportArgs);
                                             }
                                         }
                                     }
