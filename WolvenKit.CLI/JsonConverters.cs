@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -24,26 +25,13 @@ namespace WolvenKit.CLI
 {
     public static class Red4Serializer
     {
-        public static void PopulateCVarData(this IEditableVariable cvar, CVariableDto cVariableDto)
-        {
-            foreach (var (propertyName, value) in cVariableDto)
-            {
-                var redProperty = GetRedProperty(cvar, propertyName);
-                if (redProperty == null)
-                {
-                    throw new InvalidParsingException("not a CVariable");
-                }
-                redProperty.SetFromJObject(value);
-            }
-        }
-
         /// <summary>
         /// Parse
         /// </summary>
         /// <param name="cVariable"></param>
         /// <param name="value">either a JArray, JObject or primitive value</param>
         /// <exception cref="InvalidParsingException"></exception>
-        public static void SetFromJObject(this IEditableVariable cVariable, object value)
+        private static void SetFromJObject(this IEditableVariable cVariable, object value)
         {
             // switch over the jobject
             switch (value)
@@ -62,6 +50,9 @@ namespace WolvenKit.CLI
                             cVariable.SetValue(enumobj);
                             break;
                         // arrays
+                        case ICurveDataAccessor b:
+
+                            break;
                         case IREDArray redArray:
                             var listOfObjects = jArray.ToObject<List<object>>();
                             if (listOfObjects == null)
@@ -83,7 +74,7 @@ namespace WolvenKit.CLI
                     break;
                 // complex objects are JObjects and can be deserialized as CVariableDto (recursive)
                 case JObject jObject:
-                    cVariable.PopulateCVarData(jObject.ToObject<CVariableDto>());
+                    cVariable.SetFromDictionary(jObject.ToObject<Dictionary<string,object>>());
                     break;
                 // does that ever happen?
                 case JToken jToken:
@@ -111,7 +102,20 @@ namespace WolvenKit.CLI
             }
         }
 
-        public static CVariable GetRedProperty(IEditableVariable cvar, string propertyName)
+        public static void SetFromDictionary(this IEditableVariable cvar, Dictionary<string,object> dictionary)
+        {
+            foreach (var (propertyName, value) in dictionary)
+            {
+                var redProperty = GetRedProperty(cvar, propertyName);
+                if (redProperty == null)
+                {
+                    throw new InvalidParsingException("not a CVariable");
+                }
+                redProperty.SetFromJObject(value);
+            }
+        }
+
+        private static CVariable GetRedProperty(IEditableVariable cvar, string propertyName)
         {
             foreach (var member in REDReflection.GetMembers(cvar))
             {
@@ -138,7 +142,44 @@ namespace WolvenKit.CLI
             return null;
         }
 
+        public static object ToObject(this IEditableVariable data)
+        {
+            switch (data)
+                {
+                    // special cases of primitive types
+                    case IREDCurvePoint cp:
+                        if (cp.GetValue() is Tuple<IEditableVariable, IEditableVariable>(var item1, var item2))
+                        {
+                            return new Dictionary<string, object>() {{"Value", item1.ToObject()}, {"Point", item2.ToObject()}};
+                        }
+                        throw new InvalidParsingException($"{data.REDType} ToObject");
+                    // serialize primitive types directly
+                    case IREDPrimitive b:
+                        return b.GetValue();
+                    // serialize arrays as list of objects
+                    // serialize curves as array
+                    case IREDArray:
+                    case ICurveDataAccessor:
+                        dynamic array = data;
+                        if (array.Elements is not IList dyn)
+                        {
+                            throw new InvalidParsingException("Invalid File");
+                        }
+                        return dyn
+                            .Cast<IEditableVariable>()
+                            .Select(_ => _.ToObject());
+                    // serialize complex properties as Dictionary
+                    default:
+                        var dict = new Dictionary<string, object>();
+                        foreach (var cvar in data.SerializedProperties)
+                        {
+                            dict.Add(cvar.REDName, cvar.ToObject());
+                        }
 
+                        return dict;
+                }
+
+        }
     }
 
 
@@ -148,9 +189,12 @@ namespace WolvenKit.CLI
     {
         public const string Magic = "w2rc";
 
-        public Dictionary<string,CR2WExportWrapperDto> Chunks { get; set; } = new();
+        public string Extension { get; set; }
+
+        public Dictionary<int,CR2WExportWrapperDto> Chunks { get; set; } = new();
 
         public List<CR2WBufferWrapperDto> Buffers { get; set; } = new();
+
 
         public Red4W2rcFileDto()
         {
@@ -159,8 +203,9 @@ namespace WolvenKit.CLI
 
         public Red4W2rcFileDto(IWolvenkitFile cr2w)
         {
+            Extension = Path.GetExtension(cr2w.FileName);
             Chunks = cr2w.Chunks
-                .ToDictionary(_ => _.REDType, _ => new CR2WExportWrapperDto(_));
+                .ToDictionary(_ => _.ChunkIndex, _ => new CR2WExportWrapperDto(_));
             Buffers = cr2w.Buffers.Select(_ => new CR2WBufferWrapperDto(_)).ToList();
         }
 
@@ -177,10 +222,10 @@ namespace WolvenKit.CLI
             // chunks
             // order so that parent chunks get created first
             var groupedChunks = Chunks
-                .GroupBy(_ => _.Value.ParentChunkIndex);
+                .GroupBy(_ => _.Value.ParentIndex);
             foreach (var groupedChunk in groupedChunks)
             {
-                foreach (var (key, value) in groupedChunk.OrderBy(_ => _.Value.ChunkIndex))
+                foreach (var (key, value) in groupedChunk.OrderBy(_ => _.Key))
                 {
                     value.CreateChunkInFile(cr2w, key);
                 }
@@ -192,123 +237,50 @@ namespace WolvenKit.CLI
 
     public class CR2WExportWrapperDto
     {
-        public int ChunkIndex { get; set; }
-        public int ParentChunkIndex { get; set; }
-        public CVariableDto Data { get;set; }
+        public string Type { get; set; }
 
-        public CR2WExportWrapperDto()
-        {
-
-        }
+        //public int ChunkIndex { get; set; }
+        public int ParentIndex { get; set; }
+        public Dictionary<string,object> Properties { get;set; }
 
         public CR2WExportWrapperDto(ICR2WExport cr2WExport)
         {
-            ChunkIndex = cr2WExport.ChunkIndex;
-            ParentChunkIndex = cr2WExport.ParentChunkIndex;
-            Data = new CVariableDto(cr2WExport.Data);
-        }
+            Type = cr2WExport.REDType;
 
-        public void CreateChunkInFile(CR2WFile cr2WFile, string argKey)
-        {
-            var parentChunk = ParentChunkIndex == -1
-                ? null
-                : cr2WFile.Chunks.First(_ => _.ChunkIndex == ParentChunkIndex);
-
-            // create wrapped Cvariable
-            var cvar = CR2WTypeManager.Create(argKey, argKey, cr2WFile, parentChunk?.Data as CVariable);
-            // add data
-            cvar.PopulateCVarData(Data);
-
-            cr2WFile.CreateChunk(cvar, ChunkIndex, parentChunk as CR2WExportWrapper);
-        }
-
-    }
-
-    public class CVariableDto : IDictionary<string,object>
-    {
-        public Dictionary<string, object> Properties { get; set; } = new();
-        public bool ShouldSerializeProperties() => (Properties.Count > 0);
-
-        public CVariableDto()
-        {
-
-        }
-
-        public CVariableDto(IEditableVariable data)
-        {
-            foreach (var cvar in data.SerializedProperties)
+            //ChunkIndex = cr2WExport.ChunkIndex;
+            ParentIndex = cr2WExport.ParentChunkIndex;
+            var cvarAsDict = cr2WExport.Data.ToObject();
+            if (cvarAsDict is Dictionary<string, object> dict)
             {
-                switch (cvar)
-                {
-                    // primitive types are serialized as their wrapped net primitives
-                    case IREDPrimitive b:
-                        Properties.Add(cvar.REDName, b.GetValue());
-                        break;
-                    // arrays are serialized as lists of CVariableDtos
-                    case IREDArray b:
-                        dynamic array = b;
-                        if (array.Elements is not IList dyn)
-                        {
-                            throw new InvalidParsingException("Invalid File");
-                        }
-                        var c = dyn
-                            .Cast<IEditableVariable>()
-                            .Select(_ => new CVariableDto(_));
-                        Properties.Add(cvar.REDName, c);
-                        break;
-                    // default for complex properties is as CVariableDto
-                    default:
-                        Properties.Add(cvar.REDName, new CVariableDto(cvar));
-                        break;
-                }
+                Properties = dict;
             }
         }
 
-        #region implements IDictionary
-
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => Properties.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Properties).GetEnumerator();
-
-        public void Add(KeyValuePair<string, object> item) => Properties.Add(item.Key, item.Value);
-
-        public void Clear() => Properties.Clear();
-
-        public bool Contains(KeyValuePair<string, object> item) => Properties.Contains(item);
-
-        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex) => ((IDictionary<string,object>)Properties).CopyTo(array, arrayIndex);
-
-        public bool Remove(KeyValuePair<string, object> item) => Properties.Remove(item.Key);
-
-        public int Count => Properties.Count;
-
-        public bool IsReadOnly => ((IDictionary<string,object>)Properties).IsReadOnly;
-
-        public void Add(string key, object value) => Properties.Add(key, value);
-
-        public bool ContainsKey(string key) => Properties.ContainsKey(key);
-
-        public bool Remove(string key) => Properties.Remove(key);
-
-        public bool TryGetValue(string key, out object value) => Properties.TryGetValue(key, out value);
-
-        public object this[string key]
+        public void CreateChunkInFile(CR2WFile cr2WFile, int idx)
         {
-            get => Properties[key];
-            set => Properties[key] = value;
+            var parentChunk = ParentIndex == -1
+                ? null
+                : cr2WFile.Chunks.First(_ => _.ChunkIndex == ParentIndex);
+
+            // create wrapped Cvariable
+            var cvar = CR2WTypeManager.Create(Type, Type, cr2WFile, parentChunk?.Data as CVariable);
+            // add data
+            cvar.SetFromDictionary(Properties);
+
+            cr2WFile.CreateChunk(cvar, idx, parentChunk as CR2WExportWrapper);
         }
 
-        public ICollection<string> Keys => ((IDictionary<string,object>)Properties).Keys;
-
-        public ICollection<object> Values => ((IDictionary<string,object>)Properties).Values;
-
-        #endregion
     }
 
     public class CR2WBufferWrapperDto
     {
         public uint Flags { get; set; }
         public uint Index { get; set; }
+
+        // public uint Offset { get; set; }
+        // public uint DiskSize { get; set; }
+        // public uint MemSize { get; set; }
+        // public uint Crc32 { get; set; }
 
         public CR2WBufferWrapperDto()
         {
@@ -319,13 +291,21 @@ namespace WolvenKit.CLI
         {
             Flags = cr2WBuffer.Flags;
             Index = cr2WBuffer.Index;
+            // Offset = cr2WBuffer.Offset;
+            // DiskSize = cr2WBuffer.DiskSize;
+            // MemSize = cr2WBuffer.MemSize;
+            // Crc32 = cr2WBuffer.Crc32;
         }
 
         public ICR2WBuffer ToRedBuffer() =>
             new CR2WBufferWrapper(new CR2WBuffer()
             {
                 flags = Flags,
-                index = Index
+                index = Index,
+                // offset = Offset,
+                // diskSize = DiskSize,
+                // memSize = MemSize,
+                // crc32 = Crc32,
             });
     }
 

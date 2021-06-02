@@ -62,6 +62,7 @@ namespace WolvenKit.RED4.CR2W
             m_fileheader = new CR2WFileHeader()
             {
                 version = 195,
+                numChunks = 6
             };
 
             StringDictionary = new Dictionary<uint, string>();
@@ -78,7 +79,7 @@ namespace WolvenKit.RED4.CR2W
         // misc
         private uint headerOffset = 0;
         //private bool m_hasInternalBuffer;
-        private EHashVersion hashVersion = EHashVersion.Latest;
+        public EHashVersion hashVersion { get; set; } = EHashVersion.Pre120;
 
         private CR2WFile additionalCr2WFile;
 

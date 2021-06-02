@@ -205,16 +205,26 @@ namespace WolvenKit.Common.Model.Cr2w
 
 
 
-    public interface ICurveDataAccessor
+    public interface ICurveDataAccessor : IEditableVariable
     {
         string Elementtype { get; }
     }
 
-    public interface IDataBufferAccessor
+    public interface IREDCurvePoint : IREDPrimitive
+    {
+
+    }
+
+    public interface IMultiChannelCurve : IEditableVariable
+    {
+
+    }
+
+    public interface IDataBufferAccessor : IEditableVariable
     {
     }
 
-    public interface ILocalizedString
+    public interface ILocalizedString : IEditableVariable
     {
     }
 

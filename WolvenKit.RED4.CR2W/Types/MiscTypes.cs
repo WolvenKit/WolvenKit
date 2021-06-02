@@ -14,10 +14,17 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class SharedDataBuffer : CVariable, IDataBufferAccessor
     {
-
         public SharedDataBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        [REDBuffer(true)] public CBytes Buffer { get; set; }
+        private CBytes _buffer;
+
+        [Ordinal(1)]
+        [REDBuffer(true)]
+        public CBytes Buffer
+        {
+            get => GetProperty(ref _buffer);
+            set => SetProperty(ref _buffer, value);
+        }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -39,10 +46,17 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class DataBuffer : CVariable, IDataBufferAccessor
     {
-
         public DataBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        [REDBuffer(true)] public CBytes Buffer { get; set; }
+        private CBytes _buffer;
+
+        [Ordinal(1)]
+        [REDBuffer(true)]
+        public CBytes Buffer
+        {
+            get => GetProperty(ref _buffer);
+            set => SetProperty(ref _buffer, value);
+        }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -96,7 +110,15 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public AITrafficWorkspotCompiled(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        [REDBuffer(true)] public CBytes Buffer { get; set; }
+        private CBytes _buffer;
+
+        [Ordinal(1)]
+        [REDBuffer(true)]
+        public CBytes Buffer
+        {
+            get => GetProperty(ref _buffer);
+            set => SetProperty(ref _buffer, value);
+        }
 
         public override void Read(BinaryReader file, uint size)
         {
