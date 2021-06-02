@@ -18,6 +18,7 @@ using System.Threading;
 using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.MeshFile;
 
 namespace WolvenKit.Modkit.RED4.MeshFile.Materials
 {

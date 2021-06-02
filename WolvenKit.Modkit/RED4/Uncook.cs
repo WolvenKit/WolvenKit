@@ -18,8 +18,9 @@ using WolvenKit.Common.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.MeshFile;
-using WolvenKit.RED4.MorphTargetFile;
 using System.Diagnostics;
+using WolvenKit.Modkit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4.MorphTargetFile;
 
 namespace CP77.CR2W
 {
