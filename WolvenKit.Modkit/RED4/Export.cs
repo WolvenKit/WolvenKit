@@ -44,14 +44,6 @@ namespace CP77.CR2W
             using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
             using var br = new BinaryReader(fs);
 
-            var cr2w = TryReadCr2WFile(br);
-            if (cr2w == null)
-            {
-                _loggerService.Error($"Failed to read cr2w file {cr2wfile.FullName}");
-                return false;
-            }
-            cr2w.FileName = cr2wfile.FullName;
-
             return Uncook(fs, cr2wfile, ext, uncookext, flip);
         }
 
