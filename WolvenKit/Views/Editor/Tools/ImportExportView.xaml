@@ -81,13 +81,12 @@
                         ColumnSizer="Star"
                         HeaderText="Name"
                         MappingName="Name" />
-                    <syncfusion:GridComboBoxColumn
-                        x:Name="GridComboBoxColumnX"
-                        AllowEditing="True"
+                  
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
                         ColumnSizer="AutoLastColumnFill"
-                        HeaderText="Export Type"
-                        MappingName="type" />
-
+                        HeaderText="Export Task"
+                        MappingName="ExportTaskIdentifier" />
 
                 </syncfusion:SfDataGrid.Columns>
 
@@ -277,37 +276,72 @@
             </Grid.RowDefinitions>
 
             <Grid>
-                <hc:Divider Margin="90,0,50,0" VerticalAlignment="Center" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <TextBlock
-                    x:Name="AdvancedOptionsExtension"
-                    Margin="10"
+                <hc:Divider
+                    Grid.Row="0"
+                    Margin="15,0,15,0"
+                    VerticalAlignment="Center" />
+
+
+                <Border
+                    Grid.Row="0"
+                    Margin="5,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    FontSize="15"
-                    Text="EXTENSION" />
-                <StackPanel Orientation="Horizontal">
+                    Background="{DynamicResource ContentBackgroundAlt}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1">
                     <TextBlock
-                        VerticalAlignment="Bottom"
-                        FontSize="10"
-                        Text="Selected : " />
-                    <TextBlock
-                        x:Name="AdvancedOptionsFileName"
-                        VerticalAlignment="Bottom"
-                        FontSize="10"
-                        Text="FileName" />
+                        x:Name="AdvancedOptionsExtension"
+                        Padding="5,0,5,0"
+                        FontSize="15"
+                        Text="EXTENSION" />
+                </Border>
 
+
+
+
+
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="10,-15"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <StackPanel Margin="0,5" Orientation="Horizontal">
+                        <TextBlock FontSize="10" Text="Selected : " />
+                        <TextBlock
+                            x:Name="AdvancedOptionsFileName"
+                            FontSize="10"
+                            Text="FileName" />
+
+                    </StackPanel>
+
+
+
+
+                    <CheckBox
+                        Margin="3,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Content="Apply to all files of the same Extension"
+                        FontSize="10"
+                        Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}" />
 
                 </StackPanel>
 
+
+
                 <Button
-                    Width="60"
-                    Height="35"
-                    Margin="10"
+                    Width="80"
+                    Height="39"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Background="{DynamicResource ContentBackgroundAlt}"
-                    Content="ADD"
+                    Content="Confirm"
                     FontSize="12"
                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}" />
             </Grid>

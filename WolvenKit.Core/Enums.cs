@@ -28,6 +28,7 @@ namespace WolvenKit.Common
     /// </summary>
     public enum ECookedFileFormat
     {
+        wem,
         mesh,
         xbm,
         csv,

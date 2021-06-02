@@ -4,35 +4,27 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common.DDS;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
 {
     public partial class ImportExportView
     {
+
+        /// <summary>
+        /// Constructor I/E Tool.
+        /// </summary>
         public ImportExportView()
         {
             InitializeComponent();
-            GridComboBoxColumnX.ItemsSource =  Enum.GetValues(typeof(ImportExportType)).Cast<ImportExportType>();
         }
 
-
-        private void DragNDropBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
-            openFileDlg.Multiselect = true;
-            openFileDlg.Filter = "All files (*.*)|*.*";
-            Nullable<bool> result = openFileDlg.ShowDialog();
-            if (result == true)
-            {
-
-                //ImporterList.items.Text = openFileDlg.FileName;
-
-            }
-        }
-
-
-
+        /// <summary>
+        /// Item Double Clicked ExportGrid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
         {
 
@@ -49,3 +41,19 @@ namespace WolvenKit.Views.Editor
         }
     }
 }
+
+
+
+//private void DragNDropBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+//{
+//    Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
+//    openFileDlg.Multiselect = true;
+//    openFileDlg.Filter = "All files (*.*)|*.*";
+//    Nullable<bool> result = openFileDlg.ShowDialog();
+//    if (result == true)
+//    {
+
+//        //ImporterList.items.Text = openFileDlg.FileName;
+
+//    }
+//}

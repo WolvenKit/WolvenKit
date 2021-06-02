@@ -19,6 +19,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.MeshFile;
 using WolvenKit.RED4.MorphTargetFile;
+using System.Diagnostics;
 
 namespace CP77.CR2W
 {
@@ -168,6 +169,14 @@ namespace CP77.CR2W
                 return false;
             }
 
+
+            if (extAsEnum == ECookedFileFormat.wem)
+            {
+                string wemPath = cr2wFileName.FullName;
+                UncookWem(wemPath);
+                return true;
+
+            }
             // read the cr2wfile
             var cr2w = TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
@@ -192,6 +201,35 @@ namespace CP77.CR2W
                 _ => throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.")
             };
         }
+
+
+
+        private bool UncookWem(string path )
+        {
+
+            var outf = path.Replace(".wem", ".wav");
+
+
+            var arg = path + " -o " + outf;
+            var si = new ProcessStartInfo(
+                    AppDomain.CurrentDomain.BaseDirectory + "\\vgmstream\\test.exe",
+                    arg
+                )
+            {
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                Verb = "runas"
+            };
+            var proc = Process.Start(si);
+            proc.WaitForExit();
+            Trace.WriteLine(proc.StandardOutput.ReadToEnd());
+
+            return true;
+        }
+
 
         private bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
         {

@@ -17,40 +17,76 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.ViewModels.Editor
 {
     public class ImportExportViewModel : ToolViewModel
     {
-        #region Fields
 
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
         public const string ToolContentId = "ImportExport_Tool";
 
-        private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
-        public ReadOnlyObservableCollection<ImportableItemViewModel> ImportableItems => _importableItems;
-
-        private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
-        public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
-
-
         /// <summary>
         /// Identifies the caption string used for this tool window.
         /// </summary>
         public const string ToolTitle = "Import Export Tool";
 
+        /// <summary>
+        /// Private Importable Items
+        /// </summary>
+        private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
+
+        /// <summary>
+        /// Public Importable Items
+        /// </summary>
+        public ReadOnlyObservableCollection<ImportableItemViewModel> ImportableItems => _importableItems;
+
+        /// <summary>
+        /// Private Exportable Items
+        /// </summary>
+        private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
+
+        /// <summary>
+        /// Public Exportable items.
+        /// </summary>
+        public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
+
+        /// <summary>
+        /// Private Logger service.
+        /// </summary>
         private readonly ILoggerService _loggerService;
+
+        /// <summary>
+        /// Private Message Service
+        /// </summary>
         private readonly IMessageService _messageService;
+
+        /// <summary>
+        /// Private Project Manager Service
+        /// </summary>
         private readonly IProjectManager _projectManager;
+
+        /// <summary>
+        /// Private Watcher Service
+        /// </summary>
         private readonly IWatcherService _watcherService;
+
+        /// <summary>
+        /// Private Readonly ModTools
+        /// </summary>
         private readonly ModTools _modTools;
 
-        #endregion Fields
-
-        #region Constructors
-
+        /// <summary>
+        /// Import Export ViewModel Constructor
+        /// </summary>
+        /// <param name="projectManager"></param>
+        /// <param name="loggerService"></param>
+        /// <param name="messageService"></param>
+        /// <param name="watcherService"></param>
+        /// <param name="modTools"></param>
         public ImportExportViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
@@ -96,15 +132,26 @@ namespace WolvenKit.ViewModels.Editor
 
         }
 
-        #endregion Constructors
 
+        /// <summary>
+        /// Is Import Selected, if false Export is default.
+        /// </summary>
         public bool IsImportsSelected { get; set; }
 
-        #region Commands
-
+        /// <summary>
+        /// Process all in Import / Export Grid Command.
+        /// </summary>
         public ICommand ProcessAllCommand { get; private set; }
+
+        /// <summary>
+        /// Can Process all Bool
+        /// </summary>
+        /// <returns>bool</returns>
         private bool CanProcessAll() => true;
 
+        /// <summary>
+        /// Execute Process all in Import / Export Grid Command.
+        /// </summary>
         private void ExecuteProcessAll()
         {
             if (IsImportsSelected)
@@ -132,9 +179,20 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        /// <summary>
+        /// Process selected in Import / Export Grid Command
+        /// </summary>
         public ICommand ProcessSelectedCommand { get; private set; }
+
+        /// <summary>
+        /// Can Process Selected Bool.
+        /// </summary>
+        /// <returns>bool</returns>
         private bool CanProcessSelected() => true;
 
+        /// <summary>
+        /// Execute Process selected in Import / Export Grid Command
+        /// </summary>
         private void ExecuteProcessSelected()
         {
             if (IsImportsSelected)
@@ -163,24 +221,44 @@ namespace WolvenKit.ViewModels.Editor
         }
 
 
-        #endregion Properties
-
-        #region Methods
-
+        /// <summary>
+        /// Close Async
+        /// </summary>
+        /// <returns></returns>
         protected override Task CloseAsync() =>
             // TODO: Unsubscribe from events
-
             base.CloseAsync();
 
-        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
+        /// <summary>
+        /// Initialize Async
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task InitializeAsync() =>
+            // TODO: Write initialization code here and subscribe to events
+            await base.InitializeAsync();
 
-        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+        /// <summary>
+        /// Setup Tool defaults for tool window.
+        /// </summary>
+        private void SetupToolDefaults() => ContentId = ToolContentId;
 
-        #endregion Methods
+
+
+        // Define a unique contentid for this toolwindow
+        //BitmapImage bi = new BitmapImage();
+        // Define an icon for this toolwindow
+        //bi.BeginInit();
+        //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
+        //bi.EndInit();
+        //IconSource = bi;
+
     }
 
 
 
+    /// <summary>
+    /// ImportExportItem ViewModel
+    /// </summary>
     public abstract class ImportExportItemViewModel
     {
         protected FileModel BaseFile { get; set; }
@@ -217,43 +295,53 @@ namespace WolvenKit.ViewModels.Editor
         public ExportableItemViewModel(FileModel model)
         {
             BaseFile = model;
+
+            ExportTaskIdentifier = DecideDefaultExport(model);
         }
 
-
+        public string ExportTaskIdentifier { get; set; }
 
 
 
         // make this data
         public EUncookExtension UncookExtension { get; set; }
         public bool Flip { get; set; }
+
+
+        private string DecideDefaultExport(FileModel input)
+        {
+            var ie = input.Extension;
+            var deftext = "Default - ";
+            if (ie == ".morphtarget")
+            {
+                return deftext + "GLTF/GLB";
+            }
+            if (ie == ".mesh")
+            {
+                return deftext + "GLTF/GLB";
+            }
+            if (ie == ".XBM")
+            {
+                return deftext + "DDS";
+            }
+            if (ie == ".wem")
+            {
+                return deftext + "WAV";
+            }
+            return "";
+        }
     }
 
 
 
     public abstract class ImportExportProperties
     {
-        public ImportExportType ImportExportType {get;set;}
-    }
-
-    public class ExportMeshWithoutRigPGModel
-    {
-        public MeshExportOption MeshExportOption { get; set; }
     }
 
 
-    public enum ImportExportType
-    {
-        Simple,
-        Advanced
-    }
 
-    public enum MeshExportOption
-    {
-        WithPlaceHolderRig,
-        WithoutRig,
-        MultiMeshWithRig,
-        MeshWithRig,
-        MultiMeshWithoutRigh,
-        MeshWithMaterials
-    }
+
+
+
+
 }
