@@ -80,8 +80,8 @@ namespace WolvenKit.CLI
                             .ConfigureServices((hostContext, services) =>
                             {
                                 services.AddScoped<ILoggerService, MicrosoftLoggerService>();
-                                //services.AddScoped<IProgress<double>, MockProgressService>();
-                                services.AddScoped<IProgress<double>, ProgressBar>();
+                                services.AddScoped<IProgress<double>, PercentProgressService>();
+                                //services.AddScoped<IProgress<double>, ProgressBar>();
 
                                 services.AddSingleton<IHashService, HashService>();
                                 services.AddScoped<IWolvenkitFileService, Cp77FileService>();

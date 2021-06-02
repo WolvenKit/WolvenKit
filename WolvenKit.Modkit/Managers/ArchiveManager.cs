@@ -68,6 +68,24 @@ namespace WolvenKit.RED4.CR2W.Archive
         public override EArchiveType TypeName => EArchiveType.Archive;
 
         /// <summary>
+        /// Loads all archives from a folder
+        /// </summary>
+        /// <param name="archivedir"></param>
+        public void LoadFromFolder(string archivedir)
+        {
+            var di = new DirectoryInfo(archivedir);
+            if (!di.Exists)
+            {
+                return;
+            }
+            foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
+            {
+                LoadArchive(file);
+            }
+        }
+
+
+        /// <summary>
         ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>

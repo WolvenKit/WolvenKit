@@ -91,7 +91,7 @@ namespace WolvenKit.CLI.MSTests
 
 
             s_bm = new ArchiveManager(hashService);
-            s_bm.LoadAll(gameBinDir.FullName);
+            s_bm.LoadAll(gameBinDir.FullName, false);
             s_groupedFiles = s_bm.GroupedFiles;
 
 

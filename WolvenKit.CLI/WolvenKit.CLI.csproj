@@ -20,7 +20,7 @@
       <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
       <RepositoryType>git</RepositoryType>
       <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
-      <StartupObject>WolvenKit.CLI.Debug</StartupObject>
+      <StartupObject>WolvenKit.CLI.Program</StartupObject>
 
   </PropertyGroup>
 
