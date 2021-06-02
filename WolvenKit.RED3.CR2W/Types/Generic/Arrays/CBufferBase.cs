@@ -53,6 +53,7 @@ namespace WolvenKit.RED3.CR2W.Types
             var element = CR2WTypeManager.Create(Elementtype, varName, cr2w, this);
             if (element is IEditableVariable evar)
             {
+                evar.IsSerialized = true;
                 return evar;
             }
 

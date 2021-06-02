@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.CR2W
 
             m_fileheader = new CR2WFileHeader()
             {
-                version = 162,
+                version = 195,
             };
 
             StringDictionary = new Dictionary<uint, string>();
@@ -116,18 +116,6 @@ namespace WolvenKit.RED4.CR2W
         #endregion
 
         #region methods
-
-        [OnDeserializing()]
-        internal void OnDeserializingMethod(StreamingContext context)
-        {
-
-        }
-
-        [OnDeserialized()]
-        internal void OnDeserializedMethod(StreamingContext context)
-        {
-
-        }
 
         #endregion
 
@@ -464,7 +452,7 @@ namespace WolvenKit.RED4.CR2W
         #endregion
 
         #region Read
-        public (List<ICR2WImport>, bool, List<ICR2WBuffer>) ReadImportsAndBuffers(BinaryReader file)
+        public (List<ICR2WImport>, bool, List<ICR2WBuffer>) ReadHeaders(BinaryReader file)
         {
             #region Read Headers
             // read file header
@@ -644,7 +632,7 @@ namespace WolvenKit.RED4.CR2W
             return 0;
         }
 
-        private void IdentifyHash()
+        public EHashVersion IdentifyHash()
         {
             hashVersion = EHashVersion.Unknown;
 
@@ -657,17 +645,18 @@ namespace WolvenKit.RED4.CR2W
                 if ((uint)(hash64 & 0xFFFFFFFF) == name.hash)
                 {
                     hashVersion = EHashVersion.Pre120;
-                    return;
+                    return hashVersion;
                 }
 
                 if ((uint)((hash64 >> 32) ^ (uint)hash64) == name.hash)
                 {
                     hashVersion = EHashVersion.Latest;
-                    return;
+                    return hashVersion;
                 }
 
-                return;
+                return hashVersion;
             }
+            return hashVersion;
         }
 
         public CR2WFile GetAdditionalCr2wFile()
@@ -727,6 +716,11 @@ namespace WolvenKit.RED4.CR2W
         public void Write(BinaryWriter file)
         {
             CreatePropertyOnAccess = false;
+
+            if (Properties.Count < 1)
+            {
+                Properties.Add(new CR2WPropertyWrapper( new CR2WProperty() ));
+            }
 
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
@@ -848,6 +842,7 @@ namespace WolvenKit.RED4.CR2W
             }
 
             #region Update Offsets
+
             foreach (var ichunk in Chunks)
             {
                 var chunk = ichunk as CR2WExportWrapper;
@@ -861,6 +856,7 @@ namespace WolvenKit.RED4.CR2W
                 buffer.SetOffset(newoffset);
             }
             m_fileheader.objectsEnd += headerOffset;
+
             #endregion
 
             foreach (var chunk in Chunks)

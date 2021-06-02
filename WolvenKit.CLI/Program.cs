@@ -25,7 +25,7 @@ using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.MeshFile.Materials;
 
-namespace CP77Tools
+namespace WolvenKit.CLI
 {
     internal class Program
     {

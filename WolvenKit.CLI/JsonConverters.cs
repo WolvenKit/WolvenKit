@@ -74,6 +74,7 @@ namespace WolvenKit.CLI
                                 var element = redArray.GetElementInstance(i.ToString());
                                 // parse the elements according to the array type
                                 element.SetFromJObject(jitem);
+                                redArray.AddVariable(element);
                             }
                             break;
                         default:

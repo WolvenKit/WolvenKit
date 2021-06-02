@@ -53,6 +53,7 @@ namespace WolvenKit.RED4.CR2W.Types
             var element = Create<T>(varName, Array.Empty<int>());
             if (element is IEditableVariable evar)
             {
+                evar.IsSerialized = true;
                 return evar;
             }
 

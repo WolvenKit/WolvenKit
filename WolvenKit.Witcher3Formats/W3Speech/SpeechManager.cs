@@ -21,7 +21,7 @@ namespace WolvenKit.W3Speech
         ///     Load every non-mod bundle it can find in ..\\..\\content and ..\\..\\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
-        public override void LoadAll(string exedir)
+        public override void LoadAll(string exedir, bool rebuildtree = true)
         {
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
@@ -65,7 +65,10 @@ namespace WolvenKit.W3Speech
 
                 }
             }
-            RebuildRootNode();
+            if (rebuildtree)
+            {
+                RebuildRootNode();
+            }
         }
 
         /// <summary>

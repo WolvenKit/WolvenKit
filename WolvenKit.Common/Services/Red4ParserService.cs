@@ -50,9 +50,9 @@ namespace WolvenKit.Common.Services
                     }
                 }
             }
-            catch (UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException)
             {
-                Console.WriteLine(e);
+                //Console.WriteLine(e);
 
             }
 
