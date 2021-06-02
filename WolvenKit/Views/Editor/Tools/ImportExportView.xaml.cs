@@ -1,7 +1,10 @@
 
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using WolvenKit.Common.DDS;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
 {
@@ -10,7 +13,7 @@ namespace WolvenKit.Views.Editor
         public ImportExportView()
         {
             InitializeComponent();
-            GridComboBoxColumnX.ItemsSource =  Enum.GetValues(typeof(EUncookExtension)).Cast<EUncookExtension>();
+            GridComboBoxColumnX.ItemsSource =  Enum.GetValues(typeof(ImportExportType)).Cast<ImportExportType>();
         }
 
 
@@ -26,6 +29,23 @@ namespace WolvenKit.Views.Editor
                 //ImporterList.items.Text = openFileDlg.FileName;
 
             }
+        }
+
+
+
+        private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
+        {
+
+            var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
+            var simplename = Path.GetFileName(q.FullName);
+            var ext = Path.GetExtension(q.FullName).ToString();
+            if (ext is ".wem" or ".mesh" or ".xbm")
+            {
+                AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext );
+                AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
+            }
+
         }
     }
 }

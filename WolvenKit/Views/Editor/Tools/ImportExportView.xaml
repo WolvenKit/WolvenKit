@@ -61,13 +61,15 @@
 
             <!--  Data Grid Exports  -->
             <syncfusion:SfDataGrid
+                x:Name="ExportGrid"
                 Grid.Row="1"
                 AllowEditing="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
-                ColumnSizer="AutoLastColumnFill"
+                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
+                ColumnSizer="Auto"
                 ItemsSource="{Binding ExportableItems}"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ExportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
@@ -76,13 +78,16 @@
                     <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked" />
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
+                        ColumnSizer="Star"
                         HeaderText="Name"
                         MappingName="Name" />
                     <syncfusion:GridComboBoxColumn
                         x:Name="GridComboBoxColumnX"
                         AllowEditing="True"
+                        ColumnSizer="AutoLastColumnFill"
                         HeaderText="Export Type"
-                        MappingName="UncookExtension" />
+                        MappingName="type" />
+
 
                 </syncfusion:SfDataGrid.Columns>
 
@@ -91,6 +96,7 @@
 
             <!--  Data Grid Imports  -->
             <syncfusion:SfDataGrid
+                x:Name="ImportGrid"
                 Grid.Row="1"
                 AllowEditing="True"
                 AllowFiltering="True"
@@ -260,6 +266,7 @@
 
         <!--  Special Import / Export Options  -->
         <Grid
+            x:Name="AdvancedOptionsVis"
             Grid.RowSpan="4"
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt2}"
@@ -273,12 +280,25 @@
                 <hc:Divider Margin="90,0,50,0" VerticalAlignment="Center" />
 
                 <TextBlock
+                    x:Name="AdvancedOptionsExtension"
                     Margin="10"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     FontSize="15"
                     Text="EXTENSION" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        VerticalAlignment="Bottom"
+                        FontSize="10"
+                        Text="Selected : " />
+                    <TextBlock
+                        x:Name="AdvancedOptionsFileName"
+                        VerticalAlignment="Bottom"
+                        FontSize="10"
+                        Text="FileName" />
 
+
+                </StackPanel>
 
                 <Button
                     Width="60"
@@ -296,7 +316,9 @@
                 x:Name="ContentLinkForSpecialExportOrImportOptions"
                 Grid.Row="1"
                 Margin="2"
-                Background="{DynamicResource ContentBackgroundAlt}" />
+                Background="{DynamicResource ContentBackgroundAlt}">
+                <syncfusion:PropertyGrid />
+            </Grid>
 
         </Grid>
 

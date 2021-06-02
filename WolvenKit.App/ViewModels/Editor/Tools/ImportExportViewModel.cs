@@ -34,7 +34,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
-        
+
 
         /// <summary>
         /// Identifies the caption string used for this tool window.
@@ -193,9 +193,9 @@ namespace WolvenKit.ViewModels.Editor
 
 
         public bool IsChecked { get; set; }
-        
 
-        
+
+
         public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
     }
 
@@ -221,6 +221,8 @@ namespace WolvenKit.ViewModels.Editor
 
 
 
+
+
         // make this data
         public EUncookExtension UncookExtension { get; set; }
         public bool Flip { get; set; }
@@ -230,28 +232,28 @@ namespace WolvenKit.ViewModels.Editor
 
     public abstract class ImportExportProperties
     {
-
+        public ImportExportType ImportExportType {get;set;}
     }
 
-    public class ImportProperties : ImportExportProperties
+    public class ExportMeshWithoutRigPGModel
     {
+        public MeshExportOption MeshExportOption { get; set; }
     }
 
-    public class ExportProperties : ImportExportProperties
+
+    public enum ImportExportType
     {
-        public bool HasSpecialOptions { get; set; }
+        Simple,
+        Advanced
+    }
 
-
-
-        public ExportProperties()
-        {
-
-        }
-        public void DecideExportType()
-        {
-
-        }
-
-        public string test1;
+    public enum MeshExportOption
+    {
+        WithPlaceHolderRig,
+        WithoutRig,
+        MultiMeshWithRig,
+        MeshWithRig,
+        MultiMeshWithoutRigh,
+        MeshWithMaterials
     }
 }
