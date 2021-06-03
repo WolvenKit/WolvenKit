@@ -1,24 +1,20 @@
-using Catel;
 using RED.CRC32;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Catel.IoC;
+using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model;
 using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.Common.Services;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
 
@@ -44,11 +40,14 @@ namespace WolvenKit.RED4.CR2W
         #endregion
 
         #region Constants
+
         public const uint MAGIC = 0x57325243; // "W2RC"
         private const long MAGIC_SIZE = 4;
         private const long FILEHEADER_SIZE = 36;
         private const long TABLEHEADER_SIZE = 12 * 10;
         private readonly int[] TABLES_SIZES = new int[6] { 8, 8, 16, 24, 24, 24 };
+        private const uint DEADBEEF = 0xDEADBEEF;
+
         #endregion
 
         public CR2WFile()
@@ -62,7 +61,8 @@ namespace WolvenKit.RED4.CR2W
 
             m_fileheader = new CR2WFileHeader()
             {
-                version = 162,
+                version = 195,
+                numChunks = 6
             };
 
             StringDictionary = new Dictionary<uint, string>();
@@ -70,10 +70,6 @@ namespace WolvenKit.RED4.CR2W
         }
 
         #region Fields
-        // constants
-
-        private const uint DEADBEEF = 0xDEADBEEF;
-
         // IO
         private CR2WFileHeader m_fileheader;
         private CR2WTable[] m_tableheaders;
@@ -83,45 +79,44 @@ namespace WolvenKit.RED4.CR2W
         // misc
         private uint headerOffset = 0;
         //private bool m_hasInternalBuffer;
-        private EHashVersion hashVersion = EHashVersion.Latest;
+        public EHashVersion hashVersion { get; set; } = EHashVersion.Pre120;
 
         private CR2WFile additionalCr2WFile;
-        public byte[] AdditionalCr2WFileBytes;
-
-        [JsonIgnore]
-        public bool CreatePropertyOnAccess { get; set; }= true;
 
         #endregion
 
         #region Properties
 
-        public CR2WFileHeader Header => m_fileheader;
+        [NonSerialized] public byte[] AdditionalCr2WFileBytes;
 
-        //[JsonIgnore]
-        //public ILoggerService Logger { get; }
+        [JsonIgnore] public bool CreatePropertyOnAccess { get; set; }= true;
 
-        [JsonIgnore]
-        public IVariableEditor EditorController { get; set; }
+        [JsonIgnore] public IVariableEditor EditorController { get; set; }
 
-        [JsonIgnore]
-        public Dictionary<int, ICR2WExport> Chunksdict { get; private set; }
+        [JsonIgnore] private Dictionary<int, ICR2WExport> Chunksdict { get; set; }
 
+        [JsonIgnore] public bool IsDirty { get; set; }
 
+        [JsonIgnore] public string FileName { get; set; }
+        [JsonIgnore] public List<string> UnknownTypes { get; } = new();
+        [JsonIgnore] public List<string> UnknownVars { get; set; } = new();
 
-        public string FileName { get; set; }
-        public List<string> UnknownTypes { get; } = new();
-        public List<string> UnknownVars { get; set; } = new();
+        [JsonIgnore] public Dictionary<uint, string> StringDictionary { get; private set; }
 
-        public Dictionary<uint, string> StringDictionary { get; private set; }
+        [JsonIgnore] public List<ICR2WName> Names { get; private set; }
+        [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
+        [JsonIgnore] public List<CR2WPropertyWrapper> Properties { get; private set; }
 
-        [JsonIgnore]
-        public List<ICR2WName> Names { get; private set; }
-        public List<ICR2WImport> Imports { get; private set; }
-        public bool IsDirty { get; set; }
-        public List<CR2WPropertyWrapper> Properties { get; private set; }
-        public List<ICR2WExport> Chunks { get; private set; }
-        public List<ICR2WBuffer> Buffers { get; private set; }
-        public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
+        public List<ICR2WExport> Chunks { get; set; }
+        public List<ICR2WBuffer> Buffers { get; set; }
+
+        [JsonIgnore] public List<CR2WEmbeddedWrapper> Embedded { get; private set; }
+
+        [JsonIgnore] public CR2WFileHeader Header => m_fileheader;
+
+        #endregion
+
+        #region methods
 
         #endregion
 
@@ -136,7 +131,7 @@ namespace WolvenKit.RED4.CR2W
             }
 
             return (types,
-                Chunks.Sum(chunk => (chunk.unknownBytes as CBytes).Bytes.Length));
+                Chunks.Sum(chunk => (chunk.UnknownBytes as CBytes).Bytes.Length));
         }
 
         public void GenerateChunksDict() => Chunksdict = Chunks.ToDictionary(_ => _.ChunkIndex, _ => _);
@@ -228,7 +223,7 @@ namespace WolvenKit.RED4.CR2W
                 {
                     foreach (var referrer in chunk.AdReferences)
                     {
-                        if (purgereferrers && referrer.ParentVar is IArrayAccessor)
+                        if (purgereferrers && referrer.ParentVar is IREDArray)
                         {
                             referrer.ParentVar.RemoveVariable(referrer as IEditableVariable);
                         }
@@ -236,7 +231,7 @@ namespace WolvenKit.RED4.CR2W
                         {
                             // This leaves a dangling cptr/chandle in AdReferences,
                             // which needs to be adressed later.
-                            referrer.Reference = null;
+                            referrer.SetReference(null);
                         }
                     }
                 }
@@ -338,7 +333,7 @@ namespace WolvenKit.RED4.CR2W
             return removed;
         }
 
-        
+
 
         public int GetStringIndex(string name, bool addnew = false)
         {
@@ -458,7 +453,7 @@ namespace WolvenKit.RED4.CR2W
         #endregion
 
         #region Read
-        public (List<ICR2WImport>, bool, List<ICR2WBuffer>) ReadImportsAndBuffers(BinaryReader file)
+        public (List<ICR2WImport>, bool, List<ICR2WBuffer>) ReadHeaders(BinaryReader file)
         {
             #region Read Headers
             // read file header
@@ -534,7 +529,6 @@ namespace WolvenKit.RED4.CR2W
         /// <returns></returns>
         public EFileReadErrorCodes Read(BinaryReader file)
         {
-            //m_stream = file.BaseStream;
             StringDictionary.Clear();
 
             var stopwatch1 = new Stopwatch();
@@ -639,7 +633,7 @@ namespace WolvenKit.RED4.CR2W
             return 0;
         }
 
-        private void IdentifyHash()
+        public EHashVersion IdentifyHash()
         {
             hashVersion = EHashVersion.Unknown;
 
@@ -652,17 +646,18 @@ namespace WolvenKit.RED4.CR2W
                 if ((uint)(hash64 & 0xFFFFFFFF) == name.hash)
                 {
                     hashVersion = EHashVersion.Pre120;
-                    return;
+                    return hashVersion;
                 }
 
                 if ((uint)((hash64 >> 32) ^ (uint)hash64) == name.hash)
                 {
                     hashVersion = EHashVersion.Latest;
-                    return;
+                    return hashVersion;
                 }
 
-                return;
+                return hashVersion;
             }
+            return hashVersion;
         }
 
         public CR2WFile GetAdditionalCr2wFile()
@@ -718,13 +713,15 @@ namespace WolvenKit.RED4.CR2W
         }
         #endregion
 
-
-
-
         #region Write
         public void Write(BinaryWriter file)
         {
             CreatePropertyOnAccess = false;
+
+            if (Properties.Count < 1)
+            {
+                Properties.Add(new CR2WPropertyWrapper( new CR2WProperty() ));
+            }
 
             // update data
             //m_fileheader.timeStamp = CDateTime.Now.ToUInt64();    //this will change any vanilla assets simply by opening and saving in wkit
@@ -846,6 +843,7 @@ namespace WolvenKit.RED4.CR2W
             }
 
             #region Update Offsets
+
             foreach (var ichunk in Chunks)
             {
                 var chunk = ichunk as CR2WExportWrapper;
@@ -859,6 +857,7 @@ namespace WolvenKit.RED4.CR2W
                 buffer.SetOffset(newoffset);
             }
             m_fileheader.objectsEnd += headerOffset;
+
             #endregion
 
             foreach (var chunk in Chunks)
@@ -878,9 +877,9 @@ namespace WolvenKit.RED4.CR2W
             CreatePropertyOnAccess = true;
         }
 
-        
 
-       
+
+
 
 
 
@@ -986,15 +985,6 @@ namespace WolvenKit.RED4.CR2W
 
         #endregion
 
-        Task<EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
-        {
-            throw new NotImplementedException("IWolvenkitFile.Read");
-        }
-
-        public void GetChunks()
-        {
-            throw new NotImplementedException("GetChunks");
-        }
     }
 }
 

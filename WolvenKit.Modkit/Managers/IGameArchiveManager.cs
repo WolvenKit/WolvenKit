@@ -20,7 +20,7 @@ namespace WolvenKit.Common
 
         #endregion Properties
 
-        public void LoadAll(string exedir);
+        public void LoadAll(string exedir, bool rebuildTree = true);
         public void LoadArchive(string filename, bool ispatch = false);
         public void LoadModArchive(string filename);
         public void LoadModsArchives(string mods, string dlc);

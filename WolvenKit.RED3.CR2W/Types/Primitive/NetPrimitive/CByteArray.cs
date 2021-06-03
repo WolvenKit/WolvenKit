@@ -39,6 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case byte[] bytes:
@@ -57,11 +58,11 @@ namespace WolvenKit.RED3.CR2W.Types
             var copy = (CByteArray) base.Copy(context);
 
             if (Bytes == null) return copy;
-            
+
             var newbytes = new byte[Bytes.Length];
             Bytes.CopyTo(newbytes, 0);
             copy.Bytes = newbytes;
-            
+
             return copy;
         }
 

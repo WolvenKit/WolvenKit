@@ -18,8 +18,8 @@ namespace CP77.CR2W.Uncooker
         {
             //We need 2 buffers one for atlas one for tile data
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.data is Multilayer_Mask mlmask) ||
-                !(cr2w.Chunks[1]?.data is rendRenderMultilayerMaskBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault()?.Data is Multilayer_Mask mlmask) ||
+                !(cr2w.Chunks[1]?.Data is rendRenderMultilayerMaskBlobPC blob))
                 return false;
 
             var outfile = new FileInfo(cr2w.FileName);

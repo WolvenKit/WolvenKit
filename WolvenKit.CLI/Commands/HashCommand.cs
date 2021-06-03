@@ -30,7 +30,7 @@ namespace CP77Tools.Commands
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.HashTask(input, missing, prepare);
+            consoleFunctions.HashTask(input, missing);
         }
 
         #endregion Constructors

@@ -132,12 +132,12 @@ namespace WolvenKit.RED4.MeshFile
                     last = i;
                 }
             }
-            if ((cr2w.Chunks[last].data as CMesh).BoneNames.Count != 0)    // for rigid meshes
+            if ((cr2w.Chunks[last].Data as CMesh).BoneNames.Count != 0)    // for rigid meshes
             {
                 bones.Names = RIG.GetboneNames(cr2w, "CMesh");
                 bones.WorldPosn = GetMeshBonesPosn(cr2w);
 
-                Rig.BoneCount = (cr2w.Chunks[last].data as CMesh).BoneNames.Count + 1;
+                Rig.BoneCount = (cr2w.Chunks[last].Data as CMesh).BoneNames.Count + 1;
                 Rig.LocalPosn = new Vec3[Rig.BoneCount];
                 Rig.LocalRot = new System.Numerics.Quaternion[Rig.BoneCount];
                 Rig.LocalScale = new Vec3[Rig.BoneCount];
@@ -278,7 +278,7 @@ namespace WolvenKit.RED4.MeshFile
                     last = i;
                 }
             }
-            if ((cr2w.Chunks[last].data as CMesh).BoneNames.Count != 0)    // for rigid meshes
+            if ((cr2w.Chunks[last].Data as CMesh).BoneNames.Count != 0)    // for rigid meshes
             {
                 bones.Names = RIG.GetboneNames(cr2w, "CMesh");
                 bones.WorldPosn = GetMeshBonesPosn(cr2w);
@@ -345,7 +345,7 @@ namespace WolvenKit.RED4.MeshFile
                         last = i;
                     }
                 }
-                if ((cr2w.Chunks[last].data as CMesh).BoneNames.Count != 0)    // for rigid meshes
+                if ((cr2w.Chunks[last].Data as CMesh).BoneNames.Count != 0)    // for rigid meshes
                 {
                     bones.Names = RIG.GetboneNames(cr2w, "CMesh");
                     bones.WorldPosn = GetMeshBonesPosn(cr2w);
@@ -397,14 +397,14 @@ namespace WolvenKit.RED4.MeshFile
                     Index = i;
                 }
             }
-            int boneCount = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.BonePositions.Count;
+            int boneCount = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.BonePositions.Count;
             Vec3[] posn = new Vec3[boneCount];
             float x, y, z = 0;
             for (int i = 0; i < boneCount; i++)
             {
-                x = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.BonePositions[i].X.Value;
-                y = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.BonePositions[i].Y.Value;
-                z = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.BonePositions[i].Z.Value;
+                x = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.BonePositions[i].X.Value;
+                y = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.BonePositions[i].Y.Value;
+                z = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.BonePositions[i].Z.Value;
                 posn[i] = new Vec3(x, z, -y);
             }
             return posn;
@@ -423,7 +423,7 @@ namespace WolvenKit.RED4.MeshFile
             }
             int meshC = 0;
             if(renderBlobExists)
-            meshC = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
+            meshC = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
             else
             {
                 return (new MeshesInfo()
@@ -446,27 +446,27 @@ namespace WolvenKit.RED4.MeshFile
 
             for (int i = 0; i < meshC; i++)
             {
-                vertCounts[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumVertices.Value;
-                indCounts[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumIndices.Value;
-                vertOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0].Value;
-                tx0Offsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[1].Value;
-                normalOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[2].Value;
-                colorOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[3].Value;
-                unknownOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4].Value;
+                vertCounts[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumVertices.Value;
+                indCounts[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumIndices.Value;
+                vertOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0].Value;
+                tx0Offsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[1].Value;
+                normalOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[2].Value;
+                colorOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[3].Value;
+                unknownOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4].Value;
 
-                if ((cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset == null)
+                if ((cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset == null)
                 {
-                    indicesOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferOffset.Value;
+                    indicesOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferOffset.Value;
                 }
                 else
                 {
-                    indicesOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferOffset.Value + (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset.Value;
+                    indicesOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferOffset.Value + (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset.Value;
                 }
-                vpStrides[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0].Value;
-                LODLvl[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].LodMask.Value;
+                vpStrides[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0].Value;
+                LODLvl[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].LodMask.Value;
             }
-            Vector4 qSc = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationScale;
-            Vector4 qTr = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationOffset;
+            Vector4 qSc = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationScale;
+            Vector4 qTr = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationOffset;
 
             Vec4 qScale = new Vec4(qSc.X.Value, qSc.Y.Value, qSc.Z.Value, qSc.W.Value);
             Vec4 qTrans = new Vec4(qTr.X.Value, qTr.Y.Value, qTr.Z.Value, qTr.W.Value);
@@ -479,11 +479,11 @@ namespace WolvenKit.RED4.MeshFile
 
             for (int i = 0; i < meshC; i++)
             {
-                count = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
+                count = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
                 counter = 0;
                 for (int e = 0; e < count; e++)
                 {
-                    checker = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
+                    checker = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
                     if (checker == "PS_SkinIndices")
                         counter++;
                 }
@@ -493,11 +493,11 @@ namespace WolvenKit.RED4.MeshFile
             for (int i = 0; i < meshC; i++)
             {
                 extraExists[i] = false;
-                count = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
+                count = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
                 
                 for (int e = 0; e < count; e++)
                 {
-                    checker = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
+                    checker = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
                     if (checker == "PS_ExtraData")
                     {
                         extraExists[i] = true;
@@ -510,14 +510,14 @@ namespace WolvenKit.RED4.MeshFile
                 if (cr2w.Chunks[i].REDType == "meshMeshAppearance")
                 {
                     Appearance appearance = new Appearance();
-                    appearance.Name = (cr2w.Chunks[i].data as meshMeshAppearance).Name.Value;
+                    appearance.Name = (cr2w.Chunks[i].Data as meshMeshAppearance).Name.Value;
                     if(appearance.Name == string.Empty)
                         appearance.Name = "DEFAULT";
-                    int mtCount = (cr2w.Chunks[i].data as meshMeshAppearance).ChunkMaterials.Count;
+                    int mtCount = (cr2w.Chunks[i].Data as meshMeshAppearance).ChunkMaterials.Count;
                     appearance.MaterialNames = new string[mtCount];
                     for(int e = 0; e < mtCount; e++)
                     {
-                        appearance.MaterialNames[e] = (cr2w.Chunks[i].data as meshMeshAppearance).ChunkMaterials[e].Value;
+                        appearance.MaterialNames[e] = (cr2w.Chunks[i].Data as meshMeshAppearance).ChunkMaterials[e].Value;
                     }
                     appearances.Add(appearance);
                 }
@@ -540,9 +540,9 @@ namespace WolvenKit.RED4.MeshFile
                 qTrans = qTrans,
                 meshC = meshC,
                 appearances = appearances,
-                vertBufferSize = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.VertexBufferSize.Value,
-                indexBufferOffset = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferOffset.Value,
-                indexBufferSize = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferSize.Value
+                vertBufferSize = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.VertexBufferSize.Value,
+                indexBufferOffset = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferOffset.Value,
+                indexBufferSize = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferSize.Value
             };
             return meshesInfo;
         }
@@ -733,7 +733,7 @@ namespace WolvenKit.RED4.MeshFile
                 }
 
             }
-            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].data as rendRenderMeshBlob).RenderBuffer.Buffer.Bytes);
+            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Bytes);
             var b = cr2w.Buffers[p - 1];
             ms.Seek(b.Offset, SeekOrigin.Begin);
             MemoryStream meshstream = new MemoryStream();

@@ -28,9 +28,9 @@ namespace WolvenKit.Views.Templates
                     IREDBool => RedboolTemplate,
                     IREDString => CommmonTemplate,
                     IREDIntegerType => NumericTemplate,
-                    IEnumAccessor => EnumTemplate,
-                    IChunkPtrAccessor => HandleTemplateView,
-                    IArrayAccessor => ArrayTemplateView,
+                    IREDEnum => EnumTemplate,
+                    IREDChunkPtr => HandleTemplateView,
+                    IREDArray => ArrayTemplateView,
                     _ => CommmonTemplate
                 };
     }

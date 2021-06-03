@@ -125,11 +125,11 @@ namespace WolvenKit.RED4.MorphTargetFile
                 }
             }
 
-            UInt32 NumTargets = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.NumTargets.Value;
+            UInt32 NumTargets = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.NumTargets.Value;
 
             UInt32[,] NumVertexDiffsInEachChunk = new UInt32[NumTargets, SubMeshC];
-            UInt32 NumDiffs = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.NumDiffs.Value;
-            UInt32 NumDiffsMapping = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.NumDiffsMapping.Value;
+            UInt32 NumDiffs = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.NumDiffs.Value;
+            UInt32 NumDiffsMapping = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.NumDiffsMapping.Value;
             UInt32[,] NumVertexDiffsMappingInEachChunk = new UInt32[NumTargets, SubMeshC];
             UInt32[] TargetStartsInVertexDiffs = new UInt32[NumTargets];
             UInt32[] TargetStartsInVertexDiffsMapping = new UInt32[NumTargets];
@@ -139,17 +139,17 @@ namespace WolvenKit.RED4.MorphTargetFile
             {
                 for (int e = 0; e < SubMeshC; e++)
                 {
-                    NumVertexDiffsInEachChunk[i, e] = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.NumVertexDiffsInEachChunk[i][e].Value;
-                    NumVertexDiffsMappingInEachChunk[i, e] = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.NumVertexDiffsMappingInEachChunk[i][e].Value;
+                    NumVertexDiffsInEachChunk[i, e] = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.NumVertexDiffsInEachChunk[i][e].Value;
+                    NumVertexDiffsMappingInEachChunk[i, e] = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.NumVertexDiffsMappingInEachChunk[i][e].Value;
                 }
 
-                TargetStartsInVertexDiffs[i] = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetStartsInVertexDiffs[i].Value;
-                TargetStartsInVertexDiffsMapping[i] = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetStartsInVertexDiffsMapping[i].Value;
+                TargetStartsInVertexDiffs[i] = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetStartsInVertexDiffs[i].Value;
+                TargetStartsInVertexDiffsMapping[i] = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetStartsInVertexDiffsMapping[i].Value;
 
 
-                var o = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetPositionDiffOffset[i];
+                var o = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetPositionDiffOffset[i];
                 TargetPositionDiffOffset[i] = new Vec4(o.X.Value, o.Y.Value, o.Z.Value, o.W.Value);
-                var s = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetPositionDiffScale[i];
+                var s = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetPositionDiffScale[i];
                 TargetPositionDiffScale[i] = new Vec4(s.X.Value, s.Y.Value, s.Z.Value, s.W.Value);
             }
 
@@ -165,13 +165,13 @@ namespace WolvenKit.RED4.MorphTargetFile
 
             string[] Names = new string[NumTargets];
             string[] RegionNames = new string[NumTargets];
-            string BaseMesh = (cr2w.Chunks[Index].data as MorphTargetMesh).BaseMesh.DepotPath;
-            string BaseTexture = (cr2w.Chunks[Index].data as MorphTargetMesh).BaseTexture.DepotPath;
+            string BaseMesh = (cr2w.Chunks[Index].Data as MorphTargetMesh).BaseMesh.DepotPath;
+            string BaseTexture = (cr2w.Chunks[Index].Data as MorphTargetMesh).BaseTexture.DepotPath;
 
             for (int i = 0; i < NumTargets; i++)
             {
-                Names[i] = (cr2w.Chunks[Index].data as MorphTargetMesh).Targets[i].Name.Value;
-                RegionNames[i] = (cr2w.Chunks[Index].data as MorphTargetMesh).Targets[i].RegionName.Value;
+                Names[i] = (cr2w.Chunks[Index].Data as MorphTargetMesh).Targets[i].Name.Value;
+                RegionNames[i] = (cr2w.Chunks[Index].Data as MorphTargetMesh).Targets[i].RegionName.Value;
             }
 
             TargetsInfo targetsInfo = new TargetsInfo()
@@ -273,7 +273,7 @@ namespace WolvenKit.RED4.MorphTargetFile
                     Index = i;
                 }
             }
-            int Count = (cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData.Count;
+            int Count = (cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData.Count;
             int texCount = 0;
             List<UInt32> TargetDiffsDataOffset = new List<UInt32>();
             List<UInt32> TargetDiffsDataSize = new List<UInt32>();
@@ -282,12 +282,12 @@ namespace WolvenKit.RED4.MorphTargetFile
 
             for (int i = 0; i < Count; i++)
             {
-                if ((cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsDataSize.Count == 0)
+                if ((cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsDataSize.Count == 0)
                     break;
-                TargetDiffsDataOffset.Add((cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsDataOffset[0].Value);
-                TargetDiffsDataSize.Add((cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsDataSize[0].Value);
-                TargetDiffsMipLevelCounts.Add((cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsMipLevelCounts[0].Value);
-                TargetDiffsWidth.Add((cr2w.Chunks[Index].data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsWidth[0].Value);
+                TargetDiffsDataOffset.Add((cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsDataOffset[0].Value);
+                TargetDiffsDataSize.Add((cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsDataSize[0].Value);
+                TargetDiffsMipLevelCounts.Add((cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsMipLevelCounts[0].Value);
+                TargetDiffsWidth.Add((cr2w.Chunks[Index].Data as rendRenderMorphTargetMeshBlob).Header.TargetTextureDiffsData[i].TargetDiffsWidth[0].Value);
                 texCount++;
             }
 

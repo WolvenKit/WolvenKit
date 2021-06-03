@@ -22,6 +22,7 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED3;
 using WolvenKit.MVVM.Model;

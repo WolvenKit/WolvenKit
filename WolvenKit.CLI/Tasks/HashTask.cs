@@ -12,7 +12,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public int HashTask(string[] input, bool missing, string prepare)
+        public int HashTask(string[] input, bool missing)
         {
             #region checks
 
@@ -55,11 +55,6 @@ namespace CP77Tools.Tasks
                         }
                     }
                 }
-            }
-
-            if (!string.IsNullOrEmpty(prepare))
-            {
-                _hashService.Serialize(prepare);
             }
 
             return 1;

@@ -61,7 +61,7 @@ namespace CP77.CR2W.Uncooker
                     Index = i;
                 }
             }
-            int meshC = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
+            int meshC = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
 
             UInt32[] vertCounts = new UInt32[meshC];
             UInt32[] indCounts = new UInt32[meshC];
@@ -75,27 +75,27 @@ namespace CP77.CR2W.Uncooker
             UInt32[] LODLvl = new UInt32[meshC];
             for (int i = 0; i < meshC; i++)
             {
-                vertCounts[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumVertices.Value;
-                indCounts[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumIndices.Value;
-                vertOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0].Value;
-                tx0Offsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[1].Value;
-                normalOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[2].Value;
-                colorOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[3].Value;
-                tx1Offsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4].Value;
+                vertCounts[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumVertices.Value;
+                indCounts[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].NumIndices.Value;
+                vertOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0].Value;
+                tx0Offsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[1].Value;
+                normalOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[2].Value;
+                colorOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[3].Value;
+                tx1Offsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4].Value;
 
-                if ((cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset == null)
+                if ((cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset == null)
                 {
-                    indicesOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferOffset.Value;
+                    indicesOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferOffset.Value;
                 }
                 else
                 {
-                    indicesOffsets[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferOffset.Value + (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset.Value;
+                    indicesOffsets[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferOffset.Value + (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkIndices.TeOffset.Value;
                 }
-                vpStrides[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0].Value;
-                LODLvl[i] = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[i].LodMask.Value;
+                vpStrides[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0].Value;
+                LODLvl[i] = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].LodMask.Value;
             }
-            Vector4 qScale = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationScale;
-            Vector4 qTrans = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationOffset;
+            Vector4 qScale = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationScale;
+            Vector4 qTrans = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationOffset;
 
             MeshesInfo meshesInfo = new MeshesInfo()
             {

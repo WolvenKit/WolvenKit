@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         #region methods
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
@@ -71,8 +71,23 @@ namespace WolvenKit.RED4.CR2W.Archive
             return b;
         }
 
+        public void CopyFileToStreamWithoutBuffers(Stream stream, ulong hash, MemoryMappedFile mmf = null)
+        {
+            if (!Files.ContainsKey(hash))
+            {
+                return;
+            }
+
+            var entry = Files[hash] as FileEntry;
+            var startIndex = (int)entry.SegmentsStart;
+            var nextIndex = (int)entry.SegmentsEnd;
+
+            // decompress main file
+            CopyFileSegmentToStream(stream, this.Index.FileSegments[startIndex], true, mmf);
+        }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="hash"></param>
@@ -141,7 +156,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="hash"></param>
@@ -233,6 +248,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 var size = offsetEntry.Size;
                 vs.DecompressAndCopySegment(outStream, zSize, size);
             }
+            vs.Dispose();
         }
 
         /// <summary>

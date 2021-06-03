@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types

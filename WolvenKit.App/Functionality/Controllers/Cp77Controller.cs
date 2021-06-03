@@ -58,13 +58,6 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task HandleStartup()
         {
-            var dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-            var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
-            if (!OodleLoadLib.Load(destFileName))
-            {
-                throw new MissingCompressionException($"oo2ext_7_win64.dll not found in {dir}");
-            }
-
             var todo = new List<Func<IGameArchiveManager>>()
             {
                 LoadArchiveManager,

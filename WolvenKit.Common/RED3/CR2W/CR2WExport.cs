@@ -66,8 +66,8 @@ namespace WolvenKit.RED3.CR2W
             {
                 objectFlags = (ushort)(cooked ? 8192 : 0),
             };
-            AdReferences = new List<IChunkPtrAccessor>();
-            AbReferences = new List<IChunkPtrAccessor>();
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
 
             this.cr2w = file;
             this.REDType = redtype;
@@ -85,8 +85,8 @@ namespace WolvenKit.RED3.CR2W
             _export = export;
 
             REDType = cr2w.Names[export.className].Str;
-            AdReferences = new List<IChunkPtrAccessor>();
-            AbReferences = new List<IChunkPtrAccessor>();
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
         }
 
         #endregion Constructors
@@ -109,7 +109,7 @@ namespace WolvenKit.RED3.CR2W
 
         [NonSerialized] [JsonIgnore] public List<string> UnknownTypes = new();
         [NonSerialized] [JsonIgnore] public CBytes unknownBytes;
-        IEditableVariable ICR2WExport.unknownBytes => unknownBytes;
+        IEditableVariable ICR2WExport.UnknownBytes => unknownBytes;
 
         List<string> ICR2WExport.UnknownTypes => UnknownTypes;
 
@@ -122,20 +122,20 @@ namespace WolvenKit.RED3.CR2W
         /// This is the directed-graph out-edge list :
         /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
         /// </summary>
-        public List<IChunkPtrAccessor> AbReferences { get; }
+        public List<IREDChunkPtr> AbReferences { get; }
 
         /// <summary>
         /// Playing with latin here, ab means toward, ab away from.
         /// This is the directed-graph in-edge list :
         /// CVariables, being CPtr or CHandle, which reference this chunk.
         /// </summary>
-        public List<IChunkPtrAccessor> AdReferences { get; }
+        public List<IREDChunkPtr> AdReferences { get; }
 
         public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
         public int ChunkIndex => cr2w.Chunks.IndexOf(this as ICR2WExport);
         public CR2WFile cr2w { get; }
 
-        public IEditableVariable data { get; private set; }
+        public IEditableVariable Data { get; private set; }
 
         public bool IsSerialized => true;
 
@@ -162,7 +162,7 @@ namespace WolvenKit.RED3.CR2W
         {
             get
             {
-                var vars = data.GetEditableVariables();
+                var vars = Data.GetEditableVariables();
                 var firstString = vars
                         .OfType<IREDString>()
                         .FirstOrDefault(_ => _.Value != null)
@@ -218,14 +218,14 @@ namespace WolvenKit.RED3.CR2W
             //if (Export.className != 1 && GetParentChunk() == null)
             //    throw new InvalidChunkTypeException("No parent chunk set!");
 
-            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
+            Data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.Data as CVariable);
 
-            if (data == null || data is not CVariable cdata)
+            if (Data == null || Data is not CVariable cdata)
             {
                 throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
-            data.IsSerialized = true;
+            Data.IsSerialized = true;
             cdata.SetREDFlags(Export.objectFlags);
         }
 
@@ -234,7 +234,7 @@ namespace WolvenKit.RED3.CR2W
             var vars = new List<IEditableVariable>
             {
                 //ParentPtr,
-                data
+                Data
             };
             if (unknownBytes != null && unknownBytes.Bytes != null && unknownBytes.Bytes.Length != 0)
             {
@@ -288,13 +288,13 @@ namespace WolvenKit.RED3.CR2W
 
             CreateDefaultData();
 
-            data.VarChunkIndex = ChunkIndex;
+            Data.VarChunkIndex = ChunkIndex;
 
-            data.Read(file, _export.dataSize);
+            Data.Read(file, _export.dataSize);
 
             // Unknown bytes
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
-            unknownBytes = new CBytes(cr2w, data as CVariable, "unknownBytes");
+            unknownBytes = new CBytes(cr2w, Data as CVariable, "unknownBytes");
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
@@ -337,9 +337,9 @@ namespace WolvenKit.RED3.CR2W
 
             var posstart = file.BaseStream.Position;
 
-            if (data != null)
+            if (Data != null)
             {
-                data.Write(file);
+                Data.Write(file);
             }
 
             // Unknown bytes not as variable because I always want it at the end.

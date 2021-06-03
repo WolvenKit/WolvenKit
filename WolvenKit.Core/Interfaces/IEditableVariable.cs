@@ -7,25 +7,31 @@ using FastMember;
 
 namespace WolvenKit.Common.Model.Cr2w
 {
-    public interface IEditableVariable : IEditorBindable
+    public interface IEditableVariable
     {
-        [Browsable(false)] string REDName { get; }
+        IWolvenkitFile Cr2wFile { get; set; }
 
-        [Browsable(false)] string REDType { get; }
+        bool IsSerialized { get; set; }
 
-        [JsonIgnore] [Browsable(false)] string REDValue { get; }
+        string REDName { get; }
 
-        [JsonIgnore] [Browsable(false)] ushort REDFlags { get; }
+        string REDType { get; }
 
-        [JsonIgnore] [Browsable(false)] string UniqueIdentifier { get; }
+        public List<IEditableVariable> SerializedProperties { get; }
 
-        [JsonIgnore] [Browsable(false)] IEditableVariable ParentVar { get; }
-        
-        [JsonIgnore] [Browsable(false)] int VarChunkIndex { get; set; }
+        [JsonIgnore] string REDValue { get; }
 
-        [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
+        [JsonIgnore] ushort REDFlags { get; }
 
-        [JsonIgnore] [Browsable(false)] List<IEditableVariable> ChildrEditableVariables { get; }
+        [JsonIgnore] string UniqueIdentifier { get; }
+
+        [JsonIgnore] IEditableVariable ParentVar { get; }
+
+        [JsonIgnore] int VarChunkIndex { get; set; }
+
+        [JsonIgnore] public TypeAccessor accessor { get; }
+
+        [JsonIgnore] List<IEditableVariable> ChildrEditableVariables { get; }
 
 
 

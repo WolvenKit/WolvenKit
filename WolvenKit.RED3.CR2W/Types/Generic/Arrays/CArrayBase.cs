@@ -11,12 +11,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
 
     [REDMeta()]
-    public abstract class CArrayBase<T> : CVariable, IArrayAccessor<T>, IList<T> where T : IEditableVariable
+    public abstract class CArrayBase<T> : CVariable, IREDArray<T>, IList<T> where T : IEditableVariable
     {
         public CArrayBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -41,6 +42,18 @@ namespace WolvenKit.RED3.CR2W.Types
                     ? BuildTypeName(Elementtype, Flags.ToArray())
                     : BuildTypeName(Elementtype);
             }
+        }
+
+        public IEditableVariable GetElementInstance(string varName)
+        {
+            var element = CR2WTypeManager.Create(Elementtype, varName, cr2w, this);
+            if (element is IEditableVariable evar)
+            {
+                evar.IsSerialized = true;
+                return evar;
+            }
+
+            throw new TypeMismatchException(typeof(T).FullName, "");
         }
 
         private string BuildTypeName(string type, params int[] flags)
@@ -95,6 +108,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is CArrayBase<T> cvar)
             {
                 this.Elements = cvar.Elements;
@@ -221,7 +235,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
             //((IList<T>)elements).Insert(index, item);
         }
 

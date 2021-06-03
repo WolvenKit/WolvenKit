@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Globalization;
 using System.Runtime.Serialization;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W.Types
@@ -14,12 +15,12 @@ namespace WolvenKit.RED3.CR2W.Types
     public class IdHandle : CVariable
     {
         public CName handlename;
-        public CHandle<CBehaviorVariable> handle;
+        public CHandle<IEditableVariable> handle;
 
         public IdHandle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             handlename = new CName(cr2w, this, "handlename" );
-            handle = new CHandle<CBehaviorVariable>(cr2w, this, "handle" );
+            handle = new CHandle<IEditableVariable>(cr2w, this, "handle" );
         }
 
         public override void Read(BinaryReader file, uint size)

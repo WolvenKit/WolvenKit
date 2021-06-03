@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using System.Linq;
 using WolvenKit.RED3.CR2W.Types.Utils;
 using System.Runtime.Serialization;
 using WolvenKit.RED3.CR2W.Reflection;
 using static WolvenKit.RED3.CR2W.Types.Enums;
 using FastMember;
-using WolvenKit.Interfaces.RED3;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -34,7 +34,7 @@ namespace WolvenKit.RED3.CR2W.Types
             base.Read(file, size);
 
             // check if created from template
-            isCreatedFromTemplate = this.Template != null && (this.Template.Reference != null || !string.IsNullOrEmpty(this.Template.DepotPath));
+            isCreatedFromTemplate = this.Template != null && (this.Template.GetReference() != null || !string.IsNullOrEmpty(this.Template.DepotPath));
 
             // Read Component Array (should only be present if NOT created from template)
             #region Componentsarray
@@ -54,7 +54,7 @@ namespace WolvenKit.RED3.CR2W.Types
                     for (var i = 0; i < elementcount; i++)
                     {
                         var ptr = CR2WTypeManager.Create("ptr:CComponent", i.ToString(), cr2w, Components);
-                        if (ptr is IPtrAccessor iptr)
+                        if (ptr is IREDPtr iptr)
                         {
                             ptr.IsSerialized = true;
                             ptr.Read(file, 0);
@@ -120,7 +120,7 @@ namespace WolvenKit.RED3.CR2W.Types
             base.Write(file);
 
             // check if created from template
-            isCreatedFromTemplate = this.Template != null && (this.Template.Reference != null || !string.IsNullOrEmpty(this.Template.DepotPath));
+            isCreatedFromTemplate = this.Template != null && (this.Template.GetReference() != null || !string.IsNullOrEmpty(this.Template.DepotPath));
 
             // Write componentsarray (if not created from template)
             if (!isCreatedFromTemplate)

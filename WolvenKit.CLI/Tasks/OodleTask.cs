@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common.Oodle;
@@ -9,7 +10,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public static int OodleTask(string path, string outpath, bool decompress)
+        public static int OodleTask(string path, string outpath, bool decompress, bool compress)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -17,7 +18,9 @@ namespace CP77Tools.Tasks
             }
 
             if (string.IsNullOrEmpty(outpath))
-            { outpath = path; }
+            {
+                outpath = Path.ChangeExtension(path, ".kark");
+            }
 
             if (decompress)
             {
@@ -43,6 +46,22 @@ namespace CP77Tools.Tasks
                 bw.Write(unpacked);
 
                 File.WriteAllBytes($"{outpath}.kark", msout.ToArray());
+            }
+
+            if (compress)
+            {
+                var inbuffer = File.ReadAllBytes(path);
+                IEnumerable<byte> outBuffer = new List<byte>();
+
+                var r = OodleHelper.Compress(
+                    inbuffer,
+                    inbuffer.Length,
+                    ref outBuffer,
+                    OodleNative.OodleLZ_Compressor.Kraken,
+                    OodleNative.OodleLZ_Compression.Normal,
+                    true);
+
+                File.WriteAllBytes(outpath, outBuffer.ToArray());
             }
 
             return 1;

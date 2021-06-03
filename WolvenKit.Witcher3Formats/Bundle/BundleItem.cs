@@ -7,6 +7,7 @@ using Snappy;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.Bundles
 {

@@ -26,6 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             this.Value = val switch
             {
                 string s => s,
@@ -35,6 +36,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => Value;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {
