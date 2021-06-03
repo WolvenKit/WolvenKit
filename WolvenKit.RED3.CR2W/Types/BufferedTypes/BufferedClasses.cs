@@ -102,7 +102,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1000)] [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
     }
 
-    
+
 
     public partial class CEntityTemplate : CResource
     {
@@ -180,6 +180,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is CXml)
             {
                 Ragdolldata = (CXml)val;

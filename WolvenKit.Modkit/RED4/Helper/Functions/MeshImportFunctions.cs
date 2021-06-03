@@ -71,12 +71,12 @@ namespace WolvenKit.RED4.MeshFile
                 }
 
             }
-            (cr2w.Chunks[Index].data as CMesh).BoundingBox.Min.X.Value = min.X;
-            (cr2w.Chunks[Index].data as CMesh).BoundingBox.Min.Y.Value = min.Y;
-            (cr2w.Chunks[Index].data as CMesh).BoundingBox.Min.Z.Value = min.Z;
-            (cr2w.Chunks[Index].data as CMesh).BoundingBox.Max.X.Value = max.X;
-            (cr2w.Chunks[Index].data as CMesh).BoundingBox.Max.Y.Value = max.Y;
-            (cr2w.Chunks[Index].data as CMesh).BoundingBox.Max.Z.Value = max.Z;
+            (cr2w.Chunks[Index].Data as CMesh).BoundingBox.Min.X.Value = min.X;
+            (cr2w.Chunks[Index].Data as CMesh).BoundingBox.Min.Y.Value = min.Y;
+            (cr2w.Chunks[Index].Data as CMesh).BoundingBox.Min.Z.Value = min.Z;
+            (cr2w.Chunks[Index].Data as CMesh).BoundingBox.Max.X.Value = max.X;
+            (cr2w.Chunks[Index].Data as CMesh).BoundingBox.Max.Y.Value = max.Y;
+            (cr2w.Chunks[Index].Data as CMesh).BoundingBox.Max.Z.Value = max.Z;
             // bounding box updated
 
             Vec4 QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
@@ -586,52 +586,52 @@ namespace WolvenKit.RED4.MeshFile
             }
 
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
-            int Count = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.Topology.Count;
+            int Count = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.Topology.Count;
             for (int i = 0; i < Count; i++)
             {
-                (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.Topology.Remove((cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.Topology[0]);
+                (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.Topology.Remove((cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.Topology[0]);
             }
             for (int i = 0; i < info.meshC; i++)
             {
-                (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.Topology.Add(new rendTopologyData(cr2w, (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.Topology, Convert.ToString(i)) { IsSerialized = true, IsNulled = false });
+                (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.Topology.Add(new rendTopologyData(cr2w, (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.Topology, Convert.ToString(i)) { IsSerialized = true, IsNulled = false });
             }
 
             //dependent RenderLOD's removal and addition
-            Count = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs.Count;
+            Count = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs.Count;
             if (Count > 1)
             {
                 for (int i = 0; i < Count; i++)
                 {
-                    (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs.Remove((cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs[0]);
+                    (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs.Remove((cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs[0]);
                 }
-                (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs, "0") { IsSerialized = true, IsNulled = false, Value = 0f });
+                (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs, "0") { IsSerialized = true, IsNulled = false, Value = 0f });
 
                 if (info.LODLvl.ToList().Contains(2))
                 {
-                    (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs, "1") { IsSerialized = true, IsNulled = false, Value = 3f });
+                    (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs, "1") { IsSerialized = true, IsNulled = false, Value = 3f });
                 }
                 if (info.LODLvl.ToList().Contains(4))
                 {
-                    (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs, "2") { IsSerialized = true, IsNulled = false, Value = 6f });
+                    (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs, "2") { IsSerialized = true, IsNulled = false, Value = 6f });
                 }
                 if (info.LODLvl.ToList().Contains(8))
                 {
-                    (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderLODs, "3") { IsSerialized = true, IsNulled = false, Value = 9f });
+                    (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs.Add(new CFloat(cr2w, (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderLODs, "3") { IsSerialized = true, IsNulled = false, Value = 9f });
                 }
             }
             // depended CMesh LODLevelInfo removal and addition has not been implemented yet, implementation depends if it will cause any issue
 
             // removing existing rendChunks
-            Count = (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
+            Count = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos.Count;
             for (int i = 0; i < Count; i++)
             {
-                (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos.Remove((cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos[0]);
+                (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos.Remove((cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[0]);
             }
 
             // adding new rendChunks
             for (int i = 0; i < info.meshC; i++)
             {
-                rendChunk chunk = new rendChunk(cr2w, (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos, Convert.ToString(i)) { IsSerialized = true, IsNulled = false };
+                rendChunk chunk = new rendChunk(cr2w, (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos, Convert.ToString(i)) { IsSerialized = true, IsNulled = false };
 
                 chunk.LodMask = new CUInt8(cr2w, chunk, "lodMask") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(info.LODLvl[i]) };
 
@@ -915,22 +915,22 @@ namespace WolvenKit.RED4.MeshFile
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // Adding Chunk
-                (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.RenderChunkInfos.Add(chunk);
+                (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos.Add(chunk);
             }
 
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationScale.X.Value = info.qScale.X;
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationScale.Y.Value = info.qScale.Y;
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationScale.Z.Value = info.qScale.Z;
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationOffset.X.Value = info.qTrans.X;
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationOffset.Y.Value = info.qTrans.Y;
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.QuantizationOffset.Z.Value = info.qTrans.Z;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationScale.X.Value = info.qScale.X;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationScale.Y.Value = info.qScale.Y;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationScale.Z.Value = info.qScale.Z;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationOffset.X.Value = info.qTrans.X;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationOffset.Y.Value = info.qTrans.Y;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.QuantizationOffset.Z.Value = info.qTrans.Z;
 
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.VertexBufferSize.Value = info.vertBufferSize;
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferSize.Value = info.indexBufferSize;
-            (cr2w.Chunks[Index].data as rendRenderMeshBlob).Header.IndexBufferOffset.Value = info.indexBufferOffset;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.VertexBufferSize.Value = info.vertBufferSize;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferSize.Value = info.indexBufferSize;
+            (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferOffset.Value = info.indexBufferOffset;
 
 
-            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].data as rendRenderMeshBlob).RenderBuffer.Buffer.Bytes);
+            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Bytes);
 
             var compressed = new MemoryStream();
             using var buff = new BinaryWriter(compressed);

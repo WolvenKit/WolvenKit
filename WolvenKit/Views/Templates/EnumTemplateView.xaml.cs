@@ -23,14 +23,14 @@ namespace WolvenKit.Views.Templates
 
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
-        public IEnumAccessor RedEnum
+        public IREDEnum RedEnum
         {
-            get => (IEnumAccessor)GetValue(RedEnumProperty);
+            get => (IREDEnum)GetValue(RedEnumProperty);
             set => SetValue(RedEnumProperty, value);
         }
 
         public static readonly DependencyProperty RedEnumProperty =
-            DependencyProperty.Register(nameof(RedEnum), typeof(IEnumAccessor),
+            DependencyProperty.Register(nameof(RedEnum), typeof(IREDEnum),
                 typeof(EnumTemplateView), new PropertyMetadata(OnRedEnumChanged));
 
 
@@ -44,7 +44,7 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-            if (e.NewValue is not IEnumAccessor ienum)
+            if (e.NewValue is not IREDEnum ienum)
             {
                 return;
             }

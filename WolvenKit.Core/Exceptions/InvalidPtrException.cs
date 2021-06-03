@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 
 namespace WolvenKit.Interfaces.Core
 {
-    [Serializable]
     public class InvalidPtrException : Exception
     {
         #region Constructors

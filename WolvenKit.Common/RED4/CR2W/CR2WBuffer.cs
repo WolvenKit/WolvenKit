@@ -1,5 +1,6 @@
 using System.IO;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.RED4.CR2W
@@ -74,20 +75,18 @@ namespace WolvenKit.RED4.CR2W
 
         #region Properties
 
-        public CR2WBuffer Buffer => _buffer;
-
-        #endregion Properties
-
-        #region properties
+        [JsonIgnore] public CR2WBuffer Buffer => _buffer;
 
         private byte[] _data;
 
+        [JsonIgnore]
         public uint Crc32
         {
             get => _buffer.crc32;
             set => _buffer.crc32 = value;
         }
 
+        [JsonIgnore]
         public uint DiskSize
         {
             get => _buffer.diskSize;
@@ -95,14 +94,17 @@ namespace WolvenKit.RED4.CR2W
         }
 
         public uint Flags => _buffer.flags;
+
         public uint Index => _buffer.index;
 
+        [JsonIgnore]
         public uint MemSize
         {
             get => _buffer.memSize;
             set => _buffer.memSize = value;
         }
 
+        [JsonIgnore]
         public uint Offset
         {
             get => _buffer.offset;

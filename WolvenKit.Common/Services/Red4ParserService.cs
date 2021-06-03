@@ -33,9 +33,14 @@ namespace WolvenKit.Common.Services
             }
 
             // custom
-            using (var vs = mmf.CreateViewStream((long)ar.Header.Filesize, 0, MemoryMappedFileAccess.Read))
-            using (var br = new BinaryReader(vs))
+
+            try
             {
+
+                var a = mmf.CreateViewAccessor((long)ar.Header.Filesize, 0, MemoryMappedFileAccess.Read);
+
+                using var vs = mmf.CreateViewStream((long)ar.Header.Filesize, 0, MemoryMappedFileAccess.Read);
+                using var br = new BinaryReader(vs);
                 if (br.BaseStream.Length >= LxrsFooter.MIN_LENGTH)
                 {
                     var lxrs = br.ReadLxrsFooter(_hashService);
@@ -45,6 +50,12 @@ namespace WolvenKit.Common.Services
                     }
                 }
             }
+            catch (UnauthorizedAccessException)
+            {
+                //Console.WriteLine(e);
+
+            }
+
 
 
             using (var vs = mmf.CreateViewStream((long)ar.Header.IndexPosition, ar.Header.IndexSize,

@@ -30,7 +30,7 @@ namespace WolvenKit.Models
             return FromCsvInner(type, reader, useHeader);
         }
 
-        public static string ToCsvString(this IArrayAccessor wrappedArray, bool useHeader = false)
+        public static string ToCsvString(this IREDArray wrappedArray, bool useHeader = false)
         {
             using var ms = new MemoryStream();
             using var writer = new StreamWriter(ms, Encoding.UTF8);

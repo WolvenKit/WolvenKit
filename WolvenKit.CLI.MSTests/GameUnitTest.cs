@@ -34,12 +34,8 @@ namespace WolvenKit.CLI.MSTests
 
         protected static void Setup(TestContext context)
         {
-            // IoC
-            ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            #region cp77 game dir
 
-            // check for CP77_DIR environment variable first
             // overrides hardcoded appsettings.json
             var cp77Dir = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             if (!string.IsNullOrEmpty(cp77Dir) && new DirectoryInfo(cp77Dir).Exists)
@@ -62,7 +58,10 @@ namespace WolvenKit.CLI.MSTests
                 throw new ConfigurationErrorsException($"'{s_gameDirectorySetting}' is not a valid directory");
             }
 
-            // Oodle
+            #endregion
+
+            #region oodle
+
             var gameBinDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "bin", "x64"));
             var oodleInfo = new FileInfo(Path.Combine(gameBinDir.FullName, "oo2ext_7_win64.dll"));
             if (!oodleInfo.Exists)
@@ -80,12 +79,19 @@ namespace WolvenKit.CLI.MSTests
                 Assert.Fail("Could not load oo2ext_7_win64.dll.");
             }
 
+            #endregion
+
             //protobuf
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-            
+            // IoC
+            ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
+            ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+
+
             s_bm = new ArchiveManager(hashService);
-            s_bm.LoadAll(gameBinDir.FullName);
+            s_bm.LoadAll(gameBinDir.FullName, false);
             s_groupedFiles = s_bm.GroupedFiles;
 
 

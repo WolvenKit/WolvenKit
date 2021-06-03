@@ -11,11 +11,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public abstract class CBufferBase<T> : CVariable, IList<T>, IList, IBufferAccessor where T : CVariable
+    public abstract class CBufferBase<T> : CVariable, IList<T>, IList, IREDBuffer where T : CVariable
     {
         public CBufferBase(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
@@ -25,7 +26,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         [Browsable(false)]
         public List<int> Flags { get; set; }
-        #endregion
+
 
         public string Elementtype
         {
@@ -43,6 +44,20 @@ namespace WolvenKit.RED3.CR2W.Types
                     ? REDReflection.GetREDTypeString(this.GetType(), Flags.ToArray())
                     : REDReflection.GetREDTypeString(this.GetType());
             }
+        }
+
+        #endregion
+
+        public IEditableVariable GetElementInstance(string varName)
+        {
+            var element = CR2WTypeManager.Create(Elementtype, varName, cr2w, this);
+            if (element is IEditableVariable evar)
+            {
+                evar.IsSerialized = true;
+                return evar;
+            }
+
+            throw new TypeMismatchException(typeof(T).FullName, "");
         }
 
         public override List<IEditableVariable> GetEditableVariables()
@@ -201,7 +216,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
             //((IList<T>)elements).Insert(index, item);
         }
 

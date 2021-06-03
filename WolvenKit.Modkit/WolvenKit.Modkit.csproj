@@ -9,12 +9,12 @@
     <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0022" />
     <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0022" />
-    <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
+      <ProjectReference Include="..\WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj" />
   </ItemGroup>
 
 </Project>

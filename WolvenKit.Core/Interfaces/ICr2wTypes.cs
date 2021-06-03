@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 
 namespace WolvenKit.Common.Model.Cr2w
@@ -33,10 +30,10 @@ namespace WolvenKit.Common.Model.Cr2w
     {
         public uint Flags { get; }
         public uint Index { get; }
-        public uint Offset { get; set; }
-        public uint DiskSize { get; set; }
-        public uint MemSize { get; set; }
-        public uint Crc32 { get; set; }
+        [JsonIgnore] public uint Offset { get; set; }
+        [JsonIgnore] public uint DiskSize { get; set; }
+        [JsonIgnore] public uint MemSize { get; set; }
+        [JsonIgnore] public uint Crc32 { get; set; }
 
 
         public void ReadData(BinaryReader file);
@@ -49,21 +46,26 @@ namespace WolvenKit.Common.Model.Cr2w
     }
     public interface ICR2WExport
     {
-        public IEditableVariable data { get; }
         public string REDType { get; }
-        public string REDName { get; }
 
-        public IEditableVariable unknownBytes { get; }
+        public int ParentChunkIndex { get; }
 
-        public ICR2WExport ParentChunk { get; set; }
-        public ICR2WExport VirtualParentChunk { get; set; }
-        public List<ICR2WExport> ChildrenChunks { get; }
-        public List<ICR2WExport> VirtualChildrenChunks { get; }
-        public List<IChunkPtrAccessor> AdReferences { get; }
-        public List<IChunkPtrAccessor> AbReferences { get; }
-        public List<string> UnknownTypes { get; }
+        public IEditableVariable Data { get; }
 
-        public int ChunkIndex { get; }
+        [JsonIgnore] public string REDName { get; }
+        [JsonIgnore] public int ChunkIndex { get; }
+
+        [JsonIgnore] public IEditableVariable UnknownBytes { get; }
+
+        [JsonIgnore] public ICR2WExport ParentChunk { get; set; }
+        [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
+        [JsonIgnore] public List<ICR2WExport> ChildrenChunks { get; }
+        [JsonIgnore] public List<ICR2WExport> VirtualChildrenChunks { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AdReferences { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AbReferences { get; }
+        [JsonIgnore] public List<string> UnknownTypes { get; }
+
+
 
         public void CreateDefaultData(IEditableVariable cvar = null);
         public string GetFullChunkTypeDependencyString();
@@ -78,73 +80,86 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #region REDtypes
 
-    #region editor interfaces
-
-    public interface IEditorBindable
-    {
-        IWolvenkitFile Cr2wFile { get; set; }
-
-        bool IsSerialized { get; set; }
-    }
-    public interface IEditorBindable<T> : IEditorBindable
-    {
-        public T Value { get; set; } // ???
-    }
-
-    #endregion
-
     #region red primitives
 
-    public interface IREDPrimitive : IEditableVariable { }
+    public interface IREDPrimitive : IEditableVariable
+    {
+        public object GetValue();
+    }
 
-    public interface IREDColor : IEditorBindable<Color> { }
+    public interface IREDPrimitive<T> : IREDPrimitive
+    {
+        public T Value { get; set; }
+    }
+
+    public interface IREDColor : IREDPrimitive<Color> { }
 
     public interface IREDIntegerType : IREDPrimitive { }
-    public interface IREDIntegerType<T> : IREDIntegerType, IEditorBindable<T> { }
-    public interface IREDString : IREDPrimitive, IEditorBindable<string> { }
-    public interface IREDBool : IREDPrimitive, IEditorBindable<bool> { }
+    public interface IREDIntegerType<T> : IREDIntegerType, IREDPrimitive<T> { }
 
-    public interface IEnumAccessor : IEditorBindable, IEditableVariable
+    public interface IREDString : IREDPrimitive<string> { }
+
+    public interface IREDBool : IREDPrimitive<bool> { }
+
+    public interface IREDEnum : IREDPrimitive
     {
         List<string> EnumValueList { get; set; }
         bool IsFlag { get; }
 
         string GetAttributeVal();
     }
-    public interface IEnumAccessor<T> : IEditorBindable<T>, IEnumAccessor where T : Enum
+    public interface IREDEnum<T> : IREDPrimitive<T>, IREDEnum where T : Enum
     {
         string EnumToString();
-        
+
         Type GetEnumType();
     }
 
     #endregion
 
-    public interface IArrayAccessor : IEditableVariable, IList
+    #region arrays
+
+    public interface IREDArray : IEditableVariable, IList
     {
         List<int> Flags { get; set; }
 
         string Elementtype { get; set; }
         Type InnerType { get; }
+
+        public IEditableVariable GetElementInstance(string varName);
     }
-    public interface IArrayAccessor<T> : IArrayAccessor
+    public interface IREDArray<T> : IREDArray
     {
         List<T> Elements { get; set; }
     }
-    public interface IBufferAccessor : IArrayAccessor { }
+    public interface IREDBuffer : IREDArray { }
 
-    public interface IVariantAccessor
+    #endregion
+
+    public interface IREDVariant : IEditableVariable
     {
         IEditableVariable Variant { get; set; }
     }
-    public interface IBufferVariantAccessor : IVariantAccessor { }
+    public interface IREDBufferVariant : IREDVariant { }
 
-    public interface IChunkPtrAccessor : IEditableVariable
+
+
+    public interface IREDChunkPtr : IREDPrimitive
     {
-        ICR2WExport Reference { get; set; }
+        public int ChunkIndex { get; }
+        void SetReference(ICR2WExport value);
+        ICR2WExport GetReference();
         string ReferenceType { get; }
     }
-    public interface IHandleAccessor : IChunkPtrAccessor
+
+
+    /// <summary>
+    /// RED3
+    /// Handles are Int32 that store
+    /// if larger than 0 a reference to a chunk inside the cr2w file (aka Soft)
+    /// if less than 0 a reference to a string in the imports table (aka Pointer)
+    /// </summary>
+    public interface IREDHandle : IREDChunkPtr
     {
         bool ChunkHandle { get; set; }
         string DepotPath { get; set; }
@@ -154,6 +169,70 @@ namespace WolvenKit.Common.Model.Cr2w
         void ChangeHandleType();
         public IEnumerable<ICR2WExport> GetReferenceChunks();
     }
+
+    /// <summary>
+    /// RED3+4
+    /// A pointer to a chunk within the same cr2w file.
+    /// </summary>
+    public interface IREDPtr : IREDChunkPtr
+    {
+
+    }
+
+    /// <summary>
+    /// RED3
+    /// CSofts are Uint16 references to the imports table of a cr2w file
+    /// Imports are paths to a file in the tw3 filesystem
+    /// and can be set manually by DepotPath and Classname
+    /// Imports have flags which are set on write
+    /// </summary>
+    public interface IREDSoft : IREDPrimitive
+    {
+        string DepotPath { get; set; }
+        string ClassName { get; set; }
+        ushort Flags { get; set; }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IREDRef : IREDPrimitive
+    {
+        string DepotPath { get; set; }
+        EImportFlags Flags { get; set; }
+    }
+
+
+
+
+    public interface ICurveDataAccessor : IEditableVariable
+    {
+        string Elementtype { get; }
+    }
+
+    public interface IREDCurvePoint : IREDPrimitive
+    {
+
+    }
+
+    public interface IMultiChannelCurve : IEditableVariable
+    {
+
+    }
+
+    public interface IDataBufferAccessor : IEditableVariable
+    {
+    }
+
+    public interface ILocalizedString : IEditableVariable
+    {
+    }
+
+
+
+
+
+
 
     #endregion
 

@@ -167,7 +167,7 @@ namespace WolvenKit.Functionality.Layout
             HexEditorViewModel _ => HexEditorTemplate,
             JournalEditorViewModel _ => JournalEditorTemplate,
             VisualEditorViewModel _ => VisualEditorTemplate,
-            AudioToolViewModel _ => AudioToolTemplate,
+            //AudioToolViewModel _ => AudioToolTemplate,
             CR2WToTextToolViewModel _ => CR2WToTextToolTemplate,
             GameDebuggerToolViewModel _ => GameDebuggerToolTemplate,
             ImporterToolViewModel _ => ImporterToolTemplate,

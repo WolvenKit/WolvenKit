@@ -12,19 +12,19 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.CodeDom;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta()]
-    public abstract class CArrayBase<T> : CVariable, IArrayAccessor<T>, IList<T> where T : IEditableVariable
+    public abstract class CArrayBase<T> : CVariable, IREDArray<T>, IList<T> where T : IEditableVariable
     {
         public CArrayBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         #region Properties
+
         public List<T> Elements { get; set; } = new List<T>();
 
-
-        [Browsable(false)]
         public List<int> Flags { get; set; }
 
         public string Elementtype
@@ -33,28 +33,39 @@ namespace WolvenKit.RED4.CR2W.Types
             set => throw new NotSupportedException();
         }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
+
         #endregion
 
-
+        #region methods
 
         [Browsable(false)]
         public override string REDType => REDReflection.GetREDTypeString(GetType());
 
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            return Elements.Cast<IEditableVariable>().ToList();
-        }
-
+        public override List<IEditableVariable> GetEditableVariables() => Elements.Cast<IEditableVariable>().ToList();
 
         public override void Read(BinaryReader file, uint size)
         {
             throw new NotImplementedException("CArrayBase.Read");
         }
 
+        public IEditableVariable GetElementInstance(string varName)
+        {
+            var element = Create<T>(varName, Array.Empty<int>());
+            if (element is IEditableVariable evar)
+            {
+                evar.IsSerialized = true;
+                return evar;
+            }
+
+            throw new TypeMismatchException(typeof(T).FullName, "");
+        }
+
+
+
         protected void Read(BinaryReader file, uint size, int elementcount)
         {
 
-            for (int i = 0; i < elementcount; i++)
+            for (var i = 0; i < elementcount; i++)
             {
                 var element = Create<T>(i.ToString(), new int[0]);
 
@@ -64,10 +75,12 @@ namespace WolvenKit.RED4.CR2W.Types
 
                 var elementsize = 0;
                 if (element is IDataBufferAccessor)
+                {
                     elementsize = (int) ((size - 4) / elementcount);
+                }
 
                 element.Read(file, (uint)elementsize);
-                if (element is T te)
+                if (element is { } te)
                 {
                     te.IsSerialized = true;
                     Elements.Add(te);
@@ -121,6 +134,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is CArrayBase<T> cvar)
             {
                 this.Elements = cvar.Elements;
@@ -143,6 +157,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 Elements.Add(tvar);
             }
         }
+
         public override bool CanRemoveVariable(IEditableVariable child)
         {
             return child is T && Elements.Count > 0;
@@ -212,6 +227,8 @@ namespace WolvenKit.RED4.CR2W.Types
             return copy;
         }
 
+        #endregion
+
         #region interface implements
 
         [Browsable(false)]
@@ -246,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException("CarrayBase.Insert"); 
+            throw new NotImplementedException("CarrayBase.Insert");
             //((IList<T>)elements).Insert(index, item);
         }
 

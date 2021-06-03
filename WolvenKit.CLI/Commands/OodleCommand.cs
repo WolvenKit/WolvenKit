@@ -18,9 +18,10 @@ namespace CP77Tools.Commands
         {
             AddOption(new Option<string>(new[] { "--path", "-p" }, "Input path."));
             AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output path."));
-            AddOption(new Option<bool>(new[] { "--decompress", "-d" }, "Decompress KARK-compressed (Kraken) files."));
+            AddOption(new Option<bool>(new[] { "--decompress", "-d" }, "Decompress with oodle kraken."));
+            AddOption(new Option<bool>(new[] { "--compress", "-c" }, "Compress with oodle kraken."));
 
-            Handler = CommandHandler.Create<string, string, bool>(Tasks.ConsoleFunctions.OodleTask);
+            Handler = CommandHandler.Create<string, string, bool, bool>(Tasks.ConsoleFunctions.OodleTask);
         }
 
         #endregion Constructors

@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W.Types
@@ -12,17 +13,13 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         public CUInt64()
         {
-            
         }
 
         public CUInt64(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
-        private ulong _val;
-
-        [DataMember]
-        public ulong val { get => _val; set => _val = value; }
+        public ulong val { get; set; }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -36,6 +33,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case ulong o:
@@ -52,6 +50,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt64)base.Copy(context);
@@ -65,12 +65,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CUInt32 : CVariable, IREDPrimitive
     {
         public CUInt32()
         {
-            
+
         }
 
         public CUInt32(IRed3EngineFile cr2w, CVariable parent, string name)
@@ -93,6 +93,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case uint o:
@@ -109,6 +110,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt32) base.Copy(context);
@@ -122,12 +125,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CUInt16 : CVariable, IREDPrimitive
     {
         public CUInt16()
         {
-            
+
         }
 
         public CUInt16(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
@@ -151,6 +154,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case ushort o:
@@ -167,6 +171,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt16)base.Copy(context);
@@ -180,12 +186,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CUInt8 : CVariable, IREDPrimitive
     {
         public CUInt8()
         {
-            
+
         }
         public CUInt8(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -207,6 +213,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case byte o:
@@ -223,6 +230,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CUInt8) base.Copy(context);
@@ -236,12 +245,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt64 : CVariable, IREDPrimitive
     {
         public CInt64()
         {
-            
+
         }
         public CInt64(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -263,6 +272,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case long o:
@@ -279,6 +289,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt64) base.Copy(context);
@@ -292,12 +304,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt32 : CVariable, IREDPrimitive
     {
         public CInt32()
         {
-            
+
         }
         public CInt32(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -321,6 +333,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case int o:
@@ -337,6 +350,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt32) base.Copy(context);
@@ -350,12 +365,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt16 : CVariable, IREDPrimitive
     {
         public CInt16()
         {
-            
+
         }
         public CInt16(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -377,6 +392,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case short o:
@@ -393,6 +409,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt16) base.Copy(context);
@@ -406,12 +424,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CInt8 : CVariable, IREDPrimitive
     {
         public CInt8()
         {
-            
+
         }
         public CInt8(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -449,6 +467,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CInt8) base.Copy(context);
@@ -462,12 +482,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CDynamicInt : CVariable, IREDPrimitive
     {
         public CDynamicInt()
         {
-            
+
         }
         public CDynamicInt(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -489,6 +509,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case sbyte o:
@@ -504,6 +525,8 @@ namespace WolvenKit.RED3.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => val;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {
@@ -525,12 +548,12 @@ namespace WolvenKit.RED3.CR2W.Types
         }
     }
 
-    [DataContract(Namespace = "")]
+
     public class CVLQInt32 : CVariable, IREDPrimitive
     {
         public CVLQInt32()
         {
-            
+
         }
         public CVLQInt32(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -552,6 +575,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case sbyte o:
@@ -568,6 +592,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
+        public object GetValue() => val;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CVLQInt32)base.Copy(context);
@@ -580,15 +606,15 @@ namespace WolvenKit.RED3.CR2W.Types
             return val.ToString();
         }
 
-      
+
     }
 
-    [DataContract(Namespace = "")]
+
     public class CBool : CVariable, IREDPrimitive
     {
         public CBool()
         {
-            
+
         }
         public CBool(IRed3EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
@@ -617,6 +643,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case bool b:
@@ -632,6 +659,8 @@ namespace WolvenKit.RED3.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => val;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

@@ -15,7 +15,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.Interfaces.RED3;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.RED3.CR2W.Types.Utils;
@@ -128,7 +127,7 @@ namespace WolvenKit.RED3.CR2W
 
         #region Supporting Functions
 
-        
+
 
         // Does not reindex /TODO
         public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null,
@@ -307,7 +306,7 @@ namespace WolvenKit.RED3.CR2W
                 {
                     foreach (var referrer in chunk.AdReferences)
                     {
-                        if (purgereferrers && referrer.ParentVar is IArrayAccessor)
+                        if (purgereferrers && referrer.ParentVar is IREDArray)
                         {
                             referrer.ParentVar.RemoveVariable(referrer as IEditableVariable);
                         }
@@ -315,7 +314,7 @@ namespace WolvenKit.RED3.CR2W
                         {
                             // This leaves a dangling cptr/chandle in AdReferences,
                             // which needs to be adressed later.
-                            referrer.Reference = null;
+                            referrer.SetReference(null);
                         }
                     }
                 }
@@ -698,15 +697,7 @@ namespace WolvenKit.RED3.CR2W
             return (newstringtable, newstrings, nameslist, importslist);
         }
 
-        public void GetChunks()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Common.EFileReadErrorCodes> IWolvenkitFile.Read(BinaryReader file)
-        {
-            throw new NotImplementedException();
-        }
+        public EFileReadErrorCodes Read(BinaryReader file) => throw new NotImplementedException();
 
         public void Write(BinaryWriter file)
         {
@@ -940,11 +931,11 @@ namespace WolvenKit.RED3.CR2W
 
             // CDPR changed the type of CPtr<IBehTreeNodeDefinition> RootNode
             // to CHandle<IBehTreeNodeDefinition> RootNode in CBehTree in patch1
-            bool skipnamecheck = Chunks?.Count > 0 && Chunks.First().data is CBehTree;
+            bool skipnamecheck = Chunks?.Count > 0 && Chunks.First().Data is CBehTree;
 
             foreach (var c in Chunks)
             {
-                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
+                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.Data));
             }
 
             newimportslist.AddRange(newsoftlist);
@@ -993,7 +984,7 @@ namespace WolvenKit.RED3.CR2W
                 // if variable is generic type or some special case
                 switch (ivar)
                 {
-                    case IArrayAccessor a:
+                    case IREDArray a:
                         switch (a)
                         {
                             case CArray<CName> cacn:
@@ -1017,21 +1008,21 @@ namespace WolvenKit.RED3.CR2W
                         }
                         break;
 
-                    case IPtrAccessor p:
-                        if (p.Reference != null)
-                            returnedVariables.Add(new SNameArg(EStringTableMod.None, p.Reference.data));
+                    case IREDPtr p:
+                        if (p.GetReference() != null)
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, p.GetReference().Data));
                         break;
 
-                    case IHandleAccessor h:
+                    case IREDHandle h:
                         if (h.ChunkHandle)
-                            if (h.Reference != null)
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
+                            if (h.GetReference() != null)
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.GetReference().Data));
                         break;
 
-                    case ISoftAccessor s:
+                    case IREDSoft s:
                         break;
 
-                    case IBufferVariantAccessor ivariant:
+                    case IREDBufferVariant ivariant:
                         EStringTableMod mod = EStringTableMod.None;
                         if (ivariant is CVariantSizeType)
                             mod = EStringTableMod.SkipName;
@@ -1044,7 +1035,7 @@ namespace WolvenKit.RED3.CR2W
 
                     case IdHandle i:
                         returnedVariables.Add(new SNameArg(EStringTableMod.None, i));
-                        returnedVariables.Add(new SNameArg(EStringTableMod.None, i.handle.Reference?.data));
+                        returnedVariables.Add(new SNameArg(EStringTableMod.None, i.handle.GetReference()?.Data));
                         break;
                     // check all other CVariables
                     case CVariable cvar:
@@ -1053,7 +1044,7 @@ namespace WolvenKit.RED3.CR2W
                         // don't add array type parents, don't add IBufferVariantAccessor type parents
                         if (cvar.ParentVar != null
                             && !cvar.ParentVar.GetType().IsGenericType
-                            && !(cvar.ParentVar is IBufferVariantAccessor)
+                            && !(cvar.ParentVar is IREDBufferVariant)
                             && !(cvar.ParentVar is SEntityBufferType2)
                             && !idlist.Contains(cvar.ParentVar.UniqueIdentifier))
                         {
@@ -1096,7 +1087,7 @@ namespace WolvenKit.RED3.CR2W
                                 break;
 
                             case CLayerInfo cli:
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cli.ParentGroup.Reference?.data));
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cli.ParentGroup.GetReference()?.Data));
                                 break;
 
                             case CMaterialInstance cmi:
@@ -1112,36 +1103,36 @@ namespace WolvenKit.RED3.CR2W
                             case CBehaviorGraphContainerNode bgcn:
                                 if (bgcn.Inputnodes != null)
                                     returnedVariables.AddRange(bgcn.Inputnodes.Select(item =>
-                                        new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                        new SNameArg(EStringTableMod.None, (item.GetReference()?.Data))));
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk1));
                                 returnedVariables.Add(new SNameArg(EStringTableMod.None, bgcn.Unk2));
                                 switch (bgcn)
                                 {
                                     case CBehaviorGraphStageNode bgsn:
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsn.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsn.Outputnode.GetReference()?.Data));
                                         break;
 
                                     case CBehaviorGraphTopLevelNode bgtln:
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgtln.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgtln.Outputnode.GetReference()?.Data));
                                         break;
 
                                     case CBehaviorGraphStateNode bgstn:
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgstn.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgstn.Outputnode.GetReference()?.Data));
                                         break;
 
                                     case CBehaviorGraphStateMachineNode bgsmn:
                                         if (bgsmn.Unk3 != null)
                                             returnedVariables.AddRange(bgsmn.Unk3.Select(item =>
-                                                new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                                new SNameArg(EStringTableMod.None, (item.GetReference()?.Data))));
                                         if (bgsmn.Unk4 != null)
                                             returnedVariables.AddRange(bgsmn.Unk4.Select(item =>
-                                                new SNameArg(EStringTableMod.None, (item.Reference?.data))));
+                                                new SNameArg(EStringTableMod.None, (item.GetReference()?.Data))));
 
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Handle1.Reference?.data));
-                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Outputnode.Reference?.data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Handle1.GetReference()?.Data));
+                                        returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Outputnode.GetReference()?.Data));
                                         if (bgsmn.Inputnodes != null)
                                             returnedVariables.AddRange(bgsmn.Inputnodes.Select(item =>
-                                                new SNameArg(EStringTableMod.None, item.Reference?.data)));
+                                                new SNameArg(EStringTableMod.None, item.GetReference()?.Data)));
                                         returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk1));
                                         returnedVariables.Add(new SNameArg(EStringTableMod.None, bgsmn.Unk2));
                                         break;
@@ -1152,13 +1143,13 @@ namespace WolvenKit.RED3.CR2W
                                 break;
 
                             case CBehaviorGraph cbg:
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.Reference?.data));
+                                returnedVariables.Add(new SNameArg(EStringTableMod.None, cbg.Toplevelnode.GetReference()?.Data));
                                 if (cbg.Variables1 != null)
                                     returnedVariables.AddRange(cbg.Variables1.Select(item =>
                                         new SNameArg(EStringTableMod.None, item)));
                                 if (cbg.Descriptions != null)
                                     returnedVariables.AddRange(cbg.Descriptions.Select(item =>
-                                        new SNameArg(EStringTableMod.None, item.Reference?.data)));
+                                        new SNameArg(EStringTableMod.None, item.GetReference()?.Data)));
                                 if (cbg.Vectorvariables1 != null)
                                     returnedVariables.AddRange(cbg.Vectorvariables1.Select(item =>
                                         new SNameArg(EStringTableMod.None, item)));
@@ -1294,7 +1285,7 @@ namespace WolvenKit.RED3.CR2W
                         AddUniqueToTable(tag.Value);
                     }
                 }
-                else if (var is IHandleAccessor h)
+                else if (var is IREDHandle h)
                 {
                     if (!h.ChunkHandle)
                     {
@@ -1318,7 +1309,7 @@ namespace WolvenKit.RED3.CR2W
                         }
                     }
                 }
-                else if (var is ISoftAccessor s)
+                else if (var is IREDSoft s)
                 {
                     if (!(string.IsNullOrEmpty(s.ClassName) && string.IsNullOrEmpty(s.DepotPath)))
                     {
@@ -1335,13 +1326,13 @@ namespace WolvenKit.RED3.CR2W
                     var n = var as CName;
                     AddUniqueToTable(n.Value);
                 }
-                else if (var is IArrayAccessor a)
+                else if (var is IREDArray a)
                 {
-                    if (var is IBufferAccessor buffer)
+                    if (var is IREDBuffer buffer)
                     {
                         foreach (IEditableVariable ivar in buffer.GetEditableVariables())
                         {
-                            if (ivar is IHandleAccessor ha)
+                            if (ivar is IREDHandle ha)
                             {
                                 if (!ha.ChunkHandle)
                                 {
@@ -1381,7 +1372,7 @@ namespace WolvenKit.RED3.CR2W
                         }
                     }
                 }
-                else if (var is IPtrAccessor)
+                else if (var is IREDPtr)
                 {
                 }
                 else if (var is IdHandle)
@@ -1392,7 +1383,7 @@ namespace WolvenKit.RED3.CR2W
                 {
                     AddUniqueToTable((var as SEntityBufferType1).ComponentName.Value);
                 }
-                else if (var is IEnumAccessor enumAccessor)
+                else if (var is IREDEnum enumAccessor)
                 {
                     foreach (var enumstring in enumAccessor.EnumValueList)
                     {

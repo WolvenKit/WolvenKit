@@ -222,8 +222,8 @@ namespace CP77.CR2W
 
         private bool UncookTexarray(Stream cr2wStream, CR2WFile cr2w)
         {
-            if (!(cr2w.Chunks.FirstOrDefault()?.data is CTextureArray texa) ||
-                !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CTextureArray texa) ||
+                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
             {
                 return false;
             }
@@ -271,8 +271,8 @@ namespace CP77.CR2W
 
         private static bool UncookEnvprobe(Stream cr2wStream, CR2WFile cr2w)
         {
-            if (!(cr2w.Chunks.FirstOrDefault()?.data is CReflectionProbeDataResource probe) ||
-                !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CReflectionProbeDataResource probe) ||
+                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
             {
                 return false;
             }
@@ -307,8 +307,8 @@ namespace CP77.CR2W
 
         private bool UncookCubeMap(Stream cr2wStream, CR2WFile cr2w)
         {
-            if (!(cr2w.Chunks.FirstOrDefault()?.data is CCubeTexture ctex) ||
-                !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CCubeTexture ctex) ||
+                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
             {
                 return false;
             }
@@ -362,7 +362,7 @@ namespace CP77.CR2W
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault() is {data: C2dArray redcsv}))
+            if (!(cr2w.Chunks.FirstOrDefault() is {Data: C2dArray redcsv}))
             {
                 return false;
             }
@@ -390,8 +390,8 @@ namespace CP77.CR2W
             }
 
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.data is CBitmapTexture xbm) ||
-                !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CBitmapTexture xbm) ||
+                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
             {
                 return false;
             }

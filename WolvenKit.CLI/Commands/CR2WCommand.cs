@@ -21,18 +21,24 @@ namespace CP77Tools.Commands
         {
             AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to a CR2W file."));
             AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output path."));
-            AddOption(new Option<bool>(new[] { "--chunks", "-c" }, "Dump all class information."));
-            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
+            AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json or xml"));
+            AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json or xml."));
+            AddOption(new Option<string>(new[] {"--pattern", "-w"},
+                "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
+            AddOption(new Option<ConsoleFunctions.ESerializeFormat>(new[] {"--format", "-ft"},
+                "Use optional serialization format. Options are json and xml"));
 
-            Handler = CommandHandler.Create<string[], string, bool, string, string, IHost>(Action);
+            Handler = CommandHandler
+                .Create<string[], string, bool, bool, string, string, ConsoleFunctions.ESerializeFormat, IHost>(Action);
         }
 
-        private void Action(string[] path, string outpath, bool chunks, string pattern, string regex, IHost host)
+        private void Action(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
+            string regex, ConsoleFunctions.ESerializeFormat format, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.Cr2wTask(path, outpath, chunks, pattern, regex);
+            consoleFunctions.Cr2wTask(path, outpath, deserialize,serialize, pattern, regex, format);
         }
 
         #endregion Constructors

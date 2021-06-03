@@ -34,7 +34,7 @@ namespace CP77Tools.Tasks
         #region Methods
 
         public void DumpTask(string[] path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list)
+            bool texinfo, bool dump, bool list)
         {
             if (path == null || path.Length < 1)
             {
@@ -44,12 +44,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                DumpTaskInner(file, imports, missinghashes, texinfo, classinfo, dump, list);
+                DumpTaskInner(file, imports, missinghashes, texinfo, dump, list);
             });
         }
 
         public int DumpTaskInner(string path, bool imports, bool missinghashes,
-            bool texinfo, bool classinfo, bool dump, bool list)
+            bool texinfo, bool dump, bool list)
         {
             #region checks
 
@@ -94,61 +94,14 @@ namespace CP77Tools.Tasks
             // Parallel
             foreach (var ar in archives)
             {
-                if (classinfo)
-                {
-                    // using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
-                    //     ar.Filepath.GetHashMD5(), 0,
-                    //     MemoryMappedFileAccess.Read);
-
-                    var fileinfo = ar.Files.Values.Cast<FileEntry>();
-                    var query = fileinfo.GroupBy(
-                        ext => Path.GetExtension(ext.FileName),
-                        file => file,
-                        (ext, finfo) => new
-                        {
-                            Key = ext,
-                            File = fileinfo.Where(_ => Path.GetExtension(_.FileName) == ext)
-                        }).ToList();
-
-                    var total = query.Count;
-                    _loggerService.Log($"Exporting {total} bundle entries ");
-
-                    Thread.Sleep(1000);
-                    int progress = 0;
-                    _progress.Report(0);
-
-                    // foreach extension
-                    Parallel.ForEach(query, result =>
-                    {
-                        if (!string.IsNullOrEmpty(result.Key))
-                        {
-                            Parallel.ForEach(result.File, fi =>
-                            {
-                                using var ms = new MemoryStream();
-                                ar.CopyFileToStream(ms, (fi as FileEntry).NameHash64, false);
-                                var cr2w = _modTools.TryReadCr2WFile(ms);
-                                if (cr2w == null)
-                                {
-                                    return;
-                                }
-
-                                foreach (var o in cr2w.Chunks.Select(chunk => (chunk as CR2WExportWrapper).GetDumpObject(ms))
-                                    .Where(o => o != null))
-                                {
-                                    Register(o);
-                                }
-                            });
-                        }
-
-                        Interlocked.Increment(ref progress);
-                        _progress.Report(progress / (float)total);
-
-                        
-                        _loggerService.Log($"Dumped extension {result.Key}");
-                    });
-                }
                 if (imports || texinfo)
                 {
+                    if (texinfo && ar.Files.Values.All(_ => _.Extension != ".xbm"))
+                    {
+                        _loggerService.Info($"Skipping {ar.Name}");
+                        continue;
+                    }
+
                     // using var mmf = MemoryMappedFile.CreateFromFile(ar.Filepath, FileMode.Open,
                     //     ar.Filepath.GetHashMD5(), 0,
                     //     MemoryMappedFileAccess.Read);
@@ -197,8 +150,8 @@ namespace CP77Tools.Tasks
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
                                 var cr2w = _modTools.TryReadCr2WFile(ms);
 
-                                if (cr2w?.Chunks.FirstOrDefault()?.data is not CBitmapTexture xbm ||
-                                    !(cr2w.Chunks[1]?.data is rendRenderTextureBlobPC blob))
+                                if (cr2w?.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
+                                    !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
                                 {
                                     return;
                                 }
@@ -207,14 +160,14 @@ namespace CP77Tools.Tasks
                                 var texinfoObj = new Cr2wTextureInfo()
                                 {
                                     Filename = filename,
-                                    width = blob.Header.SizeInfo.Width.Value,
-                                    height = blob.Header.SizeInfo.Height.Value,
-                                    mips = blob.Header.TextureInfo.MipCount.Value,
-                                    slicecount = blob.Header.TextureInfo.SliceCount.Value,
-                                    alignment = blob.Header.TextureInfo.DataAlignment.Value,
-                                    compression = xbm.Setup.Compression,
-                                    Group = xbm.Setup.Group,
-                                    rawFormat = xbm.Setup.RawFormat,
+                                    width = blob.Header.SizeInfo.Width.IsSerialized ? blob.Header.SizeInfo.Width.Value.ToString() : "null",
+                                    height = blob.Header.SizeInfo.Height.IsSerialized ? blob.Header.SizeInfo.Height.Value.ToString() : "null",
+                                    mips = blob.Header.TextureInfo.MipCount.IsSerialized ? blob.Header.TextureInfo.MipCount.Value.ToString() : "null",
+                                    slicecount = blob.Header.TextureInfo.SliceCount.IsSerialized ? blob.Header.TextureInfo.SliceCount.Value.ToString() : "null",
+                                    alignment = blob.Header.TextureInfo.DataAlignment.IsSerialized ? blob.Header.TextureInfo.DataAlignment.Value.ToString() : "null",
+                                    compression = xbm.Setup.Compression.IsSerialized ? xbm.Setup.Compression.Value.ToString() : "null",
+                                    Group = xbm.Setup.Group.IsSerialized ? xbm.Setup.Group.Value.ToString() : "null",
+                                    rawFormat = xbm.Setup.RawFormat.IsSerialized ? xbm.Setup.RawFormat.Value.ToString(): "null",
                                 };
 
                                 texDictionary.AddOrUpdate(hash, texinfoObj, (arg1, o) => texinfoObj);
@@ -273,27 +226,65 @@ namespace CP77Tools.Tasks
                     if (texinfo)
                     {
                         //write
-                        File.WriteAllText($"{ar.ArchiveAbsolutePath}.textures.json",
-                            JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                PreserveReferencesHandling = PreserveReferencesHandling.None,
-                                TypeNameHandling = TypeNameHandling.None
-                            }));
-                        _loggerService.Success($"Finished. Dump file written to {inputFileInfo.FullName}.json");
+                        using var fs = new FileStream($"{ar.ArchiveAbsolutePath}.textures.csv", FileMode.Create,
+                            FileAccess.Write);
+                        using var sw = new StreamWriter(fs);
+                        sw.WriteLine(
+                            $"Filename;" +
+
+                            $"compression;" +
+                            $"Group;" +
+                            $"rawFormat;" +
+
+                            $"alignment;" +
+                            $"slicecount;" +
+                            $"mips;" +
+
+                            $"height;" +
+                            $"width"
+                        );
+
+                        foreach (var value in arobj.TextureDictionary.Values)
+                        {
+                            sw.WriteLine(
+                                $"{value.Filename};" +
+
+                                $"{value.compression};" +
+                                $"{value.Group};" +
+                                $"{value.rawFormat};" +
+
+                                $"{value.alignment};" +
+                                $"{value.slicecount};" +
+                                $"{value.mips};" +
+
+                                $"{value.height};" +
+                                $"{value.width};"
+                            );
+                        }
+
+
+                        // File.WriteAllText($"{ar.ArchiveAbsolutePath}.textures.json",
+                        //     JsonConvert.SerializeObject(arobj, Formatting.Indented, new JsonSerializerSettings()
+                        //     {
+                        //         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        //         PreserveReferencesHandling = PreserveReferencesHandling.None,
+                        //         TypeNameHandling = TypeNameHandling.None
+                        //     }));
+                        _loggerService.Success($"Finished. Dump file written to {ar.ArchiveAbsolutePath}.textures.csv");
                     }
                 }
 
-                // TODO: add this here
                 if (dump)
                 {
-                    File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",
-                        JsonConvert.SerializeObject(ar, Formatting.Indented, new JsonSerializerSettings()
+                    var json = JsonConvert.SerializeObject(ar, Formatting.Indented,
+                        new JsonSerializerSettings()
                         {
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                             PreserveReferencesHandling = PreserveReferencesHandling.None,
                             TypeNameHandling = TypeNameHandling.None
-                        }));
+                        });
+
+                    File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",json);
 
                     _loggerService.Success($"Finished dumping {ar.ArchiveAbsolutePath}.");
                 }
@@ -307,60 +298,6 @@ namespace CP77Tools.Tasks
                 }
             }
 
-            if (classinfo)
-            {
-                //write class definitions
-                var outdir = isDirectory
-                ? Path.Combine(inputDirInfo.FullName, "ClassDefinitions")
-                : Path.Combine(inputFileInfo.Directory.FullName, "ClassDefinitions");
-                Directory.CreateDirectory(outdir);
-                var outfile = Path.Combine(outdir, "classdefinitions.txt");
-                var outfileS = Path.Combine(outdir, "classdefinitions_simple.json");
-                var text = "";
-                foreach (var (typename, variables) in typedict)
-                {
-                    //write
-                    var sb = new StringBuilder($"[REDMeta] public class {typename} : CVariable {{\r\n");
-
-                    var variableslist = variables.ToList();
-                    for (int i = 0; i < variableslist.Count; i++)
-                    {
-                        var typ = variableslist[i].Split(' ').First();
-                        var nam = variableslist[i].Split(' ').Last();
-                        var wktype = REDReflection.GetWKitBaseTypeFromREDBaseType(typ);
-
-                        if (string.IsNullOrEmpty(nam))
-                        {
-                            nam = "Missing";
-                        }
-
-                        if (string.IsNullOrEmpty(typ))
-                        {
-                            typ = "Missing";
-                        }
-
-                        sb.Append($"\t[Ordinal({i})]  [RED(\"{nam}\")] public {wktype} {nam.FirstCharToUpper()} {{ get; set; }}\r\n");
-                    }
-
-                    sb.Append(
-                        $"public {typename}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {{ }}\r\n");
-
-                    sb.Append("}\r\n");
-                    text += sb.ToString();
-                }
-                File.WriteAllText(outfile, text);
-
-                //write
-                File.WriteAllText(outfileS,
-                    JsonConvert.SerializeObject(typedict, Formatting.Indented, new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        PreserveReferencesHandling = PreserveReferencesHandling.None,
-                        TypeNameHandling = TypeNameHandling.None
-                    }));
-
-                _loggerService.Success("Done.");
-            }
             if (missinghashes)
             {
                 var missinghashtxt = isDirectory
@@ -383,50 +320,6 @@ namespace CP77Tools.Tasks
             }
 
             return 1;
-
-            void Register(CR2WExportWrapper.Cr2wVariableDumpObject o)
-            {
-                if (o?.Type == null)
-                {
-                    return;
-                }
-
-                o.Variables ??= new List<CR2WExportWrapper.Cr2wVariableDumpObject>();
-
-                IEnumerable<string> vars = o.Variables.Select(_ => _.ToSimpleString());
-                if (typedict.ContainsKey(o.Type))
-                {
-                    var existing = typedict[o.Type];
-                    var newlist = o.Variables.Select(_ => _.ToSimpleString());
-                    if (existing != null)
-                    {
-                        vars = existing.Union(newlist);
-                    }
-                }
-                typedict.AddOrUpdate(o.Type, vars, (arg1, ol) => ol);
-
-                foreach (var oVariable in o.Variables)
-                {
-                    // generic types (arrays, handles, refs)
-                    if (oVariable.Type != null && oVariable.Type.Contains(":"))
-                    {
-                        var gentyp = oVariable.Type.Split(":").First();
-                        var innertype = oVariable.Type.Substring(gentyp.Length + 1);
-                        var innertype2 = oVariable.Type[(gentyp.Length + 1)];
-                        if (gentyp == "array")
-                        {
-                            oVariable.Type = innertype;
-                            Register(oVariable);
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-
-                    Register(oVariable);
-                }
-            }
         }
 
         #endregion Methods
@@ -461,16 +354,16 @@ namespace CP77Tools.Tasks
     {
         #region Properties
 
-        public uint alignment { get; set; }
-        public CEnum<Enums.ETextureCompression> compression { get; set; }
+        public string alignment { get; set; }
+        public string compression { get; set; }
         public string Filename { get; set; }
 
-        public CEnum<Enums.GpuWrapApieTextureGroup> Group { get; set; }
-        public ushort height { get; set; }
-        public byte mips { get; set; }
-        public CEnum<Enums.ETextureRawFormat> rawFormat { get; set; }
-        public ushort slicecount { get; set; }
-        public ushort width { get; set; }
+        public string Group { get; set; }
+        public string height { get; set; }
+        public string mips { get; set; }
+        public string rawFormat { get; set; }
+        public string slicecount { get; set; }
+        public string width { get; set; }
 
         #endregion Properties
     }

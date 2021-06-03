@@ -7,7 +7,6 @@ using System.Xml;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -15,34 +14,54 @@ namespace WolvenKit.RED3.CR2W.Types
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
     [REDMeta]
-    public class CPtr<T> : CVariable, IPtrAccessor where T : CVariable
+    public class CPtr<T> : CVariable, IREDPtr where T : CVariable
     {
-       
-
         public CPtr(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
         #region Properties
 
-        public ICR2WExport Reference { get; set; }
+        public int ChunkIndex { get; set; }
+
+        public void SetReference(ICR2WExport value)
+        {
+            SetValueInternal(value.ChunkIndex);
+
+            //Populate the reverse-lookups
+            GetReference().AdReferences.Add(this);
+            cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
+            //Soft mount the chunk except root chunk
+            if (GetReference().ChunkIndex != 0)
+            {
+                GetReference().MountChunkVirtually(LookUpChunkIndex());
+            }
+            //Hard mounts
+            switch (REDName)
+            {
+                case "parent":
+                case "transformParent":
+                    cr2w.Chunks[LookUpChunkIndex()].MountChunkVirtually(GetReference(), true);
+                    break;
+                //   case "child" when Reference.IsVirtuallyMounted:
+                //       //tried for w2ent IAttachments, not the proper way to do it, this is graph viz territory
+                //       Reference.MountChunkVirtually(GetVarChunkIndex(), true);
+                //       break;
+            }
+        }
+
+        public ICR2WExport GetReference() => ChunkIndex == 0 ? null : cr2w.Chunks[ChunkIndex - 1];
+
+
         public string ReferenceType => REDType.Split(':').Last();
+
         #endregion
 
         #region Methods
+
         public string GetPtrTargetType()
         {
             return ReferenceType;
-            //try
-            //{
-            //    if (Reference == null)
-            //        return "NULL";
-            //    return Reference.REDType;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new InvalidPtrException(ex.Message);
-            //}
         }
 
         /// <summary>
@@ -51,116 +70,75 @@ namespace WolvenKit.RED3.CR2W.Types
         /// </summary>
         /// <param name="file"></param>
         /// <param name="size"></param>
-        public override void Read(BinaryReader file, uint size)
-        {
-            SetValueInternal(file.ReadInt32());
-        }
+        public override void Read(BinaryReader file, uint size) => SetValueInternal(file.ReadInt32());
 
         private void SetValueInternal(int val)
         {
-            try
+            if (val < 0)
             {
-                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidPtrException(ex.Message);
+                throw new NotImplementedException("wCHandle.Read");
             }
 
-            // Try reparenting on virtual mountpoint
-            if (Reference != null)
-            {
-                //Populate the reverse-lookups
-                Reference.AdReferences.Add(this);
-                cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                //Soft mount the chunk except root chunk
-                if (Reference.ChunkIndex != 0)
-                {
-                    Reference.MountChunkVirtually(LookUpChunkIndex());
-                }
-                //Hard mounts
-                switch (REDName)
-                {
-                    case "parent":
-                    case "transformParent":
-                        cr2w.Chunks[LookUpChunkIndex()].MountChunkVirtually(Reference, true);
-                        break;
-                 //   case "child" when Reference.IsVirtuallyMounted:
-                 //       //tried for w2ent IAttachments, not the proper way to do it, this is graph viz territory
-                 //       Reference.MountChunkVirtually(GetVarChunkIndex(), true);
-                 //       break;
-                }
-            }
+            ChunkIndex = val;
         }
 
+        /// <summary>
+        /// Call after the stringtable was generated!
+        /// </summary>
+        /// <param name="file"></param>
         public override void Write(BinaryWriter file)
         {
-            int val = 0;
-            if (Reference != null)
-                val = Reference.ChunkIndex + 1;
-
+            var val = 0;
+            if (GetReference() != null)
+            {
+                val = GetReference().ChunkIndex + 1;
+            }
             file.Write(val);
         }
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
-                case ICR2WExport wrapper:
-                    Reference = wrapper;
+                case string s:
+                    SetValueInternal(int.Parse(s));
                     break;
-                case IPtrAccessor cval:
-                    Reference = cval.Reference;
+                case int o:
+                    SetValueInternal(o);
                     break;
+                case IREDPtr cvar:
+                    SetReference(cvar.GetReference());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this;
         }
 
+        public object GetValue() => ChunkIndex;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var copy = (CPtr<T>)base.Copy(context);
 
-            if (Reference != null)
+            if (GetReference() != null)
             {
-                ICR2WExport newref = context.TryLookupReference(Reference, copy);
+                var newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
-                    copy.SetValue(newref);
+                {
+                    copy.SetReference(newref);
+                }
             }
-            
 
             return copy;
         }
 
-        
+        public override string ToString() => GetReference() == null ? "NULL" : $"{GetReference().REDType} #{GetReference().ChunkIndex}";
 
-        public override string ToString()
-        {
-            if (Reference == null)
-                return "NULL";
-            return $"{Reference.REDType} #{Reference.ChunkIndex}";
-        }
+        public override string REDLeanValue() => GetReference() == null ? "" : $"{GetReference().ChunkIndex}";
 
-        public override string REDLeanValue()
-        {
-            if (Reference == null)
-                return "";
-            return $"{Reference.ChunkIndex}";
-        }
-
-
-        //public override void SerializeToXml(XmlWriter xw)
-        //{
-        //    DataContractSerializer ser = new DataContractSerializer(GetType());
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        ser.WriteStartObject(xw, this);
-        //        ser.WriteObjectContent(xw, this);
-        //        xw.WriteElementString("PtrTargetType", GetPtrTargetType());
-        //        xw.WriteElementString("Target", ToString());
-        //        ser.WriteEndObject(xw);
-        //    }
-        //}
         #endregion
     }
 

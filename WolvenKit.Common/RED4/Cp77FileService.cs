@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W
             {
                 //TODO: verify cr2w integrity
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
-                cr2w.ReadImportsAndBuffers(br);
+                cr2w.ReadHeaders(br);
             }
             catch (Exception)
             {

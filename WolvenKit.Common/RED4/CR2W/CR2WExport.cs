@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
+using ISerializable = System.Runtime.Serialization.ISerializable;
 
 [assembly: ContractNamespaceAttribute("", ClrNamespace = "WolvenKit.RED4.CR2W")]
 
@@ -52,6 +53,14 @@ namespace WolvenKit.RED4.CR2W
     {
         #region Constructors
 
+        public CR2WExportWrapper()
+        {
+            _export = new CR2WExport();
+
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
+        }
+
         /// <summary>
         /// This constructor should be used when manually creating chunks
         /// </summary>
@@ -65,8 +74,8 @@ namespace WolvenKit.RED4.CR2W
             {
                 objectFlags = (ushort)(cooked ? 8192 : 0),
             };
-            AdReferences = new List<IChunkPtrAccessor>();
-            AbReferences = new List<IChunkPtrAccessor>();
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
 
             this.cr2w = file;
             this.REDType = redtype;
@@ -78,14 +87,14 @@ namespace WolvenKit.RED4.CR2W
         /// </summary>
         /// <param name="export"></param>
         /// <param name="file"></param>
-        public CR2WExportWrapper(CR2WExport export, CR2WFile file)
+        internal CR2WExportWrapper(CR2WExport export, CR2WFile file)
         {
             this.cr2w = file;
             _export = export;
 
             REDType = cr2w.Names[export.className].Str;
-            AdReferences = new List<IChunkPtrAccessor>();
-            AbReferences = new List<IChunkPtrAccessor>();
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
         }
 
         #endregion Constructors
@@ -98,47 +107,6 @@ namespace WolvenKit.RED4.CR2W
 
         #region Properties
 
-        [NonSerialized] [JsonIgnore] public CBytes unknownBytes;
-
-        [NonSerialized] [JsonIgnore] public List<string> UnknownTypes = new();
-
-        /// <summary>
-        /// Playing with latin here, ab means toward, ab away from.
-        /// This is the directed-graph out-edge list :
-        /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
-        /// </summary>
-        [JsonIgnore]
-        public List<IChunkPtrAccessor> AbReferences { get; }
-
-        /// <summary>
-        /// Playing with latin here, ab means toward, ab away from.
-        /// This is the directed-graph in-edge list :
-        /// CVariables, being CPtr or CHandle, which reference this chunk.
-        /// </summary>
-        [JsonIgnore]
-        public List<IChunkPtrAccessor> AdReferences { get; }
-
-        [JsonIgnore]
-        public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
-
-        public int ChunkIndex => cr2w.Chunks.IndexOf(this);
-
-        [JsonIgnore]
-        public CR2WFile cr2w { get; }
-
-        public IEditableVariable data { get; private set; }
-        public CR2WExport Export => _export;
-
-        [JsonIgnore]
-        public bool IsSerialized => true;
-
-        [JsonIgnore]
-        public ICR2WExport ParentChunk
-        {
-            get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
-            set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
-        }
-
         /// <summary>
         /// Main CR2WExport.parentId wrapper
         /// </summary>
@@ -148,16 +116,54 @@ namespace WolvenKit.RED4.CR2W
             private set => _export.parentID = (uint)(value + 1);
         }
 
+        public string REDType { get; private set; }
+
+        public IEditableVariable Data { get; private set; }
+
+        [JsonIgnore] public CBytes unknownBytes;
+
+        [JsonIgnore] public List<string> UnknownTypes = new();
+
+        /// <summary>
+        /// Playing with latin here, ab means toward, ab away from.
+        /// This is the directed-graph out-edge list :
+        /// CVariables, being CPtr or CHandle, which are referenced by this chunk.
+        /// </summary>
+        [JsonIgnore] public List<IREDChunkPtr> AbReferences { get; }
+
+        /// <summary>
+        /// Playing with latin here, ab means toward, ab away from.
+        /// This is the directed-graph in-edge list :
+        /// CVariables, being CPtr or CHandle, which reference this chunk.
+        /// </summary>
+        [JsonIgnore] public List<IREDChunkPtr> AdReferences { get; }
+
+        [JsonIgnore] public List<ICR2WExport> ChildrenChunks => cr2w.Chunks.Where(_ => _.ParentChunk == this).ToList();
+
+        [JsonIgnore] public int ChunkIndex => cr2w.Chunks.IndexOf(this);
+
+        [JsonIgnore] public CR2WFile cr2w { get; }
+
+        [JsonIgnore] public CR2WExport Export => _export;
+
+        [JsonIgnore] public bool IsSerialized => true;
+
+        [JsonIgnore]
+        public ICR2WExport ParentChunk
+        {
+            get => ParentChunkIndex == -1 ? null : cr2w.Chunks[ParentChunkIndex];
+            set => ParentChunkIndex = value == null ? -1 : cr2w.Chunks.IndexOf(value);
+        }
+
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
         /// Do not delete!
         /// </summary>
-        [JsonIgnore]
-        public string Preview
+        [JsonIgnore] public string Preview
         {
             get
             {
-                var vars = data.GetEditableVariables();
+                var vars = Data.GetEditableVariables();
                 var firstString = vars
                         .OfType<IREDString>()
                         .FirstOrDefault(_ => _.Value != null)
@@ -166,28 +172,24 @@ namespace WolvenKit.RED4.CR2W
             }
         }
 
-        public string REDName => REDType + " #" + (ChunkIndex);
-        public string REDType { get; private set; }
+        [JsonIgnore] public string REDName => REDType + " #" + (ChunkIndex);
 
         /// <summary>
         /// This property is used as BindingProperty in frmChunkProperties
         /// Do not delete!
         /// </summary>
-        [JsonIgnore]
-        public string REDValue => this.ToString();
 
-        IEditableVariable ICR2WExport.unknownBytes => unknownBytes;
+        [JsonIgnore] public string REDValue => this.ToString();
 
-        List<string> ICR2WExport.UnknownTypes => UnknownTypes;
+        [JsonIgnore] IEditableVariable ICR2WExport.UnknownBytes => unknownBytes;
 
-        [JsonIgnore]
-        public List<ICR2WExport> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
+        [JsonIgnore] List<string> ICR2WExport.UnknownTypes => UnknownTypes;
 
-        [JsonIgnore]
-        public ICR2WExport VirtualParentChunk { get; set; }
+        [JsonIgnore] public List<ICR2WExport> VirtualChildrenChunks => cr2w.Chunks.Where(_ => _.VirtualParentChunk == this).ToList();
 
-        [JsonIgnore]
-        public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
+        [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
+
+        [JsonIgnore] public int VirtualParentChunkIndex => cr2w.Chunks.IndexOf(VirtualParentChunk);
 
         #endregion Properties
 
@@ -220,142 +222,15 @@ namespace WolvenKit.RED4.CR2W
             //if (Export.className != 1 && GetParentChunk() == null)
             //    throw new InvalidChunkTypeException("No parent chunk set!");
 
-            data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.data as CVariable);
+            Data = cvar ?? CR2WTypeManager.Create(REDType, REDType, cr2w, ParentChunk?.Data as CVariable);
 
-            if (data == null || data is not CVariable cdata)
+            if (Data is not CVariable cdata)
             {
                 throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
             }
 
-            data.IsSerialized = true;
+            Data.IsSerialized = true;
             cdata.SetREDFlags(Export.objectFlags);
-        }
-
-        public Cr2wVariableDumpObject GetDumpObject(Stream stream)
-        {
-            stream.Seek(Export.dataOffset, SeekOrigin.Begin);
-            using var br = new BinaryReader(stream);
-            var o = new Cr2wVariableDumpObject()
-            {
-                Name = this.REDName,
-                Type = this.REDType,
-                Size = (int)this.Export.dataSize,
-                Offset = br.BaseStream.Position
-            };
-
-            var zero = br.ReadByte();
-            if (zero != 0)
-                return null;
-
-            while (true)
-            {
-                try
-                {
-                    var nameId = br.ReadUInt16();
-                    if (nameId == 0)
-                        break;
-
-                    var variable = new Cr2wVariableDumpObject();
-                    variable.Offset = br.BaseStream.Position - 3;
-
-                    var typeId = (int)br.ReadUInt16();
-                    variable.Size = br.ReadInt32();
-
-                    var endoffset = br.BaseStream.Position + variable.Size - 4;
-
-                    try
-                    {
-                        variable.Name = cr2w.StringDictionary.Values.ToList()[(int)nameId];
-                        variable.Type = cr2w.StringDictionary.Values.ToList()[typeId];
-
-                        if (variable.Type.Contains("array:"))
-                        {
-                            var count = br.ReadUInt32();
-                            for (int i = 0; i < count; i++)
-                            {
-                                // dbg for now
-                                var elementsize = (variable.Size - 8) / count;
-                                if (elementsize > 9)
-                                    variable.Variables = TryGetClassVariables((int)elementsize);
-                            }
-                        }
-                        // may be another class:
-                        else if (variable.Size > 9)
-                        {
-                            variable.Variables = TryGetClassVariables(variable.Size);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // TODO: Are we intentionally swallowing this?
-                    }
-
-                    // go to variable end
-                    br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
-                    o.Variables.Add(variable);
-                }
-                catch (Exception)
-                {
-                    return o;
-                }
-            }
-
-            return o;
-
-            List<Cr2wVariableDumpObject> TryGetClassVariables(int innersize)
-            {
-                var ret = new List<Cr2wVariableDumpObject>();
-                var startpos = br.BaseStream.Position;
-
-                var zero = br.ReadByte();
-                if (zero != 0)
-                    return ret;
-
-                while (true)
-                {
-                    try
-                    {
-                        var nameId = br.ReadUInt16();
-                        if (nameId == 0)
-                            return ret;
-
-                        var variable = new Cr2wVariableDumpObject
-                        {
-                            Offset = br.BaseStream.Position - 3,
-                            Name = cr2w.StringDictionary.Values.ToList()[(int)nameId],
-                            Type = cr2w.StringDictionary.Values.ToList()[(int)br.ReadUInt16()],
-                            Size = br.ReadInt32()
-                        };
-
-                        var endoffset = br.BaseStream.Position + variable.Size - 4;
-
-                        //var buffer = br.ReadBytes(variable.Size - 4);
-                        // try read variable
-                        //array
-                        if (variable.Type.Contains("array:"))
-                        {
-                            var count = br.ReadUInt32();
-                            for (int i = 0; i < count; i++)
-                            {
-                                variable.Variables = TryGetClassVariables(variable.Size);
-                            }
-                        }
-                        // may be another class:
-                        else if (variable.Size > 9)
-                        {
-                            variable.Variables = TryGetClassVariables(variable.Size);
-                        }
-
-                        // go to variable end
-                        br.BaseStream.Seek(endoffset, SeekOrigin.Begin);
-                        ret.Add(variable);
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
-                }
-            }
         }
 
         public virtual List<IEditableVariable> GetEditableVariables()
@@ -363,7 +238,7 @@ namespace WolvenKit.RED4.CR2W
             var vars = new List<IEditableVariable>
             {
                 //ParentPtr,
-                data
+                Data
             };
             if (unknownBytes != null && unknownBytes.Bytes != null && unknownBytes.Bytes.Length != 0)
             {
@@ -417,18 +292,18 @@ namespace WolvenKit.RED4.CR2W
 
             CreateDefaultData();
 
-            data.VarChunkIndex = ChunkIndex;
+            Data.VarChunkIndex = ChunkIndex;
 
-            data.Read(file, _export.dataSize);
+            Data.Read(file, _export.dataSize);
 
             // Unknown bytes after the normal serialized class
             var bytesLeft = _export.dataSize - (file.BaseStream.Position - _export.dataOffset);
-            unknownBytes = new CBytes(cr2w, data as CVariable, "unknownBytes");
+            unknownBytes = new CBytes(cr2w, Data as CVariable, "unknownBytes");
             if (bytesLeft > 0)
             {
                 unknownBytes.Read(file, (uint)bytesLeft);
-                if (!UnknownTypes.Contains(data.REDType))
-                    UnknownTypes.Add(data.REDType);
+                if (!UnknownTypes.Contains(Data.REDType))
+                    UnknownTypes.Add(Data.REDType);
                 //UnknownTypes.Add($"Type: {data.REDType}, File: {cr2w.FileName}, Offset: {file.BaseStream.Position}, UnknownBytes: {bytesLeft}");
             }
             else if (bytesLeft < 0)
@@ -448,19 +323,13 @@ namespace WolvenKit.RED4.CR2W
 
         public void SetOffset(uint offset) => _export.dataOffset = offset;
 
-        public void SetREDName(string val)
-        {
-            throw new NotImplementedException(nameof(SetREDName));
-        }
+        public void SetREDName(string val) => throw new NotImplementedException(nameof(SetREDName));
 
         public void SetType(ushort val) => _export.className = val;
 
         public override string ToString() => REDName;
 
-        public void Write(BinaryWriter file)
-        {
-            throw new NotImplementedException(nameof(Write));
-        }
+        public void Write(BinaryWriter file) => throw new NotImplementedException(nameof(Write));
 
         public void WriteData(BinaryWriter file)
         {
@@ -469,9 +338,9 @@ namespace WolvenKit.RED4.CR2W
 
             var posstart = file.BaseStream.Position;
 
-            if (data != null)
+            if (Data != null)
             {
-                data.Write(file);
+                Data.Write(file);
             }
 
             // Unknown bytes not as variable because I always want it at the end.

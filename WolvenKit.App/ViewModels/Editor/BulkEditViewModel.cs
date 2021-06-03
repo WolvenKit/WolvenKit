@@ -257,11 +257,11 @@ namespace WolvenKit.ViewModels.Editor.Old
             var includedvalues = opts.Include == null ? new List<string>() : opts.Include.Split(',').ToList();
 
             // get chunks that match chunkname
-            var chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
+            var chunks = opts.ChunkName != null ? file.Chunks.Where(_ => _.Data.GetType().Name == opts.ChunkName).ToList() : file.Chunks;
 
             var splits = opts.Name.Split('.');
 
-            foreach (var chunk in chunks.Select(_ => _.data))
+            foreach (var chunk in chunks.Select(_ => _.Data))
             {
                 CheckProperties(chunk);
             }

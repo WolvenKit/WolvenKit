@@ -1,10 +1,17 @@
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using Catel.IoC;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED4.MeshFile;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -80,14 +87,7 @@ namespace WolvenKit.Views.Editor
 
         private void ListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (StaticReferences.GlobalPropertiesView != null)
-            {
 
-                StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-
-                StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
-            }
         }
 
 
@@ -210,6 +210,112 @@ namespace WolvenKit.Views.Editor
                         continue;
                     executeFile(vm, selectedData);
                 }
+            }
+        }
+
+        private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        {
+
+            if (StaticReferences.GlobalPropertiesView != null)
+            {
+                var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+                propertiesViewModel.AB_MeshPreviewVisible = false;
+                propertiesViewModel.IsAudioPreviewVisible= false;
+
+
+                propertiesViewModel.AB_SelectedItem = AssetBrowserView.GlobalABView.InnerList.SelectedItem as Common.Model.AssetBrowserData;
+                if (propertiesViewModel.AB_SelectedItem != null)
+                {
+                    if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        propertiesViewModel.AB_MeshPreviewVisible = true;
+
+                        if (propertiesViewModel.AB_SelectedItem.AmbigiousFiles != null)
+                        {
+                            var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles.FirstOrDefault();
+                            if (q != null)
+                            {
+
+                                string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+
+                                string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Mesh");
+                                string EndPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
+                                Directory.CreateDirectory(ManagerCacheDir);
+                                foreach (var f in Directory.GetFiles(ManagerCacheDir))
+                                {
+                                    try
+                                    { File.Delete(f); }
+                                    catch
+                                    {
+                                    }
+                                }
+                                using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
+                                q.Extract(fs);
+
+
+
+
+                                MESH m = new MESH();
+                                var q2 = m.ExportMeshWithoutRigPreviewer(EndPath);
+                                if (q2.Length > 0)
+                                {
+                                    StaticReferences.GlobalPropertiesView.LoadModel(q2);
+                                }
+
+
+
+
+
+                            }
+                        }
+
+                    }
+                    if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        propertiesViewModel.IsAudioPreviewVisible = true;
+
+                        if (propertiesViewModel.AB_SelectedItem.AmbigiousFiles != null)
+                        {
+                            var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles.FirstOrDefault();
+                            if (q != null)
+                            {
+
+
+                                string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+
+                                string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Audio_import");
+                                string EndPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
+                                Directory.CreateDirectory(ManagerCacheDir);
+                                foreach (var f in Directory.GetFiles(ManagerCacheDir))
+                                {
+                                    try
+                                    { File.Delete(f); }
+                                    catch
+                                    {
+                                    }
+                                }
+                                using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
+                                q.Extract(fs);
+
+
+                                if (File.Exists(EndPath))
+                                {
+                                    Trace.WriteLine("adding audio file");
+                                    propertiesViewModel.AddAudioItem(EndPath);
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+                propertiesViewModel.DecideForMeshPreview();
+
+
+
+
+
+
             }
         }
     }

@@ -1,0 +1,10 @@
+﻿v 1.3.6
+- added cr2w serialization and deserialization to/from json and xml
+- fixed some bugs related to the archivemanagers
+
+v 1.3.5
+- added compress option to the oodle command in the CLI
+- use oodle kraken to compress the archivehashes
+- diff archive option for git diff
+- better texture dump output
+- added archive command
