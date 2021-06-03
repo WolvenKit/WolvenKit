@@ -25,17 +25,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="lib\kraken.so" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="lib\kraken.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Remove="lib\liboodle.dylib" />
-    <Content Include="lib\liboodle.dylib">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Remove="appsettings.json" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

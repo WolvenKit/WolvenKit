@@ -59,7 +59,7 @@ namespace WolvenKit.Common.Oodle
                 throw new ArgumentNullException(nameof(outputBuffer));
             }
 
-            
+
 
 
 
@@ -102,7 +102,7 @@ namespace WolvenKit.Common.Oodle
                 }
 #pragma warning restore 162
 
-                
+
 
                 inputHandle.Free();
                 outputHandle.Free();
@@ -185,10 +185,10 @@ namespace WolvenKit.Common.Oodle
 
                 }
             }
-            
 
 
-            
+
+
         }
 
 
@@ -282,7 +282,7 @@ namespace WolvenKit.Common.Oodle
 
                     const int SPAN_LEN = 5333;//32768;
                     var length = (int)zSize - 8;
-                    
+
                     var inputBufferSpan = length <= SPAN_LEN
                         ? stackalloc byte[length]
                         : new byte[length];
@@ -373,18 +373,18 @@ namespace WolvenKit.Common.Oodle
                 //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
                 return (int)n;
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                try
-                {
-                    return OozNative.GetCompressedBufferSizeNeeded(count);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
+            // else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            // {
+            //     try
+            //     {
+            //         return OozNative.GetCompressedBufferSizeNeeded(count);
+            //     }
+            //     catch (Exception e)
+            //     {
+            //         Console.WriteLine(e);
+            //         throw;
+            //     }
+            // }
             else
             {
                 throw new NotImplementedException();

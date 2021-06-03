@@ -73,7 +73,9 @@ namespace WolvenKit.Common.Services
             // read the rest of the stream
             var outputbuffer = new byte[outputsize];
 
-            OodleHelper.Decompress(stream.ToByteArray(true), outputbuffer);
+            var inbuffer = stream.ToByteArray(true);
+
+            OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
 
             _hashes.EnsureCapacity(1_500_000);
 
