@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -46,6 +45,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is uint)
             {
                 this.val = (uint)val;

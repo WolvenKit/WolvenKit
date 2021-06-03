@@ -13,7 +13,7 @@ namespace WolvenKit.Common.Wcc
 
         #region Common Commands
 
-        [Serializable]
+
         [DescriptionAttribute("Build data cache from cooked assets.\n Usage:  buildcache -db -out [optional params]")]
         public class buildcache : WCC_Command
         {
@@ -81,7 +81,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Cook file lists, generate cooked data and bundle files for packing.\n Usage: cook")]
         public class cook : WCC_Command
         {
@@ -204,7 +204,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Cooks materials.\n Usage: cookmaterials -platform (-material=) (-fur=)")]
         public class cookmaterials : WCC_Command
         {
@@ -264,7 +264,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Dumps info from bundled files.\n Usage: dumpbundleinfo -indir= -outpath=")]
         public class dumpbundleinfo : WCC_Command
         {
@@ -316,7 +316,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Dump file contents (objects).\n Usage: dumpfile -file= -dir= -out=")]
         public class dumpfile : WCC_Command
         {
@@ -366,7 +366,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Exports single assets. \n Usage: export -depot= -file= -out=")]
         public class export : WCC_Command
         {
@@ -424,7 +424,7 @@ namespace WolvenKit.Common.Wcc
                    png: Portable Network Graphics*/
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Import assets into the engine. \n Usage: import -depot= -file= -out=")]
         public class import : WCC_Command
         {
@@ -475,7 +475,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Generates a metadata.store file for the specified directory.\n Usage: metadatastore -path=")]
         public class metadatastore : WCC_Command
         {
@@ -503,7 +503,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Packs file from given directory into a bundle.\n Usage: pack -dir= -outdir= [-compression=]")]
         public class pack : WCC_Command
         {
@@ -547,7 +547,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Unbundle files.\n Usage: unbundle -dir= -outdir=")]
         public class unbundle : WCC_Command
         {
@@ -592,7 +592,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Uncooks resources from a given bundle set.\n Usage:  uncook -indir= -outdir = [options]")]
         public class uncook : WCC_Command
         {
@@ -680,7 +680,7 @@ namespace WolvenKit.Common.Wcc
 
         #region Uncommon Commands
 
-        [Serializable]
+
         [DescriptionAttribute("Analyze game and engine data and output cook lists.\n Usage: analyze -out [optional params]")]
         public class analyze : WCC_Command
         {
@@ -730,7 +730,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Calculate required memory for runtime occlusion data for the level.\n Usage: calculateRuntimeOcclusionMemory [-density=] -world=")]
         public class calculateRuntimeOcclusionMemory : WCC_Command
         {
@@ -766,7 +766,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Generate occlusion for given worlds.\n Usage: cookocclusion -world= [-smallesOccluder=][-smallestHole=][-tileSize=][-xMin=][-xMax=][-yMin=][-yMax=]")]
         public class cookocclusion : WCC_Command
         {
@@ -832,7 +832,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("No operation.\n Usage: wcc cooksounds output_dir sound_resource_dir platforms")]
         public class cooksounds : WCC_Command
         {
@@ -877,7 +877,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
         }
 
-        [Serializable]
+
         [DescriptionAttribute(" Cooks strings and speech database, given a list of languages and platforms.\n Usage: pcookstrings -out_dir= -source_dir= -db_string_view= -languages= -platforms=")]
         public class cookstrings : WCC_Command
         {
@@ -938,7 +938,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Don't ask.\n Usage: cooksubs font subtitles")]
         public class cooksubs : WCC_Command
         {
@@ -975,7 +975,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Build dependency cache file.\n Usage: dependencies -out= -report= [-db=]")]
         public class dependencies : WCC_Command
         {
@@ -1020,7 +1020,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Dumps the charset used in a given strings file (for .w3strings).\n Usage: dumpcharset -instringsfile= -outcharsetfile= [options]")]
         public class dumpcharset : WCC_Command
         {
@@ -1078,7 +1078,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Dump data from compiled scripts. \n Usage: dumpscripts -file= -out=")]
         public class dumpscripts : WCC_Command
         {
@@ -1113,7 +1113,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Build final bundle lists.\n Usage: exportbundles -db= -seed= -spatial= -out=")]
         public class exportbundles : WCC_Command
         {
@@ -1177,7 +1177,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Check file versions.\n Usage: filever -ext= -file -min -verbose -histogram")]
         public class filever : WCC_Command
         {
@@ -1225,7 +1225,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Find duplicate geometry for the level.\n Usage: findDuplicates -world= [-output=]")]
         public class findDuplicates : WCC_Command
         {
@@ -1263,7 +1263,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Save dialog lines.\n Usage: get_txts -db= -outdir= [-lang=]")]
         public class get_txts : WCC_Command
         {
@@ -1307,7 +1307,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Optimize (resort) collision cache.\n Usage: optimizecollisioncache -file= -out=")]
         public class optimizecollisioncache : WCC_Command
         {
@@ -1342,7 +1342,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Packs world directories into a single dzip (oh god, TW2) for faster loading and deployment on consoles.\n  Creates streaming installer data for use by the game. Supported cooking platforms: PS4.\n  Usage: package app [options]")]
         public class package : WCC_Command
         {
@@ -1403,7 +1403,7 @@ namespace WolvenKit.Common.Wcc
         */
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Generalized commandlet for creating differential patches for specified type of content.\n ote: you can use -mod OR -current params\n Usage: patch -base= -current= -mod= [-name= ] -outdir=")]
         public class patch : WCC_Command
         {
@@ -1472,7 +1472,7 @@ namespace WolvenKit.Common.Wcc
                 "textures" MODS + PATCH*/
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Generate navigation data for given world.\n Usage: pathlib -rootSearchDir= -filePattern=")]
         public class pathlib : WCC_Command
         {
@@ -1505,7 +1505,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Saves quest layout for use in external QuestDebugger.\n Usage: questlayoutdump -quest -out")]
         public class questlayoutdump : WCC_Command
         {
@@ -1540,7 +1540,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Extracts a list of character templates from cook.db.\n Usage: r4characters -db= -out=")]
         public class r4characters : WCC_Command
         {
@@ -1575,7 +1575,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Extracts a list of character templates from cook.db.\n Usage: r4characters -db= -out=")]
         public class r4charactersdlc : WCC_Command
         {
@@ -1610,7 +1610,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Reports file usage and chunk distribution of a given cook database.\n Usage: reportchunks -db= -out=")]
         public class reportchunks : WCC_Command
         {
@@ -1673,7 +1673,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Re-saves resources and optionally submits the changes into P4.\n Usage:  resave -tmpdir= [options]")]
         public class resave : WCC_Command
         {
@@ -1776,7 +1776,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Export spatial resource usage information from a given world.\n Usage:  resourceusage -world= -out= [options]")]
         public class resourceusage : WCC_Command
         {
@@ -1829,7 +1829,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Split the files into content buckets.\n Usage: split -db= [-seed=] -out=")]
         public class split : WCC_Command
         {
@@ -1879,7 +1879,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Split cache into multiple files.\n Usage: splitcache -file= -db=<cook.db> -outdir= Options:")]
         public class splitcache : WCC_Command
         {
@@ -1934,7 +1934,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Splits strings and speech files for a given language based on JSON descriptor.\n Usage:splitstrings[-dlc] -splitfile= -idsfile= -keysfile= -indir= -outdir=")]
         public class splitstrings : WCC_Command
         {
@@ -2028,7 +2028,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Dumps SWF resources.\n Usage: swfdump[out]")]
         public class swfdump : WCC_Command
         {
@@ -2060,7 +2060,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
         }
 
-        [Serializable]
+
         [DescriptionAttribute(" Bulk import resources preserving directory structure.\n Usage: import [option1 value1 [option2 value2 [...]]]")]
         public class swfimport : WCC_Command
         {
@@ -2098,7 +2098,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Test asynchronous collision cache access.\n Usage: testcollisioncache -file=")]
         public class testcollisioncache : WCC_Command
         {
@@ -2126,7 +2126,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute(" Test memory framework, streaming, GC and resource management stability.\n Usage: testmem[params]")]
         public class testmem : WCC_Command
         {
@@ -2173,7 +2173,7 @@ namespace WolvenKit.Common.Wcc
             /// </summary>
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Validate resources.\n Usage: validate[-db= -file = -all] -outdir=")]
         public class validate : WCC_Command
         {
@@ -2223,7 +2223,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Generate USMs.\n Usage:  NO INFO")]
         public class venc : WCC_Command
         {
@@ -2278,7 +2278,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Properties
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Convert voiceover files from .wav to .ogg.\n Usage: wcc voconvert -wwise_bin_dir= -voiceivers_source_dir= -platform= languages=")]
         public class voconvert : WCC_Command
         {
@@ -2333,7 +2333,7 @@ namespace WolvenKit.Common.Wcc
 
         #region Unknown Commands
 
-        [Serializable]
+
         [DescriptionAttribute("Simply tests wcc.")]
         public class cookertest : WCC_Command
         {
@@ -2347,7 +2347,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Constructors
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Glues files into optimal files. \n Usage: NO INFO")]
         public class gluefiles : WCC_Command
         {
@@ -2361,7 +2361,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Constructors
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Glues files into optimal files. \n Usage: NO INFO")]
         public class gluefilesdlc : WCC_Command
         {
@@ -2375,7 +2375,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Constructors
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Attempts to load all resources to check for errors.\n Usage: NO INFO")]
         public class loadtest : WCC_Command
         {
@@ -2389,7 +2389,7 @@ namespace WolvenKit.Common.Wcc
             #endregion Constructors
         }
 
-        [Serializable]
+
         [DescriptionAttribute("Creates the .dep files Creates the .dep files needed for the database creation used by the Database Viewer.\n Usage:  NO INFO")]
         public class WorldSceneDependencyInfoFiles : WCC_Command
         {

@@ -18,6 +18,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -87,7 +88,7 @@ namespace WolvenKit.ViewModels.Editor
 
         #endregion constructors
 
-        
+
 
         //void Importableobjects_ListChanged(object sender, ListChangedEventArgs e) => OnPropertyChanged(nameof(Importableobjects));
 

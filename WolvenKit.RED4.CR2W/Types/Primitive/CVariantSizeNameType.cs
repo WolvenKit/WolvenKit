@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
     /// Format: [uint size] [ushort nameID] [ushort typeID] [byte[size] data]
     /// </summary>
     [REDMeta()]
-    public class CVariantSizeNameType : CVariable, IBufferVariantAccessor
+    public class CVariantSizeNameType : CVariable, IREDBufferVariant
     {
         public IEditableVariable Variant { get; set; }
 

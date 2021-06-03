@@ -1,14 +1,22 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using CP77.CR2W;
+using System.Xml;
 using Newtonsoft.Json;
-using WolvenKit.Common;
+using Newtonsoft.Json.Serialization;
+using WolvenKit.CLI;
+//using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Types;
+using Formatting = Newtonsoft.Json.Formatting;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
 
 namespace CP77Tools.Tasks
 {
@@ -16,7 +24,13 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void Cr2wTask(string[] path, string outpath, bool chunks, string pattern, string regex)
+        public enum ESerializeFormat
+        {
+            json,
+            xml
+        }
+
+        public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, ESerializeFormat format)
         {
             if (path == null || path.Length < 1)
             {
@@ -26,11 +40,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                Cr2wTaskInner(file, outpath, chunks, pattern, regex);
+                Cr2wTaskInner(file, outpath, deserialize, serialize, pattern, regex, format);
             });
         }
 
-        private void Cr2wTaskInner(string path, string outpath, bool chunks, string pattern = "", string regex = "")
+        private void Cr2wTaskInner(string path, string outputDirectory, bool deserialize, bool serialize,
+            string pattern = "", string regex = "", ESerializeFormat format = ESerializeFormat.json)
         {
             #region checks
 
@@ -61,8 +76,15 @@ namespace CP77Tools.Tasks
                 ? inDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList()
                 : new List<FileInfo> { inFileInfo };
 
-            // check search pattern then regex
+
             IEnumerable<FileInfo> finalmatches = fileInfos;
+
+            if (deserialize)
+            {
+                finalmatches = fileInfos.Where(_ => _.Extension == $".{format.ToString()}");
+            }
+
+            // check search pattern then regex
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = fileInfos.MatchesWildcard(item => item.FullName, pattern);
@@ -81,47 +103,98 @@ namespace CP77Tools.Tasks
             }
 
             var finalMatchesList = finalmatches.ToList();
-            _loggerService.Info($"Found {finalMatchesList.Count} files to dump.");
+            _loggerService.Info($"Found {finalMatchesList.Count} files to process.");
 
             Thread.Sleep(1000);
             int progress = 0;
             Parallel.ForEach(finalMatchesList, fileInfo =>
             {
-                var outputDirInfo = string.IsNullOrEmpty(outpath)
+                var outputDirInfo = string.IsNullOrEmpty(outputDirectory)
                     ? fileInfo.Directory
-                    : new DirectoryInfo(outpath);
+                    : new DirectoryInfo(outputDirectory);
                 if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
                     _loggerService.Error("Invalid output directory.");
                     return;
                 }
 
-                if (chunks)
+                if (serialize)
                 {
-                    var f = File.ReadAllBytes(fileInfo.FullName);
-                    using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
+                    var infile = fileInfo.FullName;
+                    using var fs = new FileStream(infile, FileMode.Open, FileAccess.Read);
                     var cr2w = _modTools.TryReadCr2WFile(fs);
                     if (cr2w == null)
                     {
                         return;
                     }
 
-                    //write
-                    File.WriteAllText(Path.Combine(outputDirInfo.FullName, $"{fileInfo.Name}.json"),
-                        JsonConvert.SerializeObject(cr2w, Formatting.Indented, new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.None,
-                            TypeNameHandling = TypeNameHandling.None
-                        }));
+                    cr2w.FileName = infile;
+
+                    string json = "";
+                    try
+                    {
+                        var dto = new Red4W2rcFileDto(cr2w);
+                        json =
+                            JsonConvert.SerializeObject(
+                                dto,
+                                Formatting.Indented
+                            );
+                    }
+                    catch (Exception)
+                    {
+                        _loggerService.Error($"Could not process {infile}.");
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        _loggerService.Error($"Could not process {infile}.");
+                        return;
+                    }
+
+                    var outpath = Path.Combine(outputDirInfo.FullName, $"{infile}.{format.ToString()}");
+
+                    switch (format)
+                    {
+                        case ESerializeFormat.json:
+                            File.WriteAllText(outpath, json);
+                            break;
+                        case ESerializeFormat.xml:
+                            var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
+                            doc?.Save(outpath);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(format), format, null);
+                    }
+
+                    _loggerService.Success($"Saved {infile} to {format.ToString()}.");
+                }
+
+                if (deserialize)
+                {
+
+                    var json = File.ReadAllText(fileInfo.FullName);
+                    var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
+                    if (newdto != null)
+                    {
+                        var w2rc = newdto.ToW2rc();
+                        var ext = newdto.Extension;
+                        var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
+
+                        using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
+                        using var bw = new BinaryWriter(fs2);
+
+                        w2rc.Write(bw);
+                    }
+
+                    _loggerService.Success($"Converted {fileInfo.FullName} to CR2W");
                 }
 
                 Interlocked.Increment(ref progress);
             });
 
             watch.Stop();
-            _loggerService.Success(
-                $"Finished. Dumped {finalMatchesList.Count} files to JSON in {watch.ElapsedMilliseconds.ToString()}ms.");
+            _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds.ToString()}ms.");
         }
 
         #endregion Methods

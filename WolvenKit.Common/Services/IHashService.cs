@@ -8,9 +8,6 @@ namespace WolvenKit.Common.Services
 
         string Get(ulong key);
 
-
-        void Serialize(string path);
-
         void Add(string path);
 
         #endregion Methods

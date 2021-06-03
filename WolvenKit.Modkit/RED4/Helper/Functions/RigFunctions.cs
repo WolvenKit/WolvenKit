@@ -95,7 +95,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 Mat.Invert(matrix4Xes[i], out Rig.IBWorldMat[i]);
             }
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...
-            if ((cr2w.Chunks[0].data as animRig).APoseMS.Count != 0)
+            if ((cr2w.Chunks[0].Data as animRig).APoseMS.Count != 0)
             {
                 Rig.AposeMSExits = true;
                 Rig.AposeMSTrans = new Vec3[Rig.BoneCount];
@@ -105,20 +105,20 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 Rig.IBAposeMat = new Mat[Rig.BoneCount];
                 for (int i = 0; i < Rig.BoneCount; i++)
                 {
-                    float x = (cr2w.Chunks[0].data as animRig).APoseMS[i].Translation.X.Value;
-                    float y = (cr2w.Chunks[0].data as animRig).APoseMS[i].Translation.Y.Value;
-                    float z = (cr2w.Chunks[0].data as animRig).APoseMS[i].Translation.Z.Value;
+                    float x = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Translation.X.Value;
+                    float y = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Translation.Y.Value;
+                    float z = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Translation.Z.Value;
                     Rig.AposeMSTrans[i] = new Vec3(x, z, -y);
                     Mat Tra = Mat.CreateTranslation(Rig.AposeMSTrans[i]);
-                    float I = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.I.Value;
-                    float J = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.J.Value;
-                    float K = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.K.Value;
-                    float R = (cr2w.Chunks[0].data as animRig).APoseMS[i].Rotation.R.Value;
+                    float I = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Rotation.I.Value;
+                    float J = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Rotation.J.Value;
+                    float K = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Rotation.K.Value;
+                    float R = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Rotation.R.Value;
                     Rig.AposeMSRot[i] = new Quat(I, K, -J, R);
                     Mat Rot = Mat.CreateFromQuaternion(Rig.AposeMSRot[i]);
-                    float t = (cr2w.Chunks[0].data as animRig).APoseMS[i].Scale.X.Value;
-                    float u = (cr2w.Chunks[0].data as animRig).APoseMS[i].Scale.Y.Value;
-                    float v = (cr2w.Chunks[0].data as animRig).APoseMS[i].Scale.Z.Value;
+                    float t = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Scale.X.Value;
+                    float u = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Scale.Y.Value;
+                    float v = (cr2w.Chunks[0].Data as animRig).APoseMS[i].Scale.Z.Value;
                     Rig.AposeMSScale[i] = new Vec3(t, u, v);
                     Mat Sca = Mat.CreateScale(Rig.AposeMSScale[i]);
                     Rig.AposeMSMat[i] = (Rot * Tra) * Sca;
@@ -130,7 +130,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
             }
 
             // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul 
-            if ((cr2w.Chunks[0].data as animRig).APoseLS.Count != 0)
+            if ((cr2w.Chunks[0].Data as animRig).APoseLS.Count != 0)
             {
                 Rig.AposeLSExits = true;
                 Rig.AposeLSTrans = new Vec3[Rig.BoneCount];
@@ -141,20 +141,20 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 Mat[] matrix4X4s = new Mat[Rig.BoneCount];
                 for (int i = 0; i < Rig.BoneCount; i++)
                 {
-                    float x = (cr2w.Chunks[0].data as animRig).APoseLS[i].Translation.X.Value;
-                    float y = (cr2w.Chunks[0].data as animRig).APoseLS[i].Translation.Y.Value;
-                    float z = (cr2w.Chunks[0].data as animRig).APoseLS[i].Translation.Z.Value;
+                    float x = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Translation.X.Value;
+                    float y = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Translation.Y.Value;
+                    float z = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Translation.Z.Value;
                     Rig.AposeLSTrans[i] = new Vec3(x, z, -y);
                     Mat Tra = Mat.CreateTranslation(Rig.AposeLSTrans[i]);
-                    float I = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.I.Value;
-                    float J = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.J.Value;
-                    float K = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.K.Value;
-                    float R = (cr2w.Chunks[0].data as animRig).APoseLS[i].Rotation.R.Value;
+                    float I = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Rotation.I.Value;
+                    float J = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Rotation.J.Value;
+                    float K = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Rotation.K.Value;
+                    float R = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Rotation.R.Value;
                     Rig.AposeLSRot[i] = new Quat(I, K, -J, R);
                     Mat Rot = Mat.CreateFromQuaternion(Rig.AposeLSRot[i]);
-                    float t = (cr2w.Chunks[0].data as animRig).APoseLS[i].Scale.X.Value;
-                    float u = (cr2w.Chunks[0].data as animRig).APoseLS[i].Scale.Y.Value;
-                    float v = (cr2w.Chunks[0].data as animRig).APoseLS[i].Scale.Z.Value;
+                    float t = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Scale.X.Value;
+                    float u = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Scale.Y.Value;
+                    float v = (cr2w.Chunks[0].Data as animRig).APoseLS[i].Scale.Z.Value;
                     Rig.AposeLSScale[i] = new Vec3(t, u, v);
                     Mat Sca = Mat.CreateScale(Rig.AposeLSScale[i]);
 
@@ -199,18 +199,18 @@ namespace WolvenKit.Modkit.RED4.RigFile
             }
             int boneCount = 0;
             if (Type == "animRig")
-                boneCount = (cr2w.Chunks[last].data as animRig).BoneNames.Count;
+                boneCount = (cr2w.Chunks[last].Data as animRig).BoneNames.Count;
             else
-                boneCount = (cr2w.Chunks[last].data as CMesh).BoneNames.Count;
+                boneCount = (cr2w.Chunks[last].Data as CMesh).BoneNames.Count;
 
 
             string[] bonenames = new string[boneCount];
             for (int i = 0; i < boneCount; i++)
             {
                 if (Type == "animRig")
-                    bonenames[i] = (cr2w.Chunks[last].data as animRig).BoneNames[i].Value;
+                    bonenames[i] = (cr2w.Chunks[last].Data as animRig).BoneNames[i].Value;
                 else
-                    bonenames[i] = (cr2w.Chunks[last].data as CMesh).BoneNames[i].Value;
+                    bonenames[i] = (cr2w.Chunks[last].Data as CMesh).BoneNames[i].Value;
             }
 
             return bonenames;

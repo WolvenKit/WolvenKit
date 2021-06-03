@@ -7,6 +7,8 @@ using System.Runtime.Serialization;
 using System.Xml;
 using WolvenKit.RED4.CR2W.Reflection;
 using FastMember;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -14,25 +16,60 @@ namespace WolvenKit.RED4.CR2W.Types
     /// A pointer to a chunk within the same cr2w file.
     /// </summary>
     [REDMeta(EREDMetaInfo.REDStruct)]
-    public class multiChannelCurve<T> : CVariable, ICurveDataAccessor where T : CVariable
+    public class multiChannelCurve<T> : CVariable, IMultiChannelCurve where T : CVariable
     {
-        
+
 
         public multiChannelCurve(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            //NumChannels = new CUInt32(cr2w, this, nameof(NumChannels));
-            InterPolationType = new CEnum<Enums.EInterPolationType>(cr2w, this, nameof(InterPolationType));
-            LinkType = new CEnum<Enums.EChannelLinkType>(cr2w, this, nameof(LinkType));
-            Alignment = new CUInt32(cr2w, this, nameof(Alignment));
-            Data = new CByteArray(cr2w, this, nameof(Data));
+
         }
 
 
-        [Ordinal(1)] [REDBuffer] public CUInt32 NumChannels { get; set; }
-        [Ordinal(2)] [REDBuffer(true)] public CEnum<Enums.EInterPolationType> InterPolationType { get; set; }
-        [Ordinal(3)] [REDBuffer(true)] public CEnum<Enums.EChannelLinkType> LinkType { get; set; }
-        [Ordinal(4)] [REDBuffer(true)] public CUInt32 Alignment { get; set; }
-        [Ordinal(5)] [REDBuffer(true)] public CByteArray Data { get; set; }
+        private CUInt32 _numChannels;
+        [Ordinal(1)]
+        [REDBuffer(true)]
+        public CUInt32 NumChannels
+        {
+            get => GetProperty(ref _numChannels);
+            set => SetProperty(ref _numChannels, value);
+        }
+
+        private CEnum<Enums.EInterPolationType> _interPolationType;
+        [Ordinal(2)]
+        [REDBuffer(true)]
+        public CEnum<Enums.EInterPolationType> InterPolationType
+        {
+            get => GetProperty(ref _interPolationType);
+            set => SetProperty(ref _interPolationType, value);
+        }
+
+        private CEnum<Enums.EChannelLinkType> _linkType;
+        [Ordinal(3)]
+        [REDBuffer(true)]
+        public CEnum<Enums.EChannelLinkType> LinkType
+        {
+            get => GetProperty(ref _linkType);
+            set => SetProperty(ref _linkType, value);
+        }
+
+        private CUInt32 _alignment;
+        [Ordinal(4)]
+        [REDBuffer(true)]
+        public CUInt32 Alignment
+        {
+            get => GetProperty(ref _alignment);
+            set => SetProperty(ref _alignment, value);
+        }
+
+        private CByteArray _data;
+        [Ordinal(5)]
+        [REDBuffer(true)]
+        public CByteArray Data
+        {
+            get => GetProperty(ref _data);
+            set => SetProperty(ref _data, value);
+        }
 
         public string Elementtype => REDReflection.GetREDTypeString(typeof(T));
 
@@ -42,7 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            base.Read(file, size);
+            NumChannels.Read(file, size);
 
             var interPolationTypeByte = (int)file.ReadByte();
             InterPolationType.Value = (Enums.EInterPolationType) interPolationTypeByte;
@@ -56,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            base.Write(file);
+            NumChannels.Write(file);
 
             file.Write((byte)InterPolationType.Value);
             file.Write((byte)LinkType.Value);
@@ -64,11 +101,6 @@ namespace WolvenKit.RED4.CR2W.Types
             Alignment.Write(file);
             Data.Write(file);
         }
-
-        //public override List<IEditableVariable> GetEditableVariables()
-        //{
-        //    return Elements.Cast<IEditableVariable>().ToList();
-        //}
     }
 
 

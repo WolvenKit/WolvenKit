@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using Ionic.Zlib;
+using WolvenKit.Bundles;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED3.CR2W;

@@ -1,9 +1,12 @@
 using System;
+using System.IO;
 using Catel.IoC;
 using CP77.CR2W;
 using Orchestra.Services;
+using WolvenKit.Bundles;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED3;
 using WolvenKit.MVVM.Model;
@@ -40,6 +43,14 @@ public static class ModuleInitializer
 
         // singletons
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
+
+
+        var dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+        var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
+        if (!OodleLoadLib.Load(destFileName))
+        {
+            throw new MissingCompressionException($"oo2ext_7_win64.dll not found in {dir}");
+        }
         serviceLocator.RegisterType<IHashService, HashService>();
 
         serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();

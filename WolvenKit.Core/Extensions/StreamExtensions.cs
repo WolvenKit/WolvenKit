@@ -9,7 +9,7 @@ namespace WolvenKit.Interfaces.Extensions
 {
     public static class StreamExtensions
     {
-        public static byte[] ToByteArray(this Stream input)
+        public static byte[] ToByteArray(this Stream input, bool keepPosition = false)
         {
             if (input is MemoryStream memoryStream)
             {
@@ -18,7 +18,10 @@ namespace WolvenKit.Interfaces.Extensions
             else
             {
                 using var ms = new MemoryStream();
-                input.Position = 0;
+                if (!keepPosition)
+                {
+                    input.Position = 0;
+                }
                 input.CopyTo(ms);
                 return ms.ToArray();
 

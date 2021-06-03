@@ -10,6 +10,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.Cache

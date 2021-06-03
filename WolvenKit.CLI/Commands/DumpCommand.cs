@@ -23,18 +23,18 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--imports", "-i" }, "Dump all imports (all filenames referenced by files in the archive)."));
             AddOption(new Option<bool>(new[] { "--missinghashes", "-m" }, "List missing hashes for all input archives."));
             AddOption(new Option<bool>(new[] { "--texinfo" }, "Dump all XBM info."));
-            AddOption(new Option<bool>(new[] { "--classinfo" }, "Dump all class info."));
             AddOption(new Option<bool>(new[] { "--dump", "-d" }, "Dump archive information."));
             AddOption(new Option<bool>(new[] { "--list", "-l" }, "List archive contents."));
 
-            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, bool, IHost>(Action);
+
+            Handler = CommandHandler.Create<string[], bool, bool, bool, bool, bool, IHost>(Action);
         }
 
-        private void Action(string[] path, bool imports, bool missinghashes, bool texinfo, bool classinfo, bool dump, bool list, IHost host)
+        private void Action(string[] path, bool imports, bool missinghashes, bool texinfo, bool dump, bool list, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.DumpTask(path, imports, missinghashes, texinfo, classinfo, dump, list);
+            consoleFunctions.DumpTask(path, imports, missinghashes, texinfo, dump, list);
         }
 
         #endregion Constructors

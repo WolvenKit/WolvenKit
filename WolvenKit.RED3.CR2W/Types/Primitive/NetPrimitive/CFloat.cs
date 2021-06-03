@@ -6,52 +6,52 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public class CFloat : CVariable, IREDPrimitive
+    public class CFloat : CVariable, IREDPrimitive<float>
     {
         public CFloat()
         {
-            
+
         }
         public CFloat(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         [DataMember]
-        public float val { get; set; }
+        public float Value { get; set; }
 
         public override void Read(BinaryReader file, uint size)
         {
-            val = file.ReadSingle();
+            Value = file.ReadSingle();
         }
 
         public override void Write(BinaryWriter file)
         {
-            file.Write(val);
+            file.Write(Value);
         }
 
         public override CVariable SetValue(object val)
         {
-            switch (val)
+            this.IsSerialized = true;
+            this.Value = val switch
             {
-                case float o:
-                    this.val = o;
-                    break;
-                case CFloat cvar:
-                    this.val = cvar.val;
-                    break;
-            }
+                float o => o,
+                CFloat cvar => cvar.Value,
+                _ => this.Value
+            };
 
             return this;
         }
 
+        public object GetValue() => Value;
+
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (CFloat) base.Copy(context);
-            var.val = val;
+            var.Value = Value;
             return var;
         }
 
         public override string ToString()
         {
-            return val.ToString();
+            return Value.ToString();
         }
     }
 }
