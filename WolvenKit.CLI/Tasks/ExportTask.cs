@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
@@ -47,7 +48,8 @@ namespace CP77Tools.Tasks
             Stopwatch watch = new();
             watch.Restart();
 
-            if (_modTools.Export(new FileInfo(path), uncookext, flip))
+            var settings = new ExportArgs() {UncookExtension = uncookext, Flip = flip};
+            if (_modTools.Export(new FileInfo(path), settings))
 
             {
                 watch.Stop();
