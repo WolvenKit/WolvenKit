@@ -20,6 +20,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Functionality.Helpers;
+using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -272,11 +273,28 @@ namespace WolvenKit.ViewModels.Editor
     /// <summary>
     /// ImportExportItem ViewModel
     /// </summary>
-    public abstract class ImportExportItemViewModel
+    public abstract class ImportExportItemViewModel : ObservableObject
     {
         protected FileModel BaseFile { get; set; }
 
-        public ImportExportArgs Properties { get; set; }
+        public ImportExportArgs Properties
+        {
+            get => _properties;
+            set
+            {
+                if (_properties != value)
+                {
+                    var oldValue = _properties;
+                    _properties = value;
+                    RaisePropertyChanged(() => Properties, oldValue, value);
+                    RaisePropertyChanged(() => ExportTaskIdentifier);
+                }
+            }
+        }
+
+        private ImportExportArgs _properties;
+
+        public string ExportTaskIdentifier => Properties.Obs;
 
         public string Extension => BaseFile.Extension;
         public string FullName => BaseFile.FullName;
@@ -310,7 +328,7 @@ namespace WolvenKit.ViewModels.Editor
             //ExportTaskIdentifier = DecideDefaultExport(model);
         }
 
-        public string ExportTaskIdentifier => Properties.ToString();
+        
 
         private ImportExportArgs DecideExportOptions(FileModel model)
         {

@@ -9,9 +9,9 @@ using WolvenKit.Common.Wcc;
 
 namespace WolvenKit.Common.Model.Arguments
 {
-    public abstract class ImportExportArgs
+    public abstract class ImportExportArgs : Catel.Data.ObservableObject
     {
-
+        public string Obs => ToString();
 
 
     }
@@ -25,7 +25,23 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class ExportArgs : ImportExportArgs
     {
-        public EUncookExtension UncookExtension { get; set; }
+        public EUncookExtension UncookExtension
+        {
+            get => _uncookExtension;
+            set
+            {
+                if (_uncookExtension != value)
+                {
+                    var oldValue = _uncookExtension;
+                    _uncookExtension = value;
+                    RaisePropertyChanged(() => UncookExtension, oldValue, value);
+                    RaisePropertyChanged(() => Obs);
+                }
+            }
+        }
+
+        private EUncookExtension _uncookExtension;
+
         public bool Flip { get; set; }
 
         public override string ToString() => $"{UncookExtension.ToString()}, {Flip.ToString()}";
