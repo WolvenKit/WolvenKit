@@ -97,7 +97,7 @@ namespace WolvenKit.CLI
 
 
 
-            parser.InvokeAsync(args);
+            parser.Invoke(args);
         }
 
         private delegate void StrDelegate(string value);
