@@ -304,34 +304,34 @@ namespace WolvenKit.ViewModels.Editor
         public ExportableItemViewModel(FileModel model)
         {
             BaseFile = model;
-            Properties = new ExportArgs();
+            Properties = DecideExportOptions(model);
+
 
             //ExportTaskIdentifier = DecideDefaultExport(model);
         }
 
         public string ExportTaskIdentifier => Properties.ToString();
 
-        private string DecideDefaultExport()
+        private ImportExportArgs DecideExportOptions(FileModel model)
         {
-            var ie = BaseFile.Extension;
-            var deftext = "Default - ";
-            if (ie == ".morphtarget")
-            {
-                return deftext + "GLTF/GLB";
-            }
-            if (ie == ".mesh")
-            {
-                return deftext + "GLTF/GLB";
-            }
-            if (ie == ".XBM")
-            {
-                return deftext + "DDS";
-            }
-            if (ie == ".wem")
-            {
-                return deftext + "WAV";
-            }
-            return "";
+
+            _ = Enum.TryParse(model.Extension.Remove(0,1), out ECookedFileFormat Extension);
+
+            switch (Extension)
+                {
+                case ECookedFileFormat.mesh:
+                    return new MeshExportArgs();
+
+                case ECookedFileFormat.wem:
+                    return new WemExportArgs();
+
+                default:
+                    return new ExportArgs();
+                }
+
+
+
+
         }
     }
 
