@@ -8,7 +8,7 @@ using WolvenKit.Common.Oodle;
 using System.Collections.Generic;
 using SharpGLTF.Schema2;
 using WolvenKit.Modkit.RED4.MeshFile;
-using WolvenKit.Modkit.RED4.MeshFile.Materials.MaterialTypes;
+using WolvenKit.Modkit.RED4.Materials.MaterialTypes;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
@@ -19,7 +19,7 @@ using Catel.IoC;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
-namespace WolvenKit.Modkit.RED4.MeshFile.Materials
+namespace WolvenKit.Modkit.RED4.Materials
 {
     public class MATERIAL
     {

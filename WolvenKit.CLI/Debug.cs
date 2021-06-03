@@ -19,7 +19,7 @@ using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.RED4.MeshFile.Materials;
+using WolvenKit.Modkit.RED4.Materials;
 
 namespace WolvenKit.CLI
 {
