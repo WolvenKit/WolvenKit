@@ -19,6 +19,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.MeshFile;
 using System.Diagnostics;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.MorphTargetFile;
 
@@ -60,8 +61,7 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public bool UncookSingle(Archive ar, ulong hash, DirectoryInfo outDir,
-            EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
+        public bool UncookSingle(Archive ar, ulong hash, DirectoryInfo outDir, ExportArgs args)
         {
             // extract the main file with uncompressed buffers
             #region unbundle main file
@@ -88,7 +88,7 @@ namespace CP77.CR2W
 
             // uncook from main file stream
             var ext = Path.GetExtension(name)[1..];
-            return Uncook(ms, outfile, ext, uncookext, flip);
+            return Uncook(ms, outfile, ext, args);
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace CP77.CR2W
         /// <param name="uncookext"></param>
         /// <param name="flip"></param>
         /// <returns></returns>
-        public (List<string>, int) UncookAll(Archive ar, DirectoryInfo outDir, string pattern = "",
-            string regex = "", EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
+        public (List<string>, int) UncookAll(Archive ar, DirectoryInfo outDir, ExportArgs args,
+            string pattern = "", string regex = "")
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -136,7 +136,7 @@ namespace CP77.CR2W
             _progressService.Report(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                if (UncookSingle(ar, info.NameHash64, outDir, uncookext, flip))
+                if (UncookSingle(ar, info.NameHash64, outDir, args))
                     extractedList.Add(info.FileName);
                 else
                     failedList.Add(info.FileName);
@@ -158,8 +158,7 @@ namespace CP77.CR2W
         /// uncooks buffers to raw format and
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public bool Uncook(Stream cr2wStream, FileInfo cr2wFileName, string ext,
-            EUncookExtension uncookext = EUncookExtension.dds, bool flip = false)
+        public bool Uncook(Stream cr2wStream, FileInfo cr2wFileName, string ext, ExportArgs args)
         {
             if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
             {
@@ -192,10 +191,10 @@ namespace CP77.CR2W
             {
                 ECookedFileFormat.mesh => (new MESH()).ExportMeshWithoutRig(cr2wStream,cr2wFileName.Name , (new FileInfo(cr2wFileName.FullName))),
                 ECookedFileFormat.morphtarget => (new TARGET()).ExportTargets(cr2wStream,(new FileInfo(cr2wFileName.FullName))),
-                ECookedFileFormat.xbm => UncookXbm(cr2wStream,cr2w, uncookext, flip),
+                ECookedFileFormat.xbm => UncookXbm(cr2wStream, cr2w, args),
                 ECookedFileFormat.csv => UncookCsv(cr2wStream, cr2w),
                 ECookedFileFormat.json => false,
-                ECookedFileFormat.mlmask => Mlmask.Uncook(cr2wStream, cr2w, uncookext),
+                ECookedFileFormat.mlmask => Mlmask.Uncook(cr2wStream, cr2w, args),
                 ECookedFileFormat.cubemap => UncookCubeMap(cr2wStream, cr2w),
                 ECookedFileFormat.envprobe => UncookEnvprobe(cr2wStream, cr2w),
                 ECookedFileFormat.texarray => UncookTexarray(cr2wStream, cr2w),
@@ -424,8 +423,13 @@ namespace CP77.CR2W
             return true;
         }
 
-        private bool UncookXbm(Stream cr2wStream, CR2WFile cr2w, EUncookExtension uncookext, bool flip)
+        private bool UncookXbm(Stream cr2wStream, CR2WFile cr2w, ExportArgs args)
         {
+            if (args is not XbmExportArgs xbmargs)
+            {
+                throw new ArgumentException(nameof(ExportArgs));
+            }
+
             if (cr2w.StringDictionary[1] != "CBitmapTexture")
             {
                 return false;
@@ -486,13 +490,13 @@ namespace CP77.CR2W
                 cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
             }
 
-            if (flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (xbmargs.Flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 TexconvWrapper.VFlip(cr2wFileName.Directory.FullName, newpath, texformat);
             }
 
             // convert to texture
-            if (uncookext == EUncookExtension.dds || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (xbmargs.UncookExtension == EUncookExtension.dds || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return true;
             }
@@ -500,7 +504,7 @@ namespace CP77.CR2W
             try
             {
                 var di = new FileInfo(cr2wFileName.FullName).Directory;
-                TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
+                TexconvWrapper.Convert(di.FullName, $"{newpath}", xbmargs.UncookExtension);
             }
             catch (Exception)
             {

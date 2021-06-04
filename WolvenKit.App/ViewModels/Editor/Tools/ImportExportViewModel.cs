@@ -294,7 +294,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private ImportExportArgs _properties;
 
-        public string ExportTaskIdentifier => Properties.Obs;
+        public string ExportTaskIdentifier => Properties.ToString();
 
         public string Extension => BaseFile.Extension;
         public string FullName => BaseFile.FullName;
@@ -314,7 +314,24 @@ namespace WolvenKit.ViewModels.Editor
         public ImportableItemViewModel(FileModel model)
         {
             BaseFile = model;
-            Properties = new ImportArgs();
+            Properties = DecideImportOptions(model);
+        }
+
+        private ImportArgs DecideImportOptions(FileModel model)
+        {
+
+            _ = Enum.TryParse(model.Extension.TrimStart('.'), out ERawFileFormat Extension);
+
+            switch (Extension)
+            {
+                case ERawFileFormat.tga:
+                case ERawFileFormat.dds:
+                    return new XbmImportArgs();
+                case ERawFileFormat.fbx:
+                    return new CommonImportArgs();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
     public class ExportableItemViewModel : ImportExportItemViewModel
@@ -323,33 +340,32 @@ namespace WolvenKit.ViewModels.Editor
         {
             BaseFile = model;
             Properties = DecideExportOptions(model);
-
-
-            //ExportTaskIdentifier = DecideDefaultExport(model);
         }
 
-        
-
-        private ImportExportArgs DecideExportOptions(FileModel model)
+        private ExportArgs DecideExportOptions(FileModel model)
         {
 
-            _ = Enum.TryParse(model.Extension.Remove(0,1), out ECookedFileFormat Extension);
+            _ = Enum.TryParse(model.Extension.TrimStart('.'), out ECookedFileFormat Extension);
 
             switch (Extension)
-                {
+            {
                 case ECookedFileFormat.mesh:
                     return new MeshExportArgs();
-
+                case ECookedFileFormat.xbm:
+                    return new XbmExportArgs();
                 case ECookedFileFormat.wem:
                     return new WemExportArgs();
-
+                case ECookedFileFormat.csv:
+                case ECookedFileFormat.json:
+                case ECookedFileFormat.mlmask:
+                case ECookedFileFormat.cubemap:
+                case ECookedFileFormat.envprobe:
+                case ECookedFileFormat.texarray:
+                case ECookedFileFormat.morphtarget:
+                    return new CommonExportArgs();
                 default:
-                    return new ExportArgs();
-                }
-
-
-
-
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 

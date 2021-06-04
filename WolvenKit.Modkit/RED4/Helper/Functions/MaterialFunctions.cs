@@ -291,7 +291,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                         if (CopyTextures)
                         {
                             File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
-                            var exportArgs = new ExportArgs() {UncookExtension = eUncookExtension};
+                            var exportArgs = new XbmExportArgs() {UncookExtension = eUncookExtension};
                             ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
                         }
                     }
@@ -304,7 +304,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                         if (CopyTextures)
                         {
                             File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
-                            var exportArgs = new ExportArgs() { UncookExtension = eUncookExtension };
+                            var exportArgs = new MlmaskExportArgs() { UncookExtension = eUncookExtension };
                             ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
                         }
                     }
@@ -330,7 +330,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                                     if (CopyTextures)
                                     {
                                         File.Copy(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr, cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr), true);
-                                        var exportArgs = new ExportArgs() { UncookExtension = eUncookExtension };
+                                        var exportArgs = new XbmExportArgs() { UncookExtension = eUncookExtension };
                                         ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr)), exportArgs);
                                     }
                                 }
@@ -354,7 +354,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                                             if (CopyTextures)
                                             {
                                                 File.Copy(AssetLib.FullName + "\\" + mlTempcr2w.Imports[eye].DepotPathStr, cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr), true);
-                                                var exportArgs = new ExportArgs() { UncookExtension = eUncookExtension };
+                                                var exportArgs = new MlmaskExportArgs { UncookExtension = eUncookExtension };
                                                 ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr)), exportArgs);
                                             }
                                         }
@@ -465,14 +465,16 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
 
                     ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                     foreach (Archive ar in archives)
-                        ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir), eUncookExtension);
+                        ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir),
+                            new XbmExportArgs() {UncookExtension = eUncookExtension});
                 }
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlmask")
                 {
                     TexturesList.Add(primaryDependencies[i]);
                     ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                     foreach (Archive ar in archives)
-                        ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir), eUncookExtension);
+                        ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir),
+                            new MlmaskExportArgs() { UncookExtension = eUncookExtension });
 
                 }
 
@@ -500,7 +502,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
 
                                 ulong hash1 = FNV1A64HashAlgorithm.HashString(cr2w.Imports[e].DepotPathStr);
                                 foreach (Archive ar in archives)
-                                    ModTools.UncookSingle(ar, hash1, new DirectoryInfo(cacheDir), eUncookExtension);
+                                    ModTools.UncookSingle(ar, hash1, new DirectoryInfo(cacheDir), new XbmExportArgs() { UncookExtension = eUncookExtension });
                             }
                             if (Path.GetExtension(cr2w.Imports[e].DepotPathStr) == ".mltemplate")
                             {
@@ -524,7 +526,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
 
                                         ulong hash3 = FNV1A64HashAlgorithm.HashString(mlTempcr2w.Imports[eye].DepotPathStr);
                                         foreach (Archive ar in archives)
-                                            ModTools.UncookSingle(ar, hash3, new DirectoryInfo(cacheDir), eUncookExtension);
+                                            ModTools.UncookSingle(ar, hash3, new DirectoryInfo(cacheDir), new XbmExportArgs() { UncookExtension = eUncookExtension });
                                     }
                                 }
                             }
@@ -838,8 +840,8 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                 ModTools.ExtractAll(ar, MaterialRepoDir, "*.mltemplate");
                 ModTools.ExtractAll(ar, MaterialRepoDir, "*.texarray");
 
-                ModTools.UncookAll(ar, MaterialRepoDir, "*.xbm", "", TexturesExtension);
-                ModTools.UncookAll(ar, MaterialRepoDir, "*.mlmask", "", TexturesExtension);
+                ModTools.UncookAll(ar, MaterialRepoDir, new XbmExportArgs() { UncookExtension = TexturesExtension},  "*.xbm", "" );
+                ModTools.UncookAll(ar, MaterialRepoDir, new MlmaskExportArgs() { UncookExtension = TexturesExtension }, "*.mlmask", "");
                 // try catch the decode in mlmask.cs for now
             }
         }

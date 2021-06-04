@@ -11,20 +11,51 @@ namespace WolvenKit.Common.Model.Arguments
 {
     public abstract class ImportExportArgs : Catel.Data.ObservableObject
     {
-        public string Obs => ToString();
+    }
 
+    public abstract class ImportArgs : ImportExportArgs
+    {
 
     }
 
-    public class ImportArgs : ImportExportArgs
+    public abstract class ExportArgs : ImportExportArgs
+    {
+
+    }
+
+
+    #region import args
+
+    public class CommonImportArgs : ImportArgs
+    {
+
+    }
+
+    public class XbmImportArgs : ImportArgs
     {
         public ETextureGroup TextureGroup { get; internal set; }
 
         public override string ToString() => TextureGroup.ToString();
     }
 
-    public class ExportArgs : ImportExportArgs
+    #endregion
+
+
+    #region export args
+
+    public class CommonExportArgs : ExportArgs
     {
+
+    }
+
+    public class MlmaskExportArgs : ExportArgs
+    {
+        public EUncookExtension UncookExtension { get; set; }
+    }
+
+    public class XbmExportArgs : ExportArgs
+    {
+        private EUncookExtension _uncookExtension;
         public EUncookExtension UncookExtension
         {
             get => _uncookExtension;
@@ -35,19 +66,18 @@ namespace WolvenKit.Common.Model.Arguments
                     var oldValue = _uncookExtension;
                     _uncookExtension = value;
                     RaisePropertyChanged(() => UncookExtension, oldValue, value);
-                    RaisePropertyChanged(() => Obs);
                 }
             }
         }
 
-        private EUncookExtension _uncookExtension;
+        
 
         public bool Flip { get; set; }
 
         public override string ToString() => $"{UncookExtension.ToString()}, {Flip.ToString()}";
     }
 
-    public class MeshExportArgs : ImportExportArgs
+    public class MeshExportArgs : ExportArgs
     {
         public Stream RigStream { get; set; }
         public bool LodFilter { get; set; } = true;
@@ -59,20 +89,18 @@ namespace WolvenKit.Common.Model.Arguments
 
     }
 
-    public class WemExportArgs : ImportExportArgs
+    public class WemExportArgs : ExportArgs
     {
         public WemExportTypes wemExportType { get; set; }
 
 
         public override string ToString() => wemExportType.ToString();
 
-
-
-
-
     }
 
     public enum WemExportTypes { Wav, Mp3 }
+
+    #endregion
 
 
 }
