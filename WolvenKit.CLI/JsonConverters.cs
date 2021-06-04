@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
@@ -83,9 +84,11 @@ namespace WolvenKit.CLI
                 default:
                     switch (value)
                     {
-                        // all numeric values are deserialized as long
-                        case long l:
-                            cVariable.SetValue(l.ToString()); // cast to string to do the parsing in the classes :/
+                        // all numeric values
+                        case long:
+                        case double:
+                        case BigInteger:
+                            cVariable.SetValue(value.ToString()); // cast to string to do the parsing in the classes :/
                             break;
                         // other primitive types can be set directly
                         case bool b:
@@ -195,6 +198,7 @@ namespace WolvenKit.CLI
 
         public List<CR2WBufferWrapperDto> Buffers { get; set; } = new();
 
+        public bool ShouldSerializeBuffers() => (Buffers.Count > 0);
 
         public Red4W2rcFileDto()
         {
@@ -243,6 +247,13 @@ namespace WolvenKit.CLI
         public int ParentIndex { get; set; }
         public Dictionary<string,object> Properties { get;set; }
 
+        public bool ShouldSerializeProperties() => (Properties.Count > 0);
+
+        public CR2WExportWrapperDto()
+        {
+
+        }
+
         public CR2WExportWrapperDto(ICR2WExport cr2WExport)
         {
             Type = cr2WExport.REDType;
@@ -260,7 +271,7 @@ namespace WolvenKit.CLI
         {
             var parentChunk = ParentIndex == -1
                 ? null
-                : cr2WFile.Chunks.First(_ => _.ChunkIndex == ParentIndex);
+                : cr2WFile.Chunks.First(_ => idx == ParentIndex);
 
             // create wrapped Cvariable
             var cvar = CR2WTypeManager.Create(Type, Type, cr2WFile, parentChunk?.Data as CVariable);

@@ -44,7 +44,7 @@ namespace CP77Tools.Tasks
 
             if (hashes != null)
             {
-                var bm =  new ArchiveManager();
+                var bm =  new ArchiveManager(_hashService);
                 bm.LoadAll(gameArchiveDir.FullName, false);
                 foreach (var hash in hashes)
                 {

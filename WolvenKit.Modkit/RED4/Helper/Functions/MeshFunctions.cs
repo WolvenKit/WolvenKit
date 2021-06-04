@@ -500,7 +500,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             {
                 extraExists[i] = false;
                 count = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
-                
+
                 for (int e = 0; e < count; e++)
                 {
                     checker = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
@@ -745,7 +745,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
                 }
 
             }
-            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Bytes);
+            UInt16 p = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Value;
             var b = cr2w.Buffers[p - 1];
             ms.Seek(b.Offset, SeekOrigin.Begin);
             MemoryStream meshstream = new MemoryStream();

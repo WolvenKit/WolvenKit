@@ -654,7 +654,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
 
             }
 
-            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Bytes);
+            UInt16 p = ((cr2w.Chunks[Index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Value);
             var b = cr2w.Buffers[p - 1];
             ms.Seek(b.Offset, SeekOrigin.Begin);
             MemoryStream materialStream = new MemoryStream();
@@ -757,7 +757,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                     }
                 }
 
-                UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Bytes);
+                UInt16 p = ((cr2w.Chunks[index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Value);
 
                 var compressed = new MemoryStream();
                 using var buff = new BinaryWriter(compressed);
@@ -789,7 +789,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
         private readonly ModTools ModTools;
         private readonly IHashService _hashService;
 
-        
+
 
 
 

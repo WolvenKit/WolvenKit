@@ -31,7 +31,6 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Properties
 
-        //public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
         public int ChunkIndex { get; set; }
 
         [JsonIgnore] public string ReferenceType => REDType.Split(':').Last();

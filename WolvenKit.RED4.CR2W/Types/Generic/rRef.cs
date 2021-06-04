@@ -76,6 +76,9 @@ namespace WolvenKit.RED4.CR2W.Types
             this.IsSerialized = true;
             switch (val)
             {
+                case string s:
+                    this.DepotPath = s;
+                    break;
                 case ushort o:
                     this.SetValueInternal(o);
                     break;

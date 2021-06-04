@@ -256,7 +256,9 @@ namespace WolvenKit.RED4.CR2W.Types
             var par = this.ParentVar;
             // top level chunk variables return the chunk index
             if (par == null)
+            {
                 return $"{this.VarChunkIndex}.{this.REDName}";
+            }
 
             // all chunks get their chunk id prefixed
             var depstr = this.VarChunkIndex > 0
