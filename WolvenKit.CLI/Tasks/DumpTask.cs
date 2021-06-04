@@ -89,7 +89,79 @@ namespace CP77Tools.Tasks
                 archives.Add(Red4ParserServiceExtensions.ReadArchive(inputFileInfo.FullName, _hashService));
             }
 
-            var typedict = new ConcurrentDictionary<string, IEnumerable<string>>();
+            if (missinghashes)
+            {
+                List<ulong> used = new();
+                List<ulong> missing = new();
+
+                _loggerService.Info($"Parsing...");
+                for (var i = 0; i < archives.Count; i++)
+                {
+                    var ar = archives[i];
+                    foreach (var (hash, fileInfoEntry) in ar.Files)
+                    {
+                        if (fileInfoEntry is FileEntry fe && fe.NameOrHash == hash.ToString())
+                        {
+                            missing.Add(hash);
+                        }
+                        else
+                        {
+                            used.Add(hash);
+                        }
+                    }
+
+                    _progressService.Report((i + 1) / (float)archives.Count);
+                }
+
+                // write all used and all missing hashes
+                _loggerService.Info($"Writing...");
+
+                var missinghashtxt = isDirectory
+                    ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt")
+                    : $"{inputFileInfo.FullName}.missinghashes.txt";
+
+                using var missingWriter = File.CreateText(missinghashtxt);
+                for (var i = 0; i < missing.Count; i++)
+                {
+                    var mh = missing[i];
+                    missingWriter.WriteLine(mh);
+                    _progressService.Report((i + 1) / (float)missing.Count);
+                }
+
+                var usedhashtxt = isDirectory
+                    ? Path.Combine(inputDirInfo.FullName, "usedhashes.txt")
+                    : $"{inputFileInfo.FullName}.usedhashes.txt";
+                using var usedWriter = File.CreateText(usedhashtxt);
+                for (var i = 0; i < used.Count; i++)
+                {
+                    var mh = used[i];
+                    usedWriter.WriteLine(_hashService.Get(mh));
+                    _progressService.Report((i + 1) / (float)used.Count);
+                }
+
+                //List<ulong> unused = new();
+                var unusedhashtxt = isDirectory
+                    ? Path.Combine(inputDirInfo.FullName, "unusedhashes.txt")
+                    : $"{inputFileInfo.FullName}.unusedhashes.txt";
+                using var unusedWriter = File.CreateText(unusedhashtxt);
+
+                var allhashes = _hashService.GetAllHashes().ToList();
+
+                var unused = allhashes.Except(used).ToList();
+
+                for (var i = 0; i < unused.Count; i++)
+                {
+                    var h = allhashes[i];
+                    unusedWriter.WriteLine(_hashService.Get(h));
+                    _progressService.Report((i + 1) / (float)unused.Count);
+                }
+
+                _loggerService.Info($"Unused: {unused.Count}");
+                _loggerService.Info($"Used: {used.Count}");
+                _loggerService.Info($"Missing: {missing.Count}");
+
+                return 1;
+            }
 
             // Parallel
             foreach (var ar in archives)
@@ -115,7 +187,7 @@ namespace CP77Tools.Tasks
 
                     Thread.Sleep(1000);
                     int progress = 0;
-                    _progress.Report(0);
+                    _progressService.Report(0);
 
                     Parallel.For(0, count, i =>
                     {
@@ -175,7 +247,7 @@ namespace CP77Tools.Tasks
                         }
 
                         Interlocked.Increment(ref progress);
-                        _progress.Report(progress / (float)count);
+                        _progressService.Report(progress / (float)count);
                     });
 
                     // write
@@ -295,27 +367,6 @@ namespace CP77Tools.Tasks
                     {
                         _loggerService.Info(entry.FileName);
                     }
-                }
-            }
-
-            if (missinghashes)
-            {
-                var missinghashtxt = isDirectory
-                    ? Path.Combine(inputDirInfo.FullName, "missinghashes.txt")
-                    : $"{inputFileInfo.FullName}.missinghashes.txt";
-                using var mwriter = File.CreateText(missinghashtxt);
-                foreach (var ar in archives)
-                {
-                    var ctr = 0;
-                    foreach (var (hash, fileInfoEntry) in ar.Files)
-                    {
-                        if ((fileInfoEntry as FileEntry).NameOrHash == hash.ToString())
-                        {
-                            mwriter.WriteLine(hash);
-                            ctr++;
-                        }
-                    }
-                    _loggerService.Info($"{ar.ArchiveAbsolutePath} - missing: {ctr}");
                 }
             }
 

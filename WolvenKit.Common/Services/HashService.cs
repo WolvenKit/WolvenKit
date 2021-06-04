@@ -1,13 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using ProtoBuf;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
@@ -19,10 +14,13 @@ namespace WolvenKit.Common.Services
     {
         #region Fields
 
-        private const string s_hashZipName = "WolvenKit.Common.Resources.archivehashes.kark";
+        private const string s_used = "WolvenKit.Common.Resources.usedhashes.kark";
+        private const string s_unused = "WolvenKit.Common.Resources.unusedhashes.kark";
+        private const string s_userHashes = "user_hashes.txt";
 
-        private Dictionary<ulong, string> _hashes = new ();
-        private Dictionary<ulong, string> _userHashes = new ();
+        private readonly Dictionary<ulong, string> _hashes = new();
+        private readonly Dictionary<ulong, string> _additionalhashes = new();
+        private readonly Dictionary<ulong, string> _userHashes = new();
 
         #endregion Fields
 
@@ -37,6 +35,15 @@ namespace WolvenKit.Common.Services
 
         #region Methods
 
+        private bool IsAdditionalLoaded() => _additionalhashes.Count > 0;
+
+        public IEnumerable<ulong> GetAllHashes()
+        {
+            // load additional
+            LoadAdditional();
+            return _hashes.Keys.Concat(_userHashes.Keys).Concat(_additionalhashes.Keys);
+        }
+
         public bool Contains(ulong key) => _hashes.ContainsKey(key) || _userHashes.ContainsKey(key);
 
         public string Get(ulong key)
@@ -45,8 +52,19 @@ namespace WolvenKit.Common.Services
             {
                 return _hashes[key];
             }
+            if (_userHashes.ContainsKey(key))
+            {
+                return _userHashes[key];
+            }
 
-            return _userHashes.ContainsKey(key) ? _userHashes[key] : "";
+            // load additional
+            LoadAdditional();
+            if (_additionalhashes.ContainsKey(key))
+            {
+                return _additionalhashes[key];
+            }
+
+            return "";
         }
 
         public void Add(string path)
@@ -58,9 +76,36 @@ namespace WolvenKit.Common.Services
             }
         }
 
+
+
+
+        private void LoadAdditional()
+        {
+            if (IsAdditionalLoaded())
+            {
+                return;
+            }
+
+            LoadEmbeddedHashes(s_unused, _additionalhashes);
+        }
+
         private void Load()
         {
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_hashZipName);
+            LoadEmbeddedHashes(s_used, _hashes);
+
+            // user hashes
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
+            if (File.Exists(userHashesPath))
+            {
+                using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
+                ReadHashes(userFs, _userHashes);
+            }
+        }
+
+        private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, string> hashDictionary)
+        {
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
@@ -68,6 +113,7 @@ namespace WolvenKit.Common.Services
             {
                 throw new DecompressionException($"Incorrect hash file.");
             }
+
             var outputsize = stream.ReadStruct<uint>();
 
             // read the rest of the stream
@@ -77,18 +123,35 @@ namespace WolvenKit.Common.Services
 
             OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
 
-            _hashes.EnsureCapacity(1_500_000);
+            hashDictionary.EnsureCapacity(1_100_000);
 
             using var ms = new MemoryStream(outputbuffer);
-            using var sr = new StreamReader(ms);
+            ReadHashes(ms, hashDictionary);
+        }
+
+        private void ReadHashes(Stream memoryStream, IDictionary<ulong, string> hashDict)
+        {
+            using var sr = new StreamReader(memoryStream);
             string line;
             while ((line = sr.ReadLine()) != null)
             {
-                _hashes.Add(FNV1A64HashAlgorithm.HashString(line), line);
+                var hash = FNV1A64HashAlgorithm.HashString(line);
+                if (_hashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+                if (_userHashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+                if (_additionalhashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+
+                hashDict.Add(hash, line);
             }
         }
-
-
 
         #endregion Methods
     }

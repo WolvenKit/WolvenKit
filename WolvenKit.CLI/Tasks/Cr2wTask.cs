@@ -13,6 +13,7 @@ using Newtonsoft.Json.Serialization;
 using WolvenKit.CLI;
 //using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
 using Formatting = Newtonsoft.Json.Formatting;
@@ -38,10 +39,15 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
+            foreach (var s in path)
             {
-                Cr2wTaskInner(file, outpath, deserialize, serialize, pattern, regex, format);
-            });
+                Cr2wTaskInner(s, outpath, deserialize, serialize, pattern, regex, format);
+            }
+
+            // Parallel.ForEach(path, file =>
+            // {
+            //     Cr2wTaskInner(file, outpath, deserialize, serialize, pattern, regex, format);
+            // });
         }
 
         private void Cr2wTaskInner(string path, string outputDirectory, bool deserialize, bool serialize,
@@ -107,7 +113,9 @@ namespace CP77Tools.Tasks
 
             Thread.Sleep(1000);
             int progress = 0;
-            Parallel.ForEach(finalMatchesList, fileInfo =>
+
+            foreach (var fileInfo in finalMatchesList)
+            //Parallel.ForEach(finalMatchesList, fileInfo =>
             {
                 var outputDirInfo = string.IsNullOrEmpty(outputDirectory)
                     ? fileInfo.Directory
@@ -172,26 +180,39 @@ namespace CP77Tools.Tasks
 
                 if (deserialize)
                 {
-
-                    var json = File.ReadAllText(fileInfo.FullName);
-                    var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
-                    if (newdto != null)
+                    try
                     {
-                        var w2rc = newdto.ToW2rc();
-                        var ext = newdto.Extension;
-                        var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
+                        var json = File.ReadAllText(fileInfo.FullName);
+                        var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
+                        if (newdto != null)
+                        {
+                            var w2rc = newdto.ToW2rc();
+                            var ext = newdto.Extension;
+                            var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name),
+                                ext);
 
-                        using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
-                        using var bw = new BinaryWriter(fs2);
+                            using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
+                            using var bw = new BinaryWriter(fs2);
 
-                        w2rc.Write(bw);
+                            w2rc.Write(bw);
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException($"Could not parse {fileInfo.FullName}");
+                        }
+
+                        _loggerService.Success($"Converted {fileInfo.FullName} to CR2W");
                     }
-
-                    _loggerService.Success($"Converted {fileInfo.FullName} to CR2W");
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        //throw;
+                    }
                 }
 
                 Interlocked.Increment(ref progress);
-            });
+                //});
+            }
 
             watch.Stop();
             _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds.ToString()}ms.");

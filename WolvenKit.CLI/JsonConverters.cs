@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
@@ -83,9 +84,11 @@ namespace WolvenKit.CLI
                 default:
                     switch (value)
                     {
-                        // all numeric values are deserialized as long
-                        case long l:
-                            cVariable.SetValue(l.ToString()); // cast to string to do the parsing in the classes :/
+                        // all numeric values
+                        case long:
+                        case double:
+                        case BigInteger:
+                            cVariable.SetValue(value.ToString()); // cast to string to do the parsing in the classes :/
                             break;
                         // other primitive types can be set directly
                         case bool b:
@@ -242,6 +245,11 @@ namespace WolvenKit.CLI
         //public int ChunkIndex { get; set; }
         public int ParentIndex { get; set; }
         public Dictionary<string,object> Properties { get;set; }
+
+        public CR2WExportWrapperDto()
+        {
+
+        }
 
         public CR2WExportWrapperDto(ICR2WExport cr2WExport)
         {

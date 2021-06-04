@@ -494,7 +494,7 @@ namespace WolvenKit.RED4.MeshFile
             {
                 extraExists[i] = false;
                 count = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
-                
+
                 for (int e = 0; e < count; e++)
                 {
                     checker = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
@@ -733,7 +733,7 @@ namespace WolvenKit.RED4.MeshFile
                 }
 
             }
-            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Bytes);
+            UInt16 p = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Value;
             var b = cr2w.Buffers[p - 1];
             ms.Seek(b.Offset, SeekOrigin.Begin);
             MemoryStream meshstream = new MemoryStream();
@@ -786,7 +786,7 @@ namespace WolvenKit.RED4.MeshFile
                     Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
                     Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
 
-                    
+
                     (int, float)[] bind0 = new (int, float)[8];
                     (int, float)[] bind1 = new (int, float)[8];
                     (int, float)[] bind2 = new (int, float)[8];

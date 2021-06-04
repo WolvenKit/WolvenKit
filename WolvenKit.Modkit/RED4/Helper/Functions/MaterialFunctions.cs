@@ -462,7 +462,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
                     ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                     foreach (Archive ar in archives)
                         ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir), eUncookExtension);
-                    
+
                 }
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
@@ -639,7 +639,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
 
             }
 
-            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Bytes);
+            UInt16 p = ((cr2w.Chunks[Index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Value);
             var b = cr2w.Buffers[p - 1];
             ms.Seek(b.Offset, SeekOrigin.Begin);
             MemoryStream materialStream = new MemoryStream();
@@ -742,7 +742,7 @@ namespace WolvenKit.RED4.MeshFile.Materials
                     }
                 }
 
-                UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Bytes);
+                UInt16 p = ((cr2w.Chunks[index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Value);
 
                 var compressed = new MemoryStream();
                 using var buff = new BinaryWriter(compressed);
@@ -767,14 +767,14 @@ namespace WolvenKit.RED4.MeshFile.Materials
             inmeshStream.Close();
 
         }
-        
+
     }
     public class MaterialRepository
     {
         private readonly ModTools ModTools;
         private readonly IHashService _hashService;
 
-        
+
 
 
 

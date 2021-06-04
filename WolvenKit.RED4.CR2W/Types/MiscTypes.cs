@@ -48,11 +48,11 @@ namespace WolvenKit.RED4.CR2W.Types
     {
         public DataBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        private CBytes _buffer;
+        private CUInt16 _buffer;
 
         [Ordinal(1)]
         [REDBuffer(true)]
-        public CBytes Buffer
+        public CUInt16 Buffer
         {
             get => GetProperty(ref _buffer);
             set => SetProperty(ref _buffer, value);
@@ -60,19 +60,15 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            Buffer = new CBytes(cr2w, this, nameof(Buffer))
+            if (size > 2)
             {
-                Bytes = new byte[0],
-                IsSerialized = true
-            };
+                throw new InvalidParsingException(nameof(serializationDeferredDataBuffer));
+            }
 
             Buffer.Read(file, size);
         }
 
-        public override void Write(BinaryWriter file)
-        {
-            Buffer.Write(file);
-        }
+        public override void Write(BinaryWriter file) => Buffer.Write(file);
     }
 
     [REDMeta]

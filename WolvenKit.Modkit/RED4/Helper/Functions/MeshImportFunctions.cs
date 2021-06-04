@@ -463,7 +463,7 @@ namespace WolvenKit.RED4.MeshFile
                     Byte[] bytes = new Byte[zeroesCount];
                     bw.Write(bytes);
                 }
-                
+
                 // writing normals and tangents
                 normalOffsets[i] = (UInt32)ms.Position;
                 for (int e = 0; e < vertCount; e++)
@@ -479,17 +479,17 @@ namespace WolvenKit.RED4.MeshFile
                     Byte[] bytes = new Byte[zeroesCount];
                     bw.Write(bytes);
                 }
-                
+
                 // writing colors and tx1s
                 colorOffsets[i] = (UInt32)ms.Position;
                 for (int e = 0; e < vertCount; e++)
                 {
-                    
+
                     bw.Write(expMeshes[i].colors[e, 0]);
                     bw.Write(expMeshes[i].colors[e, 1]);
                     bw.Write(expMeshes[i].colors[e, 2]);
                     bw.Write(expMeshes[i].colors[e, 3]);
-                    
+
 
                     // Temp fix for improved lighting geomertry
                     /*
@@ -898,8 +898,8 @@ namespace WolvenKit.RED4.MeshFile
                     // for lightblocker its 24, after testing some files, somtimes unknownoffsets[4] is used for destruction indices and some paint instead of lightblocker, so this needs to be taken care of
                     chunk.VertexFactory.Value += 24;
                 }
-                
-                
+
+
                 // Invalid, Required
                 chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
                 // fishy
@@ -930,7 +930,7 @@ namespace WolvenKit.RED4.MeshFile
             (cr2w.Chunks[Index].Data as rendRenderMeshBlob).Header.IndexBufferOffset.Value = info.indexBufferOffset;
 
 
-            UInt16 p = BitConverter.ToUInt16((cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Bytes);
+            UInt16 p = ((cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Value);
 
             var compressed = new MemoryStream();
             using var buff = new BinaryWriter(compressed);
