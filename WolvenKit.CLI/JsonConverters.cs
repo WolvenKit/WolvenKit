@@ -198,6 +198,7 @@ namespace WolvenKit.CLI
 
         public List<CR2WBufferWrapperDto> Buffers { get; set; } = new();
 
+        public bool ShouldSerializeBuffers() => (Buffers.Count > 0);
 
         public Red4W2rcFileDto()
         {
@@ -246,6 +247,8 @@ namespace WolvenKit.CLI
         public int ParentIndex { get; set; }
         public Dictionary<string,object> Properties { get;set; }
 
+        public bool ShouldSerializeProperties() => (Properties.Count > 0);
+
         public CR2WExportWrapperDto()
         {
 
@@ -268,7 +271,7 @@ namespace WolvenKit.CLI
         {
             var parentChunk = ParentIndex == -1
                 ? null
-                : cr2WFile.Chunks.First(_ => _.ChunkIndex == ParentIndex);
+                : cr2WFile.Chunks.First(_ => idx == ParentIndex);
 
             // create wrapped Cvariable
             var cvar = CR2WTypeManager.Create(Type, Type, cr2WFile, parentChunk?.Data as CVariable);

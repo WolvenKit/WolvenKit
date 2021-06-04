@@ -139,20 +139,12 @@ namespace CP77Tools.Tasks
                     cr2w.FileName = infile;
 
                     string json = "";
-                    try
-                    {
-                        var dto = new Red4W2rcFileDto(cr2w);
-                        json =
-                            JsonConvert.SerializeObject(
-                                dto,
-                                Formatting.Indented
-                            );
-                    }
-                    catch (Exception)
-                    {
-                        _loggerService.Error($"Could not process {infile}.");
-                        return;
-                    }
+                    var dto = new Red4W2rcFileDto(cr2w);
+                    json =
+                        JsonConvert.SerializeObject(
+                            dto,
+                            Formatting.Indented
+                        );
 
                     if (string.IsNullOrEmpty(json))
                     {
@@ -205,7 +197,8 @@ namespace CP77Tools.Tasks
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        _loggerService.Error($"Could not convert {fileInfo.FullName} Error:");
+                        _loggerService.Error(e.ToString());
                         //throw;
                     }
                 }
