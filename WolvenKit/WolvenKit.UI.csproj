@@ -24,7 +24,7 @@
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
     <Version>0.8.0.1-Beta</Version>
     <Description>WPF</Description>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -1628,7 +1628,6 @@
   <ItemGroup>
     <None Remove="Ab3d.DirectX.Client.Settings.dll" />
     <None Remove="Ab3d.PowerToys.Assimp.dll" />
-    <None Remove="app.manifest" />
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
@@ -1793,9 +1792,6 @@
       <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)\$(AssemblyName).UNK" />
     </ItemGroup>
   </Target>
-  <ItemGroup>
-    <EmbeddedResource Include="app.manifest" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="Ab3d.DirectX.Client.Settings">
       <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>

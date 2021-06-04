@@ -240,7 +240,6 @@ namespace WolvenKit.Views.Editor
                                 string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
 
                                 string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Mesh");
-                                string EndPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
                                 Directory.CreateDirectory(ManagerCacheDir);
                                 foreach (var f in Directory.GetFiles(ManagerCacheDir))
                                 {
@@ -250,14 +249,10 @@ namespace WolvenKit.Views.Editor
                                     {
                                     }
                                 }
-                                using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
-                                q.Extract(fs);
-
-
-
 
                                 MESH m = new MESH();
-                                var q2 = m.ExportMeshWithoutRigPreviewer(EndPath);
+                                var endPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
+                                var q2 = m.ExportMeshWithoutRigPreviewer(q, endPath);
                                 if (q2.Length > 0)
                                 {
                                     StaticReferences.GlobalPropertiesView.LoadModel(q2);

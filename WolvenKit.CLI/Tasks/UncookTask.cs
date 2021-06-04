@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
@@ -63,6 +65,34 @@ namespace CP77Tools.Tasks
             var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
+            if (!Enum.TryParse(inputFileInfo.Extension, true, out ECookedFileFormat extAsEnum))
+            {
+                return ;
+            }
+
+            ExportArgs settings;
+            switch (extAsEnum)
+            {
+                case ECookedFileFormat.xbm:
+                    settings = new XbmExportArgs() {UncookExtension = uext, Flip = flip};
+                    break;
+                case ECookedFileFormat.mlmask:
+                    settings = new MlmaskExportArgs(){UncookExtension = uext};
+                    break;
+                case ECookedFileFormat.wem:
+                case ECookedFileFormat.mesh:
+                case ECookedFileFormat.csv:
+                case ECookedFileFormat.json:
+                case ECookedFileFormat.cubemap:
+                case ECookedFileFormat.envprobe:
+                case ECookedFileFormat.texarray:
+                case ECookedFileFormat.morphtarget:
+                    settings = new CommonExportArgs();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             #endregion checks
 
             List<FileInfo> archiveFileInfos;
@@ -110,12 +140,12 @@ namespace CP77Tools.Tasks
                 // run
                 if (hash != 0)
                 {
-                    _modTools.UncookSingle(ar, hash, outDir, uext, flip);
+                    _modTools.UncookSingle(ar, hash, outDir, settings);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}");
                 }
                 else
                 {
-                    var r = _modTools.UncookAll(ar, outDir, pattern, regex, uext, flip);
+                    var r = _modTools.UncookAll(ar, outDir, settings, pattern, regex);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
                 }
             }

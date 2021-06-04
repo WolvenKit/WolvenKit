@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -48,9 +49,35 @@ namespace CP77Tools.Tasks
             Stopwatch watch = new();
             watch.Restart();
 
-            var settings = new ExportArgs() {UncookExtension = uncookext, Flip = flip};
-            if (_modTools.Export(new FileInfo(path), settings))
+            if (!Enum.TryParse(inputFileInfo.Extension, true, out ECookedFileFormat extAsEnum))
+            {
+                return 0;
+            }
 
+            ExportArgs settings;
+            switch (extAsEnum)
+            {
+                case ECookedFileFormat.xbm:
+                    settings = new XbmExportArgs() {UncookExtension = uncookext, Flip = flip};
+                    break;
+                case ECookedFileFormat.mlmask:
+                    settings = new MlmaskExportArgs(){UncookExtension = uncookext};
+                    break;
+                case ECookedFileFormat.wem:
+                case ECookedFileFormat.mesh:
+                case ECookedFileFormat.csv:
+                case ECookedFileFormat.json:
+                case ECookedFileFormat.cubemap:
+                case ECookedFileFormat.envprobe:
+                case ECookedFileFormat.texarray:
+                case ECookedFileFormat.morphtarget:
+                    settings = new CommonExportArgs();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (_modTools.Export(new FileInfo(path), settings))
             {
                 watch.Stop();
                 _loggerService.Success($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.");

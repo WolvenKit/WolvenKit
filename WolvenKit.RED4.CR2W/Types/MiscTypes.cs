@@ -60,12 +60,22 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            if (size > 2)
+            switch (size)
             {
-                throw new InvalidParsingException(nameof(serializationDeferredDataBuffer));
-            }
+                case 2:
+                    Buffer.Read(file, size);
+                    break;
+                case 4:
+                {
+                    Buffer.Read(file, 2);
 
-            Buffer.Read(file, size);
+                    var ff = file.ReadBytes(2);
+
+                    break;
+                }
+                default:
+                    throw new InvalidParsingException(nameof(serializationDeferredDataBuffer));
+            }
         }
 
         public override void Write(BinaryWriter file) => Buffer.Write(file);
