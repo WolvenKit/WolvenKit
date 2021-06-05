@@ -242,9 +242,15 @@ namespace WolvenKit.Views.Editor
             {
                 return;
             }
+
+            EUncookExtension ext;
             if (!(string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)))
+                string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+                || Enum.TryParse<EUncookExtension>(propertiesViewModel.PE_SelectedItem.GetExtension(), out ext)
+                )
+
+            )
             {
                 return;
             }
