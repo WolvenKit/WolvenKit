@@ -189,7 +189,7 @@ namespace CP77.CR2W
             // uncook textures, meshes etc
             return extAsEnum switch
             {
-                ECookedFileFormat.mesh => (new MESH()).ExportMesh(cr2wStream,cr2wFileName.Name , (new FileInfo(cr2wFileName.FullName))),
+                ECookedFileFormat.mesh => (new MESH()).ExportMesh(cr2wStream,Path.GetFileNameWithoutExtension(cr2wFileName.Name) , (new FileInfo(cr2wFileName.FullName))),
                 ECookedFileFormat.morphtarget => (new TARGET()).ExportTargets(cr2wStream,(new FileInfo(cr2wFileName.FullName))),
                 ECookedFileFormat.xbm => UncookXbm(cr2wStream, cr2w, args),
                 ECookedFileFormat.csv => UncookCsv(cr2wStream, cr2w),
