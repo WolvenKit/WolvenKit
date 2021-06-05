@@ -62,6 +62,11 @@ namespace CP77.CR2W
         /// <returns></returns>
         public bool UncookSingle(Archive ar, ulong hash, DirectoryInfo outDir, ExportArgs args)
         {
+            if (!_hashService.Contains(hash))
+            {
+                return false;
+            }
+
             // extract the main file with uncompressed buffers
             #region unbundle main file
             using var ms = new MemoryStream();
@@ -109,7 +114,7 @@ namespace CP77.CR2W
             // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
 
             // check search pattern then regex
-            IEnumerable<FileEntry> finalmatches = ar.Files.Values.Cast<FileEntry>();
+            var finalmatches = ar.Files.Values.Cast<FileEntry>();
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);

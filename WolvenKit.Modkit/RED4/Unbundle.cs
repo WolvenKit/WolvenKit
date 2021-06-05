@@ -165,6 +165,11 @@ namespace CP77.CR2W
         /// <returns></returns>
         public int ExtractSingle(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
+            if (!_hashService.Contains(hash))
+            {
+                return 0;
+            }
+
             // get filename
             var entry = ar.Files[hash] as FileEntry;
             var name = entry.FileName;
@@ -200,8 +205,13 @@ namespace CP77.CR2W
         /// <param name="outDir"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
+        public async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
+            if (!_hashService.Contains(hash))
+            {
+                return 0;
+            }
+
             // get filename
             var entry = ar.Files[hash] as FileEntry;
             var name = entry.FileName;
