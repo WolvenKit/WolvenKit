@@ -13,6 +13,7 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor

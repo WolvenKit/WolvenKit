@@ -22,6 +22,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Modkit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.MeshFile.Materials;
 using WolvenKit.RED4.MeshFile;
 
