@@ -299,7 +299,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public string ExportTaskIdentifier => Properties.ToString();
 
-        public string Extension => BaseFile.Extension;
+        public string Extension => BaseFile.GetExtension();
         public string FullName => BaseFile.FullName;
         public string Name => BaseFile.Name;
 
@@ -323,7 +323,7 @@ namespace WolvenKit.ViewModels.Editor
         private ImportArgs DecideImportOptions(FileModel model)
         {
 
-            _ = Enum.TryParse(model.Extension.TrimStart('.'), out ERawFileFormat Extension);
+            _ = Enum.TryParse(model.GetExtension(), out ERawFileFormat Extension);
 
             switch (Extension)
             {
@@ -348,7 +348,7 @@ namespace WolvenKit.ViewModels.Editor
         private ExportArgs DecideExportOptions(FileModel model)
         {
 
-            _ = Enum.TryParse(model.Extension.TrimStart('.'), out ECookedFileFormat Extension);
+            _ = Enum.TryParse(model.GetExtension(), out ECookedFileFormat Extension);
 
             switch (Extension)
             {

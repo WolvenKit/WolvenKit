@@ -8,6 +8,7 @@ using Catel.IoC;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
@@ -231,26 +232,30 @@ namespace WolvenKit.Views.Editor
             }
 
             var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+            propertiesViewModel.PE_SelectedItem = vm.SelectedItem;
+
             propertiesViewModel.PE_MeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
+            propertiesViewModel.IsImagePreviewVisible = false;
 
             if (vm.SelectedItem.IsDirectory)
             {
                 return;
             }
-            if (!(string.Equals(vm.SelectedItem.Extension, ".Mesh", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(vm.SelectedItem.Extension, ".Wem", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(vm.SelectedItem.Extension, ".Xbm", StringComparison.OrdinalIgnoreCase)))
+            if (!(string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }
 
-            propertiesViewModel.PE_SelectedItem = vm.SelectedItem;
+            
             if (propertiesViewModel.PE_SelectedItem != null)
             {
-                if  (propertiesViewModel.PE_SelectedItem.Extension.Length > 0)
+                if  (propertiesViewModel.PE_SelectedItem.GetExtension().Length > 0)
                 {
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(propertiesViewModel.PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
+                        System.StringComparison.OrdinalIgnoreCase)) 
                     {
                         propertiesViewModel.PE_MeshPreviewVisible = true;
                         MESH m = new MESH();
@@ -260,7 +265,9 @@ namespace WolvenKit.Views.Editor
                             StaticReferences.GlobalPropertiesView.LoadModel(q);
                         }
                     }
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
+
+                    if (string.Equals(propertiesViewModel.PE_SelectedItem.GetExtension(), ERedExtension.wem.ToString(),
+                        System.StringComparison.OrdinalIgnoreCase)) 
                     {
                         propertiesViewModel.IsAudioPreviewVisible = true;
 
@@ -268,9 +275,9 @@ namespace WolvenKit.Views.Editor
                     }
 
                     EUncookExtension eUncookExtension;
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Xbm",
+                    if (string.Equals(propertiesViewModel.PE_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(),
                             System.StringComparison.OrdinalIgnoreCase) ||
-                        Enum.TryParse<EUncookExtension>(propertiesViewModel.PE_SelectedItem.Extension.TrimStart('.'),
+                        Enum.TryParse<EUncookExtension>(propertiesViewModel.PE_SelectedItem.GetExtension(),
                             out eUncookExtension)) 
                     {
                         propertiesViewModel.IsImagePreviewVisible = true;

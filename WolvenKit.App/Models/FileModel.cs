@@ -13,6 +13,8 @@ namespace WolvenKit.Models
     public class FileModel : ObservableObject
     {
 
+        private readonly string _extension = ".default";
+
         public FileModel(string path)
         {
             FullName = path;
@@ -24,7 +26,7 @@ namespace WolvenKit.Models
                 var di = new DirectoryInfo(path);
                 parentfullname = di.Parent.FullName;
                 Name = di.Name;
-                Extension = ECustomImageKeys.OpenDirImageKey.ToString();
+                _extension = ECustomImageKeys.OpenDirImageKey.ToString();
             }
             else if (File.Exists(path))
             {
@@ -32,7 +34,7 @@ namespace WolvenKit.Models
                 var fi = new FileInfo(path);
                 parentfullname = fi.Directory.FullName;
                 Name = fi.Name;
-                Extension = fi.Extension;
+                _extension = fi.Extension;
             }
             else
             {
@@ -54,7 +56,7 @@ namespace WolvenKit.Models
 
         public string RelativeName { get; }
 
-        public string Extension { get; } = ".default";
+        public string Extension => GetExtension();
 
         public bool IsDirectory { get; }
 
@@ -67,11 +69,12 @@ namespace WolvenKit.Models
 
 
 
-        public bool IsImportable => !IsDirectory && !string.IsNullOrEmpty(Extension) && Enum.GetNames(typeof(ERawFileFormat)).Contains(Extension[1..]);
-        public bool IsExportable => !IsDirectory && !string.IsNullOrEmpty(Extension) && Enum.GetNames(typeof(ECookedFileFormat)).Contains(Extension[1..]);
+        public bool IsImportable => !IsDirectory && !string.IsNullOrEmpty(GetExtension()) && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
+        public bool IsExportable => !IsDirectory && !string.IsNullOrEmpty(GetExtension()) && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
         #endregion
 
+        public string GetExtension() => _extension.TrimStart('.');
 
         public override int GetHashCode() => (int)Hash;
 
