@@ -13,7 +13,7 @@ using WolvenKit.RED4.CR2W;
 using CP77.CR2W;
 using WolvenKit.Modkit.RED4;
 
-namespace WolvenKit.RED4.MeshFile
+namespace WolvenKit.Modkit.RED4.MeshFile
 {
     using Vec4 = System.Numerics.Vector4;
     using Vec2 = System.Numerics.Vector2;

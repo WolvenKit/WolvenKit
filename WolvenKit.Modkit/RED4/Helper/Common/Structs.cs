@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
-using WolvenKit.Modkit.RED4.MeshFile.Materials.MaterialTypes;
+using WolvenKit.Modkit.RED4.Materials.MaterialTypes;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
 {

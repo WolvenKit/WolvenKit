@@ -8,7 +8,7 @@ using WolvenKit.Common.Oodle;
 using System.Collections.Generic;
 using SharpGLTF.Schema2;
 using WolvenKit.Modkit.RED4.MeshFile;
-using WolvenKit.Modkit.RED4.MeshFile.Materials.MaterialTypes;
+using WolvenKit.Modkit.RED4.Materials.MaterialTypes;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
@@ -19,9 +19,8 @@ using Catel.IoC;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.MeshFile;
 
-namespace WolvenKit.Modkit.RED4.MeshFile.Materials
+namespace WolvenKit.Modkit.RED4.Materials
 {
     public class MATERIAL
     {
@@ -141,7 +140,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
             {
                 if (useAssetLib)
                 {
-                    string path = assetLib.FullName + (cr2w.Chunks[index].Data as CMesh).ExternalMaterials[i].DepotPath;
+                    string path = assetLib.FullName + "\\" + (cr2w.Chunks[index].Data as CMesh).ExternalMaterials[i].DepotPath;
                     if(File.Exists(path))
                     {
                         FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -169,7 +168,10 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
 
                     ulong hash = FNV1A64HashAlgorithm.HashString(path);
                     foreach (Archive ar in archives)
-                        ModTools.ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
+                    {
+                        if(ar.Files.ContainsKey(hash))
+                            ModTools.ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
+                    }
 
                     path = cacheDir + (cr2w.Chunks[index].Data as CMesh).ExternalMaterials[i].DepotPath;
 
@@ -482,7 +484,10 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                 {
                     ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                     foreach (Archive ar in archives)
-                        ModTools.ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
+                    {
+                        if(ar.Files.ContainsKey(hash))
+                            ModTools.ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
+                    }
 
                     if (File.Exists(cacheDir + primaryDependencies[i]))
                     {
@@ -508,7 +513,10 @@ namespace WolvenKit.Modkit.RED4.MeshFile.Materials
                             {
                                 ulong hash2 = FNV1A64HashAlgorithm.HashString(cr2w.Imports[e].DepotPathStr);
                                 foreach (Archive ar in archives)
-                                    ModTools.ExtractSingle(ar, hash2, new DirectoryInfo(cacheDir));
+                                {
+                                    if(ar.Files.ContainsKey(hash2))
+                                        ModTools.ExtractSingle(ar, hash2, new DirectoryInfo(cacheDir));
+                                }
 
                                 if (File.Exists(cacheDir + cr2w.Imports[e].DepotPathStr))
                                 {
