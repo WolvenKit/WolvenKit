@@ -63,6 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
             switch (size)
             {
                 case 2:
+                    throw new InvalidParsingException(nameof(DataBuffer));
                     Buffer.Read(file, size);
                     break;
                 case 4:
@@ -74,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
                     break;
                 }
                 default:
-                    throw new InvalidParsingException(nameof(serializationDeferredDataBuffer));
+                    throw new InvalidParsingException(nameof(DataBuffer));
             }
         }
 

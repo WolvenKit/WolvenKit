@@ -4,6 +4,8 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>WolvenKit.MSTests</AssemblyName>
+    <RootNamespace>WolvenKit.MSTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
