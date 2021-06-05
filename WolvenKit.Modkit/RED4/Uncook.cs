@@ -17,12 +17,10 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.MeshFile;
 using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.MorphTargetFile;
-using WolvenKit.Modkit.RED4.MeshFile.Materials;
 
 namespace CP77.CR2W
 {
