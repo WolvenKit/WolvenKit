@@ -22,6 +22,7 @@ using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.MorphTargetFile;
+using WolvenKit.Modkit.RED4.MeshFile.Materials;
 
 namespace CP77.CR2W
 {
@@ -190,7 +191,7 @@ namespace CP77.CR2W
             // uncook textures, meshes etc
             return extAsEnum switch
             {
-                ECookedFileFormat.mesh => (new MESH()).ExportMesh(cr2wStream,Path.GetFileNameWithoutExtension(cr2wFileName.Name) , (new FileInfo(cr2wFileName.FullName))),
+                ECookedFileFormat.mesh => (HandleMesh(cr2wStream,cr2wFileName,args)),
                 ECookedFileFormat.morphtarget => (new TARGET()).ExportTargets(cr2wStream,(new FileInfo(cr2wFileName.FullName))),
                 ECookedFileFormat.xbm => UncookXbm(cr2wStream, cr2w, args),
                 ECookedFileFormat.csv => UncookCsv(cr2wStream, cr2w),
@@ -204,6 +205,42 @@ namespace CP77.CR2W
         }
 
 
+        private bool HandleMesh(Stream cr2wStream , FileInfo cr2wFileName, ExportArgs args)
+        {
+
+            var meshargs = args as MeshExportArgs;
+            switch (meshargs.meshExportType)
+            {
+                case MeshExportType.Default:
+
+                    (new MESH()).ExportMesh(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
+                    break;
+                case MeshExportType.WithMaterials:
+
+                    (new MATERIAL()).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
+                    break;
+
+                case MeshExportType.WithRig:
+
+                    (new MESH()).ExportMeshWithRig(cr2wStream, meshargs.RigStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
+                    break;
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+            return true;
+        }
 
         private bool UncookWem(string path, WemExportTypes wemExportType )
         {
