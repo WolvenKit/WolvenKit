@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -48,9 +50,19 @@ namespace WolvenKit.Common.Model.Arguments
 
     }
 
+    public class MorphTargetExportArgs : ExportArgs
+    {
+        public bool IsBinary { get; set; } = true;
+
+        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
+
+    }
+
     public class MlmaskExportArgs : ExportArgs
     {
         public EUncookExtension UncookExtension { get; set; }
+        public override string ToString() => $"{UncookExtension.ToString()}";
+
     }
 
     public class XbmExportArgs : ExportArgs
@@ -70,22 +82,39 @@ namespace WolvenKit.Common.Model.Arguments
             }
         }
 
-        
+
 
         public bool Flip { get; set; }
 
-        public override string ToString() => $"{UncookExtension.ToString()}, {Flip.ToString()}";
+        public override string ToString() => $"{UncookExtension.ToString()} | Flip : {Flip.ToString()}";
     }
 
     public class MeshExportArgs : ExportArgs
     {
-        public Stream RigStream { get; set; }
+
+        [Category("Export Type")]
+        [Display(Name ="Mesh Export Type")]
+        public MeshExportType meshExportType { get; set; }
+
+
+        [Category("Default Settings")]
+        [Display(Name = "Lod Filter")]
+        [ReadOnly(true)]
         public bool LodFilter { get; set; } = true;
+        [Category("Default Settings")]
+        [Display(Name = "Is Binary")]
+        [ReadOnly(true)]
         public bool isGLBinary { get; set; } = true;
+
+        [Category("WithRig Settings")]
+        [Display(Name = "Select a rig")]
+        public Stream RigStream { get; set; }
+        [Category("WithMaterials Settings")]
+        [Display(Name = "Select Export Type")]
         public EUncookExtension MaterialUncookExtension { get; set; }
 
 
-        public override string ToString() => "GLTF/GLB : " +  $"{LodFilter.ToString()}, {isGLBinary.ToString()}";
+        public override string ToString() => "GLTF/GLB | " +  $"Lod filter : {LodFilter.ToString()} | Is Binary : {isGLBinary.ToString()}";
 
     }
 
@@ -99,6 +128,8 @@ namespace WolvenKit.Common.Model.Arguments
     }
 
     public enum WemExportTypes { Wav, Mp3 }
+
+    public enum MeshExportType { WithRig, Default ,WithMaterials}
 
     #endregion
 

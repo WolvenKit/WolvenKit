@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.ViewModels.Editor;
@@ -32,12 +33,29 @@ namespace WolvenKit.Views.Editor
             var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
             var simplename = Path.GetFileName(q.FullName);
             var ext = Path.GetExtension(q.FullName).ToString();
-            if (ext is ".wem" or ".mesh" or ".xbm")
+
+            _ = Enum.TryParse(ext.TrimStart('.'), out ECookedFileFormat Extension);
+            switch (Extension)
             {
-                AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-                AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext );
-                AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
+                case ECookedFileFormat.mesh:
+                case ECookedFileFormat.xbm:
+                case ECookedFileFormat.wem:
+                case ECookedFileFormat.csv:
+                case ECookedFileFormat.json:
+                case ECookedFileFormat.mlmask:
+                case ECookedFileFormat.cubemap:
+                case ECookedFileFormat.envprobe:
+                case ECookedFileFormat.texarray:
+                case ECookedFileFormat.morphtarget:
+                    AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                    AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext);
+                    AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+
+
 
         }
 

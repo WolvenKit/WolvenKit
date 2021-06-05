@@ -35,7 +35,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="80" />
 
             </Grid.RowDefinitions>
 
@@ -70,8 +70,8 @@
                 AutoGenerateColumns="False"
                 CellDoubleTapped="SfDataGrid_CellDoubleTapped"
                 ColumnSizer="Auto"
-                SelectedItem="{Binding SelectedExport}"
                 ItemsSource="{Binding ExportableItems}"
+                SelectedItem="{Binding SelectedExport}"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ExportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
 
@@ -82,7 +82,7 @@
                         ColumnSizer="Star"
                         HeaderText="Name"
                         MappingName="Name" />
-                  
+
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         ColumnSizer="AutoLastColumnFill"
@@ -104,8 +104,8 @@
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 ColumnSizer="AutoLastColumnFill"
-                SelectedItem="{Binding SelectedImport}"
                 ItemsSource="{Binding ImportableItems}"
+                SelectedItem="{Binding SelectedImport}"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ImportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
 
@@ -139,8 +139,8 @@
                             Margin="5,0,5,0"
                             Padding="2,0,2,0"
                             Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
-                            BorderThickness="2"
+                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                            BorderThickness="1"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">
                             <StackPanel Orientation="Horizontal">
@@ -154,12 +154,13 @@
                                 <TextBlock Text="Select All" />
                             </StackPanel>
                         </Button>
+
                         <Button
                             Margin="5,0,5,0"
                             Padding="2,0,2,0"
                             Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
-                            BorderThickness="2"
+                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                            BorderThickness="1"
                             Command="{Binding ProcessSelectedCommand}"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">
@@ -174,12 +175,13 @@
                                 <TextBlock Text="Process Selected" />
                             </StackPanel>
                         </Button>
+
                         <Button
                             Margin="5,0,5,0"
                             Padding="2,0,2,0"
                             Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
-                            BorderThickness="2"
+                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                            BorderThickness="1"
                             Command="{Binding ProcessAllCommand}"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">
@@ -197,9 +199,10 @@
 
 
 
-                    </StackPanel>
 
+                    </StackPanel>
                     <StackPanel
+                        Margin="0,5,0,5"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
@@ -217,18 +220,31 @@
                                 <TextBlock Text="Lock Selection" />
                             </StackPanel>
                         </ToggleButton>
+                        <hc:Divider Orientation="Vertical" />
+
                         <TextBlock
                             VerticalAlignment="Center"
                             FontSize="12"
                             Text="Selected : " />
                         <hc:Divider Orientation="Vertical" />
 
+
+
+
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="5,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
                         <Button
                             Padding="2,0,2,0"
                             VerticalAlignment="Center"
                             Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
-                            BorderThickness="2"
+                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                            BorderThickness="1"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">
                             <StackPanel Orientation="Horizontal">
@@ -253,8 +269,6 @@
                             <syncfusion:ComboBoxItemAdv Content="All in Grid" />
 
                         </syncfusion:ComboBoxAdv>
-
-
 
                     </StackPanel>
 
@@ -343,9 +357,9 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Background="{DynamicResource ContentBackgroundAlt}"
+                    Click="ButtonBase_OnClick"
                     Content="Confirm"
                     FontSize="12"
-                    Click="ButtonBase_OnClick"
                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}" />
             </Grid>
 
@@ -355,8 +369,10 @@
                 Margin="2"
                 Background="{DynamicResource ContentBackgroundAlt}">
                 <syncfusion:PropertyGrid
-                    SelectedObject="{Binding SelectedObject.Properties, Mode=OneWay}"
-                    />
+                    ButtonPanelVisibility="Collapsed"
+                    CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+                    EnableGrouping="True"
+                    SelectedObject="{Binding SelectedObject.Properties, Mode=OneWay}" />
             </Grid>
 
         </Grid>

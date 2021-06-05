@@ -361,8 +361,9 @@ namespace WolvenKit.ViewModels.Editor
                 case ECookedFileFormat.cubemap:
                 case ECookedFileFormat.envprobe:
                 case ECookedFileFormat.texarray:
-                case ECookedFileFormat.morphtarget:
                     return new CommonExportArgs();
+                case ECookedFileFormat.morphtarget:
+                    return new MorphTargetExportArgs();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
