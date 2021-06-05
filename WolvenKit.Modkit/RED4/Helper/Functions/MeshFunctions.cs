@@ -136,7 +136,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             }
         }
 
-        public void ExportMesh(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMesh(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var cr2w = ModTools.TryReadCr2WFile(meshStream);
@@ -209,6 +209,8 @@ namespace WolvenKit.Modkit.RED4.MeshFile
 
             meshStream.Dispose();
             meshStream.Close();
+
+            return true;
         }
         public bool ExportMeshWithoutRig(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
@@ -947,6 +949,6 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             public Vec3[] WorldPosn;
         }
 
-        
+
     }
 }
