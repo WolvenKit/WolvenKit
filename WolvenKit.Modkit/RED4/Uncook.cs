@@ -217,7 +217,7 @@ namespace CP77.CR2W
                     break;
                 case MeshExportType.WithMaterials:
 
-                    (new MATERIAL()).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
+                    //(new MATERIAL()).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
                     break;
 
                 case MeshExportType.WithRig:
