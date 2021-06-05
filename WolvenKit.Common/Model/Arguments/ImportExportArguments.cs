@@ -52,6 +52,9 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class MorphTargetExportArgs : ExportArgs
     {
+        [Category("Export Settings")]
+        [Display(Name = "Is Binary")]
+        [ReadOnly(true)]
         public bool IsBinary { get; set; } = true;
 
         public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
@@ -60,6 +63,8 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class MlmaskExportArgs : ExportArgs
     {
+        [Category("Export Type")]
+        [Display(Name = "MLmask Export Type")]
         public EUncookExtension UncookExtension { get; set; }
         public override string ToString() => $"{UncookExtension.ToString()}";
 
@@ -67,7 +72,11 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class XbmExportArgs : ExportArgs
     {
+
         private EUncookExtension _uncookExtension;
+
+        [Category("Export Type")]
+        [Display(Name = "XBM Export Type")]
         public EUncookExtension UncookExtension
         {
             get => _uncookExtension;
@@ -83,7 +92,8 @@ namespace WolvenKit.Common.Model.Arguments
         }
 
 
-
+        [Category("Export Settings")]
+        [Display(Name = "Flip Image")]
         public bool Flip { get; set; }
 
         public override string ToString() => $"{UncookExtension.ToString()} | Flip : {Flip.ToString()}";
@@ -97,11 +107,11 @@ namespace WolvenKit.Common.Model.Arguments
         public MeshExportType meshExportType { get; set; }
 
 
-        [Category("Default Settings")]
+        [Category("Export Settings")]
         [Display(Name = "Lod Filter")]
         [ReadOnly(true)]
         public bool LodFilter { get; set; } = true;
-        [Category("Default Settings")]
+        [Category("Export Settings")]
         [Display(Name = "Is Binary")]
         [ReadOnly(true)]
         public bool isGLBinary { get; set; } = true;
@@ -109,6 +119,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithRig Settings")]
         [Display(Name = "Select a rig")]
         public Stream RigStream { get; set; }
+
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Export Type")]
         public EUncookExtension MaterialUncookExtension { get; set; }
@@ -120,6 +131,8 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class WemExportArgs : ExportArgs
     {
+        [Category("Export Type")]
+        [Display(Name = "Wem Export Type")]
         public WemExportTypes wemExportType { get; set; }
 
 

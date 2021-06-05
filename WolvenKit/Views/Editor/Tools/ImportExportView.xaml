@@ -72,6 +72,7 @@
                 ColumnSizer="Auto"
                 ItemsSource="{Binding ExportableItems}"
                 SelectedItem="{Binding SelectedExport}"
+                SelectionChanged="ExportGrid_SelectionChanged"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ExportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
 
@@ -211,9 +212,11 @@
                             Padding="2,0,2,0"
                             VerticalAlignment="Center"
                             Background="{DynamicResource ContentBackgroundAlt}"
+                            Checked="ToggleButton_Checked"
                             IsChecked="False"
                             Style="{DynamicResource WPFToggleButtonStyle}"
-                            ToolTip="Lock selected file.">
+                            ToolTip="Lock selected file."
+                            Unchecked="ToggleButton_Unchecked">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:BootstrapIcons Kind="Lock" />
 
@@ -223,9 +226,10 @@
                         <hc:Divider Orientation="Vertical" />
 
                         <TextBlock
+                            x:Name="CurrentSelectedItemButtonbar"
                             VerticalAlignment="Center"
                             FontSize="12"
-                            Text="Selected : " />
+                            Text="{Binding CurrentSelectedInGridName}" />
                         <hc:Divider Orientation="Vertical" />
 
 

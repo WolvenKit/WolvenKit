@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Helpers;
@@ -62,6 +63,36 @@ namespace WolvenKit.Views.Editor
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        }
+
+        private bool SelectionLocked = false;
+        private void ExportGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        {
+            if (!SelectionLocked)
+            {
+                var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
+                var simplename = Path.GetFileName(q.FullName);
+
+                var prestring = "Selected : ";
+
+
+                var IEVM = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
+
+                IEVM.CurrentSelectedInGridName =prestring + simplename;
+
+            }
+
+
+        }
+
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            SelectionLocked = true;
+        }
+
+        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SelectionLocked = false;
         }
     }
 }

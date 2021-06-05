@@ -68,6 +68,9 @@ namespace WolvenKit.ViewModels.Editor
             : SelectedExport;
 
 
+        public string CurrentSelectedInGridName { get; set; }
+
+
         /// <summary>
         /// Private Logger service.
         /// </summary>
