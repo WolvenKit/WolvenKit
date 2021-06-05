@@ -410,8 +410,8 @@ namespace WolvenKit.MSTests
         {
             var results = new ConcurrentBag<ReadTestResult>();
 
-            foreach (var file in files)
-                //Parallel.ForEach(files, file =>
+            //foreach (var file in files)
+            Parallel.ForEach(files, file =>
             {
                 try
                 {
@@ -491,8 +491,8 @@ namespace WolvenKit.MSTests
                         Message = $"{e.Message}"
                     });
                 }
-            //});
-            }
+            });
+            //}
 
             return results;
         }

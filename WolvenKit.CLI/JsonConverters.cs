@@ -1,26 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
-using ISerializable = System.Runtime.Serialization.ISerializable;
 
 namespace WolvenKit.CLI
 {

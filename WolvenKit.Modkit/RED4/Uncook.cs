@@ -192,19 +192,34 @@ namespace CP77.CR2W
             cr2w.FileName = cr2wFileName.FullName;
 
             // uncook textures, meshes etc
-            return extAsEnum switch
+
+            switch (extAsEnum)
             {
-                ECookedFileFormat.mesh => (HandleMesh(cr2wStream,cr2wFileName,args)),
-                ECookedFileFormat.morphtarget => (new TARGET()).ExportTargets(cr2wStream,(new FileInfo(cr2wFileName.FullName))),
-                ECookedFileFormat.xbm => UncookXbm(cr2wStream, cr2w, args),
-                ECookedFileFormat.csv => UncookCsv(cr2wStream, cr2w),
-                ECookedFileFormat.json => false,
-                ECookedFileFormat.mlmask => Mlmask.Uncook(cr2wStream, cr2w, args),
-                ECookedFileFormat.cubemap => UncookCubeMap(cr2wStream, cr2w),
-                ECookedFileFormat.envprobe => UncookEnvprobe(cr2wStream, cr2w),
-                ECookedFileFormat.texarray => UncookTexarray(cr2wStream, cr2w),
-                _ => throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.")
-            };
+                case ECookedFileFormat.mesh:
+                    return (HandleMesh(cr2wStream, cr2wFileName, args));
+                case ECookedFileFormat.morphtarget:
+                    return (new TARGET()).ExportTargets(cr2wStream, (new FileInfo(cr2wFileName.FullName)));
+                case ECookedFileFormat.xbm:
+                    return UncookXbm(cr2wStream, cr2w,
+                        new FileStream(Path.ChangeExtension(cr2wFileName.FullName, "dds"), FileMode.Create,
+                            FileAccess.Write),
+                        args);
+                case ECookedFileFormat.csv:
+                    return UncookCsv(new FileStream($"{cr2wFileName.FullName}.csv", FileMode.Create, FileAccess.Write),
+                        cr2w);
+                case ECookedFileFormat.json:
+                    return false;
+                case ECookedFileFormat.mlmask:
+                    return Mlmask.Uncook(cr2wStream, cr2w, args);
+                case ECookedFileFormat.cubemap:
+                    return UncookCubeMap(cr2wStream, cr2w);
+                case ECookedFileFormat.envprobe:
+                    return UncookEnvprobe(cr2wStream, cr2w);
+                case ECookedFileFormat.texarray:
+                    return UncookTexarray(cr2wStream, cr2w);
+                default:
+                    throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
+            }
         }
 
 
@@ -227,21 +242,7 @@ namespace CP77.CR2W
 
                     (new MESH()).ExportMeshWithRig(cr2wStream, meshargs.RigStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
                     break;
-
-
-
             }
-
-
-
-
-
-
-
-
-
-
-
             return true;
         }
 
@@ -270,7 +271,6 @@ namespace CP77.CR2W
 
             return true;
         }
-
 
         private bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
         {
@@ -437,7 +437,7 @@ namespace CP77.CR2W
             return true;
         }
 
-        private static bool UncookCsv(Stream cr2wStream, CR2WFile cr2w)
+        private static bool UncookCsv(Stream outstream, CR2WFile cr2w)
         {
             if (cr2w.StringDictionary[1] != "C2dArray")
             {
@@ -457,14 +457,12 @@ namespace CP77.CR2W
             {
                 Directory.CreateDirectory(cr2wFileName.Directory.FullName);
             }
-            var newpath = $"{cr2wFileName.FullName}.csv";
 
-            using var nstream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
-            redcsv.ToCsvStream(nstream);
+            redcsv.ToCsvStream(outstream);
             return true;
         }
 
-        private bool UncookXbm(Stream cr2wStream, CR2WFile cr2w, ExportArgs args)
+        public bool UncookXbm(Stream cr2wStream, CR2WFile cr2w, Stream outstream, ExportArgs args)
         {
             if (args is not XbmExportArgs xbmargs)
             {
@@ -521,15 +519,11 @@ namespace CP77.CR2W
             #endregion
 
             // extract and write buffer
-            using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
-            {
-                DDSUtils.GenerateAndWriteHeader(ddsStream,
-                    new DDSMetadata(width, height, mips, texformat, alignment, false, slicecount,
-                        true));
-                var b = cr2w.Buffers[0];
-                cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(ddsStream, b.DiskSize, b.MemSize);
-            }
+            DDSUtils.GenerateAndWriteHeader(outstream, new DDSMetadata(width, height, mips, texformat, alignment, false,
+                slicecount, true));
+            var b = cr2w.Buffers[0];
+            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
+            cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
 
             if (xbmargs.Flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
