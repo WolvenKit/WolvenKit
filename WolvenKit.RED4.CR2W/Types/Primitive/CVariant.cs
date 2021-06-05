@@ -21,8 +21,6 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            var typepos = file.BaseStream.Position;
-
             var typeId = file.ReadUInt16();
             var typename = cr2w.Names[typeId].Str;
 
@@ -82,6 +80,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public void SetVariant(IEditableVariable variant) => this.Variant = variant;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

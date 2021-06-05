@@ -139,6 +139,7 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface IREDVariant : IEditableVariable
     {
         IEditableVariable Variant { get; set; }
+        public void SetVariant(IEditableVariable variant);
     }
     public interface IREDBufferVariant : IREDVariant { }
 

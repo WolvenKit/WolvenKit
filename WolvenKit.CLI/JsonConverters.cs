@@ -107,6 +107,24 @@ namespace WolvenKit.CLI
 
         public static void SetFromDictionary(this IEditableVariable cvar, Dictionary<string,object> dictionary)
         {
+            if (cvar is IREDVariant var)
+            {
+                var type = dictionary["Type"] as string;
+                var name = "Variant";
+                if (dictionary.ContainsKey("Name"))
+                {
+                    name = dictionary["Name"] as string;
+                }
+
+                var jvalue = dictionary["Variant"];
+                var variant = CR2WTypeManager.Create(type, name, cvar.Cr2wFile as IRed4EngineFile, cvar as CVariable);
+                variant.IsSerialized = true;
+                variant.SetFromJObject(jvalue);
+                var.SetVariant(variant);
+
+                return;
+            }
+
             foreach (var (propertyName, value) in dictionary)
             {
                 var redProperty = GetRedProperty(cvar, propertyName);
@@ -149,7 +167,22 @@ namespace WolvenKit.CLI
         {
             switch (data)
                 {
+                    case CDateTime d:
+                        return d.ToUInt64();
                     // special cases of primitive types
+                    case CVariant var:
+                        return new Dictionary<string, object>()
+                        {
+                            {"Type", var.Variant.REDType},
+                            {"Variant", var.Variant.ToObject()}
+                        };
+                    case CVariantSizeNameType varnt:
+                        return new Dictionary<string, object>()
+                        {
+                            {"Type", varnt.Variant.REDType},
+                            {"Name", varnt.Variant.REDName},
+                            {"Variant", varnt.Variant.ToObject()}
+                        };
                     case IREDCurvePoint cp:
                         if (cp.GetValue() is Tuple<IEditableVariable, IEditableVariable>(var item1, var item2))
                         {

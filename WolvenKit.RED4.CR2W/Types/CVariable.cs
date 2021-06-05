@@ -238,7 +238,7 @@ namespace WolvenKit.RED4.CR2W.Types
             }
 
             var varName = attr.Name;
-            if (string.IsNullOrWhiteSpace(varName) && attr is REDBufferAttribute {IsIgnored: true})
+            if (string.IsNullOrWhiteSpace(varName) && attr is REDBufferAttribute)
             {
                 varName = callerName;
             }

@@ -28,25 +28,24 @@ namespace WolvenKit.RED4.CR2W.Types
             CVariable parsedvar = null;
             var varsize = file.ReadUInt32();
             var buffer = file.ReadBytes((int)varsize - 4);
-            using (var ms = new MemoryStream(buffer))
-            using (var br = new BinaryReader(ms))
+
+            using var ms = new MemoryStream(buffer);
+            using var br = new BinaryReader(ms);
+            var nameId = br.ReadUInt16();
+            var typeId = br.ReadUInt16();
+
+            if (nameId == 0)
             {
-                var nameId = br.ReadUInt16();
-                var typeId = br.ReadUInt16();
-
-                if (nameId == 0)
-                {
-                    return;
-                }
-
-                var typename = cr2w.Names[typeId].Str;
-                var varname = cr2w.Names[nameId].Str;
-
-                parsedvar = CR2WTypeManager.Create(typename, varname, cr2w, this);
-                parsedvar.IsSerialized = true;
-                parsedvar.Read(br, size);
-                this.SetREDName(varname);
+                return;
             }
+
+            var typename = cr2w.Names[typeId].Str;
+            var varname = cr2w.Names[nameId].Str;
+
+            parsedvar = CR2WTypeManager.Create(typename, varname, cr2w, this);
+            parsedvar.IsSerialized = true;
+            parsedvar.Read(br, size);
+            this.SetREDName(varname);
 
             Variant = parsedvar;
         }
@@ -88,5 +87,32 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
         public static CVariable Create(IRed4EngineFile cr2w, CVariable parent, string name) => new CVariantSizeNameType(cr2w, parent, name);
+
+        public override CVariable SetValue(object val)
+        {
+            this.IsSerialized = true;
+            switch (val)
+            {
+                case CVariantSizeNameType var:
+                    var context = new CR2WCopyAction()
+                    {
+                        DestinationFile = this.cr2w,
+                        Parent = this.ParentVar as CVariable
+                    };
+                    this.Variant = var.Variant.Copy(context);
+                    this.SetREDName(var.REDName);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return this;
+        }
+
+        public void SetVariant(IEditableVariable variant)
+        {
+            this.Variant = variant;
+            this.SetREDName(variant.REDName);
+        }
     }
 }
