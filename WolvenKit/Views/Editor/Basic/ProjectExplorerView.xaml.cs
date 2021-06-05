@@ -1,11 +1,15 @@
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using Catel.IoC;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.Common.DDS;
+using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
@@ -208,7 +212,7 @@ namespace WolvenKit.Views.Editor
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
 
-        private void TreeGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+        private async void TreeGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
 
 
@@ -221,22 +225,52 @@ namespace WolvenKit.Views.Editor
                 propertiesViewModel.PE_SelectedItem = ProjectExplorerView.GlobalPEView.TreeGrid.SelectedItem as FileModel;
                 if (propertiesViewModel.PE_SelectedItem != null)
                 {
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
+                    if  (propertiesViewModel.PE_SelectedItem.Extension.Length > 0)
                     {
-                        propertiesViewModel.PE_MeshPreviewVisible = true;
-                        MESH m = new MESH();
-                        var q = m.ExportMeshWithoutRigPreviewer(propertiesViewModel.PE_SelectedItem.FullName);
-                        if (q.Length > 0)
+                        if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Mesh", System.StringComparison.OrdinalIgnoreCase))
                         {
-                            StaticReferences.GlobalPropertiesView.LoadModel(q);
+                            propertiesViewModel.PE_MeshPreviewVisible = true;
+                            MESH m = new MESH();
+                            var q = m.ExportMeshWithoutRigPreviewer(propertiesViewModel.PE_SelectedItem.FullName);
+                            if (q.Length > 0)
+                            {
+                                StaticReferences.GlobalPropertiesView.LoadModel(q);
+                            }
+                        }
+                        if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            propertiesViewModel.IsAudioPreviewVisible = true;
+
+                            propertiesViewModel.AddAudioItem(propertiesViewModel.PE_SelectedItem.FullName);
+                        }
+
+
+
+
+
+                        EUncookExtension eUncookExtension;
+                        if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Xbm", System.StringComparison.OrdinalIgnoreCase)  || Enum.TryParse<EUncookExtension>(propertiesViewModel.PE_SelectedItem.Extension.Remove(0, 1), out eUncookExtension))
+                        {
+                            propertiesViewModel.IsImagePreviewVisible = true;
+
+
+                            var q = await ImageDecoder.RenderToBitmapSource(propertiesViewModel.PE_SelectedItem.FullName);
+                            if (q != null )
+                            {
+                                var g = BitmapFrame.Create(q);
+                                StaticReferences.GlobalPropertiesView.LoadImage(g);
+                            }
+
+
+                            
                         }
                     }
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.Extension, ".Wem", System.StringComparison.OrdinalIgnoreCase))
-                    {
-                        propertiesViewModel.IsAudioPreviewVisible = true;
 
-                        propertiesViewModel.AddAudioItem(propertiesViewModel.PE_SelectedItem.FullName);
-                    }
+
+
+
+
+
 
                 }
                 propertiesViewModel.DecideForMeshPreview();

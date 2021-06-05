@@ -142,7 +142,7 @@ namespace WolvenKit.Common.Model.Arguments
 
     public enum WemExportTypes { Wav, Mp3 }
 
-    public enum MeshExportType { WithRig, Default ,WithMaterials}
+    public enum MeshExportType { Default, WithRig,WithMaterials}
 
     #endregion
 

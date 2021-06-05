@@ -52,6 +52,13 @@ namespace WolvenKit.Views.Editor
 
         }
 
+        public void LoadImage(System.Windows.Media.Imaging.BitmapFrame g)
+        {
+
+            bold.SetCurrentValue(HandyControl.Controls.ImageViewer.ImageSourceProperty, g);
+
+        }
+
         public void LoadModel(string fileName)
         {
             bool isNewFile = false;

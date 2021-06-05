@@ -90,6 +90,8 @@ namespace WolvenKit.ViewModels.Editor
 
             IsAudioPreviewVisible = false;
 
+            IsImagePreviewVisible = false;
+
         }
 
         /// <summary>
@@ -128,6 +130,7 @@ namespace WolvenKit.ViewModels.Editor
         public bool IsMeshPreviewVisible { get; set; }
 
         public bool IsAudioPreviewVisible { get; set; }
+        public bool IsImagePreviewVisible { get; set; }
 
         /// <summary>
         /// Decides if the Mesh Previewer should be visible or not.
