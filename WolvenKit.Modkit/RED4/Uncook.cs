@@ -172,8 +172,9 @@ namespace CP77.CR2W
 
             if (extAsEnum == ECookedFileFormat.wem)
             {
+                var q = args as WemExportArgs;
                 string wemPath = cr2wFileName.FullName;
-                UncookWem(wemPath);
+                UncookWem(wemPath, q.wemExportType);
                 return true;
 
             }
@@ -204,10 +205,10 @@ namespace CP77.CR2W
 
 
 
-        private bool UncookWem(string path )
+        private bool UncookWem(string path, WemExportTypes wemExportType )
         {
 
-            var outf = path.Replace(".wem", ".wav");
+            var outf = path.Replace(".wem", "." + wemExportType.ToString());
 
 
             var arg = path + " -o " + outf;
