@@ -3,15 +3,12 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
  xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
@@ -55,7 +52,6 @@
          ParentPropertyName="Hash"
          RowHeight="17"
          SelectedItem="{Binding SelectedItem}"
-         SelectionChanged="TreeGrid_OnSelectionChanged"
          SelectionMode="Extended"
          SelfRelationRootValue="0"
          >
@@ -80,6 +76,13 @@
                      CommandParameter="{Binding SelectedItem}"
                      DisableAssociatedObjectOnCannotExecute="False"
                      />
+                </ei:EventTrigger>
+                <ei:EventTrigger EventName="SelectionChanged">
+                    <catel:EventToCommand
+                        Command="{catel:CommandManagerBinding Application.FileSelected}"
+                        CommandParameter="{Binding SelectedItem}"
+                        DisableAssociatedObjectOnCannotExecute="False"
+                    />
                 </ei:EventTrigger>
             </ei:Interaction.Triggers>
 

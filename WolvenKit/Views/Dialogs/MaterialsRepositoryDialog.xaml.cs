@@ -1,7 +1,7 @@
 using Catel.IoC;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.Functionality.Services;
-using WolvenKit.RED4.MeshFile.Materials;
+using WolvenKit.Modkit.RED4.Materials;
 
 namespace WolvenKit.Views.Dialogs
 {

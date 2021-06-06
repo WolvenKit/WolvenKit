@@ -1,25 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Numerics;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
-using ISerializable = System.Runtime.Serialization.ISerializable;
 
 namespace WolvenKit.CLI
 {
@@ -83,9 +74,11 @@ namespace WolvenKit.CLI
                 default:
                     switch (value)
                     {
-                        // all numeric values are deserialized as long
-                        case long l:
-                            cVariable.SetValue(l.ToString()); // cast to string to do the parsing in the classes :/
+                        // all numeric values
+                        case long:
+                        case double:
+                        case BigInteger:
+                            cVariable.SetValue(value.ToString()); // cast to string to do the parsing in the classes :/
                             break;
                         // other primitive types can be set directly
                         case bool b:
@@ -104,6 +97,24 @@ namespace WolvenKit.CLI
 
         public static void SetFromDictionary(this IEditableVariable cvar, Dictionary<string,object> dictionary)
         {
+            if (cvar is IREDVariant var)
+            {
+                var type = dictionary["Type"] as string;
+                var name = "Variant";
+                if (dictionary.ContainsKey("Name"))
+                {
+                    name = dictionary["Name"] as string;
+                }
+
+                var jvalue = dictionary["Variant"];
+                var variant = CR2WTypeManager.Create(type, name, cvar.Cr2wFile as IRed4EngineFile, cvar as CVariable);
+                variant.IsSerialized = true;
+                variant.SetFromJObject(jvalue);
+                var.SetVariant(variant);
+
+                return;
+            }
+
             foreach (var (propertyName, value) in dictionary)
             {
                 var redProperty = GetRedProperty(cvar, propertyName);
@@ -146,7 +157,22 @@ namespace WolvenKit.CLI
         {
             switch (data)
                 {
+                    case CDateTime d:
+                        return d.ToUInt64();
                     // special cases of primitive types
+                    case CVariant var:
+                        return new Dictionary<string, object>()
+                        {
+                            {"Type", var.Variant.REDType},
+                            {"Variant", var.Variant.ToObject()}
+                        };
+                    case CVariantSizeNameType varnt:
+                        return new Dictionary<string, object>()
+                        {
+                            {"Type", varnt.Variant.REDType},
+                            {"Name", varnt.Variant.REDName},
+                            {"Variant", varnt.Variant.ToObject()}
+                        };
                     case IREDCurvePoint cp:
                         if (cp.GetValue() is Tuple<IEditableVariable, IEditableVariable>(var item1, var item2))
                         {
@@ -195,6 +221,7 @@ namespace WolvenKit.CLI
 
         public List<CR2WBufferWrapperDto> Buffers { get; set; } = new();
 
+        public bool ShouldSerializeBuffers() => (Buffers.Count > 0);
 
         public Red4W2rcFileDto()
         {
@@ -243,6 +270,13 @@ namespace WolvenKit.CLI
         public int ParentIndex { get; set; }
         public Dictionary<string,object> Properties { get;set; }
 
+        public bool ShouldSerializeProperties() => (Properties.Count > 0);
+
+        public CR2WExportWrapperDto()
+        {
+
+        }
+
         public CR2WExportWrapperDto(ICR2WExport cr2WExport)
         {
             Type = cr2WExport.REDType;
@@ -260,7 +294,7 @@ namespace WolvenKit.CLI
         {
             var parentChunk = ParentIndex == -1
                 ? null
-                : cr2WFile.Chunks.First(_ => _.ChunkIndex == ParentIndex);
+                : cr2WFile.Chunks.First(_ => idx == ParentIndex);
 
             // create wrapped Cvariable
             var cvar = CR2WTypeManager.Create(Type, Type, cr2WFile, parentChunk?.Data as CVariable);

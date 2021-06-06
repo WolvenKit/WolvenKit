@@ -3,12 +3,13 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Xml;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
     /*  - Format Info
-     * 
+     *
      *  0000010110100001111000001010110001111110001000111011110000000000
      *  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
      *  |0 ||22  ||33  ||56  ||172     ||2018      ||7  ||15 ||0       |
@@ -18,16 +19,16 @@ namespace WolvenKit.RED4.CR2W.Types
      *  |  ||    ||    ||    ||        ||__________|________________________ 12 - Year
      *  |  ||    ||    ||    ||________|____________________________________ 10 - Millisecond
      *  |  ||    ||    ||____|______________________________________________ 6  - Second
-     *  |  ||    ||____|____________________________________________________ 6  - Minute 
+     *  |  ||    ||____|____________________________________________________ 6  - Minute
      *  |  ||____|__________________________________________________________ 6  - Hour
      *  |__|________________________________________________________________ 4  - Empty
-     *  
+     *
      *  16/08/2018 22:33:56.172
-     *  
+     *
      *  Month and day store their value in the ulong value with the day/month - 1.
      *  Because they are the only two values where their minimum value is 1 and not 0.
      *  When reading the values add 1 to the value, and when writing subtract 1 from the day/month.
-     *  
+     *
      */
     /// <summary>
     /// Represents a REDEngine compatible datetime value.
@@ -156,6 +157,23 @@ namespace WolvenKit.RED4.CR2W.Types
 
         //    return m_value.Equals(this);
         //}
+        public override IEditableVariable SetValue(object val)
+        {
+            this.IsSerialized = true;
+            switch (val)
+            {
+                case string s:
+                    TryParse(this, UInt64.Parse(s));
+                    break;
+                case UInt64 v:
+                    TryParse(this, v);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return this;
+        }
 
         /// <summary>
         /// Returns a string representation of this instance.

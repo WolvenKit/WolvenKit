@@ -87,5 +87,6 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
 
+        public void SetVariant(IEditableVariable variant) => this.Variant = variant;
     }
 }

@@ -165,7 +165,11 @@
                  IsGroupVisible="False"
                  Label="CR2W EDITING"
                  >
-                    <syncfusion:RibbonTab Caption="EDIT" IsChecked="True" />
+                    <syncfusion:RibbonTab
+                     MinWidth="100"
+                     Caption="EDIT"
+                     IsChecked="True"
+                     />
                 </syncfusion:ContextTabGroup>
 
                 <!--  Contextual Asset Browser group  -->
@@ -176,7 +180,11 @@
                  IsGroupVisible="False"
                  Label="ASSET BROWSER"
                  >
-                    <syncfusion:RibbonTab Caption="ACTIONS" IsChecked="True">
+                    <syncfusion:RibbonTab
+                     MinWidth="100"
+                     Caption="ACTIONS"
+                     IsChecked="True"
+                     >
                         <!--  File bar  -->
                         <syncfusion:RibbonBar
                          Name="ABFileActions"
@@ -261,7 +269,11 @@
                  IsGroupVisible="False"
                  Label="PROJECT EXPLORER"
                  >
-                    <syncfusion:RibbonTab Caption="ACTIONS" IsChecked="True">
+                    <syncfusion:RibbonTab
+                     MinWidth="100"
+                     Caption="ACTIONS"
+                     IsChecked="True"
+                     >
                         <!--  File bar  -->
                         <syncfusion:RibbonBar
                          Name="Actions"

@@ -73,6 +73,12 @@ namespace WolvenKit.RED3.CR2W.Types
             file.Write(varvalue);
         }
 
+        public void SetVariant(IEditableVariable variant)
+        {
+            this.Variant = variant;
+            this.SetREDName(variant.REDName);
+        }
+
         public override string ToString()
         {
             return Variant == null ? "NULL" : Variant.ToString();

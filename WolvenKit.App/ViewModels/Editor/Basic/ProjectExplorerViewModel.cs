@@ -437,10 +437,10 @@ namespace WolvenKit.ViewModels.Editor
             && !SelectedItem.IsDirectory;
 
         private bool CanExportMesh() => _projectManager.ActiveProject is EditorProject && SelectedItem != null
-            && !SelectedItem.IsDirectory && SelectedItem.Extension == ".w2mesh";
+            && !SelectedItem.IsDirectory && SelectedItem.GetExtension() == ERedExtension.w2mesh.ToString();
 
         private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
-            && !SelectedItem.IsDirectory && SelectedItem.Extension == ".w2mesh";
+            && !SelectedItem.IsDirectory && SelectedItem.GetExtension() == ERedExtension.w2mesh.ToString();
 
         private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
 

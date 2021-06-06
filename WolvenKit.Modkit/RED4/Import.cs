@@ -4,6 +4,7 @@ using System.Linq;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77.CR2W
@@ -13,17 +14,16 @@ namespace CP77.CR2W
     /// </summary>
     public partial class ModTools
     {
-
         /// <summary>
         /// Imports a raw File to a RedEngine file (e.g. .dds to .xbm, .fbx to .mesh)
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="rawFile"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public CR2WFile Import(FileInfo rawFile, string textureGroup = null)
+        public CR2WFile Import(FileInfo rawFile, ImportArgs args)
         {
             #region checks
-
             if (rawFile == null)
             {
                 return null;
@@ -44,12 +44,12 @@ namespace CP77.CR2W
                 return null;
             }
 
-            #endregion
-
             if (!Enum.TryParse(rawFile.Extension, out ERawFileFormat rawFileFormat))
             {
                 return null;
             }
+            
+            #endregion
 
             switch (rawFileFormat)
             {
@@ -149,7 +149,7 @@ namespace CP77.CR2W
                             IsSerialized = true,
                             Value = eTextureGroup
                         };
-                        if (flags == CommonFunctions.ETexGroupFlags.Both || flags == CommonFunctions.ETexGroupFlags.CompressionOnly)
+                        if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
                         {
                             xbm.Setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, xbm, "setup")
                             {
@@ -158,7 +158,7 @@ namespace CP77.CR2W
                             };
                         }
 
-                        if (flags == CommonFunctions.ETexGroupFlags.Both || flags == CommonFunctions.ETexGroupFlags.RawFormatOnly)
+                        if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
                         {
                             xbm.Setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, xbm, "rawFormat")
                             {
@@ -200,8 +200,5 @@ namespace CP77.CR2W
             #endregion
 
         }
-
-
-
     }
 }

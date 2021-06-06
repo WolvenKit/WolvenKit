@@ -23,7 +23,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
-using WolvenKit.RED4.MeshFile.Materials;
+using WolvenKit.Modkit.RED4.Materials;
 
 namespace WolvenKit.CLI
 {

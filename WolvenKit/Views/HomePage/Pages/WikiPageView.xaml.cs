@@ -19,8 +19,8 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             try
             {
-                CoreWebView2Environment objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, @"C:\WebViewData");
-                await cal.EnsureCoreWebView2Async(objCoreWebView2Environment);
+                await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
+
                 cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://wiki.cybermods.net/wolvenkit/"));
             }
             catch (Exception e)

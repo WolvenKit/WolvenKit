@@ -746,6 +746,16 @@
                     </Grid>
                 </Border>
             </syncfusion:TabItemExt>
+
+            <syncfusion:TabItemExt Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+                <hc:ImageViewer
+                    x:Name="bold"
+                    Width="auto"
+                    Background="{DynamicResource SecondaryRegionBrush}" />
+
+
+
+            </syncfusion:TabItemExt>
         </syncfusion:TabControlExt>
 
 

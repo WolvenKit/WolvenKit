@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using CP77.Common.Image;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.RED4.CR2W;
 
@@ -14,13 +15,20 @@ namespace CP77.CR2W.Uncooker
     {
         #region Methods
 
-        public static bool Uncook(Stream cr2wStream, CR2WFile cr2w, EUncookExtension uncookext)
+        public static bool Uncook(Stream cr2wStream, CR2WFile cr2w, ExportArgs args)
         {
+            if (args is not MlmaskExportArgs mlmaskArgs)
+            {
+                throw new ArgumentException(nameof(ExportArgs));
+            }
+
             //We need 2 buffers one for atlas one for tile data
 
             if (!(cr2w.Chunks.FirstOrDefault()?.Data is Multilayer_Mask mlmask) ||
                 !(cr2w.Chunks[1]?.Data is rendRenderMultilayerMaskBlobPC blob))
+            {
                 return false;
+            }
 
             var outfile = new FileInfo(cr2w.FileName);
             if (outfile.Directory == null)
@@ -114,10 +122,10 @@ namespace CP77.CR2W.Uncooker
                 }
 
                 //convert texture if neccessary
-                if (uncookext != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (mlmaskArgs.UncookExtension != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     var di = new FileInfo(outfile.FullName).Directory;
-                    TexconvWrapper.Convert(di.FullName, $"{newpath}", uncookext);
+                    TexconvWrapper.Convert(di.FullName, $"{newpath}", mlmaskArgs.UncookExtension);
                 }
             }
             return true;

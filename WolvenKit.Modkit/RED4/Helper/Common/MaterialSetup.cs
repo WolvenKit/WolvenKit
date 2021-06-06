@@ -1,7 +1,7 @@
-﻿using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.CR2W.Types;
 using System;
 
-namespace WolvenKit.RED4.MaterialSetupFile
+namespace WolvenKit.Modkit.RED4.MaterialSetupFile
 {
     public class Setup
     {
@@ -21,7 +21,10 @@ namespace WolvenKit.RED4.MaterialSetupFile
 
                 try
                 {
-                    Layers[i].MatTile = setup.Layers[i].MatTile.Value;
+                    if (setup.Layers[i].MatTile.IsSerialized)
+                        Layers[i].MatTile = setup.Layers[i].MatTile.Value;
+                    else
+                        Layers[i].MatTile = 9999;
                     Layers[i].MbTile = setup.Layers[i].MbTile.Value;
                     Layers[i].Microblend = setup.Layers[i].Microblend.DepotPath;
                     Layers[i].MicroblendContrast = setup.Layers[i].MicroblendContrast.Value;
@@ -29,6 +32,8 @@ namespace WolvenKit.RED4.MaterialSetupFile
                     Layers[i].MicroblendOffsetU = setup.Layers[i].MicroblendOffsetU.Value;
                     Layers[i].MicroblendOffsetV = setup.Layers[i].MicroblendOffsetV.Value;
                     Layers[i].Opacity = setup.Layers[i].Opacity.Value;
+                    if (!setup.Layers[i].Opacity.IsSerialized)
+                        Layers[i].Opacity = 9999;
                     Layers[i].OffsetU = setup.Layers[i].OffsetU.Value;
                     Layers[i].OffsetV = setup.Layers[i].OffsetV.Value;
                     Layers[i].Material = setup.Layers[i].Material.DepotPath;
@@ -40,7 +45,7 @@ namespace WolvenKit.RED4.MaterialSetupFile
                     Layers[i].MetalLevelsOut = setup.Layers[i].MetalLevelsOut.Value;
                     Layers[i].Overrides = setup.Layers[i].Overrides.Value;
                 }
-                catch{ }
+                catch { }
             }
         }
     }
@@ -89,8 +94,10 @@ namespace WolvenKit.RED4.MaterialSetupFile
                 NormalTexture = template.NormalTexture.DepotPath;
                 RoughnessTexture = template.RoughnessTexture.DepotPath;
                 MetalnessTexture = template.MetalnessTexture.DepotPath;
-                TilingMultiplier = template.TilingMultiplier.Value;
-
+                if (template.TilingMultiplier.IsSerialized)
+                    TilingMultiplier = template.TilingMultiplier.Value;
+                else
+                    TilingMultiplier = 9999;
                 Count = template.ColorMaskLevelsIn.Count;
 
                 if (Count == 0)
@@ -273,7 +280,7 @@ namespace WolvenKit.RED4.MaterialSetupFile
                     Overrides.NormalStrength[i].V[0] = template.Overrides.NormalStrength[i].V.Value;
                 }
             }
-            catch {  }
+            catch { }
         }
     }
     public class TemplateDefaultOverrides

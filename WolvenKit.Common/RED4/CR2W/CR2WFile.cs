@@ -148,6 +148,7 @@ namespace WolvenKit.RED4.CR2W
             {
                 chunk.CreateDefaultData(cvar);
             }
+            chunk.Data.VarChunkIndex = chunkindex;
 
             if (parent != null)
             {
@@ -171,6 +172,7 @@ namespace WolvenKit.RED4.CR2W
 
             var chunk = new CR2WExportWrapper(this, cvar.REDType, parent);
             chunk.CreateDefaultData(cvar);
+            chunk.Data.VarChunkIndex = chunkindex;
 
             if (parent != null)
             {

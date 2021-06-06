@@ -27,8 +27,10 @@
     <EmbeddedResource Remove="Model\Cr2w\**" />
     <None Remove="Extensions\PropertyGridEditors\**" />
     <None Remove="Model\Cr2w\**" />
-    <None Remove="Resources\archivehashes.kark" />
-    <EmbeddedResource Include="Resources\archivehashes.kark" />
+    <None Remove="Resources\unusedhashes.kark" />
+    <EmbeddedResource Include="Resources\unusedhashes.kark" />
+    <None Remove="Resources\usedhashes.kark" />
+    <EmbeddedResource Include="Resources\usedhashes.kark" />
   </ItemGroup>
 
   <ItemGroup>

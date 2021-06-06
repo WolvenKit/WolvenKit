@@ -11,7 +11,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED3;
 using WolvenKit.MVVM.Model;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.MeshFile.Materials;
+using WolvenKit.Modkit.RED4.Materials;
 using AboutInfoService = WolvenKit.Functionality.Services.AboutInfoService;
 
 /// <summary>
@@ -43,14 +43,6 @@ public static class ModuleInitializer
 
         // singletons
         serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
-
-
-        var dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-        var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
-        if (!OodleLoadLib.Load(destFileName))
-        {
-            throw new MissingCompressionException($"oo2ext_7_win64.dll not found in {dir}");
-        }
         serviceLocator.RegisterType<IHashService, HashService>();
 
         serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();

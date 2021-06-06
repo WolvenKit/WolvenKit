@@ -11,11 +11,17 @@ namespace WolvenKit.Common.Model
 
     public class AssetBrowserData
     {
+        private readonly string _extension;
+
+        public AssetBrowserData(string extension)
+        {
+            _extension = extension;
+        }
+
         #region Properties
 
         public List<IGameFile> AmbigiousFiles { get; set; }
         public GameFileTreeNode Children { get; set; }
-        public string Extension { get; set; }
         public string Name { get; set; }
         public ulong Hash { get; set; }
         public GameFileTreeNode Parent { get; set; }
@@ -24,5 +30,9 @@ namespace WolvenKit.Common.Model
         public EntryType Type { get; set; }
 
         #endregion Properties
+
+        public string GetExtension() => _extension.TrimStart('.');
+
+        public string Extension => GetExtension();
     }
 }

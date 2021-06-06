@@ -12,8 +12,8 @@ namespace WolvenKit.RED4.CR2W.Types
 {
     /// <summary>
     /// CSofts are Uint16 references to the imports table of a cr2w file
-    /// Imports are paths to a file in the tw3 filesystem
-    /// and can be set manually by DepotPath and Classname
+    /// Imports are paths to a file in the filesystem
+    /// and can be set manually by DepotPath
     /// Imports have flags which are set on write
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -40,19 +40,14 @@ namespace WolvenKit.RED4.CR2W.Types
             if (value > 0)
             {
                 DepotPath = cr2w.Imports[value - 1].DepotPathStr;
-
-                //var filetype = cr2w.Imports[value - 1].Import.className;
-                //ClassName = cr2w.Names[filetype].Str;
-
                 Flags = (EImportFlags)cr2w.Imports[value - 1].Flags;
             }
             else
             {
                 DepotPath = "";
-                //ClassName = "";
                 Flags = EImportFlags.Default;
 
-                throw new InvalidParsingException("rRef");
+                //throw new InvalidParsingException("rRef");
             }
         }
 
@@ -76,12 +71,14 @@ namespace WolvenKit.RED4.CR2W.Types
             this.IsSerialized = true;
             switch (val)
             {
+                case string s:
+                    this.DepotPath = s;
+                    break;
                 case ushort o:
                     this.SetValueInternal(o);
                     break;
                 case IREDRef soft:
                     this.DepotPath = soft.DepotPath;
-                    //this.ClassName = cvar.ClassName;
                     this.Flags = soft.Flags;
                     break;
                 default:

@@ -86,7 +86,7 @@ namespace CP77Tools.Tasks
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
-                var archiveManager = new ArchiveManager();
+                var archiveManager = new ArchiveManager(_hashService);
                 archiveManager.LoadFromFolder(basedir.FullName);
                 // TODO: use the manager here?
                 archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
@@ -195,7 +195,7 @@ namespace CP77Tools.Tasks
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
-                var archiveManager = new ArchiveManager();
+                var archiveManager = new ArchiveManager(_hashService);
                 archiveManager.LoadFromFolder(basedir.FullName);
                 // TODO: use the manager here?
                 archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
@@ -244,7 +244,7 @@ namespace CP77Tools.Tasks
                     _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
                     foreach (var hash_num in hashlist)
                     {
-                        await ModTools.ExtractSingleAsync(ar, hash_num, outDir, DEBUG_decompress);
+                        await _modTools.ExtractSingleAsync(ar, hash_num, outDir, DEBUG_decompress);
                         _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}");
                     }
 
@@ -252,7 +252,7 @@ namespace CP77Tools.Tasks
                 }
                 else if (isHash && hashNumber != 0)
                 {
-                    await ModTools.ExtractSingleAsync(ar, hashNumber, outDir, DEBUG_decompress);
+                    await _modTools.ExtractSingleAsync(ar, hashNumber, outDir, DEBUG_decompress);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
                 }
                 else

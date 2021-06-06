@@ -196,10 +196,9 @@ namespace WolvenKit.RED4.CR2W
                                 break;
                         }
                         break;
-                    case IREDHandle h:
-                        if (h.ChunkHandle)
-                            if (h.GetReference() != null)
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.GetReference().Data));
+                    case IREDPtr h:
+                        if (h.GetReference() != null)
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, h.GetReference().Data));
                         break;
                     case IREDRef s:
                         break;

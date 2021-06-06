@@ -65,8 +65,7 @@ namespace WolvenKit.Functionality.WKitGlobal
 
 
             public const string ViewSelected = "Application.ViewSelected";
-
-
+            public const string FileSelected = "Application.FileSelected";
 
 
             public static readonly InputGesture AboutInputGesture = new InputGesture(Key.F1);

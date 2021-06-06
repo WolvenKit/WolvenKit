@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using Catel;
 using Catel.IoC;
 using Catel.Messaging;
@@ -56,8 +57,7 @@ namespace WolvenKit.ViewModels.Shell
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ICommandManager commandManager//,
-                                          //IGameController gameController
+            ICommandManager commandManager
         )
         {
             #region dependency injection
@@ -105,9 +105,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            OpenFileCommand = new DelegateCommand<FileModel>(
-                async (p) => await ExecuteOpenFile(p),
-                CanOpenFile);
+            OpenFileCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteOpenFile(p), CanOpenFile);
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
@@ -116,6 +114,8 @@ namespace WolvenKit.ViewModels.Shell
 
             SaveFileFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
+
+            FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
 
             // register as application-wide commands
             RegisterCommands(commandManager);
@@ -210,16 +210,25 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.SaveAll, SaveAllCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
+            //commandManager.RegisterCommand(AppCommands.Application.FileSelected, OpenFileCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.NewFile, NewFileCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.BackupMod, BackupModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.PublishMod, PublishModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowPackageInstaller, ShowPackageInstallerCommand, this);
+
+            // global commands
+            commandManager.RegisterCommand(AppCommands.Application.FileSelected, FileSelectedCommand, this);
         }
 
         #endregion init
 
         #region commands
+
+        public ICommand FileSelectedCommand { get; private set; }
+        private bool CanSelectFile(FileModel model) => true;
+
+        private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
 
         /// <summary>
         /// Saves the active Documents

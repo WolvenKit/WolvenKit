@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Numerics;
 
-namespace WolvenKit.RED4.GeneralStructs
+namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
     public class Converters
     {

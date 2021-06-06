@@ -37,6 +37,11 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             ushort val = 0;
 
+            if (!cr2w.Names.Select(_ => _.Str).Contains(Value))
+            {
+
+            }
+
             var nw = cr2w.Names.First(_ => _.Str == Value);
             val = (ushort)cr2w.Names.IndexOf(nw);
 

@@ -64,6 +64,8 @@ namespace CP77Tools.Tasks
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
             }
 
+
+
             return 1;
         }
 
