@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
@@ -23,14 +24,14 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        /// <summary>Gets/sets the currently active document.</summary>
-        DocumentViewModel ActiveDocument { get; set; }
+        // <summary>Gets/sets the currently active document.</summary>
+        //DocumentViewModel ActiveDocument { get; set; }
 
-        /// <summary>Gets an enumeration of all currently available document viewmodels.</summary>
-        ObservableCollection<DocumentViewModel> Files { get; }
+        // <summary>Gets an enumeration of all currently available document viewmodels.</summary>
+        //List<DocumentViewModel> Files { get; }
 
         /// <summary>Gets an enumeration of all currently available tool window viewmodels.</summary>
-        ObservableCollection<ToolViewModel> Tools { get; }
+        ObservableCollection<IDockElement> Tools { get; }
 
         #endregion Properties
 

@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
         [DataMember]
         public string GuidString
         {
-            get { return ToString(); }
+            get => ToString();
             set
             {
                 Guid g;
@@ -33,18 +33,13 @@ namespace WolvenKit.RED4.CR2W.Types
 
 
 
-        public override void Read(BinaryReader file, uint size)
-        {
-            guid = file.ReadBytes(16);
-        }
+        public override void Read(BinaryReader file, uint size) => guid = file.ReadBytes(16);
 
-        public override void Write(BinaryWriter file)
-        {
-            file.Write(guid);
-        }
+        public override void Write(BinaryWriter file) => file.Write(guid);
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case byte[] o:
@@ -57,6 +52,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => guid;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

@@ -3,9 +3,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyVersion>1.3.3.0</AssemblyVersion>
-    <FileVersion>1.3.3.0</FileVersion>
-      <Version>1.3.3</Version>
+    <AssemblyVersion>1.3.6.0</AssemblyVersion>
+    <FileVersion>1.3.6.0</FileVersion>
+      <Version>1.3.6</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <PackAsTool>true</PackAsTool>
       <ToolCommandName>cp77tools</ToolCommandName>
@@ -20,31 +20,29 @@
       <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
       <RepositoryType>git</RepositoryType>
       <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+      <StartupObject>WolvenKit.CLI.Program</StartupObject>
+
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="lib\kraken.so" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="lib\kraken.so">
+    <None Remove="appsettings.json" />
+    <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="lib\liboodle.dylib" />
-    <Content Include="lib\liboodle.dylib">
+    <None Remove="changelog.txt" />
+    <Content Include="changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="27.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
-    
+
   </ItemGroup>
 
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

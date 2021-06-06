@@ -14,7 +14,7 @@
       <RepositoryType>git</RepositoryType>
       <PackageTags>wolvenkit, witcher3, cyberpunk2077</PackageTags>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <Version>1.1.0</Version>
+      <Version>1.2.2</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 

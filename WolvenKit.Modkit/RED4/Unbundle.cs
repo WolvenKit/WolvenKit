@@ -62,9 +62,7 @@ namespace CP77.CR2W
             using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
 
-            //Thread.Sleep(1000);
             var progress = 0;
-            _progressService.Report(0);
 
             //foreach (var info in finalMatchesList)
             //{
@@ -99,8 +97,6 @@ namespace CP77.CR2W
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             });
-
-            _progressService.Report(1.0);
 
             //return (extractedList.ToList(), finalMatchesList.Count);
         }
@@ -146,7 +142,6 @@ namespace CP77.CR2W
 
             //Thread.Sleep(1000);
             var progress = 0;
-            _progressService.Report(0);
 
             var bag = new ConcurrentBag<object>();
             await finalMatchesList.ParallelForEachAsync(async info =>
@@ -158,8 +153,6 @@ namespace CP77.CR2W
             });
             var count = bag.Count;
             _loggerService.Info($"--------{count}---------");
-
-            _progressService.Report(1.0);
         }
 
         /// <summary>
@@ -172,6 +165,11 @@ namespace CP77.CR2W
         /// <returns></returns>
         public int ExtractSingle(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
+            if (!_hashService.Contains(hash))
+            {
+                return 0;
+            }
+
             // get filename
             var entry = ar.Files[hash] as FileEntry;
             var name = entry.FileName;
@@ -207,8 +205,13 @@ namespace CP77.CR2W
         /// <param name="outDir"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
+        public async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
+            if (!_hashService.Contains(hash))
+            {
+                return 0;
+            }
+
             // get filename
             var entry = ar.Files[hash] as FileEntry;
             var name = entry.FileName;
@@ -266,7 +269,7 @@ namespace CP77.CR2W
             //ms.CopyTo(stream);
         }
 
-       
+
         /// <summary>
         /// Extracts a single file (by hash) from an archive to a Stream
         /// </summary>

@@ -1,11 +1,26 @@
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using Catel.IoC;
+using CP77.CR2W;
+using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.ViewModels.Editor;
+using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
 namespace WolvenKit.Views.Editor
 {
@@ -13,13 +28,14 @@ namespace WolvenKit.Views.Editor
     {
 
 
-
+        public static AssetBrowserView GlobalABView;
         public AssetBrowserView()
         {
             InitializeComponent();
             NotifyPropertyChanged();
             TreeNavSF.DrillDownItems.CollectionChanged += DrillDownItems_CollectionChanged;
             VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+            GlobalABView = this;
 
 
         }
@@ -55,13 +71,7 @@ namespace WolvenKit.Views.Editor
 
         public new event PropertyChangedEventHandler PropertyChanged;
 
-        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Asset Browser");
-            }
-        }
+
 
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
 
@@ -79,14 +89,7 @@ namespace WolvenKit.Views.Editor
 
         private void ListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (StaticReferences.GlobalPropertiesView != null)
-            {
 
-                StaticReferences.GlobalPropertiesView.ExplorerBind.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                StaticReferences.GlobalPropertiesView.AssetsBind.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-
-                StaticReferences.GlobalPropertiesView.fish.SetValue(Panel.DataContextProperty, DataContext);
-            }
         }
 
 
@@ -177,12 +180,27 @@ namespace WolvenKit.Views.Editor
             }
         }
 
+        public void RevampedImport()
+        {
+
+            var vm = ViewModel as AssetBrowserViewModel;
+            if (vm != null)
+            {
+                idx = 0;
+                foreach (var selectedItem in InnerList.SelectedItems)
+                {
+                    var selectedData = selectedItem as Common.Model.AssetBrowserData;
+                    if (selectedData == null)
+                        continue;
+                    executeFile(vm, selectedData);
+                }
+            }
+        }
+
         private void MenuItem_ImportSelected_Click(object sender, RoutedEventArgs e)
         {
             var mi = sender as MenuItem;
-            var gridRecordContextMenuInfo = mi?.DataContext as Syncfusion.UI.Xaml.Grid.GridRecordContextMenuInfo;
-            var vm = ViewModel as AssetBrowserViewModel;
-            if (gridRecordContextMenuInfo != null && vm != null)
+            if (mi?.DataContext is GridRecordContextMenuInfo gridRecordContextMenuInfo && ViewModel is AssetBrowserViewModel vm)
             {
                 idx = 0;
                 foreach (var selectedItem in gridRecordContextMenuInfo.DataGrid.SelectedItems)
@@ -193,6 +211,146 @@ namespace WolvenKit.Views.Editor
                     executeFile(vm, selectedData);
                 }
             }
+        }
+
+        private async void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        {
+            if (StaticReferences.GlobalPropertiesView == null)
+            {
+                return;
+            }
+
+            if (ViewModel is not AssetBrowserViewModel vm)
+            {
+                return;
+            }
+
+            var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+            propertiesViewModel.AB_SelectedItem = vm.SelectedNode;
+
+            propertiesViewModel.AB_MeshPreviewVisible = false;
+            propertiesViewModel.IsAudioPreviewVisible = false;
+            propertiesViewModel.IsImagePreviewVisible = false;
+
+            if (propertiesViewModel.AB_SelectedItem != null)
+            {
+                if (string.Equals(propertiesViewModel.AB_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
+                    System.StringComparison.OrdinalIgnoreCase))
+                {
+                    propertiesViewModel.AB_MeshPreviewVisible = true;
+
+                    if (propertiesViewModel.AB_SelectedItem.AmbigiousFiles != null)
+                    {
+                        var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles.FirstOrDefault();
+                        if (q != null)
+                        {
+
+                            string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+
+                            string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Mesh");
+                            Directory.CreateDirectory(ManagerCacheDir);
+                            foreach (var f in Directory.GetFiles(ManagerCacheDir))
+                            {
+                                try
+                                { File.Delete(f); }
+                                catch
+                                {
+                                }
+                            }
+
+                            MESH m = new MESH();
+                            var endPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
+                            var q2 = m.ExportMeshWithoutRigPreviewer(q, endPath);
+                            if (q2.Length > 0)
+                            {
+                                StaticReferences.GlobalPropertiesView.LoadModel(q2);
+                            }
+
+
+
+
+
+                        }
+                    }
+
+                }
+
+                if (string.Equals(propertiesViewModel.AB_SelectedItem.GetExtension(), ERedExtension.wem.ToString(),
+                    System.StringComparison.OrdinalIgnoreCase))
+                {
+                    propertiesViewModel.IsAudioPreviewVisible = true;
+
+                    if (propertiesViewModel.AB_SelectedItem.AmbigiousFiles != null)
+                    {
+                        var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles.FirstOrDefault();
+                        if (q != null)
+                        {
+
+
+                            string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+
+                            string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Audio_import");
+                            string EndPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
+                            Directory.CreateDirectory(ManagerCacheDir);
+                            foreach (var f in Directory.GetFiles(ManagerCacheDir))
+                            {
+                                try
+                                { File.Delete(f); }
+                                catch
+                                {
+                                }
+                            }
+                            using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
+                            q.Extract(fs);
+
+
+                            if (File.Exists(EndPath))
+                            {
+                                Trace.WriteLine("adding audio file");
+                                propertiesViewModel.AddAudioItem(EndPath);
+
+                            }
+
+                        }
+                    }
+                }
+
+                if (string.Equals(propertiesViewModel.AB_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(),
+                                            System.StringComparison.OrdinalIgnoreCase))
+                {
+                    propertiesViewModel.IsImagePreviewVisible = true;
+
+                    var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles?.FirstOrDefault();
+                    if (q != null)
+                    {
+                        var man = ServiceLocator.Default.ResolveType<ModTools>();
+
+                        // extract cr2w to stream
+                        await using var cr2wstream = new MemoryStream();
+                        q.Extract(cr2wstream);
+
+                        // convert xbm to dds stream
+                        await using var ddsstream = new MemoryStream();
+                        var expargs = new XbmExportArgs {Flip = false, UncookExtension = EUncookExtension.dds};
+                        man.UncookXbm(cr2wstream, ddsstream, expargs, out _);
+
+                        // try loading it in pfim
+                        try
+                        {
+                            var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+                            if (qa != null)
+                            {
+                                var g = BitmapFrame.Create(qa);
+                                StaticReferences.GlobalPropertiesView.LoadImage(g);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+            }
+            propertiesViewModel.DecideForMeshPreview();
         }
     }
 }

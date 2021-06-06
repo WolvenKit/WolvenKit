@@ -13,9 +13,9 @@
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <TargetFramework>net5.0</TargetFramework>
-      <Version>2.1.0</Version>
-      <AssemblyVersion>2.1.0.0</AssemblyVersion>
-      <FileVersion>2.1.0.0</FileVersion>
+      <Version>2.2.0</Version>
+      <AssemblyVersion>2.2.0.0</AssemblyVersion>
+      <FileVersion>2.2.0.0</FileVersion>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -27,6 +27,10 @@
     <EmbeddedResource Remove="Model\Cr2w\**" />
     <None Remove="Extensions\PropertyGridEditors\**" />
     <None Remove="Model\Cr2w\**" />
+    <None Remove="Resources\unusedhashes.kark" />
+    <EmbeddedResource Include="Resources\unusedhashes.kark" />
+    <None Remove="Resources\usedhashes.kark" />
+    <EmbeddedResource Include="Resources\usedhashes.kark" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,24 +50,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="lib\kraken.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>true</Pack>
+        <PackagePath>lib\net5.0</PackagePath>
+    </Content>
     <Content Include="texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\hash_cache_0.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_1.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_10.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_2.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_3.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_4.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_5.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_6.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_7.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_8.zip" />
-    <EmbeddedResource Include="Resources\hash_cache_9.zip" />
-    <EmbeddedResource Include="Resources\hash_lookup.bin" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,16 +67,18 @@
     </PackageReference>
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="FmodAudio" Version="2.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
     <PackageReference Include="SharpZipLib" Version="1.3.1" />
-    <PackageReference Include="WolvenKit.RED3.CR2W" Version="3.0.0" />
-    <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.1.0" />
     <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+    
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED3.CR2W\WolvenKit.RED3.CR2W.csproj" />
   </ItemGroup>
 
 </Project>

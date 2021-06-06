@@ -150,6 +150,7 @@ namespace WolvenKit.Functionality.Services
             _commandManager.CreateCommand(AppCommands.Application.PublishMod);
 
             _commandManager.CreateCommand(AppCommands.ProjectExplorer.Refresh);
+            _commandManager.CreateCommand(AppCommands.Application.FileSelected);
 
             _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
         }

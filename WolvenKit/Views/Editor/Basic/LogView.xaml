@@ -11,7 +11,6 @@
  xmlns:orclogviewer1="http://schemas.wildgums.com/orc/controls"
  d:DesignHeight="450"
  d:DesignWidth="800"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d"
  >
 

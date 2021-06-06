@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using ProtoBuf;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Oodle;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.Common.Services
 {
@@ -16,173 +14,144 @@ namespace WolvenKit.Common.Services
     {
         #region Fields
 
-        private const string s_hashFileName = "archivehashes.txt";
-        private const string s_hashZipName = "WolvenKit.Common.Resources.archivehashes.zip";
+        private const string s_used = "WolvenKit.Common.Resources.usedhashes.kark";
+        private const string s_unused = "WolvenKit.Common.Resources.unusedhashes.kark";
+        private const string s_userHashes = "user_hashes.txt";
 
-        private const string s_lookupRes = "WolvenKit.Common.Resources.hash_lookup.bin";
-        private const string s_keyRes = "WolvenKit.Common.Resources.hash_keys.bin";
-
-        private static string GetHashCacheZipName(int i) => $"WolvenKit.Common.Resources.hash_cache_{i}.zip";
-        private static string GetHashCacheName(int i) => $"hash_cache_{i}.bin";
-
-
-        private readonly ILoggerService _loggerService;
-
-        private Dictionary<int,Dictionary<ulong, string>> cacheList;
-        private readonly Dictionary<int,ulong> _lookup;
+        private readonly Dictionary<ulong, string> _hashes = new();
+        private readonly Dictionary<ulong, string> _additionalhashes = new();
+        private readonly Dictionary<ulong, string> _userHashes = new();
 
         #endregion Fields
 
         #region Constructors
 
-        public HashService(ILoggerService loggerService)
+        public HashService()
         {
-            _loggerService = loggerService;
-
-            cacheList = new Dictionary<int, Dictionary<ulong, string>>();
-            for (var i = 0; i < 11; i++)
-            {
-                cacheList.Add(i, new Dictionary<ulong, string>());
-            }
-
-            //get lookup
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_lookupRes);
-            _lookup = Serializer.Deserialize<Dictionary<int, ulong>>(stream);
+            Load();
         }
 
         #endregion Constructors
 
         #region Methods
-        private int GetCacheKey(ulong key)
-        {
-            foreach (var (i, value) in _lookup)
-            {
-                if (key < value)
-                {
-                    return i;
-                }
-            }
 
-            throw new ArgumentOutOfRangeException();
+        private bool IsAdditionalLoaded() => _additionalhashes.Count > 0;
+
+        public IEnumerable<ulong> GetAllHashes()
+        {
+            // load additional
+            LoadAdditional();
+            return _hashes.Keys.Concat(_userHashes.Keys).Concat(_additionalhashes.Keys);
         }
 
-        public bool Contains(ulong key)
-        {
-            // get the correct cache
-            var chacheKey = GetCacheKey(key);
-
-            // lazyly load the cache
-            if (cacheList[chacheKey].Count < 1)
-
-            {
-                Load(chacheKey);
-            }
-
-            return cacheList[chacheKey].ContainsKey(key);
-        }
+        public bool Contains(ulong key) => _hashes.ContainsKey(key) || _userHashes.ContainsKey(key);
 
         public string Get(ulong key)
         {
-            // get the correct cache
-            var chacheKey = GetCacheKey(key);
-
-            // lazyly load the cache
-            if (cacheList[chacheKey].Count < 1)
+            if (_hashes.ContainsKey(key))
             {
-                Load(chacheKey);
+                return _hashes[key];
             }
-            
-            return cacheList[chacheKey].ContainsKey(key) ? cacheList[chacheKey][key] : "";
+            if (_userHashes.ContainsKey(key))
+            {
+                return _userHashes[key];
+            }
+
+            // load additional
+            LoadAdditional();
+            if (_additionalhashes.ContainsKey(key))
+            {
+                return _additionalhashes[key];
+            }
+
+            return "";
+        }
+
+        public void Add(string path)
+        {
+            var hash = FNV1A64HashAlgorithm.HashString(path);
+            if (!Contains(hash))
+            {
+                _userHashes.Add(hash, path);
+            }
         }
 
 
-        public void Serialize(string path)
+
+
+        private void LoadAdditional()
         {
-            // load all 
-            List<string> _hashes = new();
-
-            using var fs = new FileStream(path, FileMode.Open);
-            var archive = new ZipArchive(fs);
-            var zipArchiveEntry = archive.GetEntry(s_hashFileName);
-            using var zipstream = zipArchiveEntry.Open();
-            AddHashesFromStream(zipstream, _hashes);
-
-            var hashes = _hashes
-                .Select(s => new KeyValuePair<ulong, string>(FNV1A64HashAlgorithm.HashString(s), s)).ToList();
-            var orderedDict = hashes.OrderBy(_ => _.Key).ToList();
-
-            var step = orderedDict.Count / 10;
-            var mod = orderedDict.Count % 10;
-
-            var lookup = new Dictionary<int, ulong>();
-
-            var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            for (var i = 0; i < 10; i++)
+            if (IsAdditionalLoaded())
             {
-                using var file = File.Create(Path.Combine(myDocuments, $"hash_cache_{i}.bin"));
-
-                var fragment = orderedDict.GetRange(i * step, step);
-                lookup.Add(i, fragment.Last().Key);
-
-                // serialize to protobuf
-                var fragmentDict = fragment.Select(_ => _.Value);
-                Serializer.Serialize(file, fragmentDict);
-
-                //var fragmentDict = fragment.ToDictionary(_ => _.Key, _ => _.Value);
-                //Serializer.Serialize(file, fragmentDict);
-            }
-            var fragmentMod = orderedDict.GetRange(orderedDict.Count - mod, mod);
-            lookup.Add(10, fragmentMod.Last().Key);
-
-            // serialize mod
-            var fragmentDictMod = fragmentMod.Select(_ => _.Value);
-            using (var fileMod = File.Create(Path.Combine(myDocuments, $"hash_cache_10.bin")))
-            {
-                Serializer.Serialize(fileMod, fragmentDictMod);
+                return;
             }
 
-            // serialize lookup
-            using (var _fs = File.Create(Path.Combine(myDocuments, $"hash_lookup.bin")))
-            {
-                Serializer.Serialize(_fs, lookup);
-            }
-
-            // serialize keys
-            var keys = Path.Combine(myDocuments, $"hash_keys.bin");
-            using (var _fs = File.Create(keys))
-            {
-                Serializer.Serialize(_fs, orderedDict.Select(_ => _.Key));
-            }
-
+            LoadEmbeddedHashes(s_unused, _additionalhashes);
         }
 
-
-        public void ReloadLocally() => throw new System.NotImplementedException();
-
-        private void AddHashesFromStream(Stream stream, List<string> _hashes)
+        private void Load()
         {
+            LoadEmbeddedHashes(s_used, _hashes);
+
+            // user hashes
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
+            if (File.Exists(userHashesPath))
+            {
+                using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
+                ReadHashes(userFs, _userHashes);
+            }
+        }
+
+        private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, string> hashDictionary)
+        {
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+
+            // read KARK header
+            var oodleCompression = stream.ReadStruct<uint>();
+            if (oodleCompression != OodleHelper.KARK)
+            {
+                throw new DecompressionException($"Incorrect hash file.");
+            }
+
+            var outputsize = stream.ReadStruct<uint>();
+
+            // read the rest of the stream
+            var outputbuffer = new byte[outputsize];
+
+            var inbuffer = stream.ToByteArray(true);
+
+            OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
+
+            hashDictionary.EnsureCapacity(1_100_000);
+
+            using var ms = new MemoryStream(outputbuffer);
+            ReadHashes(ms, hashDictionary);
+        }
+
+        private void ReadHashes(Stream memoryStream, IDictionary<ulong, string> hashDict)
+        {
+            using var sr = new StreamReader(memoryStream);
             string line;
-            using var sr = new StreamReader(stream, Encoding.UTF8);
             while ((line = sr.ReadLine()) != null)
             {
-                //_hashes[FNV1A64HashAlgorithm.HashString(line)] = line;
-                _hashes.Add(line);
+                var hash = FNV1A64HashAlgorithm.HashString(line);
+                if (_hashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+                if (_userHashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+                if (_additionalhashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+
+                hashDict.Add(hash, line);
             }
         }
-
-        private void Load(int i)
-        {
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetHashCacheZipName(i));
-            var archive = new ZipArchive(stream);
-            var zipArchiveEntry = archive.GetEntry(GetHashCacheName(i));
-            using var zipstream = zipArchiveEntry.Open();
-            var x = Serializer.Deserialize<IEnumerable<string>>(zipstream);
-
-            cacheList[i] = x.ToDictionary(FNV1A64HashAlgorithm.HashString);
-        }
-
-
 
         #endregion Methods
     }

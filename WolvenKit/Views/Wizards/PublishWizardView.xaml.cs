@@ -112,13 +112,6 @@ namespace WolvenKit.Views.Wizards
             }
         }
 
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("User Wizard");
-            }
-        }
 
         #endregion Methods
     }

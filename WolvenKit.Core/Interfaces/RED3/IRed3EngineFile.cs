@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Interfaces.RED3;
 
 namespace WolvenKit.RED3.CR2W.Reflection
 {

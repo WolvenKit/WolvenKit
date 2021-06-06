@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using WolvenKit.RED4.CR2W.Archive;
 using CP77Tools.Model;
@@ -10,7 +11,10 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
+using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using Index = CP77Tools.Model.Index;
@@ -34,7 +38,7 @@ namespace CP77.CR2W
 
         #region Methods
 
-        
+
 
         /// <summary>
         /// Creates and archive from a folder and packs all files inside into it
@@ -83,6 +87,8 @@ namespace CP77.CR2W
             var fileInfos = parentfiles
                 .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
                 .ToList();
+            var customPaths = new List<string>();
+
 
             _loggerService.Info($"Found {fileInfos.Count} bundle entries to pack.");
 
@@ -99,6 +105,11 @@ namespace CP77.CR2W
                     {
                         continue;
                     }
+                }
+
+                if (!_hashService.Contains(hash))
+                {
+                    customPaths.Add(relpath);
                 }
 
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
@@ -221,9 +232,20 @@ namespace CP77.CR2W
 
             #endregion write footer
 
+            #region write custom footer
+            if (customPaths.Count > 0)
+            {
+                bw.BaseStream.Seek(0, SeekOrigin.End);
+
+                var wfooter = new LxrsFooter(customPaths);
+                wfooter.Write(bw);
+            }
+            #endregion
+
             return ar;
         }
 
         #endregion Methods
     }
+
 }

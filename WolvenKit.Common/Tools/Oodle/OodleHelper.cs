@@ -41,7 +41,8 @@ namespace WolvenKit.Common.Oodle
             // int outputOffset,
             // int outputCount,
             OodleNative.OodleLZ_Compressor algo = OodleNative.OodleLZ_Compressor.Kraken,
-            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal)
+            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal,
+            bool useREDHeader = true)
         {
             if (inputBytes == null)
             {
@@ -58,7 +59,7 @@ namespace WolvenKit.Common.Oodle
                 throw new ArgumentNullException(nameof(outputBuffer));
             }
 
-            
+
 
 
 
@@ -101,20 +102,34 @@ namespace WolvenKit.Common.Oodle
                 }
 #pragma warning restore 162
 
-                
+
 
                 inputHandle.Free();
                 outputHandle.Free();
 
-                //resize buffer
-                var writelist = new List<byte>()
+                if (result == 0 || result > inputCount)
                 {
-                    0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
-                };
-                writelist.AddRange(BitConverter.GetBytes(inputCount));
-                writelist.AddRange(compressedBuffer.Take(result));
+                    outputBuffer = inputBytes;
+                    return outputBuffer.Count();
+                }
 
-                outputBuffer = writelist;
+
+                if (useREDHeader)
+                {
+                    //resize buffer
+                    var writelist = new List<byte>()
+                    {
+                        0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
+                    };
+                    writelist.AddRange(BitConverter.GetBytes(inputCount));
+                    writelist.AddRange(compressedBuffer.Take(result));
+
+                    outputBuffer = writelist;
+                }
+                else
+                {
+                    outputBuffer = compressedBuffer.Take(result);
+                }
 
                 return outputBuffer.Count();
             }
@@ -170,10 +185,10 @@ namespace WolvenKit.Common.Oodle
 
                 }
             }
-            
 
 
-            
+
+
         }
 
 
@@ -267,7 +282,7 @@ namespace WolvenKit.Common.Oodle
 
                     const int SPAN_LEN = 5333;//32768;
                     var length = (int)zSize - 8;
-                    
+
                     var inputBufferSpan = length <= SPAN_LEN
                         ? stackalloc byte[length]
                         : new byte[length];
@@ -358,18 +373,18 @@ namespace WolvenKit.Common.Oodle
                 //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
                 return (int)n;
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                try
-                {
-                    return OozNative.GetCompressedBufferSizeNeeded(count);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
+            // else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            // {
+            //     try
+            //     {
+            //         return OozNative.GetCompressedBufferSizeNeeded(count);
+            //     }
+            //     catch (Exception e)
+            //     {
+            //         Console.WriteLine(e);
+            //         throw;
+            //     }
+            // }
             else
             {
                 throw new NotImplementedException();

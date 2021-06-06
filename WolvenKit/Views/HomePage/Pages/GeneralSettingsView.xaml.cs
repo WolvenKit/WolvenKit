@@ -87,7 +87,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Setting - General");
+               // DiscordHelper.SetDiscordRPCStatus("Setting - General");
             }
         }
 

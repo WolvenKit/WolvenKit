@@ -23,14 +23,14 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
-using WolvenKit.RED4.MeshFile.Materials;
+using WolvenKit.Modkit.RED4.Materials;
 
-namespace CP77Tools
+namespace WolvenKit.CLI
 {
     internal class Program
     {
         [STAThread]
-        public static /*void*/ Task Main(string[] args)
+        public static void Main(string[] args)
         {
             // try get oodle dll from game
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
@@ -38,7 +38,7 @@ namespace CP77Tools
                 Console.WriteLine("Could not automatically find oo2ext_7_win64.dll. " +
                            "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
                            $"{AppDomain.CurrentDomain.BaseDirectory}.");
-                return Task.CompletedTask;
+                return;
             }
 
             var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
@@ -47,7 +47,8 @@ namespace CP77Tools
 
             var rootCommand = new RootCommand
             {
-                
+                new ArchiveCommand(),
+
                 new UnbundleCommand(),
                 new UncookCommand(),
                 new RebuildCommand(),
@@ -62,7 +63,6 @@ namespace CP77Tools
                 new OodleCommand(),
             };
 
-            //var clb = new CommandLineBuilder(new RootCommand {Handler = CommandHandler.Create<IHost>(Action
             var parser = new CommandLineBuilder(rootCommand)
                 .UseDefaults()
                 .UseHost(Host.CreateDefaultBuilder, host =>
@@ -72,33 +72,32 @@ namespace CP77Tools
                                 logging.ClearProviders();
                                 logging.AddColorConsoleLogger(configuration =>
                                 {
-                                    // info
                                     configuration.LogLevels.Add(LogLevel.Warning, ConsoleColor.DarkYellow);
-                                    // warning
                                     configuration.LogLevels.Add(LogLevel.Error, ConsoleColor.DarkMagenta);
-                                    // error
                                     configuration.LogLevels.Add(LogLevel.Critical, ConsoleColor.Red);
                                 });
                             })
                             .ConfigureServices((hostContext, services) =>
                             {
                                 services.AddScoped<ILoggerService, MicrosoftLoggerService>();
+                                services.AddScoped<IProgress<double>, PercentProgressService>();
+                                //services.AddScoped<IProgress<double>, ProgressBar>();
+
                                 services.AddSingleton<IHashService, HashService>();
                                 services.AddScoped<IWolvenkitFileService, Cp77FileService>();
-
-                                //services.AddScoped<IProgress<double>, MockProgressService>();
-                                services.AddScoped<IProgress<double>, ProgressBar>();
 
                                 services.AddScoped<MaterialRepository>();
                                 services.AddScoped<ModTools>();
                                 services.AddScoped<ConsoleFunctions>();
-                            });
+                            })
+
+                            ;
                     })
                 .Build();
 
-            
 
-            return parser.InvokeAsync(args);
+
+            parser.Invoke(args);
         }
 
         private delegate void StrDelegate(string value);

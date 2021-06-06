@@ -5,8 +5,7 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- xmlns:thmPage1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.UserWizard"
- IsVisibleChanged="UserControl_IsVisibleChanged">
+ xmlns:thmPage1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.UserWizard">
 
     <Grid
      MinWidth="300"

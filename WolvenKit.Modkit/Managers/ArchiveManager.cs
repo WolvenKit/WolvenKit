@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public ArchiveManager()
         {
-            
+
         }
 
         public ArchiveManager(IHashService hashService)
@@ -68,10 +68,28 @@ namespace WolvenKit.RED4.CR2W.Archive
         public override EArchiveType TypeName => EArchiveType.Archive;
 
         /// <summary>
+        /// Loads all archives from a folder
+        /// </summary>
+        /// <param name="archivedir"></param>
+        public void LoadFromFolder(string archivedir)
+        {
+            var di = new DirectoryInfo(archivedir);
+            if (!di.Exists)
+            {
+                return;
+            }
+            foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
+            {
+                LoadArchive(file);
+            }
+        }
+
+
+        /// <summary>
         ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
-        public override void LoadAll(string exedir)
+        public override void LoadAll(string exedir, bool rebuildtree = true)
         {
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
@@ -85,7 +103,11 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 LoadArchive(file);
             }
-            RebuildRootNode();
+
+            if (rebuildtree)
+            {
+                RebuildRootNode();
+            }
         }
 
         /// <summary>

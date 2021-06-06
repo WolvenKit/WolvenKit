@@ -1,5 +1,132 @@
 namespace WolvenKit.Common
 {
+    public enum ERedExtension
+    {
+        actionanimdb,
+        acousticdata,
+        aiarch,
+        animgraph,
+        anims,
+        app,
+        archetypes,
+        areas,
+        audio_metadata,
+        audiovehcurveset,
+        behavior,
+        bikecurveset,
+        bk2,
+        bnk,
+        camcurveset,
+        cfoliage,
+        charcustpreset,
+        cminimap,
+        community,
+        conversations,
+        cooked_mlsetup,
+        cookedanims,
+        cookedapp,
+        credits,
+        csv,
+        cubemap,
+        curveset,
+        dat,
+        devices,
+        dtex,
+        effect,
+        ent,
+        env,
+        envparam,
+        envprobe,
+        es,
+        facialcustom,
+        facialsetup,
+        fb2tl,
+        fnt,
+        folbrush,
+        foldest,
+        fp,
+        gamedef,
+        garmentlayerparams,
+        genericanimdb,
+        geometry_cache,
+        gidata,
+        gradient,
+        hitrepresentation,
+        hp,
+        ies,
+        inkanim,
+        inkatlas,
+        inkcharcustomization,
+        inkfontfamily,
+        inkfullscreencomposition,
+        inkgamesettings,
+        inkhud,
+        inklayers,
+        inkmenu,
+        inkshapecollection,
+        inkstyle,
+        inktypography,
+        inkwidget,
+        interaction,
+        journal,
+        journaldesc,
+        json,
+        lane_connections,
+        lane_polygons,
+        lane_spots,
+        lights,
+        lipmap,
+        location,
+        locopaths,
+        loot,
+        mappins,
+        mesh,
+        mi,
+        mlmask,
+        mlsetup,
+        mltemplate,
+        morphtarget,
+        mt,
+        navmesh,
+        null_areas,
+        opusinfo,
+        opuspak,
+        particle,
+        phys,
+        physicalscene,
+        physmatlib,
+        poimappins,
+        psrep,
+        quest,
+        questphase,
+        regionset,
+        remt,
+        reslist,
+        rig,
+        scene,
+        scenerid,
+        scenesversions,
+        smartobject,
+        smartobjects,
+        sp,
+        spatial_representation,
+        streamingquerydata,
+        streamingsector,
+        streamingsector_inplace,
+        streamingworld,
+        terrainsetup,
+        texarray,
+        traffic_collisions,
+        traffic_persistent,
+        voicetags,
+        w2mesh,
+        w2mi,
+        wem,
+        workspot,
+        xbm,
+        xcube
+    }
+
 
     public enum Logtype
     {
@@ -28,6 +155,7 @@ namespace WolvenKit.Common
     /// </summary>
     public enum ECookedFileFormat
     {
+        wem,
         mesh,
         xbm,
         csv,
@@ -35,7 +163,27 @@ namespace WolvenKit.Common
         mlmask,
         cubemap,
         envprobe,
-        texarray
+        texarray,
+        morphtarget
+    }
+
+    /// <summary>
+    /// Possible file extensions of raw files
+    /// </summary>
+    public enum ERawFileFormat
+    {
+        tga,
+        dds,
+        fbx
+    }
+
+    /// <summary>
+    /// Possible file extensions of raw files
+    /// </summary>
+    public enum EExportState
+    {
+        Exportable,
+        Importable
     }
 
     public enum ECustomImageKeys
@@ -68,15 +216,7 @@ namespace WolvenKit.Common
         Raw
     }
 
-    /// <summary>
-    /// Possible file extensions of raw files
-    /// </summary>
-    public enum ERawFileFormat
-    {
-        tga,
-        dds,
-        fbx
-    }
+
 
 
     /// IMPORT FLAGS

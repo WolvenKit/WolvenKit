@@ -41,6 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
         //file.Write(val ? (byte) 1 : (byte) 0);
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             this.Value = val switch
             {
                 bool b => b,
@@ -51,6 +52,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => Value;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

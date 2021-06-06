@@ -137,7 +137,7 @@ namespace WolvenKit.RED4.CR2W
 
             foreach (var c in file.Chunks)
             {
-                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.data));
+                LoopWrapper(new SNameArg(EStringTableMod.SkipName, c.Data));
             }
 
             newimportslist.AddRange(newsoftlist);
@@ -175,7 +175,7 @@ namespace WolvenKit.RED4.CR2W
                 // if variable is generic type or some special case
                 switch (ivar)
                 {
-                    case IArrayAccessor a:
+                    case IREDArray a:
                         switch (a)
                         {
                             case CArray<CName> cacn:
@@ -196,14 +196,13 @@ namespace WolvenKit.RED4.CR2W
                                 break;
                         }
                         break;
-                    case IHandleAccessor h:
-                        if (h.ChunkHandle)
-                            if (h.Reference != null)
-                                returnedVariables.Add(new SNameArg(EStringTableMod.None, h.Reference.data));
+                    case IREDPtr h:
+                        if (h.GetReference() != null)
+                            returnedVariables.Add(new SNameArg(EStringTableMod.None, h.GetReference().Data));
                         break;
-                    case ISoftAccessor s:
+                    case IREDRef s:
                         break;
-                    case IBufferVariantAccessor ivariant:
+                    case IREDBufferVariant ivariant:
                         var mod = EStringTableMod.None;
                         returnedVariables.Add(new SNameArg(mod, ivariant.Variant));
                         break;
@@ -221,10 +220,10 @@ namespace WolvenKit.RED4.CR2W
 
 
                         // add parent if not already in guidlist
-                        // don't add array type parents, don't add IBufferVariantAccessor type parents
+                        // don't add array type parents, don't add IREDBufferVariant type parents
                         if (cvar.ParentVar != null
                             && !cvar.ParentVar.GetType().IsGenericType
-                            && !(cvar.ParentVar is IBufferVariantAccessor)
+                            && !(cvar.ParentVar is IREDBufferVariant)
                             && !idlist.Contains(cvar.ParentVar.UniqueIdentifier))
                         {
                             returnedVariables.Add(new SNameArg(EStringTableMod.None, cvar.ParentVar));
@@ -288,7 +287,7 @@ namespace WolvenKit.RED4.CR2W
 
                 switch (var)
                 {
-                    case IHandleAccessor handle:
+                    case IREDHandle handle:
                     {
                         if (!handle.ChunkHandle)
                         {
@@ -307,7 +306,7 @@ namespace WolvenKit.RED4.CR2W
 
                         break;
                     }
-                    case ISoftAccessor soft:
+                    case IREDRef soft:
                     {
                         if (/*!(string.IsNullOrEmpty(s.ClassName) &&*/ !string.IsNullOrEmpty(soft.DepotPath))
                         {
@@ -330,11 +329,11 @@ namespace WolvenKit.RED4.CR2W
                     case CName n:
                         AddUniqueToTable(n.Value);
                         break;
-                    case IArrayAccessor when var is IBufferAccessor buffer:
+                    case IREDArray when var is IREDBuffer buffer:
                     {
                         foreach (var ivar in buffer.GetEditableVariables())
                         {
-                            if (ivar is not IHandleAccessor ha)
+                            if (ivar is not IREDHandle ha)
                                 continue;
                             if (ha.ChunkHandle)
                                 continue;
@@ -353,7 +352,7 @@ namespace WolvenKit.RED4.CR2W
 
                         break;
                     }
-                    case IArrayAccessor:
+                    case IREDArray:
                     {
                         CheckVarNameAndTypes();
 
@@ -367,13 +366,13 @@ namespace WolvenKit.RED4.CR2W
 
                         break;
                     }
-                    case IEnumAccessor { IsFlag: true } enumAccessor:
+                    case IREDEnum { IsFlag: true } enumAccessor:
                     {
                         foreach (var enumstring in enumAccessor.EnumValueList)
                             AddUniqueToTable(enumstring);
                         break;
                     }
-                    case IEnumAccessor enumAccessor:
+                    case IREDEnum enumAccessor:
                         AddUniqueToTable(enumAccessor.GetAttributeVal());
                         break;
                 }

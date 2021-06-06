@@ -26,11 +26,11 @@ namespace WolvenKit.Views.Templates
                 : editableVariable.Property switch
                 {
                     IREDBool => RedboolTemplate,
-                    IREDString => RedboolTemplate,
+                    IREDString => CommmonTemplate,
                     IREDIntegerType => NumericTemplate,
-                    IEnumAccessor => EnumTemplate,
-                    IChunkPtrAccessor => HandleTemplateView,
-                    IArrayAccessor => ArrayTemplateView,
+                    IREDEnum => EnumTemplate,
+                    IREDChunkPtr => HandleTemplateView,
+                    IREDArray => ArrayTemplateView,
                     _ => CommmonTemplate
                 };
     }

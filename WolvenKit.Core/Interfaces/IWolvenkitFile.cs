@@ -29,7 +29,7 @@ namespace WolvenKit.Common.Model
 
         #region Methods
 
-        Task<EFileReadErrorCodes> Read(BinaryReader file);
+        public EFileReadErrorCodes Read(BinaryReader file);
 
         void Write(BinaryWriter writer);
 
@@ -40,5 +40,5 @@ namespace WolvenKit.Common.Model
         #endregion Methods
     }
 
-    
+
 }

@@ -15,13 +15,7 @@ namespace WolvenKit.Views.Editor
 
         #region Methods
 
-        private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Journal Editor");
-            }
-        }
+
 
         #endregion Methods
     }

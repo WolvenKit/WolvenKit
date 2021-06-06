@@ -24,7 +24,7 @@
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
     <Version>0.8.0.1-Beta</Version>
     <Description>WPF</Description>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -63,6 +63,9 @@
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="C:\Users\ghost\.nuget\packages\wolvenkit.handycontrol\3.2.0\contentFiles\any\net5.0-windows7.0\LangProvider.tt" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Ab3d.DirectX.Client.Settings.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -76,6 +79,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="AssimpNet.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Layout\DockStatesCR2W.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="FFME\avcodec-58.dll">
@@ -318,8 +324,8 @@
 
     <PackageReference Include="Ab3d.DXEngine" Version="4.3.7763" />
     <PackageReference Include="Ab3d.PowerToys" Version="9.5.7763" />
-    <PackageReference Include="Catel.Core" Version="5.12.14" />
-    <PackageReference Include="Catel.MVVM" Version="5.12.14" />
+    <PackageReference Include="Catel.Core" Version="5.12.16" />
+    <PackageReference Include="Catel.MVVM" Version="5.12.16" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="CatFacts.Net" Version="0.1.1" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
@@ -329,12 +335,9 @@
     <PackageReference Include="Feather.Core" Version="1.0.0" />
     <PackageReference Include="FFME.Windows" Version="4.3.340" />
     <PackageReference Include="Fody" Version="6.5.1" PrivateAssets="all" />
-    <PackageReference Include="CsvHelper" Version="27.0.2" />
+    <PackageReference Include="CsvHelper" Version="27.0.4" />
     <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.23.4" />
-    <PackageReference Include="Magick.NET.SystemDrawing" Version="2.0.15" />
-    <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="3.0.9" />
     <PackageReference Include="MahApps.Metro" Version="2.4.5" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" NoWarn="NU1701" />
@@ -360,10 +363,10 @@
     <PackageReference Include="Pfim" Version="0.10.0" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="SharpZipLib" Version="1.3.1" />
+    <PackageReference Include="SharpZipLib" Version="1.3.2" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="2.80.2" />
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
+     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.63" />
@@ -393,7 +396,6 @@
     <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
     <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
 
@@ -1622,10 +1624,10 @@
   <ItemGroup>
     <None Remove="Ab3d.DirectX.Client.Settings.dll" />
     <None Remove="Ab3d.PowerToys.Assimp.dll" />
-    <None Remove="app.manifest" />
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
+    <None Remove="Config\Layout\DockStatesCR2W.xml" />
     <None Remove="distraction_generic.bk2" />
     <None Remove="FFME\avcodec-58.dll" />
     <None Remove="FFME\avdevice-58.dll" />
@@ -1786,9 +1788,6 @@
       <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)\$(AssemblyName).UNK" />
     </ItemGroup>
   </Target>
-  <ItemGroup>
-    <EmbeddedResource Include="app.manifest" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="Ab3d.DirectX.Client.Settings">
       <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>

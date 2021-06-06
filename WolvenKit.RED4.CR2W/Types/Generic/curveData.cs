@@ -12,12 +12,16 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
-    public class CurvePoint<T> : CVariable where T : CVariable
+    public class CurvePoint<T> : CVariable, IREDCurvePoint where T : CVariable
     {
         public T Value { get; set; }
         public CFloat Point { get; set; }
 
         public CurvePoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+        public object GetValue() => new Tuple<IEditableVariable, IEditableVariable>(Value, Point);
+
+
     }
 
 
@@ -28,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class curveData<T> : CVariable, ICurveDataAccessor where T : CVariable
     {
-        
+
 
         public curveData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
@@ -36,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public string Elementtype => REDReflection.GetREDTypeString(typeof(T));
 
-        private List<CurvePoint<T>> Elements { get; set; } = new();
+        public List<CurvePoint<T>> Elements { get; set; } = new();
         public ushort Tail { get; set; }
 
         public override string REDType => REDReflection.GetREDTypeString(GetType());
@@ -46,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
             var pos = file.BaseStream.Position;
             var count = file.ReadUInt32();
 
-            
+
             for (int i = 0; i < count; i++)
             {
                 var cpoint = new CurvePoint<T>(cr2w, this, i.ToString()) {IsSerialized = true};

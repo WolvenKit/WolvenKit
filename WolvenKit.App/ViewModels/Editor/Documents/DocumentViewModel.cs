@@ -20,6 +20,7 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W.SRT;
 using WolvenKit.ViewModels.Shell;
@@ -63,21 +64,28 @@ namespace WolvenKit.ViewModels.Editor
             try
             {
                 Title = Path.GetFileName(fileinfo.FullName);
+                Header = Title;
             }
-            catch { }
+            catch
+            {
+
+            }
 
             ContentId = fileinfo.FullName;
             _IsExistingInFileSystem = isExistingInFileSystem;
         }
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel)
+        private DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel)
             : this()
         {
             _workSpaceViewModel = workSpaceViewModel;
         }
 
-        public DocumentViewModel()
+        private DocumentViewModel()
         {
+            State = DockState.Document;
+            
+
             _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
             _modTools = ServiceLocator.Default.ResolveType<ModTools>();

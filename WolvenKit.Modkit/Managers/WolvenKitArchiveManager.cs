@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace WolvenKit.Common.Model
 {
     [ProtoContract]
-    public abstract class WolvenKitArchiveManager : IGameArchiveManager 
+    public abstract class WolvenKitArchiveManager : IGameArchiveManager
     {
         public abstract EArchiveType TypeName { get; }
 
@@ -26,7 +26,7 @@ namespace WolvenKit.Common.Model
         public IEnumerable<string> Extensions => FileList.Select(_ => _.Extension).Distinct();
 
 
-        public abstract void LoadAll(string exedir);
+        public abstract void LoadAll(string exedir, bool rebuildTree = true);
         public abstract void LoadArchive(string filename, bool ispatch = false);
         public abstract void LoadModArchive(string filename);
         public abstract void LoadModsArchives(string mods, string dlc);

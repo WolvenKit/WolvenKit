@@ -14,14 +14,7 @@ namespace WolvenKit.Views.Editor
         #endregion Constructors
 
         #region Methods
-
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
-            }
-        }
+        
 
         #endregion Methods
     }

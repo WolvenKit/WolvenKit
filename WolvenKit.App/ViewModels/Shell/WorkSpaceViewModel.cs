@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using Catel;
 using Catel.IoC;
 using Catel.Messaging;
@@ -21,6 +23,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
@@ -34,15 +37,12 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region fields
 
-        private readonly ObservableCollection<DocumentViewModel> _files = new();
-
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         //private readonly IGameController _gameController;
 
-        private readonly DocumentViewModelDelegate addfiledel;
-        private DocumentViewModel _activeDocument = null;
+        private DocumentViewModel _activeDocument;
 
         private delegate void DocumentViewModelDelegate(DocumentViewModel value);
 
@@ -57,8 +57,7 @@ namespace WolvenKit.ViewModels.Shell
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ICommandManager commandManager//,
-                                          //IGameController gameController
+            ICommandManager commandManager
         )
         {
             #region dependency injection
@@ -85,12 +84,11 @@ namespace WolvenKit.ViewModels.Shell
             ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
             ShowBulkEditorCommand = new RelayCommand(ExecuteBulkEditor, CanShowBulkEditor);
             ShowCsvEditorCommand = new RelayCommand(ExecuteCsvEditor, CanShowCsvEditor);
-            ShowHexEditorCommand = new RelayCommand(ExecuteHexEditor, CanShowHexEditor);
             ShowJournalEditorCommand = new RelayCommand(ExecuteJournalEditor, CanShowJournalEditor);
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
             ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
             ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
-            ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
+            //ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
             ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
             ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
@@ -106,9 +104,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            OpenFileCommand = new DelegateCommand<FileModel>(
-                async (p) => await ExecuteOpenFile(p),
-                (p) => CanOpenFile(p));
+            OpenFileCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteOpenFile(p), CanOpenFile);
             NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
@@ -118,28 +114,28 @@ namespace WolvenKit.ViewModels.Shell
             SaveFileFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
-            addfiledel = vm => _files.Add(vm);
+            FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
 
             // register as application-wide commands
             RegisterCommands(commandManager);
 
             #endregion commands
 
-            Tools = new ObservableCollection<ToolViewModel> {
+            Tools = new ObservableCollection<IDockElement> {
                 Log,
                 ProjectExplorer,
                 PropertiesViewModel,
-                ImportViewModel,
                 AssetBrowserVM,
-                BulkEditorVM,
                 ImportExportToolVM,
+
+                ImportViewModel,
+                BulkEditorVM,
                 CsvEditorVM,
-                HexEditorVM,
-                CodeEditorVM,
+                //CodeEditorVM,
                 JournalEditorVM,
                 VisualEditorVM,
                 AnimationToolVM,
-                AudioToolVM,
+                //AudioToolVM,
                 ImporterToolVM,
                 CR2WToTextToolVM,
                 GameDebuggerToolVM,
@@ -186,12 +182,11 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowAssetBrowser, ShowAssetsCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowBulkEditor, ShowBulkEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCsvEditor, ShowCsvEditorCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowHexEditor, ShowHexEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowJournalEditor, ShowJournalEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
+           // commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.ShowImportExportTool, ShowImportExportToolCommand, this);
@@ -212,16 +207,25 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.SaveAll, SaveAllCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
+            //commandManager.RegisterCommand(AppCommands.Application.FileSelected, OpenFileCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.NewFile, NewFileCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.BackupMod, BackupModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.PublishMod, PublishModCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowPackageInstaller, ShowPackageInstallerCommand, this);
+
+            // global commands
+            commandManager.RegisterCommand(AppCommands.Application.FileSelected, FileSelectedCommand, this);
         }
 
         #endregion init
 
         #region commands
+
+        public ICommand FileSelectedCommand { get; private set; }
+        private bool CanSelectFile(FileModel model) => true;
+
+        private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
 
         /// <summary>
         /// Saves the active Documents
@@ -371,7 +375,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region command implementation
 
-        public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
+       // public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
         public void ExecuteVideoTool()
         {
@@ -384,30 +388,30 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecutePackMod() { }
         //_gameController.PackAndInstallProject();
 
-        private bool CanBackupMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanBackupMod() => _projectManager.ActiveProject != null;
 
         private bool CanNewFile() => true;
 
         private bool CanOpenFile(FileModel model) => true;
 
-        private bool CanPackMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanPackMod() => _projectManager.ActiveProject != null;
 
-        private bool CanPublishMod() => _projectManager.ActiveProject is EditorProject;
+        private bool CanPublishMod() => _projectManager.ActiveProject != null;
 
         private bool CanShowAnimationTool() => false;
 
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
-        private bool CanShowAudioTool() => _projectManager.ActiveProject is EditorProject;
-        private bool CanShowVideoTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowAudioTool() => _projectManager.ActiveProject != null;
+        private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
 
 
         private bool CanShowBulkEditor() => false;
 
         private bool CanShowCR2WToTextTool() => false;
 
-        private bool CanShowCsvEditor() => _projectManager.ActiveProject is EditorProject;
-        private bool CanShowCodeEditor() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowCsvEditor() => _projectManager.ActiveProject != null;
+        private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
 
 
         private bool CanShowGameDebuggerTool() => false;
@@ -416,13 +420,13 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowImporterTool() => false;
 
-        private bool CanShowImportUtility() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowImportUtility() => _projectManager.ActiveProject != null;
 
         private bool CanShowInstaller() => false;
 
         private bool CanShowJournalEditor() => false;
 
-        private bool CanShowLog() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowLog() => _projectManager.ActiveProject != null;
 
         private bool CanShowMenuCreatorTool() => false;
 
@@ -430,17 +434,17 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowPluginManagerTool() => false;
 
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowProjectExplorer() => _projectManager.ActiveProject != null;
 
-        private bool CanShowProperties() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowProperties() => _projectManager.ActiveProject != null;
 
         //private bool CanShowRadishTool() => false;
 
-        private bool CanShowVisualEditor() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowVisualEditor() => _projectManager.ActiveProject != null;
 
         private bool CanShowWccTool() => false;
 
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject is EditorProject;
+        private bool CanShowImportExportTool() => _projectManager.ActiveProject != null;
 
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
@@ -462,7 +466,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
 
-        private void ExecuteHexEditor() => HexEditorVM.IsVisible = false;
 
         private void ExecuteImporterTool() => ImporterToolVM.IsVisible = false;
 
@@ -577,7 +580,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
-        private AudioToolViewModel _AudioToolVM = null;
+      //  private AudioToolViewModel _AudioToolVM = null;
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
@@ -612,7 +615,6 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
-        private HexEditorViewModel _HexEditorVM = null;
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
@@ -690,15 +692,15 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public AudioToolViewModel AudioToolVM
-        {
-            get
-            {
-                _AudioToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AudioToolViewModel>();
-                _AudioToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _AudioToolVM;
-            }
-        }
+        //public AudioToolViewModel AudioToolVM
+        //{
+        //    get
+        //    {
+        //        _AudioToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AudioToolViewModel>();
+        //        _AudioToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
+        //        return _AudioToolVM;
+        //    }
+        //}
 
         public BulkEditorViewModel BulkEditorVM
         {
@@ -759,17 +761,8 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public HexEditorViewModel HexEditorVM
-        {
-            get
-            {
-                _HexEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<HexEditorViewModel>();
-                _HexEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _HexEditorVM;
-            }
-        }
+        
 
-        /// </summary>
         public ImporterToolViewModel ImporterToolVM
         {
             get
@@ -897,15 +890,16 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets a collection of all currently available document viewmodels
         /// </summary>
-        public ObservableCollection<DocumentViewModel> Files => _files;
-
-        public EditorProject EditorProject { get; set; }
+        public List<DocumentViewModel> Files => Tools
+            .OfType<DocumentViewModel>()
+            .Where(_ => _.State == DockState.Document)
+            .ToList();
 
 
         /// <summary>
         /// Gets an enumeration of all currently available tool window viewmodels.
         /// </summary>
-        public ObservableCollection<ToolViewModel> Tools { get; set; }
+        public ObservableCollection<IDockElement> Tools { get; set; }
 
         #endregion properties
 
@@ -923,12 +917,12 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // Don't add this twice
-            if (_files.Any(f => f.ContentId == fileToAdd.ContentId))
+            if (Files.Any(f => f.ContentId == fileToAdd.ContentId))
             {
                 return;
             }
 
-            _files.Add(fileToAdd);
+            Tools.Add(fileToAdd);
         }
 
         /// <summary>
@@ -952,14 +946,17 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
 
-            _files.Remove(fileToClose);
+            Tools.Remove(fileToClose);
         }
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
         public void CloseAllDocuments()
         {
             ActiveDocument = null;
-            _files.Clear();
+            foreach (var documentViewModel in Files)
+            {
+                Tools.Remove(documentViewModel);
+            }
         }
 
         /// <summary>
@@ -970,7 +967,7 @@ namespace WolvenKit.ViewModels.Shell
         public async Task<DocumentViewModel> OpenAsync(FileModel model)
         {
             // Check if we have already loaded this file and return it if so
-            var fileViewModel = _files.FirstOrDefault(fm => fm.ContentId == model.FullName);
+            var fileViewModel = Files.FirstOrDefault(fm => fm.ContentId == model.FullName);
             if (fileViewModel != null)
             {
                 return fileViewModel;
@@ -983,7 +980,7 @@ namespace WolvenKit.ViewModels.Shell
             if (result)
             {
                 // TODO: this is not threadsafe
-                _files.Add(fileViewModel);
+                Tools.Add(fileViewModel);
 
                 //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
                 //{
@@ -1147,11 +1144,11 @@ namespace WolvenKit.ViewModels.Shell
             void OpenAudioFile(string full)
             {
 
+                // commented for testing 
 
-
-                var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
-                ExecuteAudioTool();
-                z.AddAudioItem(full);
+                //var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
+                //ExecuteAudioTool();
+                //z.AddAudioItem(full);
             }
 
             void ShellExecute(string path)

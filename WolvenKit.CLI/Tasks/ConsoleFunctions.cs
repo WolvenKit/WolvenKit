@@ -13,12 +13,12 @@ namespace CP77Tools.Tasks
         private readonly ILoggerService _loggerService;
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
-        private readonly IProgress<double> _progress;
+        private readonly IProgress<double> _progressService;
 
-        
-        
 
-        
+
+
+
 
 
 
@@ -31,7 +31,7 @@ namespace CP77Tools.Tasks
         {
             _loggerService = loggerService;
             _modTools = modTools;
-            _progress = progress;
+            _progressService = progress;
             _hashService = hashService;
 
         }

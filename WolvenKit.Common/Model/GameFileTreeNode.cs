@@ -88,31 +88,30 @@ namespace WolvenKit.Common
         public List<AssetBrowserData> ToAssetBrowserData()
         {
             var ret = new List<AssetBrowserData>();
-            ret.Add(new AssetBrowserData()
+            ret.Add(new AssetBrowserData(nameof(ECustomImageKeys.OpenDirImageKey))
             {
                 Name = "..",
-                Extension = nameof(ECustomImageKeys.OpenDirImageKey),
                 Type = EntryType.MoveUP,
                 This = this,
                 Parent = this.Parent
             });
-            ret.AddRange(Directories.Select(d => new AssetBrowserData()
+            ret.AddRange(Directories.Select(d => new AssetBrowserData(nameof(ECustomImageKeys.ClosedDirImageKey))
             {
                 Name = d.Key,
                 Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
                 Parent = this.Parent,
                 Children = d.Value,
-                Extension = nameof(ECustomImageKeys.ClosedDirImageKey),
                 This = this,
                 Type = EntryType.Directory
             }).OrderBy(_ => _.Name));
 
-            ret.AddRange(Files.Select(f => new AssetBrowserData()
+            ret.AddRange(Files.Select(f => new AssetBrowserData(Path.GetExtension(f.Key))
             {
+                AmbigiousFiles = f.Value,
+                Hash = f.Value[0].Key,
                 Name = f.Key,
                 Size = FormatSize(f.Value[0].Size),
                 This = this,
-                Extension = Path.GetExtension(f.Key),
                 Type = EntryType.File,
                 Parent = this.Parent
             }).OrderBy(_ => _.Name));

@@ -11,7 +11,7 @@ namespace WolvenKit.RED3.CR2W.Types
     /// Format: [ushort typeID] [uint size] [byte[size] data]
     /// </summary>
     [REDMeta()]
-    public class CVariant : CVariable, IVariantAccessor
+    public class CVariant : CVariable, IREDVariant
     {
         public IEditableVariable Variant { get; set; }
 
@@ -63,6 +63,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             //if (val is CVariable)
             //{
             //    Variant = (CVariable)val;
@@ -79,6 +80,8 @@ namespace WolvenKit.RED3.CR2W.Types
 
             return this;
         }
+
+        public void SetVariant(IEditableVariable variant) => this.Variant = variant;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

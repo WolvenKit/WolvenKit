@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Web.WebView2.Core;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
@@ -17,8 +18,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             try
             {
-                CoreWebView2Environment objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, @"C:\WebViewData", null);
-                await cal.EnsureCoreWebView2Async(objCoreWebView2Environment);
+                await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
                 cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://redmodding.org/"));
             }
             catch (Exception)

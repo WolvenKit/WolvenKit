@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 
 namespace WolvenKit.Common.DDS
 {
-    [Serializable]
     public class MissingFormatException : Exception
     {
         #region Constructors

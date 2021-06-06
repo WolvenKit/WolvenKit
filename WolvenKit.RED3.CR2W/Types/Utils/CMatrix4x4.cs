@@ -66,7 +66,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
             for (int i = 0; i < fields.Length; i++)
             {
-                (copy.fields[i] as CFloat).val = (fields[i] as CFloat).val;
+                (copy.fields[i] as CFloat).Value = (fields[i] as CFloat).Value;
             }
 
             return copy;
@@ -74,6 +74,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is CMatrix4x4 v)
                 this.fields = v.fields;
 

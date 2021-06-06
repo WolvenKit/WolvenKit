@@ -40,9 +40,9 @@ namespace CP77Tools.Commands
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
 
 #if IS_ASYNC
-            Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, pattern, regex, hash, DEBUG_decompress)).Wait();
+            Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, hash, pattern, regex, DEBUG_decompress)).Wait();
 #else
-            consoleFunctions.UnbundleTask(path, outpath, pattern, regex, hash, DEBUG_decompress);
+            consoleFunctions.UnbundleTask(path, outpath, hash, pattern, regex, DEBUG_decompress);
 #endif
         }
 
