@@ -63,13 +63,6 @@ namespace WolvenKit.Views.Editor
 
         #endregion Constructors
 
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                //DiscordHelper.SetDiscordRPCStatus("Project Explorer");
-            }
-        }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
