@@ -4,7 +4,6 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:hexz="clr-namespace:WpfHexaEditor;assembly=WPFHexaEditor"
  IsVisibleChanged="UserControl_IsVisibleChanged">
 
     <catel:UserControl.Resources>
@@ -17,9 +16,6 @@
     </catel:UserControl.Resources>
 
     <Grid>
-        <hexz:HexEditor
-         Width="Auto"
-         Height="Auto"
-         Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" />
+       
     </Grid>
 </catel:UserControl>

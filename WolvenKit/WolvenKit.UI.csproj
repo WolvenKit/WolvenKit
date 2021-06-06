@@ -396,7 +396,6 @@
     <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
     <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
 
