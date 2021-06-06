@@ -153,10 +153,6 @@
                 <syncfusion:QuickAccessToolBar Margin="65,0,0,0" />
             </syncfusion:Ribbon.QuickAccessToolBar>
 
-            <syncfusion:Ribbon.QuickAccessToolBar>
-                <syncfusion:QuickAccessToolBar Margin="65,0,0,0" />
-            </syncfusion:Ribbon.QuickAccessToolBar>
-
             <!--  Contextual Tabs  -->
             <syncfusion:Ribbon.ContextTabGroups>
 
