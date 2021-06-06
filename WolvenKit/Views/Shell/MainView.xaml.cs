@@ -55,12 +55,6 @@ namespace WolvenKit.Views.Shell
 
         #endregion Methods
 
-        private void UserControl_IsVisibleChanged_1(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible && IsLoaded)
-            {
-              //  DiscordHelper.SetDiscordRPCStatus("Main View");
-            }
-        }
+
     }
 }

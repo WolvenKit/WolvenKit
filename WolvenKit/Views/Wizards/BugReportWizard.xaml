@@ -6,7 +6,6 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:wiz1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.BugReportWizard"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  >
 
     <catel:UserControl.Resources>

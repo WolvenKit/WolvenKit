@@ -64,13 +64,6 @@ namespace WolvenKit.Views.Wizards
             }
         }
 
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                //DiscordHelper.SetDiscordRPCStatus("Project Wizard");
-            }
-        }
 
         private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
         {
