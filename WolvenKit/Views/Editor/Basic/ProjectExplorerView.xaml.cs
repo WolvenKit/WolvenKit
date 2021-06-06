@@ -5,11 +5,13 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
+using CP77.CR2W;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -174,11 +176,7 @@ namespace WolvenKit.Views.Editor
             TreeGrid.ExpandAllNodes(node);
         }
 
-        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
-        {
-            ExpandChildren();
-
-        }
+        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e) => ExpandChildren();
 
         public void CollapseChildren()
         {
@@ -192,116 +190,17 @@ namespace WolvenKit.Views.Editor
             TreeGrid.CollapseAllNodes(node);
         }
 
-        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
-        {
-            CollapseChildren();
-
-        }
+        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e) => CollapseChildren();
 
 
-        public void ExpandAll()
-        {
-            TreeGrid.ExpandAllNodes();
-        }
-        public void CollapseAll()
-        {
-            TreeGrid.CollapseAllNodes();
-        }
+        public void ExpandAll() => TreeGrid.ExpandAllNodes();
+
+        public void CollapseAll() => TreeGrid.CollapseAllNodes();
 
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAll();
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
 
-        public enum EPreviewExtensions
-        {
-            mesh,
-            wem,
-            xbm
-        }
-
-        private async void TreeGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
-        {
-            if (StaticReferences.GlobalPropertiesView == null)
-            {
-                return;
-            }
-
-            if (ViewModel is not ProjectExplorerViewModel vm)
-            {
-                return;
-            }
-
-            var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
-            propertiesViewModel.PE_SelectedItem = vm.SelectedItem;
-
-            propertiesViewModel.PE_MeshPreviewVisible = false;
-            propertiesViewModel.IsAudioPreviewVisible = false;
-            propertiesViewModel.IsImagePreviewVisible = false;
-
-            if (vm.SelectedItem.IsDirectory)
-            {
-                return;
-            }
-
-            EUncookExtension ext;
-            if (!(string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(vm.SelectedItem.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
-                || Enum.TryParse<EUncookExtension>(propertiesViewModel.PE_SelectedItem.GetExtension(), out ext)
-                )
-
-            )
-            {
-                return;
-            }
-
-            
-            if (propertiesViewModel.PE_SelectedItem != null)
-            {
-                if  (propertiesViewModel.PE_SelectedItem.GetExtension().Length > 0)
-                {
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
-                        System.StringComparison.OrdinalIgnoreCase)) 
-                    {
-                        propertiesViewModel.PE_MeshPreviewVisible = true;
-                        MESH m = new MESH();
-                        var q = m.ExportMeshWithoutRigPreviewer(propertiesViewModel.PE_SelectedItem.FullName);
-                        if (q.Length > 0)
-                        {
-                            StaticReferences.GlobalPropertiesView.LoadModel(q);
-                        }
-                    }
-
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.GetExtension(), ERedExtension.wem.ToString(),
-                        System.StringComparison.OrdinalIgnoreCase)) 
-                    {
-                        propertiesViewModel.IsAudioPreviewVisible = true;
-
-                        propertiesViewModel.AddAudioItem(propertiesViewModel.PE_SelectedItem.FullName);
-                    }
-
-                    EUncookExtension eUncookExtension;
-                    if (string.Equals(propertiesViewModel.PE_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(),
-                            System.StringComparison.OrdinalIgnoreCase) ||
-                        Enum.TryParse<EUncookExtension>(propertiesViewModel.PE_SelectedItem.GetExtension(),
-                            out eUncookExtension)) 
-                    {
-                        propertiesViewModel.IsImagePreviewVisible = true;
-
-
-                        var q = await ImageDecoder.RenderToBitmapSource(propertiesViewModel.PE_SelectedItem.FullName);
-                        if (q != null )
-                        {
-                            var g = BitmapFrame.Create(q);
-                            StaticReferences.GlobalPropertiesView.LoadImage(g);
-                        }
-
-
-                            
-                    }
-                }
-            }
-            propertiesViewModel.DecideForMeshPreview();
-        }
+        
     }
 }

@@ -52,7 +52,6 @@
          ParentPropertyName="Hash"
          RowHeight="17"
          SelectedItem="{Binding SelectedItem}"
-         SelectionChanged="TreeGrid_OnSelectionChanged"
          SelectionMode="Extended"
          SelfRelationRootValue="0"
          >
@@ -77,6 +76,13 @@
                      CommandParameter="{Binding SelectedItem}"
                      DisableAssociatedObjectOnCannotExecute="False"
                      />
+                </ei:EventTrigger>
+                <ei:EventTrigger EventName="SelectionChanged">
+                    <catel:EventToCommand
+                        Command="{catel:CommandManagerBinding Application.FileSelected}"
+                        CommandParameter="{Binding SelectedItem}"
+                        DisableAssociatedObjectOnCannotExecute="False"
+                    />
                 </ei:EventTrigger>
             </ei:Interaction.Triggers>
 

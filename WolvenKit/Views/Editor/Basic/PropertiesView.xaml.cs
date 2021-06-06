@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using Ab3d;
 using Ab3d.Assimp;
@@ -13,7 +14,9 @@ using Ab3d.DirectX;
 using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
+using Catel.Data;
 using Catel.IoC;
+using Catel.MVVM;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -32,6 +35,7 @@ namespace WolvenKit.Views.Editor
         public PropertiesView()
         {
             InitializeComponent();
+
             Helpers.LoadAssimpNativeLibrary();
 
 
@@ -50,6 +54,34 @@ namespace WolvenKit.Views.Editor
             waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
 
 
+        }
+
+        protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
+        {
+            base.OnViewModelPropertyChanged(e);
+
+            if (e is not AdvancedPropertyChangedEventArgs property)
+            {
+                return;
+            }
+
+            switch (property.PropertyName)
+            {
+                case nameof(PropertiesViewModel.LoadedBitmapFrame):
+                    if (property.NewValue is BitmapFrame frame)
+                    {
+                        LoadImage(frame);
+                    }
+                    break;
+                case nameof(PropertiesViewModel.LoadedModelPath):
+                    if (property.NewValue is string modelpath)
+                    {
+                        LoadModel(modelpath);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void LoadImage(System.Windows.Media.Imaging.BitmapFrame g)
@@ -287,14 +319,6 @@ namespace WolvenKit.Views.Editor
             window.Content = textBox;
             window.Show();
         }
-
-
-
-
-
-
-
-
 
         #region AudioPreview
 

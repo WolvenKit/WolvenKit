@@ -3,33 +3,36 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using Catel;
+using Catel.IoC;
+using Catel.MVVM;
 using Catel.Services;
+using CP77.CR2W;
+using Microsoft.Win32;
 using NAudio.Wave;
+using WolvenKit.Common;
+using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
+using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Views.Editor.AudioTool;
 
 namespace WolvenKit.ViewModels.Editor
 {
     public class PropertiesViewModel : ToolViewModel
     {
-
-        /// <summary>
-        /// Private Logger Service
-        /// </summary>
         private readonly ILoggerService _loggerService;
-
-        /// <summary>
-        /// Private Message Service
-        /// </summary>
         private readonly IMessageService _messageService;
-
-        /// <summary>
-        /// Private ProjectManager
-        /// </summary>
         private readonly IProjectManager _projectManager;
 
         /// <summary>
@@ -38,21 +41,23 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="projectManager"></param>
         /// <param name="loggerService"></param>
         /// <param name="messageService"></param>
+        /// <param name="commandManager"></param>
         public PropertiesViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService
+            IMessageService messageService,
+            ICommandManager commandManager
         ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
+            Argument.IsNotNull(() => commandManager);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
 
-            SetupCommands();
             SetupToolDefaults();
 
             SetToNullAndResetVisibility();
@@ -60,16 +65,14 @@ namespace WolvenKit.ViewModels.Editor
 
             nAudioSimple = NAudioSimpleEngine.Instance;
             NAudioSimpleEngine.Instance.PropertyChanged += NAudioEngine_PropertyChanged;
+
+            // global commands
+            FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanOpenFile);
+            commandManager.RegisterCommand(AppCommands.Application.FileSelected, FileSelectedCommand, this);
+
         }
 
-
-        /// <summary>
-        /// Initialize commands for this window.
-        /// </summary>
-        private void SetupCommands()
-        {
-            // Unused for Properties so far.
-        }
+        #region properties
 
         /// <summary>
         /// Resets stuff each time a new item is selected.
@@ -102,7 +105,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected Item from Asset Browser If Available.
         /// </summary>
-        public Common.Model.AssetBrowserData AB_SelectedItem { get; set; }
+        public AssetBrowserData AB_SelectedItem { get; set; }
 
         /// <summary>
         /// Decides if Asset browser Selected File info should be visible.
@@ -131,6 +134,123 @@ namespace WolvenKit.ViewModels.Editor
 
         public bool IsAudioPreviewVisible { get; set; }
         public bool IsImagePreviewVisible { get; set; }
+
+        #endregion
+
+        #region commands
+
+        /// <summary>
+        /// Opens a physical file in WolvenKit.
+        /// </summary>
+        public ICommand FileSelectedCommand { get; private set; }
+        private bool CanOpenFile(FileModel model) => true;
+        public async Task ExecuteSelectFile(FileModel model)
+        {
+            PE_SelectedItem = model;
+            PE_MeshPreviewVisible = false;
+            IsAudioPreviewVisible = false;
+            IsImagePreviewVisible = false;
+
+            // check additional changes
+            if (model.IsDirectory)
+            {
+                return;
+            }
+
+            if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                  string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                  string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+                  || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
+                )
+
+            )
+            {
+                return;
+            }
+
+
+            if (PE_SelectedItem != null)
+            {
+                if (PE_SelectedItem.GetExtension().Length > 0)
+                {
+                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
+                        System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        PE_MeshPreviewVisible = true;
+                        MESH m = new MESH();
+                        var q = m.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
+                        if (q.Length > 0)
+                        {
+                            LoadModel(q);
+                        }
+                    }
+
+                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.wem.ToString(),
+                        System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        IsAudioPreviewVisible = true;
+
+                        AddAudioItem(PE_SelectedItem.FullName);
+                    }
+
+                    // textures
+                    if (Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(),
+                            out _))
+                    {
+                        IsImagePreviewVisible = true;
+
+                        var q = await ImageDecoder.RenderToBitmapSource(PE_SelectedItem.FullName);
+                        if (q != null)
+                        {
+                            var g = BitmapFrame.Create(q);
+                            LoadImage(g);
+                        }
+                    }
+
+                    // xbm
+                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(),
+                            System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        IsImagePreviewVisible = true;
+                        var man = ServiceLocator.Default.ResolveType<ModTools>();
+
+                        // convert xbm to dds stream
+                        await using var ddsstream = new MemoryStream();
+                        var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.dds };
+                        await using var filestream = new FileStream(PE_SelectedItem.FullName,
+                            FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
+                        man.UncookXbm(filestream, ddsstream, expargs, out _);
+
+                        // try loading it in pfim
+                        try
+                        {
+                            var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+                            if (qa != null)
+                            {
+                                var g = BitmapFrame.Create(qa);
+                                LoadImage(g);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+            }
+            DecideForMeshPreview();
+        }
+
+        public string LoadedModelPath { get; set; }
+        private void LoadModel(string s) => LoadedModelPath = s;
+        public BitmapFrame LoadedBitmapFrame { get; set; }
+        private void LoadImage(BitmapFrame p0) => LoadedBitmapFrame = p0;
+
+        #endregion
+
+        protected override async Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+        }
 
         /// <summary>
         /// Decides if the Mesh Previewer should be visible or not.
@@ -282,5 +402,6 @@ namespace WolvenKit.ViewModels.Editor
         }
         #endregion
 
+  
     }
 }

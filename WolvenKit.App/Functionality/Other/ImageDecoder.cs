@@ -8,20 +8,35 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ImageMagick;
 using Pfim;
-using SkiaSharp;
-using SkiaSharp.Views.WPF;
+//using SkiaSharp;
+//using SkiaSharp.Views.WPF;
 
 
 namespace WolvenKit.Functionality.Ab4d
 {
     public static class ImageDecoder
     {
+        public static async Task<BitmapSource>  RenderToBitmapSourceDds(Stream stream)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            var image = Pfim.Pfim.FromStream(stream);
+            await stream.DisposeAsync().ConfigureAwait(false);
+            var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
+            var addr = pinnedArray.AddrOfPinnedObject();
+            var pfimPic = BitmapSource.Create(image.Width, image.Height, 96.0, 96.0,
+                PixelFormat(image), null, addr, image.DataLen, image.Stride);
+            image.Dispose();
+            pfimPic.Freeze();
+            return pfimPic;
+        }
+
+
         /// <summary>
         /// Decodes image from file to BitMapSource
         /// </summary>
         /// <param name="file">Absolute path of the file</param>
         /// <returns></returns>
-        internal static async Task<BitmapSource> RenderToBitmapSource(string file)
+        public static async Task<BitmapSource> RenderToBitmapSource(string file)
         {
             try
             {
@@ -29,31 +44,31 @@ namespace WolvenKit.Functionality.Ab4d
                 FileStream filestream;
                 switch (ext)
                 {
-                    case ".JPG":
-                    case ".JPEG":
-                    case ".JPE":
-                    case ".PNG":
-                    case ".BMP":
-                    case ".TIF":
-                    case ".TIFF":
-                    case ".GIF":
-                    case ".ICO":
-                    case ".JFIF":
-                    case ".WEBP":
-                    case ".WBMP":
-                        filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        var sKBitmap = SKBitmap.Decode(filestream);
-                        await filestream.DisposeAsync().ConfigureAwait(false);
+                    //case ".JPG":
+                    //case ".JPEG":
+                    //case ".JPE":
+                    //case ".PNG":
+                    //case ".BMP":
+                    //case ".TIF":
+                    //case ".TIFF":
+                    //case ".GIF":
+                    //case ".ICO":
+                    //case ".JFIF":
+                    //case ".WEBP":
+                    //case ".WBMP":
+                    //    filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
+                    //    var sKBitmap = SKBitmap.Decode(filestream);
+                    //    await filestream.DisposeAsync().ConfigureAwait(false);
 
-                        if (sKBitmap == null)
-                        {
-                            return null;
-                        }
+                    //    if (sKBitmap == null)
+                    //    {
+                    //        return null;
+                    //    }
 
-                        var skPic = sKBitmap.ToWriteableBitmap();
-                        skPic.Freeze();
-                        sKBitmap.Dispose();
-                        return skPic;
+                    //    var skPic = sKBitmap.ToWriteableBitmap();
+                    //    skPic.Freeze();
+                    //    sKBitmap.Dispose();
+                    //    return skPic;
 
                     case ".DDS":
                     case "TGA": // TODO some tga files are created upside down https://github.com/Ruben2776/PicView/issues/22

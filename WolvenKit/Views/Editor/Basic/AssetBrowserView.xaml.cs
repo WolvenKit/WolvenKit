@@ -4,12 +4,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Catel.IoC;
+using CP77.CR2W;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Modkit.RED4.MeshFile;
@@ -213,7 +219,7 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        private async void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
         {
             if (StaticReferences.GlobalPropertiesView == null)
             {
@@ -235,7 +241,7 @@ namespace WolvenKit.Views.Editor
             if (propertiesViewModel.AB_SelectedItem != null)
             {
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
-                    System.StringComparison.OrdinalIgnoreCase)) 
+                    System.StringComparison.OrdinalIgnoreCase))
                 {
                     propertiesViewModel.AB_MeshPreviewVisible = true;
 
@@ -276,7 +282,7 @@ namespace WolvenKit.Views.Editor
                 }
 
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.GetExtension(), ERedExtension.wem.ToString(),
-                    System.StringComparison.OrdinalIgnoreCase)) 
+                    System.StringComparison.OrdinalIgnoreCase))
                 {
                     propertiesViewModel.IsAudioPreviewVisible = true;
 
@@ -311,6 +317,41 @@ namespace WolvenKit.Views.Editor
 
                             }
 
+                        }
+                    }
+                }
+
+                if (string.Equals(propertiesViewModel.AB_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(),
+                                            System.StringComparison.OrdinalIgnoreCase))
+                {
+                    propertiesViewModel.IsImagePreviewVisible = true;
+
+                    var q = propertiesViewModel.AB_SelectedItem.AmbigiousFiles?.FirstOrDefault();
+                    if (q != null)
+                    {
+                        var man = ServiceLocator.Default.ResolveType<ModTools>();
+
+                        // extract cr2w to stream
+                        await using var cr2wstream = new MemoryStream();
+                        q.Extract(cr2wstream);
+
+                        // convert xbm to dds stream
+                        await using var ddsstream = new MemoryStream();
+                        var expargs = new XbmExportArgs {Flip = false, UncookExtension = EUncookExtension.dds};
+                        man.UncookXbm(cr2wstream, ddsstream, expargs, out _);
+
+                        // try loading it in pfim
+                        try
+                        {
+                            var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+                            if (qa != null)
+                            {
+                                var g = BitmapFrame.Create(qa);
+                                StaticReferences.GlobalPropertiesView.LoadImage(g);
+                            }
+                        }
+                        catch (Exception)
+                        {
                         }
                     }
                 }

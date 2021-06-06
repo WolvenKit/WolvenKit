@@ -6,12 +6,13 @@
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:ab4d="clr-namespace:WolvenKit.Functionality.Ab4d;assembly=WolvenKit.App"
  d:DesignHeight="450"
  d:DesignWidth="800"
  mc:Ignorable="d"
  >
     <UserControl.Resources>
-        <Converters1:XenConverter x:Key="MyColorToBrushConverterx" />
+        <ab4d:XenConverter x:Key="MyColorToBrushConverterx" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
