@@ -398,7 +398,59 @@
         </Grid>
 
 
+        <!--  Overlay For File Selection  -->
+        <Grid
+            Grid.RowSpan="4"
+            Grid.ColumnSpan="4"
+            Background="{DynamicResource ContentBackgroundAlt}"
+            Visibility="Collapsed">
 
+
+            <syncfusion:SfDataGrid x:Name="FileSelectionDataGrid" Margin="0,0,0,40" />
+            <Border Margin="5" VerticalAlignment="Bottom">
+                <Grid>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <!--  Cancel Button  -->
+                        <Button
+                            Height="30"
+                            Margin="5,0,5,0"
+                            Padding="5"
+                            FontSize="12"
+                            Style="{DynamicResource ButtonDefault}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="Close" />
+
+                                <TextBlock Text="Cancel" />
+                            </StackPanel>
+                        </Button>
+                        <!--  Add Button  -->
+                        <Button
+                            Height="30"
+                            Margin="5,0,5,0"
+                            Padding="5"
+                            FontSize="12"
+                            Style="{DynamicResource ButtonDefault}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="Add" />
+
+                                <TextBlock Text="Add selected file" />
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
 
 
         <!--  file succesfully/error adding/added window.  -->
