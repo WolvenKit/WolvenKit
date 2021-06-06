@@ -29,7 +29,7 @@ namespace WolvenKit.Views.Editor
             WeakEventManager<FrameworkElement, RoutedEventArgs>
                 .AddHandler(this, "Loaded", View_LoadedAsync);
 
-            
+
         }
 
         #endregion Constructors
@@ -64,13 +64,6 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                //DiscordHelper.SetDiscordRPCStatus("Document View");
-            }
-        }
 
         /// <summary>
         /// Initializes the viewmodel and view as soon as the view is loaded.

@@ -49,14 +49,7 @@ namespace WolvenKit.Views.Editor.VisualEditor
         {
         }
 
-        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-               // DiscordHelper.SetDiscordRPCStatus("Visual Editor");
-            }
-        }
-
+        
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
 
         #endregion Methods

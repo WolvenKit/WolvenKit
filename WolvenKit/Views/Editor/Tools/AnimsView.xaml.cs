@@ -15,13 +15,6 @@ namespace WolvenKit.Views.Editor
 
         #region Methods
 
-        private void UserControl_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                //DiscordHelper.SetDiscordRPCStatus("Animation Exporter");
-            }
-        }
 
         #endregion Methods
     }
