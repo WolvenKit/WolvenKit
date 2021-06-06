@@ -27,7 +27,7 @@
                              Margin="0,0,50,0"
                              VerticalAlignment="Center"
                              FontSize="16"
-                             Text="General" />
+                             Text="Asset Browser" />
                         </Grid>
                     </Border>
 

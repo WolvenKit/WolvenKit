@@ -149,7 +149,6 @@
          >
 
 
-
             <syncfusion:Ribbon.QuickAccessToolBar>
                 <syncfusion:QuickAccessToolBar Margin="65,0,0,0" />
             </syncfusion:Ribbon.QuickAccessToolBar>

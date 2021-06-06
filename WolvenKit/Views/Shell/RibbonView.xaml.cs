@@ -20,6 +20,7 @@ namespace WolvenKit.Views.Shell
     {
         public RibbonView()
         {
+
             InitializeComponent();
             StaticReferences.RibbonViewInstance = this;
             var dxEngineSettingsStorage = new DXEngineSettingsStorage();

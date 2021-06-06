@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
@@ -28,6 +28,7 @@
   <ItemGroup>
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="FFME.Windows" Version="4.3.340" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.24.0" />
     <PackageReference Include="Magick.NET.SystemDrawing" Version="2.0.16" />
@@ -44,6 +45,8 @@
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.1" />
     <PackageReference Include="Svg" Version="3.2.3" />
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.59" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
