@@ -43,7 +43,7 @@ namespace WolvenKit.Views.Editor.AudioTool.Radio
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Radio Player");
+               // DiscordHelper.SetDiscordRPCStatus("Radio Player");
             }
         }
 

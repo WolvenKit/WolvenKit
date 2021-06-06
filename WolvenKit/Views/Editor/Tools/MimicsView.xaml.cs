@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
+                //DiscordHelper.SetDiscordRPCStatus("Mimics Exporter");
             }
         }
 

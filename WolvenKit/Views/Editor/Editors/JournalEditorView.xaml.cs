@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Journal Editor");
+                //DiscordHelper.SetDiscordRPCStatus("Journal Editor");
             }
         }
 

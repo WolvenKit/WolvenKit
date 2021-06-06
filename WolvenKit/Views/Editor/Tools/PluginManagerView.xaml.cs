@@ -27,7 +27,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
+               // DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
             }
         }
 

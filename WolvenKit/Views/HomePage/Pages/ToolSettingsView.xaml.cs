@@ -66,7 +66,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Setting - Tools");
+               // DiscordHelper.SetDiscordRPCStatus("Setting - Tools");
             }
         }
 

@@ -116,7 +116,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("User Wizard");
+                //DiscordHelper.SetDiscordRPCStatus("User Wizard");
             }
         }
 

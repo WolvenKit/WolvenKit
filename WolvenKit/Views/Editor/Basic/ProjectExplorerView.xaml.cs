@@ -67,7 +67,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Project Explorer");
+                //DiscordHelper.SetDiscordRPCStatus("Project Explorer");
             }
         }
 

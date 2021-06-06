@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Hex Editor");
+                //DiscordHelper.SetDiscordRPCStatus("Hex Editor");
             }
         }
 

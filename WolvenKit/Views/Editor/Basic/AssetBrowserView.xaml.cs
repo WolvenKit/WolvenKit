@@ -75,7 +75,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Asset Browser");
+                //DiscordHelper.SetDiscordRPCStatus("Asset Browser");
             }
         }
 

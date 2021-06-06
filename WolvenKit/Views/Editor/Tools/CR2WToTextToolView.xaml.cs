@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("CR2W To Text Tool");
+                //DiscordHelper.SetDiscordRPCStatus("CR2W To Text Tool");
             }
         }
 

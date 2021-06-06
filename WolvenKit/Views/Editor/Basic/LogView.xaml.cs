@@ -33,7 +33,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Log View");
+                //DiscordHelper.SetDiscordRPCStatus("Log View");
             }
         }
 

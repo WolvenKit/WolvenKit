@@ -23,7 +23,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Import View");
+                //DiscordHelper.SetDiscordRPCStatus("Import View");
             }
         }
 

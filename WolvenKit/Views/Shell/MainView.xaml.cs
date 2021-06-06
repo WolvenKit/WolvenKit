@@ -59,7 +59,7 @@ namespace WolvenKit.Views.Shell
         {
             if (IsVisible && IsLoaded)
             {
-                DiscordHelper.SetDiscordRPCStatus("Main View");
+              //  DiscordHelper.SetDiscordRPCStatus("Main View");
             }
         }
     }

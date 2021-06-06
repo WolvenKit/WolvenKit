@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Game Debugger");
+                //DiscordHelper.SetDiscordRPCStatus("Game Debugger");
             }
         }
 

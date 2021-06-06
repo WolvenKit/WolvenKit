@@ -68,7 +68,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Document View");
+                //DiscordHelper.SetDiscordRPCStatus("Document View");
             }
         }
 

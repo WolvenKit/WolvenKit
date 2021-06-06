@@ -345,7 +345,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Audio Tool");
+                //DiscordHelper.SetDiscordRPCStatus("Audio Tool");
             }
         }
 

@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Editor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Animation Exporter");
+                //DiscordHelper.SetDiscordRPCStatus("Animation Exporter");
             }
         }
 

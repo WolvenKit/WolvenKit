@@ -53,7 +53,7 @@ namespace WolvenKit.Views.Editor.VisualEditor
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Visual Editor");
+               // DiscordHelper.SetDiscordRPCStatus("Visual Editor");
             }
         }
 

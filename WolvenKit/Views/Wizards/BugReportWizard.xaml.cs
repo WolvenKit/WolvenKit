@@ -19,7 +19,7 @@ namespace WolvenKit.Views.Wizards
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Bug Report Wizard");
+              ///  DiscordHelper.SetDiscordRPCStatus("Bug Report Wizard");
             }
         }
 

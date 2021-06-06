@@ -25,7 +25,7 @@ namespace WolvenKit.Views.Shared
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Backstage - Open File");
+              //  DiscordHelper.SetDiscordRPCStatus("Backstage - Open File");
             }
         }
 

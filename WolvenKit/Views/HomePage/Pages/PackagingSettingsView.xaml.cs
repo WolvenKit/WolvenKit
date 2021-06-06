@@ -19,7 +19,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Setting - Packaging");
+             //   DiscordHelper.SetDiscordRPCStatus("Setting - Packaging");
             }
         }
 
