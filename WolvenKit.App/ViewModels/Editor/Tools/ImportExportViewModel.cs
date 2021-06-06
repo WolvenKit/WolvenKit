@@ -17,9 +17,11 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.RED4.CR2W.Archive;
 using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.ViewModels.Editor
@@ -70,26 +72,11 @@ namespace WolvenKit.ViewModels.Editor
 
         public string CurrentSelectedInGridName { get; set; }
 
-
-        /// <summary>
-        /// Private Logger service.
-        /// </summary>
         private readonly ILoggerService _loggerService;
-
-        /// <summary>
-        /// Private Message Service
-        /// </summary>
         private readonly IMessageService _messageService;
-
-        /// <summary>
-        /// Private Project Manager Service
-        /// </summary>
         private readonly IProjectManager _projectManager;
-
-        /// <summary>
-        /// Private Watcher Service
-        /// </summary>
         private readonly IWatcherService _watcherService;
+        private readonly IGameControllerFactory _gameController;
 
         /// <summary>
         /// Private Readonly ModTools
@@ -103,12 +90,14 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="loggerService"></param>
         /// <param name="messageService"></param>
         /// <param name="watcherService"></param>
+        /// <param name="gameController"></param>
         /// <param name="modTools"></param>
         public ImportExportViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
            IMessageService messageService,
            IWatcherService watcherService,
+           IGameControllerFactory gameController,
            ModTools modTools
            ) : base(ToolTitle)
         {
@@ -117,6 +106,7 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => watcherService);
             Argument.IsNotNull(() => modTools);
+            Argument.IsNotNull(() => gameController);
 
 
             _projectManager = projectManager;
@@ -124,6 +114,7 @@ namespace WolvenKit.ViewModels.Editor
             _messageService = messageService;
             _watcherService = watcherService;
             _modTools = modTools;
+            _gameController = gameController;
 
             SetupToolDefaults();
 
@@ -189,6 +180,14 @@ namespace WolvenKit.ViewModels.Editor
                     var fi = new FileInfo(item.FullName);
                     if (fi.Exists)
                     {
+                        if (item.Properties is MeshExportArgs meshExportArgs)
+                        {
+                            var cp77controller = _gameController.GetController() as Cp77Controller;
+                            var archivemanager =
+                                cp77controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                            meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                        }
+
                         _modTools.Export(fi, item.Properties as ExportArgs);
                     }
                 }

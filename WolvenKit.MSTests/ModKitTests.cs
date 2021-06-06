@@ -58,6 +58,20 @@ namespace CP77.MSTests
 
             foreach (var fileEntry in infiles)
             {
+                // skip files without buffers
+                var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
+                if (!hasBuffers)
+                {
+                    continue;
+                }
+
+                var ar = fileEntry.Archive as Archive;
+                using var ms = new MemoryStream();
+                ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
+
+
+
+
                 // uncook
                 modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, args);
 

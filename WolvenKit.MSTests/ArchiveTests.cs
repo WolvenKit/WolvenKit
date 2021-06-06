@@ -33,17 +33,17 @@ namespace CP77.MSTests
         #region Methods
 
         [TestMethod]
-        //[DataRow("audio_1_general.archive")]
-        //[DataRow("audio_2_soundbanks.archive")]
+        [DataRow("audio_1_general.archive")]
+        [DataRow("audio_2_soundbanks.archive")]
         [DataRow("basegame_1_engine.archive")]
         [DataRow("basegame_2_mainmenu.archive")]
-        //[DataRow("basegame_3_nightcity.archive")]
-        //[DataRow("basegame_3_nightcity_gi.archive")]
-        //[DataRow("basegame_3_nightcity_terrain.archive")]
+        [DataRow("basegame_3_nightcity.archive")]
+        [DataRow("basegame_3_nightcity_gi.archive")]
+        [DataRow("basegame_3_nightcity_terrain.archive")]
         [DataRow("basegame_4_animation.archive")]
-        //[DataRow("basegame_4_appearance.archive")]
-        //[DataRow("basegame_4_gamedata.archive")]
-        //[DataRow("basegame_5_video.archive")]
+        [DataRow("basegame_4_appearance.archive")]
+        [DataRow("basegame_4_gamedata.archive")]
+        [DataRow("basegame_5_video.archive")]
         //[DataRow("lang_ar_text.archive")]
         //[DataRow("lang_cs_text.archive")]
         //[DataRow("lang_de_text.archive")]
@@ -76,37 +76,34 @@ namespace CP77.MSTests
             Parallel.ForEach(archive.Files, keyvalue =>
             {
                 var (hash, _) = keyvalue;
-                using (var ms = new MemoryStream())
+                using var ms = new MemoryStream();
+                try
                 {
-                    try
+                    ModTools.ExtractSingleToStream(archive, hash, ms);
+                    results.Add(new ArchiveTestResult()
                     {
-                        ModTools.ExtractSingleToStream(archive, hash, ms);
-                        results.Add(new ArchiveTestResult()
-                        {
-                            ArchiveName = archivename,
-                            Hash = hash.ToString(),
-                            Success = true
-                        });
-                    }
-                    catch (Exception e)
+                        ArchiveName = archivename,
+                        Hash = hash.ToString(),
+                        Success = true
+                    });
+                }
+                catch (Exception e)
+                {
+                    results.Add(new ArchiveTestResult()
                     {
-                        results.Add(new ArchiveTestResult()
-                        {
-                            ArchiveName = archivename,
-                            Hash = hash.ToString(),
-                            Success = false,
-                            ExceptionType = e.GetType(),
-                            Message = $"{e.Message}"
-                        });
-                    }
+                        ArchiveName = archivename,
+                        Hash = hash.ToString(),
+                        Success = false,
+                        ExceptionType = e.GetType(),
+                        Message = $"{e.Message}"
+                    });
                 }
             });
 
             // Check success
             var successCount = results.Count(r => r.Success);
             var sb = new StringBuilder();
-            sb.AppendLine(
-                $"Successfully unbundled: {successCount} / {totalCount} ({(int)(successCount / (double)totalCount * 100)}%)");
+            sb.AppendLine($"Successfully unbundled: {successCount} / {totalCount} ({(int)(successCount / (double)totalCount * 100)}%)");
             var success = results.All(r => r.Success);
             if (success)
             {
@@ -120,7 +117,12 @@ namespace CP77.MSTests
         [TestMethod]
         public void Test_Uncook()
         {
-            
+
+
+
+
+
+
         }
 
         [TestMethod]
@@ -132,7 +134,7 @@ namespace CP77.MSTests
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             switch (method)
             {
-                
+
                 case Serialization.NewtonsoftJson:
                 {
                     var chachePath = Path.Combine(resultDir, "archive_cache.json");
@@ -165,7 +167,7 @@ namespace CP77.MSTests
                     throw new ArgumentOutOfRangeException(nameof(method), method, null);
             }
         }
-        
+
         [TestMethod]
         //[DataRow(Serialization.NewtonsoftJson)]
         //[DataRow(Serialization.Zeroformatting)]

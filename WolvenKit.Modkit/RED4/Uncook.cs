@@ -16,6 +16,8 @@ using WolvenKit.Common.Oodle;
 using WolvenKit.RED4.CR2W;
 using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.MorphTargetFile;
 
@@ -54,8 +56,7 @@ namespace CP77.CR2W
         /// <param name="ar"></param>
         /// <param name="hash"></param>
         /// <param name="outDir"></param>
-        /// <param name="uncookext"></param>
-        /// <param name="flip"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         public bool UncookSingle(Archive ar, ulong hash, DirectoryInfo outDir, ExportArgs args)
         {
@@ -133,14 +134,19 @@ namespace CP77.CR2W
             _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to uncook.");
 
             Thread.Sleep(1000);
-            int progress = 0;
+            var progress = 0;
             _progressService.Report(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
                 if (UncookSingle(ar, info.NameHash64, outDir, args))
+                {
                     extractedList.Add(info.FileName);
+                }
                 else
+                {
                     failedList.Add(info.FileName);
+                }
+
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             });
@@ -163,7 +169,20 @@ namespace CP77.CR2W
         {
             if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
             {
-                return GenerateBuffers(cr2wStream, inputFileInfo);
+                if (inputFileInfo.Directory != null)
+                {
+                    Directory.CreateDirectory(inputFileInfo.Directory.FullName);
+                }
+
+                var i = 0;
+                foreach (var stream in GenerateBuffers(cr2wStream))
+                {
+                    var bufferpath = $"{inputFileInfo}.{i}.buffer";
+                    using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
+                    i++;
+                    stream.CopyTo(fs);
+                    stream.Dispose();
+                }
             }
             if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
             {
@@ -300,21 +319,17 @@ namespace CP77.CR2W
 
         private bool HandleMesh(Stream cr2wStream , FileInfo cr2wFileName, ExportArgs args)
         {
-
             var meshargs = args as MeshExportArgs;
             switch (meshargs.meshExportType)
             {
                 case MeshExportType.Default:
-
                     (new MESH()).ExportMesh(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
                     break;
                 case MeshExportType.WithMaterials:
-
-                    //(new MATERIAL()).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
+                    (new MATERIAL(meshargs.Archives)).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
                     break;
 
                 case MeshExportType.WithRig:
-
                     (new MESH()).ExportMeshWithRig(cr2wStream, meshargs.RigStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
                     break;
             }
@@ -347,34 +362,24 @@ namespace CP77.CR2W
             return true;
         }
 
-        private bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
+        public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
         {
             // read the cr2wfile
             var cr2w = TryReadCr2WFileHeaders(cr2wStream);
             if (cr2w == null)
             {
-                _loggerService.Error($"Failed to read cr2w {cr2wFileName.FullName}");
-                return false;
+                yield break;
             }
-            cr2w.FileName = cr2wFileName.FullName;
 
-            // decompress buffers
             var buffers = cr2w.Buffers;
-            for (var i = 0; i < buffers.Count; i++)
+            foreach (var b in buffers)
             {
-                if (cr2wFileName.Directory != null)
-                {
-                    Directory.CreateDirectory(cr2wFileName.Directory.FullName);
-                }
-
-                var bufferpath = $"{cr2wFileName}.{i}.buffer";
-                using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
-                var b = buffers[i];
+                var ms = new MemoryStream();
                 cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(fs, b.DiskSize, b.MemSize);
-            }
+                cr2wStream.DecompressAndCopySegment(ms, b.DiskSize, b.MemSize);
 
-            return true;
+                yield return ms;
+            }
         }
 
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Wcc;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -123,6 +124,9 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Export Type")]
         public EUncookExtension MaterialUncookExtension { get; set; }
+
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
 
 
         public override string ToString() => "GLTF/GLB | " +  $"Lod filter : {LodFilter.ToString()} | Is Binary : {isGLBinary.ToString()}";
