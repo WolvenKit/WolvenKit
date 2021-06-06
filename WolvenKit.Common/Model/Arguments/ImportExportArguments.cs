@@ -22,7 +22,7 @@ namespace WolvenKit.Common.Model.Arguments
 
     public abstract class ExportArgs : ImportExportArgs
     {
-
+        public string FileName { get; set; }
     }
 
 

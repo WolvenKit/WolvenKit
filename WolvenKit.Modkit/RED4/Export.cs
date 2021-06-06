@@ -45,7 +45,7 @@ namespace CP77.CR2W
             using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
             using var br = new BinaryReader(fs);
 
-            return Uncook(fs, cr2wfile, ext, args);
+            return UncookInplace(fs, cr2wfile, ext, args);
         }
 
         #endregion Methods

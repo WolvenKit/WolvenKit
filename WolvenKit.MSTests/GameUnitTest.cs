@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using Catel.IoC;
+using CP77.CR2W;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
@@ -10,6 +11,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.CLI.MSTests
@@ -87,6 +89,10 @@ namespace WolvenKit.CLI.MSTests
             // IoC
             ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            ServiceLocator.Default.RegisterType<IProgress<double>, MockProgressService>();
+            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
+            ServiceLocator.Default.RegisterType<ModTools>();
+
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
 
 
