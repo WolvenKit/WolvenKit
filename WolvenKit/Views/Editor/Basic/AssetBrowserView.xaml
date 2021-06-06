@@ -14,8 +14,7 @@
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    BorderBrush="{x:Null}"
-    IsVisibleChanged="DataWindow_IsVisibleChanged">
+    BorderBrush="{x:Null}">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>

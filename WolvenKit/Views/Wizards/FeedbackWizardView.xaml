@@ -7,7 +7,6 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:rv1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.FeedbackWizard"
  Margin="-1,-105,0,0"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  >
     <catel:UserControl.Resources>
         <ResourceDictionary>

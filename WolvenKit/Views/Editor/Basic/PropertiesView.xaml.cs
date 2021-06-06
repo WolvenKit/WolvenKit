@@ -341,13 +341,6 @@ namespace WolvenKit.Views.Editor
         {
         }
 
-        private void DataWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Audio Tool");
-            }
-        }
 
         private void DefaultThemeMenuItem_Checked(object sender, RoutedEventArgs e)
         {

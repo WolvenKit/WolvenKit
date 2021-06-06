@@ -16,7 +16,6 @@
  xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
  d:DesignHeight="450"
  d:DesignWidth="800"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d">
     <catel:UserControl.Resources>
         <ResourceDictionary>

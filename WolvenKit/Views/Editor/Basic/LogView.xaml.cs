@@ -29,13 +29,7 @@ namespace WolvenKit.Views.Editor
         #region Methods
 
 
-        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Log View");
-            }
-        }
+      
 
         #endregion Methods
 

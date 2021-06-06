@@ -7,7 +7,6 @@
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:nodenetwork="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
  BorderBrush="{x:Null}"
- IsVisibleChanged="DataWindow_IsVisibleChanged"
  >
 
     <catel:UserControl.Resources>

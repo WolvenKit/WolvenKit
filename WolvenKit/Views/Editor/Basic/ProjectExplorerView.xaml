@@ -14,7 +14,6 @@
  d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
  d:DesignHeight="450"
  d:DesignWidth="400"
- IsVisibleChanged="UserControl_IsVisibleChanged"
  mc:Ignorable="d"
  >
 

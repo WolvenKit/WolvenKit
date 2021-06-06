@@ -23,14 +23,6 @@ namespace WolvenKit.Views.Editor
         {
         }
 
-        private void DataWindow_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                DiscordHelper.SetDiscordRPCStatus("Plugin Manager");
-            }
-        }
-
         private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
 
         #endregion Methods

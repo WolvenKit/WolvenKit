@@ -19,7 +19,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("Setting - Integrations");
+              //  DiscordHelper.SetDiscordRPCStatus("Setting - Integrations");
             }
         }
 

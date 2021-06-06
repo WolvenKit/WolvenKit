@@ -128,7 +128,7 @@ namespace WolvenKit.ViewModels.Shell
                     : ERibbonContextualTabGroupVisibility.Collapsed;
             }
 
-            DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
+            //DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
         }
 
         #endregion commands
