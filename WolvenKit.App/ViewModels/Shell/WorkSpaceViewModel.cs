@@ -84,7 +84,6 @@ namespace WolvenKit.ViewModels.Shell
             ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
             ShowBulkEditorCommand = new RelayCommand(ExecuteBulkEditor, CanShowBulkEditor);
             ShowCsvEditorCommand = new RelayCommand(ExecuteCsvEditor, CanShowCsvEditor);
-            ShowHexEditorCommand = new RelayCommand(ExecuteHexEditor, CanShowHexEditor);
             ShowJournalEditorCommand = new RelayCommand(ExecuteJournalEditor, CanShowJournalEditor);
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
             ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
@@ -132,7 +131,6 @@ namespace WolvenKit.ViewModels.Shell
                 ImportViewModel,
                 BulkEditorVM,
                 CsvEditorVM,
-                HexEditorVM,
                 //CodeEditorVM,
                 JournalEditorVM,
                 VisualEditorVM,
@@ -184,7 +182,6 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowAssetBrowser, ShowAssetsCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowBulkEditor, ShowBulkEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCsvEditor, ShowCsvEditorCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowHexEditor, ShowHexEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowJournalEditor, ShowJournalEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
@@ -469,7 +466,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
 
-        private void ExecuteHexEditor() => HexEditorVM.IsVisible = false;
 
         private void ExecuteImporterTool() => ImporterToolVM.IsVisible = false;
 
@@ -619,7 +615,6 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
         /// </summary>
-        private HexEditorViewModel _HexEditorVM = null;
 
         /// <summary>
         /// Gets an instance of the ProjectExplorerViewModer.
@@ -766,15 +761,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public HexEditorViewModel HexEditorVM
-        {
-            get
-            {
-                _HexEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<HexEditorViewModel>();
-                _HexEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _HexEditorVM;
-            }
-        }
+        
 
         public ImporterToolViewModel ImporterToolVM
         {

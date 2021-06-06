@@ -84,11 +84,7 @@
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type viewmodels:HexEditorViewModel}">
-                        <Grid>
-                            <views:HexEditorView />
-                        </Grid>
-                    </DataTemplate>
+                   
 
                     <DataTemplate DataType="{x:Type viewmodels:JournalEditorViewModel}">
                         <Grid>

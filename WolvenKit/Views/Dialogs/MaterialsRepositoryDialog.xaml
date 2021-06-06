@@ -1,18 +1,17 @@
 <hc:Window
- x:Class="WolvenKit.Views.Dialogs.MaterialsRepositoryDialog"
- xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
- xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
- xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- Title="Materials Repository Generator"
- Width="600"
- Height="450"
- ResizeMode="NoResize"
- SizeToContent="Height"
- mc:Ignorable="d"
- >
+    x:Class="WolvenKit.Views.Dialogs.MaterialsRepositoryDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Materials Repository Generator"
+    Width="600"
+    Height="450"
+    ResizeMode="NoResize"
+    SizeToContent="Height"
+    mc:Ignorable="d">
     <hc:Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,60 +24,53 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock
-                 Margin="15"
-                 VerticalAlignment="Center"
-                 Text="Do you want to generate a Materials Repository?"
-                 />
+                    Margin="15"
+                    VerticalAlignment="Center"
+                    Text="Do you want to generate a Materials Repository?" />
 
                 <Border
-                 Margin="10"
-                 VerticalAlignment="Center"
-                 Style="{StaticResource BorderTipWarning}"
-                 >
+                    Margin="10"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource BorderTipWarning}">
                     <TextBlock Text="Warning this takes up quite a bit of space locally." />
                 </Border>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBox
-                 x:Name="archivestext"
-                 Width="500"
-                 Margin="15"
-                 HorizontalAlignment="Stretch"
-                 IsEnabled="False"
-                 Text="Game archives path"
-                 />
+                    x:Name="archivestext"
+                    Width="500"
+                    Margin="15"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="False"
+                    Text="Game archives path" />
                 <Button
-                 x:Name="archivespathbutt"
-                 Click="archivespathbutt_Click"
-                 Content="Find"
-                 />
+                    x:Name="archivespathbutt"
+                    Click="archivespathbutt_Click"
+                    Content="Find" />
 
 
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBox
-                 x:Name="Materialsrepotext"
-                 Width="500"
-                 Margin="15"
-                 HorizontalAlignment="Stretch"
-                 hc:InfoElement.Necessary="True"
-                 IsEnabled="False"
-                 Text="Materials Repository Path"
-                 />
+                    x:Name="Materialsrepotext"
+                    Width="500"
+                    Margin="15"
+                    HorizontalAlignment="Stretch"
+                    hc:InfoElement.Necessary="True"
+                    IsEnabled="False"
+                    Text="Materials Repository Path" />
                 <Button
-                 x:Name="matsbutton"
-                 Click="matsbutton_Click"
-                 Content="Find"
-                 />
+                    x:Name="matsbutton"
+                    Click="matsbutton_Click"
+                    Content="Find" />
 
 
             </StackPanel>
             <Button
-             Margin="15"
-             HorizontalAlignment="Stretch"
-             Click="Button_Click"
-             Content="Generate"
-             />
+                Margin="15"
+                HorizontalAlignment="Stretch"
+                Click="Button_Click"
+                Content="Generate" />
 
 
         </StackPanel>

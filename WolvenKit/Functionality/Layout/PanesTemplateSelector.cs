@@ -164,7 +164,6 @@ namespace WolvenKit.Functionality.Layout
 
             CodeEditorViewModel _ => CodeEditorTemplate,
             CsvEditorViewModel _ => CsvEditorTemplate,
-            HexEditorViewModel _ => HexEditorTemplate,
             JournalEditorViewModel _ => JournalEditorTemplate,
             VisualEditorViewModel _ => VisualEditorTemplate,
             //AudioToolViewModel _ => AudioToolTemplate,

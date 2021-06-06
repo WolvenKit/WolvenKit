@@ -6,8 +6,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  MinWidth="250"
- BorderBrush="{x:Null}"
- IsVisibleChanged="DataWindow_IsVisibleChanged">
+ BorderBrush="{x:Null}">
 
     <!--
         Plugin Manager MVVM TODOLIST (REMOVE ITEM IF DONE)
