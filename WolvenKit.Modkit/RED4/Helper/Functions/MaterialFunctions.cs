@@ -6,6 +6,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.Oodle;
 using System.Collections.Generic;
+using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.Materials.MaterialTypes;
@@ -75,7 +76,7 @@ namespace CP77.CR2W
             meshStream.Close();
         }
 
-        public void ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile,
+        public bool ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile,
             List<Archive> archives, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds,
             bool LodFilter = true)
         {
@@ -83,6 +84,20 @@ namespace CP77.CR2W
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
+
+            if (mesh_cr2w == null)
+            {
+                return false;
+            }
+
+            var chunkdata = mesh_cr2w.Chunks
+                .Select(_ => _.Data)
+                .OfType<rendRenderMeshBlob>()
+                .ToList();
+            if (!chunkdata.Any())
+            {
+                return false;
+            }
 
             MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, mesh_cr2w);
             MeshesInfo meshinfo = MeshTools.GetMeshesinfo(mesh_cr2w);
@@ -120,6 +135,8 @@ namespace CP77.CR2W
             Directory.Delete(cacheDir, true);
             meshStream.Dispose();
             meshStream.Close();
+
+            return true;
         }
 
         private void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies,

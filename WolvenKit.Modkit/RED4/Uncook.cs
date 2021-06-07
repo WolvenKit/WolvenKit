@@ -123,8 +123,8 @@ namespace CP77.CR2W
             var progress = 0;
             _progressService.Report(0);
 
-            foreach (var info in finalMatchesList)
-            //Parallel.ForEach(finalMatchesList, info =>
+            //foreach (var info in finalMatchesList)
+            Parallel.ForEach(finalMatchesList, info =>
             {
                 if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir))
                 {
@@ -137,8 +137,8 @@ namespace CP77.CR2W
 
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
-            //});
-            }
+            });
+            //}
 
             foreach (var failed in failedList)
             {
@@ -271,7 +271,7 @@ namespace CP77.CR2W
                     return UncookCsv(cr2wStream, fs);
                 }
                 case ECookedFileFormat.json:
-                    return false;
+                    return true;
                 case ECookedFileFormat.cubemap:
                 {
                     var newpath = Path.ChangeExtension(outfile.FullName, "dds");
@@ -303,18 +303,14 @@ namespace CP77.CR2W
             switch (meshargs.meshExportType)
             {
                 case MeshExportType.Default:
-                    _meshTools.ExportMesh(cr2wStream, meshName, cr2wFileName);
-                    break;
+                    return _meshTools.ExportMesh(cr2wStream, meshName, cr2wFileName);
                 case MeshExportType.WithMaterials:
-                    ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName, meshargs.Archives,
+                    return ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName, meshargs.Archives,
                         meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter);
-                    break;
-
                 case MeshExportType.WithRig:
-                    _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream, meshName, cr2wFileName);
-                    break;
+                    return _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream, meshName, cr2wFileName);
             }
-            return true;
+            return false;
         }
 
         private bool UncookWem(string infile, string outfile)

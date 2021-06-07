@@ -14,6 +14,7 @@ using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using WolvenKit.Common;
+using WolvenKit.Common.Exceptions;
 using WolvenKit.Modkit.RED4.RigFile;
 
 namespace CP77.CR2W
@@ -142,6 +143,21 @@ namespace CP77.CR2W
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var cr2w = _modTools.TryReadRED4File(meshStream);
+
+            if (cr2w == null)
+            {
+                return false;
+            }
+
+            var chunkdata = cr2w.Chunks
+                .Select(_ => _.Data)
+                .OfType<rendRenderMeshBlob>()
+                .ToList();
+            if (!chunkdata.Any())
+            {
+                return false;
+            }
+
 
             RawArmature Rig = new RawArmature();
             MeshBones bones = new MeshBones();
@@ -287,13 +303,27 @@ namespace CP77.CR2W
                 meshStreamS[i].Close();
             }
         }
-        public void ExportMeshWithRig(Stream meshStream, Stream rigStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             RawArmature Rig = _rig.ProcessRig(rigStream);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
             var cr2w = _modTools.TryReadRED4File(meshStream);
+
+            if (cr2w == null)
+            {
+                return false;
+            }
+
+            var chunkdata = cr2w.Chunks
+                .Select(_ => _.Data)
+                .OfType<rendRenderMeshBlob>()
+                .ToList();
+            if (!chunkdata.Any())
+            {
+                return false;
+            }
 
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
             MeshesInfo meshinfo = GetMeshesinfo(cr2w);
@@ -342,6 +372,8 @@ namespace CP77.CR2W
             meshStream.Close();
             rigStream.Dispose();
             rigStream.Close();
+
+            return true;
         }
         public void ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, List<string> _meshNameS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
@@ -760,20 +792,22 @@ namespace CP77.CR2W
         }
         public static MemoryStream GetMeshBufferStream(Stream ms, CR2WFile cr2w)
         {
-            int Index = 0;
-            for (int i = 0; i < cr2w.Chunks.Count; i++)
+            var chunkdata = cr2w.Chunks
+                .Select(_ => _.Data)
+                .OfType<rendRenderMeshBlob>()
+                .ToList();
+            if (!chunkdata.Any())
             {
-                if (cr2w.Chunks[i].REDType == "rendRenderMeshBlob")
-                {
-                    Index = i;
-                }
-
+                throw new ModkitExportException(nameof(GetMeshBufferStream));
             }
-            UInt16 p = (cr2w.Chunks[Index].Data as rendRenderMeshBlob).RenderBuffer.Buffer.Value;
-            var b = cr2w.Buffers[p - 1];
-            ms.Seek(b.Offset, SeekOrigin.Begin);
-            MemoryStream meshstream = new MemoryStream();
-            ms.DecompressAndCopySegment(meshstream, b.DiskSize, b.MemSize);
+
+            var blob = chunkdata.First();
+            var bufferIdx = blob.RenderBuffer.Buffer.Value;
+
+            var buffer = cr2w.Buffers[bufferIdx - 1];
+            ms.Seek(buffer.Offset, SeekOrigin.Begin);
+            var meshstream = new MemoryStream();
+            ms.DecompressAndCopySegment(meshstream, buffer.DiskSize, buffer.MemSize);
             return meshstream;
         }
         public static ModelRoot RawSkinnedMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
