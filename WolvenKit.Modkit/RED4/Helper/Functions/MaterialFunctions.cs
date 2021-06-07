@@ -624,14 +624,6 @@ namespace WolvenKit.Modkit.RED4.Materials
             {
                 rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
 
-                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "mesh_decal")
-                {
-                    rawMaterial.MaterialType = MaterialType.MeshDecal;
-
-                    MeshDecal MeshDecal = new MeshDecal(cMaterialInstance);
-                    rawMaterial.MeshDecal = MeshDecal;
-
-                }
                 if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "multilayered")
                 {
                     rawMaterial.MaterialType = MaterialType.MultiLayered;
@@ -640,12 +632,28 @@ namespace WolvenKit.Modkit.RED4.Materials
                     rawMaterial.MultiLayered = multiLayered;
 
                 }
+                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "mesh_decal")
+                {
+                    rawMaterial.MaterialType = MaterialType.MeshDecal;
+
+                    MeshDecal MeshDecal = new MeshDecal(cMaterialInstance);
+                    rawMaterial.MeshDecal = MeshDecal;
+
+                }
                 if (cMaterialInstance.BaseMaterial.DepotPath.Contains("skin"))
                 {
                     rawMaterial.MaterialType = MaterialType.HumanSkin;
 
                     HumanSkin HumanSkin = new HumanSkin(cMaterialInstance);
                     rawMaterial.HumanSkin = HumanSkin;
+                }
+                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "metal_base")
+                {
+                    rawMaterial.MaterialType = MaterialType.MetalBase;
+
+                    MetalBase metalBase = new MetalBase(cMaterialInstance);
+                    rawMaterial.MetalBase = metalBase;
+
                 }
             }
             catch { }

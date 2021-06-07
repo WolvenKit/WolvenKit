@@ -127,5 +127,6 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public HumanSkin HumanSkin { get; set; }
         public MeshDecal MeshDecal { get; set; }
         public MultiLayered MultiLayered { get; set; }
+        public MetalBase MetalBase { get; set; }
     }
 }

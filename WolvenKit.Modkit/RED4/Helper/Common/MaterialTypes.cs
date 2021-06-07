@@ -4,7 +4,7 @@ namespace WolvenKit.Modkit.RED4.Materials.MaterialTypes
 {
     public enum MaterialType
     {
-        Unknown, MultiLayered, MeshDecal, HumanSkin
+        Unknown, MultiLayered, MeshDecal, HumanSkin, MetalBase
     }
     public class MultiLayered
     {
@@ -202,6 +202,35 @@ namespace WolvenKit.Modkit.RED4.Materials.MaterialTypes
             }
         }
 
+    }
+    public class MetalBase
+    {
+        public string BaseColor { get; set; } = null;
+        public string Normal { get; set; } = null;
+        public Color BaseColorScale { get; set; }
+        public Nullable<float> AlphaThreshold { get; set; } = null;
+
+        public MetalBase(CMaterialInstance cMaterialInstance)
+        {
+            for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
+            {
+                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "BaseColor")
+                    BaseColor = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Normal")
+                    Normal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
+                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AlphaThreshold")
+                    AlphaThreshold = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
+                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "BaseColorScale")
+                {
+                    float x = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).X.Value;
+                    float y = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).Y.Value;
+                    float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).Z.Value;
+                    float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).W.Value;
+
+                    BaseColorScale = new Color(x, y, z, w);
+                }
+            }
+        }
     }
     public class Color
     {
