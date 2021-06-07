@@ -166,32 +166,42 @@ namespace WolvenKit.ViewModels.Editor
             {
                 foreach (var item in ImportableItems)
                 {
-                    var fi = new FileInfo(item.FullName);
-                    if (fi.Exists)
-                    {
-                        _modTools.Import(fi, item.Properties as ImportArgs);
-                    }
+                    ImportSingle(item);
                 }
             }
             else
             {
                 foreach (var item in ExportableItems)
                 {
-                    var fi = new FileInfo(item.FullName);
-                    if (fi.Exists)
-                    {
-                        if (item.Properties is MeshExportArgs meshExportArgs)
-                        {
-                            var cp77controller = _gameController.GetController() as Cp77Controller;
-                            var archivemanager =
-                                cp77controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
-                            meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
-                        }
-
-                        _modTools.Export(fi, item.Properties as ExportArgs);
-                    }
+                    ExportSingle(item);
                 }
 
+            }
+        }
+
+        private void ImportSingle(ImportableItemViewModel item)
+        {
+            var fi = new FileInfo(item.FullName);
+            if (fi.Exists)
+            {
+                _modTools.Import(fi, item.Properties as ImportArgs);
+            }
+        }
+
+        private void ExportSingle(ExportableItemViewModel item)
+        {
+            var fi = new FileInfo(item.FullName);
+            if (fi.Exists)
+            {
+                if (item.Properties is MeshExportArgs meshExportArgs)
+                {
+                    var cp77controller = _gameController.GetController() as Cp77Controller;
+                    var archivemanager =
+                        cp77controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                    meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                }
+
+                _modTools.Export(fi, item.Properties as ExportArgs);
             }
         }
 
@@ -215,22 +225,14 @@ namespace WolvenKit.ViewModels.Editor
             {
                 foreach (var item in ImportableItems.Where(_ => _.IsChecked))
                 {
-                    var fi = new FileInfo(item.FullName);
-                    if (fi.Exists)
-                    {
-                        _modTools.Import(fi, item.Properties as ImportArgs);
-                    }
+                    ImportSingle(item);
                 }
             }
             else
             {
                 foreach (var item in ExportableItems.Where(_ => _.IsChecked))
                 {
-                    var fi = new FileInfo(item.FullName);
-                    if (fi.Exists)
-                    {
-                        _modTools.Export(fi, item.Properties as ExportArgs);
-                    }
+                    ExportSingle(item);
                 }
 
             }

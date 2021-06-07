@@ -65,6 +65,11 @@ namespace CP77.CR2W
                 return false;
             }
 
+            if (!ar.Files.ContainsKey(hash))
+            {
+                return false;
+            }
+
             // extract the main file with uncompressed buffers
             #region unbundle main file
             using var ms = new MemoryStream();
