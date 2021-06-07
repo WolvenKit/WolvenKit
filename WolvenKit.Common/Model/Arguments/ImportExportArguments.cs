@@ -43,6 +43,14 @@ namespace WolvenKit.Common.Model.Arguments
         public override string ToString() => TextureGroup.ToString();
     }
 
+    public class MeshImportArgs : ImportArgs
+    {
+        public Stream MeshToReplaceStream { get; set; }
+
+        public override string ToString() => ".Mesh";
+
+    }
+
     #endregion
 
 
@@ -102,37 +110,83 @@ namespace WolvenKit.Common.Model.Arguments
         public override string ToString() => $"{UncookExtension.ToString()} | Flip : {Flip.ToString()}";
     }
 
+
+
     public class MeshExportArgs : ExportArgs
     {
-
+        /// Export Type Category
         [Category("Export Type")]
         [Display(Name = "Mesh Export Type")]
-        [Description("The type of export for your mesh")]
-
+        [Description("The type of export for your mesh, by default no Materials or Rig is used.")]
         public MeshExportType meshExportType { get; set; } = MeshExportType.Default;
 
 
-        [Category("Export Settings")]
+        ///  Default Export Settings Category
+        [Category("Default Export Settings")]
         [Display(Name = "Lod Filter")]
+        [Description("If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.")]
         public bool LodFilter { get; set; } = true;
-        [Category("Export Settings")]
+
+        [Category("Default Export Settings")]
         [Display(Name = "Is Binary")]
+        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
         public bool isGLBinary { get; set; } = true;
 
-        [Category("WithRig Settings")]
-        [Display(Name = "Select a rig")]
-        public Stream RigStream { get; set; }
 
-        [Category("WithMaterials Settings")]
-        [Display(Name = "Select Export Type")]
-        public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
+
+        /// Export Arguments Settings
+        [Category("Export Arguments Settings")]
+        [Display(Name = "MultiMesh Export Arguments")]
+        public MultiMeshArgs MultiMeshargs { get; set; } = new();
+
+        [Category("Export Arguments Settings")]
+        [Display(Name = "Mesh with Rig Export Arguments")]
+        public WithRigMeshArgs WithRigMeshargs { get; set; } = new();
+        [Category("Export Arguments Settings")]
+        [Display(Name = "Mesh with Material Export Arguments")]
+        public WithMaterialMeshArgs WithMaterialMeshargs { get; set; } = new();
+
 
 
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
 
-
         public override string ToString() => "GLTF/GLB | " +  $"Lod filter : {LodFilter.ToString()} | Is Binary : {isGLBinary.ToString()}";
+
+    }
+
+    public class WithMaterialMeshArgs
+    {
+        [Category("WithMaterials Settings")]
+        [Display(Name = "Select Export Format")]
+        [Description("Exports textures(dds,png,tga etc) and material helper data with the mesh.")]
+        public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
+
+
+        public override string ToString() => "Adjust these settings if WithMaterial selected.";
+
+
+    }
+
+    public class WithRigMeshArgs
+    {
+        [Category("WithRig Settings")]
+        [Display(Name = "Select rig(s)")]
+        [Description("Select rig(s) to export within your mesh.")]
+        public Stream RigStream { get; set; }
+        public override string ToString() => "Adjust these settings if WithRigh selected.";
+
+    }
+
+    public class MultiMeshArgs
+    {
+        [Category("MultiMesh Settings")]
+        [Display(Name = "Select additional meshes")]
+        public List<Stream> MultiMeshMeshes { get; set; } = new();
+        [Category("MultiMesh Settings")]
+        [Display(Name = "Select rig(s)")]
+        public List<Stream> MultiMeshRigs { get; set; } = new();
+        public override string ToString() => "Adjust these settings if MultiMesh selected.";
 
     }
 
@@ -140,6 +194,8 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Export Type")]
         [Display(Name = "Wem Export Type")]
+        [Description("Set the audioformat you want your wem file to be converted to.")]
+
         public WemExportTypes wemExportType { get; set; } = WemExportTypes.Mp3;
 
 

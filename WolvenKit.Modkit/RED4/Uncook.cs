@@ -311,11 +311,11 @@ namespace CP77.CR2W
                     (new MESH()).ExportMesh(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)),meshargs.LodFilter,meshargs.isGLBinary);
                     break;
                 case MeshExportType.WithMaterials:
-                    (new MATERIAL(meshargs.Archives)).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)),meshargs.isGLBinary,meshargs.MaterialUncookExtension,meshargs.LodFilter);
+                    (new MATERIAL(meshargs.Archives)).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)),meshargs.isGLBinary,meshargs.WithMaterialMeshargs.MaterialUncookExtension,meshargs.LodFilter);
                     break;
 
                 case MeshExportType.WithRig:
-                    (new MESH()).ExportMeshWithRig(cr2wStream, meshargs.RigStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)),meshargs.LodFilter,meshargs.isGLBinary);
+                    (new MESH()).ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)),meshargs.LodFilter,meshargs.isGLBinary);
                     break;
             }
             return true;

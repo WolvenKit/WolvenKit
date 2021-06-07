@@ -94,6 +94,18 @@ namespace WolvenKit.Views.Editor
         {
             SelectionLocked = false;
         }
+
+        private void PropertyGrid_CollectionEditorOpening(object sender, Syncfusion.Windows.PropertyGrid.CollectionEditorOpeningEventArgs e)
+        {
+            
+            e.Cancel=true;
+            FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        private void CancelSelectingClick(object sender, RoutedEventArgs e)
+        {
+            FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        }
     }
 }
 
