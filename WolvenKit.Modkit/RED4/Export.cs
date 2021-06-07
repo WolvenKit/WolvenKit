@@ -37,7 +37,7 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var ext = Path.GetExtension(cr2wfile.FullName)[1..];
+            var ext = Path.GetExtension(cr2wfile.FullName).TrimStart('.');
 
             #endregion checks
 
@@ -45,7 +45,7 @@ namespace CP77.CR2W
             using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
             using var br = new BinaryReader(fs);
 
-            return UncookInplace(fs, cr2wfile, ext, args);
+            return UncookInplace(fs, cr2wfile, args);
         }
 
         #endregion Methods

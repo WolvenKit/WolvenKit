@@ -73,7 +73,7 @@ namespace CP77.MSTests
 
 
                 // uncook
-                modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, args);
+                modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, args, resultDir);
 
                 // rebuild
                 modtools.Recombine(resultDir, true, true, false, true, false, true);

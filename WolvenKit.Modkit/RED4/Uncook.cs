@@ -23,79 +23,57 @@ using WolvenKit.Modkit.RED4.MorphTargetFile;
 
 namespace CP77.CR2W
 {
-    public static class ModToolsExtensions
-    {
-
-    }
-
-
-
-
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
     public partial class ModTools
     {
-
-
-        /// <summary>
-        /// Extracts a single file (by hash) from an archive to a Stream
-        /// </summary>
-        /// <param name="ar"></param>
-        /// <param name="hash"></param>
-        /// <param name="stream"></param>
-        public void UncookSingleToStream(Archive ar, ulong hash, Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-
-
         /// <summary>
         /// Uncooks a single file by hash. This will both extract and uncook the redengine file
         /// </summary>
-        /// <param name="ar"></param>
+        /// <param name="archive"></param>
         /// <param name="hash"></param>
         /// <param name="outDir"></param>
+        /// <param name="rawOutDir"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public bool UncookSingle(Archive ar, ulong hash, DirectoryInfo outDir, ExportArgs args)
+        public bool UncookSingle(Archive archive, ulong hash, DirectoryInfo outDir, ExportArgs args, DirectoryInfo rawOutDir = null)
         {
             if (!_hashService.Contains(hash))
             {
                 return false;
             }
 
-            if (!ar.Files.ContainsKey(hash))
+            if (!archive.Files.ContainsKey(hash))
             {
                 return false;
             }
 
             // extract the main file with uncompressed buffers
             #region unbundle main file
-            using var ms = new MemoryStream();
-            ExtractSingleToStream(ar, hash, ms);
+            using var cr2WStream = new MemoryStream();
+            ExtractSingleToStream(archive, hash, cr2WStream);
 
             // write main file
-            var entry = ar.Files[hash] as FileEntry;
-            var name = entry.FileName;
-            if (string.IsNullOrEmpty(Path.GetExtension(name)))
+            var entry = archive.Files[hash] as FileEntry;
+            var relFileFullName = entry.FileName;
+            if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
             {
-                name += ".bin";
+                relFileFullName += ".bin";
             }
-            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
-            if (outfile.Directory == null)
+            var cr2WExtractedFullPath = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
+            if (cr2WExtractedFullPath.Directory == null)
             {
                 return false;
             }
-            Directory.CreateDirectory(outfile.Directory.FullName);
-            using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
-            ms.Seek(0, SeekOrigin.Begin);
-            ms.CopyTo(fs);
+            Directory.CreateDirectory(cr2WExtractedFullPath.Directory.FullName);
+            using var fs = new FileStream(cr2WExtractedFullPath.FullName, FileMode.Create, FileAccess.Write);
+            cr2WStream.Seek(0, SeekOrigin.Begin);
+            cr2WStream.CopyTo(fs);
             #endregion
 
-            // uncook from main file stream
-            var ext = Path.GetExtension(name)[1..];
-            return UncookInplace(ms, outfile, ext, args);
+            // uncook from main file buffers
+            return UncookInplace(cr2WStream, cr2WExtractedFullPath, args, rawOutDir);
         }
 
         /// <summary>
@@ -109,7 +87,7 @@ namespace CP77.CR2W
         /// <param name="flip"></param>
         /// <returns></returns>
         public (List<string>, int) UncookAll(Archive ar, DirectoryInfo outDir, ExportArgs args,
-            string pattern = "", string regex = "")
+            string pattern = "", string regex = "", DirectoryInfo rawOutDir = null)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -143,7 +121,7 @@ namespace CP77.CR2W
             _progressService.Report(0);
             Parallel.ForEach(finalMatchesList, info =>
             {
-                if (UncookSingle(ar, info.NameHash64, outDir, args))
+                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir))
                 {
                     extractedList.Add(info.FileName);
                 }
@@ -170,8 +148,11 @@ namespace CP77.CR2W
         /// uncooks buffers to raw format and
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public bool UncookInplace(Stream cr2wStream, FileInfo inputFileInfo, string ext, ExportArgs args)
+        public bool UncookInplace(Stream cr2wStream, FileInfo inputFileInfo, ExportArgs args, DirectoryInfo rawOutDir = null)
         {
+            var ext = Path.GetExtension(inputFileInfo.FullName).TrimStart('.');
+
+            // files where uncook methods are NOT implemented: just extract buffers
             if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
             {
                 if (inputFileInfo.Directory != null)
@@ -189,12 +170,14 @@ namespace CP77.CR2W
                     stream.Dispose();
                 }
             }
+
+            // handle files where uncook methods ARE implemented
             if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
             {
                 return false;
             }
 
-
+            // wems are not cr2w files, need to be handled first
             if (extAsEnum == ECookedFileFormat.wem)
             {
                 var q = args as WemExportArgs;
@@ -204,9 +187,8 @@ namespace CP77.CR2W
 
             }
 
-            args.FileName = inputFileInfo.FullName;
-
             // uncook textures, meshes etc
+            args.FileName = inputFileInfo.FullName;
             switch (extAsEnum)
             {
                 case ECookedFileFormat.mlmask:
@@ -225,8 +207,6 @@ namespace CP77.CR2W
                     return (HandleMesh(cr2wStream, inputFileInfo, args));
                 case ECookedFileFormat.morphtarget:
                     return (new TARGET()).ExportTargets(cr2wStream, (new FileInfo(inputFileInfo.FullName)));
-
-
                 case ECookedFileFormat.xbm:
                 {
                     if (args is not XbmExportArgs xbmargs)
