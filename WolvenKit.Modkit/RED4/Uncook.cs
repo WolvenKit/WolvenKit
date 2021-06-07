@@ -308,11 +308,12 @@ namespace CP77.CR2W
                     ExportMesh(cr2wStream, meshName, cr2wFileName);
                     break;
                 case MeshExportType.WithMaterials:
-                    ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName, meshargs.Archives);
+                    ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName, meshargs.Archives,
+                        meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter);
                     break;
 
                 case MeshExportType.WithRig:
-                    ExportMeshWithRig(cr2wStream, meshargs.RigStream, meshName, cr2wFileName);
+                    ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream, meshName, cr2wFileName);
                     break;
             }
             return true;
