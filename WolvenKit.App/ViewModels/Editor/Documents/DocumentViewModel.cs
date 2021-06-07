@@ -23,6 +23,7 @@ using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W.SRT;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
@@ -47,6 +48,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IProjectManager _projectManager;
+        private readonly Cp77FileService _wolvenkitFileService;
         private readonly ModTools _modTools;
 
 
@@ -89,6 +91,7 @@ namespace WolvenKit.ViewModels.Editor
             _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
             _modTools = ServiceLocator.Default.ResolveType<ModTools>();
+            _wolvenkitFileService = ServiceLocator.Default.ResolveType<Cp77FileService>();
 
             IsDirty = false;
 
@@ -359,11 +362,10 @@ namespace WolvenKit.ViewModels.Editor
                     {
                         // check game
                         var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-                        //var fileService = ServiceLocator.Default.ResolveType<IWolvenkitFileService>();
                         switch (pm.ActiveProject)
                         {
                             case Cp77Project cp77proj:
-                                var cr2w = _modTools.TryReadCr2WFile(reader);
+                                var cr2w = _wolvenkitFileService.TryReadCr2WFile(reader);
                                 if (cr2w == null)
                                 {
                                     logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);

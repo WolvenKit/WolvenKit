@@ -11,6 +11,8 @@ using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Modkit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -90,8 +92,13 @@ namespace WolvenKit.CLI.MSTests
             ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IProgress<double>, MockProgressService>();
-            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
-            ServiceLocator.Default.RegisterType<ModTools>();
+            ServiceLocator.Default.RegisterType<Cp77FileService>();
+            ServiceLocator.Default.RegisterType<TargetTools>();      //Cp77FileService
+            ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService
+            ServiceLocator.Default.RegisterType<MESHIMPORTER>();     //Cp77FileService
+            ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
+
+            ServiceLocator.Default.RegisterType<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
 

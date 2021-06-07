@@ -17,6 +17,8 @@ using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Modkit.RED4.Materials;
+using WolvenKit.Modkit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
@@ -48,9 +50,13 @@ namespace WolvenKit.CLI
                     services.AddScoped<IProgress<double>, MockProgressService>();
 
                     services.AddSingleton<IHashService, HashService>();
-                    services.AddScoped<IWolvenkitFileService, Cp77FileService>();
+                    services.AddScoped<Cp77FileService>();
+                    services.AddScoped<TargetTools>();      //Cp77FileService
+                    services.AddScoped<RIG>();              //Cp77FileService
+                    services.AddScoped<MESHIMPORTER>();     //Cp77FileService
+                    services.AddScoped<MeshTools>();        //RIG, Cp77FileService
 
-                    services.AddScoped<ModTools>();
+                    services.AddScoped<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
                     services.AddHostedService<WorkerHostedService>();
                 });

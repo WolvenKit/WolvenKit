@@ -20,7 +20,7 @@ namespace CP77.CR2W
         public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 return false;

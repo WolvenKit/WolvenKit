@@ -34,8 +34,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
-        private readonly ModTools _modTools;
-        
+        private readonly MeshTools _meshTools;
+
 
         /// <summary>
         /// Constructor PropertiesViewModel
@@ -43,12 +43,13 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="projectManager"></param>
         /// <param name="loggerService"></param>
         /// <param name="messageService"></param>
+        /// <param name="meshTools"></param>
         /// <param name="commandManager"></param>
         public PropertiesViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ModTools modTools,
+            MeshTools meshTools,
             ICommandManager commandManager
         ) : base(ToolTitle)
         {
@@ -56,12 +57,12 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => modTools);
+            Argument.IsNotNull(() => meshTools);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
-            _modTools = modTools;
+            _meshTools = meshTools;
 
             SetupToolDefaults();
 
@@ -182,7 +183,7 @@ namespace WolvenKit.ViewModels.Editor
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
-                        var q = _modTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
+                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
                         if (q.Length > 0)
                         {
                             LoadModel(q);

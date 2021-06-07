@@ -130,7 +130,7 @@ namespace CP77Tools.Tasks
                 {
                     var infile = fileInfo.FullName;
                     using var fs = new FileStream(infile, FileMode.Open, FileAccess.Read);
-                    var cr2w = _modTools.TryReadCr2WFile(fs);
+                    var cr2w = _wolvenkitFileService.TryReadCr2WFile(fs);
                     if (cr2w == null)
                     {
                         return;

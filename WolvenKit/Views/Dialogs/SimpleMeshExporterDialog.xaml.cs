@@ -303,7 +303,8 @@ namespace WolvenKit.Views.Dialogs
         private void ExportButton_OnClick(object sender, RoutedEventArgs e)
         {
             var gamecontroller = ServiceLocator.Default.ResolveType<Cp77Controller>();
-            var modkit = ServiceLocator.Default.ResolveType<ModTools>();
+            var meshTools = ServiceLocator.Default.ResolveType<MeshTools>();
+            var materialTools = ServiceLocator.Default.ResolveType<ModTools>();
 
             // var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
             var Item = SelectedItem;
@@ -319,7 +320,7 @@ namespace WolvenKit.Views.Dialogs
                 {
                     if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
                     {
-                        modkit.ExportMeshWithoutRig(stream, Item.Name, FIItem);
+                        meshTools.ExportMeshWithoutRig(stream, Item.Name, FIItem);
                     }
 
                     if (ExtractRigged)
@@ -333,13 +334,13 @@ namespace WolvenKit.Views.Dialogs
                             xz.Add(Path.GetFileName(fs.Name));
 
                         }
-                        modkit.ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
+                        meshTools.ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
                     }
                     if (ExportMaterials && UseMaterialsRepository && CopyTextures)
                     {
                         if (ReturnThisForMe() != null)
                         {
-                            modkit.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem, true, true);
+                            materialTools.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem, true, true);
 
                         }
                     }
@@ -347,12 +348,12 @@ namespace WolvenKit.Views.Dialogs
                     {
                         if (ReturnThisForMe() != null)
                         {
-                            modkit.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem);
+                            materialTools.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem);
                         }
                     }
                     if (ExportMaterials)
                     {
-                        modkit.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem, list.Cast<Archive>().ToList());
+                        materialTools.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem, list.Cast<Archive>().ToList());
                     }
 
                     Trace.WriteLine(_selectedExportFormatId);

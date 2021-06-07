@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
 
 namespace CP77Tools.Tasks
 {
@@ -14,7 +15,7 @@ namespace CP77Tools.Tasks
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
         private readonly IProgress<double> _progressService;
-
+        private readonly Cp77FileService _wolvenkitFileService;
 
 
 
@@ -26,6 +27,7 @@ namespace CP77Tools.Tasks
             ILoggerService loggerService,
             IHashService hashService,
             IProgress<double> progress,
+            Cp77FileService wolvenkitFileService,
             ModTools modTools
             )
         {
@@ -33,7 +35,7 @@ namespace CP77Tools.Tasks
             _modTools = modTools;
             _progressService = progress;
             _hashService = hashService;
-
+            _wolvenkitFileService = wolvenkitFileService;
         }
 
 

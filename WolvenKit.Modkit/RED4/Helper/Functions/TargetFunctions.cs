@@ -24,15 +24,21 @@ namespace CP77.CR2W
     using RIGIDMESH = MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>;
     using VPNT = VertexPositionNormalTangent;
     using VCT = VertexColor1Texture2;
-    public partial class ModTools
+    public class TargetTools
     {
+        private readonly Cp77FileService _modTools;
+
+        public TargetTools(Cp77FileService modTools)
+        {
+            _modTools = modTools;
+        }
 
         public bool ExportTargets(Stream targetStream, FileInfo outfile, bool isGLBinary = true)
         {
-            var cr2w = TryReadCr2WFile(targetStream);
+            var cr2w = _modTools.TryReadRED4File(targetStream);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            MemoryStream meshbuffer = GetMeshBufferStream(targetStream, cr2w);
+            MemoryStream meshbuffer = MeshTools.GetMeshBufferStream(targetStream, cr2w);
 
 
             var buffers = cr2w.Buffers;
@@ -50,7 +56,7 @@ namespace CP77.CR2W
             targetStream.Seek(cr2w.Buffers[2].Offset, SeekOrigin.Begin);
             targetStream.DecompressAndCopySegment(texbuffer, buffers[2].DiskSize, buffers[2].MemSize);
 
-            MeshesInfo meshinfo = GetMeshesinfo(cr2w);
+            MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
 
             int subMeshC = 0;
             for (int i = 0; i < meshinfo.meshC; i++)
@@ -58,7 +64,7 @@ namespace CP77.CR2W
 
                 if (meshinfo.LODLvl[i] != 1)
                     continue;
-                RawMeshContainer mesh = ContainRawMesh(meshbuffer, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
+                RawMeshContainer mesh = MeshTools.ContainRawMesh(meshbuffer, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
                 mesh.name = "mesh_" + i;
                 expMeshes.Add(mesh);
                 subMeshC++;

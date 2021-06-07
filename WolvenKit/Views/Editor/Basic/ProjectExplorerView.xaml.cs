@@ -76,8 +76,7 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
-            var modkit = ServiceLocator.Default.ResolveType<ModTools>();
-            var q = modkit.ExportMeshWithoutRigPreviewer(z.FullName);
+            var q = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(z.FullName);
             if (q.Length <= 0)
             {
                 return;
@@ -115,8 +114,7 @@ namespace WolvenKit.Views.Editor
 
             var xa = new FileInfo(outp + "\\" + z.Name);
             Trace.WriteLine(xa);
-            var modkit = ServiceLocator.Default.ResolveType<ModTools>();
-            modkit.ExportTargets(targetStream, xa);
+            ServiceLocator.Default.ResolveType<TargetTools>().ExportTargets(targetStream, xa);
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)

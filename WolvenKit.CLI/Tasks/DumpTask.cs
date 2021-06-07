@@ -199,7 +199,7 @@ namespace CP77Tools.Tasks
                         {
                             using var ms = new MemoryStream();
                             ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
-                            var cr2w = _modTools.TryReadCr2WFileHeaders(ms);
+                            var cr2w = _wolvenkitFileService.TryReadCr2WFileHeaders(ms);
                             if (cr2w == null)
                             {
                                 return;
@@ -220,7 +220,7 @@ namespace CP77Tools.Tasks
                             {
                                 using var ms = new MemoryStream();
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
-                                var cr2w = _modTools.TryReadCr2WFile(ms);
+                                var cr2w = _wolvenkitFileService.TryReadCr2WFile(ms);
 
                                 if (cr2w?.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
                                     !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))

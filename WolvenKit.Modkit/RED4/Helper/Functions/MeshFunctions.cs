@@ -30,8 +30,16 @@ namespace CP77.CR2W
     using VCT = VertexColor1Texture2;
     using VJ = VertexJoints8;
 
-    public partial class ModTools
+    public class MeshTools
     {
+        private readonly Cp77FileService _modTools;
+        private readonly RIG _rig;
+
+        public MeshTools(Cp77FileService modtools, RIG rig)
+        {
+            _modTools = modtools;
+            _rig = rig;
+        }
 
         private const string tempmodels = "tempmodels\\OBJ\\";
 
@@ -40,7 +48,7 @@ namespace CP77.CR2W
             using var meshStream = new MemoryStream();
             file.Extract(meshStream);
             meshStream.Seek(0, SeekOrigin.Begin);
-            var cr2w = TryReadCr2WFile(meshStream);
+            var cr2w = _modTools.TryReadRED4File(meshStream);
             if (cr2w == null)
             {
                 return "";
@@ -52,7 +60,7 @@ namespace CP77.CR2W
         public string ExportMeshWithoutRigPreviewer(string FilePath, bool LodFilter = true, bool isGLBinary = true)
         {
             using var meshStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var cr2w = TryReadCr2WFile(meshStream);
+            var cr2w = _modTools.TryReadRED4File(meshStream);
             if (cr2w == null)
             {
                 return "";
@@ -133,7 +141,7 @@ namespace CP77.CR2W
         public bool ExportMesh(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var cr2w = TryReadCr2WFile(meshStream);
+            var cr2w = _modTools.TryReadRED4File(meshStream);
 
             RawArmature Rig = new RawArmature();
             MeshBones bones = new MeshBones();
@@ -209,7 +217,7 @@ namespace CP77.CR2W
         public bool ExportMeshWithoutRig(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var cr2w = TryReadCr2WFile(meshStream);
+            var cr2w = _modTools.TryReadRED4File(meshStream);
 
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
             MeshesInfo meshinfo = GetMeshesinfo(cr2w);
@@ -247,7 +255,7 @@ namespace CP77.CR2W
 
             for (int m = 0; m < meshStreamS.Count; m++)
             {
-                var cr2w = TryReadCr2WFile(meshStreamS[m]);
+                var cr2w = _modTools.TryReadRED4File(meshStreamS[m]);
 
                 MemoryStream ms = GetMeshBufferStream(meshStreamS[m], cr2w);
                 MeshesInfo meshinfo = GetMeshesinfo(cr2w);
@@ -281,11 +289,11 @@ namespace CP77.CR2W
         }
         public void ExportMeshWithRig(Stream meshStream, Stream rigStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
-            RawArmature Rig = (new RIG()).ProcessRig(rigStream);
+            RawArmature Rig = _rig.ProcessRig(rigStream);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
-            var cr2w = TryReadCr2WFile(meshStream);
+            var cr2w = _modTools.TryReadRED4File(meshStream);
 
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
             MeshesInfo meshinfo = GetMeshesinfo(cr2w);
@@ -341,7 +349,7 @@ namespace CP77.CR2W
             rigStreamS = rigStreamS.OrderByDescending(r => r.Length).ToList();  // not so smart hacky method to get bodybase rigs on top/ orderby descending
             for (int r = 0; r < rigStreamS.Count; r++)
             {
-                RawArmature Rig = (new RIG()).ProcessRig(rigStreamS[r]);
+                RawArmature Rig = _rig.ProcessRig(rigStreamS[r]);
                 Rigs.Add(Rig);
             }
             RawArmature expRig = RIG.CombineRigs(Rigs);
@@ -352,7 +360,7 @@ namespace CP77.CR2W
             {
                 BinaryReader br = new BinaryReader(meshStreamS[m]);
 
-                var cr2w = TryReadCr2WFile(meshStreamS[m]);
+                var cr2w = _modTools.TryReadRED4File(meshStreamS[m]);
 
                 MemoryStream ms = GetMeshBufferStream(meshStreamS[m], cr2w);
                 MeshesInfo meshinfo = GetMeshesinfo(cr2w);

@@ -12,6 +12,8 @@ using WolvenKit.Modkit.RED3;
 using WolvenKit.MVVM.Model;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.Modkit.RED4.Materials;
+using WolvenKit.Modkit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4.RigFile;
 using AboutInfoService = WolvenKit.Functionality.Services.AboutInfoService;
 
 /// <summary>
@@ -49,11 +51,14 @@ public static class ModuleInitializer
         serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
         serviceLocator.RegisterType<MockGameController>();
 
-        serviceLocator.RegisterType<IWolvenkitFileService, Cp77FileService>();
+        serviceLocator.RegisterType<Cp77FileService>();
+        serviceLocator.RegisterType<TargetTools>();      //Cp77FileService
+        serviceLocator.RegisterType<RIG>();              //Cp77FileService
+        serviceLocator.RegisterType<MESHIMPORTER>();     //Cp77FileService
+        serviceLocator.RegisterType<MeshTools>();        //RIG, Cp77FileService
 
+        serviceLocator.RegisterType<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
-        // red4 modding tools
-        serviceLocator.RegisterType<ModTools>();
         serviceLocator.RegisterType<Cp77Controller>();
 
         // red3 modding tools

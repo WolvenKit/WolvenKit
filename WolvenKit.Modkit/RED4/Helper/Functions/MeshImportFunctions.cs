@@ -20,11 +20,11 @@ namespace WolvenKit.Modkit.RED4.MeshFile
     using Vec3 = System.Numerics.Vector3;
     public class MESHIMPORTER
     {
-        private readonly ModTools ModTools;
+        private readonly Cp77FileService _modTools;
 
-        public MESHIMPORTER()
+        public MESHIMPORTER(Cp77FileService modtools)
         {
-            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
+            _modTools = modtools;
         }
 
         public void Import(FileInfo inGltfFile, Stream inmeshStream, FileInfo outMeshFile)
@@ -33,7 +33,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
 
             VerifyGLTF(model);
 
-            var cr2w = ModTools.TryReadCr2WFile(inmeshStream);
+            var cr2w = _modTools.TryReadRED4File(inmeshStream);
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
 
             for (int i = 0; i < model.LogicalMeshes.Count; i++)

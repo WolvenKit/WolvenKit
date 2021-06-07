@@ -259,7 +259,7 @@ namespace WolvenKit.Views.Editor
                             }
 
                             var endPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
-                            var q2 = ServiceLocator.Default.ResolveType<ModTools>().ExportMeshWithoutRigPreviewer(q, endPath);
+                            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(q, endPath);
                             if (q2.Length > 0)
                             {
                                 StaticReferences.GlobalPropertiesView.LoadModel(q2);

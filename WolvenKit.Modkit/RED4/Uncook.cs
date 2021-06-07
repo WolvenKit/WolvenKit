@@ -17,14 +17,12 @@ using WolvenKit.RED4.CR2W;
 using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.MeshFile;
 
 namespace CP77.CR2W
 {
-    /// <summary>
-    /// Collection of common modding utilities.
-    /// </summary>
     public partial class ModTools
     {
         /// <summary>
@@ -51,7 +49,7 @@ namespace CP77.CR2W
             // extract the main file with uncompressed buffers
             #region unbundle main file
             using var cr2WStream = new MemoryStream();
-            ExtractSingleToStream(archive, hash, cr2WStream);
+            ModTools.ExtractSingleToStream(archive, hash, cr2WStream);
 
             // write main file
             var entry = archive.Files[hash] as FileEntry;
@@ -225,7 +223,7 @@ namespace CP77.CR2W
                 case ECookedFileFormat.mesh:
                     return (HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>()));
                 case ECookedFileFormat.morphtarget:
-                    return ExportTargets(cr2wStream, outfile);
+                    return _targetTools.ExportTargets(cr2wStream, outfile);
                 case ECookedFileFormat.xbm:
                 {
                     if (settings.Get<XbmExportArgs>() is not { } xbmargs)
@@ -305,7 +303,7 @@ namespace CP77.CR2W
             switch (meshargs.meshExportType)
             {
                 case MeshExportType.Default:
-                    ExportMesh(cr2wStream, meshName, cr2wFileName);
+                    _meshTools.ExportMesh(cr2wStream, meshName, cr2wFileName);
                     break;
                 case MeshExportType.WithMaterials:
                     ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName, meshargs.Archives,
@@ -313,7 +311,7 @@ namespace CP77.CR2W
                     break;
 
                 case MeshExportType.WithRig:
-                    ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream, meshName, cr2wFileName);
+                    _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream, meshName, cr2wFileName);
                     break;
             }
             return true;
@@ -344,7 +342,7 @@ namespace CP77.CR2W
         public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFileHeaders(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFileHeaders(cr2wStream);
             if (cr2w == null)
             {
                 yield break;
@@ -366,7 +364,7 @@ namespace CP77.CR2W
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -414,7 +412,7 @@ namespace CP77.CR2W
         private bool UncookEnvprobe(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -449,7 +447,7 @@ namespace CP77.CR2W
         private bool UncookCubeMap(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -497,7 +495,7 @@ namespace CP77.CR2W
         private bool UncookCsv(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -522,7 +520,7 @@ namespace CP77.CR2W
             texformat = EFormat.R8G8B8A8_UNORM;
 
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;

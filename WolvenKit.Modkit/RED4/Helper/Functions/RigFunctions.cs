@@ -17,18 +17,18 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
     public class RIG
     {
-        private readonly ModTools ModTools;
+        private readonly Cp77FileService _modTools;
 
-        public RIG()
+        public RIG(Cp77FileService modTools)
         {
-            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
+            _modTools = modTools;
         }
 
         public RawArmature ProcessRig(Stream fs)
         {
             BinaryReader br = new BinaryReader(fs);
 
-            var cr2w = ModTools.TryReadCr2WFile(fs);
+            var cr2w = _modTools.TryReadRED4File(fs);
 
             RawArmature Rig = new RawArmature();
             Rig.Names = GetboneNames(cr2w, "animRig");

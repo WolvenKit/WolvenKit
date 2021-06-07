@@ -27,6 +27,7 @@ namespace CP77.CR2W
     /// </summary>
     public partial class ModTools
     {
+        
         static string cacheDir = Path.GetTempPath() + "WolvenKit\\Material\\Temp\\";
 
         public void ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName,
@@ -36,15 +37,15 @@ namespace CP77.CR2W
             Directory.CreateDirectory(cacheDir);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var mesh_cr2w = TryReadCr2WFile(meshStream);
+            var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
 
-            MemoryStream ms = GetMeshBufferStream(meshStream, mesh_cr2w);
-            MeshesInfo meshinfo = GetMeshesinfo(mesh_cr2w);
+            MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, mesh_cr2w);
+            MeshesInfo meshinfo = MeshTools.GetMeshesinfo(mesh_cr2w);
             for (int i = 0; i < meshinfo.meshC; i++)
             {
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
-                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
+                RawMeshContainer mesh = MeshTools.ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
                 mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
@@ -56,7 +57,7 @@ namespace CP77.CR2W
                 }
                 expMeshes.Add(mesh);
             }
-            ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
+            ModelRoot model = MeshTools.RawRigidMeshesToGLTF(expMeshes);
 
             DirectoryInfo outDir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
             Directory.CreateDirectory(outDir.FullName);
@@ -81,15 +82,15 @@ namespace CP77.CR2W
             Directory.CreateDirectory(cacheDir);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var mesh_cr2w = TryReadCr2WFile(meshStream);
+            var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
 
-            MemoryStream ms = GetMeshBufferStream(meshStream, mesh_cr2w);
-            MeshesInfo meshinfo = GetMeshesinfo(mesh_cr2w);
+            MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, mesh_cr2w);
+            MeshesInfo meshinfo = MeshTools.GetMeshesinfo(mesh_cr2w);
             for (int i = 0; i < meshinfo.meshC; i++)
             {
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
-                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i],
+                RawMeshContainer mesh = MeshTools.ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i],
                     meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i],
                     meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i],
                     meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
@@ -104,7 +105,7 @@ namespace CP77.CR2W
                 }
                 expMeshes.Add(mesh);
             }
-            ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
+            ModelRoot model = MeshTools.RawRigidMeshesToGLTF(expMeshes);
 
             DirectoryInfo outDir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
             Directory.CreateDirectory(outDir.FullName);
@@ -125,7 +126,7 @@ namespace CP77.CR2W
             ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib,
             bool useAssetLib, List<Archive> archives)
         {
-            var cr2w = TryReadCr2WFile(meshStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
 
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
@@ -145,7 +146,7 @@ namespace CP77.CR2W
                     if(File.Exists(path))
                     {
                         FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-                        var micr2w = TryReadCr2WFile(fs);
+                        var micr2w = _wolvenkitFileService.TryReadCr2WFile(fs);
                         ExternalMaterial.Add(micr2w.Chunks[0].Data as CMaterialInstance);
 
                         for (int t = 0; t < micr2w.Imports.Count; t++)
@@ -179,7 +180,7 @@ namespace CP77.CR2W
                     if (File.Exists(path))
                     {
                         FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-                        var micr2w = TryReadCr2WFile(fs);
+                        var micr2w = _wolvenkitFileService.TryReadCr2WFile(fs);
                         ExternalMaterial.Add(micr2w.Chunks[0].Data as CMaterialInstance);
 
                         for (int t = 0; t < micr2w.Imports.Count; t++)
@@ -214,7 +215,7 @@ namespace CP77.CR2W
                     UInt32 size = (cr2w.Chunks[index].Data as CMesh).LocalMaterialBuffer.RawDataHeaders[i].Size.Value;
 
                     MemoryStream ms = new MemoryStream(bytes, (int)offset, (int)size);
-                    var mtcr2w = TryReadCr2WFile(ms);
+                    var mtcr2w = _wolvenkitFileService.TryReadCr2WFile(ms);
 
                     string path = (mtcr2w.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath;
 
@@ -321,7 +322,7 @@ namespace CP77.CR2W
                     if (File.Exists(AssetLib.FullName + "\\" + primaryDependencies[i]))
                     {
                         FileStream setupFs = new FileStream((AssetLib.FullName + "\\" + primaryDependencies[i]), FileMode.Open, FileAccess.Read);
-                        var cr2w = TryReadCr2WFile(setupFs);
+                        var cr2w = _wolvenkitFileService.TryReadCr2WFile(setupFs);
                         mlSetupNames.Add(Path.GetFileName(primaryDependencies[i]));
                         mlSetups.Add(cr2w.Chunks[0].Data as Multilayer_Setup);
 
@@ -346,7 +347,7 @@ namespace CP77.CR2W
                                 if (File.Exists(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr))
                                 {
                                     FileStream templateFs = new FileStream((AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr), FileMode.Open, FileAccess.Read);
-                                    var mlTempcr2w = TryReadCr2WFile(templateFs);
+                                    var mlTempcr2w = _wolvenkitFileService.TryReadCr2WFile(templateFs);
                                     mlTemplateNames.Add(Path.GetFileName(cr2w.Imports[e].DepotPathStr));
                                     mlTemplates.Add(mlTempcr2w.Chunks[0].Data as Multilayer_LayerTemplate);
 
@@ -499,7 +500,7 @@ namespace CP77.CR2W
                     if (File.Exists(cacheDir + primaryDependencies[i]))
                     {
                         FileStream setupFs = new FileStream((cacheDir + primaryDependencies[i]), FileMode.Open, FileAccess.Read);
-                        var cr2w = TryReadCr2WFile(setupFs);
+                        var cr2w = _wolvenkitFileService.TryReadCr2WFile(setupFs);
                         mlSetupNames.Add(Path.GetFileName(primaryDependencies[i]));
                         mlSetups.Add(cr2w.Chunks[0].Data as Multilayer_Setup);
 
@@ -528,7 +529,7 @@ namespace CP77.CR2W
                                 if (File.Exists(cacheDir + cr2w.Imports[e].DepotPathStr))
                                 {
                                     FileStream templateFs = new FileStream((cacheDir + cr2w.Imports[e].DepotPathStr), FileMode.Open, FileAccess.Read);
-                                    var mlTempcr2w = TryReadCr2WFile(templateFs);
+                                    var mlTempcr2w = _wolvenkitFileService.TryReadCr2WFile(templateFs);
                                     mlTemplateNames.Add(Path.GetFileName(cr2w.Imports[e].DepotPathStr));
                                     mlTemplates.Add(mlTempcr2w.Chunks[0].Data as Multilayer_LayerTemplate);
 
@@ -688,7 +689,7 @@ namespace CP77.CR2W
         }
         public void UnpackLocalBufferMaterials(Stream meshStream, DirectoryInfo unpackDir)
         {
-            var cr2w = TryReadCr2WFile(meshStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {
@@ -728,7 +729,7 @@ namespace CP77.CR2W
         }
         public void PackMaterialToLocalBuffer(DirectoryInfo packDir, Stream inmeshStream, FileInfo outMeshFile)
         {
-            var cr2w = TryReadCr2WFile(inmeshStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(inmeshStream);
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {

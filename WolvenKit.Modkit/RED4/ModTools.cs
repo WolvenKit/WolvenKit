@@ -12,33 +12,29 @@ namespace CP77.CR2W
         private readonly ILoggerService _loggerService;
         private readonly IProgress<double> _progressService;
         private readonly IHashService _hashService;
-        private readonly IWolvenkitFileService _wolvenkitFileService;
+        private readonly Cp77FileService _wolvenkitFileService;
+        private readonly MeshTools _meshTools;
+        private readonly TargetTools _targetTools;
+        //private readonly MaterialTools _materialTools;
 
 
         public ModTools(
             ILoggerService loggerService,
             IProgress<double> progressService,
             IHashService hashService,
-            IWolvenkitFileService wolvenkitFileService
+            Cp77FileService wolvenkitFileService,
+            MeshTools meshTools,
+            TargetTools targetTools
+            //MaterialTools materialTools
         )
         {
             _loggerService = loggerService;
             _progressService = progressService;
             _hashService = hashService;
             _wolvenkitFileService = wolvenkitFileService;
+            _meshTools = meshTools;
+            _targetTools = targetTools;
+            //_materialTools = materialTools;
         }
-
-
-        #region Methods
-
-        public CR2WFile TryReadCr2WFile(Stream stream) => _wolvenkitFileService.TryReadCr2WFile(stream) as CR2WFile;
-
-        public CR2WFile TryReadCr2WFile(BinaryReader br) => _wolvenkitFileService.TryReadCr2WFile(br) as CR2WFile;
-
-        public CR2WFile TryReadCr2WFileHeaders(Stream stream) => _wolvenkitFileService.TryReadCr2WFileHeaders(stream) as CR2WFile;
-
-        public CR2WFile TryReadCr2WFileHeaders(BinaryReader br) => _wolvenkitFileService.TryReadCr2WFileHeaders(br) as CR2WFile;
-
-        #endregion Methods
     }
 }
