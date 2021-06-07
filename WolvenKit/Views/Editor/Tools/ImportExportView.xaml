@@ -373,6 +373,7 @@
                 Margin="2"
                 Background="{DynamicResource ContentBackgroundAlt}">
                 <syncfusion:PropertyGrid
+                    DescriptionPanelVisibility="Visible"
                     ButtonPanelVisibility="Collapsed"
                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                     EnableGrouping="True"

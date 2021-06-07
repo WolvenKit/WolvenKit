@@ -23,6 +23,8 @@ namespace WolvenKit.Common.Model.Arguments
 
     public abstract class ExportArgs : ImportExportArgs
     {
+
+        [Browsable(false)]
         public string FileName { get; set; }
     }
 
@@ -104,17 +106,17 @@ namespace WolvenKit.Common.Model.Arguments
     {
 
         [Category("Export Type")]
-        [Display(Name ="Mesh Export Type")]
-        public MeshExportType meshExportType { get; set; }
+        [Display(Name = "Mesh Export Type")]
+        [Description("The type of export for your mesh")]
+
+        public MeshExportType meshExportType { get; set; } = MeshExportType.Default;
 
 
         [Category("Export Settings")]
         [Display(Name = "Lod Filter")]
-        [ReadOnly(true)]
         public bool LodFilter { get; set; } = true;
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [ReadOnly(true)]
         public bool isGLBinary { get; set; } = true;
 
         [Category("WithRig Settings")]
@@ -123,7 +125,8 @@ namespace WolvenKit.Common.Model.Arguments
 
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Export Type")]
-        public EUncookExtension MaterialUncookExtension { get; set; }
+        public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
+
 
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
@@ -137,7 +140,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Export Type")]
         [Display(Name = "Wem Export Type")]
-        public WemExportTypes wemExportType { get; set; }
+        public WemExportTypes wemExportType { get; set; } = WemExportTypes.Mp3;
 
 
         public override string ToString() => wemExportType.ToString();
