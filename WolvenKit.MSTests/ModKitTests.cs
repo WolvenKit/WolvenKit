@@ -70,10 +70,10 @@ namespace CP77.MSTests
                 ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
 
 
-
+                var globalSettings = new GlobalExportArgs();
 
                 // uncook
-                modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, args, resultDir);
+                modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, globalSettings, resultDir);
 
                 // rebuild
                 modtools.Recombine(resultDir, true, true, false, true, false, true);

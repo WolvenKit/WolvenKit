@@ -201,7 +201,8 @@ namespace WolvenKit.ViewModels.Editor
                     meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                 }
 
-                _modTools.Export(fi, item.Properties as ExportArgs);
+                var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
+                _modTools.Export(fi, settings);
             }
         }
 

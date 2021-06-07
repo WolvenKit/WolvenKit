@@ -1,6 +1,7 @@
 using System.IO;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
@@ -14,11 +15,14 @@ namespace CP77.CR2W
         #region Methods
 
         /// <summary>
-        /// Exports (Uncooks) a REDEngine file into it's raw counterpart
+        /// Exports (Uncooks) a physical REDengine file into it's raw file
         /// </summary>
         /// <param name="cr2wfile"></param>
-        /// <param name="outpath"></param>
-        public bool Export(FileInfo cr2wfile, ExportArgs args)
+        /// <param name="args"></param>
+        /// <param name="basedir"></param>
+        /// <param name="rawoutdir"></param>
+        public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir = null,
+            DirectoryInfo rawoutdir = null)
         {
             #region checks
 
@@ -37,15 +41,31 @@ namespace CP77.CR2W
                 return false;
             }
 
-            var ext = Path.GetExtension(cr2wfile.FullName).TrimStart('.');
+            // if no basedir is supplied use the file directory
+            if (basedir is not {Exists: true})
+            {
+                basedir = cr2wfile.Directory;
+            }
+            if (rawoutdir is not { Exists: true })
+            {
+                rawoutdir = cr2wfile.Directory;
+            }
+
+            if (!cr2wfile.FullName.Contains(basedir.FullName))
+            {
+                return false;
+            }
 
             #endregion checks
+
+            var ext = Path.GetExtension(cr2wfile.FullName).TrimStart('.');
 
             // read file
             using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
             using var br = new BinaryReader(fs);
 
-            return UncookInplace(fs, cr2wfile, args);
+            var relpath = cr2wfile.FullName.RelativePath(basedir);
+            return UncookBuffers(fs, relpath, args, rawoutdir);
         }
 
         #endregion Methods

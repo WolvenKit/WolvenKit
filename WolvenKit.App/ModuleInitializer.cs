@@ -54,7 +54,6 @@ public static class ModuleInitializer
 
         // red4 modding tools
         serviceLocator.RegisterType<ModTools>();
-        serviceLocator.RegisterType<MaterialRepository>();
         serviceLocator.RegisterType<Cp77Controller>();
 
         // red3 modding tools

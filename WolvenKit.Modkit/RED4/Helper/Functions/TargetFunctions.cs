@@ -14,7 +14,7 @@ using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Schema2;
 
-namespace WolvenKit.Modkit.RED4.MorphTargetFile
+namespace CP77.CR2W
 {
     using Vec4 = System.Numerics.Vector4;
     using Vec3 = System.Numerics.Vector3;
@@ -24,21 +24,15 @@ namespace WolvenKit.Modkit.RED4.MorphTargetFile
     using RIGIDMESH = MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>;
     using VPNT = VertexPositionNormalTangent;
     using VCT = VertexColor1Texture2;
-    public class TARGET
+    public partial class ModTools
     {
-        private readonly ModTools ModTools;
 
-        public TARGET()
+        public bool ExportTargets(Stream targetStream, FileInfo outfile, bool isGLBinary = true)
         {
-            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
-        }
-
-        public bool ExportTargets(Stream targetStream,FileInfo outfile, bool isGLBinary = true)
-        {
-            var cr2w = ModTools.TryReadCr2WFile(targetStream);
+            var cr2w = TryReadCr2WFile(targetStream);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            MemoryStream meshbuffer = MESH.GetMeshBufferStream(targetStream, cr2w);
+            MemoryStream meshbuffer = GetMeshBufferStream(targetStream, cr2w);
 
 
             var buffers = cr2w.Buffers;
@@ -56,7 +50,7 @@ namespace WolvenKit.Modkit.RED4.MorphTargetFile
             targetStream.Seek(cr2w.Buffers[2].Offset, SeekOrigin.Begin);
             targetStream.DecompressAndCopySegment(texbuffer, buffers[2].DiskSize, buffers[2].MemSize);
 
-            MeshesInfo meshinfo = MESH.GetMeshesinfo(cr2w);
+            MeshesInfo meshinfo = GetMeshesinfo(cr2w);
 
             int subMeshC = 0;
             for (int i = 0; i < meshinfo.meshC; i++)
@@ -64,7 +58,7 @@ namespace WolvenKit.Modkit.RED4.MorphTargetFile
 
                 if (meshinfo.LODLvl[i] != 1)
                     continue;
-                RawMeshContainer mesh = MESH.ContainRawMesh(meshbuffer, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
+                RawMeshContainer mesh = ContainRawMesh(meshbuffer, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
                 mesh.name = "mesh_" + i;
                 expMeshes.Add(mesh);
                 subMeshC++;

@@ -12,6 +12,50 @@ using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model.Arguments
 {
+    public class GlobalExportArgs
+    {
+        private readonly Dictionary<Type, ExportArgs> _argsList = new()
+        {
+            { typeof(CommonExportArgs), new CommonExportArgs() },
+            { typeof(MorphTargetExportArgs), new MorphTargetExportArgs() },
+            { typeof(MlmaskExportArgs), new MlmaskExportArgs() },
+            { typeof(XbmExportArgs), new XbmExportArgs() },
+            { typeof(MeshExportArgs), new MeshExportArgs() },
+            { typeof(WemExportArgs), new WemExportArgs() },
+        };
+
+        public GlobalExportArgs Register(params ExportArgs[] exportArgs)
+        {
+            foreach (var arg in exportArgs)
+            {
+                var type = arg.GetType();
+                if (_argsList.ContainsKey(type))
+                {
+                    _argsList[type] = arg;
+                }
+                else
+                {
+                    _argsList.Add(type, arg);
+                }
+            }
+
+            return this;
+        }
+
+        public T Get<T>() where T : ExportArgs
+        {
+            var arg = _argsList[typeof(T)];
+            if (arg is T t)
+            {
+                return t;
+            }
+
+            return null;
+        }
+
+    }
+
+
     public abstract class ImportExportArgs : Catel.Data.ObservableObject
     {
     }

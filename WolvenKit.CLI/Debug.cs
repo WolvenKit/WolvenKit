@@ -50,7 +50,6 @@ namespace WolvenKit.CLI
                     services.AddSingleton<IHashService, HashService>();
                     services.AddScoped<IWolvenkitFileService, Cp77FileService>();
 
-                    services.AddScoped<MaterialRepository>();
                     services.AddScoped<ModTools>();
 
                     services.AddHostedService<WorkerHostedService>();

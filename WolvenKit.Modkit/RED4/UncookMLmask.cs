@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Catel.IoC;
 using CP77.Common.Image;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.DDS;
@@ -9,17 +10,20 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.RED4.CR2W;
 
-namespace CP77.CR2W.Uncooker
+namespace CP77.CR2W
 {
-    public static class Mlmask
+    public partial class ModTools
     {
+
         #region Methods
 
-        public static bool Uncook(Stream cr2wStream, CR2WFile cr2w, ExportArgs args)
+        public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
         {
-            if (args is not MlmaskExportArgs mlmaskArgs)
+            // read the cr2wfile
+            var cr2w = TryReadCr2WFile(cr2wStream);
+            if (cr2w == null)
             {
-                throw new ArgumentException(nameof(ExportArgs));
+                return false;
             }
 
             //We need 2 buffers one for atlas one for tile data
@@ -29,16 +33,6 @@ namespace CP77.CR2W.Uncooker
             {
                 return false;
             }
-
-            var outfile = new FileInfo(cr2w.FileName);
-            if (outfile.Directory == null)
-            {
-                return false;
-            }
-
-            Directory.CreateDirectory(outfile.Directory.FullName);
-            string filename = Path.GetFileNameWithoutExtension(outfile.FullName);
-            string path = outfile.Directory.FullName;
 
             uint atlasWidth = blob.Header.AtlasWidth.Value;
             uint atlasHeight = blob.Header.AtlasHeight.Value;
@@ -99,11 +93,10 @@ namespace CP77.CR2W.Uncooker
 
             byte[] maskData = new byte[maskWidth * maskHeight];
 
-            Directory.CreateDirectory(path);
             for (int i = 0; i < maskCount; i++)
             {
-                var mFilename = filename + $"_{i}.dds";
-                var newpath = Path.Combine(path, mFilename);
+                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}.dds";
+                var newpath = Path.Combine(outfile.Directory.FullName, mFilename);
 
                 //Clear instead of allocate new is faster?
                 //Mandatory cause decode does not always write to every pixel
@@ -122,10 +115,10 @@ namespace CP77.CR2W.Uncooker
                 }
 
                 //convert texture if neccessary
-                if (mlmaskArgs.UncookExtension != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (args.UncookExtension != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     var di = new FileInfo(outfile.FullName).Directory;
-                    TexconvWrapper.Convert(di.FullName, $"{newpath}", mlmaskArgs.UncookExtension);
+                    TexconvWrapper.Convert(di.FullName, $"{newpath}", args.UncookExtension);
                 }
             }
             return true;

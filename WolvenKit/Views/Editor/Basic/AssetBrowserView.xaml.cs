@@ -258,9 +258,8 @@ namespace WolvenKit.Views.Editor
                                 }
                             }
 
-                            MESH m = new MESH();
                             var endPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
-                            var q2 = m.ExportMeshWithoutRigPreviewer(q, endPath);
+                            var q2 = ServiceLocator.Default.ResolveType<ModTools>().ExportMeshWithoutRigPreviewer(q, endPath);
                             if (q2.Length > 0)
                             {
                                 StaticReferences.GlobalPropertiesView.LoadModel(q2);
@@ -332,7 +331,7 @@ namespace WolvenKit.Views.Editor
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();
                         var expargs = new XbmExportArgs {Flip = false, UncookExtension = EUncookExtension.dds};
-                        man.UncookXbm(cr2wstream, ddsstream, expargs, out _);
+                        man.UncookXbm(cr2wstream, ddsstream, out _);
 
                         // try loading it in pfim
                         try

@@ -1,4 +1,5 @@
 using Catel.IoC;
+using CP77.CR2W;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4.Materials;
@@ -23,11 +24,8 @@ namespace WolvenKit.Views.Dialogs
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath = archivestext.Text;
-            var MaterialRepository = ServiceLocator.Default.ResolveType<MaterialRepository>();
-            MaterialRepository.Generate(new System.IO.DirectoryInfo(archivestext.Text), new System.IO.DirectoryInfo(Materialsrepotext.Text), Common.DDS.EUncookExtension.dds);
-
-
-
+            var modTools = ServiceLocator.Default.ResolveType<ModTools>();
+            modTools.Generate(new System.IO.DirectoryInfo(archivestext.Text), new System.IO.DirectoryInfo(Materialsrepotext.Text), Common.DDS.EUncookExtension.dds);
         }
 
         private void GenerateMaterials(object obj)

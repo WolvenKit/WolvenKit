@@ -20,39 +20,31 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
-namespace WolvenKit.Modkit.RED4.Materials
+namespace CP77.CR2W
 {
-    public class MATERIAL
+    /// <summary>
+    /// Collection of common modding utilities.
+    /// </summary>
+    public partial class ModTools
     {
-        private readonly ModTools ModTools;
-
-
-        public MATERIAL(List<Archive> _Archives) : this()
-        {
-            archives = _Archives;
-        }
-        public MATERIAL()
-        {
-            ModTools = ServiceLocator.Default.ResolveType<ModTools>();
-        }
-
-
         static string cacheDir = Path.GetTempPath() + "WolvenKit\\Material\\Temp\\";
-        public static List<Archive> archives;
-        public void ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName, FileInfo outfile, bool isGLBinary = true, bool copyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
+
+        public void ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName,
+            FileInfo outfile, bool isGLBinary = true, bool copyTextures = false,
+            EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
         {
             Directory.CreateDirectory(cacheDir);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var mesh_cr2w = ModTools.TryReadCr2WFile(meshStream);
+            var mesh_cr2w = TryReadCr2WFile(meshStream);
 
-            MemoryStream ms = MESH.GetMeshBufferStream(meshStream, mesh_cr2w);
-            MeshesInfo meshinfo = MESH.GetMeshesinfo(mesh_cr2w);
+            MemoryStream ms = GetMeshBufferStream(meshStream, mesh_cr2w);
+            MeshesInfo meshinfo = GetMeshesinfo(mesh_cr2w);
             for (int i = 0; i < meshinfo.meshC; i++)
             {
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
-                RawMeshContainer mesh = MESH.ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
+                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
                 mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
@@ -64,7 +56,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                 }
                 expMeshes.Add(mesh);
             }
-            ModelRoot model = MESH.RawRigidMeshesToGLTF(expMeshes);
+            ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
 
             DirectoryInfo outDir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
             Directory.CreateDirectory(outDir.FullName);
@@ -81,20 +73,26 @@ namespace WolvenKit.Modkit.RED4.Materials
             meshStream.Dispose();
             meshStream.Close();
         }
-        public void ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
+
+        public void ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile,
+            List<Archive> archives, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds,
+            bool LodFilter = true)
         {
             Directory.CreateDirectory(cacheDir);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var mesh_cr2w = ModTools.TryReadCr2WFile(meshStream);
+            var mesh_cr2w = TryReadCr2WFile(meshStream);
 
-            MemoryStream ms = MESH.GetMeshBufferStream(meshStream, mesh_cr2w);
-            MeshesInfo meshinfo = MESH.GetMeshesinfo(mesh_cr2w);
+            MemoryStream ms = GetMeshBufferStream(meshStream, mesh_cr2w);
+            MeshesInfo meshinfo = GetMeshesinfo(mesh_cr2w);
             for (int i = 0; i < meshinfo.meshC; i++)
             {
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
-                RawMeshContainer mesh = MESH.ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
+                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i],
+                    meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i],
+                    meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i],
+                    meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
                 mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
@@ -106,12 +104,12 @@ namespace WolvenKit.Modkit.RED4.Materials
                 }
                 expMeshes.Add(mesh);
             }
-            ModelRoot model = MESH.RawRigidMeshesToGLTF(expMeshes);
+            ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
 
             DirectoryInfo outDir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
             Directory.CreateDirectory(outDir.FullName);
 
-            ParseMaterialsUsingArchives(meshStream, ref model, outDir, eUncookExtension);
+            ParseMaterialsUsingArchives(meshStream, ref model, outDir, archives, eUncookExtension);
 
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
@@ -122,9 +120,12 @@ namespace WolvenKit.Modkit.RED4.Materials
             meshStream.Dispose();
             meshStream.Close();
         }
-        void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib, bool useAssetLib)
+
+        private void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies,
+            ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib,
+            bool useAssetLib, List<Archive> archives)
         {
-            var cr2w = ModTools.TryReadCr2WFile(meshStream);
+            var cr2w = TryReadCr2WFile(meshStream);
 
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
@@ -144,7 +145,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                     if(File.Exists(path))
                     {
                         FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-                        var micr2w = ModTools.TryReadCr2WFile(fs);
+                        var micr2w = TryReadCr2WFile(fs);
                         ExternalMaterial.Add(micr2w.Chunks[0].Data as CMaterialInstance);
 
                         for (int t = 0; t < micr2w.Imports.Count; t++)
@@ -170,7 +171,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                     foreach (Archive ar in archives)
                     {
                         if(ar.Files.ContainsKey(hash))
-                            ModTools.ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
+                            ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
                     }
 
                     path = cacheDir + (cr2w.Chunks[index].Data as CMesh).ExternalMaterials[i].DepotPath;
@@ -178,7 +179,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                     if (File.Exists(path))
                     {
                         FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-                        var micr2w = ModTools.TryReadCr2WFile(fs);
+                        var micr2w = TryReadCr2WFile(fs);
                         ExternalMaterial.Add(micr2w.Chunks[0].Data as CMaterialInstance);
 
                         for (int t = 0; t < micr2w.Imports.Count; t++)
@@ -213,7 +214,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                     UInt32 size = (cr2w.Chunks[index].Data as CMesh).LocalMaterialBuffer.RawDataHeaders[i].Size.Value;
 
                     MemoryStream ms = new MemoryStream(bytes, (int)offset, (int)size);
-                    var mtcr2w = ModTools.TryReadCr2WFile(ms);
+                    var mtcr2w = TryReadCr2WFile(ms);
 
                     string path = (mtcr2w.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath;
 
@@ -265,14 +266,14 @@ namespace WolvenKit.Modkit.RED4.Materials
                     materialEntries.Add(ExternalMaterial[Entry.Index.Value]);
             }
         }
-        void ParseMaterialsUsingAssetLib(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, DirectoryInfo AssetLib, bool CopyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterialsUsingAssetLib(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, DirectoryInfo AssetLib, bool CopyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             List<string> primaryDependencies = new List<string>();
 
             List<string> materialEntryNames = new List<string>();
             List<CMaterialInstance> materialEntries = new List<CMaterialInstance>();
 
-            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, AssetLib, true);
+            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, AssetLib, true, null);
 
             List<string> mlSetupNames = new List<string>();
             List<Multilayer_Setup> mlSetups = new List<Multilayer_Setup>();
@@ -281,6 +282,12 @@ namespace WolvenKit.Modkit.RED4.Materials
             List<Multilayer_LayerTemplate> mlTemplates = new List<Multilayer_LayerTemplate>();
 
             List<string> TexturesList = new List<string>();
+
+            var exportArgs =
+                new GlobalExportArgs().Register(
+                    new XbmExportArgs() { UncookExtension = eUncookExtension },
+                    new MlmaskExportArgs() { UncookExtension = eUncookExtension }
+                    );
 
             for (int i = 0; i < primaryDependencies.Count; i++)
             {
@@ -293,8 +300,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                         if (CopyTextures)
                         {
                             File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
-                            var exportArgs = new XbmExportArgs() {UncookExtension = eUncookExtension};
-                            ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
+                            Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
                         }
                     }
                 }
@@ -306,8 +312,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                         if (CopyTextures)
                         {
                             File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
-                            var exportArgs = new MlmaskExportArgs() { UncookExtension = eUncookExtension };
-                            ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
+                            Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
                         }
                     }
                 }
@@ -316,7 +321,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                     if (File.Exists(AssetLib.FullName + "\\" + primaryDependencies[i]))
                     {
                         FileStream setupFs = new FileStream((AssetLib.FullName + "\\" + primaryDependencies[i]), FileMode.Open, FileAccess.Read);
-                        var cr2w = ModTools.TryReadCr2WFile(setupFs);
+                        var cr2w = TryReadCr2WFile(setupFs);
                         mlSetupNames.Add(Path.GetFileName(primaryDependencies[i]));
                         mlSetups.Add(cr2w.Chunks[0].Data as Multilayer_Setup);
 
@@ -332,8 +337,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                                     if (CopyTextures)
                                     {
                                         File.Copy(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr, cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr), true);
-                                        var exportArgs = new XbmExportArgs() { UncookExtension = eUncookExtension };
-                                        ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr)), exportArgs);
+                                        Export(new FileInfo(cacheDir + Path.GetFileName(cr2w.Imports[e].DepotPathStr)), exportArgs);
                                     }
                                 }
                             }
@@ -342,7 +346,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                                 if (File.Exists(AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr))
                                 {
                                     FileStream templateFs = new FileStream((AssetLib.FullName + "\\" + cr2w.Imports[e].DepotPathStr), FileMode.Open, FileAccess.Read);
-                                    var mlTempcr2w = ModTools.TryReadCr2WFile(templateFs);
+                                    var mlTempcr2w = TryReadCr2WFile(templateFs);
                                     mlTemplateNames.Add(Path.GetFileName(cr2w.Imports[e].DepotPathStr));
                                     mlTemplates.Add(mlTempcr2w.Chunks[0].Data as Multilayer_LayerTemplate);
 
@@ -356,8 +360,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                                             if (CopyTextures)
                                             {
                                                 File.Copy(AssetLib.FullName + "\\" + mlTempcr2w.Imports[eye].DepotPathStr, cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr), true);
-                                                var exportArgs = new XbmExportArgs { UncookExtension = eUncookExtension };
-                                                ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr)), exportArgs);
+                                                Export(new FileInfo(cacheDir + Path.GetFileName(mlTempcr2w.Imports[eye].DepotPathStr)), exportArgs);
                                             }
                                         }
                                     }
@@ -441,14 +444,14 @@ namespace WolvenKit.Modkit.RED4.Materials
                 File.Move(files[i], path, true);
             }
         }
-        void ParseMaterialsUsingArchives(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterialsUsingArchives(Stream meshStream, ref ModelRoot model, DirectoryInfo outDir, List<Archive> archives, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             List<string> primaryDependencies = new List<string>();
 
             List<string> materialEntryNames = new List<string>();
             List<CMaterialInstance> materialEntries = new List<CMaterialInstance>();
 
-            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, new DirectoryInfo(cacheDir), false);
+            GetMateriaEntries(meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, new DirectoryInfo(cacheDir), false, archives);
 
             List<string> mlSetupNames = new List<string>();
             List<Multilayer_Setup> mlSetups = new List<Multilayer_Setup>();
@@ -457,6 +460,12 @@ namespace WolvenKit.Modkit.RED4.Materials
             List<Multilayer_LayerTemplate> mlTemplates = new List<Multilayer_LayerTemplate>();
 
             List<string> TexturesList = new List<string>();
+
+            var exportArgs =
+                new GlobalExportArgs().Register(
+                    new XbmExportArgs() { UncookExtension = eUncookExtension },
+                    new MlmaskExportArgs() { UncookExtension = eUncookExtension }
+                );
 
             for (int i = 0; i < primaryDependencies.Count; i++)
             {
@@ -467,16 +476,14 @@ namespace WolvenKit.Modkit.RED4.Materials
 
                     ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                     foreach (Archive ar in archives)
-                        ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir),
-                            new XbmExportArgs() {UncookExtension = eUncookExtension});
+                        UncookSingle(ar, hash, new DirectoryInfo(cacheDir), exportArgs);
                 }
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlmask")
                 {
                     TexturesList.Add(primaryDependencies[i]);
                     ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                     foreach (Archive ar in archives)
-                        ModTools.UncookSingle(ar, hash, new DirectoryInfo(cacheDir),
-                            new MlmaskExportArgs() { UncookExtension = eUncookExtension });
+                        UncookSingle(ar, hash, new DirectoryInfo(cacheDir), exportArgs);
 
                 }
 
@@ -486,13 +493,13 @@ namespace WolvenKit.Modkit.RED4.Materials
                     foreach (Archive ar in archives)
                     {
                         if(ar.Files.ContainsKey(hash))
-                            ModTools.ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
+                            ExtractSingle(ar, hash, new DirectoryInfo(cacheDir));
                     }
 
                     if (File.Exists(cacheDir + primaryDependencies[i]))
                     {
                         FileStream setupFs = new FileStream((cacheDir + primaryDependencies[i]), FileMode.Open, FileAccess.Read);
-                        var cr2w = ModTools.TryReadCr2WFile(setupFs);
+                        var cr2w = TryReadCr2WFile(setupFs);
                         mlSetupNames.Add(Path.GetFileName(primaryDependencies[i]));
                         mlSetups.Add(cr2w.Chunks[0].Data as Multilayer_Setup);
 
@@ -507,7 +514,7 @@ namespace WolvenKit.Modkit.RED4.Materials
 
                                 ulong hash1 = FNV1A64HashAlgorithm.HashString(cr2w.Imports[e].DepotPathStr);
                                 foreach (Archive ar in archives)
-                                    ModTools.UncookSingle(ar, hash1, new DirectoryInfo(cacheDir), new XbmExportArgs() { UncookExtension = eUncookExtension });
+                                    UncookSingle(ar, hash1, new DirectoryInfo(cacheDir), exportArgs);
                             }
                             if (Path.GetExtension(cr2w.Imports[e].DepotPathStr) == ".mltemplate")
                             {
@@ -515,13 +522,13 @@ namespace WolvenKit.Modkit.RED4.Materials
                                 foreach (Archive ar in archives)
                                 {
                                     if(ar.Files.ContainsKey(hash2))
-                                        ModTools.ExtractSingle(ar, hash2, new DirectoryInfo(cacheDir));
+                                        ExtractSingle(ar, hash2, new DirectoryInfo(cacheDir));
                                 }
 
                                 if (File.Exists(cacheDir + cr2w.Imports[e].DepotPathStr))
                                 {
                                     FileStream templateFs = new FileStream((cacheDir + cr2w.Imports[e].DepotPathStr), FileMode.Open, FileAccess.Read);
-                                    var mlTempcr2w = ModTools.TryReadCr2WFile(templateFs);
+                                    var mlTempcr2w = TryReadCr2WFile(templateFs);
                                     mlTemplateNames.Add(Path.GetFileName(cr2w.Imports[e].DepotPathStr));
                                     mlTemplates.Add(mlTempcr2w.Chunks[0].Data as Multilayer_LayerTemplate);
 
@@ -534,7 +541,7 @@ namespace WolvenKit.Modkit.RED4.Materials
 
                                         ulong hash3 = FNV1A64HashAlgorithm.HashString(mlTempcr2w.Imports[eye].DepotPathStr);
                                         foreach (Archive ar in archives)
-                                            ModTools.UncookSingle(ar, hash3, new DirectoryInfo(cacheDir), new XbmExportArgs() { UncookExtension = eUncookExtension });
+                                            UncookSingle(ar, hash3, new DirectoryInfo(cacheDir), exportArgs);
                                     }
                                 }
                             }
@@ -615,7 +622,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                 File.Move(files[i], path, true);
             }
         }
-        static RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string Name)
+        private static RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string Name)
         {
             RawMaterial rawMaterial = new RawMaterial();
 
@@ -660,7 +667,7 @@ namespace WolvenKit.Modkit.RED4.Materials
 
             return rawMaterial;
         }
-        static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
+        private static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
         {
             int Index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
@@ -681,7 +688,7 @@ namespace WolvenKit.Modkit.RED4.Materials
         }
         public void UnpackLocalBufferMaterials(Stream meshStream, DirectoryInfo unpackDir)
         {
-            var cr2w = ModTools.TryReadCr2WFile(meshStream);
+            var cr2w = TryReadCr2WFile(meshStream);
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {
@@ -721,7 +728,7 @@ namespace WolvenKit.Modkit.RED4.Materials
         }
         public void PackMaterialToLocalBuffer(DirectoryInfo packDir, Stream inmeshStream, FileInfo outMeshFile)
         {
-            var cr2w = ModTools.TryReadCr2WFile(inmeshStream);
+            var cr2w = TryReadCr2WFile(inmeshStream);
             int index = 0;
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {
@@ -802,23 +809,8 @@ namespace WolvenKit.Modkit.RED4.Materials
         }
 
     }
-    public class MaterialRepository
+    public partial class ModTools
     {
-        private readonly ModTools ModTools;
-        private readonly IHashService _hashService;
-
-
-
-
-
-        public MaterialRepository(
-            ModTools modTools,
-            IHashService hashService
-            )
-        {
-            ModTools = modTools;
-            _hashService = hashService;
-        }
 
         public Thread Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
         {
@@ -841,23 +833,29 @@ namespace WolvenKit.Modkit.RED4.Materials
                 archives.Add(Red4ParserServiceExtensions.ReadArchive(filenames[i], _hashService));
             }
 
+            var exportArgs =
+                new GlobalExportArgs().Register(
+                    new XbmExportArgs() { UncookExtension = TexturesExtension },
+                    new MlmaskExportArgs() { UncookExtension = TexturesExtension }
+                );
+
             foreach (var ar in archives)
             {
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.gradient");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.w2mi");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.matlib");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.remt");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.sp");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.hp");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.fp");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mi");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mt");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mlsetup");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.mltemplate");
-                ModTools.ExtractAll(ar, MaterialRepoDir, "*.texarray");
+                ExtractAll(ar, MaterialRepoDir, "*.gradient");
+                ExtractAll(ar, MaterialRepoDir, "*.w2mi");
+                ExtractAll(ar, MaterialRepoDir, "*.matlib");
+                ExtractAll(ar, MaterialRepoDir, "*.remt");
+                ExtractAll(ar, MaterialRepoDir, "*.sp");
+                ExtractAll(ar, MaterialRepoDir, "*.hp");
+                ExtractAll(ar, MaterialRepoDir, "*.fp");
+                ExtractAll(ar, MaterialRepoDir, "*.mi");
+                ExtractAll(ar, MaterialRepoDir, "*.mt");
+                ExtractAll(ar, MaterialRepoDir, "*.mlsetup");
+                ExtractAll(ar, MaterialRepoDir, "*.mltemplate");
+                ExtractAll(ar, MaterialRepoDir, "*.texarray");
 
-                ModTools.UncookAll(ar, MaterialRepoDir, new XbmExportArgs() { UncookExtension = TexturesExtension},  "*.xbm", "" );
-                ModTools.UncookAll(ar, MaterialRepoDir, new MlmaskExportArgs() { UncookExtension = TexturesExtension }, "*.mlmask", "");
+                UncookAll(ar, MaterialRepoDir, exportArgs,  "*.xbm", "" );
+                UncookAll(ar, MaterialRepoDir, exportArgs, "*.mlmask", "");
                 // try catch the decode in mlmask.cs for now
             }
         }

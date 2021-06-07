@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace CP77Tools.Tasks
 {
@@ -14,7 +18,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void ExportTask(string[] path, EUncookExtension uncookext, bool flip)
+        public void ExportTask(string[] path, string outDir, EUncookExtension uncookext, bool flip)
         {
             if (path == null || path.Length < 1)
             {
@@ -24,71 +28,64 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                ExportTaskInner(file, uncookext, flip);
+                ExportTaskInner(file, outDir, uncookext, flip);
             });
         }
 
-        private int ExportTaskInner(string path, EUncookExtension uncookext, bool flip)
+        private void ExportTaskInner(string path, string outDir, EUncookExtension uncookext, bool flip)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
                 _loggerService.Warning("Please fill in an input path.");
-                return 0;
+                return;
             }
+
             var inputFileInfo = new FileInfo(path);
-            if (!inputFileInfo.Exists)
+            var inputDirInfo = new DirectoryInfo(path);
+
+            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                _loggerService.Warning("Input file does not exist.");
-                return 0;
+                _loggerService.Warning("Input path does not exist.");
+                return;
             }
+
+            var isDirectory = !inputFileInfo.Exists;
+            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
             #endregion checks
 
-            Stopwatch watch = new();
-            watch.Restart();
 
-            if (!Enum.TryParse(inputFileInfo.Extension, true, out ECookedFileFormat extAsEnum))
+            var filesToExport = isDirectory
+                ? inputDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList()
+                : new List<FileInfo> { inputFileInfo };
+
+            foreach (var fileInfo in filesToExport)
             {
-                return 0;
+                if (!Enum.TryParse(inputFileInfo.Extension, true, out ECookedFileFormat extAsEnum))
+                {
+                    continue;
+                }
+
+                // create extract arguments
+                var settings = new GlobalExportArgs().Register(
+                    new XbmExportArgs() { UncookExtension = uncookext, Flip = flip },
+                    new MlmaskExportArgs() { UncookExtension = uncookext }
+                );
+
+                if (_modTools.Export(fileInfo, settings, basedir, new DirectoryInfo(outDir)))
+                {
+                    _loggerService.Success($"Successfully exported {path}.");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to export {path}.");
+                }
+
             }
 
-            ExportArgs settings;
-            switch (extAsEnum)
-            {
-                case ECookedFileFormat.xbm:
-                    settings = new XbmExportArgs() {UncookExtension = uncookext, Flip = flip};
-                    break;
-                case ECookedFileFormat.mlmask:
-                    settings = new MlmaskExportArgs(){UncookExtension = uncookext};
-                    break;
-                case ECookedFileFormat.wem:
-                case ECookedFileFormat.mesh:
-                case ECookedFileFormat.csv:
-                case ECookedFileFormat.json:
-                case ECookedFileFormat.cubemap:
-                case ECookedFileFormat.envprobe:
-                case ECookedFileFormat.texarray:
-                case ECookedFileFormat.morphtarget:
-                    settings = new CommonExportArgs();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            if (_modTools.Export(new FileInfo(path), settings))
-            {
-                watch.Stop();
-                _loggerService.Success($"Successfully exported {path} in {watch.ElapsedMilliseconds.ToString()}ms.");
-            }
-            else
-            {
-                watch.Stop();
-                _loggerService.Error($"Failed to export {path}.");
-            }
-
-            return 1;
+            return;
         }
 
         #endregion Methods

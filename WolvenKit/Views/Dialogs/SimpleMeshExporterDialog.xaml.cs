@@ -14,6 +14,7 @@ using Ab3d.Common.Cameras;
 using Ab3d.Utilities;
 using Assimp;
 using Catel.IoC;
+using CP77.CR2W;
 using Orchestra.Services;
 using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Controllers;
@@ -302,15 +303,13 @@ namespace WolvenKit.Views.Dialogs
         private void ExportButton_OnClick(object sender, RoutedEventArgs e)
         {
             var gamecontroller = ServiceLocator.Default.ResolveType<Cp77Controller>();
+            var modkit = ServiceLocator.Default.ResolveType<ModTools>();
+
             // var isExported = ExportViewport3D(OutputFileName.Text, _selectedExportFormatId, MainViewport, _namedObjects);
             var Item = SelectedItem;
             var x = gamecontroller.GetArchiveManagersManagers(false);
             var z = (ArchiveManager)x[0];
             var list = z.Archives.Values.ToList();
-
-
-
-
 
             try
             {
@@ -320,7 +319,7 @@ namespace WolvenKit.Views.Dialogs
                 {
                     if (!ExtractRigged && !ExportMaterials && !CopyTextures && !UseMaterialsRepository)
                     {
-                        (new MESH()).ExportMeshWithoutRig(stream, Item.Name, FIItem);
+                        modkit.ExportMeshWithoutRig(stream, Item.Name, FIItem);
                     }
 
                     if (ExtractRigged)
@@ -334,31 +333,26 @@ namespace WolvenKit.Views.Dialogs
                             xz.Add(Path.GetFileName(fs.Name));
 
                         }
-                        (new MESH()).ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
+                        modkit.ExportMultiMeshWithRig(SelectedMeshFiles, SelectedRigFile, xz, FIItem);
                     }
                     if (ExportMaterials && UseMaterialsRepository && CopyTextures)
                     {
-
-                        var M = new MATERIAL(list.Cast<Archive>().ToList());
                         if (ReturnThisForMe() != null)
                         {
-                            M.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem, true, true);
+                            modkit.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem, true, true);
 
                         }
                     }
                     if (ExportMaterials && UseMaterialsRepository)
                     {
-                        var M = new MATERIAL(list.Cast<Archive>().ToList());
                         if (ReturnThisForMe() != null)
                         {
-                            M.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem);
-
+                            modkit.ExportMeshWithMaterialsUsingAssetLib(stream, ReturnThisForMe(), Item.Name, FIItem);
                         }
                     }
                     if (ExportMaterials)
                     {
-                        var M = new MATERIAL(list.Cast<Archive>().ToList());
-                        M.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem);
+                        modkit.ExportMeshWithMaterialsUsingArchives(stream, Item.Name, FIItem, list.Cast<Archive>().ToList());
                     }
 
                     Trace.WriteLine(_selectedExportFormatId);

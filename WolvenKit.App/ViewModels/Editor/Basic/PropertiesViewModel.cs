@@ -34,6 +34,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
+        private readonly ModTools _modTools;
+        
 
         /// <summary>
         /// Constructor PropertiesViewModel
@@ -46,6 +48,7 @@ namespace WolvenKit.ViewModels.Editor
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
+            ModTools modTools,
             ICommandManager commandManager
         ) : base(ToolTitle)
         {
@@ -53,10 +56,12 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNull(() => modTools);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
+            _modTools = modTools;
 
             SetupToolDefaults();
 
@@ -177,8 +182,7 @@ namespace WolvenKit.ViewModels.Editor
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
-                        MESH m = new MESH();
-                        var q = m.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
+                        var q = _modTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
                         if (q.Length > 0)
                         {
                             LoadModel(q);
@@ -219,7 +223,7 @@ namespace WolvenKit.ViewModels.Editor
                         var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.dds };
                         await using var filestream = new FileStream(PE_SelectedItem.FullName,
                             FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        man.UncookXbm(filestream, ddsstream, expargs, out _);
+                        man.UncookXbm(filestream, ddsstream, out _);
 
                         // try loading it in pfim
                         try

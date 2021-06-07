@@ -17,7 +17,6 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.MeshFile;
-using WolvenKit.Modkit.RED4.MorphTargetFile;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.Views.Dialogs;
 
@@ -77,7 +76,8 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
-            var q = (new MESH()).ExportMeshWithoutRigPreviewer(z.FullName);
+            var modkit = ServiceLocator.Default.ResolveType<ModTools>();
+            var q = modkit.ExportMeshWithoutRigPreviewer(z.FullName);
             if (q.Length <= 0)
             {
                 return;
@@ -115,7 +115,8 @@ namespace WolvenKit.Views.Editor
 
             var xa = new FileInfo(outp + "\\" + z.Name);
             Trace.WriteLine(xa);
-            (new TARGET()).ExportTargets(targetStream, xa);
+            var modkit = ServiceLocator.Default.ResolveType<ModTools>();
+            modkit.ExportTargets(targetStream, xa);
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
