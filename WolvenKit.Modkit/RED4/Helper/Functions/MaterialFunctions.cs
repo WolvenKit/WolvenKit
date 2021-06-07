@@ -306,7 +306,7 @@ namespace WolvenKit.Modkit.RED4.Materials
                         if (CopyTextures)
                         {
                             File.Copy(AssetLib.FullName + "\\" + primaryDependencies[i], cacheDir + Path.GetFileName(primaryDependencies[i]), true);
-                            var exportArgs = new XbmExportArgs() { UncookExtension = eUncookExtension };
+                            var exportArgs = new MlmaskExportArgs() { UncookExtension = eUncookExtension };
                             ModTools.Export(new FileInfo(cacheDir + Path.GetFileName(primaryDependencies[i])), exportArgs);
                         }
                     }
