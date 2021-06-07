@@ -474,12 +474,12 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Error("Please ensure the game is not running before editing the files.");
                 return false;
             }
-
-            WitcherPackSettings packsettings = null;
-            if (_projectManager?.ActiveProject is Tw3Project tw3p)
+            if (_projectManager?.ActiveProject is not Tw3Project tw3p)
             {
-                packsettings = tw3p.PackSettings;
+                return false;
             }
+
+            WitcherPackSettings packsettings = tw3p.PackSettings;
             if (packsettings != null)
             {
                 //ProjectStatus = EProjectStatus.Busy;
@@ -493,14 +493,14 @@ namespace WolvenKit.Functionality.Controllers
                 Directory.CreateDirectory(_projectManager.ActiveProject.PackedModDirectory);
                 if (!string.IsNullOrEmpty(w3Project.GetDlcName()))
                 {
-                    Directory.CreateDirectory(_projectManager.ActiveProject.PackedDlcDirectory);
+                    Directory.CreateDirectory(tw3p.PackedDlcDirectory);
                 }
 
                 //------------------------PRE COOKING------------------------------------//
                 // have a check if somehow users forget to add a dlc folder in their dlc :(
                 // but have files inform them that it just not gonna work
                 var initialDlcCheck = true;
-                if (_projectManager.ActiveProject.DLCFiles.Any() && string.IsNullOrEmpty(w3Project.GetDlcName()))
+                if (tw3p.DLCFiles.Any() && string.IsNullOrEmpty(w3Project.GetDlcName()))
                 {
                     _loggerService.Error("Files in your DLC directory must be structured as such: dlc\\DLCNAME\\files. DLC will not be packed.");
                     initialDlcCheck = false;
@@ -527,12 +527,12 @@ namespace WolvenKit.Functionality.Controllers
 
                 if (initialDlcCheck)
                 {
-                    if (Directory.GetFiles(_projectManager.ActiveProject.DlcDirectory, "*", SearchOption.AllDirectories).Any())
+                    if (Directory.GetFiles(tw3p.DlcDirectory, "*", SearchOption.AllDirectories).Any())
                     {
                         _loggerService.Info($"======== Analyzing DLC files ======== \n");
-                        if (Directory.GetFiles(_projectManager.ActiveProject.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).Any())
+                        if (Directory.GetFiles(tw3p.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).Any())
                         {
-                            var reddlcfile = Directory.GetFiles(_projectManager.ActiveProject.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).FirstOrDefault();
+                            var reddlcfile = Directory.GetFiles(tw3p.DlcDirectory, "*.reddlc", SearchOption.AllDirectories).FirstOrDefault();
                             var analyze = new Wcc_lite.analyze()
                             {
                                 Analyzer = analyzers.r4dlc,
@@ -808,7 +808,7 @@ namespace WolvenKit.Functionality.Controllers
 
                     if (packsettings.dlcSound)
                     {
-                        var sounddlcdir = Path.Combine(_projectManager.ActiveProject.DlcDirectory, EArchiveType.SoundCache.ToString());
+                        var sounddlcdir = Path.Combine(tw3p.DlcDirectory, EArchiveType.SoundCache.ToString());
 
                         //Create dlc soundspc.cache
                         if (Directory.Exists(sounddlcdir) && new DirectoryInfo(sounddlcdir)
@@ -818,7 +818,7 @@ namespace WolvenKit.Functionality.Controllers
                                 new DirectoryInfo(sounddlcdir)
                                     .GetFiles("*.*", SearchOption.AllDirectories)
                                     .Where(file => file.Name.ToLower().EndsWith("wem") || file.Name.ToLower().EndsWith("bnk")).ToList().Select(x => x.FullName).ToList(),
-                                Path.Combine(_projectManager.ActiveProject.PackedDlcDirectory, @"soundspc.cache"));
+                                Path.Combine(tw3p.PackedDlcDirectory, @"soundspc.cache"));
                             _loggerService.Info("DLC sound cache generated.\n");
                         }
                         else
@@ -861,24 +861,24 @@ namespace WolvenKit.Functionality.Controllers
                 }
 
                 //Handle the DLC scripts
-                if (packscriptsdlc && Directory.Exists(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
+                if (packscriptsdlc && Directory.Exists(Path.Combine(tw3p.DlcDirectory, "scripts")) && Directory.GetFiles(Path.Combine(tw3p.DlcDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Any())
                 {
-                    if (!Directory.Exists(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts")))
+                    if (!Directory.Exists(Path.Combine(tw3p.DlcDirectory, "scripts")))
                     {
-                        Directory.CreateDirectory(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts"));
+                        Directory.CreateDirectory(Path.Combine(tw3p.DlcDirectory, "scripts"));
                     }
                     //Now Create all of the directories
-                    foreach (var dirPath in Directory.GetDirectories(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts"), "*.*",
+                    foreach (var dirPath in Directory.GetDirectories(Path.Combine(tw3p.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
-                        Directory.CreateDirectory(dirPath.Replace(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts"), Path.Combine(_projectManager.ActiveProject.PackedDlcDirectory, "scripts")));
+                        Directory.CreateDirectory(dirPath.Replace(Path.Combine(tw3p.DlcDirectory, "scripts"), Path.Combine(tw3p.PackedDlcDirectory, "scripts")));
                     }
 
                     //Copy all the files & Replaces any files with the same name
-                    foreach (var newPath in Directory.GetFiles(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts"), "*.*",
+                    foreach (var newPath in Directory.GetFiles(Path.Combine(tw3p.DlcDirectory, "scripts"), "*.*",
                         SearchOption.AllDirectories))
                     {
-                        File.Copy(newPath, newPath.Replace(Path.Combine(_projectManager.ActiveProject.DlcDirectory, "scripts"), Path.Combine(_projectManager.ActiveProject.PackedDlcDirectory, "scripts")), true);
+                        File.Copy(newPath, newPath.Replace(Path.Combine(tw3p.DlcDirectory, "scripts"), Path.Combine(tw3p.PackedDlcDirectory, "scripts")), true);
                     }
                 }
 
@@ -897,7 +897,7 @@ namespace WolvenKit.Functionality.Controllers
 
                     if (packsettings.modStrings)
                     {
-                        files.ForEach(x => File.Copy(x, Path.Combine(_projectManager.ActiveProject.PackedDlcDirectory, Path.GetFileName(x))));
+                        files.ForEach(x => File.Copy(x, Path.Combine(tw3p.PackedDlcDirectory, Path.GetFileName(x))));
                     }
 
                     if (packsettings.dlcStrings)
@@ -1239,6 +1239,11 @@ namespace WolvenKit.Functionality.Controllers
         /// <returns></returns>
         public async Task<int> CreateMetaData(bool packmod, bool dlcmod)
         {
+            if (_projectManager?.ActiveProject is not Tw3Project tw3p)
+            {
+                return 0;
+            }
+
             var finished = 1;
 
             if (packmod && Directory.Exists(_projectManager.ActiveProject.PackedModDirectory))
@@ -1246,9 +1251,9 @@ namespace WolvenKit.Functionality.Controllers
                 finished *= await Task.Run(() => CreateMetaDataInternal(_projectManager.ActiveProject.PackedModDirectory));
             }
 
-            if (dlcmod && Directory.Exists(_projectManager.ActiveProject.PackedDlcDirectory))
+            if (dlcmod && Directory.Exists(tw3p.PackedDlcDirectory))
             {
-                finished *= await Task.Run(() => CreateMetaDataInternal(_projectManager.ActiveProject.PackedDlcDirectory, true));
+                finished *= await Task.Run(() => CreateMetaDataInternal(tw3p.PackedDlcDirectory, true));
             }
 
             return finished == 0 ? 0 : 1;
@@ -1395,7 +1400,7 @@ namespace WolvenKit.Functionality.Controllers
 
             if (packdlc)
             {
-                finished *= await Task.Run(() => GenerateCacheInternal(_projectManager.ActiveProject.PackedDlcDirectory, dlcdbfile, dlcbasedir, true));
+                finished *= await Task.Run(() => GenerateCacheInternal(w3Project.PackedDlcDirectory, dlcdbfile, dlcbasedir, true));
             }
 
             return finished == 0 ? 0 : 1;
@@ -1458,9 +1463,9 @@ namespace WolvenKit.Functionality.Controllers
                 finished *= await Task.Run(() => PackBundleInternal(w3Project.CookedModDirectory, _projectManager.ActiveProject.PackedModDirectory));
             }
 
-            if (packdlc && Directory.Exists(w3Project.CookedDlcDirectory) && Directory.Exists(_projectManager.ActiveProject.PackedDlcDirectory))
+            if (packdlc && Directory.Exists(w3Project.CookedDlcDirectory) && Directory.Exists(w3Project.PackedDlcDirectory))
             {
-                finished *= await Task.Run(() => PackBundleInternal(w3Project.CookedDlcDirectory, _projectManager.ActiveProject.PackedDlcDirectory, true));
+                finished *= await Task.Run(() => PackBundleInternal(w3Project.CookedDlcDirectory, w3Project.PackedDlcDirectory, true));
             }
 
             return finished == 0 ? 0 : 1;

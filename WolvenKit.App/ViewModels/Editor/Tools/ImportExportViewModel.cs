@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Linq;
@@ -12,15 +11,12 @@ using CP77.CR2W;
 using DynamicData;
 using ReactiveUI;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.Functionality.Helpers;
 using WolvenKit.RED4.CR2W.Archive;
 using ObservableObject = Catel.Data.ObservableObject;
 
@@ -250,6 +246,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="item"></param>
         private void ExportSingle(ExportableItemViewModel item)
         {
+            var proj = _projectManager.ActiveProject;
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
@@ -262,7 +259,8 @@ namespace WolvenKit.ViewModels.Editor
                 }
 
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-                _modTools.Export(fi, settings);
+                _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory),
+                    new DirectoryInfo(proj.RawDirectory));
             }
         }
 

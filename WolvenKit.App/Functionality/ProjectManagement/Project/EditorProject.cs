@@ -35,8 +35,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public abstract GameType GameType { get; }
 
-        public abstract string PackedDlcDirectory { get; }
-
         public abstract string PackedModDirectory { get; }
 
 
@@ -47,20 +45,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             get
             {
                 var dir = Path.Combine(ProjectDirectory, "files");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        public string DlcDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "DLC");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -98,7 +82,19 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        
+        public string RawDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "Raw");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
 
 
         public List<string> Files
@@ -115,20 +111,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        public List<string> DLCFiles
-        {
-            get
-            {
-                if (!Directory.Exists(DlcDirectory))
-                {
-                    Directory.CreateDirectory(DlcDirectory);
-                }
-                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file[(DlcDirectory.Length + 1)..])
-                    .ToList();
-            }
-        }
-
         public List<string> ModFiles
         {
             get
@@ -139,6 +121,20 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 }
                 return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
                     .Select(file => file[(ModDirectory.Length + 1)..])
+                    .ToList();
+            }
+        }
+
+        public List<string> RawFiles
+        {
+            get
+            {
+                if (!Directory.Exists(RawDirectory))
+                {
+                    Directory.CreateDirectory(RawDirectory);
+                }
+                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file[(RawDirectory.Length + 1)..])
                     .ToList();
             }
         }

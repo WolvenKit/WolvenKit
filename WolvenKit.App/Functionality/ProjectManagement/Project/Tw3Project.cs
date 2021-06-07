@@ -22,11 +22,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public WitcherPackSettings PackSettings { get; set; } = new WitcherPackSettings();
 
-        public string RadishDirectory
+        public string DlcDirectory
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "files", "Radish");
+                var dir = Path.Combine(FileDirectory, "DLC");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -35,12 +35,11 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
-
-        public string RawDirectory
+        public string RadishDirectory
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "Raw");
+                var dir = Path.Combine(ProjectDirectory, "files", "Radish");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -164,7 +163,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override GameType GameType => GameType.Witcher3;
 
-        public override string PackedDlcDirectory
+        public string PackedDlcDirectory
         {
             get
             {
@@ -196,7 +195,19 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-       
+        public List<string> DLCFiles
+        {
+            get
+            {
+                if (!Directory.Exists(DlcDirectory))
+                {
+                    Directory.CreateDirectory(DlcDirectory);
+                }
+                return Directory.EnumerateFiles(DlcDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file[(DlcDirectory.Length + 1)..])
+                    .ToList();
+            }
+        }
         public List<string> RadishFiles
         {
             get
@@ -207,20 +218,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 }
                 return Directory.EnumerateFiles(RadishDirectory, "*", SearchOption.AllDirectories)
                     .Select(file => file[(RadishDirectory.Length + 1)..])
-                    .ToList();
-            }
-        }
-
-        public List<string> RawFiles
-        {
-            get
-            {
-                if (!Directory.Exists(RawDirectory))
-                {
-                    Directory.CreateDirectory(RawDirectory);
-                }
-                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
-                    .Select(file => file[(RawDirectory.Length + 1)..])
                     .ToList();
             }
         }

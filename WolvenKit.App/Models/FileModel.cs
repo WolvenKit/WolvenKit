@@ -93,7 +93,7 @@ namespace WolvenKit.Models
 
             var filedir = project.FileDirectory;
             var moddir = project.ModDirectory;
-            var dlcdir = project.DlcDirectory;
+            var rawDirectory = project.RawDirectory;
 
             if (fullname.Equals(filedir, StringComparison.Ordinal))
             {
@@ -104,18 +104,19 @@ namespace WolvenKit.Models
             {
                 return "wkitmoddir";
             }
-            if (fullname.Equals(dlcdir, StringComparison.Ordinal))
+            if (fullname.Equals(rawDirectory, StringComparison.Ordinal))
             {
-                return "wkitdlcdir";
+                return "wkitrawdir";
             }
 
             if (fullname.StartsWith(moddir, StringComparison.Ordinal))
             {
                 return fullname[(moddir.Length + 1)..];
             }
-            if (fullname.StartsWith(dlcdir, StringComparison.Ordinal))
+            if (fullname.StartsWith(rawDirectory, StringComparison.Ordinal))
             {
-                return fullname[(dlcdir.Length + 1)..];
+                var rel = fullname[(filedir.Length + 1)..];
+                return rel;
             }
 
             if (fullname.StartsWith(filedir, StringComparison.Ordinal))
