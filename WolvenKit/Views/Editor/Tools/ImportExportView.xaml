@@ -72,7 +72,6 @@
                 ColumnSizer="Auto"
                 ItemsSource="{Binding ExportableItems}"
                 SelectedItem="{Binding SelectedExport}"
-                SelectionChanged="ExportGrid_SelectionChanged"
                 SelectionMode="Extended"
                 Visibility="{Binding Path=IsChecked, ElementName=ExportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
 
@@ -222,11 +221,9 @@
                             Padding="2,0,2,0"
                             VerticalAlignment="Center"
                             Background="{DynamicResource ContentBackgroundAlt}"
-                            Checked="ToggleButton_Checked"
-                            IsChecked="False"
+                            IsChecked="{Binding SelectionLocked}"
                             Style="{DynamicResource WPFToggleButtonStyle}"
-                            ToolTip="Lock selected file."
-                            Unchecked="ToggleButton_Unchecked">
+                            ToolTip="Lock selected file.">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:BootstrapIcons Kind="Lock" />
 
@@ -295,7 +292,7 @@
 
         <!--  Special Import / Export Options  -->
         <Grid
-            x:Name="AdvancedOptionsVis"
+            x:Name="XAML_AdvancedOptionsOverlay"
             Grid.RowSpan="4"
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt2}"
@@ -326,7 +323,7 @@
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1">
                     <TextBlock
-                        x:Name="AdvancedOptionsExtension"
+                        x:Name="XAML_AdvancedOptionsExtension"
                         Padding="5,0,5,0"
                         FontSize="15"
                         Text="EXTENSION" />
@@ -344,7 +341,7 @@
                     <StackPanel Margin="0,5" Orientation="Horizontal">
                         <TextBlock FontSize="10" Text="Selected : " />
                         <TextBlock
-                            x:Name="AdvancedOptionsFileName"
+                            x:Name="XAML_AdvancedOptionsFileName"
                             FontSize="10"
                             Text="FileName" />
 
@@ -418,7 +415,7 @@
 
         <!--  Overlay For File Selection  -->
         <Grid
-            x:Name="FileSelectingOverlay"
+            x:Name="XAML_FileSelectingOverlay"
             Grid.RowSpan="4"
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt}"

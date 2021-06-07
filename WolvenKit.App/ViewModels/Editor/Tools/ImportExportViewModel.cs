@@ -28,7 +28,6 @@ namespace WolvenKit.ViewModels.Editor
 {
     public class ImportExportViewModel : ToolViewModel
     {
-
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
@@ -59,29 +58,83 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
 
-
-
+        /// <summary>
+        /// Selected Export Item
+        /// </summary>
         public ExportableItemViewModel SelectedExport { get; set; }
 
+        /// <summary>
+        /// Selected Import Item
+        /// </summary>
         public ImportableItemViewModel SelectedImport { get; set; }
 
-        public ImportExportItemViewModel SelectedObject => IsImportsSelected
-            ? SelectedImport
-            : SelectedExport;
+        /// <summary>
+        /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
+        /// </summary>
+        public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : SelectedExport;
 
+        /// <summary>
+        /// Private NameOf Selected Item in Grid.
+        /// </summary>
+        private string _CurrentSelectionInGridName;
 
-        public string CurrentSelectedInGridName { get; set; }
+        /// <summary>
+        /// Private Last Selected Item, Used for Selection Lock.
+        /// </summary>
+        private ImportExportItemViewModel lastselected;
 
-        private readonly ILoggerService _loggerService;
-        private readonly IMessageService _messageService;
-        private readonly IProjectManager _projectManager;
-        private readonly IWatcherService _watcherService;
-        private readonly IGameControllerFactory _gameController;
+        /// <summary>
+        /// Lock Selection of items in grid.
+        /// </summary>
+        public bool SelectionLocked { get; set; } = false;
+
+        /// <summary>
+        /// Returns the name of current selected object in Import/Export Grid.
+        /// </summary>
+        public string CurrentSelectedInGridName {
+           get {
+                if (SelectedObject != null)
+                {
+                    if (!SelectionLocked)
+                    {
+                        lastselected = SelectedObject;
+                        return SelectedObject.Name;
+                    }
+                    else{return lastselected.Name;}
+                }
+                else{return "";}
+            } set { _CurrentSelectionInGridName = value; }
+        }
 
         /// <summary>
         /// Private Readonly ModTools
         /// </summary>
         private readonly ModTools _modTools;
+
+        /// <summary>
+        /// Private Logger Service
+        /// </summary>
+        private readonly ILoggerService _loggerService;
+
+        /// <summary>
+        /// Private Message Service
+        /// </summary>
+        private readonly IMessageService _messageService;
+
+        /// <summary>
+        /// Private Project Manager
+        /// </summary>
+        private readonly IProjectManager _projectManager;
+
+        /// <summary>
+        /// Private WatcherService
+        /// </summary>
+        private readonly IWatcherService _watcherService;
+
+        /// <summary>
+        /// Private GameController
+        /// </summary>
+        private readonly IGameControllerFactory _gameController;
 
         /// <summary>
         /// Import Export ViewModel Constructor
@@ -140,7 +193,6 @@ namespace WolvenKit.ViewModels.Editor
 
         }
 
-
         /// <summary>
         /// Is Import Selected, if false Export is default.
         /// </summary>
@@ -179,6 +231,10 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        /// <summary>
+        /// Import Single item
+        /// </summary>
+        /// <param name="item"></param>
         private void ImportSingle(ImportableItemViewModel item)
         {
             var fi = new FileInfo(item.FullName);
@@ -188,6 +244,10 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        /// <summary>
+        /// Export Single Item
+        /// </summary>
+        /// <param name="item"></param>
         private void ExportSingle(ExportableItemViewModel item)
         {
             var fi = new FileInfo(item.FullName);
@@ -261,16 +321,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
 
-
-
-        // Define a unique contentid for this toolwindow
-        //BitmapImage bi = new BitmapImage();
-        // Define an icon for this toolwindow
-        //bi.BeginInit();
-        //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
-        //bi.EndInit();
-        //IconSource = bi;
-
     }
 
 
@@ -280,8 +330,14 @@ namespace WolvenKit.ViewModels.Editor
     /// </summary>
     public abstract class ImportExportItemViewModel : ObservableObject
     {
+        /// <summary>
+        /// BaseFile "FileModel"
+        /// </summary>
         protected FileModel BaseFile { get; set; }
 
+        /// <summary>
+        /// Properties
+        /// </summary>
         public ImportExportArgs Properties
         {
             get => _properties;

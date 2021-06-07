@@ -30,112 +30,58 @@ namespace WolvenKit.Views.Editor
         /// <param name="e"></param>
         private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
         {
-
-            var IEVM = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
-
-            if (IEVM.IsImportsSelected)
+            var m_LocalViewModel = ViewModel as ImportExportViewModel;
+            if (m_LocalViewModel.IsImportsSelected)
             {
-                var q2 = ImportGrid.SelectedItem as ImportExportItemViewModel;
-                var simplename = Path.GetFileName(q2.FullName);
-                var ext = Path.GetExtension(q2.FullName).ToString();
-
-
-                var succes = Enum.TryParse(ext.TrimStart('.'), out ERawFileFormat RawExtension);
-                if (succes)
+                var m_ImportSelected = ImportGrid.SelectedItem as ImportExportItemViewModel;
+                var m_EnumParsedSuccesfully = Enum.TryParse(m_ImportSelected.Extension.TrimStart('.'), out ERawFileFormat RawExtension);
+                if (m_EnumParsedSuccesfully)
                 {
-                    AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-                    AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext);
-                    AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
+                    XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                    XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ImportSelected.Extension);
+                    XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ImportSelected.Name);
                 }
-                else
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
+                else{throw new ArgumentOutOfRangeException();}
             }
             else
             {
-
-                var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
-                var simplename = Path.GetFileName(q.FullName);
-                var ext = Path.GetExtension(q.FullName).ToString();
-
-                var succes = Enum.TryParse(ext.TrimStart('.'), out ECookedFileFormat Extension);
-                if (succes)
+                var m_ExportSelected = ExportGrid.SelectedItem as ImportExportItemViewModel;
+                var m_EnumParsedSuccesfully = Enum.TryParse(m_ExportSelected.Extension.TrimStart('.'), out ECookedFileFormat Extension);
+                if (m_EnumParsedSuccesfully)
                 {
-                    AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-                    AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext);
-                    AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
+                    XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                    XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ExportSelected.Extension);
+                    XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ExportSelected.Name);
                 }
-                else{
-                    throw new ArgumentOutOfRangeException();
-
-                }
-
-
+                else{throw new ArgumentOutOfRangeException();}
             }
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        }
+        /// <summary>
+        /// Confirm Button (Advanced Options)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) => XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
-        private bool SelectionLocked = false;
-        private void ExportGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
-        {
-            if (!SelectionLocked)
-            {
-                var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
-                var simplename = Path.GetFileName(q.FullName);
+        /// <summary>
+        /// Cancel Button (Select additional files)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CancelSelectingClick(object sender, RoutedEventArgs e) => XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
-                var prestring = "Selected : ";
-
-
-                var IEVM = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
-
-                IEVM.CurrentSelectedInGridName =prestring + simplename;
-
-            }
-
-
-        }
-
-        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-            SelectionLocked = true;
-        }
-
-        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            SelectionLocked = false;
-        }
-
+        /// <summary>
+        /// Override PG Collection Editor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PropertyGrid_CollectionEditorOpening(object sender, Syncfusion.Windows.PropertyGrid.CollectionEditorOpeningEventArgs e)
         {
-
             e.Cancel=true;
-            FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }
 
-        private void CancelSelectingClick(object sender, RoutedEventArgs e)
-        {
-            FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        }
     }
 }
 
-
-
-//private void DragNDropBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-//{
-//    Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
-//    openFileDlg.Multiselect = true;
-//    openFileDlg.Filter = "All files (*.*)|*.*";
-//    Nullable<bool> result = openFileDlg.ShowDialog();
-//    if (result == true)
-//    {
-
-//        //ImporterList.items.Text = openFileDlg.FileName;
-
-//    }
-//}

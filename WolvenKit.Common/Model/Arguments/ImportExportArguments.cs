@@ -109,7 +109,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [ReadOnly(true)]
+        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
 
         public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
@@ -199,56 +199,105 @@ namespace WolvenKit.Common.Model.Arguments
 
     }
 
+    /// <summary>
+    /// WithMaterials Mesh Export Arguments.
+    /// </summary>
     public class WithMaterialMeshArgs
     {
+        /// <summary>
+        /// Uncook Format for material files. (DDS,TGA,PNG Etc)
+        /// </summary>
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Export Format")]
         [Description("Exports textures(dds,png,tga etc) and material helper data with the mesh.")]
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
 
-
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => "Adjust these settings if WithMaterial selected.";
 
 
     }
 
+    /// <summary>
+    /// WithRig Mesh Export Arguments.
+    /// </summary>
     public class WithRigMeshArgs
     {
+        /// <summary>
+        /// Selected Rig for Mesh WithRig Export.
+        /// </summary>
         [Category("WithRig Settings")]
         [Display(Name = "Select rig(s)")]
         [Description("Select rig(s) to export within your mesh.")]
         public Stream RigStream { get; set; }
-        public override string ToString() => "Adjust these settings if WithRigh selected.";
+
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => "Adjust these settings if WithRig selected.";
 
     }
 
+    /// <summary>
+    /// MultiMesh Export Arguments
+    /// </summary>
     public class MultiMeshArgs
     {
+        /// <summary>
+        /// MultiMesh Mesh List.
+        /// </summary>
         [Category("MultiMesh Settings")]
         [Display(Name = "Select additional meshes")]
         public List<Stream> MultiMeshMeshes { get; set; } = new();
+
+        /// <summary>
+        /// MultiMesh Rig List.
+        /// </summary>
         [Category("MultiMesh Settings")]
         [Display(Name = "Select rig(s)")]
         public List<Stream> MultiMeshRigs { get; set; } = new();
+
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => "Adjust these settings if MultiMesh selected.";
 
     }
 
+    /// <summary>
+    /// Wem Export Arguments.
+    /// </summary>
     public class WemExportArgs : ExportArgs
     {
+        /// <summary>
+        /// Wem Export type
+        /// </summary>
         [Category("Export Type")]
         [Display(Name = "Wem Export Type")]
         [Description("Set the audioformat you want your wem file to be converted to.")]
-
         public WemExportTypes wemExportType { get; set; } = WemExportTypes.Mp3;
 
-
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => wemExportType.ToString();
 
     }
 
+    /// <summary>
+    /// Wem Export Types
+    /// </summary>
     public enum WemExportTypes { Wav, Mp3 }
 
+    /// <summary>
+    /// Mesh Export Types
+    /// </summary>
     public enum MeshExportType { Default, WithRig,WithMaterials}
 
     #endregion
