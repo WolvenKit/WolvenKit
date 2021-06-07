@@ -31,33 +31,48 @@ namespace WolvenKit.Views.Editor
         private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
         {
 
-            var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
-            var simplename = Path.GetFileName(q.FullName);
-            var ext = Path.GetExtension(q.FullName).ToString();
+            var IEVM = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
 
-            _ = Enum.TryParse(ext.TrimStart('.'), out ECookedFileFormat Extension);
-            switch (Extension)
+            if (IEVM.IsImportsSelected)
             {
-                case ECookedFileFormat.mesh:
-                case ECookedFileFormat.xbm:
-                case ECookedFileFormat.wem:
-                case ECookedFileFormat.csv:
-                case ECookedFileFormat.json:
-                case ECookedFileFormat.mlmask:
-                case ECookedFileFormat.cubemap:
-                case ECookedFileFormat.envprobe:
-                case ECookedFileFormat.texarray:
-                case ECookedFileFormat.morphtarget:
+                var q2 = ImportGrid.SelectedItem as ImportExportItemViewModel;
+                var simplename = Path.GetFileName(q2.FullName);
+                var ext = Path.GetExtension(q2.FullName).ToString();
+
+
+                var succes = Enum.TryParse(ext.TrimStart('.'), out ERawFileFormat RawExtension);
+                if (succes)
+                {
                     AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
                     AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext);
                     AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
-                    break;
-                default:
+                }
+                else
+                {
                     throw new ArgumentOutOfRangeException();
+                }
             }
+            else
+            {
+
+                var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
+                var simplename = Path.GetFileName(q.FullName);
+                var ext = Path.GetExtension(q.FullName).ToString();
+
+                var succes = Enum.TryParse(ext.TrimStart('.'), out ECookedFileFormat Extension);
+                if (succes)
+                {
+                    AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                    AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext);
+                    AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
+                }
+                else{
+                    throw new ArgumentOutOfRangeException();
+
+                }
 
 
-
+            }
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -97,7 +112,7 @@ namespace WolvenKit.Views.Editor
 
         private void PropertyGrid_CollectionEditorOpening(object sender, Syncfusion.Windows.PropertyGrid.CollectionEditorOpeningEventArgs e)
         {
-            
+
             e.Cancel=true;
             FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }

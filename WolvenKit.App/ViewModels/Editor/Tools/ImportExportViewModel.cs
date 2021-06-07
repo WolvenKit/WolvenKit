@@ -333,8 +333,14 @@ namespace WolvenKit.ViewModels.Editor
                     return new XbmImportArgs();
                 case ERawFileFormat.fbx:
                     return new CommonImportArgs();
+
+                case ERawFileFormat.glb:
+                case ERawFileFormat.gltf:
+                    return new MeshImportArgs();
+
+
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return new CommonImportArgs();
             }
         }
     }

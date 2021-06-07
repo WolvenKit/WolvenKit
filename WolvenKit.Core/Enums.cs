@@ -174,7 +174,9 @@ namespace WolvenKit.Common
     {
         tga,
         dds,
-        fbx
+        fbx,
+        gltf,
+        glb
     }
 
     /// <summary>

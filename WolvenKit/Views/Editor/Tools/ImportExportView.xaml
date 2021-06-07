@@ -82,12 +82,14 @@
                         AllowEditing="False"
                         ColumnSizer="Star"
                         HeaderText="Name"
+                        HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />
 
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         ColumnSizer="AutoLastColumnFill"
                         HeaderText="Export Task"
+                        HorizontalHeaderContentAlignment="Left"
                         MappingName="ExportTaskIdentifier" />
 
                 </syncfusion:SfDataGrid.Columns>
@@ -104,7 +106,8 @@
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
-                ColumnSizer="AutoLastColumnFill"
+                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
+                ColumnSizer="Auto"
                 ItemsSource="{Binding ImportableItems}"
                 SelectedItem="{Binding SelectedImport}"
                 SelectionMode="Extended"
@@ -117,9 +120,16 @@
                         MappingName="IsChecked" />
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
+                        ColumnSizer="Star"
                         HeaderText="Name"
+                        HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />
-
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
+                        ColumnSizer="AutoLastColumnFill"
+                        HeaderText="Import Task"
+                        HorizontalHeaderContentAlignment="Left"
+                        MappingName="ExportTaskIdentifier" />
 
                 </syncfusion:SfDataGrid.Columns>
 
