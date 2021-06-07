@@ -51,7 +51,7 @@ public static class ModuleInitializer
         serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
         serviceLocator.RegisterType<MockGameController>();
 
-        serviceLocator.RegisterType<Cp77FileService>();
+        serviceLocator.RegisterType<Red4ParserService>();
         serviceLocator.RegisterType<TargetTools>();      //Cp77FileService
         serviceLocator.RegisterType<RIG>();              //Cp77FileService
         serviceLocator.RegisterType<MESHIMPORTER>();     //Cp77FileService

@@ -15,7 +15,7 @@ namespace CP77Tools.Tasks
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
         private readonly IProgress<double> _progressService;
-        private readonly Cp77FileService _wolvenkitFileService;
+        private readonly Red4ParserService _wolvenkitFileService;
 
 
 
@@ -27,7 +27,7 @@ namespace CP77Tools.Tasks
             ILoggerService loggerService,
             IHashService hashService,
             IProgress<double> progress,
-            Cp77FileService wolvenkitFileService,
+            Red4ParserService wolvenkitFileService,
             ModTools modTools
             )
         {

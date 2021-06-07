@@ -6,7 +6,7 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED4.CR2W
 {
-    public class Cp77FileService : IWolvenkitFileService
+    public class Red4ParserService : IRedParserService
     {
         #region Methods
 

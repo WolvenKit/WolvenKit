@@ -88,7 +88,7 @@ namespace WolvenKit.CLI
                                 services.AddSingleton<IHashService, HashService>();
 
 
-                                services.AddScoped<Cp77FileService>();
+                                services.AddScoped<Red4ParserService>();
                                 services.AddScoped<TargetTools>();      //Cp77FileService
                                 services.AddScoped<RIG>();              //Cp77FileService
                                 services.AddScoped<MESHIMPORTER>();     //Cp77FileService

@@ -12,7 +12,7 @@ namespace CP77.CR2W
         private readonly ILoggerService _loggerService;
         private readonly IProgress<double> _progressService;
         private readonly IHashService _hashService;
-        private readonly Cp77FileService _wolvenkitFileService;
+        private readonly Red4ParserService _wolvenkitFileService;
         private readonly MeshTools _meshTools;
         private readonly TargetTools _targetTools;
         //private readonly MaterialTools _materialTools;
@@ -22,7 +22,7 @@ namespace CP77.CR2W
             ILoggerService loggerService,
             IProgress<double> progressService,
             IHashService hashService,
-            Cp77FileService wolvenkitFileService,
+            Red4ParserService wolvenkitFileService,
             MeshTools meshTools,
             TargetTools targetTools
             //MaterialTools materialTools

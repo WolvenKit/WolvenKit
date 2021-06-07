@@ -26,9 +26,9 @@ namespace CP77.CR2W
     using VCT = VertexColor1Texture2;
     public class TargetTools
     {
-        private readonly Cp77FileService _modTools;
+        private readonly Red4ParserService _modTools;
 
-        public TargetTools(Cp77FileService modTools)
+        public TargetTools(Red4ParserService modTools)
         {
             _modTools = modTools;
         }

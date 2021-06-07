@@ -17,9 +17,9 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
     public class RIG
     {
-        private readonly Cp77FileService _modTools;
+        private readonly Red4ParserService _modTools;
 
-        public RIG(Cp77FileService modTools)
+        public RIG(Red4ParserService modTools)
         {
             _modTools = modTools;
         }

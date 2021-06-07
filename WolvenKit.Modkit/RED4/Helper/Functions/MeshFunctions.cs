@@ -32,10 +32,10 @@ namespace CP77.CR2W
 
     public class MeshTools
     {
-        private readonly Cp77FileService _modTools;
+        private readonly Red4ParserService _modTools;
         private readonly RIG _rig;
 
-        public MeshTools(Cp77FileService modtools, RIG rig)
+        public MeshTools(Red4ParserService modtools, RIG rig)
         {
             _modTools = modtools;
             _rig = rig;

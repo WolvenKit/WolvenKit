@@ -3,7 +3,7 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common.Services
 {
-    public interface IWolvenkitFileService
+    public interface IRedParserService
     {
         #region Methods
 

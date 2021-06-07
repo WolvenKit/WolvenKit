@@ -92,7 +92,7 @@ namespace WolvenKit.CLI.MSTests
             ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IProgress<double>, MockProgressService>();
-            ServiceLocator.Default.RegisterType<Cp77FileService>();
+            ServiceLocator.Default.RegisterType<Red4ParserService>();
             ServiceLocator.Default.RegisterType<TargetTools>();      //Cp77FileService
             ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService
             ServiceLocator.Default.RegisterType<MESHIMPORTER>();     //Cp77FileService

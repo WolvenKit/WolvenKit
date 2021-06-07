@@ -20,9 +20,9 @@ namespace WolvenKit.Modkit.RED4.MeshFile
     using Vec3 = System.Numerics.Vector3;
     public class MESHIMPORTER
     {
-        private readonly Cp77FileService _modTools;
+        private readonly Red4ParserService _modTools;
 
-        public MESHIMPORTER(Cp77FileService modtools)
+        public MESHIMPORTER(Red4ParserService modtools)
         {
             _modTools = modtools;
         }

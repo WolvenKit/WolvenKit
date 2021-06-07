@@ -48,7 +48,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IProjectManager _projectManager;
-        private readonly Cp77FileService _wolvenkitFileService;
+        private readonly Red4ParserService _wolvenkitFileService;
         private readonly ModTools _modTools;
 
 
@@ -91,7 +91,7 @@ namespace WolvenKit.ViewModels.Editor
             _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
             _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
             _modTools = ServiceLocator.Default.ResolveType<ModTools>();
-            _wolvenkitFileService = ServiceLocator.Default.ResolveType<Cp77FileService>();
+            _wolvenkitFileService = ServiceLocator.Default.ResolveType<Red4ParserService>();
 
             IsDirty = false;
 
