@@ -12,8 +12,14 @@ using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model.Arguments
 {
+    /// <summary>
+    /// Global Export Arguments
+    /// </summary>
     public class GlobalExportArgs
     {
+        /// <summary>
+        /// Export Argument Dictionary.
+        /// </summary>
         private readonly Dictionary<Type, ExportArgs> _argsList = new()
         {
             { typeof(CommonExportArgs), new CommonExportArgs() },
@@ -24,6 +30,11 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(WemExportArgs), new WemExportArgs() },
         };
 
+        /// <summary>
+        /// Register Export Arguments.
+        /// </summary>
+        /// <param name="exportArgs"></param>
+        /// <returns></returns>
         public GlobalExportArgs Register(params ExportArgs[] exportArgs)
         {
             foreach (var arg in exportArgs)
@@ -42,6 +53,11 @@ namespace WolvenKit.Common.Model.Arguments
             return this;
         }
 
+        /// <summary>
+        /// Get Argument.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T Get<T>() where T : ExportArgs
         {
             var arg = _argsList[typeof(T)];
@@ -55,16 +71,24 @@ namespace WolvenKit.Common.Model.Arguments
 
     }
 
-
+    /// <summary>
+    /// Import Export Arguments
+    /// </summary>
     public abstract class ImportExportArgs : Catel.Data.ObservableObject
     {
     }
 
+    /// <summary>
+    /// Import Arguments
+    /// </summary>
     public abstract class ImportArgs : ImportExportArgs
     {
 
     }
 
+    /// <summary>
+    /// Export Arguments
+    /// </summary>
     public abstract class ExportArgs : ImportExportArgs
     {
 
@@ -75,22 +99,40 @@ namespace WolvenKit.Common.Model.Arguments
 
     #region import args
 
+
+    /// <summary>
+    /// Common Import Arguments
+    /// </summary>
     public class CommonImportArgs : ImportArgs
     {
 
     }
 
+    /// <summary>
+    /// XBM Import Arguments
+    /// </summary>
     public class XbmImportArgs : ImportArgs
     {
         public ETextureGroup TextureGroup { get; internal set; }
 
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => TextureGroup.ToString();
     }
 
+    /// <summary>
+    /// Mesh Import Arguments
+    /// </summary>
     public class MeshImportArgs : ImportArgs
     {
         public Stream MeshToReplaceStream { get; set; }
 
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => ".Mesh";
 
     }
@@ -100,36 +142,68 @@ namespace WolvenKit.Common.Model.Arguments
 
     #region export args
 
+    /// <summary>
+    /// Common Export Arguments
+    /// </summary>
     public class CommonExportArgs : ExportArgs
     {
 
     }
 
+    /// <summary>
+    /// MorphTarget Export Arguments
+    /// </summary>
     public class MorphTargetExportArgs : ExportArgs
     {
+        /// <summary>
+        /// Binary Export Bool, Decides between GLB and GLTF
+        /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
         [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
 
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
 
     }
 
+    /// <summary>
+    /// MlMask Export Arguments
+    /// </summary>
     public class MlmaskExportArgs : ExportArgs
     {
+        /// <summary>
+        /// MlMask Uncook Format
+        /// </summary>
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
         public EUncookExtension UncookExtension { get; set; }
+
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => $"{UncookExtension.ToString()}";
 
     }
 
+    /// <summary>
+    /// XBM Export Arguments
+    /// </summary>
     public class XbmExportArgs : ExportArgs
     {
-
+        /// <summary>
+        /// Private Uncook Format.
+        /// </summary>
         private EUncookExtension _uncookExtension;
 
+        /// <summary>
+        ///  Uncook Format for XBM.
+        /// </summary>
         [Category("Export Type")]
         [Display(Name = "XBM Export Type")]
         public EUncookExtension UncookExtension
@@ -146,55 +220,81 @@ namespace WolvenKit.Common.Model.Arguments
             }
         }
 
-
+        /// <summary>
+        /// Flip Image argument
+        /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Flip Image")]
         public bool Flip { get; set; }
 
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => $"{UncookExtension.ToString()} | Flip : {Flip.ToString()}";
     }
 
 
-
+    /// <summary>
+    /// Mesh Export Arguments
+    /// </summary>
     public class MeshExportArgs : ExportArgs
     {
-        /// Export Type Category
+        /// <summary>
+        /// Export type for the selected Mesh.
+        /// </summary>
         [Category("Export Type")]
         [Display(Name = "Mesh Export Type")]
         [Description("The type of export for your mesh, by default no Materials or Rig is used.")]
         public MeshExportType meshExportType { get; set; } = MeshExportType.Default;
 
-
-        ///  Default Export Settings Category
+        /// <summary>
+        /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
+        /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "Lod Filter")]
         [Description("If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.")]
         public bool LodFilter { get; set; } = true;
 
+        /// <summary>
+        /// Binary Export Bool, Decides between GLB and GLTF
+        /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "Is Binary")]
         [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
         public bool isGLBinary { get; set; } = true;
 
-
-
-        /// Export Arguments Settings
+        /// <summary>
+        /// MultiMesh Arguments
+        /// </summary>
         [Category("Export Arguments Settings")]
         [Display(Name = "MultiMesh Export Arguments")]
         public MultiMeshArgs MultiMeshargs { get; set; } = new();
 
+        /// <summary>
+        /// With Rig Mesh Arguments
+        /// </summary>
         [Category("Export Arguments Settings")]
         [Display(Name = "Mesh with Rig Export Arguments")]
         public WithRigMeshArgs WithRigMeshargs { get; set; } = new();
+
+        /// <summary>
+        /// With Materials Mesh Arguments
+        /// </summary>
         [Category("Export Arguments Settings")]
         [Display(Name = "Mesh with Material Export Arguments")]
         public WithMaterialMeshArgs WithMaterialMeshargs { get; set; } = new();
 
-
-
+        /// <summary>
+        /// List of Archives for WithMaterials Mesh Export.
+        /// </summary>
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
 
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString() => "GLTF/GLB | " +  $"Lod filter : {LodFilter.ToString()} | Is Binary : {isGLBinary.ToString()}";
 
     }
