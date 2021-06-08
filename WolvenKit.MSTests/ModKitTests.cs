@@ -1,24 +1,16 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catel.IoC;
-using CP77.CR2W;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using ProtoBuf;
-using ProtoBuf.Meta;
-using WolvenKit.CLI.MSTests;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W.Archive;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
-namespace CP77.MSTests
+namespace WolvenKit.MSTests
 {
     [TestClass]
     public class ModKitTests : GameUnitTest
@@ -30,7 +22,7 @@ namespace CP77.MSTests
 
         [TestMethod]
         [DataRow(ERedExtension.xbm)]
-        [DataRow(ERedExtension.mesh)]
+        //[DataRow(ERedExtension.mesh)]
         public void Test_Rebuild(ERedExtension extension)
         {
             var ext = $".{extension.ToString()}";
@@ -43,22 +35,19 @@ namespace CP77.MSTests
                 Directory.CreateDirectory(resultDir.FullName);
             }
 
-            ExportArgs args;
-            switch (extension)
-            {
-                case ERedExtension.mesh:
-                    args = new MeshExportArgs();
-                    break;
-                case ERedExtension.xbm:
-                    args = new XbmExportArgs();
-                    break;
-                default:
-                    args = new CommonExportArgs();
-                    break;
-            }
+            var keep = true;
+            var isettings = new GlobalImportArgs().Register(
+                new XbmImportArgs() { Keep = keep },
+                new MeshImportArgs() { Keep = keep },
+                new CommonImportArgs() { Keep = keep }
+            );
+            var esettings = new GlobalExportArgs();
 
-            foreach (var fileEntry in infiles)
+            var fails = new List<FileEntry>();
+
+            for (var i = 0; i < infiles.Count; i++)
             {
+                var fileEntry = infiles[i];
                 // skip files without buffers
                 var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
                 if (!hasBuffers)
@@ -67,23 +56,86 @@ namespace CP77.MSTests
                 }
 
                 var ar = fileEntry.Archive as Archive;
-                using var ms = new MemoryStream();
-                ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
+                using var cr2wstream = new MemoryStream();
+                ar.CopyFileToStream(cr2wstream, fileEntry.NameHash64, false);
+                var originalBytes = cr2wstream.ToByteArray();
 
-
-                var globalSettings = new GlobalExportArgs();
 
                 // uncook
-                modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, globalSettings, resultDir);
+                var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, esettings,
+                    resultDir);
+
+                if (!resUncook)
+                {
+                    fails.Add(fileEntry);
+                }
 
                 // rebuild
-                //modtools.Recombine(resultDir, true, false);
+                var allfiles = resultDir.GetFiles("*", SearchOption.AllDirectories);
+                var rawfile = allfiles.FirstOrDefault(_ => _.Extension != ext);
+                if (rawfile == null)
+                {
+                    Assert.Fail($"No raw file found in {resultDir}");
+                }
+
+                var resImport = modtools.Import(rawfile, isettings);
+                if (!resImport)
+                {
+                    fails.Add(fileEntry);
+                }
 
                 // compare
+                var redfile = allfiles.FirstOrDefault(_ => _.Extension == ext);
+                if (redfile == null)
+                {
+                    Assert.Fail($"No red file found in {resultDir}");
+                }
 
+                var newbytes = File.ReadAllBytes(redfile.FullName);
 
+                if (!originalBytes.SequenceEqual(newbytes))
+                {
+                    fails.Add(fileEntry);
+                }
+                else
+                {
+                }
+
+                // clean temp dir
+                try
+                {
+                    foreach (var fileInfo in allfiles)
+                    {
+                        fileInfo.Delete();
+                    }
+
+                    //var alldirs = resultDir.GetDirectories();
+                    //foreach (var fileInfo in alldirs)
+                    //{
+                    //    fileInfo.Delete();
+                    //}
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
 
+            Assert.AreEqual(0, fails.Count);
+
+
+            // cleanup
+            var allf = resultDir.GetFiles("*", SearchOption.AllDirectories);
+            foreach (var fileInfo in allf)
+            {
+                fileInfo.Delete();
+            }
+            var alld = resultDir.GetDirectories();
+            foreach (var directoryInfo in alld)
+            {
+                directoryInfo.Delete(true);
+            }
         }
 
         #endregion Methods

@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
 using WolvenKit.Common;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Modkit.RED4.MeshFile;
@@ -17,7 +16,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
-namespace WolvenKit.CLI.MSTests
+namespace WolvenKit.MSTests
 {
     [TestClass]
     public class GameUnitTest

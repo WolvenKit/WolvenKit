@@ -1,21 +1,16 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CP77.CR2W;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using ProtoBuf;
-using ProtoBuf.Meta;
-using WolvenKit.CLI.MSTests;
-using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
-namespace CP77.MSTests
+namespace WolvenKit.MSTests
 {
     [TestClass]
     public class ArchiveTests : GameUnitTest

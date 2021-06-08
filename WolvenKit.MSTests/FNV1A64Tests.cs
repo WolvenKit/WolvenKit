@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.FNV1A;
 
-namespace CP77.MSTests
+namespace WolvenKit.MSTests
 {
     [TestClass]
     public class FNV1A64Tests

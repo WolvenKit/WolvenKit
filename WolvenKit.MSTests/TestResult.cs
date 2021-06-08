@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using WolvenKit.RED4.CR2W.Archive;
 
-namespace CP77.MSTests
+namespace WolvenKit.MSTests
 {
     public class ReadTestResult : TestResult
     {

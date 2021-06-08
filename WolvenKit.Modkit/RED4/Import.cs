@@ -160,7 +160,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private bool ImportXbm(FileInfo rawFile, DirectoryInfo outDir, XbmImportArgs args)
+        public bool ImportXbm(FileInfo rawFile, DirectoryInfo outDir, XbmImportArgs args)
         {
             var rawExt = rawFile.Extension.TrimStart('.');
             // TODO: do this in a working directory?

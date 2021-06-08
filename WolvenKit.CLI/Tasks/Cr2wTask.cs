@@ -3,21 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using WolvenKit.CLI;
-//using Newtonsoft.Json;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
 using Formatting = Newtonsoft.Json.Formatting;
-using JsonConverter = Newtonsoft.Json.JsonConverter;
 
 namespace CP77Tools.Tasks
 {
