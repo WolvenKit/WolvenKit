@@ -32,8 +32,10 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir"></param>
         /// <param name="rawOutDir"></param>
         /// <param name="args"></param>
+        /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        public bool UncookSingle(Archive archive, ulong hash, DirectoryInfo outDir, GlobalExportArgs args, DirectoryInfo rawOutDir = null)
+        public bool UncookSingle(Archive archive, ulong hash, DirectoryInfo outDir, GlobalExportArgs args,
+            DirectoryInfo rawOutDir = null, ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
         {
             if (!archive.Files.ContainsKey(hash))
             {
@@ -76,7 +78,16 @@ namespace WolvenKit.Modkit.RED4
             {
                 rawOutDir = outDir;
             }
-            return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir);
+
+            try
+            {
+                return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
+                return false;
+            }
         }
 
         /// <summary>
@@ -89,6 +100,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="pattern"></param>
         /// <param name="regex"></param>
         /// <param name="rawOutDir"></param>
+        /// <param name="forcebuffers"></param>
         /// <returns></returns>
         public (List<string>, int) UncookAll(
             Archive ar,
@@ -97,7 +109,8 @@ namespace WolvenKit.Modkit.RED4
             bool unbundle = false,
             string pattern = "",
             string regex = "",
-            DirectoryInfo rawOutDir = null)
+            DirectoryInfo rawOutDir = null,
+            ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -138,7 +151,7 @@ namespace WolvenKit.Modkit.RED4
             //foreach (var info in finalMatchesList)
             Parallel.ForEach(finalMatchesList, info =>
             {
-                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir))
+                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers))
                 {
                     extractedList.Add(info.FileName);
                 }
@@ -170,7 +183,8 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="settings">GlobalExportSettings</param>
         /// <param name="rawOutDir">the output directory. the outfile is conbined from the rawoutdir and the relative path</param>
         /// <returns></returns>
-        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir)
+        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings,
+            DirectoryInfo rawOutDir, ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
         {
             var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, relPath));
             if (outfile.Directory == null)
@@ -182,7 +196,7 @@ namespace WolvenKit.Modkit.RED4
             var ext = Path.GetExtension(relPath).TrimStart('.');
 
             // files where uncook methods are NOT implemented: just extract buffers
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
+            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext) || forcebuffers.ToString() == ext)
             {
                 var i = 0;
                 foreach (var stream in GenerateBuffers(cr2wStream))
@@ -282,8 +296,8 @@ namespace WolvenKit.Modkit.RED4
                     using var fs = new FileStream($"{outfile.FullName}.csv", FileMode.Create, FileAccess.Write);
                     return UncookCsv(cr2wStream, fs);
                 }
-                case ECookedFileFormat.json:
-                    return true;
+                //case ECookedFileFormat.json:
+                //    return true;
                 case ECookedFileFormat.cubemap:
                 {
                     var newpath = Path.ChangeExtension(outfile.FullName, "dds");

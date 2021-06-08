@@ -118,11 +118,11 @@ namespace CP77Tools.Tasks
                 {
                     if (_modTools.Import(rawFile, settings, outDirectory))
                     {
-                        _loggerService.Success($"Successfully imported all files in {path}");
+                        _loggerService.Success($"Successfully imported {path}");
                     }
                     else
                     {
-                        _loggerService.Error($"Failed to import files in {path}");
+                        _loggerService.Error($"Failed to import {path}");
                     }
                 }
 

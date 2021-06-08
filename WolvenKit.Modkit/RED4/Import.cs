@@ -42,7 +42,6 @@ namespace WolvenKit.Modkit.RED4
                 outDir = rawFile.Directory;
             }
             
-
             #endregion
 
             // check if the file can be directly imported
@@ -94,17 +93,17 @@ namespace WolvenKit.Modkit.RED4
             {
                 case ERawFileFormat.tga:
                 case ERawFileFormat.dds:
-                    // if keep, rebuild
-
-                    // else create new xbm
-                    return ImportXbm(rawFile);
+                    var xbmargs = args.Get<XbmImportArgs>();
+                    return xbmargs.Keep
+                        ? RebuildSingleFile(rawFile, outDir)
+                        : ImportXbm(rawFile);
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
-                    // if keep, rebuild
-
-                    // else create new redmesh
-                    throw new NotImplementedException();
+                    var meshArgs = args.Get<MeshImportArgs>();
+                    return meshArgs.Keep
+                        ? RebuildSingleFile(rawFile, outDir)
+                        : ImportXbm(rawFile);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -277,6 +276,11 @@ namespace WolvenKit.Modkit.RED4
 
             #endregion
 
+        }
+
+        private bool ImportMesh(FileInfo rawFile, string textureGroup = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }

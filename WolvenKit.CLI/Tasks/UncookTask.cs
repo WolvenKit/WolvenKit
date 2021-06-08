@@ -17,7 +17,8 @@ namespace CP77Tools.Tasks
         #region Methods
 
         public void UncookTask(string[] path, string outpath, string rawOutDir,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle)
+            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle,
+            ECookedFileFormat forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
@@ -27,12 +28,13 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                UncookTaskInner(file, outpath, rawOutDir, uext, flip, hash, pattern, regex, unbundle);
+                UncookTaskInner(file, outpath, rawOutDir, uext, flip, hash, pattern, regex, unbundle, forcebuffers);
             });
         }
 
         private void UncookTaskInner(string path, string outpath, string rawOutDir,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle)
+            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle,
+            ECookedFileFormat forcebuffers)
         {
             #region checks
 
@@ -127,12 +129,12 @@ namespace CP77Tools.Tasks
                 // run
                 if (hash != 0)
                 {
-                    _modTools.UncookSingle(ar, hash, outDir, globalSettings, rawOutDirInfo);
+                    _modTools.UncookSingle(ar, hash, outDir, globalSettings, rawOutDirInfo, forcebuffers);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}");
                 }
                 else
                 {
-                    var r = _modTools.UncookAll(ar, outDir, globalSettings, unbundle, pattern, regex, rawOutDirInfo);
+                    var r = _modTools.UncookAll(ar, outDir, globalSettings, unbundle, pattern, regex, rawOutDirInfo, forcebuffers);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
                 }
             }
