@@ -16,6 +16,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W.Archive;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace CP77.MSTests
 {
@@ -76,7 +77,7 @@ namespace CP77.MSTests
                 modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, globalSettings, resultDir);
 
                 // rebuild
-                modtools.Recombine(resultDir, true, true, false, true, false, true);
+                //modtools.Recombine(resultDir, true, false);
 
                 // compare
 

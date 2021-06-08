@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.RED4.CR2W.Types;
@@ -7,7 +8,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.CR2W;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     /// <summary>
     /// Collection of common modding utilities.
@@ -17,53 +18,130 @@ namespace CP77.CR2W
         /// <summary>
         /// Imports a raw File to a RedEngine file (e.g. .dds to .xbm, .fbx to .mesh)
         /// </summary>
-        /// <param name="rawFile"></param>
+        /// <param name="rawFile">the raw file to be imported</param>
         /// <param name="args"></param>
+        /// <param name="outDir">can be a depotpath, or if null the parent directory of the rawfile</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public CR2WFile Import(FileInfo rawFile, ImportArgs args)
+        public bool Import(
+            FileInfo rawFile,
+            GlobalImportArgs args,
+            DirectoryInfo outDir = null)
         {
             #region checks
-            if (rawFile == null)
+            if (rawFile is null or {Exists: false})
             {
-                return null;
+                return false;
             }
-
-            if (!rawFile.Exists)
+            if (rawFile.Directory is { Exists: false })
             {
-                return null;
+                return false;
             }
-
-            if (rawFile.Directory is {Exists: false})
+            if (outDir is not { Exists: true })
             {
-                return null;
-            }
-
-            if (!Enum.GetNames(typeof(ERawFileFormat)).Contains(rawFile.Extension[1..]))
-            {
-                return null;
-            }
-
-            if (!Enum.TryParse(rawFile.Extension, out ERawFileFormat rawFileFormat))
-            {
-                return null;
+                outDir = rawFile.Directory;
             }
             
+
             #endregion
 
-            switch (rawFileFormat)
+            // check if the file can be directly imported
+            var ext = Path.GetExtension(rawFile.FullName).TrimStart('.');
+            if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+                // only buffers can be rebuilt
+                if (ext != ".buffer")
+                {
+                    return false;
+                }
+                // buffers can not be rebuilt on their own
+                if (!args.Get<CommonImportArgs>().Keep)
+                {
+                    return false;
+                }
+
+
+
+
+                var filename = rawFile.Name;
+
+                // if keep, rebuild
+                // get a list of buffers if the user selected just one
+                var buffers = rawFile.Directory
+                    .GetFiles($"{rawFile.FullName}.*.buffer", SearchOption.TopDirectoryOnly);
+
+
+                // find redfile in outdir
+                // TODO (this can potentially return multiple files with the same name)
+                var files = outDir.GetFiles($"*{filename}", SearchOption.AllDirectories);
+                if (files.Length > 0)
+                {
+                    // throw something
+                }
+                else if (files.Length < 1)
+                {
+                    // no redfile found, skip
+                    return false;
+                }
+                else
+                {
+                    Rebuild(files.First().FullName, buffers);
+                }
+            }
+
+            // import files
+            switch (extAsEnum)
             {
                 case ERawFileFormat.tga:
                 case ERawFileFormat.dds:
+                    // if keep, rebuild
+
+                    // else create new xbm
                     return ImportXbm(rawFile);
                 case ERawFileFormat.fbx:
+                case ERawFileFormat.gltf:
+                case ERawFileFormat.glb:
+                    // if keep, rebuild
+
+                    // else create new redmesh
                     throw new NotImplementedException();
                 default:
-                    throw new ArgumentOutOfRangeException($"Import fbx");
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        private CR2WFile ImportXbm(FileInfo rawFile, string textureGroup = null)
+        public bool ImportFolder(
+            DirectoryInfo inDir,
+            DirectoryInfo outDir = null
+        )
+        {
+
+            //var texturesList = allFiles.Where(_ => _.Extension.ToLower() == ".dds");
+            //foreach (var fileInfo in texturesList)
+            //{
+            //    // dds path e.g. stand__rh_hold_tray__serve_milkshakes__01.dds
+            //    // rename to xbm and hash
+            //    var relpath = fileInfo.FullName;//[(infolder.FullName.Length + 1)..];
+            //    var parentpath = Path.ChangeExtension(relpath, "xbm");
+            //    var key = parentpath;//FNV1A64HashAlgorithm.HashString(parentpath);
+
+            //    // add buffer
+            //    if (!buffersDict.ContainsKey(key))
+            //    {
+            //        buffersDict.Add(key, new List<FileInfo>());
+            //    }
+            //    else // there can always only be one texture and it gets priority
+            //    {
+            //        buffersDict[key] = new List<FileInfo>();
+            //    }
+
+            //    buffersDict[key].Add(fileInfo);
+            //}
+
+            return true;
+        }
+
+        private bool ImportXbm(FileInfo rawFile, string textureGroup = null)
         {
             var rawExt = rawFile.Extension;
             // TODO: do this in a working directory?
@@ -76,19 +154,19 @@ namespace CP77.CR2W
                     if (ddsPath.Length > 255)
                     {
                         _loggerService.Error($"{ddsPath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.");
-                        return null;
+                        return false;
                     }
                     TexconvWrapper.Convert(rawFile.Directory.FullName, $"{ddsPath}", EUncookExtension.dds);
                 }
                 catch (Exception)
                 {
                     //TODO: proper exception handling
-                    return null;
+                    return false;
                 }
 
                 if (!File.Exists(ddsPath))
                 {
-                    return null;
+                    return false;
                 }
             }
 

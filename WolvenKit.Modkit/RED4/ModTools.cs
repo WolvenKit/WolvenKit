@@ -1,11 +1,9 @@
 using System;
-using System.IO;
-using Catel.IoC;
+using CP77.CR2W;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {

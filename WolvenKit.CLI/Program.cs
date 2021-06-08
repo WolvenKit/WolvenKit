@@ -14,6 +14,7 @@ using CP77.CR2W;
 using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
 using CP77Tools.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -26,6 +27,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.RigFile;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.CLI
 {
@@ -53,7 +55,7 @@ namespace WolvenKit.CLI
 
                 new UnbundleCommand(),
                 new UncookCommand(),
-                new RebuildCommand(),
+                new ImportCommand(),
                 new PackCommand(),
                 new ExportCommand(),
 
@@ -69,7 +71,13 @@ namespace WolvenKit.CLI
                 .UseDefaults()
                 .UseHost(Host.CreateDefaultBuilder, host =>
                     {
-                        host.ConfigureLogging(logging =>
+                        host
+                            .ConfigureAppConfiguration((hostingContext, configuration) =>
+                            {
+                                configuration
+                                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                            })
+                            .ConfigureLogging(logging =>
                             {
                                 logging.ClearProviders();
                                 logging.AddColorConsoleLogger(configuration =>

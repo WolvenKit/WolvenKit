@@ -25,6 +25,7 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED3.CR2W.SRT;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Shell;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.ViewModels.Editor
 {

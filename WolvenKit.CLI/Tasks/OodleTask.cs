@@ -10,7 +10,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public static int OodleTask(string path, string outpath, bool decompress, bool compress)
+        public int OodleTask(string path, string outpath, bool decompress, bool compress)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -45,7 +45,9 @@ namespace CP77Tools.Tasks
                 using var bw = new BinaryWriter(msout);
                 bw.Write(unpacked);
 
-                File.WriteAllBytes($"{outpath}.kark", msout.ToArray());
+                File.WriteAllBytes($"{outpath}.bin", msout.ToArray());
+
+                _loggerService.Success($"Finished decompressing: { outpath}.bin");
             }
 
             if (compress)
@@ -62,6 +64,8 @@ namespace CP77Tools.Tasks
                     true);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
+
+                _loggerService.Success($"Finished compressing: {outpath}");
             }
 
 

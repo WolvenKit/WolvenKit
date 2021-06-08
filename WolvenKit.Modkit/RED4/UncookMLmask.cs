@@ -10,7 +10,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.RED4.CR2W;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
@@ -103,9 +103,13 @@ namespace CP77.CR2W
                 Array.Clear(maskData, 0, maskData.Length);
                 try
                 {
-                    Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
+                    Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth,
+                        atlasHeight, tiles, maskTileSize, i);
                 }
-                catch { return false; }
+                catch
+                {
+                    return false;
+                }
 
                 using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
                 {

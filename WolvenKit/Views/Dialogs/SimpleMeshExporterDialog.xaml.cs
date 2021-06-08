@@ -24,6 +24,7 @@ using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.Materials;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.Views.Dialogs
 {

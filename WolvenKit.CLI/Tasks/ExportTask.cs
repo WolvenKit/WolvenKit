@@ -42,6 +42,12 @@ namespace CP77Tools.Tasks
                 return;
             }
 
+            if (!string.IsNullOrEmpty(outDir) && !Directory.Exists(outDir))
+            {
+                _loggerService.Warning("Please fill in a valid outdirectory path.");
+                return;
+            }
+
             var inputFileInfo = new FileInfo(path);
             var inputDirInfo = new DirectoryInfo(path);
 
@@ -74,7 +80,8 @@ namespace CP77Tools.Tasks
                     new MlmaskExportArgs() { UncookExtension = uncookext }
                 );
 
-                if (_modTools.Export(fileInfo, settings, basedir, new DirectoryInfo(outDir)))
+                var di = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
+                if (_modTools.Export(fileInfo, settings, basedir, di))
                 {
                     _loggerService.Success($"Successfully exported {path}.");
                 }

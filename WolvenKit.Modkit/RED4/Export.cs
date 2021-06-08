@@ -5,7 +5,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     /// <summary>
     /// Collection of common modding utilities.
@@ -15,7 +15,7 @@ namespace CP77.CR2W
         #region Methods
 
         /// <summary>
-        /// Exports (Uncooks) a physical REDengine file into it's raw file
+        /// Exports (Uncooks) a physical REDengine file into its raw file
         /// </summary>
         /// <param name="cr2wfile"></param>
         /// <param name="args"></param>
@@ -26,16 +26,10 @@ namespace CP77.CR2W
         {
             #region checks
 
-            if (cr2wfile == null)
+            if (cr2wfile is null or { Exists: false })
             {
                 return false;
             }
-
-            if (!cr2wfile.Exists)
-            {
-                return false;
-            }
-
             if (cr2wfile.Directory is {Exists: false})
             {
                 return false;

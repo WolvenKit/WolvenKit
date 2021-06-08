@@ -15,6 +15,7 @@ using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.RigFile;
 using AboutInfoService = WolvenKit.Functionality.Services.AboutInfoService;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.

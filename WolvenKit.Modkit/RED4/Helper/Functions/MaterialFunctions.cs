@@ -21,7 +21,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     /// <summary>
     /// Collection of common modding utilities.
@@ -874,8 +874,8 @@ namespace CP77.CR2W
                 ExtractAll(ar, MaterialRepoDir, "*.mltemplate");
                 ExtractAll(ar, MaterialRepoDir, "*.texarray");
 
-                UncookAll(ar, MaterialRepoDir, exportArgs,  "*.xbm", "" );
-                UncookAll(ar, MaterialRepoDir, exportArgs, "*.mlmask", "");
+                UncookAll(ar, MaterialRepoDir, exportArgs, false, "*.xbm", "" );
+                UncookAll(ar, MaterialRepoDir, exportArgs, false, "*.mlmask", "");
                 // try catch the decode in mlmask.cs for now
             }
         }

@@ -1,4 +1,9 @@
-﻿v 1.3.6
+v 1.4.0
+- mesh uncooking
+- importing, exporting with out directory
+- better UI
+
+v 1.3.6
 - added cr2w serialization and deserialization to/from json and xml
 - fixed some bugs related to the archivemanagers
 - added a user_hashes.txt file to parse additional hashes

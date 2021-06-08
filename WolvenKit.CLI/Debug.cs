@@ -22,6 +22,7 @@ using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.CLI
 {

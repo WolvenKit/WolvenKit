@@ -19,7 +19,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using Index = CP77Tools.Model.Index;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     /// <summary>
     /// Collection of common modding utilities.

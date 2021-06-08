@@ -18,6 +18,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.ViewModels.Editor
@@ -236,7 +237,8 @@ namespace WolvenKit.ViewModels.Editor
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
-                _modTools.Import(fi, item.Properties as ImportArgs);
+                var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
+                _modTools.Import(fi, settings);
             }
         }
 
@@ -378,25 +380,17 @@ namespace WolvenKit.ViewModels.Editor
 
         private ImportArgs DecideImportOptions(FileModel model)
         {
+            _ = Enum.TryParse(model.GetExtension(), out ERawFileFormat rawFileFormat);
 
-            _ = Enum.TryParse(model.GetExtension(), out ERawFileFormat Extension);
-
-            switch (Extension)
+            return rawFileFormat switch
             {
-                case ERawFileFormat.tga:
-                case ERawFileFormat.dds:
-                    return new XbmImportArgs();
-                case ERawFileFormat.fbx:
-                    return new CommonImportArgs();
-
-                case ERawFileFormat.glb:
-                case ERawFileFormat.gltf:
-                    return new MeshImportArgs();
-
-
-                default:
-                    return new CommonImportArgs();
-            }
+                ERawFileFormat.tga => new XbmImportArgs(),
+                ERawFileFormat.dds => new XbmImportArgs(),
+                ERawFileFormat.fbx => new CommonImportArgs(),
+                ERawFileFormat.glb => new MeshImportArgs(),
+                ERawFileFormat.gltf => new MeshImportArgs(),
+                _ => new CommonImportArgs()
+            };
         }
     }
     public class ExportableItemViewModel : ImportExportItemViewModel
@@ -409,29 +403,22 @@ namespace WolvenKit.ViewModels.Editor
 
         private ExportArgs DecideExportOptions(FileModel model)
         {
+            _ = Enum.TryParse(model.GetExtension(), out ECookedFileFormat fileFormat);
 
-            _ = Enum.TryParse(model.GetExtension(), out ECookedFileFormat Extension);
-
-            switch (Extension)
+            return fileFormat switch
             {
-                case ECookedFileFormat.mesh:
-                    return new MeshExportArgs();
-                case ECookedFileFormat.xbm:
-                    return new XbmExportArgs();
-                case ECookedFileFormat.wem:
-                    return new WemExportArgs();
-                case ECookedFileFormat.csv:
-                case ECookedFileFormat.json:
-                case ECookedFileFormat.mlmask:
-                case ECookedFileFormat.cubemap:
-                case ECookedFileFormat.envprobe:
-                case ECookedFileFormat.texarray:
-                    return new CommonExportArgs();
-                case ECookedFileFormat.morphtarget:
-                    return new MorphTargetExportArgs();
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                ECookedFileFormat.mesh => new MeshExportArgs(),
+                ECookedFileFormat.xbm => new XbmExportArgs(),
+                ECookedFileFormat.wem => new WemExportArgs(),
+                ECookedFileFormat.csv => new CommonExportArgs(),
+                ECookedFileFormat.json => new CommonExportArgs(),
+                ECookedFileFormat.mlmask => new CommonExportArgs(),
+                ECookedFileFormat.cubemap => new CommonExportArgs(),
+                ECookedFileFormat.envprobe => new CommonExportArgs(),
+                ECookedFileFormat.texarray => new CommonExportArgs(),
+                ECookedFileFormat.morphtarget => new MorphTargetExportArgs(),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 

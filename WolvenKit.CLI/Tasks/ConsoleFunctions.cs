@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace CP77Tools.Tasks
 {

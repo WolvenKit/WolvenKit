@@ -16,8 +16,8 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void UncookTask(string[] path, string outpath,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
+        public void UncookTask(string[] path, string outpath, string rawOutDir,
+            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle)
         {
             if (path == null || path.Length < 1)
             {
@@ -27,12 +27,12 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                UncookTaskInner(file, outpath, uext, flip, hash, pattern, regex);
+                UncookTaskInner(file, outpath, rawOutDir, uext, flip, hash, pattern, regex, unbundle);
             });
         }
 
-        private void UncookTaskInner(string path, string outpath,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
+        private void UncookTaskInner(string path, string outpath, string rawOutDir,
+            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle)
         {
             #region checks
 
@@ -70,11 +70,8 @@ namespace CP77Tools.Tasks
                 {
                     UncookExtension = uext,
                     Flip = flip
-                },
-                new CommonExportArgs()
-                {
                 }
-                );
+            );
 
             #endregion checks
 
@@ -108,12 +105,19 @@ namespace CP77Tools.Tasks
                     {
                         outDir = Directory.CreateDirectory(outpath);
                     }
+                }
 
-                    if (inputDirInfo.Exists)
+                DirectoryInfo rawOutDirInfo = null;
+                if (string.IsNullOrEmpty(rawOutDir))
+                {
+                    rawOutDirInfo = outDir;
+                }
+                else
+                {
+                    rawOutDirInfo = new DirectoryInfo(rawOutDir);
+                    if (!rawOutDirInfo.Exists)
                     {
-                        outDir = Directory.CreateDirectory(Path.Combine(
-                            outDir.FullName,
-                            processedarchive.Name.Replace(".archive", "")));
+                        rawOutDirInfo = Directory.CreateDirectory(rawOutDir);
                     }
                 }
 
@@ -123,12 +127,12 @@ namespace CP77Tools.Tasks
                 // run
                 if (hash != 0)
                 {
-                    _modTools.UncookSingle(ar, hash, outDir, globalSettings);
+                    _modTools.UncookSingle(ar, hash, outDir, globalSettings, rawOutDirInfo);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}");
                 }
                 else
                 {
-                    var r = _modTools.UncookAll(ar, outDir, globalSettings, pattern, regex);
+                    var r = _modTools.UncookAll(ar, outDir, globalSettings, unbundle, pattern, regex, rawOutDirInfo);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
                 }
             }

@@ -13,6 +13,7 @@ using ProtoBuf.Meta;
 using WolvenKit.CLI.MSTests;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace CP77.MSTests
 {

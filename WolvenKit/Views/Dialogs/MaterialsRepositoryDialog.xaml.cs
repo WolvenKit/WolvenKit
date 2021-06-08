@@ -3,6 +3,7 @@ using CP77.CR2W;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4.Materials;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.Views.Dialogs
 {

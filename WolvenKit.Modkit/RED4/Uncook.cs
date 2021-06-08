@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using CP77.CR2W.Uncooker;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
@@ -21,7 +20,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.MeshFile;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
@@ -36,11 +35,6 @@ namespace CP77.CR2W
         /// <returns></returns>
         public bool UncookSingle(Archive archive, ulong hash, DirectoryInfo outDir, GlobalExportArgs args, DirectoryInfo rawOutDir = null)
         {
-            if (!_hashService.Contains(hash))
-            {
-                return false;
-            }
-
             if (!archive.Files.ContainsKey(hash))
             {
                 return false;
@@ -49,7 +43,7 @@ namespace CP77.CR2W
             // extract the main file with uncompressed buffers
             #region unbundle main file
             using var cr2WStream = new MemoryStream();
-            ModTools.ExtractSingleToStream(archive, hash, cr2WStream);
+            WolvenKit.Modkit.RED4.ModTools.ExtractSingleToStream(archive, hash, cr2WStream);
 
             // write main file
             var entry = archive.Files[hash] as FileEntry;
@@ -71,6 +65,12 @@ namespace CP77.CR2W
             cr2WStream.CopyTo(fs);
             #endregion
 
+            var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
+            if (!hasBuffers)
+            {
+                return true;
+            }
+
             // uncook main file buffers to raw out dir
             if (rawOutDir is null or { Exists: false })
             {
@@ -85,12 +85,19 @@ namespace CP77.CR2W
         /// <param name="ar"></param>
         /// <param name="outDir"></param>
         /// <param name="args"></param>
+        /// <param name="unbundle"></param>
         /// <param name="pattern"></param>
         /// <param name="regex"></param>
         /// <param name="rawOutDir"></param>
         /// <returns></returns>
-        public (List<string>, int) UncookAll(Archive ar, DirectoryInfo outDir, GlobalExportArgs args,
-            string pattern = "", string regex = "", DirectoryInfo rawOutDir = null)
+        public (List<string>, int) UncookAll(
+            Archive ar,
+            DirectoryInfo outDir,
+            GlobalExportArgs args,
+            bool unbundle = false,
+            string pattern = "",
+            string regex = "",
+            DirectoryInfo rawOutDir = null)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -99,6 +106,7 @@ namespace CP77.CR2W
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
+            var totalInArchiveCount = ar.FileCount;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -116,10 +124,14 @@ namespace CP77.CR2W
                 finalmatches = queryMatchingFiles;
             }
 
-            var finalMatchesList = finalmatches.Where(_ => ar.CanUncook(_.NameHash64)).ToList();
-            _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to uncook.");
+            var finalMatchesList = finalmatches.ToList();
+            if (!unbundle)
+            {
+                finalMatchesList = finalMatchesList.Where(_ => ar.CanUncook(_.NameHash64)).ToList();
+            }
 
-            Thread.Sleep(1000);
+            _loggerService.Info($" {ar.ArchiveAbsolutePath}: Found {finalMatchesList.Count}/{totalInArchiveCount} entries to uncook");
+
             var progress = 0;
             _progressService.Report(0);
 
@@ -153,10 +165,10 @@ namespace CP77.CR2W
         /// Extracts and decompresses buffers of a cr2wstream
         /// uncooks buffers to raw format
         /// </summary>
-        /// <param name="cr2wStream"></param>
-        /// <param name="relPath"></param>
-        /// <param name="settings"></param>
-        /// <param name="rawOutDir"></param>
+        /// <param name="cr2wStream">the cooked redengine file input stream</param>
+        /// <param name="relPath">if a depot is used the relpath is a relative base path, if no depot is used, the relapth is simply the filename</param>
+        /// <param name="settings">GlobalExportSettings</param>
+        /// <param name="rawOutDir">the output directory. the outfile is conbined from the rawoutdir and the relative path</param>
         /// <returns></returns>
         private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir)
         {
@@ -354,8 +366,6 @@ namespace CP77.CR2W
                 yield return ms;
             }
         }
-
-
 
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {

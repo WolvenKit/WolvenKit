@@ -131,12 +131,12 @@ namespace CP77Tools.Tasks
                 if (!isHash && File.Exists(hash))
                 {
                     var hashlist = File.ReadAllLines(hash)
-                        .ToList().Select(_ => ulong.TryParse(_, out ulong res) ? res : 0);
+                        .ToList().Select(_ => ulong.TryParse(_, out var res) ? res : 0);
                     _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
-                    foreach (var hash_num in hashlist)
+                    foreach (var hashNum in hashlist)
                     {
-                        _modTools.ExtractSingle(ar, hash_num, outDir, DEBUG_decompress);
-                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}");
+                        _modTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
                     }
 
                     _loggerService.Success($"Bulk extraction from hashlist file completed.");
@@ -149,7 +149,6 @@ namespace CP77Tools.Tasks
                 else
                 {
                     _modTools.ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
-                    _loggerService.Success($"{ar.ArchiveAbsolutePath}: Extracted all files.");
                 }
             }
 
