@@ -104,7 +104,7 @@ namespace CP77Tools.Tasks
                         return;
                     }
 
-                    if (_modTools.RebuildSingleFile(rawFile, outDirectory))
+                    if (_modTools.RebuildBuffer(rawFile, outDirectory))
                     {
                         _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
                     }

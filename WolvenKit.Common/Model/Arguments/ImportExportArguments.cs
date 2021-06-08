@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Wcc;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -171,7 +172,7 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class XbmImportArgs : ImportArgs
     {
-        public ETextureGroup TextureGroup { get; internal set; }
+        public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; }
 
         /// <summary>
         /// String Override to display info in datagrid.

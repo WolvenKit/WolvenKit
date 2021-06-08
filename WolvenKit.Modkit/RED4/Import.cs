@@ -41,8 +41,10 @@ namespace WolvenKit.Modkit.RED4
             {
                 outDir = rawFile.Directory;
             }
-            
+
             #endregion
+
+            var filename = rawFile.Name;
 
             // check if the file can be directly imported
             var ext = Path.GetExtension(rawFile.FullName).TrimStart('.');
@@ -59,33 +61,19 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-
-
-
-                var filename = rawFile.Name;
-
                 // if keep, rebuild
                 // get a list of buffers if the user selected just one
                 var buffers = rawFile.Directory
                     .GetFiles($"{rawFile.FullName}.*.buffer", SearchOption.TopDirectoryOnly);
 
-
-                // find redfile in outdir
-                // TODO (this can potentially return multiple files with the same name)
-                var files = outDir.GetFiles($"*{filename}", SearchOption.AllDirectories);
-                if (files.Length > 0)
+                var redfile = FindRedFileForBuffer(outDir, filename);
+                if (string.IsNullOrEmpty(redfile))
                 {
-                    // throw something
-                }
-                else if (files.Length < 1)
-                {
-                    // no redfile found, skip
                     return false;
                 }
-                else
-                {
-                    Rebuild(files.First().FullName, buffers);
-                }
+
+                using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
+                Rebuild(fileStream, buffers);
             }
 
             // import files
@@ -94,18 +82,36 @@ namespace WolvenKit.Modkit.RED4
                 case ERawFileFormat.tga:
                 case ERawFileFormat.dds:
                     var xbmargs = args.Get<XbmImportArgs>();
-                    return xbmargs.Keep
-                        ? RebuildSingleFile(rawFile, outDir)
-                        : ImportXbm(rawFile);
+                    return ImportXbm(rawFile, outDir, xbmargs);
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
                     var meshArgs = args.Get<MeshImportArgs>();
-                    return meshArgs.Keep
-                        ? RebuildSingleFile(rawFile, outDir)
-                        : ImportXbm(rawFile);
+                    return ImportMesh(rawFile, meshArgs);
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+
+            static string FindRedFileForBuffer(DirectoryInfo outDir, string bufferPath)
+            {
+                var filename = Path.ChangeExtension(bufferPath.Remove(bufferPath.Length - 7), "").TrimEnd('.');
+                // find redfile in outdir
+                // TODO (this can potentially return multiple files with the same name)
+                var files = outDir.GetFiles($"*{filename}", SearchOption.AllDirectories);
+                if (files.Length > 1)
+                {
+                    // duplicates found, assert something
+                    return "";
+                }
+
+                if (files.Length < 1)
+                {
+                    // no redfile found, skip
+                    return "";
+                }
+
+                var redfile = files.First().FullName;
+                return redfile;
             }
         }
 
@@ -114,6 +120,20 @@ namespace WolvenKit.Modkit.RED4
             DirectoryInfo outDir = null
         )
         {
+            #region checks
+
+            if (inDir is not { Exists: true })
+            {
+                return false;
+            }
+            if (outDir is not { Exists: true })
+            {
+                outDir = inDir;
+            }
+
+            #endregion
+
+
 
             //var texturesList = allFiles.Where(_ => _.Extension.ToLower() == ".dds");
             //foreach (var fileInfo in texturesList)
@@ -140,9 +160,9 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private bool ImportXbm(FileInfo rawFile, string textureGroup = null)
+        private bool ImportXbm(FileInfo rawFile, DirectoryInfo outDir, XbmImportArgs args)
         {
-            var rawExt = rawFile.Extension;
+            var rawExt = rawFile.Extension.TrimStart('.');
             // TODO: do this in a working directory?
             var ddsPath = Path.ChangeExtension(rawFile.FullName, "dds");
             // convert to dds if not already
@@ -169,16 +189,22 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
+            if (args.Keep)
+            {
+                var buffer = new FileInfo(ddsPath);
+                var filename = rawFile.Name;
+                var redfile = FindRedFile(outDir, filename);
+                using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
+                return !string.IsNullOrEmpty(redfile) && Rebuild(fileStream, new List<FileInfo>() {buffer});
+            }
+
+
+
+
             // read dds metadata
             var metadata = DDSUtils.ReadHeader(ddsPath);
             var width = metadata.Width;
             var height = metadata.Height;
-
-
-
-
-
-
 
             // create cr2wfile
             var cr2w = new CR2WFile();
@@ -216,40 +242,32 @@ namespace WolvenKit.Modkit.RED4
             void SetTextureGroupSetup()
             {
                 // first check the user-texture group
-                if (!string.IsNullOrEmpty(textureGroup))
+                var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(args.TextureGroup);
+                xbm.Setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, xbm, "group")
                 {
-                    if (Enum.TryParse(textureGroup, out Enums.GpuWrapApieTextureGroup eTextureGroup))
+                    IsSerialized = true,
+                    Value = args.TextureGroup
+                };
+                if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
+                {
+                    xbm.Setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, xbm, "setup")
                     {
-                        var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(eTextureGroup);
-                        xbm.Setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, xbm, "group")
-                        {
-                            IsSerialized = true,
-                            Value = eTextureGroup
-                        };
-                        if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
-                        {
-                            xbm.Setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, xbm, "setup")
-                            {
-                                IsSerialized = true,
-                                Value = compression
-                            };
-                        }
+                        IsSerialized = true,
+                        Value = compression
+                    };
+                }
 
-                        if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
-                        {
-                            xbm.Setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, xbm, "rawFormat")
-                            {
-                                IsSerialized = true,
-                                Value = rawformat
-                            };
-                        }
-
-                        return;
-                    }
+                if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
+                {
+                    xbm.Setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, xbm, "rawFormat")
+                    {
+                        IsSerialized = true,
+                        Value = rawformat
+                    };
                 }
 
                 // if that didn't work, interpret the filename suffix
-                if (string.IsNullOrEmpty(textureGroup) && rawFile.Name.Contains('_'))
+                if (rawFile.Name.Contains('_'))
                 {
                     // try interpret suffix
                     switch (rawFile.Name.Split('_').Last())
@@ -278,7 +296,47 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private bool ImportMesh(FileInfo rawFile, string textureGroup = null)
+        private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
+            rawextension switch
+            {
+                ERawFileFormat.tga => ECookedFileFormat.xbm,
+                ERawFileFormat.dds => ECookedFileFormat.xbm,
+                ERawFileFormat.fbx => ECookedFileFormat.mesh,
+                ERawFileFormat.gltf => ECookedFileFormat.mesh,
+                ERawFileFormat.glb => ECookedFileFormat.mesh,
+                _ => throw new ArgumentOutOfRangeException(nameof(rawextension), rawextension, null)
+            };
+
+        private static string FindRedFile(DirectoryInfo outDir, string rawfilename)
+        {
+            var ext = Path.GetExtension(rawfilename).TrimStart('.');
+            if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+                return "";
+            }
+
+            var filename = Path.ChangeExtension(rawfilename, FromRawExtension(extAsEnum).ToString());
+
+
+            // find redfile in outdir
+            // TODO (this can potentially return multiple files with the same name)
+            var files = outDir.GetFiles($"*{filename}", SearchOption.AllDirectories);
+            if (files.Length > 1)
+            {
+                // duplicates found, assert something
+                return "";
+            }
+
+            if (files.Length < 1)
+            {
+                // no redfile found, skip
+                return "";
+            }
+
+            var redfile = files.First().FullName;
+            return redfile;
+        }
+        private bool ImportMesh(FileInfo rawFile, MeshImportArgs args)
         {
             throw new NotImplementedException();
         }

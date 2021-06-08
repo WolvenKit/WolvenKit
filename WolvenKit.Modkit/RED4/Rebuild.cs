@@ -18,29 +18,23 @@ namespace WolvenKit.Modkit.RED4
     {
         #region Methods
 
-        private bool Rebuild(
-            string redfile,
+        public bool Rebuild(
+            Stream redfile,
             IEnumerable<FileInfo> buffers
         )
         {
-            // if the parent cr2w exists
-            if (File.Exists(redfile))
-            {
-                AppendBuffersToFile(redfile, buffers);
-            }
+            AppendBuffersToFile(redfile, buffers);
 
             return true;
 
-            void AppendBuffersToFile(string parentPath, IEnumerable<FileInfo> buffersIn)
+            void AppendBuffersToFile(Stream fileStream, IEnumerable<FileInfo> buffersIn)
             {
                 //check if cr2w
-                using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
                 using var fileReader = new BinaryReader(fileStream);
 
                 var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileReader);
                 if (cr2w == null)
                 {
-                    _loggerService.Error($"Failed to read cr2w file {parentPath}");
                     return;
                 }
 
@@ -147,7 +141,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        public bool RebuildSingleFile(
+        public bool RebuildBuffer(
             FileInfo rawFile,
             DirectoryInfo outDirectory = null
             )
@@ -169,7 +163,6 @@ namespace WolvenKit.Modkit.RED4
 
             var filename = rawFile.Name;
 
-            // if keep, rebuild
             // get a list of buffers if the user selected just one
             var buffers = rawFile.Directory
                 .GetFiles($"{rawFile.FullName}.*.buffer", SearchOption.TopDirectoryOnly);
@@ -190,7 +183,8 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
-                return Rebuild(files.First().FullName, buffers);
+                using var fileStream = new FileStream(files.First().FullName, FileMode.Open, FileAccess.ReadWrite);
+                return Rebuild(fileStream, buffers);
             }
         }
 
@@ -219,6 +213,12 @@ namespace WolvenKit.Modkit.RED4
             // then the texture has priority
             GetBuffers();
 
+            if (buffersDict.Count < 1)
+            {
+                _loggerService.Info($"No buffers found to rebuild in {inDir.FullName}");
+                return true;
+            }
+
             _loggerService.Info($"Found {buffersDict.Count} file(s) to rebuild.");
 
             var progress = 0;
@@ -227,7 +227,8 @@ namespace WolvenKit.Modkit.RED4
             // loop through the buffersDict
             foreach (var (parentPath, buffers) in buffersDict)
             {
-                Rebuild(parentPath, buffers);
+                using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
+                Rebuild(fileStream, buffers);
 
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)buffersDict.Count);
