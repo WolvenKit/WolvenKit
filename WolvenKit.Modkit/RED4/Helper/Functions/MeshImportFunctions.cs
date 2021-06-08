@@ -27,13 +27,17 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             _modTools = modtools;
         }
 
-        public void Import(FileInfo inGltfFile, Stream inmeshStream, FileInfo outMeshFile)
+        public bool Import(FileInfo inGltfFile, Stream inmeshStream, FileInfo outMeshFile)
         {
             var model = ModelRoot.Load(inGltfFile.FullName);
 
             VerifyGLTF(model);
 
             var cr2w = _modTools.TryReadRED4File(inmeshStream);
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            {
+                throw new("Invalid CR2W File,CR2W File doesn't contain CMesh/rendMeshBlob");
+            }
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
 
             for (int i = 0; i < model.LogicalMeshes.Count; i++)
@@ -135,6 +139,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
 
             inmeshStream.Dispose();
             inmeshStream.Close();
+            return true;
         }
         static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
         {

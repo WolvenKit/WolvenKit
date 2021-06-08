@@ -28,17 +28,29 @@ namespace CP77.CR2W
     /// </summary>
     public partial class ModTools
     {
-        
         static string cacheDir = Path.GetTempPath() + "WolvenKit\\Material\\Temp\\";
-
-        public void ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName,
-            FileInfo outfile, bool isGLBinary = true, bool copyTextures = false,
-            EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
+        public bool ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName, FileInfo outfile, bool isGLBinary = true, bool copyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
         {
             Directory.CreateDirectory(cacheDir);
+            var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
+            if (mesh_cr2w == null || !mesh_cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            {
+                return false;
+            }
+
+            if (!mesh_cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            {
+                var tempmodel = (new SharpGLTF.Scenes.SceneBuilder()).ToGltf2();
+                DirectoryInfo dir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
+                ParseMaterialsUsingAssetLib(meshStream, ref tempmodel, dir, assetLib, copyTextures, eUncookExtension);
+                if (isGLBinary)
+                    tempmodel.SaveGLB(outfile.FullName);
+                else
+                    tempmodel.SaveGLTF(outfile.FullName);
+                return true;
+            }
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-            var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
 
             MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, mesh_cr2w);
             MeshesInfo meshinfo = MeshTools.GetMeshesinfo(mesh_cr2w);
@@ -74,30 +86,31 @@ namespace CP77.CR2W
 
             meshStream.Dispose();
             meshStream.Close();
+
+            return true;
         }
 
-        public bool ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile,
-            List<Archive> archives, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds,
-            bool LodFilter = true)
+        public bool ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile, List<Archive> archives, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
         {
             Directory.CreateDirectory(cacheDir);
-
-            List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
-
-            if (mesh_cr2w == null)
+            if (mesh_cr2w == null || !mesh_cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
             {
                 return false;
             }
 
-            var chunkdata = mesh_cr2w.Chunks
-                .Select(_ => _.Data)
-                .OfType<rendRenderMeshBlob>()
-                .ToList();
-            if (!chunkdata.Any())
+            if (!mesh_cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
-                return false;
+                var tempmodel = (new SharpGLTF.Scenes.SceneBuilder()).ToGltf2();
+                DirectoryInfo dir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
+                ParseMaterialsUsingArchives(meshStream, ref tempmodel, dir, archives, eUncookExtension);
+                if (isGLBinary)
+                    tempmodel.SaveGLB(outfile.FullName);
+                else
+                    tempmodel.SaveGLTF(outfile.FullName);
+                return true;
             }
+            List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
             MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, mesh_cr2w);
             MeshesInfo meshinfo = MeshTools.GetMeshesinfo(mesh_cr2w);
@@ -139,9 +152,7 @@ namespace CP77.CR2W
             return true;
         }
 
-        private void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies,
-            ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib,
-            bool useAssetLib, List<Archive> archives)
+        private void GetMateriaEntries(Stream meshStream, ref List<string> primaryDependencies,ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, DirectoryInfo assetLib, bool useAssetLib, List<Archive> archives)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
 
@@ -687,17 +698,9 @@ namespace CP77.CR2W
         }
         private static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
         {
-            int Index = 0;
-            for (int i = 0; i < cr2w.Chunks.Count; i++)
-            {
-                if (cr2w.Chunks[i].REDType == "CMesh")
-                {
-                    Index = i;
-                }
+            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
 
-            }
-
-            UInt16 p = ((cr2w.Chunks[Index].Data as CMesh).LocalMaterialBuffer.RawData.Buffer.Value);
+            UInt16 p = blob.LocalMaterialBuffer.RawData.Buffer.Value;
             var b = cr2w.Buffers[p - 1];
             ms.Seek(b.Offset, SeekOrigin.Begin);
             MemoryStream materialStream = new MemoryStream();
@@ -829,8 +832,7 @@ namespace CP77.CR2W
     }
     public partial class ModTools
     {
-
-        public Thread Generate(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
+        public Thread GenerateMaterialRepo(DirectoryInfo gameArchiveDir, DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
         {
             GameArchiveDir = gameArchiveDir;
             MaterialRepoDir = materialRepoDir;

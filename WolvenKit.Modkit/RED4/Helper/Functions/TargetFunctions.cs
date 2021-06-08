@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
@@ -36,6 +37,10 @@ namespace CP77.CR2W
         public bool ExportTargets(Stream targetStream, FileInfo outfile, bool isGLBinary = true)
         {
             var cr2w = _modTools.TryReadRED4File(targetStream);
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            {
+                return false;
+            }
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             MemoryStream meshbuffer = MeshTools.GetMeshBufferStream(targetStream, cr2w);
@@ -65,7 +70,7 @@ namespace CP77.CR2W
                 if (meshinfo.LODLvl[i] != 1)
                     continue;
                 RawMeshContainer mesh = MeshTools.ContainRawMesh(meshbuffer, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name = "mesh_" + i;
+                mesh.name = "submesh_" + i + "_" + meshinfo.LODLvl[i];
                 expMeshes.Add(mesh);
                 subMeshC++;
             }

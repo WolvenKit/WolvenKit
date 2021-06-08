@@ -25,7 +25,7 @@ namespace WolvenKit.Views.Dialogs
         {
             ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath = archivestext.Text;
             var modTools = ServiceLocator.Default.ResolveType<ModTools>();
-            modTools.Generate(new System.IO.DirectoryInfo(archivestext.Text), new System.IO.DirectoryInfo(Materialsrepotext.Text), Common.DDS.EUncookExtension.dds);
+            modTools.GenerateMaterialRepo(new System.IO.DirectoryInfo(archivestext.Text), new System.IO.DirectoryInfo(Materialsrepotext.Text), Common.DDS.EUncookExtension.dds);
         }
 
         private void GenerateMaterials(object obj)
