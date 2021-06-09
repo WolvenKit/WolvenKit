@@ -43,6 +43,8 @@ namespace WolvenKit.Common.Extensions
             }
         }
 
+        public static string Extension(this FileInfo fi) => fi.Extension.TrimStart('.');
+
         #endregion Methods
     }
 }

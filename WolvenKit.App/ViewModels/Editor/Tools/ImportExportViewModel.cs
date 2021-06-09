@@ -175,6 +175,7 @@ namespace WolvenKit.ViewModels.Editor
             _watcherService.Files
                 .Connect()
                 .Filter(_ => _.IsImportable)
+                .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
                 .Transform(_ => new ImportableItemViewModel(_))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _importableItems)
@@ -183,6 +184,7 @@ namespace WolvenKit.ViewModels.Editor
             _watcherService.Files
                 .Connect()
                 .Filter(_ => _.IsExportable)
+                .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.ModDirectory))
                 .Transform(_ => new ExportableItemViewModel(_))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _exportableItems)
@@ -234,11 +236,12 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="item"></param>
         private void ImportSingle(ImportableItemViewModel item)
         {
+            var proj = _projectManager.ActiveProject;
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
-                _modTools.Import(fi, settings);
+                _modTools.Import(fi, settings, new DirectoryInfo(proj.ModDirectory));
             }
         }
 
@@ -261,8 +264,7 @@ namespace WolvenKit.ViewModels.Editor
                 }
 
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-                _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory),
-                    new DirectoryInfo(proj.RawDirectory));
+                _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
             }
         }
 

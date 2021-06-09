@@ -219,22 +219,30 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            _loggerService.Info($"Found {buffersDict.Count} file(s) to rebuild.");
+            _loggerService.Info($"Found {buffersDict.Count} raw file(s) to rebuild");
 
+            var failsCount = 0;
             var progress = 0;
             _progressService.Report(0);
-
-            // loop through the buffersDict
             foreach (var (parentPath, buffers) in buffersDict)
             {
                 using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
-                Rebuild(fileStream, buffers);
+                if (!Rebuild(fileStream, buffers))
+                {
+                    failsCount++;
+                    _loggerService.Warning($"Failed to rebuild {parentPath} with buffers");
+                    
+                }
+                else
+                {
+                    _loggerService.Success($"Rebuilt {parentPath} with buffers");
+                }
 
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)buffersDict.Count);
             }
 
-            _loggerService.Success($"Successfully rebuilt {buffersDict.Count} file(s).");
+            _loggerService.Info($"Rebuilt {buffersDict.Count - failsCount}/{buffersDict.Count} file(s)");
             return true;
 
             void GetBuffers()
@@ -245,8 +253,8 @@ namespace WolvenKit.Modkit.RED4
                 {
                     // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.11.buffer
                     // removes 7 characters (".buffer") and then removes the variable length extension (".11")
-                    var relpath = fileInfo.FullName;//[(infolder.FullName.Length + 1)..];
-                    var parentpath = Path.ChangeExtension(relpath.Remove(relpath.Length - 7), "").TrimEnd('.');
+                    var path = fileInfo.FullName;//[(infolder.FullName.Length + 1)..];
+                    var parentpath = Path.ChangeExtension(path.Remove(path.Length - 7), "").TrimEnd('.');
 
                     // if the outdir is elsewhere, we need to change the path... :(
                     var parentFileName = Path.GetFileName(parentpath);
@@ -254,7 +262,6 @@ namespace WolvenKit.Modkit.RED4
                     {
                         parentpath = parentpath.Replace(inDir.FullName, outDir.FullName);
                     }
-
 
                     var key = parentpath;//FNV1A64HashAlgorithm.HashString(parentpath);
 

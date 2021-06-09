@@ -23,7 +23,7 @@ namespace CP77Tools.Commands
         {
             AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to .archive."));
             AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directpry to extract main files to."));
-            AddOption(new Option<string>(new[] { "--raw", }, "Optional seperate directory to extract raw files to."));
+            AddOption(new Option<string>(new[] { "--raw", "-or" }, "Optional seperate directory to extract raw files to."));
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
             AddOption(new Option<EUncookExtension>(new[] { "--uext" }, "Format to uncook to (tga, bmp, jpg, png, dds), TGA by default."));

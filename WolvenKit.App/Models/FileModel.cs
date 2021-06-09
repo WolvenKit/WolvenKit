@@ -69,8 +69,13 @@ namespace WolvenKit.Models
 
 
 
-        public bool IsImportable => !IsDirectory && !string.IsNullOrEmpty(GetExtension()) && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
-        public bool IsExportable => !IsDirectory && !string.IsNullOrEmpty(GetExtension()) && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
+        public bool IsImportable => !IsDirectory
+                                    && !string.IsNullOrEmpty(GetExtension())
+                                    && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
+
+        public bool IsExportable => !IsDirectory
+                                    && !string.IsNullOrEmpty(GetExtension())
+                                    && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
         #endregion
 

@@ -20,8 +20,10 @@ namespace CP77Tools.Commands
         public ImportCommand() : base(Name, Description)
         {
             AddOption(new Option<string[]>(new[] { "--path", "-p" },
-                "Input path. Must be a folder/list of folders or files."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path"));
+                "Input path for raw files. Can be a file or a folder or a list of files/folders"));
+            AddOption(new Option<string>(new[] { "--outpath", "-o" },
+                "Optional output directory path. " +
+                "If used with --keep, this is the folder for the redengine files to rebuild. "));
             AddOption(new Option<bool>(new[] { "--keep", "-k" },
                 "Optionally keep existing CR2W files intact and only append the buffer."));
 

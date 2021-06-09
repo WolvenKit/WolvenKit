@@ -84,11 +84,7 @@ namespace CP77Tools.Tasks
             // a directory was selected to import
             if (isDirectory)
             {
-                // process buffers
-                _modTools.RebuildFolder(basedir, outDirectory);
-
-                // process all other files
-                _modTools.ImportFolder(basedir, outDirectory);
+                _modTools.ImportFolder(basedir, settings, outDirectory);
             }
             // just a single file was selected
             else

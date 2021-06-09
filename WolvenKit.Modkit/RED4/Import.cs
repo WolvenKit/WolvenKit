@@ -5,6 +5,7 @@ using System.Linq;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.CR2W;
 
@@ -75,6 +76,9 @@ namespace WolvenKit.Modkit.RED4
 
                 using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
                 var r = Rebuild(fileStream, buffers);
+
+                _loggerService.Success($"Succesfully rebuilt {redfile} with raw buffers.");
+
                 return r;
             }
 
@@ -83,13 +87,12 @@ namespace WolvenKit.Modkit.RED4
             {
                 case ERawFileFormat.tga:
                 case ERawFileFormat.dds:
-                    var xbmargs = args.Get<XbmImportArgs>();
-                    return ImportXbm(rawFile, outDir, xbmargs);
+                    // for now only xbm is supported
+                    return ImportXbm(rawFile, outDir, args.Get<XbmImportArgs>());
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
-                    var meshArgs = args.Get<MeshImportArgs>();
-                    return ImportMesh(rawFile, meshArgs);
+                    return ImportMesh(rawFile, args.Get<MeshImportArgs>());
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -117,8 +120,15 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
+        /// <summary>
+        ///  Imports or rebuilds a folder
+        /// </summary>
+        /// <param name="inDir"></param>
+        /// <param name="outDir"></param>
+        /// <returns></returns>
         public bool ImportFolder(
             DirectoryInfo inDir,
+            GlobalImportArgs args,
             DirectoryInfo outDir = null
         )
         {
@@ -135,29 +145,26 @@ namespace WolvenKit.Modkit.RED4
 
             #endregion
 
+            // process buffers
+            // buffers need an existing redengine file to rebuild/import
+            if (args.Get<CommonImportArgs>().Keep)
+            {
+                RebuildFolder(inDir, outDir);
+            }
 
+            // process all other raw files
+            var allFiles = inDir.GetFiles("*", SearchOption.AllDirectories).ToList();
+            var rawFilesList = allFiles.Where(_ => _.Extension.ToLower() != ".buffer");
+            foreach (var fi in rawFilesList)
+            {
+                var ext = fi.Extension();
+                if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+                {
+                    continue;
+                }
 
-            //var texturesList = allFiles.Where(_ => _.Extension.ToLower() == ".dds");
-            //foreach (var fileInfo in texturesList)
-            //{
-            //    // dds path e.g. stand__rh_hold_tray__serve_milkshakes__01.dds
-            //    // rename to xbm and hash
-            //    var relpath = fileInfo.FullName;//[(infolder.FullName.Length + 1)..];
-            //    var parentpath = Path.ChangeExtension(relpath, "xbm");
-            //    var key = parentpath;//FNV1A64HashAlgorithm.HashString(parentpath);
-
-            //    // add buffer
-            //    if (!buffersDict.ContainsKey(key))
-            //    {
-            //        buffersDict.Add(key, new List<FileInfo>());
-            //    }
-            //    else // there can always only be one texture and it gets priority
-            //    {
-            //        buffersDict[key] = new List<FileInfo>();
-            //    }
-
-            //    buffersDict[key].Add(fileInfo);
-            //}
+                Import(fi, args, outDir);
+            }
 
             return true;
         }
@@ -196,14 +203,37 @@ namespace WolvenKit.Modkit.RED4
                 var buffer = new FileInfo(ddsPath);
                 var filename = rawFile.Name;
                 var redfile = FindRedFile(outDir, filename);
+
+                if (string.IsNullOrEmpty(redfile))
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {filename}");
+                    return false;
+                }
+
                 using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                return !string.IsNullOrEmpty(redfile) && Rebuild(fileStream, new List<FileInfo>() {buffer});
+                var result = Rebuild(fileStream, new List<FileInfo>() {buffer});
+
+                if (result)
+                {
+                    _loggerService.Success($"Rebuilt {redfile} with buffers");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild {redfile} with buffers");
+                }
+
+                return result;
+            }
+            else
+            {
+                _loggerService.Warning($"{rawFile.Name} - Direct xbm importing is not implemented");
+                return false;
             }
 
 
 
-
             // read dds metadata
+#pragma warning disable 162
             var metadata = DDSUtils.ReadHeader(ddsPath);
             var width = metadata.Width;
             var height = metadata.Height;
@@ -237,6 +267,7 @@ namespace WolvenKit.Modkit.RED4
             // update cr2w headers
 
             throw new NotImplementedException();
+#pragma warning restore 162
 
 
             #region local functions
@@ -340,7 +371,8 @@ namespace WolvenKit.Modkit.RED4
         }
         private bool ImportMesh(FileInfo rawFile, MeshImportArgs args)
         {
-            throw new NotImplementedException();
+            _loggerService.Warning($"{rawFile.Name} - Direct mesh importing is not implemented");
+            return false;
         }
     }
 }
