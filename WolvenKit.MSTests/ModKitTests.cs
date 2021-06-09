@@ -15,6 +15,10 @@ namespace WolvenKit.MSTests
     [TestClass]
     public class ModKitTests : GameUnitTest
     {
+        private const bool KEEP = true;
+        private const bool RANDOM = true;
+        private const int LIMIT = 1000;
+
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
@@ -34,20 +38,32 @@ namespace WolvenKit.MSTests
             {
                 Directory.CreateDirectory(resultDir.FullName);
             }
+            var logDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "logs"));
+            if (!resultDir.Exists)
+            {
+                Directory.CreateDirectory(logDir.FullName);
+            }
 
-            var keep = true;
             var isettings = new GlobalImportArgs().Register(
-                new XbmImportArgs() { Keep = keep },
-                new MeshImportArgs() { Keep = keep },
-                new CommonImportArgs() { Keep = keep }
+                new XbmImportArgs() { Keep = KEEP },
+                new MeshImportArgs() { Keep = KEEP },
+                new CommonImportArgs() { Keep = KEEP }
             );
             var esettings = new GlobalExportArgs();
 
             var fails = new List<FileEntry>();
 
-            for (var i = 0; i < infiles.Count; i++)
+            // random tests
+            var random = new Random();
+            var filesToTest = infiles;
+            if (RANDOM)
             {
-                var fileEntry = infiles[i];
+                filesToTest = infiles.OrderBy(a => random.Next()).Take(LIMIT).ToList();
+            }
+
+            for (var i = 0; i < filesToTest.Count; i++)
+            {
+                var fileEntry = filesToTest[i];
                 // skip files without buffers
                 var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
                 if (!hasBuffers)
@@ -96,6 +112,12 @@ namespace WolvenKit.MSTests
                 if (!originalBytes.SequenceEqual(newbytes))
                 {
                     fails.Add(fileEntry);
+
+                    var filename = Path.GetFileName(fileEntry.FileName);
+                    var dbgOriginalFile = Path.Combine(logDir.FullName, filename);
+                    var dbgNewFile = Path.Combine(logDir.FullName, $"{filename}.new");
+                    File.WriteAllBytes(dbgOriginalFile, originalBytes);
+                    File.WriteAllBytes(dbgNewFile, newbytes);
                 }
                 else
                 {
@@ -108,12 +130,6 @@ namespace WolvenKit.MSTests
                     {
                         fileInfo.Delete();
                     }
-
-                    //var alldirs = resultDir.GetDirectories();
-                    //foreach (var fileInfo in alldirs)
-                    //{
-                    //    fileInfo.Delete();
-                    //}
                 }
                 catch (Exception e)
                 {
@@ -121,6 +137,16 @@ namespace WolvenKit.MSTests
                     throw;
                 }
             }
+
+
+            if (fails.Count > 0)
+            {
+                foreach (var fileEntry in fails)
+                {
+                    Console.WriteLine(fileEntry.FileName);
+                }
+            }
+            
 
             Assert.AreEqual(0, fails.Count);
 
