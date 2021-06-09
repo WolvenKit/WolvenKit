@@ -63,99 +63,7 @@ namespace WolvenKit.Views.Editor
         #endregion Constructors
 
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.TreeGrid.SelectedItem == null)
-            {
-                return;
-            }
 
-            var z = TreeGrid.SelectedItem as FileModel;
-            if (!z.FullName.Contains(".mesh", System.StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-
-            var q = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(z.FullName);
-            if (q.Length <= 0)
-            {
-                return;
-            }
-
-            var meshexporter = new SimpleMeshExporterDialog(TreeGrid.SelectedItem);
-            meshexporter.LoadModel(q);
-            meshexporter.Show();
-        }
-
-        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (TreeGrid.SelectedItem == null)
-            {
-                return;
-            }
-
-            var z = TreeGrid.SelectedItem as FileModel;
-            if (!z.FullName.Contains(".morphtarget", System.StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-
-            // EXPORT Morphtarget
-
-            using var dialog = new CommonOpenFileDialog { IsFolderPicker = true, Multiselect = false };
-            if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
-            {
-                return;
-            }
-
-            var outp = dialog.FileName;
-
-            var targetStream = new FileStream(z.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
-            var xa = new FileInfo(outp + "\\" + z.Name);
-            Trace.WriteLine(xa);
-            ServiceLocator.Default.ResolveType<TargetTools>().ExportTargets(targetStream, xa);
-        }
-
-        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
-        {
-            if (TreeGrid.SelectedItem == null)
-            {
-                return;
-            }
-
-            var z = TreeGrid.SelectedItem as FileModel;
-            if (!z.FullName.Contains(".wem", System.StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-
-            // EXPORT WEM
-            string outp;
-            using var dialog = new CommonOpenFileDialog { IsFolderPicker = true, Multiselect = false };
-            if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
-            {
-                return;
-            }
-
-            outp = dialog.FileName;
-
-
-            //Clean directory
-            var outf = Path.Combine(outp, Path.GetFileNameWithoutExtension(z.FullName) + ".wav");
-            var arg = z.FullName + " -o " + outf;
-            var si = new ProcessStartInfo(
-                "vgmstream\\test.exe",
-                arg
-            )
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false
-            };
-            var proc = Process.Start(si);
-            proc.WaitForExit();
-        }
         public void ExpandChildren()
         {
             if (ViewModel is not ProjectExplorerViewModel viewModel)
@@ -193,6 +101,6 @@ namespace WolvenKit.Views.Editor
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
 
-        
+
     }
 }

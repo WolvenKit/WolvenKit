@@ -1,21 +1,20 @@
 <catel:UserControl
- x:Class="WolvenKit.Views.Editor.ProjectExplorerView"
- xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
- xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:catel="http://schemas.catelproject.com"
- xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
- xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
- xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
- xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
- xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
- xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
- d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
- d:DesignHeight="450"
- d:DesignWidth="400"
- mc:Ignorable="d"
- >
+    x:Class="WolvenKit.Views.Editor.ProjectExplorerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:catel="http://schemas.catelproject.com"
+    xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
+    xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -37,23 +36,22 @@
         </Grid>
 
         <syncfusion:SfTreeGrid
-         Name="TreeGrid"
-         AllowEditing="False"
-         AllowFiltering="True"
-         AllowResizingColumns="False"
-         AutoExpandMode="RootNodesExpanded"
-         AutoGenerateColumns="False"
-         ChildPropertyName="ParentHash"
-         ColumnSizer="Star"
-         ExpandStateMappingName="IsExpanded"
-         ItemsSource="{Binding BindGrid1}"
-         LiveNodeUpdateMode="AllowDataShaping"
-         ParentPropertyName="Hash"
-         RowHeight="17"
-         SelectedItem="{Binding SelectedItem}"
-         SelectionMode="Extended"
-         SelfRelationRootValue="0"
-         >
+            Name="TreeGrid"
+            AllowEditing="False"
+            AllowFiltering="True"
+            AllowResizingColumns="False"
+            AutoExpandMode="RootNodesExpanded"
+            AutoGenerateColumns="False"
+            ChildPropertyName="ParentHash"
+            ColumnSizer="Star"
+            ExpandStateMappingName="IsExpanded"
+            ItemsSource="{Binding BindGrid1}"
+            LiveNodeUpdateMode="AllowDataShaping"
+            ParentPropertyName="Hash"
+            RowHeight="17"
+            SelectedItem="{Binding SelectedItem}"
+            SelectionMode="Extended"
+            SelfRelationRootValue="0">
 
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
@@ -71,27 +69,24 @@
             <ei:Interaction.Triggers>
                 <ei:EventTrigger EventName="CellDoubleTapped">
                     <catel:EventToCommand
-                     Command="{catel:CommandManagerBinding Application.OpenFile}"
-                     CommandParameter="{Binding SelectedItem}"
-                     DisableAssociatedObjectOnCannotExecute="False"
-                     />
+                        Command="{catel:CommandManagerBinding Application.OpenFile}"
+                        CommandParameter="{Binding SelectedItem}"
+                        DisableAssociatedObjectOnCannotExecute="False" />
                 </ei:EventTrigger>
                 <ei:EventTrigger EventName="SelectionChanged">
                     <catel:EventToCommand
                         Command="{catel:CommandManagerBinding Application.FileSelected}"
                         CommandParameter="{Binding SelectedItem}"
-                        DisableAssociatedObjectOnCannotExecute="False"
-                    />
+                        DisableAssociatedObjectOnCannotExecute="False" />
                 </ei:EventTrigger>
             </ei:Interaction.Triggers>
 
 
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
-                 HeaderText="Name"
-                 HorizontalHeaderContentAlignment="Left"
-                 MappingName="Name"
-                 >
+                    HeaderText="Name"
+                    HorizontalHeaderContentAlignment="Left"
+                    MappingName="Name">
                     <syncfusion:TreeGridTextColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -790,12 +785,11 @@
                                  Stretch="Uniform"
                                  />-->
                                 <TextBlock
-                                 x:Name="TemplateTextBlock"
-                                 Grid.Column="1"
-                                 Margin="2"
-                                 VerticalAlignment="Center"
-                                 Text="{Binding Path=Name}"
-                                 />
+                                    x:Name="TemplateTextBlock"
+                                    Grid.Column="1"
+                                    Margin="2"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Path=Name}" />
                             </Grid>
                         </DataTemplate>
                     </syncfusion:TreeGridTextColumn.CellTemplate>
@@ -806,10 +800,9 @@
                 <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
                     <MenuItem Header="File">
                         <MenuItem
-                         Command="{catel:CommandManagerBinding Application.OpenFile}"
-                         CommandParameter="{Binding SelectedItem}"
-                         Header="Open"
-                         />
+                            Command="{catel:CommandManagerBinding Application.OpenFile}"
+                            CommandParameter="{Binding SelectedItem}"
+                            Header="Open" />
                         <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
                         <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
                         <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
@@ -826,13 +819,7 @@
                     <MenuItem Header="Export selected - Simple" />
                     <MenuItem Header="Export selected - Advanced" />
 
-                    <MenuItem Header="Export">
-                        <MenuItem Click="MenuItem_Click_2" Header="Wem" />
-                        <MenuItem Click="MenuItem_Click_1" Header="Morphtarget" />
 
-                        <MenuItem Click="MenuItem_Click" Header="Export Mesh" />
-
-                    </MenuItem>
 
                     <Separator Margin="-15" />
 
