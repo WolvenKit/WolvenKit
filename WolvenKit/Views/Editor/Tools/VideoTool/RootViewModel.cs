@@ -18,9 +18,9 @@ namespace WolvenKit.Views.ViewModels
         private string m_NotificationMessage = string.Empty;
         private double m_PlaybackProgress;
         private TaskbarItemProgressState m_PlaybackProgressState;
-        private bool m_IsPlaylistPanelOpen = App.c_IsInDesignMode;
-        private bool m_IsPropertiesPanelOpen = App.c_IsInDesignMode;
-        private bool m_IsApplicationLoaded = App.c_IsInDesignMode;
+        private bool m_IsPlaylistPanelOpen = App.IsInDesignMode;
+        private bool m_IsPropertiesPanelOpen = App.IsInDesignMode;
+        private bool m_IsApplicationLoaded = App.IsInDesignMode;
         private MediaElement m_MediaElement;
 
         /// <summary>

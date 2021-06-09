@@ -27,7 +27,7 @@ namespace WolvenKit.Views.ViewModels
         private string FilterString = string.Empty;
 
         // Property Backing
-        private bool m_IsInOpenMode = App.c_IsInDesignMode;
+        private bool m_IsInOpenMode = App.IsInDesignMode;
         private bool m_IsPlaylistEnabled = true;
         private string m_OpenMediaSource = string.Empty;
         private string m_PlaylistSearchString = string.Empty;
@@ -84,7 +84,7 @@ namespace WolvenKit.Views.ViewModels
         private void OnMessage(string obj)
         {
             OpenMediaSource = obj;
-            App.c_RootViewModel.Commands.OpenCommand.ExecuteAsync(obj);
+            App.ViewModel.Commands.OpenCommand.ExecuteAsync(obj);
 
         }
 
@@ -176,7 +176,7 @@ namespace WolvenKit.Views.ViewModels
         internal override void OnApplicationLoaded()
         {
             base.OnApplicationLoaded();
-            var m = App.c_RootViewModel.MediaElement;
+            var m = App.ViewModel.MediaElement;
 
             m.WhenChanged(() => IsPlaylistEnabled = m.IsOpening == false, nameof(m.IsOpening));
             m.MediaOpened += OnMediaOpened;
@@ -191,7 +191,7 @@ namespace WolvenKit.Views.ViewModels
         private void OnMediaOpened(object sender, EventArgs e)
         {
             HasTakenThumbnail = false;
-            var m = App.c_RootViewModel.MediaElement;
+            var m = App.ViewModel.MediaElement;
 
             Entries.AddOrUpdateEntry(m.Source, m.MediaInfo);
             Entries.SaveEntries();

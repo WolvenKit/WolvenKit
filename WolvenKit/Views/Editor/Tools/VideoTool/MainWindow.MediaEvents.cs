@@ -32,7 +32,7 @@ namespace WolvenKit.Views
 
 
                 var seekFileName = $"{Path.GetFileNameWithoutExtension(mediaFilePath)}.six";
-                var seekFilePath = Path.Combine(App.c_RootViewModel.Playlist.IndexDirectory, seekFileName);
+                var seekFilePath = Path.Combine(App.ViewModel.Playlist.IndexDirectory, seekFileName);
                 if (string.IsNullOrWhiteSpace(seekFilePath))
                     return null;
 

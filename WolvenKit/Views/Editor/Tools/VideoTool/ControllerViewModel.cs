@@ -121,13 +121,13 @@ namespace WolvenKit.Views.ViewModels
         {
             get
             {
-                var m = App.c_RootViewModel.MediaElement;
+                var m = App.ViewModel.MediaElement;
                 if (m == null) return false;
                 return m.LoopingBehavior == MediaPlaybackState.Play;
             }
             set
             {
-                var m = App.c_RootViewModel.MediaElement;
+                var m = App.ViewModel.MediaElement;
                 if (m == null) return;
                 m.LoopingBehavior = value ? MediaPlaybackState.Play : MediaPlaybackState.Pause;
                 NotifyPropertyChanged(nameof(IsLoopingMediaEnabled));
@@ -213,7 +213,7 @@ namespace WolvenKit.Views.ViewModels
         {
             get
             {
-                var m = App.c_RootViewModel.MediaElement;
+                var m = App.ViewModel.MediaElement;
                 if (m == null) return 1d;
 
                 var transform = m.RenderTransform as ScaleTransform;
@@ -221,7 +221,7 @@ namespace WolvenKit.Views.ViewModels
             }
             set
             {
-                var m = App.c_RootViewModel.MediaElement;
+                var m = App.ViewModel.MediaElement;
                 if (m == null) return;
 
                 var transform = m.RenderTransform as ScaleTransform;
@@ -254,7 +254,7 @@ namespace WolvenKit.Views.ViewModels
         internal override void OnApplicationLoaded()
         {
             base.OnApplicationLoaded();
-            var m = App.c_RootViewModel.MediaElement;
+            var m = App.ViewModel.MediaElement;
 
             m.WhenChanged(() => IsMediaOpenVisibility = m.IsOpen ? Visibility.Visible : Visibility.Hidden,
                 nameof(m.IsOpen));

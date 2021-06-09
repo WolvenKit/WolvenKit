@@ -50,11 +50,11 @@ namespace WolvenKit.Views
 
 
             // Set the ViewModel from the application resource
-            ViewModel = App.c_RootViewModel;
+            ViewModel = App.ViewModel;
 
             // During runtime, let's hide the window. The loaded event handler will
             // compute the final placement of our window.
-            if (!App.c_IsInDesignMode)
+            if (!App.IsInDesignMode)
             {
                 Left = int.MinValue;
                 Top = int.MinValue;
@@ -280,7 +280,7 @@ namespace WolvenKit.Views
             var args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
-                App.c_RootViewModel.Commands.OpenCommand.Execute(args[1].Trim());
+                App.ViewModel.Commands.OpenCommand.Execute(args[1].Trim());
             }
         }
 
@@ -310,14 +310,14 @@ namespace WolvenKit.Views
             // Pause
             if (TogglePlayPauseKeys.Contains(e.Key) && Media.IsPlaying)
             {
-                await App.c_RootViewModel.Commands.PauseCommand.ExecuteAsync();
+                await App.ViewModel.Commands.PauseCommand.ExecuteAsync();
                 return;
             }
 
             // Play
             if (TogglePlayPauseKeys.Contains(e.Key) && Media.IsPlaying == false)
             {
-                await App.c_RootViewModel.Commands.PlayCommand.ExecuteAsync();
+                await App.ViewModel.Commands.PlayCommand.ExecuteAsync();
                 return;
             }
 
@@ -561,7 +561,7 @@ namespace WolvenKit.Views
             // Exit fullscreen
             if (e.Key == Key.Escape && WindowStyle == WindowStyle.None)
             {
-                await App.c_RootViewModel.Commands.ToggleFullscreenCommand.ExecuteAsync();
+                await App.ViewModel.Commands.ToggleFullscreenCommand.ExecuteAsync();
             }
         }
 
@@ -576,7 +576,7 @@ namespace WolvenKit.Views
                 return;
 
             e.Handled = true;
-            await App.c_RootViewModel.Commands.ToggleFullscreenCommand.ExecuteAsync();
+            await App.ViewModel.Commands.ToggleFullscreenCommand.ExecuteAsync();
         }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace WolvenKit.Views
                 return;
 
             var delta = (e.Delta / 2000d).ToMultipleOf(0.05d);
-            ViewModel.Controller.MediaElementZoom = Math.Round(App.c_RootViewModel.Controller.MediaElementZoom + delta, 2);
+            ViewModel.Controller.MediaElementZoom = Math.Round(App.ViewModel.Controller.MediaElementZoom + delta, 2);
         }
 
         #endregion
