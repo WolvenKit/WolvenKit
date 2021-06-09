@@ -51,7 +51,7 @@ namespace WolvenKit.Views
                     if (string.IsNullOrWhiteSpace(uriString))
                         return;
 
-                    var m = App.ViewModel.MediaElement;
+                    var m = App.c_RootViewModel.MediaElement;
                     var target = new Uri(uriString);
                     if (target.ToString().StartsWith(FileInputStream.Scheme, StringComparison.OrdinalIgnoreCase))
                         await m.Open(new FileInputStream(target.LocalPath));
@@ -79,10 +79,10 @@ namespace WolvenKit.Views
         public DelegateCommand CloseCommand => m_CloseCommand ??
             (m_CloseCommand = new DelegateCommand(async o =>
             {
-                await App.ViewModel.MediaElement.Close();
+                await App.c_RootViewModel.MediaElement.Close();
 
                 // or, you can totally dispose manually:
-                // App.ViewModel.MediaElement.Dispose();
+                // App.c_RootViewModel.MediaElement.Dispose();
             }));
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace WolvenKit.Views
         public DelegateCommand PauseCommand => m_PauseCommand ??
             (m_PauseCommand = new DelegateCommand(async o =>
             {
-                await App.ViewModel.MediaElement.Pause();
+                await App.c_RootViewModel.MediaElement.Pause();
             }));
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace WolvenKit.Views
             (m_PlayCommand = new DelegateCommand(async o =>
             {
                 // await Current.MediaElement.Seek(TimeSpan.Zero)
-                await App.ViewModel.MediaElement.Play();
+                await App.c_RootViewModel.MediaElement.Play();
             }));
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace WolvenKit.Views
         public DelegateCommand StopCommand => m_StopCommand ??
             (m_StopCommand = new DelegateCommand(async o =>
             {
-                await App.ViewModel.MediaElement.Stop();
+                await App.c_RootViewModel.MediaElement.Stop();
             }));
 
         /// <summary>
@@ -164,8 +164,8 @@ namespace WolvenKit.Views
                 {
                     if (Uri.TryCreate(entry.MediaSource, UriKind.RelativeOrAbsolute, out var mediaSource))
                     {
-                        App.ViewModel.Playlist.Entries.RemoveEntryByMediaSource(mediaSource);
-                        App.ViewModel.Playlist.Entries.SaveEntries();
+                        App.c_RootViewModel.Playlist.Entries.RemoveEntryByMediaSource(mediaSource);
+                        App.c_RootViewModel.Playlist.Entries.SaveEntries();
                     }
                 }
             }));

@@ -22,23 +22,38 @@ using WolvenKit.Views.ViewModels;
 
 namespace WolvenKit
 {
+    #region Application
+    /// <summary>
+    /// Main App
+    /// </summary>
     public partial class App : Application
     {
-        // Static ref to RootVM.
-        public static RootViewModel ViewModel => Current.Resources[nameof(ViewModel)] as RootViewModel;
+        #region Properties
+        /// <summary>
+        /// Statice Reference To RootViewModel
+        /// </summary>
+        public static RootViewModel c_RootViewModel => Current.Resources[nameof(c_RootViewModel)] as RootViewModel;
 
-        // Static ref to MainWindow.
-        public static MainWindow MainX;
+        /// <summary>
+        /// Statice Reference To MainWindow
+        /// </summary>
+        public static MainWindow c_MainWindow;
 
-        // Determines if the application is in design mode.
-        public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
+        /// <summary>
+        /// Statice Bool if Application is in design Mode.
+        /// </summary>
+        public static bool c_IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
+        #endregion
 
-
-
-        // Constructor #1
+        #region Application Constructors
+        /// <summary>
+        /// Application Constructor #1 (Static).
+        /// </summary>
         static App() { }
 
-        // Constructor #2
+        /// <summary>
+        /// Application Constructor #2 (Public).
+        /// </summary>
         public App()
         {
             // Set application licenses.
@@ -47,10 +62,24 @@ namespace WolvenKit
             Library.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
             Library.EnableWpfMultiThreadedVideo = false;
         }
+        #endregion
 
-        // Application OnStartup Override.
+        #region Events (OnStartup + OnMessage)
+        /// <summary>
+        /// Application OnStartup Override.
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnStartup(StartupEventArgs e)
         {
+            // Enable debug or not, this can only be done here in code.
+            Helpers.DBG_Enable();
+
+
+
+
+
+
+
             // Startup speed boosting (HC)
             ApplicationHelper.StartProfileOptimization();
 
@@ -97,26 +126,18 @@ namespace WolvenKit
             Helpers.CheckForUpdates();
 
 
-            //Window window = new Window();
-            //window.AllowsTransparency = true;
-            //window.Background = new SolidColorBrush(Colors.Transparent);
-            //window.Content = new HomePageView();
-            //window.WindowStyle = WindowStyle.None;
-            //window.Show();
+
+
 
             // Create WebView Data Folder.
             Directory.CreateDirectory(@"C:\WebViewData");
             // Message system for video tool.
-            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-            mediator.Register<int>(this, onmessage);
+            var m_mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            m_mediator.Register<int>(this, onmessage);
             // Init FFMPEG libraries.
             await Task.Run(async () =>
             {
-                try
-                {
-                    // Pre-load FFmpeg
-                    await Library.LoadFFmpegAsync();
-                }
+                try{await Library.LoadFFmpegAsync();}
                 catch (Exception ex)
                 {
                     var dispatcher = Current?.Dispatcher;
@@ -141,23 +162,25 @@ namespace WolvenKit
             });
         }
 
-        // Sets the VideTool as current main window on demand.
+        /// <summary>
+        /// Sets the VideTool as current main window on demand.
+        /// </summary>
+        /// <param name="obj"></param>
         private void onmessage(int obj)
         {
             if (obj == 0)
             {
-                if (MainX == null)
+                if (c_MainWindow == null)
                 {
-                    MainX = new MainWindow();
-                    Current.MainWindow = MainX;
-                    Current.MainWindow.Loaded += (snd, eva) => ViewModel.OnApplicationLoaded();
+                    c_MainWindow = new MainWindow();
+                    Current.MainWindow = c_MainWindow;
+                    Current.MainWindow.Loaded += (snd, eva) => c_RootViewModel.OnApplicationLoaded();
                     Current.MainWindow.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
                     Current.MainWindow.Show();
                 }
-
-
             }
         }
-
-       }
+        #endregion
+    }
+    #endregion
 }

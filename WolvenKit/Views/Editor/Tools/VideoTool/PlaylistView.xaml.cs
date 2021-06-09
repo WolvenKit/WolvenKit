@@ -20,7 +20,7 @@ namespace WolvenKit.Views.Controls
             InitializeComponent();
 
             // Prevent binding to the events
-            if (App.IsInDesignMode)
+            if (App.c_IsInDesignMode)
                 return;
 
             // Bind the Enter key to the command
@@ -28,7 +28,7 @@ namespace WolvenKit.Views.Controls
             {
                 if (e.Key != Key.Enter)
                     return;
-                await App.ViewModel.Commands.OpenCommand.ExecuteAsync(OpenFileTextBox.Text);
+                await App.c_RootViewModel.Commands.OpenCommand.ExecuteAsync(OpenFileTextBox.Text);
                 e.Handled = true;
             };
 

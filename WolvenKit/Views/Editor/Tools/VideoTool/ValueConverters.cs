@@ -184,10 +184,10 @@ namespace WolvenKit.Views.Foundation
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object format, CultureInfo culture)
         {
-            if (value is string thumbnailFilename && !App.IsInDesignMode)
+            if (value is string thumbnailFilename && !App.c_IsInDesignMode)
             {
                 return ThumbnailGenerator.GetThumbnail(
-                    App.ViewModel.Playlist.ThumbsDirectory, thumbnailFilename);
+                    App.c_RootViewModel.Playlist.ThumbsDirectory, thumbnailFilename);
             }
 
             return default(ImageSource);
