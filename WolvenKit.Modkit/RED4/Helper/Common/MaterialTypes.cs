@@ -1,37 +1,26 @@
 using WolvenKit.RED4.CR2W.Types;
 using System;
-namespace WolvenKit.Modkit.RED4.Materials.MaterialTypes
+using WolvenKit.Modkit.RED4.GeneralStructs;
+
+namespace WolvenKit.Modkit.RED4.Materials.Types
 {
     public enum MaterialType
     {
         Unknown, MultiLayered, MeshDecal, HumanSkin, MetalBase
     }
-    public class MultiLayered
+    public class MaterialInstanceData
     {
         public string MultilayerSetup { get; set; } = null;
         public string MultilayerMask { get; set; } = null;
         public string GlobalNormal { get; set; } = null;
-        public MultiLayered(CMaterialInstance cMaterialInstance)
-        {
-            for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
-            {
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MultilayerSetup")
-                    MultilayerSetup = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<Multilayer_Setup>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MultilayerMask")
-                    MultilayerMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<Multilayer_Mask>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "GlobalNormal")
-                    GlobalNormal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-            }
-        }
-    }
-    public class MeshDecal
-    {
         public string DiffuseTexture { get; set; } = null;
-        public Color DiffuseColor { get; set; }
+        public Vec4 DiffuseColor { get; set; }
         public Nullable<float> DiffuseAlpha { get; set; } = null;
-        public Struct2D UVOffset { get; set; }
+        public Nullable<float> UVOffsetX { get; set; }
+        public Nullable<float> UVOffsetY { get; set; }
+        public Nullable<float> UVScaleX { get; set; }
+        public Nullable<float> UVScaleY { get; set; }
         public Nullable<float> UVRotation { get; set; } = null;
-        public Struct2D UVScale { get; set; }
         public string SecondaryMask { get; set; } = null;
         public Nullable<float> SecondaryMaskUVScale { get; set; } = null;
         public Nullable<float> SecondaryMaskInfluence { get; set; } = null;
@@ -47,74 +36,6 @@ namespace WolvenKit.Modkit.RED4.Materials.MaterialTypes
         public Nullable<float> AnimationFramesWidth { get; set; } = null;
         public Nullable<float> AnimationFramesHeight { get; set; } = null;
         public Nullable<float> DepthThreshold { get; set; } = null;
-
-        public MeshDecal(CMaterialInstance cMaterialInstance)
-        {
-            for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
-            {
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DiffuseTexture")
-                    DiffuseTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DiffuseColor")
-                {
-                    float x = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Red.Value / 255f;
-                    float y = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Green.Value / 255f;
-                    float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Blue.Value / 255f;
-                    float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Alpha.Value / 255f;
-
-                    DiffuseColor = new Color(x, y, z, w);
-                }
-                System.Numerics.Vector2 uvOff = new System.Numerics.Vector2();
-                System.Numerics.Vector2 uvSca = new System.Numerics.Vector2();
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DiffuseAlpha")
-                    DiffuseAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVOffsetX")
-                    uvOff.X = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVOffsetY")
-                    uvOff.Y = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVRotation")
-                    UVRotation = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVScaleX")
-                    uvSca.X = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "UVScaleY")
-                    uvSca.Y = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SecondaryMask")
-                    SecondaryMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SecondaryMaskUVScale")
-                    SecondaryMaskUVScale = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SecondaryMaskInfluence")
-                    SecondaryMaskInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalTexture")
-                    NormalTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalAlpha")
-                    NormalAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalAlphaTex")
-                    NormalAlphaTex = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "NormalsBlendingMode")
-                    NormalsBlendingMode = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "RoughnessTexture")
-                    RoughnessTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MetalnessTexture")
-                    MetalnessTexture = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AlphaMaskContrast")
-                    AlphaMaskContrast = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "RoughnessMetalnessAlpha")
-                    RoughnessMetalnessAlpha = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AnimationSpeed")
-                    AnimationSpeed = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AnimationFramesWidth")
-                    AnimationFramesWidth = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AnimationFramesHeight")
-                    AnimationFramesHeight = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DepthThreshold")
-                    DepthThreshold = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-
-                UVScale = new Struct2D(uvSca.X, uvSca.Y);
-                UVOffset = new Struct2D(uvSca.X, uvSca.Y);
-            }
-        }
-    }
-    public class HumanSkin
-    {
         public string Roughness { get; set; } = null;
         public string DetailNormal { get; set; } = null;
         public Nullable<float> DetailNormalInfluence { get; set; } = null;
@@ -124,149 +45,210 @@ namespace WolvenKit.Modkit.RED4.Materials.MaterialTypes
         public string Detailmap_Stretch { get; set; } = null;
         public Nullable<float> DetailRoughnessBiasMin { get; set; } = null;
         public Nullable<float> DetailRoughnessBiasMax { get; set; } = null;
-        public Color TintColor { get; set; }
+        public Vec4 TintColor { get; set; }
         public Nullable<float> TintScale { get; set; } = null;
         public string SkinProfile { get; set; } = null;
         public string Bloodflow { get; set; } = null;
-        public Color BloodColor { get; set; }
+        public Vec4 BloodColor { get; set; }
         public Nullable<float> MicroDetailUVScale01 { get; set; } = null;
         public Nullable<float> MicroDetailUVScale02 { get; set; } = null;
         public string TintColorMask { get; set; } = null;
         public Nullable<float> MicroDetailInfluence { get; set; } = null;
         public Nullable<float> CavityIntensity { get; set; } = null;
-
-        public HumanSkin(CMaterialInstance cMaterialInstance)
-        {
-            for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
-            {
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Roughness")
-                    Roughness = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailNormal")
-                    DetailNormal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailNormalInfluence")
-                    DetailNormalInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Normal")
-                    Normal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Albedo")
-                    Albedo = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Detailmap_Squash")
-                    Detailmap_Squash = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Detailmap_Stretch")
-                    Detailmap_Stretch = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailRoughnessBiasMin")
-                    DetailRoughnessBiasMin = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "DetailRoughnessBiasMax")
-                    DetailRoughnessBiasMax = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "TintColor")
-                {
-                    float x = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Red.Value / 255f;
-                    float y = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Green.Value / 255f;
-                    float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Blue.Value / 255f;
-                    float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Alpha.Value / 255f;
-
-                    TintColor = new Color(x, y, z, w);
-                }
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "TintScale")
-                    TintScale = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "SkinProfile")
-                    SkinProfile = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<CSkinProfile>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Bloodflow")
-                    Bloodflow = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "BloodColor")
-                {
-                    float x = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Red.Value / 255f;
-                    float y = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Green.Value / 255f;
-                    float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Blue.Value / 255f;
-                    float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as CColor).Alpha.Value / 255f;
-
-                    BloodColor = new Color(x, y, z, w);
-                }
-
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MicroDetailUVScale01")
-                    MicroDetailUVScale01 = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MicroDetailUVScale02")
-                    MicroDetailUVScale02 = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "TintColorMask")
-                    TintColorMask = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "MicroDetailInfluence")
-                    MicroDetailInfluence = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "CavityIntensity")
-                    CavityIntensity = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-
-            }
-        }
-
-    }
-    public class MetalBase
-    {
         public string BaseColor { get; set; } = null;
-        public string Normal { get; set; } = null;
-        public Color BaseColorScale { get; set; }
+        public Vec4 BaseColorScale { get; set; }
         public Nullable<float> AlphaThreshold { get; set; } = null;
-
-        public MetalBase(CMaterialInstance cMaterialInstance)
+        public MaterialInstanceData(CMaterialInstance cMaterialInstance)
         {
             for (int i = 0; i < cMaterialInstance.CMaterialInstanceData.Count; i++)
             {
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "BaseColor")
-                    BaseColor = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "Normal")
-                    Normal = (cMaterialInstance.CMaterialInstanceData[i].Variant as rRef<ITexture>).DepotPath;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "AlphaThreshold")
-                    AlphaThreshold = (cMaterialInstance.CMaterialInstanceData[i].Variant as CFloat).Value;
-                if (cMaterialInstance.CMaterialInstanceData[i].REDName == "BaseColorScale")
-                {
-                    float x = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).X.Value;
-                    float y = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).Y.Value;
-                    float z = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).Z.Value;
-                    float w = (cMaterialInstance.CMaterialInstanceData[i].Variant as Vector4).W.Value;
+                var data = cMaterialInstance.CMaterialInstanceData[i];
 
-                    BaseColorScale = new Color(x, y, z, w);
+                if (data.REDName == "MultilayerSetup")
+                    MultilayerSetup = (data.Variant as rRef<Multilayer_Setup>).DepotPath;
+
+                if (data.REDName == "MultilayerMask")
+                    MultilayerMask = (data.Variant as rRef<Multilayer_Mask>).DepotPath;
+
+                if (data.REDName == "GlobalNormal")
+                    GlobalNormal = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "DiffuseTexture")
+                    DiffuseTexture = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "DiffuseColor")
+                {
+                    float x = (data.Variant as CColor).Red.Value / 255f;
+                    float y = (data.Variant as CColor).Green.Value / 255f;
+                    float z = (data.Variant as CColor).Blue.Value / 255f;
+                    float w = (data.Variant as CColor).Alpha.Value / 255f;
+
+                    DiffuseColor = new Vec4(x, y, z, w);
+                }
+
+                if (data.REDName == "DiffuseAlpha")
+                    DiffuseAlpha = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "UVOffsetX")
+                    UVOffsetX = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "UVOffsetY")
+                    UVOffsetY = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "UVRotation")
+                    UVRotation = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "UVScaleX")
+                    UVScaleX = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "UVScaleY")
+                    UVScaleY = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "SecondaryMask")
+                    SecondaryMask = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "SecondaryMaskUVScale")
+                    SecondaryMaskUVScale = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "SecondaryMaskInfluence")
+                    SecondaryMaskInfluence = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "NormalTexture")
+                    NormalTexture = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "NormalAlpha")
+                    NormalAlpha = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "NormalAlphaTex")
+                    NormalAlphaTex = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "NormalsBlendingMode")
+                    NormalsBlendingMode = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "RoughnessTexture")
+                    RoughnessTexture = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "MetalnessTexture")
+                    MetalnessTexture = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "AlphaMaskContrast")
+                    AlphaMaskContrast = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "RoughnessMetalnessAlpha")
+                    RoughnessMetalnessAlpha = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "AnimationSpeed")
+                    AnimationSpeed = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "AnimationFramesWidth")
+                    AnimationFramesWidth = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "AnimationFramesHeight")
+                    AnimationFramesHeight = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "DepthThreshold")
+                    DepthThreshold = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "Roughness")
+                    Roughness = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "DetailNormal")
+                    DetailNormal = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "DetailNormalInfluence")
+                    DetailNormalInfluence = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "Normal")
+                    Normal = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "Albedo")
+                    Albedo = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "Detailmap_Squash")
+                    Detailmap_Squash = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "Detailmap_Stretch")
+                    Detailmap_Stretch = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "DetailRoughnessBiasMin")
+                    DetailRoughnessBiasMin = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "DetailRoughnessBiasMax")
+                    DetailRoughnessBiasMax = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "TintColor")
+                {
+                    float x = (data.Variant as CColor).Red.Value / 255f;
+                    float y = (data.Variant as CColor).Green.Value / 255f;
+                    float z = (data.Variant as CColor).Blue.Value / 255f;
+                    float w = (data.Variant as CColor).Alpha.Value / 255f;
+
+                    TintColor = new Vec4(x, y, z, w);
+                }
+                if (data.REDName == "TintScale")
+                    TintScale = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "SkinProfile")
+                    SkinProfile = (data.Variant as rRef<CSkinProfile>).DepotPath;
+                if (data.REDName == "Bloodflow")
+                    Bloodflow = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "BloodColor")
+                {
+                    float x = (data.Variant as CColor).Red.Value / 255f;
+                    float y = (data.Variant as CColor).Green.Value / 255f;
+                    float z = (data.Variant as CColor).Blue.Value / 255f;
+                    float w = (data.Variant as CColor).Alpha.Value / 255f;
+
+                    BloodColor = new Vec4(x, y, z, w);
+                }
+
+                if (data.REDName == "MicroDetailUVScale01")
+                    MicroDetailUVScale01 = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "MicroDetailUVScale02")
+                    MicroDetailUVScale02 = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "TintColorMask")
+                    TintColorMask = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "MicroDetailInfluence")
+                    MicroDetailInfluence = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "CavityIntensity")
+                    CavityIntensity = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "BaseColor")
+                    BaseColor = (data.Variant as rRef<ITexture>).DepotPath;
+
+                if (data.REDName == "AlphaThreshold")
+                    AlphaThreshold = (data.Variant as CFloat).IsSerialized ? (data.Variant as CFloat).Value : null;
+
+                if (data.REDName == "BaseColorScale")
+                {
+                    float x = (data.Variant as Vector4).X.Value;
+                    float y = (data.Variant as Vector4).Y.Value;
+                    float z = (data.Variant as Vector4).Z.Value;
+                    float w = (data.Variant as Vector4).W.Value;
+
+                    BaseColorScale = new Vec4(x, y, z, w);
                 }
             }
         }
     }
-    public class Color
-    {
-        public float R { get; set; }
-        public float G { get; set; }
-        public float B { get; set; }
-        public float A { get; set; }
-
-        public Color(float x, float y, float z, float w)
-        {
-            this.R = x;
-            this.G = y;
-            this.B = z;
-            this.A = w;
-        }
-    }
-    public class Struct2D
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public Struct2D(float x, float y)
-        {
-            this.X = x;
-            this.Y = y;
-        }
-    }
-    public class Struct3D
+    public class Vec4
     {
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
-        public Struct3D(float x, float y, float z)
+        public float W { get; set; }
+
+        public Vec4(float x, float y, float z, float w)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
+            W = w;
         }
     }
 }
