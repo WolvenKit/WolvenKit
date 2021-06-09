@@ -72,10 +72,13 @@ namespace WolvenKit.MSTests
             Parallel.ForEach(archive.Files, keyvalue =>
             {
                 var (hash, _) = keyvalue;
-                using var ms = new MemoryStream();
+                
                 try
                 {
-                    ModTools.ExtractSingleToStream(archive, hash, ms);
+                    using (var ms = new MemoryStream())
+                    {
+                        ModTools.ExtractSingleToStream(archive, hash, ms);
+                    }
                     results.Add(new ArchiveTestResult()
                     {
                         ArchiveName = archivename,

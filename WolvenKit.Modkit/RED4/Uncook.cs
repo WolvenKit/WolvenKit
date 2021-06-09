@@ -15,10 +15,6 @@ using WolvenKit.Common.Oodle;
 using WolvenKit.RED4.CR2W;
 using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Common.Services;
-using WolvenKit.Modkit.RED4.Materials;
-using WolvenKit.Modkit.RED4.MeshFile;
 
 namespace WolvenKit.Modkit.RED4
 {

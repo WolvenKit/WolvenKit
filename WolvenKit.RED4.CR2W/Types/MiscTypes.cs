@@ -79,7 +79,12 @@ namespace WolvenKit.RED4.CR2W.Types
             }
         }
 
-        public override void Write(BinaryWriter file) => Buffer.Write(file);
+        public override void Write(BinaryWriter file)
+        {
+            Buffer.Write(file);
+            file.Write((byte)0x00);
+            file.Write((byte)0x80);
+        }
     }
 
     [REDMeta]

@@ -17,7 +17,6 @@ namespace WolvenKit.MSTests
     {
         private const string s_LIMIT = "LIMIT";
         private const string s_KEEP = "KEEP";
-        private const string s_RANDOM = "RANDOM";
 
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
@@ -25,9 +24,9 @@ namespace WolvenKit.MSTests
         #region Methods
 
         [TestMethod]
-        [DataRow(ERedExtension.xbm)]
+        //[DataRow(ERedExtension.xbm)]
         [DataRow(ERedExtension.mesh)]
-        public void Test_Rebuild(ERedExtension extension)
+        public void Test_ImportExport(ERedExtension extension)
         {
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
@@ -56,13 +55,8 @@ namespace WolvenKit.MSTests
 
             // random tests
             var random = new Random();
-            var filesToTest = infiles;
-            var isRandom = bool.Parse(s_config.GetSection(s_RANDOM).Value);
-            if (isRandom)
-            {
-                var limit = int.Parse(s_config.GetSection(s_LIMIT).Value);
-                filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
-            }
+            var limit = int.Parse(s_config.GetSection(s_LIMIT).Value);
+            var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
 
             for (var i = 0; i < filesToTest.Count; i++)
             {
@@ -82,7 +76,7 @@ namespace WolvenKit.MSTests
 
                 // uncook
                 var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, esettings,
-                    resultDir, ECookedFileFormat.mesh);
+                    resultDir, ECookedFileFormat.NONE);
 
                 if (!resUncook)
                 {
@@ -166,6 +160,8 @@ namespace WolvenKit.MSTests
                 directoryInfo.Delete(true);
             }
         }
+
+
 
         #endregion Methods
     }

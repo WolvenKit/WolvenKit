@@ -92,7 +92,7 @@ namespace WolvenKit.Modkit.RED4
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
-                    return ImportMesh(rawFile, args.Get<MeshImportArgs>());
+                    return ImportMesh(rawFile, outDir, args.Get<MeshImportArgs>());
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -369,8 +369,35 @@ namespace WolvenKit.Modkit.RED4
             var redfile = files.First().FullName;
             return redfile;
         }
-        private bool ImportMesh(FileInfo rawFile, MeshImportArgs args)
+        private bool ImportMesh(FileInfo rawFile, DirectoryInfo outDir, MeshImportArgs args)
         {
+            if (args.Keep)
+            {
+                var filename = rawFile.Name;
+                var redfile = FindRedFile(outDir, filename);
+
+                if (string.IsNullOrEmpty(redfile))
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {filename}");
+                    return false;
+                }
+
+                using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
+                var result = _meshimporter.Import(rawFile, redFs);
+
+                if (result)
+                {
+                    _loggerService.Success($"Rebuilt {redfile} with buffers");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild {redfile} with buffers");
+                }
+
+                return result;
+            }
+
+
             _loggerService.Warning($"{rawFile.Name} - Direct mesh importing is not implemented");
             return false;
         }

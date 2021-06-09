@@ -27,7 +27,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             _modTools = modtools;
         }
 
-        public bool Import(FileInfo inGltfFile, Stream inmeshStream, FileInfo outMeshFile)
+        public bool Import(FileInfo inGltfFile, Stream inmeshStream, Stream outStream = null)
         {
             var model = ModelRoot.Load(inGltfFile.FullName);
 
@@ -135,10 +135,16 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             meshesInfo.qTrans = QuantTrans;
 
             MemoryStream ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
-            File.WriteAllBytes(outMeshFile.FullName, ms.ToArray());
-
-            inmeshStream.Dispose();
-            inmeshStream.Close();
+            ms.Seek(0, SeekOrigin.Begin);
+            if (outStream != null)
+            {
+                ms.CopyTo(outStream);
+            }
+            else
+            {
+                ms.SetLength(0);
+                ms.CopyTo(inmeshStream);
+            }
             return true;
         }
         static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
