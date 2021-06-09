@@ -39,7 +39,7 @@ namespace WolvenKit.MSTests
                 Directory.CreateDirectory(resultDir.FullName);
             }
             var logDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "logs"));
-            if (!resultDir.Exists)
+            if (!logDir.Exists)
             {
                 Directory.CreateDirectory(logDir.FullName);
             }
