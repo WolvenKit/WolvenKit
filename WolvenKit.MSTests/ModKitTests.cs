@@ -25,7 +25,7 @@ namespace WolvenKit.MSTests
         #region Methods
 
         [TestMethod]
-        //[DataRow(ERedExtension.xbm)]
+        [DataRow(ERedExtension.xbm)]
         [DataRow(ERedExtension.mesh)]
         public void Test_Rebuild(ERedExtension extension)
         {
