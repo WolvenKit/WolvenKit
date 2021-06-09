@@ -375,6 +375,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 var filename = rawFile.Name;
                 var redfile = FindRedFile(outDir, filename);
+                var redfileName = Path.GetFileName(redfile);
 
                 if (string.IsNullOrEmpty(redfile))
                 {
@@ -383,18 +384,27 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                var result = _meshimporter.Import(rawFile, redFs);
-
-                if (result)
+                try
                 {
-                    _loggerService.Success($"Rebuilt {redfile} with buffers");
+                    var result = _meshimporter.Import(rawFile, redFs);
+
+                    if (result)
+                    {
+                        _loggerService.Success($"Rebuilt {redfileName} with buffers");
+                    }
+                    else
+                    {
+                        _loggerService.Error($"Failed to rebuild {redfileName} with buffers");
+                    }
+                    return result;
                 }
-                else
+                catch (Exception e)
                 {
-                    _loggerService.Error($"Failed to rebuild {redfile} with buffers");
+                    _loggerService.Error($"Unexpected error occured while importing {redfileName}: {e.Message}");
+                    return false;
                 }
 
-                return result;
+
             }
 
 

@@ -51,7 +51,9 @@ namespace WolvenKit.MSTests
             );
             var esettings = new GlobalExportArgs();
 
-            var fails = new List<FileEntry>();
+            var uncookfails = new List<FileEntry>();
+            var importfails = new List<FileEntry>();
+            var equalfails = new List<FileEntry>();
 
             // random tests
             var random = new Random();
@@ -80,7 +82,9 @@ namespace WolvenKit.MSTests
 
                 if (!resUncook)
                 {
-                    fails.Add(fileEntry);
+                    uncookfails.Add(fileEntry);
+                    Cleanup();
+                    continue;
                 }
 
                 // rebuild
@@ -94,7 +98,9 @@ namespace WolvenKit.MSTests
                 var resImport = modtools.Import(rawfile, isettings);
                 if (!resImport)
                 {
-                    fails.Add(fileEntry);
+                    importfails.Add(fileEntry);
+                    Cleanup();
+                    continue;
                 }
 
                 // compare
@@ -108,7 +114,7 @@ namespace WolvenKit.MSTests
 
                 if (!originalBytes.SequenceEqual(newbytes))
                 {
-                    fails.Add(fileEntry);
+                    equalfails.Add(fileEntry);
 
                     var filename = Path.GetFileName(fileEntry.FileName);
                     var dbgOriginalFile = Path.Combine(logDir.FullName, filename);
@@ -121,31 +127,33 @@ namespace WolvenKit.MSTests
                 }
 
                 // clean temp dir
-                try
-                {
-                    foreach (var fileInfo in allfiles)
-                    {
-                        fileInfo.Delete();
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                Cleanup();
             }
 
 
-            if (fails.Count > 0)
+            if (uncookfails.Count > 0)
             {
-                foreach (var fileEntry in fails)
+                foreach (var fileEntry in uncookfails)
                 {
-                    Console.WriteLine(fileEntry.FileName);
+                    Console.WriteLine($"Failed to uncook - {fileEntry.FileName}");
                 }
             }
-            
+            if (importfails.Count > 0)
+            {
+                foreach (var fileEntry in importfails)
+                {
+                    Console.WriteLine($"Failed to import - {fileEntry.FileName}");
+                }
+            }
+            if (equalfails.Count > 0)
+            {
+                foreach (var fileEntry in equalfails)
+                {
+                    Console.WriteLine($"Not binary equal - {fileEntry.FileName}");
+                }
+            }
 
-            Assert.AreEqual(0, fails.Count);
+            Assert.AreEqual(0, uncookfails.Count + importfails.Count + equalfails.Count);
 
 
             // cleanup
@@ -158,6 +166,23 @@ namespace WolvenKit.MSTests
             foreach (var directoryInfo in alld)
             {
                 directoryInfo.Delete(true);
+            }
+
+            void Cleanup()
+            {
+                var allfiles = resultDir.GetFiles("*", SearchOption.AllDirectories);
+                try
+                {
+                    foreach (var fileInfo in allfiles)
+                    {
+                        fileInfo.Delete();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
         }
 
