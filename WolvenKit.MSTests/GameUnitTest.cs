@@ -29,7 +29,7 @@ namespace WolvenKit.MSTests
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";
         private const string s_writeToFileSetting = "WriteToFile";
-        private static IConfigurationRoot s_config;
+        protected static IConfigurationRoot s_config;
         public static string s_gameDirectoryPath;
 
         #endregion Fields

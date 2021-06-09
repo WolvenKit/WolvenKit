@@ -58,7 +58,10 @@ namespace WolvenKit.Modkit.RED4
 
             var finalMatchesList = finalmatches.ToList();
             _loggerService.Info($"{ar.ArchiveAbsolutePath}: Found {finalMatchesList.Count}/{totalInArchiveCount} entries to extract.");
-
+            if (finalMatchesList.Count == 0)
+            {
+                return;
+            }
 
             using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
@@ -171,6 +174,7 @@ namespace WolvenKit.Modkit.RED4
                 name += ".bin";
             }
 
+            Directory.CreateDirectory(outDir.FullName);
             // get outfile name
             var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
             if (outfile.Directory == null)

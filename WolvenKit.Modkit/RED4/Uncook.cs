@@ -42,6 +42,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
+            Directory.CreateDirectory(outDir.FullName);
+
             // extract the main file with uncompressed buffers
             #region unbundle main file
             using var cr2WStream = new MemoryStream();
@@ -102,7 +104,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="rawOutDir"></param>
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        public (List<string>, int) UncookAll(
+        public void UncookAll(
             Archive ar,
             DirectoryInfo outDir,
             GlobalExportArgs args,
@@ -144,6 +146,10 @@ namespace WolvenKit.Modkit.RED4
             }
 
             _loggerService.Info($" {ar.ArchiveAbsolutePath}: Found {finalMatchesList.Count}/{totalInArchiveCount} entries to uncook");
+            if (finalMatchesList.Count == 0)
+            {
+                return;
+            }
 
             var progress = 0;
             _progressService.Report(0);
@@ -170,7 +176,7 @@ namespace WolvenKit.Modkit.RED4
                 _loggerService.Warning($"Failed to uncook {failed}.");
             }
 
-            return (extractedList.ToList(), finalMatchesList.Count);
+            _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {extractedList.Count}/{finalMatchesList.Count} files.");
         }
 
 

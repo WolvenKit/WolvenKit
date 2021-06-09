@@ -51,7 +51,7 @@ namespace WolvenKit.Modkit.RED4
             if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
                 // only buffers can be rebuilt
-                if (ext != ".buffer")
+                if (ext != "buffer")
                 {
                     return false;
                 }
@@ -63,8 +63,9 @@ namespace WolvenKit.Modkit.RED4
 
                 // if keep, rebuild
                 // get a list of buffers if the user selected just one
+                var buffername = Path.ChangeExtension(filename.Remove(filename.Length - 7), "").TrimEnd('.');
                 var buffers = rawFile.Directory
-                    .GetFiles($"{rawFile.FullName}.*.buffer", SearchOption.TopDirectoryOnly);
+                    .GetFiles($"{buffername}.*.buffer", SearchOption.TopDirectoryOnly);
 
                 var redfile = FindRedFileForBuffer(outDir, filename);
                 if (string.IsNullOrEmpty(redfile))
@@ -73,7 +74,8 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                Rebuild(fileStream, buffers);
+                var r = Rebuild(fileStream, buffers);
+                return r;
             }
 
             // import files

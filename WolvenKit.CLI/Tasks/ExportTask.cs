@@ -69,7 +69,7 @@ namespace CP77Tools.Tasks
 
             foreach (var fileInfo in filesToExport)
             {
-                if (!Enum.TryParse(inputFileInfo.Extension, true, out ECookedFileFormat extAsEnum))
+                if (!Enum.TryParse(inputFileInfo.Extension.TrimStart('.'), true, out ECookedFileFormat extAsEnum))
                 {
                     continue;
                 }

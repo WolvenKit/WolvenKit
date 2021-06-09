@@ -15,9 +15,9 @@ namespace WolvenKit.MSTests
     [TestClass]
     public class ModKitTests : GameUnitTest
     {
-        private const bool KEEP = true;
-        private const bool RANDOM = true;
-        private const int LIMIT = 1000;
+        private const string s_LIMIT = "LIMIT";
+        private const string s_KEEP = "KEEP";
+        private const string s_RANDOM = "RANDOM";
 
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
@@ -25,8 +25,8 @@ namespace WolvenKit.MSTests
         #region Methods
 
         [TestMethod]
-        [DataRow(ERedExtension.xbm)]
-        //[DataRow(ERedExtension.mesh)]
+        //[DataRow(ERedExtension.xbm)]
+        [DataRow(ERedExtension.mesh)]
         public void Test_Rebuild(ERedExtension extension)
         {
             var ext = $".{extension.ToString()}";
@@ -44,10 +44,11 @@ namespace WolvenKit.MSTests
                 Directory.CreateDirectory(logDir.FullName);
             }
 
+            var isKeep = bool.Parse(s_config.GetSection(s_KEEP).Value);
             var isettings = new GlobalImportArgs().Register(
-                new XbmImportArgs() { Keep = KEEP },
-                new MeshImportArgs() { Keep = KEEP },
-                new CommonImportArgs() { Keep = KEEP }
+                new XbmImportArgs() { Keep = isKeep },
+                new MeshImportArgs() { Keep = isKeep },
+                new CommonImportArgs() { Keep = isKeep }
             );
             var esettings = new GlobalExportArgs();
 
@@ -56,9 +57,11 @@ namespace WolvenKit.MSTests
             // random tests
             var random = new Random();
             var filesToTest = infiles;
-            if (RANDOM)
+            var isRandom = bool.Parse(s_config.GetSection(s_RANDOM).Value);
+            if (isRandom)
             {
-                filesToTest = infiles.OrderBy(a => random.Next()).Take(LIMIT).ToList();
+                var limit = int.Parse(s_config.GetSection(s_LIMIT).Value);
+                filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
             }
 
             for (var i = 0; i < filesToTest.Count; i++)
@@ -79,7 +82,7 @@ namespace WolvenKit.MSTests
 
                 // uncook
                 var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, esettings,
-                    resultDir);
+                    resultDir, ECookedFileFormat.mesh);
 
                 if (!resUncook)
                 {
