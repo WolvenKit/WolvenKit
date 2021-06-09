@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using AutoUpdaterDotNET;
 using Catel.Logging;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.Views.Others;
 using WolvenKit.Views.Wizards;
@@ -11,64 +12,42 @@ namespace WolvenKit.Functionality.Helpers
 {
     public static partial class Helpers
     {
-
-
-        // Show the first time setup to the user.
-        public static void ShowFirstTimeSetup()
-        {
-            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
-            {
-                try
-                {
-                    // Try to show First time setup.
-                    Task.Run(() =>
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            var rpv = new FirstSetupWizardView();
-                            var zxc = new UserControlHostWindowViewModel(rpv);
-                            var uchwv = new UserControlHostWindowView(zxc);
-                            rpv.ViewModelChanged += (_s, _e) =>
-                            {
-                                if (rpv.ViewModel == null)
-                                {
-                                    return;
-                                }
-
-                                rpv.ViewModel.ClosedAsync += async (s, e) => await Task.Run(() => Application.Current.Dispatcher.Invoke(() => uchwv.Close()));
-                            };
-                            uchwv.Show();
-                        }));
-                }
-
-                catch (Exception e)
-                {
-                    // Log error.
-                    StaticReferences.Logger.Error(e.Message);
-
-                }
-            }
-        }
-
-
-        // Check for program updates.
+        /// <summary>
+        /// Check for application Updates.
+        /// </summary>
         public static void CheckForUpdates()
         {
             try
-            {
-                // Start Auto updater.
-                AutoUpdater.Start("https://raw.githubusercontent.com/WolvenKit/WolvenKit/master/Update.xml");
-            }
-            catch (Exception e)
-            {
-                // Log Error
-                StaticReferences.Logger.Error(e.Message);
-            }
+            { AutoUpdater.Start("https://raw.githubusercontent.com/WolvenKit/WolvenKit/master/Update.xml"); }
+            catch (Exception p_Exception) { StaticReferences.Logger.Error(p_Exception.Message); }
         }
 
-
-
-
+        /// <summary>
+        /// Present the first time setup to the user.
+        /// </summary>
+        public static void ShowFirstTimeSetup()
+        {
+            if (SettingsManager.FirstTimeSetupForUser)
+            {
+                try
+                {
+                    Task.Run(() =>
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var m_FirstSetupWizardView = new FirstSetupWizardView();
+                            var m_UserControlHostWindowViewModel = new UserControlHostWindowViewModel(m_FirstSetupWizardView);
+                            var m_UserControlHostWindowView = new UserControlHostWindowView(m_UserControlHostWindowViewModel);
+                            m_FirstSetupWizardView.ViewModelChanged += (_s, _e) =>
+                            {
+                                if (m_FirstSetupWizardView.ViewModel == null)
+                                { return; }
+                                m_FirstSetupWizardView.ViewModel.ClosedAsync += async (s, e) => await Task.Run(() => Application.Current.Dispatcher.Invoke(() => m_UserControlHostWindowView.Close()));
+                            };
+                            m_UserControlHostWindowView.Show();
+                        }));
+                }
+                catch (Exception p_Exception) { StaticReferences.Logger.Error(p_Exception.Message); }
+            }
+        }
     }
-
-
 }
