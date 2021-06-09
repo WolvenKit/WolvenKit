@@ -43,7 +43,7 @@ namespace WolvenKit.Modkit.RED4
             // extract the main file with uncompressed buffers
             #region unbundle main file
             using var cr2WStream = new MemoryStream();
-            WolvenKit.Modkit.RED4.ModTools.ExtractSingleToStream(archive, hash, cr2WStream);
+            ExtractSingleToStream(archive, hash, cr2WStream);
 
             // write main file
             var entry = archive.Files[hash] as FileEntry;
@@ -263,7 +263,7 @@ namespace WolvenKit.Modkit.RED4
                     var ddspath = Path.ChangeExtension(outfile.FullName, "dds");
                     using (var fs = new FileStream(ddspath, FileMode.Create, FileAccess.Write))
                     {
-                        
+
                         if (!UncookXbm(cr2wStream, fs, out texformat))
                         {
                             return false;

@@ -67,7 +67,7 @@ namespace CP77Tools.Tasks
             var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
-            var globalSettings = new GlobalExportArgs().Register(
+            var exportArgs = new GlobalExportArgs().Register(
                 new XbmExportArgs()
                 {
                     UncookExtension = uext,
@@ -129,12 +129,12 @@ namespace CP77Tools.Tasks
                 // run
                 if (hash != 0)
                 {
-                    _modTools.UncookSingle(ar, hash, outDir, globalSettings, rawOutDirInfo, forcebuffers);
+                    _modTools.UncookSingle(ar, hash, outDir, exportArgs, rawOutDirInfo, forcebuffers);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}");
                 }
                 else
                 {
-                    _modTools.UncookAll(ar, outDir, globalSettings, unbundle, pattern, regex, rawOutDirInfo, forcebuffers);
+                    _modTools.UncookAll(ar, outDir, exportArgs, unbundle, pattern, regex, rawOutDirInfo, forcebuffers);
                 }
             }
 

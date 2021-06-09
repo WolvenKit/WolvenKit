@@ -12,7 +12,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
 
-namespace WolvenKit.CLI
+namespace WolvenKit.Common.Tools
 {
     public static class Red4Serializer
     {
