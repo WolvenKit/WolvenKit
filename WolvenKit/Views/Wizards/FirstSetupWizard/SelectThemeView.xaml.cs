@@ -15,9 +15,9 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
     {
         #region Fields
 
-        private bool c_ColorsLoaded = false;
+        private bool filled = false;
 
-        private Brush c_LastAccentBrush;
+        private Brush lastaccent;
 
         #endregion Fields
 
@@ -34,42 +34,46 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 
         private void Circle_MouseEnter(object sender, MouseEventArgs e)
         {
-            var m_Sender = (Ellipse)sender;
-            c_LastAccentBrush = m_Sender.Fill;
-            m_Sender.Fill = new SolidColorBrush(Colors.AliceBlue);
+            var a = (Ellipse)sender;
+            lastaccent = a.Fill;
+            a.Fill = new SolidColorBrush(Colors.AliceBlue);
         }
 
         private void Circle_MouseLeave(object sender, MouseEventArgs e)
         {
-            var m_Sender = (Ellipse)sender;
-            m_Sender.Fill = c_LastAccentBrush;
+            var a = (Ellipse)sender;
+            a.Fill = lastaccent;
         }
 
         private void Circle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-           var m_Sender = (Ellipse)sender;
-           var m_color = ((SolidColorBrush)m_Sender.Fill).Color;
-           var m_settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var a = (Ellipse)sender;
 
-           m_settings.ThemeAccent = m_color;
-           m_settings.Save();
+            ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name);
 
+            try
+            {
+                var color = ((SolidColorBrush)a.Fill).Color;
+                var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+                settings.ThemeAccent = color;
+            }
+            catch
+            {
+                // swallow
+            }
         }
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-            // #RemoveThis
         }
 
         private void ThemeColorsHoney_Loaded(object sender, RoutedEventArgs e)
         {
-            // #RemoveThis
-
         }
 
         private void UserControl_Initialized_1(object sender, EventArgs e)
         {
-            if (!c_ColorsLoaded)
+            if (!filled)
             {
                 new Thread(() =>
                 {
@@ -104,7 +108,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
                     }
                 }).Start();
             }
-            c_ColorsLoaded = true;
+            filled = true;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e) => ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>().AllFieldIsValid = true;
