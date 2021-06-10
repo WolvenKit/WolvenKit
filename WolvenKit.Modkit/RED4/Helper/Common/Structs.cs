@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
-using WolvenKit.Modkit.RED4.Materials.MaterialTypes;
+using WolvenKit.Modkit.RED4.Materials.Types;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
@@ -124,9 +124,6 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public string Name { get; set; }
         public string BaseMaterial { get; set; }
         public MaterialType MaterialType { get; set; }
-        public HumanSkin HumanSkin { get; set; }
-        public MeshDecal MeshDecal { get; set; }
-        public MultiLayered MultiLayered { get; set; }
-        public MetalBase MetalBase { get; set; }
+        public MaterialInstanceData MaterialInstanceData { get; set; }
     }
 }

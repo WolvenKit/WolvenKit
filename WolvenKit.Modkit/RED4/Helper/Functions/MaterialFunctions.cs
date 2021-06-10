@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Modkit.RED4.MeshFile;
-using WolvenKit.Modkit.RED4.Materials.MaterialTypes;
+using WolvenKit.Modkit.RED4.Materials.Types;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
@@ -400,9 +400,6 @@ namespace WolvenKit.Modkit.RED4
                     }
             }
 
-            try
-            {
-
                 List<RawMaterial> RawMaterials = new List<RawMaterial>();
                 for (int i = 0; i < materialEntries.Count; i++)
                 {
@@ -445,9 +442,6 @@ namespace WolvenKit.Modkit.RED4
                         File.WriteAllText(outDir.FullName + "Material.json", JsonContent.Serialize(obj).ToJson());
                     }
                 }
-
-            }
-            catch { }
 
             File.WriteAllLines(outDir.FullName + "Textures List.txt", TexturesList);
 
@@ -580,9 +574,6 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            try
-            {
-
                 List<RawMaterial> RawMaterials = new List<RawMaterial>();
                 for (int i = 0; i < materialEntries.Count; i++)
                 {
@@ -626,8 +617,6 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
 
-            }
-            catch { }
             File.WriteAllLines(outDir.FullName + "TexturesList.txt", TexturesList);
 
             string ext = "*.dds";
@@ -656,43 +645,21 @@ namespace WolvenKit.Modkit.RED4
             RawMaterial rawMaterial = new RawMaterial();
 
             rawMaterial.Name = Name;
-            try
-            {
+
                 rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
+                rawMaterial.MaterialInstanceData = new MaterialInstanceData(cMaterialInstance);
 
                 if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "multilayered")
-                {
                     rawMaterial.MaterialType = MaterialType.MultiLayered;
 
-                    MultiLayered multiLayered = new MultiLayered(cMaterialInstance);
-                    rawMaterial.MultiLayered = multiLayered;
-
-                }
                 if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "mesh_decal")
-                {
                     rawMaterial.MaterialType = MaterialType.MeshDecal;
 
-                    MeshDecal MeshDecal = new MeshDecal(cMaterialInstance);
-                    rawMaterial.MeshDecal = MeshDecal;
-
-                }
                 if (cMaterialInstance.BaseMaterial.DepotPath.Contains("skin"))
-                {
                     rawMaterial.MaterialType = MaterialType.HumanSkin;
 
-                    HumanSkin HumanSkin = new HumanSkin(cMaterialInstance);
-                    rawMaterial.HumanSkin = HumanSkin;
-                }
                 if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "metal_base")
-                {
                     rawMaterial.MaterialType = MaterialType.MetalBase;
-
-                    MetalBase metalBase = new MetalBase(cMaterialInstance);
-                    rawMaterial.MetalBase = metalBase;
-
-                }
-            }
-            catch { }
 
             return rawMaterial;
         }
