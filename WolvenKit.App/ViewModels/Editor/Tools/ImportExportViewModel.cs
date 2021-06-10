@@ -88,8 +88,10 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Returns the name of current selected object in Import/Export Grid.
         /// </summary>
-        public string CurrentSelectedInGridName {
-           get {
+        public string CurrentSelectedInGridName
+        {
+            get
+            {
                 if (SelectedObject != null)
                 {
                     if (!SelectionLocked)
@@ -97,10 +99,20 @@ namespace WolvenKit.ViewModels.Editor
                         lastselected = SelectedObject;
                         return SelectedObject.Name;
                     }
-                    else{return lastselected.Name;}
+                    else
+                    {
+                        if (lastselected == null)
+                        { return ""; }
+                        else
+                        {
+                            return lastselected.Name;
+                        }
+                    }
                 }
-                else{return "";}
-            } set { _CurrentSelectionInGridName = value; }
+                else
+                { return ""; }
+            }
+            set { _CurrentSelectionInGridName = value; }
         }
 
         /// <summary>
@@ -158,7 +170,6 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => modTools);
             Argument.IsNotNull(() => gameController);
 
-
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
@@ -167,7 +178,6 @@ namespace WolvenKit.ViewModels.Editor
             _gameController = gameController;
 
             SetupToolDefaults();
-
 
             ProcessAllCommand = new RelayCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new RelayCommand(ExecuteProcessSelected, CanProcessSelected);
@@ -189,7 +199,6 @@ namespace WolvenKit.ViewModels.Editor
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _exportableItems)
                 .Subscribe();
-
         }
 
         /// <summary>
@@ -226,7 +235,6 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     ExportSingle(item);
                 }
-
             }
         }
 
@@ -296,10 +304,8 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     ExportSingle(item);
                 }
-
             }
         }
-
 
         /// <summary>
         /// Close Async
@@ -321,10 +327,7 @@ namespace WolvenKit.ViewModels.Editor
         /// Setup Tool defaults for tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
-
     }
-
-
 
     /// <summary>
     /// ImportExportItem ViewModel
@@ -362,14 +365,10 @@ namespace WolvenKit.ViewModels.Editor
         public string FullName => BaseFile.FullName;
         public string Name => BaseFile.Name;
 
-
         public bool IsChecked { get; set; }
-
-
 
         public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
     }
-
 
     public class ImportableItemViewModel : ImportExportItemViewModel
     {
@@ -394,6 +393,7 @@ namespace WolvenKit.ViewModels.Editor
             };
         }
     }
+
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
         public ExportableItemViewModel(FileModel model)
@@ -422,7 +422,4 @@ namespace WolvenKit.ViewModels.Editor
             };
         }
     }
-
-
-
 }
