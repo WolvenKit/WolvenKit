@@ -1,14 +1,14 @@
 using System;
 using System.IO;
+//using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Catel.IoC;
 using CP77.Common.Image;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -109,6 +109,11 @@ namespace WolvenKit.Modkit.RED4
                 catch
                 {
                     return false;
+                }
+
+                if (WolvenTesting.IsTesting)
+                {
+                    continue;
                 }
 
                 using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))

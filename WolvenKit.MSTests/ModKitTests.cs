@@ -420,6 +420,8 @@ namespace WolvenKit.MSTests
         // [DataRow(ECookedFileFormat.xbm)]
         public void Test_Uncook(ECookedFileFormat extension)
         {
+            Environment.SetEnvironmentVariable("WOLVENKIT_ENVIRONMENT", "Testing", EnvironmentVariableTarget.Process);
+
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
 
@@ -460,12 +462,6 @@ namespace WolvenKit.MSTests
                     continue;
                 }
 
-                var ar = fileEntry.Archive as Archive;
-                using var cr2wstream = new MemoryStream();
-                ar.CopyFileToStream(cr2wstream, fileEntry.NameHash64, false);
-                var originalBytes = cr2wstream.ToByteArray();
-
-
                 // uncook
                 var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir,
                     exportArgs, resultDir, ECookedFileFormat.NONE);
@@ -473,12 +469,7 @@ namespace WolvenKit.MSTests
                 if (!resUncook)
                 {
                     uncookfails.Add(fileEntry);
-                    Cleanup();
-                    continue;
                 }
-
-                // clean temp dir
-                Cleanup();
             }
 
 
@@ -491,38 +482,6 @@ namespace WolvenKit.MSTests
             }
 
             Assert.AreEqual(limit,  limit - uncookfails.Count);
-
-
-            // cleanup
-            var allf = resultDir.GetFiles("*", SearchOption.AllDirectories);
-            foreach (var fileInfo in allf)
-            {
-                fileInfo.Delete();
-            }
-            var alld = resultDir.GetDirectories();
-            foreach (var directoryInfo in alld)
-            {
-                directoryInfo.Delete(true);
-            }
-
-            void Cleanup()
-            {
-                var allfiles = resultDir.GetFiles("*", SearchOption.AllDirectories);
-                try
-                {
-                    foreach (var fileInfo in allfiles)
-                    {
-                        fileInfo.Delete();
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
-
-
         }
 
         #endregion Methods

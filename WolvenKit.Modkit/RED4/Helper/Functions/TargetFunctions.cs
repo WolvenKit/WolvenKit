@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
-using System.IO;
-using Catel.IoC;
-using CP77.CR2W;
+//using System.IO;
 using WolvenKit.Common.DDS;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Common.Oodle;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Schema2;
+using WolvenKit.Common.Services;
 
 namespace CP77.CR2W
 {
@@ -61,6 +60,9 @@ namespace CP77.CR2W
             targetStream.Seek(cr2w.Buffers[2].Offset, SeekOrigin.Begin);
             targetStream.DecompressAndCopySegment(texbuffer, buffers[2].DiskSize, buffers[2].MemSize);
 
+            targetStream.Dispose();
+            targetStream.Close();
+
             MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
 
             int subMeshC = 0;
@@ -100,10 +102,16 @@ namespace CP77.CR2W
             List<MemoryStream> textureStreams = ContainTextureStreams(cr2w, texbuffer);
             ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, names);
 
+            if (WolvenTesting.IsTesting)
+            {
+                return true;
+            }
+
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
                 model.SaveGLTF(outfile.FullName);
+
             var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_Textures");
 
             if (textureStreams.Count > 0)
@@ -116,8 +124,6 @@ namespace CP77.CR2W
                 File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds", textureStreams[i].ToArray());
             }
 
-            targetStream.Dispose();
-            targetStream.Close();
             return true;
         }
         static TargetsInfo GetTargetInfos(CR2WFile cr2w, int SubMeshC)

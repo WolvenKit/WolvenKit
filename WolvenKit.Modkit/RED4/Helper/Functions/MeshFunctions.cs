@@ -15,6 +15,7 @@ using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
+using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.RigFile;
 
 namespace CP77.CR2W
@@ -136,12 +137,7 @@ namespace CP77.CR2W
 
             if (!cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
-                SceneBuilder scene = new SceneBuilder();
-                if (isGLBinary)
-                    scene.ToGltf2().SaveGLB(outfile.FullName);
-                else
-                    scene.ToGltf2().SaveGLTF(outfile.FullName);
-                return true;
+                return WriteFakeMeshToFile();
             }
 
             RawArmature Rig = new RawArmature();
@@ -199,16 +195,52 @@ namespace CP77.CR2W
 
             ModelRoot model = RawSkinnedMeshesToGLTF(expMeshes, Rig);
 
-            if (isGLBinary)
-                model.SaveGLB(outfile.FullName);
-            else
-                model.SaveGLTF(outfile.FullName);
+            WriteMeshToFile();
 
             meshStream.Dispose();
             meshStream.Close();
 
             return true;
+
+            bool WriteFakeMeshToFile()
+            {
+                if (WolvenTesting.IsTesting)
+                {
+                    return true;
+                }
+
+                SceneBuilder scene = new SceneBuilder();
+                if (isGLBinary)
+                {
+                    scene.ToGltf2().SaveGLB(outfile.FullName);
+                }
+                else
+                {
+                    scene.ToGltf2().SaveGLTF(outfile.FullName);
+                }
+
+                return true;
+            }
+
+
+            void WriteMeshToFile()
+            {
+                if (WolvenTesting.IsTesting)
+                {
+                    return;
+                }
+
+                if (isGLBinary)
+                {
+                    model.SaveGLB(outfile.FullName);
+                }
+                else
+                {
+                    model.SaveGLTF(outfile.FullName);
+                }
+            }
         }
+
         public bool ExportMeshWithoutRig(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();

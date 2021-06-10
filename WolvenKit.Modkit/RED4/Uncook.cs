@@ -15,6 +15,7 @@ using WolvenKit.Common.Oodle;
 using WolvenKit.RED4.CR2W;
 using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -43,14 +44,11 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            Directory.CreateDirectory(outDir.FullName);
-
-            // extract the main file with uncompressed buffers
             #region unbundle main file
+
             using var cr2WStream = new MemoryStream();
             ExtractSingleToStream(archive, hash, cr2WStream);
 
-            // write main file
             var entry = archive.Files[hash] as FileEntry;
             var relFileFullName = entry.FileName;
             if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
@@ -59,16 +57,18 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
-            if (mainFileInfo.Directory == null)
-            {
-                return false;
-            }
-            Directory.CreateDirectory(mainFileInfo.Directory.FullName);
 
-            using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
-            cr2WStream.Seek(0, SeekOrigin.Begin);
-            cr2WStream.CopyTo(fs);
+            // write mainFile
+            if (!WolvenTesting.IsTesting)
+            {
+                Directory.CreateDirectory(mainFileInfo.Directory.FullName);
+                using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                cr2WStream.Seek(0, SeekOrigin.Begin);
+                cr2WStream.CopyTo(fs);
+            }
             #endregion
+
+            #region extract buffers
 
             var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
             if (!hasBuffers)
@@ -84,6 +84,7 @@ namespace WolvenKit.Modkit.RED4
 
             try
             {
+                // wems need the physical infile path
                 args.Get<WemExportArgs>().FileName = mainFileInfo.FullName;
                 return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
             }
@@ -92,6 +93,8 @@ namespace WolvenKit.Modkit.RED4
                 _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
                 return false;
             }
+
+            #endregion
         }
 
         /// <summary>
@@ -199,21 +202,31 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-            Directory.CreateDirectory(outfile.Directory.FullName);
+
 
             var ext = Path.GetExtension(relPath).TrimStart('.');
 
             // files where uncook methods are NOT implemented: just extract buffers
+            if (!WolvenTesting.IsTesting)
+            {
+                Directory.CreateDirectory(outfile.Directory.FullName);
+            }
+
             if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext) || forcebuffers.ToString() == ext)
             {
                 var i = 0;
                 foreach (var stream in GenerateBuffers(cr2wStream))
                 {
                     var bufferpath = $"{outfile.FullName}.{i}.buffer";
-                    using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
-                    i++;
-                    stream.Seek(0, SeekOrigin.Begin);
-                    stream.CopyTo(fs);
+
+                    if (!WolvenTesting.IsTesting)
+                    {
+                        using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
+                        i++;
+                        stream.Seek(0, SeekOrigin.Begin);
+                        stream.CopyTo(fs);
+                    }
+
                     stream.Dispose();
                 }
 
@@ -231,19 +244,12 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (settings.Get<WemExportArgs>() is { } wemaArgs)
                 {
-                    if (!File.Exists(wemaArgs.FileName))
-                    {
-                        throw new NotImplementedException();
-                    }
-
                     var wemoutfile = Path.ChangeExtension(outfile.FullName, wemaArgs.wemExportType.ToString());
                     UncookWem(wemaArgs.FileName, wemoutfile);
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
 
             // uncook textures, meshes etc
@@ -251,9 +257,7 @@ namespace WolvenKit.Modkit.RED4
             switch (extAsEnum)
             {
                 case ECookedFileFormat.mlmask:
-                {
                     return UncookMlmask(cr2wStream, outfile, settings.Get<MlmaskExportArgs>());
-                }
                 case ECookedFileFormat.mesh:
                     return (HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>()));
                 case ECookedFileFormat.morphtarget:
@@ -267,14 +271,17 @@ namespace WolvenKit.Modkit.RED4
 
                     EFormat texformat;
                     var ddspath = Path.ChangeExtension(outfile.FullName, "dds");
-                    using (var fs = new FileStream(ddspath, FileMode.Create, FileAccess.Write))
+                    if (!UncookXbm(cr2wStream, ddspath, out texformat))
                     {
-
-                        if (!UncookXbm(cr2wStream, fs, out texformat))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
+
+                    if (WolvenTesting.IsTesting)
+                    {
+                        return true;
+                    }
+
+                    #region texconv
 
                     // flip the physical file
                     if (xbmargs.Flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -289,7 +296,6 @@ namespace WolvenKit.Modkit.RED4
                     }
                     try
                     {
-
                         TexconvWrapper.Convert(outfile.Directory.FullName, $"{ddspath}", xbmargs.UncookExtension);
                     }
                     catch (Exception)
@@ -297,10 +303,18 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
+                    #endregion
+
                     return true;
                 }
                 case ECookedFileFormat.csv:
                 {
+                    if (WolvenTesting.IsTesting)
+                    {
+                        using var ms = new MemoryStream();
+                        return UncookCsv(cr2wStream, ms);
+                    }
+
                     using var fs = new FileStream($"{outfile.FullName}.csv", FileMode.Create, FileAccess.Write);
                     return UncookCsv(cr2wStream, fs);
                 }
@@ -308,18 +322,33 @@ namespace WolvenKit.Modkit.RED4
                 //    return true;
                 case ECookedFileFormat.cubemap:
                 {
+                    if (WolvenTesting.IsTesting)
+                    {
+                        using var ms = new MemoryStream();
+                        return UncookCubeMap(cr2wStream, ms);
+                    }
                     var newpath = Path.ChangeExtension(outfile.FullName, "dds");
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookCubeMap(cr2wStream, ddsStream);
                 }
                 case ECookedFileFormat.envprobe:
                 {
+                    if (WolvenTesting.IsTesting)
+                    {
+                        using var ms = new MemoryStream();
+                        return UncookEnvprobe(cr2wStream, ms);
+                    }
                     var newpath = Path.ChangeExtension(outfile.FullName, "dds");
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookEnvprobe(cr2wStream, ddsStream);
                 }
                 case ECookedFileFormat.texarray:
                 {
+                    if (WolvenTesting.IsTesting)
+                    {
+                        using var ms = new MemoryStream();
+                        return UncookTexarray(cr2wStream, ms);
+                    }
                     var newpath = Path.ChangeExtension(outfile.FullName, "dds");
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookTexarray(cr2wStream, ddsStream);
@@ -347,6 +376,11 @@ namespace WolvenKit.Modkit.RED4
 
         private bool UncookWem(string infile, string outfile)
         {
+            if (WolvenTesting.IsTesting)
+            {
+                return true;
+            }
+
             var arg = infile + " -o " + outfile;
             var si = new ProcessStartInfo(
                     AppDomain.CurrentDomain.BaseDirectory + "\\vgmstream\\test.exe",
@@ -541,12 +575,24 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool UncookXbm(Stream cr2wStream, Stream outstream, out EFormat texformat)
+        public bool UncookXbm(Stream redInFile, string ddsOutFile, out EFormat texformat)
+        {
+            if (WolvenTesting.IsTesting)
+            {
+                using var ms = new MemoryStream();
+                return UncookXbm(redInFile, ms, out texformat);
+            }
+
+            using var fs = new FileStream(ddsOutFile, FileMode.Create, FileAccess.Write);
+            return UncookXbm(redInFile, fs, out texformat);
+        }
+
+        public bool UncookXbm(Stream redInFile, Stream outstream, out EFormat texformat)
         {
             texformat = EFormat.R8G8B8A8_UNORM;
 
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRED4File(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(redInFile);
             if (cr2w == null)
             {
                 return false;
@@ -577,17 +623,11 @@ namespace WolvenKit.Modkit.RED4
             {
                 rawfmt = xbm.Setup.RawFormat.Value;
             }
-            else
-            {
-            }
 
             var compression = Enums.ETextureCompression.TCM_None;
             if (xbm.Setup.Compression?.Value != null)
             {
                 compression = xbm.Setup.Compression.Value;
-            }
-            else
-            {
             }
 
             texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
@@ -598,8 +638,8 @@ namespace WolvenKit.Modkit.RED4
             DDSUtils.GenerateAndWriteHeader(outstream, new DDSMetadata(width, height, mips, texformat, alignment, false,
                 slicecount, true));
             var b = cr2w.Buffers[0];
-            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+            redInFile.Seek(b.Offset, SeekOrigin.Begin);
+            redInFile.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
 
             return true;
         }
