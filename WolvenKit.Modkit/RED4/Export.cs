@@ -58,6 +58,8 @@ namespace WolvenKit.Modkit.RED4
             using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
             using var br = new BinaryReader(fs);
 
+            args.Get<WemExportArgs>().FileName = cr2wfile.FullName;
+
             var relpath = cr2wfile.FullName.RelativePath(basedir);
             return UncookBuffers(fs, relpath, args, rawoutdir);
         }

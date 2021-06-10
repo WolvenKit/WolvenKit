@@ -71,15 +71,19 @@ namespace CP77Tools.Tasks
 
             #endregion checks
 
-            // create import settings //TODO: get them from somewhere in the CLI
+            // create import settings
+
+
             var settings = new GlobalImportArgs().Register(
-                new XbmImportArgs() { Keep = keep },
-                new MeshImportArgs() { Keep = keep },
-                new CommonImportArgs() { Keep = keep }
+                _commonImportArgs.Value,
+                _xbmImportArgs.Value,
+                _meshImportArgs.Value
             );
+            settings.Get<CommonImportArgs>().Keep = keep;
+            settings.Get<XbmImportArgs>().Keep = keep;
+            settings.Get<MeshImportArgs>().Keep = keep;
 
             var outDirectory = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
-
 
             // a directory was selected to import
             if (isDirectory)
@@ -122,7 +126,7 @@ namespace CP77Tools.Tasks
                     }
                 }
 
-                
+
             }
         }
 

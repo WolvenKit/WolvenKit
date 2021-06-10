@@ -258,8 +258,7 @@ namespace WolvenKit.ViewModels.Editor
                 if (item.Properties is MeshExportArgs meshExportArgs)
                 {
                     var cp77controller = _gameController.GetController() as Cp77Controller;
-                    var archivemanager =
-                        cp77controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                    var archivemanager = cp77controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
                     meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                 }
 

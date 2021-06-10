@@ -18,7 +18,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void ExportTask(string[] path, string outDir, EUncookExtension uncookext, bool flip)
+        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip)
         {
             if (path == null || path.Length < 1)
             {
@@ -32,7 +32,7 @@ namespace CP77Tools.Tasks
             });
         }
 
-        private void ExportTaskInner(string path, string outDir, EUncookExtension uncookext, bool flip)
+        private void ExportTaskInner(string path, string outDir, EUncookExtension? uext, bool? flip)
         {
             #region checks
 
@@ -67,6 +67,31 @@ namespace CP77Tools.Tasks
                 ? inputDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList()
                 : new List<FileInfo> { inputFileInfo };
 
+            // create extract arguments
+            var exportArgs = new GlobalExportArgs().Register(
+                _xbmExportArgs.Value,
+                _meshExportArgs.Value,
+                _morphTargetExportArgs.Value,
+                _mlmaskExportArgs.Value,
+                _wemExportArgs.Value
+            );
+            if (flip != null)
+            {
+                exportArgs.Get<XbmExportArgs>().Flip = flip.Value;
+            }
+            if (uext != null)
+            {
+                exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
+                exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
+            }
+            var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
+            if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
+            {
+                var bm = new ArchiveManager(_hashService);
+                bm.LoadFromFolder(archiveDepot);
+                exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
+            }
+
             foreach (var fileInfo in filesToExport)
             {
                 if (!Enum.TryParse(inputFileInfo.Extension.TrimStart('.'), true, out ECookedFileFormat extAsEnum))
@@ -74,14 +99,8 @@ namespace CP77Tools.Tasks
                     continue;
                 }
 
-                // create extract arguments
-                var settings = new GlobalExportArgs().Register(
-                    new XbmExportArgs() { UncookExtension = uncookext, Flip = flip },
-                    new MlmaskExportArgs() { UncookExtension = uncookext }
-                );
-
                 var di = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
-                if (_modTools.Export(fileInfo, settings, basedir, di))
+                if (_modTools.Export(fileInfo, exportArgs, basedir, di))
                 {
                     _loggerService.Success($"Successfully exported {path}.");
                 }

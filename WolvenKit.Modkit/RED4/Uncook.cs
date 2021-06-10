@@ -30,8 +30,13 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="args"></param>
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        public bool UncookSingle(Archive archive, ulong hash, DirectoryInfo outDir, GlobalExportArgs args,
-            DirectoryInfo rawOutDir = null, ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
+        public bool UncookSingle(
+            Archive archive,
+            ulong hash,
+            DirectoryInfo outDir,
+            GlobalExportArgs args,
+            DirectoryInfo rawOutDir = null,
+            ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
         {
             if (!archive.Files.ContainsKey(hash))
             {
@@ -53,14 +58,14 @@ namespace WolvenKit.Modkit.RED4
                 relFileFullName += ".bin";
             }
 
-            var cr2WExtractedFullPath = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
-            if (cr2WExtractedFullPath.Directory == null)
+            var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
+            if (mainFileInfo.Directory == null)
             {
                 return false;
             }
-            Directory.CreateDirectory(cr2WExtractedFullPath.Directory.FullName);
+            Directory.CreateDirectory(mainFileInfo.Directory.FullName);
 
-            using var fs = new FileStream(cr2WExtractedFullPath.FullName, FileMode.Create, FileAccess.Write);
+            using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
             cr2WStream.Seek(0, SeekOrigin.Begin);
             cr2WStream.CopyTo(fs);
             #endregion
@@ -79,6 +84,7 @@ namespace WolvenKit.Modkit.RED4
 
             try
             {
+                args.Get<WemExportArgs>().FileName = mainFileInfo.FullName;
                 return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
             }
             catch (Exception e)
@@ -230,7 +236,7 @@ namespace WolvenKit.Modkit.RED4
                         throw new NotImplementedException();
                     }
 
-                    var wemoutfile = Path.ChangeExtension(outfile.FullName, wemaArgs.ToString());
+                    var wemoutfile = Path.ChangeExtension(outfile.FullName, wemaArgs.wemExportType.ToString());
                     UncookWem(wemaArgs.FileName, wemoutfile);
                     return true;
                 }
@@ -328,17 +334,15 @@ namespace WolvenKit.Modkit.RED4
         {
             var meshName = Path.GetFileNameWithoutExtension(cr2wFileName.Name);
 
-            switch (meshargs.meshExportType)
+            return meshargs.meshExportType switch
             {
-                case MeshExportType.Default:
-                    return _meshTools.ExportMesh(cr2wStream, meshName, cr2wFileName);
-                case MeshExportType.WithMaterials:
-                    return ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName, meshargs.Archives,
-                        meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter);
-                case MeshExportType.WithRig:
-                    return _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream, meshName, cr2wFileName);
-            }
-            return false;
+                MeshExportType.Default => _meshTools.ExportMesh(cr2wStream, meshName, cr2wFileName),
+                MeshExportType.WithMaterials => ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName,
+                    meshargs.Archives, meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter),
+                MeshExportType.WithRig => _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream,
+                    meshName, cr2wFileName),
+                _ => false
+            };
         }
 
         private bool UncookWem(string infile, string outfile)

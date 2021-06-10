@@ -17,7 +17,7 @@ namespace CP77Tools.Tasks
         #region Methods
 
         public void UncookTask(string[] path, string outpath, string rawOutDir,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle,
+            EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
             ECookedFileFormat forcebuffers)
         {
             if (path == null || path.Length < 1)
@@ -33,7 +33,7 @@ namespace CP77Tools.Tasks
         }
 
         private void UncookTaskInner(string path, string outpath, string rawOutDir,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex, bool unbundle,
+            EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
             ECookedFileFormat forcebuffers)
         {
             #region checks
@@ -67,22 +67,38 @@ namespace CP77Tools.Tasks
             var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
-            var exportArgs = new GlobalExportArgs().Register(
-                new XbmExportArgs()
-                {
-                    UncookExtension = uext,
-                    Flip = flip
-                }
-            );
-
             #endregion checks
+
+            var exportArgs = new GlobalExportArgs().Register(
+                _xbmExportArgs.Value,
+                _meshExportArgs.Value,
+                _morphTargetExportArgs.Value,
+                _mlmaskExportArgs.Value,
+                _wemExportArgs.Value
+            );
+            if (flip != null)
+            {
+                exportArgs.Get<XbmExportArgs>().Flip = flip.Value;
+            }
+            if (uext != null)
+            {
+                exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
+                exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
+            }
+
+            var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
+            if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
+            {
+                var bm = new ArchiveManager(_hashService);
+                bm.LoadFromFolder(archiveDepot);
+                exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
+            }
 
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
                 var archiveManager = new ArchiveManager(_hashService);
                 archiveManager.LoadFromFolder(basedir.FullName);
-                // TODO: use the manager here?
                 archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
             else
