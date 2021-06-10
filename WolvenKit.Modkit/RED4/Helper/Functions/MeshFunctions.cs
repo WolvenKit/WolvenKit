@@ -694,7 +694,7 @@ namespace CP77.CR2W
                     weights[i, e] = gbr.ReadByte() / 255f;
                     sum += weights[i, e];
                 }
-                if(sum == 0)
+                if(sum == 0 && weightcount > 0)
                 {
                     boneindices[i, 0] = 0;
                     weights[i, 0] = 1f;
