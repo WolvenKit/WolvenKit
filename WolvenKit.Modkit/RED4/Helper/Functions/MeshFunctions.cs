@@ -687,10 +687,17 @@ namespace CP77.CR2W
             // getting weights
             for (int i = 0; i < vertCount; i++)
             {
+                float sum = 0;
                 gfs.Position = vertOffset + i * vpStride + 8 + weightcount;
                 for (int e = 0; e < weightcount; e++)
                 {
                     weights[i, e] = gbr.ReadByte() / 255f;
+                    sum += weights[i, e];
+                }
+                if(sum == 0)
+                {
+                    boneindices[i, 0] = 0;
+                    weights[i, 0] = 1f;
                 }
             }
             // got weights
