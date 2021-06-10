@@ -409,15 +409,15 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        // [DataRow(ECookedFileFormat.csv)]
-        // [DataRow(ECookedFileFormat.cubemap)]
-        // [DataRow(ECookedFileFormat.envprobe)]
+        [DataRow(ECookedFileFormat.csv)]
+        [DataRow(ECookedFileFormat.cubemap)]
+        [DataRow(ECookedFileFormat.envprobe)]
         [DataRow(ECookedFileFormat.mesh)]
-        // [DataRow(ECookedFileFormat.mlmask)]
+        [DataRow(ECookedFileFormat.mlmask)]
         // [DataRow(ECookedFileFormat.morphtarget)]
-        // [DataRow(ECookedFileFormat.texarray)]
-        // [DataRow(ECookedFileFormat.wem)]
-        // [DataRow(ECookedFileFormat.xbm)]
+        [DataRow(ECookedFileFormat.texarray)]
+        [DataRow(ECookedFileFormat.wem)]
+        [DataRow(ECookedFileFormat.xbm)]
         public void Test_Uncook(ECookedFileFormat extension)
         {
             Environment.SetEnvironmentVariable("WOLVENKIT_ENVIRONMENT", "Testing", EnvironmentVariableTarget.Process);
@@ -452,14 +452,15 @@ namespace WolvenKit.MSTests
             var limit =  Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
             var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
 
-            for (var i = 0; i < filesToTest.Count; i++)
+            Parallel.ForEach(filesToTest, fileEntry =>
+            //foreach (var fileEntry in filesToTest)
             {
-                var fileEntry = filesToTest[i];
                 // skip files without buffers
                 var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
                 if (!hasBuffers)
                 {
-                    continue;
+                    //continue;
+                    return;
                 }
 
                 // uncook
@@ -471,7 +472,7 @@ namespace WolvenKit.MSTests
                     uncookfails.Add(fileEntry);
                 }
             }
-
+            );
 
             if (uncookfails.Count > 0)
             {

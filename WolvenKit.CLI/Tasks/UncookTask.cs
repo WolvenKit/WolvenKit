@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.DDS;
@@ -106,7 +104,7 @@ namespace CP77Tools.Tasks
                 archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
 
-            foreach (var processedarchive in archiveFileInfos)
+            foreach (var fileInfo in archiveFileInfos)
             {
                 // get outdirectory
                 DirectoryInfo outDir;
@@ -114,7 +112,7 @@ namespace CP77Tools.Tasks
                 {
                     outDir = new DirectoryInfo(Path.Combine(
                         basedir.FullName,
-                        processedarchive.Name.Replace(".archive", "")));
+                        fileInfo.Name.Replace(".archive", "")));
                 }
                 else
                 {
@@ -140,7 +138,7 @@ namespace CP77Tools.Tasks
                 }
 
                 // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(processedarchive.FullName, _hashService);
+                var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
 
                 // run
                 if (hash != 0)

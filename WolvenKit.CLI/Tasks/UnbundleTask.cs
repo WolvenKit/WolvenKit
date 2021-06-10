@@ -96,7 +96,7 @@ namespace CP77Tools.Tasks
                 archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
 
-            foreach (var processedarchive in archiveFileInfos)
+            foreach (var fileInfo in archiveFileInfos)
             {
                 // get outdirectory
                 DirectoryInfo outDir;
@@ -104,7 +104,7 @@ namespace CP77Tools.Tasks
                 {
                     outDir = new DirectoryInfo(Path.Combine(
                         basedir.FullName,
-                        processedarchive.Name.Replace(".archive", "")));
+                        fileInfo.Name.Replace(".archive", "")));
                 }
                 else
                 {
@@ -118,12 +118,12 @@ namespace CP77Tools.Tasks
                     {
                         outDir = new DirectoryInfo(Path.Combine(
                             outDir.FullName,
-                            processedarchive.Name.Replace(".archive", "")));
+                            fileInfo.Name.Replace(".archive", "")));
                     }
                 }
 
                 // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(processedarchive.FullName, _hashService);
+                var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
 
                 var isHash = ulong.TryParse(hash, out ulong hashNumber);
 

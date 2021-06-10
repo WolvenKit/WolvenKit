@@ -159,8 +159,8 @@ namespace WolvenKit.Modkit.RED4
             var progress = 0;
             _progressService.Report(0);
 
-            foreach (var info in finalMatchesList)
-            //Parallel.ForEach(finalMatchesList, info =>
+            //foreach (var info in finalMatchesList)
+            Parallel.ForEach(finalMatchesList, info =>
             {
                 if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers))
                 {
@@ -174,7 +174,7 @@ namespace WolvenKit.Modkit.RED4
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             }
-            //);
+            );
 
             foreach (var failed in failedList)
             {
@@ -193,6 +193,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="relPath">if a depot is used the relpath is a relative base path, if no depot is used, the relapth is simply the filename</param>
         /// <param name="settings">GlobalExportSettings</param>
         /// <param name="rawOutDir">the output directory. the outfile is conbined from the rawoutdir and the relative path</param>
+        /// <param name="forcebuffers"></param>
         /// <returns></returns>
         private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings,
             DirectoryInfo rawOutDir, ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
