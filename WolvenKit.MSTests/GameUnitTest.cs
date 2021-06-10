@@ -104,7 +104,8 @@ namespace WolvenKit.MSTests
 
 
             s_bm = new ArchiveManager(hashService);
-            s_bm.LoadFromFolder(gameBinDir.FullName);
+            var archivedir = Path.Combine(gameDirectory.FullName, "archive", "pc", "content");
+            s_bm.LoadFromFolder(archivedir);
             s_groupedFiles = s_bm.GroupedFiles;
 
 

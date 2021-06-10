@@ -409,15 +409,15 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        [DataRow(ECookedFileFormat.csv)]
-        [DataRow(ECookedFileFormat.cubemap)]
-        [DataRow(ECookedFileFormat.envprobe)]
+        // [DataRow(ECookedFileFormat.csv)]
+        // [DataRow(ECookedFileFormat.cubemap)]
+        // [DataRow(ECookedFileFormat.envprobe)]
         [DataRow(ECookedFileFormat.mesh)]
-        [DataRow(ECookedFileFormat.mlmask)]
-        [DataRow(ECookedFileFormat.morphtarget)]
-        [DataRow(ECookedFileFormat.texarray)]
-        [DataRow(ECookedFileFormat.wem)]
-        [DataRow(ECookedFileFormat.xbm)]
+        // [DataRow(ECookedFileFormat.mlmask)]
+        // [DataRow(ECookedFileFormat.morphtarget)]
+        // [DataRow(ECookedFileFormat.texarray)]
+        // [DataRow(ECookedFileFormat.wem)]
+        // [DataRow(ECookedFileFormat.xbm)]
         public void Test_Uncook(ECookedFileFormat extension)
         {
             var ext = $".{extension.ToString()}";

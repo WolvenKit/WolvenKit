@@ -103,6 +103,10 @@ namespace WolvenKit.Modkit.RED4
             {
                 var tempmodel = (new SharpGLTF.Scenes.SceneBuilder()).ToGltf2();
                 DirectoryInfo dir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
+                if (!dir.Exists)
+                {
+                    Directory.CreateDirectory(dir.FullName);
+                }
                 ParseMaterialsUsingArchives(meshStream, ref tempmodel, dir, archives, eUncookExtension);
                 if (isGLBinary)
                     tempmodel.SaveGLB(outfile.FullName);
@@ -136,7 +140,10 @@ namespace WolvenKit.Modkit.RED4
             ModelRoot model = MeshTools.RawRigidMeshesToGLTF(expMeshes);
 
             DirectoryInfo outDir = new DirectoryInfo(outfile.DirectoryName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + "_Textures\\");
-            Directory.CreateDirectory(outDir.FullName);
+            if (!outDir.Exists)
+            {
+                Directory.CreateDirectory(outDir.FullName);
+            }
 
             ParseMaterialsUsingArchives(meshStream, ref model, outDir, archives, eUncookExtension);
 
