@@ -122,7 +122,16 @@
                     <syncfusion:GridCheckBoxColumn
                         AllowEditing="True"
                         HeaderText="#"
-                        MappingName="IsChecked" />
+                        MappingName="IsChecked">
+                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    Command="local:SFDataGridCommands.CheckAndUnCheck"
+                                    CommandParameter="{Binding ElementName=ImportGrid}"
+                                    IsChecked="{Binding Path=IsHeaderChecked}" />
+                            </DataTemplate>
+                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                    </syncfusion:GridCheckBoxColumn>
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         ColumnSizer="Star"
@@ -136,6 +145,9 @@
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="ExportTaskIdentifier" />
                 </syncfusion:SfDataGrid.Columns>
+                <I:Interaction.Behaviors>
+                    <local:Behaviour />
+                </I:Interaction.Behaviors>
             </syncfusion:SfDataGrid>
 
             <!--  Bottom Button Panel Main  -->

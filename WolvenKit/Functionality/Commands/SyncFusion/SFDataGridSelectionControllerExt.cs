@@ -75,10 +75,26 @@ namespace WolvenKit
                 if (SelectedRows.Count == 0)
                 {
                     var row = this.DataGrid.GetRecordAtRowIndex(rowColumnIndex.RowIndex);
-                    (row as ExportableItemViewModel).IsChecked = false;
+                    if (IEVM.IsImportsSelected)
+                    {
+                        (row as ImportableItemViewModel).IsChecked = false;
+                    }
+                    else
+                    {
+                        (row as ExportableItemViewModel).IsChecked = false;
+                    }
                 }
                 else
-                    (SelectedRows[0].RowData as ExportableItemViewModel).IsChecked = true;
+                {
+                    if (IEVM.IsImportsSelected)
+                    {
+                        (SelectedRows[0].RowData as ImportableItemViewModel).IsChecked = true;
+                    }
+                    else
+                    {
+                        (SelectedRows[0].RowData as ExportableItemViewModel).IsChecked = true;
+                    }
+                }
             }
 
             var collectioncount = (IEVM).ExportableItems.Count;
@@ -105,28 +121,65 @@ namespace WolvenKit
             {
                 if (e.Action == NotifyCollectionChangedAction.Reset)
                 {
-                    foreach (ExportableItemViewModel o in (IEVM).ExportableItems)
-                        o.IsChecked = false;
+                    if (IEVM.IsImportsSelected)
+                    {
+                        foreach (ImportableItemViewModel o in (IEVM).ImportableItems)
+                            o.IsChecked = false;
+                    }
+                    else
+                    {
+                        foreach (ExportableItemViewModel o in (IEVM).ExportableItems)
+                            o.IsChecked = false;
+                    }
                 }
                 else if (e.Action == NotifyCollectionChangedAction.Add)
                 {
-                    foreach (ExportableItemViewModel o in e.NewItems)
-                        o.IsChecked = true;
+                    if (IEVM.IsImportsSelected)
+                    {
+                        foreach (ImportableItemViewModel o in e.NewItems)
+                            o.IsChecked = true;
+                    }
+                    else
+                    {
+                        foreach (ExportableItemViewModel o in e.NewItems)
+                            o.IsChecked = true;
+                    }
                 }
                 else if (e.Action == NotifyCollectionChangedAction.Remove)
                 {
-                    foreach (ExportableItemViewModel o in e.OldItems)
-                        o.IsChecked = false;
+                    if (IEVM.IsImportsSelected)
+                    {
+                        foreach (ImportableItemViewModel o in e.OldItems)
+                            o.IsChecked = false;
+                    }
+                    else
+                    {
+                        foreach (ExportableItemViewModel o in e.OldItems)
+                            o.IsChecked = false;
+                    }
                 }
                 else
                 {
-                    if (e.NewItems != null)
-                        foreach (ExportableItemViewModel o in e.NewItems)
-                            o.IsChecked = true;
+                    if (IEVM.IsImportsSelected)
+                    {
+                        if (e.NewItems != null)
+                            foreach (ExportableItemViewModel o in e.NewItems)
+                                o.IsChecked = true;
 
-                    if (e.OldItems != null)
-                        foreach (ExportableItemViewModel o in e.OldItems)
-                            o.IsChecked = false;
+                        if (e.OldItems != null)
+                            foreach (ExportableItemViewModel o in e.OldItems)
+                                o.IsChecked = false;
+                    }
+                    else
+                    {
+                        if (e.NewItems != null)
+                            foreach (ExportableItemViewModel o in e.NewItems)
+                                o.IsChecked = true;
+
+                        if (e.OldItems != null)
+                            foreach (ExportableItemViewModel o in e.OldItems)
+                                o.IsChecked = false;
+                    }
                 }
             }
         }
