@@ -66,7 +66,8 @@ namespace WolvenKit.Modkit.RED4
                 cr2WStream.Seek(0, SeekOrigin.Begin);
                 cr2WStream.CopyTo(fs);
             }
-            #endregion
+
+            #endregion unbundle main file
 
             #region extract buffers
 
@@ -94,7 +95,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            #endregion
+            #endregion extract buffers
         }
 
         /// <summary>
@@ -184,7 +185,6 @@ namespace WolvenKit.Modkit.RED4
             _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {extractedList.Count}/{finalMatchesList.Count} files.");
         }
 
-
         /// <summary>
         /// Extracts and decompresses buffers of a cr2wstream
         /// uncooks buffers to raw format
@@ -203,7 +203,6 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-
 
             var ext = Path.GetExtension(relPath).TrimStart('.');
 
@@ -259,10 +258,13 @@ namespace WolvenKit.Modkit.RED4
             {
                 case ECookedFileFormat.mlmask:
                     return UncookMlmask(cr2wStream, outfile, settings.Get<MlmaskExportArgs>());
+
                 case ECookedFileFormat.mesh:
                     return (HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>()));
+
                 case ECookedFileFormat.morphtarget:
                     return _targetTools.ExportTargets(cr2wStream, outfile);
+
                 case ECookedFileFormat.xbm:
                 {
                     if (settings.Get<XbmExportArgs>() is not { } xbmargs)
@@ -304,7 +306,7 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    #endregion
+                    #endregion texconv
 
                     return true;
                 }
@@ -359,8 +361,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-
-        private bool HandleMesh(Stream cr2wStream , FileInfo cr2wFileName, MeshExportArgs meshargs)
+        private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
         {
             var meshName = Path.GetFileNameWithoutExtension(cr2wFileName.Name);
 
@@ -369,7 +370,7 @@ namespace WolvenKit.Modkit.RED4
                 MeshExportType.Default => _meshTools.ExportMesh(cr2wStream, meshName, cr2wFileName),
                 MeshExportType.WithMaterials => ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName,
                     meshargs.Archives, meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter),
-                MeshExportType.WithRig => _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream,
+                MeshExportType.WithRig => _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream.FirstOrDefault(),
                     meshName, cr2wFileName),
                 _ => false
             };
@@ -458,7 +459,6 @@ namespace WolvenKit.Modkit.RED4
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
-
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
@@ -494,7 +494,6 @@ namespace WolvenKit.Modkit.RED4
 
             const EFormat texformat = EFormat.R8G8B8A8_UNORM;
 
-
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
@@ -526,7 +525,6 @@ namespace WolvenKit.Modkit.RED4
 
             var height = blob.Header.SizeInfo.Height.Value;
             var width = blob.Header.SizeInfo.Width.Value;
-
 
             var compression = Enums.ETextureCompression.TCM_None;
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
@@ -567,7 +565,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault() is {Data: C2dArray redcsv}))
+            if (!(cr2w.Chunks.FirstOrDefault() is { Data: C2dArray redcsv }))
             {
                 return false;
             }
@@ -604,7 +602,6 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-
             if (cr2w.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
                 cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
             {
@@ -633,7 +630,7 @@ namespace WolvenKit.Modkit.RED4
 
             texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
-            #endregion
+            #endregion get xbm data
 
             // extract and write buffer
             DDSUtils.GenerateAndWriteHeader(outstream, new DDSMetadata(width, height, mips, texformat, alignment, false,
