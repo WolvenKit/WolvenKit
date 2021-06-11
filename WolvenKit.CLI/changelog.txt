@@ -1,8 +1,30 @@
-v 1.4.0
-- mesh uncooking, exporting and importing
-- importing, exporting with out directory
-- better UI
-- more command options
+v 1.4
+
+- NEW command "settings": open global settings for uncooking and importing
+- NEW command "archive": options to quickly list all files of an archive or dump the archive to a human-readable form
+
+- updated command "uncook":
+	mesh uncooking to gltf,glb
+	-or: optional raw output directory to seperate raw files from redengine files
+	-u: optionally unbundles all files too
+	--forcebuffers: add an extension to force uncooking into .buffer files instead of raw files (e.g. gltf)
+
+- renamed command rebuild --> import
+	-o: accepts an output folder path to create rebuilt files in
+	-k: keep existing redengine files when rebuilding (if an output directory is selected, it will look there for redengine files)
+	removed "unsaferaw" and other options
+
+- updated command "cr2w":
+	-s: serializes (saves) a cr2w file to a human-readable json file
+	-d: [EXPERIMENTAL] deserializes (loads) a json file and creates a cr2w file from it
+	accepts folders and lists of files as input, as well as output folders
+
+
+- many more hashes
+- faster startup time
+- removed debug command "verify"
+- updated UI
+
 
 v 1.3.6
 - added cr2w serialization and deserialization to/from json and xml
