@@ -5,7 +5,6 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Catel.IoC;
 using CP77Tools.Model;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Interfaces.Core;

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using Catel.IO;
-using Catel.IoC;
 using ProtoBuf;
 using WolvenKit.RED4.CR2W.Archive;
 using RED.CRC64;

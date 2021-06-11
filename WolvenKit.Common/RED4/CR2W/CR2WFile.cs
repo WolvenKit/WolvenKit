@@ -20,7 +20,7 @@ using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W
 {
-    public class CR2WFile : Catel.Data.ObservableObject, IRed4EngineFile
+    public class CR2WFile : ObservableObject, IRed4EngineFile
     {
         #region Enums
         public enum EChunkDisplayMode
@@ -329,7 +329,7 @@ namespace WolvenKit.RED4.CR2W
                 }
 
                 //Update UI
-                RaisePropertyChanged(nameof(Chunks));
+                OnPropertyChanged(nameof(Chunks));
             }
 
             return removed;

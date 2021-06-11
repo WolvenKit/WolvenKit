@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using Catel.IoC;
 using RED.CRC32;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;

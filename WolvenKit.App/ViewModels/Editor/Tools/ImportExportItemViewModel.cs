@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using WolvenKit.Models.Arguments;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Models;
@@ -19,22 +21,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Properties
         /// </summary>
-        public ImportExportArgs Properties
-        {
-            get => _properties;
-            set
-            {
-                if (_properties != value)
-                {
-                    var oldValue = _properties;
-                    _properties = value;
-                    RaisePropertyChanged(() => Properties, oldValue, value);
-                    RaisePropertyChanged(() => ExportTaskIdentifier);
-                }
-            }
-        }
-
-        private ImportExportArgs _properties;
+        public ImportExportArgs Properties { get; set; }
 
         public string ExportTaskIdentifier => Properties.ToString();
 
@@ -53,7 +40,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             BaseFile = model;
             Properties = DecideImportOptions(model);
+
+            Properties.PropertyChanged += PropertiesOnPropertyChanged;
         }
+
+        private void PropertiesOnPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(nameof(Properties));
 
         private ImportArgs DecideImportOptions(FileModel model)
         {
@@ -77,7 +68,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             BaseFile = model;
             Properties = DecideExportOptions(model);
+
+            Properties.PropertyChanged += PropertiesOnPropertyChanged;
         }
+
+        private void PropertiesOnPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(nameof(Properties));
 
         private ExportArgs DecideExportOptions(FileModel model)
         {

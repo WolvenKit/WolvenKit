@@ -1,12 +1,10 @@
 using System;
 using System.IO;
-using Catel.IoC;
 using ProtoBuf;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
-using ServiceLocator = Catel.IoC.ServiceLocator;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {

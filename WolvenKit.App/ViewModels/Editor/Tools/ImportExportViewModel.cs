@@ -9,8 +9,10 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Models.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -315,9 +317,11 @@ namespace WolvenKit.ViewModels.Editor
             {
                 if (item.Properties is MeshExportArgs meshExportArgs)
                 {
-                    var cp77controller = _gameController.GetController() as Cp77Controller;
-                    var archivemanager = cp77controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
-                    meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    {
+                        var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                        meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                    }
                 }
 
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);

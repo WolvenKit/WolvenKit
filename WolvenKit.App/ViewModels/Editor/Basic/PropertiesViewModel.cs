@@ -14,6 +14,7 @@ using Catel.Services;
 using CP77.CR2W;
 using Microsoft.Win32;
 using NAudio.Wave;
+using WolvenKit.Models.Arguments;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
