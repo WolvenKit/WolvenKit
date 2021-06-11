@@ -184,7 +184,7 @@ namespace WolvenKit.ViewModels.Editor
             ProcessAllCommand = new RelayCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new RelayCommand(ExecuteProcessSelected, CanProcessSelected);
 
-            CopyArgumentsTemplateToCommand = new RelayCommand(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
+            CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
 
             _watcherService.Files
                 .Connect()
@@ -217,10 +217,18 @@ namespace WolvenKit.ViewModels.Editor
 
         public ICommand CopyArgumentsTemplateToCommand { get; private set; }
 
-        private bool CanCopyArgumentsTemplateTo() => true;
+        private bool CanCopyArgumentsTemplateTo(string param) => true;
 
-        private void ExecuteCopyArgumentsTemplateTo()
+        private void ExecuteCopyArgumentsTemplateTo(string param)
         {
+            if (param == "Selected in Grid")
+            {
+
+            }
+            else if (param == "All in Grid")
+            {
+
+            }
         }
 
         /// <summary>
