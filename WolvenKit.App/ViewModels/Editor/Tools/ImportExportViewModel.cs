@@ -25,6 +25,8 @@ namespace WolvenKit.ViewModels.Editor
 {
     public class ImportExportViewModel : ToolViewModel
     {
+        private const string s_selectedInGrid = "Selected in Grid";
+
         /// <summary>
         /// Identifies the <see ref="ContentId"/> of this tool window.
         /// </summary>
@@ -64,6 +66,8 @@ namespace WolvenKit.ViewModels.Editor
         /// Selected Import Item
         /// </summary>
         public ImportableItemViewModel SelectedImport { get; set; }
+
+        public ObservableCollection<ImportableItemViewModel> SelectedImports { get; set; }
 
         /// <summary>
         /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
@@ -147,6 +151,8 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private readonly IGameControllerFactory _gameController;
 
+        
+
         /// <summary>
         /// Import Export ViewModel Constructor
         /// </summary>
@@ -180,6 +186,8 @@ namespace WolvenKit.ViewModels.Editor
             _gameController = gameController;
 
             SetupToolDefaults();
+
+            SelectedImports = new ObservableCollection<ImportableItemViewModel>();
 
             ProcessAllCommand = new RelayCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new RelayCommand(ExecuteProcessSelected, CanProcessSelected);
@@ -221,13 +229,43 @@ namespace WolvenKit.ViewModels.Editor
 
         private void ExecuteCopyArgumentsTemplateTo(string param)
         {
-            if (param == "Selected in Grid")
+            var current = SelectedObject.Properties;
+            
+            if (IsImportsSelected)
             {
+                if (current is not ImportArgs importArgs)
+                {
+                    return;
+                }
 
+                var results = param switch
+                {
+                    s_selectedInGrid => ImportableItems.Where(_ => _.IsChecked),
+                    _ => ImportableItems
+                };
+
+                foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
+                {
+                    item.Properties = importArgs;
+                }
             }
-            else if (param == "All in Grid")
+            else
             {
+                if (current is not ExportArgs exportArgs)
+                {
+                    return;
+                }
 
+                var results = param switch
+                {
+                    s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
+                    _ => ExportableItems
+                };
+
+                foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
+                {
+                    item.Properties = exportArgs;
+                }
             }
         }
 
@@ -299,6 +337,8 @@ namespace WolvenKit.ViewModels.Editor
         /// Process selected in Import / Export Grid Command
         /// </summary>
         public ICommand ProcessSelectedCommand { get; private set; }
+
+        
 
         /// <summary>
         /// Can Process Selected Bool.
