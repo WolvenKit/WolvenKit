@@ -1,4 +1,3 @@
-
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,7 +13,6 @@ namespace WolvenKit.Views.Editor
 {
     public partial class ImportExportView
     {
-
         /// <summary>
         /// Constructor I/E Tool.
         /// </summary>
@@ -41,7 +39,8 @@ namespace WolvenKit.Views.Editor
                     XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ImportSelected.Extension);
                     XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ImportSelected.Name);
                 }
-                else{throw new ArgumentOutOfRangeException();}
+                else
+                { throw new ArgumentOutOfRangeException(); }
             }
             else
             {
@@ -53,7 +52,8 @@ namespace WolvenKit.Views.Editor
                     XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ExportSelected.Extension);
                     XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ExportSelected.Name);
                 }
-                else{throw new ArgumentOutOfRangeException();}
+                else
+                { throw new ArgumentOutOfRangeException(); }
             }
         }
 
@@ -78,10 +78,12 @@ namespace WolvenKit.Views.Editor
         /// <param name="e"></param>
         private void PropertyGrid_CollectionEditorOpening(object sender, Syncfusion.Windows.PropertyGrid.CollectionEditorOpeningEventArgs e)
         {
-            e.Cancel=true;
+            e.Cancel = true;
             XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e) => HelpOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) => HelpOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
     }
 }
-
