@@ -17,6 +17,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W.Archive;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
+using Orchestra.Services;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -41,29 +42,11 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private readonly ModTools _modTools;
 
-        /// <summary>
-        /// Private Logger Service
-        /// </summary>
         private readonly ILoggerService _loggerService;
-
-        /// <summary>
-        /// Private Message Service
-        /// </summary>
         private readonly IMessageService _messageService;
-
-        /// <summary>
-        /// Private Project Manager
-        /// </summary>
+        private readonly IGrowlNotificationService _notificationService;
         private readonly IProjectManager _projectManager;
-
-        /// <summary>
-        /// Private WatcherService
-        /// </summary>
         private readonly IWatcherService _watcherService;
-
-        /// <summary>
-        /// Private GameController
-        /// </summary>
         private readonly IGameControllerFactory _gameController;
 
         /// <summary>
@@ -86,7 +69,7 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
 
-        #endregion
+        #endregion fields
 
         /// <summary>
         /// Import Export ViewModel Constructor
@@ -102,6 +85,7 @@ namespace WolvenKit.ViewModels.Editor
            ILoggerService loggerService,
            IMessageService messageService,
            IWatcherService watcherService,
+           IGrowlNotificationService notificationService,
            IGameControllerFactory gameController,
            ModTools modTools
            ) : base(ToolTitle)
@@ -112,6 +96,7 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => watcherService);
             Argument.IsNotNull(() => modTools);
             Argument.IsNotNull(() => gameController);
+            Argument.IsNotNull(() => notificationService);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -119,6 +104,7 @@ namespace WolvenKit.ViewModels.Editor
             _watcherService = watcherService;
             _modTools = modTools;
             _gameController = gameController;
+            _notificationService = notificationService;
 
             SetupToolDefaults();
 
@@ -147,8 +133,6 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         #region properties
-
-       
 
         /// <summary>
         /// Public Importable Items
@@ -212,13 +196,12 @@ namespace WolvenKit.ViewModels.Editor
             set => _CurrentSelectionInGridName = value;
         }
 
-
         /// <summary>
         /// Is Import Selected, if false Export is default.
         /// </summary>
         public bool IsImportsSelected { get; set; }
 
-        #endregion
+        #endregion properties
 
         public ICommand CopyArgumentsTemplateToCommand { get; private set; }
 
@@ -227,7 +210,7 @@ namespace WolvenKit.ViewModels.Editor
         private void ExecuteCopyArgumentsTemplateTo(string param)
         {
             var current = SelectedObject.Properties;
-            
+
             if (IsImportsSelected)
             {
                 if (current is not ImportArgs importArgs)
@@ -264,6 +247,7 @@ namespace WolvenKit.ViewModels.Editor
                     item.Properties = exportArgs;
                 }
             }
+            _notificationService.Success($"Template has been copied to the selected items.");
         }
 
         public bool IsProcessing { get; set; } = false;
@@ -301,6 +285,7 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
             IsProcessing = false;
+            _notificationService.Success($"Files have been processed and are available in the Project Explorer");
         }
 
         /// <summary>
@@ -314,7 +299,8 @@ namespace WolvenKit.ViewModels.Editor
             if (fi.Exists)
             {
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
-                await Task.Run(() =>  _modTools.Import(fi, settings, new DirectoryInfo(proj.ModDirectory)));
+                await Task.Run(() => _modTools.Import(fi, settings, new DirectoryInfo(proj.ModDirectory)));
+                _notificationService.Success($"File has been processed and is available in the Project Explorer");
             }
         }
 
@@ -339,6 +325,8 @@ namespace WolvenKit.ViewModels.Editor
                 await Task.Run(() => _modTools.Export(fi, settings,
                     new DirectoryInfo(proj.ModDirectory),
                     new DirectoryInfo(proj.RawDirectory)));
+
+                _notificationService.Success($"File has been processed and is available in the Project Explorer");
             }
         }
 
@@ -374,6 +362,7 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
             IsProcessing = false;
+            _notificationService.Success($"Files have been processed and are available in the Project Explorer");
         }
 
         /// <summary>
