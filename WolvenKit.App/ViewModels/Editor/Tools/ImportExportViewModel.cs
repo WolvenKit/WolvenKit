@@ -269,6 +269,8 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        public bool IsProcessing { get; set; } = false;
+
         /// <summary>
         /// Can Process all Bool
         /// </summary>
@@ -280,6 +282,8 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private void ExecuteProcessAll()
         {
+            IsProcessing = true;
+
             if (IsImportsSelected)
             {
                 foreach (var item in ImportableItems)
@@ -294,6 +298,7 @@ namespace WolvenKit.ViewModels.Editor
                     ExportSingle(item);
                 }
             }
+            IsProcessing = false;
         }
 
         /// <summary>
@@ -351,6 +356,7 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private void ExecuteProcessSelected()
         {
+            IsProcessing = true;
             if (IsImportsSelected)
             {
                 foreach (var item in ImportableItems.Where(_ => _.IsChecked))
@@ -365,6 +371,7 @@ namespace WolvenKit.ViewModels.Editor
                     ExportSingle(item);
                 }
             }
+            IsProcessing = false;
         }
 
         /// <summary>
