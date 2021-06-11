@@ -142,7 +142,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             }
             else
             {
-                ms.SetLength(0);
+                inmeshStream.SetLength(0);
                 ms.CopyTo(inmeshStream);
             }
             return true;
