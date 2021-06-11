@@ -243,7 +243,7 @@
                             BorderBrush="{DynamicResource ContentBackgroundAlt}"
                             BorderThickness="1"
                             Command="{Binding CopyArgumentsTemplateToCommand}"
-                            CommandParameter="{Binding SelectedItem, ElementName=ToThese}"
+                            CommandParameter="{Binding Path=SelectedItem.Content, ElementName=ToThese}"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">
                             <StackPanel Orientation="Horizontal">
