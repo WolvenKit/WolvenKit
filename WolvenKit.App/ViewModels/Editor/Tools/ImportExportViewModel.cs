@@ -300,7 +300,6 @@ namespace WolvenKit.ViewModels.Editor
             {
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 await Task.Run(() => _modTools.Import(fi, settings, new DirectoryInfo(proj.ModDirectory)));
-                _notificationService.Success($"File has been processed and is available in the Project Explorer");
             }
         }
 
@@ -326,7 +325,6 @@ namespace WolvenKit.ViewModels.Editor
                     new DirectoryInfo(proj.ModDirectory),
                     new DirectoryInfo(proj.RawDirectory)));
 
-                _notificationService.Success($"File has been processed and is available in the Project Explorer");
             }
         }
 
