@@ -166,26 +166,6 @@
                             Background="{DynamicResource ContentBackground}"
                             BorderBrush="{DynamicResource ContentBackgroundAlt}"
                             BorderThickness="1"
-                            FontSize="12"
-                            Style="{DynamicResource ButtonCustom}">
-                            <StackPanel Orientation="Horizontal">
-                                <iconPacks:PackIconFontAwesome
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Kind="CheckDoubleSolid" />
-
-                                <TextBlock Text="Select All" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button
-                            Margin="5,0,5,0"
-                            Padding="2,0,2,0"
-                            Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                            BorderThickness="1"
                             Command="{Binding ProcessSelectedCommand}"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">
@@ -262,6 +242,8 @@
                             Background="{DynamicResource ContentBackground}"
                             BorderBrush="{DynamicResource ContentBackgroundAlt}"
                             BorderThickness="1"
+                            Command="{Binding CopyArgumentsTemplateToCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=ToThese}"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">
                             <StackPanel Orientation="Horizontal">
@@ -276,6 +258,7 @@
                         </Button>
                         <TextBlock Text="settings from selected file to : " />
                         <syncfusion:ComboBoxAdv
+                            x:Name="ToThese"
                             VerticalAlignment="Center"
                             FontSize="12"
                             SelectedIndex="0"

@@ -184,6 +184,8 @@ namespace WolvenKit.ViewModels.Editor
             ProcessAllCommand = new RelayCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new RelayCommand(ExecuteProcessSelected, CanProcessSelected);
 
+            // CopyArgumentsTemplateToCommand = new RelayCommand(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
+
             _watcherService.Files
                 .Connect()
                 .Filter(_ => _.IsImportable)
@@ -212,6 +214,8 @@ namespace WolvenKit.ViewModels.Editor
         /// Process all in Import / Export Grid Command.
         /// </summary>
         public ICommand ProcessAllCommand { get; private set; }
+
+        public ICommand CopyArgumentsTemplateToCommand { get; private set; }
 
         /// <summary>
         /// Can Process all Bool
