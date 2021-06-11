@@ -70,6 +70,8 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : SelectedExport;
 
+        public bool? IsHeaderChecked { get; set; }
+
         /// <summary>
         /// Private NameOf Selected Item in Grid.
         /// </summary>
