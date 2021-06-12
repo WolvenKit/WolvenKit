@@ -1,3 +1,10 @@
+v 1.4.1
+- added ttf <--> fnt conversions (affects uncook/export/import command)
+- fixed a bug where appsettings for dotnet tool were not detected properly
+- fixed a bug where cr2w serialize would stop on reading a faulty file
+- fixed a bug where archives would not pack correctly
+- fixed a bug where mesh importing would not change the original file
+
 v 1.4
 
 - NEW command "settings": open global settings for uncooking and importing
