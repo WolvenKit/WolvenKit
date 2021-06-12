@@ -2,6 +2,7 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
+using System.Reflection;
 using Catel.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;

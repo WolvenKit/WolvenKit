@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IO;
 using CP77.CR2W;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +27,10 @@ namespace WolvenKit.CLI
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, configuration) =>
                 {
-                    configuration
-                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                    var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                    configuration.SetBasePath(assemblyFolder);
+                    configuration.AddJsonFile("appsettings.json");
                 })
                 .ConfigureLogging(logging =>
                 {
