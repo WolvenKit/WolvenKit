@@ -58,6 +58,25 @@ namespace WolvenKit.Modkit.RED4
                 return null;
             }
 
+            // get files
+            var includedExtensions = Enum.GetNames<ERedExtension>();
+            var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
+            var parentfiles = allfiles
+                .Where(_ => includedExtensions.Any(x => _.TrimmedExtension().ToLower() == x));
+            var fileInfos = parentfiles
+                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
+                .ToList();
+
+            _loggerService.Info($"Found {fileInfos.Count} bundle entries to pack.");
+
+            var customPaths = (from fileInfo in fileInfos
+                select fileInfo.FullName.RelativePath(infolder)
+                into relpath
+                let hash = FNV1A64HashAlgorithm.HashString(relpath)
+                where !_hashService.Contains(hash)
+                select relpath).ToList();
+
+
             var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
             var ar = new Archive
             {
@@ -66,34 +85,33 @@ namespace WolvenKit.Modkit.RED4
             using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
 
+
+
             #region write header
 
             bw.WriteHeader(ar.Header);
             bw.Write(new byte[132]); // some weird padding
 
+
+            #region write custom data
+
+            long customDataLength = 0;
+            if (customPaths.Count > 0)
+            {
+                var wfooter = new LxrsFooter(customPaths);
+                wfooter.Write(bw);
+                customDataLength = bw.BaseStream.Position - Header.EXTENDED_SIZE;
+            }
+
+
+            #endregion
+
+
             #endregion write header
 
             #region write files
 
-            var exludedExtensions = new[]
-            {
-                ".buffer",
-                ".dds",
-                ".DS_Store", //Hooray for OSX
-            };
-            var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
-            var parentfiles = allfiles
-                .Where(_ => exludedExtensions.All(x => _.Extension.ToLower() != x));
-            var fileInfos = parentfiles
-                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
-                .ToList();
-            var customPaths = new List<string>();
-
-
-            _loggerService.Info($"Found {fileInfos.Count} bundle entries to pack.");
-
-            Thread.Sleep(1000);
-            int progress = 0;
+            var progress = 0;
             _progressService.Report(0);
             foreach (var fileInfo in fileInfos)
             {
@@ -223,24 +241,16 @@ namespace WolvenKit.Modkit.RED4
             bw.PadUntilPage();
             var filesize = bw.BaseStream.Position;
 
+            #endregion write footer
+
+
             // write the header again
             ar.Header.IndexPosition = (ulong)tableoffset;
             ar.Header.IndexSize = (uint)tablesize;
             ar.Header.Filesize = (ulong)filesize;
             bw.BaseStream.Seek(0, SeekOrigin.Begin);
             bw.WriteHeader(ar.Header);
-
-            #endregion write footer
-
-            #region write custom footer
-            if (customPaths.Count > 0)
-            {
-                bw.BaseStream.Seek(0, SeekOrigin.End);
-
-                var wfooter = new LxrsFooter(customPaths);
-                wfooter.Write(bw);
-            }
-            #endregion
+            bw.Write(customDataLength);
 
             return ar;
         }

@@ -25,27 +25,31 @@ namespace WolvenKit.Common.Services
 
             using var mmf = MemoryMappedFile.CreateFromFile(path, FileMode.Open);
 
-            using (var vs = mmf.CreateViewStream(0, Header.SIZE, MemoryMappedFileAccess.Read))
+
+            // read header
+            uint customDataLength = 0;
+
+            using (var vs = mmf.CreateViewStream(0, Header.EXTENDED_SIZE, MemoryMappedFileAccess.Read))
             using (var br = new BinaryReader(vs))
             {
                 ar.Header = ReadHeader(br);
+                customDataLength = br.ReadUInt32();
             }
 
-            // custom
-
+            // read custom
             try
             {
-
-                var a = mmf.CreateViewAccessor((long)ar.Header.Filesize, 0, MemoryMappedFileAccess.Read);
-
-                using var vs = mmf.CreateViewStream((long)ar.Header.Filesize, 0, MemoryMappedFileAccess.Read);
-                using var br = new BinaryReader(vs);
-                if (br.BaseStream.Length >= LxrsFooter.MIN_LENGTH)
+                if (customDataLength != 0)
                 {
-                    var lxrs = br.ReadLxrsFooter(_hashService);
-                    foreach (var s in lxrs.FileInfos)
+                    using var vs = mmf.CreateViewStream(Header.EXTENDED_SIZE, customDataLength, MemoryMappedFileAccess.Read);
+                    using var br = new BinaryReader(vs);
+                    if (br.BaseStream.Length >= LxrsFooter.MIN_LENGTH)
                     {
-                        _hashService.Add(s);
+                        var lxrs = br.ReadLxrsFooter(_hashService);
+                        foreach (var s in lxrs.FileInfos)
+                        {
+                            _hashService.Add(s);
+                        }
                     }
                 }
             }
@@ -55,8 +59,7 @@ namespace WolvenKit.Common.Services
 
             }
 
-
-
+            // read files
             using (var vs = mmf.CreateViewStream((long)ar.Header.IndexPosition, ar.Header.IndexSize,
             MemoryMappedFileAccess.Read))
             using (var br = new BinaryReader(vs))
@@ -73,7 +76,7 @@ namespace WolvenKit.Common.Services
             return ar;
         }
 
-       private static LxrsFooter ReadLxrsFooter(this BinaryReader br, IHashService _hashService)
+        private static LxrsFooter ReadLxrsFooter(this BinaryReader br, IHashService _hashService)
        {
            var customPaths = new List<string>();
            var footer = new LxrsFooter(customPaths);
