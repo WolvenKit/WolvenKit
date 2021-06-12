@@ -273,7 +273,7 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                     EFormat texformat;
-                    var ddspath = Path.ChangeExtension(outfile.FullName, "dds");
+                    var ddspath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
                     if (!UncookXbm(cr2wStream, ddspath, out texformat))
                     {
                         return false;
@@ -330,7 +330,7 @@ namespace WolvenKit.Modkit.RED4
                         using var ms = new MemoryStream();
                         return UncookCubeMap(cr2wStream, ms);
                     }
-                    var newpath = Path.ChangeExtension(outfile.FullName, "dds");
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookCubeMap(cr2wStream, ddsStream);
                 }
@@ -341,7 +341,7 @@ namespace WolvenKit.Modkit.RED4
                         using var ms = new MemoryStream();
                         return UncookEnvprobe(cr2wStream, ms);
                     }
-                    var newpath = Path.ChangeExtension(outfile.FullName, "dds");
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookEnvprobe(cr2wStream, ddsStream);
                 }
@@ -352,13 +352,43 @@ namespace WolvenKit.Modkit.RED4
                         using var ms = new MemoryStream();
                         return UncookTexarray(cr2wStream, ms);
                     }
-                    var newpath = Path.ChangeExtension(outfile.FullName, "dds");
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookTexarray(cr2wStream, ddsStream);
+                }
+                case ECookedFileFormat.fnt:
+                {
+                    if (WolvenTesting.IsTesting)
+                    {
+                        using var ms = new MemoryStream();
+                        return UncookFont(cr2wStream, ms);
+                    }
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.ttf.ToString());
+                    using var ttfStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
+                    return UncookFont(cr2wStream, ttfStream);
                 }
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
+        }
+
+        private bool UncookFont(Stream redstream, Stream outstream)
+        {
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(redstream);
+            if (cr2w == null)
+            {
+                return false;
+            }
+
+            if (cr2w.Chunks.FirstOrDefault()?.REDType != nameof(rendFont))
+            {
+                return false;
+            }
+
+            var b = cr2w.Buffers[0];
+            redstream.Seek(b.Offset, SeekOrigin.Begin);
+            redstream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+            return true;
         }
 
         private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
@@ -479,8 +509,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CReflectionProbeDataResource probe) ||
-                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
+            if (cr2w.Chunks.FirstOrDefault()?.Data is not CReflectionProbeDataResource probe ||
+                cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }

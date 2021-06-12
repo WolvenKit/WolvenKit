@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+
 namespace WolvenKit.Common
 {
     public enum ERedExtension
@@ -165,7 +167,8 @@ namespace WolvenKit.Common
         cubemap,
         envprobe,
         texarray,
-        morphtarget
+        morphtarget,
+        fnt
     }
 
     /// <summary>
@@ -177,7 +180,8 @@ namespace WolvenKit.Common
         dds,
         fbx,
         gltf,
-        glb
+        glb,
+        ttf
     }
 
     /// <summary>

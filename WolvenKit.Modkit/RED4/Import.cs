@@ -93,6 +93,8 @@ namespace WolvenKit.Modkit.RED4
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
                     return ImportMesh(rawFile, outDir, args.Get<MeshImportArgs>());
+                case ERawFileFormat.ttf:
+                    return ImportTtf(rawFile, outDir, args.Get<CommonImportArgs>());
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -157,7 +159,7 @@ namespace WolvenKit.Modkit.RED4
             var rawFilesList = allFiles.Where(_ => _.Extension.ToLower() != ".buffer");
             foreach (var fi in rawFilesList)
             {
-                var ext = fi.Extension();
+                var ext = fi.TrimmedExtension();
                 if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
                 {
                     continue;
@@ -169,13 +171,112 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
+        private bool ImportTtf(FileInfo rawFile, DirectoryInfo outDir, CommonImportArgs args)
+        {
+            var rawExt = rawFile.Extension.TrimStart('.');
+            if (args.Keep)
+            {
+                var buffer = new FileInfo(rawFile.FullName);
+                var filename = rawFile.Name;
+                var redfile = FindRedFile(outDir, filename);
+
+                if (string.IsNullOrEmpty(redfile))
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {filename}");
+                    return false;
+                }
+
+                using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
+                var result = Rebuild(fileStream, new List<FileInfo>() { buffer });
+
+                if (result)
+                {
+                    _loggerService.Success($"Rebuilt {redfile} with buffers");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild {redfile} with buffers");
+                }
+
+                return result;
+            }
+            else
+            {
+                // create redengine file
+                var red = new CR2WFile();
+                var font = new rendFont(red, null, nameof(rendFont));
+                font.CookingPlatform = new CEnum<Enums.ECookingPlatform>(red, font, "cookingPlatform")
+                {
+                    Value = Enums.ECookingPlatform.PLATFORM_PC,
+                    IsSerialized = true
+                };
+                font.FontBuffer = new DataBuffer(red, font, "fontBuffer"){IsSerialized = true};
+                font.FontBuffer.Buffer.SetValue((ushort)1);
+
+                // add chunk
+                red.CreateChunk(font, 0);
+
+                // add fake buffer
+                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
+
+                // write main file
+                using var ms = new MemoryStream();
+                using var bw = new BinaryWriter(ms);
+                red.Write(bw);
+
+                // write buffer
+                var offset = (uint)bw.BaseStream.Position;
+                var inbuffer = File.ReadAllBytes(rawFile.FullName);
+                var (zsize, crc) = bw.CompressAndWrite(inbuffer);
+
+                // add buffer info
+                red.Buffers[0] = new CR2WBufferWrapper(new CR2WBuffer()
+                {
+                    flags = 0xE0000, //TODO: find out what to set here, but for fnt files these are always 0xE0000
+                    index = (uint)0,
+                    offset = offset,
+                    diskSize = zsize,
+                    memSize = (uint)inbuffer.Length,
+                    crc32 = crc
+                });
+
+                // write header again to update the buffer info
+                bw.Seek(0, SeekOrigin.Begin);
+                red.WriteHeader(bw);
+
+                // write to file
+                var redpath = Path.ChangeExtension(rawFile.FullName, ECookedFileFormat.fnt.ToString());
+                using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
+                ms.Seek(0, SeekOrigin.Begin);
+                ms.CopyTo(fs);
+
+                return true;
+            }
+
+
+
+        }
+
+        private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
+            rawextension switch
+            {
+                ERawFileFormat.tga => ECookedFileFormat.xbm,
+                ERawFileFormat.dds => ECookedFileFormat.xbm,
+                ERawFileFormat.fbx => ECookedFileFormat.mesh,
+                ERawFileFormat.gltf => ECookedFileFormat.mesh,
+                ERawFileFormat.glb => ECookedFileFormat.mesh,
+                ERawFileFormat.ttf => ECookedFileFormat.fnt,
+                _ => throw new ArgumentOutOfRangeException(nameof(rawextension), rawextension, null)
+            };
+
+
         public bool ImportXbm(FileInfo rawFile, DirectoryInfo outDir, XbmImportArgs args)
         {
             var rawExt = rawFile.Extension.TrimStart('.');
             // TODO: do this in a working directory?
-            var ddsPath = Path.ChangeExtension(rawFile.FullName, "dds");
+            var ddsPath = Path.ChangeExtension(rawFile.FullName, ERawFileFormat.dds.ToString());
             // convert to dds if not already
-            if (rawExt != "dds")
+            if (rawExt != ERawFileFormat.dds.ToString())
             {
                 try
                 {
@@ -329,17 +430,6 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
-            rawextension switch
-            {
-                ERawFileFormat.tga => ECookedFileFormat.xbm,
-                ERawFileFormat.dds => ECookedFileFormat.xbm,
-                ERawFileFormat.fbx => ECookedFileFormat.mesh,
-                ERawFileFormat.gltf => ECookedFileFormat.mesh,
-                ERawFileFormat.glb => ECookedFileFormat.mesh,
-                _ => throw new ArgumentOutOfRangeException(nameof(rawextension), rawextension, null)
-            };
-
         private static string FindRedFile(DirectoryInfo outDir, string rawfilename)
         {
             var ext = Path.GetExtension(rawfilename).TrimStart('.');
@@ -369,6 +459,7 @@ namespace WolvenKit.Modkit.RED4
             var redfile = files.First().FullName;
             return redfile;
         }
+
         private bool ImportMesh(FileInfo rawFile, DirectoryInfo outDir, MeshImportArgs args)
         {
             if (args.Keep)

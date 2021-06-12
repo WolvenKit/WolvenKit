@@ -34,6 +34,7 @@ namespace WolvenKit.CLI
 {
     internal class Program
     {
+        
         [STAThread]
         public static void Main(string[] args)
         {
@@ -71,60 +72,8 @@ namespace WolvenKit.CLI
 
             var parser = new CommandLineBuilder(rootCommand)
                 .UseDefaults()
-                .UseHost(Host.CreateDefaultBuilder, host =>
-                    {
-                        host
-                            .ConfigureAppConfiguration((hostingContext, configuration) =>
-                            {
-                                configuration
-                                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                            })
-                            .ConfigureLogging(logging =>
-                            {
-                                logging.ClearProviders();
-                                logging.AddColorConsoleLogger(configuration =>
-                                {
-                                    configuration.LogLevels.Add(LogLevel.Warning, ConsoleColor.DarkYellow);
-                                    configuration.LogLevels.Add(LogLevel.Error, ConsoleColor.DarkMagenta);
-                                    configuration.LogLevels.Add(LogLevel.Critical, ConsoleColor.Red);
-                                });
-                            })
-                            .ConfigureServices((hostContext, services) =>
-                            {
-                                services.AddScoped<ILoggerService, MicrosoftLoggerService>();
-                                services.AddScoped<IProgress<double>, PercentProgressService>();
-                                //services.AddScoped<IProgress<double>, ProgressBar>();
-
-                                services.AddSingleton<IHashService, HashService>();
-
-
-                                services.AddScoped<Red4ParserService>();
-                                services.AddScoped<TargetTools>();      //Cp77FileService
-                                services.AddScoped<RIG>();              //Cp77FileService
-                                services.AddScoped<MESHIMPORTER>();     //Cp77FileService
-                                services.AddScoped<MeshTools>();        //RIG, Cp77FileService
-
-                                services.AddScoped<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
-
-                                //services.AddScoped<MaterialTools>();    //ModTools, Cp77FileService, CookingUtilities
-
-                                services.AddOptions<CommonImportArgs>().Bind(hostContext.Configuration.GetSection("CommonImportArgs"));
-                                services.AddOptions<XbmImportArgs>().Bind(hostContext.Configuration.GetSection("XbmImportArgs"));
-                                services.AddOptions<MeshImportArgs>().Bind(hostContext.Configuration.GetSection("MeshImportArgs"));
-
-                                services.AddOptions<XbmExportArgs>().Bind(hostContext.Configuration.GetSection("XbmExportArgs"));
-                                services.AddOptions<MeshExportArgs>().Bind(hostContext.Configuration.GetSection("MeshExportArgs"));
-                                services.AddOptions<MorphTargetExportArgs>().Bind(hostContext.Configuration.GetSection("MorphTargetExportArgs"));
-                                services.AddOptions<MlmaskExportArgs>().Bind(hostContext.Configuration.GetSection("MlmaskExportArgs"));
-                                services.AddOptions<WemExportArgs>().Bind(hostContext.Configuration.GetSection("WemExportArgs"));
-
-                                services.AddScoped<ConsoleFunctions>();
-                            })
-                            ;
-                    })
+                .UseHost(GenericHost.CreateHostBuilder)
                 .Build();
-
-
 
             parser.Invoke(args);
         }

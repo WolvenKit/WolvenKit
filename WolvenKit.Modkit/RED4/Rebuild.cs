@@ -18,7 +18,7 @@ namespace WolvenKit.Modkit.RED4
     {
         #region Methods
 
-        public bool Rebuild(
+        private bool Rebuild(
             Stream redfile,
             IEnumerable<FileInfo> buffers
         )

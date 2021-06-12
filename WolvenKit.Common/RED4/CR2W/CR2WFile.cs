@@ -870,6 +870,9 @@ namespace WolvenKit.RED4.CR2W
             // Write headers again with fixed offsets
             WriteHeader(file);
 
+            // scroll to end after the data chunks
+            file.Seek(0, SeekOrigin.End);
+
             if (AdditionalCr2WFileBytes != null)
             {
                 file.BaseStream.Seek(0, SeekOrigin.End);
