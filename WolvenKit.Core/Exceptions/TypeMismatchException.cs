@@ -8,4 +8,11 @@ namespace WolvenKit.Core.Exceptions
         {
         }
     }
+
+    public class MissingRTTIException : Exception
+    {
+        public MissingRTTIException(string expected) : base($"Missing in wolven rtti (Expected:\"{expected}\")")
+        {
+        }
+    }
 }

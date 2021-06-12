@@ -1,6 +1,8 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
+using Catel.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,14 +25,16 @@ namespace CP77Tools.Commands
             Handler = CommandHandler.Create<IHost>(Action);
         }
 
-        private void Action(IHost host) =>
-            new Process
+        private void Action(IHost host)
+        {
+            var basedir = AppDomain.CurrentDomain.BaseDirectory;
+            var settingsPath = Path.Combine(basedir, "appsettings.json");
+            Console.WriteLine($"Opening {settingsPath}");
+            new Process {StartInfo = new ProcessStartInfo(settingsPath)
             {
-                StartInfo = new ProcessStartInfo(@"appsettings.json")
-                {
-                    UseShellExecute = true
-                }
-            }.Start();
+                UseShellExecute = true
+            }}.Start();
+        }
 
         #endregion Constructors
     }

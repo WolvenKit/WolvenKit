@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 return evar;
             }
 
-            throw new TypeMismatchException(typeof(T).FullName, "");
+            throw new MissingRTTIException(typeof(T).FullName);
         }
 
 

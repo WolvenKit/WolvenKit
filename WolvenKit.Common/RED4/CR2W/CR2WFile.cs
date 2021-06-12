@@ -372,9 +372,9 @@ namespace WolvenKit.RED4.CR2W
 
             // Read Value
             var parsedvar = parent.GetPropertyByREDName(varname);
-            if (parsedvar.REDType != typename)
+            if (parsedvar == null || parsedvar.REDType != typename)
             {
-                throw new TypeMismatchException(typename, parsedvar.REDType);
+                throw new MissingRTTIException(varname);
             }
 
             // The "size" variable read is something a bit strange : it takes itself into account.

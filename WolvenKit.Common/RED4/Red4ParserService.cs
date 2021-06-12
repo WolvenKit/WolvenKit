@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -25,12 +26,17 @@ namespace WolvenKit.RED4.CR2W
         {
             // peak if cr2w
             if (br.BaseStream.Length < 4)
+            {
                 return null;
+            }
+
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             var magic = br.ReadUInt32();
             var isCr2wFile = magic == CR2WFile.MAGIC;
             if (!isCr2wFile)
+            {
                 return null;
+            }
 
             var cr2w = new CR2WFile();
             try
@@ -38,6 +44,11 @@ namespace WolvenKit.RED4.CR2W
                 //TODO: verify cr2w integrity
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 cr2w.Read(br);
+            }
+            catch (MissingRTTIException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
             catch (Exception)
             {

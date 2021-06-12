@@ -14,6 +14,8 @@ namespace WolvenKit.Models
     {
 
         private readonly string _extension = ".default";
+        public const string s_moddir = "wkitmoddir";
+        public const string s_rawdir = "wkitrawdir";
 
         public FileModel(string path)
         {
@@ -107,11 +109,11 @@ namespace WolvenKit.Models
             // hack so that we get proper hashes
             if (fullname.Equals(moddir, StringComparison.Ordinal))
             {
-                return "wkitmoddir";
+                return s_moddir;
             }
             if (fullname.Equals(rawDirectory, StringComparison.Ordinal))
             {
-                return "wkitrawdir";
+                return s_rawdir;
             }
 
             if (fullname.StartsWith(moddir, StringComparison.Ordinal))

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WolvenKit.CLI;
 using WolvenKit.Common;
@@ -111,8 +112,8 @@ namespace CP77Tools.Tasks
 
             int progress = 0;
 
-            foreach (var fileInfo in finalMatchesList)
-            //Parallel.ForEach(finalMatchesList, fileInfo =>
+            //foreach (var fileInfo in finalMatchesList)
+            Parallel.ForEach(finalMatchesList, fileInfo =>
             {
                 var outputDirInfo = string.IsNullOrEmpty(outputDirectory)
                     ? fileInfo.Directory
@@ -130,6 +131,7 @@ namespace CP77Tools.Tasks
                     var cr2w = _wolvenkitFileService.TryReadCr2WFile(fs);
                     if (cr2w == null)
                     {
+                        _loggerService.Error($"Could not parse {infile}.");
                         return;
                     }
 
@@ -201,8 +203,8 @@ namespace CP77Tools.Tasks
                 }
 
                 Interlocked.Increment(ref progress);
-                //});
-            }
+            });
+            //}
 
             watch.Stop();
             _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds.ToString()}ms.");

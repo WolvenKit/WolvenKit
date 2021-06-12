@@ -119,6 +119,10 @@ namespace WolvenKit.ViewModels.Editor
             BindGrid1.Clear();
             foreach (var fileModel in BindGrid)
             {
+                if (fileModel.RelativeName is FileModel.s_moddir or FileModel.s_rawdir)
+                {
+                    fileModel.IsExpanded = true;
+                }
                 BindGrid1.Add(fileModel);
             }
             IsTreeBeingEdited = false;
