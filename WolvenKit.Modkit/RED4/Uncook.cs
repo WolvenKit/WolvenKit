@@ -393,15 +393,22 @@ namespace WolvenKit.Modkit.RED4
 
         private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
         {
-            var meshName = Path.GetFileNameWithoutExtension(cr2wFileName.Name);
-
+            List<Archive> archives = new List<Archive>();
+            foreach(var ar in meshargs.Archives)
+            {
+                string name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
+                if(name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
+                {
+                    archives.Add(ar);
+                }
+            }
             return meshargs.meshExportType switch
             {
-                MeshExportType.Default => _meshTools.ExportMesh(cr2wStream, meshName, cr2wFileName),
-                MeshExportType.WithMaterials => ExportMeshWithMaterialsUsingArchives(cr2wStream, meshName, cr2wFileName,
-                    meshargs.Archives, meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter),
+                MeshExportType.Default => _meshTools.ExportMesh(cr2wStream, cr2wFileName),
+                MeshExportType.WithMaterials => ExportMeshWithMaterialsUsingArchives(cr2wStream, cr2wFileName,
+                    archives, meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter),
                 MeshExportType.WithRig => _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream.FirstOrDefault(),
-                    meshName, cr2wFileName),
+                    cr2wFileName),
                 _ => false
             };
         }
