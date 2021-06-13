@@ -63,7 +63,6 @@
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
                 <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
-
             </syncfusion:SfTreeGrid.Resources>
 
             <ei:Interaction.Triggers>
@@ -81,7 +80,6 @@
                 </ei:EventTrigger>
             </ei:Interaction.Triggers>
 
-
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Name"
@@ -93,7 +91,6 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20" />
                                     <ColumnDefinition Width="*" />
-
                                 </Grid.ColumnDefinitions>
                                 <Image Height="13">
                                     <Image.Style>
@@ -114,8 +111,6 @@
                                                 <DataTrigger Binding="{Binding Extension}" Value=".w2behtree ">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/behavior_graph3.svg}" />
                                                 </DataTrigger>
-
-
 
                                                 <DataTrigger Binding="{Binding Extension}" Value=".env">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/env.svg}" />
@@ -184,9 +179,6 @@
                                                 <DataTrigger Binding="{Binding Extension}" Value="DlcUncookedImageKey">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
                                                 </DataTrigger>
-
-
-
 
                                                 <DataTrigger Binding="{Binding Extension}" Value=".aiarch">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/aiarch.svg}" />
@@ -761,21 +753,10 @@
                                                 <DataTrigger Binding="{Binding Extension}" Value=".w3app">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3app.svg}" />
                                                 </DataTrigger>
-
-
-
-
-
-
-
-
-
                                             </Style.Triggers>
                                         </Style>
                                     </Image.Style>
                                 </Image>
-
-
 
                                 <!--<svgc:SvgViewbox
                                  Width="12"
@@ -819,8 +800,6 @@
                     <MenuItem Header="Export selected - Simple" />
                     <MenuItem Header="Export selected - Advanced" />
 
-
-
                     <Separator Margin="-15" />
 
                     <Separator Margin="-15" />
@@ -836,7 +815,6 @@
                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                 </ContextMenu>
             </syncfusion:SfTreeGrid.ContextMenu>
-
         </syncfusion:SfTreeGrid>
     </Grid>
 </catel:UserControl>

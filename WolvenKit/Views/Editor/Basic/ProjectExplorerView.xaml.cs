@@ -27,12 +27,38 @@ namespace WolvenKit.Views.Editor
     public partial class ProjectExplorerView
     {
         #region Constructors
+
         public static ProjectExplorerView GlobalPEView;
 
         public ProjectExplorerView()
         {
             InitializeComponent();
             GlobalPEView = this;
+
+            TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
+        }
+
+        private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
+        {
+            if (TreeGrid.View != null)
+            {
+                TreeGrid.View.NodeCollectionChanged += View_NodeCollectionChanged;
+            }
+        }
+
+        private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Trace.WriteLine("lets see bois");
+            if (ViewModel is not ProjectExplorerViewModel viewModel)
+            {
+                return;
+            }
+
+            var node = TreeGrid.View.Nodes.RootNodes;
+            foreach (var nerd in node)
+            {
+                TreeGrid.ExpandNode(nerd);
+            }
 
         }
 
@@ -60,8 +86,6 @@ namespace WolvenKit.Views.Editor
         }
 
         #endregion Constructors
-
-
 
         public void ExpandChildren()
         {
@@ -91,7 +115,6 @@ namespace WolvenKit.Views.Editor
 
         private void CollapseChildren_OnClick(object sender, RoutedEventArgs e) => CollapseChildren();
 
-
         public void ExpandAll() => TreeGrid.ExpandAllNodes();
 
         public void CollapseAll() => TreeGrid.CollapseAllNodes();
@@ -99,7 +122,5 @@ namespace WolvenKit.Views.Editor
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAll();
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
-
-
     }
 }
