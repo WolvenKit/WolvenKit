@@ -379,7 +379,7 @@ namespace WolvenKit.Common.Model.Arguments
             [Category("WithRig Settings")]
             [Display(Name = "Select rig(s)")]
             [Description("Select rig(s) to export within your mesh.")]
-            public List<Stream> RigStream { get; set; }
+            public List<string> Rigs { get; set; }             // rigs
 
             /// <summary>
             /// String Override to display info in datagrid.
@@ -398,14 +398,14 @@ namespace WolvenKit.Common.Model.Arguments
             /// </summary>
             [Category("MultiMesh Settings")]
             [Display(Name = "Select additional meshes")]
-            public List<Stream> MultiMeshMeshes { get; set; } = new();
+            public List<string> MultiMeshMeshes { get; set; } = new();      // meshes?
 
             /// <summary>
             /// MultiMesh Rig List.
             /// </summary>
             [Category("MultiMesh Settings")]
             [Display(Name = "Select rig(s)")]
-            public List<Stream> MultiMeshRigs { get; set; } = new();
+            public List<string> MultiMeshRigs { get; set; } = new();        // rigs
 
             /// <summary>
             /// String Override to display info in datagrid.

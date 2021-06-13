@@ -20,6 +20,8 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W.Archive;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 using Orchestra.Services;
+using WolvenKit.Common;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -112,8 +114,10 @@ namespace WolvenKit.ViewModels.Editor
 
             ProcessAllCommand = new TaskCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new TaskCommand(ExecuteProcessSelected, CanProcessSelected);
-
             CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
+            SetCollectionCommand = new RelayCommand(ExecuteSetCollection, CanSetCollection);
+            ConfirmMeshCollectionCommand = new DelegateCommand<string>(ExecuteConfirmMeshCollection, CanConfirmMeshCollection);
+
 
             _watcherService.Files
                 .Connect()
@@ -135,6 +139,9 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         #region properties
+
+        public ObservableCollection<FileEntry> MeshExportAvailableCollection { get; set; } = new();
+        public ObservableCollection<FileEntry> MeshExportSelectedCollection { get; set; } = new();
 
         /// <summary>
         /// Public Importable Items
@@ -204,6 +211,62 @@ namespace WolvenKit.ViewModels.Editor
         public bool IsImportsSelected { get; set; }
 
         #endregion properties
+
+
+
+        public ICommand ConfirmMeshCollectionCommand { get; private set; }
+
+        private bool CanConfirmMeshCollection(string v) => true;
+
+        private void ExecuteConfirmMeshCollection(string v)
+        {
+            if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
+                _gameController.GetController() is not Cp77Controller cp77Controller)
+            {
+                return;
+            }
+
+            // set mesh props
+            switch (v)
+            {
+                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
+                    meshExportArgs.MultiMeshargs.MultiMeshMeshes =
+                        MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                    break;
+                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
+                    meshExportArgs.MultiMeshargs.MultiMeshRigs =
+                        MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                    break;
+                case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
+                    meshExportArgs.WithRigMeshargs.Rigs =
+                        MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        public ICommand SetCollectionCommand { get; private set; }
+
+        private bool CanSetCollection() => true;
+
+        private void ExecuteSetCollection()
+        {
+            if (SelectedExport is not {Properties: MeshExportArgs meshExportArgs} ||
+                _gameController.GetController() is not Cp77Controller cp77Controller)
+            {
+                return;
+            }
+
+            var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+            MeshExportAvailableCollection.Clear();
+            if (archivemanager != null)
+            {
+                MeshExportAvailableCollection.AddRange(archivemanager.GroupedFiles[$".{ERedExtension.rig}"]);
+            }
+        }
+
 
         public ICommand CopyArgumentsTemplateToCommand { get; private set; }
 

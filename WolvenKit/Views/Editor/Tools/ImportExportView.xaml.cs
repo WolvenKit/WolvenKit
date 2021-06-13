@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using Catel.IoC;
+using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -97,6 +100,24 @@ namespace WolvenKit.Views.Editor
         /// <param name="e"></param>
         private void PropertyGrid_CollectionEditorOpening(object sender, Syncfusion.Windows.PropertyGrid.CollectionEditorOpeningEventArgs e)
         {
+            if (ViewModel is ImportExportViewModel vm && sender is PropertyGrid pg)
+            {
+                var propItem = pg.SelectedPropertyItem;
+                switch (propItem.Name)
+                {
+                    case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
+                        break;
+                    case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
+                        break;
+                    case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
+                        break;
+                    default:
+                        break;
+                }
+
+                vm.SetCollectionCommand.SafeExecute();
+            }
+
             e.Cancel = true;
             XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }
@@ -104,5 +125,26 @@ namespace WolvenKit.Views.Editor
         private void Button_Click(object sender, RoutedEventArgs e) => HelpOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
         private void Button_Click_1(object sender, RoutedEventArgs e) => HelpOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+        private void ConfirmCollectionEditorSelection_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is ImportExportViewModel vm && sender is PropertyGrid pg)
+            {
+                var propItem = pg.SelectedPropertyItem;
+                switch (propItem.Name)
+                {
+                    case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
+                        break;
+                    case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
+                        break;
+                    case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
+                        break;
+                    default:
+                        break;
+                }
+
+                vm.ConfirmMeshCollectionCommand.SafeExecute();
+            }
+        }
     }
 }

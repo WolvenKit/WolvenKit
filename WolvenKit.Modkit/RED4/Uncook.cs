@@ -402,15 +402,24 @@ namespace WolvenKit.Modkit.RED4
                     archives.Add(ar);
                 }
             }
-            return meshargs.meshExportType switch
+
+            switch (meshargs.meshExportType)
             {
-                MeshExportType.Default => _meshTools.ExportMesh(cr2wStream, cr2wFileName),
-                MeshExportType.WithMaterials => ExportMeshWithMaterialsUsingArchives(cr2wStream, cr2wFileName,
-                    archives, meshargs.isGLBinary, meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter),
-                MeshExportType.WithRig => _meshTools.ExportMeshWithRig(cr2wStream, meshargs.WithRigMeshargs.RigStream.FirstOrDefault(),
-                    cr2wFileName),
-                _ => false
-            };
+                case MeshExportType.Default:
+                    return _meshTools.ExportMesh(cr2wStream, cr2wFileName);
+                case MeshExportType.WithMaterials:
+                    return ExportMeshWithMaterialsUsingArchives(cr2wStream, cr2wFileName, archives, meshargs.isGLBinary,
+                        meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter);
+                case MeshExportType.WithRig:
+                {
+                    var ms = new MemoryStream();
+                    var filename = meshargs.WithRigMeshargs.Rigs;
+                    return _meshTools.ExportMeshWithRig(cr2wStream, ms,
+                        cr2wFileName);
+                }
+                default:
+                    return false;
+            }
         }
 
         private bool UncookWem(string infile, string outfile)

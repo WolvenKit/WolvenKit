@@ -469,7 +469,21 @@
                     Grid.Column="0"
                     Background="{DynamicResource ContentBackgroundAlt2}">
                     <Grid>
-                        <syncfusion:SfDataGrid x:Name="FileSelectionDataGrid" Margin="0,0,0,40" />
+                        <syncfusion:SfDataGrid x:Name="FileSelectionDataGrid"
+                                               Margin="0,0,0,40"
+                                               ItemsSource="{Binding MeshExportAvailableCollection}"
+                                               AutoGenerateColumns="False"
+                                               >
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridTextColumn
+                                    AllowEditing="False"
+                                    ColumnSizer="AutoLastColumnFill"
+                                    HeaderText="Export Task"
+                                    HorizontalHeaderContentAlignment="Left"
+                                    MappingName="Name" />
+                            </syncfusion:SfDataGrid.Columns>
+
+                        </syncfusion:SfDataGrid>
                         <Border
                             Margin="0"
                             Padding="5"
@@ -507,7 +521,11 @@
                     Grid.Column="2"
                     Background="{DynamicResource ContentBackgroundAlt2}">
                     <Grid>
-                        <syncfusion:SfDataGrid x:Name="SelectedFilesGrid" Margin="0,0,0,40" />
+                        <syncfusion:SfDataGrid x:Name="SelectedFilesGrid"
+                                               Margin="0,0,0,40"
+                                               ItemsSource="{Binding MeshExportSelectedCollection}">
+                            
+                        </syncfusion:SfDataGrid>
                         <Border
                             Margin="0"
                             Padding="5"
@@ -556,7 +574,9 @@
                                         Padding="5"
                                         Background="{DynamicResource ContentBackgroundAlt}"
                                         FontSize="12"
-                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
+                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
+                                        Click="ConfirmCollectionEditorSelection_OnClick"
+                                        >
                                         <StackPanel Orientation="Horizontal">
 
                                             <TextBlock Text="Confirm" />
