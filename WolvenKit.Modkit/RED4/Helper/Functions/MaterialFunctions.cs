@@ -29,7 +29,7 @@ namespace WolvenKit.Modkit.RED4
     public partial class ModTools
     {
         static string cacheDir = Path.GetTempPath() + "WolvenKit\\Material\\Temp\\";
-        public bool ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, string _meshName, FileInfo outfile, bool isGLBinary = true, bool copyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
+        public bool ExportMeshWithMaterialsUsingAssetLib(Stream meshStream, DirectoryInfo assetLib, FileInfo outfile, bool isGLBinary = true, bool copyTextures = false, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
         {
             Directory.CreateDirectory(cacheDir);
             var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
@@ -59,7 +59,7 @@ namespace WolvenKit.Modkit.RED4
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
                 RawMeshContainer mesh = MeshTools.ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
+                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
                 mesh.materialNames = new string[meshinfo.appearances.Count];
@@ -90,7 +90,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ExportMeshWithMaterialsUsingArchives(Stream meshStream, string _meshName, FileInfo outfile, List<Archive> archives, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
+        public bool ExportMeshWithMaterialsUsingArchives(Stream meshStream, FileInfo outfile, List<Archive> archives, bool isGLBinary = true, EUncookExtension eUncookExtension = EUncookExtension.dds, bool LodFilter = true)
         {
             Directory.CreateDirectory(cacheDir);
             var mesh_cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
@@ -126,7 +126,7 @@ namespace WolvenKit.Modkit.RED4
                     meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i],
                     meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i],
                     meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
+                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
                 mesh.materialNames = new string[meshinfo.appearances.Count];

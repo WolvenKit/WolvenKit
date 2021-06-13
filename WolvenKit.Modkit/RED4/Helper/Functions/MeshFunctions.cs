@@ -71,7 +71,6 @@ namespace CP77.CR2W
             }
             var ms = GetMeshBufferStream(meshStream, cr2w);
 
-            var meshName = Path.GetFileNameWithoutExtension(FilePath);
             var meshinfo = GetMeshesinfo(cr2w);
 
             var expMeshes = new List<RawMeshContainer>();
@@ -81,7 +80,7 @@ namespace CP77.CR2W
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
                 RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name = meshName + "_" + i;
+                mesh.name =  "submesh_" + i;
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
                 mesh.materialNames = new string[meshinfo.appearances.Count];
@@ -125,7 +124,7 @@ namespace CP77.CR2W
             return outfile;
         }
 
-        public bool ExportMesh(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var cr2w = _modTools.TryReadRED4File(meshStream);
@@ -180,7 +179,7 @@ namespace CP77.CR2W
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
                 RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
+                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
                 UpdateMeshJoints(ref mesh, Rig, bones);
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
@@ -241,7 +240,7 @@ namespace CP77.CR2W
             }
         }
 
-        public bool ExportMeshWithoutRig(Stream meshStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var cr2w = _modTools.TryReadRED4File(meshStream);
@@ -268,7 +267,7 @@ namespace CP77.CR2W
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
                 RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
+                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
                 mesh.materialNames = new string[meshinfo.appearances.Count];
@@ -291,7 +290,7 @@ namespace CP77.CR2W
             return true;
 
         }
-        public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, List<string> _meshNameS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
@@ -308,7 +307,7 @@ namespace CP77.CR2W
                     if (meshinfo.LODLvl[i] != 1 && LodFilter)
                         continue;
                     RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                    mesh.name = _meshNameS[m] + "_" + i + "_" + meshinfo.LODLvl[i];
+                    mesh.name = m + "_submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
                     mesh.appNames = new string[meshinfo.appearances.Count];
                     mesh.materialNames = new string[meshinfo.appearances.Count];
                     for (int e = 0; e < meshinfo.appearances.Count; e++)
@@ -333,7 +332,7 @@ namespace CP77.CR2W
 
             return true;
         }
-        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, string _meshName, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             RawArmature Rig = _rig.ProcessRig(rigStream);
 
@@ -373,7 +372,7 @@ namespace CP77.CR2W
                 if (meshinfo.LODLvl[i] != 1 && LodFilter)
                     continue;
                 RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                mesh.name = _meshName + "_" + i + "_" + meshinfo.LODLvl[i];
+                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
                 UpdateMeshJoints(ref mesh, Rig, bones);
 
                 mesh.appNames = new string[meshinfo.appearances.Count];
@@ -399,7 +398,7 @@ namespace CP77.CR2W
 
             return true;
         }
-        public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, List<string> _meshNameS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawArmature> Rigs = new List<RawArmature>();
             rigStreamS = rigStreamS.OrderByDescending(r => r.Length).ToList();  // not so smart hacky method to get bodybase rigs on top/ orderby descending
@@ -438,7 +437,7 @@ namespace CP77.CR2W
                     if (meshinfo.LODLvl[i] != 1 && LodFilter)
                         continue;
                     RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                    mesh.name = _meshNameS[m] + "_" + i + "_" + meshinfo.LODLvl[i];
+                    mesh.name = m + "_submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
                     if (meshinfo.weightcounts[i] != 0)   // for static meshes
                         UpdateMeshJoints(ref mesh, expRig, bones);
 
