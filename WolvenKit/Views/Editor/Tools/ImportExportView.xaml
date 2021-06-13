@@ -476,11 +476,13 @@
                                     <!--  Add Button  -->
                                     <Button
                                         Height="30"
-                                        Margin="5,0,5,0"
+                                        Margin="0,0,5,0"
                                         Padding="5"
+                                        Background="{DynamicResource ContentBackgroundAlt}"
                                         FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
+                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconPixelartIcons Kind="AddBoxMultiple" />
 
                                             <TextBlock Text="Add selected file(s)" />
                                         </StackPanel>
@@ -513,11 +515,13 @@
                                     <!--  Renove Button  -->
                                     <Button
                                         Height="30"
-                                        Margin="5,0,5,0"
+                                        Margin="0,0,5,0"
                                         Padding="5"
+                                        Background="{DynamicResource ContentBackgroundAlt}"
                                         FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
+                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconPixelartIcons Kind="RemoveBoxMultiple" />
 
                                             <TextBlock Text="Remove selected file(s)" />
                                         </StackPanel>
@@ -528,9 +532,10 @@
                                         Height="30"
                                         Margin="5,0,5,0"
                                         Padding="5"
+                                        Background="{DynamicResource ContentBackgroundAlt}"
                                         Click="CancelSelectingClick"
                                         FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
+                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">
 
                                             <TextBlock Text="Cancel" />
@@ -541,8 +546,9 @@
                                         Height="30"
                                         Margin="5,0,5,0"
                                         Padding="5"
+                                        Background="{DynamicResource ContentBackgroundAlt}"
                                         FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
+                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">
 
                                             <TextBlock Text="Confirm" />
