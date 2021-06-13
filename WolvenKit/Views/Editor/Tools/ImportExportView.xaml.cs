@@ -6,6 +6,7 @@ using System.Windows;
 using Catel.IoC;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.ViewModels.Editor;
 
@@ -28,32 +29,39 @@ namespace WolvenKit.Views.Editor
         /// <param name="e"></param>
         private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
         {
-            var m_LocalViewModel = ViewModel as ImportExportViewModel;
-            if (m_LocalViewModel.IsImportsSelected)
+            if (ViewModel is not ImportExportViewModel vm)
             {
-                var m_ImportSelected = ImportGrid.SelectedItem as ImportExportItemViewModel;
-                var m_EnumParsedSuccesfully = Enum.TryParse(m_ImportSelected.Extension.TrimStart('.'), out ERawFileFormat RawExtension);
-                if (m_EnumParsedSuccesfully)
+                return;
+            }
+            if (vm.IsImportsSelected)
+            {
+                if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport)
                 {
-                    XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-                    XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ImportSelected.Extension);
-                    XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ImportSelected.Name);
+                    if (Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat _))
+                    {
+                        XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                        XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Extension);
+                        XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Name);
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
                 }
-                else
-                { throw new ArgumentOutOfRangeException(); }
             }
             else
             {
-                var m_ExportSelected = ExportGrid.SelectedItem as ImportExportItemViewModel;
-                var m_EnumParsedSuccesfully = Enum.TryParse(m_ExportSelected.Extension.TrimStart('.'), out ECookedFileFormat Extension);
-                if (m_EnumParsedSuccesfully)
+                if (ExportGrid.SelectedItem is ImportExportItemViewModel selectedExport)
                 {
-                    XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-                    XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ExportSelected.Extension);
-                    XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, m_ExportSelected.Name);
+                    if (Enum.TryParse(selectedExport.Extension.TrimStart('.'), out ECookedFileFormat _))
+                    {
+                        XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                        XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedExport.Extension);
+                        XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedExport.Name);
+                    }
+                    else
+                    { throw new ArgumentOutOfRangeException(); }
                 }
-                else
-                { throw new ArgumentOutOfRangeException(); }
             }
         }
 
@@ -62,7 +70,18 @@ namespace WolvenKit.Views.Editor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) => XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is ImportExportViewModel vm)
+            {
+                if (ApplyToAllCheckbox.IsChecked != null && ApplyToAllCheckbox.IsChecked.Value)
+                {
+                    vm.CopyArgumentsTemplateToCommand.SafeExecute("All in Grid");
+                    ApplyToAllCheckbox.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false);
+                }
+            }
+            XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        }
 
         /// <summary>
         /// Cancel Button (Select additional files)
