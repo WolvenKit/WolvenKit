@@ -57,6 +57,7 @@ namespace WolvenKit.ViewModels.Editor
                 ERawFileFormat.fbx => new CommonImportArgs(),
                 ERawFileFormat.glb => new MeshImportArgs(),
                 ERawFileFormat.gltf => new MeshImportArgs(),
+                ERawFileFormat.ttf => new FntImportArgs(),
                 _ => new CommonImportArgs()
             };
         }
@@ -89,6 +90,7 @@ namespace WolvenKit.ViewModels.Editor
                 ECookedFileFormat.cubemap => new CommonExportArgs(),
                 ECookedFileFormat.envprobe => new CommonExportArgs(),
                 ECookedFileFormat.texarray => new CommonExportArgs(),
+                ECookedFileFormat.fnt => new FntExportArgs(),
                 ECookedFileFormat.morphtarget => new MorphTargetExportArgs(),
                 _ => throw new ArgumentOutOfRangeException()
             };

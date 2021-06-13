@@ -67,6 +67,9 @@ namespace WolvenKit.Views.Editor
             {
                 TreeGrid.ExpandNode(rootnode);
             }
+
+
+            Trace.WriteLine(e.Action.ToString());
         }
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)

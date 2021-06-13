@@ -40,7 +40,7 @@
             AllowEditing="False"
             AllowFiltering="True"
             AllowResizingColumns="False"
-            AutoExpandMode="RootNodesExpanded"
+            AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             ChildPropertyName="ParentHash"
             ColumnSizer="Star"

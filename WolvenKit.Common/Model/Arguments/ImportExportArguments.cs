@@ -161,6 +161,14 @@ namespace WolvenKit.Common.Model.Arguments
     }
 
     /// <summary>
+    /// Fnt Import Arguments
+    /// </summary>
+    public class FntImportArgs : ImportArgs
+    {
+        public override string ToString() => ".FNT";
+    }
+
+    /// <summary>
     /// XBM Import Arguments
     /// </summary>
     public class XbmImportArgs : ImportArgs
@@ -217,6 +225,14 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
+    }
+
+    /// <summary>
+    /// Fnt Import Arguments
+    /// </summary>
+    public class FntExportArgs : ExportArgs
+    {
+        public override string ToString() => ".TTF";
     }
 
     /// <summary>
