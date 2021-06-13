@@ -11,7 +11,7 @@
     xmlns:local="clr-namespace:WolvenKit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance Type=editor:ImportExportViewModel}"
     mc:Ignorable="d">
@@ -420,106 +420,28 @@
             Grid.RowSpan="4"
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt}"
-            Visibility="Collapsed">
+            Visibility="Visible">
 
-            <syncfusion:TabControlExt>
-                <syncfusion:TabItemExt Header="Add Files">
-                    <Grid>
-                        <syncfusion:SfDataGrid x:Name="FileSelectionDataGrid" Margin="0,0,0,40" />
-                        <Border Margin="5" VerticalAlignment="Bottom">
-                            <Grid>
-                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                    <!--  Cancel Button  -->
-                                    <Button
-                                        Height="30"
-                                        Margin="5,0,5,0"
-                                        Padding="5"
-                                        Click="CancelSelectingClick"
-                                        FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
-                                        <StackPanel Orientation="Horizontal">
 
-                                            <TextBlock Text="Cancel" />
-                                        </StackPanel>
-                                    </Button>
-                                    <!--  Add Button  -->
-                                    <Button
-                                        Height="30"
-                                        Margin="5,0,5,0"
-                                        Padding="5"
-                                        FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
-                                        <StackPanel Orientation="Horizontal">
 
-                                            <TextBlock Text="Add selected file" />
-                                        </StackPanel>
-                                    </Button>
-                                    <!--  Confirm Button  -->
-                                    <Button
-                                        Height="30"
-                                        Margin="5,0,5,0"
-                                        Padding="5"
-                                        FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
-                                        <StackPanel Orientation="Horizontal">
 
-                                            <TextBlock Text="Confirm" />
-                                        </StackPanel>
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </syncfusion:TabItemExt>
-                <syncfusion:TabItemExt Header="Selected Files">
-                    <Grid>
-                        <syncfusion:SfDataGrid x:Name="SelectedFilesGrid" Margin="0,0,0,40" />
-                        <Border Margin="5" VerticalAlignment="Bottom">
-                            <Grid>
-                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                    <!--  Cancel Button  -->
-                                    <Button
-                                        Height="30"
-                                        Margin="5,0,5,0"
-                                        Padding="5"
-                                        Click="CancelSelectingClick"
-                                        FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
-                                        <StackPanel Orientation="Horizontal">
 
-                                            <TextBlock Text="Cancel" />
-                                        </StackPanel>
-                                    </Button>
-                                    <!--  Renove Button  -->
-                                    <Button
-                                        Height="30"
-                                        Margin="5,0,5,0"
-                                        Padding="5"
-                                        FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
-                                        <StackPanel Orientation="Horizontal">
+            <!--  Cancel Button  -->
+            <Button
+                Height="30"
+                Margin="5,0,5,0"
+                Padding="5"
+                Click="CancelSelectingClick"
+                FontSize="12"
+                Style="{DynamicResource ButtonDefault}">
+                <StackPanel Orientation="Horizontal">
 
-                                            <TextBlock Text="Remove selected file" />
-                                        </StackPanel>
-                                    </Button>
-                                    <!--  Confirm Button  -->
-                                    <Button
-                                        Height="30"
-                                        Margin="5,0,5,0"
-                                        Padding="5"
-                                        FontSize="12"
-                                        Style="{DynamicResource ButtonDefault}">
-                                        <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Cancel" />
+                </StackPanel>
+            </Button>
 
-                                            <TextBlock Text="Confirm" />
-                                        </StackPanel>
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </syncfusion:TabItemExt>
-            </syncfusion:TabControlExt>
+
+            <hc:Transfer Background="{DynamicResource ContentBackgroundAlt}" BorderThickness="0" />
         </Grid>
 
         <!--  file succesfully/error adding/added window.  -->
