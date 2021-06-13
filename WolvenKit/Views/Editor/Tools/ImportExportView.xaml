@@ -423,25 +423,138 @@
             Visibility="Visible">
 
 
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
 
 
 
-            <!--  Cancel Button  -->
-            <Button
-                Height="30"
-                Margin="5,0,5,0"
-                Padding="5"
-                Click="CancelSelectingClick"
-                FontSize="12"
-                Style="{DynamicResource ButtonDefault}">
-                <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Grid.Column="0"
+                    Padding="2"
+                    Background="{DynamicResource MahApps.Brushes.Accent3}"
+                    Text="Select File(s)"
+                    TextAlignment="Center" />
+                <TextBlock
+                    Grid.Column="2"
+                    Padding="2"
+                    Background="{DynamicResource MahApps.Brushes.Accent3}"
+                    Text=" Selected File(s)"
+                    TextAlignment="Center" />
 
-                    <TextBlock Text="Cancel" />
-                </StackPanel>
-            </Button>
 
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Background="{DynamicResource ContentBackgroundAlt2}" />
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Background="{DynamicResource ContentBackgroundAlt2}">
+                    <Grid>
+                        <syncfusion:SfDataGrid x:Name="FileSelectionDataGrid" Margin="0,0,0,40" />
+                        <Border
+                            Margin="0"
+                            Padding="5"
+                            VerticalAlignment="Bottom"
+                            Background="{DynamicResource ContentBackground}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1">
+                            <Grid>
+                                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
 
-            <hc:Transfer Background="{DynamicResource ContentBackgroundAlt}" BorderThickness="0" />
+                                    <!--  Add Button  -->
+                                    <Button
+                                        Height="30"
+                                        Margin="5,0,5,0"
+                                        Padding="5"
+                                        FontSize="12"
+                                        Style="{DynamicResource ButtonDefault}">
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBlock Text="Add selected file(s)" />
+                                        </StackPanel>
+                                    </Button>
+
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Background="{DynamicResource ContentBackgroundAlt2}">
+                    <Grid>
+                        <syncfusion:SfDataGrid x:Name="SelectedFilesGrid" Margin="0,0,0,40" />
+                        <Border
+                            Margin="0"
+                            Padding="5"
+                            VerticalAlignment="Bottom"
+                            Background="{DynamicResource ContentBackground}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="1">
+
+                            <Grid>
+
+                                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+
+                                    <!--  Renove Button  -->
+                                    <Button
+                                        Height="30"
+                                        Margin="5,0,5,0"
+                                        Padding="5"
+                                        FontSize="12"
+                                        Style="{DynamicResource ButtonDefault}">
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBlock Text="Remove selected file(s)" />
+                                        </StackPanel>
+                                    </Button>
+
+                                    <!--  Cancel Button  -->
+                                    <Button
+                                        Height="30"
+                                        Margin="5,0,5,0"
+                                        Padding="5"
+                                        Click="CancelSelectingClick"
+                                        FontSize="12"
+                                        Style="{DynamicResource ButtonDefault}">
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBlock Text="Cancel" />
+                                        </StackPanel>
+                                    </Button>
+                                    <!--  Confirm Button  -->
+                                    <Button
+                                        Height="30"
+                                        Margin="5,0,5,0"
+                                        Padding="5"
+                                        FontSize="12"
+                                        Style="{DynamicResource ButtonDefault}">
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBlock Text="Confirm" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+            </Grid>
         </Grid>
 
         <!--  file succesfully/error adding/added window.  -->
