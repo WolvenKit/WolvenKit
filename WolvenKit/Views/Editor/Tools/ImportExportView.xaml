@@ -420,7 +420,7 @@
             Grid.RowSpan="4"
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt}"
-            Visibility="Visible">
+            Visibility="Collapsed">
 
 
             <Grid>

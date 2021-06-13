@@ -48,18 +48,25 @@ namespace WolvenKit.Views.Editor
 
         private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Trace.WriteLine("lets see bois");
+            //if (e.NewItems != null)
+            //{
+            //    foreach (var nerd in e.NewItems)
+            //    {
+            //        Trace.WriteLine(nerd.ToString());
+            //        TreeGrid.ExpandNode((TreeNode)nerd);
+            //    }
+            //}
+
             if (ViewModel is not ProjectExplorerViewModel viewModel)
             {
                 return;
             }
 
-            var node = TreeGrid.View.Nodes.RootNodes;
-            foreach (var nerd in node)
+            var rootnodes = TreeGrid.View.Nodes.RootNodes;
+            foreach (var rootnode in rootnodes)
             {
-                TreeGrid.ExpandNode(nerd);
+                TreeGrid.ExpandNode(rootnode);
             }
-
         }
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
