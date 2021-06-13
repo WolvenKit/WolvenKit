@@ -439,6 +439,8 @@
 
 
 
+
+                <!--  Titles  -->
                 <TextBlock
                     Grid.Column="0"
                     Padding="2"
@@ -453,10 +455,15 @@
                     TextAlignment="Center" />
 
 
+                <!--  Divider  -->
                 <Grid
                     Grid.Row="1"
                     Grid.Column="1"
                     Background="{DynamicResource ContentBackgroundAlt2}" />
+
+
+
+                <!--  Selection Grid  -->
                 <Grid
                     Grid.Row="1"
                     Grid.Column="0"
@@ -494,6 +501,7 @@
                     </Grid>
                 </Grid>
 
+                <!--  Selected Grid  -->
                 <Grid
                     Grid.Row="1"
                     Grid.Column="2"
@@ -559,7 +567,40 @@
                         </Border>
                     </Grid>
                 </Grid>
+                <Grid
+                    Grid.RowSpan="2"
+                    Grid.ColumnSpan="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource ContentBackground}">
+                    <StackPanel>
+                        <!--  Remove Button <  -->
+                        <Button
+                            Height="30"
+                            Padding="5"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            FontSize="12"
+                            Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconMaterial Kind="TransferLeft" />
 
+                            </StackPanel>
+                        </Button>
+                        <!--  Add Button >  -->
+                        <Button
+                            Height="30"
+                            Padding="5"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            FontSize="12"
+                            Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconMaterial Kind="TransferRight" />
+
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
 
