@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
             this.IsSerialized = true;
             this.Value = val switch
             {
+                string s => float.Parse(s),
                 float o => o,
                 CFloat cvar => cvar.Value,
                 _ => this.Value
