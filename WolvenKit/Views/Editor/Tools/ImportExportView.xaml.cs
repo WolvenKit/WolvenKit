@@ -104,20 +104,28 @@ namespace WolvenKit.Views.Editor
         {
             if (ViewModel is ImportExportViewModel vm && sender is PropertyGrid pg)
             {
+                if (vm.MeshExportSelectedCollection != null)
+                {
+                    vm.MeshExportSelectedCollection.Clear();
+                }
+
                 _propertyItem = pg.SelectedPropertyItem;
                 switch (_propertyItem.Name)
                 {
                     case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
+
                         vm.SetCollectionCommand.SafeExecute(ERedExtension.mesh);
 
                         break;
 
                     case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
+
                         vm.SetCollectionCommand.SafeExecute(ERedExtension.rig);
 
                         break;
 
                     case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
+
                         vm.SetCollectionCommand.SafeExecute(ERedExtension.rig);
 
                         break;
@@ -137,7 +145,7 @@ namespace WolvenKit.Views.Editor
 
         private void ConfirmCollectionEditorSelection_OnClick(object sender, RoutedEventArgs e)
         {
-            Trace.WriteLine(sender as PropertyGrid);
+            XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             if (ViewModel is ImportExportViewModel vm)
             {
                 vm.ConfirmMeshCollectionCommand.SafeExecute(_propertyItem.Name);

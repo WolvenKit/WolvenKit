@@ -465,7 +465,9 @@
                             x:Name="FileSelectionDataGrid"
                             Margin="0,0,0,40"
                             AllowFiltering="True"
+                            AllowResizingColumns="True"
                             AutoGenerateColumns="False"
+                            ColumnSizer="Auto"
                             FilterRowPosition="FixedTop"
                             ItemsSource="{Binding MeshExportAvailableCollection}"
                             SelectionMode="Extended">
@@ -473,13 +475,11 @@
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
-                                    ColumnSizer="SizeToCells"
                                     HeaderText="File Name"
                                     HorizontalHeaderContentAlignment="Left"
                                     MappingName="ShortName" />
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
-                                    ColumnSizer="AutoLastColumnFill"
                                     HeaderText="Full Path"
                                     HorizontalHeaderContentAlignment="Left"
                                     MappingName="Name" />
@@ -527,22 +527,16 @@
                             Margin="0,0,0,40"
                             AllowFiltering="True"
                             AutoGenerateColumns="False"
+                            ColumnSizer="AutoWithLastColumnFill"
                             FilterRowPosition="FixedTop"
                             ItemsSource="{Binding MeshExportSelectedCollection}"
                             SelectionMode="Extended">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
-                                    ColumnSizer="SizeToCells"
                                     HeaderText="File Name"
                                     HorizontalHeaderContentAlignment="Left"
                                     MappingName="ShortName" />
-                                <syncfusion:GridTextColumn
-                                    AllowEditing="False"
-                                    ColumnSizer="AutoLastColumnFill"
-                                    HeaderText="Full Path"
-                                    HorizontalHeaderContentAlignment="Left"
-                                    MappingName="Name" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                         <Border
