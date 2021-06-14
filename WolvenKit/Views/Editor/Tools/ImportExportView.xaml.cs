@@ -124,7 +124,7 @@ namespace WolvenKit.Views.Editor
 
                         break;
 
-                    case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
+                    case nameof(MeshExportArgs.WithRigMeshargs.Rig):
 
                         vm.SetCollectionCommand.SafeExecute(ERedExtension.rig);
 

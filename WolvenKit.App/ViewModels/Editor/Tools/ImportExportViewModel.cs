@@ -266,21 +266,20 @@ namespace WolvenKit.ViewModels.Editor
             {
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
                     meshExportArgs.MultiMeshargs.MultiMeshMeshes =
-                        MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                        MeshExportSelectedCollection.ToList();
                     _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
 
                     break;
 
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
                     meshExportArgs.MultiMeshargs.MultiMeshRigs =
-                        MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                        MeshExportSelectedCollection.ToList();
                     _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
 
                     break;
 
-                case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
-                    meshExportArgs.WithRigMeshargs.Rigs =
-                        MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                case nameof(MeshExportArgs.WithRigMeshargs.Rig):
+                    meshExportArgs.WithRigMeshargs.Rig = new List<FileEntry>(){ MeshExportSelectedCollection.FirstOrDefault() };
                     _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
 
                     break;
