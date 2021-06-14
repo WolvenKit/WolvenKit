@@ -41,7 +41,6 @@ namespace CP77.CR2W
                 return false;
             }
 
-            List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             MemoryStream meshbuffer = MeshTools.GetMeshBufferStream(targetStream, cr2w);
 
 
@@ -65,17 +64,9 @@ namespace CP77.CR2W
 
             MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
 
-            int subMeshC = 0;
-            for (int i = 0; i < meshinfo.meshC; i++)
-            {
+            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshinfo, true);
 
-                if (meshinfo.LODLvl[i] != 1)
-                    continue;
-                RawMeshContainer mesh = MeshTools.ContainRawMesh(meshbuffer, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name = "submesh_" + i + "_" + meshinfo.LODLvl[i];
-                expMeshes.Add(mesh);
-                subMeshC++;
-            }
+            int subMeshC = expMeshes.Count;
 
             TargetsInfo targetsInfo = GetTargetInfos(cr2w, subMeshC);
 

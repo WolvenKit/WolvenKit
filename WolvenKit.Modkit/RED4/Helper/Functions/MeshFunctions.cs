@@ -24,11 +24,6 @@ namespace CP77.CR2W
     using Vec3 = System.Numerics.Vector3;
     using Vec2 = System.Numerics.Vector2;
 
-    using SKINNEDVERTEX = VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>;
-    using SKINNEDMESH = MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>;
-    using RIGIDVERTEX = VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>;
-    using RIGIDMESH = MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>;
-    using VPNT = VertexPositionNormalTangent;
     using VCT = VertexColor1Texture2;
     using VJ = VertexJoints8;
 
@@ -73,26 +68,9 @@ namespace CP77.CR2W
 
             var meshinfo = GetMeshesinfo(cr2w);
 
-            var expMeshes = new List<RawMeshContainer>();
+            var expMeshes = ContainRawMesh(ms,meshinfo, LodFilter);
 
-            for (int i = 0; i < meshinfo.meshC; i++)
-            {
-                if (meshinfo.LODLvl[i] != 1 && LodFilter)
-                    continue;
-                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i]);
-                mesh.name =  "submesh_" + i;
-
-                mesh.appNames = new string[meshinfo.appearances.Count];
-                mesh.materialNames = new string[meshinfo.appearances.Count];
-                for (int e = 0; e < meshinfo.appearances.Count; e++)
-                {
-                    mesh.appNames[e] = meshinfo.appearances[e].Name;
-                    mesh.materialNames[e] = meshinfo.appearances[e].MaterialNames[i];
-                }
-                expMeshes.Add(mesh);
-            }
-
-            ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
+            ModelRoot model = RawMeshesToGLTF(expMeshes,null);
             string outfile;
 
             Directory.CreateDirectory(tempmodels);
@@ -126,7 +104,6 @@ namespace CP77.CR2W
 
         public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
-            List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var cr2w = _modTools.TryReadRED4File(meshStream);
 
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
@@ -173,26 +150,13 @@ namespace CP77.CR2W
             }
 
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
+
             MeshesInfo meshinfo = GetMeshesinfo(cr2w);
-            for (int i = 0; i < meshinfo.meshC; i++)
-            {
-                if (meshinfo.LODLvl[i] != 1 && LodFilter)
-                    continue;
-                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
-                UpdateMeshJoints(ref mesh, Rig, bones);
 
-                mesh.appNames = new string[meshinfo.appearances.Count];
-                mesh.materialNames = new string[meshinfo.appearances.Count];
-                for (int e = 0; e < meshinfo.appearances.Count; e++)
-                {
-                    mesh.appNames[e] = meshinfo.appearances[e].Name;
-                    mesh.materialNames[e] = meshinfo.appearances[e].MaterialNames[i];
-                }
-                expMeshes.Add(mesh);
-            }
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms,meshinfo,LodFilter);
+            UpdateMeshJoints(ref expMeshes, Rig, bones);
 
-            ModelRoot model = RawSkinnedMeshesToGLTF(expMeshes, Rig);
+            ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
             WriteMeshToFile();
 
@@ -239,10 +203,8 @@ namespace CP77.CR2W
                 }
             }
         }
-
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
-            List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
             var cr2w = _modTools.TryReadRED4File(meshStream);
 
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
@@ -252,33 +214,17 @@ namespace CP77.CR2W
 
             if (!cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
-                SceneBuilder scene = new SceneBuilder();
-                if (isGLBinary)
-                    scene.ToGltf2().SaveGLB(outfile.FullName);
-                else
-                    scene.ToGltf2().SaveGLTF(outfile.FullName);
-                return true;
+                return false;
             }
 
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
-            MeshesInfo meshinfo = GetMeshesinfo(cr2w);
-            for (int i = 0; i < meshinfo.meshC; i++)
-            {
-                if (meshinfo.LODLvl[i] != 1 && LodFilter)
-                    continue;
-                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
 
-                mesh.appNames = new string[meshinfo.appearances.Count];
-                mesh.materialNames = new string[meshinfo.appearances.Count];
-                for (int e = 0; e < meshinfo.appearances.Count; e++)
-                {
-                    mesh.appNames[e] = meshinfo.appearances[e].Name;
-                    mesh.materialNames[e] = meshinfo.appearances[e].MaterialNames[i];
-                }
-                expMeshes.Add(mesh);
-            }
-            ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
+            MeshesInfo meshinfo = GetMeshesinfo(cr2w);
+
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
+
+            ModelRoot model = RawMeshesToGLTF(expMeshes, null);
+
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
@@ -301,24 +247,15 @@ namespace CP77.CR2W
                     continue;
 
                 MemoryStream ms = GetMeshBufferStream(meshStreamS[m], cr2w);
+
                 MeshesInfo meshinfo = GetMeshesinfo(cr2w);
-                for (int i = 0; i < meshinfo.meshC; i++)
-                {
-                    if (meshinfo.LODLvl[i] != 1 && LodFilter)
-                        continue;
-                    RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                    mesh.name = m + "_submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
-                    mesh.appNames = new string[meshinfo.appearances.Count];
-                    mesh.materialNames = new string[meshinfo.appearances.Count];
-                    for (int e = 0; e < meshinfo.appearances.Count; e++)
-                    {
-                        mesh.appNames[e] = meshinfo.appearances[e].Name;
-                        mesh.materialNames[e] = meshinfo.appearances[e].MaterialNames[i];
-                    }
-                    expMeshes.Add(mesh);
-                }
+                var Meshes = ContainRawMesh(ms, meshinfo, LodFilter);
+                for (int i = 0; i < Meshes.Count; i++)
+                    Meshes[i].name = m + "_" + Meshes[i].name;
+                expMeshes.AddRange(Meshes);
             }
-            ModelRoot model = RawRigidMeshesToGLTF(expMeshes);
+
+            ModelRoot model = RawMeshesToGLTF(expMeshes,null);
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
@@ -336,8 +273,6 @@ namespace CP77.CR2W
         {
             RawArmature Rig = _rig.ProcessRig(rigStream);
 
-            List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
-
             var cr2w = _modTools.TryReadRED4File(meshStream);
 
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
@@ -347,12 +282,7 @@ namespace CP77.CR2W
 
             if (!cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
-                SceneBuilder scene = new SceneBuilder();
-                if (isGLBinary)
-                    scene.ToGltf2().SaveGLB(outfile.FullName);
-                else
-                    scene.ToGltf2().SaveGLTF(outfile.FullName);
-                return true;
+                return false;
             }
 
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
@@ -367,25 +297,11 @@ namespace CP77.CR2W
                 bones.WorldPosn = GetMeshBonesPosn(cr2w);
             }
 
-            for (int i = 0; i < meshinfo.meshC; i++)
-            {
-                if (meshinfo.LODLvl[i] != 1 && LodFilter)
-                    continue;
-                RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                mesh.name = "submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
-                UpdateMeshJoints(ref mesh, Rig, bones);
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms,meshinfo,LodFilter);
+            UpdateMeshJoints(ref expMeshes, Rig, bones);
 
-                mesh.appNames = new string[meshinfo.appearances.Count];
-                mesh.materialNames = new string[meshinfo.appearances.Count];
-                for (int e = 0; e < meshinfo.appearances.Count; e++)
-                {
-                    mesh.appNames[e] = meshinfo.appearances[e].Name;
-                    mesh.materialNames[e] = meshinfo.appearances[e].MaterialNames[i];
-                }
-                expMeshes.Add(mesh);
-            }
+            ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
-            ModelRoot model = RawSkinnedMeshesToGLTF(expMeshes, Rig);
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
@@ -432,26 +348,16 @@ namespace CP77.CR2W
                     bones.WorldPosn = GetMeshBonesPosn(cr2w);
                 }
 
-                for (int i = 0; i < meshinfo.meshC; i++)
-                {
-                    if (meshinfo.LODLvl[i] != 1 && LodFilter)
-                        continue;
-                    RawMeshContainer mesh = ContainRawMesh(ms, meshinfo.vertCounts[i], meshinfo.indCounts[i], meshinfo.vertOffsets[i], meshinfo.tx0Offsets[i], meshinfo.normalOffsets[i], meshinfo.colorOffsets[i], meshinfo.unknownOffsets[i], meshinfo.indicesOffsets[i], meshinfo.vpStrides[i], meshinfo.qScale, meshinfo.qTrans, meshinfo.weightcounts[i], meshinfo.extraExists[i]);
-                    mesh.name = m + "_submesh_" + i + "_LOD_" + meshinfo.LODLvl[i];
-                    if (meshinfo.weightcounts[i] != 0)   // for static meshes
-                        UpdateMeshJoints(ref mesh, expRig, bones);
+                List<RawMeshContainer> Meshes = ContainRawMesh(ms, meshinfo, LodFilter);
 
-                    mesh.appNames = new string[meshinfo.appearances.Count];
-                    mesh.materialNames = new string[meshinfo.appearances.Count];
-                    for (int e = 0; e < meshinfo.appearances.Count; e++)
-                    {
-                        mesh.appNames[e] = meshinfo.appearances[e].Name;
-                        mesh.materialNames[e] = meshinfo.appearances[e].MaterialNames[i];
-                    }
-                    expMeshes.Add(mesh);
-                }
+                UpdateMeshJoints(ref Meshes, expRig, bones);
+                for (int i = 0; i < Meshes.Count; i++)
+                    Meshes[i].name = m + "_" + Meshes[i].name;
+
+                expMeshes.AddRange(Meshes);
+
             }
-            ModelRoot model = RawSkinnedMeshesToGLTF(expMeshes, expRig);
+            ModelRoot model = RawMeshesToGLTF(expMeshes, expRig);
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
@@ -496,7 +402,9 @@ namespace CP77.CR2W
             UInt32[] vertOffsets = new UInt32[meshC];
             UInt32[] tx0Offsets = new UInt32[meshC];
             UInt32[] normalOffsets = new UInt32[meshC];
+            UInt32[] tangentOffsets = new UInt32[meshC];
             UInt32[] colorOffsets = new UInt32[meshC];
+            UInt32[] tx1Offsets = new UInt32[meshC];
             UInt32[] unknownOffsets = new UInt32[meshC];
             UInt32[] indicesOffsets = new UInt32[meshC];
             UInt32[] vpStrides = new UInt32[meshC];
@@ -508,10 +416,31 @@ namespace CP77.CR2W
                 vertCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumVertices.Value;
                 indCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumIndices.Value;
                 vertOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0].Value;
-                tx0Offsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[1].Value;
-                normalOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[2].Value;
-                colorOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[3].Value;
                 unknownOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4].Value;
+
+                var cv = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices;
+                for (int e = 0; e < cv.VertexLayout.Elements.Count; e++)
+                {
+                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_Normal")
+                    {
+                        normalOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                    }
+                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_Tangent")
+                    {
+                        tangentOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                    }
+                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_Color")
+                    {
+                        colorOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                    }
+                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_TexCoord")
+                    {
+                        if(tx0Offsets[i] == 0)
+                            tx0Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                        else
+                            tx1Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                    }
+                }
 
                 if (rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset == null)
                 {
@@ -563,6 +492,11 @@ namespace CP77.CR2W
                     }
                 }
             }
+            for (int i = 0; i < meshC; i++)
+            {
+
+            }
+
             List<Appearance> appearances = new List<Appearance>();
             for (int i = 0; i < cr2w.Chunks.Count; i++)
             {
@@ -588,7 +522,9 @@ namespace CP77.CR2W
                 vertOffsets = vertOffsets,
                 tx0Offsets = tx0Offsets,
                 normalOffsets = normalOffsets,
+                tangentOffsets = tangentOffsets,
                 colorOffsets = colorOffsets,
+                tx1Offsets = tx1Offsets,
                 unknownOffsets = unknownOffsets,
                 indicesOffsets = indicesOffsets,
                 vpStrides = vpStrides,
@@ -605,194 +541,237 @@ namespace CP77.CR2W
             };
             return meshesInfo;
         }
-        public static RawMeshContainer ContainRawMesh(MemoryStream gfs, UInt32 vertCount, UInt32 indCount, UInt32 vertOffset, UInt32 tx0Offset, UInt32 normalOffset, UInt32 colorOffset, UInt32 unknownOffset, UInt32 indOffset, UInt32 vpStride, Vec4 qScale, Vec4 qTrans, UInt32 weightcount, bool extraExist = false)
+        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool LODFilter)
         {
             BinaryReader gbr = new BinaryReader(gfs);
 
-            Vec3[] vertices = new Vec3[vertCount];
-            uint[] indices = new uint[indCount];
-            Vec2[] tx0coords = new Vec2[vertCount];
-            Vec3[] normals = new Vec3[vertCount];
-            Vec4[] tangents = new Vec4[vertCount];
-            Vec4[] colors = new Vec4[vertCount];
-            Vec2[] tx1coords = new Vec2[vertCount];
-            float[,] weights = new float[vertCount, weightcount];
-            UInt16[,] boneindices = new UInt16[vertCount, weightcount];
-            Vec3[] extradata = new Vec3[vertCount];
+            List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
-            // geting vertices
-            for (int i = 0; i < vertCount; i++)
+            for(int index = 0; index < info.meshC; index++)
             {
-                gfs.Position = vertOffset + i * vpStride;
+                if (info.LODLvl[index] != 1 && LODFilter)
+                    continue;
+                Vec3[] vertices = new Vec3[info.vertCounts[index]];
+                uint[] indices = new uint[info.indCounts[index]];
+                Vec2[] tx0coords = new Vec2[info.vertCounts[index]];
+                Vec3[] normals = new Vec3[0];
+                Vec4[] tangents = new Vec4[0];
+                Vec4[] colors = new Vec4[info.vertCounts[index]];
+                Vec2[] tx1coords = new Vec2[info.vertCounts[index]];
+                float[,] weights = new float[info.vertCounts[index], info.weightcounts[index]];
+                UInt16[,] boneindices = new UInt16[info.vertCounts[index], info.weightcounts[index]];
+                Vec3[] extradata = new Vec3[info.vertCounts[index]];
 
-                float x = (gbr.ReadInt16() / 32767f) * qScale.X + qTrans.X;
-                float y = (gbr.ReadInt16() / 32767f) * qScale.Y + qTrans.Y;
-                float z = (gbr.ReadInt16() / 32767f) * qScale.Z + qTrans.Z;
-                // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
-                vertices[i] = new Vec3(x, z, -y);
-            }
-            // got vertices
-
-            float[] values = new float[vertCount * 2];
-
-            if (tx0Offset != 0)
-            {
-                // getting texturecoord0 as half floats
-                gfs.Position = tx0Offset;
-                for (int i = 0; i < vertCount * 2; i++)
+                // geting vertices
+                for (int i = 0; i < info.vertCounts[index]; i++)
                 {
-                    UInt16 read = gbr.ReadUInt16();
-                    values[i] = Converters.hfconvert(read);
+                    gfs.Position = info.vertOffsets[index] + i * info.vpStrides[index];
+
+                    float x = (gbr.ReadInt16() / 32767f) * info.qScale.X + info.qTrans.X;
+                    float y = (gbr.ReadInt16() / 32767f) * info.qScale.Y + info.qTrans.Y;
+                    float z = (gbr.ReadInt16() / 32767f) * info.qScale.Z + info.qTrans.Z;
+                    // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
+                    vertices[i] = new Vec3(x, z, -y);
                 }
-                for (int i = 0; i < vertCount; i++)
+                // got vertices
+
+                float[] values = new float[info.vertCounts[index] * 2];
+
+                if (info.tx0Offsets[index] != 0)
                 {
-                    tx0coords[i] = new Vec2(values[2 * i], values[2 * i + 1]);
-                }
-                // got texturecoord0 as half floats
-            }
-
-            UInt32 NorRead32;
-            // getting 10bit normals
-            for (int i = 0; i < vertCount; i++)
-            {
-                gfs.Position = normalOffset + 8 * i;
-                NorRead32 = gbr.ReadUInt32();
-                Vec4 tempv = Converters.TenBitShifted(NorRead32);
-                // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
-                normals[i] = new Vec3(tempv.X, tempv.Z, -tempv.Y);
-            }
-            // got 10bit normals
-
-            // getting 10bit tangents
-            for (int i = 0; i < vertCount; i++)
-            {
-                gfs.Position = normalOffset + 4 + 8 * i;
-                NorRead32 = gbr.ReadUInt32();
-                Vec4 tempv = Converters.TenBitShifted(NorRead32);
-                // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
-                tangents[i] = new Vec4(tempv.X, tempv.Z, -tempv.Y, 1f);
-            }
-
-
-            if (colorOffset != 0)
-            {
-                gfs.Position = colorOffset + 4;
-                // getting texturecoord1 as half floats
-                for (int i = 0; i < vertCount * 2; i++)
-                {
-                    UInt16 read = gbr.ReadUInt16();
-                    values[i] = Converters.hfconvert(read);
-                    if (i % 2 != 0)
-                        gfs.Position += 4;
-                }
-                for (int i = 0; i < vertCount; i++)
-                {
-                    tx1coords[i] = new Vec2(values[2 * i], values[2 * i + 1]);
-                }
-                // got texturecoord1 as half floats
-            }
-
-            if (colorOffset != 0)
-            {
-                for (int i = 0; i < vertCount; i++)
-                {
-                    gfs.Position = colorOffset + i * 8;
-                    Vec4 tempv = new Vec4(gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f);
-                    colors[i] = new Vec4(tempv.X, tempv.Y, tempv.Z, tempv.W);
-
-                }
-                // got vert colors
-            }
-
-            // getting bone indices
-            for (int i = 0; i < vertCount; i++)
-            {
-                gfs.Position = vertOffset + i * vpStride + 8;
-                for (int e = 0; e < weightcount; e++)
-                {
-                    boneindices[i, e] = gbr.ReadByte();
-                }
-            }
-            // got bone indexes
-
-            // getting weights
-            for (int i = 0; i < vertCount; i++)
-            {
-                float sum = 0;
-                gfs.Position = vertOffset + i * vpStride + 8 + weightcount;
-                for (int e = 0; e < weightcount; e++)
-                {
-                    weights[i, e] = gbr.ReadByte() / 255f;
-                    sum += weights[i, e];
-                }
-                if(sum == 0 && weightcount > 0)
-                {
-                    boneindices[i, 0] = 0;
-                    weights[i, 0] = 1f;
-                }
-            }
-            // got weights
-
-            if (extraExist)
-            {
-                for (int i = 0; i < vertCount; i++)
-                {
-                    gfs.Position = vertOffset + i * vpStride + 8 + 2 * weightcount;
-                    float x = Converters.hfconvert(gbr.ReadUInt16());
-                    float y = Converters.hfconvert(gbr.ReadUInt16());
-                    float z = Converters.hfconvert(gbr.ReadUInt16());
-                    extradata[i] = new Vec3(x, z, -y);
-                }
-            }
-            // getting uint16 faces/indices
-            gfs.Position = indOffset;
-            for (int i = 0; i < indCount; i++)
-            {
-                indices[i] = gbr.ReadUInt16();
-            }
-            // got uint16 faces/indices
-
-            RawMeshContainer mesh = new RawMeshContainer()
-            {
-                vertices = vertices,
-                indices = indices,
-                tx0coords = tx0coords,
-                normals = normals,
-                tangents = tangents,
-                colors = colors,
-                tx1coords = tx1coords,
-                boneindices = boneindices,
-                weights = weights,
-                weightcount = weightcount,
-                extradata = extradata,
-                extraExist = extraExist
-            };
-            return mesh;
-        }
-        static void UpdateMeshJoints(ref RawMeshContainer Mesh, RawArmature Rig, MeshBones Bones)
-        {
-            // updating mesh bone indexes
-            for (int e = 0; e < Mesh.vertices.Length; e++)
-            {
-                for (int eye = 0; eye < Mesh.weightcount; eye++)
-                {
-                    bool found = false;
-                    for (UInt16 r = 0; r < Rig.BoneCount; r++)
+                    // getting texturecoord0 as half floats
+                    gfs.Position = info.tx0Offsets[index];
+                    for (int i = 0; i < info.vertCounts[index] * 2; i++)
                     {
-                        if (Rig.Names[r] == Bones.Names[Mesh.boneindices[e, eye]])
+                        UInt16 read = gbr.ReadUInt16();
+                        values[i] = Converters.hfconvert(read);
+                    }
+                    for (int i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        tx0coords[i] = new Vec2(values[2 * i], values[2 * i + 1]);
+                    }
+                    // got texturecoord0 as half floats
+                }
+
+                UInt32 NorRead32;
+                bool invalidNors = true;
+                if(info.normalOffsets[index] != 0)
+                {
+                    normals = new Vec3[info.vertCounts[index]];
+                    // getting 10bit normals
+                    int str = 4;
+                    if (info.tangentOffsets[index] != 0)
+                        str += 4;
+                    for (int i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        gfs.Position = info.normalOffsets[index] + str * i;
+                        NorRead32 = gbr.ReadUInt32();
+                        Vec4 tempv = Converters.TenBitShifted(NorRead32);
+                        // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
+                        normals[i] = new Vec3(tempv.X, tempv.Z, -tempv.Y);
+
+                        if(NorRead32 != 0x5FF7FDFF)
                         {
-                            Mesh.boneindices[e, eye] = r;
-                            found = true;
-                            break;
+                            invalidNors = false;
                         }
                     }
-                    if (!found)
+                }
+                // got 10bit normals
+
+                if (invalidNors)
+                    continue;
+                if (info.tangentOffsets[index] != 0 && info.normalOffsets[index] != 0)
+                {
+                    tangents = new Vec4[info.vertCounts[index]];
+                    info.tangentOffsets[index] += 4;
+                    // getting 10bit tangents
+                    for (int i = 0; i < info.vertCounts[index]; i++)
                     {
-                        throw new Exception("Bone: " + Bones.Names[Mesh.boneindices[e, eye]] + " is not present in the Provided .rig(s).\nInput .rig(s) are incompatible or incomplete, Please provide a/more compatible .rig(s)\nTIP: 1. For body .rig(s) provide {BodyType}_base_deformations.rig instead of {BodyType}_base.rig.\n2. if Input .mesh(s) contains any dangle/physics bones, provide the compatible dangle.rig also.\n");
+                        gfs.Position = info.tangentOffsets[index] + 8 * i;
+                        NorRead32 = gbr.ReadUInt32();
+                        Vec4 tempv = Converters.TenBitShifted(NorRead32);
+                        // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
+                        tangents[i] = new Vec4(tempv.X, tempv.Z, -tempv.Y, 1f);
+                    }
+                }
+
+                if (info.tx1Offsets[index] != 0)
+                {
+                    if (info.colorOffsets[index] != 0)
+                        info.tx1Offsets[index] += 4;
+                    gfs.Position = info.tx1Offsets[index];
+                    // getting texturecoord1 as half floats
+                    for (int i = 0; i < info.vertCounts[index] * 2; i++)
+                    {
+                        UInt16 read = gbr.ReadUInt16();
+                        values[i] = Converters.hfconvert(read);
+                        if (i % 2 != 0)
+                            gfs.Position += 4;
+                    }
+                    for (int i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        tx1coords[i] = new Vec2(values[2 * i], values[2 * i + 1]);
+                    }
+                    // got texturecoord1 as half floats
+                }
+
+                if (info.colorOffsets[index] != 0)
+                {
+                    int str = 4;
+                    if (info.tx1Offsets[index] != 0)
+                        str += 4;
+                    for (int i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        gfs.Position = info.colorOffsets[index] + i * str;
+                        Vec4 tempv = new Vec4(gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f);
+                        colors[i] = new Vec4(tempv.X, tempv.Y, tempv.Z, tempv.W);
+
+                    }
+                    // got vert colors
+                }
+
+                // getting bone indices
+                for (int i = 0; i < info.vertCounts[index]; i++)
+                {
+                    gfs.Position = info.vertOffsets[index] + i * info.vpStrides[index] + 8;
+                    for (int e = 0; e < info.weightcounts[index]; e++)
+                    {
+                        boneindices[i, e] = gbr.ReadByte();
+                    }
+                }
+                // got bone indexes
+
+                // getting weights
+                for (int i = 0; i < info.vertCounts[index]; i++)
+                {
+                    float sum = 0;
+                    gfs.Position = info.vertOffsets[index] + i * info.vpStrides[index] + 8 + info.weightcounts[index];
+                    for (int e = 0; e < info.weightcounts[index]; e++)
+                    {
+                        weights[i, e] = gbr.ReadByte() / 255f;
+                        sum += weights[i, e];
+                    }
+                    if (sum == 0 && info.weightcounts[index] > 0)
+                    {
+                        boneindices[i, 0] = 0;
+                        weights[i, 0] = 1f;
+                    }
+                }
+                // got weights
+
+                if (info.extraExists[index])
+                {
+                    for (int i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        gfs.Position = info.vertOffsets[index] + i * info.vpStrides[index] + 8 + 2 * info.weightcounts[index];
+                        float x = Converters.hfconvert(gbr.ReadUInt16());
+                        float y = Converters.hfconvert(gbr.ReadUInt16());
+                        float z = Converters.hfconvert(gbr.ReadUInt16());
+                        extradata[i] = new Vec3(x, z, -y);
+                    }
+                }
+                // getting uint16 faces/indices
+                gfs.Position = info.indicesOffsets[index];
+                for (int i = 0; i < info.indCounts[index]; i++)
+                {
+                    indices[i] = gbr.ReadUInt16();
+                }
+                // got uint16 faces/indices
+
+                RawMeshContainer mesh = new RawMeshContainer()
+                {
+                    vertices = vertices,
+                    indices = indices,
+                    tx0coords = tx0coords,
+                    normals = normals,
+                    tangents = tangents,
+                    colors = colors,
+                    tx1coords = tx1coords,
+                    boneindices = boneindices,
+                    weights = weights,
+                    weightcount = info.weightcounts[index],
+                    extradata = extradata,
+                    extraExist = info.extraExists[index]
+                };
+                mesh.name = "submesh_" + index + "_LOD_" + info.LODLvl[index];
+
+                mesh.appNames = new string[info.appearances.Count];
+                mesh.materialNames = new string[info.appearances.Count];
+                for (int e = 0; e < info.appearances.Count; e++)
+                {
+                    mesh.appNames[e] = info.appearances[e].Name;
+                    mesh.materialNames[e] = info.appearances[e].MaterialNames[index];
+                }
+                expMeshes.Add(mesh);
+            }
+            return expMeshes;
+        }
+        static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature Rig, MeshBones Bones)
+        {
+            // updating mesh bone indexes
+            for(int i = 0; i < Meshes.Count; i++)
+            {
+                for (int e = 0; e < Meshes[i].vertices.Length; e++)
+                {
+                    for (int eye = 0; eye < Meshes[i].weightcount; eye++)
+                    {
+                        bool found = false;
+                        for (UInt16 r = 0; r < Rig.BoneCount; r++)
+                        {
+                            if (Rig.Names[r] == Bones.Names[Meshes[i].boneindices[e, eye]])
+                            {
+                                Meshes[i].boneindices[e, eye] = r;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found)
+                        {
+                            throw new Exception("Bone: " + Bones.Names[Meshes[i].boneindices[e, eye]] + " is not present in the Provided .rig(s).\nInput .rig(s) are incompatible or incomplete, Please provide a/more compatible .rig(s)\nTIP: 1. For body .rig(s) provide {BodyType}_base_deformations.rig instead of {BodyType}_base.rig.\n2. if Input .mesh(s) contains any dangle/physics bones, provide the compatible dangle.rig also.\n");
+                        }
                     }
                 }
             }
-
         }
         public static MemoryStream GetMeshBufferStream(Stream ms, CR2WFile cr2w)
         {
@@ -805,179 +784,291 @@ namespace CP77.CR2W
             ms.DecompressAndCopySegment(meshstream, buffer.DiskSize, buffer.MemSize);
             return meshstream;
         }
-        public static ModelRoot RawSkinnedMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
+        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
         {
             var scene = new SceneBuilder();
-
-            var bones = RIG.ExportNodes(Rig);
-            var rootbone = bones.Values.Where(n => n.Parent == null).FirstOrDefault();
-
-            foreach (var mesh in meshes)
+            if (Rig == null)
             {
-                long indCount = mesh.indices.Length;
-                var expmesh = new SKINNEDMESH(mesh.name);
-
-                var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
-                for (int i = 0; i < indCount; i += 3)
+                foreach (var mesh in meshes)
                 {
-                    uint idx0 = mesh.indices[i + 1];
-                    uint idx1 = mesh.indices[i];
-                    uint idx2 = mesh.indices[i + 2];
-
-                    //VPNT
-                    Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
-                    Vec3 n_0 = new Vec3(mesh.normals[idx0].X, mesh.normals[idx0].Y, mesh.normals[idx0].Z);
-                    Vec4 t_0 = new Vec4(mesh.tangents[idx0].X, mesh.tangents[idx0].Y, mesh.tangents[idx0].Z, mesh.tangents[idx0].W);
-
-                    Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
-                    Vec3 n_1 = new Vec3(mesh.normals[idx1].X, mesh.normals[idx1].Y, mesh.normals[idx1].Z);
-                    Vec4 t_1 = new Vec4(mesh.tangents[idx1].X, mesh.tangents[idx1].Y, mesh.tangents[idx1].Z, mesh.tangents[idx1].W);
-
-                    Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
-                    Vec3 n_2 = new Vec3(mesh.normals[idx2].X, mesh.normals[idx2].Y, mesh.normals[idx2].Z);
-                    Vec4 t_2 = new Vec4(mesh.tangents[idx2].X, mesh.tangents[idx2].Y, mesh.tangents[idx2].Z, mesh.tangents[idx2].W);
-
-                    //VCT
-                    Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
-                    Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
-
-                    Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
-                    Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
-
-                    Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
-                    Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
-
-                    Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
-                    Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
-                    Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
-
-
-                    (int, float)[] bind0 = new (int, float)[8];
-                    (int, float)[] bind1 = new (int, float)[8];
-                    (int, float)[] bind2 = new (int, float)[8];
-
-
-                    if (mesh.weightcount == 0)   // for rigid meshes
-                    {
-                        bind0[0].Item2 = 1f;
-                        bind1[0].Item2 = 1f;
-                        bind2[0].Item2 = 1f;
-                    }
-
-                    for (int w = 0; w < mesh.weightcount; w++)
-                    {
-                        bind0[w].Item1 = mesh.boneindices[idx0, w];
-                        bind0[w].Item2 = mesh.weights[idx0, w];
-                        bind1[w].Item1 = mesh.boneindices[idx1, w];
-                        bind1[w].Item2 = mesh.weights[idx1, w];
-                        bind2[w].Item1 = mesh.boneindices[idx2, w];
-                        bind2[w].Item2 = mesh.weights[idx2, w];
-                    }
-                    // vertex build
-                    var v0 = new SKINNEDVERTEX(new VPNT(p_0, n_0, t_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
-                    var v1 = new SKINNEDVERTEX(new VPNT(p_1, n_1, t_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
-                    var v2 = new SKINNEDVERTEX(new VPNT(p_2, n_2, t_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
-                    // triangle build
-                    prim.AddTriangle(v0, v1, v2);
+                    if (mesh.normals.Length != 0 && mesh.tangents.Length != 0)
+                        scene.AddRigidMesh(VPNT(mesh), System.Numerics.Matrix4x4.Identity);
+                    if (mesh.normals.Length != 0 && mesh.tangents.Length == 0)
+                        scene.AddRigidMesh(VPN(mesh), System.Numerics.Matrix4x4.Identity);
+                    if (mesh.normals.Length == 0 && mesh.tangents.Length == 0)
+                        scene.AddRigidMesh(VP(mesh), System.Numerics.Matrix4x4.Identity);
                 }
+            }
+            else
+            {
+                var bones = RIG.ExportNodes(Rig);
+                var rootbone = bones.Values.Where(n => n.Parent == null).FirstOrDefault();
 
-                if (mesh.extraExist)
+                foreach (var mesh in meshes)
                 {
-                    var morphbuilder = expmesh.UseMorphTarget(0);
-                    for (int i = 0; i < mesh.vertices.Length; i++)
+                    if (mesh.weightcount == 0)
                     {
-                        morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
+                        if (mesh.normals.Length != 0 && mesh.tangents.Length != 0)
+                            scene.AddRigidMesh(VPNT(mesh), System.Numerics.Matrix4x4.Identity);
+                        if (mesh.normals.Length != 0 && mesh.tangents.Length == 0)
+                            scene.AddRigidMesh(VPN(mesh), System.Numerics.Matrix4x4.Identity);
+                        if (mesh.normals.Length == 0 && mesh.tangents.Length == 0)
+                            scene.AddRigidMesh(VP(mesh), System.Numerics.Matrix4x4.Identity);
+
                     }
-                }
-
-                var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
-
-                expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-
-                if (mesh.weightcount == 0)
-                {
-                    scene.AddRigidMesh(expmesh, System.Numerics.Matrix4x4.Identity);
-                }
-                else
-                {
-                    scene.AddSkinnedMesh(expmesh, rootbone.WorldMatrix, bones.Values.ToArray());
+                    else
+                    {
+                        if (mesh.normals.Length != 0 && mesh.tangents.Length != 0)
+                            scene.AddSkinnedMesh(VPNT(mesh), rootbone.WorldMatrix, bones.Values.ToArray());
+                        if (mesh.normals.Length != 0 && mesh.tangents.Length == 0)
+                            scene.AddSkinnedMesh(VPN(mesh), rootbone.WorldMatrix, bones.Values.ToArray());
+                        if (mesh.normals.Length == 0 && mesh.tangents.Length == 0)
+                            scene.AddSkinnedMesh(VP(mesh), rootbone.WorldMatrix, bones.Values.ToArray());
+                    }
                 }
             }
             var model = scene.ToGltf2();
 
-            return model;
-        }
-        public static ModelRoot RawRigidMeshesToGLTF(List<RawMeshContainer> meshes)
-        {
-            var scene = new SceneBuilder();
-
-            foreach (var mesh in meshes)
-            {
-                long indCount = mesh.indices.Length;
-                var expmesh = new RIGIDMESH(mesh.name);
-
-                var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
-                for (int i = 0; i < indCount; i += 3)
-                {
-                    uint idx0 = mesh.indices[i + 1];
-                    uint idx1 = mesh.indices[i];
-                    uint idx2 = mesh.indices[i + 2];
-
-                    //VPNT
-                    Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
-                    Vec3 n_0 = new Vec3(mesh.normals[idx0].X, mesh.normals[idx0].Y, mesh.normals[idx0].Z);
-                    Vec4 t_0 = new Vec4(mesh.tangents[idx0].X, mesh.tangents[idx0].Y, mesh.tangents[idx0].Z, mesh.tangents[idx0].W);
-
-                    Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
-                    Vec3 n_1 = new Vec3(mesh.normals[idx1].X, mesh.normals[idx1].Y, mesh.normals[idx1].Z);
-                    Vec4 t_1 = new Vec4(mesh.tangents[idx1].X, mesh.tangents[idx1].Y, mesh.tangents[idx1].Z, mesh.tangents[idx1].W);
-
-                    Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
-                    Vec3 n_2 = new Vec3(mesh.normals[idx2].X, mesh.normals[idx2].Y, mesh.normals[idx2].Z);
-                    Vec4 t_2 = new Vec4(mesh.tangents[idx2].X, mesh.tangents[idx2].Y, mesh.tangents[idx2].Z, mesh.tangents[idx2].W);
-
-                    //VCT
-                    Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
-                    Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
-
-                    Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
-                    Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
-
-                    Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
-                    Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
-
-                    Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
-                    Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
-                    Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
-
-                    // vertex build
-                    var v0 = new RIGIDVERTEX(new VPNT(p_0, n_0, t_0), new VCT(col_0, tx0_0, tx1_0));
-                    var v1 = new RIGIDVERTEX(new VPNT(p_1, n_1, t_1), new VCT(col_1, tx0_1, tx1_1));
-                    var v2 = new RIGIDVERTEX(new VPNT(p_2, n_2, t_2), new VCT(col_2, tx0_2, tx1_2));
-                    // triangle build
-                    prim.AddTriangle(v0, v1, v2);
-                }
-
-                if (mesh.extraExist)
-                {
-                    var morphbuilder = expmesh.UseMorphTarget(0);
-                    for (int i = 0; i < mesh.vertices.Length; i++)
-                    {
-                        morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
-                    }
-                }
-                var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
-
-                expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                scene.AddRigidMesh(expmesh, System.Numerics.Matrix4x4.Identity);
-            }
-            var model = scene.ToGltf2();
             return model;
         }
         class MeshBones
         {
             public string[] Names;
             public Vec3[] WorldPosn;
+        }
+        private static MeshBuilder<VertexPosition,VertexColor1Texture2,VertexJoints8> VP (RawMeshContainer mesh)
+        {
+            long indCount = mesh.indices.Length;
+            var expmesh = new MeshBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(mesh.name);
+            var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
+
+            for (int i = 0; i < indCount; i += 3)
+            {
+                uint idx0 = mesh.indices[i + 1];
+                uint idx1 = mesh.indices[i];
+                uint idx2 = mesh.indices[i + 2];
+
+                //VPNT
+                Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
+
+                Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
+
+                Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
+
+                //VCT
+                Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
+                Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
+
+                Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
+                Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
+
+                Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
+                Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
+
+                Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
+                Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
+                Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
+
+                (int, float)[] bind0 = new (int, float)[8];
+                (int, float)[] bind1 = new (int, float)[8];
+                (int, float)[] bind2 = new (int, float)[8];
+
+                if (mesh.weightcount == 0)   // for rigid meshes
+                {
+                    bind0[0].Item2 = 1f;
+                    bind1[0].Item2 = 1f;
+                    bind2[0].Item2 = 1f;
+                }
+
+                for (int w = 0; w < mesh.weightcount; w++)
+                {
+                    bind0[w].Item1 = mesh.boneindices[idx0, w];
+                    bind0[w].Item2 = mesh.weights[idx0, w];
+                    bind1[w].Item1 = mesh.boneindices[idx1, w];
+                    bind1[w].Item2 = mesh.weights[idx1, w];
+                    bind2[w].Item1 = mesh.boneindices[idx2, w];
+                    bind2[w].Item2 = mesh.weights[idx2, w];
+                }
+                // vertex build
+                var v0 = new VertexBuilder<VertexPosition,VertexColor1Texture2,VertexJoints8>(new VertexPosition(p_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
+                var v1 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
+                var v2 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
+                // triangle build
+                prim.AddTriangle(v0, v1, v2);
+            }
+
+            if (mesh.extraExist)
+            {
+                var morphbuilder = expmesh.UseMorphTarget(0);
+                for (int i = 0; i < mesh.vertices.Length; i++)
+                {
+                    morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
+                }
+            }
+
+            var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
+            expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+
+            return expmesh;
+        }
+        private static MeshBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8> VPN (RawMeshContainer mesh)
+        {
+            long indCount = mesh.indices.Length;
+            var expmesh = new MeshBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(mesh.name);
+            var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
+
+            for (int i = 0; i < indCount; i += 3)
+            {
+                uint idx0 = mesh.indices[i + 1];
+                uint idx1 = mesh.indices[i];
+                uint idx2 = mesh.indices[i + 2];
+
+                //VPNT
+                Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
+                Vec3 n_0 = new Vec3(mesh.normals[idx0].X, mesh.normals[idx0].Y, mesh.normals[idx0].Z);
+
+                Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
+                Vec3 n_1 = new Vec3(mesh.normals[idx1].X, mesh.normals[idx1].Y, mesh.normals[idx1].Z);
+
+                Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
+                Vec3 n_2 = new Vec3(mesh.normals[idx2].X, mesh.normals[idx2].Y, mesh.normals[idx2].Z);
+
+                //VCT
+                Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
+                Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
+
+                Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
+                Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
+
+                Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
+                Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
+
+                Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
+                Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
+                Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
+
+                (int, float)[] bind0 = new (int, float)[8];
+                (int, float)[] bind1 = new (int, float)[8];
+                (int, float)[] bind2 = new (int, float)[8];
+
+                if (mesh.weightcount == 0)   // for rigid meshes
+                {
+                    bind0[0].Item2 = 1f;
+                    bind1[0].Item2 = 1f;
+                    bind2[0].Item2 = 1f;
+                }
+
+                for (int w = 0; w < mesh.weightcount; w++)
+                {
+                    bind0[w].Item1 = mesh.boneindices[idx0, w];
+                    bind0[w].Item2 = mesh.weights[idx0, w];
+                    bind1[w].Item1 = mesh.boneindices[idx1, w];
+                    bind1[w].Item2 = mesh.weights[idx1, w];
+                    bind2[w].Item1 = mesh.boneindices[idx2, w];
+                    bind2[w].Item2 = mesh.weights[idx2, w];
+                }
+                // vertex build
+                var v0 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_0,n_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
+                var v1 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_1,n_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
+                var v2 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_2,n_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
+                // triangle build
+                prim.AddTriangle(v0, v1, v2);
+            }
+
+            if (mesh.extraExist)
+            {
+                var morphbuilder = expmesh.UseMorphTarget(0);
+                for (int i = 0; i < mesh.vertices.Length; i++)
+                {
+                    morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
+                }
+            }
+
+            var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
+            expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+
+            return expmesh;
+        }
+        private static MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8> VPNT(RawMeshContainer mesh)
+        {
+            long indCount = mesh.indices.Length;
+            var expmesh = new MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(mesh.name);
+            var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
+
+            for (int i = 0; i < indCount; i += 3)
+            {
+                uint idx0 = mesh.indices[i + 1];
+                uint idx1 = mesh.indices[i];
+                uint idx2 = mesh.indices[i + 2];
+
+                //VPNT
+                Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
+                Vec3 n_0 = new Vec3(mesh.normals[idx0].X, mesh.normals[idx0].Y, mesh.normals[idx0].Z);
+                Vec4 t_0 = new Vec4(mesh.tangents[idx0].X, mesh.tangents[idx0].Y, mesh.tangents[idx0].Z, mesh.tangents[idx0].W);
+
+                Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
+                Vec3 n_1 = new Vec3(mesh.normals[idx1].X, mesh.normals[idx1].Y, mesh.normals[idx1].Z);
+                Vec4 t_1 = new Vec4(mesh.tangents[idx1].X, mesh.tangents[idx1].Y, mesh.tangents[idx1].Z, mesh.tangents[idx1].W);
+
+                Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
+                Vec3 n_2 = new Vec3(mesh.normals[idx2].X, mesh.normals[idx2].Y, mesh.normals[idx2].Z);
+                Vec4 t_2 = new Vec4(mesh.tangents[idx2].X, mesh.tangents[idx2].Y, mesh.tangents[idx2].Z, mesh.tangents[idx2].W);
+
+                //VCT
+                Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
+                Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
+
+                Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
+                Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
+
+                Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
+                Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
+
+                Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
+                Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
+                Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
+
+                (int, float)[] bind0 = new (int, float)[8];
+                (int, float)[] bind1 = new (int, float)[8];
+                (int, float)[] bind2 = new (int, float)[8];
+
+                if (mesh.weightcount == 0)   // for rigid meshes
+                {
+                    bind0[0].Item2 = 1f;
+                    bind1[0].Item2 = 1f;
+                    bind2[0].Item2 = 1f;
+                }
+
+                for (int w = 0; w < mesh.weightcount; w++)
+                {
+                    bind0[w].Item1 = mesh.boneindices[idx0, w];
+                    bind0[w].Item2 = mesh.weights[idx0, w];
+                    bind1[w].Item1 = mesh.boneindices[idx1, w];
+                    bind1[w].Item2 = mesh.weights[idx1, w];
+                    bind2[w].Item1 = mesh.boneindices[idx2, w];
+                    bind2[w].Item2 = mesh.weights[idx2, w];
+                }
+                // vertex build
+                var v0 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_0, n_0,t_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
+                var v1 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_1, n_1,t_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
+                var v2 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_2, n_2,t_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
+                // triangle build
+                prim.AddTriangle(v0, v1, v2);
+            }
+
+            if (mesh.extraExist)
+            {
+                var morphbuilder = expmesh.UseMorphTarget(0);
+                for (int i = 0; i < mesh.vertices.Length; i++)
+                {
+                    morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
+                }
+            }
+
+            var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
+            expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+
+            return expmesh;
         }
     }
 }
