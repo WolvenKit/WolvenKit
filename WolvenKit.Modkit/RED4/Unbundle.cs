@@ -1,17 +1,12 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Catel.IoC;
 using Dasync.Collections;
-using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 
 namespace WolvenKit.Modkit.RED4
 {

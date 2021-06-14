@@ -24,6 +24,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
+using WolvenKit.Common.Extensions;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -406,7 +407,9 @@ namespace WolvenKit.ViewModels.Editor
             if (fi.Exists)
             {
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
-                await Task.Run(() => _modTools.Import(fi, settings, new DirectoryInfo(proj.ModDirectory)));
+                var rawDir = new DirectoryInfo(proj.RawDirectory);
+                var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
+                await Task.Run(() => _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory)));
             }
         }
 

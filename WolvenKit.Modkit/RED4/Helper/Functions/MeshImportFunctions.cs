@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Catel.IoC;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using SharpGLTF.Schema2;
 using SharpGLTF.IO;

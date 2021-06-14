@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
@@ -93,10 +95,10 @@ namespace CP77Tools.Tasks
             // just a single file was selected
             else
             {
+                var rawRelative = new RedRelativePath(rawFile.Directory, rawFile.GetRelativePath(rawFile.Directory));
                 // check if the file can be directly imported
-                var ext = Path.GetExtension(rawFile.FullName).TrimStart('.');
                 // if not, rebuild the single file
-                if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+                if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
                 {
                     // buffers can not be rebuilt on their own
                     if (!settings.Get<CommonImportArgs>().Keep)
@@ -104,7 +106,8 @@ namespace CP77Tools.Tasks
                         return;
                     }
 
-                    if (_modTools.RebuildBuffer(rawFile, outDirectory))
+                    // outdir needs to be the parent dir of the redfile to rebuild !! (user needs to take care of that)
+                    if (_modTools.RebuildBuffer(rawRelative, outDirectory))
                     {
                         _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
                     }
@@ -116,7 +119,8 @@ namespace CP77Tools.Tasks
                 // the raw file can be imported directly
                 else
                 {
-                    if (_modTools.Import(rawFile, settings, outDirectory))
+
+                    if (_modTools.Import(rawRelative, settings, outDirectory))
                     {
                         _loggerService.Success($"Successfully imported {path}");
                     }

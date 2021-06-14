@@ -2,39 +2,19 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
-using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Catel.IoC;
-using CP77.CR2W;
-using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
-using CP77Tools.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using WolvenKit.CLI;
-using WolvenKit.CLI.Services;
-using WolvenKit.Common;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
-using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.Materials;
-using WolvenKit.Modkit.RED4.MeshFile;
-using WolvenKit.Modkit.RED4.RigFile;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.CLI
 {
     internal class Program
     {
-        
+
         [STAThread]
         public static void Main(string[] args)
         {

@@ -7,8 +7,6 @@ namespace WolvenKit.Common.Extensions
 {
     public static class FileSystemInfoExtensions
     {
-        #region Methods
-
         public static void CopyToAndCreate(this FileInfo fi, string destinationpath, bool overwrite = false)
         {
             try
@@ -45,6 +43,20 @@ namespace WolvenKit.Common.Extensions
 
         public static string TrimmedExtension(this FileInfo fi) => fi.Extension.TrimStart('.');
 
-        #endregion Methods
+        public static string GetRelativePath(this FileInfo fi, DirectoryInfo baseDir)
+        {
+            if (fi.FullName.Contains(baseDir.FullName))
+            {
+
+            }
+
+            var rel = fi.FullName[(baseDir.FullName.Length + 1)..];
+
+
+            return fi.FullName.Contains(baseDir.FullName)
+                ? fi.FullName[(baseDir.FullName.Length + 1)..]
+                : "";
+        }
+
     }
 }

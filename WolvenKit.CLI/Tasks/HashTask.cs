@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Catel.IoC;
-using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Services;
 
 namespace CP77Tools.Tasks
 {

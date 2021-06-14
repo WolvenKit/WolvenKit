@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using Catel.IoC;
-using CP77.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.Oodle;
@@ -14,7 +12,6 @@ using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using WolvenKit.Common;
-using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.RigFile;
 

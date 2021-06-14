@@ -4,55 +4,51 @@
   <xs:element name="Weavers">
     <xs:complexType>
       <xs:all>
-        <xs:element name="Catel" minOccurs="0" maxOccurs="1">
+        <xs:element name="PropertyChanged" minOccurs="0" maxOccurs="1">
           <xs:complexType>
-            <xs:attribute name="WeaveProperties" type="xs:boolean">
+            <xs:attribute name="InjectOnPropertyNameChanged" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>
-        Weave all regular properties on classes that inherit (directly or indirectly) from `Catel.Data.ModelBase` into Catel properties. The default value is <c>true</c>.
-      </xs:documentation>
+                <xs:documentation>Used to control if the On_PropertyName_Changed feature is enabled.</xs:documentation>
               </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="WeaveExposedProperties" type="xs:boolean">
+            <xs:attribute name="TriggerDependentProperties" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>
-        Weave all Catel properties decorated with both the `Catel.MVVM.ModelAttribute` and `Fody.ExposeAttribute` attributes as automatic mappings. The default value is <c>true</c>.
-      </xs:documentation>
+                <xs:documentation>Used to control if the Dependent properties feature is enabled.</xs:documentation>
               </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="WeaveCalculatedProperties" type="xs:boolean">
+            <xs:attribute name="EnableIsChangedProperty" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>
-        Automatically raise change notifications for calculated properties (e.g. `FullName =&gt; FirstName + " " + LastName`). The default value is <c>true</c>.
-      </xs:documentation>
+                <xs:documentation>Used to control if the IsChanged property feature is enabled.</xs:documentation>
               </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="WeaveArguments" type="xs:boolean">
+            <xs:attribute name="EventInvokerNames" type="xs:string">
               <xs:annotation>
-                <xs:documentation>
-        Weave all Argument check attributes into actual argument checks. The default value is <c>true</c>.
-      </xs:documentation>
+                <xs:documentation>Used to change the name of the method that fires the notify event. This is a string that accepts multiple values in a comma separated form.</xs:documentation>
               </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="WeaveLogging" type="xs:boolean">
+            <xs:attribute name="CheckForEquality" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>
-        Weave all calls to `LogManager.GetCurrentClassLogger()` into `LogManager.GetLogger(typeof(classname))`. The default value is <c>true</c>.
-      </xs:documentation>
+                <xs:documentation>Used to control if equality checks should be inserted. If false, equality checking will be disabled for the project.</xs:documentation>
               </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="GenerateXmlSchemas" type="xs:boolean">
+            <xs:attribute name="CheckForEqualityUsingBaseEquals" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>
-        Generate xml schemas for all classes that inherit (directly or indirectly) from `Catel.Data.ModelBase`. The default value is <c>false</c>.
-      </xs:documentation>
+                <xs:documentation>Used to control if equality checks should use the Equals method resolved from the base class.</xs:documentation>
               </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="GeneratedPropertyDataAccessibility" type="xs:string">
+            <xs:attribute name="UseStaticEqualsFromBase" type="xs:boolean">
               <xs:annotation>
-                <xs:documentation>
-        The accessibility for generated property data. The default value is `Public`. Use either `Public`, `Internal` or `Private`.
-      </xs:documentation>
+                <xs:documentation>Used to control if equality checks should use the static Equals method resolved from the base class.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="SuppressWarnings" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>Used to turn off build warnings from this weaver.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="SuppressOnPropertyNameChangedWarning" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>Used to turn off build warnings about mismatched On_PropertyName_Changed methods.</xs:documentation>
               </xs:annotation>
             </xs:attribute>
           </xs:complexType>

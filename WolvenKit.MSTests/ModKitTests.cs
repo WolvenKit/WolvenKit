@@ -11,6 +11,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Tools;
 using WolvenKit.Interfaces.Core;
@@ -232,7 +234,8 @@ namespace WolvenKit.MSTests
                     Assert.Fail($"No raw file found in {resultDir}");
                 }
 
-                var resImport = modtools.Import(rawfile, isettings);
+                var redrelative = new RedRelativePath(rawfile.Directory, rawfile.Name);
+                var resImport = modtools.Import(redrelative, isettings);
                 if (!resImport)
                 {
                     importfails.Add(fileEntry);

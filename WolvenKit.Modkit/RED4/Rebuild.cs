@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
@@ -18,16 +20,20 @@ namespace WolvenKit.Modkit.RED4
     {
         #region Methods
 
-        private bool Rebuild(
-            Stream redfile,
-            IEnumerable<FileInfo> buffers
-        )
+        /// <summary>
+        /// Rebuild a list of buffers into a redfile
+        /// </summary>
+        /// <param name="redfile"></param>
+        /// <param name="buffers"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        private bool Rebuild(Stream redfile, IEnumerable<FileInfo> buffers)
         {
-            AppendBuffersToFile(redfile, buffers);
+            AppendBuffersToFile(redfile);
 
             return true;
 
-            void AppendBuffersToFile(Stream fileStream, IEnumerable<FileInfo> buffersIn)
+            void AppendBuffersToFile(Stream fileStream)
             {
                 //check if cr2w
                 using var fileReader = new BinaryReader(fileStream);
@@ -39,10 +45,10 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // sort buffers numerically
-                var buffers = buffersIn;
-                if (buffersIn.All(_ => _.Extension == ".buffer"))
+                var bufferlist = buffers.ToList();
+                if (bufferlist.All(_ => _.Extension == ".buffer"))
                 {
-                    buffers = buffersIn
+                    bufferlist = bufferlist
                         .OrderBy(_ =>
                             int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
                         .ToList();
@@ -58,10 +64,9 @@ namespace WolvenKit.Modkit.RED4
 
                 var existingBufferCount = cr2w.Buffers.Count;
 
-                var bufferList = buffers.ToList();
-                for (var i = 0; i < bufferList.Count; i++)
+                for (var i = 0; i < bufferlist.Count; i++)
                 {
-                    var buffer = bufferList[i];
+                    var buffer = bufferlist[i];
                     if (!buffer.Exists)
                     {
                         throw new FileNotFoundException($"Could not find file {buffer.FullName} anymore.");
@@ -141,65 +146,82 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        public bool RebuildBuffer(
-            FileInfo rawFile,
-            DirectoryInfo outDirectory = null
-            )
+        /// <summary>
+        /// Rebuilds a single raw buffer into its redfile
+        /// </summary>
+        /// <param name="rawRelativePath"></param>
+        /// <param name="outDir"></param>
+        /// <returns></returns>
+        public bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo outDir = null)
         {
-            var ext = Path.GetExtension(rawFile.FullName).TrimStart('.');
-            if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
-            {
-                return false;
-            }
+            var ext = rawRelativePath.Extension;
             // only buffers can be rebuilt
-            if (ext != ".buffer")
+            if (ext != "buffer")
             {
                 return false;
             }
-            if (outDirectory is not { Exists: true })
+            if (outDir is not { Exists: true })
             {
-                outDirectory = rawFile.Directory;
+                outDir = rawRelativePath.BaseDirectory;
             }
 
-            var filename = rawFile.Name;
+            var bufferPath = rawRelativePath.FullPath;
+            var rawRedFilePath = new FileInfo(Path.ChangeExtension(bufferPath.Remove(bufferPath.Length - 7), "").TrimEnd('.'));
 
-            // get a list of buffers if the user selected just one
-            var buffers = rawFile.Directory
-                .GetFiles($"{rawFile.FullName}.*.buffer", SearchOption.TopDirectoryOnly);
+            var redRelative = new RedRelativePath(rawRelativePath)
+                .ChangeBaseDir(outDir)
+                .ChangeRelativePath(rawRedFilePath.GetRelativePath(rawRelativePath.BaseDirectory));
 
-
-            // find redfile in outdir
-            // TODO (this can potentially return multiple files with the same name)
-            var files = outDirectory.GetFiles($"*{filename}", SearchOption.AllDirectories);
-            if (files.Length > 0)
+            if (string.IsNullOrEmpty(redRelative.FullPath) || !File.Exists(redRelative.FullPath))
             {
-                // throw something
-                return false;
+                var depotBase = $"{Path.DirectorySeparatorChar}base{Path.DirectorySeparatorChar}";
+                var basedir = rawRelativePath.BaseDirectory.FullName;
+                // check one more combination if the user is derpy
+                if (basedir.Contains(depotBase))
+                {
+                    var first = basedir.IndexOf(depotBase, StringComparison.Ordinal);
+                    var additionalRelPath = basedir[(first + 1)..];
+
+                    redRelative.ChangeBaseDir(outDir);
+                    var newrelpath = Path.Combine(additionalRelPath, redRelative.RelativePath);
+                    redRelative.ChangeRelativePath(newrelpath);
+
+                    if (!File.Exists(redRelative.FullPath))
+                    {
+                        // this means the redfile to be rebuilt has not been found in the output folder
+                        _loggerService.Error($"Failed to find a file to rebuild for {bufferPath}");
+                        return false;
+                    }
+                }
             }
-            else if (files.Length < 1)
+
+            // get all other buffers
+            var buffers = rawRelativePath.ToFileInfo().Directory
+                .GetFiles($"{rawRedFilePath.Name}.*.buffer", SearchOption.TopDirectoryOnly);
+
+            using var fileStream = new FileStream(redRelative.FullPath, FileMode.Open, FileAccess.ReadWrite);
+            var r = Rebuild(fileStream, buffers);
+
+            if (r)
             {
-                // no redfile found, skip
-                return false;
+                _loggerService.Success($"Succesfully rebuilt {redRelative.FullPath} with raw buffers");
             }
             else
             {
-                using var fileStream = new FileStream(files.First().FullName, FileMode.Open, FileAccess.ReadWrite);
-                return Rebuild(fileStream, buffers);
+                _loggerService.Error($"Failed to rebuild {redRelative.FullPath} with raw buffers.");
             }
+
+            return r;
         }
 
-
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="inDir"></param>
         /// <param name="outDir"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool RebuildFolder(
-            DirectoryInfo inDir,
-            DirectoryInfo outDir = null
-            )
+        public bool RebuildFolder(DirectoryInfo inDir, DirectoryInfo outDir = null)
         {
             if (outDir is not { Exists: true })
             {
@@ -226,16 +248,23 @@ namespace WolvenKit.Modkit.RED4
             _progressService.Report(0);
             foreach (var (parentPath, buffers) in buffersDict)
             {
-                using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
-                if (!Rebuild(fileStream, buffers))
+                if (!File.Exists(parentPath))
                 {
                     failsCount++;
                     _loggerService.Warning($"Failed to rebuild {parentPath} with buffers");
-                    
                 }
                 else
                 {
-                    _loggerService.Success($"Rebuilt {parentPath} with buffers");
+                    using var fileStream = new FileStream(parentPath, FileMode.Open, FileAccess.ReadWrite);
+                    if (!Rebuild(fileStream, buffers))
+                    {
+                        failsCount++;
+                        _loggerService.Warning($"Failed to rebuild {parentPath} with buffers");
+                    }
+                    else
+                    {
+                        _loggerService.Success($"Rebuilt {parentPath} with buffers");
+                    }
                 }
 
                 Interlocked.Increment(ref progress);
@@ -254,24 +283,50 @@ namespace WolvenKit.Modkit.RED4
                     // buffer path e.g. stand__rh_hold_tray__serve_milkshakes__01.scenerid.11.buffer
                     // removes 7 characters (".buffer") and then removes the variable length extension (".11")
                     var path = fileInfo.FullName;//[(infolder.FullName.Length + 1)..];
-                    var parentpath = Path.ChangeExtension(path.Remove(path.Length - 7), "").TrimEnd('.');
+                    var rawRedFilePath = Path.ChangeExtension(path.Remove(path.Length - 7), "").TrimEnd('.');
 
-                    // if the outdir is elsewhere, we need to change the path... :(
-                    var parentFileName = Path.GetFileName(parentpath);
-                    if (inDir.FullName != outDir.FullName)
+                    // if the outdir is elsewhere, we need to change the path
+                    var redFilePath = rawRedFilePath.Replace(inDir.FullName, outDir.FullName);
+                    if (outDir != inDir && rawRedFilePath.Equals(redFilePath))
                     {
-                        parentpath = parentpath.Replace(inDir.FullName, outDir.FullName);
+                        // this means the redfile to be rebuilt has not been found in the output folder
+                        _loggerService.Error($"Failed to find a file to rebuild for {path}");
+                        return;
                     }
 
-                    var key = parentpath;//FNV1A64HashAlgorithm.HashString(parentpath);
+                    if (!File.Exists(redFilePath))
+                    {
+                        var depotBase = $"{Path.DirectorySeparatorChar}base{Path.DirectorySeparatorChar}";
+                        var basedir = inDir.FullName;
+                        // check one more combination if the user is derpy
+                        if (basedir.Contains(depotBase))
+                        {
+                            var first = basedir.IndexOf(depotBase, StringComparison.Ordinal);
+                            var additionalRelPath = basedir[(first + 1)..];
+
+                            var redRelative = new RedRelativePath(outDir, new FileInfo(rawRedFilePath).GetRelativePath(inDir));
+                            var newrelpath = Path.Combine(additionalRelPath, redRelative.RelativePath);
+                            redRelative.ChangeRelativePath(newrelpath);
+
+                            if (!File.Exists(redRelative.FullPath))
+                            {
+                                // this means the redfile to be rebuilt has not been found in the output folder
+                                _loggerService.Error($"Failed to find a file to rebuild for {path}");
+                                return;
+                            }
+
+                            redFilePath = redRelative.FullName;
+                        }
+                    }
+
 
                     // add buffer
-                    if (!buffersDict.ContainsKey(key))
+                    if (!buffersDict.ContainsKey(redFilePath))
                     {
-                        buffersDict.Add(key, new List<FileInfo>());
+                        buffersDict.Add(redFilePath, new List<FileInfo>());
                     }
 
-                    buffersDict[key].Add(fileInfo);
+                    buffersDict[redFilePath].Add(fileInfo);
                 }
             }
         }

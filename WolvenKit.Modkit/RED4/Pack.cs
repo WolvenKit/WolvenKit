@@ -188,7 +188,7 @@ namespace WolvenKit.Modkit.RED4
                 else
                 {
                     fileStream.Seek(0, SeekOrigin.Begin);
-                    var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(fileStream);
+                    var cr2winbuffer = fileStream.ToByteArray();
                     var offset = (ulong)bw.BaseStream.Position;
                     var size = (uint)cr2winbuffer.Length;
 
@@ -215,7 +215,7 @@ namespace WolvenKit.Modkit.RED4
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(fileBinaryReader.BaseStream)); //TODO: this is only correct for files with no buffer
+                var sha1hash = sha1.ComputeHash(fileBinaryReader.BaseStream.ToByteArray()); //TODO: this is only correct for files with no buffer
                 var item = new FileEntry(hash, DateTime.Now, (uint)flags
                     , firstoffsetidx, lastoffsetidx,
                     firstimportidx, lastimportidx

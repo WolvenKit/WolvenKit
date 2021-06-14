@@ -6,8 +6,6 @@ using WolvenKit.Modkit.RED4.GeneralStructs;
 using SharpGLTF.Scenes;
 using System.Collections.Generic;
 using System.Linq;
-using Catel.IoC;
-using CP77.CR2W;
 
 namespace WolvenKit.Modkit.RED4.RigFile
 {
@@ -133,7 +131,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 }
             }
 
-            // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul 
+            // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul
             if ((cr2w.Chunks[0].Data as animRig).APoseLS.Count != 0)
             {
                 Rig.AposeLSExits = true;
@@ -368,7 +366,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
             var srcParentIdx = srcBones.Parent[srcIndex]; // I guess a negative parent index means it's a root bone.
 
-            if (srcParentIdx >= 0) // if this bone has a parent, get the parent NodeBuilder from the bonesMap. 
+            if (srcParentIdx >= 0) // if this bone has a parent, get the parent NodeBuilder from the bonesMap.
             {
                 var dstParent = bonesMap[srcParentIdx];
                 dstParent.AddNode(dstNode);

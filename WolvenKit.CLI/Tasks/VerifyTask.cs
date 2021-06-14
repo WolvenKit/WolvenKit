@@ -1,13 +1,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using Catel.IoC;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.RED4.CR2W.Helpers;
-using StreamExtensions = Catel.IO.StreamExtensions;
+using WolvenKit.Interfaces.Extensions;
 
 namespace CP77Tools.Tasks
 {
@@ -77,7 +74,7 @@ namespace CP77Tools.Tasks
             static bool VerifyFile(Stream ms, string infilepath = "")
             {
                 var c = new CR2WFile();// { FileName = fileEntry.NameOrHash };
-                var originalbytes = StreamExtensions.ToByteArray(ms);
+                var originalbytes = ms.ToByteArray();
                 ms.Seek(0, SeekOrigin.Begin);
                 var readResult = c.Read(ms);
 
