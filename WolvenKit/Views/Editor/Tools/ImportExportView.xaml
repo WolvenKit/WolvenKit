@@ -475,13 +475,17 @@
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
+                                    FilterRowCondition="Contains"
                                     HeaderText="File Name"
                                     HorizontalHeaderContentAlignment="Left"
+                                    ImmediateUpdateColumnFilter="True"
                                     MappingName="ShortName" />
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
+                                    FilterRowCondition="Contains"
                                     HeaderText="Full Path"
                                     HorizontalHeaderContentAlignment="Left"
+                                    ImmediateUpdateColumnFilter="True"
                                     MappingName="Name" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
@@ -534,8 +538,10 @@
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
+                                    FilterRowCondition="Contains"
                                     HeaderText="File Name"
                                     HorizontalHeaderContentAlignment="Left"
+                                    ImmediateUpdateColumnFilter="True"
                                     MappingName="ShortName" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
