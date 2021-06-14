@@ -104,10 +104,7 @@ namespace WolvenKit.Views.Editor
         {
             if (ViewModel is ImportExportViewModel vm && sender is PropertyGrid pg)
             {
-                if (vm.MeshExportSelectedCollection != null)
-                {
-                    vm.MeshExportSelectedCollection.Clear();
-                }
+                vm.MeshExportSelectedCollection?.Clear();
 
                 _propertyItem = pg.SelectedPropertyItem;
                 switch (_propertyItem.Name)

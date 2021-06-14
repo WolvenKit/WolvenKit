@@ -393,10 +393,10 @@ namespace WolvenKit.Modkit.RED4
 
         private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
         {
-            List<Archive> archives = new List<Archive>();
+            var archives = new List<Archive>();
             foreach(var ar in meshargs.Archives)
             {
-                string name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
+                var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
                 if(name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
                 {
                     archives.Add(ar);
@@ -427,42 +427,33 @@ namespace WolvenKit.Modkit.RED4
                 case MeshExportType.Multimesh:
                 {
                     var meshes = meshargs.MultiMeshargs.MultiMeshMeshes;
-                    if (!meshes.Any())
+                    var rigs = meshargs.MultiMeshargs.MultiMeshRigs;
+                    if (!meshes.Any() || !rigs.Any())
                     {
                         return false;
                     }
-                    var rigs = meshargs.MultiMeshargs.MultiMeshRigs;
 
                     var meshstreams = meshes.Select(
                             delegate (FileEntry entry)
                             {
                                 var ar = entry.Archive as Archive;
-                                using var ms = new MemoryStream();
+                                var ms = new MemoryStream();
                                 ar?.CopyFileToStreamWithoutBuffers(ms, entry.NameHash64);
                                 return (Stream)ms;
                             })
                         .ToList();
 
-                    if (!rigs.Any())
-                    {
-                        return _meshTools.ExportMultiMeshWithoutRig(meshstreams, cr2wFileName, meshargs.LodFilter,
-                            meshargs.isGLBinary);
-                    }
-                    else
-                    {
-                        var rigstreams = rigs.Select(
-                                delegate (FileEntry entry)
-                                {
-                                    var ar = entry.Archive as Archive;
-                                    using var ms = new MemoryStream();
-                                    ar?.CopyFileToStreamWithoutBuffers(ms, entry.NameHash64);
-                                    return (Stream) ms;
-                                })
-                            .ToList();
+                    var rigstreams = rigs.Select(
+                            delegate (FileEntry entry)
+                            {
+                                var ar = entry.Archive as Archive;
+                                var ms = new MemoryStream();
+                                ar?.CopyFileToStreamWithoutBuffers(ms, entry.NameHash64);
+                                return (Stream)ms;
+                            })
+                        .ToList();
 
-                        return _meshTools.ExportMultiMeshWithRig(meshstreams, rigstreams, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
-                    }
-
+                    return _meshTools.ExportMultiMeshWithRig(meshstreams, rigstreams, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
                 }
                 default:
                     return false;

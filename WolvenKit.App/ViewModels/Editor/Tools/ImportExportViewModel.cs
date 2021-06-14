@@ -250,7 +250,6 @@ namespace WolvenKit.ViewModels.Editor
         public ICommand ConfirmMeshCollectionCommand { get; private set; }
 
         private bool CanConfirmMeshCollection(string v) => true;
-
         private void ExecuteConfirmMeshCollection(string v)
         {
             if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
@@ -298,6 +297,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
                 _gameController.GetController() is not Cp77Controller cp77Controller)
+            {
+                return;
+            }
+
+            if (MeshExportAvailableCollection.Any() && MeshExportAvailableCollection.FirstOrDefault().Extension.TrimStart('.').Equals(selectedType.ToString()))
             {
                 return;
             }
