@@ -32,8 +32,6 @@ namespace WolvenKit.MSTests
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
-        #region Methods
-
         [TestMethod]
         //[DataRow("audio_1_general.archive")]
         [DataRow("basegame_1_engine.archive")]
@@ -412,15 +410,15 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        [DataRow(ECookedFileFormat.csv)]
-        [DataRow(ECookedFileFormat.cubemap)]
-        [DataRow(ECookedFileFormat.envprobe)]
+        //[DataRow(ECookedFileFormat.csv)]
+        //[DataRow(ECookedFileFormat.cubemap)]
+        //[DataRow(ECookedFileFormat.envprobe)]
         [DataRow(ECookedFileFormat.mesh)]
-        [DataRow(ECookedFileFormat.mlmask)]
-        // [DataRow(ECookedFileFormat.morphtarget)]
-        [DataRow(ECookedFileFormat.texarray)]
-        [DataRow(ECookedFileFormat.wem)]
-        [DataRow(ECookedFileFormat.xbm)]
+        //[DataRow(ECookedFileFormat.mlmask)]
+        //// [DataRow(ECookedFileFormat.morphtarget)]
+        //[DataRow(ECookedFileFormat.texarray)]
+        //[DataRow(ECookedFileFormat.wem)]
+        //[DataRow(ECookedFileFormat.xbm)]
         public void Test_Uncook(ECookedFileFormat extension)
         {
             Environment.SetEnvironmentVariable("WOLVENKIT_ENVIRONMENT", "Testing", EnvironmentVariableTarget.Process);
@@ -488,6 +486,5 @@ namespace WolvenKit.MSTests
             Assert.AreEqual(limit,  limit - uncookfails.Count);
         }
 
-        #endregion Methods
     }
 }

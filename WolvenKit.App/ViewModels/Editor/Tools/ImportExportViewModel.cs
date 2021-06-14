@@ -118,7 +118,7 @@ namespace WolvenKit.ViewModels.Editor
             ProcessAllCommand = new TaskCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new TaskCommand(ExecuteProcessSelected, CanProcessSelected);
             CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
-            SetCollectionCommand = new DelegateCommand<ERedExtension>(ExecuteSetCollection, CanSetCollection);
+            SetCollectionCommand = new DelegateCommand<string>(ExecuteSetCollection, CanSetCollection);
             ConfirmMeshCollectionCommand = new DelegateCommand<string>(ExecuteConfirmMeshCollection, CanConfirmMeshCollection);
 
             AddItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteAddItems, CanAddItems);
@@ -267,20 +267,20 @@ namespace WolvenKit.ViewModels.Editor
                     meshExportArgs.MultiMeshargs.MultiMeshMeshes =
                         MeshExportSelectedCollection.ToList();
                     _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
-
+                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
                     break;
 
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
                     meshExportArgs.MultiMeshargs.MultiMeshRigs =
                         MeshExportSelectedCollection.ToList();
                     _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
-
+                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
                     break;
 
                 case nameof(MeshExportArgs.WithRigMeshargs.Rig):
                     meshExportArgs.WithRigMeshargs.Rig = new List<FileEntry>(){ MeshExportSelectedCollection.FirstOrDefault() };
                     _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-
+                    meshExportArgs.meshExportType = MeshExportType.WithRig;
                     break;
 
                 default:
@@ -291,9 +291,9 @@ namespace WolvenKit.ViewModels.Editor
 
         public ICommand SetCollectionCommand { get; private set; }
 
-        private bool CanSetCollection(ERedExtension selectedType) => true;
+        private bool CanSetCollection(string selectedType) => true;
 
-        private void ExecuteSetCollection(ERedExtension selectedType)
+        private void ExecuteSetCollection(string argType)
         {
             if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
                 _gameController.GetController() is not Cp77Controller cp77Controller)
@@ -301,7 +301,36 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
-            if (MeshExportAvailableCollection.Any() && MeshExportAvailableCollection.FirstOrDefault().Extension.TrimStart('.').Equals(selectedType.ToString()))
+            var fetchExtension = ERedExtension.rig;
+            List<FileEntry> selectedEntries = new();
+            switch (argType)
+            {
+                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
+                    fetchExtension = ERedExtension.mesh;
+                    selectedEntries = meshExportArgs.MultiMeshargs.MultiMeshMeshes;
+                    break;
+                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
+                    selectedEntries = meshExportArgs.MultiMeshargs.MultiMeshRigs;
+                    break;
+                case nameof(MeshExportArgs.WithRigMeshargs.Rig):
+                    selectedEntries = meshExportArgs.WithRigMeshargs.Rig;
+                    break;
+                default:
+                    break;
+            }
+
+            // set selected types
+            if (MeshExportSelectedCollection != null)
+            {
+                MeshExportSelectedCollection.Clear();
+                if (selectedEntries != null)
+                {
+                    MeshExportSelectedCollection.AddRange(selectedEntries);
+                }
+            }
+
+            // set available types
+            if (MeshExportAvailableCollection.Any() && MeshExportAvailableCollection.FirstOrDefault().Extension.TrimStart('.').Equals(fetchExtension.ToString()))
             {
                 return;
             }
@@ -310,7 +339,7 @@ namespace WolvenKit.ViewModels.Editor
             MeshExportAvailableCollection.Clear();
             if (archivemanager != null)
             {
-                MeshExportAvailableCollection.AddRange(archivemanager.GroupedFiles[$".{selectedType}"]);
+                MeshExportAvailableCollection.AddRange(archivemanager.GroupedFiles[$".{fetchExtension}"]);
             }
         }
 
