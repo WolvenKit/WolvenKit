@@ -106,16 +106,23 @@ namespace WolvenKit.Views.Editor
                 switch (propItem.Name)
                 {
                     case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
+                        vm.SetCollectionCommand.SafeExecute(ERedExtension.mesh);
+
                         break;
+
                     case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
+                        vm.SetCollectionCommand.SafeExecute(ERedExtension.rig);
+
                         break;
+
                     case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
+                        vm.SetCollectionCommand.SafeExecute(ERedExtension.rig);
+
                         break;
+
                     default:
                         break;
                 }
-
-                vm.SetCollectionCommand.SafeExecute();
             }
 
             e.Cancel = true;
@@ -135,10 +142,13 @@ namespace WolvenKit.Views.Editor
                 {
                     case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
                         break;
+
                     case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
                         break;
+
                     case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
                         break;
+
                     default:
                         break;
                 }

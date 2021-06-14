@@ -115,9 +115,8 @@ namespace WolvenKit.ViewModels.Editor
             ProcessAllCommand = new TaskCommand(ExecuteProcessAll, CanProcessAll);
             ProcessSelectedCommand = new TaskCommand(ExecuteProcessSelected, CanProcessSelected);
             CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
-            SetCollectionCommand = new RelayCommand(ExecuteSetCollection, CanSetCollection);
+            SetCollectionCommand = new DelegateCommand<ERedExtension>(ExecuteSetCollection, CanSetCollection);
             ConfirmMeshCollectionCommand = new DelegateCommand<string>(ExecuteConfirmMeshCollection, CanConfirmMeshCollection);
-
 
             _watcherService.Files
                 .Connect()
@@ -212,8 +211,6 @@ namespace WolvenKit.ViewModels.Editor
 
         #endregion properties
 
-
-
         public ICommand ConfirmMeshCollectionCommand { get; private set; }
 
         private bool CanConfirmMeshCollection(string v) => true;
@@ -233,27 +230,29 @@ namespace WolvenKit.ViewModels.Editor
                     meshExportArgs.MultiMeshargs.MultiMeshMeshes =
                         MeshExportSelectedCollection.Select(_ => _.Name).ToList();
                     break;
+
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
                     meshExportArgs.MultiMeshargs.MultiMeshRigs =
                         MeshExportSelectedCollection.Select(_ => _.Name).ToList();
                     break;
+
                 case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
                     meshExportArgs.WithRigMeshargs.Rigs =
                         MeshExportSelectedCollection.Select(_ => _.Name).ToList();
                     break;
+
                 default:
                     break;
             }
         }
 
-
         public ICommand SetCollectionCommand { get; private set; }
 
-        private bool CanSetCollection() => true;
+        private bool CanSetCollection(ERedExtension selectedType) => true;
 
-        private void ExecuteSetCollection()
+        private void ExecuteSetCollection(ERedExtension selectedType)
         {
-            if (SelectedExport is not {Properties: MeshExportArgs meshExportArgs} ||
+            if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
                 _gameController.GetController() is not Cp77Controller cp77Controller)
             {
                 return;
@@ -263,10 +262,9 @@ namespace WolvenKit.ViewModels.Editor
             MeshExportAvailableCollection.Clear();
             if (archivemanager != null)
             {
-                MeshExportAvailableCollection.AddRange(archivemanager.GroupedFiles[$".{ERedExtension.rig}"]);
+                MeshExportAvailableCollection.AddRange(archivemanager.GroupedFiles[$".{selectedType}"]);
             }
         }
-
 
         public ICommand CopyArgumentsTemplateToCommand { get; private set; }
 
@@ -391,7 +389,6 @@ namespace WolvenKit.ViewModels.Editor
                 await Task.Run(() => _modTools.Export(fi, settings,
                     new DirectoryInfo(proj.ModDirectory),
                     new DirectoryInfo(proj.RawDirectory)));
-
             }
         }
 

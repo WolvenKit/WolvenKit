@@ -60,6 +60,7 @@ namespace WolvenKit
 
 #if DEBUG
             LogManager.AddDebugListener(false);
+            VMHelpers.InDebug = true;
 #endif
 
             StaticReferences.Logger.Info("Starting application");
