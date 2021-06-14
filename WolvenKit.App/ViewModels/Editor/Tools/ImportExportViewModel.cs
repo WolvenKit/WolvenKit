@@ -22,6 +22,8 @@ using ModTools = WolvenKit.Modkit.RED4.ModTools;
 using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -118,6 +120,9 @@ namespace WolvenKit.ViewModels.Editor
             SetCollectionCommand = new DelegateCommand<ERedExtension>(ExecuteSetCollection, CanSetCollection);
             ConfirmMeshCollectionCommand = new DelegateCommand<string>(ExecuteConfirmMeshCollection, CanConfirmMeshCollection);
 
+            AddItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteAddItems, CanAddItems);
+            RemoveItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteRemoveItems, CanRemoveItems);
+
             _watcherService.Files
                 .Connect()
                 .Filter(_ => _.IsImportable)
@@ -210,6 +215,36 @@ namespace WolvenKit.ViewModels.Editor
         public bool IsImportsSelected { get; set; }
 
         #endregion properties
+
+        public ICommand AddItemsCommand { get; private set; }
+        public ICommand RemoveItemsCommand { get; private set; }
+
+        private bool CanAddItems(ObservableCollection<object> items) => true;
+
+        private void ExecuteAddItems(ObservableCollection<object> items)
+        {
+            foreach (var item in items)
+            {
+                var newitem = item as FileEntry;
+                if (!MeshExportSelectedCollection.Contains(newitem))
+                {
+                    MeshExportSelectedCollection.Add(newitem);
+                }
+            }
+        }
+
+        private bool CanRemoveItems(ObservableCollection<object> items) => true;
+
+        private void ExecuteRemoveItems(ObservableCollection<object> items)
+        {
+            var x = new List<FileEntry>();
+            foreach (var item in items)
+            {
+                var newitem = item as FileEntry;
+                x.Add(newitem);
+            }
+            MeshExportSelectedCollection.RemoveMany(x);
+        }
 
         public ICommand ConfirmMeshCollectionCommand { get; private set; }
 

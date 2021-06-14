@@ -422,7 +422,6 @@
             Background="{DynamicResource ContentBackgroundAlt}"
             Visibility="Collapsed">
 
-
             <Grid>
 
                 <Grid.RowDefinitions>
@@ -434,11 +433,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="1" />
                     <ColumnDefinition Width="*" />
-
                 </Grid.ColumnDefinitions>
-
-
-
 
                 <!--  Titles  -->
                 <TextBlock
@@ -454,14 +449,11 @@
                     Text=" Selected File(s)"
                     TextAlignment="Center" />
 
-
                 <!--  Divider  -->
                 <Grid
                     Grid.Row="1"
                     Grid.Column="1"
                     Background="{DynamicResource ContentBackgroundAlt2}" />
-
-
 
                 <!--  Selection Grid  -->
                 <Grid
@@ -469,11 +461,12 @@
                     Grid.Column="0"
                     Background="{DynamicResource ContentBackgroundAlt2}">
                     <Grid>
-                        <syncfusion:SfDataGrid x:Name="FileSelectionDataGrid"
-                                               Margin="0,0,0,40"
-                                               ItemsSource="{Binding MeshExportAvailableCollection}"
-                                               AutoGenerateColumns="False"
-                                               >
+                        <syncfusion:SfDataGrid
+                            x:Name="FileSelectionDataGrid"
+                            Margin="0,0,0,40"
+                            AutoGenerateColumns="False"
+                            ItemsSource="{Binding MeshExportAvailableCollection}"
+                            SelectionMode="Extended">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
@@ -482,7 +475,6 @@
                                     HorizontalHeaderContentAlignment="Left"
                                     MappingName="Name" />
                             </syncfusion:SfDataGrid.Columns>
-
                         </syncfusion:SfDataGrid>
                         <Border
                             Margin="0"
@@ -500,6 +492,7 @@
                                         Margin="0,0,5,0"
                                         Padding="5"
                                         Background="{DynamicResource ContentBackgroundAlt}"
+                                        Click="AddItemsButtonClick"
                                         FontSize="12"
                                         Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">
@@ -508,7 +501,6 @@
                                             <TextBlock Text="Add selected file(s)" />
                                         </StackPanel>
                                     </Button>
-
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -521,11 +513,11 @@
                     Grid.Column="2"
                     Background="{DynamicResource ContentBackgroundAlt2}">
                     <Grid>
-                        <syncfusion:SfDataGrid x:Name="SelectedFilesGrid"
-                                               Margin="0,0,0,40"
-                                               ItemsSource="{Binding MeshExportSelectedCollection}">
-                            
-                        </syncfusion:SfDataGrid>
+                        <syncfusion:SfDataGrid
+                            x:Name="SelectedFilesGrid"
+                            Margin="0,0,0,40"
+                            ItemsSource="{Binding MeshExportSelectedCollection}"
+                            SelectionMode="Extended" />
                         <Border
                             Margin="0"
                             Padding="5"
@@ -544,6 +536,7 @@
                                         Margin="0,0,5,0"
                                         Padding="5"
                                         Background="{DynamicResource ContentBackgroundAlt}"
+                                        Click="RemoveItemsButtonClick"
                                         FontSize="12"
                                         Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">
@@ -573,10 +566,9 @@
                                         Margin="5,0,5,0"
                                         Padding="5"
                                         Background="{DynamicResource ContentBackgroundAlt}"
-                                        FontSize="12"
-                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
                                         Click="ConfirmCollectionEditorSelection_OnClick"
-                                        >
+                                        FontSize="12"
+                                        Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">
 
                                             <TextBlock Text="Confirm" />
@@ -599,11 +591,11 @@
                             Height="30"
                             Padding="5"
                             BorderBrush="{DynamicResource BorderBrush}"
+                            Click="RemoveItemsButtonClick"
                             FontSize="12"
                             Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconMaterial Kind="TransferLeft" />
-
                             </StackPanel>
                         </Button>
                         <!--  Add Button >  -->
@@ -611,14 +603,13 @@
                             Height="30"
                             Padding="5"
                             BorderBrush="{DynamicResource BorderBrush}"
+                            Click="AddItemsButtonClick"
                             FontSize="12"
                             Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconMaterial Kind="TransferRight" />
-
                             </StackPanel>
                         </Button>
-
                     </StackPanel>
                 </Grid>
             </Grid>

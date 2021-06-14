@@ -156,5 +156,21 @@ namespace WolvenKit.Views.Editor
                 vm.ConfirmMeshCollectionCommand.SafeExecute();
             }
         }
+
+        private void AddItemsButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is ImportExportViewModel vm)
+            {
+                vm.AddItemsCommand.SafeExecute(FileSelectionDataGrid.SelectedItems);
+            }
+        }
+
+        private void RemoveItemsButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is ImportExportViewModel vm)
+            {
+                vm.RemoveItemsCommand.SafeExecute(SelectedFilesGrid.SelectedItems);
+            }
+        }
     }
 }
