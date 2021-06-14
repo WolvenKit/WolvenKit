@@ -255,6 +255,8 @@ namespace WolvenKit.ViewModels.Editor
             if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
                 _gameController.GetController() is not Cp77Controller cp77Controller)
             {
+                Trace.WriteLine("failed to confirm");
+
                 return;
             }
 
@@ -264,21 +266,28 @@ namespace WolvenKit.ViewModels.Editor
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
                     meshExportArgs.MultiMeshargs.MultiMeshMeshes =
                         MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                    _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
+
                     break;
 
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
                     meshExportArgs.MultiMeshargs.MultiMeshRigs =
                         MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                    _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
+
                     break;
 
                 case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
                     meshExportArgs.WithRigMeshargs.Rigs =
                         MeshExportSelectedCollection.Select(_ => _.Name).ToList();
+                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+
                     break;
 
                 default:
                     break;
             }
+
         }
 
         public ICommand SetCollectionCommand { get; private set; }

@@ -61,6 +61,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
         public string Extension => Path.GetExtension(FileName);
 
+        public string ShortName => Path.GetFileName(FileName);
+
         #endregion Properties
 
         #region Methods

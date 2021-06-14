@@ -93,6 +93,8 @@ namespace WolvenKit.Views.Editor
         /// <param name="e"></param>
         private void CancelSelectingClick(object sender, RoutedEventArgs e) => XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
+        private PropertyItem _propertyItem;
+
         /// <summary>
         /// Override PG Collection Editor
         /// </summary>
@@ -102,8 +104,8 @@ namespace WolvenKit.Views.Editor
         {
             if (ViewModel is ImportExportViewModel vm && sender is PropertyGrid pg)
             {
-                var propItem = pg.SelectedPropertyItem;
-                switch (propItem.Name)
+                _propertyItem = pg.SelectedPropertyItem;
+                switch (_propertyItem.Name)
                 {
                     case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
                         vm.SetCollectionCommand.SafeExecute(ERedExtension.mesh);
@@ -135,25 +137,10 @@ namespace WolvenKit.Views.Editor
 
         private void ConfirmCollectionEditorSelection_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is ImportExportViewModel vm && sender is PropertyGrid pg)
+            Trace.WriteLine(sender as PropertyGrid);
+            if (ViewModel is ImportExportViewModel vm)
             {
-                var propItem = pg.SelectedPropertyItem;
-                switch (propItem.Name)
-                {
-                    case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
-                        break;
-
-                    case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
-                        break;
-
-                    case nameof(MeshExportArgs.WithRigMeshargs.Rigs):
-                        break;
-
-                    default:
-                        break;
-                }
-
-                vm.ConfirmMeshCollectionCommand.SafeExecute();
+                vm.ConfirmMeshCollectionCommand.SafeExecute(_propertyItem.Name);
             }
         }
 
