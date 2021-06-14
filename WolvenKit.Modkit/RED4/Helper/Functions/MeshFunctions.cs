@@ -151,6 +151,11 @@ namespace CP77.CR2W
             MeshesInfo meshinfo = GetMeshesinfo(cr2w);
 
             List<RawMeshContainer> expMeshes = ContainRawMesh(ms,meshinfo,LodFilter);
+            if (cmesh.BoneNames.Count == 0)    // for rigid meshes
+            {
+                for (int i = 0; i < expMeshes.Count; i++)
+                    expMeshes[i].weightcount = 0;
+            }
             UpdateMeshJoints(ref expMeshes, Rig, bones);
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
@@ -295,6 +300,12 @@ namespace CP77.CR2W
             }
 
             List<RawMeshContainer> expMeshes = ContainRawMesh(ms,meshinfo,LodFilter);
+
+            if (cmesh.BoneNames.Count == 0)    // for rigid meshes
+            {
+                for (int i = 0; i < expMeshes.Count; i++)
+                    expMeshes[i].weightcount = 0;
+            }
             UpdateMeshJoints(ref expMeshes, Rig, bones);
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
@@ -347,9 +358,15 @@ namespace CP77.CR2W
 
                 List<RawMeshContainer> Meshes = ContainRawMesh(ms, meshinfo, LodFilter);
 
-                UpdateMeshJoints(ref Meshes, expRig, bones);
                 for (int i = 0; i < Meshes.Count; i++)
+                {
                     Meshes[i].name = m + "_" + Meshes[i].name;
+                    if (cmesh.BoneNames.Count == 0)    // for rigid meshes
+                        Meshes[i].weightcount = 0;
+                }
+                UpdateMeshJoints(ref Meshes, expRig, bones);
+
+                for (int i = 0; i < Meshes.Count; i++)
 
                 expMeshes.AddRange(Meshes);
 
@@ -485,13 +502,10 @@ namespace CP77.CR2W
                     checker = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
                     if (checker == "PS_ExtraData")
                     {
-                        extraExists[i] = true;
+                        if(rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex.Value == 0)
+                            extraExists[i] = true;
                     }
                 }
-            }
-            for (int i = 0; i < meshC; i++)
-            {
-
             }
 
             List<Appearance> appearances = new List<Appearance>();
