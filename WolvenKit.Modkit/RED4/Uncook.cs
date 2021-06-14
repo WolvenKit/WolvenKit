@@ -420,7 +420,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var ar = entry.Archive as Archive;
                     using var ms = new MemoryStream();
-                    ar?.CopyFileToStreamWithoutBuffers(ms, entry.NameHash64);
+                    ar?.CopyFileToStream(ms, entry.NameHash64,false);
 
                     return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName);
                 }
@@ -438,7 +438,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ar = entry.Archive as Archive;
                                 var ms = new MemoryStream();
-                                ar?.CopyFileToStreamWithoutBuffers(ms, entry.NameHash64);
+                                ar?.CopyFileToStream(ms, entry.NameHash64,false);
                                 return (Stream)ms;
                             })
                         .ToList();
@@ -448,7 +448,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ar = entry.Archive as Archive;
                                 var ms = new MemoryStream();
-                                ar?.CopyFileToStreamWithoutBuffers(ms, entry.NameHash64);
+                                ar?.CopyFileToStream(ms, entry.NameHash64,false);
                                 return (Stream)ms;
                             })
                         .ToList();
