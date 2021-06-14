@@ -366,8 +366,6 @@ namespace CP77.CR2W
                 }
                 UpdateMeshJoints(ref Meshes, expRig, bones);
 
-                for (int i = 0; i < Meshes.Count; i++)
-
                 expMeshes.AddRange(Meshes);
 
             }
