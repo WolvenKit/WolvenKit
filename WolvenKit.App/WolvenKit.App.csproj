@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
@@ -44,9 +44,9 @@
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.5" />
     <PackageReference Include="Svg" Version="3.2.3" />
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.67" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
@@ -61,7 +61,7 @@
         <PackageReference Include="Pfim" Version="0.10.0" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
-    
+
 
 
 
