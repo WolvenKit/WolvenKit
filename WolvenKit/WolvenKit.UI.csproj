@@ -366,21 +366,21 @@
     <PackageReference Include="SharpZipLib" Version="1.3.2" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="2.80.2" />
-     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.67" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.67" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.63" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.5" />
