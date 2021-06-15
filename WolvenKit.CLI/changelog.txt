@@ -1,3 +1,9 @@
+v 1.4.3
+- fixed a bug where mesh settings would not be applied to default export/uncooking
+
+v 1.4.2
+- fixed a bug where files were not being imported properly
+
 v 1.4.1
 - added ttf <--> fnt conversions (affects uncook/export/import command)
 - fixed a bug where appsettings for dotnet tool were not detected properly
