@@ -57,7 +57,7 @@ namespace WolvenKit.RED3.CR2W.Types
                 return evar;
             }
 
-            throw new MissingRTTIException(typeof(T).FullName);
+            throw new MissingRTTIException(varName, Elementtype, this.REDType);
         }
 
         public override List<IEditableVariable> GetEditableVariables()

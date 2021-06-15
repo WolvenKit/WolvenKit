@@ -53,7 +53,7 @@ namespace WolvenKit.RED3.CR2W.Types
                 return evar;
             }
 
-            throw new MissingRTTIException(typeof(T).FullName);
+            throw new MissingRTTIException(varName, Elementtype, this.REDType);
         }
 
         private string BuildTypeName(string type, params int[] flags)

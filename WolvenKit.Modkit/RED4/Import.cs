@@ -275,63 +275,72 @@ namespace WolvenKit.Modkit.RED4
             else
             {
                 _loggerService.Warning($"{rawRelative.Name} - Direct xbm importing is not implemented");
-                return false;
+
+
+
+
+                // read dds metadata
+                var metadata = DDSUtils.ReadHeader(ddsPath);
+                var width = metadata.Width;
+                var height = metadata.Height;
+
+                // create cr2wfile
+                var red = new CR2WFile();
+                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
+                // create xbm chunk
+                var xbm = new CBitmapTexture(red, null, "CBitmapTexture");
+                xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(red, xbm, "cookingPlatform")
+                {
+                    Value = Enums.ECookingPlatform.PLATFORM_PC,
+                    IsSerialized = true
+                };
+                xbm.Width = new CUInt32(red, xbm, "width") { Value = width, IsSerialized = true };
+                xbm.Height = new CUInt32(red, xbm, "height") { Value = height, IsSerialized = true };
+                xbm.Setup = new STextureGroupSetup(red, xbm, "setup")
+                {
+                    IsSerialized = true
+                };
+                SetTextureGroupSetup(xbm.Setup, red);
+                xbm.RenderResourceBlob = new CHandle<IRenderResourceBlob>(red, xbm, "renderTextureResource")
+                    .SetValue(2) as CHandle<IRenderResourceBlob>;
+
+                // create rendRenderTextureBlobPC chunk
+                var blob = new rendRenderTextureBlobPC(red, null, "rendRenderTextureBlobPC");
+                blob.Header = new rendRenderTextureBlobHeader(red, blob.ParentVar as CVariable, "header")
+                {
+                    IsSerialized = true
+                };
+                blob.TextureData = new serializationDeferredDataBuffer(red, blob.ParentVar as CVariable, "textureData")
+                    .SetValue(1) as serializationDeferredDataBuffer;
+
+
+
+                // kraken ddsfile
+                // remove dds header
+
+                // compress file
+
+                // append to cr2wfile
+
+                // update cr2w headers
+
+                throw new NotImplementedException();
             }
-
-
-
-            // read dds metadata
-#pragma warning disable 162
-            var metadata = DDSUtils.ReadHeader(ddsPath);
-            var width = metadata.Width;
-            var height = metadata.Height;
-
-            // create cr2wfile
-            var cr2w = new CR2WFile();
-            // create xbm chunk
-            var xbm = new CBitmapTexture(cr2w, null, "CBitmapTexture");
-            xbm.Width = new CUInt32(cr2w, xbm, "width") { Value = width, IsSerialized = true };
-            xbm.Height = new CUInt32(cr2w, xbm, "height") { Value = height, IsSerialized = true };
-            xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(cr2w, xbm, "cookingPlatform"){ Value = Enums.ECookingPlatform.PLATFORM_PC, IsSerialized = true };
-            xbm.Setup = new STextureGroupSetup(cr2w, xbm, "setup")
-            {
-                IsSerialized = true
-            };
-            SetTextureGroupSetup();
-
-
-
-            // populate with dds metadata
-
-
-
-            // kraken ddsfile
-            // remove dds header
-
-            // compress file
-
-            // append to cr2wfile
-
-            // update cr2w headers
-
-            throw new NotImplementedException();
-#pragma warning restore 162
-
 
             #region local functions
 
-            void SetTextureGroupSetup()
+            void SetTextureGroupSetup(STextureGroupSetup setup, CR2WFile cr2w)
             {
                 // first check the user-texture group
                 var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(args.TextureGroup);
-                xbm.Setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, xbm, "group")
+                setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, setup.ParentVar as CVariable, "group")
                 {
                     IsSerialized = true,
                     Value = args.TextureGroup
                 };
                 if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
                 {
-                    xbm.Setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, xbm, "setup")
+                    setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, setup.ParentVar as CVariable, "setup")
                     {
                         IsSerialized = true,
                         Value = compression
@@ -340,7 +349,7 @@ namespace WolvenKit.Modkit.RED4
 
                 if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
                 {
-                    xbm.Setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, xbm, "rawFormat")
+                    setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, setup.ParentVar as CVariable, "rawFormat")
                     {
                         IsSerialized = true,
                         Value = rawformat

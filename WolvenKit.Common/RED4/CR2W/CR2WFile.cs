@@ -374,7 +374,7 @@ namespace WolvenKit.RED4.CR2W
             var parsedvar = parent.GetPropertyByREDName(varname);
             if (parsedvar == null || parsedvar.REDType != typename)
             {
-                throw new MissingRTTIException(varname);
+                throw new MissingRTTIException(varname, typename, parent.REDType);
             }
 
             // The "size" variable read is something a bit strange : it takes itself into account.

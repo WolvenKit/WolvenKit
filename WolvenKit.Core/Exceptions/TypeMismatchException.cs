@@ -11,7 +11,8 @@ namespace WolvenKit.Core.Exceptions
 
     public class MissingRTTIException : Exception
     {
-        public MissingRTTIException(string expected) : base($"Missing in wolven rtti (Expected:\"{expected}\")")
+        public MissingRTTIException(string varname, string vartype, string parenttype) :
+            base($"Missing in wolven rtti: ({vartype}){varname} in {parenttype}")
         {
         }
     }
