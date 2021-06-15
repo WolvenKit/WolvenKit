@@ -9,7 +9,7 @@ using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
-    class OpusTools
+    public class OpusTools
     {
         private readonly Archive _soundBanks;
         private readonly DirectoryInfo _modFolder;
@@ -63,7 +63,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                         var ms = new MemoryStream();
                         ModTools.ExtractSingleToStream(_soundBanks, containerHash, ms);
                         _info.WriteOpusFromPak(ms, _rawFolder, i);
-                        break;
+                        return true;
                     }
                     if (_info.OpusCount == i + 1)
                         return false;
@@ -80,7 +80,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                         {
                             var ms = new MemoryStream(File.ReadAllBytes(pakFile));
                             _info.WriteOpusFromPak(ms, _rawFolder, i);
-                            break;
+                            return true;
                         }
                         else
                             return false;
