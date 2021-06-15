@@ -260,7 +260,16 @@ namespace WolvenKit.Modkit.RED4
                     return UncookMlmask(cr2wStream, outfile, settings.Get<MlmaskExportArgs>());
 
                 case ECookedFileFormat.mesh:
-                    return HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>());
+                    try
+                    {
+                        return HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>());
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error(e.Message);
+                        
+                        return false;
+                    }
 
                 case ECookedFileFormat.morphtarget:
                     return _targetTools.ExportTargets(cr2wStream, outfile);
@@ -394,10 +403,10 @@ namespace WolvenKit.Modkit.RED4
         private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
         {
             var archives = new List<Archive>();
-            foreach(var ar in meshargs.Archives)
+            foreach (var ar in meshargs.Archives)
             {
                 var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
-                if(name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
+                if (name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
                 {
                     archives.Add(ar);
                 }
@@ -407,9 +416,11 @@ namespace WolvenKit.Modkit.RED4
             {
                 case MeshExportType.Default:
                     return _meshTools.ExportMesh(cr2wStream, cr2wFileName);
+
                 case MeshExportType.WithMaterials:
                     return ExportMeshWithMaterialsUsingArchives(cr2wStream, cr2wFileName, archives, meshargs.isGLBinary,
                         meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.LodFilter);
+
                 case MeshExportType.WithRig:
                 {
                     var entry = meshargs.WithRigMeshargs.Rig.FirstOrDefault();
@@ -420,7 +431,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var ar = entry.Archive as Archive;
                     using var ms = new MemoryStream();
-                    ar?.CopyFileToStream(ms, entry.NameHash64,false);
+                    ar?.CopyFileToStream(ms, entry.NameHash64, false);
 
                     return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName);
                 }
@@ -438,7 +449,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ar = entry.Archive as Archive;
                                 var ms = new MemoryStream();
-                                ar?.CopyFileToStream(ms, entry.NameHash64,false);
+                                ar?.CopyFileToStream(ms, entry.NameHash64, false);
                                 return (Stream)ms;
                             })
                         .ToList();
@@ -448,7 +459,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ar = entry.Archive as Archive;
                                 var ms = new MemoryStream();
-                                ar?.CopyFileToStream(ms, entry.NameHash64,false);
+                                ar?.CopyFileToStream(ms, entry.NameHash64, false);
                                 return (Stream)ms;
                             })
                         .ToList();
