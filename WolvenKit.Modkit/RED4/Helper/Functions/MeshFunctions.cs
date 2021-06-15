@@ -626,9 +626,6 @@ namespace CP77.CR2W
                     }
                 }
                 // got 10bit normals
-
-                if (invalidNors)
-                    continue;
                 if (info.tangentOffsets[index] != 0 && info.normalOffsets[index] != 0)
                 {
                     tangents = new Vec4[info.vertCounts[index]];
@@ -642,6 +639,12 @@ namespace CP77.CR2W
                         // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
                         tangents[i] = new Vec4(tempv.X, tempv.Z, -tempv.Y, 1f);
                     }
+                }
+
+                if (invalidNors)
+                {
+                    normals = new Vec3[0];
+                    tangents = new Vec4[0];
                 }
 
                 if (info.tx1Offsets[index] != 0)
