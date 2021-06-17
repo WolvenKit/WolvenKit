@@ -9,7 +9,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private raRef<CMesh> _baseMesh;
 		private raRef<CMesh> _destructibleMesh;
-		private CName _meshAppearance;
 
 		[Ordinal(0)] 
 		[RED("baseMesh")] 
@@ -25,14 +24,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _destructibleMesh);
 			set => SetProperty(ref _destructibleMesh, value);
-		}
-
-		[Ordinal(2)] 
-		[RED("meshAppearance")] 
-		public CName MeshAppearance
-		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
 		}
 
 		public worldFoliageDestructionMapping(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

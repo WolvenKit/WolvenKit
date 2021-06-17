@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("offsetValue")] 
-		public CFloat OffsetValue
+		public CFloat OffsetValue_
 		{
 			get => GetProperty(ref _offsetValue);
 			set => SetProperty(ref _offsetValue, value);

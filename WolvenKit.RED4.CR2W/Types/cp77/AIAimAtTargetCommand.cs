@@ -5,13 +5,13 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class AIAimAtTargetCommand : AICommand
+	public class AIAimAtTargetCommand : AICombatRelatedCommand
 	{
 		private NodeRef _targetOverrideNodeRef;
 		private gameEntityReference _targetOverridePuppetRef;
 		private CFloat _duration;
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("targetOverrideNodeRef")] 
 		public NodeRef TargetOverrideNodeRef
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetOverrideNodeRef, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("targetOverridePuppetRef")] 
 		public gameEntityReference TargetOverridePuppetRef
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetOverridePuppetRef, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{

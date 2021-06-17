@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _synchronousProcessingForPlayer;
 		private CBool _forceSynchronousProcessing;
 		private CBool _tempExecuteOnlyOnce;
+		private CFloat _tickRate;
+		private CBool _useSimTimeForTick;
 
 		[Ordinal(0)] 
 		[RED("advancedTargetHandling")] 
@@ -42,6 +44,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _tempExecuteOnlyOnce);
 			set => SetProperty(ref _tempExecuteOnlyOnce, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("tickRate")] 
+		public CFloat TickRate
+		{
+			get => GetProperty(ref _tickRate);
+			set => SetProperty(ref _tickRate, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("useSimTimeForTick")] 
+		public CBool UseSimTimeForTick
+		{
+			get => GetProperty(ref _useSimTimeForTick);
+			set => SetProperty(ref _useSimTimeForTick, value);
 		}
 
 		public gameEffectSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

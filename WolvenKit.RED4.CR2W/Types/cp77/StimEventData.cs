@@ -9,7 +9,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<gameObject> _source;
 		private CEnum<gamedataStimType> _stimType;
-		private CArray<CName> _tags;
 
 		[Ordinal(0)] 
 		[RED("source")] 
@@ -25,14 +24,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _stimType);
 			set => SetProperty(ref _stimType, value);
-		}
-
-		[Ordinal(2)] 
-		[RED("tags")] 
-		public CArray<CName> Tags
-		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
 		}
 
 		public StimEventData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
