@@ -15,7 +15,6 @@ using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.Views.Dialogs;
 

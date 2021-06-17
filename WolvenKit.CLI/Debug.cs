@@ -16,7 +16,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;

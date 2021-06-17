@@ -416,7 +416,7 @@ namespace WolvenKit.Modkit.RED4
                 using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
                 try
                 {
-                    var result = _meshimporter.Import(rawRelative.ToFileInfo(), redFs);
+                    var result = ImportMesh(rawRelative.ToFileInfo(), redFs,args.archive);
 
                     if (result)
                     {

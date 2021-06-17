@@ -189,6 +189,8 @@ namespace WolvenKit.Common.Model.Arguments
     {
         public Stream MeshToReplaceStream { get; set; }
 
+        [Browsable(false)]
+        public Archive archive { get; set; } = new(); // basegame4_gamedata.archive
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

@@ -11,32 +11,34 @@ using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.CR2W;
 using CP77.CR2W;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.CR2W.Archive;
 
-namespace WolvenKit.Modkit.RED4.MeshFile
+namespace WolvenKit.Modkit.RED4
 {
     using Vec4 = System.Numerics.Vector4;
     using Vec2 = System.Numerics.Vector2;
     using Vec3 = System.Numerics.Vector3;
-    public class MESHIMPORTER
+    public partial class ModTools
     {
-        private readonly Red4ParserService _modTools;
-
-        public MESHIMPORTER(Red4ParserService modtools)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, Archive ar = null, Stream outStream = null)
         {
-            _modTools = modtools;
-        }
 
-        public bool Import(FileInfo inGltfFile, Stream inmeshStream, Stream outStream = null)
-        {
-            var model = ModelRoot.Load(inGltfFile.FullName);
-
-            VerifyGLTF(model);
-
-            var cr2w = _modTools.TryReadRED4File(inmeshStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(inmeshStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
+
+            DirectoryInfo outDir = new DirectoryInfo(Path.Combine(inGltfFile.DirectoryName, Path.GetFileNameWithoutExtension(inGltfFile.FullName)));
+            if (File.Exists(Path.Combine(outDir.FullName, "Material.json")))
+            {
+                if (ar != null)
+                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.Combine(outDir.FullName, "Material.json")), ar);
+            }
+
+            var model = ModelRoot.Load(inGltfFile.FullName);
+
+            VerifyGLTF(model);
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
 
             for (int i = 0; i < model.LogicalMeshes.Count; i++)

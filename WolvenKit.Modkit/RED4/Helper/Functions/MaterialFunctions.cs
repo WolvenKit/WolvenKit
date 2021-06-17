@@ -17,9 +17,12 @@ using System.Threading;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using Newtonsoft.Json;
+using WolvenKit.Modkit.RED4.Materials;
+using WolvenKit.Modkit.RED4.RigFile;
 
 namespace WolvenKit.Modkit.RED4
 {
+    using Vec3 = System.Numerics.Vector3;
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
@@ -34,12 +37,29 @@ namespace WolvenKit.Modkit.RED4
             }
             DirectoryInfo outDir = new DirectoryInfo(Path.Combine(outfile.DirectoryName, Path.GetFileNameWithoutExtension(outfile.FullName)));
 
+            MeshTools.MeshBones meshBones = new MeshTools.MeshBones();
+
+            meshBones.boneCount = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().BoneNames.Count;
+
+            if (meshBones.boneCount != 0)    // for rigid meshes
+            {
+                meshBones.Names = RIG.GetboneNames(cr2w, "CMesh");
+                meshBones.WorldPosn = MeshTools.GetMeshBonesPosn(cr2w);
+            }
+            RawArmature Rig = MeshTools.GetNonParentedRig(meshBones);
+
             MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, cr2w);
             MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
 
             List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(ms, meshinfo, LodFilter);
+            if (meshBones.boneCount == 0)    // for rigid meshes
+            {
+                for (int i = 0; i < expMeshes.Count; i++)
+                    expMeshes[i].weightcount = 0;
+            }
+            MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshBones);
 
-            ModelRoot model = MeshTools.RawMeshesToGLTF(expMeshes,null);
+            ModelRoot model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
 
             if (!outDir.Exists)
             {
@@ -280,7 +300,7 @@ namespace WolvenKit.Modkit.RED4
             List<RawMaterial> RawMaterials = new List<RawMaterial>();
             for (int i = 0; i < materialEntries.Count; i++)
             {
-                RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i]));
+                RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i],archives));
             }
 
             List<Setup> MaterialSetups = new List<Setup>();
@@ -294,7 +314,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 MaterialTemplates.Add(new Template(mlTemplates[i], mlTemplateNames[i]));
             }
-            var obj = new { RawMaterials = RawMaterials, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
+            var obj = new { Materials = RawMaterials, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
 
             var settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
@@ -306,12 +326,30 @@ namespace WolvenKit.Modkit.RED4
             File.WriteAllText(Path.Combine(outDir.FullName,"Material.json"), str);
 
         }
-        private static RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string Name)
+        private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string Name, List<Archive> archives)
         {
             RawMaterial rawMaterial = new RawMaterial();
 
             rawMaterial.Name = Name;
-            rawMaterial.CMaterialInstance = cMaterialInstance;
+            rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
+
+            string path = cMaterialInstance.BaseMaterial.DepotPath;
+            while (!Path.GetExtension(path).Contains("mt"))
+            {
+                ulong hash = FNV1A64HashAlgorithm.HashString(path);
+                foreach (Archive ar in archives)
+                {
+                    if (ar.Files.ContainsKey(hash))
+                    {
+                        var ms = new MemoryStream();
+                        ModTools.ExtractSingleToStream(ar, hash, ms);
+                        var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                        path = (mi.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath;
+                        break;
+                    }
+                }
+            }
+            MATERIAL.ContainRawMaterialEnum(ref rawMaterial, cMaterialInstance, path);
             return rawMaterial;
         }
         private static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
@@ -431,6 +469,118 @@ namespace WolvenKit.Modkit.RED4
             inmeshStream.Dispose();
             inmeshStream.Close();
 
+        }
+        public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, Archive ar)
+        {
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any() || cr2w.Buffers.Count < 1)
+            {
+                return false;
+            }
+
+            ulong hash = FNV1A64HashAlgorithm.HashString("base\\characters\\common\\skin\\old_mat_instances\\skin_ma_a__head.mi");
+            if (!ar.Files.ContainsKey(hash))
+                return false;
+
+            var ms = new MemoryStream();
+            ModTools.ExtractSingleToStream(ar, hash, ms);
+            _wolvenkitFileService.TryReadRED4File(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var obj = JsonConvert.DeserializeObject<MatData>(_matData);
+
+            var materialbuffer = new MemoryStream();
+            List<UInt32> offsets = new List<UInt32>();
+            List<UInt32> sizes = new List<UInt32>();
+            List<string> names = new List<string>();
+
+            if (obj.Materials.Count < 1)
+                return false;
+
+            for (int i = 0; i < obj.Materials.Count; i++)
+            {
+                var mat = obj.Materials[i];
+                names.Add(mat.Name);
+                var mi = _wolvenkitFileService.TryReadRED4File(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                MATERIAL.WriteMatToMeshEnum(ref mi, ref mat);
+                (mi.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath = mat.BaseMaterial;
+
+                offsets.Add((UInt32)materialbuffer.Position);
+                var m = new MemoryStream();
+                var b = new BinaryWriter(m);
+                mi.Write(b);
+                materialbuffer.Write(m.ToArray(), 0, (int)m.Length);
+                sizes.Add((UInt32)m.Length);
+            }
+
+            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
+
+            while (blob.MaterialEntries.Count != 0)
+            {
+                blob.MaterialEntries.Remove(blob.MaterialEntries[blob.MaterialEntries.Count - 1]);
+            }
+            while (blob.LocalMaterialBuffer.RawDataHeaders.Count != 0)
+            {
+                blob.LocalMaterialBuffer.RawDataHeaders.Remove(blob.LocalMaterialBuffer.RawDataHeaders[blob.LocalMaterialBuffer.RawDataHeaders.Count - 1]);
+            }
+
+            for (int i = 0; i < names.Count; i++)
+            {
+                var c = new CMeshMaterialEntry(cr2w, blob.MaterialEntries, Convert.ToString(i)) { IsSerialized = true, };
+                c.IsLocalInstance = new CBool(cr2w, c, "isLocalInstance") { Value = true, IsSerialized = true };
+                c.Name = new CName(cr2w, c, "name") { Value = names[i], IsSerialized = true };
+                c.Index = new CUInt16(cr2w, c, "index") { Value = (UInt16)i, IsSerialized = true };
+                blob.MaterialEntries.Add(c);
+
+                var m = new meshLocalMaterialHeader(cr2w, blob.LocalMaterialBuffer.RawDataHeaders, Convert.ToString(i)) { IsSerialized = true };
+                m.Offset = new CUInt32(cr2w, m, "offset") { Value = offsets[i], IsSerialized = true };
+                m.Size = new CUInt32(cr2w, m, "size") { Value = sizes[i], IsSerialized = true };
+                blob.LocalMaterialBuffer.RawDataHeaders.Add(m);
+            }
+
+            var compressed = new MemoryStream();
+            using var buff = new BinaryWriter(compressed);
+            var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
+
+            if (!blob.LocalMaterialBuffer.RawData.Buffer.IsSerialized)
+            {
+                blob.LocalMaterialBuffer.RawData.Buffer = new CUInt16(cr2w, blob.LocalMaterialBuffer.RawData, "rawData") { IsSerialized = true, Value = (UInt16)(cr2w.Buffers.Count + 1) };
+
+                uint idx = (uint)cr2w.Buffers.Count;
+                cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                {
+                    flags = 0,
+                    index = idx,
+                    offset = 0,
+                    diskSize = zsize,
+                    memSize = (UInt32)materialbuffer.Length,
+                    crc32 = crc
+                }));
+
+                cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+            }
+            else
+            {
+                UInt16 p = (blob.LocalMaterialBuffer.RawData.Buffer.Value);
+                cr2w.Buffers[p - 1].DiskSize = zsize;
+                cr2w.Buffers[p - 1].Crc32 = crc;
+                cr2w.Buffers[p - 1].MemSize = (UInt32)materialbuffer.Length;
+                var off = cr2w.Buffers[p - 1].Offset;
+                cr2w.Buffers[p - 1].Offset = 0;
+                cr2w.Buffers[p - 1].ReadData(new BinaryReader(compressed));
+                cr2w.Buffers[p - 1].Offset = off;
+            }
+
+            var apps = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshAppearance>().ToList();
+            for (int i = 0; i < apps.Count; i++)
+            {
+                for (int e = 0; e < apps[i].ChunkMaterials.Count; e++)
+                {
+                    apps[i].ChunkMaterials[e].Value = names[0];
+                }
+            }
+            return true;
         }
     }
     public partial class ModTools
