@@ -8,7 +8,6 @@ using WolvenKit.Common.Oodle;
 using System.Collections.Generic;
 using System.Linq;
 using SharpGLTF.Schema2;
-using WolvenKit.Modkit.RED4.Materials.Types;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
@@ -312,22 +311,7 @@ namespace WolvenKit.Modkit.RED4
             RawMaterial rawMaterial = new RawMaterial();
 
             rawMaterial.Name = Name;
-
-                rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
-                rawMaterial.MaterialInstanceData = new MaterialInstanceData(cMaterialInstance);
-
-                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "multilayered")
-                    rawMaterial.MaterialType = MaterialType.MultiLayered;
-
-                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "mesh_decal")
-                    rawMaterial.MaterialType = MaterialType.MeshDecal;
-
-                if (cMaterialInstance.BaseMaterial.DepotPath.Contains("skin"))
-                    rawMaterial.MaterialType = MaterialType.HumanSkin;
-
-                if (Path.GetFileNameWithoutExtension(cMaterialInstance.BaseMaterial.DepotPath) == "metal_base")
-                    rawMaterial.MaterialType = MaterialType.MetalBase;
-
+            rawMaterial.CMaterialInstance = cMaterialInstance;
             return rawMaterial;
         }
         private static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)

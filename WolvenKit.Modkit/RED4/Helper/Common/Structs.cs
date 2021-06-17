@@ -1,7 +1,6 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
-using WolvenKit.Modkit.RED4.Materials.Types;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
@@ -124,8 +123,6 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     public class RawMaterial
     {
         public string Name { get; set; }
-        public string BaseMaterial { get; set; }
-        public MaterialType MaterialType { get; set; }
-        public MaterialInstanceData MaterialInstanceData { get; set; }
+        public WolvenKit.RED4.CR2W.Types.CMaterialInstance CMaterialInstance { get; set; }
     }
 }
