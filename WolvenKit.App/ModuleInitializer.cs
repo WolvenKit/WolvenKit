@@ -11,7 +11,6 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED3;
 using WolvenKit.MVVM.Model;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.RigFile;
 using AboutInfoService = WolvenKit.Functionality.Services.AboutInfoService;

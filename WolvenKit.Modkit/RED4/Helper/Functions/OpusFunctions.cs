@@ -9,7 +9,7 @@ using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
-    class OpusTools
+    public class OpusTools
     {
         private readonly Archive _soundBanks;
         private readonly DirectoryInfo _modFolder;
@@ -22,6 +22,11 @@ namespace WolvenKit.Modkit.RED4.Opus
             _modFolder = new DirectoryInfo(modFolder);
             _rawFolder = new DirectoryInfo(rawFolder);
             _isModded = useMod;
+            if (!Directory.Exists(Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks")))
+                Directory.CreateDirectory(Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks"));
+            if (!Directory.Exists(_rawFolder.FullName))
+                Directory.CreateDirectory(_rawFolder.FullName);
+
             if (_isModded)
             {
                 string infoFile = Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks\\sfx_container.opusinfo");
@@ -47,8 +52,15 @@ namespace WolvenKit.Modkit.RED4.Opus
             {
                 ulong hash = FNV1A64HashAlgorithm.HashString("base\\sound\\soundbanks\\sfx_container.opusinfo");
                 var ms = new MemoryStream();
-                ModTools.ExtractSingleToStream(_soundBanks, hash, ms);
-                _info = new OpusInfo(ms);
+                if (_soundBanks.Files.ContainsKey(hash))
+                {
+                    ModTools.ExtractSingleToStream(_soundBanks, hash, ms);
+                    _info = new OpusInfo(ms);
+                }
+                else
+                {
+                    _info = new OpusInfo();
+                }
             }
         }
         public bool ExportOpusUsingHash(UInt32 opusHash)
@@ -63,7 +75,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                         var ms = new MemoryStream();
                         ModTools.ExtractSingleToStream(_soundBanks, containerHash, ms);
                         _info.WriteOpusFromPak(ms, _rawFolder, i);
-                        break;
+                        return true;
                     }
                     if (_info.OpusCount == i + 1)
                         return false;
@@ -80,7 +92,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                         {
                             var ms = new MemoryStream(File.ReadAllBytes(pakFile));
                             _info.WriteOpusFromPak(ms, _rawFolder, i);
-                            break;
+                            return true;
                         }
                         else
                             return false;
@@ -298,6 +310,10 @@ namespace WolvenKit.Modkit.RED4.Opus
                 }
                 GroupObjs.Add(group);
             }
+        }
+        public OpusInfo()
+        {
+            OpusCount = 0;
         }
         public void WriteAllOpusFromPaks(Stream[] opuspaks, DirectoryInfo outdir) // thou shall not be used
         {

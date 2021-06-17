@@ -745,7 +745,7 @@ namespace CP77.CR2W
                     extradata = extradata,
                     extraExist = info.extraExists[index]
                 };
-                mesh.name = "submesh_" + index + "_LOD_" + info.LODLvl[index];
+                mesh.name = "submesh_" + Convert.ToString(index).PadLeft(2,'0') + "_LOD_" + info.LODLvl[index];
 
                 mesh.appNames = new string[info.appearances.Count];
                 mesh.materialNames = new string[info.appearances.Count];

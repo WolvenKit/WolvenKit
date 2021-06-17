@@ -35,7 +35,7 @@ namespace WolvenKit.Modkit.RED4.MeshFile
             var cr2w = _modTools.TryReadRED4File(inmeshStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
-                throw new("Invalid CR2W File,CR2W File doesn't contain CMesh/rendMeshBlob");
+                return false;
             }
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
 
