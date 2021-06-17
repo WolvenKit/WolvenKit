@@ -450,8 +450,8 @@ namespace WolvenKit.ViewModels.Editor
                             if (name  == "basegame_4_gamedata")
                             {
                                 meshImportArgs.archive = ar;
+                                break;
                             }
-                            break;
                         }
                     }
                 }
