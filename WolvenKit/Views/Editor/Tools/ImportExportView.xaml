@@ -467,7 +467,7 @@
                             AllowFiltering="True"
                             AllowResizingColumns="True"
                             AutoGenerateColumns="False"
-                            ColumnSizer="Auto"
+                            ColumnSizer="AutoWithLastColumnFill"
                             FilterRowPosition="FixedTop"
                             ItemsSource="{Binding CollectionAvailableItems}"
                             SelectionMode="Extended">
