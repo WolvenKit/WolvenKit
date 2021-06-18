@@ -217,7 +217,7 @@ namespace WolvenKit.Common.Model.Arguments
         public List<uint> SelectedForExport { get; set; } = new();
 
         [Browsable(false)]
-        public List<Archive> SoundbanksArchive { get; set; } = new();
+        public Archive SoundbanksArchive { get; set; } = new();
 
         [Browsable(false)]
         public string ModFolderPath { get; set; }

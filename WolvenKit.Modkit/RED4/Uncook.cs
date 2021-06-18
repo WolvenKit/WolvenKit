@@ -387,22 +387,11 @@ namespace WolvenKit.Modkit.RED4
 
         private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
-            var archives = new List<Archive>();
-            foreach (var ar in opusExportArgs.SoundbanksArchive)
-            {
-                var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
-                if (name is "audio_2_soundbanks")
-                {
-                    archives.Add(ar);
-                }
-            }
-
             OpusTools opusTools = new(
-                archives.FirstOrDefault(),
+                opusExportArgs.SoundbanksArchive,
                 opusExportArgs.ModFolderPath,
                 opusExportArgs.RawFolderPath,
                 opusExportArgs.UseMod);
-
 
 
             // If More than 0 selected from opusinfo export to wem.
