@@ -18,7 +18,6 @@ using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.ViewModels.Editor;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 

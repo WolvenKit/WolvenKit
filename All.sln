@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Modkit", "WolvenK
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Core", "WolvenKit.Core\WolvenKit.Core.csproj", "{CEF1CF72-B8CF-4CBB-AA11-473438EDE3F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.MSTests", "WolvenKit.MSTests\WolvenKit.MSTests.csproj", "{96B50D87-B772-4E1F-BF6C-44AFDC2CA748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.MSTests", "WolvenKit.MSTests\WolvenKit.MSTests.csproj", "{96B50D87-B772-4E1F-BF6C-44AFDC2CA748}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

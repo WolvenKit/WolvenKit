@@ -10,7 +10,6 @@ using ProtoBuf.Meta;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
@@ -95,7 +94,6 @@ namespace WolvenKit.MSTests
             ServiceLocator.Default.RegisterType<Red4ParserService>();
             ServiceLocator.Default.RegisterType<TargetTools>();      //Cp77FileService
             ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService
-            ServiceLocator.Default.RegisterType<MESHIMPORTER>();     //Cp77FileService
             ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
 
             ServiceLocator.Default.RegisterType<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target

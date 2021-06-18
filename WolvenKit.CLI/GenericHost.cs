@@ -15,7 +15,6 @@ using WolvenKit.CLI.Services;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 
@@ -54,7 +53,6 @@ namespace WolvenKit.CLI
                     services.AddScoped<Red4ParserService>();
                     services.AddScoped<TargetTools>();      //Cp77FileService
                     services.AddScoped<RIG>();              //Cp77FileService
-                    services.AddScoped<MESHIMPORTER>();     //Cp77FileService
                     services.AddScoped<MeshTools>();        //RIG, Cp77FileService
 
                     services.AddScoped<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target

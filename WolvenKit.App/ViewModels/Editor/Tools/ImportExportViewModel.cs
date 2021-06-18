@@ -499,6 +499,23 @@ namespace WolvenKit.ViewModels.Editor
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
+                if (item.Properties is MeshImportArgs meshImportArgs)
+                {
+                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    {
+                        var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                        var archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                        foreach (var ar in archives)
+                        {
+                            var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
+                            if (name  == "basegame_4_gamedata")
+                            {
+                                meshImportArgs.archive = ar;
+                                break;
+                            }
+                        }
+                    }
+                }
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));

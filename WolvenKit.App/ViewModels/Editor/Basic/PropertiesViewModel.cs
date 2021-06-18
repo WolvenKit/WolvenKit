@@ -25,7 +25,6 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Views.Editor.AudioTool;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 

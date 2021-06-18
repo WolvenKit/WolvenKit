@@ -113,50 +113,30 @@ namespace CP77.CR2W
                 return WriteFakeMeshToFile();
             }
 
-            RawArmature Rig = new RawArmature();
-            MeshBones bones = new MeshBones();
+            MeshBones meshBones = new MeshBones();
 
-            CMesh cmesh = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
+            meshBones.boneCount = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().BoneNames.Count;
 
-            if (cmesh.BoneNames.Count != 0)    // for rigid meshes
+            if (meshBones.boneCount != 0)    // for rigid meshes
             {
-                bones.Names = RIG.GetboneNames(cr2w, "CMesh");
-                bones.WorldPosn = GetMeshBonesPosn(cr2w);
-
-                Rig.BoneCount = cmesh.BoneNames.Count + 1;
-                Rig.LocalPosn = new Vec3[Rig.BoneCount];
-                Rig.LocalRot = new System.Numerics.Quaternion[Rig.BoneCount];
-                Rig.LocalScale = new Vec3[Rig.BoneCount];
-                Rig.Parent = new Int16[Rig.BoneCount];
-                Rig.Names = new string[Rig.BoneCount];
-
-                Rig.Parent[0] = -1;
-                Rig.Names[0] = "WolvenKit_Root";
-                Rig.LocalPosn[0] = new Vec3(0f, 0f, 0f);
-                Rig.LocalRot[0] = new System.Numerics.Quaternion(0f, 0f, 0f, 1f);
-                Rig.LocalScale[0] = new Vec3(1f, 1f, 1f);
-
-                for (int i = 0; i < Rig.BoneCount - 1; i++)
-                {
-                    Rig.LocalPosn[i + 1] = bones.WorldPosn[i];
-                    Rig.Names[i + 1] = bones.Names[i];
-                    Rig.LocalRot[i + 1] = new System.Numerics.Quaternion(-0.707107f, 0f, 0f, 0.707107f);
-                    Rig.LocalScale[i + 1] = new Vec3(1f, 1f, 1f);
-                    Rig.Parent[i + 1] = 0;
-                }
+                meshBones.Names = RIG.GetboneNames(cr2w, "CMesh");
+                meshBones.WorldPosn = GetMeshBonesPosn(cr2w);
             }
+            RawArmature Rig = GetNonParentedRig(meshBones);
+
+
 
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
 
             MeshesInfo meshinfo = GetMeshesinfo(cr2w);
 
             List<RawMeshContainer> expMeshes = ContainRawMesh(ms,meshinfo,LodFilter);
-            if (cmesh.BoneNames.Count == 0)    // for rigid meshes
+            if (meshBones.boneCount == 0)    // for rigid meshes
             {
                 for (int i = 0; i < expMeshes.Count; i++)
                     expMeshes[i].weightcount = 0;
             }
-            UpdateMeshJoints(ref expMeshes, Rig, bones);
+            UpdateMeshJoints(ref expMeshes, Rig, meshBones);
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
@@ -387,7 +367,7 @@ namespace CP77.CR2W
             }
             return true;
         }
-        static Vec3[] GetMeshBonesPosn(CR2WFile cr2w)
+        public static Vec3[] GetMeshBonesPosn(CR2WFile cr2w)
         {
             rendRenderMeshBlob rendmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
@@ -745,7 +725,7 @@ namespace CP77.CR2W
                     extradata = extradata,
                     extraExist = info.extraExists[index]
                 };
-                mesh.name = "submesh_" + index + "_LOD_" + info.LODLvl[index];
+                mesh.name = "submesh_" + Convert.ToString(index).PadLeft(2,'0') + "_LOD_" + info.LODLvl[index];
 
                 mesh.appNames = new string[info.appearances.Count];
                 mesh.materialNames = new string[info.appearances.Count];
@@ -758,7 +738,7 @@ namespace CP77.CR2W
             }
             return expMeshes;
         }
-        static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature Rig, MeshBones Bones)
+        public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature Rig, MeshBones Bones)
         {
             // updating mesh bone indexes
             for(int i = 0; i < Meshes.Count; i++)
@@ -843,10 +823,11 @@ namespace CP77.CR2W
 
             return model;
         }
-        class MeshBones
+        public class MeshBones
         {
             public string[] Names;
             public Vec3[] WorldPosn;
+            public int boneCount;
         }
         private static MeshBuilder<VertexPosition,VertexColor1Texture2,VertexJoints8> VP (RawMeshContainer mesh)
         {
@@ -1081,6 +1062,35 @@ namespace CP77.CR2W
             expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
 
             return expmesh;
+        }
+        public static RawArmature GetNonParentedRig(MeshBones meshBones)
+        {
+            RawArmature Rig = new RawArmature();
+            if (meshBones.boneCount != 0)    // for rigid meshes
+            {
+                Rig.BoneCount = meshBones.boneCount + 1;
+                Rig.LocalPosn = new Vec3[Rig.BoneCount];
+                Rig.LocalRot = new System.Numerics.Quaternion[Rig.BoneCount];
+                Rig.LocalScale = new Vec3[Rig.BoneCount];
+                Rig.Parent = new Int16[Rig.BoneCount];
+                Rig.Names = new string[Rig.BoneCount];
+
+                Rig.Parent[0] = -1;
+                Rig.Names[0] = "WolvenKit_Root";
+                Rig.LocalPosn[0] = new Vec3(0f, 0f, 0f);
+                Rig.LocalRot[0] = new System.Numerics.Quaternion(0f, 0f, 0f, 1f);
+                Rig.LocalScale[0] = new Vec3(1f, 1f, 1f);
+
+                for (int i = 0; i < Rig.BoneCount - 1; i++)
+                {
+                    Rig.LocalPosn[i + 1] = meshBones.WorldPosn[i];
+                    Rig.Names[i + 1] = meshBones.Names[i];
+                    Rig.LocalRot[i + 1] = new System.Numerics.Quaternion(-0.707107f, 0f, 0f, 0.707107f);
+                    Rig.LocalScale[i + 1] = new Vec3(1f, 1f, 1f);
+                    Rig.Parent[i + 1] = 0;
+                }
+            }
+            return Rig;
         }
     }
 }

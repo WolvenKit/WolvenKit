@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,14 +6,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" >
+      <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
           <PrivateAssets>all</PrivateAssets>
       </PackageReference>
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0022" />
     <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0022" />
   </ItemGroup>
-
+    <ItemGroup>
+        <Content Include="opus-tools\opusdec.exe">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="opus-tools\opusenc.exe">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="opus-tools\opusinfo.exe">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
