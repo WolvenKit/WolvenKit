@@ -187,6 +187,18 @@ namespace WolvenKit.Common
     }
 
     /// <summary>
+    /// Possible file extensions of cooked redengine files
+    /// </summary>
+    public enum ECookedTextureFormat
+    {
+        xbm,
+        mlmask,
+        cubemap,
+        envprobe,
+        texarray,
+    }
+
+    /// <summary>
     /// Possible file extensions of raw files
     /// </summary>
     public enum EExportState

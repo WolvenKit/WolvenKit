@@ -55,8 +55,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 case ERawFileFormat.tga:
                 case ERawFileFormat.dds:
-                    // for now only xbm is supported
-                    return ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
+                    // check here for textures
+                    return HandleTextures(rawRelative, outDir, args);
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
@@ -65,6 +65,109 @@ namespace WolvenKit.Modkit.RED4
                     return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private bool HandleTextures(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
+        {
+            // dds can be imported to cubemap, envprobe, texarray, xbm, mlmask
+
+            // check for keep
+
+            // find redparents
+            foreach (var cookedTextureFormat in Enum.GetValues<ECookedTextureFormat>())
+            {
+                // check for mlmaskparent
+                if (cookedTextureFormat == ECookedTextureFormat.mlmask)
+                {
+                    // ml_w_knife__combat__grip1_01_masksset_0.dds
+                    // ml_w_knife__combat__grip1_01_masksset_10.dds
+                    var mlmaskrelpath = $"{rawRelative.RelativePath[..^4]}"; //ml_w_knife__combat__grip1_01_masksset_10
+                    var idx = mlmaskrelpath.LastIndexOf('_');
+                    if (idx == -1)
+                    {
+                        continue;
+                    }
+
+                    mlmaskrelpath = $"{mlmaskrelpath[..idx]}.mlmask";
+
+
+                    //var mlmaskrelpath2 = Path.ChangeExtension(rawRelative.RelativePath[..^4], ERedExtension.mlmask.ToString());
+                    var mlmaskParent = new RedRelativePath(rawRelative)
+                        .ChangeBaseDir(outDir)
+                        .ChangeRelativePath(mlmaskrelpath);
+
+                    if (File.Exists(mlmaskParent.FullPath))
+                    {
+                        return RebuildMlMask(mlmaskParent.FullPath);
+                    }
+
+                }
+                else
+                {
+                    // find the first matching redfile
+                    var redfile = FindRedFile(rawRelative, outDir, cookedTextureFormat.ToString());
+                    if (!string.IsNullOrEmpty(redfile))
+                    {
+                        return cookedTextureFormat == ECookedTextureFormat.xbm
+                            ? ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>())
+                            : RebuildTexture(redfile);
+                    }
+                }
+            }
+
+            _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+            return false;
+
+
+            bool RebuildMlMask(string redparent)
+            {
+                _loggerService.Warning($"{rawRelative.Name} - Mlmask importing is not implemented yet");
+                return false;
+
+                // get all other buffers
+#pragma warning disable 162
+                var uncookedMaskRootPath = rawRelative.RelativePath[..^6];
+                var uncookedRelative = new RedRelativePath(rawRelative)
+                    .ChangeRelativePath(uncookedMaskRootPath);
+
+                var buffers = rawRelative.ToFileInfo().Directory
+                    .GetFiles($"{uncookedRelative.Name}_*.dds", SearchOption.TopDirectoryOnly);
+
+
+                using var fileStream = new FileStream(redparent, FileMode.Open, FileAccess.ReadWrite);
+                var result = Rebuild(fileStream, buffers);
+
+                if (result)
+                {
+                    _loggerService.Success($"Rebuilt {redparent} with buffers");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild {redparent} with buffers");
+                }
+
+                return result;
+#pragma warning restore 162
+            }
+
+            bool RebuildTexture(string redparent)
+            {
+                var ddsPath = Path.ChangeExtension(rawRelative.FullName, ERawFileFormat.dds.ToString());
+
+                using var fileStream = new FileStream(redparent, FileMode.Open, FileAccess.ReadWrite);
+                var result = Rebuild(fileStream, new List<FileInfo>() {new(ddsPath ?? throw new InvalidOperationException())});
+
+                if (result)
+                {
+                    _loggerService.Success($"Rebuilt {redparent} with buffers");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild {redparent} with buffers");
+                }
+
+                return result;
             }
         }
 
@@ -106,6 +209,7 @@ namespace WolvenKit.Modkit.RED4
                 var ext = fi.TrimmedExtension();
                 if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
                 {
+                    failsCount++;
                     continue;
                 }
 
@@ -208,8 +312,6 @@ namespace WolvenKit.Modkit.RED4
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
             rawextension switch
             {
-                ERawFileFormat.tga => ECookedFileFormat.xbm,
-                ERawFileFormat.dds => ECookedFileFormat.xbm,
                 ERawFileFormat.fbx => ECookedFileFormat.mesh,
                 ERawFileFormat.gltf => ECookedFileFormat.mesh,
                 ERawFileFormat.glb => ECookedFileFormat.mesh,
@@ -386,7 +488,7 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private static string FindRedFile(RedRelativePath rawRelPath,  DirectoryInfo outDir)
+        private static string FindRedFile(RedRelativePath rawRelPath,  DirectoryInfo outDir, string overrideExt = null)
         {
             var ext = rawRelPath.Extension;
             if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
@@ -395,7 +497,9 @@ namespace WolvenKit.Modkit.RED4
             }
             var redfile = new RedRelativePath(rawRelPath)
                 .ChangeBaseDir(outDir)
-                .ChangeExtension(FromRawExtension(extAsEnum).ToString());
+                .ChangeExtension(string.IsNullOrEmpty(overrideExt)
+                    ? FromRawExtension(extAsEnum).ToString()
+                    : overrideExt );
 
             return !File.Exists(redfile.FullPath) ? "" : redfile.FullPath;
         }
