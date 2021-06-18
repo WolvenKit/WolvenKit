@@ -16,6 +16,7 @@ using WolvenKit.RED4.CR2W;
 using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4.Opus;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -256,6 +257,9 @@ namespace WolvenKit.Modkit.RED4
             //args.FileName = outFileInfo.FullName;
             switch (extAsEnum)
             {
+                case ECookedFileFormat.opusinfo:
+                    return HandleOpus(settings.Get<OpusExportArgs>());
+
                 case ECookedFileFormat.mlmask:
                     return UncookMlmask(cr2wStream, outfile, settings.Get<MlmaskExportArgs>());
 
@@ -267,7 +271,7 @@ namespace WolvenKit.Modkit.RED4
                     catch (Exception e)
                     {
                         _loggerService.Error(e.Message);
-                        
+
                         return false;
                     }
 
@@ -379,6 +383,38 @@ namespace WolvenKit.Modkit.RED4
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
+        }
+
+        private bool HandleOpus(OpusExportArgs opusExportArgs)
+        {
+            var archives = new List<Archive>();
+            foreach (var ar in opusExportArgs.SoundbanksArchive)
+            {
+                var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
+                if (name is "audio_2_soundbanks")
+                {
+                    archives.Add(ar);
+                }
+            }
+
+            OpusTools opusTools = new(
+                archives.FirstOrDefault(),
+                opusExportArgs.ModFolderPath,
+                opusExportArgs.RawFolderPath,
+                opusExportArgs.UseMod);
+
+
+
+            // If More than 0 selected from opusinfo export to wem.
+            if (opusExportArgs.SelectedForExport.Count > 0)
+            {
+                foreach (var audiofile in opusExportArgs.SelectedForExport)
+                {
+                    opusTools.ExportOpusUsingHash(audiofile);
+                }
+            }
+
+            return true;
         }
 
         private bool UncookFont(Stream redstream, Stream outstream)

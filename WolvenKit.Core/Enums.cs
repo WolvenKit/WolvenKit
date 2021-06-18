@@ -129,7 +129,6 @@ namespace WolvenKit.Common
         xcube
     }
 
-
     public enum Logtype
     {
         Normal,
@@ -162,13 +161,16 @@ namespace WolvenKit.Common
         mesh,
         xbm,
         csv,
+
         //json,
         mlmask,
+
         cubemap,
         envprobe,
         texarray,
         morphtarget,
-        fnt
+        fnt,
+        opusinfo
     }
 
     /// <summary>
@@ -222,9 +224,6 @@ namespace WolvenKit.Common
         Uncooked,
         Raw
     }
-
-
-
 
     /// IMPORT FLAGS
     [System.Flags]

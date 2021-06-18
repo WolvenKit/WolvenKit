@@ -9,14 +9,15 @@ using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
-    class OpusTools
+    public class OpusTools
     {
         private readonly Archive _soundBanks;
         private readonly DirectoryInfo _modFolder;
         private readonly DirectoryInfo _rawFolder;
-        private OpusInfo _info;
+        public OpusInfo _info;
         private readonly bool _isModded;
-        public OpusTools(Archive soundbanks, string modFolder, string rawFolder,bool useMod = false) //audio_2_soundbanks.archive
+
+        public OpusTools(Archive soundbanks, string modFolder, string rawFolder, bool useMod = false) //audio_2_soundbanks.archive
         {
             _soundBanks = soundbanks;
             _modFolder = new DirectoryInfo(modFolder);
@@ -51,6 +52,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 _info = new OpusInfo(ms);
             }
         }
+
         public bool ExportOpusUsingHash(UInt32 opusHash)
         {
             if (!_isModded)
@@ -91,12 +93,14 @@ namespace WolvenKit.Modkit.RED4.Opus
             }
             return false;
         }
+
         public bool DumpAllOpusInfo()
         {
             string s = JsonConvert.SerializeObject(_info, Formatting.Indented);
             File.WriteAllText(Path.Combine(_rawFolder.FullName, "sfx_container.opusinfo.json"), s);
             return true;
         }
+
         public bool ImportWavs()
         {
             var wavFiles = Directory.GetFiles(_rawFolder.FullName, "*.wav");
@@ -110,7 +114,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                     UInt32 idddd = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
                     foundids.Add(idddd);
                 }
-                catch{ }
+                catch { }
             }
 
             List<UInt32> validids = new List<UInt32>();
@@ -179,7 +183,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                         if (validids[i] == _info.OpusHashes[e])
                         {
                             int pakIdx = _info.PackIndices[e];
-                            if(modStreams[pakIdx] == null)
+                            if (modStreams[pakIdx] == null)
                             {
                                 string pakName = "base\\sound\\soundbanks\\sfx_container_" + pakIdx + ".opuspak";
                                 if (_isModded && File.Exists(Path.Combine(_modFolder.FullName, pakName)))
@@ -200,7 +204,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             bool writeinfo = false;
             for (int i = 0; i < modStreams.Length; i++)
             {
-                if(modStreams[i] != null)
+                if (modStreams[i] != null)
                 {
                     string pakName = "base\\sound\\soundbanks\\sfx_container_" + i + ".opuspak";
                     var temp = modStreams[i];
@@ -221,10 +225,12 @@ namespace WolvenKit.Modkit.RED4.Opus
             return false;
         }
     }
-    class OpusInfo
+
+    public class OpusInfo
     {
         //  S       N       D   ?....
         public byte[] Header { get; } = { 0x53, 0x4E, 0x44, 0x20, 0x02, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00 };
+
         public UInt32 OpusCount { get; set; }
         public UInt32 GroupingObjSize4x { get; set; }
         public UInt32[] OpusHashes { get; set; }
@@ -234,12 +240,14 @@ namespace WolvenKit.Modkit.RED4.Opus
         public UInt32[] OpusStreamLengths { get; set; }
         public UInt32[] WavStreamLengths { get; set; }
         public List<Group> GroupObjs { get; set; }
+
         public class Group
         {
             public UInt32 Hash { get; set; }
             public UInt32 MemberCount { get; set; }
             public UInt32[] MemberHashes { get; set; }
         }
+
         public OpusInfo(Stream ms)
         {
             ms.Position = 0;
@@ -299,6 +307,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 GroupObjs.Add(group);
             }
         }
+
         public void WriteAllOpusFromPaks(Stream[] opuspaks, DirectoryInfo outdir) // thou shall not be used
         {
             BinaryReader[] brs = new BinaryReader[opuspaks.Length];
@@ -314,7 +323,8 @@ namespace WolvenKit.Modkit.RED4.Opus
                 File.WriteAllBytes(Path.Combine(outdir.FullName, name), bytes);
             }
         }
-        public void WriteOpusFromPak(Stream opuspak, DirectoryInfo outdir,UInt32 index)
+
+        public void WriteOpusFromPak(Stream opuspak, DirectoryInfo outdir, UInt32 index)
         {
             BinaryReader br = new BinaryReader(opuspak);
             opuspak.Position = OpusOffsets[index] + RiffOpusOffsets[index];
@@ -336,6 +346,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 p.WaitForExit();
             }
         }
+
         public void WriteOpusToPak(MemoryStream opus, ref Stream pak, UInt32 hash, MemoryStream wav)
         {
             BinaryReader br = new BinaryReader(pak);
@@ -386,6 +397,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             pak = ms;
             //File.WriteAllBytes(@"C:\Users\Abhinav\Desktop\mod\sfx_container_1280.opuspak",ms.ToArray());
         }
+
         public void WriteOpusInfo(DirectoryInfo dir)
         {
             MemoryStream ms = new MemoryStream();

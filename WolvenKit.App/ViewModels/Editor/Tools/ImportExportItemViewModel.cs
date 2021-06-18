@@ -81,6 +81,7 @@ namespace WolvenKit.ViewModels.Editor
 
             return fileFormat switch
             {
+                ECookedFileFormat.opusinfo => new OpusExportArgs(),
                 ECookedFileFormat.mesh => new MeshExportArgs(),
                 ECookedFileFormat.xbm => new XbmExportArgs(),
                 ECookedFileFormat.wem => new WemExportArgs(),

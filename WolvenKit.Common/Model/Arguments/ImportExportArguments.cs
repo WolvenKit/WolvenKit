@@ -207,6 +207,31 @@ namespace WolvenKit.Common.Model.Arguments
     {
     }
 
+    public class OpusExportArgs : ExportArgs
+    {
+        [Category("Export Settings")]
+        [Display(Name = "Use Modified OpusInfo")]
+        [Description("FALSE is when u want to grab the sounds from the original opusinfo and paks that are present in the archives. TRUE when u already have a modded opusinfo and paks in the mod folder")]
+        public bool UseMod { get; set; }
+
+        public List<uint> SelectedForExport { get; set; } = new();
+
+        [Browsable(false)]
+        public List<Archive> SoundbanksArchive { get; set; } = new();
+
+        [Browsable(false)]
+        public string ModFolderPath { get; set; }
+
+        [Browsable(false)]
+        public string RawFolderPath { get; set; }
+
+        [Category("Export Settings")]
+        [Display(Name = "Dump all information inside OpusInfo to Json.")]
+        public bool DumpAllToJson { get; set; }
+
+        public override string ToString() => "Wem Files | " + $"Use Modified OpusInfo :  {UseMod.ToString()} | Selected :  {SelectedForExport.Count.ToString()}";
+    }
+
     /// <summary>
     /// MorphTarget Export Arguments
     /// </summary>
@@ -399,7 +424,6 @@ namespace WolvenKit.Common.Model.Arguments
             [Category("MultiMesh Settings")]
             [Display(Name = "Select additional meshes")]
             public List<FileEntry> MultiMeshMeshes { get; set; } = new();      // meshes?
-
 
             /// <summary>
             /// MultiMesh Rig List.
