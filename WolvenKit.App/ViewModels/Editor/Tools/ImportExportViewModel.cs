@@ -25,6 +25,7 @@ using WolvenKit.Common.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Modkit.RED4.Opus;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -145,8 +146,8 @@ namespace WolvenKit.ViewModels.Editor
 
         #region properties
 
-        public ObservableCollection<FileEntry> MeshExportAvailableCollection { get; set; } = new();
-        public ObservableCollection<FileEntry> MeshExportSelectedCollection { get; set; } = new();
+        public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
+        public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
 
         /// <summary>
         /// Public Importable Items
@@ -226,10 +227,10 @@ namespace WolvenKit.ViewModels.Editor
         {
             foreach (var item in items)
             {
-                var newitem = item as FileEntry;
-                if (!MeshExportSelectedCollection.Contains(newitem))
+                var newitem = item as CollectionItemViewModel;
+                if (!CollectionSelectedItems.Contains(newitem))
                 {
-                    MeshExportSelectedCollection.Add(newitem);
+                    CollectionSelectedItems.Add(newitem);
                 }
             }
         }
@@ -238,18 +239,19 @@ namespace WolvenKit.ViewModels.Editor
 
         private void ExecuteRemoveItems(ObservableCollection<object> items)
         {
-            var x = new List<FileEntry>();
+            var x = new List<CollectionItemViewModel>();
             foreach (var item in items)
             {
-                var newitem = item as FileEntry;
+                var newitem = item as CollectionItemViewModel;
                 x.Add(newitem);
             }
-            MeshExportSelectedCollection.RemoveMany(x);
+            CollectionSelectedItems.RemoveMany(x);
         }
 
         public ICommand ConfirmMeshCollectionCommand { get; private set; }
 
         private bool CanConfirmMeshCollection(string v) => true;
+
         private void ExecuteConfirmMeshCollection(string v)
         {
             if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
@@ -265,20 +267,20 @@ namespace WolvenKit.ViewModels.Editor
             {
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
                     meshExportArgs.MultiMeshargs.MultiMeshMeshes =
-                        MeshExportSelectedCollection.ToList();
+                        CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
                     _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
                     break;
 
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
                     meshExportArgs.MultiMeshargs.MultiMeshRigs =
-                        MeshExportSelectedCollection.ToList();
+                        CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
                     _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
                     break;
 
                 case nameof(MeshExportArgs.WithRigMeshargs.Rig):
-                    meshExportArgs.WithRigMeshargs.Rig = new List<FileEntry>(){ MeshExportSelectedCollection.FirstOrDefault() };
+                    meshExportArgs.WithRigMeshargs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
                     _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
                     meshExportArgs.meshExportType = MeshExportType.WithRig;
                     break;
@@ -286,17 +288,15 @@ namespace WolvenKit.ViewModels.Editor
                 default:
                     break;
             }
-
         }
 
         public ICommand SetCollectionCommand { get; private set; }
 
         private bool CanSetCollection(string selectedType) => true;
 
-        private void ExecuteSetCollection(string argType)
+        private void InitCollectionEditorForMesh(string argType, MeshExportArgs meshExportArgs)
         {
-            if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
-                _gameController.GetController() is not Cp77Controller cp77Controller)
+            if (_gameController.GetController() is not Cp77Controller cp77Controller)
             {
                 return;
             }
@@ -309,37 +309,98 @@ namespace WolvenKit.ViewModels.Editor
                     fetchExtension = ERedExtension.mesh;
                     selectedEntries = meshExportArgs.MultiMeshargs.MultiMeshMeshes;
                     break;
+
                 case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
                     selectedEntries = meshExportArgs.MultiMeshargs.MultiMeshRigs;
                     break;
+
                 case nameof(MeshExportArgs.WithRigMeshargs.Rig):
                     selectedEntries = meshExportArgs.WithRigMeshargs.Rig;
+                    break;
+
+                default:
+                    break;
+            }
+
+            // set selected types
+            if (CollectionSelectedItems != null)
+            {
+                CollectionSelectedItems.Clear();
+                if (selectedEntries != null)
+                {
+                    CollectionSelectedItems.AddRange( selectedEntries.Select(_ => new CollectionItemViewModel(_)));
+                }
+            }
+
+            //// set available types
+            
+            //if (CollectionAvailableItems.Any() && CollectionAvailableItems.FirstOrDefault().Extension.TrimStart('.').Equals(fetchExtension.ToString()))
+            //{
+            //    return;
+            //}
+
+            var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+            CollectionAvailableItems.Clear();
+            if (archivemanager != null)
+            {
+                CollectionAvailableItems.AddRange(archivemanager.GroupedFiles[$".{fetchExtension}"].Select(_ => new CollectionItemViewModel(_)));
+            }
+        }
+
+        private void InitCollectionEditorForOpus(string argType, OpusExportArgs opusExportArgs)
+        {
+            var proj = _projectManager.ActiveProject;
+
+            if (_gameController.GetController() is Cp77Controller cp77Controller)
+            {
+                var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                opusExportArgs.SoundbanksArchive = archivemanager.Archives.Values
+                    .Cast<Archive>()
+                    .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
+            }
+
+            OpusTools opusTools = new(
+                opusExportArgs.SoundbanksArchive,
+                proj.ModDirectory,
+                proj.RawDirectory,
+                opusExportArgs.UseMod);
+
+            List<uint> selectedEntries = new();
+            switch (argType)
+            {
+                case nameof(OpusExportArgs.SelectedForExport):
+                    selectedEntries = opusExportArgs.SelectedForExport;
                     break;
                 default:
                     break;
             }
 
             // set selected types
-            if (MeshExportSelectedCollection != null)
+            if (CollectionSelectedItems != null)
             {
-                MeshExportSelectedCollection.Clear();
+                CollectionSelectedItems.Clear();
                 if (selectedEntries != null)
                 {
-                    MeshExportSelectedCollection.AddRange(selectedEntries);
+                    CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
             }
 
-            // set available types
-            if (MeshExportAvailableCollection.Any() && MeshExportAvailableCollection.FirstOrDefault().Extension.TrimStart('.').Equals(fetchExtension.ToString()))
-            {
-                return;
-            }
+            CollectionAvailableItems.AddRange(opusTools._info.OpusHashes.Select(_ => new CollectionItemViewModel(_)));
+        }
 
-            var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
-            MeshExportAvailableCollection.Clear();
-            if (archivemanager != null)
+        private void ExecuteSetCollection(string argType)
+        {
+            switch (SelectedExport)
             {
-                MeshExportAvailableCollection.AddRange(archivemanager.GroupedFiles[$".{fetchExtension}"]);
+                case { Properties: MeshExportArgs meshExportArgs }:
+                    InitCollectionEditorForMesh(argType, meshExportArgs);
+
+                    break;
+
+                case { Properties: OpusExportArgs opusExportArgs }:
+                    InitCollectionEditorForOpus(argType, opusExportArgs);
+                    Trace.WriteLine(opusExportArgs.ModFolderPath + opusExportArgs.RawFolderPath);
+                    break;
             }
         }
 
@@ -480,6 +541,19 @@ namespace WolvenKit.ViewModels.Editor
                         meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                     }
                 }
+                if (item.Properties is OpusExportArgs opusExportArgs)
+                {
+                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    {
+                        var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                        opusExportArgs.SoundbanksArchive = archivemanager.Archives.Values
+                            .Cast<Archive>()
+                            .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
+                    }
+
+                    opusExportArgs.RawFolderPath = proj.RawDirectory;
+                    opusExportArgs.ModFolderPath = proj.ModDirectory;
+                }
 
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
                 await Task.Run(() => _modTools.Export(fi, settings,
@@ -543,5 +617,32 @@ namespace WolvenKit.ViewModels.Editor
         /// Setup Tool defaults for tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
+    }
+
+
+    public class CollectionItemViewModel : ObservableObject
+    {
+        public string Info =>
+            Model switch
+            {
+                FileEntry fe => fe.Name,
+                _ => ""
+            };
+
+        public string Name =>
+            Model switch
+            {
+                FileEntry fe => fe.ShortName,
+                _ => Model.ToString()
+            };
+
+        public CollectionItemViewModel(object model)
+        {
+            Model = model;
+        }
+
+        public object Model { get; set; }
+
+
     }
 }

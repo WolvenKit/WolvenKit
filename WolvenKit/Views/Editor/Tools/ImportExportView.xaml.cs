@@ -106,6 +106,16 @@ namespace WolvenKit.Views.Editor
             {
                 _propertyItem = pg.SelectedPropertyItem;
                 vm.SetCollectionCommand.SafeExecute(_propertyItem.Name);
+                //if (vm.SelectedExport.Extension == nameof(ECookedFileFormat.mesh))
+                //{
+                //    FileSelectionDataGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.ItemsSourceProperty, vm.MeshExportAvailableCollection);
+                //    SelectedFilesGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.ItemsSourceProperty, vm.MeshExportSelectedCollection);
+                //}
+                //if (vm.SelectedExport.Extension == nameof(ECookedFileFormat.opusinfo))
+                //{
+                //    FileSelectionDataGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.ItemsSourceProperty, vm.OpusExportAvailableCollection);
+                //    SelectedFilesGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.ItemsSourceProperty, vm.OpusExportSelectedCollection);
+                //}
             }
 
             e.Cancel = true;

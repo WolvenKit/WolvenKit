@@ -96,6 +96,7 @@ namespace WolvenKit.Modkit.RED4
             for (int i = 0; i < maskCount; i++)
             {
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}.dds";
+                //var mFilename = Path.GetFileName(outfile.FullName) + $".{i}.dds"; // TODO:we should use this at some point
                 var newpath = Path.Combine(outfile.Directory.FullName, mFilename);
 
                 //Clear instead of allocate new is faster?

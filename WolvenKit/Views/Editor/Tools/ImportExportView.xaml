@@ -469,7 +469,7 @@
                             AutoGenerateColumns="False"
                             ColumnSizer="Auto"
                             FilterRowPosition="FixedTop"
-                            ItemsSource="{Binding MeshExportAvailableCollection}"
+                            ItemsSource="{Binding CollectionAvailableItems}"
                             SelectionMode="Extended">
 
                             <syncfusion:SfDataGrid.Columns>
@@ -479,14 +479,14 @@
                                     HeaderText="File Name"
                                     HorizontalHeaderContentAlignment="Left"
                                     ImmediateUpdateColumnFilter="True"
-                                    MappingName="ShortName" />
+                                    MappingName="Name" />
                                 <syncfusion:GridTextColumn
                                     AllowEditing="False"
                                     FilterRowCondition="Contains"
-                                    HeaderText="Full Path"
+                                    HeaderText="Info"
                                     HorizontalHeaderContentAlignment="Left"
                                     ImmediateUpdateColumnFilter="True"
-                                    MappingName="Name" />
+                                    MappingName="Info" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                         <Border
@@ -533,7 +533,7 @@
                             AutoGenerateColumns="False"
                             ColumnSizer="AutoWithLastColumnFill"
                             FilterRowPosition="FixedTop"
-                            ItemsSource="{Binding MeshExportSelectedCollection}"
+                            ItemsSource="{Binding CollectionSelectedItems}"
                             SelectionMode="Extended">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn
@@ -542,7 +542,7 @@
                                     HeaderText="File Name"
                                     HorizontalHeaderContentAlignment="Left"
                                     ImmediateUpdateColumnFilter="True"
-                                    MappingName="ShortName" />
+                                    MappingName="Name" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                         <Border

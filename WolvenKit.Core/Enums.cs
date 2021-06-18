@@ -129,7 +129,6 @@ namespace WolvenKit.Common
         xcube
     }
 
-
     public enum Logtype
     {
         Normal,
@@ -162,13 +161,16 @@ namespace WolvenKit.Common
         mesh,
         xbm,
         csv,
+
         //json,
         mlmask,
+
         cubemap,
         envprobe,
         texarray,
         morphtarget,
-        fnt
+        fnt,
+        opusinfo
     }
 
     /// <summary>
@@ -182,6 +184,18 @@ namespace WolvenKit.Common
         gltf,
         glb,
         ttf
+    }
+
+    /// <summary>
+    /// Possible file extensions of cooked redengine files
+    /// </summary>
+    public enum ECookedTextureFormat
+    {
+        xbm,
+        mlmask,
+        cubemap,
+        envprobe,
+        texarray,
     }
 
     /// <summary>
@@ -222,9 +236,6 @@ namespace WolvenKit.Common
         Uncooked,
         Raw
     }
-
-
-
 
     /// IMPORT FLAGS
     [System.Flags]

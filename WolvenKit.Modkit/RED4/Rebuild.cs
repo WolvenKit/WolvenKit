@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -49,8 +50,15 @@ namespace WolvenKit.Modkit.RED4
                 if (bufferlist.All(_ => _.Extension == ".buffer"))
                 {
                     bufferlist = bufferlist
-                        .OrderBy(_ =>
-                            int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
+                        .OrderBy(_ => int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
+                        .ToList();
+                }
+                if (bufferlist.All(_ => _.Extension == ".dds"))
+                {
+                    // ml_w_knife__combat__grip1_01_masksset_0.dds
+                    bufferlist = bufferlist
+                        .OrderBy(n => Regex.Replace(n.Name, @"\d+", n => n.Value.PadLeft(4, '0')))
+                        //.OrderBy(_ => int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 4))[1..]))
                         .ToList();
                 }
 
