@@ -215,7 +215,7 @@ namespace WolvenKit.MSTests
 
                 // uncook
                 var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, esettings,
-                    resultDir, ECookedFileFormat.NONE);
+                    resultDir);
 
                 if (!resUncook)
                 {
@@ -466,7 +466,7 @@ namespace WolvenKit.MSTests
 
                 // uncook
                 var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir,
-                    exportArgs, resultDir, ECookedFileFormat.NONE);
+                    exportArgs, resultDir);
 
                 if (!resUncook)
                 {

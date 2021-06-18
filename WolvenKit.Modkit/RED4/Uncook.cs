@@ -38,7 +38,7 @@ namespace WolvenKit.Modkit.RED4
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo rawOutDir = null,
-            ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
+            ECookedFileFormat? forcebuffers = null)
         {
             if (!archive.Files.ContainsKey(hash))
             {
@@ -119,7 +119,7 @@ namespace WolvenKit.Modkit.RED4
             string pattern = "",
             string regex = "",
             DirectoryInfo rawOutDir = null,
-            ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
+            ECookedFileFormat? forcebuffers = null)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -197,7 +197,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
         private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings,
-            DirectoryInfo rawOutDir, ECookedFileFormat forcebuffers = ECookedFileFormat.NONE)
+            DirectoryInfo rawOutDir, ECookedFileFormat? forcebuffers = null)
         {
             var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, relPath));
             if (outfile.Directory == null)
@@ -213,7 +213,7 @@ namespace WolvenKit.Modkit.RED4
                 Directory.CreateDirectory(outfile.Directory.FullName);
             }
 
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext) || forcebuffers.ToString() == ext)
+            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext) || forcebuffers?.ToString() == ext)
             {
                 var i = 0;
                 foreach (var stream in GenerateBuffers(cr2wStream))

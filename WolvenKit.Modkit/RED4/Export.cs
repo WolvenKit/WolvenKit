@@ -22,7 +22,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="basedir"></param>
         /// <param name="rawoutdir"></param>
         public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir = null,
-            DirectoryInfo rawoutdir = null)
+            DirectoryInfo rawoutdir = null, ECookedFileFormat? forcebuffers = null)
         {
             #region checks
 
@@ -61,7 +61,7 @@ namespace WolvenKit.Modkit.RED4
             args.Get<WemExportArgs>().FileName = cr2wfile.FullName;
 
             var relpath = cr2wfile.FullName.RelativePath(basedir);
-            return UncookBuffers(fs, relpath, args, rawoutdir);
+            return UncookBuffers(fs, relpath, args, rawoutdir, forcebuffers);
         }
 
         #endregion Methods

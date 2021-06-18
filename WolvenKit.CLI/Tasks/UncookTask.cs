@@ -16,7 +16,7 @@ namespace CP77Tools.Tasks
 
         public void UncookTask(string[] path, string outpath, string rawOutDir,
             EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
-            ECookedFileFormat forcebuffers)
+            ECookedFileFormat? forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
@@ -32,7 +32,7 @@ namespace CP77Tools.Tasks
 
         private void UncookTaskInner(string path, string outpath, string rawOutDir,
             EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
-            ECookedFileFormat forcebuffers)
+            ECookedFileFormat? forcebuffers)
         {
             #region checks
 

@@ -156,7 +156,6 @@ namespace WolvenKit.Common
     /// </summary>
     public enum ECookedFileFormat
     {
-        NONE,
         wem,
         mesh,
         xbm,

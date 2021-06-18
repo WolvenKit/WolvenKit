@@ -18,7 +18,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip)
+        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
@@ -28,11 +28,11 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                ExportTaskInner(file, outDir, uncookext, flip);
+                ExportTaskInner(file, outDir, uncookext, flip, forcebuffers);
             });
         }
 
-        private void ExportTaskInner(string path, string outDir, EUncookExtension? uext, bool? flip)
+        private void ExportTaskInner(string path, string outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat forcebuffers)
         {
             #region checks
 
@@ -100,7 +100,7 @@ namespace CP77Tools.Tasks
                 }
 
                 var di = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
-                if (_modTools.Export(fileInfo, exportArgs, basedir, di))
+                if (_modTools.Export(fileInfo, exportArgs, basedir, di, forcebuffers))
                 {
                     _loggerService.Success($"Successfully exported {path}.");
                 }
