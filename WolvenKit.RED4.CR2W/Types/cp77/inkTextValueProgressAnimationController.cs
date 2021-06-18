@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("targetValue")] 
-		public CFloat TargetValue_
+		public CFloat TargetValue
 		{
 			get => GetProperty(ref _targetValue);
 			set => SetProperty(ref _targetValue, value);
