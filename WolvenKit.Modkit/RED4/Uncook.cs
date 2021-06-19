@@ -393,7 +393,6 @@ namespace WolvenKit.Modkit.RED4
                 opusExportArgs.RawFolderPath,
                 opusExportArgs.UseMod);
 
-
             // If More than 0 selected from opusinfo export to wem.
             if (opusExportArgs.SelectedForExport.Count > 0)
             {
@@ -444,10 +443,11 @@ namespace WolvenKit.Modkit.RED4
 
                 case MeshExportType.WithMaterials:
                     return ExportMeshWithMaterials(cr2wStream, cr2wFileName, archives,
-                        meshargs.WithMaterialMeshargs.MaterialUncookExtension, meshargs.isGLBinary, meshargs.LodFilter);
+                        meshargs.MaterialUncookExtension, meshargs.isGLBinary, meshargs.LodFilter);
+
                 case MeshExportType.WithRig:
                 {
-                    var entry = meshargs.WithRigMeshargs.Rig.FirstOrDefault();
+                    var entry = meshargs.Rig.FirstOrDefault();
                     if (entry == null)
                     {
                         return false;
@@ -461,8 +461,8 @@ namespace WolvenKit.Modkit.RED4
                 }
                 case MeshExportType.Multimesh:
                 {
-                    var meshes = meshargs.MultiMeshargs.MultiMeshMeshes;
-                    var rigs = meshargs.MultiMeshargs.MultiMeshRigs;
+                    var meshes = meshargs.MultiMeshMeshes;
+                    var rigs = meshargs.MultiMeshRigs;
                     if (!meshes.Any() || !rigs.Any())
                     {
                         return false;

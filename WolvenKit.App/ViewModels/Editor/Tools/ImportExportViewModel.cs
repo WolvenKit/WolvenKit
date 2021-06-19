@@ -265,22 +265,22 @@ namespace WolvenKit.ViewModels.Editor
             // set mesh props
             switch (v)
             {
-                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
-                    meshExportArgs.MultiMeshargs.MultiMeshMeshes =
+                case nameof(MeshExportArgs.MultiMeshMeshes):
+                    meshExportArgs.MultiMeshMeshes =
                         CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
                     _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
                     break;
 
-                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
-                    meshExportArgs.MultiMeshargs.MultiMeshRigs =
+                case nameof(MeshExportArgs.MultiMeshRigs):
+                    meshExportArgs.MultiMeshRigs =
                         CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
                     _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
                     break;
 
-                case nameof(MeshExportArgs.WithRigMeshargs.Rig):
-                    meshExportArgs.WithRigMeshargs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+                case nameof(MeshExportArgs.Rig):
+                    meshExportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
                     _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
                     meshExportArgs.meshExportType = MeshExportType.WithRig;
                     break;
@@ -305,17 +305,17 @@ namespace WolvenKit.ViewModels.Editor
             List<FileEntry> selectedEntries = new();
             switch (argType)
             {
-                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshMeshes):
+                case nameof(MeshExportArgs.MultiMeshMeshes):
                     fetchExtension = ERedExtension.mesh;
-                    selectedEntries = meshExportArgs.MultiMeshargs.MultiMeshMeshes;
+                    selectedEntries = meshExportArgs.MultiMeshMeshes;
                     break;
 
-                case nameof(MeshExportArgs.MultiMeshArgs.MultiMeshRigs):
-                    selectedEntries = meshExportArgs.MultiMeshargs.MultiMeshRigs;
+                case nameof(MeshExportArgs.MultiMeshRigs):
+                    selectedEntries = meshExportArgs.MultiMeshRigs;
                     break;
 
-                case nameof(MeshExportArgs.WithRigMeshargs.Rig):
-                    selectedEntries = meshExportArgs.WithRigMeshargs.Rig;
+                case nameof(MeshExportArgs.Rig):
+                    selectedEntries = meshExportArgs.Rig;
                     break;
 
                 default:
@@ -328,12 +328,12 @@ namespace WolvenKit.ViewModels.Editor
                 CollectionSelectedItems.Clear();
                 if (selectedEntries != null)
                 {
-                    CollectionSelectedItems.AddRange( selectedEntries.Select(_ => new CollectionItemViewModel(_)));
+                    CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
             }
 
             //// set available types
-            
+
             //if (CollectionAvailableItems.Any() && CollectionAvailableItems.FirstOrDefault().Extension.TrimStart('.').Equals(fetchExtension.ToString()))
             //{
             //    return;
@@ -371,6 +371,7 @@ namespace WolvenKit.ViewModels.Editor
                 case nameof(OpusExportArgs.SelectedForExport):
                     selectedEntries = opusExportArgs.SelectedForExport;
                     break;
+
                 default:
                     break;
             }
@@ -508,7 +509,7 @@ namespace WolvenKit.ViewModels.Editor
                         foreach (var ar in archives)
                         {
                             var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
-                            if (name  == "basegame_4_gamedata")
+                            if (name == "basegame_4_gamedata")
                             {
                                 meshImportArgs.archive = ar;
                                 break;
@@ -619,7 +620,6 @@ namespace WolvenKit.ViewModels.Editor
         private void SetupToolDefaults() => ContentId = ToolContentId;
     }
 
-
     public class CollectionItemViewModel : ObservableObject
     {
         public string Info =>
@@ -642,7 +642,5 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         public object Model { get; set; }
-
-
     }
 }
