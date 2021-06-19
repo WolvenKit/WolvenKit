@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -415,7 +416,7 @@ namespace WolvenKit.ViewModels.Editor
             }
 
             CollectionAvailableItems.Clear();
-            CollectionAvailableItems.AddRange(opusTools._info.OpusHashes.Select(_ => new CollectionItemViewModel(_)));
+            CollectionAvailableItems.AddRange(opusTools.Info.OpusHashes.Select(_ => new CollectionItemViewModel(_)));
         }
 
         public ICommand CopyArgumentsTemplateToCommand { get; private set; }
@@ -487,10 +488,20 @@ namespace WolvenKit.ViewModels.Editor
 
             if (IsImportsSelected)
             {
+                var wavs = new List<string>();
+                // split up wavs
                 foreach (var item in ImportableItems)
                 {
-                    await ImportSingle(item);
+                    if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
+                    {
+                        wavs.Add(item.FullName);
+                    }
+                    else
+                    {
+                        await ImportSingle(item);
+                    }
                 }
+                ImportWavs(wavs);
             }
             else
             {
@@ -503,33 +514,53 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
         }
 
+        private void ImportWavs(List<string> wavs)
+        {
+            var proj = _projectManager.ActiveProject;
+            if (_gameController.GetController() is Cp77Controller cp77Controller)
+            {
+                var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                var soundbanksArchive = archivemanager.Archives.Values
+                    .Cast<Archive>()
+                    .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
+
+                OpusTools opusTools = new(
+                    soundbanksArchive,
+                    proj.ModDirectory,
+                    proj.RawDirectory,
+                    true);
+
+                opusTools.ImportWavs(wavs.ToArray());
+            }
+        }
+
         /// <summary>
         /// Import Single item
         /// </summary>
         /// <param name="item"></param>
         private async Task ImportSingle(ImportableItemViewModel item)
         {
+            if (_gameController.GetController() is not Cp77Controller cp77Controller)
+            {
+                return;
+            }
+
             var proj = _projectManager.ActiveProject;
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
                 if (item.Properties is MeshImportArgs meshImportArgs)
                 {
-                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                    var archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                    var basegameArchive = archives.FirstOrDefault(_ => _.Name.Equals("basegame_4_gamedata.archive"));
+                    if (basegameArchive == null)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
-                        var archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
-                        foreach (var ar in archives)
-                        {
-                            var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
-                            if (name == "basegame_4_gamedata")
-                            {
-                                meshImportArgs.archive = ar;
-                                break;
-                            }
-                        }
+                        return;
                     }
+                    meshImportArgs.Archive = basegameArchive;
                 }
+
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
@@ -595,10 +626,20 @@ namespace WolvenKit.ViewModels.Editor
             IsProcessing = true;
             if (IsImportsSelected)
             {
+                var wavs = new List<string>();
+                // split up wavs
                 foreach (var item in ImportableItems.Where(_ => _.IsChecked))
                 {
-                    await ImportSingle(item);
+                    if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
+                    {
+                        wavs.Add(item.FullName);
+                    }
+                    else
+                    {
+                        await ImportSingle(item);
+                    }
                 }
+                ImportWavs(wavs);
             }
             else
             {

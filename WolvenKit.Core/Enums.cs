@@ -182,7 +182,8 @@ namespace WolvenKit.Common
         fbx,
         gltf,
         glb,
-        ttf
+        ttf,
+        wav
     }
 
     /// <summary>

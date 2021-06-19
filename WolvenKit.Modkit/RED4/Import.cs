@@ -8,6 +8,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.Modkit.RED4
@@ -63,9 +64,17 @@ namespace WolvenKit.Modkit.RED4
                     return ImportMesh(rawRelative, outDir, args.Get<MeshImportArgs>());
                 case ERawFileFormat.ttf:
                     return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
+                case ERawFileFormat.wav:
+                    return ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>());
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private bool ImportWav(RedRelativePath rawRelative, DirectoryInfo outDir, OpusImportArgs opusImportArgs)
+        {
+            _loggerService.Success($"Use WolvenKit to import opus.");
+            return false;
         }
 
         private bool HandleTextures(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
@@ -520,7 +529,7 @@ namespace WolvenKit.Modkit.RED4
                 using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
                 try
                 {
-                    var result = ImportMesh(rawRelative.ToFileInfo(), redFs,args.archive);
+                    var result = ImportMesh(rawRelative.ToFileInfo(), redFs,args.Archive);
 
                     if (result)
                     {

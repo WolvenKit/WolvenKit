@@ -50,51 +50,59 @@ namespace WolvenKit.Modkit.RED4
             using var cr2WStream = new MemoryStream();
             ExtractSingleToStream(archive, hash, cr2WStream);
 
-            var entry = archive.Files[hash] as FileEntry;
-            var relFileFullName = entry.FileName;
-            if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
+            if (archive.Files[hash] is FileEntry entry)
             {
-                relFileFullName += ".bin";
+                var relFileFullName = entry.FileName;
+                if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
+                {
+                    relFileFullName += ".bin";
+                }
+
+                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
+
+                // write mainFile
+                if (!WolvenTesting.IsTesting)
+                {
+                    if (mainFileInfo.Directory != null)
+                    {
+                        Directory.CreateDirectory(mainFileInfo.Directory.FullName);
+                    }
+
+                    using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                    cr2WStream.Seek(0, SeekOrigin.Begin);
+                    cr2WStream.CopyTo(fs);
+                }
+
+                #endregion unbundle main file
+
+                #region extract buffers
+
+                var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
+                if (!hasBuffers)
+                {
+                    return true;
+                }
+
+                // uncook main file buffers to raw out dir
+                if (rawOutDir is null or { Exists: false })
+                {
+                    rawOutDir = outDir;
+                }
+
+                try
+                {
+                    // wems need the physical infile path
+                    args.Get<WemExportArgs>().FileName = mainFileInfo.FullName;
+                    return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
+                    return false;
+                }
             }
 
-            var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
-
-            // write mainFile
-            if (!WolvenTesting.IsTesting)
-            {
-                Directory.CreateDirectory(mainFileInfo.Directory.FullName);
-                using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
-                cr2WStream.Seek(0, SeekOrigin.Begin);
-                cr2WStream.CopyTo(fs);
-            }
-
-            #endregion unbundle main file
-
-            #region extract buffers
-
-            var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
-            if (!hasBuffers)
-            {
-                return true;
-            }
-
-            // uncook main file buffers to raw out dir
-            if (rawOutDir is null or { Exists: false })
-            {
-                rawOutDir = outDir;
-            }
-
-            try
-            {
-                // wems need the physical infile path
-                args.Get<WemExportArgs>().FileName = mainFileInfo.FullName;
-                return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
-                return false;
-            }
+            return false;
 
             #endregion extract buffers
         }
@@ -123,8 +131,6 @@ namespace WolvenKit.Modkit.RED4
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
-
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
@@ -495,11 +501,11 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private bool UncookWem(string infile, string outfile)
+        private static void UncookWem(string infile, string outfile)
         {
             if (WolvenTesting.IsTesting)
             {
-                return true;
+                return;
             }
 
             var arg = infile + " -o " + outfile;
@@ -516,10 +522,11 @@ namespace WolvenKit.Modkit.RED4
                 Verb = "runas"
             };
             var proc = Process.Start(si);
-            proc.WaitForExit();
-            Trace.WriteLine(proc.StandardOutput.ReadToEnd());
-
-            return true;
+            if (proc != null)
+            {
+                proc.WaitForExit();
+                Trace.WriteLine(proc.StandardOutput.ReadToEnd());
+            }
         }
 
         public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
@@ -598,7 +605,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault()?.Data is not CReflectionProbeDataResource probe ||
+            if (cr2w.Chunks.FirstOrDefault()?.Data is not CReflectionProbeDataResource ||
                 cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
             {
                 return false;

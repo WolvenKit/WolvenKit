@@ -85,6 +85,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(CommonImportArgs), new CommonImportArgs() },
             { typeof(XbmImportArgs), new XbmImportArgs() },
             { typeof(MeshImportArgs), new MeshImportArgs() },
+            { typeof(OpusImportArgs), new OpusImportArgs() },
         };
 
         /// <summary>
@@ -142,7 +143,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Default Import Settings")]
         [Display(Name = "Replace original File?")]
         [Description("If checked the file will replace the original file in the archives.")]
-        public bool Keep { get; set; }
+        public bool Keep { get; set; } = true;
     }
 
     /// <summary>
@@ -159,6 +160,16 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class CommonImportArgs : ImportArgs
     {
+    }
+
+    /// <summary>
+    /// Fnt Import Arguments
+    /// </summary>
+    public class OpusImportArgs : ImportArgs
+    {
+        public bool UseMod { get; set; }
+
+        public override string ToString() => ".WAV";
     }
 
     /// <summary>
@@ -188,10 +199,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class MeshImportArgs : ImportArgs
     {
-        public Stream MeshToReplaceStream { get; set; }
-
         [Browsable(false)]
-        public Archive archive { get; set; } = new(); // basegame4_gamedata.archive
+        public Archive Archive { get; set; } = new(); // basegame4_gamedata.archive
 
         /// <summary>
         /// String Override to display info in datagrid.
