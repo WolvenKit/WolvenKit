@@ -121,7 +121,7 @@ namespace WolvenKit.Views.Editor
             XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             if (ViewModel is ImportExportViewModel vm)
             {
-                vm.ConfirmMeshCollectionCommand.SafeExecute(_propertyItem.Name);
+                vm.ConfirmCollectionCommand.SafeExecute(_propertyItem.Name);
             }
         }
 

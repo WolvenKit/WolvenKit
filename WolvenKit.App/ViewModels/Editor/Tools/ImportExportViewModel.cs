@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Editor
             ProcessSelectedCommand = new TaskCommand(ExecuteProcessSelected, CanProcessSelected);
             CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
             SetCollectionCommand = new DelegateCommand<string>(ExecuteSetCollection, CanSetCollection);
-            ConfirmMeshCollectionCommand = new DelegateCommand<string>(ExecuteConfirmMeshCollection, CanConfirmMeshCollection);
+            ConfirmCollectionCommand = new DelegateCommand<string>(ExecuteConfirmCollection, CanConfirmCollection);
 
             AddItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteAddItems, CanAddItems);
             RemoveItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteRemoveItems, CanRemoveItems);
@@ -248,44 +248,50 @@ namespace WolvenKit.ViewModels.Editor
             CollectionSelectedItems.RemoveMany(x);
         }
 
-        public ICommand ConfirmMeshCollectionCommand { get; private set; }
+        public ICommand ConfirmCollectionCommand { get; private set; }
 
-        private bool CanConfirmMeshCollection(string v) => true;
+        private bool CanConfirmCollection(string v) => true;
 
-        private void ExecuteConfirmMeshCollection(string v)
+        private void ExecuteConfirmCollection(string v)
         {
-            if (SelectedExport is not { Properties: MeshExportArgs meshExportArgs } ||
-                _gameController.GetController() is not Cp77Controller cp77Controller)
+            switch (SelectedExport)
             {
-                Trace.WriteLine("failed to confirm");
+                case { Properties: MeshExportArgs meshExportArgs }:
+                    switch (v)
+                    {
+                        case nameof(MeshExportArgs.MultiMeshMeshes):
+                            meshExportArgs.MultiMeshMeshes =
+                                CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
+                            _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
+                            meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                            break;
 
-                return;
-            }
+                        case nameof(MeshExportArgs.MultiMeshRigs):
+                            meshExportArgs.MultiMeshRigs =
+                                CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
+                            _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
+                            meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                            break;
 
-            // set mesh props
-            switch (v)
-            {
-                case nameof(MeshExportArgs.MultiMeshMeshes):
-                    meshExportArgs.MultiMeshMeshes =
-                        CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
-                    _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
-                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                        case nameof(MeshExportArgs.Rig):
+                            meshExportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+                            _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                            meshExportArgs.meshExportType = MeshExportType.WithRig;
+                            break;
+                    }
                     break;
-
-                case nameof(MeshExportArgs.MultiMeshRigs):
-                    meshExportArgs.MultiMeshRigs =
-                        CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
-                    _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
-                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                case {Properties: OpusExportArgs opusExportArgs}:
+                    switch (v)
+                    {
+                        case nameof(OpusExportArgs.SelectedForExport):
+                            opusExportArgs.SelectedForExport =
+                                new List<uint>(CollectionSelectedItems.Select(_ => _.Model).Cast<uint>());
+                            _notificationService.Success($"Selected opus items were added.");
+                            break;
+                    }
                     break;
-
-                case nameof(MeshExportArgs.Rig):
-                    meshExportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
-                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                    meshExportArgs.meshExportType = MeshExportType.WithRig;
-                    break;
-
                 default:
+                    Trace.WriteLine("failed to confirm");
                     break;
             }
         }
