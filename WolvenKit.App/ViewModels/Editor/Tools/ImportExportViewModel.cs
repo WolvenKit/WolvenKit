@@ -294,6 +294,22 @@ namespace WolvenKit.ViewModels.Editor
 
         private bool CanSetCollection(string selectedType) => true;
 
+        private void ExecuteSetCollection(string argType)
+        {
+            switch (SelectedExport)
+            {
+                case { Properties: MeshExportArgs meshExportArgs }:
+                    InitCollectionEditorForMesh(argType, meshExportArgs);
+
+                    break;
+
+                case { Properties: OpusExportArgs opusExportArgs }:
+                    InitCollectionEditorForOpus(argType, opusExportArgs);
+                    Trace.WriteLine(opusExportArgs.ModFolderPath + opusExportArgs.RawFolderPath);
+                    break;
+            }
+        }
+
         private void InitCollectionEditorForMesh(string argType, MeshExportArgs meshExportArgs)
         {
             if (_gameController.GetController() is not Cp77Controller cp77Controller)
@@ -332,12 +348,12 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
 
-            //// set available types
-
-            //if (CollectionAvailableItems.Any() && CollectionAvailableItems.FirstOrDefault().Extension.TrimStart('.').Equals(fetchExtension.ToString()))
-            //{
-            //    return;
-            //}
+            // set available types
+            if (CollectionAvailableItems.Any() && CollectionAvailableItems.First().Model is FileEntry entry &&
+                entry.Extension.TrimStart('.').Equals(fetchExtension.ToString()))
+            {
+                return;
+            }
 
             var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
             CollectionAvailableItems.Clear();
@@ -386,23 +402,14 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
 
-            CollectionAvailableItems.AddRange(opusTools._info.OpusHashes.Select(_ => new CollectionItemViewModel(_)));
-        }
-
-        private void ExecuteSetCollection(string argType)
-        {
-            switch (SelectedExport)
+            // set available types
+            if (CollectionAvailableItems.Any() && CollectionAvailableItems.First().Model is uint entry)
             {
-                case { Properties: MeshExportArgs meshExportArgs }:
-                    InitCollectionEditorForMesh(argType, meshExportArgs);
-
-                    break;
-
-                case { Properties: OpusExportArgs opusExportArgs }:
-                    InitCollectionEditorForOpus(argType, opusExportArgs);
-                    Trace.WriteLine(opusExportArgs.ModFolderPath + opusExportArgs.RawFolderPath);
-                    break;
+                return;
             }
+
+            CollectionAvailableItems.Clear();
+            CollectionAvailableItems.AddRange(opusTools._info.OpusHashes.Select(_ => new CollectionItemViewModel(_)));
         }
 
         public ICommand CopyArgumentsTemplateToCommand { get; private set; }

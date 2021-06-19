@@ -29,6 +29,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(XbmExportArgs), new XbmExportArgs() },
             { typeof(MeshExportArgs), new MeshExportArgs() },
             { typeof(WemExportArgs), new WemExportArgs() },
+            { typeof(OpusExportArgs), new OpusExportArgs() },
         };
 
         /// <summary>
