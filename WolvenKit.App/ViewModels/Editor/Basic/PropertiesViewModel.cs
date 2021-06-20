@@ -14,6 +14,7 @@ using Catel.Services;
 using CP77.CR2W;
 using Microsoft.Win32;
 using NAudio.Wave;
+using WolvenKit.Models.Arguments;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
@@ -24,8 +25,8 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4.MeshFile;
 using WolvenKit.Views.Editor.AudioTool;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -34,6 +35,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
+        private readonly MeshTools _meshTools;
+
 
         /// <summary>
         /// Constructor PropertiesViewModel
@@ -41,11 +44,13 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="projectManager"></param>
         /// <param name="loggerService"></param>
         /// <param name="messageService"></param>
+        /// <param name="meshTools"></param>
         /// <param name="commandManager"></param>
         public PropertiesViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
+            MeshTools meshTools,
             ICommandManager commandManager
         ) : base(ToolTitle)
         {
@@ -53,10 +58,12 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => loggerService);
             Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNull(() => meshTools);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
+            _meshTools = meshTools;
 
             SetupToolDefaults();
 
@@ -177,8 +184,7 @@ namespace WolvenKit.ViewModels.Editor
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
-                        MESH m = new MESH();
-                        var q = m.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
+                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
                         if (q.Length > 0)
                         {
                             LoadModel(q);
@@ -219,7 +225,7 @@ namespace WolvenKit.ViewModels.Editor
                         var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.dds };
                         await using var filestream = new FileStream(PE_SelectedItem.FullName,
                             FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        man.UncookXbm(filestream, ddsstream, expargs, out _);
+                        man.UncookXbm(filestream, ddsstream, out _);
 
                         // try loading it in pfim
                         try

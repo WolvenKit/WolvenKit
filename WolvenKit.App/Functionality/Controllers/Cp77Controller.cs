@@ -20,6 +20,7 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -177,9 +178,13 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Error("Can't pack nor install project (no project/not cyberpunk project)!");
                 return Task.FromResult(false);
             }
-            _loggerService.Info("Rebuilding necessary files....");
-            _modTools.Recombine(new DirectoryInfo(cp77Proj.ModDirectory), true, true, true, true, true, true);
-            _loggerService.Info("Rebuilding done, packing files into archive(s)....");
+
+            // rebuilding is done manually in the import/export util
+            //_loggerService.Info("Rebuilding necessary files....");
+            //_modTools.Recombine(new DirectoryInfo(cp77Proj.ModDirectory), true, true, true, true);
+            //_loggerService.Info("Rebuilding done, packing files into archive(s)....");
+
+
             _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory),
                 new DirectoryInfo(cp77Proj.PackedModDirectory));
             _loggerService.Info("Packing complete!");

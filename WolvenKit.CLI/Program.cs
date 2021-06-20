@@ -2,33 +2,19 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
-using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Catel.IoC;
-using CP77.CR2W;
-using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
-using CP77Tools.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using WolvenKit.CLI;
-using WolvenKit.CLI.Services;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
-using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.Materials;
 
 namespace WolvenKit.CLI
 {
     internal class Program
     {
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -51,51 +37,23 @@ namespace WolvenKit.CLI
 
                 new UnbundleCommand(),
                 new UncookCommand(),
-                new RebuildCommand(),
+                new ImportCommand(),
                 new PackCommand(),
                 new ExportCommand(),
 
                 new DumpCommand(),
-                new VerifyCommand(),
                 new CR2WCommand(),
 
                 new HashCommand(),
                 new OodleCommand(),
+
+                new SettingsCommand(),
             };
 
             var parser = new CommandLineBuilder(rootCommand)
                 .UseDefaults()
-                .UseHost(Host.CreateDefaultBuilder, host =>
-                    {
-                        host.ConfigureLogging(logging =>
-                            {
-                                logging.ClearProviders();
-                                logging.AddColorConsoleLogger(configuration =>
-                                {
-                                    configuration.LogLevels.Add(LogLevel.Warning, ConsoleColor.DarkYellow);
-                                    configuration.LogLevels.Add(LogLevel.Error, ConsoleColor.DarkMagenta);
-                                    configuration.LogLevels.Add(LogLevel.Critical, ConsoleColor.Red);
-                                });
-                            })
-                            .ConfigureServices((hostContext, services) =>
-                            {
-                                services.AddScoped<ILoggerService, MicrosoftLoggerService>();
-                                services.AddScoped<IProgress<double>, PercentProgressService>();
-                                //services.AddScoped<IProgress<double>, ProgressBar>();
-
-                                services.AddSingleton<IHashService, HashService>();
-                                services.AddScoped<IWolvenkitFileService, Cp77FileService>();
-
-                                services.AddScoped<MaterialRepository>();
-                                services.AddScoped<ModTools>();
-                                services.AddScoped<ConsoleFunctions>();
-                            })
-
-                            ;
-                    })
+                .UseHost(GenericHost.CreateHostBuilder)
                 .Build();
-
-
 
             parser.Invoke(args);
         }

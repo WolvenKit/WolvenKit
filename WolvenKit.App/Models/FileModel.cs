@@ -14,6 +14,8 @@ namespace WolvenKit.Models
     {
 
         private readonly string _extension = ".default";
+        public const string s_moddir = "wkitmoddir";
+        public const string s_rawdir = "wkitrawdir";
 
         public FileModel(string path)
         {
@@ -69,8 +71,13 @@ namespace WolvenKit.Models
 
 
 
-        public bool IsImportable => !IsDirectory && !string.IsNullOrEmpty(GetExtension()) && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
-        public bool IsExportable => !IsDirectory && !string.IsNullOrEmpty(GetExtension()) && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
+        public bool IsImportable => !IsDirectory
+                                    && !string.IsNullOrEmpty(GetExtension())
+                                    && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
+
+        public bool IsExportable => !IsDirectory
+                                    && !string.IsNullOrEmpty(GetExtension())
+                                    && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
         #endregion
 
@@ -93,7 +100,7 @@ namespace WolvenKit.Models
 
             var filedir = project.FileDirectory;
             var moddir = project.ModDirectory;
-            var dlcdir = project.DlcDirectory;
+            var rawDirectory = project.RawDirectory;
 
             if (fullname.Equals(filedir, StringComparison.Ordinal))
             {
@@ -102,20 +109,21 @@ namespace WolvenKit.Models
             // hack so that we get proper hashes
             if (fullname.Equals(moddir, StringComparison.Ordinal))
             {
-                return "wkitmoddir";
+                return s_moddir;
             }
-            if (fullname.Equals(dlcdir, StringComparison.Ordinal))
+            if (fullname.Equals(rawDirectory, StringComparison.Ordinal))
             {
-                return "wkitdlcdir";
+                return s_rawdir;
             }
 
             if (fullname.StartsWith(moddir, StringComparison.Ordinal))
             {
                 return fullname[(moddir.Length + 1)..];
             }
-            if (fullname.StartsWith(dlcdir, StringComparison.Ordinal))
+            if (fullname.StartsWith(rawDirectory, StringComparison.Ordinal))
             {
-                return fullname[(dlcdir.Length + 1)..];
+                var rel = fullname[(filedir.Length + 1)..];
+                return rel;
             }
 
             if (fullname.StartsWith(filedir, StringComparison.Ordinal))

@@ -18,24 +18,6 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override GameType GameType => GameType.Cyberpunk2077;
 
-        public override string PackedDlcDirectory
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(GetDlcName()))
-                {
-                    return null;
-                }
-                var dir = Path.Combine(ProjectDirectory, "packed", "archive", "pc", "dlc", $"mod{Name}");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
         public override string PackedModDirectory
         {
             get
@@ -53,13 +35,13 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region methods
 
-        public string GetDlcName() => $"dlc{Name}";
+        //public string GetDlcName() => $"dlc{Name}";
 
         public void CreateDefaultDirectories()
         {
             // create top-level directories
             _ = ModDirectory;
-            _ = DlcDirectory;
+            _ = RawDirectory;
         }
 
         public object Clone()

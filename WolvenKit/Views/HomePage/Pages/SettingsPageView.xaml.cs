@@ -1,3 +1,10 @@
+using System.Windows;
+using System.Windows.Controls;
+using Catel.IoC;
+using Catel.MVVM.Views;
+using Syncfusion.Windows.Controls.Layout;
+using WolvenKit.ViewModels.HomePage.Pages;
+
 namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class SettingsPageView
@@ -7,9 +14,31 @@ namespace WolvenKit.Views.HomePage.Pages
         public SettingsPageView()
         {
             InitializeComponent();
+            var vm = ServiceLocator.Default.ResolveType<SettingsPageViewModel>();
+           AccordionItems = SfAccordion.Items;
         }
 
         #endregion Constructors
+
+        #region properties
+
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
+        public ItemCollection AccordionItems
+        {
+            get
+            {
+                return (ItemCollection)GetValue(AccordionItemsProperty);
+            }
+            set
+            {
+                SetValue(AccordionItemsProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty AccordionItemsProperty =
+            DependencyProperty.Register(nameof(AccordionItems), typeof(ItemCollection), typeof(SettingsPageView));
+
+        #endregion
 
         #region Methods
 
@@ -19,5 +48,12 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         #endregion Methods
+
+        private void SfAccordionItem_Unselected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
     }
 }

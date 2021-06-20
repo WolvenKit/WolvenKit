@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using CP77.CR2W.Uncooker;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
@@ -16,80 +15,96 @@ using WolvenKit.Common.Oodle;
 using WolvenKit.RED4.CR2W;
 using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Modkit.RED4.MeshFile;
-using WolvenKit.Modkit.RED4.MorphTargetFile;
+using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4.Opus;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
-    public static class ModToolsExtensions
-    {
-
-    }
-
-
-
-
-    /// <summary>
-    /// Collection of common modding utilities.
-    /// </summary>
     public partial class ModTools
     {
-
-
-        /// <summary>
-        /// Extracts a single file (by hash) from an archive to a Stream
-        /// </summary>
-        /// <param name="ar"></param>
-        /// <param name="hash"></param>
-        /// <param name="stream"></param>
-        public void UncookSingleToStream(Archive ar, ulong hash, Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-
-
         /// <summary>
         /// Uncooks a single file by hash. This will both extract and uncook the redengine file
         /// </summary>
-        /// <param name="ar"></param>
+        /// <param name="archive"></param>
         /// <param name="hash"></param>
         /// <param name="outDir"></param>
-        /// <param name="uncookext"></param>
-        /// <param name="flip"></param>
+        /// <param name="rawOutDir"></param>
+        /// <param name="args"></param>
+        /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        public bool UncookSingle(Archive ar, ulong hash, DirectoryInfo outDir, ExportArgs args)
+        public bool UncookSingle(
+            Archive archive,
+            ulong hash,
+            DirectoryInfo outDir,
+            GlobalExportArgs args,
+            DirectoryInfo rawOutDir = null,
+            ECookedFileFormat? forcebuffers = null)
         {
-            if (!_hashService.Contains(hash))
+            if (!archive.Files.ContainsKey(hash))
             {
                 return false;
             }
 
-            // extract the main file with uncompressed buffers
             #region unbundle main file
-            using var ms = new MemoryStream();
-            ExtractSingleToStream(ar, hash, ms);
 
-            // write main file
-            var entry = ar.Files[hash] as FileEntry;
-            var name = entry.FileName;
-            if (string.IsNullOrEmpty(Path.GetExtension(name)))
-            {
-                name += ".bin";
-            }
-            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
-            if (outfile.Directory == null)
-            {
-                return false;
-            }
-            Directory.CreateDirectory(outfile.Directory.FullName);
-            using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
-            ms.Seek(0, SeekOrigin.Begin);
-            ms.CopyTo(fs);
-            #endregion
+            using var cr2WStream = new MemoryStream();
+            ExtractSingleToStream(archive, hash, cr2WStream);
 
-            // uncook from main file stream
-            var ext = Path.GetExtension(name)[1..];
-            return UncookInplace(ms, outfile, ext, args);
+            if (archive.Files[hash] is FileEntry entry)
+            {
+                var relFileFullName = entry.FileName;
+                if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
+                {
+                    relFileFullName += ".bin";
+                }
+
+                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
+
+                // write mainFile
+                if (!WolvenTesting.IsTesting)
+                {
+                    if (mainFileInfo.Directory != null)
+                    {
+                        Directory.CreateDirectory(mainFileInfo.Directory.FullName);
+                    }
+
+                    using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                    cr2WStream.Seek(0, SeekOrigin.Begin);
+                    cr2WStream.CopyTo(fs);
+                }
+
+                #endregion unbundle main file
+
+                #region extract buffers
+
+                var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
+                if (!hasBuffers)
+                {
+                    return true;
+                }
+
+                // uncook main file buffers to raw out dir
+                if (rawOutDir is null or { Exists: false })
+                {
+                    rawOutDir = outDir;
+                }
+
+                try
+                {
+                    // wems need the physical infile path
+                    args.Get<WemExportArgs>().FileName = mainFileInfo.FullName;
+                    return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
+                    return false;
+                }
+            }
+
+            return false;
+
+            #endregion extract buffers
         }
 
         /// <summary>
@@ -97,21 +112,29 @@ namespace CP77.CR2W
         /// </summary>
         /// <param name="ar"></param>
         /// <param name="outDir"></param>
+        /// <param name="args"></param>
+        /// <param name="unbundle"></param>
         /// <param name="pattern"></param>
         /// <param name="regex"></param>
-        /// <param name="uncookext"></param>
-        /// <param name="flip"></param>
+        /// <param name="rawOutDir"></param>
+        /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        public (List<string>, int) UncookAll(Archive ar, DirectoryInfo outDir, ExportArgs args,
-            string pattern = "", string regex = "")
+        public void UncookAll(
+            Archive ar,
+            DirectoryInfo outDir,
+            GlobalExportArgs args,
+            bool unbundle = false,
+            string pattern = "",
+            string regex = "",
+            DirectoryInfo rawOutDir = null,
+            ECookedFileFormat? forcebuffers = null)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
-            // using var mmf = MemoryMappedFile.CreateFromFile(Filepath, FileMode.Open);
-
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
+            var totalInArchiveCount = ar.FileCount;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -129,105 +152,163 @@ namespace CP77.CR2W
                 finalmatches = queryMatchingFiles;
             }
 
-            var finalMatchesList = finalmatches.Where(_ => ar.CanUncook(_.NameHash64)).ToList();
-            _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to uncook.");
+            var finalMatchesList = finalmatches.ToList();
+            if (!unbundle)
+            {
+                finalMatchesList = finalMatchesList.Where(_ => ar.CanUncook(_.NameHash64)).ToList();
+            }
 
-            Thread.Sleep(1000);
-            int progress = 0;
+            _loggerService.Info($" {ar.ArchiveAbsolutePath}: Found {finalMatchesList.Count}/{totalInArchiveCount} entries to uncook");
+            if (finalMatchesList.Count == 0)
+            {
+                return;
+            }
+
+            var progress = 0;
             _progressService.Report(0);
+
+            //foreach (var info in finalMatchesList)
             Parallel.ForEach(finalMatchesList, info =>
             {
-                if (UncookSingle(ar, info.NameHash64, outDir, args))
+                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers))
+                {
                     extractedList.Add(info.FileName);
+                }
                 else
+                {
                     failedList.Add(info.FileName);
+                }
+
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
-            });
+            }
+            );
 
             foreach (var failed in failedList)
             {
                 _loggerService.Warning($"Failed to uncook {failed}.");
             }
 
-            return (extractedList.ToList(), finalMatchesList.Count);
+            _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {extractedList.Count}/{finalMatchesList.Count} files.");
         }
-
 
         /// <summary>
         /// Extracts and decompresses buffers of a cr2wstream
-        /// uncooks buffers to raw format and
+        /// uncooks buffers to raw format
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public bool UncookInplace(Stream cr2wStream, FileInfo inputFileInfo, string ext, ExportArgs args)
+        /// <param name="cr2wStream">the cooked redengine file input stream</param>
+        /// <param name="relPath">if a depot is used the relpath is a relative base path, if no depot is used, the relapth is simply the filename</param>
+        /// <param name="settings">GlobalExportSettings</param>
+        /// <param name="rawOutDir">the output directory. the outfile is conbined from the rawoutdir and the relative path</param>
+        /// <param name="forcebuffers"></param>
+        /// <returns></returns>
+        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings,
+            DirectoryInfo rawOutDir, ECookedFileFormat? forcebuffers = null)
         {
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext))
+            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, relPath));
+            if (outfile.Directory == null)
             {
-                return GenerateBuffers(cr2wStream, inputFileInfo);
+                return false;
             }
+
+            var ext = Path.GetExtension(relPath).TrimStart('.');
+
+            // files where uncook methods are NOT implemented: just extract buffers
+            if (!WolvenTesting.IsTesting)
+            {
+                Directory.CreateDirectory(outfile.Directory.FullName);
+            }
+
+            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext) || forcebuffers?.ToString() == ext)
+            {
+                var i = 0;
+                foreach (var stream in GenerateBuffers(cr2wStream))
+                {
+                    var bufferpath = $"{outfile.FullName}.{i}.buffer";
+
+                    if (!WolvenTesting.IsTesting)
+                    {
+                        using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
+                        i++;
+                        stream.Seek(0, SeekOrigin.Begin);
+                        stream.CopyTo(fs);
+                    }
+
+                    stream.Dispose();
+                }
+
+                return true;
+            }
+
+            // handle files where uncook methods ARE implemented
             if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
             {
                 return false;
             }
 
-
+            // wems are not cr2w files, need to be handled first
             if (extAsEnum == ECookedFileFormat.wem)
             {
-                var q = args as WemExportArgs;
-                string wemPath = inputFileInfo.FullName;
-                UncookWem(wemPath, q.wemExportType);
-                return true;
+                if (settings.Get<WemExportArgs>() is { } wemaArgs)
+                {
+                    var wemoutfile = Path.ChangeExtension(outfile.FullName, wemaArgs.wemExportType.ToString());
+                    UncookWem(wemaArgs.FileName, wemoutfile);
+                    return true;
+                }
 
+                return false;
             }
 
-            args.FileName = inputFileInfo.FullName;
-
             // uncook textures, meshes etc
+            //args.FileName = outFileInfo.FullName;
             switch (extAsEnum)
             {
+                case ECookedFileFormat.opusinfo:
+                    return HandleOpus(settings.Get<OpusExportArgs>());
+
                 case ECookedFileFormat.mlmask:
-                {
-                    // read the cr2wfile
-                    var cr2w = TryReadCr2WFile(cr2wStream);
-                    if (cr2w == null)
+                    return UncookMlmask(cr2wStream, outfile, settings.Get<MlmaskExportArgs>());
+
+                case ECookedFileFormat.mesh:
+                    try
                     {
+                        return HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>());
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error(e.Message);
+
                         return false;
                     }
 
-                    cr2w.FileName = inputFileInfo.FullName;
-                    return Mlmask.Uncook(cr2wStream, cr2w, args);
-                }
-                case ECookedFileFormat.mesh:
-                    return (HandleMesh(cr2wStream, inputFileInfo, args));
                 case ECookedFileFormat.morphtarget:
-                    return (new TARGET()).ExportTargets(cr2wStream, (new FileInfo(inputFileInfo.FullName)));
-
+                    return _targetTools.ExportTargets(cr2wStream, outfile);
 
                 case ECookedFileFormat.xbm:
                 {
-                    if (args is not XbmExportArgs xbmargs)
+                    if (settings.Get<XbmExportArgs>() is not { } xbmargs)
                     {
                         return false;
                     }
 
-                    if (inputFileInfo.Directory != null)
-                    {
-                        Directory.CreateDirectory(inputFileInfo.Directory.FullName);
-                    }
-                    var di = inputFileInfo.Directory;
-
-                    var ddspath = Path.ChangeExtension(inputFileInfo.FullName, "dds");
-                    using var fs = new FileStream(ddspath, FileMode.Create, FileAccess.Write);
-                    if (!UncookXbm(cr2wStream, fs, args, out var texformat))
+                    EFormat texformat;
+                    var ddspath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
+                    if (!UncookXbm(cr2wStream, ddspath, out texformat))
                     {
                         return false;
                     }
 
+                    if (WolvenTesting.IsTesting)
+                    {
+                        return true;
+                    }
+
+                    #region texconv
 
                     // flip the physical file
                     if (xbmargs.Flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
-                        TexconvWrapper.VFlip(di.FullName, ddspath, texformat);
+                        TexconvWrapper.VFlip(outfile.Directory.FullName, ddspath, texformat);
                     }
 
                     // convert the texture
@@ -237,97 +318,197 @@ namespace CP77.CR2W
                     }
                     try
                     {
-
-                        TexconvWrapper.Convert(di.FullName, $"{ddspath}", xbmargs.UncookExtension);
+                        TexconvWrapper.Convert(outfile.Directory.FullName, $"{ddspath}", xbmargs.UncookExtension);
                     }
                     catch (Exception)
                     {
                         return false;
                     }
 
+                    #endregion texconv
+
                     return true;
                 }
                 case ECookedFileFormat.csv:
                 {
-                    if (inputFileInfo.Directory != null)
+                    if (WolvenTesting.IsTesting)
                     {
-                        Directory.CreateDirectory(inputFileInfo.Directory.FullName);
+                        using var ms = new MemoryStream();
+                        return UncookCsv(cr2wStream, ms);
                     }
-                    using var fs = new FileStream($"{inputFileInfo.FullName}.csv", FileMode.Create, FileAccess.Write);
+
+                    using var fs = new FileStream($"{outfile.FullName}.csv", FileMode.Create, FileAccess.Write);
                     return UncookCsv(cr2wStream, fs);
                 }
-                case ECookedFileFormat.json:
-                    return false;
+                //case ECookedFileFormat.json:
+                //    return true;
                 case ECookedFileFormat.cubemap:
                 {
-                    if (inputFileInfo.Directory != null)
+                    if (WolvenTesting.IsTesting)
                     {
-                        Directory.CreateDirectory(inputFileInfo.Directory.FullName);
+                        using var ms = new MemoryStream();
+                        return UncookCubeMap(cr2wStream, ms);
                     }
-                    var newpath = Path.ChangeExtension(inputFileInfo.FullName, "dds");
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookCubeMap(cr2wStream, ddsStream);
                 }
                 case ECookedFileFormat.envprobe:
                 {
-                    if (inputFileInfo.Directory != null)
+                    if (WolvenTesting.IsTesting)
                     {
-                        Directory.CreateDirectory(inputFileInfo.Directory.FullName);
+                        using var ms = new MemoryStream();
+                        return UncookEnvprobe(cr2wStream, ms);
                     }
-
-                    var newpath = Path.ChangeExtension(inputFileInfo.FullName, "dds");
-
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookEnvprobe(cr2wStream, ddsStream);
                 }
                 case ECookedFileFormat.texarray:
                 {
-                    if (inputFileInfo.Directory != null)
+                    if (WolvenTesting.IsTesting)
                     {
-                        Directory.CreateDirectory(inputFileInfo.Directory.FullName);
+                        using var ms = new MemoryStream();
+                        return UncookTexarray(cr2wStream, ms);
                     }
-
-                    var newpath = Path.ChangeExtension(inputFileInfo.FullName, "dds");
-
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookTexarray(cr2wStream, ddsStream);
+                }
+                case ECookedFileFormat.fnt:
+                {
+                    if (WolvenTesting.IsTesting)
+                    {
+                        using var ms = new MemoryStream();
+                        return UncookFont(cr2wStream, ms);
+                    }
+                    var newpath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.ttf.ToString());
+                    using var ttfStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
+                    return UncookFont(cr2wStream, ttfStream);
                 }
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
         }
 
-
-        private bool HandleMesh(Stream cr2wStream , FileInfo cr2wFileName, ExportArgs args)
+        private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
+            OpusTools opusTools = new(
+                opusExportArgs.SoundbanksArchive,
+                opusExportArgs.ModFolderPath,
+                opusExportArgs.RawFolderPath,
+                opusExportArgs.UseMod);
 
-            var meshargs = args as MeshExportArgs;
-            switch (meshargs.meshExportType)
+            // If More than 0 selected from opusinfo export to wem.
+            if (opusExportArgs.SelectedForExport.Count > 0)
             {
-                case MeshExportType.Default:
-
-                    (new MESH()).ExportMesh(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
-                    break;
-                case MeshExportType.WithMaterials:
-
-                    //(new MATERIAL()).ExportMeshWithMaterialsUsingArchives(cr2wStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
-                    break;
-
-                case MeshExportType.WithRig:
-
-                    (new MESH()).ExportMeshWithRig(cr2wStream, meshargs.RigStream, Path.GetFileNameWithoutExtension(cr2wFileName.Name), (new FileInfo(cr2wFileName.FullName)));
-                    break;
+                foreach (var audiofile in opusExportArgs.SelectedForExport)
+                {
+                    opusTools.ExportOpusUsingHash(audiofile);
+                }
             }
+
             return true;
         }
 
-        private bool UncookWem(string path, WemExportTypes wemExportType )
+        private bool UncookFont(Stream redstream, Stream outstream)
         {
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(redstream);
+            if (cr2w == null)
+            {
+                return false;
+            }
 
-            var outf = path.Replace(".wem", "." + wemExportType.ToString());
+            if (cr2w.Chunks.FirstOrDefault()?.REDType != nameof(rendFont))
+            {
+                return false;
+            }
 
+            var b = cr2w.Buffers[0];
+            redstream.Seek(b.Offset, SeekOrigin.Begin);
+            redstream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+            return true;
+        }
 
-            var arg = path + " -o " + outf;
+        private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
+        {
+            var archives = new List<Archive>();
+            foreach (var ar in meshargs.Archives)
+            {
+                var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
+                if (name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
+                {
+                    archives.Add(ar);
+                }
+            }
+
+            switch (meshargs.meshExportType)
+            {
+                case MeshExportType.Default:
+                    return _meshTools.ExportMesh(cr2wStream, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
+
+                case MeshExportType.WithMaterials:
+                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, archives,
+                        meshargs.MaterialUncookExtension, meshargs.isGLBinary, meshargs.LodFilter);
+
+                case MeshExportType.WithRig:
+                {
+                    var entry = meshargs.Rig.FirstOrDefault();
+                    if (entry == null)
+                    {
+                        return false;
+                    }
+
+                    var ar = entry.Archive as Archive;
+                    using var ms = new MemoryStream();
+                    ar?.CopyFileToStream(ms, entry.NameHash64, false);
+
+                    return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName);
+                }
+                case MeshExportType.Multimesh:
+                {
+                    var meshes = meshargs.MultiMeshMeshes;
+                    var rigs = meshargs.MultiMeshRigs;
+                    if (!meshes.Any() || !rigs.Any())
+                    {
+                        return false;
+                    }
+
+                    var meshstreams = meshes.Select(
+                            delegate (FileEntry entry)
+                            {
+                                var ar = entry.Archive as Archive;
+                                var ms = new MemoryStream();
+                                ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                                return (Stream)ms;
+                            })
+                        .ToList();
+
+                    var rigstreams = rigs.Select(
+                            delegate (FileEntry entry)
+                            {
+                                var ar = entry.Archive as Archive;
+                                var ms = new MemoryStream();
+                                ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                                return (Stream)ms;
+                            })
+                        .ToList();
+
+                    return _meshTools.ExportMultiMeshWithRig(meshstreams, rigstreams, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
+                }
+                default:
+                    return false;
+            }
+        }
+
+        private static void UncookWem(string infile, string outfile)
+        {
+            if (WolvenTesting.IsTesting)
+            {
+                return;
+            }
+
+            var arg = infile + " -o " + outfile;
             var si = new ProcessStartInfo(
                     AppDomain.CurrentDomain.BaseDirectory + "\\vgmstream\\test.exe",
                     arg
@@ -341,48 +522,37 @@ namespace CP77.CR2W
                 Verb = "runas"
             };
             var proc = Process.Start(si);
-            proc.WaitForExit();
-            Trace.WriteLine(proc.StandardOutput.ReadToEnd());
-
-            return true;
+            if (proc != null)
+            {
+                proc.WaitForExit();
+                Trace.WriteLine(proc.StandardOutput.ReadToEnd());
+            }
         }
 
-        private bool GenerateBuffers(Stream cr2wStream, FileInfo cr2wFileName)
+        public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFileHeaders(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFileHeaders(cr2wStream);
             if (cr2w == null)
             {
-                _loggerService.Error($"Failed to read cr2w {cr2wFileName.FullName}");
-                return false;
+                yield break;
             }
-            cr2w.FileName = cr2wFileName.FullName;
 
-            // decompress buffers
             var buffers = cr2w.Buffers;
-            for (var i = 0; i < buffers.Count; i++)
+            foreach (var b in buffers)
             {
-                if (cr2wFileName.Directory != null)
-                {
-                    Directory.CreateDirectory(cr2wFileName.Directory.FullName);
-                }
-
-                var bufferpath = $"{cr2wFileName}.{i}.buffer";
-                using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
-                var b = buffers[i];
+                var ms = new MemoryStream();
                 cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(fs, b.DiskSize, b.MemSize);
+                cr2wStream.DecompressAndCopySegment(ms, b.DiskSize, b.MemSize);
+
+                yield return ms;
             }
-
-            return true;
         }
-
-
 
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -415,7 +585,6 @@ namespace CP77.CR2W
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
-
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
                     true));
@@ -430,14 +599,14 @@ namespace CP77.CR2W
         private bool UncookEnvprobe(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CReflectionProbeDataResource probe) ||
-                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
+            if (cr2w.Chunks.FirstOrDefault()?.Data is not CReflectionProbeDataResource ||
+                cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
@@ -450,7 +619,6 @@ namespace CP77.CR2W
             var width = blob.Header.SizeInfo.Width.Value;
 
             const EFormat texformat = EFormat.R8G8B8A8_UNORM;
-
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
@@ -465,7 +633,7 @@ namespace CP77.CR2W
         private bool UncookCubeMap(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -483,7 +651,6 @@ namespace CP77.CR2W
 
             var height = blob.Header.SizeInfo.Height.Value;
             var width = blob.Header.SizeInfo.Width.Value;
-
 
             var compression = Enums.ETextureCompression.TCM_None;
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
@@ -513,7 +680,7 @@ namespace CP77.CR2W
         private bool UncookCsv(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -524,7 +691,7 @@ namespace CP77.CR2W
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault() is {Data: C2dArray redcsv}))
+            if (!(cr2w.Chunks.FirstOrDefault() is { Data: C2dArray redcsv }))
             {
                 return false;
             }
@@ -533,17 +700,24 @@ namespace CP77.CR2W
             return true;
         }
 
-        public bool UncookXbm(Stream cr2wStream, Stream outstream, ExportArgs args, out EFormat texformat)
+        public bool UncookXbm(Stream redInFile, string ddsOutFile, out EFormat texformat)
         {
-            if (args is not XbmExportArgs xbmargs)
+            if (WolvenTesting.IsTesting)
             {
-                throw new ArgumentException(nameof(ExportArgs));
+                using var ms = new MemoryStream();
+                return UncookXbm(redInFile, ms, out texformat);
             }
 
+            using var fs = new FileStream(ddsOutFile, FileMode.Create, FileAccess.Write);
+            return UncookXbm(redInFile, fs, out texformat);
+        }
+
+        public bool UncookXbm(Stream redInFile, Stream outstream, out EFormat texformat)
+        {
             texformat = EFormat.R8G8B8A8_UNORM;
 
             // read the cr2wfile
-            var cr2w = TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(redInFile);
             if (cr2w == null)
             {
                 return false;
@@ -553,7 +727,6 @@ namespace CP77.CR2W
             {
                 return false;
             }
-
 
             if (cr2w.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
                 cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
@@ -574,29 +747,23 @@ namespace CP77.CR2W
             {
                 rawfmt = xbm.Setup.RawFormat.Value;
             }
-            else
-            {
-            }
 
             var compression = Enums.ETextureCompression.TCM_None;
             if (xbm.Setup.Compression?.Value != null)
             {
                 compression = xbm.Setup.Compression.Value;
             }
-            else
-            {
-            }
 
             texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
-            #endregion
+            #endregion get xbm data
 
             // extract and write buffer
             DDSUtils.GenerateAndWriteHeader(outstream, new DDSMetadata(width, height, mips, texformat, alignment, false,
                 slicecount, true));
             var b = cr2w.Buffers[0];
-            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+            redInFile.Seek(b.Offset, SeekOrigin.Begin);
+            redInFile.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
 
             return true;
         }

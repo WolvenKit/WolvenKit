@@ -13,12 +13,11 @@ using CP77.CR2W;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Modkit.RED4.MeshFile;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.ViewModels.Editor;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
@@ -258,9 +257,8 @@ namespace WolvenKit.Views.Editor
                                 }
                             }
 
-                            MESH m = new MESH();
                             var endPath = Path.Combine(ManagerCacheDir, Path.GetFileName(q.Name));
-                            var q2 = m.ExportMeshWithoutRigPreviewer(q, endPath);
+                            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(q, endPath);
                             if (q2.Length > 0)
                             {
                                 StaticReferences.GlobalPropertiesView.LoadModel(q2);
@@ -332,7 +330,7 @@ namespace WolvenKit.Views.Editor
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();
                         var expargs = new XbmExportArgs {Flip = false, UncookExtension = EUncookExtension.dds};
-                        man.UncookXbm(cr2wstream, ddsstream, expargs, out _);
+                        man.UncookXbm(cr2wstream, ddsstream, out _);
 
                         // try loading it in pfim
                         try

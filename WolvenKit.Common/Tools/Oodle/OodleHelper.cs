@@ -107,7 +107,7 @@ namespace WolvenKit.Common.Oodle
                 inputHandle.Free();
                 outputHandle.Free();
 
-                if (result == 0 || result > inputCount)
+                if (result == 0 || inputCount <= (result + 8))
                 {
                     outputBuffer = inputBytes;
                     return outputBuffer.Count();

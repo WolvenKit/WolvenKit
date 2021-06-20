@@ -19,7 +19,7 @@ namespace CP77Tools.Commands
 
         public CR2WCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to a CR2W file."));
+            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to a CR2W file or folder."));
             AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output path."));
             AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json or xml"));
             AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json or xml."));

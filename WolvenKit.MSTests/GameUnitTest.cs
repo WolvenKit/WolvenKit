@@ -8,13 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
 using WolvenKit.Common;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
-namespace WolvenKit.CLI.MSTests
+namespace WolvenKit.MSTests
 {
     [TestClass]
     public class GameUnitTest
@@ -27,7 +28,7 @@ namespace WolvenKit.CLI.MSTests
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";
         private const string s_writeToFileSetting = "WriteToFile";
-        private static IConfigurationRoot s_config;
+        protected static IConfigurationRoot s_config;
         public static string s_gameDirectoryPath;
 
         #endregion Fields
@@ -90,14 +91,19 @@ namespace WolvenKit.CLI.MSTests
             ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IProgress<double>, MockProgressService>();
-            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
-            ServiceLocator.Default.RegisterType<ModTools>();
+            ServiceLocator.Default.RegisterType<Red4ParserService>();
+            ServiceLocator.Default.RegisterType<TargetTools>();      //Cp77FileService
+            ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService
+            ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
+
+            ServiceLocator.Default.RegisterType<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
 
 
             s_bm = new ArchiveManager(hashService);
-            s_bm.LoadAll(gameBinDir.FullName, false);
+            var archivedir = Path.Combine(gameDirectory.FullName, "archive", "pc", "content");
+            s_bm.LoadFromFolder(archivedir);
             s_groupedFiles = s_bm.GroupedFiles;
 
 

@@ -16,7 +16,7 @@ namespace WolvenKit.Common.RED4.Archive
     {
         public const int MIN_LENGTH = 20;
 
-        private const uint s_magic = 1397905484;
+        public const uint s_magic = 0x4C585253; //1397905484;
         private const uint s_version = 1;
 
 

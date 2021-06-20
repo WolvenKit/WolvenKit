@@ -13,4 +13,16 @@ namespace WolvenKit.Common.Exceptions
 
         #endregion Constructors
     }
+
+    public class ModkitExportException : Exception
+    {
+        #region Constructors
+
+        public ModkitExportException(string message)
+            : base(message)
+        {
+        }
+
+        #endregion Constructors
+    }
 }

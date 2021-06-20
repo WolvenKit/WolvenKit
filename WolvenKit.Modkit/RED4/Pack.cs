@@ -19,7 +19,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using Index = CP77Tools.Model.Index;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     /// <summary>
     /// Collection of common modding utilities.
@@ -58,6 +58,25 @@ namespace CP77.CR2W
                 return null;
             }
 
+            // get files
+            var includedExtensions = Enum.GetNames<ERedExtension>();
+            var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
+            var parentfiles = allfiles
+                .Where(_ => includedExtensions.Any(x => _.TrimmedExtension().ToLower() == x));
+            var fileInfos = parentfiles
+                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
+                .ToList();
+
+            _loggerService.Info($"Found {fileInfos.Count} bundle entries to pack.");
+
+            var customPaths = (from fileInfo in fileInfos
+                select fileInfo.FullName.RelativePath(infolder)
+                into relpath
+                let hash = FNV1A64HashAlgorithm.HashString(relpath)
+                where !_hashService.Contains(hash)
+                select relpath).ToList();
+
+
             var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
             var ar = new Archive
             {
@@ -66,34 +85,33 @@ namespace CP77.CR2W
             using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
 
+
+
             #region write header
 
             bw.WriteHeader(ar.Header);
             bw.Write(new byte[132]); // some weird padding
 
+
+            #region write custom data
+
+            long customDataLength = 0;
+            if (customPaths.Count > 0)
+            {
+                var wfooter = new LxrsFooter(customPaths);
+                wfooter.Write(bw);
+                customDataLength = bw.BaseStream.Position - Header.EXTENDED_SIZE;
+            }
+
+
+            #endregion
+
+
             #endregion write header
 
             #region write files
 
-            var exludedExtensions = new[]
-            {
-                ".buffer",
-                ".dds",
-                ".DS_Store", //Hooray for OSX
-            };
-            var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
-            var parentfiles = allfiles
-                .Where(_ => exludedExtensions.All(x => _.Extension.ToLower() != x));
-            var fileInfos = parentfiles
-                .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName.RelativePath(infolder)))
-                .ToList();
-            var customPaths = new List<string>();
-
-
-            _loggerService.Info($"Found {fileInfos.Count} bundle entries to pack.");
-
-            Thread.Sleep(1000);
-            int progress = 0;
+            var progress = 0;
             _progressService.Report(0);
             foreach (var fileInfo in fileInfos)
             {
@@ -122,7 +140,7 @@ namespace CP77.CR2W
                 uint lastoffsetidx = (uint)ar.Index.FileSegments.Count;
                 int flags = 0;
 
-                var cr2w = TryReadCr2WFileHeaders(fileBinaryReader);
+                var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileBinaryReader);
                 if (cr2w != null)
                 {
                     //register imports
@@ -170,7 +188,7 @@ namespace CP77.CR2W
                 else
                 {
                     fileStream.Seek(0, SeekOrigin.Begin);
-                    var cr2winbuffer = Catel.IO.StreamExtensions.ToByteArray(fileStream);
+                    var cr2winbuffer = fileStream.ToByteArray();
                     var offset = (ulong)bw.BaseStream.Position;
                     var size = (uint)cr2winbuffer.Length;
 
@@ -197,7 +215,7 @@ namespace CP77.CR2W
 
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(Catel.IO.StreamExtensions.ToByteArray(fileBinaryReader.BaseStream)); //TODO: this is only correct for files with no buffer
+                var sha1hash = sha1.ComputeHash(fileBinaryReader.BaseStream.ToByteArray()); //TODO: this is only correct for files with no buffer
                 var item = new FileEntry(hash, DateTime.Now, (uint)flags
                     , firstoffsetidx, lastoffsetidx,
                     firstimportidx, lastimportidx
@@ -223,24 +241,16 @@ namespace CP77.CR2W
             bw.PadUntilPage();
             var filesize = bw.BaseStream.Position;
 
+            #endregion write footer
+
+
             // write the header again
             ar.Header.IndexPosition = (ulong)tableoffset;
             ar.Header.IndexSize = (uint)tablesize;
             ar.Header.Filesize = (ulong)filesize;
             bw.BaseStream.Seek(0, SeekOrigin.Begin);
             bw.WriteHeader(ar.Header);
-
-            #endregion write footer
-
-            #region write custom footer
-            if (customPaths.Count > 0)
-            {
-                bw.BaseStream.Seek(0, SeekOrigin.End);
-
-                var wfooter = new LxrsFooter(customPaths);
-                wfooter.Write(bw);
-            }
-            #endregion
+            bw.Write(customDataLength);
 
             return ar;
         }

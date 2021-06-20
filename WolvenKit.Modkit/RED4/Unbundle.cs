@@ -1,19 +1,14 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Catel.IoC;
 using Dasync.Collections;
-using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     /// <summary>
     /// Collection of common modding utilities.
@@ -38,6 +33,7 @@ namespace CP77.CR2W
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
+            var totalInArchiveCount = ar.FileCount;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -56,30 +52,16 @@ namespace CP77.CR2W
             }
 
             var finalMatchesList = finalmatches.ToList();
-            _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to extract.");
-
+            _loggerService.Info($"{ar.ArchiveAbsolutePath}: Found {finalMatchesList.Count}/{totalInArchiveCount} entries to extract.");
+            if (finalMatchesList.Count == 0)
+            {
+                return;
+            }
 
             using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
 
             var progress = 0;
-
-            //foreach (var info in finalMatchesList)
-            //{
-            //    var extracted = ExtractSingle(ar, info.NameHash64, outDir, decompressBuffers, mmf);
-
-            //    if (extracted != 0)
-            //    {
-            //        extractedList.Add(info.FileName);
-            //    }
-            //    else
-            //    {
-            //        failedList.Add(info.FileName);
-            //    }
-
-            //    Interlocked.Increment(ref progress);
-            //    _progressService.Report(progress / (float)finalMatchesList.Count);
-            //}
 
             Parallel.ForEach(finalMatchesList, info =>
             {
@@ -98,7 +80,16 @@ namespace CP77.CR2W
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             });
 
-            //return (extractedList.ToList(), finalMatchesList.Count);
+            //logging
+            var msg = $"{ar.ArchiveAbsolutePath}: Unbundled {extractedList.Count}/{finalMatchesList.Count} entries.";
+            if (extractedList.Count == finalMatchesList.Count)
+            {
+                _loggerService.Success(msg);
+            }
+            else
+            {
+                _loggerService.Info(msg);
+            }
         }
 
         /// <summary>
@@ -165,7 +156,7 @@ namespace CP77.CR2W
         /// <returns></returns>
         public int ExtractSingle(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
-            if (!_hashService.Contains(hash))
+            if (!ar.Files.ContainsKey(hash))
             {
                 return 0;
             }
@@ -178,6 +169,7 @@ namespace CP77.CR2W
                 name += ".bin";
             }
 
+            Directory.CreateDirectory(outDir.FullName);
             // get outfile name
             var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
             if (outfile.Directory == null)
@@ -207,7 +199,7 @@ namespace CP77.CR2W
         /// <returns></returns>
         public async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
-            if (!_hashService.Contains(hash))
+            if (!ar.Files.ContainsKey(hash))
             {
                 return 0;
             }

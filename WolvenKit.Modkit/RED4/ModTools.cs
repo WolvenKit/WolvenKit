@@ -1,44 +1,38 @@
 using System;
-using System.IO;
-using Catel.IoC;
+using CP77.CR2W;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
         private readonly ILoggerService _loggerService;
         private readonly IProgress<double> _progressService;
         private readonly IHashService _hashService;
-        private readonly IWolvenkitFileService _wolvenkitFileService;
+        private readonly Red4ParserService _wolvenkitFileService;
+        private readonly MeshTools _meshTools;
+        private readonly TargetTools _targetTools;
+        //private readonly MaterialTools _materialTools;
 
 
         public ModTools(
             ILoggerService loggerService,
             IProgress<double> progressService,
             IHashService hashService,
-            IWolvenkitFileService wolvenkitFileService
+            Red4ParserService wolvenkitFileService,
+            MeshTools meshTools,
+            TargetTools targetTools
+        //MaterialTools materialTools
         )
         {
             _loggerService = loggerService;
             _progressService = progressService;
             _hashService = hashService;
             _wolvenkitFileService = wolvenkitFileService;
+            _meshTools = meshTools;
+            _targetTools = targetTools;
+            //_materialTools = materialTools;
         }
-
-
-        #region Methods
-
-        public CR2WFile TryReadCr2WFile(Stream stream) => _wolvenkitFileService.TryReadCr2WFile(stream) as CR2WFile;
-
-        public CR2WFile TryReadCr2WFile(BinaryReader br) => _wolvenkitFileService.TryReadCr2WFile(br) as CR2WFile;
-
-        public CR2WFile TryReadCr2WFileHeaders(Stream stream) => _wolvenkitFileService.TryReadCr2WFileHeaders(stream) as CR2WFile;
-
-        public CR2WFile TryReadCr2WFileHeaders(BinaryReader br) => _wolvenkitFileService.TryReadCr2WFileHeaders(br) as CR2WFile;
-
-        #endregion Methods
     }
 }

@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Catel.IoC;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.DDS

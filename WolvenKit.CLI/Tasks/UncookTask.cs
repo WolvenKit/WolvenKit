@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.DDS;
@@ -16,8 +14,9 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void UncookTask(string[] path, string outpath,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
+        public void UncookTask(string[] path, string outpath, string rawOutDir,
+            EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
+            ECookedFileFormat? forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
@@ -27,12 +26,13 @@ namespace CP77Tools.Tasks
 
             Parallel.ForEach(path, file =>
             {
-                UncookTaskInner(file, outpath, uext, flip, hash, pattern, regex);
+                UncookTaskInner(file, outpath, rawOutDir, uext, flip, hash, pattern, regex, unbundle, forcebuffers);
             });
         }
 
-        private void UncookTaskInner(string path, string outpath,
-            EUncookExtension uext, bool flip, ulong hash, string pattern, string regex)
+        private void UncookTaskInner(string path, string outpath, string rawOutDir,
+            EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
+            ECookedFileFormat? forcebuffers)
         {
             #region checks
 
@@ -65,42 +65,38 @@ namespace CP77Tools.Tasks
             var isDirectory = !inputFileInfo.Exists;
             var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
-            if (!Enum.TryParse(inputFileInfo.Extension, true, out ECookedFileFormat extAsEnum))
-            {
-                return ;
-            }
-
-            ExportArgs settings;
-            switch (extAsEnum)
-            {
-                case ECookedFileFormat.xbm:
-                    settings = new XbmExportArgs() {UncookExtension = uext, Flip = flip};
-                    break;
-                case ECookedFileFormat.mlmask:
-                    settings = new MlmaskExportArgs(){UncookExtension = uext};
-                    break;
-                case ECookedFileFormat.wem:
-                case ECookedFileFormat.mesh:
-                case ECookedFileFormat.csv:
-                case ECookedFileFormat.json:
-                case ECookedFileFormat.cubemap:
-                case ECookedFileFormat.envprobe:
-                case ECookedFileFormat.texarray:
-                case ECookedFileFormat.morphtarget:
-                    settings = new CommonExportArgs();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
             #endregion checks
+
+            var exportArgs = new GlobalExportArgs().Register(
+                _xbmExportArgs.Value,
+                _meshExportArgs.Value,
+                _morphTargetExportArgs.Value,
+                _mlmaskExportArgs.Value,
+                _wemExportArgs.Value
+            );
+            if (flip != null)
+            {
+                exportArgs.Get<XbmExportArgs>().Flip = flip.Value;
+            }
+            if (uext != null)
+            {
+                exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
+                exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
+            }
+
+            var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
+            if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
+            {
+                var bm = new ArchiveManager(_hashService);
+                bm.LoadFromFolder(archiveDepot);
+                exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
+            }
 
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
                 var archiveManager = new ArchiveManager(_hashService);
                 archiveManager.LoadFromFolder(basedir.FullName);
-                // TODO: use the manager here?
                 archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
             else
@@ -108,45 +104,51 @@ namespace CP77Tools.Tasks
                 archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
 
-            foreach (var processedarchive in archiveFileInfos)
+            foreach (var fileInfo in archiveFileInfos)
             {
                 // get outdirectory
                 DirectoryInfo outDir;
                 if (string.IsNullOrEmpty(outpath))
                 {
-                    outDir = Directory.CreateDirectory(Path.Combine(
+                    outDir = new DirectoryInfo(Path.Combine(
                         basedir.FullName,
-                        processedarchive.Name.Replace(".archive", "")));
+                        fileInfo.Name.Replace(".archive", "")));
                 }
                 else
                 {
                     outDir = new DirectoryInfo(outpath);
                     if (!outDir.Exists)
                     {
-                        outDir = Directory.CreateDirectory(outpath);
+                        outDir = new DirectoryInfo(outpath);
                     }
+                }
 
-                    if (inputDirInfo.Exists)
+                DirectoryInfo rawOutDirInfo = null;
+                if (string.IsNullOrEmpty(rawOutDir))
+                {
+                    rawOutDirInfo = outDir;
+                }
+                else
+                {
+                    rawOutDirInfo = new DirectoryInfo(rawOutDir);
+                    if (!rawOutDirInfo.Exists)
                     {
-                        outDir = Directory.CreateDirectory(Path.Combine(
-                            outDir.FullName,
-                            processedarchive.Name.Replace(".archive", "")));
+                        rawOutDirInfo = new DirectoryInfo(rawOutDir);
                     }
                 }
 
                 // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(processedarchive.FullName, _hashService);
+                var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
 
                 // run
                 if (hash != 0)
                 {
-                    _modTools.UncookSingle(ar, hash, outDir, settings);
+                    _modTools.UncookSingle(ar, hash, outDir, exportArgs, rawOutDirInfo, forcebuffers);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}");
                 }
                 else
                 {
-                    var r = _modTools.UncookAll(ar, outDir, settings, pattern, regex);
-                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked {r.Item1.Count}/{r.Item2} files.");
+                    _modTools.UncookAll(ar, outDir, exportArgs, unbundle, pattern, regex, rawOutDirInfo, forcebuffers);
                 }
             }
 

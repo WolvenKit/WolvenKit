@@ -20,7 +20,7 @@ using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W
 {
-    public class CR2WFile : Catel.Data.ObservableObject, IRed4EngineFile
+    public class CR2WFile : ObservableObject, IRed4EngineFile
     {
         #region Enums
         public enum EChunkDisplayMode
@@ -329,7 +329,7 @@ namespace WolvenKit.RED4.CR2W
                 }
 
                 //Update UI
-                RaisePropertyChanged(nameof(Chunks));
+                OnPropertyChanged(nameof(Chunks));
             }
 
             return removed;
@@ -372,9 +372,9 @@ namespace WolvenKit.RED4.CR2W
 
             // Read Value
             var parsedvar = parent.GetPropertyByREDName(varname);
-            if (parsedvar.REDType != typename)
+            if (parsedvar == null || parsedvar.REDType != typename)
             {
-                throw new TypeMismatchException(typename, parsedvar.REDType);
+                throw new MissingRTTIException(varname, typename, parent.REDType);
             }
 
             // The "size" variable read is something a bit strange : it takes itself into account.
@@ -869,6 +869,9 @@ namespace WolvenKit.RED4.CR2W
 
             // Write headers again with fixed offsets
             WriteHeader(file);
+
+            // scroll to end after the data chunks
+            file.Seek(0, SeekOrigin.End);
 
             if (AdditionalCr2WFileBytes != null)
             {

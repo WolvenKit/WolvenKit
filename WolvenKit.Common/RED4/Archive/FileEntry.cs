@@ -1,12 +1,10 @@
 using System;
 using System.IO;
-using Catel.IoC;
 using ProtoBuf;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
-using ServiceLocator = Catel.IoC.ServiceLocator;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
@@ -62,6 +60,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
         public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
         public string Extension => Path.GetExtension(FileName);
+
+        public string ShortName => Path.GetFileName(FileName);
 
         #endregion Properties
 

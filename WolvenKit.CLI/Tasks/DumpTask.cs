@@ -1,24 +1,15 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Catel.IoC;
-using CP77.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.CR2W.Types;
 using Newtonsoft.Json;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
-using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
 
 namespace CP77Tools.Tasks
@@ -199,7 +190,7 @@ namespace CP77Tools.Tasks
                         {
                             using var ms = new MemoryStream();
                             ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
-                            var cr2w = _modTools.TryReadCr2WFileHeaders(ms);
+                            var cr2w = _wolvenkitFileService.TryReadCr2WFileHeaders(ms);
                             if (cr2w == null)
                             {
                                 return;
@@ -220,7 +211,7 @@ namespace CP77Tools.Tasks
                             {
                                 using var ms = new MemoryStream();
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
-                                var cr2w = _modTools.TryReadCr2WFile(ms);
+                                var cr2w = _wolvenkitFileService.TryReadCr2WFile(ms);
 
                                 if (cr2w?.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
                                     !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))

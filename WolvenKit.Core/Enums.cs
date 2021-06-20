@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+
 namespace WolvenKit.Common
 {
     public enum ERedExtension
@@ -127,7 +129,6 @@ namespace WolvenKit.Common
         xcube
     }
 
-
     public enum Logtype
     {
         Normal,
@@ -159,12 +160,16 @@ namespace WolvenKit.Common
         mesh,
         xbm,
         csv,
-        json,
+
+        //json,
         mlmask,
+
         cubemap,
         envprobe,
         texarray,
-        morphtarget
+        morphtarget,
+        fnt,
+        opusinfo
     }
 
     /// <summary>
@@ -174,7 +179,23 @@ namespace WolvenKit.Common
     {
         tga,
         dds,
-        fbx
+        fbx,
+        gltf,
+        glb,
+        ttf,
+        wav
+    }
+
+    /// <summary>
+    /// Possible file extensions of cooked redengine files
+    /// </summary>
+    public enum ECookedTextureFormat
+    {
+        xbm,
+        mlmask,
+        cubemap,
+        envprobe,
+        texarray,
     }
 
     /// <summary>
@@ -215,9 +236,6 @@ namespace WolvenKit.Common
         Uncooked,
         Raw
     }
-
-
-
 
     /// IMPORT FLAGS
     [System.Flags]

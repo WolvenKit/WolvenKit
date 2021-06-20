@@ -12,6 +12,7 @@ namespace CP77Tools.Model
 
         public const uint MAGIC = 1380009042;
         public const int SIZE = 40;
+        public const int EXTENDED_SIZE = 0xAC;
 
         #endregion Fields
 

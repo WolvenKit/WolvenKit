@@ -2,12 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Catel.IoC;
-using CP77.CR2W;
-using WolvenKit.Common;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 
 namespace CP77Tools.Tasks
 {
@@ -96,34 +92,34 @@ namespace CP77Tools.Tasks
                 archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
 
-            foreach (var processedarchive in archiveFileInfos)
+            foreach (var fileInfo in archiveFileInfos)
             {
                 // get outdirectory
                 DirectoryInfo outDir;
                 if (string.IsNullOrEmpty(outpath))
                 {
-                    outDir = Directory.CreateDirectory(Path.Combine(
+                    outDir = new DirectoryInfo(Path.Combine(
                         basedir.FullName,
-                        processedarchive.Name.Replace(".archive", "")));
+                        fileInfo.Name.Replace(".archive", "")));
                 }
                 else
                 {
                     outDir = new DirectoryInfo(outpath);
                     if (!outDir.Exists)
                     {
-                        outDir = Directory.CreateDirectory(outpath);
+                        outDir = new DirectoryInfo(outpath);
                     }
 
                     if (inputDirInfo.Exists)
                     {
-                        outDir = Directory.CreateDirectory(Path.Combine(
+                        outDir = new DirectoryInfo(Path.Combine(
                             outDir.FullName,
-                            processedarchive.Name.Replace(".archive", "")));
+                            fileInfo.Name.Replace(".archive", "")));
                     }
                 }
 
                 // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(processedarchive.FullName, _hashService);
+                var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
 
                 var isHash = ulong.TryParse(hash, out ulong hashNumber);
 
@@ -131,12 +127,12 @@ namespace CP77Tools.Tasks
                 if (!isHash && File.Exists(hash))
                 {
                     var hashlist = File.ReadAllLines(hash)
-                        .ToList().Select(_ => ulong.TryParse(_, out ulong res) ? res : 0);
+                        .ToList().Select(_ => ulong.TryParse(_, out var res) ? res : 0);
                     _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
-                    foreach (var hash_num in hashlist)
+                    foreach (var hashNum in hashlist)
                     {
-                        _modTools.ExtractSingle(ar, hash_num, outDir, DEBUG_decompress);
-                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}");
+                        _modTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
                     }
 
                     _loggerService.Success($"Bulk extraction from hashlist file completed.");
@@ -149,7 +145,6 @@ namespace CP77Tools.Tasks
                 else
                 {
                     _modTools.ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
-                    _loggerService.Success($"{ar.ArchiveAbsolutePath}: Extracted all files.");
                 }
             }
 

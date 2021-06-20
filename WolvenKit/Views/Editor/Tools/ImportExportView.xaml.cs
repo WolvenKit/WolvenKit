@@ -1,20 +1,22 @@
-
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using Catel.IoC;
+using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
 {
     public partial class ImportExportView
     {
-
         /// <summary>
         /// Constructor I/E Tool.
         /// </summary>
@@ -30,85 +32,113 @@ namespace WolvenKit.Views.Editor
         /// <param name="e"></param>
         private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
         {
-
-            var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
-            var simplename = Path.GetFileName(q.FullName);
-            var ext = Path.GetExtension(q.FullName).ToString();
-
-            _ = Enum.TryParse(ext.TrimStart('.'), out ECookedFileFormat Extension);
-            switch (Extension)
+            if (ViewModel is not ImportExportViewModel vm)
             {
-                case ECookedFileFormat.mesh:
-                case ECookedFileFormat.xbm:
-                case ECookedFileFormat.wem:
-                case ECookedFileFormat.csv:
-                case ECookedFileFormat.json:
-                case ECookedFileFormat.mlmask:
-                case ECookedFileFormat.cubemap:
-                case ECookedFileFormat.envprobe:
-                case ECookedFileFormat.texarray:
-                case ECookedFileFormat.morphtarget:
-                    AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-                    AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, ext);
-                    AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, simplename);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                return;
             }
-
-
-
+            if (vm.IsImportsSelected)
+            {
+                if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport)
+                {
+                    if (Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat _))
+                    {
+                        XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                        XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Extension);
+                        XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Name);
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+                }
+            }
+            else
+            {
+                if (ExportGrid.SelectedItem is ImportExportItemViewModel selectedExport)
+                {
+                    if (Enum.TryParse(selectedExport.Extension.TrimStart('.'), out ECookedFileFormat _))
+                    {
+                        XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                        XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedExport.Extension);
+                        XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedExport.Name);
+                    }
+                    else
+                    { throw new ArgumentOutOfRangeException(); }
+                }
+            }
         }
 
+        /// <summary>
+        /// Confirm Button (Advanced Options)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            AdvancedOptionsVis.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            if (ViewModel is ImportExportViewModel vm)
+            {
+                if (ApplyToAllCheckbox.IsChecked != null && ApplyToAllCheckbox.IsChecked.Value)
+                {
+                    vm.CopyArgumentsTemplateToCommand.SafeExecute("All in Grid");
+                    ApplyToAllCheckbox.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false);
+                }
+            }
+            XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }
 
-        private bool SelectionLocked = false;
-        private void ExportGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        /// <summary>
+        /// Cancel Button (Select additional files)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CancelSelectingClick(object sender, RoutedEventArgs e) => XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+        private PropertyItem _propertyItem;
+
+        /// <summary>
+        /// Override PG Collection Editor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PropertyGrid_CollectionEditorOpening(object sender, Syncfusion.Windows.PropertyGrid.CollectionEditorOpeningEventArgs e)
         {
-            if (!SelectionLocked)
+            if (ViewModel is ImportExportViewModel vm && sender is PropertyGrid pg)
             {
-                var q = ExportGrid.SelectedItem as ImportExportItemViewModel;
-                var simplename = Path.GetFileName(q.FullName);
-
-                var prestring = "Selected : ";
-
-
-                var IEVM = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
-
-                IEVM.CurrentSelectedInGridName =prestring + simplename;
-
+                _propertyItem = pg.SelectedPropertyItem;
+                vm.SetCollectionCommand.SafeExecute(_propertyItem.Name);
             }
 
-
+            e.Cancel = true;
+            XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }
 
-        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e) => HelpOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) => HelpOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+        private void ConfirmCollectionEditorSelection_OnClick(object sender, RoutedEventArgs e)
         {
-            SelectionLocked = true;
+            XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            if (ViewModel is ImportExportViewModel vm)
+            {
+                vm.ConfirmCollectionCommand.SafeExecute(_propertyItem.Name);
+            }
         }
 
-        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        private void AddItemsButtonClick(object sender, RoutedEventArgs e)
         {
-            SelectionLocked = false;
+            if (ViewModel is ImportExportViewModel vm)
+            {
+                vm.AddItemsCommand.SafeExecute(FileSelectionDataGrid.SelectedItems);
+            }
+        }
+
+        private void RemoveItemsButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is ImportExportViewModel vm)
+            {
+                vm.RemoveItemsCommand.SafeExecute(SelectedFilesGrid.SelectedItems);
+            }
         }
     }
 }
-
-
-
-//private void DragNDropBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-//{
-//    Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
-//    openFileDlg.Multiselect = true;
-//    openFileDlg.Filter = "All files (*.*)|*.*";
-//    Nullable<bool> result = openFileDlg.ShowDialog();
-//    if (result == true)
-//    {
-
-//        //ImporterList.items.Text = openFileDlg.FileName;
-
-//    }
-//}
