@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private physicsDestructionParams _destructionParams;
 		private CArray<physicsDestructionLevelData> _destructionLevelData;
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("audioMetadata")] 
 		public CName AudioMetadata
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _audioMetadata, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("destructionParams")] 
 		public physicsDestructionParams DestructionParams
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _destructionParams, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("destructionLevelData")] 
 		public CArray<physicsDestructionLevelData> DestructionLevelData
 		{

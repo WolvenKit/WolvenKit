@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _playerLevel;
 		private CInt32 _recommendedLevel;
 		private CHandle<inkanimProxy> _entryAnimProxy;
+		private CBool _canUsePhone;
 		private CArray<CHandle<VirutalNestedListData>> _listData;
 
 		[Ordinal(3)] 
@@ -154,6 +155,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("canUsePhone")] 
+		public CBool CanUsePhone
+		{
+			get => GetProperty(ref _canUsePhone);
+			set => SetProperty(ref _canUsePhone, value);
+		}
+
+		[Ordinal(20)] 
 		[RED("listData")] 
 		public CArray<CHandle<VirutalNestedListData>> ListData
 		{

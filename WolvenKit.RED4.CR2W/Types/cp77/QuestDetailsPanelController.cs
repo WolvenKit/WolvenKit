@@ -21,6 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<PhoneSystem> _phoneSystem;
 		private wCHandle<gamemappinsMappinSystem> _mappinSystem;
 		private wCHandle<gameJournalQuestObjective> _trackedObjective;
+		private CBool _canUsePhone;
 
 		[Ordinal(1)] 
 		[RED("questTitle")] 
@@ -132,6 +133,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _trackedObjective);
 			set => SetProperty(ref _trackedObjective, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("canUsePhone")] 
+		public CBool CanUsePhone
+		{
+			get => GetProperty(ref _canUsePhone);
+			set => SetProperty(ref _canUsePhone, value);
 		}
 
 		public QuestDetailsPanelController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _acceptInstant;
 		private CBool _acceptNotInstant;
 		private CBool _acceptForcedTransition;
+		private CBool _succeedOnMissingMountedEntity;
 		private CUInt32 _callbackId;
 		private CUInt32 _highLevelStateCallbackId;
 
@@ -47,6 +48,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("succeedOnMissingMountedEntity")] 
+		public CBool SucceedOnMissingMountedEntity
+		{
+			get => GetProperty(ref _succeedOnMissingMountedEntity);
+			set => SetProperty(ref _succeedOnMissingMountedEntity, value);
+		}
+
+		[Ordinal(5)] 
 		[RED("callbackId")] 
 		public CUInt32 CallbackId
 		{
@@ -54,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _callbackId, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("highLevelStateCallbackId")] 
 		public CUInt32 HighLevelStateCallbackId
 		{

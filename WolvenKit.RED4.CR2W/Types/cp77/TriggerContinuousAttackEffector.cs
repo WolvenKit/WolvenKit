@@ -9,6 +9,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<gameObject> _owner;
 		private TweakDBID _attackTDBID;
+		private CHandle<gameAttack_GameEffect> _attack;
+		private CFloat _delayTime;
 
 		[Ordinal(0)] 
 		[RED("owner")] 
@@ -24,6 +26,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _attackTDBID);
 			set => SetProperty(ref _attackTDBID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("attack")] 
+		public CHandle<gameAttack_GameEffect> Attack
+		{
+			get => GetProperty(ref _attack);
+			set => SetProperty(ref _attack, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("delayTime")] 
+		public CFloat DelayTime
+		{
+			get => GetProperty(ref _delayTime);
+			set => SetProperty(ref _delayTime, value);
 		}
 
 		public TriggerContinuousAttackEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

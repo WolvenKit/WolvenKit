@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CEnum<gamedataStimType> _stimType;
 		private CEnum<gamedataStimType> _silentStimType;
+		private CArray<CEnum<gamedataStimType>> _suppressedByStimTypes;
 
 		[Ordinal(1)] 
 		[RED("stimType")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _silentStimType);
 			set => SetProperty(ref _silentStimType, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("suppressedByStimTypes")] 
+		public CArray<CEnum<gamedataStimType>> SuppressedByStimTypes
+		{
+			get => GetProperty(ref _suppressedByStimTypes);
+			set => SetProperty(ref _suppressedByStimTypes, value);
 		}
 
 		public GameEffectExecutor_StimOnHit(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

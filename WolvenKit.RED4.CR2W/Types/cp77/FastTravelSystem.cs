@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CHandle<gameFastTravelPointData>> _fastTravelNodes;
 		private CBool _isFastTravelEnabledOnMap;
 		private CInt32 _fastTravelPointsTotal;
+		private CInt32 _lastUpdatedAchievementCount;
 		private CArray<FastTravelSystemLock> _fastTravelLocks;
 		private CUInt32 _loadingScreenCallbackID;
 		private CBool _requestAutoSafeAfterLoadingScreen;
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("lastUpdatedAchievementCount")] 
+		public CInt32 LastUpdatedAchievementCount
+		{
+			get => GetProperty(ref _lastUpdatedAchievementCount);
+			set => SetProperty(ref _lastUpdatedAchievementCount, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("fastTravelLocks")] 
 		public CArray<FastTravelSystemLock> FastTravelLocks
 		{
@@ -49,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fastTravelLocks, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("loadingScreenCallbackID")] 
 		public CUInt32 LoadingScreenCallbackID
 		{
@@ -57,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _loadingScreenCallbackID, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("requestAutoSafeAfterLoadingScreen")] 
 		public CBool RequestAutoSafeAfterLoadingScreen
 		{
@@ -65,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _requestAutoSafeAfterLoadingScreen, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("lockLisenerID")] 
 		public CName LockLisenerID
 		{
@@ -73,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lockLisenerID, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("unlockLisenerID")] 
 		public CName UnlockLisenerID
 		{
@@ -81,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _unlockLisenerID, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("removeAllLocksLisenerID")] 
 		public CName RemoveAllLocksLisenerID
 		{

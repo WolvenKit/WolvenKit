@@ -13,6 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _minEffectDuration;
 		private CFloat _maxEffectDuration;
 		private CBool _twoDimensional;
+		private CBool _smoothInterpolations;
 
 		[Ordinal(0)] 
 		[RED("effectsCount")] 
@@ -60,6 +61,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _twoDimensional);
 			set => SetProperty(ref _twoDimensional, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("smoothInterpolations")] 
+		public CBool SmoothInterpolations
+		{
+			get => GetProperty(ref _smoothInterpolations);
+			set => SetProperty(ref _smoothInterpolations, value);
 		}
 
 		public gameEffectAction_ChildEffectsMovingInCone(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

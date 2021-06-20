@@ -17,7 +17,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _investigationSlots;
 		private CBool _sourceHighlighted;
 		private CString _effectName;
-		private CBool _isInvalid;
 
 		[Ordinal(0)] 
 		[RED("highlightType")] 
@@ -97,14 +96,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _effectName);
 			set => SetProperty(ref _effectName, value);
-		}
-
-		[Ordinal(10)] 
-		[RED("isInvalid")] 
-		public CBool IsInvalid
-		{
-			get => GetProperty(ref _isInvalid);
-			set => SetProperty(ref _isInvalid, value);
 		}
 
 		public PuppetForceVisionAppearanceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

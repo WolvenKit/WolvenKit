@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("setValue")] 
-		public CBool SetValue
+		public CBool SetValue_
 		{
 			get => GetProperty(ref _setValue);
 			set => SetProperty(ref _setValue, value);

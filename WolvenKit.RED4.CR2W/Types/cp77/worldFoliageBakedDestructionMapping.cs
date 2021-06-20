@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<physicsFilterDataSource> _filterDataSource;
 		private CHandle<physicsFilterData> _filterData;
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("numFrames")] 
 		public CFloat NumFrames
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numFrames, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("frameRate")] 
 		public CFloat FrameRate
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frameRate, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("audioMetadata")] 
 		public CName AudioMetadata
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _audioMetadata, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("destructionEffect")] 
 		public raRef<worldEffect> DestructionEffect
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _destructionEffect, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _filterDataSource, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
