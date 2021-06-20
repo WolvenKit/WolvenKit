@@ -2,12 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.Wcc;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
 
@@ -394,7 +389,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "GLTF/GLB | " + $"Lod filter : {LodFilter.ToString()} | Is Binary : {isGLBinary.ToString()}";
+        public override string ToString() => "GLTF/GLB | " + $"Export Type : {meshExportType.ToString()} | Lod filter : {LodFilter.ToString()} | Is Binary : {isGLBinary.ToString()}";
     }
 
     /// <summary>
