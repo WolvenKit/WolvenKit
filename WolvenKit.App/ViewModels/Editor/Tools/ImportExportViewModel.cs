@@ -501,7 +501,7 @@ namespace WolvenKit.ViewModels.Editor
                         await ImportSingle(item);
                     }
                 }
-                ImportWavs(wavs);
+                await ImportWavs(wavs);
             }
             else
             {
@@ -514,7 +514,7 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
         }
 
-        private void ImportWavs(List<string> wavs)
+        private async Task ImportWavs(List<string> wavs)
         {
             var proj = _projectManager.ActiveProject;
             if (_gameController.GetController() is Cp77Controller cp77Controller)
@@ -530,7 +530,7 @@ namespace WolvenKit.ViewModels.Editor
                     proj.RawDirectory,
                     true);
 
-                opusTools.ImportWavs(wavs.ToArray());
+                await Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
             }
         }
 
@@ -639,7 +639,7 @@ namespace WolvenKit.ViewModels.Editor
                         await ImportSingle(item);
                     }
                 }
-                ImportWavs(wavs);
+                await ImportWavs(wavs);
             }
             else
             {
