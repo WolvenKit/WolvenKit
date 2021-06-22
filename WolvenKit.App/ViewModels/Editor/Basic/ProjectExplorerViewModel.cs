@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -13,6 +14,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using DynamicData;
+using DynamicData.Binding;
 using Orc.FileSystem;
 using ReactiveUI;
 using WolvenKit.Common;
@@ -52,17 +54,10 @@ namespace WolvenKit.ViewModels.Editor
         private readonly Tw3Controller _tw3Controller;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
-
-
-        //private readonly ReadOnlyObservableCollection<FileViewModel> _bindOut;
-        //public ReadOnlyObservableCollection<FileViewModel> BindingModel => _bindOut;
-        private readonly ReadOnlyObservableCollection<FileModel> _bindGrid;
-        public ReadOnlyObservableCollection<FileModel> BindGrid => _bindGrid;
-
-        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
-
         public static ProjectExplorerViewModel GlobalProjectExplorer;
 
+        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
+        private readonly IObservableList<FileModel> _observableList;
 
         #endregion fields
 
@@ -99,34 +94,19 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-            //_watcherService.Connect()
-            //    .Filter(_ => _.ParentHash == 0)
-            //    .Bind(out _bindOut)
-            //    .Subscribe();
+            
             GlobalProjectExplorer = this;
+
             _watcherService.Files
                 .Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _bindGrid)
+                .BindToObservableList(out _observableList)
                 .Subscribe(OnNext);
         }
 
 
         public bool IsTreeBeingEdited { get; set; }
-        private void OnNext(IChangeSet<FileModel, ulong> obj)
-        {
-            IsTreeBeingEdited = true;
-            BindGrid1.Clear();
-            foreach (var fileModel in BindGrid)
-            {
-                if (fileModel.RelativeName is FileModel.s_moddir or FileModel.s_rawdir)
-                {
-                    fileModel.IsExpanded = true;
-                }
-                BindGrid1.Add(fileModel);
-            }
-            IsTreeBeingEdited = false;
-        }
+        private void OnNext(IChangeSet<FileModel, ulong> obj) => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
 
         /// <summary>
         /// Initialize commands for this window.

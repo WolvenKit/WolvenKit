@@ -48,31 +48,7 @@ namespace WolvenKit.Functionality.Services
                 }
 
             });
-
-            
-
-            //Files.Connect()
-            //    .Transform(_ => new FileViewModel(_))
-            //    .ObserveOnDispatcher()
-            //    .Bind(out _bindingModel)
-            //    .Subscribe(OnNext);
-
         }
-
-        // this runs on the dispatcher thread :/
-        //private void OnNext(IChangeSet<FileViewModel, ulong> obj)
-        //{
-        //    var lookup = _bindingModel.ToLookup(x => x.ParentHash);
-        //    foreach (var model in _bindingModel)
-        //    {
-        //        model.ChildrenCache.Edit(inner =>
-        //            {
-        //                inner.Clear();
-        //                inner.AddOrUpdate(lookup[model.Hash]);
-        //            }
-        //        );
-        //    }
-        //}
 
         private void WatchLocation(string location)
         {

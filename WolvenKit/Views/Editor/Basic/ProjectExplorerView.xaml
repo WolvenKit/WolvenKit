@@ -45,13 +45,15 @@
             ChildPropertyName="ParentHash"
             ColumnSizer="Star"
             ExpandStateMappingName="IsExpanded"
-            ItemsSource="{Binding BindGrid1}"
+            ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Extended"
-            SelfRelationRootValue="0">
+            SelfRelationRootValue="0"
+            IsReadOnly="True"
+            >
 
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
