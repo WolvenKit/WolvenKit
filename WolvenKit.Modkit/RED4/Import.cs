@@ -211,7 +211,9 @@ namespace WolvenKit.Modkit.RED4
 
             // process all other raw files
             var allFiles = inDir.GetFiles("*", SearchOption.AllDirectories).ToList();
-            var rawFilesList = allFiles.Where(_ => _.Extension.ToLower() != ".buffer").ToList();
+            var rawFilesList = allFiles
+                .Where(_ => Enum.GetNames<ERawFileFormat>().Contains(_.Extension.ToLower()))
+                .ToList();
             var failsCount = 0;
             foreach (var fi in rawFilesList)
             {

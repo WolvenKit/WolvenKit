@@ -18,7 +18,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat forcebuffers)
+        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
@@ -32,7 +32,7 @@ namespace CP77Tools.Tasks
             });
         }
 
-        private void ExportTaskInner(string path, string outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat forcebuffers)
+        private void ExportTaskInner(string path, string outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             #region checks
 
