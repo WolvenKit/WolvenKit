@@ -27,9 +27,6 @@ namespace WolvenKit.Functionality.Services
 
         public FileModel LastSelect { get; set; }
 
-        //private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
-        //public IObservable<IChangeSet<FileViewModel>> Connect() => _bindingModel.ToObservableChangeSet();
-
         #endregion
 
         public WatcherService(IProjectManager projectManager)
@@ -140,9 +137,6 @@ namespace WolvenKit.Functionality.Services
                         inner.Remove(hash);
                     });
                     break;
-                case WatcherChangeTypes.Renamed:
-                    _files.AddOrUpdate(new FileModel(e.FullPath));
-                    break;
                 case WatcherChangeTypes.All:
                     break;
                 case WatcherChangeTypes.Changed:
@@ -159,6 +153,19 @@ namespace WolvenKit.Functionality.Services
         /// <param name="e"></param>
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
+            if (IsSuspended)
+            {
+                return;
+            }
+
+            switch (e.ChangeType)
+            {
+                case WatcherChangeTypes.Renamed:
+                    var hash = FNV1A64HashAlgorithm.HashString(FileModel.GetRelativeName(e.OldFullPath));
+                    _files.RemoveKey(hash);
+                    _files.AddOrUpdate(new FileModel(e.FullPath));
+                    break;
+            }
 
         }
 

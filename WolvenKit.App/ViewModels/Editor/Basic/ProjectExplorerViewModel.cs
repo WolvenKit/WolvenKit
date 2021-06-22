@@ -336,13 +336,11 @@ namespace WolvenKit.ViewModels.Editor
         /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
-        private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null;
+        private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
         private async void ExecuteRenameFile()
         {
-            var filename = SelectedItem.FullName;
-
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            var viewModel = new InputDialogViewModel() { Text = filename };
+            var viewModel = new InputDialogViewModel() { Text = SelectedItem.Name };
             await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
@@ -355,7 +353,9 @@ namespace WolvenKit.ViewModels.Editor
                     return;
                 }
 
-                var newfullpath = Path.Combine(ActiveMod.FileDirectory, vm.Text);
+
+                var filename = SelectedItem.FullName;
+                var newfullpath = Path.Combine(Path.GetDirectoryName(filename), vm.Text);
 
                 if (File.Exists(newfullpath))
                 {
