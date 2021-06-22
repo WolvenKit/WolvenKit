@@ -12,7 +12,7 @@ namespace WolvenKit.Functionality.Services
         //public IObservable<IChangeSet<FileViewModel>> Connect();
         public IObservableCache<FileModel, ulong> Files { get; }
 
-
+        public FileModel LastSelect { get; set; }
         public Task RefreshAsync(EditorProject proj);
     }
 }

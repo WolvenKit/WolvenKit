@@ -1,4 +1,6 @@
 using System.Windows;
+using Syncfusion.UI.Xaml.ScrollAxis;
+using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -16,20 +18,45 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
             GlobalPEView = this;
+            TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
 
-            //TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
+
         }
 
-        //private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
-        //{
-        //    if (TreeGrid.View != null)
-        //    {
-        //        TreeGrid.View.NodeCollectionChanged += View_NodeCollectionChanged;
-        //    }
-        //}
+
+        private bool _isfirsttime { get; set; } = true;
+        private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
+        {
+            if (ViewModel is not ProjectExplorerViewModel viewModel)
+            {
+                return;
+            }
+            if (TreeGrid.View != null)
+            {
+                if (!_isfirsttime)
+                {
+                    if (viewModel.LastSelected != null)
+                    {
+                        TreeGrid.ExpandAllNodes();
+                        var rowIndex = this.TreeGrid.ResolveToRowIndex(viewModel.LastSelected);
+                        if (rowIndex > -1)
+                        {
+                            var q = TreeGrid.ResolveToRowIndex(rowIndex - 1);
+                            var columnIndex = this.TreeGrid.ResolveToStartColumnIndex();
+                            this.TreeGrid.ScrollInView(new RowColumnIndex(q, columnIndex));
+                            TreeGrid.SelectRows(q, q);
+                        }
+                    }
+                }
+                else
+                { _isfirsttime = false; }
+            }
+        }
 
         //private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         //{
+
+        //    Trace.WriteLine("hello");
         //    //if (e.NewItems != null)
         //    //{
         //    //    foreach (var nerd in e.NewItems)
@@ -44,11 +71,11 @@ namespace WolvenKit.Views.Editor
         //        return;
         //    }
 
-        //    var rootnodes = TreeGrid.View.Nodes.RootNodes;
-        //    foreach (var rootnode in rootnodes)
-        //    {
-        //        TreeGrid.ExpandNode(rootnode);
-        //    }
+        //    //var rootnodes = TreeGrid.View.Nodes.RootNodes;
+        //    //foreach (var rootnode in rootnodes)
+        //    //{
+        //    //    TreeGrid.ExpandNode(rootnode);
+        //    //}
 
 
         //    Trace.WriteLine(e.Action.ToString());

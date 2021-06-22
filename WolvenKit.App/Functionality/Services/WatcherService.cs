@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
@@ -25,6 +24,8 @@ namespace WolvenKit.Functionality.Services
         private readonly IProjectManager _projectManager;
 
         private FileSystemWatcher _modsWatcher;
+
+        public FileModel LastSelect { get; set; }
 
         //private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
         //public IObservable<IChangeSet<FileViewModel>> Connect() => _bindingModel.ToObservableChangeSet();
@@ -127,7 +128,8 @@ namespace WolvenKit.Functionality.Services
             {
                 case WatcherChangeTypes.Created:
                 {
-                    _files.AddOrUpdate(new FileModel(e.FullPath));
+                    LastSelect = new FileModel(e.FullPath);
+                    _files.AddOrUpdate(LastSelect);
                     break;
                 }
                 case WatcherChangeTypes.Deleted:
@@ -151,13 +153,13 @@ namespace WolvenKit.Functionality.Services
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            
+
         }
 
 

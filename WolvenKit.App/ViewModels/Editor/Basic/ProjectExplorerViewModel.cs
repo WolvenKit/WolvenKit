@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -53,6 +52,9 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IDirectoryService _directoryService;
         private readonly Tw3Controller _tw3Controller;
 
+
+        public FileModel LastSelected { get { return _watcherService.LastSelect; } }
+
         private EditorProject ActiveMod => _projectManager.ActiveProject;
         public static ProjectExplorerViewModel GlobalProjectExplorer;
 
@@ -94,7 +96,7 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-            
+
             GlobalProjectExplorer = this;
 
             _watcherService.Files

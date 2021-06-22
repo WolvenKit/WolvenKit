@@ -38,7 +38,7 @@
             AllowEditing="False"
             AllowFiltering="True"
             AllowResizingColumns="False"
-            AutoExpandMode="None"
+            AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             ChildPropertyName="ParentHash"
             ColumnSizer="Star"
