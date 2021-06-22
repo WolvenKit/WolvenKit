@@ -193,6 +193,52 @@ namespace WolvenKit.Modkit.RED4
                 else
                     materialEntries.Add(ExternalMaterial[Entry.Index.Value]);
             }
+            foreach(var m in materialEntries)
+            {
+                string path = m.BaseMaterial.DepotPath;
+                while(!Path.GetExtension(path).Contains("mt"))
+                {
+                    ulong hash = FNV1A64HashAlgorithm.HashString(path);
+                    foreach (Archive ar in archives)
+                    {
+                        if (ar.Files.ContainsKey(hash))
+                        {
+                            var ms = new MemoryStream();
+                            ExtractSingleToStream(ar, hash, ms);
+
+                            var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                            path = (mi.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath;
+                            for (int t = 0; t < mi.Imports.Count; t++)
+                            {
+                                if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                                {
+                                    primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                ulong mt = FNV1A64HashAlgorithm.HashString(path);
+                foreach (Archive ar in archives)
+                {
+                    if (ar.Files.ContainsKey(mt))
+                    {
+                        var ms = new MemoryStream();
+                        ExtractSingleToStream(ar, mt, ms);
+
+                        var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                        for (int t = 0; t < mi.Imports.Count; t++)
+                        {
+                            if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                            {
+                                primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
         }
         private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, DirectoryInfo outDir, List<Archive> archives, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
