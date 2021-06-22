@@ -9,10 +9,9 @@ namespace WolvenKit.Functionality.Services
     {
         public bool IsSuspended { get; set; }
 
-        //public IObservable<IChangeSet<FileViewModel>> Connect();
         public IObservableCache<FileModel, ulong> Files { get; }
 
-
+        public FileModel LastSelect { get; set; }
         public Task RefreshAsync(EditorProject proj);
     }
 }

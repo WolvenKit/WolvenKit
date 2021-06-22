@@ -110,6 +110,32 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
+            for (int i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
+            {
+                string path = cmesh.PreloadExternalMaterials[i].DepotPath;
+
+                ulong hash = FNV1A64HashAlgorithm.HashString(path);
+                foreach (Archive ar in archives)
+                {
+                    if (ar.Files.ContainsKey(hash))
+                    {
+                        var ms = new MemoryStream();
+                        ExtractSingleToStream(ar, hash, ms);
+
+                        var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                        ExternalMaterial.Add(mi.Chunks[0].Data as CMaterialInstance);
+
+                        for (int t = 0; t < mi.Imports.Count; t++)
+                        {
+                            if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                            {
+                                primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
             List<CMaterialInstance> LocalMaterial = new List<CMaterialInstance>();
 
             bool isbuffered = true;
@@ -542,9 +568,12 @@ namespace WolvenKit.Modkit.RED4
             using var buff = new BinaryWriter(compressed);
             var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
 
-            if (!blob.LocalMaterialBuffer.RawData.Buffer.IsSerialized)
+            bool check = false;
+            check = blob.LocalMaterialBuffer.IsSerialized;
+            if (!check)
             {
                 blob.LocalMaterialBuffer.RawData.Buffer = new CUInt16(cr2w, blob.LocalMaterialBuffer.RawData, "rawData") { IsSerialized = true, Value = (UInt16)(cr2w.Buffers.Count + 1) };
+                blob.LocalMaterialBuffer.IsSerialized = true;
 
                 uint idx = (uint)cr2w.Buffers.Count;
                 cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()

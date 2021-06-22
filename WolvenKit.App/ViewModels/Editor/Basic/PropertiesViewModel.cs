@@ -150,9 +150,14 @@ namespace WolvenKit.ViewModels.Editor
         /// Opens a physical file in WolvenKit.
         /// </summary>
         public ICommand FileSelectedCommand { get; private set; }
-        private bool CanOpenFile(FileModel model) => true;
+        private bool CanOpenFile(FileModel model) => model != null;
         public async Task ExecuteSelectFile(FileModel model)
         {
+            if (model == null)
+            {
+                return;
+            }
+
             PE_SelectedItem = model;
             PE_MeshPreviewVisible = false;
             IsAudioPreviewVisible = false;

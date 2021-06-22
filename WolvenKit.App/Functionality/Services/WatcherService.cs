@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
@@ -26,8 +25,7 @@ namespace WolvenKit.Functionality.Services
 
         private FileSystemWatcher _modsWatcher;
 
-        //private readonly ReadOnlyObservableCollection<FileViewModel> _bindingModel;
-        //public IObservable<IChangeSet<FileViewModel>> Connect() => _bindingModel.ToObservableChangeSet();
+        public FileModel LastSelect { get; set; }
 
         #endregion
 
@@ -48,31 +46,7 @@ namespace WolvenKit.Functionality.Services
                 }
 
             });
-
-            
-
-            //Files.Connect()
-            //    .Transform(_ => new FileViewModel(_))
-            //    .ObserveOnDispatcher()
-            //    .Bind(out _bindingModel)
-            //    .Subscribe(OnNext);
-
         }
-
-        // this runs on the dispatcher thread :/
-        //private void OnNext(IChangeSet<FileViewModel, ulong> obj)
-        //{
-        //    var lookup = _bindingModel.ToLookup(x => x.ParentHash);
-        //    foreach (var model in _bindingModel)
-        //    {
-        //        model.ChildrenCache.Edit(inner =>
-        //            {
-        //                inner.Clear();
-        //                inner.AddOrUpdate(lookup[model.Hash]);
-        //            }
-        //        );
-        //    }
-        //}
 
         private void WatchLocation(string location)
         {
@@ -120,15 +94,6 @@ namespace WolvenKit.Functionality.Services
                     .GetFileSystemEntries(proj.FileDirectory, "*", SearchOption.AllDirectories)
                 ;
 
-            //_files.Clear();
-            //foreach (var file in allFiles)
-            //{
-            //    var m = new FileModel(file);
-            //    _files.AddOrUpdate(m);
-            //}
-
-            //_files.AddOrUpdate(allFiles.Select(_ => new FileModel(_)));
-
             _files.Edit(innerList =>
             {
                 innerList.Clear();
@@ -160,7 +125,8 @@ namespace WolvenKit.Functionality.Services
             {
                 case WatcherChangeTypes.Created:
                 {
-                    _files.AddOrUpdate(new FileModel(e.FullPath));
+                    LastSelect = new FileModel(e.FullPath);
+                    _files.AddOrUpdate(LastSelect);
                     break;
                 }
                 case WatcherChangeTypes.Deleted:
@@ -170,9 +136,6 @@ namespace WolvenKit.Functionality.Services
                         inner.RemoveKeys(GetChildrenKeysRecursive(hash));
                         inner.Remove(hash);
                     });
-                    break;
-                case WatcherChangeTypes.Renamed:
-                    _files.AddOrUpdate(new FileModel(e.FullPath));
                     break;
                 case WatcherChangeTypes.All:
                     break;
@@ -184,13 +147,26 @@ namespace WolvenKit.Functionality.Services
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            
+            if (IsSuspended)
+            {
+                return;
+            }
+
+            switch (e.ChangeType)
+            {
+                case WatcherChangeTypes.Renamed:
+                    var hash = FNV1A64HashAlgorithm.HashString(FileModel.GetRelativeName(e.OldFullPath));
+                    _files.RemoveKey(hash);
+                    _files.AddOrUpdate(new FileModel(e.FullPath));
+                    break;
+            }
+
         }
 
 

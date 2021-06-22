@@ -13,6 +13,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using DynamicData;
+using DynamicData.Binding;
 using Orc.FileSystem;
 using ReactiveUI;
 using WolvenKit.Common;
@@ -51,18 +52,14 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IDirectoryService _directoryService;
         private readonly Tw3Controller _tw3Controller;
 
+
+        public FileModel LastSelected { get { return _watcherService.LastSelect; } }
+
         private EditorProject ActiveMod => _projectManager.ActiveProject;
-
-
-        //private readonly ReadOnlyObservableCollection<FileViewModel> _bindOut;
-        //public ReadOnlyObservableCollection<FileViewModel> BindingModel => _bindOut;
-        private readonly ReadOnlyObservableCollection<FileModel> _bindGrid;
-        public ReadOnlyObservableCollection<FileModel> BindGrid => _bindGrid;
-
-        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
-
         public static ProjectExplorerViewModel GlobalProjectExplorer;
 
+        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
+        private readonly IObservableList<FileModel> _observableList;
 
         #endregion fields
 
@@ -99,34 +96,19 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-            //_watcherService.Connect()
-            //    .Filter(_ => _.ParentHash == 0)
-            //    .Bind(out _bindOut)
-            //    .Subscribe();
+
             GlobalProjectExplorer = this;
+
             _watcherService.Files
                 .Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _bindGrid)
+                .BindToObservableList(out _observableList)
                 .Subscribe(OnNext);
         }
 
 
         public bool IsTreeBeingEdited { get; set; }
-        private void OnNext(IChangeSet<FileModel, ulong> obj)
-        {
-            IsTreeBeingEdited = true;
-            BindGrid1.Clear();
-            foreach (var fileModel in BindGrid)
-            {
-                if (fileModel.RelativeName is FileModel.s_moddir or FileModel.s_rawdir)
-                {
-                    fileModel.IsExpanded = true;
-                }
-                BindGrid1.Add(fileModel);
-            }
-            IsTreeBeingEdited = false;
-        }
+        private void OnNext(IChangeSet<FileModel, ulong> obj) => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
 
         /// <summary>
         /// Initialize commands for this window.
@@ -164,7 +146,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public FileModel SelectedItem { get; set; }
 
-
+        public ObservableCollection<object> SelectedItems { get; set; } = new();
 
         #endregion properties
 
@@ -255,32 +237,36 @@ namespace WolvenKit.ViewModels.Editor
             }
 
             // Delete from file structure
-            var fullpath = SelectedItem.FullName;
-            try
+            var selected = SelectedItems.OfType<FileModel>().ToList();
+            foreach (var item in selected)
             {
+                var fullpath = item.FullName;
+                try
+                {
 
-                if (SelectedItem.IsDirectory)
-                {
-                    _directoryService.Delete(fullpath);
-                    //Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
-                    //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                    //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    if (item.IsDirectory)
+                    {
+                        _directoryService.Delete(fullpath);
+                        //Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
+                        //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                        //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    }
+                    else
+                    {
+                        _fileService.Delete(fullpath);
+                        //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
+                        //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                        //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    _fileService.Delete(fullpath);
-                    //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
-                    //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                    //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    _loggerService.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
                 }
-            }
-            catch (Exception)
-            {
-                _loggerService.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
-            }
-            finally
-            {
-                //SelectedItem.RaiseRequestRefresh();
+                finally
+                {
+                    //SelectedItem.RaiseRequestRefresh();
+                }
             }
         }
 
@@ -350,13 +336,11 @@ namespace WolvenKit.ViewModels.Editor
         /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
-        private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null;
+        private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
         private async void ExecuteRenameFile()
         {
-            var filename = SelectedItem.FullName;
-
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            var viewModel = new InputDialogViewModel() { Text = filename };
+            var viewModel = new InputDialogViewModel() { Text = SelectedItem.Name };
             await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
             {
                 if (args.Result != true)
@@ -369,7 +353,9 @@ namespace WolvenKit.ViewModels.Editor
                     return;
                 }
 
-                var newfullpath = Path.Combine(ActiveMod.FileDirectory, vm.Text);
+
+                var filename = SelectedItem.FullName;
+                var newfullpath = Path.Combine(Path.GetDirectoryName(filename), vm.Text);
 
                 if (File.Exists(newfullpath))
                 {
