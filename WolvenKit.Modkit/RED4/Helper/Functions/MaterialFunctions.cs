@@ -613,14 +613,6 @@ namespace WolvenKit.Modkit.RED4
                 cr2w.Buffers[p - 1].Offset = off;
             }
 
-            var apps = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshAppearance>().ToList();
-            for (int i = 0; i < apps.Count; i++)
-            {
-                for (int e = 0; e < apps[i].ChunkMaterials.Count; e++)
-                {
-                    apps[i].ChunkMaterials[e].Value = names[0];
-                }
-            }
             return true;
         }
     }
