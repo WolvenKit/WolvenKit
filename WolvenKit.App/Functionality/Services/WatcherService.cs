@@ -96,15 +96,6 @@ namespace WolvenKit.Functionality.Services
                     .GetFileSystemEntries(proj.FileDirectory, "*", SearchOption.AllDirectories)
                 ;
 
-            //_files.Clear();
-            //foreach (var file in allFiles)
-            //{
-            //    var m = new FileModel(file);
-            //    _files.AddOrUpdate(m);
-            //}
-
-            //_files.AddOrUpdate(allFiles.Select(_ => new FileModel(_)));
-
             _files.Edit(innerList =>
             {
                 innerList.Clear();

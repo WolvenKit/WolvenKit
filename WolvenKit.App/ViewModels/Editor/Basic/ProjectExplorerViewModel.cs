@@ -144,7 +144,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public FileModel SelectedItem { get; set; }
 
-
+        public ObservableCollection<object> SelectedItems { get; set; } = new();
 
         #endregion properties
 
@@ -235,32 +235,36 @@ namespace WolvenKit.ViewModels.Editor
             }
 
             // Delete from file structure
-            var fullpath = SelectedItem.FullName;
-            try
+            var selected = SelectedItems.OfType<FileModel>().ToList();
+            foreach (var item in selected)
             {
+                var fullpath = item.FullName;
+                try
+                {
 
-                if (SelectedItem.IsDirectory)
-                {
-                    _directoryService.Delete(fullpath);
-                    //Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
-                    //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                    //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    if (item.IsDirectory)
+                    {
+                        _directoryService.Delete(fullpath);
+                        //Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
+                        //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                        //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    }
+                    else
+                    {
+                        _fileService.Delete(fullpath);
+                        //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
+                        //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                        //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    _fileService.Delete(fullpath);
-                    //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
-                    //    , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                    //    , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    _loggerService.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
                 }
-            }
-            catch (Exception)
-            {
-                _loggerService.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
-            }
-            finally
-            {
-                //SelectedItem.RaiseRequestRefresh();
+                finally
+                {
+                    //SelectedItem.RaiseRequestRefresh();
+                }
             }
         }
 

@@ -48,6 +48,7 @@
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"
+            SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             IsReadOnly="True"
