@@ -31,12 +31,9 @@
             <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
         </Grid.Resources>
 
-        <Grid VerticalAlignment="Top" Visibility="Visible">
-            <hc:SearchBar Margin="3" />
-        </Grid>
+
 
         <syncfusion:SfTreeGrid
-            Margin="0,33,0,0"
             Name="TreeGrid"
             AllowEditing="False"
             AllowFiltering="True"
