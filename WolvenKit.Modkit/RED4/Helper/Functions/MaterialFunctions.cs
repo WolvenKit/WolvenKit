@@ -359,6 +359,8 @@ namespace WolvenKit.Modkit.RED4
             rawMaterial.Name = Name;
             rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
 
+            List<CMaterialInstance> BaseMaterials = new List<CMaterialInstance>();
+
             string path = cMaterialInstance.BaseMaterial.DepotPath;
             while (!Path.GetExtension(path).Contains("mt"))
             {
@@ -370,12 +372,22 @@ namespace WolvenKit.Modkit.RED4
                         var ms = new MemoryStream();
                         ModTools.ExtractSingleToStream(ar, hash, ms);
                         var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                        BaseMaterials.Add(mi.Chunks[0].Data as CMaterialInstance);
                         path = (mi.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath;
                         break;
                     }
                 }
             }
-            MATERIAL.ContainRawMaterialEnum(ref rawMaterial, cMaterialInstance, path);
+
+            string type = Path.GetFileName(path);
+
+            BaseMaterials.Reverse();
+            for(int i = 0; i < BaseMaterials.Count; i++)
+            {
+                MATERIAL.ContainRawMaterialEnum(ref rawMaterial, BaseMaterials[i], type);
+            }
+
+            MATERIAL.ContainRawMaterialEnum(ref rawMaterial, cMaterialInstance, type);
             return rawMaterial;
         }
         private static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
