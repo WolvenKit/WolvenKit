@@ -1,5 +1,6 @@
 using System;
 using Catel.Logging;
+using DynamicData;
 
 namespace WolvenKit.Common.Services
 {
@@ -9,7 +10,7 @@ namespace WolvenKit.Common.Services
 
         public CatelLoggerService()
         {
-            
+
         }
 
         public CatelLoggerService(bool enableConsoleListener)
@@ -49,6 +50,7 @@ namespace WolvenKit.Common.Services
         }
 
         public void Success(string msg) => LogString(msg, Logtype.Success);
+        public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
         public void Log(string msg, Logtype type = Logtype.Normal) => LogString(msg, type);
 

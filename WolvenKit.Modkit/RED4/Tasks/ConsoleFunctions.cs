@@ -12,7 +12,14 @@ using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace CP77Tools.Tasks
 {
-    public partial class ConsoleFunctions
+    public interface IConsoleFunctions
+    {
+        public void ArchiveTask(string[] path, string pattern, string regex, bool diff, bool list);
+        public void UnbundleTask(string[] path, string outpath, string hash, string pattern, string regex,
+            bool DEBUG_decompress = false);
+    }
+
+    public partial class ConsoleFunctions : IConsoleFunctions
     {
         private readonly ILoggerService _loggerService;
         private readonly ModTools _modTools;

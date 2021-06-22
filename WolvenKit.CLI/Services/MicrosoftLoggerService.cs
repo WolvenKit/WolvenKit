@@ -1,4 +1,5 @@
 using System;
+using DynamicData;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using WolvenKit.Common;
@@ -48,6 +49,7 @@ namespace WolvenKit.CLI
 
         
         public void Success(string msg) => LogString(msg, Logtype.Success);
+        public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
         public void Info(string s) => LogString(s, Logtype.Important);
         public void Important(string s) => LogString(s, Logtype.Important);
