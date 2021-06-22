@@ -25,12 +25,12 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path"));
             AddOption(new Option<EUncookExtension?>(new[] { "--uext" }, "Format to uncook textures into (tga, bmp, jpg, png, dds), DDS by default"));
             AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically (can help with legibility if there's text)"));
-            AddOption(new Option<ECookedFileFormat>(new[] { "--forcebuffers" }, "Force uncooking to buffers for given extension. e.g. mesh"));
+            AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
 
-            Handler = CommandHandler.Create<string[], string, EUncookExtension?, bool?, ECookedFileFormat, IHost>(Action);
+            Handler = CommandHandler.Create<string[], string, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action);
         }
 
-        private void Action(string[] path, string outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat forcebuffers, IHost host)
+        private void Action(string[] path, string outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();

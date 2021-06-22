@@ -30,15 +30,15 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flip textures vertically (can help with legibility if there's text)."));
             AddOption(new Option<ulong>(new[] { "--hash" }, "Extract single file with a given hash."));
             AddOption(new Option<bool>(new[] { "--unbundle", "-u" }, "Also unbundle files."));
-            AddOption(new Option<ECookedFileFormat?>(new[] { "--forcebuffers"}, "Force uncooking to buffers for given extension. e.g. mesh"));
+            AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb"}, "Force uncooking to buffers for given extension. e.g. mesh"));
 
             Handler = CommandHandler
-                .Create<string[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat?
+                .Create<string[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[]
                     , IHost>(Action);
         }
 
         private void Action(string[] path, string outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
-            string regex, bool unbundle, ECookedFileFormat? forcebuffers, IHost host)
+            string regex, bool unbundle, ECookedFileFormat[] forcebuffers, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();

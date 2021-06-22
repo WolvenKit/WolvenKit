@@ -22,7 +22,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="basedir"></param>
         /// <param name="rawoutdir"></param>
         public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir = null,
-            DirectoryInfo rawoutdir = null, ECookedFileFormat? forcebuffers = null)
+            DirectoryInfo rawoutdir = null, ECookedFileFormat[] forcebuffers = null)
         {
             #region checks
 
