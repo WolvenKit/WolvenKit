@@ -113,7 +113,7 @@ namespace WolvenKit.Functionality.Services
 
         public string TextLanguage { get; set; }
 
-        public Color ThemeAccent { get; set; }
+        public Color ThemeAccent { get; set; } = (Color)ColorConverter.ConvertFromString("#DF2935");
 
         /// <summary>
         /// Gets the internal name and Uri source for all available themes.

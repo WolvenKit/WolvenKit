@@ -149,7 +149,8 @@ namespace WolvenKit.Views.Shell
         {
             var z = new MaterialsRepositoryDialog();
             z.Show();
-
+            //var test = ServiceLocator.Default.ResolveType<IPleaseWaitService>();
+            //test.UpdateStatus(50, 100);
 
         }
 
