@@ -28,6 +28,38 @@ namespace WolvenKit.ViewModels.Editor
 {
     public class AssetBrowserViewModel : ToolViewModel
     {
+
+
+
+
+        #region Reworked
+
+        public List<GameFileTreeNode> SubDirectories { get; set; } = new List<GameFileTreeNode>();
+
+
+
+
+        #endregion Reworked
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #region constants
 
         /// <summary>
@@ -278,6 +310,10 @@ namespace WolvenKit.ViewModels.Editor
             LoadVisibility = Visibility.Collapsed;
 
             _ = InitializeCurrentNodeAsync(RootNode);
+
+
+
+            SubDirectories = RootNode.SubDirectories;
         }
 
 

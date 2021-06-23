@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -28,7 +27,7 @@ namespace WolvenKit.Functionality.Converters
 
             var result = GetSmallIconForFileType(extension) ?? "Icons/Files/default.svg";
 
-            Trace.WriteLine("Resources/Media/Images/" + result);
+            // Trace.WriteLine("Resources/Media/Images/" + result);
 
             var uri = new Uri("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
             //var svgDoc = SvgDocument.Open("pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result);
@@ -374,13 +373,13 @@ namespace WolvenKit.Functionality.Converters
 
 
 
-                        //defaultreturn = $"Icons/Files/{extension}.svg";
-                        //break;
+                    //defaultreturn = $"Icons/Files/{extension}.svg";
+                    //break;
 
 
-                  //  case "w2cutscene":
-                      //  defaultreturn = $"RedEngine/{extension}.png";
-                      //  break;
+                    //  case "w2cutscene":
+                    //  defaultreturn = $"RedEngine/{extension}.png";
+                    //  break;
 
                     case "aiarch":
                     case "animgraph":

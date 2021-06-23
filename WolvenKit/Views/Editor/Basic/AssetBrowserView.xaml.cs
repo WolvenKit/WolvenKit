@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -16,7 +15,6 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.ViewModels.Editor;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
@@ -32,7 +30,7 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
             NotifyPropertyChanged();
-            TreeNavSF.DrillDownItems.CollectionChanged += DrillDownItems_CollectionChanged;
+            //TreeNavSF.DrillDownItems.CollectionChanged += DrillDownItems_CollectionChanged;
             VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
             GlobalABView = this;
 
@@ -102,16 +100,16 @@ namespace WolvenKit.Views.Editor
                 }
 
                 vm.CurrentNode = TreeNavSF.SelectedItem as GameFileTreeNode;
+
+
+
+
                 vm.CurrentNodeFiles = (TreeNavSF.SelectedItem as GameFileTreeNode)?.ToAssetBrowserData();
+
             }
         }
 
 
-
-        private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -125,6 +123,7 @@ namespace WolvenKit.Views.Editor
                     {
                         vm.CurrentNode = vm.RootNode;
                         vm.CurrentNodeFiles = vm.RootNode.ToAssetBrowserData();
+
                         VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     }
                     else
@@ -329,7 +328,7 @@ namespace WolvenKit.Views.Editor
 
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();
-                        var expargs = new XbmExportArgs {Flip = false, UncookExtension = EUncookExtension.dds};
+                        var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.dds };
                         man.UncookXbm(cr2wstream, ddsstream, out _);
 
                         // try loading it in pfim
