@@ -159,25 +159,15 @@
                                     </Grid>
                                 </Border>
                             </Border>
-                            <!--
-                            <syncfusion:HierarchyNavigator
-                                x:Name="hierarchicalNavigator"
-                                Grid.Column="1"
-                                Width="auto"
-
-                                IsEnableHistory="False">
-                                <syncfusion:HierarchyNavigator.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
-                                        <TextBlock Margin="2,0" Text="{Binding Name}" />
-                                    </HierarchicalDataTemplate>
-                                </syncfusion:HierarchyNavigator.ItemTemplate>
-                            </syncfusion:HierarchyNavigator>
-
-                    ItemsSource="{Binding RootNode.SubDirectories, Mode=OneWay, TargetNullValue=bone}"  -->
 
                         </Grid>
 
                         <Grid Margin="0,51,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
                             <syncfusion:SfDataGrid
                                 x:Name="InnerList"
                                 Margin="1,-15,0,0"
@@ -191,12 +181,14 @@
                                 Background="{DynamicResource RegionBrush}"
                                 ColumnSizer="Star"
                                 IsManipulationEnabled="False"
-                                ItemsSource="{Binding CurrentNodeFiles}"
                                 RowHeight="22"
                                 SelectedItem="{Binding SelectedFile,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectedItems="{Binding SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectionChanged="InnerList_SelectionChanged"
-                                SelectionMode="Extended">
+                                SelectionMode="Extended"
+                                EnableDataVirtualization="True"
+                                ItemsSource="{Binding ElementName=dataPager,Path=PagedSource}"
+                                >
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
@@ -930,6 +922,13 @@
                                     </hc:EventTrigger>
                                 </hc:Interaction.Triggers>
                             </syncfusion:SfDataGrid>
+
+                            <syncfusion:SfDataPager x:Name="dataPager"
+                                                    Grid.Row="1"
+                                                    PageSize="500"
+                                                    Source="{Binding CurrentNodeFiles}"
+                            />
+
                         </Grid>
 
                     </Grid>

@@ -54,7 +54,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameController;
 
-        private List<IGameArchiveManager> Managers { get; set; }
+        private List<IGameArchiveManager> _managers;
 
         private bool _stillLoading;
 
@@ -182,10 +182,7 @@ namespace WolvenKit.ViewModels.Editor
         private bool CanHome() => true;
         private void ExecuteHome()
         {
-            //CurrentNodeFiles = RootNode.ToAssetBrowserData();
-
-            //GoToRootInTreeNavSF();
-
+            SelectedNode = BoundRootNodes.FirstOrDefault();
         }
 
         public ICommand SearchStartedCommand { get; private set; }
@@ -230,7 +227,7 @@ namespace WolvenKit.ViewModels.Editor
         {
             LoadVisibility = Visibility.Visible;
 
-            Managers = _gameController.GetController().GetArchiveManagers(loadmods);
+            _managers = _gameController.GetController().GetArchiveManagers(loadmods);
 
             Extensions = _gameController
                 .GetController()
@@ -270,22 +267,12 @@ namespace WolvenKit.ViewModels.Editor
 
         private void PerformSearch(string query)
         {
-            var newnode = new GameFileTreeNode()
-            {
-                Name = "",
-                Parent = SelectedNode as GameFileTreeNode,
-                Directories = new Dictionary<string, GameFileTreeNode>(),
-                Files = new Dictionary<string, List<IGameFile>>()
-            };
-            newnode.Files = Managers.
+            var files = _managers.
                 SelectMany(_ => CollectFiles(query, _))
                 .GroupBy(x => x.Name)
                 .Select(x => x.First())
-                .Select(f => new KeyValuePair<string, List<IGameFile>>(f.Name, new List<IGameFile>() { f }))
-                .ToDictionary(x => x.Key, x => x.Value);
-            SelectedNode = newnode;
-            CurrentNodeFiles = (SelectedNode as GameFileTreeNode).Files.Values
-                .SelectMany(_ => _)
+                ;
+            CurrentNodeFiles = files
                 .Select(_ => new FileEntryViewModel(_));
         }
 
