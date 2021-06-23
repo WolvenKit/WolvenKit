@@ -43,7 +43,7 @@ namespace WolvenKit.Views.Editor
             {
                 vm.SelectItemInTreeNavSF += (obj) =>
                 {
-                    TreeNavSF.SetCurrentValue(Syncfusion.Windows.Controls.Navigation.SfTreeNavigator.SelectedItemProperty, obj);
+                    //TreeNavSF.SetCurrentValue(Syncfusion.Windows.Controls.Navigation.SfTreeNavigator.SelectedItemProperty, obj);
                 };
                 vm.GoBackInTreeNavSF += () =>
                 {
@@ -56,6 +56,7 @@ namespace WolvenKit.Views.Editor
                 };
                 vm.GoToRootInTreeNavSF += () =>
                 {
+                    TreeNavSF.
                     // ? :)
                 };
             }
@@ -121,14 +122,14 @@ namespace WolvenKit.Views.Editor
                     TreeNavSF.GoBack();
                     if (TreeNavSF.DrillDownItem.Header as string == "Depot")
                     {
-                        vm.CurrentNode = vm.RootNode;
+                        //vm.CurrentNode = vm.RootNode;
                         vm.CurrentNodeFiles = vm.RootNode.ToAssetBrowserData();
 
                         VisibleBackButton.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
                     }
                     else
                     {
-                        vm.CurrentNode = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
+                        //vm.CurrentNode = TreeNavSF.DrillDownItem.Header as GameFileTreeNode;
                         vm.CurrentNodeFiles = (TreeNavSF.DrillDownItem.Header as GameFileTreeNode)?.ToAssetBrowserData();
                     }
                 }
@@ -222,6 +223,7 @@ namespace WolvenKit.Views.Editor
             {
                 return;
             }
+
 
             var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
             propertiesViewModel.AB_SelectedItem = vm.SelectedNode;

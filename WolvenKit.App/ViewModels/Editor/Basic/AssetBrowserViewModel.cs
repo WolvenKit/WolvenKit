@@ -37,6 +37,7 @@ namespace WolvenKit.ViewModels.Editor
         public List<GameFileTreeNode> SubDirectories { get; set; } = new List<GameFileTreeNode>();
 
 
+        public ObservableCollection<GameFileTreeNode> HierarchyItems { get; set; } = new ObservableCollection<GameFileTreeNode>();
 
 
         #endregion Reworked
@@ -186,7 +187,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private void ExecuteHome()
         {
-            CurrentNode = RootNode;
+            //CurrentNode = RootNode;
             CurrentNodeFiles = RootNode.ToAssetBrowserData();
 
             GoToRootInTreeNavSF();
@@ -226,6 +227,7 @@ namespace WolvenKit.ViewModels.Editor
         public event Action GoBackInTreeNavSF;
 
         public event Action GoToRootInTreeNavSF;
+        //public event Action SetHierarchy;
 
 
         #endregion commands
@@ -311,10 +313,34 @@ namespace WolvenKit.ViewModels.Editor
 
             _ = InitializeCurrentNodeAsync(RootNode);
 
-
-
             SubDirectories = RootNode.SubDirectories;
+            //ObtainHierarchy(SubDirectories);
+            // HierarchyItems = new ObservableCollection<GameFileTreeNode>(SubDirectories);
+
+            //SetHierarchy?.Invoke();
+
+
         }
+
+
+        //private void ObtainHierarchy(List<GameFileTreeNode> gameFileTreeNodes)
+        //{
+        //    foreach (var subDir in gameFileTreeNodes)
+        //    {
+
+        //        var z = new List<HierarchyItem>();
+        //        foreach (var file in subDir.SubDirectories)
+        //        {
+        //            z.Add(new HierarchyItem(file.Name));
+        //            ObtainHierarchy(file.SubDirectories);
+        //        }
+        //        var q = z.ToArray();
+
+        //        HierarchyItems.Add(new HierarchyItem(subDir.Name, q));
+
+
+        //    }
+        //}
 
 
 
@@ -351,6 +377,7 @@ namespace WolvenKit.ViewModels.Editor
                     CurrentNode.Parent = item.This;
                     CurrentNodeFiles = item.Children.ToAssetBrowserData();
                     SelectItemInTreeNavSF?.Invoke(CurrentNode);
+
                     break;
                 }
                 case EntryType.File:

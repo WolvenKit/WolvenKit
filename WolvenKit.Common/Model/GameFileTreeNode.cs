@@ -92,13 +92,13 @@ namespace WolvenKit.Common
 
             new Thread(() =>
             {
-                ret.Add(new AssetBrowserData(nameof(ECustomImageKeys.OpenDirImageKey))
-                {
-                    Name = "..",
-                    Type = EntryType.MoveUP,
-                    This = this,
-                    Parent = this.Parent
-                });
+                //ret.Add(new AssetBrowserData(nameof(ECustomImageKeys.OpenDirImageKey))
+                //{
+                //    Name = "..",
+                //    Type = EntryType.MoveUP,
+                //    This = this,
+                //    Parent = this.Parent
+                //});
                 ret.AddRange(Directories.Select(d => new AssetBrowserData(nameof(ECustomImageKeys.ClosedDirImageKey))
                 {
                     Name = d.Key,

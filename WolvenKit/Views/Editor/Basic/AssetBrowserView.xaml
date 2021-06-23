@@ -53,7 +53,9 @@
                                 Header="Depot"
                                 NavigationMode="Default"
                                 ItemsSource="{Binding SubDirectories}"
+                                SelectedItem="{Binding CurrentNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectionChanged="SfTreeNavigator_SelectionChanged">
+
 
                                 <syncfusion:SfTreeNavigator.ItemTemplate>
 
@@ -184,11 +186,12 @@
                                     </Grid>
                                 </Border>
                             </Border>
-
+                            <!--
                             <syncfusion:HierarchyNavigator
                                 x:Name="hierarchicalNavigator"
                                 Grid.Column="1"
                                 Width="auto"
+
                                 IsEnableHistory="False">
                                 <syncfusion:HierarchyNavigator.ItemTemplate>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SubDirectories}">
@@ -197,7 +200,7 @@
                                 </syncfusion:HierarchyNavigator.ItemTemplate>
                             </syncfusion:HierarchyNavigator>
 
-                            <!--  ItemsSource="{Binding RootNode.SubDirectories, Mode=OneWay, TargetNullValue=bone}"  -->
+                    ItemsSource="{Binding RootNode.SubDirectories, Mode=OneWay, TargetNullValue=bone}"  -->
 
                         </Grid>
 
