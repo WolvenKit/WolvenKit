@@ -15,10 +15,7 @@ namespace WolvenKit.Common.Model
         public abstract Dictionary<string, IGameArchive> Archives { get; set; }
         public GameFileTreeNode RootNode { get; set; }
 
-        public Dictionary<ulong, IEnumerable<IGameFile>> Items => Archives.Values
-            .SelectMany(_ => _.Files)
-            .GroupBy(_ => _.Key)
-            .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value));
+        public Dictionary<ulong, IEnumerable<IGameFile>> Items { get; set; }
 
 
         public IEnumerable<IGameFile> FileList => Items.Values.SelectMany(_ => _);
@@ -27,7 +24,9 @@ namespace WolvenKit.Common.Model
 
 
         public abstract void LoadAll(string exedir, bool rebuildTree = true);
+
         public abstract void LoadArchive(string filename, bool ispatch = false);
+
         public abstract void LoadModArchive(string filename);
         public abstract void LoadModsArchives(string mods, string dlc);
 

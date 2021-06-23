@@ -125,13 +125,18 @@ namespace WolvenKit.Cache
 
             var bundle = new SoundCache(filename);
 
-            //foreach (var item in bundle.Files.Values)
-            //{
-            //    if (!Items.ContainsKey(item.Name))
-            //        Items.Add(item.Name, new List<IGameFile>());
-
-            //    Items[item.Name].Add(item);
-            //}
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].ToList().Add(value);
+                }
+            }
 
             Archives.Add(filename, bundle);
         }
@@ -143,17 +148,24 @@ namespace WolvenKit.Cache
         public override void LoadModArchive(string filename)
         {
             if (Archives.ContainsKey(filename))
+            {
                 return;
+            }
 
             var bundle = new SoundCache(filename);
 
-            //foreach (var item in bundle.Files.Values)
-            //{
-            //    if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-            //        Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
-
-            //    Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
-            //}
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].ToList().Add(value);
+                }
+            }
 
             Archives.Add(filename, bundle);
         }

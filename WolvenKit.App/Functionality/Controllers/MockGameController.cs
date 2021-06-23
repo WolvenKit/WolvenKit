@@ -12,7 +12,7 @@ namespace WolvenKit.Functionality.Controllers
     {
         #region Methods
 
-        public List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods) => new List<IGameArchiveManager>();
+        public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new List<IGameArchiveManager>();
 
         public void AddToMod(IGameFile file) => throw new NotImplementedException();
 

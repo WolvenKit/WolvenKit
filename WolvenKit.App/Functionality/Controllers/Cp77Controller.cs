@@ -74,7 +74,7 @@ namespace WolvenKit.Functionality.Controllers
             return Task.CompletedTask;
         }
 
-        public List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods) =>
+        public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) =>
             new()
             {
                 ArchiveManager

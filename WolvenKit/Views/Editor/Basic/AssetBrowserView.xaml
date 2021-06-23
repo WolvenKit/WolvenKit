@@ -13,8 +13,11 @@
     xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
-    BorderBrush="{x:Null}">
+    xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    BorderBrush="{x:Null}"
+    d:DataContext="{d:DesignInstance Type=editor:AssetBrowserViewModel}"
+    >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>

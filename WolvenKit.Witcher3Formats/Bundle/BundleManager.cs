@@ -111,6 +111,19 @@ namespace WolvenKit.Bundles
             //    Items[item.Key].Add(item.Value);
             //}
 
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].ToList().Add(value);
+                }
+            }
+
             Archives.Add(filename, bundle);
         }
 
@@ -127,13 +140,18 @@ namespace WolvenKit.Bundles
 
             var bundle = new Bundle(filename);
 
-            //foreach (var item in bundle.Files)
-            //{
-            //    if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Key))
-            //        Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<IGameFile>());
-
-            //    Items[GetModFolder(filename) + "\\" + item.Key].Add(item.Value);
-            //}
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].ToList().Add(value);
+                }
+            }
 
             Archives.Add(filename, bundle);
         }

@@ -61,7 +61,7 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion Methods
 
-        List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods);
+        List<IGameArchiveManager> GetArchiveManagers(bool loadmods);
         Task<bool> PackageMod();
         void InstallMod();
     }

@@ -78,19 +78,26 @@ namespace WolvenKit.W3Speech
         public override void LoadArchive(string filename, bool ispatch = false)
         {
             if (Archives.ContainsKey(filename))
+            {
                 return;
+            }
 
-            var speech = Coder.Decode(new W3Speech(filename), new System.IO.BinaryReader(new FileStream(filename, FileMode.Open)));
+            var bundle = Coder.Decode(new W3Speech(filename), new System.IO.BinaryReader(new FileStream(filename, FileMode.Open)));
 
-            //foreach (var item in speech.Files.Values)
-            //{
-            //    if (!Items.ContainsKey(item.Name))
-            //        Items.Add(item.Name, new List<IGameFile>());
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].ToList().Add(value);
+                }
+            }
 
-            //    Items[item.Name].Add(item);
-            //}
-
-            Archives.Add(filename, speech);
+            Archives.Add(filename, bundle);
         }
 
         /// <summary>
@@ -102,19 +109,26 @@ namespace WolvenKit.W3Speech
         public override void LoadModArchive(string filename)
         {
             if (Archives.ContainsKey(filename))
+            {
                 return;
+            }
 
-            var speech = Coder.Decode(new W3Speech(filename), new System.IO.BinaryReader(new FileStream(filename, FileMode.Open)));
+            var bundle = Coder.Decode(new W3Speech(filename), new System.IO.BinaryReader(new FileStream(filename, FileMode.Open)));
 
-            //foreach (var item in speech.Files.Values)
-            //{
-            //    if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-            //        Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].ToList().Add(value);
+                }
+            }
 
-            //    Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
-            //}
-
-            Archives.Add(filename, speech);
+            Archives.Add(filename, bundle);
         }
 
 

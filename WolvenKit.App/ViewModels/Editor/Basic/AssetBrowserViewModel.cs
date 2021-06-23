@@ -282,7 +282,7 @@ namespace WolvenKit.ViewModels.Editor
 
 
 
-            Managers = _gameController.GetController().GetArchiveManagersManagers(loadmods);
+            Managers = _gameController.GetController().GetArchiveManagers(loadmods);
 
             CurrentNode = new GameFileTreeNode(EArchiveType.ANY) { Name = "Depot" };
             foreach (var mngr in Managers)
@@ -298,7 +298,7 @@ namespace WolvenKit.ViewModels.Editor
             RootNode = CurrentNode;
             Extensions = _gameController
                 .GetController()
-                .GetArchiveManagersManagers(loadmods)
+                .GetArchiveManagers(loadmods)
                 .SelectMany(x => x.Extensions)
                 .ToList();
             Classes = _gameController

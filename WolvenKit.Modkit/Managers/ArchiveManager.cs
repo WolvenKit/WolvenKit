@@ -15,7 +15,6 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public static string SerializationVersion = "1.1";
 
-        private DirectoryInfo _parentDirectoryInfo;
         private readonly IHashService _hashService;
         #endregion Fields
 
@@ -34,8 +33,6 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion Constructors
 
         #region properties
-
-        //[ProtoMember(1)] public Dictionary<string, Archive> Archives { get; set; }
         [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
 
         public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
@@ -61,6 +58,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                     archive.Files.Add(file.Key, file);
                 }
             }
+
+            Items = Archives.Values
+                .SelectMany(_ => _.Files)
+                .GroupBy(_ => _.Key)
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value));
 
             RebuildRootNode();
         }
@@ -123,16 +125,21 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var bundle = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
-            //foreach (var (key, value) in bundle.Files)
-            //{
-            //    // add new key if the file isn't already in another bundle
-            //    if (!Items.ContainsKey(value.Name))
-            //    {
-            //        Items.Add(value.Name, new List<IGameFile>());
-            //    }
 
-            //    Items[value.Name].Add(value);
-            //}
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].ToList().Add(value);
+                }
+            }
+
+
             Archives.Add(bundle.ArchiveAbsolutePath, bundle);
         }
 
@@ -191,26 +198,6 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
             }
             RebuildRootNode();*/
-        }
-
-        /// <summary>
-        /// Reload the ArchiveManager from given directory (optional).
-        /// </summary>
-        /// <param name="indir"></param>
-        public void Reload(DirectoryInfo indir = null)
-        {
-            if (indir != null)
-            {
-                _parentDirectoryInfo = indir;
-            }
-
-            var archives = _parentDirectoryInfo.GetFiles("*.archive").ToList();
-            Archives.Clear();
-            foreach (var fi in archives)
-            {
-                Archives.Add(fi.FullName, Red4ParserServiceExtensions.ReadArchive(fi.FullName, _hashService));
-            }
-
         }
 
         #endregion methods

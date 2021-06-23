@@ -139,6 +139,8 @@ namespace WolvenKit.Common
 
         }
 
+        public override string ToString() => Name;
+
         #endregion Methods
     }
 }
