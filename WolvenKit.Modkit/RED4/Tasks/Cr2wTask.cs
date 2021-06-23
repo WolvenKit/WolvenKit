@@ -18,12 +18,6 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public enum ESerializeFormat
-        {
-            json,
-            xml
-        }
-
         public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, ESerializeFormat format)
         {
             if (path == null || path.Length < 1)

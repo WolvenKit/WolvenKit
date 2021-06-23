@@ -2,6 +2,12 @@
 
 namespace WolvenKit.Common
 {
+    public enum ESerializeFormat
+    {
+        json,
+        xml
+    }
+
     public enum ERedExtension
     {
         actionanimdb,

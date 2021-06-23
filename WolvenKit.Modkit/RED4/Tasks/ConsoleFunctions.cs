@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CP77.CR2W;
 using Microsoft.Extensions.Options;
+using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W;
@@ -17,6 +19,16 @@ namespace CP77Tools.Tasks
         public void ArchiveTask(string[] path, string pattern, string regex, bool diff, bool list);
         public void UnbundleTask(string[] path, string outpath, string hash, string pattern, string regex,
             bool DEBUG_decompress = false);
+        public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
+            string regex, ESerializeFormat format);
+        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip,
+            ECookedFileFormat[] forcebuffers);
+        public void ImportTask(string[] path, string outDir, bool keep);
+        public int OodleTask(string path, string outpath, bool decompress, bool compress);
+        public void PackTask(string[] path, string outpath);
+        public void UncookTask(string[] path, string outpath, string rawOutDir,
+            EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
+            ECookedFileFormat[] forcebuffers);
     }
 
     public partial class ConsoleFunctions : IConsoleFunctions
