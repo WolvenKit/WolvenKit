@@ -56,7 +56,7 @@ namespace WolvenKit.Views.Editor
                 };
                 vm.GoToRootInTreeNavSF += () =>
                 {
-                    TreeNavSF.
+                    //
                     // ? :)
                 };
             }
