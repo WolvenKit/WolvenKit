@@ -19,11 +19,12 @@ namespace WolvenKit.Views.Shell
         private async void Tag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 
-            var client = new CatFactsClient();
-            var randomFact = await client.GetRandomFactsAsync();
+
 
             try
             {
+                var client = new CatFactsClient();
+                var randomFact = await client.GetRandomFactsAsync();
                 Random x = new Random();
                 var z = x.Next(0, randomFact.Length);
                 var catfact = randomFact[z].Text;
@@ -76,6 +77,6 @@ namespace WolvenKit.Views.Shell
 
         }
 
-      
+
     }
 }
