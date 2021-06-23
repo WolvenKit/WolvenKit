@@ -86,58 +86,58 @@ namespace WolvenKit.Common
 
         #region Methods
 
-        public List<AssetBrowserData> ToAssetBrowserData()
-        {
-            var ret = new List<AssetBrowserData>();
+        //public List<AssetBrowserData> ToAssetBrowserData()
+        //{
+        //    var ret = new List<AssetBrowserData>();
 
-            new Thread(() =>
-            {
-                //ret.Add(new AssetBrowserData(nameof(ECustomImageKeys.OpenDirImageKey))
-                //{
-                //    Name = "..",
-                //    Type = EntryType.MoveUP,
-                //    This = this,
-                //    Parent = this.Parent
-                //});
-                ret.AddRange(Directories.Select(d => new AssetBrowserData(nameof(ECustomImageKeys.ClosedDirImageKey))
-                {
-                    Name = d.Key,
-                    Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
-                    Parent = this.Parent,
-                    Children = d.Value,
-                    This = this,
-                    Type = EntryType.Directory
-                }).OrderBy(_ => _.Name));
+        //    new Thread(() =>
+        //    {
+        //        //ret.Add(new AssetBrowserData(nameof(ECustomImageKeys.OpenDirImageKey))
+        //        //{
+        //        //    Name = "..",
+        //        //    Type = EntryType.MoveUP,
+        //        //    This = this,
+        //        //    Parent = this.Parent
+        //        //});
+        //        ret.AddRange(Directories.Select(d => new AssetBrowserData(nameof(ECustomImageKeys.ClosedDirImageKey))
+        //        {
+        //            Name = d.Key,
+        //            Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
+        //            Parent = this.Parent,
+        //            Children = d.Value,
+        //            This = this,
+        //            Type = EntryType.Directory
+        //        }).OrderBy(_ => _.Name));
 
-                ret.AddRange(Files.Select(f => new AssetBrowserData(Path.GetExtension(f.Key))
-                {
-                    AmbigiousFiles = f.Value,
-                    Hash = f.Value[0].Key,
-                    Name = f.Key,
-                    Size = FormatSize(f.Value[0].Size),
-                    This = this,
-                    Type = EntryType.File,
-                    Parent = this.Parent
-                }).OrderBy(_ => _.Name));
+        //        ret.AddRange(Files.Select(f => new AssetBrowserData(Path.GetExtension(f.Key))
+        //        {
+        //            AmbigiousFiles = f.Value,
+        //            Hash = f.Value[0].Key,
+        //            Name = f.Key,
+        //            Size = FormatSize(f.Value[0].Size),
+        //            This = this,
+        //            Type = EntryType.File,
+        //            Parent = this.Parent
+        //        }).OrderBy(_ => _.Name));
 
 
-                string FormatSize(uint size)
-                {
-                    string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
+        //        string FormatSize(uint size)
+        //        {
+        //            string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 
-                    var counter = 0;
-                    var number = (decimal)size;
-                    while (Math.Round(number / 1024) >= 1)
-                    {
-                        number = number / 1024;
-                        counter++;
-                    }
-                    return $"{number:n1} {suffixes[counter]}";
-                }
-            }).Start();
-            return ret;
+        //            var counter = 0;
+        //            var number = (decimal)size;
+        //            while (Math.Round(number / 1024) >= 1)
+        //            {
+        //                number = number / 1024;
+        //                counter++;
+        //            }
+        //            return $"{number:n1} {suffixes[counter]}";
+        //        }
+        //    }).Start();
+        //    return ret;
 
-        }
+        //}
 
         public override string ToString() => Name;
 

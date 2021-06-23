@@ -12,9 +12,6 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using CP77.CR2W;
-using Microsoft.Win32;
-using NAudio.Wave;
-using WolvenKit.Models.Arguments;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
@@ -25,6 +22,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.Views.Editor.AudioTool;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
@@ -112,7 +110,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected Item from Asset Browser If Available.
         /// </summary>
-        public AssetBrowserData AB_SelectedItem { get; set; }
+        public FileEntryViewModel AB_SelectedItem { get; set; }
 
         /// <summary>
         /// Decides if Asset browser Selected File info should be visible.
@@ -158,6 +156,11 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
+            if (State is DockState.AutoHidden or DockState.Hidden)
+            {
+                return;
+            }
+
             PE_SelectedItem = model;
             PE_MeshPreviewVisible = false;
             IsAudioPreviewVisible = false;
@@ -174,7 +177,6 @@ namespace WolvenKit.ViewModels.Editor
                   string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
                   || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
                 )
-
             )
             {
                 return;

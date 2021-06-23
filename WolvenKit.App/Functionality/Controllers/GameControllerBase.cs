@@ -9,6 +9,7 @@ using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.W3Strings;
 using Catel.IoC;
+using DynamicData;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -59,10 +60,14 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject();
 
-        #endregion Methods
+        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy();
 
         List<IGameArchiveManager> GetArchiveManagers(bool loadmods);
+
         Task<bool> PackageMod();
+
         void InstallMod();
+
+        #endregion Methods
     }
 }

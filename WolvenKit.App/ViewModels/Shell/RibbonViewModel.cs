@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
+using ProtoBuf.Meta;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -56,7 +58,9 @@ namespace WolvenKit.ViewModels.Shell
             StartScreenShown = false;
             BackstageIsOpen = true;
             GlobalRibbonVM = this;
+
             ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
+            AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
 
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title();
@@ -106,6 +110,24 @@ namespace WolvenKit.ViewModels.Shell
         #endregion properties
 
         #region commands
+
+        public ICommand AssetBrowserAddCommand { get; private set; }
+
+        private bool CanAssetBrowserAdd()
+        {
+            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            return abvm is {SelectedFiles: { }} && abvm.SelectedFiles.Any();
+        }
+
+        private void ExecuteAssetBrowserAdd()
+        {
+            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            abvm.AddSelectedCommand.SafeExecute();
+        }
+
+        
+
+
 
         /// <summary>
         /// Is raised when a PaneView is selected: shows the contextual ribbon tab

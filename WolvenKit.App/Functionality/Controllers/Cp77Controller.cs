@@ -8,6 +8,7 @@ using System.Windows;
 using System.Xml.Linq;
 using Catel.IoC;
 using CP77.CR2W;
+using DynamicData;
 using ProtoBuf;
 using WolvenKit.Bundles;
 using WolvenKit.Common;
@@ -47,11 +48,16 @@ namespace WolvenKit.Functionality.Controllers
             _settingsManager = settingsManager;
             _hashService = hashService;
             _modTools = modTools;
+
+            _rootCache = new SourceCache<GameFileTreeNode, string>(t => t.FullPath);
         }
 
         #region Properties
 
         private static ArchiveManager ArchiveManager { get; set; }
+
+        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
 
         #endregion Properties
 
@@ -124,10 +130,16 @@ namespace WolvenKit.Functionality.Controllers
             }
             _loggerService.Info("Finished loading archive manager.");
 
-            //start LOAD INDICATOR
-            // StaticReferences.GlobalStatusBar.LoadingString = "loading";
-            // init asset browser here after the manager has loaded
-            //var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
+
+
+            _rootCache.Edit(innerCache =>
+            {
+                innerCache.Clear();
+                innerCache.AddOrUpdate(ArchiveManager.RootNode);
+            });
+
+
+
             assetBrowserViewModel.ReInit(false);
 
             return ArchiveManager;

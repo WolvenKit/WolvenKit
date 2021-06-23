@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using Catel.IoC;
+using DynamicData;
 using Newtonsoft.Json;
 using WolvenKit.Functionality.Services;
 using ProtoBuf;
@@ -409,6 +410,8 @@ namespace WolvenKit.Functionality.Controllers
 
             return textureManager;
         }
+
+        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => throw new NotImplementedException();
 
         public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new()
         {

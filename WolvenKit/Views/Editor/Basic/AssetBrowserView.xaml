@@ -3,17 +3,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:catel="http://schemas.catelproject.com"
-    xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
     xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
-    xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:WolvenKit.Views.Editor"
-    xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
     BorderBrush="{x:Null}"
     d:DataContext="{d:DesignInstance Type=editor:AssetBrowserViewModel}"
@@ -28,10 +24,6 @@
         </ResourceDictionary>
     </catel:UserControl.Resources>
     <Grid>
-        <Grid.Resources>
-            <editor:BoolToVisConverter x:Key="boolConverter" />
-        </Grid.Resources>
-
         <Border
             hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
@@ -52,11 +44,11 @@
 
 
                             <syncfusion:SfTreeNavigator
-                                x:Name="TreeNavSF"
+                                x:Name="TreeNavigator"
                                 Header="Depot"
                                 NavigationMode="Default"
-                                ItemsSource="{Binding SubDirectories}"
-                                SelectedItem="{Binding CurrentNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding BoundRootNodes, Mode=OneWay}"
+                                SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectionChanged="SfTreeNavigator_SelectionChanged">
 
 
@@ -86,28 +78,6 @@
                                 </syncfusion:SfTreeNavigator.ItemTemplate>
                             </syncfusion:SfTreeNavigator>
 
-
-
-                            <Border
-                                x:Name="VisibleBackButton"
-                                Width="37"
-                                Height="35"
-                                Margin="5,2,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Background="{DynamicResource RegionBrush}">
-                                <Button
-                                    Background="{DynamicResource RegionBrush}"
-                                    BorderBrush="Transparent"
-                                    BorderThickness="2"
-                                    Click="Button_Click">
-                                    <iconPacks:PackIconRemixIcon
-                                        Width="12"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Kind="ArrowGoBackFill" />
-                                </Button>
-                            </Border>
                         </Grid>
 
                     </Grid>
@@ -223,20 +193,19 @@
                                 IsManipulationEnabled="False"
                                 ItemsSource="{Binding CurrentNodeFiles}"
                                 RowHeight="22"
-                                SelectedItem="{Binding SelectedNode, Mode=OneWayToSource}"
+                                SelectedItem="{Binding SelectedFile,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItems="{Binding SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectionChanged="InnerList_SelectionChanged"
                                 SelectionMode="Extended">
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Click="MenuItem_ImportSelected_Click" Header="Add selected items to Project" />
+                                        <MenuItem Header="Add selected items to Project" Command="{Binding AddSelectedCommand}" />
                                         <MenuItem Header="Export selected - Simple" />
                                         <MenuItem Header="Export selected - Advanced" />
 
                                     </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
-
-
 
                                 <syncfusion:SfDataGrid.Resources>
                                     <Style TargetType="syncfusion:GridHeaderCellControl">
@@ -249,9 +218,6 @@
 
                                     <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
                                 </syncfusion:SfDataGrid.Resources>
-
-
-
 
                                 <syncfusion:SfDataGrid.Columns>
                                     <!--<syncfusion:GridImageColumn
@@ -957,6 +923,7 @@
                                         MappingName="Size" />
 
                                 </syncfusion:SfDataGrid.Columns>
+
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="MouseDoubleClick">
                                         <hc:EventToCommand Command="{Binding ImportFileCommand}" />

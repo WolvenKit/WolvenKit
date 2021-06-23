@@ -159,23 +159,7 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
         private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-        private void ExecuteCopyRelPath()
-        {
-            Clipboard.SetText(SelectedItem.Name);
-
-            //string GetArchivePath(string s)
-            //{
-            //    if (s.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length > 2)
-            //    {
-            //        var relpath = s[(ActiveMod.FileDirectory.Length + 1)..];
-            //        return string.Join(Path.DirectorySeparatorChar.ToString(), relpath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Skip(2).ToArray());
-            //    }
-            //    else
-            //    {
-            //        return s;
-            //    }
-            //}
-        }
+        private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.Name);
 
         /// <summary>
         /// Copies relative path of node.

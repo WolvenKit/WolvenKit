@@ -16,6 +16,7 @@
  xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
+
  >
 
     <!--  Resources  -->
@@ -193,7 +194,7 @@
                             <!--  Add selected Items(s) to Project Button  -->
                             <syncfusion:RibbonButton
                              x:Name="AddSelectedItems"
-                             Click="AddSelectedItems_Click"
+                             Command="{Binding AssetBrowserAddCommand}"
                              IconStretch="Fill"
                              IconType="Icon"
                              Label="Add selected Item(s) to Project"
