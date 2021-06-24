@@ -193,6 +193,52 @@ namespace WolvenKit.Modkit.RED4
                 else
                     materialEntries.Add(ExternalMaterial[Entry.Index.Value]);
             }
+            foreach(var m in materialEntries)
+            {
+                string path = m.BaseMaterial.DepotPath;
+                while(!Path.GetExtension(path).Contains("mt"))
+                {
+                    ulong hash = FNV1A64HashAlgorithm.HashString(path);
+                    foreach (Archive ar in archives)
+                    {
+                        if (ar.Files.ContainsKey(hash))
+                        {
+                            var ms = new MemoryStream();
+                            ExtractSingleToStream(ar, hash, ms);
+
+                            var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                            path = (mi.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath;
+                            for (int t = 0; t < mi.Imports.Count; t++)
+                            {
+                                if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                                {
+                                    primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                ulong mt = FNV1A64HashAlgorithm.HashString(path);
+                foreach (Archive ar in archives)
+                {
+                    if (ar.Files.ContainsKey(mt))
+                    {
+                        var ms = new MemoryStream();
+                        ExtractSingleToStream(ar, mt, ms);
+
+                        var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                        for (int t = 0; t < mi.Imports.Count; t++)
+                        {
+                            if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                            {
+                                primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
         }
         private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, DirectoryInfo outDir, List<Archive> archives, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
@@ -208,6 +254,9 @@ namespace WolvenKit.Modkit.RED4
 
             List<string> mlTemplateNames = new List<string>();
             List<Multilayer_LayerTemplate> mlTemplates = new List<Multilayer_LayerTemplate>();
+
+            List<HairProfile> HairProfiles = new List<HairProfile>();
+            List<string> HairProfileNames = new List<string>();
 
             List<string> TexturesList = new List<string>();
 
@@ -250,6 +299,26 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
 
+                }
+
+                if (Path.GetExtension(primaryDependencies[i]) == ".hp")
+                {
+                    if (!HairProfileNames.Contains(Path.GetFileName(primaryDependencies[i])))
+                    {
+                        HairProfileNames.Add(Path.GetFileName(primaryDependencies[i]));
+                        ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                        foreach (Archive ar in archives)
+                        {
+                            if (ar.Files.ContainsKey(hash))
+                            {
+                                var ms = new MemoryStream();
+                                ExtractSingleToStream(ar, hash, ms);
+                                var hp = _wolvenkitFileService.TryReadCr2WFile(ms);
+                                HairProfiles.Add(new HairProfile(hp.Chunks[0].Data as CHairProfile, Path.GetFileName(primaryDependencies[i])));
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
@@ -340,7 +409,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 MaterialTemplates.Add(new Template(mlTemplates[i], mlTemplateNames[i]));
             }
-            var obj = new { Materials = RawMaterials, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
+            var obj = new { Materials = RawMaterials,HairProfiles = HairProfiles, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
 
             var settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
@@ -359,6 +428,8 @@ namespace WolvenKit.Modkit.RED4
             rawMaterial.Name = Name;
             rawMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath;
 
+            List<CMaterialInstance> BaseMaterials = new List<CMaterialInstance>();
+
             string path = cMaterialInstance.BaseMaterial.DepotPath;
             while (!Path.GetExtension(path).Contains("mt"))
             {
@@ -370,12 +441,22 @@ namespace WolvenKit.Modkit.RED4
                         var ms = new MemoryStream();
                         ModTools.ExtractSingleToStream(ar, hash, ms);
                         var mi = _wolvenkitFileService.TryReadCr2WFile(ms);
+                        BaseMaterials.Add(mi.Chunks[0].Data as CMaterialInstance);
                         path = (mi.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath;
                         break;
                     }
                 }
             }
-            MATERIAL.ContainRawMaterialEnum(ref rawMaterial, cMaterialInstance, path);
+
+            string type = Path.GetFileName(path);
+
+            BaseMaterials.Reverse();
+            for(int i = 0; i < BaseMaterials.Count; i++)
+            {
+                MATERIAL.ContainRawMaterialEnum(ref rawMaterial, BaseMaterials[i], type);
+            }
+
+            MATERIAL.ContainRawMaterialEnum(ref rawMaterial, cMaterialInstance, type);
             return rawMaterial;
         }
         private static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
@@ -601,14 +682,6 @@ namespace WolvenKit.Modkit.RED4
                 cr2w.Buffers[p - 1].Offset = off;
             }
 
-            var apps = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshAppearance>().ToList();
-            for (int i = 0; i < apps.Count; i++)
-            {
-                for (int e = 0; e < apps[i].ChunkMaterials.Count; e++)
-                {
-                    apps[i].ChunkMaterials[e].Value = names[0];
-                }
-            }
             return true;
         }
     }

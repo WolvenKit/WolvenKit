@@ -1,4 +1,5 @@
 using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.Modkit.RED4.Materials.Types;
 using System;
 
 namespace WolvenKit.Modkit.RED4.MaterialSetupFile
@@ -246,5 +247,36 @@ namespace WolvenKit.Modkit.RED4.MaterialSetupFile
     {
         public string N { get; set; } = null;
         public Nullable<float>[] V { get; set; } = null;
+    }
+    public class HairProfile
+    {
+        public string Name { get; set; }
+        public GradientEntry[] GradientEntriesID { get; set; }
+        public GradientEntry[] GradientEntriesRootToTip { get; set; }
+        public HairProfile(CHairProfile c, string name)
+        {
+            Name = name;
+            GradientEntriesID = new GradientEntry[c.GradientEntriesID.Count];
+            GradientEntriesRootToTip = new GradientEntry[c.GradientEntriesRootToTip.Count];
+
+            for (int i = 0; i < c.GradientEntriesID.Count; i++)
+            {
+                GradientEntriesID[i] = new GradientEntry(c.GradientEntriesID[i]);
+            }
+            for (int i = 0; i < c.GradientEntriesRootToTip.Count; i++)
+            {
+                GradientEntriesRootToTip[i] = new GradientEntry(c.GradientEntriesRootToTip[i]);
+            }
+        }
+    }
+    public class GradientEntry
+    {
+        public float Value;
+        public Color Color;
+        public GradientEntry(rendGradientEntry g)
+        {
+            Value = g.Value.Value;
+            Color = new Color(g.Color);
+        }
     }
 }
