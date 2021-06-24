@@ -55,6 +55,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IGameControllerFactory _gameController;
 
         private List<IGameArchiveManager> _managers;
+        private readonly ReadOnlyObservableCollection<GameFileTreeNode> _boundRootNodes;
+
 
         private bool _stillLoading;
 
@@ -107,8 +109,10 @@ namespace WolvenKit.ViewModels.Editor
             var disposable = controller.ConnectHierarchy()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
-                .Subscribe();
+                .Subscribe(OnRootNodesUpdated);
         }
+
+        private void OnRootNodesUpdated(IChangeSet<GameFileTreeNode, string> obj) => BoundRootNodes = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
 
         #endregion ctor
 
@@ -122,13 +126,10 @@ namespace WolvenKit.ViewModels.Editor
         public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
 
-
-        
-        private readonly ReadOnlyObservableCollection<GameFileTreeNode> _boundRootNodes;
         /// <summary>
         /// Bound RootNodes to left navigation
         /// </summary>
-        public ReadOnlyObservableCollection<GameFileTreeNode> BoundRootNodes => _boundRootNodes;
+        public ObservableCollection<GameFileTreeNode> BoundRootNodes { get; set; } = new();
 
         /// <summary>
         /// Selected Root node in left navigation
@@ -243,6 +244,8 @@ namespace WolvenKit.ViewModels.Editor
 
             _notificationService.Success($"Asset Browser is initialized");
             LoadVisibility = Visibility.Collapsed;
+
+            RaisePropertyChanged(nameof(BoundRootNodes));
         }
 
         protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
