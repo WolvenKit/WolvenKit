@@ -5505,10 +5505,10 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
     }
     public class Vec4
     {
-        public Nullable<float> X { get; set; }
-        public Nullable<float> Y { get; set; }
-        public Nullable<float> Z { get; set; }
-        public Nullable<float> W { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public float W { get; set; }
 
         public Vec4(Vector4 v)
         {
