@@ -5,12 +5,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
 using CP77.CR2W;
-using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
@@ -78,6 +78,9 @@ namespace WolvenKit.Views.Editor
 
         private void SBBar_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
+
+
+
             if (string.Equals(SBBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
             {
                 SBBar.SetCurrentValue(TextBox.TextProperty, "");
@@ -207,6 +210,38 @@ namespace WolvenKit.Views.Editor
                 }
             }
             propertiesViewModel.DecideForMeshPreview();
+        }
+
+        private async void SBBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ViewModel is not AssetBrowserViewModel vm)
+            {
+                return;
+            }
+            if (InnerList == null)
+            {
+                return;
+            }
+            await Task.Delay(1000);
+
+
+            if (SBBar.Text != "search" || SBBar.Text != "")
+            {
+                this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.SearchBrushProperty, HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3"));
+
+                this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.AllowFilteringProperty, true);
+
+
+                this.InnerList.SearchHelper.Search(SBBar.Text);
+            }
+            else
+            {
+                this.InnerList.SearchHelper.ClearSearch();
+
+            }
+
+
+
         }
     }
 }

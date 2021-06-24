@@ -116,8 +116,10 @@
                                                 BorderBrush="Transparent"
                                                 FlowDirection="LeftToRight"
                                                 MouseDown="SearchBar_MouseDown"
+                                                Text="search"
                                                 PreviewTextInput="SBBar_PreviewTextInput"
-                                                Text="Search">
+                                                TextChanged="SBBar_TextChanged"
+                                                >
 
                                                 <hc:Interaction.Triggers>
                                                     <hc:EventTrigger EventName="SearchStarted">
@@ -177,6 +179,7 @@
                                 AllowEditing="False"
                                 AllowResizingColumns="False"
                                 AllowSorting="False"
+                                AllowFiltering="True"
                                 AutoGenerateColumns="False"
                                 Background="{DynamicResource RegionBrush}"
                                 ColumnSizer="Star"
@@ -226,7 +229,7 @@
                                      />-->
 
 
-                                    <syncfusion:GridTemplateColumn Width="22">
+                                    <syncfusion:GridTemplateColumn FilterRowOptionsVisibility="Collapsed" MappingName="x" Width="22">
                                         <syncfusion:GridTemplateColumn.CellTemplate>
 
                                             <DataTemplate>
