@@ -255,6 +255,9 @@ namespace WolvenKit.Modkit.RED4
             List<string> mlTemplateNames = new List<string>();
             List<Multilayer_LayerTemplate> mlTemplates = new List<Multilayer_LayerTemplate>();
 
+            List<HairProfile> HairProfiles = new List<HairProfile>();
+            List<string> HairProfileNames = new List<string>();
+
             List<string> TexturesList = new List<string>();
 
             var exportArgs =
@@ -296,6 +299,26 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
 
+                }
+
+                if (Path.GetExtension(primaryDependencies[i]) == ".hp")
+                {
+                    if (!HairProfileNames.Contains(Path.GetFileName(primaryDependencies[i])))
+                    {
+                        HairProfileNames.Add(Path.GetFileName(primaryDependencies[i]));
+                        ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                        foreach (Archive ar in archives)
+                        {
+                            if (ar.Files.ContainsKey(hash))
+                            {
+                                var ms = new MemoryStream();
+                                ExtractSingleToStream(ar, hash, ms);
+                                var hp = _wolvenkitFileService.TryReadCr2WFile(ms);
+                                HairProfiles.Add(new HairProfile(hp.Chunks[0].Data as CHairProfile, Path.GetFileName(primaryDependencies[i])));
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
@@ -386,7 +409,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 MaterialTemplates.Add(new Template(mlTemplates[i], mlTemplateNames[i]));
             }
-            var obj = new { Materials = RawMaterials, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
+            var obj = new { Materials = RawMaterials,HairProfiles = HairProfiles, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
 
             var settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
