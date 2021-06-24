@@ -1,21 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using Catel;
 using Catel.Services;
 using DynamicData;
-using Feather.Commands;
-using Feather.Controls;
 using HandyControl.Data;
 using Orchestra.Services;
 using ReactiveUI;
@@ -25,7 +18,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.RED4.CR2W.Archive;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
 namespace WolvenKit.ViewModels.Editor
@@ -277,6 +269,12 @@ namespace WolvenKit.ViewModels.Editor
                 ;
             CurrentNodeFiles = files
                 .Select(_ => new FileEntryViewModel(_));
+        }
+
+
+        private void PreformFolderSearch(string query)
+        {
+
         }
 
         private void SetupToolDefaults()
