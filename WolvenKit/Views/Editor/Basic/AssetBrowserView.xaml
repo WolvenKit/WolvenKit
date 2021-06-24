@@ -45,12 +45,13 @@
 
                             <syncfusion:SfTreeNavigator
                                 x:Name="TreeNavigator"
-                                Header="Depot"
+                                
                                 NavigationMode="Default"
                                 ItemsSource="{Binding BoundRootNodes, Mode=OneWay}"
                                 SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectionChanged="SfTreeNavigator_SelectionChanged">
-
+                                SelectionChanged="SfTreeNavigator_SelectionChanged"
+                            >
+                                
 
                                 <syncfusion:SfTreeNavigator.ItemTemplate>
 
@@ -77,6 +78,28 @@
                                     </HierarchicalDataTemplate>
                                 </syncfusion:SfTreeNavigator.ItemTemplate>
                             </syncfusion:SfTreeNavigator>
+
+                            <Border
+                                x:Name="VisibleBackButton"
+                                Width="37"
+                                Height="35"
+                                Margin="5,2,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource RegionBrush}">
+                                <Button
+                                    Background="{DynamicResource RegionBrush}"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="2"
+                                    Click="TreeNavBackButton_OnClick"
+                                >
+                                    <iconPacks:PackIconRemixIcon
+                                        Width="12"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Kind="ArrowGoBackFill" />
+                                </Button>
+                            </Border>
 
                         </Grid>
 

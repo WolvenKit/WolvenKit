@@ -91,7 +91,10 @@ namespace WolvenKit.Views.HomePage
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            StaticReferences.GlobalShell.DragMove();
+            if (StaticReferences.GlobalShell != null)
+            {
+                StaticReferences.GlobalShell.DragMove();
+            }
         }
 
         private void Grid_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -100,20 +103,22 @@ namespace WolvenKit.Views.HomePage
             {
                 if (IsMouseOver)
                 {
-                    if (StaticReferences.GlobalShell.WindowState == WindowState.Maximized)
+                    if (StaticReferences.GlobalShell != null)
                     {
-                        StaticReferences.GlobalShell.SetCurrentValue(Window.WindowStateProperty, WindowState.Normal);
-                    }
-                    else
-                    {
-                        StaticReferences.GlobalShell.SetCurrentValue(Window.WindowStateProperty, WindowState.Maximized);
+                        StaticReferences.GlobalShell.SetCurrentValue(Window.WindowStateProperty,
+                            StaticReferences.GlobalShell.WindowState == WindowState.Maximized
+                                ? WindowState.Normal
+                                : WindowState.Maximized);
                     }
                 }
             }
             else
             {
                 base.OnMouseLeftButtonDown(e);
-                StaticReferences.GlobalShell.DragMove();
+                if (StaticReferences.GlobalShell != null)
+                {
+                    StaticReferences.GlobalShell.DragMove();
+                }
             }
         }
 

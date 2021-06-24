@@ -157,7 +157,10 @@ namespace WolvenKit.Functionality.Commands
                             break;
                     }
 
-                    StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
+                    if (StaticReferences.GlobalShell != null)
+                    {
+                        StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
+                    }
 
                     StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
                 }

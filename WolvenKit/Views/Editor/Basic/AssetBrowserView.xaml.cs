@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -242,6 +243,30 @@ namespace WolvenKit.Views.Editor
 
 
 
+        }
+
+        private void TreeNavBackButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not AssetBrowserViewModel vm)
+            {
+                return;
+            }
+
+            var header = TreeNavigator.DrillDownItem.Header;
+            if ((header as string) != "Depot")
+            {
+                TreeNavigator.GoBack();
+                var newheader = TreeNavigator.DrillDownItem.Header;
+                if ((newheader as string) != "Depot")
+                {
+                    if (header is GameFileTreeNode node)
+                    {
+                        vm.CurrentNodeFiles = node.Files.Values
+                            .SelectMany(_ => _)
+                            .Select(_ => new FileEntryViewModel(_ as FileEntry));
+                    }
+                }
+            }
         }
     }
 }
