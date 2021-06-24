@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
 using CP77.CR2W;
+using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
@@ -245,27 +247,46 @@ namespace WolvenKit.Views.Editor
 
         }
 
-        private void TreeNavBackButton_OnClick(object sender, RoutedEventArgs e)
+        //private void TreeNavBackButton_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    if (DataContext is not AssetBrowserViewModel vm)
+        //    {
+        //        return;
+        //    }
+
+        //    var header = TreeNavigator.DrillDownItem.Header;
+        //    if ((header as string) != "Depot")
+        //    {
+        //        TreeNavigator.GoBack();
+        //        var newheader = TreeNavigator.DrillDownItem.Header;
+        //        if ((newheader as string) != "Depot")
+        //        {
+        //            if (header is GameFileTreeNode node)
+        //            {
+        //                vm.CurrentNodeFiles = node.Files.Values
+        //                    .SelectMany(_ => _)
+        //                    .Select(_ => new FileEntryViewModel(_ as FileEntry));
+        //            }
+        //        }
+        //    }
+        //}
+
+        private void LeftNavigation_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (DataContext is not AssetBrowserViewModel vm)
             {
                 return;
             }
 
-            var header = TreeNavigator.DrillDownItem.Header;
-            if ((header as string) != "Depot")
+            if (!e.AddedItems.Any())
             {
-                TreeNavigator.GoBack();
-                var newheader = TreeNavigator.DrillDownItem.Header;
-                if ((newheader as string) != "Depot")
-                {
-                    if (header is GameFileTreeNode node)
-                    {
-                        vm.CurrentNodeFiles = node.Files.Values
-                            .SelectMany(_ => _)
-                            .Select(_ => new FileEntryViewModel(_ as FileEntry));
-                    }
-                }
+                return;
+            }
+
+            if (e.AddedItems.First() is TreeGridRowInfo { RowData: GameFileTreeNode model })
+            {
+                vm.CurrentNodeFiles = model.Files.Values.SelectMany(_ => _)
+                    .Select(_ => new FileEntryViewModel(_ as FileEntry));
             }
         }
     }

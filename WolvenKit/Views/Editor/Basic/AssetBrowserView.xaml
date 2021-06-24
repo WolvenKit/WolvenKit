@@ -41,9 +41,24 @@
                                 <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                             </Grid.Resources>
 
+                            <syncfusion:SfTreeGrid Grid.Column="0"
+                                                   x:Name="LeftNavigation"
+                                                   AllowFiltering="True"
+                                                   SelectionChanged="LeftNavigation_OnSelectionChanged"
+                                                   ChildPropertyName="SubDirectories"
+                                                   AutoGenerateColumns="False"
+                                                   ColumnSizer="AutoFillColumn"
+                                                   FilterLevel="Extended"
+                                                   ItemsSource="{Binding BoundRootNodes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                                   SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            >
 
+                                <syncfusion:SfTreeGrid.Columns>
+                                    <syncfusion:TreeGridTextColumn MappingName="Name"/>
+                                </syncfusion:SfTreeGrid.Columns>
+                            </syncfusion:SfTreeGrid>
 
-                            <syncfusion:SfTreeNavigator
+                            <!--<syncfusion:SfTreeNavigator
                                 x:Name="TreeNavigator"
                                 
                                 NavigationMode="Default"
@@ -77,9 +92,9 @@
                                         </StackPanel>
                                     </HierarchicalDataTemplate>
                                 </syncfusion:SfTreeNavigator.ItemTemplate>
-                            </syncfusion:SfTreeNavigator>
+                            </syncfusion:SfTreeNavigator>-->
 
-                            <Border
+                            <!--<Border
                                 x:Name="VisibleBackButton"
                                 Width="37"
                                 Height="35"
@@ -99,7 +114,7 @@
                                         VerticalAlignment="Center"
                                         Kind="ArrowGoBackFill" />
                                 </Button>
-                            </Border>
+                            </Border>-->
 
                         </Grid>
 
