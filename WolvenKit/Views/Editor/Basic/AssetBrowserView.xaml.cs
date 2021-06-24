@@ -222,7 +222,7 @@ namespace WolvenKit.Views.Editor
             {
                 return;
             }
-            await Task.Delay(1000);
+            await Task.Delay(25);
 
 
             if (SBBar.Text != "search" || SBBar.Text != "")
