@@ -13,16 +13,6 @@ namespace WolvenKit.Modkit.RED4.Materials
         {
             switch (Enum.Parse<MaterialTypes>(mat.MaterialType))
             {
-                case MaterialTypes._skin:
-                    mat._skin.write(ref mi);
-                    if (mat.BaseMaterial == null)
-                        mat.BaseMaterial = "base\\materials\\skin.mt";
-                    break;
-                case MaterialTypes._multilayered:
-                    mat._multilayered.write(ref mi);
-                    if (mat.BaseMaterial == null)
-                        mat.BaseMaterial = "engine\\materials\\multilayered.mt";
-                    break;
                 case MaterialTypes._3d_map:
                     mat._3d_map.write(ref mi);
                     if (mat.BaseMaterial == null)
@@ -528,6 +518,11 @@ namespace WolvenKit.Modkit.RED4.Materials
                     if (mat.BaseMaterial == null)
                         mat.BaseMaterial = @"base\materials\silverhand_overlay_blendable.mt";
                     break;
+                case MaterialTypes._skin:
+                    mat._skin.write(ref mi);
+                    if (mat.BaseMaterial == null)
+                        mat.BaseMaterial = @"base\materials\skin.mt";
+                    break;
                 case MaterialTypes._skin_blendable:
                     mat._skin_blendable.write(ref mi);
                     if (mat.BaseMaterial == null)
@@ -752,6 +747,11 @@ namespace WolvenKit.Modkit.RED4.Materials
                     mat._metal_base_proxy.write(ref mi);
                     if (mat.BaseMaterial == null)
                         mat.BaseMaterial = @"engine\materials\metal_base_proxy.mt";
+                    break;
+                case MaterialTypes._multilayered:
+                    mat._multilayered.write(ref mi);
+                    if (mat.BaseMaterial == null)
+                        mat.BaseMaterial = @"engine\materials\multilayered.mt";
                     break;
                 case MaterialTypes._multilayered_debug:
                     mat._multilayered_debug.write(ref mi);
@@ -1193,6 +1193,11 @@ namespace WolvenKit.Modkit.RED4.Materials
                     if (mat.BaseMaterial == null)
                         mat.BaseMaterial = @"base\fx\shaders\triplanar_projection.mt";
                     break;
+                case MaterialTypes._water_plane:
+                    mat._water_plane.write(ref mi);
+                    if (mat.BaseMaterial == null)
+                        mat.BaseMaterial = @"base\fx\shaders\water_plane.mt";
+                    break;
                 case MaterialTypes._zoom:
                     mat._zoom.write(ref mi);
                     if (mat.BaseMaterial == null)
@@ -1458,6 +1463,11 @@ namespace WolvenKit.Modkit.RED4.Materials
                     if (mat.BaseMaterial == null)
                         mat.BaseMaterial = @"engine\materials\internal\multilayered_baked.mt";
                     break;
+                case MaterialTypes._silverhand_props_overlay:
+                    mat._silverhand_props_overlay.write(ref mi);
+                    if (mat.BaseMaterial == null)
+                        mat.BaseMaterial = @"base\fx\materials\holograms\silverhand_props_overlay.mt";
+                    break;
                 case MaterialTypes._mikoshi_fullscr_transition:
                     mat._mikoshi_fullscr_transition.write(ref mi);
                     if (mat.BaseMaterial == null)
@@ -1508,1211 +1518,1817 @@ namespace WolvenKit.Modkit.RED4.Materials
                     if (mat.BaseMaterial == null)
                         mat.BaseMaterial = @"engine\materials\particles_liquid.remt";
                     break;
-                default:
-                    break;
             }
         }
-        public static void ContainRawMaterialEnum(ref RawMaterial rawMaterial, CMaterialInstance cMaterialInstance, string path)
+        public static void ContainRawMaterialEnum(ref RawMaterial rawMaterial, CMaterialInstance cMaterialInstance, string Type)
         {
-            switch (Path.GetFileName(path))
+            switch (Type)
             {
-                case "skin.mt":
-                    rawMaterial._skin = new _skin(cMaterialInstance);
-                    rawMaterial.MaterialType = MaterialTypes._skin.ToString();
-                    break;
-                case "multilayered.mt":
-                    rawMaterial._multilayered = new _multilayered(cMaterialInstance);
-                    rawMaterial.MaterialType = MaterialTypes._multilayered.ToString();
-                    break;
                 case "3d_map.mt":
-                    rawMaterial._3d_map = new _3d_map(cMaterialInstance);
+                    if (rawMaterial._3d_map == null)
+                        rawMaterial._3d_map = new _3d_map();
+                    rawMaterial._3d_map.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._3d_map.ToString();
                     break;
                 case "3d_map_cubes.mt":
-                    rawMaterial._3d_map_cubes = new _3d_map_cubes(cMaterialInstance);
+                    if (rawMaterial._3d_map_cubes == null)
+                        rawMaterial._3d_map_cubes = new _3d_map_cubes();
+                    rawMaterial._3d_map_cubes.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._3d_map_cubes.ToString();
                     break;
                 case "3d_map_solid.mt":
-                    rawMaterial._3d_map_solid = new _3d_map_solid(cMaterialInstance);
+                    if (rawMaterial._3d_map_solid == null)
+                        rawMaterial._3d_map_solid = new _3d_map_solid();
+                    rawMaterial._3d_map_solid.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._3d_map_solid.ToString();
                     break;
                 case "beyondblackwall.mt":
-                    rawMaterial._beyondblackwall = new _beyondblackwall(cMaterialInstance);
+                    if (rawMaterial._beyondblackwall == null)
+                        rawMaterial._beyondblackwall = new _beyondblackwall();
+                    rawMaterial._beyondblackwall.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._beyondblackwall.ToString();
                     break;
                 case "beyondblackwall_chars.mt":
-                    rawMaterial._beyondblackwall_chars = new _beyondblackwall_chars(cMaterialInstance);
+                    if (rawMaterial._beyondblackwall_chars == null)
+                        rawMaterial._beyondblackwall_chars = new _beyondblackwall_chars();
+                    rawMaterial._beyondblackwall_chars.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._beyondblackwall_chars.ToString();
                     break;
                 case "beyondblackwall_sky.mt":
-                    rawMaterial._beyondblackwall_sky = new _beyondblackwall_sky(cMaterialInstance);
+                    if (rawMaterial._beyondblackwall_sky == null)
+                        rawMaterial._beyondblackwall_sky = new _beyondblackwall_sky();
+                    rawMaterial._beyondblackwall_sky.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._beyondblackwall_sky.ToString();
                     break;
                 case "beyondblackwall_sky_raymarch.mt":
-                    rawMaterial._beyondblackwall_sky_raymarch = new _beyondblackwall_sky_raymarch(cMaterialInstance);
+                    if (rawMaterial._beyondblackwall_sky_raymarch == null)
+                        rawMaterial._beyondblackwall_sky_raymarch = new _beyondblackwall_sky_raymarch();
+                    rawMaterial._beyondblackwall_sky_raymarch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._beyondblackwall_sky_raymarch.ToString();
                     break;
                 case "blood_puddle_decal.mt":
-                    rawMaterial._blood_puddle_decal = new _blood_puddle_decal(cMaterialInstance);
+                    if (rawMaterial._blood_puddle_decal == null)
+                        rawMaterial._blood_puddle_decal = new _blood_puddle_decal();
+                    rawMaterial._blood_puddle_decal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._blood_puddle_decal.ToString();
                     break;
                 case "cable.mt":
-                    rawMaterial._cable = new _cable(cMaterialInstance);
+                    if (rawMaterial._cable == null)
+                        rawMaterial._cable = new _cable();
+                    rawMaterial._cable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cable.ToString();
                     break;
                 case "circuit_wires.mt":
-                    rawMaterial._circuit_wires = new _circuit_wires(cMaterialInstance);
+                    if (rawMaterial._circuit_wires == null)
+                        rawMaterial._circuit_wires = new _circuit_wires();
+                    rawMaterial._circuit_wires.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._circuit_wires.ToString();
                     break;
                 case "cloth_mov.mt":
-                    rawMaterial._cloth_mov = new _cloth_mov(cMaterialInstance);
+                    if (rawMaterial._cloth_mov == null)
+                        rawMaterial._cloth_mov = new _cloth_mov();
+                    rawMaterial._cloth_mov.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cloth_mov.ToString();
                     break;
                 case "cloth_mov_multilayered.mt":
-                    rawMaterial._cloth_mov_multilayered = new _cloth_mov_multilayered(cMaterialInstance);
+                    if (rawMaterial._cloth_mov_multilayered == null)
+                        rawMaterial._cloth_mov_multilayered = new _cloth_mov_multilayered();
+                    rawMaterial._cloth_mov_multilayered.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cloth_mov_multilayered.ToString();
                     break;
                 case "cyberparticles_base.mt":
-                    rawMaterial._cyberparticles_base = new _cyberparticles_base(cMaterialInstance);
+                    if (rawMaterial._cyberparticles_base == null)
+                        rawMaterial._cyberparticles_base = new _cyberparticles_base();
+                    rawMaterial._cyberparticles_base.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberparticles_base.ToString();
                     break;
                 case "cyberparticles_blackwall.mt":
-                    rawMaterial._cyberparticles_blackwall = new _cyberparticles_blackwall(cMaterialInstance);
+                    if (rawMaterial._cyberparticles_blackwall == null)
+                        rawMaterial._cyberparticles_blackwall = new _cyberparticles_blackwall();
+                    rawMaterial._cyberparticles_blackwall.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberparticles_blackwall.ToString();
                     break;
                 case "cyberparticles_blackwall_touch.mt":
-                    rawMaterial._cyberparticles_blackwall_touch = new _cyberparticles_blackwall_touch(cMaterialInstance);
+                    if (rawMaterial._cyberparticles_blackwall_touch == null)
+                        rawMaterial._cyberparticles_blackwall_touch = new _cyberparticles_blackwall_touch();
+                    rawMaterial._cyberparticles_blackwall_touch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberparticles_blackwall_touch.ToString();
                     break;
                 case "cyberparticles_braindance.mt":
-                    rawMaterial._cyberparticles_braindance = new _cyberparticles_braindance(cMaterialInstance);
+                    if (rawMaterial._cyberparticles_braindance == null)
+                        rawMaterial._cyberparticles_braindance = new _cyberparticles_braindance();
+                    rawMaterial._cyberparticles_braindance.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberparticles_braindance.ToString();
                     break;
                 case "cyberparticles_dynamic.mt":
-                    rawMaterial._cyberparticles_dynamic = new _cyberparticles_dynamic(cMaterialInstance);
+                    if (rawMaterial._cyberparticles_dynamic == null)
+                        rawMaterial._cyberparticles_dynamic = new _cyberparticles_dynamic();
+                    rawMaterial._cyberparticles_dynamic.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberparticles_dynamic.ToString();
                     break;
                 case "cyberparticles_platform.mt":
-                    rawMaterial._cyberparticles_platform = new _cyberparticles_platform(cMaterialInstance);
+                    if (rawMaterial._cyberparticles_platform == null)
+                        rawMaterial._cyberparticles_platform = new _cyberparticles_platform();
+                    rawMaterial._cyberparticles_platform.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberparticles_platform.ToString();
                     break;
                 case "decal_emissive_color.mt":
-                    rawMaterial._decal_emissive_color = new _decal_emissive_color(cMaterialInstance);
+                    if (rawMaterial._decal_emissive_color == null)
+                        rawMaterial._decal_emissive_color = new _decal_emissive_color();
+                    rawMaterial._decal_emissive_color.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_emissive_color.ToString();
                     break;
                 case "decal_emissive_only.mt":
-                    rawMaterial._decal_emissive_only = new _decal_emissive_only(cMaterialInstance);
+                    if (rawMaterial._decal_emissive_only == null)
+                        rawMaterial._decal_emissive_only = new _decal_emissive_only();
+                    rawMaterial._decal_emissive_only.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_emissive_only.ToString();
                     break;
                 case "decal_forward.mt":
-                    rawMaterial._decal_forward = new _decal_forward(cMaterialInstance);
+                    if (rawMaterial._decal_forward == null)
+                        rawMaterial._decal_forward = new _decal_forward();
+                    rawMaterial._decal_forward.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_forward.ToString();
                     break;
                 case "decal_gradientmap_recolor.mt":
-                    rawMaterial._decal_gradientmap_recolor = new _decal_gradientmap_recolor(cMaterialInstance);
+                    if (rawMaterial._decal_gradientmap_recolor == null)
+                        rawMaterial._decal_gradientmap_recolor = new _decal_gradientmap_recolor();
+                    rawMaterial._decal_gradientmap_recolor.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_gradientmap_recolor.ToString();
                     break;
                 case "decal_gradientmap_recolor_emissive.mt":
-                    rawMaterial._decal_gradientmap_recolor_emissive = new _decal_gradientmap_recolor_emissive(cMaterialInstance);
+                    if (rawMaterial._decal_gradientmap_recolor_emissive == null)
+                        rawMaterial._decal_gradientmap_recolor_emissive = new _decal_gradientmap_recolor_emissive();
+                    rawMaterial._decal_gradientmap_recolor_emissive.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_gradientmap_recolor_emissive.ToString();
                     break;
                 case "decal_normal_roughness.mt":
-                    rawMaterial._decal_normal_roughness = new _decal_normal_roughness(cMaterialInstance);
+                    if (rawMaterial._decal_normal_roughness == null)
+                        rawMaterial._decal_normal_roughness = new _decal_normal_roughness();
+                    rawMaterial._decal_normal_roughness.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_normal_roughness.ToString();
                     break;
                 case "decal_normal_roughness_metalness.mt":
-                    rawMaterial._decal_normal_roughness_metalness = new _decal_normal_roughness_metalness(cMaterialInstance);
+                    if (rawMaterial._decal_normal_roughness_metalness == null)
+                        rawMaterial._decal_normal_roughness_metalness = new _decal_normal_roughness_metalness();
+                    rawMaterial._decal_normal_roughness_metalness.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_normal_roughness_metalness.ToString();
                     break;
                 case "decal_normal_roughness_metalness_2.mt":
-                    rawMaterial._decal_normal_roughness_metalness_2 = new _decal_normal_roughness_metalness_2(cMaterialInstance);
+                    if (rawMaterial._decal_normal_roughness_metalness_2 == null)
+                        rawMaterial._decal_normal_roughness_metalness_2 = new _decal_normal_roughness_metalness_2();
+                    rawMaterial._decal_normal_roughness_metalness_2.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_normal_roughness_metalness_2.ToString();
                     break;
                 case "decal_parallax.mt":
-                    rawMaterial._decal_parallax = new _decal_parallax(cMaterialInstance);
+                    if (rawMaterial._decal_parallax == null)
+                        rawMaterial._decal_parallax = new _decal_parallax();
+                    rawMaterial._decal_parallax.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_parallax.ToString();
                     break;
                 case "decal_puddle.mt":
-                    rawMaterial._decal_puddle = new _decal_puddle(cMaterialInstance);
+                    if (rawMaterial._decal_puddle == null)
+                        rawMaterial._decal_puddle = new _decal_puddle();
+                    rawMaterial._decal_puddle.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_puddle.ToString();
                     break;
                 case "decal_roughness.mt":
-                    rawMaterial._decal_roughness = new _decal_roughness(cMaterialInstance);
+                    if (rawMaterial._decal_roughness == null)
+                        rawMaterial._decal_roughness = new _decal_roughness();
+                    rawMaterial._decal_roughness.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_roughness.ToString();
                     break;
                 case "decal_roughness_only.mt":
-                    rawMaterial._decal_roughness_only = new _decal_roughness_only(cMaterialInstance);
+                    if (rawMaterial._decal_roughness_only == null)
+                        rawMaterial._decal_roughness_only = new _decal_roughness_only();
+                    rawMaterial._decal_roughness_only.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_roughness_only.ToString();
                     break;
                 case "decal_terrain_projected.mt":
-                    rawMaterial._decal_terrain_projected = new _decal_terrain_projected(cMaterialInstance);
+                    if (rawMaterial._decal_terrain_projected == null)
+                        rawMaterial._decal_terrain_projected = new _decal_terrain_projected();
+                    rawMaterial._decal_terrain_projected.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_terrain_projected.ToString();
                     break;
                 case "decal_tintable.mt":
-                    rawMaterial._decal_tintable = new _decal_tintable(cMaterialInstance);
+                    if (rawMaterial._decal_tintable == null)
+                        rawMaterial._decal_tintable = new _decal_tintable();
+                    rawMaterial._decal_tintable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_tintable.ToString();
                     break;
                 case "diode_sign.mt":
-                    rawMaterial._diode_sign = new _diode_sign(cMaterialInstance);
+                    if (rawMaterial._diode_sign == null)
+                        rawMaterial._diode_sign = new _diode_sign();
+                    rawMaterial._diode_sign.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._diode_sign.ToString();
                     break;
                 case "earth_globe.mt":
-                    rawMaterial._earth_globe = new _earth_globe(cMaterialInstance);
+                    if (rawMaterial._earth_globe == null)
+                        rawMaterial._earth_globe = new _earth_globe();
+                    rawMaterial._earth_globe.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._earth_globe.ToString();
                     break;
                 case "earth_globe_atmosphere.mt":
-                    rawMaterial._earth_globe_atmosphere = new _earth_globe_atmosphere(cMaterialInstance);
+                    if (rawMaterial._earth_globe_atmosphere == null)
+                        rawMaterial._earth_globe_atmosphere = new _earth_globe_atmosphere();
+                    rawMaterial._earth_globe_atmosphere.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._earth_globe_atmosphere.ToString();
                     break;
                 case "earth_globe_lights.mt":
-                    rawMaterial._earth_globe_lights = new _earth_globe_lights(cMaterialInstance);
+                    if (rawMaterial._earth_globe_lights == null)
+                        rawMaterial._earth_globe_lights = new _earth_globe_lights();
+                    rawMaterial._earth_globe_lights.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._earth_globe_lights.ToString();
                     break;
                 case "emissive_control.mt":
-                    rawMaterial._emissive_control = new _emissive_control(cMaterialInstance);
+                    if (rawMaterial._emissive_control == null)
+                        rawMaterial._emissive_control = new _emissive_control();
+                    rawMaterial._emissive_control.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._emissive_control.ToString();
                     break;
                 case "eye.mt":
-                    rawMaterial._eye = new _eye(cMaterialInstance);
+                    if (rawMaterial._eye == null)
+                        rawMaterial._eye = new _eye();
+                    rawMaterial._eye.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._eye.ToString();
                     break;
                 case "eye_blendable.mt":
-                    rawMaterial._eye_blendable = new _eye_blendable(cMaterialInstance);
+                    if (rawMaterial._eye_blendable == null)
+                        rawMaterial._eye_blendable = new _eye_blendable();
+                    rawMaterial._eye_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._eye_blendable.ToString();
                     break;
                 case "eye_gradient.mt":
-                    rawMaterial._eye_gradient = new _eye_gradient(cMaterialInstance);
+                    if (rawMaterial._eye_gradient == null)
+                        rawMaterial._eye_gradient = new _eye_gradient();
+                    rawMaterial._eye_gradient.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._eye_gradient.ToString();
                     break;
                 case "eye_shadow.mt":
-                    rawMaterial._eye_shadow = new _eye_shadow(cMaterialInstance);
+                    if (rawMaterial._eye_shadow == null)
+                        rawMaterial._eye_shadow = new _eye_shadow();
+                    rawMaterial._eye_shadow.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._eye_shadow.ToString();
                     break;
                 case "eye_shadow_blendable.mt":
-                    rawMaterial._eye_shadow_blendable = new _eye_shadow_blendable(cMaterialInstance);
+                    if (rawMaterial._eye_shadow_blendable == null)
+                        rawMaterial._eye_shadow_blendable = new _eye_shadow_blendable();
+                    rawMaterial._eye_shadow_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._eye_shadow_blendable.ToString();
                     break;
                 case "fake_occluder.mt":
-                    rawMaterial._fake_occluder = new _fake_occluder(cMaterialInstance);
+                    if (rawMaterial._fake_occluder == null)
+                        rawMaterial._fake_occluder = new _fake_occluder();
+                    rawMaterial._fake_occluder.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fake_occluder.ToString();
                     break;
                 case "fillable_fluid.mt":
-                    rawMaterial._fillable_fluid = new _fillable_fluid(cMaterialInstance);
+                    if (rawMaterial._fillable_fluid == null)
+                        rawMaterial._fillable_fluid = new _fillable_fluid();
+                    rawMaterial._fillable_fluid.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fillable_fluid.ToString();
                     break;
                 case "fillable_fluid_vertex.mt":
-                    rawMaterial._fillable_fluid_vertex = new _fillable_fluid_vertex(cMaterialInstance);
+                    if (rawMaterial._fillable_fluid_vertex == null)
+                        rawMaterial._fillable_fluid_vertex = new _fillable_fluid_vertex();
+                    rawMaterial._fillable_fluid_vertex.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fillable_fluid_vertex.ToString();
                     break;
                 case "fluid_mov.mt":
-                    rawMaterial._fluid_mov = new _fluid_mov(cMaterialInstance);
+                    if (rawMaterial._fluid_mov == null)
+                        rawMaterial._fluid_mov = new _fluid_mov();
+                    rawMaterial._fluid_mov.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fluid_mov.ToString();
                     break;
                 case "frosted_glass.mt":
-                    rawMaterial._frosted_glass = new _frosted_glass(cMaterialInstance);
+                    if (rawMaterial._frosted_glass == null)
+                        rawMaterial._frosted_glass = new _frosted_glass();
+                    rawMaterial._frosted_glass.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._frosted_glass.ToString();
                     break;
                 case "frosted_glass_curtain.mt":
-                    rawMaterial._frosted_glass_curtain = new _frosted_glass_curtain(cMaterialInstance);
+                    if (rawMaterial._frosted_glass_curtain == null)
+                        rawMaterial._frosted_glass_curtain = new _frosted_glass_curtain();
+                    rawMaterial._frosted_glass_curtain.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._frosted_glass_curtain.ToString();
                     break;
                 case "glass.mt":
-                    rawMaterial._glass = new _glass(cMaterialInstance);
+                    if (rawMaterial._glass == null)
+                        rawMaterial._glass = new _glass();
+                    rawMaterial._glass.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._glass.ToString();
                     break;
                 case "glass_blendable.mt":
-                    rawMaterial._glass_blendable = new _glass_blendable(cMaterialInstance);
+                    if (rawMaterial._glass_blendable == null)
+                        rawMaterial._glass_blendable = new _glass_blendable();
+                    rawMaterial._glass_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._glass_blendable.ToString();
                     break;
                 case "glass_cracked_edge.mt":
-                    rawMaterial._glass_cracked_edge = new _glass_cracked_edge(cMaterialInstance);
+                    if (rawMaterial._glass_cracked_edge == null)
+                        rawMaterial._glass_cracked_edge = new _glass_cracked_edge();
+                    rawMaterial._glass_cracked_edge.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._glass_cracked_edge.ToString();
                     break;
                 case "glass_deferred.mt":
-                    rawMaterial._glass_deferred = new _glass_deferred(cMaterialInstance);
+                    if (rawMaterial._glass_deferred == null)
+                        rawMaterial._glass_deferred = new _glass_deferred();
+                    rawMaterial._glass_deferred.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._glass_deferred.ToString();
                     break;
                 case "glass_scope.mt":
-                    rawMaterial._glass_scope = new _glass_scope(cMaterialInstance);
+                    if (rawMaterial._glass_scope == null)
+                        rawMaterial._glass_scope = new _glass_scope();
+                    rawMaterial._glass_scope.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._glass_scope.ToString();
                     break;
                 case "glass_window_rain.mt":
-                    rawMaterial._glass_window_rain = new _glass_window_rain(cMaterialInstance);
+                    if (rawMaterial._glass_window_rain == null)
+                        rawMaterial._glass_window_rain = new _glass_window_rain();
+                    rawMaterial._glass_window_rain.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._glass_window_rain.ToString();
                     break;
                 case "hair.mt":
-                    rawMaterial._hair = new _hair(cMaterialInstance);
+                    if (rawMaterial._hair == null)
+                        rawMaterial._hair = new _hair();
+                    rawMaterial._hair.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hair.ToString();
                     break;
                 case "hair_blendable.mt":
-                    rawMaterial._hair_blendable = new _hair_blendable(cMaterialInstance);
+                    if (rawMaterial._hair_blendable == null)
+                        rawMaterial._hair_blendable = new _hair_blendable();
+                    rawMaterial._hair_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hair_blendable.ToString();
                     break;
                 case "hair_proxy.mt":
-                    rawMaterial._hair_proxy = new _hair_proxy(cMaterialInstance);
+                    if (rawMaterial._hair_proxy == null)
+                        rawMaterial._hair_proxy = new _hair_proxy();
+                    rawMaterial._hair_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hair_proxy.ToString();
                     break;
                 case "ice_fluid_mov.mt":
-                    rawMaterial._ice_fluid_mov = new _ice_fluid_mov(cMaterialInstance);
+                    if (rawMaterial._ice_fluid_mov == null)
+                        rawMaterial._ice_fluid_mov = new _ice_fluid_mov();
+                    rawMaterial._ice_fluid_mov.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ice_fluid_mov.ToString();
                     break;
                 case "ice_ver_mov_translucent.mt":
-                    rawMaterial._ice_ver_mov_translucent = new _ice_ver_mov_translucent(cMaterialInstance);
+                    if (rawMaterial._ice_ver_mov_translucent == null)
+                        rawMaterial._ice_ver_mov_translucent = new _ice_ver_mov_translucent();
+                    rawMaterial._ice_ver_mov_translucent.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ice_ver_mov_translucent.ToString();
                     break;
                 case "lights_interactive.mt":
-                    rawMaterial._lights_interactive = new _lights_interactive(cMaterialInstance);
+                    if (rawMaterial._lights_interactive == null)
+                        rawMaterial._lights_interactive = new _lights_interactive();
+                    rawMaterial._lights_interactive.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._lights_interactive.ToString();
                     break;
                 case "loot_drop_highlight.mt":
-                    rawMaterial._loot_drop_highlight = new _loot_drop_highlight(cMaterialInstance);
+                    if (rawMaterial._loot_drop_highlight == null)
+                        rawMaterial._loot_drop_highlight = new _loot_drop_highlight();
+                    rawMaterial._loot_drop_highlight.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._loot_drop_highlight.ToString();
                     break;
                 case "mesh_decal.mt":
-                    rawMaterial._mesh_decal = new _mesh_decal(cMaterialInstance);
+                    if (rawMaterial._mesh_decal == null)
+                        rawMaterial._mesh_decal = new _mesh_decal();
+                    rawMaterial._mesh_decal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal.ToString();
                     break;
                 case "mesh_decal_blendable.mt":
-                    rawMaterial._mesh_decal_blendable = new _mesh_decal_blendable(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_blendable == null)
+                        rawMaterial._mesh_decal_blendable = new _mesh_decal_blendable();
+                    rawMaterial._mesh_decal_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_blendable.ToString();
                     break;
                 case "mesh_decal_double_diffuse.mt":
-                    rawMaterial._mesh_decal_double_diffuse = new _mesh_decal_double_diffuse(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_double_diffuse == null)
+                        rawMaterial._mesh_decal_double_diffuse = new _mesh_decal_double_diffuse();
+                    rawMaterial._mesh_decal_double_diffuse.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_double_diffuse.ToString();
                     break;
                 case "mesh_decal_emissive.mt":
-                    rawMaterial._mesh_decal_emissive = new _mesh_decal_emissive(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_emissive == null)
+                        rawMaterial._mesh_decal_emissive = new _mesh_decal_emissive();
+                    rawMaterial._mesh_decal_emissive.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_emissive.ToString();
                     break;
                 case "mesh_decal_emissive_subsurface.mt":
-                    rawMaterial._mesh_decal_emissive_subsurface = new _mesh_decal_emissive_subsurface(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_emissive_subsurface == null)
+                        rawMaterial._mesh_decal_emissive_subsurface = new _mesh_decal_emissive_subsurface();
+                    rawMaterial._mesh_decal_emissive_subsurface.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_emissive_subsurface.ToString();
                     break;
                 case "mesh_decal_gradientmap_recolor.mt":
-                    rawMaterial._mesh_decal_gradientmap_recolor = new _mesh_decal_gradientmap_recolor(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_gradientmap_recolor == null)
+                        rawMaterial._mesh_decal_gradientmap_recolor = new _mesh_decal_gradientmap_recolor();
+                    rawMaterial._mesh_decal_gradientmap_recolor.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_gradientmap_recolor.ToString();
                     break;
                 case "mesh_decal_gradientmap_recolor_2.mt":
-                    rawMaterial._mesh_decal_gradientmap_recolor_2 = new _mesh_decal_gradientmap_recolor_2(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_gradientmap_recolor_2 == null)
+                        rawMaterial._mesh_decal_gradientmap_recolor_2 = new _mesh_decal_gradientmap_recolor_2();
+                    rawMaterial._mesh_decal_gradientmap_recolor_2.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_gradientmap_recolor_2.ToString();
                     break;
                 case "mesh_decal_gradientmap_recolor_emissive.mt":
-                    rawMaterial._mesh_decal_gradientmap_recolor_emissive = new _mesh_decal_gradientmap_recolor_emissive(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_gradientmap_recolor_emissive == null)
+                        rawMaterial._mesh_decal_gradientmap_recolor_emissive = new _mesh_decal_gradientmap_recolor_emissive();
+                    rawMaterial._mesh_decal_gradientmap_recolor_emissive.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_gradientmap_recolor_emissive.ToString();
                     break;
                 case "mesh_decal_multitinted.mt":
-                    rawMaterial._mesh_decal_multitinted = new _mesh_decal_multitinted(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_multitinted == null)
+                        rawMaterial._mesh_decal_multitinted = new _mesh_decal_multitinted();
+                    rawMaterial._mesh_decal_multitinted.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_multitinted.ToString();
                     break;
                 case "mesh_decal_parallax.mt":
-                    rawMaterial._mesh_decal_parallax = new _mesh_decal_parallax(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_parallax == null)
+                        rawMaterial._mesh_decal_parallax = new _mesh_decal_parallax();
+                    rawMaterial._mesh_decal_parallax.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_parallax.ToString();
                     break;
                 case "mesh_decal_revealed.mt":
-                    rawMaterial._mesh_decal_revealed = new _mesh_decal_revealed(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_revealed == null)
+                        rawMaterial._mesh_decal_revealed = new _mesh_decal_revealed();
+                    rawMaterial._mesh_decal_revealed.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_revealed.ToString();
                     break;
                 case "mesh_decal_wet_character.mt":
-                    rawMaterial._mesh_decal_wet_character = new _mesh_decal_wet_character(cMaterialInstance);
+                    if (rawMaterial._mesh_decal_wet_character == null)
+                        rawMaterial._mesh_decal_wet_character = new _mesh_decal_wet_character();
+                    rawMaterial._mesh_decal_wet_character.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal_wet_character.ToString();
                     break;
                 case "metal_base_bink.mt":
-                    rawMaterial._metal_base_bink = new _metal_base_bink(cMaterialInstance);
+                    if (rawMaterial._metal_base_bink == null)
+                        rawMaterial._metal_base_bink = new _metal_base_bink();
+                    rawMaterial._metal_base_bink.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_bink.ToString();
                     break;
                 case "metal_base_det.mt":
-                    rawMaterial._metal_base_det = new _metal_base_det(cMaterialInstance);
+                    if (rawMaterial._metal_base_det == null)
+                        rawMaterial._metal_base_det = new _metal_base_det();
+                    rawMaterial._metal_base_det.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_det.ToString();
                     break;
                 case "metal_base_det_dithered.mt":
-                    rawMaterial._metal_base_det_dithered = new _metal_base_det_dithered(cMaterialInstance);
+                    if (rawMaterial._metal_base_det_dithered == null)
+                        rawMaterial._metal_base_det_dithered = new _metal_base_det_dithered();
+                    rawMaterial._metal_base_det_dithered.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_det_dithered.ToString();
                     break;
                 case "metal_base_dithered.mt":
-                    rawMaterial._metal_base_dithered = new _metal_base_dithered(cMaterialInstance);
+                    if (rawMaterial._metal_base_dithered == null)
+                        rawMaterial._metal_base_dithered = new _metal_base_dithered();
+                    rawMaterial._metal_base_dithered.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_dithered.ToString();
                     break;
                 case "metal_base_gradientmap_recolor.mt":
-                    rawMaterial._metal_base_gradientmap_recolor = new _metal_base_gradientmap_recolor(cMaterialInstance);
+                    if (rawMaterial._metal_base_gradientmap_recolor == null)
+                        rawMaterial._metal_base_gradientmap_recolor = new _metal_base_gradientmap_recolor();
+                    rawMaterial._metal_base_gradientmap_recolor.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_gradientmap_recolor.ToString();
                     break;
                 case "metal_base_parallax.mt":
-                    rawMaterial._metal_base_parallax = new _metal_base_parallax(cMaterialInstance);
+                    if (rawMaterial._metal_base_parallax == null)
+                        rawMaterial._metal_base_parallax = new _metal_base_parallax();
+                    rawMaterial._metal_base_parallax.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_parallax.ToString();
                     break;
                 case "metal_base_trafficlight_proxy.mt":
-                    rawMaterial._metal_base_trafficlight_proxy = new _metal_base_trafficlight_proxy(cMaterialInstance);
+                    if (rawMaterial._metal_base_trafficlight_proxy == null)
+                        rawMaterial._metal_base_trafficlight_proxy = new _metal_base_trafficlight_proxy();
+                    rawMaterial._metal_base_trafficlight_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_trafficlight_proxy.ToString();
                     break;
                 case "metal_base_ui.mt":
-                    rawMaterial._metal_base_ui = new _metal_base_ui(cMaterialInstance);
+                    if (rawMaterial._metal_base_ui == null)
+                        rawMaterial._metal_base_ui = new _metal_base_ui();
+                    rawMaterial._metal_base_ui.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_ui.ToString();
                     break;
                 case "metal_base_vertexcolored.mt":
-                    rawMaterial._metal_base_vertexcolored = new _metal_base_vertexcolored(cMaterialInstance);
+                    if (rawMaterial._metal_base_vertexcolored == null)
+                        rawMaterial._metal_base_vertexcolored = new _metal_base_vertexcolored();
+                    rawMaterial._metal_base_vertexcolored.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_vertexcolored.ToString();
                     break;
                 case "mikoshi_blocks_big.mt":
-                    rawMaterial._mikoshi_blocks_big = new _mikoshi_blocks_big(cMaterialInstance);
+                    if (rawMaterial._mikoshi_blocks_big == null)
+                        rawMaterial._mikoshi_blocks_big = new _mikoshi_blocks_big();
+                    rawMaterial._mikoshi_blocks_big.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mikoshi_blocks_big.ToString();
                     break;
                 case "mikoshi_blocks_medium.mt":
-                    rawMaterial._mikoshi_blocks_medium = new _mikoshi_blocks_medium(cMaterialInstance);
+                    if (rawMaterial._mikoshi_blocks_medium == null)
+                        rawMaterial._mikoshi_blocks_medium = new _mikoshi_blocks_medium();
+                    rawMaterial._mikoshi_blocks_medium.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mikoshi_blocks_medium.ToString();
                     break;
                 case "mikoshi_blocks_small.mt":
-                    rawMaterial._mikoshi_blocks_small = new _mikoshi_blocks_small(cMaterialInstance);
+                    if (rawMaterial._mikoshi_blocks_small == null)
+                        rawMaterial._mikoshi_blocks_small = new _mikoshi_blocks_small();
+                    rawMaterial._mikoshi_blocks_small.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mikoshi_blocks_small.ToString();
                     break;
                 case "mikoshi_parallax.mt":
-                    rawMaterial._mikoshi_parallax = new _mikoshi_parallax(cMaterialInstance);
+                    if (rawMaterial._mikoshi_parallax == null)
+                        rawMaterial._mikoshi_parallax = new _mikoshi_parallax();
+                    rawMaterial._mikoshi_parallax.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mikoshi_parallax.ToString();
                     break;
                 case "mikoshi_prison_cell.mt":
-                    rawMaterial._mikoshi_prison_cell = new _mikoshi_prison_cell(cMaterialInstance);
+                    if (rawMaterial._mikoshi_prison_cell == null)
+                        rawMaterial._mikoshi_prison_cell = new _mikoshi_prison_cell();
+                    rawMaterial._mikoshi_prison_cell.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mikoshi_prison_cell.ToString();
                     break;
                 case "multilayered_clear_coat.mt":
-                    rawMaterial._multilayered_clear_coat = new _multilayered_clear_coat(cMaterialInstance);
+                    if (rawMaterial._multilayered_clear_coat == null)
+                        rawMaterial._multilayered_clear_coat = new _multilayered_clear_coat();
+                    rawMaterial._multilayered_clear_coat.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._multilayered_clear_coat.ToString();
                     break;
                 case "multilayered_terrain.mt":
-                    rawMaterial._multilayered_terrain = new _multilayered_terrain(cMaterialInstance);
+                    if (rawMaterial._multilayered_terrain == null)
+                        rawMaterial._multilayered_terrain = new _multilayered_terrain();
+                    rawMaterial._multilayered_terrain.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._multilayered_terrain.ToString();
                     break;
                 case "neon_parallax.mt":
-                    rawMaterial._neon_parallax = new _neon_parallax(cMaterialInstance);
+                    if (rawMaterial._neon_parallax == null)
+                        rawMaterial._neon_parallax = new _neon_parallax();
+                    rawMaterial._neon_parallax.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._neon_parallax.ToString();
                     break;
                 case "presimulated_particles.mt":
-                    rawMaterial._presimulated_particles = new _presimulated_particles(cMaterialInstance);
+                    if (rawMaterial._presimulated_particles == null)
+                        rawMaterial._presimulated_particles = new _presimulated_particles();
+                    rawMaterial._presimulated_particles.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._presimulated_particles.ToString();
                     break;
                 case "proxy_ad.mt":
-                    rawMaterial._proxy_ad = new _proxy_ad(cMaterialInstance);
+                    if (rawMaterial._proxy_ad == null)
+                        rawMaterial._proxy_ad = new _proxy_ad();
+                    rawMaterial._proxy_ad.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._proxy_ad.ToString();
                     break;
                 case "proxy_crowd.mt":
-                    rawMaterial._proxy_crowd = new _proxy_crowd(cMaterialInstance);
+                    if (rawMaterial._proxy_crowd == null)
+                        rawMaterial._proxy_crowd = new _proxy_crowd();
+                    rawMaterial._proxy_crowd.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._proxy_crowd.ToString();
                     break;
                 case "q116_mikoshi_cubes.mt":
-                    rawMaterial._q116_mikoshi_cubes = new _q116_mikoshi_cubes(cMaterialInstance);
+                    if (rawMaterial._q116_mikoshi_cubes == null)
+                        rawMaterial._q116_mikoshi_cubes = new _q116_mikoshi_cubes();
+                    rawMaterial._q116_mikoshi_cubes.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._q116_mikoshi_cubes.ToString();
                     break;
                 case "q116_mikoshi_floor.mt":
-                    rawMaterial._q116_mikoshi_floor = new _q116_mikoshi_floor(cMaterialInstance);
+                    if (rawMaterial._q116_mikoshi_floor == null)
+                        rawMaterial._q116_mikoshi_floor = new _q116_mikoshi_floor();
+                    rawMaterial._q116_mikoshi_floor.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._q116_mikoshi_floor.ToString();
                     break;
                 case "q202_lake_surface.mt":
-                    rawMaterial._q202_lake_surface = new _q202_lake_surface(cMaterialInstance);
+                    if (rawMaterial._q202_lake_surface == null)
+                        rawMaterial._q202_lake_surface = new _q202_lake_surface();
+                    rawMaterial._q202_lake_surface.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._q202_lake_surface.ToString();
                     break;
                 case "rain.mt":
-                    rawMaterial._rain = new _rain(cMaterialInstance);
+                    if (rawMaterial._rain == null)
+                        rawMaterial._rain = new _rain();
+                    rawMaterial._rain.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._rain.ToString();
                     break;
                 case "road_debug_grid.mt":
-                    rawMaterial._road_debug_grid = new _road_debug_grid(cMaterialInstance);
+                    if (rawMaterial._road_debug_grid == null)
+                        rawMaterial._road_debug_grid = new _road_debug_grid();
+                    rawMaterial._road_debug_grid.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._road_debug_grid.ToString();
                     break;
                 case "set_stencil_3.mt":
-                    rawMaterial._set_stencil_3 = new _set_stencil_3(cMaterialInstance);
+                    if (rawMaterial._set_stencil_3 == null)
+                        rawMaterial._set_stencil_3 = new _set_stencil_3();
+                    rawMaterial._set_stencil_3.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._set_stencil_3.ToString();
                     break;
                 case "silverhand_overlay.mt":
-                    rawMaterial._silverhand_overlay = new _silverhand_overlay(cMaterialInstance);
+                    if (rawMaterial._silverhand_overlay == null)
+                        rawMaterial._silverhand_overlay = new _silverhand_overlay();
+                    rawMaterial._silverhand_overlay.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._silverhand_overlay.ToString();
                     break;
                 case "silverhand_overlay_blendable.mt":
-                    rawMaterial._silverhand_overlay_blendable = new _silverhand_overlay_blendable(cMaterialInstance);
+                    if (rawMaterial._silverhand_overlay_blendable == null)
+                        rawMaterial._silverhand_overlay_blendable = new _silverhand_overlay_blendable();
+                    rawMaterial._silverhand_overlay_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._silverhand_overlay_blendable.ToString();
                     break;
+                case "skin.mt":
+                    if (rawMaterial._skin == null)
+                        rawMaterial._skin = new _skin();
+                    rawMaterial._skin.Read(cMaterialInstance);
+                    rawMaterial.MaterialType = MaterialTypes._skin.ToString();
+                    break;
                 case "skin_blendable.mt":
-                    rawMaterial._skin_blendable = new _skin_blendable(cMaterialInstance);
+                    if (rawMaterial._skin_blendable == null)
+                        rawMaterial._skin_blendable = new _skin_blendable();
+                    rawMaterial._skin_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._skin_blendable.ToString();
                     break;
                 case "skybox.mt":
-                    rawMaterial._skybox = new _skybox(cMaterialInstance);
+                    if (rawMaterial._skybox == null)
+                        rawMaterial._skybox = new _skybox();
+                    rawMaterial._skybox.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._skybox.ToString();
                     break;
                 case "speedtree_3d_v8_billboard.mt":
-                    rawMaterial._speedtree_3d_v8_billboard = new _speedtree_3d_v8_billboard(cMaterialInstance);
+                    if (rawMaterial._speedtree_3d_v8_billboard == null)
+                        rawMaterial._speedtree_3d_v8_billboard = new _speedtree_3d_v8_billboard();
+                    rawMaterial._speedtree_3d_v8_billboard.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._speedtree_3d_v8_billboard.ToString();
                     break;
                 case "speedtree_3d_v8_onesided.mt":
-                    rawMaterial._speedtree_3d_v8_onesided = new _speedtree_3d_v8_onesided(cMaterialInstance);
+                    if (rawMaterial._speedtree_3d_v8_onesided == null)
+                        rawMaterial._speedtree_3d_v8_onesided = new _speedtree_3d_v8_onesided();
+                    rawMaterial._speedtree_3d_v8_onesided.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._speedtree_3d_v8_onesided.ToString();
                     break;
                 case "speedtree_3d_v8_onesided_gradient_recolor.mt":
-                    rawMaterial._speedtree_3d_v8_onesided_gradient_recolor = new _speedtree_3d_v8_onesided_gradient_recolor(cMaterialInstance);
+                    if (rawMaterial._speedtree_3d_v8_onesided_gradient_recolor == null)
+                        rawMaterial._speedtree_3d_v8_onesided_gradient_recolor = new _speedtree_3d_v8_onesided_gradient_recolor();
+                    rawMaterial._speedtree_3d_v8_onesided_gradient_recolor.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._speedtree_3d_v8_onesided_gradient_recolor.ToString();
                     break;
                 case "speedtree_3d_v8_seams.mt":
-                    rawMaterial._speedtree_3d_v8_seams = new _speedtree_3d_v8_seams(cMaterialInstance);
+                    if (rawMaterial._speedtree_3d_v8_seams == null)
+                        rawMaterial._speedtree_3d_v8_seams = new _speedtree_3d_v8_seams();
+                    rawMaterial._speedtree_3d_v8_seams.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._speedtree_3d_v8_seams.ToString();
                     break;
                 case "speedtree_3d_v8_twosided.mt":
-                    rawMaterial._speedtree_3d_v8_twosided = new _speedtree_3d_v8_twosided(cMaterialInstance);
+                    if (rawMaterial._speedtree_3d_v8_twosided == null)
+                        rawMaterial._speedtree_3d_v8_twosided = new _speedtree_3d_v8_twosided();
+                    rawMaterial._speedtree_3d_v8_twosided.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._speedtree_3d_v8_twosided.ToString();
                     break;
                 case "spline_deformed_metal_base.mt":
-                    rawMaterial._spline_deformed_metal_base = new _spline_deformed_metal_base(cMaterialInstance);
+                    if (rawMaterial._spline_deformed_metal_base == null)
+                        rawMaterial._spline_deformed_metal_base = new _spline_deformed_metal_base();
+                    rawMaterial._spline_deformed_metal_base.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._spline_deformed_metal_base.ToString();
                     break;
                 case "terrain_simple.mt":
-                    rawMaterial._terrain_simple = new _terrain_simple(cMaterialInstance);
+                    if (rawMaterial._terrain_simple == null)
+                        rawMaterial._terrain_simple = new _terrain_simple();
+                    rawMaterial._terrain_simple.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._terrain_simple.ToString();
                     break;
                 case "top_down_car_proxy_depth.mt":
-                    rawMaterial._top_down_car_proxy_depth = new _top_down_car_proxy_depth(cMaterialInstance);
+                    if (rawMaterial._top_down_car_proxy_depth == null)
+                        rawMaterial._top_down_car_proxy_depth = new _top_down_car_proxy_depth();
+                    rawMaterial._top_down_car_proxy_depth.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._top_down_car_proxy_depth.ToString();
                     break;
                 case "trail_decal.mt":
-                    rawMaterial._trail_decal = new _trail_decal(cMaterialInstance);
+                    if (rawMaterial._trail_decal == null)
+                        rawMaterial._trail_decal = new _trail_decal();
+                    rawMaterial._trail_decal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._trail_decal.ToString();
                     break;
                 case "trail_decal_normal.mt":
-                    rawMaterial._trail_decal_normal = new _trail_decal_normal(cMaterialInstance);
+                    if (rawMaterial._trail_decal_normal == null)
+                        rawMaterial._trail_decal_normal = new _trail_decal_normal();
+                    rawMaterial._trail_decal_normal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._trail_decal_normal.ToString();
                     break;
                 case "trail_decal_normal_color.mt":
-                    rawMaterial._trail_decal_normal_color = new _trail_decal_normal_color(cMaterialInstance);
+                    if (rawMaterial._trail_decal_normal_color == null)
+                        rawMaterial._trail_decal_normal_color = new _trail_decal_normal_color();
+                    rawMaterial._trail_decal_normal_color.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._trail_decal_normal_color.ToString();
                     break;
                 case "transparent_liquid.mt":
-                    rawMaterial._transparent_liquid = new _transparent_liquid(cMaterialInstance);
+                    if (rawMaterial._transparent_liquid == null)
+                        rawMaterial._transparent_liquid = new _transparent_liquid();
+                    rawMaterial._transparent_liquid.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._transparent_liquid.ToString();
                     break;
                 case "underwater_blood.mt":
-                    rawMaterial._underwater_blood = new _underwater_blood(cMaterialInstance);
+                    if (rawMaterial._underwater_blood == null)
+                        rawMaterial._underwater_blood = new _underwater_blood();
+                    rawMaterial._underwater_blood.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._underwater_blood.ToString();
                     break;
                 case "vehicle_destr_blendshape.mt":
-                    rawMaterial._vehicle_destr_blendshape = new _vehicle_destr_blendshape(cMaterialInstance);
+                    if (rawMaterial._vehicle_destr_blendshape == null)
+                        rawMaterial._vehicle_destr_blendshape = new _vehicle_destr_blendshape();
+                    rawMaterial._vehicle_destr_blendshape.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._vehicle_destr_blendshape.ToString();
                     break;
                 case "vehicle_glass.mt":
-                    rawMaterial._vehicle_glass = new _vehicle_glass(cMaterialInstance);
+                    if (rawMaterial._vehicle_glass == null)
+                        rawMaterial._vehicle_glass = new _vehicle_glass();
+                    rawMaterial._vehicle_glass.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._vehicle_glass.ToString();
                     break;
                 case "vehicle_glass_proxy.mt":
-                    rawMaterial._vehicle_glass_proxy = new _vehicle_glass_proxy(cMaterialInstance);
+                    if (rawMaterial._vehicle_glass_proxy == null)
+                        rawMaterial._vehicle_glass_proxy = new _vehicle_glass_proxy();
+                    rawMaterial._vehicle_glass_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._vehicle_glass_proxy.ToString();
                     break;
                 case "vehicle_lights.mt":
-                    rawMaterial._vehicle_lights = new _vehicle_lights(cMaterialInstance);
+                    if (rawMaterial._vehicle_lights == null)
+                        rawMaterial._vehicle_lights = new _vehicle_lights();
+                    rawMaterial._vehicle_lights.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._vehicle_lights.ToString();
                     break;
                 case "vehicle_mesh_decal.mt":
-                    rawMaterial._vehicle_mesh_decal = new _vehicle_mesh_decal(cMaterialInstance);
+                    if (rawMaterial._vehicle_mesh_decal == null)
+                        rawMaterial._vehicle_mesh_decal = new _vehicle_mesh_decal();
+                    rawMaterial._vehicle_mesh_decal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._vehicle_mesh_decal.ToString();
                     break;
                 case "ver_mov.mt":
-                    rawMaterial._ver_mov = new _ver_mov(cMaterialInstance);
+                    if (rawMaterial._ver_mov == null)
+                        rawMaterial._ver_mov = new _ver_mov();
+                    rawMaterial._ver_mov.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ver_mov.ToString();
                     break;
                 case "ver_mov_glass.mt":
-                    rawMaterial._ver_mov_glass = new _ver_mov_glass(cMaterialInstance);
+                    if (rawMaterial._ver_mov_glass == null)
+                        rawMaterial._ver_mov_glass = new _ver_mov_glass();
+                    rawMaterial._ver_mov_glass.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ver_mov_glass.ToString();
                     break;
                 case "ver_mov_multilayered.mt":
-                    rawMaterial._ver_mov_multilayered = new _ver_mov_multilayered(cMaterialInstance);
+                    if (rawMaterial._ver_mov_multilayered == null)
+                        rawMaterial._ver_mov_multilayered = new _ver_mov_multilayered();
+                    rawMaterial._ver_mov_multilayered.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ver_mov_multilayered.ToString();
                     break;
                 case "ver_skinned_mov.mt":
-                    rawMaterial._ver_skinned_mov = new _ver_skinned_mov(cMaterialInstance);
+                    if (rawMaterial._ver_skinned_mov == null)
+                        rawMaterial._ver_skinned_mov = new _ver_skinned_mov();
+                    rawMaterial._ver_skinned_mov.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ver_skinned_mov.ToString();
                     break;
                 case "ver_skinned_mov_parade.mt":
-                    rawMaterial._ver_skinned_mov_parade = new _ver_skinned_mov_parade(cMaterialInstance);
+                    if (rawMaterial._ver_skinned_mov_parade == null)
+                        rawMaterial._ver_skinned_mov_parade = new _ver_skinned_mov_parade();
+                    rawMaterial._ver_skinned_mov_parade.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ver_skinned_mov_parade.ToString();
                     break;
                 case "window_interior_uv.mt":
-                    rawMaterial._window_interior_uv = new _window_interior_uv(cMaterialInstance);
+                    if (rawMaterial._window_interior_uv == null)
+                        rawMaterial._window_interior_uv = new _window_interior_uv();
+                    rawMaterial._window_interior_uv.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._window_interior_uv.ToString();
                     break;
                 case "window_parallax_interior.mt":
-                    rawMaterial._window_parallax_interior = new _window_parallax_interior(cMaterialInstance);
+                    if (rawMaterial._window_parallax_interior == null)
+                        rawMaterial._window_parallax_interior = new _window_parallax_interior();
+                    rawMaterial._window_parallax_interior.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._window_parallax_interior.ToString();
                     break;
                 case "window_parallax_interior_proxy.mt":
-                    rawMaterial._window_parallax_interior_proxy = new _window_parallax_interior_proxy(cMaterialInstance);
+                    if (rawMaterial._window_parallax_interior_proxy == null)
+                        rawMaterial._window_parallax_interior_proxy = new _window_parallax_interior_proxy();
+                    rawMaterial._window_parallax_interior_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._window_parallax_interior_proxy.ToString();
                     break;
                 case "window_parallax_interior_proxy_buffer.mt":
-                    rawMaterial._window_parallax_interior_proxy_buffer = new _window_parallax_interior_proxy_buffer(cMaterialInstance);
+                    if (rawMaterial._window_parallax_interior_proxy_buffer == null)
+                        rawMaterial._window_parallax_interior_proxy_buffer = new _window_parallax_interior_proxy_buffer();
+                    rawMaterial._window_parallax_interior_proxy_buffer.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._window_parallax_interior_proxy_buffer.ToString();
                     break;
                 case "window_very_long_distance.mt":
-                    rawMaterial._window_very_long_distance = new _window_very_long_distance(cMaterialInstance);
+                    if (rawMaterial._window_very_long_distance == null)
+                        rawMaterial._window_very_long_distance = new _window_very_long_distance();
+                    rawMaterial._window_very_long_distance.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._window_very_long_distance.ToString();
                     break;
                 case "worldspace_grid.mt":
-                    rawMaterial._worldspace_grid = new _worldspace_grid(cMaterialInstance);
+                    if (rawMaterial._worldspace_grid == null)
+                        rawMaterial._worldspace_grid = new _worldspace_grid();
+                    rawMaterial._worldspace_grid.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._worldspace_grid.ToString();
                     break;
                 case "bink_simple.mt":
-                    rawMaterial._bink_simple = new _bink_simple(cMaterialInstance);
+                    if (rawMaterial._bink_simple == null)
+                        rawMaterial._bink_simple = new _bink_simple();
+                    rawMaterial._bink_simple.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._bink_simple.ToString();
                     break;
                 case "cable_strip.mt":
-                    rawMaterial._cable_strip = new _cable_strip(cMaterialInstance);
+                    if (rawMaterial._cable_strip == null)
+                        rawMaterial._cable_strip = new _cable_strip();
+                    rawMaterial._cable_strip.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cable_strip.ToString();
                     break;
                 case "debugdraw_bias.mt":
-                    rawMaterial._debugdraw_bias = new _debugdraw_bias(cMaterialInstance);
+                    if (rawMaterial._debugdraw_bias == null)
+                        rawMaterial._debugdraw_bias = new _debugdraw_bias();
+                    rawMaterial._debugdraw_bias.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._debugdraw_bias.ToString();
                     break;
                 case "debugdraw_wireframe.mt":
-                    rawMaterial._debugdraw_wireframe = new _debugdraw_wireframe(cMaterialInstance);
+                    if (rawMaterial._debugdraw_wireframe == null)
+                        rawMaterial._debugdraw_wireframe = new _debugdraw_wireframe();
+                    rawMaterial._debugdraw_wireframe.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._debugdraw_wireframe.ToString();
                     break;
                 case "debugdraw_wireframe_bias.mt":
-                    rawMaterial._debugdraw_wireframe_bias = new _debugdraw_wireframe_bias(cMaterialInstance);
+                    if (rawMaterial._debugdraw_wireframe_bias == null)
+                        rawMaterial._debugdraw_wireframe_bias = new _debugdraw_wireframe_bias();
+                    rawMaterial._debugdraw_wireframe_bias.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._debugdraw_wireframe_bias.ToString();
                     break;
                 case "debug_coloring.mt":
-                    rawMaterial._debug_coloring = new _debug_coloring(cMaterialInstance);
+                    if (rawMaterial._debug_coloring == null)
+                        rawMaterial._debug_coloring = new _debug_coloring();
+                    rawMaterial._debug_coloring.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._debug_coloring.ToString();
                     break;
                 case "font.mt":
-                    rawMaterial._font = new _font(cMaterialInstance);
+                    if (rawMaterial._font == null)
+                        rawMaterial._font = new _font();
+                    rawMaterial._font.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._font.ToString();
                     break;
                 case "global_water_patch.mt":
-                    rawMaterial._global_water_patch = new _global_water_patch(cMaterialInstance);
+                    if (rawMaterial._global_water_patch == null)
+                        rawMaterial._global_water_patch = new _global_water_patch();
+                    rawMaterial._global_water_patch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._global_water_patch.ToString();
                     break;
                 case "metal_base_animated_uv.mt":
-                    rawMaterial._metal_base_animated_uv = new _metal_base_animated_uv(cMaterialInstance);
+                    if (rawMaterial._metal_base_animated_uv == null)
+                        rawMaterial._metal_base_animated_uv = new _metal_base_animated_uv();
+                    rawMaterial._metal_base_animated_uv.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_animated_uv.ToString();
                     break;
                 case "metal_base_blendable.mt":
-                    rawMaterial._metal_base_blendable = new _metal_base_blendable(cMaterialInstance);
+                    if (rawMaterial._metal_base_blendable == null)
+                        rawMaterial._metal_base_blendable = new _metal_base_blendable();
+                    rawMaterial._metal_base_blendable.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_blendable.ToString();
                     break;
                 case "metal_base_fence.mt":
-                    rawMaterial._metal_base_fence = new _metal_base_fence(cMaterialInstance);
+                    if (rawMaterial._metal_base_fence == null)
+                        rawMaterial._metal_base_fence = new _metal_base_fence();
+                    rawMaterial._metal_base_fence.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_fence.ToString();
                     break;
                 case "metal_base_garment.mt":
-                    rawMaterial._metal_base_garment = new _metal_base_garment(cMaterialInstance);
+                    if (rawMaterial._metal_base_garment == null)
+                        rawMaterial._metal_base_garment = new _metal_base_garment();
+                    rawMaterial._metal_base_garment.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_garment.ToString();
                     break;
                 case "metal_base_packed.mt":
-                    rawMaterial._metal_base_packed = new _metal_base_packed(cMaterialInstance);
+                    if (rawMaterial._metal_base_packed == null)
+                        rawMaterial._metal_base_packed = new _metal_base_packed();
+                    rawMaterial._metal_base_packed.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_packed.ToString();
                     break;
                 case "metal_base_proxy.mt":
-                    rawMaterial._metal_base_proxy = new _metal_base_proxy(cMaterialInstance);
+                    if (rawMaterial._metal_base_proxy == null)
+                        rawMaterial._metal_base_proxy = new _metal_base_proxy();
+                    rawMaterial._metal_base_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_proxy.ToString();
                     break;
+                case "multilayered.mt":
+                    if (rawMaterial._multilayered == null)
+                        rawMaterial._multilayered = new _multilayered();
+                    rawMaterial._multilayered.Read(cMaterialInstance);
+                    rawMaterial.MaterialType = MaterialTypes._multilayered.ToString();
+                    break;
                 case "multilayered_debug.mt":
-                    rawMaterial._multilayered_debug = new _multilayered_debug(cMaterialInstance);
+                    if (rawMaterial._multilayered_debug == null)
+                        rawMaterial._multilayered_debug = new _multilayered_debug();
+                    rawMaterial._multilayered_debug.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._multilayered_debug.ToString();
                     break;
                 case "pbr_simple.mt":
-                    rawMaterial._pbr_simple = new _pbr_simple(cMaterialInstance);
+                    if (rawMaterial._pbr_simple == null)
+                        rawMaterial._pbr_simple = new _pbr_simple();
+                    rawMaterial._pbr_simple.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._pbr_simple.ToString();
                     break;
                 case "shadows_debug.mt":
-                    rawMaterial._shadows_debug = new _shadows_debug(cMaterialInstance);
+                    if (rawMaterial._shadows_debug == null)
+                        rawMaterial._shadows_debug = new _shadows_debug();
+                    rawMaterial._shadows_debug.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._shadows_debug.ToString();
                     break;
                 case "transparent_notxaa_2.mt":
-                    rawMaterial._transparent_notxaa_2 = new _transparent_notxaa_2(cMaterialInstance);
+                    if (rawMaterial._transparent_notxaa_2 == null)
+                        rawMaterial._transparent_notxaa_2 = new _transparent_notxaa_2();
+                    rawMaterial._transparent_notxaa_2.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._transparent_notxaa_2.ToString();
                     break;
                 case "ui_default_element.mt":
-                    rawMaterial._ui_default_element = new _ui_default_element(cMaterialInstance);
+                    if (rawMaterial._ui_default_element == null)
+                        rawMaterial._ui_default_element = new _ui_default_element();
+                    rawMaterial._ui_default_element.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_default_element.ToString();
                     break;
                 case "ui_default_nine_slice_element.mt":
-                    rawMaterial._ui_default_nine_slice_element = new _ui_default_nine_slice_element(cMaterialInstance);
+                    if (rawMaterial._ui_default_nine_slice_element == null)
+                        rawMaterial._ui_default_nine_slice_element = new _ui_default_nine_slice_element();
+                    rawMaterial._ui_default_nine_slice_element.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_default_nine_slice_element.ToString();
                     break;
                 case "ui_default_tile_element.mt":
-                    rawMaterial._ui_default_tile_element = new _ui_default_tile_element(cMaterialInstance);
+                    if (rawMaterial._ui_default_tile_element == null)
+                        rawMaterial._ui_default_tile_element = new _ui_default_tile_element();
+                    rawMaterial._ui_default_tile_element.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_default_tile_element.ToString();
                     break;
                 case "ui_effect_box_blur.mt":
-                    rawMaterial._ui_effect_box_blur = new _ui_effect_box_blur(cMaterialInstance);
+                    if (rawMaterial._ui_effect_box_blur == null)
+                        rawMaterial._ui_effect_box_blur = new _ui_effect_box_blur();
+                    rawMaterial._ui_effect_box_blur.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_box_blur.ToString();
                     break;
                 case "ui_effect_color_correction.mt":
-                    rawMaterial._ui_effect_color_correction = new _ui_effect_color_correction(cMaterialInstance);
+                    if (rawMaterial._ui_effect_color_correction == null)
+                        rawMaterial._ui_effect_color_correction = new _ui_effect_color_correction();
+                    rawMaterial._ui_effect_color_correction.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_color_correction.ToString();
                     break;
                 case "ui_effect_color_fill.mt":
-                    rawMaterial._ui_effect_color_fill = new _ui_effect_color_fill(cMaterialInstance);
+                    if (rawMaterial._ui_effect_color_fill == null)
+                        rawMaterial._ui_effect_color_fill = new _ui_effect_color_fill();
+                    rawMaterial._ui_effect_color_fill.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_color_fill.ToString();
                     break;
                 case "ui_effect_glitch.mt":
-                    rawMaterial._ui_effect_glitch = new _ui_effect_glitch(cMaterialInstance);
+                    if (rawMaterial._ui_effect_glitch == null)
+                        rawMaterial._ui_effect_glitch = new _ui_effect_glitch();
+                    rawMaterial._ui_effect_glitch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_glitch.ToString();
                     break;
                 case "ui_effect_inner_glow.mt":
-                    rawMaterial._ui_effect_inner_glow = new _ui_effect_inner_glow(cMaterialInstance);
+                    if (rawMaterial._ui_effect_inner_glow == null)
+                        rawMaterial._ui_effect_inner_glow = new _ui_effect_inner_glow();
+                    rawMaterial._ui_effect_inner_glow.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_inner_glow.ToString();
                     break;
                 case "ui_effect_light_sweep.mt":
-                    rawMaterial._ui_effect_light_sweep = new _ui_effect_light_sweep(cMaterialInstance);
+                    if (rawMaterial._ui_effect_light_sweep == null)
+                        rawMaterial._ui_effect_light_sweep = new _ui_effect_light_sweep();
+                    rawMaterial._ui_effect_light_sweep.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_light_sweep.ToString();
                     break;
                 case "ui_effect_linear_wipe.mt":
-                    rawMaterial._ui_effect_linear_wipe = new _ui_effect_linear_wipe(cMaterialInstance);
+                    if (rawMaterial._ui_effect_linear_wipe == null)
+                        rawMaterial._ui_effect_linear_wipe = new _ui_effect_linear_wipe();
+                    rawMaterial._ui_effect_linear_wipe.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_linear_wipe.ToString();
                     break;
                 case "ui_effect_mask.mt":
-                    rawMaterial._ui_effect_mask = new _ui_effect_mask(cMaterialInstance);
+                    if (rawMaterial._ui_effect_mask == null)
+                        rawMaterial._ui_effect_mask = new _ui_effect_mask();
+                    rawMaterial._ui_effect_mask.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_mask.ToString();
                     break;
                 case "ui_effect_point_cloud.mt":
-                    rawMaterial._ui_effect_point_cloud = new _ui_effect_point_cloud(cMaterialInstance);
+                    if (rawMaterial._ui_effect_point_cloud == null)
+                        rawMaterial._ui_effect_point_cloud = new _ui_effect_point_cloud();
+                    rawMaterial._ui_effect_point_cloud.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_point_cloud.ToString();
                     break;
                 case "ui_effect_radial_wipe.mt":
-                    rawMaterial._ui_effect_radial_wipe = new _ui_effect_radial_wipe(cMaterialInstance);
+                    if (rawMaterial._ui_effect_radial_wipe == null)
+                        rawMaterial._ui_effect_radial_wipe = new _ui_effect_radial_wipe();
+                    rawMaterial._ui_effect_radial_wipe.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_radial_wipe.ToString();
                     break;
                 case "ui_effect_swipe.mt":
-                    rawMaterial._ui_effect_swipe = new _ui_effect_swipe(cMaterialInstance);
+                    if (rawMaterial._ui_effect_swipe == null)
+                        rawMaterial._ui_effect_swipe = new _ui_effect_swipe();
+                    rawMaterial._ui_effect_swipe.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_effect_swipe.ToString();
                     break;
                 case "ui_element_depth_texture.mt":
-                    rawMaterial._ui_element_depth_texture = new _ui_element_depth_texture(cMaterialInstance);
+                    if (rawMaterial._ui_element_depth_texture == null)
+                        rawMaterial._ui_element_depth_texture = new _ui_element_depth_texture();
+                    rawMaterial._ui_element_depth_texture.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_element_depth_texture.ToString();
                     break;
                 case "ui_panel.mt":
-                    rawMaterial._ui_panel = new _ui_panel(cMaterialInstance);
+                    if (rawMaterial._ui_panel == null)
+                        rawMaterial._ui_panel = new _ui_panel();
+                    rawMaterial._ui_panel.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_panel.ToString();
                     break;
                 case "ui_text_element.mt":
-                    rawMaterial._ui_text_element = new _ui_text_element(cMaterialInstance);
+                    if (rawMaterial._ui_text_element == null)
+                        rawMaterial._ui_text_element = new _ui_text_element();
+                    rawMaterial._ui_text_element.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._ui_text_element.ToString();
                     break;
                 case "alphablend_glass.mt":
-                    rawMaterial._alphablend_glass = new _alphablend_glass(cMaterialInstance);
+                    if (rawMaterial._alphablend_glass == null)
+                        rawMaterial._alphablend_glass = new _alphablend_glass();
+                    rawMaterial._alphablend_glass.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._alphablend_glass.ToString();
                     break;
                 case "alpha_control_refraction.mt":
-                    rawMaterial._alpha_control_refraction = new _alpha_control_refraction(cMaterialInstance);
+                    if (rawMaterial._alpha_control_refraction == null)
+                        rawMaterial._alpha_control_refraction = new _alpha_control_refraction();
+                    rawMaterial._alpha_control_refraction.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._alpha_control_refraction.ToString();
                     break;
                 case "animated_decal.mt":
-                    rawMaterial._animated_decal = new _animated_decal(cMaterialInstance);
+                    if (rawMaterial._animated_decal == null)
+                        rawMaterial._animated_decal = new _animated_decal();
+                    rawMaterial._animated_decal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._animated_decal.ToString();
                     break;
                 case "beam_particles.mt":
-                    rawMaterial._beam_particles = new _beam_particles(cMaterialInstance);
+                    if (rawMaterial._beam_particles == null)
+                        rawMaterial._beam_particles = new _beam_particles();
+                    rawMaterial._beam_particles.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._beam_particles.ToString();
                     break;
                 case "blackbodyradiation.mt":
-                    rawMaterial._blackbodyradiation = new _blackbodyradiation(cMaterialInstance);
+                    if (rawMaterial._blackbodyradiation == null)
+                        rawMaterial._blackbodyradiation = new _blackbodyradiation();
+                    rawMaterial._blackbodyradiation.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._blackbodyradiation.ToString();
                     break;
                 case "blackbody_simple.mt":
-                    rawMaterial._blackbody_simple = new _blackbody_simple(cMaterialInstance);
+                    if (rawMaterial._blackbody_simple == null)
+                        rawMaterial._blackbody_simple = new _blackbody_simple();
+                    rawMaterial._blackbody_simple.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._blackbody_simple.ToString();
                     break;
                 case "blood_transparent.mt":
-                    rawMaterial._blood_transparent = new _blood_transparent(cMaterialInstance);
+                    if (rawMaterial._blood_transparent == null)
+                        rawMaterial._blood_transparent = new _blood_transparent();
+                    rawMaterial._blood_transparent.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._blood_transparent.ToString();
                     break;
                 case "braindance_fog.mt":
-                    rawMaterial._braindance_fog = new _braindance_fog(cMaterialInstance);
+                    if (rawMaterial._braindance_fog == null)
+                        rawMaterial._braindance_fog = new _braindance_fog();
+                    rawMaterial._braindance_fog.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._braindance_fog.ToString();
                     break;
                 case "braindance_particle_thermal.mt":
-                    rawMaterial._braindance_particle_thermal = new _braindance_particle_thermal(cMaterialInstance);
+                    if (rawMaterial._braindance_particle_thermal == null)
+                        rawMaterial._braindance_particle_thermal = new _braindance_particle_thermal();
+                    rawMaterial._braindance_particle_thermal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._braindance_particle_thermal.ToString();
                     break;
                 case "cloak.mt":
-                    rawMaterial._cloak = new _cloak(cMaterialInstance);
+                    if (rawMaterial._cloak == null)
+                        rawMaterial._cloak = new _cloak();
+                    rawMaterial._cloak.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cloak.ToString();
                     break;
                 case "cyberspace_pixelsort_stencil.mt":
-                    rawMaterial._cyberspace_pixelsort_stencil = new _cyberspace_pixelsort_stencil(cMaterialInstance);
+                    if (rawMaterial._cyberspace_pixelsort_stencil == null)
+                        rawMaterial._cyberspace_pixelsort_stencil = new _cyberspace_pixelsort_stencil();
+                    rawMaterial._cyberspace_pixelsort_stencil.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberspace_pixelsort_stencil.ToString();
                     break;
                 case "cyberspace_pixelsort_stencil_0.mt":
-                    rawMaterial._cyberspace_pixelsort_stencil_0 = new _cyberspace_pixelsort_stencil_0(cMaterialInstance);
+                    if (rawMaterial._cyberspace_pixelsort_stencil_0 == null)
+                        rawMaterial._cyberspace_pixelsort_stencil_0 = new _cyberspace_pixelsort_stencil_0();
+                    rawMaterial._cyberspace_pixelsort_stencil_0.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberspace_pixelsort_stencil_0.ToString();
                     break;
                 case "cyberware_animation.mt":
-                    rawMaterial._cyberware_animation = new _cyberware_animation(cMaterialInstance);
+                    if (rawMaterial._cyberware_animation == null)
+                        rawMaterial._cyberware_animation = new _cyberware_animation();
+                    rawMaterial._cyberware_animation.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberware_animation.ToString();
                     break;
                 case "damage_indicator.mt":
-                    rawMaterial._damage_indicator = new _damage_indicator(cMaterialInstance);
+                    if (rawMaterial._damage_indicator == null)
+                        rawMaterial._damage_indicator = new _damage_indicator();
+                    rawMaterial._damage_indicator.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._damage_indicator.ToString();
                     break;
                 case "device_diode.mt":
-                    rawMaterial._device_diode = new _device_diode(cMaterialInstance);
+                    if (rawMaterial._device_diode == null)
+                        rawMaterial._device_diode = new _device_diode();
+                    rawMaterial._device_diode.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._device_diode.ToString();
                     break;
                 case "device_diode_multi_state.mt":
-                    rawMaterial._device_diode_multi_state = new _device_diode_multi_state(cMaterialInstance);
+                    if (rawMaterial._device_diode_multi_state == null)
+                        rawMaterial._device_diode_multi_state = new _device_diode_multi_state();
+                    rawMaterial._device_diode_multi_state.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._device_diode_multi_state.ToString();
                     break;
                 case "diode_pavements.mt":
-                    rawMaterial._diode_pavements = new _diode_pavements(cMaterialInstance);
+                    if (rawMaterial._diode_pavements == null)
+                        rawMaterial._diode_pavements = new _diode_pavements();
+                    rawMaterial._diode_pavements.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._diode_pavements.ToString();
                     break;
                 case "drugged_sobel.mt":
-                    rawMaterial._drugged_sobel = new _drugged_sobel(cMaterialInstance);
+                    if (rawMaterial._drugged_sobel == null)
+                        rawMaterial._drugged_sobel = new _drugged_sobel();
+                    rawMaterial._drugged_sobel.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._drugged_sobel.ToString();
                     break;
                 case "emissive_basic_transparent.mt":
-                    rawMaterial._emissive_basic_transparent = new _emissive_basic_transparent(cMaterialInstance);
+                    if (rawMaterial._emissive_basic_transparent == null)
+                        rawMaterial._emissive_basic_transparent = new _emissive_basic_transparent();
+                    rawMaterial._emissive_basic_transparent.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._emissive_basic_transparent.ToString();
                     break;
                 case "fog_laser.mt":
-                    rawMaterial._fog_laser = new _fog_laser(cMaterialInstance);
+                    if (rawMaterial._fog_laser == null)
+                        rawMaterial._fog_laser = new _fog_laser();
+                    rawMaterial._fog_laser.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fog_laser.ToString();
                     break;
                 case "hologram.mt":
-                    rawMaterial._hologram = new _hologram(cMaterialInstance);
+                    if (rawMaterial._hologram == null)
+                        rawMaterial._hologram = new _hologram();
+                    rawMaterial._hologram.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hologram.ToString();
                     break;
                 case "hologram_two_sided.mt":
-                    rawMaterial._hologram_two_sided = new _hologram_two_sided(cMaterialInstance);
+                    if (rawMaterial._hologram_two_sided == null)
+                        rawMaterial._hologram_two_sided = new _hologram_two_sided();
+                    rawMaterial._hologram_two_sided.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hologram_two_sided.ToString();
                     break;
                 case "holo_projections.mt":
-                    rawMaterial._holo_projections = new _holo_projections(cMaterialInstance);
+                    if (rawMaterial._holo_projections == null)
+                        rawMaterial._holo_projections = new _holo_projections();
+                    rawMaterial._holo_projections.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._holo_projections.ToString();
                     break;
                 case "hud_focus_mode_scanline.mt":
-                    rawMaterial._hud_focus_mode_scanline = new _hud_focus_mode_scanline(cMaterialInstance);
+                    if (rawMaterial._hud_focus_mode_scanline == null)
+                        rawMaterial._hud_focus_mode_scanline = new _hud_focus_mode_scanline();
+                    rawMaterial._hud_focus_mode_scanline.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hud_focus_mode_scanline.ToString();
                     break;
                 case "hud_markers_notxaa.mt":
-                    rawMaterial._hud_markers_notxaa = new _hud_markers_notxaa(cMaterialInstance);
+                    if (rawMaterial._hud_markers_notxaa == null)
+                        rawMaterial._hud_markers_notxaa = new _hud_markers_notxaa();
+                    rawMaterial._hud_markers_notxaa.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hud_markers_notxaa.ToString();
                     break;
                 case "hud_markers_transparent.mt":
-                    rawMaterial._hud_markers_transparent = new _hud_markers_transparent(cMaterialInstance);
+                    if (rawMaterial._hud_markers_transparent == null)
+                        rawMaterial._hud_markers_transparent = new _hud_markers_transparent();
+                    rawMaterial._hud_markers_transparent.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hud_markers_transparent.ToString();
                     break;
                 case "hud_markers_vision.mt":
-                    rawMaterial._hud_markers_vision = new _hud_markers_vision(cMaterialInstance);
+                    if (rawMaterial._hud_markers_vision == null)
+                        rawMaterial._hud_markers_vision = new _hud_markers_vision();
+                    rawMaterial._hud_markers_vision.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hud_markers_vision.ToString();
                     break;
                 case "hud_ui_dot.mt":
-                    rawMaterial._hud_ui_dot = new _hud_ui_dot(cMaterialInstance);
+                    if (rawMaterial._hud_ui_dot == null)
+                        rawMaterial._hud_ui_dot = new _hud_ui_dot();
+                    rawMaterial._hud_ui_dot.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hud_ui_dot.ToString();
                     break;
                 case "hud_vision_pass.mt":
-                    rawMaterial._hud_vision_pass = new _hud_vision_pass(cMaterialInstance);
+                    if (rawMaterial._hud_vision_pass == null)
+                        rawMaterial._hud_vision_pass = new _hud_vision_pass();
+                    rawMaterial._hud_vision_pass.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hud_vision_pass.ToString();
                     break;
                 case "johnny_effect.mt":
-                    rawMaterial._johnny_effect = new _johnny_effect(cMaterialInstance);
+                    if (rawMaterial._johnny_effect == null)
+                        rawMaterial._johnny_effect = new _johnny_effect();
+                    rawMaterial._johnny_effect.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._johnny_effect.ToString();
                     break;
                 case "johnny_glitch.mt":
-                    rawMaterial._johnny_glitch = new _johnny_glitch(cMaterialInstance);
+                    if (rawMaterial._johnny_glitch == null)
+                        rawMaterial._johnny_glitch = new _johnny_glitch();
+                    rawMaterial._johnny_glitch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._johnny_glitch.ToString();
                     break;
                 case "metal_base_atlas_animation.mt":
-                    rawMaterial._metal_base_atlas_animation = new _metal_base_atlas_animation(cMaterialInstance);
+                    if (rawMaterial._metal_base_atlas_animation == null)
+                        rawMaterial._metal_base_atlas_animation = new _metal_base_atlas_animation();
+                    rawMaterial._metal_base_atlas_animation.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_atlas_animation.ToString();
                     break;
                 case "metal_base_blackbody.mt":
-                    rawMaterial._metal_base_blackbody = new _metal_base_blackbody(cMaterialInstance);
+                    if (rawMaterial._metal_base_blackbody == null)
+                        rawMaterial._metal_base_blackbody = new _metal_base_blackbody();
+                    rawMaterial._metal_base_blackbody.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_blackbody.ToString();
                     break;
                 case "metal_base_glitter.mt":
-                    rawMaterial._metal_base_glitter = new _metal_base_glitter(cMaterialInstance);
+                    if (rawMaterial._metal_base_glitter == null)
+                        rawMaterial._metal_base_glitter = new _metal_base_glitter();
+                    rawMaterial._metal_base_glitter.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_glitter.ToString();
                     break;
                 case "neon_tubes.mt":
-                    rawMaterial._neon_tubes = new _neon_tubes(cMaterialInstance);
+                    if (rawMaterial._neon_tubes == null)
+                        rawMaterial._neon_tubes = new _neon_tubes();
+                    rawMaterial._neon_tubes.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._neon_tubes.ToString();
                     break;
                 case "noctovision_mode.mt":
-                    rawMaterial._noctovision_mode = new _noctovision_mode(cMaterialInstance);
+                    if (rawMaterial._noctovision_mode == null)
+                        rawMaterial._noctovision_mode = new _noctovision_mode();
+                    rawMaterial._noctovision_mode.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._noctovision_mode.ToString();
                     break;
                 case "parallaxscreen.mt":
-                    rawMaterial._parallaxscreen = new _parallaxscreen(cMaterialInstance);
+                    if (rawMaterial._parallaxscreen == null)
+                        rawMaterial._parallaxscreen = new _parallaxscreen();
+                    rawMaterial._parallaxscreen.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._parallaxscreen.ToString();
                     break;
                 case "parallaxscreen_transparent.mt":
-                    rawMaterial._parallaxscreen_transparent = new _parallaxscreen_transparent(cMaterialInstance);
+                    if (rawMaterial._parallaxscreen_transparent == null)
+                        rawMaterial._parallaxscreen_transparent = new _parallaxscreen_transparent();
+                    rawMaterial._parallaxscreen_transparent.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._parallaxscreen_transparent.ToString();
                     break;
                 case "parallaxscreen_transparent_ui.mt":
-                    rawMaterial._parallaxscreen_transparent_ui = new _parallaxscreen_transparent_ui(cMaterialInstance);
+                    if (rawMaterial._parallaxscreen_transparent_ui == null)
+                        rawMaterial._parallaxscreen_transparent_ui = new _parallaxscreen_transparent_ui();
+                    rawMaterial._parallaxscreen_transparent_ui.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._parallaxscreen_transparent_ui.ToString();
                     break;
                 case "parallax_bink.mt":
-                    rawMaterial._parallax_bink = new _parallax_bink(cMaterialInstance);
+                    if (rawMaterial._parallax_bink == null)
+                        rawMaterial._parallax_bink = new _parallax_bink();
+                    rawMaterial._parallax_bink.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._parallax_bink.ToString();
                     break;
                 case "particles_generic_expanded.mt":
-                    rawMaterial._particles_generic_expanded = new _particles_generic_expanded(cMaterialInstance);
+                    if (rawMaterial._particles_generic_expanded == null)
+                        rawMaterial._particles_generic_expanded = new _particles_generic_expanded();
+                    rawMaterial._particles_generic_expanded.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._particles_generic_expanded.ToString();
                     break;
                 case "particles_hologram.mt":
-                    rawMaterial._particles_hologram = new _particles_hologram(cMaterialInstance);
+                    if (rawMaterial._particles_hologram == null)
+                        rawMaterial._particles_hologram = new _particles_hologram();
+                    rawMaterial._particles_hologram.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._particles_hologram.ToString();
                     break;
                 case "pointcloud_source_mesh.mt":
-                    rawMaterial._pointcloud_source_mesh = new _pointcloud_source_mesh(cMaterialInstance);
+                    if (rawMaterial._pointcloud_source_mesh == null)
+                        rawMaterial._pointcloud_source_mesh = new _pointcloud_source_mesh();
+                    rawMaterial._pointcloud_source_mesh.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._pointcloud_source_mesh.ToString();
                     break;
                 case "postprocess.mt":
-                    rawMaterial._postprocess = new _postprocess(cMaterialInstance);
+                    if (rawMaterial._postprocess == null)
+                        rawMaterial._postprocess = new _postprocess();
+                    rawMaterial._postprocess.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._postprocess.ToString();
                     break;
                 case "postprocess_notxaa.mt":
-                    rawMaterial._postprocess_notxaa = new _postprocess_notxaa(cMaterialInstance);
+                    if (rawMaterial._postprocess_notxaa == null)
+                        rawMaterial._postprocess_notxaa = new _postprocess_notxaa();
+                    rawMaterial._postprocess_notxaa.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._postprocess_notxaa.ToString();
                     break;
                 case "radial_blur.mt":
-                    rawMaterial._radial_blur = new _radial_blur(cMaterialInstance);
+                    if (rawMaterial._radial_blur == null)
+                        rawMaterial._radial_blur = new _radial_blur();
+                    rawMaterial._radial_blur.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._radial_blur.ToString();
                     break;
                 case "reflex_buster.mt":
-                    rawMaterial._reflex_buster = new _reflex_buster(cMaterialInstance);
+                    if (rawMaterial._reflex_buster == null)
+                        rawMaterial._reflex_buster = new _reflex_buster();
+                    rawMaterial._reflex_buster.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._reflex_buster.ToString();
                     break;
                 case "refraction.mt":
-                    rawMaterial._refraction = new _refraction(cMaterialInstance);
+                    if (rawMaterial._refraction == null)
+                        rawMaterial._refraction = new _refraction();
+                    rawMaterial._refraction.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._refraction.ToString();
                     break;
                 case "sandevistan_trails.mt":
-                    rawMaterial._sandevistan_trails = new _sandevistan_trails(cMaterialInstance);
+                    if (rawMaterial._sandevistan_trails == null)
+                        rawMaterial._sandevistan_trails = new _sandevistan_trails();
+                    rawMaterial._sandevistan_trails.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._sandevistan_trails.ToString();
                     break;
                 case "screens.mt":
-                    rawMaterial._screens = new _screens(cMaterialInstance);
+                    if (rawMaterial._screens == null)
+                        rawMaterial._screens = new _screens();
+                    rawMaterial._screens.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screens.ToString();
                     break;
                 case "screen_artifacts.mt":
-                    rawMaterial._screen_artifacts = new _screen_artifacts(cMaterialInstance);
+                    if (rawMaterial._screen_artifacts == null)
+                        rawMaterial._screen_artifacts = new _screen_artifacts();
+                    rawMaterial._screen_artifacts.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_artifacts.ToString();
                     break;
                 case "screen_artifacts_vision.mt":
-                    rawMaterial._screen_artifacts_vision = new _screen_artifacts_vision(cMaterialInstance);
+                    if (rawMaterial._screen_artifacts_vision == null)
+                        rawMaterial._screen_artifacts_vision = new _screen_artifacts_vision();
+                    rawMaterial._screen_artifacts_vision.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_artifacts_vision.ToString();
                     break;
                 case "screen_black.mt":
-                    rawMaterial._screen_black = new _screen_black(cMaterialInstance);
+                    if (rawMaterial._screen_black == null)
+                        rawMaterial._screen_black = new _screen_black();
+                    rawMaterial._screen_black.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_black.ToString();
                     break;
                 case "screen_fast_travel_glitch.mt":
-                    rawMaterial._screen_fast_travel_glitch = new _screen_fast_travel_glitch(cMaterialInstance);
+                    if (rawMaterial._screen_fast_travel_glitch == null)
+                        rawMaterial._screen_fast_travel_glitch = new _screen_fast_travel_glitch();
+                    rawMaterial._screen_fast_travel_glitch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_fast_travel_glitch.ToString();
                     break;
                 case "screen_glitch.mt":
-                    rawMaterial._screen_glitch = new _screen_glitch(cMaterialInstance);
+                    if (rawMaterial._screen_glitch == null)
+                        rawMaterial._screen_glitch = new _screen_glitch();
+                    rawMaterial._screen_glitch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_glitch.ToString();
                     break;
                 case "screen_glitch_notxaa.mt":
-                    rawMaterial._screen_glitch_notxaa = new _screen_glitch_notxaa(cMaterialInstance);
+                    if (rawMaterial._screen_glitch_notxaa == null)
+                        rawMaterial._screen_glitch_notxaa = new _screen_glitch_notxaa();
+                    rawMaterial._screen_glitch_notxaa.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_glitch_notxaa.ToString();
                     break;
                 case "screen_glitch_vision.mt":
-                    rawMaterial._screen_glitch_vision = new _screen_glitch_vision(cMaterialInstance);
+                    if (rawMaterial._screen_glitch_vision == null)
+                        rawMaterial._screen_glitch_vision = new _screen_glitch_vision();
+                    rawMaterial._screen_glitch_vision.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_glitch_vision.ToString();
                     break;
                 case "signages.mt":
-                    rawMaterial._signages = new _signages(cMaterialInstance);
+                    if (rawMaterial._signages == null)
+                        rawMaterial._signages = new _signages();
+                    rawMaterial._signages.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._signages.ToString();
                     break;
                 case "signages_transparent_no_txaa.mt":
-                    rawMaterial._signages_transparent_no_txaa = new _signages_transparent_no_txaa(cMaterialInstance);
+                    if (rawMaterial._signages_transparent_no_txaa == null)
+                        rawMaterial._signages_transparent_no_txaa = new _signages_transparent_no_txaa();
+                    rawMaterial._signages_transparent_no_txaa.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._signages_transparent_no_txaa.ToString();
                     break;
                 case "silverhand_proxy.mt":
-                    rawMaterial._silverhand_proxy = new _silverhand_proxy(cMaterialInstance);
+                    if (rawMaterial._silverhand_proxy == null)
+                        rawMaterial._silverhand_proxy = new _silverhand_proxy();
+                    rawMaterial._silverhand_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._silverhand_proxy.ToString();
                     break;
                 case "simple_additive_ui.mt":
-                    rawMaterial._simple_additive_ui = new _simple_additive_ui(cMaterialInstance);
+                    if (rawMaterial._simple_additive_ui == null)
+                        rawMaterial._simple_additive_ui = new _simple_additive_ui();
+                    rawMaterial._simple_additive_ui.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._simple_additive_ui.ToString();
                     break;
                 case "simple_emissive_decals.mt":
-                    rawMaterial._simple_emissive_decals = new _simple_emissive_decals(cMaterialInstance);
+                    if (rawMaterial._simple_emissive_decals == null)
+                        rawMaterial._simple_emissive_decals = new _simple_emissive_decals();
+                    rawMaterial._simple_emissive_decals.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._simple_emissive_decals.ToString();
                     break;
                 case "simple_fresnel.mt":
-                    rawMaterial._simple_fresnel = new _simple_fresnel(cMaterialInstance);
+                    if (rawMaterial._simple_fresnel == null)
+                        rawMaterial._simple_fresnel = new _simple_fresnel();
+                    rawMaterial._simple_fresnel.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._simple_fresnel.ToString();
                     break;
                 case "simple_refraction.mt":
-                    rawMaterial._simple_refraction = new _simple_refraction(cMaterialInstance);
+                    if (rawMaterial._simple_refraction == null)
+                        rawMaterial._simple_refraction = new _simple_refraction();
+                    rawMaterial._simple_refraction.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._simple_refraction.ToString();
                     break;
                 case "sound_clue.mt":
-                    rawMaterial._sound_clue = new _sound_clue(cMaterialInstance);
+                    if (rawMaterial._sound_clue == null)
+                        rawMaterial._sound_clue = new _sound_clue();
+                    rawMaterial._sound_clue.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._sound_clue.ToString();
                     break;
                 case "television_ad.mt":
-                    rawMaterial._television_ad = new _television_ad(cMaterialInstance);
+                    if (rawMaterial._television_ad == null)
+                        rawMaterial._television_ad = new _television_ad();
+                    rawMaterial._television_ad.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._television_ad.ToString();
                     break;
                 case "triplanar_projection.mt":
-                    rawMaterial._triplanar_projection = new _triplanar_projection(cMaterialInstance);
+                    if (rawMaterial._triplanar_projection == null)
+                        rawMaterial._triplanar_projection = new _triplanar_projection();
+                    rawMaterial._triplanar_projection.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._triplanar_projection.ToString();
                     break;
+                case "water_plane.mt":
+                    if (rawMaterial._water_plane == null)
+                        rawMaterial._water_plane = new _water_plane();
+                    rawMaterial._water_plane.Read(cMaterialInstance);
+                    rawMaterial.MaterialType = MaterialTypes._water_plane.ToString();
+                    break;
                 case "zoom.mt":
-                    rawMaterial._zoom = new _zoom(cMaterialInstance);
+                    if (rawMaterial._zoom == null)
+                        rawMaterial._zoom = new _zoom();
+                    rawMaterial._zoom.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._zoom.ToString();
                     break;
                 case "alt_halo.mt":
-                    rawMaterial._alt_halo = new _alt_halo(cMaterialInstance);
+                    if (rawMaterial._alt_halo == null)
+                        rawMaterial._alt_halo = new _alt_halo();
+                    rawMaterial._alt_halo.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._alt_halo.ToString();
                     break;
                 case "blackbodyradiation_distant.mt":
-                    rawMaterial._blackbodyradiation_distant = new _blackbodyradiation_distant(cMaterialInstance);
+                    if (rawMaterial._blackbodyradiation_distant == null)
+                        rawMaterial._blackbodyradiation_distant = new _blackbodyradiation_distant();
+                    rawMaterial._blackbodyradiation_distant.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._blackbodyradiation_distant.ToString();
                     break;
                 case "blackbodyradiation_notxaa.mt":
-                    rawMaterial._blackbodyradiation_notxaa = new _blackbodyradiation_notxaa(cMaterialInstance);
+                    if (rawMaterial._blackbodyradiation_notxaa == null)
+                        rawMaterial._blackbodyradiation_notxaa = new _blackbodyradiation_notxaa();
+                    rawMaterial._blackbodyradiation_notxaa.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._blackbodyradiation_notxaa.ToString();
                     break;
                 case "blood_metal_base.mt":
-                    rawMaterial._blood_metal_base = new _blood_metal_base(cMaterialInstance);
+                    if (rawMaterial._blood_metal_base == null)
+                        rawMaterial._blood_metal_base = new _blood_metal_base();
+                    rawMaterial._blood_metal_base.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._blood_metal_base.ToString();
                     break;
                 case "caustics.mt":
-                    rawMaterial._caustics = new _caustics(cMaterialInstance);
+                    if (rawMaterial._caustics == null)
+                        rawMaterial._caustics = new _caustics();
+                    rawMaterial._caustics.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._caustics.ToString();
                     break;
                 case "character_kerenzikov.mt":
-                    rawMaterial._character_kerenzikov = new _character_kerenzikov(cMaterialInstance);
+                    if (rawMaterial._character_kerenzikov == null)
+                        rawMaterial._character_kerenzikov = new _character_kerenzikov();
+                    rawMaterial._character_kerenzikov.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._character_kerenzikov.ToString();
                     break;
                 case "character_sandevistan.mt":
-                    rawMaterial._character_sandevistan = new _character_sandevistan(cMaterialInstance);
+                    if (rawMaterial._character_sandevistan == null)
+                        rawMaterial._character_sandevistan = new _character_sandevistan();
+                    rawMaterial._character_sandevistan.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._character_sandevistan.ToString();
                     break;
                 case "crystal_dome.mt":
-                    rawMaterial._crystal_dome = new _crystal_dome(cMaterialInstance);
+                    if (rawMaterial._crystal_dome == null)
+                        rawMaterial._crystal_dome = new _crystal_dome();
+                    rawMaterial._crystal_dome.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._crystal_dome.ToString();
                     break;
                 case "crystal_dome_opaque.mt":
-                    rawMaterial._crystal_dome_opaque = new _crystal_dome_opaque(cMaterialInstance);
+                    if (rawMaterial._crystal_dome_opaque == null)
+                        rawMaterial._crystal_dome_opaque = new _crystal_dome_opaque();
+                    rawMaterial._crystal_dome_opaque.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._crystal_dome_opaque.ToString();
                     break;
                 case "cyberspace_gradient.mt":
-                    rawMaterial._cyberspace_gradient = new _cyberspace_gradient(cMaterialInstance);
+                    if (rawMaterial._cyberspace_gradient == null)
+                        rawMaterial._cyberspace_gradient = new _cyberspace_gradient();
+                    rawMaterial._cyberspace_gradient.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberspace_gradient.ToString();
                     break;
                 case "cyberspace_teleport_glitch.mt":
-                    rawMaterial._cyberspace_teleport_glitch = new _cyberspace_teleport_glitch(cMaterialInstance);
+                    if (rawMaterial._cyberspace_teleport_glitch == null)
+                        rawMaterial._cyberspace_teleport_glitch = new _cyberspace_teleport_glitch();
+                    rawMaterial._cyberspace_teleport_glitch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._cyberspace_teleport_glitch.ToString();
                     break;
                 case "decal_caustics.mt":
-                    rawMaterial._decal_caustics = new _decal_caustics(cMaterialInstance);
+                    if (rawMaterial._decal_caustics == null)
+                        rawMaterial._decal_caustics = new _decal_caustics();
+                    rawMaterial._decal_caustics.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_caustics.ToString();
                     break;
                 case "decal_glitch.mt":
-                    rawMaterial._decal_glitch = new _decal_glitch(cMaterialInstance);
+                    if (rawMaterial._decal_glitch == null)
+                        rawMaterial._decal_glitch = new _decal_glitch();
+                    rawMaterial._decal_glitch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_glitch.ToString();
                     break;
                 case "decal_glitch_emissive.mt":
-                    rawMaterial._decal_glitch_emissive = new _decal_glitch_emissive(cMaterialInstance);
+                    if (rawMaterial._decal_glitch_emissive == null)
+                        rawMaterial._decal_glitch_emissive = new _decal_glitch_emissive();
+                    rawMaterial._decal_glitch_emissive.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_glitch_emissive.ToString();
                     break;
                 case "depth_based_sobel.mt":
-                    rawMaterial._depth_based_sobel = new _depth_based_sobel(cMaterialInstance);
+                    if (rawMaterial._depth_based_sobel == null)
+                        rawMaterial._depth_based_sobel = new _depth_based_sobel();
+                    rawMaterial._depth_based_sobel.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._depth_based_sobel.ToString();
                     break;
                 case "diode_pavements_ui.mt":
-                    rawMaterial._diode_pavements_ui = new _diode_pavements_ui(cMaterialInstance);
+                    if (rawMaterial._diode_pavements_ui == null)
+                        rawMaterial._diode_pavements_ui = new _diode_pavements_ui();
+                    rawMaterial._diode_pavements_ui.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._diode_pavements_ui.ToString();
                     break;
                 case "dirt_animated_masked.mt":
-                    rawMaterial._dirt_animated_masked = new _dirt_animated_masked(cMaterialInstance);
+                    if (rawMaterial._dirt_animated_masked == null)
+                        rawMaterial._dirt_animated_masked = new _dirt_animated_masked();
+                    rawMaterial._dirt_animated_masked.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._dirt_animated_masked.ToString();
                     break;
                 case "e3_prototype_mask.mt":
-                    rawMaterial._e3_prototype_mask = new _e3_prototype_mask(cMaterialInstance);
+                    if (rawMaterial._e3_prototype_mask == null)
+                        rawMaterial._e3_prototype_mask = new _e3_prototype_mask();
+                    rawMaterial._e3_prototype_mask.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._e3_prototype_mask.ToString();
                     break;
                 case "fake_flare.mt":
-                    rawMaterial._fake_flare = new _fake_flare(cMaterialInstance);
+                    if (rawMaterial._fake_flare == null)
+                        rawMaterial._fake_flare = new _fake_flare();
+                    rawMaterial._fake_flare.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fake_flare.ToString();
                     break;
                 case "fake_flare_simple.mt":
-                    rawMaterial._fake_flare_simple = new _fake_flare_simple(cMaterialInstance);
+                    if (rawMaterial._fake_flare_simple == null)
+                        rawMaterial._fake_flare_simple = new _fake_flare_simple();
+                    rawMaterial._fake_flare_simple.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fake_flare_simple.ToString();
                     break;
                 case "flat_fog_masked.mt":
-                    rawMaterial._flat_fog_masked = new _flat_fog_masked(cMaterialInstance);
+                    if (rawMaterial._flat_fog_masked == null)
+                        rawMaterial._flat_fog_masked = new _flat_fog_masked();
+                    rawMaterial._flat_fog_masked.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._flat_fog_masked.ToString();
                     break;
                 case "flat_fog_masked_notxaa.mt":
-                    rawMaterial._flat_fog_masked_notxaa = new _flat_fog_masked_notxaa(cMaterialInstance);
+                    if (rawMaterial._flat_fog_masked_notxaa == null)
+                        rawMaterial._flat_fog_masked_notxaa = new _flat_fog_masked_notxaa();
+                    rawMaterial._flat_fog_masked_notxaa.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._flat_fog_masked_notxaa.ToString();
                     break;
                 case "highlight_blocker.mt":
-                    rawMaterial._highlight_blocker = new _highlight_blocker(cMaterialInstance);
+                    if (rawMaterial._highlight_blocker == null)
+                        rawMaterial._highlight_blocker = new _highlight_blocker();
+                    rawMaterial._highlight_blocker.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._highlight_blocker.ToString();
                     break;
                 case "hologram_proxy.mt":
-                    rawMaterial._hologram_proxy = new _hologram_proxy(cMaterialInstance);
+                    if (rawMaterial._hologram_proxy == null)
+                        rawMaterial._hologram_proxy = new _hologram_proxy();
+                    rawMaterial._hologram_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hologram_proxy.ToString();
                     break;
                 case "holo_mask.mt":
-                    rawMaterial._holo_mask = new _holo_mask(cMaterialInstance);
+                    if (rawMaterial._holo_mask == null)
+                        rawMaterial._holo_mask = new _holo_mask();
+                    rawMaterial._holo_mask.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._holo_mask.ToString();
                     break;
                 case "invisible.mt":
-                    rawMaterial._invisible = new _invisible(cMaterialInstance);
+                    if (rawMaterial._invisible == null)
+                        rawMaterial._invisible = new _invisible();
+                    rawMaterial._invisible.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._invisible.ToString();
                     break;
                 case "lightning_plasma.mt":
-                    rawMaterial._lightning_plasma = new _lightning_plasma(cMaterialInstance);
+                    if (rawMaterial._lightning_plasma == null)
+                        rawMaterial._lightning_plasma = new _lightning_plasma();
+                    rawMaterial._lightning_plasma.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._lightning_plasma.ToString();
                     break;
                 case "light_gradients.mt":
-                    rawMaterial._light_gradients = new _light_gradients(cMaterialInstance);
+                    if (rawMaterial._light_gradients == null)
+                        rawMaterial._light_gradients = new _light_gradients();
+                    rawMaterial._light_gradients.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._light_gradients.ToString();
                     break;
                 case "low_health.mt":
-                    rawMaterial._low_health = new _low_health(cMaterialInstance);
+                    if (rawMaterial._low_health == null)
+                        rawMaterial._low_health = new _low_health();
+                    rawMaterial._low_health.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._low_health.ToString();
                     break;
                 case "mesh_decal__blackbody.mt":
-                    rawMaterial._mesh_decal__blackbody = new _mesh_decal__blackbody(cMaterialInstance);
+                    if (rawMaterial._mesh_decal__blackbody == null)
+                        rawMaterial._mesh_decal__blackbody = new _mesh_decal__blackbody();
+                    rawMaterial._mesh_decal__blackbody.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mesh_decal__blackbody.ToString();
                     break;
                 case "metal_base_scrolling.mt":
-                    rawMaterial._metal_base_scrolling = new _metal_base_scrolling(cMaterialInstance);
+                    if (rawMaterial._metal_base_scrolling == null)
+                        rawMaterial._metal_base_scrolling = new _metal_base_scrolling();
+                    rawMaterial._metal_base_scrolling.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base_scrolling.ToString();
                     break;
                 case "multilayer_blackbody_inject.mt":
-                    rawMaterial._multilayer_blackbody_inject = new _multilayer_blackbody_inject(cMaterialInstance);
+                    if (rawMaterial._multilayer_blackbody_inject == null)
+                        rawMaterial._multilayer_blackbody_inject = new _multilayer_blackbody_inject();
+                    rawMaterial._multilayer_blackbody_inject.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._multilayer_blackbody_inject.ToString();
                     break;
                 case "nanowire_string.mt":
-                    rawMaterial._nanowire_string = new _nanowire_string(cMaterialInstance);
+                    if (rawMaterial._nanowire_string == null)
+                        rawMaterial._nanowire_string = new _nanowire_string();
+                    rawMaterial._nanowire_string.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._nanowire_string.ToString();
                     break;
                 case "oda_helm.mt":
-                    rawMaterial._oda_helm = new _oda_helm(cMaterialInstance);
+                    if (rawMaterial._oda_helm == null)
+                        rawMaterial._oda_helm = new _oda_helm();
+                    rawMaterial._oda_helm.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._oda_helm.ToString();
                     break;
                 case "rift_noise.mt":
-                    rawMaterial._rift_noise = new _rift_noise(cMaterialInstance);
+                    if (rawMaterial._rift_noise == null)
+                        rawMaterial._rift_noise = new _rift_noise();
+                    rawMaterial._rift_noise.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._rift_noise.ToString();
                     break;
                 case "screen_wave.mt":
-                    rawMaterial._screen_wave = new _screen_wave(cMaterialInstance);
+                    if (rawMaterial._screen_wave == null)
+                        rawMaterial._screen_wave = new _screen_wave();
+                    rawMaterial._screen_wave.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._screen_wave.ToString();
                     break;
                 case "simple_fog.mt":
-                    rawMaterial._simple_fog = new _simple_fog(cMaterialInstance);
+                    if (rawMaterial._simple_fog == null)
+                        rawMaterial._simple_fog = new _simple_fog();
+                    rawMaterial._simple_fog.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._simple_fog.ToString();
                     break;
                 case "simple_refraction_mask.mt":
-                    rawMaterial._simple_refraction_mask = new _simple_refraction_mask(cMaterialInstance);
+                    if (rawMaterial._simple_refraction_mask == null)
+                        rawMaterial._simple_refraction_mask = new _simple_refraction_mask();
+                    rawMaterial._simple_refraction_mask.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._simple_refraction_mask.ToString();
                     break;
                 case "transparent_flowmap.mt":
-                    rawMaterial._transparent_flowmap = new _transparent_flowmap(cMaterialInstance);
+                    if (rawMaterial._transparent_flowmap == null)
+                        rawMaterial._transparent_flowmap = new _transparent_flowmap();
+                    rawMaterial._transparent_flowmap.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._transparent_flowmap.ToString();
                     break;
                 case "transparent_liquid_notxaa.mt":
-                    rawMaterial._transparent_liquid_notxaa = new _transparent_liquid_notxaa(cMaterialInstance);
+                    if (rawMaterial._transparent_liquid_notxaa == null)
+                        rawMaterial._transparent_liquid_notxaa = new _transparent_liquid_notxaa();
+                    rawMaterial._transparent_liquid_notxaa.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._transparent_liquid_notxaa.ToString();
                     break;
                 case "world_to_screen_glitch.mt":
-                    rawMaterial._world_to_screen_glitch = new _world_to_screen_glitch(cMaterialInstance);
+                    if (rawMaterial._world_to_screen_glitch == null)
+                        rawMaterial._world_to_screen_glitch = new _world_to_screen_glitch();
+                    rawMaterial._world_to_screen_glitch.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._world_to_screen_glitch.ToString();
                     break;
                 case "hit_proxy.mt":
-                    rawMaterial._hit_proxy = new _hit_proxy(cMaterialInstance);
+                    if (rawMaterial._hit_proxy == null)
+                        rawMaterial._hit_proxy = new _hit_proxy();
+                    rawMaterial._hit_proxy.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._hit_proxy.ToString();
                     break;
                 case "lod_coloring.mt":
-                    rawMaterial._lod_coloring = new _lod_coloring(cMaterialInstance);
+                    if (rawMaterial._lod_coloring == null)
+                        rawMaterial._lod_coloring = new _lod_coloring();
+                    rawMaterial._lod_coloring.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._lod_coloring.ToString();
                     break;
                 case "overdraw.mt":
-                    rawMaterial._overdraw = new _overdraw(cMaterialInstance);
+                    if (rawMaterial._overdraw == null)
+                        rawMaterial._overdraw = new _overdraw();
+                    rawMaterial._overdraw.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._overdraw.ToString();
                     break;
                 case "overdraw_seethrough.mt":
-                    rawMaterial._overdraw_seethrough = new _overdraw_seethrough(cMaterialInstance);
+                    if (rawMaterial._overdraw_seethrough == null)
+                        rawMaterial._overdraw_seethrough = new _overdraw_seethrough();
+                    rawMaterial._overdraw_seethrough.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._overdraw_seethrough.ToString();
                     break;
                 case "selection.mt":
-                    rawMaterial._selection = new _selection(cMaterialInstance);
+                    if (rawMaterial._selection == null)
+                        rawMaterial._selection = new _selection();
+                    rawMaterial._selection.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._selection.ToString();
                     break;
                 case "uv_density.mt":
-                    rawMaterial._uv_density = new _uv_density(cMaterialInstance);
+                    if (rawMaterial._uv_density == null)
+                        rawMaterial._uv_density = new _uv_density();
+                    rawMaterial._uv_density.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._uv_density.ToString();
                     break;
                 case "wireframe.mt":
-                    rawMaterial._wireframe = new _wireframe(cMaterialInstance);
+                    if (rawMaterial._wireframe == null)
+                        rawMaterial._wireframe = new _wireframe();
+                    rawMaterial._wireframe.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._wireframe.ToString();
                     break;
                 case "editor_mlmask_preview.mt":
-                    rawMaterial._editor_mlmask_preview = new _editor_mlmask_preview(cMaterialInstance);
+                    if (rawMaterial._editor_mlmask_preview == null)
+                        rawMaterial._editor_mlmask_preview = new _editor_mlmask_preview();
+                    rawMaterial._editor_mlmask_preview.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._editor_mlmask_preview.ToString();
                     break;
                 case "editor_mltemplate_preview.mt":
-                    rawMaterial._editor_mltemplate_preview = new _editor_mltemplate_preview(cMaterialInstance);
+                    if (rawMaterial._editor_mltemplate_preview == null)
+                        rawMaterial._editor_mltemplate_preview = new _editor_mltemplate_preview();
+                    rawMaterial._editor_mltemplate_preview.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._editor_mltemplate_preview.ToString();
                     break;
                 case "gi_backface_debug.mt":
-                    rawMaterial._gi_backface_debug = new _gi_backface_debug(cMaterialInstance);
+                    if (rawMaterial._gi_backface_debug == null)
+                        rawMaterial._gi_backface_debug = new _gi_backface_debug();
+                    rawMaterial._gi_backface_debug.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._gi_backface_debug.ToString();
                     break;
                 case "multilayered_baked.mt":
-                    rawMaterial._multilayered_baked = new _multilayered_baked(cMaterialInstance);
+                    if (rawMaterial._multilayered_baked == null)
+                        rawMaterial._multilayered_baked = new _multilayered_baked();
+                    rawMaterial._multilayered_baked.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._multilayered_baked.ToString();
                     break;
+                case "silverhand_props_overlay.mt":
+                    if (rawMaterial._silverhand_props_overlay == null)
+                        rawMaterial._silverhand_props_overlay = new _silverhand_props_overlay();
+                    rawMaterial._silverhand_props_overlay.Read(cMaterialInstance);
+                    rawMaterial.MaterialType = MaterialTypes._silverhand_props_overlay.ToString();
+                    break;
                 case "mikoshi_fullscr_transition.mt":
-                    rawMaterial._mikoshi_fullscr_transition = new _mikoshi_fullscr_transition(cMaterialInstance);
+                    if (rawMaterial._mikoshi_fullscr_transition == null)
+                        rawMaterial._mikoshi_fullscr_transition = new _mikoshi_fullscr_transition();
+                    rawMaterial._mikoshi_fullscr_transition.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mikoshi_fullscr_transition.ToString();
                     break;
                 case "decal.remt":
-                    rawMaterial._decal = new _decal(cMaterialInstance);
+                    if (rawMaterial._decal == null)
+                        rawMaterial._decal = new _decal();
+                    rawMaterial._decal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal.ToString();
                     break;
                 case "decal_normal.remt":
-                    rawMaterial._decal_normal = new _decal_normal(cMaterialInstance);
+                    if (rawMaterial._decal_normal == null)
+                        rawMaterial._decal_normal = new _decal_normal();
+                    rawMaterial._decal_normal.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._decal_normal.ToString();
                     break;
                 case "pbr_layer.remt":
-                    rawMaterial._pbr_layer = new _pbr_layer(cMaterialInstance);
+                    if (rawMaterial._pbr_layer == null)
+                        rawMaterial._pbr_layer = new _pbr_layer();
+                    rawMaterial._pbr_layer.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._pbr_layer.ToString();
                     break;
                 case "debugdraw.remt":
-                    rawMaterial._debugdraw = new _debugdraw(cMaterialInstance);
+                    if (rawMaterial._debugdraw == null)
+                        rawMaterial._debugdraw = new _debugdraw();
+                    rawMaterial._debugdraw.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._debugdraw.ToString();
                     break;
                 case "fallback.remt":
-                    rawMaterial._fallback = new _fallback(cMaterialInstance);
+                    if (rawMaterial._fallback == null)
+                        rawMaterial._fallback = new _fallback();
+                    rawMaterial._fallback.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._fallback.ToString();
                     break;
                 case "metal_base.remt":
-                    rawMaterial._metal_base = new _metal_base(cMaterialInstance);
+                    if (rawMaterial._metal_base == null)
+                        rawMaterial._metal_base = new _metal_base();
+                    rawMaterial._metal_base.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._metal_base.ToString();
                     break;
                 case "mirror.remt":
-                    rawMaterial._mirror = new _mirror(cMaterialInstance);
+                    if (rawMaterial._mirror == null)
+                        rawMaterial._mirror = new _mirror();
+                    rawMaterial._mirror.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._mirror.ToString();
                     break;
                 case "particles_generic.remt":
-                    rawMaterial._particles_generic = new _particles_generic(cMaterialInstance);
+                    if (rawMaterial._particles_generic == null)
+                        rawMaterial._particles_generic = new _particles_generic();
+                    rawMaterial._particles_generic.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._particles_generic.ToString();
                     break;
                 case "particles_liquid.remt":
-                    rawMaterial._particles_liquid = new _particles_liquid(cMaterialInstance);
+                    if (rawMaterial._particles_liquid == null)
+                        rawMaterial._particles_liquid = new _particles_liquid();
+                    rawMaterial._particles_liquid.Read(cMaterialInstance);
                     rawMaterial.MaterialType = MaterialTypes._particles_liquid.ToString();
-                    break;
-                default:
                     break;
             }
         }
@@ -2722,10 +3338,7 @@ namespace WolvenKit.Modkit.RED4.Materials
         public string Name { get; set; }
         public string BaseMaterial { get; set; }
         public string MaterialType { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public _skin _skin { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public _multilayered _multilayered { get; set; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _3d_map _3d_map { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2929,6 +3542,8 @@ namespace WolvenKit.Modkit.RED4.Materials
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _silverhand_overlay_blendable _silverhand_overlay_blendable { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public _skin _skin { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _skin_blendable _skin_blendable { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _skybox _skybox { get; set; }
@@ -3018,6 +3633,8 @@ namespace WolvenKit.Modkit.RED4.Materials
         public _metal_base_packed _metal_base_packed { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _metal_base_proxy _metal_base_proxy { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public _multilayered _multilayered { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _multilayered_debug _multilayered_debug { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -3195,6 +3812,8 @@ namespace WolvenKit.Modkit.RED4.Materials
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _triplanar_projection _triplanar_projection { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public _water_plane _water_plane { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _zoom _zoom { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _alt_halo _alt_halo { get; set; }
@@ -3301,6 +3920,8 @@ namespace WolvenKit.Modkit.RED4.Materials
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _multilayered_baked _multilayered_baked { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public _silverhand_props_overlay _silverhand_props_overlay { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _mikoshi_fullscr_transition _mikoshi_fullscr_transition { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _decal _decal { get; set; }
@@ -3320,11 +3941,9 @@ namespace WolvenKit.Modkit.RED4.Materials
         public _particles_generic _particles_generic { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public _particles_liquid _particles_liquid { get; set; }
-
     }
     public enum MaterialTypes
     {
-        unknown,
         _3d_map,
         _3d_map_cubes,
         _3d_map_solid,
@@ -3561,7 +4180,7 @@ namespace WolvenKit.Modkit.RED4.Materials
         _sound_clue,
         _television_ad,
         _triplanar_projection,
-        _water_test,
+        _water_plane,
         _zoom,
         _alt_halo,
         _blackbodyradiation_distant,
@@ -3615,6 +4234,7 @@ namespace WolvenKit.Modkit.RED4.Materials
         _editor_mltemplate_preview,
         _gi_backface_debug,
         _multilayered_baked,
+        _silverhand_props_overlay,
         _mikoshi_fullscr_transition,
         _decal,
         _decal_normal,
@@ -3624,6 +4244,6 @@ namespace WolvenKit.Modkit.RED4.Materials
         _metal_base,
         _mirror,
         _particles_generic,
-        _particles_liquid
+        _particles_liquid,
     }
 }
