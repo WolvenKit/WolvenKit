@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -30,12 +31,17 @@ namespace WolvenKit.Functionality.Initialization
 {
     public static class Initializations
     {
+
+
         /// <summary>
         /// Initialize webview2
         /// </summary>
         public async static void InitializeWebview2()
         {
-            Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, @"C:\WebViewData", null);
+            string wKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit")                ;
+            string WebViewData = Path.Combine(wKitAppData, "WebViewData");
+            Directory.CreateDirectory(WebViewData);
+            Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, WebViewData, null);
         }
 
         // Initialize Github RPC
