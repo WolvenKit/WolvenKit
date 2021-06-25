@@ -369,6 +369,7 @@
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.1.0.63" />
