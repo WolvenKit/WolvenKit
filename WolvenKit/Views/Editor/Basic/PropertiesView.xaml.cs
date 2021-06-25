@@ -65,7 +65,7 @@ namespace WolvenKit.Views.Editor
             switch (property.PropertyName)
             {
                 case nameof(PropertiesViewModel.LoadedBitmapFrame):
-                    if (property.NewValue is BitmapFrame frame)
+                    if (property.NewValue is BitmapSource frame)
                     {
                         LoadImage(frame);
                     }
