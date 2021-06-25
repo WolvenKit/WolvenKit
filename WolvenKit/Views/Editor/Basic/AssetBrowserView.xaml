@@ -231,9 +231,7 @@
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Command="{Binding AddSelectedCommand}" Header="Add selected items to Project" />
-                                        <MenuItem Header="Export selected - Simple" />
-                                        <MenuItem Header="Export selected - Advanced" />
+                                        <MenuItem Header="Add selected items to Project" Click="RightContextMenuAddAll_OnClick" />
                                     </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
 

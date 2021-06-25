@@ -92,10 +92,8 @@ namespace WolvenKit.ViewModels.Editor
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
 
             SetupToolDefaults();
-            //ReInit(false);
 
             var controller = _gameController.GetRed4Controller();
-
             controller.ConnectHierarchy()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
@@ -145,8 +143,6 @@ namespace WolvenKit.ViewModels.Editor
         public List<string> Classes { get; set; }
         public string SelectedClass { get; set; }
         public string SelectedExtension { get; set; }
-
-        public ICommand SetCurrentNodeCommand { get; set; }
 
         #endregion properties
 
