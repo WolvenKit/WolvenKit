@@ -69,6 +69,8 @@ namespace WolvenKit
 
             StaticReferences.Logger.Info("Starting application");
 
+            Initializations.InitializeWebview2();
+
             StaticReferences.Logger.Info("Initializing MVVM");
             await Initializations.InitializeMVVM();
 
@@ -110,7 +112,7 @@ namespace WolvenKit
             //window.Show();
 
             // Create WebView Data Folder.
-            Directory.CreateDirectory(@"C:\WebViewData");
+            //Directory.CreateDirectory(@"C:\WebViewData");
             // Message system for video tool.
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
             mediator.Register<int>(this, onmessage);
