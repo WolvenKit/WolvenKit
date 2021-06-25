@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Media;
@@ -27,10 +28,7 @@ namespace WolvenKit.Functionality.Services
         {
             get
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var filename = Path.GetFileNameWithoutExtension(path);
-                var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir ?? "", filename + "_config_n.json");
+                return Path.Combine(IGameController.WKitAppData, "_config_n.json");
             }
         }
 
@@ -38,10 +36,7 @@ namespace WolvenKit.Functionality.Services
         {
             get
             {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var filename = Path.GetFileNameWithoutExtension(path);
-                var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir ?? "", filename + "_profile_image.png");
+                return Path.Combine(IGameController.WKitAppData, "_profile_image.png");
             }
         }
 
@@ -118,7 +113,22 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-        public string RED4GameRootDir => Path.Combine(new FileInfo(CP77ExecutablePath).Directory.Parent.Parent.FullName);
+        public string RED4GameRootDir
+        {
+            get
+            {
+                try
+                {
+                    return Path.Combine(new FileInfo(CP77ExecutablePath).Directory.Parent.Parent.FullName);
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine(e);
+
+                    return e.Message;
+                }
+            }
+        }
 
         public string RED4GameModDir
         {
@@ -134,7 +144,7 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-        #endregion
+        #endregion red4
 
         #region red3
 
@@ -158,8 +168,6 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-
-
         public string W3GameContentDir => Path.Combine(W3GameRootDir, "content");
 
         public string W3GameDlcDir => Path.Combine(W3GameRootDir, "DLC");
@@ -168,7 +176,7 @@ namespace WolvenKit.Functionality.Services
 
         public string W3GameRootDir => Path.Combine(W3ExecutablePath, @"..\..\..\");
 
-        #endregion
+        #endregion red3
 
         #endregion properties
 
