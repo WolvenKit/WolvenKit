@@ -19,6 +19,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
@@ -186,7 +187,8 @@ namespace WolvenKit.ViewModels.Editor
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
-                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName);
+
+                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName, Path.Combine(IGameController.WKitAppData, "Temp_OBJ"));
                         if (q.Length > 0)
                         {
                             LoadModel(q);

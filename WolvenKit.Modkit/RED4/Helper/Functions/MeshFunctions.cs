@@ -35,29 +35,25 @@ namespace CP77.CR2W
             _rig = rig;
         }
 
-        public static string wKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
-
-        public static string tempmodels => Path.Combine(wKitAppData, "Temp_OBJ");
-
-        public string ExportMeshWithoutRigPreviewer(IGameFile file, string FilePath, bool LodFilter = true, bool isGLBinary = true)
+        public string ExportMeshWithoutRigPreviewer(IGameFile file, string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
         {
             using var meshStream = new MemoryStream();
             file.Extract(meshStream);
             meshStream.Seek(0, SeekOrigin.Begin);
             var cr2w = _modTools.TryReadRED4File(meshStream);
 
-            return ExportMeshWithoutRigPreviewerInner(meshStream, cr2w, FilePath, LodFilter, isGLBinary);
+            return ExportMeshWithoutRigPreviewerInner(meshStream, cr2w, FilePath, tempmodels, LodFilter, isGLBinary);
         }
 
-        public string ExportMeshWithoutRigPreviewer(string FilePath, bool LodFilter = true, bool isGLBinary = true)
+        public string ExportMeshWithoutRigPreviewer(string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
         {
             using var meshStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             var cr2w = _modTools.TryReadRED4File(meshStream);
 
-            return ExportMeshWithoutRigPreviewerInner(meshStream, cr2w, FilePath, LodFilter, isGLBinary);
+            return ExportMeshWithoutRigPreviewerInner(meshStream, cr2w, FilePath, tempmodels, LodFilter, isGLBinary);
         }
 
-        private string ExportMeshWithoutRigPreviewerInner(Stream meshStream, CR2WFile cr2w, string FilePath, bool LodFilter = true, bool isGLBinary = true)
+        private string ExportMeshWithoutRigPreviewerInner(Stream meshStream, CR2WFile cr2w, string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
         {
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {

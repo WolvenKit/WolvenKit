@@ -20,6 +20,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
@@ -114,7 +115,7 @@ namespace WolvenKit.Views.Editor
             }
 
             var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
-            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath);
+            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, Path.Combine(IGameController.WKitAppData, "Temp_OBJ"));
             if (q2.Length > 0)
             { StaticReferences.GlobalPropertiesView.LoadModel(q2); }
         }
@@ -158,7 +159,8 @@ namespace WolvenKit.Views.Editor
             try
             {
                 var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                if (qa != null)                {                    StaticReferences.GlobalPropertiesView.LoadImage(qa);                }
+                if (qa != null)
+                { StaticReferences.GlobalPropertiesView.LoadImage(qa); }
             }
             catch (Exception) { }
         }
@@ -200,6 +202,7 @@ namespace WolvenKit.Views.Editor
         }
 
         private string _currentFolderQuery = "";
+
         private bool FilterNodes(object o) => o is GameFileTreeNode data && data.Name.Contains(_currentFolderQuery);
 
         private void FolderSearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
@@ -212,7 +215,6 @@ namespace WolvenKit.Views.Editor
             LeftNavigation.View.Filter = FilterNodes;
             LeftNavigation.View.RefreshFilter();
         }
-
 
         private void LeftNavigationHomeButton_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
 
