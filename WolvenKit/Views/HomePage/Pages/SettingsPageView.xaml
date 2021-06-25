@@ -79,7 +79,7 @@
                         SelectedObject="{Binding EditorSettingsPGModel}" />
                 </syncfusion:SfAccordionItem>
 
-                <syncfusion:SfAccordionItem Header="Tools">
+                <syncfusion:SfAccordionItem Visibility="Collapsed" Header="Tools">
                     <syncfusion:PropertyGrid
                         x:Name="ToolsSettingsPG"
                         EnableGrouping="True"
