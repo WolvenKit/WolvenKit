@@ -35,7 +35,9 @@ namespace CP77.CR2W
             _rig = rig;
         }
 
-        private const string tempmodels = "tempmodels\\OBJ\\";
+        public static string wKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+
+        public static string tempmodels => Path.Combine(wKitAppData, "Temp_OBJ");
 
         public string ExportMeshWithoutRigPreviewer(IGameFile file, string FilePath, bool LodFilter = true, bool isGLBinary = true)
         {
@@ -65,9 +67,9 @@ namespace CP77.CR2W
 
             var meshinfo = GetMeshesinfo(cr2w);
 
-            var expMeshes = ContainRawMesh(ms,meshinfo, LodFilter);
+            var expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
 
-            ModelRoot model = RawMeshesToGLTF(expMeshes,null);
+            ModelRoot model = RawMeshesToGLTF(expMeshes, null);
             string outfile;
 
             Directory.CreateDirectory(tempmodels);
@@ -81,7 +83,6 @@ namespace CP77.CR2W
                     }
                     catch
                     {
-
                     }
                 }
             }
@@ -124,13 +125,11 @@ namespace CP77.CR2W
             }
             RawArmature Rig = GetNonParentedRig(meshBones);
 
-
-
             MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
 
             MeshesInfo meshinfo = GetMeshesinfo(cr2w);
 
-            List<RawMeshContainer> expMeshes = ContainRawMesh(ms,meshinfo,LodFilter);
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
             if (meshBones.boneCount == 0)    // for rigid meshes
             {
                 for (int i = 0; i < expMeshes.Count; i++)
@@ -167,7 +166,6 @@ namespace CP77.CR2W
                 return true;
             }
 
-
             void WriteMeshToFile()
             {
                 if (WolvenTesting.IsTesting)
@@ -185,6 +183,7 @@ namespace CP77.CR2W
                 }
             }
         }
+
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             var cr2w = _modTools.TryReadRED4File(meshStream);
@@ -212,12 +211,11 @@ namespace CP77.CR2W
             else
                 model.SaveGLTF(outfile.FullName);
 
-
             meshStream.Dispose();
             meshStream.Close();
             return true;
-
         }
+
         public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
@@ -237,7 +235,7 @@ namespace CP77.CR2W
                 expMeshes.AddRange(Meshes);
             }
 
-            ModelRoot model = RawMeshesToGLTF(expMeshes,null);
+            ModelRoot model = RawMeshesToGLTF(expMeshes, null);
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
@@ -251,6 +249,7 @@ namespace CP77.CR2W
 
             return true;
         }
+
         public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             RawArmature Rig = _rig.ProcessRig(rigStream);
@@ -279,7 +278,7 @@ namespace CP77.CR2W
                 bones.WorldPosn = GetMeshBonesPosn(cr2w);
             }
 
-            List<RawMeshContainer> expMeshes = ContainRawMesh(ms,meshinfo,LodFilter);
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
 
             if (cmesh.BoneNames.Count == 0)    // for rigid meshes
             {
@@ -302,6 +301,7 @@ namespace CP77.CR2W
 
             return true;
         }
+
         public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawArmature> Rigs = new List<RawArmature>();
@@ -347,7 +347,6 @@ namespace CP77.CR2W
                 UpdateMeshJoints(ref Meshes, expRig, bones);
 
                 expMeshes.AddRange(Meshes);
-
             }
             ModelRoot model = RawMeshesToGLTF(expMeshes, expRig);
             if (isGLBinary)
@@ -367,6 +366,7 @@ namespace CP77.CR2W
             }
             return true;
         }
+
         public static Vec3[] GetMeshBonesPosn(CR2WFile cr2w)
         {
             rendRenderMeshBlob rendmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
@@ -383,9 +383,10 @@ namespace CP77.CR2W
             }
             return posn;
         }
+
         public static MeshesInfo GetMeshesinfo(CR2WFile cr2w)
         {
-            rendRenderMeshBlob rendmeshblob =  cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            rendRenderMeshBlob rendmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
             int meshC = rendmeshblob.Header.RenderChunkInfos.Count;
 
@@ -427,7 +428,7 @@ namespace CP77.CR2W
                     }
                     if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_TexCoord")
                     {
-                        if(tx0Offsets[i] == 0)
+                        if (tx0Offsets[i] == 0)
                             tx0Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
                         else
                             tx1Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
@@ -480,7 +481,7 @@ namespace CP77.CR2W
                     checker = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
                     if (checker == "PS_ExtraData")
                     {
-                        if(rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex.Value == 0)
+                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex.Value == 0)
                             extraExists[i] = true;
                     }
                 }
@@ -493,7 +494,7 @@ namespace CP77.CR2W
                 {
                     Appearance appearance = new Appearance();
                     appearance.Name = (cr2w.Chunks[i].Data as meshMeshAppearance).Name.Value;
-                    if(appearance.Name == string.Empty)
+                    if (appearance.Name == string.Empty)
                         appearance.Name = "DEFAULT";
                     int mtCount = (cr2w.Chunks[i].Data as meshMeshAppearance).ChunkMaterials.Count;
                     appearance.MaterialNames = new string[mtCount];
@@ -530,13 +531,14 @@ namespace CP77.CR2W
             };
             return meshesInfo;
         }
+
         public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool LODFilter)
         {
             BinaryReader gbr = new BinaryReader(gfs);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
-            for(int index = 0; index < info.meshC; index++)
+            for (int index = 0; index < info.meshC; index++)
             {
                 if (info.LODLvl[index] != 1 && LODFilter)
                     continue;
@@ -584,7 +586,7 @@ namespace CP77.CR2W
 
                 UInt32 NorRead32;
                 bool invalidNors = true;
-                if(info.normalOffsets[index] != 0)
+                if (info.normalOffsets[index] != 0)
                 {
                     normals = new Vec3[info.vertCounts[index]];
                     // getting 10bit normals
@@ -599,7 +601,7 @@ namespace CP77.CR2W
                         // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
                         normals[i] = new Vec3(tempv.X, tempv.Z, -tempv.Y);
 
-                        if(NorRead32 != 0x5FF7FDFF)
+                        if (NorRead32 != 0x5FF7FDFF)
                         {
                             invalidNors = false;
                         }
@@ -657,7 +659,6 @@ namespace CP77.CR2W
                         gfs.Position = info.colorOffsets[index] + i * str;
                         Vec4 tempv = new Vec4(gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f);
                         colors[i] = new Vec4(tempv.X, tempv.Y, tempv.Z, tempv.W);
-
                     }
                     // got vert colors
                 }
@@ -725,7 +726,7 @@ namespace CP77.CR2W
                     extradata = extradata,
                     extraExist = info.extraExists[index]
                 };
-                mesh.name = "submesh_" + Convert.ToString(index).PadLeft(2,'0') + "_LOD_" + info.LODLvl[index];
+                mesh.name = "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
 
                 mesh.appNames = new string[info.appearances.Count];
                 mesh.materialNames = new string[info.appearances.Count];
@@ -738,10 +739,11 @@ namespace CP77.CR2W
             }
             return expMeshes;
         }
+
         public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature Rig, MeshBones Bones)
         {
             // updating mesh bone indexes
-            for(int i = 0; i < Meshes.Count; i++)
+            for (int i = 0; i < Meshes.Count; i++)
             {
                 for (int e = 0; e < Meshes[i].vertices.Length; e++)
                 {
@@ -765,6 +767,7 @@ namespace CP77.CR2W
                 }
             }
         }
+
         public static MemoryStream GetMeshBufferStream(Stream ms, CR2WFile cr2w)
         {
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
@@ -776,6 +779,7 @@ namespace CP77.CR2W
             ms.DecompressAndCopySegment(meshstream, buffer.DiskSize, buffer.MemSize);
             return meshstream;
         }
+
         public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
         {
             var scene = new SceneBuilder();
@@ -806,7 +810,6 @@ namespace CP77.CR2W
                             scene.AddRigidMesh(VPN(mesh), System.Numerics.Matrix4x4.Identity);
                         if (mesh.normals.Length == 0 && mesh.tangents.Length == 0)
                             scene.AddRigidMesh(VP(mesh), System.Numerics.Matrix4x4.Identity);
-
                     }
                     else
                     {
@@ -823,13 +826,15 @@ namespace CP77.CR2W
 
             return model;
         }
+
         public class MeshBones
         {
             public string[] Names;
             public Vec3[] WorldPosn;
             public int boneCount;
         }
-        private static MeshBuilder<VertexPosition,VertexColor1Texture2,VertexJoints8> VP (RawMeshContainer mesh)
+
+        private static MeshBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8> VP(RawMeshContainer mesh)
         {
             long indCount = mesh.indices.Length;
             var expmesh = new MeshBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(mesh.name);
@@ -883,7 +888,7 @@ namespace CP77.CR2W
                     bind2[w].Item2 = mesh.weights[idx2, w];
                 }
                 // vertex build
-                var v0 = new VertexBuilder<VertexPosition,VertexColor1Texture2,VertexJoints8>(new VertexPosition(p_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
+                var v0 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
                 var v1 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
                 var v2 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
                 // triangle build
@@ -904,7 +909,8 @@ namespace CP77.CR2W
 
             return expmesh;
         }
-        private static MeshBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8> VPN (RawMeshContainer mesh)
+
+        private static MeshBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8> VPN(RawMeshContainer mesh)
         {
             long indCount = mesh.indices.Length;
             var expmesh = new MeshBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(mesh.name);
@@ -961,9 +967,9 @@ namespace CP77.CR2W
                     bind2[w].Item2 = mesh.weights[idx2, w];
                 }
                 // vertex build
-                var v0 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_0,n_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
-                var v1 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_1,n_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
-                var v2 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_2,n_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
+                var v0 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_0, n_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
+                var v1 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_1, n_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
+                var v2 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_2, n_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
                 // triangle build
                 prim.AddTriangle(v0, v1, v2);
             }
@@ -982,6 +988,7 @@ namespace CP77.CR2W
 
             return expmesh;
         }
+
         private static MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8> VPNT(RawMeshContainer mesh)
         {
             long indCount = mesh.indices.Length;
@@ -1042,9 +1049,9 @@ namespace CP77.CR2W
                     bind2[w].Item2 = mesh.weights[idx2, w];
                 }
                 // vertex build
-                var v0 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_0, n_0,t_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
-                var v1 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_1, n_1,t_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
-                var v2 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_2, n_2,t_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
+                var v0 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_0, n_0, t_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
+                var v1 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_1, n_1, t_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
+                var v2 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_2, n_2, t_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
                 // triangle build
                 prim.AddTriangle(v0, v1, v2);
             }
@@ -1063,6 +1070,7 @@ namespace CP77.CR2W
 
             return expmesh;
         }
+
         public static RawArmature GetNonParentedRig(MeshBones meshBones)
         {
             RawArmature Rig = new RawArmature();
