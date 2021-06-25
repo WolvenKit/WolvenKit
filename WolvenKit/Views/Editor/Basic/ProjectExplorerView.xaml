@@ -819,7 +819,7 @@
 
             <hc:Interaction.Triggers>
                 <hc:EventTrigger EventName="SearchStarted">
-                    <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                    <hc:EventToCommand Command="{Binding PESearchStartedCommand}" PassEventArgsToCommand="True" />
                 </hc:EventTrigger>
             </hc:Interaction.Triggers>
         </hc:SearchBar>

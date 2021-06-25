@@ -14,6 +14,7 @@ using Catel.MVVM;
 using Catel.Services;
 using DynamicData;
 using DynamicData.Binding;
+using HandyControl.Data;
 using Orc.FileSystem;
 using ReactiveUI;
 using WolvenKit.Common;
@@ -52,7 +53,6 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IDirectoryService _directoryService;
         private readonly Tw3Controller _tw3Controller;
 
-
         public FileModel LastSelected { get { return _watcherService.LastSelect; } }
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
@@ -64,6 +64,7 @@ namespace WolvenKit.ViewModels.Editor
         #endregion fields
 
         #region constructors
+
         public ProjectExplorerViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
@@ -96,7 +97,6 @@ namespace WolvenKit.ViewModels.Editor
             SetupCommands();
             SetupToolDefaults();
 
-
             GlobalProjectExplorer = this;
 
             _watcherService.Files
@@ -106,8 +106,8 @@ namespace WolvenKit.ViewModels.Editor
                 .Subscribe(OnNext);
         }
 
-
         public bool IsTreeBeingEdited { get; set; }
+
         private void OnNext(IChangeSet<FileModel, ulong> obj) => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
 
         /// <summary>
@@ -129,16 +129,12 @@ namespace WolvenKit.ViewModels.Editor
             AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
             ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
             OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
-
         }
 
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
-
-
-
 
         #endregion constructors
 
@@ -158,33 +154,36 @@ namespace WolvenKit.ViewModels.Editor
         /// Copies selected node to the clipboard.
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
+
         private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
+
         private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.Name);
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
+
         private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
+
         private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
         /// <summary>
         /// Cuts selected node to the clipboard.
         /// </summary>
         public ICommand CutFileCommand { get; private set; }
+
         private bool CanCutFile() => _projectManager.ActiveProject != null && SelectedItem != null;
+
         private void ExecuteCutFile()
         {
-
-
-
-
         }
 
         /// <summary>
         /// Delets selected node.
         /// </summary>
         public ICommand DeleteFileCommand { get; private set; }
+
         private bool CanDeleteFile()
         {
             var b = _projectManager.ActiveProject != null && SelectedItem != null;
@@ -209,6 +208,7 @@ namespace WolvenKit.ViewModels.Editor
 
             return b;
         }
+
         private async void ExecuteDeleteFile()
         {
             //// TODO: close open documents
@@ -227,7 +227,6 @@ namespace WolvenKit.ViewModels.Editor
                 var fullpath = item.FullName;
                 try
                 {
-
                     if (item.IsDirectory)
                     {
                         _directoryService.Delete(fullpath);
@@ -258,7 +257,9 @@ namespace WolvenKit.ViewModels.Editor
         /// Opens selected node in File Explorer.
         /// </summary>
         public ICommand OpenInFileExplorerCommand { get; private set; }
+
         private bool CanOpenInFileExplorer() => _projectManager.ActiveProject != null && SelectedItem != null;
+
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
@@ -275,7 +276,9 @@ namespace WolvenKit.ViewModels.Editor
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
         public ICommand PasteFileCommand { get; private set; }
+
         private bool CanPasteFile() => _projectManager.ActiveProject != null && SelectedItem != null && Clipboard.ContainsText();
+
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -320,7 +323,9 @@ namespace WolvenKit.ViewModels.Editor
         /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
+
         private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
+
         private async void ExecuteRenameFile()
         {
             var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
@@ -336,7 +341,6 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     return;
                 }
-
 
                 var filename = SelectedItem.FullName;
                 var newfullpath = Path.Combine(Path.GetDirectoryName(filename), vm.Text);
@@ -399,7 +403,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ICommand OpenInAssetBrowserCommand { get; private set; }
 
-
         private async void AddAllImports() => await _tw3Controller.AddAllImportsAsync(SelectedItem.FullName, true);
 
         private bool CanAddAllImports() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null && !SelectedItem.IsDirectory;
@@ -435,6 +438,23 @@ namespace WolvenKit.ViewModels.Editor
             // TODO: Handle command logic here
         }
 
+        public ICommand PESearchStartedCommand { get; private set; }
+
+        private bool CanPESearchStartedCommand(object arg) => true;
+
+        private void ExecutePESearchStartedCommand(object arg)
+        {
+            if (arg is FunctionEventArgs<string> e)
+            {
+                PerformSearch(e.Info);
+            }
+        }
+
+        private void PerformSearch(string query)
+        {
+            // ??
+        }
+
         private async void ExportMesh() => await Task.Run(() => _tw3Controller.ExportFileToMod(SelectedItem.FullName));
 
         #endregion Tw3 Commands
@@ -446,7 +466,6 @@ namespace WolvenKit.ViewModels.Editor
         protected override async Task CloseAsync() => await base.CloseAsync();
 
         protected override async Task InitializeAsync() => await base.InitializeAsync();
-
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
         {
@@ -540,8 +559,6 @@ namespace WolvenKit.ViewModels.Editor
                 _loggerService.LogString("Error cooking files.", Logtype.Error);
             }
         }
-
-
 
         #endregion Methods
     }
