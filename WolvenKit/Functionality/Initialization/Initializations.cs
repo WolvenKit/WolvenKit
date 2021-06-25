@@ -18,6 +18,7 @@ using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using Unosquare.FFME;
 using WolvenKit.Controls;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Tools;
@@ -31,15 +32,12 @@ namespace WolvenKit.Functionality.Initialization
 {
     public static class Initializations
     {
-
-
         /// <summary>
         /// Initialize webview2
         /// </summary>
         public async static void InitializeWebview2()
         {
-            string wKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit")                ;
-            string WebViewData = Path.Combine(wKitAppData, "WebViewData");
+            string WebViewData = Path.Combine(IGameController.WKitAppData, "WebViewData");
             Directory.CreateDirectory(WebViewData);
             Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, WebViewData, null);
         }
@@ -274,7 +272,6 @@ namespace WolvenKit.Functionality.Initialization
 
         public static void ThemeInnerInit()
         {
-
             var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
@@ -291,10 +288,8 @@ namespace WolvenKit.Functionality.Initialization
                 FontFamily = new FontFamily("Segoe UI")
             };
 
-
             SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
             //  SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
-
         }
     }
 }

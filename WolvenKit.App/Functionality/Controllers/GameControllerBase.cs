@@ -17,7 +17,7 @@ namespace WolvenKit.Functionality.Controllers
     {
         #region Properties
 
-        private static string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding","WolvenKit");
+        public static string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
 
         public static string ManagerCacheDir => Path.Combine(WKitAppData, "Config");
         public static string WorkDir => Path.Combine(WKitAppData, "tmp_workdir");
