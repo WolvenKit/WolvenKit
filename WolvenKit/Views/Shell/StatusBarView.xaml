@@ -29,7 +29,7 @@
         <hc:Divider
          Width="9999"
          Height="2"
-         Margin="0"
+         Margin="-5,0,0,0"
          LineStroke="Black"
          LineStrokeThickness="1"
          Orientation="Horizontal"
@@ -46,7 +46,7 @@
              >
                 <hc:Tag
                  Height="28"
-                 Margin="-10,0,0,0"
+                 Margin="0,0,0,0"
                  hc:TitleElement.Background="{DynamicResource RegionBrush}"
                  Background="{DynamicResource GrayBrush10}"
                  Content="Show Catfact"

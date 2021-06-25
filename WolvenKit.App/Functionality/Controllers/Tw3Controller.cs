@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using Catel.IoC;
+using DynamicData;
 using Newtonsoft.Json;
 using WolvenKit.Functionality.Services;
 using ProtoBuf;
@@ -410,7 +411,9 @@ namespace WolvenKit.Functionality.Controllers
             return textureManager;
         }
 
-        public List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods) => new()
+        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => throw new NotImplementedException();
+
+        public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new()
         {
             bundleManager,
             textureManager,
@@ -1639,7 +1642,7 @@ namespace WolvenKit.Functionality.Controllers
             //    UnbundleFile(relativePath, isDLC, projectFolder, EBundleType.TextureCache, alternateOutDirectory,
             //        loadmods, silent);
             //}
-            var manager = GetArchiveManagersManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
+            var manager = GetArchiveManagers(loadmods).FirstOrDefault(_ => _.TypeName == bundleType);
 
             if (manager != null && manager.Items.Any(x => x.Value.Any(y => y.Name == relativePath)))
             {

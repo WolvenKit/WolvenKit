@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.Messaging;
@@ -17,7 +16,6 @@ using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Views;
-using WolvenKit.Views.HomePage;
 using WolvenKit.Views.ViewModels;
 
 namespace WolvenKit
@@ -56,6 +54,12 @@ namespace WolvenKit
 
             // Set service locator.
             var serviceLocator = ServiceLocator.Default;
+
+
+            // ShellService.GivenPoop = new StartupViewer();
+
+
+
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
 
 #if DEBUG
@@ -64,6 +68,8 @@ namespace WolvenKit
 #endif
 
             StaticReferences.Logger.Info("Starting application");
+
+            Initializations.InitializeWebview2();
 
             StaticReferences.Logger.Info("Initializing MVVM");
             await Initializations.InitializeMVVM();
@@ -106,7 +112,7 @@ namespace WolvenKit
             //window.Show();
 
             // Create WebView Data Folder.
-            Directory.CreateDirectory(@"C:\WebViewData");
+            //Directory.CreateDirectory(@"C:\WebViewData");
             // Message system for video tool.
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
             mediator.Register<int>(this, onmessage);
@@ -160,5 +166,5 @@ namespace WolvenKit
             }
         }
 
-       }
+    }
 }

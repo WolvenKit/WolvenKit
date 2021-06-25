@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -104,9 +104,6 @@ namespace CP77Tools.Tasks
 
                     finalmatches = queryMatchingFiles;
                 }
-
-                var finalMatchesList = finalmatches.Where(_ => ar.CanUncook(_.NameHash64)).ToList();
-
 
                 // list files in archive
                 if (list)

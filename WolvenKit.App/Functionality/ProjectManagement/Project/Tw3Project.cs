@@ -163,6 +163,20 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override GameType GameType => GameType.Witcher3;
 
+        public override string PackedRootDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "packed");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
         public string PackedDlcDirectory
         {
             get
@@ -171,7 +185,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 {
                     return null;
                 }
-                var dir = Path.Combine(ProjectDirectory, "packed", "DLC", GetDlcName(), "content");
+                var dir = Path.Combine(PackedRootDirectory, "DLC", GetDlcName(), "content");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -185,7 +199,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "packed", "Mods", $"mod{Name}", "content");
+                var dir = Path.Combine(PackedRootDirectory, "Mods", $"mod{Name}", "content");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

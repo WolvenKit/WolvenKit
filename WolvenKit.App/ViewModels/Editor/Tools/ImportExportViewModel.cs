@@ -362,7 +362,7 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
-            var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+            var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
             CollectionAvailableItems.Clear();
             if (archivemanager != null)
             {
@@ -376,7 +376,7 @@ namespace WolvenKit.ViewModels.Editor
 
             if (_gameController.GetController() is Cp77Controller cp77Controller)
             {
-                var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                 opusExportArgs.SoundbanksArchive = archivemanager.Archives.Values
                     .Cast<Archive>()
                     .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
@@ -519,7 +519,7 @@ namespace WolvenKit.ViewModels.Editor
             var proj = _projectManager.ActiveProject;
             if (_gameController.GetController() is Cp77Controller cp77Controller)
             {
-                var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                 var soundbanksArchive = archivemanager.Archives.Values
                     .Cast<Archive>()
                     .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
@@ -551,7 +551,7 @@ namespace WolvenKit.ViewModels.Editor
             {
                 if (item.Properties is MeshImportArgs meshImportArgs)
                 {
-                    var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                    var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                     var archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                     var basegameArchive = archives.FirstOrDefault(_ => _.Name.Equals("basegame_4_gamedata.archive"));
                     if (basegameArchive == null)
@@ -582,7 +582,7 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     if (_gameController.GetController() is Cp77Controller cp77Controller)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                         meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                     }
                 }
@@ -590,7 +590,7 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     if (_gameController.GetController() is Cp77Controller cp77Controller)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagersManagers(false).First() as ArchiveManager;
+                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                         opusExportArgs.SoundbanksArchive = archivemanager.Archives.Values
                             .Cast<Archive>()
                             .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));

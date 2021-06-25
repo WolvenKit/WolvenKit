@@ -369,9 +369,11 @@
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.1.0.63" />
@@ -391,7 +393,7 @@
     <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
-    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.6" />
+    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="5.0.1" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -1060,9 +1062,9 @@
     <Resource Include="Resources\Old\Images\RedEngine\w2surf.png" />
     <Resource Include="Resources\Old\Images\RedEngine\w2w.png" />
     <Resource Include="Resources\Old\Images\RedEngine\worldmap.png" />
-    <Resource Include="Resources\Media\Images\Icons\Application\TaskBarIcon.ico">
+    <Content Include="Resources\Media\Images\Icons\Application\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
     <Content Include="Resources\Old\Images\Preferences_light_64x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

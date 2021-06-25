@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
@@ -16,6 +18,7 @@ using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using Unosquare.FFME;
 using WolvenKit.Controls;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Tools;
@@ -34,7 +37,9 @@ namespace WolvenKit.Functionality.Initialization
         /// </summary>
         public async static void InitializeWebview2()
         {
-            Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, @"C:\WebViewData", null);
+            string WebViewData = Path.Combine(IGameController.WKitAppData, "WebViewData");
+            Directory.CreateDirectory(WebViewData);
+            Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, WebViewData, null);
         }
 
         // Initialize Github RPC
@@ -55,11 +60,13 @@ namespace WolvenKit.Functionality.Initialization
         {
             try
             {
+                var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
+
                 HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
                 var themeResources = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
                 var themeSettings = new MaterialDarkThemeSettings
                 {
-                    PrimaryBackground = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3"),
+                    PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent),
                     BodyFontSize = 11,
                     HeaderFontSize = 14,
                     SubHeaderFontSize = 13,
@@ -224,11 +231,14 @@ namespace WolvenKit.Functionality.Initialization
 
                 await shellService.CreateAsync<ShellWindow>();
                 var sh = (ShellWindow)shellService.Shell;
+                sh.TitleTextAlignment = System.Windows.HorizontalAlignment.Right;
+                sh.ShowIcon = false;
+                sh.Icon = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\Media\\Images\\Icons\\Application\\TaskBarIcon.ico"));
                 StaticReferences.GlobalShell = sh;
-                sh.MinWidth = 1;
-                sh.MinHeight = 1;
-                sh.WindowState = WindowState.Maximized;
-                sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                //sh.MinWidth = 1;
+                //sh.MinHeight = 1;
+                // sh.WindowState = WindowState.Maximized;
+                // sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 var ws = new Binding
                 {
                     Source = HomePageViewModel.GlobalHomePageVM,
@@ -239,8 +249,8 @@ namespace WolvenKit.Functionality.Initialization
                 BindingOperations.SetBinding(sh, ShellWindow.WindowStateProperty, ws);
                 sh.Closed += Sh_Closed;
 
-                StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
-                StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
+                //StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
+                //StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
             }
             catch (Exception e)
             {
@@ -262,51 +272,24 @@ namespace WolvenKit.Functionality.Initialization
 
         public static void ThemeInnerInit()
         {
-            try
-            {
-                var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
-                MaterialDarkThemeSettings themeSettings;
-                if (SettingsManag.ThemeAccent != default)
-                {
-                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                        ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.ThemeAccent, false));
+            var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
-                    themeSettings = new MaterialDarkThemeSettings
-                    {
-                        PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent),
-                        BodyFontSize = 11,
-                        HeaderFontSize = 14,
-                        SubHeaderFontSize = 13,
-                        TitleFontSize = 13,
-                        SubTitleFontSize = 12,
-                        BodyAltFontSize = 11,
-                        FontFamily = new FontFamily("Segoe UI")
-                    };
-                }
-                else
-                {
-                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                        ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", (Color)ColorConverter.ConvertFromString("#DF2935"), false));
-
-                    themeSettings = new MaterialDarkThemeSettings
-                    {
-                        PrimaryBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935")),
-                        BodyFontSize = 11,
-                        HeaderFontSize = 14,
-                        SubHeaderFontSize = 13,
-                        TitleFontSize = 13,
-                        SubTitleFontSize = 12,
-                        BodyAltFontSize = 11,
-                        FontFamily = new FontFamily("Segoe UI")
-                    };
-                }
-                SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-                SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
-            }
-            catch (Exception e)
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
+                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.ThemeAccent, false));
+            MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings
             {
-                StaticReferences.Logger.Error(e);
-            }
+                PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent),
+                BodyFontSize = 11,
+                HeaderFontSize = 14,
+                SubHeaderFontSize = 13,
+                TitleFontSize = 13,
+                SubTitleFontSize = 12,
+                BodyAltFontSize = 11,
+                FontFamily = new FontFamily("Segoe UI")
+            };
+
+            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+            //  SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
         }
     }
 }

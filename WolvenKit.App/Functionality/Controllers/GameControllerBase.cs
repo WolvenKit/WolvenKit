@@ -9,6 +9,7 @@ using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.W3Strings;
 using Catel.IoC;
+using DynamicData;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -16,7 +17,7 @@ namespace WolvenKit.Functionality.Controllers
     {
         #region Properties
 
-        private static string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding","WolvenKit");
+        public static string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
 
         public static string ManagerCacheDir => Path.Combine(WKitAppData, "Config");
         public static string WorkDir => Path.Combine(WKitAppData, "tmp_workdir");
@@ -59,10 +60,14 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject();
 
-        #endregion Methods
+        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy();
 
-        List<IGameArchiveManager> GetArchiveManagersManagers(bool loadmods);
+        List<IGameArchiveManager> GetArchiveManagers(bool loadmods);
+
         Task<bool> PackageMod();
+
         void InstallMod();
+
+        #endregion Methods
     }
 }

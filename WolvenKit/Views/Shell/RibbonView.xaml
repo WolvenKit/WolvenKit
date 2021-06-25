@@ -16,6 +16,9 @@
  xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
  xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
+                                                      Panel.ZIndex="-15"
+    Margin="0,33,0,0"
+
  >
 
     <!--  Resources  -->
@@ -193,7 +196,7 @@
                             <!--  Add selected Items(s) to Project Button  -->
                             <syncfusion:RibbonButton
                              x:Name="AddSelectedItems"
-                             Click="AddSelectedItems_Click"
+                             Command="{Binding AssetBrowserAddCommand}"
                              IconStretch="Fill"
                              IconType="Icon"
                              Label="Add selected Item(s) to Project"
@@ -1719,7 +1722,7 @@
         <StackPanel
          Width="auto"
          Height="20"
-         Margin="75,-21,0,0"
+         Margin="75,-22,0,0"
          HorizontalAlignment="Left"
          VerticalAlignment="Top"
          Orientation="Horizontal"
@@ -1729,7 +1732,7 @@
         <Border
          Width="70"
          Height="30"
-         Margin="0,-25,0,0"
+         Margin="0,-30,0,0"
          HorizontalAlignment="Left"
          VerticalAlignment="top"
          Background="{DynamicResource ContentBackgroundAlt2}"

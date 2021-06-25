@@ -12,6 +12,8 @@ namespace WolvenKit.Functionality.Controllers
     public interface IGameControllerFactory
     {
         public IGameController GetController();
+
+        public Cp77Controller GetRed4Controller();
     }
 
 
@@ -36,6 +38,8 @@ namespace WolvenKit.Functionality.Controllers
             _projectManager = projectManager;
             _mockGameController = mockGameController;
         }
+
+        public Cp77Controller GetRed4Controller() => _cp77Controller;
 
         public IGameController GetController() =>
             _projectManager.ActiveProject == null

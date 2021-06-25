@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Media;
 using Catel.Data;
 using Newtonsoft.Json;
@@ -65,16 +67,6 @@ namespace WolvenKit.Functionality.Services
 
         public bool CheckForUpdates { get; set; }
 
-        public string CP77ExecutablePath
-        {
-            get => _cp77ExecutablePath;
-            set
-            {
-                _cp77ExecutablePath = value;
-                RaisePropertyChanged(nameof(CP77ExecutablePath));
-            }
-        }
-
         public string DepotPath
         {
             get => _depotPath;
@@ -113,11 +105,54 @@ namespace WolvenKit.Functionality.Services
 
         public string TextLanguage { get; set; }
 
-        public Color ThemeAccent { get; set; }
+        public Color ThemeAccent { get; set; } = (Color)ColorConverter.ConvertFromString("#DF2935");
 
-        /// <summary>
-        /// Gets the internal name and Uri source for all available themes.
-        /// </summary>
+        #region red4
+
+        public string CP77ExecutablePath
+        {
+            get => _cp77ExecutablePath;
+            set
+            {
+                _cp77ExecutablePath = value;
+                RaisePropertyChanged(nameof(CP77ExecutablePath));
+            }
+        }
+
+        public string RED4GameRootDir
+        {
+            get
+            {
+                try
+                {
+                    return Path.Combine(new FileInfo(CP77ExecutablePath).Directory.Parent.Parent.FullName);
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine(e);
+
+                    return e.Message;
+                }
+            }
+        }
+
+        public string RED4GameModDir
+        {
+            get
+            {
+                var dir = Path.Combine(RED4GameRootDir, "archive", "pc", "mod");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        #endregion red4
+
+        #region red3
 
         public string W3ExecutablePath
         {
@@ -139,8 +174,6 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-
-
         public string W3GameContentDir => Path.Combine(W3GameRootDir, "content");
 
         public string W3GameDlcDir => Path.Combine(W3GameRootDir, "DLC");
@@ -149,10 +182,13 @@ namespace WolvenKit.Functionality.Services
 
         public string W3GameRootDir => Path.Combine(W3ExecutablePath, @"..\..\..\");
 
+        #endregion red3
 
         #endregion properties
 
         #region methods
+
+        public bool CheckSelf() => File.Exists(CP77ExecutablePath);
 
         public static SettingsManager Load()
         {
@@ -162,7 +198,16 @@ namespace WolvenKit.Functionality.Services
                 if (File.Exists(ConfigurationPath))
                 {
                     config = JsonConvert.DeserializeObject<SettingsManager>(File.ReadAllText(ConfigurationPath));
-                    FirstTimeSetupForUser = false;
+
+                    if (config == null)
+                    {
+                        throw new SerializationException();
+                    }
+
+                    if (config.CheckSelf())
+                    {
+                        FirstTimeSetupForUser = false;
+                    }
                 }
                 else
                 {

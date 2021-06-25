@@ -76,14 +76,6 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-
-
-        private void Backstage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            StaticReferences.GlobalShell.DragMove();
-        }
-
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
@@ -149,7 +141,8 @@ namespace WolvenKit.Views.Shell
         {
             var z = new MaterialsRepositoryDialog();
             z.Show();
-
+            //var test = ServiceLocator.Default.ResolveType<IPleaseWaitService>();
+            //test.UpdateStatus(50, 100);
 
         }
 
@@ -180,12 +173,6 @@ namespace WolvenKit.Views.Shell
         private void ExandChildrenContext_Click(object sender, RoutedEventArgs e)
         {
             ProjectExplorerView.GlobalPEView.ExpandChildren();
-
-        }
-
-        private void AddSelectedItems_Click(object sender, RoutedEventArgs e)
-        {
-            AssetBrowserView.GlobalABView.RevampedImport();
 
         }
     }

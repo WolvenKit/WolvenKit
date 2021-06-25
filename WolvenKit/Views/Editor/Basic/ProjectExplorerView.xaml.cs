@@ -1,6 +1,8 @@
 using System.Windows;
+using HandyControl.Data;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -141,5 +143,21 @@ namespace WolvenKit.Views.Editor
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAll();
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
+
+
+        private string _currentFolderQuery = "";
+        private bool FilterNodes(object o) => o is FileModel data && data.Name.Contains(_currentFolderQuery);
+
+        private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
+        {
+            // expand all
+            TreeGrid.ExpandAllNodes();
+            _currentFolderQuery = e.Info;
+
+            // filter programmatially
+            TreeGrid.View.Filter = FilterNodes;
+            TreeGrid.View.RefreshFilter();
+
+        }
     }
 }

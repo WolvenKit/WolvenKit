@@ -1,23 +1,20 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.FileSystem;
-using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Functionality.Commands
 {
@@ -32,8 +29,8 @@ namespace WolvenKit.Functionality.Commands
         private readonly Cp77Controller _cp77Controller;
         private readonly Tw3Controller _tw3Controller;
 
-        
-        
+
+
 
         #endregion Fields
 
@@ -77,7 +74,7 @@ namespace WolvenKit.Functionality.Commands
         {
             var location = parameter as string;
             // switch from one active project to another
-            
+
             if (_projectManager.ActiveProject != null && !string.IsNullOrEmpty(location))
             {
                 if (_projectManager.ActiveProject.Location == location)
@@ -90,7 +87,7 @@ namespace WolvenKit.Functionality.Commands
             {
                 RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
                 RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
-                
+
                 if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
                 {
                     // file was moved or deleted
@@ -160,8 +157,10 @@ namespace WolvenKit.Functionality.Commands
                             break;
                     }
 
-                    var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
-                    btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
+                    if (StaticReferences.GlobalShell != null)
+                    {
+                        StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
+                    }
 
                     StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
                 }

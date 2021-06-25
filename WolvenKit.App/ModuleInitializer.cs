@@ -20,8 +20,6 @@ using ModTools = WolvenKit.Modkit.RED4.ModTools;
 /// </summary>
 public static class ModuleInitializer
 {
-    #region Methods
-
     /// <summary>
     /// Initializes the module.
     /// </summary>
@@ -69,7 +67,4 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IGameControllerFactory, GameControllerFactory>();
 
     }
-
-    #endregion Methods
-
 }
