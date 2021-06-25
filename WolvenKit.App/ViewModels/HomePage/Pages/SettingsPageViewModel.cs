@@ -233,7 +233,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         {
             if (info.CanWrite)
             {
-                var binding = new Binding("Path")
+                var binding = new Binding("Value")
                 {
                     Mode = BindingMode.TwoWay,
                     Source = info,
@@ -245,7 +245,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             else
             {
                 addPathDialogView.IsEnabled = false;
-                var binding = new Binding("Path")
+                var binding = new Binding("Value")
                 {
                     Source = info,
                     ValidatesOnExceptions = true,
