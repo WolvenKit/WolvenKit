@@ -123,6 +123,8 @@ namespace WolvenKit.ViewModels.Editor
             CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
             OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
 
+            PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
+
             CookCommand = new RelayCommand(Cook, CanCook);
             FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
             ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
