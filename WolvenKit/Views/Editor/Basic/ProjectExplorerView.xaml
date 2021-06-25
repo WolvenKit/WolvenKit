@@ -31,8 +31,6 @@
             <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
         </Grid.Resources>
 
-
-
         <syncfusion:SfTreeGrid
             Name="TreeGrid"
             AllowEditing="False"
@@ -790,7 +788,6 @@
                         <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
                     </MenuItem>
 
-
                     <MenuItem Margin="0" Header="Actions">
 
                         <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
@@ -798,7 +795,6 @@
                     </MenuItem>
                     <MenuItem Header="Export selected - Simple" />
                     <MenuItem Header="Export selected - Advanced" />
-
 
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
@@ -811,5 +807,21 @@
                 </ContextMenu>
             </syncfusion:SfTreeGrid.ContextMenu>
         </syncfusion:SfTreeGrid>
+
+        <hc:SearchBar
+            x:Name="PESearchBar"
+            Margin="0,0,0,0"
+            VerticalAlignment="Top"
+            Background="{DynamicResource ContentBackground}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            FlowDirection="LeftToRight"
+            Text="search">
+
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="SearchStarted">
+                    <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
+        </hc:SearchBar>
     </Grid>
 </catel:UserControl>
