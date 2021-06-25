@@ -43,6 +43,7 @@
             ChildPropertyName="ParentHash"
             ColumnSizer="Star"
             ExpandStateMappingName="IsExpanded"
+            IsReadOnly="True"
             ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             ParentPropertyName="Hash"
@@ -50,9 +51,7 @@
             SelectedItem="{Binding SelectedItem}"
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
-            SelfRelationRootValue="0"
-            IsReadOnly="True"
-            >
+            SelfRelationRootValue="0">
 
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
@@ -791,7 +790,6 @@
                         <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
                     </MenuItem>
 
-                    <Separator Margin="-15" />
 
                     <MenuItem Margin="0" Header="Actions">
 
@@ -801,15 +799,11 @@
                     <MenuItem Header="Export selected - Simple" />
                     <MenuItem Header="Export selected - Advanced" />
 
-                    <Separator Margin="-15" />
 
-                    <Separator Margin="-15" />
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
                     <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
-                    <Separator Margin="-15" />
 
-                    <Separator Margin="-15" />
                     <MenuItem Click="ExpandChildren_OnClick" Header="Expand children" />
                     <MenuItem Click="CollapseChildren_OnClick" Header="Collapse children" />
                     <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
