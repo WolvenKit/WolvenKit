@@ -46,7 +46,7 @@ namespace WolvenKit.Controls
         {
             if (System.IO.File.Exists(str))
             {
-                notification.IsOpen = true;
+                notification.IsOpen = false;
                 return HandyControl.Data.OperationResult.Success();
             }
             else

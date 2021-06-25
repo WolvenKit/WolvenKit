@@ -28,7 +28,10 @@ namespace WolvenKit.Functionality.Services
         {
             get
             {
-                return Path.Combine(IGameController.WKitAppData, "_config_n.json");
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                var filename = Path.GetFileNameWithoutExtension(path);
+                var dir = Path.GetDirectoryName(path);
+                return Path.Combine(dir ?? "", filename + "_config_n.json");
             }
         }
 
@@ -36,7 +39,10 @@ namespace WolvenKit.Functionality.Services
         {
             get
             {
-                return Path.Combine(IGameController.WKitAppData, "_profile_image.png");
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                var filename = Path.GetFileNameWithoutExtension(path);
+                var dir = Path.GetDirectoryName(path);
+                return Path.Combine(dir ?? "", filename + "_profile_image.png");
             }
         }
 
