@@ -229,7 +229,7 @@ namespace WolvenKit.Functionality.Initialization
                 var sh = (ShellWindow)shellService.Shell;
                 sh.TitleTextAlignment = System.Windows.HorizontalAlignment.Right;
                 sh.ShowIcon = false;
-                sh.Icon = new BitmapImage(new Uri(@"C:\Users\cancerPC\source\repos\Wolvenkit\WolvenKit\Resources\Media\Images\Icons\Application\TaskBarIcon.ico"));
+                sh.Icon = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\Media\\Images\\Icons\\Application\\TaskBarIcon.ico"));
                 StaticReferences.GlobalShell = sh;
                 //sh.MinWidth = 1;
                 //sh.MinHeight = 1;

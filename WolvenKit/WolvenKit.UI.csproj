@@ -1060,9 +1060,9 @@
     <Resource Include="Resources\Old\Images\RedEngine\w2surf.png" />
     <Resource Include="Resources\Old\Images\RedEngine\w2w.png" />
     <Resource Include="Resources\Old\Images\RedEngine\worldmap.png" />
-    <Resource Include="Resources\Media\Images\Icons\Application\TaskBarIcon.ico">
+    <Content Include="Resources\Media\Images\Icons\Application\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
     <Content Include="Resources\Old\Images\Preferences_light_64x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
