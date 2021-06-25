@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
 using CP77.CR2W;
+using HandyControl.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common;
@@ -72,7 +73,7 @@ namespace WolvenKit.Views.Editor
             if (propertiesViewModel.State is DockState.AutoHidden or DockState.Hidden)
             { return; }
 
-            propertiesViewModel.AB_SelectedItem = vm.SelectedFile;
+            propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
             propertiesViewModel.AB_MeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
@@ -193,9 +194,50 @@ namespace WolvenKit.Views.Editor
 
             if (e.AddedItems.First() is TreeGridRowInfo { RowData: GameFileTreeNode model })
             {
-                vm.CurrentNodeFiles = model.Files.Values.SelectMany(_ => _)
+                vm.RightItems = model.Files.Values.SelectMany(_ => _)
                     .Select(_ => new FileEntryViewModel(_ as FileEntry));
             }
         }
+
+        private string _currentFolderQuery = "";
+
+        private bool FilerNodes(object o) => o is GameFileTreeNode data && data.Name.Contains(_currentFolderQuery);
+
+        private Predicate<object> FilterNodes(string query) => FilerNodes;
+
+        private void FolderSearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
+        {
+            // expand all
+            LeftNavigation.ExpandAllNodes();
+            _currentFolderQuery = e.Info;
+
+            // filter programmatially
+            LeftNavigation.View.Filter = FilterNodes(_currentFolderQuery);
+            LeftNavigation.View.RefreshFilter();
+        }
+
+
+        private void LeftNavigationHomeButton_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
+
+        private void Expand_OnClick(object sender, RoutedEventArgs e)
+        {
+            var selectedIndex = LeftNavigation.SelectedIndex;
+            LeftNavigation.ExpandNode(selectedIndex);
+        }
+
+        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.ExpandAllNodes();
+
+        private void Collapse_OnClick(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = LeftNavigation.SelectedItem;
+            if (selectedItem == null)
+            {
+                return;
+            }
+            var node = LeftNavigation.View.Nodes.GetNode(selectedItem);
+            LeftNavigation.CollapseNode(node);
+        }
+
+        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
     }
 }

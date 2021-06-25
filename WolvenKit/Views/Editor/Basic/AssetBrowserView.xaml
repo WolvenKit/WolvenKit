@@ -52,10 +52,11 @@
                                 AutoGenerateColumns="False"
                                 ChildPropertyName="SubDirectories"
                                 ColumnSizer="FillColumn"
-                                FilterLevel="All"
-                                ItemsSource="{Binding BoundRootNodes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FilterLevel="Extended"
+                                ItemsSource="{Binding LeftItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding LeftSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectionChanged="LeftNavigation_OnSelectionChanged">
+
                                 <syncfusion:SfTreeGrid.Resources>
                                     <Style TargetType="syncfusion:TreeGridCell">
                                         <Setter Property="BorderBrush" Value="Transparent" />
@@ -67,12 +68,15 @@
                                     </Style>
                                     <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
                                 </syncfusion:SfTreeGrid.Resources>
+
                                 <syncfusion:SfTreeGrid.Columns>
 
                                     <syncfusion:TreeGridTextColumn
                                         HeaderText="Name"
                                         HorizontalHeaderContentAlignment="Left"
-                                        MappingName="Name">
+                                        MappingName="Name"
+                                        ImmediateUpdateColumnFilter="True"
+                                        >
                                         <syncfusion:TreeGridTextColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -139,6 +143,16 @@
                                         </syncfusion:TreeGridTextColumn.CellTemplate>
                                     </syncfusion:TreeGridTextColumn>
                                 </syncfusion:SfTreeGrid.Columns>
+
+                                <syncfusion:SfTreeGrid.ExpanderContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem x:Name="Expand" Header="Expand" Click="Expand_OnClick"  />
+                                        <MenuItem x:Name="ExpandAll" Header="ExpandAll" Click="ExpandAll_OnClick" />
+                                        <MenuItem x:Name="Collapse" Header="Collapse" Click="Collapse_OnClick" />
+                                        <MenuItem x:Name="CollapseAll" Header="CollapseAll" Click="CollapseAll_OnClick" />
+                                    </ContextMenu>
+                                </syncfusion:SfTreeGrid.ExpanderContextMenu>
+
                             </syncfusion:SfTreeGrid>
 
                             <hc:SearchBar
@@ -149,20 +163,16 @@
                                 Background="{DynamicResource ContentBackground}"
                                 BorderBrush="{DynamicResource BorderBrush}"
                                 FlowDirection="LeftToRight"
-                                Text="search">
-
-                                <hc:Interaction.Triggers>
-                                    <hc:EventTrigger EventName="SearchStarted">
-                                        <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
-                                    </hc:EventTrigger>
-                                </hc:Interaction.Triggers>
+                                Text="search"
+                                SearchStarted="FolderSearchBar_OnSearchStarted"
+                                >
                             </hc:SearchBar>
 
                             <Button
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
                                 Background="{DynamicResource ContentBackground}"
-                                Command="{Binding HomeCommand}"
+                                Click="LeftNavigationHomeButton_OnClick"
                                 Visibility="Visible">
                                 <iconPacks:PackIconCodicons Kind="Home" />
                             </Button>
@@ -213,8 +223,8 @@
                                 IsManipulationEnabled="False"
                                 ItemsSource="{Binding ElementName=dataPager, Path=PagedSource}"
                                 RowHeight="22"
-                                SelectedItem="{Binding SelectedFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectedItems="{Binding SelectedFiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding RightSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItems="{Binding RightSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectionChanged="InnerList_SelectionChanged"
                                 SelectionMode="Extended">
 
@@ -939,7 +949,7 @@
                                 x:Name="dataPager"
                                 Grid.Row="1"
                                 PageSize="500"
-                                Source="{Binding CurrentNodeFiles}" />
+                                Source="{Binding RightItems}" />
                         </Grid>
                     </Grid>
                 </Grid>

@@ -224,7 +224,6 @@ namespace WolvenKit.ViewModels.Editor
 
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();
-                        var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.tga };
                         await using var filestream = new FileStream(PE_SelectedItem.FullName,
                             FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
                         man.UncookXbm(filestream, ddsstream, out _);

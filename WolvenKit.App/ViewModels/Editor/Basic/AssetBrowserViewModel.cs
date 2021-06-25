@@ -88,61 +88,58 @@ namespace WolvenKit.ViewModels.Editor
             SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
-            HomeCommand = new RelayCommand(ExecuteHome, CanHome);
 
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
 
-            FolderSearchStartedCommand = new DelegateCommand<object>(ExecuteFolderSearchStartedCommand, CanFolderSearchStartedCommand);
-
             SetupToolDefaults();
-            ReInit(false);
+            //ReInit(false);
 
             var controller = _gameController.GetRed4Controller();
 
-            var disposable = controller.ConnectHierarchy()
+            controller.ConnectHierarchy()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
                 .Subscribe(OnRootNodesUpdated);
         }
 
-        private void OnRootNodesUpdated(IChangeSet<GameFileTreeNode, string> obj) => BoundRootNodes = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
+        private void OnRootNodesUpdated(IChangeSet<GameFileTreeNode, string> obj) => LeftItems = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
 
         #endregion ctor
 
         #region properties
 
         // binding properties. do not make private
-        // ReSharper disable MemberCanBePrivate.Global
         public bool PreviewVisible { get; set; }
-
-        public bool IsLoaded { get; set; }
-        public GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
+        public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
         public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
         /// <summary>
         /// Bound RootNodes to left navigation
         /// </summary>
-        public ObservableCollection<GameFileTreeNode> BoundRootNodes { get; set; } = new();
+        public ObservableCollection<GameFileTreeNode> LeftItems { get; set; } = new();
 
         /// <summary>
         /// Selected Root node in left navigation
         /// </summary>
-        public /*GameFileTreeNode*/ object SelectedNode { get; set; }
-
-        /// <summary>
-        /// Items (Files) inside a Node (Folder) bound to right navigation
-        /// </summary>
-        public IEnumerable<FileEntryViewModel> CurrentNodeFiles { get; set; }
+        public object LeftSelectedItem { get; set; }
 
         /// <summary>
         /// Selected File in right navigaiton
         /// </summary>
-        public FileEntryViewModel SelectedFile { get; set; }
+        public FileEntryViewModel RightSelectedItem { get; set; }
+
+        /// <summary>
+        /// Items (Files) inside a Node (Folder) bound to right navigation
+        /// </summary>
+        public IEnumerable<FileEntryViewModel> RightItems { get; set; }
 
         /// <summary>
         /// Selected Files in right navigaiton
         /// </summary>
-        public ObservableCollection<object> SelectedFiles { get; set; }
+        public ObservableCollection<object> RightSelectedItems { get; set; }
+
+
+
 
         public List<string> Extensions { get; set; }
         public List<string> Classes { get; set; }
@@ -157,37 +154,16 @@ namespace WolvenKit.ViewModels.Editor
 
         public ICommand AddSelectedCommand { get; private set; }
 
-        private bool CanAddSelected() => SelectedFiles != null && SelectedFiles.Any();
+        private bool CanAddSelected() => RightSelectedItems != null && RightSelectedItems.Any();
 
         private void ExecuteAddSelected()
         {
-            foreach (var o in SelectedFiles)
+            foreach (var o in RightSelectedItems)
             {
                 if (o is FileEntryViewModel fileVm)
                 {
                     AddFile(fileVm);
                 }
-            }
-        }
-
-        public ICommand HomeCommand { get; private set; }
-
-        private bool CanHome() => true;
-
-        private void ExecuteHome()
-        {
-            SelectedNode = BoundRootNodes.FirstOrDefault();
-        }
-
-        public ICommand FolderSearchStartedCommand { get; private set; }
-
-        private bool CanFolderSearchStartedCommand(object arg) => true;
-
-        private void ExecuteFolderSearchStartedCommand(object arg)
-        {
-            if (arg is FunctionEventArgs<string> e)
-            {
-                PreformFolderSearch(e.Info);
             }
         }
 
@@ -225,7 +201,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private bool CanImportFile() => /*CurrentNode != null*/ true;
 
-        private void ExecuteImportFile() => AddFile(SelectedFile);
+        private void ExecuteImportFile() => AddFile(RightSelectedItem);
 
         #endregion commands
 
@@ -250,12 +226,8 @@ namespace WolvenKit.ViewModels.Editor
                 .GetAvaliableClasses();
             PreviewVisible = false;
 
-            IsLoaded = true;
-
             _notificationService.Success($"Asset Browser is initialized");
             LoadVisibility = Visibility.Collapsed;
-
-            RaisePropertyChanged(nameof(BoundRootNodes));
         }
 
         protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
@@ -285,15 +257,11 @@ namespace WolvenKit.ViewModels.Editor
                 .GroupBy(x => x.Name)
                 .Select(x => x.First())
                 ;
-            CurrentNodeFiles = files
+            RightItems = files
                 .Select(_ => new FileEntryViewModel(_));
         }
 
-        private void PreformFolderSearch(string query)
-        {
-            // ??
-        }
-
+        
         private void SetupToolDefaults()
         {
             ContentId = ToolContentId;

@@ -116,7 +116,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanAssetBrowserAdd()
         {
             var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
-            return abvm is {SelectedFiles: { }} && abvm.SelectedFiles.Any();
+            return abvm is {RightSelectedItems: { }} && abvm.RightSelectedItems.Any();
         }
 
         private void ExecuteAssetBrowserAdd()
