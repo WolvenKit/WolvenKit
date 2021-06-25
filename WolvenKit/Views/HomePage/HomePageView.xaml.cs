@@ -68,7 +68,7 @@ namespace WolvenKit.Views.HomePage
 
             if (_settingsManager.ShowGuidedTour)
             {
-                guide.Visibility = Visibility.Visible;
+                guide.Visibility = Visibility.Hidden;
 
             }
 

@@ -71,7 +71,7 @@
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
-                <syncfusion:SfAccordionItem Header="Editor">
+                <syncfusion:SfAccordionItem Header="Editor" Visibility="Collapsed">
                     <syncfusion:PropertyGrid
                         x:Name="EditorSettingsPG"
                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
@@ -79,7 +79,7 @@
                         SelectedObject="{Binding EditorSettingsPGModel}" />
                 </syncfusion:SfAccordionItem>
 
-                <syncfusion:SfAccordionItem Visibility="Collapsed" Header="Tools">
+                <syncfusion:SfAccordionItem Header="Tools" Visibility="Collapsed">
                     <syncfusion:PropertyGrid
                         x:Name="ToolsSettingsPG"
                         EnableGrouping="True"
