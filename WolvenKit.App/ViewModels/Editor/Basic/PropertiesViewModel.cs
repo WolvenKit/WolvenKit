@@ -35,7 +35,6 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly MeshTools _meshTools;
 
-
         /// <summary>
         /// Constructor PropertiesViewModel
         /// </summary>
@@ -67,14 +66,12 @@ namespace WolvenKit.ViewModels.Editor
 
             SetToNullAndResetVisibility();
 
-
             nAudioSimple = NAudioSimpleEngine.Instance;
             NAudioSimpleEngine.Instance.PropertyChanged += NAudioEngine_PropertyChanged;
 
             // global commands
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanOpenFile);
             commandManager.RegisterCommand(AppCommands.Application.FileSelected, FileSelectedCommand, this);
-
         }
 
         #region properties
@@ -84,12 +81,10 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public void SetToNullAndResetVisibility()
         {
-
             // Asset Browser
             AB_SelectedItem = null;
             AB_FileInfoVisible = false;
             AB_MeshPreviewVisible = false;
-
 
             // Project Explorer
             PE_SelectedItem = null;
@@ -99,7 +94,6 @@ namespace WolvenKit.ViewModels.Editor
             IsAudioPreviewVisible = false;
 
             IsImagePreviewVisible = false;
-
         }
 
         /// <summary>
@@ -140,7 +134,7 @@ namespace WolvenKit.ViewModels.Editor
         public bool IsAudioPreviewVisible { get; set; }
         public bool IsImagePreviewVisible { get; set; }
 
-        #endregion
+        #endregion properties
 
         #region commands
 
@@ -148,7 +142,9 @@ namespace WolvenKit.ViewModels.Editor
         /// Opens a physical file in WolvenKit.
         /// </summary>
         public ICommand FileSelectedCommand { get; private set; }
+
         private bool CanOpenFile(FileModel model) => model != null;
+
         public async Task ExecuteSelectFile(FileModel model)
         {
             if (model == null)
@@ -181,7 +177,6 @@ namespace WolvenKit.ViewModels.Editor
             {
                 return;
             }
-
 
             if (PE_SelectedItem != null)
             {
@@ -229,7 +224,7 @@ namespace WolvenKit.ViewModels.Editor
 
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();
-                        var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.dds };
+                        var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.tga };
                         await using var filestream = new FileStream(PE_SelectedItem.FullName,
                             FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
                         man.UncookXbm(filestream, ddsstream, out _);
@@ -240,8 +235,7 @@ namespace WolvenKit.ViewModels.Editor
                             var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
                             if (qa != null)
                             {
-                                var g = BitmapFrame.Create(qa);
-                                LoadImage(g);
+                                LoadImage(qa);
                             }
                         }
                         catch (Exception)
@@ -254,11 +248,14 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         public string LoadedModelPath { get; set; }
-        private void LoadModel(string s) => LoadedModelPath = s;
-        public BitmapFrame LoadedBitmapFrame { get; set; }
-        private void LoadImage(BitmapFrame p0) => LoadedBitmapFrame = p0;
 
-        #endregion
+        private void LoadModel(string s) => LoadedModelPath = s;
+
+        public BitmapSource LoadedBitmapFrame { get; set; }
+
+        private void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;
+
+        #endregion commands
 
         protected override async Task InitializeAsync()
         {
@@ -272,14 +269,12 @@ namespace WolvenKit.ViewModels.Editor
         {
             if (AB_MeshPreviewVisible || PE_MeshPreviewVisible)
             { IsMeshPreviewVisible = true; }
-
             else
             { IsMeshPreviewVisible = false; }
         }
 
-
-
         #region ToolViewModel
+
         /// <summary>
         /// Initialize Syncfusion specific defaults that are specific to this tool window.
         /// </summary>
@@ -294,8 +289,8 @@ namespace WolvenKit.ViewModels.Editor
         /// Identifies the caption string used for this tool window.
         /// </summary>
         public const string ToolTitle = "Properties";
-        #endregion
 
+        #endregion ToolViewModel
 
         #region AudioPreview
 
@@ -328,8 +323,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// current track name.
         /// </summary>
-        public string CurrentTrackName { get;set; }
-
+        public string CurrentTrackName { get; set; }
 
         /// <summary>
         /// convert a file to wav to preview it.
@@ -348,14 +342,10 @@ namespace WolvenKit.ViewModels.Editor
             {
                 try
                 {
-
-                        File.Delete(f);
-
-
+                    File.Delete(f);
                 }
                 catch
                 {
-
                 }
             }
 
@@ -380,7 +370,6 @@ namespace WolvenKit.ViewModels.Editor
             proc.WaitForExit();
             Trace.WriteLine(proc.StandardOutput.ReadToEnd());
 
-
             var lvi = new TextBlock()
             {
                 Text = Path.GetFullPath(outf),
@@ -388,7 +377,7 @@ namespace WolvenKit.ViewModels.Editor
             };
 
             NAudioSimpleEngine.Instance.OpenFile(outf);
-          CurrentTrackName   =Path.GetFileNameWithoutExtension(outf);
+            CurrentTrackName = Path.GetFileNameWithoutExtension(outf);
 
             //AudioFileList.Add(lvi);
         }
@@ -402,8 +391,6 @@ namespace WolvenKit.ViewModels.Editor
         {
             switch (e.PropertyName)
             {
-
-
                 case "ChannelPosition":
                     ChannelPosition = TimeSpan.FromSeconds(NAudioSimpleEngine.Instance.ChannelPosition);
                     break;
@@ -413,8 +400,7 @@ namespace WolvenKit.ViewModels.Editor
                     break;
             }
         }
-        #endregion
 
-  
+        #endregion AudioPreview
     }
 }
