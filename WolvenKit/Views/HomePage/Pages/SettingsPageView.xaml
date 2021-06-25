@@ -96,7 +96,7 @@
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
-                <syncfusion:SfAccordionItem Header="The Witcher 3">
+                <syncfusion:SfAccordionItem Header="The Witcher 3" Visibility="Collapsed">
                     <syncfusion:PropertyGrid
                         x:Name="TW3SettingsPG"
                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
