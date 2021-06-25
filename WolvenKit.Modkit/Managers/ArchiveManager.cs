@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             Items = Archives.Values
                 .SelectMany(_ => _.Files)
                 .GroupBy(_ => _.Key)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value));
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value).ToList());
 
             RebuildRootNode();
         }
@@ -135,7 +135,8 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
                 if (!Items[key].ToList().Contains(value))
                 {
-                    Items[key].ToList().Add(value);
+                    var items = Items[key];
+                    items.Add(value);
                 }
             }
 

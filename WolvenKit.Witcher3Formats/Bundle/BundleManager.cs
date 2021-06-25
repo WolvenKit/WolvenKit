@@ -120,7 +120,7 @@ namespace WolvenKit.Bundles
                 }
                 if (!Items[key].ToList().Contains(value))
                 {
-                    Items[key].ToList().Add(value);
+                    Items[key].Add(value);
                 }
             }
 
@@ -149,7 +149,7 @@ namespace WolvenKit.Bundles
                 }
                 if (!Items[key].ToList().Contains(value))
                 {
-                    Items[key].ToList().Add(value);
+                    Items[key].Add(value);
                 }
             }
 

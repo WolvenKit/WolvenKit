@@ -10,7 +10,7 @@ namespace WolvenKit.Common
         #region Properties
 
         Dictionary<string, IGameArchive> Archives { get; set; }
-        Dictionary<ulong, IEnumerable<IGameFile>> Items { get; }
+        Dictionary<ulong, List<IGameFile>> Items { get; }
         GameFileTreeNode RootNode { get; set; }
 
         IEnumerable<string> AutocompleteSource { get; }

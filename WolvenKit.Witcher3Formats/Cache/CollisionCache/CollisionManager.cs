@@ -95,7 +95,7 @@ namespace WolvenKit.Cache
                 }
                 if (!Items[key].ToList().Contains(value))
                 {
-                    Items[key].ToList().Add(value);
+                    Items[key].Add(value);
                 }
             }
 
@@ -158,7 +158,7 @@ namespace WolvenKit.Cache
                 }
                 if (!Items[key].ToList().Contains(value))
                 {
-                    Items[key].ToList().Add(value);
+                    Items[key].Add(value);
                 }
             }
 

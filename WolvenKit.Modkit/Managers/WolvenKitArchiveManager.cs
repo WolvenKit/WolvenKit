@@ -15,7 +15,7 @@ namespace WolvenKit.Common.Model
         public abstract Dictionary<string, IGameArchive> Archives { get; set; }
         public GameFileTreeNode RootNode { get; set; }
 
-        public Dictionary<ulong, IEnumerable<IGameFile>> Items { get; set; } = new();
+        public Dictionary<ulong, List<IGameFile>> Items { get; set; } = new();
 
 
         public IEnumerable<IGameFile> FileList => Items.Values.SelectMany(_ => _);

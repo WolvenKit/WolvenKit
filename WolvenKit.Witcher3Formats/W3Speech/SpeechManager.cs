@@ -93,7 +93,7 @@ namespace WolvenKit.W3Speech
                 }
                 if (!Items[key].ToList().Contains(value))
                 {
-                    Items[key].ToList().Add(value);
+                    Items[key].Add(value);
                 }
             }
 
@@ -124,7 +124,7 @@ namespace WolvenKit.W3Speech
                 }
                 if (!Items[key].ToList().Contains(value))
                 {
-                    Items[key].ToList().Add(value);
+                    Items[key].Add(value);
                 }
             }
 
