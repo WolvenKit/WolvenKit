@@ -146,10 +146,10 @@
 
                                 <syncfusion:SfTreeGrid.ExpanderContextMenu>
                                     <ContextMenu>
-                                        <MenuItem x:Name="Expand" Header="Expand" Click="Expand_OnClick"  />
-                                        <MenuItem x:Name="ExpandAll" Header="ExpandAll" Click="ExpandAll_OnClick" />
-                                        <MenuItem x:Name="Collapse" Header="Collapse" Click="Collapse_OnClick" />
-                                        <MenuItem x:Name="CollapseAll" Header="CollapseAll" Click="CollapseAll_OnClick" />
+                                        <MenuItem Header="Expand" Click="Expand_OnClick"  />
+                                        <MenuItem Header="Expand all" Click="ExpandAll_OnClick" />
+                                        <MenuItem Header="Collapse" Click="Collapse_OnClick" />
+                                        <MenuItem Header="Collapse all" Click="CollapseAll_OnClick" />
                                     </ContextMenu>
                                 </syncfusion:SfTreeGrid.ExpanderContextMenu>
 
@@ -165,6 +165,7 @@
                                 FlowDirection="LeftToRight"
                                 Text="search"
                                 SearchStarted="FolderSearchBar_OnSearchStarted"
+                                ShowClearButton="True"
                                 >
                             </hc:SearchBar>
 

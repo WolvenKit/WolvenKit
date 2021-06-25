@@ -200,10 +200,7 @@ namespace WolvenKit.Views.Editor
         }
 
         private string _currentFolderQuery = "";
-
-        private bool FilerNodes(object o) => o is GameFileTreeNode data && data.Name.Contains(_currentFolderQuery);
-
-        private Predicate<object> FilterNodes(string query) => FilerNodes;
+        private bool FilterNodes(object o) => o is GameFileTreeNode data && data.Name.Contains(_currentFolderQuery);
 
         private void FolderSearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
@@ -212,7 +209,7 @@ namespace WolvenKit.Views.Editor
             _currentFolderQuery = e.Info;
 
             // filter programmatially
-            LeftNavigation.View.Filter = FilterNodes(_currentFolderQuery);
+            LeftNavigation.View.Filter = FilterNodes;
             LeftNavigation.View.RefreshFilter();
         }
 

@@ -34,7 +34,8 @@
         <syncfusion:SfTreeGrid
             Name="TreeGrid"
             AllowEditing="False"
-            AllowFiltering="True"
+            AllowFiltering="False"
+            FilterLevel="Extended"
             AllowResizingColumns="False"
             AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
@@ -82,7 +83,9 @@
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Name"
                     HorizontalHeaderContentAlignment="Left"
-                    MappingName="Name">
+                    MappingName="Name"
+                    ImmediateUpdateColumnFilter="True"
+                >
                     <syncfusion:TreeGridTextColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -755,14 +758,6 @@
                                         </Style>
                                     </Image.Style>
                                 </Image>
-
-                                <!--<svgc:SvgViewbox
-                                 Width="12"
-                                 Height="12"
-                                 Margin="0"
-                                 Source="{Binding Extension, Converter={StaticResource ExtensionToBmp}, TargetNullValue=}"
-                                 Stretch="Uniform"
-                                 />-->
                                 <TextBlock
                                     x:Name="TemplateTextBlock"
                                     Grid.Column="1"
@@ -800,12 +795,13 @@
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
                     <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
 
-                    <MenuItem Click="ExpandChildren_OnClick" Header="Expand children" />
-                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse children" />
+                    <MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
+                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />
                     <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                 </ContextMenu>
             </syncfusion:SfTreeGrid.ContextMenu>
+
         </syncfusion:SfTreeGrid>
 
         <hc:SearchBar
@@ -815,13 +811,10 @@
             Background="{DynamicResource ContentBackground}"
             BorderBrush="{DynamicResource BorderBrush}"
             FlowDirection="LeftToRight"
-            Text="search">
-
-            <hc:Interaction.Triggers>
-                <hc:EventTrigger EventName="SearchStarted">
-                    <hc:EventToCommand Command="{Binding PESearchStartedCommand}" PassEventArgsToCommand="True" />
-                </hc:EventTrigger>
-            </hc:Interaction.Triggers>
+            Text="search"
+            SearchStarted="PESearchBar_OnSearchStarted"
+            ShowClearButton="True"
+            >
         </hc:SearchBar>
     </Grid>
 </catel:UserControl>
