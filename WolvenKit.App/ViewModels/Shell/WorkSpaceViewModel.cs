@@ -20,6 +20,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
@@ -40,7 +41,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
-        //private readonly IGameController _gameController;
+        private readonly IGameControllerFactory _gameControllerFactory;
 
         private DocumentViewModel _activeDocument;
 
@@ -57,21 +58,15 @@ namespace WolvenKit.ViewModels.Shell
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            ICommandManager commandManager
+            ICommandManager commandManager,
+            IGameControllerFactory gameControllerFactory
         )
         {
             #region dependency injection
-
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => loggerService);
-            //Argument.IsNotNull(() => gameController);
-
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
-            //_gameController = gameController;
+            _gameControllerFactory = gameControllerFactory;
 
             #endregion dependency injection
 
@@ -385,8 +380,8 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        private void ExecutePackMod() { }
-        //_gameController.PackAndInstallProject();
+        private void ExecutePackMod() => _gameControllerFactory.GetController().PackAndInstallProject();
+
 
         private bool CanBackupMod() => _projectManager.ActiveProject != null;
 

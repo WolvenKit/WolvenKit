@@ -21,6 +21,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
@@ -238,5 +239,13 @@ namespace WolvenKit.Views.Editor
         }
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
+
+        private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is AssetBrowserViewModel vm)
+            {
+                vm.AddSelectedCommand.SafeExecute();
+            }
+        }
     }
 }

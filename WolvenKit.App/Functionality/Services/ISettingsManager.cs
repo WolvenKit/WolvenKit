@@ -34,6 +34,9 @@ namespace WolvenKit.Functionality.Services
         string W3GameModDir { get; }
         string W3GameRootDir { get; }
 
+        string RED4GameRootDir { get; }
+        string RED4GameModDir { get; }
+
         #endregion Properties
 
         /*public*/

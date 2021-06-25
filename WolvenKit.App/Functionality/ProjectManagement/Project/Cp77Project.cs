@@ -32,6 +32,20 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        public override string PackedRootDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "packed");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
 
         #region methods
 

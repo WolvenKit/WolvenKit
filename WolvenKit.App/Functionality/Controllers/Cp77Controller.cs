@@ -17,6 +17,7 @@ using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
@@ -184,22 +185,15 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject()
         {
-
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _loggerService.Error("Can't pack nor install project (no project/not cyberpunk project)!");
                 return Task.FromResult(false);
             }
 
-            // rebuilding is done manually in the import/export util
-            //_loggerService.Info("Rebuilding necessary files....");
-            //_modTools.Recombine(new DirectoryInfo(cp77Proj.ModDirectory), true, true, true, true);
-            //_loggerService.Info("Rebuilding done, packing files into archive(s)....");
-
-
-            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory),
-                new DirectoryInfo(cp77Proj.PackedModDirectory));
+            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.PackedModDirectory));
             _loggerService.Info("Packing complete!");
+
             InstallMod();
             return Task.FromResult(true);
         }
@@ -207,14 +201,15 @@ namespace WolvenKit.Functionality.Controllers
         public void InstallMod()
         {
             var activeMod = _projectManager.ActiveProject;
+            var logPath = Path.Combine(activeMod.ProjectDirectory, "install_log.xml");
 
             try
             {
                 //Check if we have installed this mod before. If so do a little cleanup.
-                if (File.Exists(activeMod.ProjectDirectory + "\\install_log.xml"))
+                if (File.Exists(logPath))
                 {
-                    var log = XDocument.Load(activeMod.ProjectDirectory + "\\install_log.xml");
-                    var dirs = log.Root.Element("Files")?.Descendants("Directory");
+                    var log = XDocument.Load(logPath);
+                    var dirs = log.Root.Element("Files")?.Descendants("Directory").ToList();
                     if (dirs != null)
                     {
                         //Loop throught dirs and delete the old files in them.
@@ -242,29 +237,33 @@ namespace WolvenKit.Functionality.Controllers
                         }
                     }
                     //Delete the old install log. We will make a new one so this is not needed anymore.
-                    File.Delete(activeMod.ProjectDirectory + "\\install_log.xml");
+                    File.Delete(logPath);
                 }
-                var installlog = new XDocument(new XElement("InstalLog", new XAttribute("Project", activeMod.Name), new XAttribute("Build_date", DateTime.Now.ToString())));
+
+                var installlog = new XDocument(
+                    new XElement("InstalLog",
+                        new XAttribute("Project", activeMod.Name),
+                        new XAttribute("Build_date", DateTime.Now.ToString())
+                        ));
                 var fileroot = new XElement("Files");
+
                 //Copy and log the files.
-                if (!Directory.Exists(Path.Combine(activeMod.ProjectDirectory, "packed")))
+                var packedmoddir = activeMod.PackedRootDirectory;
+                if (!Directory.Exists(packedmoddir))
                 {
-                    _loggerService.Error("Failed to install the mod! The packed directory doesn't exist! You forgot to tick any of the packing options?");
+                    _loggerService.Error("Failed to install the mod! The packed directory doesn't exist!");
                     return;
                 }
 
-                //TODO: fix this once we have mod support
-                /*var packedmoddir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "Mods");
-                if (Directory.Exists(packedmoddir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, MainController.Get().Configuration.CP77GameModDir, true));
+                fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.RED4GameRootDir, true));
 
-                var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
-                if (Directory.Exists(packeddlcdir))
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.CP77GameDlcDir, true));*/
+
+                //var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
+                //if (Directory.Exists(packeddlcdir))
+                //    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.CP77GameDlcDir, true));
 
                 installlog.Root.Add(fileroot);
-                //Save the log.
-                installlog.Save(activeMod.ProjectDirectory + "\\install_log.xml");
+                installlog.Save(logPath);
                 _loggerService.Info(activeMod.Name + " installed!" + "\n");
             }
             catch (Exception ex)
