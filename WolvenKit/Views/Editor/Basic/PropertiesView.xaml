@@ -38,9 +38,6 @@
 
             <conv:StringPathToItemStringConverter x:Key="PathConverter" />
 
-
-
-
             <!--  Region: WaveformTimeline  -->
             <LinearGradientBrush x:Key="WaveformRightLevelBrush" StartPoint="1,0" EndPoint="1,1">
                 <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
@@ -100,7 +97,6 @@
             </Style>
             <!--  EndRegion: WaveformTimeline  -->
 
-
             <Style TargetType="{x:Type svl1:SpectrumAnalyzer}">
                 <Setter Property="BarStyle">
                     <Setter.Value>
@@ -110,11 +106,9 @@
                                     <LinearGradientBrush>
                                         <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
                                         <GradientStop Offset="1" Color="{DynamicResource MahApps.Colors.Gray.SemiTransparent}" />
-
                                     </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
-
                         </Style>
                     </Setter.Value>
                 </Setter>
@@ -125,11 +119,9 @@
                                 <Setter.Value>
                                     <LinearGradientBrush>
                                         <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
-
                                     </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
-
 
                             <Setter Property="Effect">
                                 <Setter.Value>
@@ -156,10 +148,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
-
-
-
 
             <!--  region PreviewSlider  -->
 
@@ -327,16 +315,10 @@
             </Style>
 
             <!--  endregion  -->
-
-
         </ResourceDictionary>
-
-
     </catel:UserControl.Resources>
 
     <Grid>
-
-
 
         <syncfusion:TabControlExt>
             <syncfusion:TabItemExt Header="File Properties">
@@ -345,13 +327,10 @@
                     <Grid.Resources>
                         <Style BasedOn="{StaticResource MahApps.Styles.CheckBox.DataGrid.Win10}" TargetType="CheckBox">
                             <Setter Property="HorizontalAlignment" Value="Left" />
-
                         </Style>
-
 
                         <Style TargetType="TextBox">
                             <Setter Property="Margin" Value="5,0,0,0" />
-
                         </Style>
                     </Grid.Resources>
 
@@ -373,8 +352,6 @@
                         SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}" />
                 </Grid>
-
-
             </syncfusion:TabItemExt>
             <syncfusion:TabItemExt Header="Mesh Preview" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <Grid Name="RootGrid" Height="auto">
@@ -386,7 +363,6 @@
 
                             <Viewport3D Name="MainViewport">
 
-
                                 <ModelVisual3D x:Name="ContentVisual" />
                                 <visuals:WireframeVisual3D
                                     x:Name="ContentWireframeVisual"
@@ -395,8 +371,6 @@
                                     ShowPolygonLines="True"
                                     UseModelColor="False"
                                     WireframeType="WireframeWithOriginalSolidModel" />
-
-
                             </Viewport3D>
                         </dxControls:DXViewportView>
                     </Border>
@@ -452,7 +426,6 @@
                         VerticalAlignment="Top"
                         Orientation="Vertical">
 
-
                         <Expander
                             Header="Assimp info"
                             IsExpanded="False"
@@ -478,7 +451,6 @@
                                     VerticalAlignment="Center"
                                     Kind="Settings2Fill" />
                             </DataTemplate>
-
                         </syncfusion:DropDownButton.IconTemplate>
                         <Border
                             Margin="5"
@@ -546,24 +518,10 @@
                             </StackPanel>
                         </Border>
                     </syncfusion:DropDownButton>
-
-
                 </Grid>
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
-
-
-
-
-
-
-
-
-
-
-
-
 
                 <Border
                     Width="auto"
@@ -594,7 +552,6 @@
                                         <RowDefinition Height="2*" />
                                         <RowDefinition Height="2*" />
                                         <RowDefinition Height="50" />
-
                                     </Grid.RowDefinitions>
                                     <Border
                                         Grid.Row="3"
@@ -605,7 +562,6 @@
                                         Background="{DynamicResource RegionBrush}"
                                         CornerRadius="5">
                                         <Grid HorizontalAlignment="Center">
-
 
                                             <StackPanel
                                                 Margin="5,0,0,0"
@@ -675,11 +631,7 @@
                                                         ShowSubSeconds="False"
                                                         Time="{Binding ChannelPosition}" />
                                                 </Border>
-
                                             </StackPanel>
-
-
-
                                         </Grid>
                                     </Border>
 
@@ -737,28 +689,20 @@
                                         </Grid>
                                     </Border>
                                 </Grid>
-
-
                             </Grid>
-
-
                         </Grid>
                     </Grid>
                 </Border>
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
-                <hc:ImageViewer
+                <!--<hc:ImageViewer
                     x:Name="bold"
                     Width="auto"
-                    Background="{DynamicResource SecondaryRegionBrush}" />
+                    Background="{DynamicResource SecondaryRegionBrush}" />-->
 
-
-
+                <syncfusion:SfImageEditor x:Name="bold" />
             </syncfusion:TabItemExt>
         </syncfusion:TabControlExt>
-
-
-
     </Grid>
 </catel:UserControl>

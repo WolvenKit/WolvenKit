@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,7 +39,6 @@ namespace WolvenKit.Views.Editor
 
             Helpers.LoadAssimpNativeLibrary();
 
-
             var assimpWpfImporter = new AssimpWpfImporter();
             string[] supportedImportFormats = assimpWpfImporter.SupportedImportFormats;
             var assimpWpfExporter = new AssimpWpfExporter();
@@ -46,14 +46,11 @@ namespace WolvenKit.Views.Editor
 
             StaticReferences.GlobalPropertiesView = this;
 
-
             var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
 
             spectrumAnalyzer.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
             waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
-
-
         }
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
@@ -73,23 +70,31 @@ namespace WolvenKit.Views.Editor
                         LoadImage(frame);
                     }
                     break;
+
                 case nameof(PropertiesViewModel.LoadedModelPath):
                     if (property.NewValue is string modelpath)
                     {
                         LoadModel(modelpath);
                     }
                     break;
+
                 default:
                     break;
             }
         }
 
-        public void LoadImage(System.Windows.Media.Imaging.BitmapFrame g)
+        private Stream StreamFromBitmapSource(BitmapSource writeBmp)
         {
+            Stream bmp = new MemoryStream();
 
-            bold.SetCurrentValue(HandyControl.Controls.ImageViewer.ImageSourceProperty, g);
+            BitmapEncoder enc = new BmpBitmapEncoder();
+            enc.Frames.Add(BitmapFrame.Create(writeBmp));
+            enc.Save(bmp);
 
+            return bmp;
         }
+
+        public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, (System.IO.Stream)StreamFromBitmapSource(qa));
 
         public void LoadModel(string fileName)
         {
@@ -170,7 +175,6 @@ namespace WolvenKit.Views.Editor
         {
             try
             {
-
                 ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);
 
                 // NOTE:
@@ -207,7 +211,6 @@ namespace WolvenKit.Views.Editor
                                               bounds.SizeY * bounds.SizeY +
                                               bounds.SizeZ * bounds.SizeZ);
 
-
                     Camera1.TargetPosition = modelCenter;
                     Camera1.SetCurrentValue(Ab3d.Cameras.BaseTargetPositionCamera.DistanceProperty, modelSize * 2);
                 }
@@ -220,13 +223,10 @@ namespace WolvenKit.Views.Editor
 
                 ShowInfoButton.SetCurrentValue(IsEnabledProperty, true);
             }
-
             catch
             {
-
             }
         }
-
 
         public void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -260,7 +260,6 @@ namespace WolvenKit.Views.Editor
             if (AddLineDepthBiasCheckBox.IsChecked ?? false)
             {
                 depthBiasValue = ContentWireframeVisual.OriginalModel.Bounds.GetDiagonalLength() * 0.001;
-
 
                 // To specify line depth bias to the Ab3d.PowerToys line Visual3D objects,
                 // we use SetDXAttribute extension method and use LineDepthBias as DXAttributeType
@@ -301,7 +300,6 @@ namespace WolvenKit.Views.Editor
 
             string objectInfo = Ab3d.Utilities.Dumper.GetObjectHierarchyString(shownModel);
 
-
             var textBox = new TextBox()
             {
                 Margin = new Thickness(10, 10, 10, 10),
@@ -341,7 +339,6 @@ namespace WolvenKit.Views.Editor
         {
         }
 
-
         private void DefaultThemeMenuItem_Checked(object sender, RoutedEventArgs e)
         {
             //LoadDefaultTheme();
@@ -358,8 +355,6 @@ namespace WolvenKit.Views.Editor
         {
             //  LoadExpressionLightTheme();
         }
-
-
 
         private void OpenFile()
         {
@@ -393,10 +388,6 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-
-
-
-
         // Begin dragging the window
         private void PlayListView_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -423,6 +414,6 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        #endregion
+        #endregion AudioPreview
     }
 }

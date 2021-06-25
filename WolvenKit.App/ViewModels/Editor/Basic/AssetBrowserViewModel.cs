@@ -49,7 +49,6 @@ namespace WolvenKit.ViewModels.Editor
         private List<IGameArchiveManager> _managers;
         private readonly ReadOnlyObservableCollection<GameFileTreeNode> _boundRootNodes;
 
-
         private bool _stillLoading;
 
         public bool StillLoading
@@ -93,11 +92,13 @@ namespace WolvenKit.ViewModels.Editor
 
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
 
+            FolderSearchStartedCommand = new DelegateCommand<object>(ExecuteFolderSearchStartedCommand, CanFolderSearchStartedCommand);
 
             SetupToolDefaults();
             ReInit(false);
 
             var controller = _gameController.GetRed4Controller();
+
             var disposable = controller.ConnectHierarchy()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
@@ -113,10 +114,10 @@ namespace WolvenKit.ViewModels.Editor
         // binding properties. do not make private
         // ReSharper disable MemberCanBePrivate.Global
         public bool PreviewVisible { get; set; }
+
         public bool IsLoaded { get; set; }
         public GridLength PreviewWidth { get; set; } = new(0, System.Windows.GridUnitType.Pixel);
         public Visibility LoadVisibility { get; set; } = Visibility.Visible;
-
 
         /// <summary>
         /// Bound RootNodes to left navigation
@@ -137,11 +138,11 @@ namespace WolvenKit.ViewModels.Editor
         /// Selected File in right navigaiton
         /// </summary>
         public FileEntryViewModel SelectedFile { get; set; }
+
         /// <summary>
         /// Selected Files in right navigaiton
         /// </summary>
         public ObservableCollection<object> SelectedFiles { get; set; }
-
 
         public List<string> Extensions { get; set; }
         public List<string> Classes { get; set; }
@@ -149,8 +150,6 @@ namespace WolvenKit.ViewModels.Editor
         public string SelectedExtension { get; set; }
 
         public ICommand SetCurrentNodeCommand { get; set; }
-
-
 
         #endregion properties
 
@@ -172,17 +171,32 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         public ICommand HomeCommand { get; private set; }
+
         private bool CanHome() => true;
+
         private void ExecuteHome()
         {
             SelectedNode = BoundRootNodes.FirstOrDefault();
         }
 
+        public ICommand FolderSearchStartedCommand { get; private set; }
+
+        private bool CanFolderSearchStartedCommand(object arg) => true;
+
+        private void ExecuteFolderSearchStartedCommand(object arg)
+        {
+            if (arg is FunctionEventArgs<string> e)
+            {
+                PreformFolderSearch(e.Info);
+            }
+        }
+
         public ICommand SearchStartedCommand { get; private set; }
+
         private bool CanSearchStartedCommand(object arg) => true;
+
         private void ExecuteSearchStartedCommand(object arg)
         {
-
             if (arg is FunctionEventArgs<string> e)
             {
                 PerformSearch(e.Info);
@@ -190,7 +204,9 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         public ICommand TogglePreviewCommand { get; private set; }
+
         private bool CanTogglePreview() => true;
+
         private void ExecuteTogglePreview()
         {
             if (PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel)
@@ -206,7 +222,9 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         public ICommand ImportFileCommand { get; private set; }
+
         private bool CanImportFile() => /*CurrentNode != null*/ true;
+
         private void ExecuteImportFile() => AddFile(SelectedFile);
 
         #endregion commands
@@ -271,16 +289,14 @@ namespace WolvenKit.ViewModels.Editor
                 .Select(_ => new FileEntryViewModel(_));
         }
 
-
         private void PreformFolderSearch(string query)
         {
-
+            // ??
         }
 
         private void SetupToolDefaults()
         {
             ContentId = ToolContentId;
-
         }        // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         #endregion methods

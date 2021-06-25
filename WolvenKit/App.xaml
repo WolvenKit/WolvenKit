@@ -40,7 +40,6 @@
                         </Grid>
                     </DataTemplate>
 
-
                     <DataTemplate DataType="{x:Type viewmodels:MimicsViewModel}">
                         <Grid>
                             <views:MimicsView />
@@ -58,7 +57,6 @@
                             <views:ImportView />
                         </Grid>
                     </DataTemplate>
-
 
                     <DataTemplate DataType="{x:Type viewmodels:ImportExportViewModel}">
                         <Grid>
@@ -83,8 +81,6 @@
                             <views:CsvEditorView />
                         </Grid>
                     </DataTemplate>
-
-                   
 
                     <DataTemplate DataType="{x:Type viewmodels:JournalEditorViewModel}">
                         <Grid>
@@ -165,8 +161,6 @@
                     <local:ClosedCaptionsChannelConverter x:Key="ClosedCaptionsChannelConverter" />
                 </ResourceDictionary>
 
-
-
                 <!--  Resource Dictionaries  -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
@@ -180,8 +174,8 @@
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
 
-
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfDataGrid/SfDataGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfImageEditor/SfImageEditor.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeGrid/SfTreeGrid.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeNavigator/SfTreeNavigator.xaml" />
@@ -200,8 +194,6 @@
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
-
-
             </ResourceDictionary.MergedDictionaries>
 
             <Style
