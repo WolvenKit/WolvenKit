@@ -308,7 +308,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             set
             {
                 _settingsManager.SetThemeAccent(((SolidColorBrush)value).Color);
-                //_settingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
