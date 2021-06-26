@@ -14,6 +14,7 @@ using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
@@ -82,21 +83,19 @@ namespace WolvenKit.Views.Shell
                 DocumentContainer.AddTabDocumentAtLastProperty, true);
 
 
-
-
             // Add setting to persist State or not ? ( Load Default Docking on Startup : Yes/No )
             // if (XSETTINGX){ SetLayoutToDefault();}else{
 
-            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
+            var serviceLocator = ServiceLocator.Default;
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            if (settings.ShowFirstTimeSetupForUser())
             {
                 SetLayoutToDefault();
-
             }
             else
             {
                 var Debugging_A = PART_DockingManager.LoadDockState();
                 Trace.WriteLine(Debugging_A);
-
             }
 
 

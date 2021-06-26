@@ -19,6 +19,7 @@ using WolvenKit.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Tools;
+using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
@@ -173,7 +174,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
     #region PropertyGridModels
     [Editor(typeof(string), typeof(PathEditor))]
-    public class CP77SettingsPGModel
+    public class CP77SettingsPGModel : ObservableObject
     {
         ISettingsManager _settingsManager;
 
@@ -268,7 +269,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     }
 
     [Editor(typeof(string), typeof(PathEditor))]
-    public class GeneralSettingsPGModel
+    public class GeneralSettingsPGModel : ObservableObject
     {
 
         ISettingsManager _settingsManager;
@@ -278,32 +279,36 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             _settingsManager = settingsManager;
         }
 
-        [Category("General")]
-        public ApplicationLanguage Language { get; set; }
+        //[Category("General")]
+        //public ApplicationLanguage Language { get; set; }
+
         //public bool Desktop_Notifications { get; set; }  // Doesn't work yet I think?
-        [Category("Updates")]
-        [Display(Name = "Receive Auto updates?")]
-        public bool ReceiveAutoUpdates { get; set; }
-        [Category("Updates")]
-        [Display(Name = "Set auto update channel.")]
-        public AutoUpdateChannel UpdateChannel { get; set; }
-        [Category("Mods")]
-        [Display(Name = "Automatically install mods.")]
-        public bool AutoInstallMods { get; set; }
-        [Category("Mods")]
-        [Display(Name = "Material depot path.")]
-        public string MaterialDepotPath { get; set; }
+
+        //[Category("Updates")]
+        //[Display(Name = "Receive Auto updates?")]
+        //public bool ReceiveAutoUpdates { get; set; }
+
+        //[Category("Updates")]
+        //[Display(Name = "Set auto update channel.")]
+        //public AutoUpdateChannel UpdateChannel { get; set; }
+
+        //[Category("Mods")]
+        //[Display(Name = "Automatically install mods.")]
+        //public bool AutoInstallMods { get; set; }
+
+        //[Category("Mods")]
+        //[Display(Name = "Material depot path.")]
+        //public string MaterialDepotPath { get; set; }
 
         [Category("Theme")]
         [Display(Name = "Application theme accent.")]
         public Brush BrushProperty
         {
-            get { return new SolidColorBrush(_settingsManager.ThemeAccent); }
+            get => new SolidColorBrush(_settingsManager.GetThemeAccent());
             set
             {
-                _settingsManager.ThemeAccent = ((SolidColorBrush)value).Color;
-                _settingsManager.Save();
-
+                _settingsManager.SetThemeAccent(((SolidColorBrush)value).Color);
+                //_settingsManager.Save();
             }
         }
     }

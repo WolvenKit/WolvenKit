@@ -10,13 +10,11 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
     {
         #region constructors
 
-        public LocateGameDateViewModel(ISettingsManager settingsManager, FirstSetupWizardModel firstSetupWizardModel, FirstSetupWizardViewModel firstSetupWizardViewModel)
+        public LocateGameDateViewModel(FirstSetupWizardModel firstSetupWizardModel, FirstSetupWizardViewModel firstSetupWizardViewModel)
         {
-            Argument.IsNotNull(() => settingsManager);
             Argument.IsNotNull(() => firstSetupWizardModel);
             Argument.IsNotNull(() => firstSetupWizardViewModel);
 
-            SettingsManager = settingsManager;
             FirstSetupWizardModel = firstSetupWizardModel;
             FirstSetupWizardViewModel = firstSetupWizardViewModel;
         }
@@ -41,13 +39,6 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         [Expose("WccLitePath")]
         [Expose("CP77ExePath")]
         public FirstSetupWizardViewModel FirstSetupWizardViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the SettingsManager.
-        /// </summary>
-        [Model]
-        [Expose("DepotPath")]
-        public ISettingsManager SettingsManager { get; set; }
 
         #endregion properties
     }

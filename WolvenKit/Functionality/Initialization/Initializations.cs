@@ -66,7 +66,7 @@ namespace WolvenKit.Functionality.Initialization
                 var themeResources = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
                 var themeSettings = new MaterialDarkThemeSettings
                 {
-                    PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent),
+                    PrimaryBackground = new SolidColorBrush(SettingsManag.GetThemeAccent()),
                     BodyFontSize = 11,
                     HeaderFontSize = 14,
                     SubHeaderFontSize = 13,
@@ -275,10 +275,10 @@ namespace WolvenKit.Functionality.Initialization
             var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.ThemeAccent, false));
+                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.GetThemeAccent(), false));
             MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings
             {
-                PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent),
+                PrimaryBackground = new SolidColorBrush(SettingsManag.GetThemeAccent()),
                 BodyFontSize = 11,
                 HeaderFontSize = 14,
                 SubHeaderFontSize = 13,

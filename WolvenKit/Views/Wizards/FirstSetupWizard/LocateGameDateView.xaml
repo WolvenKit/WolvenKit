@@ -60,17 +60,7 @@
                                  Text="{Binding WccLitePath}"
                                  TextChanged="Field_TextChanged"
                                  VerifyFunc="VerifyFile" />
-                                <hc:TextBox
-                                 x:Name="uncookedDepTxtb"
-                                 Margin="0,32,0,0"
-                                 hc:InfoElement.Necessary="True"
-                                 hc:InfoElement.Title="Uncooked Depot Path"
-                                 hc:InfoElement.TitlePlacement="Left"
-                                 hc:InfoElement.TitleWidth="200"
-                                 Style="{StaticResource TextBoxExtendCustom}"
-                                 Text="{Binding DepotPath}"
-                                 TextChanged="Field_TextChanged"
-                                 VerifyFunc="VerifyFolder" />
+                               
                             </StackPanel>
                             <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
                                 <hc:Divider

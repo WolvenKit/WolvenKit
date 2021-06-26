@@ -55,7 +55,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             {
                 var color = ((SolidColorBrush)a.Fill).Color;
                 var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-                settings.ThemeAccent = color;
+                settings.SetThemeAccent(color);
             }
             catch
             {

@@ -54,10 +54,7 @@ namespace WolvenKit
 
             // Set service locator.
             var serviceLocator = ServiceLocator.Default;
-
-
-            // ShellService.GivenPoop = new StartupViewer();
-
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
 
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
@@ -79,7 +76,7 @@ namespace WolvenKit
 
             StaticReferences.Logger.Info("Initializing Shell");
             await Initializations.InitializeShell();
-            Helpers.ShowFirstTimeSetup();
+            Helpers.ShowFirstTimeSetup(settings);
 
             StaticReferences.Logger.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();

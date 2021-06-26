@@ -61,7 +61,7 @@
                             x:Name="GeneralSettingsPG"
                             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                             EnableGrouping="True"
-                            SelectedObject="{Binding generalSettingsPGModel}"
+                            SelectedObject="{Binding generalSettingsPGModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             SortDirection="{x:Null}" />
                         <TextBlock
                             Margin="5"
@@ -92,7 +92,7 @@
                             x:Name="CP77SettingsPG"
                             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                             EnableGrouping="True"
-                            SelectedObject="{Binding cp77SettingsPGModel}" />
+                            SelectedObject="{Binding cp77SettingsPGModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
@@ -105,6 +105,7 @@
                 </syncfusion:SfAccordionItem>
             </syncfusion:SfAccordion>
         </Grid>
+
         <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
             <hc:SearchBar
                 x:Name="settingsSearch"
@@ -120,6 +121,7 @@
                 </hc:Interaction.Triggers>
             </hc:SearchBar>
         </hc:TransitioningContentControl>
+
         <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
             <StackPanel

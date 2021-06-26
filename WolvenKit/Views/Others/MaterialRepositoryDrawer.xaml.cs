@@ -30,10 +30,10 @@ namespace WolvenKit.Views.Others
             Folders = new ObservableCollection<string>();
             ImageSources = new ObservableCollection<string>();
 
-
-            if (ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath != "")
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            if (!string.IsNullOrEmpty(settings.MaterialRepositoryPath))
             {
-                PreviousFolder = ServiceLocator.Default.ResolveType<ISettingsManager>().MaterialRepositoryPath;
+                PreviousFolder = settings.MaterialRepositoryPath;
                 GetFolders(PreviousFolder);
 
             }

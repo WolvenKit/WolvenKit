@@ -41,7 +41,7 @@
 
                         <StackPanel>
 
-                            <hc:Divider
+                            <!--<hc:Divider
                              Margin="0,32,10,0"
                              HorizontalContentAlignment="Left"
                              Content="User" />
@@ -64,7 +64,8 @@
                                  Margin="205,0,0,5"
                                  VerticalAlignment="Bottom"
                                  Text="{Binding Author}" />
-                            </Grid>
+                            </Grid>-->
+
                             <hc:Divider
                              Margin="0,32,10,0"
                              HorizontalContentAlignment="Left"
@@ -90,7 +91,7 @@
                              HorizontalContentAlignment="Left"
                              Content="Initial preferences" />
 
-                            <Grid Margin="5,32,10,0">
+                            <!--<Grid Margin="5,32,10,0">
 
                                 <TextBlock VerticalAlignment="Center" Text="Games" />
                                 <TextBox
@@ -99,8 +100,8 @@
                                  VerticalAlignment="Stretch"
                                  IsEnabled="False"
                                  Text="{Binding SelectedGames}" />
-                            </Grid>
-                            <Grid Margin="5,32,10,0">
+                            </Grid>-->
+                            <!--<Grid Margin="5,32,10,0">
 
                                 <TextBlock VerticalAlignment="Center" Text="Auto-install mods" />
                                 <TextBox
@@ -109,7 +110,7 @@
                                  VerticalAlignment="Stretch"
                                  IsEnabled="False"
                                  Text="{Binding AutoInstallMods}" />
-                            </Grid>
+                            </Grid>-->
                             <Grid Margin="5,32,10,0">
 
                                 <TextBlock VerticalAlignment="Center" Text="Show guided tour" />
@@ -120,11 +121,12 @@
                                  IsEnabled="False"
                                  Text="{Binding ShowGuidedTour, StringFormat={}{0}}" />
                             </Grid>
+
                             <hc:Divider
                              Margin="0,32,10,0"
                              HorizontalContentAlignment="Left"
                              Content="Game Data" />
-                            <StackPanel Visibility="{Binding CreateModForW3, Converter={StaticResource Boolean2VisibilityConverter}}">
+                            <!--<StackPanel Visibility="{Binding CreateModForW3, Converter={StaticResource Boolean2VisibilityConverter}}">
                                 <Grid Margin="5,32,10,0">
 
                                     <TextBlock VerticalAlignment="Center" Text="TW3 executable path" />
@@ -155,7 +157,7 @@
                                      IsEnabled="False"
                                      Text="{Binding DepotPath}" />
                                 </Grid>
-                            </StackPanel>
+                            </StackPanel>-->
                             <StackPanel Visibility="{Binding CreateModForCP77, Converter={StaticResource Boolean2VisibilityConverter}}">
                                 <Grid Margin="5,32,10,0">
 

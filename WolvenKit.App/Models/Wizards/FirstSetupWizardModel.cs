@@ -16,7 +16,7 @@ namespace WolvenKit.Models.Wizards
         private string _author = "";
         private bool _autoInstallMods = true;
         private bool _createModForCP77 = true;
-        private bool _createModForW3 = true;
+        private bool _createModForW3 = false;
         private string _defaultDescription = "";
         private string _donateLink = "";
         private string _email = "";

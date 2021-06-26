@@ -982,13 +982,13 @@ namespace WolvenKit.Functionality.Controllers
                 var packedmoddir = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "packed", "Mods");
                 if (Directory.Exists(packedmoddir))
                 {
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settings.W3GameModDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settings.GetW3GameModDir(), true));
                 }
 
                 var packeddlcdir = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
                 {
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, _settings.W3GameDlcDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, _settings.GetW3GameDlcDir(), true));
                 }
 
                 installlog.Root.Add(fileroot);
@@ -1908,9 +1908,9 @@ namespace WolvenKit.Functionality.Controllers
             // uncook the folder with wcc
             // check if mod or vanilla file
             var indir = isDLC
-                ? Path.GetFullPath(_settings.W3GameDlcDir)
+                ? Path.GetFullPath(_settings.GetW3GameDlcDir())
                 : Path.GetFullPath(_settings.W3ExecutablePath);
-            if (basedir.Contains(Path.GetFullPath(_settings.W3GameModDir)))
+            if (basedir.Contains(Path.GetFullPath(_settings.GetW3GameModDir())))
             {
                 indir = basedir;
             }

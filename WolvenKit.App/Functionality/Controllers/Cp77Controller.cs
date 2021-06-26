@@ -255,7 +255,7 @@ namespace WolvenKit.Functionality.Controllers
                     return;
                 }
 
-                fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.RED4GameRootDir, true));
+                fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.GetRED4GameRootDir(), true));
 
 
                 //var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
