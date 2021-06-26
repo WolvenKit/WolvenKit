@@ -1479,7 +1479,8 @@
                 <syncfusion:RibbonBar
                     Name="Help"
                     Width="auto"
-                    Header="Help">
+                    Header="Help"
+                    Visibility="Collapsed">
 
                     <!--  BugReport Button  -->
                     <syncfusion:RibbonButton
