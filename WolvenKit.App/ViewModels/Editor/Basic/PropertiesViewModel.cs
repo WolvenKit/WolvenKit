@@ -93,6 +93,7 @@ namespace WolvenKit.ViewModels.Editor
         private void ExecuteStopPlaying()
         {
             mediaPlayer.Stop();
+            mediaPlayer.Position = new TimeSpan(0);
         }
 
         private bool CanStartPlaying() => true;
@@ -418,22 +419,34 @@ namespace WolvenKit.ViewModels.Editor
 
             mediaPlayer.Open(new Uri(outf));
 
-            var q = mediaPlayer.NaturalDuration.HasTimeSpan;
-            if (q)
-            {
-                ChannelLength = mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
-            }
-
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
-            ;
+
             timer.Start();
 
+            DispatcherTimer ChannelPositionTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1)
+            };
+            ChannelPositionTimer.Tick += ChannelPositionTimer_Tick;
+            ;
+
+            ChannelPositionTimer.Start();
+
+            ChannelLength =
+                mediaPlayer.Position.TotalMinutes.ToString() + " : " +
+                mediaPlayer.Position.TotalSeconds.ToString() + " : " +
+                mediaPlayer.Position.TotalMilliseconds.ToString();
             NAudioSimpleEngine.Instance.OpenFile(outf);
             CurrentTrackName = Path.GetFileNameWithoutExtension(outf);
 
             //AudioFileList.Add(lvi);
+        }
+
+        private void ChannelPositionTimer_Tick(object sender, EventArgs e)
+        {
+            NAudioSimpleEngine.Instance.ChannelPosition = mediaPlayer.Position.TotalSeconds;
         }
 
         public string AudioPositionText { get; set; }

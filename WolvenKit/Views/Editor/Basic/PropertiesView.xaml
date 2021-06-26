@@ -551,12 +551,11 @@
                                     Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="50" />
-                                        <RowDefinition Height="2*" />
+                                        <RowDefinition Height="auto" />
                                         <RowDefinition Height="2*" />
                                         <RowDefinition Height="50" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="{Binding ChannelLength}" />
                                     <Border
                                         Grid.Row="3"
                                         Width="auto"
@@ -597,6 +596,7 @@
                                                     BorderBrush="Transparent"
                                                     Command="{Binding PauseAudioCommand}"
                                                     Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
+                                                    IsEnabled="True"
                                                     Style="{StaticResource ButtonIcon}" />
                                                 <hc:Divider
                                                     Height="10"
@@ -633,9 +633,10 @@
                                                             HorizontalAlignment="Right"
                                                             Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                             ShowHours="True"
-                                                            ShowSubSeconds="False"
+                                                            ShowSubSeconds="True"
                                                             Time="{Binding ChannelPosition}" />
-                                                        <hc:Divider Width="2" Orientation="Vertical" />
+
+
                                                     </StackPanel>
                                                 </Border>
                                             </StackPanel>
@@ -663,7 +664,8 @@
                                         Margin="10,10,10,10"
                                         VerticalAlignment="Stretch"
                                         Background="{DynamicResource RegionBrush}"
-                                        CornerRadius="5">
+                                        CornerRadius="5"
+                                        Visibility="Collapsed">
                                         <Grid>
                                             <svl1:SpectrumAnalyzer
                                                 x:Name="spectrumAnalyzer"
@@ -696,8 +698,11 @@
                                         </Grid>
                                     </Border>
                                 </Grid>
+
                             </Grid>
+
                         </Grid>
+
                     </Grid>
                 </Border>
             </syncfusion:TabItemExt>
