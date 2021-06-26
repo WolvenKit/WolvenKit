@@ -901,7 +901,8 @@
                 <syncfusion:RibbonBar
                     Name="File"
                     Width="auto"
-                    Header="File">
+                    Header="File"
+                    Visibility="Collapsed">
                     <!--  New File Button  -->
                     <syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.NewFile}"
