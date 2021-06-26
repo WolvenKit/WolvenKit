@@ -56,6 +56,11 @@ namespace WolvenKit.Views.Others
 
         private void GetFolders(string dir)
         {
+            if (!Directory.Exists(dir))
+            {
+                return;
+            }
+
             Folders.Clear();
             var dirs = Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly);
             MatDepoItem newitem = new MatDepoItem();

@@ -12,6 +12,7 @@
     ResizeMode="NoResize"
     SizeToContent="Height"
     mc:Ignorable="d">
+
     <hc:Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,7 +21,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </hc:Window.Resources>
-    <Grid Background="{DynamicResource RegionBrush}">
+
+    <Grid Background="{DynamicResource RegionBrush}"
+          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hc:Window}}}">
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock
@@ -35,21 +38,22 @@
                     <TextBlock Text="Warning this takes up quite a bit of space locally." />
                 </Border>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" IsEnabled="False">
                 <TextBox
                     Width="150"
                     HorizontalAlignment="Stretch"
                     IsEnabled="False"
-                    Text="Game archives path" />
+                    Text="Game archives path"
+                    />
                 <TextBox
-                    x:Name="archivestext"
+                    x:Name="ArchivesTextBox"
                     Width="400"
                     HorizontalAlignment="Stretch"
                     IsEnabled="False"
-                    Text="Game archives path" />
+                    Text="{Binding ArchivesFolderPath, Mode=OneWay}" />
                 <Button
-                    x:Name="archivespathbutt"
-                    Click="archivespathbutt_Click"
+                    x:Name="ArchivesButton"
+                    Click="ArchivesButton_Click"
                     Content="Find" />
 
 
@@ -61,15 +65,15 @@
                     IsEnabled="False"
                     Text="Materials Repository Path" />
                 <TextBox
-                    x:Name="Materialsrepotext"
+                    x:Name="MaterialsTextBox"
                     Width="400"
                     HorizontalAlignment="Stretch"
                     hc:InfoElement.Necessary="True"
                     IsEnabled="False"
-                    Text="Materials Repository Path" />
+                    Text="{Binding MaterialsDepotPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
-                    x:Name="matsbutton"
-                    Click="matsbutton_Click"
+                    x:Name="MaterialsButton"
+                    Click="MaterialsButton_Click"
                     Content="Find" />
 
 
@@ -77,7 +81,7 @@
             <Button
                 Margin="15"
                 HorizontalAlignment="Stretch"
-                Click="Button_Click"
+                Click="GenerateButton_Click"
                 Content="Generate" />
 
 
