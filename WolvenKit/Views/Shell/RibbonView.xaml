@@ -1578,7 +1578,7 @@
                         hc:IconElement.Height="50"
                         hc:IconElement.Width="50"
                         IsChecked="{Binding IsOpen, ElementName=MatRepoDrawer}"
-                        Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
+                        Style="{DynamicResource WPFFlatToggleButtonStyle}">
                         <Grid Height="70">
                             <TextBlock
                                 Width="90"
