@@ -54,6 +54,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
         }
 
+        private void ExitRestart_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }
