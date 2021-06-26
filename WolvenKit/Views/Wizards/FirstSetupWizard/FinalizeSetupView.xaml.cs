@@ -27,7 +27,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             _fswvm = ServiceLocator.Default.ResolveType<FirstSetupWizardViewModel>();
             _fswm = ServiceLocator.Default.ResolveType<FirstSetupWizardModel>();
 
-            //imgSelector.CommandBindings[0].Executed += imgSelector_Executed;
+            imgSelector.CommandBindings[0].Executed += imgSelector_Executed;
         }
 
         #endregion Constructors
@@ -45,25 +45,25 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             await _fswvm.CloseViewModelAsync(null);
         }
 
-        ///// <summary>
-        ///// Exectues on image selected event.
-        ///// </summary>
-        //private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        //{
-        //    var imgSelector = sender as ImageSelector;
-        //    var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
-        //    if (imgBrush != null)
-        //    {
-        //        _fswm.ProfileImageBrush = imgBrush;
-        //        _fswm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
-        //    }
-        //    else
-        //    {
-        //        var frame = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(FinalizeSetupViewModel.bpp));
-        //        _fswm.ProfileImageBrush = new System.Windows.Media.ImageBrush(frame);
-        //        _fswm.ProfileImageBrushPath = FinalizeSetupViewModel.bpp;
-        //    }
-        //}
+        /// <summary>
+        /// Exectues on image selected event.
+        /// </summary>
+        private void imgSelector_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            var imgSelector = sender as ImageSelector;
+            var imgBrush = imgSelector.PreviewBrush as System.Windows.Media.ImageBrush;
+            if (imgBrush != null)
+            {
+                _fswm.ProfileImageBrush = imgBrush;
+                _fswm.ProfileImageBrushPath = imgSelector.Uri.AbsoluteUri;
+            }
+            else
+            {
+                var frame = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(FinalizeSetupViewModel.bpp));
+                _fswm.ProfileImageBrush = new System.Windows.Media.ImageBrush(frame);
+                _fswm.ProfileImageBrushPath = FinalizeSetupViewModel.bpp;
+            }
+        }
 
         #endregion Methods
     }

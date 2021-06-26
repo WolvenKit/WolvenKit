@@ -72,28 +72,28 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         /// </summary>
         private Task ControlLoadedExecuteAsync(ImageSelector imgSelector)
         {
-            //if (FirstSetupWizardModel.ProfileImageBrush != null)
-            //{
-            //    imgSelector.SetValue(ImageSelector.UriPropertyKey, new System.Uri(FirstSetupWizardModel.ProfileImageBrushPath, System.UriKind.RelativeOrAbsolute));
-            //    imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, FirstSetupWizardModel.ProfileImageBrush);
-            //    imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
-            //    imgSelector.SetValue(ImageSelector.IsEnabledProperty, true);
-            //    imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, FirstSetupWizardModel.ProfileImageBrushPath);
-            //}
-            //else
-            //{
-            //    var uri = new System.Uri(bpp);
-            //    imgSelector.SetValue(ImageSelector.UriPropertyKey, uri);
-            //    var frame = new System.Windows.Media.Imaging.BitmapImage(uri);
-            //    var imgBrush = new System.Windows.Media.ImageBrush(frame);
-            //    imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, imgBrush);
-            //    imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
-            //    imgSelector.SetValue(ImageSelector.IsEnabledProperty, false);
-            //    imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, bpp);
+            if (FirstSetupWizardModel.ProfileImageBrush != null)
+            {
+                imgSelector.SetValue(ImageSelector.UriPropertyKey, new System.Uri(FirstSetupWizardModel.ProfileImageBrushPath, System.UriKind.RelativeOrAbsolute));
+                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, FirstSetupWizardModel.ProfileImageBrush);
+                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
+                imgSelector.SetValue(ImageSelector.IsEnabledProperty, true);
+                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, FirstSetupWizardModel.ProfileImageBrushPath);
+            }
+            else
+            {
+                var uri = new System.Uri(bpp);
+                imgSelector.SetValue(ImageSelector.UriPropertyKey, uri);
+                var frame = new System.Windows.Media.Imaging.BitmapImage(uri);
+                var imgBrush = new System.Windows.Media.ImageBrush(frame);
+                imgSelector.SetValue(ImageSelector.PreviewBrushPropertyKey, imgBrush);
+                imgSelector.SetValue(ImageSelector.HasValuePropertyKey, true);
+                imgSelector.SetValue(ImageSelector.IsEnabledProperty, false);
+                imgSelector.SetCurrentValue(ImageSelector.ToolTipProperty, bpp);
 
-            //    FirstSetupWizardModel.ProfileImageBrush = imgBrush;
-            //    FirstSetupWizardModel.ProfileImageBrushPath = bpp;
-            //}
+                FirstSetupWizardModel.ProfileImageBrush = imgBrush;
+                FirstSetupWizardModel.ProfileImageBrushPath = bpp;
+            }
 
             if (string.IsNullOrEmpty(FirstSetupWizardModel.Author))
             {
