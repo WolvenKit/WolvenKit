@@ -93,15 +93,26 @@ namespace WolvenKit.Views.Others
                 try
                 {
                     var q = await ImageDecoder.RenderToBitmapSource(qa.FullName);
-
-                    var g = BitmapFrame.Create(q);
-                    bold.SetCurrentValue(HandyControl.Controls.ImageViewer.ImageSourceProperty, g);
+                    LoadImage(q);
                 }
                 catch
                 {
                 }
             }
         }
+
+        private Stream StreamFromBitmapSource(BitmapSource writeBmp)
+        {
+            Stream bmp = new MemoryStream();
+
+            BitmapEncoder enc = new BmpBitmapEncoder();
+            enc.Frames.Add(BitmapFrame.Create(writeBmp));
+            enc.Save(bmp);
+
+            return bmp;
+        }
+
+        public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, (System.IO.Stream)StreamFromBitmapSource(qa));
 
         public class MatDepoItem
         {

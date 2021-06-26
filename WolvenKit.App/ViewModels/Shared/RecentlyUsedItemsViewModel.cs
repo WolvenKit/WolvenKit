@@ -168,7 +168,7 @@ namespace WolvenKit.ViewModels.Shared
             }
         }
 
-        public string GetAssemblyVersion() => "0.8.0.1-Beta";
+        public string GetAssemblyVersion() => "8.2.0";
 
         protected override Task CloseAsync()
         {
