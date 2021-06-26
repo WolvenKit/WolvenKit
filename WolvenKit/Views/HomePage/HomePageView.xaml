@@ -326,7 +326,7 @@
                 CornerRadius="0">
                 <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                     <Grid>
-                       
+
                         <Grid
                             x:Name="DebugPage"
                             Margin="0"
@@ -490,7 +490,7 @@
                     FontSize="10"
                     Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
                     IsEnabled="False"
-                    Text="ENTER CURRENT VERSION" />
+                    Text="8.2.0" />
                 <iconPacks:PackIconCodicons
                     Width="20"
                     Height="20"
