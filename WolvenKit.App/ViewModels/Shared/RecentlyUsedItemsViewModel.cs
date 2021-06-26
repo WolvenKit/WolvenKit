@@ -251,6 +251,7 @@ namespace WolvenKit.ViewModels.Shared
                 Type = type;
                 ProjectPath = path;
                 Image = image;
+                SafeName = Path.GetFileNameWithoutExtension(name);
             }
 
             #endregion Constructors
@@ -261,6 +262,9 @@ namespace WolvenKit.ViewModels.Shared
             public string Image { get; set; }
             public DateTime LastEditDate { get; set; }
             public string Name { get; set; }
+
+
+            public string SafeName { get; set; }
             public string ProjectPath { get; set; }
             public string Type { get; set; }
 

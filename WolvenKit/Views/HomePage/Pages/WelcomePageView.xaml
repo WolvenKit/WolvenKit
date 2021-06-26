@@ -32,182 +32,7 @@
                         Rect="0,0,15,15" />
                 </DrawingBrush.Drawing>
             </DrawingBrush>
-            <ControlTemplate x:Key="GroupBoxBaseTopTemplate" TargetType="GroupBox">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" MinHeight="30" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Border
-                        MinHeight="30"
-                        Margin="0,0,0,6"
-                        Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
-                        <ContentPresenter
-                            Margin="10,0"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            ContentSource="Header"
-                            RecognizesAccessKey="True"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                            TextElement.Foreground="{TemplateBinding Foreground}" />
-                    </Border>
-                    <Border
-                        Grid.Row="1"
-                        Background="{DynamicResource MahApps.Brushes.Accent}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                </Grid>
-            </ControlTemplate>
 
-            <ControlTemplate x:Key="GroupBoxBaseLeftTemplate" TargetType="GroupBox">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="30" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Border
-                        MinWidth="30"
-                        Margin="0,0,6,0"
-                        Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        ClipToBounds="False"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
-                        <ContentPresenter
-                            Margin="0,10"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            ContentSource="Header"
-                            RecognizesAccessKey="True"
-                            RenderTransformOrigin="0.5,0.5"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                            TextElement.Foreground="{TemplateBinding Foreground}">
-                            <ContentPresenter.LayoutTransform>
-                                <TransformGroup>
-                                    <RotateTransform Angle="-90" />
-                                </TransformGroup>
-                            </ContentPresenter.LayoutTransform>
-                        </ContentPresenter>
-                    </Border>
-                    <Border
-                        Grid.Column="1"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                </Grid>
-            </ControlTemplate>
-
-            <Style x:Key="GroupBoxBaseStyle" TargetType="GroupBox">
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-                <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
-                <Setter Property="hc:TitleElement.Background" Value="{DynamicResource SecondaryRegionBrush}" />
-                <Setter Property="hc:TitleElement.TitlePlacement" Value="Top" />
-                <Setter Property="hc:BorderElement.CornerRadius" Value="{StaticResource DefaultCornerRadius}" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Padding" Value="4" />
-                <Setter Property="Template" Value="{StaticResource GroupBoxBaseTopTemplate}" />
-                <Style.Triggers>
-                    <Trigger Property="hc:TitleElement.TitlePlacement" Value="Left">
-                        <Setter Property="Template" Value="{StaticResource GroupBoxBaseLeftTemplate}" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-
-            <ControlTemplate x:Key="GroupBoxTabTopTemplate" TargetType="GroupBox">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" MinHeight="30" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Border
-                        Grid.Row="1"
-                        Background="{DynamicResource RegionBrush}"
-                        BorderBrush="{DynamicResource RegionBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,0,1,1'}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                    <Border
-                        Grid.Row="0"
-                        MinHeight="30"
-                        Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}"
-                        BorderBrush="{DynamicResource RegionBrush}"
-                        BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='1,1,1,0'}"
-                        CornerRadius="15,2,2,2">
-                        <ContentPresenter
-                            Margin="0,0"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            ContentSource="Header"
-                            RecognizesAccessKey="True"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                            TextElement.Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" />
-                    </Border>
-                </Grid>
-            </ControlTemplate>
-
-            <ControlTemplate x:Key="GroupBoxTabLeftTemplate" TargetType="GroupBox">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="30" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Border
-                        Grid.Column="1"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='0,1,1,0'}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                    <Border
-                        Grid.Column="0"
-                        MinWidth="30"
-                        Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='1,1,0,1'}"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CornerRadiusSplitConverter}, ConverterParameter='1,0,0,1'}">
-                        <ContentPresenter
-                            Margin="0,10"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            ContentSource="Header"
-                            RecognizesAccessKey="True"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                            TextElement.Foreground="{TemplateBinding Foreground}">
-                            <ContentPresenter.LayoutTransform>
-                                <TransformGroup>
-                                    <RotateTransform Angle="-90" />
-                                </TransformGroup>
-                            </ContentPresenter.LayoutTransform>
-                        </ContentPresenter>
-                    </Border>
-                </Grid>
-            </ControlTemplate>
-
-            <Style
-                x:Key="GroupBoxTabBaseStyle"
-                BasedOn="{StaticResource GroupBoxBaseStyle}"
-                TargetType="GroupBox">
-                <Setter Property="Template" Value="{StaticResource GroupBoxTabTopTemplate}" />
-                <Style.Triggers>
-                    <Trigger Property="hc:TitleElement.TitlePlacement" Value="Left">
-                        <Setter Property="Template" Value="{StaticResource GroupBoxTabLeftTemplate}" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
@@ -219,13 +44,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="4*" />
             <RowDefinition Height="3*" />
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="300" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="500" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
@@ -590,11 +415,17 @@
             HorizontalAlignment="Stretch"
             Background="{DynamicResource ContentBackgroundAlt2}">
 
+            <Grid.ColumnDefinitions>
+
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="500" />
+
+            </Grid.ColumnDefinitions>
 
             <Border
                 x:Name="lokz"
-                Grid.Column="3"
-                Margin="0,5,15,30"
+                Grid.Column="1"
+                Margin="0,0,0,35"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Background="{DynamicResource ContentBackgroundAlt2}"
@@ -606,7 +437,7 @@
                         Grid.Row="0"
                         Grid.RowSpan="2"
                         Grid.Column="0"
-                        Margin="0,15,0,0"
+                        Margin="0,0,0,0"
                         HorizontalAlignment="Right">
                         <StackPanel
                             Margin="0,0,15,0"
@@ -622,7 +453,7 @@
                                 SpinAutoReverse="False" />
 
                             <TextBlock
-                                Margin="10,0,5,0"
+                                Margin="10,0,0,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 FontSize="18"
@@ -634,68 +465,62 @@
                     <wv2:WebView2
                         Width="414"
                         Height="{Binding ElementName=lokz, Path=ActualHeight}"
-                        Margin="0"
+                        MaxWidth="414"
+                        Margin="0,0,15,0"
                         Source="https://www.youtube.com/embed/ZR23YFquZBg" />
                 </StackPanel>
             </Border>
         </Grid>
 
         <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
-            <StackPanel Margin="5,8,32,5" Orientation="Horizontal">
-                <iconPacks:PackIconCodicons
-                    Grid.Row="0"
-                    Width="25"
-                    Height="25"
-                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                    Kind="GoToFile"
-                    Spin="False"
-                    SpinAutoReverse="False" />
+            <StackPanel Orientation="Vertical">
 
-                <TextBlock
-                    x:Name="RecentProjectTour"
-                    Margin="10,0,0,0"
-                    FontSize="18"
-                    Text="Recent Projects" />
+                <StackPanel Margin="5,8,32,5" Orientation="Horizontal">
+                    <iconPacks:PackIconCodicons
+                        Grid.Row="0"
+                        Width="25"
+                        Height="25"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Kind="GoToFile"
+                        Spin="False"
+                        SpinAutoReverse="False" />
+
+                    <TextBlock
+                        x:Name="RecentProjectTour"
+                        Margin="10,0,0,0"
+                        FontSize="18"
+                        Text="Recent Projects" />
+                </StackPanel>
+                <hc:Divider Margin="0,0,0,0" />
+
+
             </StackPanel>
-            <hc:Divider Margin="0,40,0,0" />
-            <hc:CoverView
-                Margin="0,42,0,0"
-                BorderBrush="{x:Null}"
-                BorderThickness="1,1,1,1"
-                ItemContentHeight="55"
-                ItemHeight="240"
-                ItemMargin="15,8,15,8"
-                ItemWidth="350"
+            <syncfusion:CardView
+                Name="cardView"
+                Height="220"
+                Margin="0,60,0,0"
+                Background="Transparent"
+                CanSort="False"
                 ItemsSource="{Binding FancyProjects}"
-                ShowContent="False">
-
-                <hc:CoverView.ItemHeaderTemplate>
+                ShowHeader="False">
+                <syncfusion:CardView.HeaderTemplate>
                     <DataTemplate>
-                        <GroupBox Style="{StaticResource GroupBoxTabBaseStyle}">
-                            <GroupBox.Header>
-                                <Border Background="{DynamicResource MahApps.Brushes.Accent4}" CornerRadius="15,2,2,2">
+                        <Border Margin="-9,-9,-9,-9" Background="{DynamicResource MahApps.Brushes.Accent4}">
+                            <Border Background="{StaticResource CloudDrawingBrushMain}">
 
-                                    <Border Background="{StaticResource CloudDrawingBrushMain}" CornerRadius="15,2,2,2">
-                                        <hc:Tag
-                                            Height="40"
-                                            MinWidth="350"
-                                            MaxWidth="350"
-                                            Margin="3"
-                                            HorizontalAlignment="Left"
-                                            HorizontalContentAlignment="Left"
-                                            Background="{x:Null}"
-                                            Selectable="False"
-                                            ShowCloseButton="False">
-                                            <hc:Tag.Content>
-                                                <TextBlock
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    FontSize="16"
-                                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                    Text="{Binding Path=Name}" />
-                                            </hc:Tag.Content>
-                                            <hc:Tag.Header>
-                                                <Border>
+                                <Grid Height="50">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border>
+                                            <hc:Tag
+                                                Width="42"
+                                                Height="40"
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                HorizontalContentAlignment="Left"
+                                                Background="{x:Null}"
+                                                Selectable="False"
+                                                ShowCloseButton="False">
+                                                <hc:Tag.Header>
 
                                                     <Image Source="{Binding Image}" Stretch="Fill">
                                                         <Image.Effect>
@@ -703,14 +528,29 @@
                                                             <hc:BrightnessEffect Brightness="0.9" />
                                                         </Image.Effect>
                                                     </Image>
-                                                </Border>
-                                                <!--  Bind to project Image  -->
-                                            </hc:Tag.Header>
-                                        </hc:Tag>
-                                    </Border>
-                                </Border>
-                            </GroupBox.Header>
+                                                </hc:Tag.Header>
+                                            </hc:Tag>
+                                        </Border>
+                                        <TextBlock
+                                            Margin="5,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            FontWeight="Bold"
+                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                            Text="{Binding Path=SafeName}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Border>
+                    </DataTemplate>
+                </syncfusion:CardView.HeaderTemplate>
+                <syncfusion:CardView.ItemTemplate>
+                    <DataTemplate>
+
+                        <StackPanel Orientation="Horizontal">
                             <Border
+                                Width="195"
                                 Background="{DynamicResource RegionBrush}"
                                 BorderBrush="{DynamicResource Fluent.Ribbon.Brushes.BackstageTabControl.ItemsPanelBackground}"
                                 BorderThickness="1,0,1,1"
@@ -719,11 +559,7 @@
                                 <Grid>
                                     <StackPanel Margin="5" Orientation="Vertical">
                                         <StackPanel Margin="5" Orientation="Horizontal">
-                                            <hc:Divider
-                                                Width="15"
-                                                Margin="5,15"
-                                                LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                LineStrokeThickness="2" />
+
 
                                             <Border
                                                 Height="25"
@@ -745,11 +581,7 @@
                                             </Border>
                                         </StackPanel>
                                         <StackPanel Margin="5" Orientation="Horizontal">
-                                            <hc:Divider
-                                                Width="15"
-                                                Margin="5,15"
-                                                LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                LineStrokeThickness="2" />
+
                                             <Border
                                                 Height="25"
                                                 VerticalAlignment="Center"
@@ -770,77 +602,52 @@
                                             </Border>
                                         </StackPanel>
 
-                                        <StackPanel Margin="5" Orientation="Horizontal">
+                                        <StackPanel
+                                            Margin="5"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Bottom"
+                                            Orientation="Horizontal">
+                                            <Button
+                                                Height="35"
+                                                HorizontalAlignment="Left"
+                                                Command="{catel:CommandManagerBinding Application.OpenProject}"
+                                                CommandParameter="{Binding ProjectPath}">
+                                                <iconPacks:PackIconCodicons Kind="Edit" />
+                                            </Button>
                                             <hc:Divider
-                                                Width="15"
-                                                Margin="5,15"
+                                                MaxHeight="16"
                                                 LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                LineStrokeThickness="2" />
-                                            <Border
-                                                Height="25"
-                                                VerticalAlignment="Center"
-                                                Background="{DynamicResource RegionBrush}"
-                                                CornerRadius="5,2,2,2">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock
-                                                        Width="30"
-                                                        Margin="5"
-                                                        VerticalAlignment="Center"
-                                                        Text="Path : " />
-                                                    <TextBlock
-                                                        Width="280"
-                                                        Margin="0"
-                                                        VerticalAlignment="Center"
-                                                        Text="{Binding ProjectPath}"
-                                                        TextWrapping="Wrap" />
-                                                </StackPanel>
-                                            </Border>
+                                                LineStrokeThickness="2"
+                                                Orientation="Vertical" />
+                                            <Button
+                                                Height="35"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                                                CommandParameter="{Binding ProjectPath}">
+                                                <iconPacks:PackIconCodicons Kind="FolderOpened" />
+                                            </Button>
+                                            <hc:Divider
+                                                MaxHeight="16"
+                                                LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
+                                                LineStrokeThickness="2"
+                                                Orientation="Vertical" />
+                                            <Button
+                                                Height="35"
+                                                HorizontalAlignment="Left"
+                                                Command="{catel:CommandManagerBinding Application.DeleteProject}"
+                                                CommandParameter="{Binding ProjectPath}">
+                                                <iconPacks:PackIconCodicons Kind="Trash" />
+                                            </Button>
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <StackPanel
-                                        Margin="15"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Bottom"
-                                        Orientation="Horizontal">
-                                        <Button
-                                            Height="35"
-                                            HorizontalAlignment="Left"
-                                            Command="{catel:CommandManagerBinding Application.OpenProject}"
-                                            CommandParameter="{Binding ProjectPath}">
-                                            <iconPacks:PackIconCodicons Kind="Edit" />
-                                        </Button>
-                                        <hc:Divider
-                                            MaxHeight="16"
-                                            LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                            LineStrokeThickness="2"
-                                            Orientation="Vertical" />
-                                        <Button
-                                            Height="35"
-                                            HorizontalAlignment="Left"
-                                            Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
-                                            CommandParameter="{Binding ProjectPath}">
-                                            <iconPacks:PackIconCodicons Kind="FolderOpened" />
-                                        </Button>
-                                        <hc:Divider
-                                            MaxHeight="16"
-                                            LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                            LineStrokeThickness="2"
-                                            Orientation="Vertical" />
-                                        <Button
-                                            Height="35"
-                                            HorizontalAlignment="Left"
-                                            Command="{catel:CommandManagerBinding Application.DeleteProject}"
-                                            CommandParameter="{Binding ProjectPath}">
-                                            <iconPacks:PackIconCodicons Kind="Trash" />
-                                        </Button>
-                                    </StackPanel>
+
                                 </Grid>
                             </Border>
-                        </GroupBox>
+                        </StackPanel>
                     </DataTemplate>
-                </hc:CoverView.ItemHeaderTemplate>
-            </hc:CoverView>
+                </syncfusion:CardView.ItemTemplate>
+            </syncfusion:CardView>
         </Grid>
     </Grid>
 </catel:UserControl>
