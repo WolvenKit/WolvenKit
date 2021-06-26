@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows.Media;
 
 namespace WolvenKit.Functionality.Services
@@ -170,5 +172,7 @@ namespace WolvenKit.Functionality.Services
         bool ShowFirstTimeSetupForUser();
         Color GetThemeAccent();
         void SetThemeAccent(Color color);
+
+        string GetVersionNumber();
     }
 }

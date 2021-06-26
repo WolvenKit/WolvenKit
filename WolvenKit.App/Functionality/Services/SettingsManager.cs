@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -50,6 +53,24 @@ namespace WolvenKit.Functionality.Services
         public SettingsManager()
         {
             ManagerVersions = new string[(int)EManagerType.Max];
+
+            _assemblyVersion = GetAssemblyVersion();
+        }
+
+        private string GetAssemblyVersion()
+        {
+            var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            var paths = new List<string>(runtimeAssemblies);
+            var resolver = new PathAssemblyResolver(paths);
+            var mlc = new MetadataLoadContext(resolver);
+
+            using (mlc)
+            {
+                // Load assembly into MetadataLoadContext.
+                var assembly = mlc.LoadFromAssemblyPath("WolvenKit.dll");
+                var name = assembly.GetName();
+                return name.Version.ToString();
+            }
         }
 
         #endregion constructors
@@ -75,6 +96,10 @@ namespace WolvenKit.Functionality.Services
         {
             ThemeAccentString = color.ToString();
         }
+
+        private string _assemblyVersion;
+
+        public string GetVersionNumber() => _assemblyVersion;
 
         public string[] ManagerVersions { get; set; }
 
