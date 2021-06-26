@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using Catel.IoC;
@@ -56,28 +58,30 @@ namespace WolvenKit.Models
 
         public string Name { get; }
 
-        public string RelativeName { get; }
-
         public string Extension => GetExtension();
 
-        public bool IsDirectory { get; }
-
-        public ulong Hash { get; }
-
-        public ulong ParentHash { get; }
+        [Display(Name = "Hash")] public string HashStr => Hash.ToString();
 
 
-        public bool IsExpanded { get; set; }
+        [Browsable(false)] public ulong Hash { get; }
+
+        [Browsable(false)] public string RelativeName { get; }
+
+        
+        [Browsable(false)] public bool IsDirectory { get; }
+
+        [Browsable(false)] public ulong ParentHash { get; }
+
+        [Browsable(false)] public bool IsExpanded { get; set; }
 
 
+        [Browsable(false)] public bool IsImportable => !IsDirectory
+                                                       && !string.IsNullOrEmpty(GetExtension())
+                                                       && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
 
-        public bool IsImportable => !IsDirectory
-                                    && !string.IsNullOrEmpty(GetExtension())
-                                    && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
-
-        public bool IsExportable => !IsDirectory
-                                    && !string.IsNullOrEmpty(GetExtension())
-                                    && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
+        [Browsable(false)] public bool IsExportable => !IsDirectory
+                                                       && !string.IsNullOrEmpty(GetExtension())
+                                                       && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
         #endregion
 
