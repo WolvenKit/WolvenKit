@@ -2,6 +2,8 @@ using System.Windows;
 using HandyControl.Data;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
@@ -158,6 +160,13 @@ namespace WolvenKit.Views.Editor
             TreeGrid.View.Filter = FilterNodes;
             TreeGrid.View.RefreshFilter();
 
+        }
+
+
+
+        private void UserControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+                    StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
         }
     }
 }

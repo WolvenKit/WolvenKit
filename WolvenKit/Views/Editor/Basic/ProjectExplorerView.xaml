@@ -14,6 +14,7 @@
     d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
+    MouseDown="UserControl_MouseDown"
     mc:Ignorable="d">
 
     <catel:UserControl.Resources>
@@ -35,13 +36,13 @@
             Name="TreeGrid"
             AllowEditing="False"
             AllowFiltering="False"
-            FilterLevel="Extended"
             AllowResizingColumns="False"
             AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             ChildPropertyName="ParentHash"
             ColumnSizer="Star"
             ExpandStateMappingName="IsExpanded"
+            FilterLevel="Extended"
             IsReadOnly="True"
             ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
@@ -83,9 +84,8 @@
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Name"
                     HorizontalHeaderContentAlignment="Left"
-                    MappingName="Name"
                     ImmediateUpdateColumnFilter="True"
-                >
+                    MappingName="Name">
                     <syncfusion:TreeGridTextColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -811,10 +811,8 @@
             Background="{DynamicResource ContentBackground}"
             BorderBrush="{DynamicResource BorderBrush}"
             FlowDirection="LeftToRight"
-            Text="search"
             SearchStarted="PESearchBar_OnSearchStarted"
             ShowClearButton="True"
-            >
-        </hc:SearchBar>
+            Text="search" />
     </Grid>
 </catel:UserControl>
