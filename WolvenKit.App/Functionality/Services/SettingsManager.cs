@@ -165,7 +165,7 @@ namespace WolvenKit.Functionality.Services
             {
                 CheckForUpdates = settings.CheckForUpdates,
                 ShowGuidedTour = settings.ShowGuidedTour,
-                ProfileImageBrush = settings.ProfileImageBrush,
+                //ProfileImageBrush = settings.ProfileImageBrush,
                 TextLanguage = settings.TextLanguage,
                 ThemeAccentString = settings.ThemeAccentString,
                 ManagerVersions = settings.ManagerVersions,
@@ -238,12 +238,12 @@ namespace WolvenKit.Functionality.Services
                 enc.Save(fs1);
             }
 
-            using var createStream = File.Create(ConfigurationPath);
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
             };
-            JsonSerializer.SerializeAsync(createStream, new SettingsDto(this), options);
+            var json = JsonSerializer.Serialize(new SettingsDto(this), options);
+            File.WriteAllText(ConfigurationPath, json);
         }
 
         public bool ShowFirstTimeSetupForUser() => !IsHealthy();
@@ -262,7 +262,7 @@ namespace WolvenKit.Functionality.Services
         {
             CheckForUpdates = settings.CheckForUpdates;
             ShowGuidedTour = settings.ShowGuidedTour;
-            ProfileImageBrush = settings.ProfileImageBrush;
+            //ProfileImageBrush = settings.ProfileImageBrush;
             TextLanguage = settings.TextLanguage;
             ThemeAccentString = settings.ThemeAccentString;
             ManagerVersions = settings.ManagerVersions;
@@ -276,7 +276,7 @@ namespace WolvenKit.Functionality.Services
 
         public bool CheckForUpdates { get; set; }
         
-        public ImageBrush ProfileImageBrush { get; set; }
+        //public ImageBrush ProfileImageBrush { get; set; }
         public string TextLanguage { get; set; }
         public string ThemeAccentString { get; set; }
         public string[] ManagerVersions { get; set; }

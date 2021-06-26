@@ -8,9 +8,6 @@ namespace WolvenKit.Functionality.Services
 
         bool CheckForUpdates { get; set; }
 
-        
-
-        public ImageBrush ProfileImageBrush { get; set; }
 
         string TextLanguage { get; set; }
 
@@ -44,6 +41,8 @@ namespace WolvenKit.Functionality.Services
         // This is here because Catel can't expose inherited Properties ¯\_(ツ)_/¯
         // and we use this in teh first set up viewmodels
         bool ShowGuidedTour { get; set; }
+
+        public ImageBrush ProfileImageBrush { get; set; }
 
         #region Methods
 
