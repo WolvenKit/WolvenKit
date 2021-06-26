@@ -75,7 +75,18 @@ namespace WolvenKit.Views.Editor
             if (propertiesViewModel.State is DockState.AutoHidden or DockState.Hidden)
             { return; }
 
-            propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
+
+            if (propertiesViewModel.canShowPrev)
+            {
+                propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
+
+            }
+            else
+            {
+                return;
+            }
+
+
             propertiesViewModel.AB_MeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
@@ -219,15 +230,20 @@ namespace WolvenKit.Views.Editor
 
         private void LeftNavigationHomeButton_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
 
-        private void Expand_OnClick(object sender, RoutedEventArgs e)
+        private void Expand_OnClick(object sender, RoutedEventArgs e) => ExpandNode();
+
+        public void ExpandNode()
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
             LeftNavigation.ExpandNode(selectedIndex);
         }
 
-        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.ExpandAllNodes();
+        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAllNodes();
+        public void ExpandAllNodes() => LeftNavigation.ExpandAllNodes();
 
-        private void Collapse_OnClick(object sender, RoutedEventArgs e)
+        private void Collapse_OnClick(object sender, RoutedEventArgs e) => CollapseNode();
+
+        public void CollapseNode()
         {
             var selectedItem = LeftNavigation.SelectedItem;
             if (selectedItem == null)
@@ -238,7 +254,9 @@ namespace WolvenKit.Views.Editor
             LeftNavigation.CollapseNode(node);
         }
 
-        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
+        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAllNodes();
+
+        public void CollapseAllNodes() => LeftNavigation.CollapseAllNodes();
 
         private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
         {

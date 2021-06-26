@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Catel;
@@ -100,6 +101,9 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected Item from Project Explorer If Available.
         /// </summary>
+        ///
+
+        public bool canShowPrev { get; set; } = true;
         public FileModel PE_SelectedItem { get; set; }
 
         /// <summary>
@@ -158,7 +162,12 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
-            PE_SelectedItem = model;
+            if (canShowPrev)
+            {
+                PE_SelectedItem = model;
+            }
+            else
+            { return; }
             PE_MeshPreviewVisible = false;
             IsAudioPreviewVisible = false;
             IsImagePreviewVisible = false;
@@ -169,12 +178,17 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
+            if (PE_SelectedItem != null)
+            {
+                return;
+            }
+
             if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                  string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                  string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
-                  || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
-                )
+              string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+              || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
             )
+        )
             {
                 return;
             }

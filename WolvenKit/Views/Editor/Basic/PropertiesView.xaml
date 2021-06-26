@@ -335,6 +335,7 @@
                     </Grid.Resources>
 
                     <syncfusion:PropertyGrid
+                        x:Name="PEPropGrid"
                         EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
                         EditableFontWeight="SemiBold"
                         IsEnabled="False"
@@ -344,6 +345,7 @@
                         Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}" />
 
                     <syncfusion:PropertyGrid
+                        x:Name="ABPropGrid"
                         EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
                         EditableFontWeight="SemiBold"
                         IsEnabled="False"
