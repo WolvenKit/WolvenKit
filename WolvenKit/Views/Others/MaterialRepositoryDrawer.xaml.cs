@@ -14,36 +14,29 @@ namespace WolvenKit.Views.Others
     /// </summary>
     public partial class MaterialRepositoryDrawer : UserControl
     {
-        public static ObservableCollection<string> ImageSources { get; set; }
-        public static ObservableCollection<string> Folders { get; set; }
+        public static ObservableCollection<MatDepoItem> ImageSources { get; set; }
+        public static ObservableCollection<MatDepoItem> Folders { get; set; }
         public static string PreviousFolder { get; set; }
+
         public MaterialRepositoryDrawer()
         {
             InitializeComponent();
 
-
-
-
-
             // string rootPath = @"C:\Wolvenkit_Develop";
             // string rootPath = @"C:\Wolvenkit_Develop";
-            Folders = new ObservableCollection<string>();
-            ImageSources = new ObservableCollection<string>();
+            Folders = new ObservableCollection<MatDepoItem>();
+            ImageSources = new ObservableCollection<MatDepoItem>();
 
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             if (!string.IsNullOrEmpty(settings.MaterialRepositoryPath))
             {
                 PreviousFolder = settings.MaterialRepositoryPath;
                 GetFolders(PreviousFolder);
-
             }
-
 
             // ImageSources = GetDirFiles(rootPath);
             DataContext = this;
         }
-
-
 
         private static void GetDirFiles(string dir)
         {
@@ -54,8 +47,9 @@ namespace WolvenKit.Views.Others
             {
                 if (z.Contains(".dds") || z.Contains(".xbm"))
                 {
-                    MaterialRepositoryDrawer.ImageSources.Add(z);
-
+                    MatDepoItem newitem = new MatDepoItem();
+                    newitem.FullName = z;
+                    MaterialRepositoryDrawer.ImageSources.Add(newitem);
                 }
             }
         }
@@ -64,12 +58,14 @@ namespace WolvenKit.Views.Others
         {
             Folders.Clear();
             var dirs = Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly);
-
-            MaterialRepositoryDrawer.Folders.Add(PreviousFolder);
+            MatDepoItem newitem = new MatDepoItem();
+            newitem.FullName = PreviousFolder;
+            MaterialRepositoryDrawer.Folders.Add(newitem);
             foreach (var z in dirs)
             {
-
-                MaterialRepositoryDrawer.Folders.Add(z);
+                MatDepoItem newitem2 = new MatDepoItem();
+                newitem2.FullName = z;
+                MaterialRepositoryDrawer.Folders.Add(newitem2);
             }
 
             GetDirFiles(dir);
@@ -79,37 +75,53 @@ namespace WolvenKit.Views.Others
         {
             if (Henry.SelectedItem != null)
             {
-                var b = Henry.SelectedItem.ToString();
-                Trace.WriteLine(@"" + b);
-                GetFolders(@"" + b);
-            }
+                var qa = Henry.SelectedItem as MatDepoItem;
 
+                GetFolders(@"" + qa.FullName);
+            }
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
         }
 
         private async void x_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (x.SelectedItem != null)
             {
-
+                var qa = x.SelectedItem as MatDepoItem;
                 try
                 {
-                    var q = await ImageDecoder.RenderToBitmapSource(x.SelectedItem.ToString());
+                    var q = await ImageDecoder.RenderToBitmapSource(qa.FullName);
 
                     var g = BitmapFrame.Create(q);
                     bold.SetCurrentValue(HandyControl.Controls.ImageViewer.ImageSourceProperty, g);
-
                 }
                 catch
                 {
+                }
+            }
+        }
 
+        public class MatDepoItem
+        {
+            public string FullName { get; set; }
+
+            public string SafeName
+            {
+                get
+                {
+                    return Path.GetFileName(FullName);
                 }
             }
 
+            public string Extension
+            {
+                get
+                {
+                    return Path.GetExtension(FullName);
+                }
+            }
         }
     }
 }

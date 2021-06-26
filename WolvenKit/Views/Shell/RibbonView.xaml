@@ -1711,8 +1711,8 @@
                 Width="900"
                 Background="{DynamicResource RegionBrush}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                BorderThickness="2,2,0,2"
-                CornerRadius="15,0,0,15">
+                BorderThickness="2,0,0,0"
+                CornerRadius="0,0,0,0">
                 <others:MaterialRepositoryDrawer />
             </Border>
         </hc:Drawer>
