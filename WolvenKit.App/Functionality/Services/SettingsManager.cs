@@ -66,17 +66,10 @@ namespace WolvenKit.Functionality.Services
 
         public string ThemeAccentString { get; set; }
 
-        public Color GetThemeAccent()
-        {
-            if (!string.IsNullOrEmpty(ThemeAccentString))
-            {
-                return (Color)ColorConverter.ConvertFromString(ThemeAccentString);
-            }
-            else
-            {
-                return (Color)ColorConverter.ConvertFromString("#DF2935");
-            }
-        }
+        public Color GetThemeAccent() =>
+            !string.IsNullOrEmpty(ThemeAccentString)
+                ? (Color)ColorConverter.ConvertFromString(ThemeAccentString)
+                : (Color)ColorConverter.ConvertFromString("#DF2935");
 
         public void SetThemeAccent(Color color)
         {
