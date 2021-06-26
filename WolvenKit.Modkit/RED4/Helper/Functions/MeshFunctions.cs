@@ -68,7 +68,9 @@ namespace CP77.CR2W
             ModelRoot model = RawMeshesToGLTF(expMeshes, null);
             string outfile;
 
-            Directory.CreateDirectory(tempmodels);
+            if(!Directory.Exists(tempmodels))
+                Directory.CreateDirectory(tempmodels);
+            
             if (Directory.GetFiles(tempmodels).Length > 5)
             {
                 foreach (var f in Directory.GetFiles(tempmodels))
@@ -83,16 +85,20 @@ namespace CP77.CR2W
                 }
             }
 
+
             if (isGLBinary)
             {
-                outfile = tempmodels + Path.GetFileNameWithoutExtension(FilePath) + ".glb";
+                outfile = Path.Combine(tempmodels,Path.GetFileNameWithoutExtension(FilePath) + ".glb");
                 model.SaveGLB(outfile);
             }
             else
             {
-                outfile = tempmodels + Path.GetFileNameWithoutExtension(FilePath) + ".gltf";
+                outfile = Path.Combine(tempmodels, Path.GetFileNameWithoutExtension(FilePath) + ".gltf");
                 model.SaveGLTF(outfile);
             }
+            meshStream.Dispose();
+            meshStream.Close();
+
             return outfile;
         }
 
