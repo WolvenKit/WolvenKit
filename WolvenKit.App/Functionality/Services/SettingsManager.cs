@@ -16,7 +16,6 @@ namespace WolvenKit.Functionality.Services
     /// </summary>
     public class SettingsManager : ObservableObject, ISettingsManager
     {
-
         #region fields
 
         private static string ConfigurationPath
@@ -50,15 +49,12 @@ namespace WolvenKit.Functionality.Services
         /// </summary>
         public SettingsManager()
         {
-            
-
             ManagerVersions = new string[(int)EManagerType.Max];
         }
 
         #endregion constructors
 
         #region properties
-
 
         public bool ShowGuidedTour { get; set; } = true;
 
@@ -70,13 +66,13 @@ namespace WolvenKit.Functionality.Services
 
         public string ThemeAccentString { get; set; }
 
-        public Color GetThemeAccent() 
+        public Color GetThemeAccent()
         {
-            try
+            if (string.IsNullOrEmpty(ThemeAccentString))
             {
                 return (Color)ColorConverter.ConvertFromString(ThemeAccentString);
             }
-            catch (Exception)
+            else
             {
                 return (Color)ColorConverter.ConvertFromString("#DF2935");
             }
@@ -87,7 +83,7 @@ namespace WolvenKit.Functionality.Services
             ThemeAccentString = color.ToString();
         }
 
-        public string[] ManagerVersions { get; set; } 
+        public string[] ManagerVersions { get; set; }
 
         /// <summary>
         /// Gets/Sets the author's profile image brush.
@@ -95,7 +91,6 @@ namespace WolvenKit.Functionality.Services
         [JsonIgnore] public ImageBrush ProfileImageBrush { get; set; }
 
         public string TextLanguage { get; set; }
-
 
         #region red4
 
@@ -195,7 +190,6 @@ namespace WolvenKit.Functionality.Services
             }
             catch (Exception)
             {
-                
             }
 
             // Defaults
@@ -204,7 +198,6 @@ namespace WolvenKit.Functionality.Services
                 TextLanguage = "en",
                 //VoiceLanguage = "en",
             };
-
 
             // TODO: move this?
             // add a mechanism to update individual cache managers
@@ -255,7 +248,6 @@ namespace WolvenKit.Functionality.Services
     {
         public SettingsDto()
         {
-            
         }
 
         public SettingsDto(SettingsManager settings)
@@ -273,11 +265,11 @@ namespace WolvenKit.Functionality.Services
             WccLitePath = settings.WccLitePath;
         }
 
-
         public bool CheckForUpdates { get; set; }
-        
+
         //public ImageBrush ProfileImageBrush { get; set; }
         public string TextLanguage { get; set; }
+
         public string ThemeAccentString { get; set; }
         public string[] ManagerVersions { get; set; }
         public string DepotPath { get; set; }
@@ -288,5 +280,4 @@ namespace WolvenKit.Functionality.Services
 
         public bool ShowGuidedTour { get; set; }
     }
-
 }

@@ -225,15 +225,15 @@
         <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
                 <Grid>
                     <Border
+                        HorizontalAlignment="Left"
                         VerticalAlignment="top"
-                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                        BorderThickness="0">
+                        BorderBrush="{DynamicResource ContentBackgroundAlt}">
                         <StackPanel VerticalAlignment="top">
 
                             <StackPanel
@@ -269,18 +269,22 @@
                                         VerticalAlignment="Stretch" />
                                 </StackPanel>
                             </StackPanel>
-                            <TextBlock Margin="15" TextWrapping="Wrap">
+                            <TextBlock
+                                Width="300"
+                                Margin="15,15,0,0"
+                                HorizontalAlignment="Left"
+                                TextAlignment="Justify"
+                                TextWrapping="Wrap">
                                 We would like to thank every person and enitity who helped and contributed to this ambitious project,<LineBreak />
                                 whom, without their support it wouldn't exist.<LineBreak /><LineBreak />
-                                Happy Modding!<LineBreak /><LineBreak /><LineBreak />
-                                - RED Modding Tools team</TextBlock>
+                                Happy Modding!  -  RED Modding Tools team</TextBlock>
 
                             <sync1:SfBarcode
                                 x:Name="barcode"
                                 Width="90"
                                 Height="90"
-                                Margin="0,-50,0,0"
-                                HorizontalAlignment="Right"
+                                Margin="15,10,0,0"
+                                HorizontalAlignment="Left"
                                 VerticalAlignment="Bottom"
                                 DarkBarBrush="Red"
                                 DisplayText="False"
