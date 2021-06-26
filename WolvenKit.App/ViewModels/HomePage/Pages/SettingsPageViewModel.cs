@@ -9,8 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using Catel.Fody;
 using Catel.MVVM;
-using HandyControl.Data;
 using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
@@ -19,7 +19,6 @@ using WolvenKit.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Editor.Tools;
-using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
@@ -37,7 +36,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         {
             _settingsManager = settingsManager;
             _loggerService = loggerService;
-            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
+            //SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
             originalAccordionItems = new List<SfAccordionItem>();
         }
 
@@ -89,58 +88,58 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         #region methods
         private bool CanSearchStartedCommand(object arg) => true;
 
-        private void ExecuteSearchStartedCommand(object arg)
-        {
+        //private void ExecuteSearchStartedCommand(object arg)
+        //{
             
 
-            if (arg is FunctionEventArgs<string> e)
-            {
-                var query = e.Info;
-                //bool subItemContains = false;
+        //    if (arg is FunctionEventArgs<string> e)
+        //    {
+        //        var query = e.Info;
+        //        //bool subItemContains = false;
 
-                if (!string.IsNullOrWhiteSpace(query))
-                {
-                    if (AccordionItems.Count == 0)
-                    {
-                        AccordionItems.Filter = null;
-                    }
-                    else
-                    {
-                        // filters the itemcollection, if an item's header doesn't match with the query, it gets filtered out.
+        //        if (!string.IsNullOrWhiteSpace(query))
+        //        {
+        //            if (AccordionItems.Count == 0)
+        //            {
+        //                AccordionItems.Filter = null;
+        //            }
+        //            else
+        //            {
+        //                // filters the itemcollection, if an item's header doesn't match with the query, it gets filtered out.
 
-                        AccordionItems.Filter = item =>
-                        {
-                            //SfAccordionItem accordionItem = item as SfAccordionItem;
-                            if (item == null)
-                                return false;
+        //                AccordionItems.Filter = item =>
+        //                {
+        //                    //SfAccordionItem accordionItem = item as SfAccordionItem;
+        //                    if (item == null)
+        //                        return false;
 
-                            return (item as SfAccordionItem).Header.ToString().ToLower().Contains(query.ToLower());
+        //                    return (item as SfAccordionItem).Header.ToString().ToLower().Contains(query.ToLower());
 
-                            //subProperties = GetPropertyViews(accordionItem);
+        //                    //subProperties = GetPropertyViews(accordionItem);
 
-                            //// filters the subCategories aswell based on the Category string.
-                            //subProperties.Filter = subItem =>
-                            //{
-                            //    PropertyCategoryViewItemCollection viewItemCollection = subItem as PropertyCategoryViewItemCollection;
-                            //    subItemContains = viewItemCollection.Category.ToLower().Contains(query.ToLower());
-                            //    return subItemContains;
-                            //};
+        //                    //// filters the subCategories aswell based on the Category string.
+        //                    //subProperties.Filter = subItem =>
+        //                    //{
+        //                    //    PropertyCategoryViewItemCollection viewItemCollection = subItem as PropertyCategoryViewItemCollection;
+        //                    //    subItemContains = viewItemCollection.Category.ToLower().Contains(query.ToLower());
+        //                    //    return subItemContains;
+        //                    //};
 
-                            //// If theres still an element in the collection after the filter,
-                            //// then we still allow the current accordionItem to be shown.
-                            //if (subProperties.Count > 0)
-                            //    return true;
+        //                    //// If theres still an element in the collection after the filter,
+        //                    //// then we still allow the current accordionItem to be shown.
+        //                    //if (subProperties.Count > 0)
+        //                    //    return true;
 
-                            //return headerContains;
-                        };
-                    }
-                }   // reseting filter.
-                else // if the search bar gets emptied out, then all items should be seen again by removing the filter.
-                {
-                    AccordionItems.Filter = null;
-                }
-            }
-        }
+        //                    //return headerContains;
+        //                };
+        //            }
+        //        }   // reseting filter.
+        //        else // if the search bar gets emptied out, then all items should be seen again by removing the filter.
+        //        {
+        //            AccordionItems.Filter = null;
+        //        }
+        //    }
+        //}
 
         // Starting from the AccordionItem, this method recurseviley goes down the visual tree
         // until it finds the element with the PropertyView type.
@@ -174,9 +173,13 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
     #region PropertyGridModels
     [Editor(typeof(string), typeof(PathEditor))]
-    public class CP77SettingsPGModel : ObservableObject
+    public class CP77SettingsPGModel : Catel.Data.ObservableObject
     {
-        ISettingsManager _settingsManager;
+
+        /// <summary>
+        /// Gets or sets the SettingsManager.
+        /// </summary>
+        private ISettingsManager _settingsManager { get; set; }
 
         public CP77SettingsPGModel(ISettingsManager settingsManager)
         {
@@ -191,6 +194,18 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             set
             {
                 _settingsManager.CP77ExecutablePath = value;
+                _settingsManager.Save();
+            }
+        }
+
+        [Category("General")]
+        [Display(Name = "Materialrepository path")]
+        public string MaterialRepositoryPath
+        {
+            get => _settingsManager.MaterialRepositoryPath;
+            set
+            {
+                _settingsManager.MaterialRepositoryPath = value;
                 _settingsManager.Save();
             }
         }

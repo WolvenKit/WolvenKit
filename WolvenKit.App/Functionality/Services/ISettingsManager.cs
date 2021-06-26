@@ -24,7 +24,6 @@ namespace WolvenKit.Functionality.Services
 
         string CP77ExecutablePath { get; set; }
 
-        string MaterialRepositoryPath { get; set; }
 
         // red 3
 
@@ -39,10 +38,13 @@ namespace WolvenKit.Functionality.Services
     public interface ISettingsManager : ISettingsDto
     {
         // This is here because Catel can't expose inherited Properties ¯\_(ツ)_/¯
-        // and we use this in teh first set up viewmodels
+        // and we use this in the first set up viewmodels
         bool ShowGuidedTour { get; set; }
 
         public ImageBrush ProfileImageBrush { get; set; }
+
+        string MaterialRepositoryPath { get; set; }
+
 
         #region Methods
 

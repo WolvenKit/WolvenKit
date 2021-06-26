@@ -137,19 +137,27 @@ namespace WolvenKit.Views.Editor
             propertiesViewModel.IsAudioPreviewVisible = true;
 
             var managerCacheDir = Path.Combine(wKitAppData, "Temp_Audio_import");
-            string EndPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
             Directory.CreateDirectory(managerCacheDir);
+
+            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
             foreach (var f in Directory.GetFiles(managerCacheDir))
             {
                 try
-                { File.Delete(f); }
-                catch { }
+                {
+                    File.Delete(f);
+                }
+                catch
+                {
+
+                }
             }
-            using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
+            using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
             selectedGameFile.Extract(fs);
 
-            if (File.Exists(EndPath))
-            { propertiesViewModel.AddAudioItem(EndPath); }
+            if (File.Exists(endPath))
+            {
+                propertiesViewModel.AddAudioItem(endPath);
+            }
         }
 
         private async void PreviewTexture(PropertiesViewModel propertiesViewModel, string wKitAppData, FileEntryViewModel selectedItem, IGameFile selectedGameFile)

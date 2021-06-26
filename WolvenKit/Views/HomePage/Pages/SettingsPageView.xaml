@@ -19,7 +19,6 @@
     <Grid
         MinWidth="300"
         MinHeight="300"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
         <Grid x:Name="settingsGrid" Margin="3,75,3,0">
 
@@ -118,7 +117,7 @@
             </syncfusion:SfAccordion>
         </Grid>
 
-        <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <!--<hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
             <hc:SearchBar
                 x:Name="settingsSearch"
                 Margin="200,40,200,0"
@@ -132,9 +131,9 @@
                     </hc:EventTrigger>
                 </hc:Interaction.Triggers>
             </hc:SearchBar>
-        </hc:TransitioningContentControl>
+        </hc:TransitioningContentControl>-->
 
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+        <!--<hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
             <StackPanel
                 Margin="5"
@@ -166,6 +165,6 @@
                     StrokeThickness="1.5"
                     Duration="00:00:06" />
             </StackPanel>
-        </hc:TransitioningContentControl>
+        </hc:TransitioningContentControl>-->
     </Grid>
 </catel:UserControl>

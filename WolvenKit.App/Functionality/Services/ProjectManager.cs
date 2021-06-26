@@ -109,8 +109,8 @@ namespace WolvenKit.Functionality.Services
             try
             {
                 await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(SerializationData));
-                if (ser.Deserialize(lf) is not SerializationData obj)
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                if (ser.Deserialize(lf) is not CP77Mod obj)
                 {
                     return null;
                 }
@@ -149,8 +149,8 @@ namespace WolvenKit.Functionality.Services
             try
             {
                 await using var sf = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(SerializationData));
-                ser.Serialize(sf, new SerializationData(ActiveProject));
+                var ser = new XmlSerializer(typeof(CP77Mod));
+                ser.Serialize(sf, new CP77Mod(ActiveProject));
 
             }
             catch (Exception e)
@@ -162,13 +162,13 @@ namespace WolvenKit.Functionality.Services
             return true;
         }
 
-        public class SerializationData
+        public class CP77Mod
         {
-            public SerializationData()
+            public CP77Mod()
             {
                 
             }
-            public SerializationData(EditorProject project)
+            public CP77Mod(EditorProject project)
             {
                 Author = project.Author;
                 Email = project.Email;
