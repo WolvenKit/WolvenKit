@@ -28,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true)
+        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -66,7 +66,7 @@ namespace WolvenKit.Modkit.RED4
                 Directory.CreateDirectory(outDir.FullName);
             }
 
-            ParseMaterials(cr2w, meshStream, outDir, archives, eUncookExtension);
+            ParseMaterials(cr2w, meshStream, outDir, archives, matRepo, eUncookExtension);
 
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
@@ -240,7 +240,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
         }
-        private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, DirectoryInfo outDir, List<Archive> archives, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, DirectoryInfo outDir, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             List<string> primaryDependencies = new List<string>();
 
@@ -279,7 +279,11 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (ar.Files.ContainsKey(hash))
                         {
-                            UncookSingle(ar, hash, outDir, exportArgs);
+                            if (!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace("xbm",exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                            {
+                                if (Directory.Exists(matRepo))
+                                    UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
+                            }
                             break;
                         }
 
@@ -294,7 +298,11 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (ar.Files.ContainsKey(hash))
                         {
-                            UncookSingle(ar, hash, outDir, exportArgs);
+                            if(!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace(".mlmask",$"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()}"))))
+                            {
+                                if (Directory.Exists(matRepo))
+                                    UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
+                            }
                             break;
                         }
                     }
@@ -346,7 +354,11 @@ namespace WolvenKit.Modkit.RED4
                                     {
                                         if (arr.Files.ContainsKey(hash1))
                                         {
-                                            UncookSingle(arr, hash1, outDir, exportArgs);
+                                            if (!File.Exists(Path.Combine(matRepo, mls.Imports[e].DepotPathStr.Replace("xbm", exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                            {
+                                                if (Directory.Exists(matRepo))
+                                                    UncookSingle(arr, hash1, new DirectoryInfo(matRepo), exportArgs);
+                                            }
                                             break;
                                         }
                                     }
@@ -375,7 +387,11 @@ namespace WolvenKit.Modkit.RED4
                                                 {
                                                     if (arrr.Files.ContainsKey(hash3))
                                                     {
-                                                        UncookSingle(arrr, hash3, outDir, exportArgs);
+                                                        if (!File.Exists(Path.Combine(matRepo, mlt.Imports[eye].DepotPathStr.Replace("xbm", exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                        {
+                                                            if (Directory.Exists(matRepo))
+                                                                UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
+                                                        }
                                                         break;
                                                     }
                                                 }
@@ -409,7 +425,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 MaterialTemplates.Add(new Template(mlTemplates[i], mlTemplateNames[i]));
             }
-            var obj = new { Materials = RawMaterials,HairProfiles = HairProfiles, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
+            var obj = new { MaterialRepo = matRepo, Materials = RawMaterials,HairProfiles = HairProfiles, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
 
             var settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
