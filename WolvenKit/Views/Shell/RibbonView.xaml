@@ -714,7 +714,7 @@
                         </syncfusion:RibbonButton>
                     </syncfusion:RibbonMenuGroup>
 
-                    <syncfusion:RibbonMenuGroup Header="File">
+                    <syncfusion:RibbonMenuGroup Header="File" Visibility="Collapsed">
 
                         <!--  New File Button  -->
                         <syncfusion:RibbonButton
