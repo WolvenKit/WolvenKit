@@ -178,7 +178,7 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
-            if (PE_SelectedItem != null)
+            if (PE_SelectedItem == null)
             {
                 return;
             }
