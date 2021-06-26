@@ -194,7 +194,12 @@
                                     </DataTemplate>
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
-
+                        </syncfusion:RibbonBar>
+                        <!--  File bar  -->
+                        <syncfusion:RibbonBar
+                            Name="ABViewActions"
+                            Width="auto"
+                            Header="View">
                             <!--  Expand Single Nodes  -->
                             <syncfusion:RibbonButton
                                 x:Name="ExpandSingleAB"
@@ -1583,7 +1588,6 @@
                                 TextAlignment="Center"
                                 TextWrapping="Wrap" />
 
-
                             <iconPacks:PackIconBootstrapIcons
                                 Width="28"
                                 Height="28"
@@ -1591,9 +1595,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Kind="Image" />
-
                         </Grid>
-
                     </ToggleButton>
                     <!--  Plugin Manager Button  -->
                     <syncfusion:RibbonButton
