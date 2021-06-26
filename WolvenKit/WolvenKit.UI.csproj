@@ -22,7 +22,7 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <Version>0.8.0.1-Beta</Version>
+    <Version>8.2.0.0</Version>
     <Description>WPF</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
