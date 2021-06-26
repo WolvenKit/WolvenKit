@@ -783,17 +783,23 @@
                         <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
                     </MenuItem>
 
-                    <MenuItem Margin="0" Header="Actions">
+                    <MenuItem
+                        Margin="0"
+                        Header="Actions"
+                        Visibility="Collapsed">
 
                         <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
-                    <MenuItem Header="Export selected - Simple" />
-                    <MenuItem Header="Export selected - Advanced" />
+                    <MenuItem Header="Export selected - Simple" Visibility="Collapsed" />
+                    <MenuItem Header="Export selected - Advanced" Visibility="Collapsed" />
 
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
+                    <MenuItem
+                        Command="{Binding OpenInAssetBrowserCommand}"
+                        Header="Open in asset browser"
+                        Visibility="Collapsed" />
 
                     <MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
                     <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />

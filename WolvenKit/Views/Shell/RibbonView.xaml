@@ -1045,7 +1045,10 @@
                 </syncfusion:RibbonBar>
             </syncfusion:RibbonTab>
             <!--  EDITORS TAB  -->
-            <syncfusion:RibbonTab Caption="EDITORS" IsChecked="False">
+            <syncfusion:RibbonTab
+                Caption="EDITORS"
+                IsChecked="False"
+                Visibility="Collapsed">
                 <!--  Editors bar  -->
                 <syncfusion:RibbonBar
                     Name="Editors"
@@ -1211,7 +1214,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Audio Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons
@@ -1249,7 +1253,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="WCC Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons
@@ -1268,7 +1273,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="CR2W2Text Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons
@@ -1286,7 +1292,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Importer Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons
@@ -1304,7 +1311,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Anim Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons
@@ -1323,7 +1331,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Mimics Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons
@@ -1342,7 +1351,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Game Debugger Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconCodicons
@@ -1361,7 +1371,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Menu Creator Tool"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons
@@ -1378,12 +1389,14 @@
                 <syncfusion:RibbonBar
                     Name="CP77BarTools"
                     Width="auto"
-                    Header="Cyberpunk 2077" />
+                    Header="Cyberpunk 2077"
+                    Visibility="Collapsed" />
                 <!--  TW3 bar  -->
                 <syncfusion:RibbonBar
                     Name="TW3BarTools"
                     Width="auto"
-                    Header="The Witcher 3" />
+                    Header="The Witcher 3"
+                    Visibility="Collapsed" />
             </syncfusion:RibbonTab>
 
             <!--  OPTIONS TAB  -->
@@ -1549,14 +1562,47 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                    <ToggleButton
+                        x:Name="xa"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        hc:IconElement.Geometry="{DynamicResource IntegratedGeo}"
+                        hc:IconElement.Height="50"
+                        hc:IconElement.Width="50"
+                        IsChecked="{Binding IsOpen, ElementName=MatRepoDrawer}"
+                        Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
+                        <Grid Height="70">
+                            <TextBlock
+                                Width="90"
+                                Margin="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Text="Browse Material Repository"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
 
+
+                            <iconPacks:PackIconBootstrapIcons
+                                Width="28"
+                                Height="28"
+                                Margin="6"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Kind="Image" />
+
+                        </Grid>
+
+                    </ToggleButton>
                     <!--  Plugin Manager Button  -->
                     <syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowPluginManager}"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Plugin Manager"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconBootstrapIcons

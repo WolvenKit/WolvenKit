@@ -37,9 +37,13 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBox
+                    Width="150"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="False"
+                    Text="Game archives path" />
+                <TextBox
                     x:Name="archivestext"
-                    Width="500"
-                    Margin="15"
+                    Width="400"
                     HorizontalAlignment="Stretch"
                     IsEnabled="False"
                     Text="Game archives path" />
@@ -52,9 +56,13 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBox
+                    Width="150"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="False"
+                    Text="Materials Repository Path" />
+                <TextBox
                     x:Name="Materialsrepotext"
-                    Width="500"
-                    Margin="15"
+                    Width="400"
                     HorizontalAlignment="Stretch"
                     hc:InfoElement.Necessary="True"
                     IsEnabled="False"
