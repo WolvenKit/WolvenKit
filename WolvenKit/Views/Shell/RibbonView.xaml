@@ -1040,7 +1040,7 @@
                 <syncfusion:RibbonBar Header="Preview">
                     <syncfusion:RibbonCheckBox
                         x:Name="PrevFileInfo"
-                        Content="Toggle File Preview"
+                        Content="Show File Preview"
                         IsChecked="{Binding canShowPrev, Mode=TwoWay}" />
                 </syncfusion:RibbonBar>
             </syncfusion:RibbonTab>
