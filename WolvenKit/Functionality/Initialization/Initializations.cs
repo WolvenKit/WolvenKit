@@ -21,7 +21,6 @@ using WolvenKit.Controls;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Editor.Tools;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
@@ -205,7 +204,6 @@ namespace WolvenKit.Functionality.Initialization
                 viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
-                viewModelLocator.Register(typeof(AddPathDialogView), typeof(AddPathDialogViewModel));
 
                 // Fixes
                 // Custom Registrations

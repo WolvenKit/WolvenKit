@@ -13,12 +13,11 @@ using Catel.Fody;
 using Catel.MVVM;
 using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.Controls;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Editor.Tools;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
@@ -71,12 +70,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         public EditorSettingsPGModel EditorSettingsPGModel
         {
             get { return new EditorSettingsPGModel(_settingsManager); }
-            set { }
-        }
-
-        public AddPathDialogViewModel AddPathDialogViewModel
-        {
-            get { return new AddPathDialogViewModel(); }
             set { }
         }
         #endregion
@@ -172,7 +165,8 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     }
 
     #region PropertyGridModels
-    [Editor(typeof(string), typeof(PathEditor))]
+    [Editor(nameof(Game_Executable_Path), typeof(SingleFilePathEditor))]
+    [Editor(nameof(MaterialRepositoryPath), typeof(SingleFolderPathEditor))]
     public class CP77SettingsPGModel : Catel.Data.ObservableObject
     {
 
@@ -211,7 +205,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         }
     }
 
-    [Editor(typeof(string), typeof(PathEditor))]
     public class TW3SettingsPGModel
     {
         ISettingsManager _settingsManager;
@@ -241,49 +234,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
     }
 
-    public class PathEditor : ITypeEditor
-    {
-        AddPathDialogView addPathDialogView;
-
-        public void Attach(PropertyViewItem property, PropertyItem info)
-        {
-            if (info.CanWrite)
-            {
-                var binding = new Binding("Value")
-                {
-                    Mode = BindingMode.TwoWay,
-                    Source = info,
-                    ValidatesOnExceptions = true,
-                    ValidatesOnDataErrors = true
-                };
-                BindingOperations.SetBinding(addPathDialogView, AddPathDialogView.PathProperty, binding);
-            }
-            else
-            {
-                addPathDialogView.IsEnabled = false;
-                var binding = new Binding("Value")
-                {
-                    Source = info,
-                    ValidatesOnExceptions = true,
-                    ValidatesOnDataErrors = true
-                };
-                BindingOperations.SetBinding(addPathDialogView, AddPathDialogView.PathProperty, binding);
-            }
-        }
-        public object Create(PropertyInfo PropertyInfo)
-        {
-            addPathDialogView = new AddPathDialogView();
-            addPathDialogView.Path = "";
-            return addPathDialogView;
-        }
-
-        public void Detach(PropertyViewItem property)
-        {
-
-        }
-    }
-
-    [Editor(typeof(string), typeof(PathEditor))]
     public class GeneralSettingsPGModel : ObservableObject
     {
 
@@ -353,7 +303,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         public VisualEditorType VisualEditorType { get; set; }
     }
 
-    [Editor(typeof(string), typeof(PathEditor))]
     public class EditorSettingsPGModel
     {
         ISettingsManager _settingsManager;
