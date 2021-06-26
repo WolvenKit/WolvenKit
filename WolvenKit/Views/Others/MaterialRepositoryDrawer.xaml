@@ -2,6 +2,7 @@
     x:Class="WolvenKit.Views.Others.MaterialRepositoryDrawer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Converters="clr-namespace:WolvenKit.Functionality.Converters"
     xmlns:Converters1="clr-namespace:WolvenKit.Functionality.Ab4d"
     xmlns:ab4d="clr-namespace:WolvenKit.Functionality.Ab4d;assembly=WolvenKit.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -27,12 +28,11 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
         <Border
             Grid.Row="1"
             Grid.RowSpan="3"
-            Grid.Column="0"
-            BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-            BorderThickness="1">
+            Grid.Column="0">
             <ListBox
                 x:Name="Henry"
                 ItemsSource="{Binding Folders, Mode=OneWay}"
@@ -42,9 +42,11 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
 
-                            <Image Height="13" Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderdefault.svg}" />
-                            <TextBlock Text="{Binding SafeName}" />
-
+                            <Image
+                                Height="24"
+                                Margin="5"
+                                Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderdefault.svg}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding SafeName}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -61,35 +63,36 @@
         <Border
             Grid.Row="1"
             Grid.RowSpan="2"
-            Grid.Column="1"
-            BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-            BorderThickness="1">
+            Grid.Column="1">
 
             <ListBox
                 x:Name="x"
                 ItemsSource="{Binding ImageSources, Mode=OneWay}"
                 SelectionChanged="x_SelectionChanged"
                 SelectionMode="Single">
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-
-                            <Image Height="13" Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
-                            <TextBlock Text="{Binding SafeName}" />
-
+                            <Image
+                                Height="16"
+                                Margin="5"
+                                Source="{Binding localBmp}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding SafeName}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
-
-        <Border
+        <hc:HoneycombPanel
+            x:Name="HoneyCombPanelAccess"
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2" />
+        <syncfusion:SfImageEditor
+            x:Name="bold"
             Grid.Row="3"
-            Grid.Column="1"
-            BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-            BorderThickness="1">
-
-            <syncfusion:SfImageEditor x:Name="bold" />
-        </Border>
+            Grid.Column="1" />
     </Grid>
 </UserControl>

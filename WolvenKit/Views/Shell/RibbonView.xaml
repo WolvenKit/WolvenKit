@@ -1709,10 +1709,10 @@
             ShowMode="Cover"
             Visibility="Visible">
             <Border
-                Width="900"
-                Background="{DynamicResource RegionBrush}"
+                Width="1200"
+                Background="{DynamicResource ContentBackgroundAlt}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                BorderThickness="2,0,0,0"
+                BorderThickness="0"
                 CornerRadius="0,0,0,0">
                 <others:MaterialRepositoryDrawer />
             </Border>

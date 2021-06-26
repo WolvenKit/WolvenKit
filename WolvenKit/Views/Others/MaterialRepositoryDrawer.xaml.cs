@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Catel.IoC;
@@ -38,18 +39,26 @@ namespace WolvenKit.Views.Others
             DataContext = this;
         }
 
-        private static void GetDirFiles(string dir)
+        private async void GetDirFiles(string dir)
         {
+            HoneyCombPanelAccess.Children.Clear();
             ImageSources.Clear();
             var allfiles = Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly);
 
             foreach (var z in allfiles)
             {
-                if (z.Contains(".dds") || z.Contains(".xbm"))
+                if (z.Contains(".dds"))
                 {
-                    MatDepoItem newitem = new MatDepoItem();
-                    newitem.FullName = z;
-                    MaterialRepositoryDrawer.ImageSources.Add(newitem);
+                    var q = await ImageDecoder.RenderToBitmapSource(z);
+                    Image image = new Image();
+                    image.Width = 50;
+                    image.Height = 50;
+                    image.Margin = new System.Windows.Thickness(5);
+                    image.Source = q;
+
+                    HoneyCombPanelAccess.Children.Add(image);
+
+                    // MaterialRepositoryDrawer.ImageSources.Add(newitem);
                 }
             }
         }
@@ -58,13 +67,11 @@ namespace WolvenKit.Views.Others
         {
             Folders.Clear();
             var dirs = Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly);
-            MatDepoItem newitem = new MatDepoItem();
-            newitem.FullName = PreviousFolder;
+            MatDepoItem newitem = new MatDepoItem(PreviousFolder);
             MaterialRepositoryDrawer.Folders.Add(newitem);
             foreach (var z in dirs)
             {
-                MatDepoItem newitem2 = new MatDepoItem();
-                newitem2.FullName = z;
+                MatDepoItem newitem2 = new MatDepoItem(z);
                 MaterialRepositoryDrawer.Folders.Add(newitem2);
             }
 
@@ -116,6 +123,32 @@ namespace WolvenKit.Views.Others
 
         public class MatDepoItem
         {
+            public MatDepoItem(string fullname)
+
+            {
+                FullName = fullname;
+                SetlocalBMP();
+            }
+
+            public BitmapSource localBmp;
+
+            private async void SetlocalBMP()
+            {
+                localBmp = await ImageDecoder.RenderToBitmapSource(FullName);
+                //if (localBmp == null)
+                //{
+                //    return;
+                //}
+                //Stream bmp = new MemoryStream();
+
+                //BitmapEncoder enc = new BmpBitmapEncoder();
+                //enc.Frames.Add(BitmapFrame.Create(localBmp));
+                //enc.Save(bmp);
+                //FileStream = bmp;
+            }
+
+            public Stream FileStream { get; set; }
+
             public string FullName { get; set; }
 
             public string SafeName
