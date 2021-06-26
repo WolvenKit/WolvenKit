@@ -98,7 +98,7 @@ namespace WolvenKit.Functionality.Controllers
                 return null;
             }
             _loggerService.Info("Loading archive Manager ... ");
-            var chachePath = Path.Combine(IGameController.WKitAppData, "archive_cache.bin");
+            var chachePath = Path.Combine(IGameController.GetManagerPath(EManagerType.ArchiveManager));
             try
             {
 

@@ -37,7 +37,7 @@ namespace WolvenKit.Functionality.Initialization
         /// </summary>
         public async static void InitializeWebview2()
         {
-            string WebViewData = Path.Combine(IGameController.WKitAppData, "WebViewData");
+            string WebViewData = ISettingsManager.GetWebViewDataPath();
             Directory.CreateDirectory(WebViewData);
             Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, WebViewData, null);
         }

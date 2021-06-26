@@ -350,7 +350,7 @@ namespace WolvenKit.ViewModels.Editor
 
             // create mipmaps with texconv?
             // create a temporary dds
-            var tempdir = IGameController.WorkDir;
+            var tempdir = ISettingsManager.GetWorkDir();
             var textureformat = ImageUtility.GetEFormatFromCompression(compression);
             var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
 
@@ -468,7 +468,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private void RegisterXBMDump()
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, IGameController.XBMDumpPath);
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ISettingsManager.GetXBMDumpPath());
             using var fr = new FileStream(path, FileMode.Open, FileAccess.Read);
             using var sr = new StreamReader(fr);
             using var csv = new CsvReader(sr, CultureInfo.InvariantCulture);

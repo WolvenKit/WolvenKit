@@ -235,7 +235,7 @@ namespace WolvenKit.ViewModels.Editor
                     {
                         PE_MeshPreviewVisible = true;
 
-                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName, Path.Combine(IGameController.WKitAppData, "Temp_OBJ"));
+                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
                         if (q.Length > 0)
                         {
                             LoadModel(q);
@@ -379,9 +379,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="path"></param>
         public void TempConvertToWemWav(string path)
         {
-            string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
-
-            string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Audio");
+            string ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
 
             //Clean directory
             Directory.CreateDirectory(ManagerCacheDir);
@@ -417,12 +415,6 @@ namespace WolvenKit.ViewModels.Editor
             var proc = Process.Start(si);
             proc.WaitForExit();
             Trace.WriteLine(proc.StandardOutput.ReadToEnd());
-
-            var lvi = new TextBlock()
-            {
-                Text = Path.GetFullPath(outf),
-                Tag = Path.GetFileName(outf)
-            };
 
             mediaPlayer.Open(new Uri(outf));
 

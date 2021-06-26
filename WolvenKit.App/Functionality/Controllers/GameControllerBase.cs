@@ -10,36 +10,37 @@ using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.W3Strings;
 using Catel.IoC;
 using DynamicData;
+using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Functionality.Controllers
 {
     public interface IGameController
     {
-        #region Properties
-
-        public static string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
-
-        public static string ManagerCacheDir => Path.Combine(WKitAppData, "Config");
-        public static string WorkDir => Path.Combine(WKitAppData, "tmp_workdir");
-        public static string XBMDumpPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "__xbmdump_3768555366.csv");
-
-        #endregion Properties
+        
 
         #region Methods
 
         public void AddToMod(IGameFile file);
 
-        public static string GetManagerPath(EManagerType type) =>
-            type switch
+        public static string GetManagerPath(EManagerType type)
+        {
+            var path = type switch
             {
-                EManagerType.BundleManager => Path.Combine(ManagerCacheDir, "bundle_cache.json"),
-                EManagerType.CollisionManager => Path.Combine(ManagerCacheDir, "collision_cache.json"),
-                EManagerType.SoundManager => Path.Combine(ManagerCacheDir, "sound_cache.json"),
-                EManagerType.W3StringManager => Path.Combine(ManagerCacheDir, "string_cache.bin"),
-                EManagerType.TextureManager => Path.Combine(ManagerCacheDir, "texture_cache.json"),
-                EManagerType.ArchiveManager => Path.Combine(ManagerCacheDir, "archive_cache.json"),
+                EManagerType.BundleManager => Path.Combine(ISettingsManager.GetManagerCacheDir(), "bundle_cache.json"),
+                EManagerType.CollisionManager => Path.Combine(ISettingsManager.GetManagerCacheDir(),
+                    "collision_cache.json"),
+                EManagerType.SoundManager => Path.Combine(ISettingsManager.GetManagerCacheDir(), "sound_cache.json"),
+                EManagerType.W3StringManager => Path.Combine(ISettingsManager.GetManagerCacheDir(), "string_cache.bin"),
+                EManagerType.TextureManager => Path.Combine(ISettingsManager.GetManagerCacheDir(),
+                    "texture_cache.json"),
+                EManagerType.ArchiveManager => Path.Combine(ISettingsManager.GetManagerCacheDir(), "archive_cache.bin"),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
+
+
+
+            return path;
+        }
 
         public static string GetManagerVersion(EManagerType type) =>
             type switch

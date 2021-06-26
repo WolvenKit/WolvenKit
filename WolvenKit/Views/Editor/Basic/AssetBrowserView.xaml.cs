@@ -23,6 +23,7 @@ using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
@@ -91,8 +92,6 @@ namespace WolvenKit.Views.Editor
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
 
-            var wKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
-
             if (propertiesViewModel.AB_SelectedItem != null)
             {
                 var selectedItem = propertiesViewModel.AB_SelectedItem;
@@ -100,24 +99,24 @@ namespace WolvenKit.Views.Editor
 
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.mesh.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
-                { PreviewMesh(propertiesViewModel, wKitAppData, selectedItem, selectedGameFile); }
+                { PreviewMesh(propertiesViewModel, selectedItem, selectedGameFile); }
 
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.wem.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
-                { PreviewWem(propertiesViewModel, wKitAppData, selectedItem, selectedGameFile); }
+                { PreviewWem(propertiesViewModel, selectedItem, selectedGameFile); }
 
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.xbm.ToString(),
                                             System.StringComparison.OrdinalIgnoreCase))
-                { PreviewTexture(propertiesViewModel, wKitAppData, selectedItem, selectedGameFile); }
+                { PreviewTexture(propertiesViewModel, selectedItem, selectedGameFile); }
             }
             propertiesViewModel.DecideForMeshPreview();
         }
 
-        private void PreviewMesh(PropertiesViewModel propertiesViewModel, string wKitAppData, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewMesh(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.AB_MeshPreviewVisible = true;
 
-            var managerCacheDir = Path.Combine(wKitAppData, "Temp_Mesh");
+            var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
             Directory.CreateDirectory(managerCacheDir);
             foreach (var f in Directory.GetFiles(managerCacheDir))
             {
@@ -127,16 +126,16 @@ namespace WolvenKit.Views.Editor
             }
 
             var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
-            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, Path.Combine(IGameController.WKitAppData, "Temp_OBJ"));
+            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, ISettingsManager.GetTemp_OBJPath());
             if (q2.Length > 0)
             { StaticReferences.GlobalPropertiesView.LoadModel(q2); }
         }
 
-        private void PreviewWem(PropertiesViewModel propertiesViewModel, string wKitAppData, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewWem(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsAudioPreviewVisible = true;
 
-            var managerCacheDir = Path.Combine(wKitAppData, "Temp_Audio_import");
+            var managerCacheDir = ISettingsManager.GetTemp_Audio_importPath();
             Directory.CreateDirectory(managerCacheDir);
 
             var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
@@ -151,16 +150,19 @@ namespace WolvenKit.Views.Editor
 
                 }
             }
-            using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
-            selectedGameFile.Extract(fs);
 
+            using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
+            {
+                selectedGameFile.Extract(fs);
+            }
+            
             if (File.Exists(endPath))
             {
                 propertiesViewModel.AddAudioItem(endPath);
             }
         }
 
-        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, string wKitAppData, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsImagePreviewVisible = true;
 
