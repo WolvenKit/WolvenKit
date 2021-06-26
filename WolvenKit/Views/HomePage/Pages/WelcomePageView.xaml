@@ -586,62 +586,52 @@
             HorizontalAlignment="Stretch"
             Background="{DynamicResource ContentBackgroundAlt2}">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
 
             <Border
                 x:Name="lokz"
-                Margin="0,5,0,25"
+                Grid.Column="3"
+                Margin="0,5,15,30"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
                 Background="{DynamicResource ContentBackgroundAlt2}"
-                BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                BorderThickness="3"
                 CornerRadius="2">
 
                 <StackPanel>
-                    <TextBlock Text="  Featured Wolvenkit Guide!" />
+
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Margin="0,15,0,0"
+                        HorizontalAlignment="Right">
+                        <StackPanel
+                            Margin="0,0,15,0"
+                            FlowDirection="RightToLeft"
+                            Orientation="Horizontal">
+                            <iconPacks:PackIconSimpleIcons
+                                Grid.Row="0"
+                                Width="25"
+                                Height="25"
+                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                Kind="AirPlayVideo"
+                                Spin="False"
+                                SpinAutoReverse="False" />
+
+                            <TextBlock
+                                Margin="10,0,5,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                Text="Featured Modding Guide" />
+                        </StackPanel>
+                    </StackPanel>
+                    <hc:Divider Margin="15,5,15,3" />
+
                     <wv2:WebView2
-                        Width="auto"
+                        Width="414"
                         Height="{Binding ElementName=lokz, Path=ActualHeight}"
                         Margin="0"
-                        Source="https://www.youtube.com/embed/be6G9yxMKkY" />
-                </StackPanel>
-            </Border>
-
-            <Border
-                Grid.Column="1"
-                Margin="0,5,0,25"
-                Background="{DynamicResource ContentBackgroundAlt2}"
-                BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                BorderThickness="3"
-                CornerRadius="2">
-
-                <StackPanel>
-                    <TextBlock Text="  Featured Wolvenkit Guide!" />
-                    <wv2:WebView2
-                        Width="auto"
-                        Height="{Binding ElementName=lokz, Path=ActualHeight}"
-                        Margin="0"
-                        Source="https://www.youtube.com/embed/e1up_pAP_U8" />
-                </StackPanel>
-            </Border>
-            <Border
-                Grid.Column="2"
-                Margin="0,5,0,25"
-                Background="{DynamicResource ContentBackgroundAlt2}"
-                BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                BorderThickness="3"
-                CornerRadius="2">
-
-                <StackPanel>
-                    <TextBlock Text="  Featured Wolvenkit Guide!" />
-                    <wv2:WebView2
-                        Width="auto"
-                        Height="{Binding ElementName=lokz, Path=ActualHeight}"
-                        Margin="0"
-                        Source="https://www.youtube.com/embed/NOR36H4fDhg" />
+                        Source="https://www.youtube.com/embed/ZR23YFquZBg" />
                 </StackPanel>
             </Border>
         </Grid>
