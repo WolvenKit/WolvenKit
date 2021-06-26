@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Catel;
 using Catel.IoC;
 using Catel.MVVM;
@@ -74,6 +76,37 @@ namespace WolvenKit.ViewModels.Editor
             // global commands
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanOpenFile);
             commandManager.RegisterCommand(AppCommands.Application.FileSelected, FileSelectedCommand, this);
+
+            StopAudioCommand = new RelayCommand(ExecuteStopPlaying, CanStopPlaying);
+            PlayAudioCommand = new RelayCommand(ExecuteStartPlaying, CanStartPlaying);
+            PauseAudioCommand = new RelayCommand(ExecutePausePlaying, CanPausePlaying);
+        }
+
+        public ICommand PlayAudioCommand { get; private set; }
+
+        public ICommand PauseAudioCommand { get; private set; }
+
+        public ICommand StopAudioCommand { get; private set; }
+
+        private bool CanStopPlaying() => true;
+
+        private void ExecuteStopPlaying()
+        {
+            mediaPlayer.Stop();
+        }
+
+        private bool CanStartPlaying() => true;
+
+        private void ExecuteStartPlaying()
+        {
+            mediaPlayer.Play();
+        }
+
+        private bool CanPausePlaying() => true;
+
+        private void ExecutePausePlaying()
+        {
+            mediaPlayer.Pause();
         }
 
         #region properties
@@ -391,11 +424,42 @@ namespace WolvenKit.ViewModels.Editor
                 Tag = Path.GetFileName(outf)
             };
 
+            mediaPlayer.Open(new Uri(outf));
+
+            var q = mediaPlayer.NaturalDuration.HasTimeSpan;
+            if (q)
+            {
+                ChannelLength = mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
+            }
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            ;
+            timer.Start();
+
             NAudioSimpleEngine.Instance.OpenFile(outf);
             CurrentTrackName = Path.GetFileNameWithoutExtension(outf);
 
             //AudioFileList.Add(lvi);
         }
+
+        public string AudioPositionText { get; set; }
+        public string ChannelLength { get; set; }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (mediaPlayer.Source != null)
+            {
+                ChannelPosition = mediaPlayer.Position;
+            }
+            else
+            {
+                AudioPositionText = "No file selected...";
+            }
+        }
+
+        private MediaPlayer mediaPlayer = new MediaPlayer();
 
         /// <summary>
         /// property changed for naudio
