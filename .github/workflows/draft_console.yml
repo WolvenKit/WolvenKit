@@ -19,65 +19,8 @@ jobs:
         tag_name: commit-${{ github.sha }}
         draft: true
 
-  build-dll-win:
-    runs-on: windows-latest
-
-    steps:
-    - name: checkout
-      uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
-    - name: dotnet clean
-      run: dotnet clean ./WolvenKitFormats.sln --configuration Release && dotnet nuget locals all --clear
-    - name: dotnet restore
-      run: dotnet restore ./WolvenKitFormats.sln 
-    - name: dotnet build WolvenKitFormats.sln
-      run: dotnet build ./WolvenKitFormats.sln --configuration Release --no-restore
-
-    - name: Build Artifact RED3 CR2W
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: artifact_wkit-win-red3
-        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
-    - name: Build Artifact RED4 CR2W
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: artifact_wkit-win-red4
-        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
-
-  build-dll-osx:
-    runs-on: macos-latest
-
-    steps:
-    - name: checkout
-      uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
-    - name: dotnet clean
-      run: dotnet clean ./WolvenKitFormats.sln --configuration Release && dotnet nuget locals all --clear
-    - name: dotnet restore
-      run: dotnet restore ./WolvenKitFormats.sln 
-    - name: dotnet build WolvenKitFormats.sln
-      run: dotnet build ./WolvenKitFormats.sln --configuration Release --no-restore
-
-    - name: Build Artifact RED3 CR2W
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: artifact_wkit-osx-red3
-        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0/WolvenKit.RED3.CR2W.dll
-    - name: Build Artifact RED4 CR2W
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: artifact_wkit-osx-red4
-        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0/WolvenKit.RED4.CR2W.dll
-
   console-win:
     runs-on: windows-latest
-    needs: [build-dll-win, create_release]
 
     steps:
     - name: checkout
@@ -91,19 +34,6 @@ jobs:
     - name: dotnet restore
       run: dotnet restore ./CP77Tools.sln
 
-    - name: Download Artifact RED3 CR2W
-      uses: actions/download-artifact@v2
-      with:
-        name: artifact_wkit-win-red3
-        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0/
-    - name: Download Artifact RED4 CR2W
-      uses: actions/download-artifact@v2
-      with:
-        name: artifact_wkit-win-red4
-        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
-    - name: Display structure of downloaded files
-      run: ls -R
-
     - name: dotnet build CP77Tools.sln
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
 
@@ -111,12 +41,12 @@ jobs:
       uses: actions/upload-artifact@v2.2.1
       with:
         name: artifact_console-windows
-        path: ./WolvenKit.CLI/bin/Release/net5.0-windows
+        path: ./WolvenKit.CLI/bin/Release/net5.0
 
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./WolvenKit.CLI/bin/Release/net5.0-windows
+        files: ./WolvenKit.CLI/bin/Release/net5.0
         dest: wolvenkit_console.zip
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -127,56 +57,3 @@ jobs:
         asset_path: ./wolvenkit_console.zip
         asset_name: wolvenkit_console.zip
         asset_content_type: application/zip
-      
-  console-osx:
-    runs-on: macos-latest
-    needs: [build-dll-osx, create_release]
-
-    steps:
-    - name: checkout
-      uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
-    - name: dotnet clean
-      run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
-    - name: dotnet restore
-      run: dotnet restore ./CP77Tools.sln
-    
-    - name: Download Artifact RED3 CR2W
-      uses: actions/download-artifact@v2
-      with:
-        name: artifact_wkit-osx-red3
-        path: ./WolvenKit.RED3.CR2W/bin/Release/net5.0
-    - name: Download Artifact RED4 CR2W
-      uses: actions/download-artifact@v2
-      with:
-        name: artifact_wkit-osx-red4
-        path: ./WolvenKit.RED4.CR2W/bin/Release/net5.0
-    - name: Display structure of downloaded files
-      run: ls -R
-
-    - name: dotnet build CP77Tools.sln
-      run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: artifact_console-OSX
-        path: ./WolvenKit.CLI/bin/Release/net5.0
-
-    - name: zip
-      uses: papeloto/action-zip@v1
-      with:
-        files: ./WolvenKit.CLI/bin/Release/net5.0
-        dest: wolvenkit_console_osx.zip
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{needs.create_release.outputs.upload_url }}
-        asset_path: ./wolvenkit_console_osx.zip
-        asset_name: wolvenkit_console_osx.zip
-        asset_content_type: application/zip     
