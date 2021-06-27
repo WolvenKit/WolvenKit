@@ -62,10 +62,7 @@
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Remove="C:\Users\ghost\.nuget\packages\wolvenkit.handycontrol\3.2.0\contentFiles\any\net5.0-windows7.0\LangProvider.tt" />
-  </ItemGroup>
-  <ItemGroup>
+    <ItemGroup>
     <Content Include="Ab3d.DirectX.Client.Settings.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -314,7 +311,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-    <ProjectReference Include="..\WolvenKit.Radish\WolvenKit.Radish.csproj" />
   </ItemGroup>
 
   <ItemGroup>
