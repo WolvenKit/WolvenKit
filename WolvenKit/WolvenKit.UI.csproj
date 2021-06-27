@@ -392,6 +392,7 @@
     <PackageReference Include="WolvenKit.AvalonDock.Themes.VS2013" Version="4.50.4" />
     <PackageReference Include="WolvenKit.AvalonEdit" Version="6.1.1" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
+    <PackageReference Include="Wolvenkit.InteropControls" Version="1.0.1" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
     <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="5.0.1" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />

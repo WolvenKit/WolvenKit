@@ -172,6 +172,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public bool IsAudioPreviewVisible { get; set; }
         public bool IsImagePreviewVisible { get; set; }
+        public bool IsVideoPreviewVisible { get; set; }
 
         #endregion properties
 
@@ -205,6 +206,7 @@ namespace WolvenKit.ViewModels.Editor
             PE_MeshPreviewVisible = false;
             IsAudioPreviewVisible = false;
             IsImagePreviewVisible = false;
+            IsVideoPreviewVisible = false;
 
             // check additional changes
             if (model.IsDirectory)
@@ -216,9 +218,10 @@ namespace WolvenKit.ViewModels.Editor
             {
                 return;
             }
-
+            // string.Equals(model.GetExtension(), ERedExtension.bk2.ToString(), StringComparison.OrdinalIgnoreCase) ||
             if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
+
               string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
               || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
             )
@@ -231,6 +234,13 @@ namespace WolvenKit.ViewModels.Editor
             {
                 if (PE_SelectedItem.GetExtension().Length > 0)
                 {
+                    //if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.bk2.ToString(),
+                    //   System.StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    IsVideoPreviewVisible = true;
+                    //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
+                    //}
+
                     if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
                         System.StringComparison.OrdinalIgnoreCase))
                     {
@@ -295,6 +305,8 @@ namespace WolvenKit.ViewModels.Editor
             }
             DecideForMeshPreview();
         }
+
+        public string ExeCommand { get; set; }
 
         public string LoadedModelPath { get; set; }
 

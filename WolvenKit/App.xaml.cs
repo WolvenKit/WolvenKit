@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using Catel.IoC;
@@ -31,8 +32,6 @@ namespace WolvenKit
         // Determines if the application is in design mode.
         public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
-
-
         // Constructor #1
         static App() { }
 
@@ -55,7 +54,6 @@ namespace WolvenKit
             // Set service locator.
             var serviceLocator = ServiceLocator.Default;
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-
 
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
 
@@ -96,10 +94,8 @@ namespace WolvenKit
             StaticReferences.Logger.Info("Initializing FFME");
             Initializations.InitializeFFME();
 
-
             StaticReferences.Logger.Info("Check for new updates");
             Helpers.CheckForUpdates();
-
 
             //Window window = new Window();
             //window.AllowsTransparency = true;
@@ -143,6 +139,21 @@ namespace WolvenKit
                     }
                 }
             });
+            //if (!File.Exists(@"Resources\Media\test.exe"))
+            //{
+            //    try
+            //    {
+            //        var uri = new Uri("https://filebin.net/9nrr98uwas3k1auo/binkpl64.exe");
+            //        var client = new HttpClient();
+            //        var response = await client.GetAsync(uri);
+            //        using var fs = new FileStream(@"Resources\Media\test.exe",
+            //            FileMode.CreateNew);
+            //        await response.Content.CopyToAsync(fs);
+            //    }
+            //    catch
+            //    {
+            //    }
+            //}
         }
 
         // Sets the VideTool as current main window on demand.
@@ -158,10 +169,7 @@ namespace WolvenKit
                     Current.MainWindow.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Hidden);
                     Current.MainWindow.Show();
                 }
-
-
             }
         }
-
     }
 }

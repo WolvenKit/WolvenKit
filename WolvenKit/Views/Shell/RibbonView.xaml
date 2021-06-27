@@ -899,7 +899,7 @@
                 </syncfusion:RibbonBar>
                 <!--  File bar  -->
                 <syncfusion:RibbonBar
-                    Name="File"
+                    Name="Filez"
                     Width="auto"
                     Header="File"
                     Visibility="Collapsed">

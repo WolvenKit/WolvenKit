@@ -18,6 +18,7 @@ using Assimp;
 using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
+using Wolvenkit.InteropControls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -51,6 +52,10 @@ namespace WolvenKit.Views.Editor
 
             spectrumAnalyzer.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
             waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
+
+            //appControl.ExeName = "binkpl64.exe";
+            //appControl.Args = "test2.bk2 /J /I2 /P";
+            //this.Unloaded += new RoutedEventHandler((s, e) => { appControl.Dispose(); });
         }
 
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
@@ -60,6 +65,19 @@ namespace WolvenKit.Views.Editor
             if (e is not AdvancedPropertyChangedEventArgs property)
             {
                 return;
+            }
+
+            if (ViewModel is PropertiesViewModel vm)
+            {
+                //vm.SetExeCommand += (obj) =>
+                //{
+                //    var x = obj as string;
+
+                //    var appControl = new AppControl();
+                //    appControl.ExeName = x.Split('|')[0];
+                //    appControl.Args = x.Split('|')[1];
+                //    //StaticReferences.RibbonViewInstance.VideoDrawerContent.Child = appControl;
+                //};
             }
 
             switch (property.PropertyName)
