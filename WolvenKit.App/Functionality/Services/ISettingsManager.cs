@@ -48,121 +48,9 @@ namespace WolvenKit.Functionality.Services
 
         string MaterialRepositoryPath { get; set; }
 
-
-        #region Methods
-
-        string GetW3GameContentDir();
-        string GetW3GameDlcDir();
-        string GetW3GameModDir();
-        string GetW3GameRootDir();
-
-
-        string GetRED4GameRootDir();
-        string GetRED4GameModDir();
-
         string GetOodleDll();
         string GetRED4OodleDll();
 
-        #region Properties
-
-        public static string GetWolvenkitAppData()
-        {
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding",
-                "WolvenKit");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetManagerCacheDir()
-        {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Config");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetWorkDir()
-        {
-            var dir = Path.Combine(GetWolvenkitAppData(), "tmp_workdir");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetXBMDumpPath()
-        {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "__xbmdump_3768555366.csv");
-        }
-
-        public static string GetTemp_AudioPath()
-        {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Audio");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetTemp_OBJPath()
-        {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_OBJ");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetTemp_MeshPath()
-        {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Mesh");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetTemp_Audio_importPath()
-        {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Audio_import");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetWebViewDataPath()
-        {
-            var dir = Path.Combine(GetWolvenkitAppData(), "WebViewData");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public ImageBrush ProfileImageBrush { get; set; }
-
-        string MaterialRepositoryPath { get; set; }
-
 
         string GetW3GameContentDir();
 
@@ -176,7 +64,6 @@ namespace WolvenKit.Functionality.Services
 
         string GetRED4GameModDir();
 
-        #region Properties
 
         public static string GetWolvenkitAppData()
         {
@@ -283,11 +170,7 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        #endregion Properties
-
         void Save();
-
-        #endregion Methods
 
         Color GetThemeAccent();
         void SetThemeAccent(Color color);

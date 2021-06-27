@@ -80,9 +80,6 @@ namespace WolvenKit
             StaticReferences.Logger.Info("Initializing Notifications.");
             NotificationHelper.InitializeNotificationHelper();
 
-            StaticReferences.Logger.Info("Initializing FFME");
-            Initializations.InitializeFFME();
-
             StaticReferences.Logger.Info("Check for new updates");
             Helpers.CheckForUpdates();
 

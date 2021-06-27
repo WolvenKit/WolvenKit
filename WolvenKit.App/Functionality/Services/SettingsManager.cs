@@ -163,8 +163,6 @@ namespace WolvenKit.Functionality.Services
 
         #endregion
 
-        #endregion properties
-
         public string GetW3GameContentDir() => Path.Combine(GetW3GameRootDir(), "content");
 
         public string GetW3GameDlcDir() => Path.Combine(GetW3GameRootDir(), "DLC");
@@ -182,7 +180,6 @@ namespace WolvenKit.Functionality.Services
             return fi.Directory is { Parent: { Parent: { } } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
         }
 
-        #endregion
 
         public List<string> IsHealthy()
         {
@@ -287,8 +284,6 @@ namespace WolvenKit.Functionality.Services
             var json = JsonSerializer.Serialize(new SettingsDto(this), options);
             File.WriteAllText(ConfigurationPath, json);
         }
-
-        public bool ShowFirstTimeSetupForUser() => !IsHealthy();
 
         #endregion methods
     }
