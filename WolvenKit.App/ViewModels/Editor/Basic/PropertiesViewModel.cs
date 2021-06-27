@@ -218,7 +218,7 @@ namespace WolvenKit.ViewModels.Editor
             {
                 return;
             }
-            // string.Equals(model.GetExtension(), ERedExtension.bk2.ToString(), StringComparison.OrdinalIgnoreCase) ||
+            //
             if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
 
@@ -234,13 +234,6 @@ namespace WolvenKit.ViewModels.Editor
             {
                 if (PE_SelectedItem.GetExtension().Length > 0)
                 {
-                    //if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.bk2.ToString(),
-                    //   System.StringComparison.OrdinalIgnoreCase))
-                    //{
-                    //    IsVideoPreviewVisible = true;
-                    //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
-                    //}
-
                     if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
                         System.StringComparison.OrdinalIgnoreCase))
                     {

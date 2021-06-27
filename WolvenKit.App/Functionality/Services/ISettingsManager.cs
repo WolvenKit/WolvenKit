@@ -147,6 +147,16 @@ namespace WolvenKit.Functionality.Services
 
             return dir;
         }
+        public static string GetTemp_Video_PreviewPath()
+        {
+            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Video_Preview");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
 
         public static string GetWebViewDataPath()
         {

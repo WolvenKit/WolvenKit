@@ -1099,7 +1099,6 @@ namespace WolvenKit.ViewModels.Shell
 
                 // VIDEO
                 case ".BK2":
-                    OpenVideoFile(fullpath);
                     break;
 
                 // AUDIO
@@ -1168,15 +1167,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private void OpenVideoFile(string fullpath)
-        {
-            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-            mediator.SendMessage<int>(0);
 
-            mediator.SendMessage<bool>(true);
-
-            mediator.SendMessage<string>(fullpath);
-        }
 
         #endregion methods
     }

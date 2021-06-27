@@ -9,7 +9,6 @@ using System.Windows.Media.Imaging;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
-using FFmpeg.AutoGen;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
 using Orc.Squirrel;
@@ -17,7 +16,6 @@ using Orchestra.Services;
 using Orchestra.Views;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
-using Unosquare.FFME;
 using WolvenKit.Controls;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
@@ -77,22 +75,6 @@ namespace WolvenKit.Functionality.Initialization
                 };
                 SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
                 SfSkinManager.ApplyStylesOnApplication = true;
-            }
-            catch (Exception e)
-            {
-                StaticReferences.Logger.Error(e);
-            }
-        }
-
-        // Initialize FFME
-        public static void InitializeFFME()
-        {
-            try
-            {
-                string path = System.AppDomain.CurrentDomain.BaseDirectory;
-                Unosquare.FFME.Library.FFmpegDirectory = path + "FFME";
-                Library.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
-                Library.EnableWpfMultiThreadedVideo = false;
             }
             catch (Exception e)
             {

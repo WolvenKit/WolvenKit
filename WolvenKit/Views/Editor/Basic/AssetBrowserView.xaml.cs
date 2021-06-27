@@ -30,6 +30,7 @@ using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.ViewModels.Editor;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using Wolvenkit.InteropControls;
 
 namespace WolvenKit.Views.Editor
 {
@@ -273,6 +274,77 @@ namespace WolvenKit.Views.Editor
                 NotificationHelper.IsShowNotificationsEnabled = false;
                 vm.AddSelectedCommand.SafeExecute();
             }
+        }
+
+        private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (InnerList.SelectedItem == null)
+            {
+                return;
+            }
+            var selected = InnerList.SelectedItem as FileEntryViewModel;
+
+            if (!selected.FullName.ToLower().Contains("bk2"))
+            {
+                return;
+            }
+
+            ///Extract to Temp dir
+
+            var tempPath = ISettingsManager.GetTemp_Video_PreviewPath();
+            var endPath = Path.Combine(tempPath, Path.GetFileName(selected.Name));
+
+            foreach (var f in Directory.GetFiles(tempPath))
+            {
+                try
+                {
+                    File.Delete(f);
+                }
+                catch
+                {
+                }
+            }
+
+            using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
+            {
+                selected.GetGameFile().Extract(fs);
+            }
+
+            if (File.Exists(endPath))
+            {
+            }
+
+            var x = "Resources\\Media\\test.exe | " + endPath + "/I2 /P /L";
+
+            var appControl = new AppControl();
+            appControl.ExeName = x.Split('|')[0];
+            appControl.Args = x.Split('|')[1];
+            appControl.VisualPoint = new Point(0.0, 30.0);
+
+            if (StaticReferences.XoWindow == null)
+            {
+                StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+                StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
+            }
+
+            if (StaticReferences.XoWindow.Content != null)
+            {
+                return;
+            }
+            StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
+            {
+                var q = s as HandyControl.Controls.GlowWindow;
+                q.Close();
+                StaticReferences.XoWindow = null;
+                StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+            });
+
+            Grid grid = new Grid();
+            grid.Children.Add(appControl);
+            StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
+            StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
+            StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            StaticReferences.XoWindow.Show();
         }
     }
 }

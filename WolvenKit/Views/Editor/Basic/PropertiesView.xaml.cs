@@ -58,6 +58,8 @@ namespace WolvenKit.Views.Editor
             //this.Unloaded += new RoutedEventHandler((s, e) => { appControl.Dispose(); });
         }
 
+        private static HandyControl.Controls.GlowWindow XoWindow = new HandyControl.Controls.GlowWindow();
+
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnViewModelPropertyChanged(e);
@@ -65,19 +67,6 @@ namespace WolvenKit.Views.Editor
             if (e is not AdvancedPropertyChangedEventArgs property)
             {
                 return;
-            }
-
-            if (ViewModel is PropertiesViewModel vm)
-            {
-                //vm.SetExeCommand += (obj) =>
-                //{
-                //    var x = obj as string;
-
-                //    var appControl = new AppControl();
-                //    appControl.ExeName = x.Split('|')[0];
-                //    appControl.Args = x.Split('|')[1];
-                //    //StaticReferences.RibbonViewInstance.VideoDrawerContent.Child = appControl;
-                //};
             }
 
             switch (property.PropertyName)

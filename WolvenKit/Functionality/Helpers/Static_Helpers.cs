@@ -16,6 +16,7 @@ namespace WolvenKit.Functionality.Helpers
         public static MainView MainView { get; set; }
 
 
+        public static HandyControl.Controls.GlowWindow XoWindow;
 
 
 
