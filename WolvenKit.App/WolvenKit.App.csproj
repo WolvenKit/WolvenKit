@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
-    <PackageReference Include="FFME.Windows" Version="4.4.350" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.24.1" />
@@ -42,6 +41,7 @@
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />

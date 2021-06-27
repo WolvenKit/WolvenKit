@@ -1,7 +1,14 @@
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Shell;
 using HandyControl.Data;
+using MahApps.Metro.Controls;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.Windows.Tools.Controls;
+using Wolvenkit.InteropControls;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
@@ -21,18 +28,18 @@ namespace WolvenKit.Views.Editor
             InitializeComponent();
             GlobalPEView = this;
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
-
-
         }
 
-
         private bool _isfirsttime { get; set; } = true;
+
         private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
         {
             if (ViewModel is not ProjectExplorerViewModel viewModel)
             {
                 return;
             }
+            if (TreeGrid == null)
+            { return; }
             if (TreeGrid.View != null)
             {
                 if (!_isfirsttime)
@@ -57,7 +64,6 @@ namespace WolvenKit.Views.Editor
 
         //private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         //{
-
         //    Trace.WriteLine("hello");
         //    //if (e.NewItems != null)
         //    //{
@@ -78,7 +84,6 @@ namespace WolvenKit.Views.Editor
         //    //{
         //    //    TreeGrid.ExpandNode(rootnode);
         //    //}
-
 
         //    Trace.WriteLine(e.Action.ToString());
         //}
@@ -144,8 +149,8 @@ namespace WolvenKit.Views.Editor
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
 
-
         private string _currentFolderQuery = "";
+
         private bool FilterNodes(object o) => o is FileModel data && data.Name.Contains(_currentFolderQuery);
 
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
@@ -157,7 +162,66 @@ namespace WolvenKit.Views.Editor
             // filter programmatially
             TreeGrid.View.Filter = FilterNodes;
             TreeGrid.View.RefreshFilter();
+        }
 
+        private void UserControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+        }
+
+        private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (!StaticReferences.AllowVideoPreview)
+            {
+                return;
+            }
+
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
+            {
+                SfTreeGrid dg = sender as SfTreeGrid;
+                if (dg.SelectedItem == null)
+                {
+                    return;
+                }
+                var selected = dg.SelectedItem as FileModel;
+
+                if (!selected.FullName.ToLower().Contains("bk2"))
+                {
+                    return;
+                }
+
+                var x = "Resources\\Media\\test.exe | " + selected.FullName + "/I2 /P /L";
+
+                var appControl = new AppControl();
+                appControl.ExeName = x.Split('|')[0];
+                appControl.Args = x.Split('|')[1];
+                appControl.VisualPoint = new Point(0.0, 30.0);
+
+                if (StaticReferences.XoWindow == null)
+                {
+                    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+                    StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
+                }
+
+                if (StaticReferences.XoWindow.Content != null)
+                {
+                    return;
+                }
+                StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
+                {
+                    var q = s as HandyControl.Controls.GlowWindow;
+                    q.Close();
+                    StaticReferences.XoWindow = null;
+                    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+                });
+
+                Grid grid = new Grid();
+                grid.Children.Add(appControl);
+                StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
+                StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
+                StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                StaticReferences.XoWindow.Show();
+            }
         }
     }
 }

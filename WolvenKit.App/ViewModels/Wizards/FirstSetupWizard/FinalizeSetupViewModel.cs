@@ -59,8 +59,7 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
         /// Gets or sets the SettingsManager.
         /// </summary>
         [Model]
-        [Expose("DepotPath")]
-        [Expose("ShowGuidedTour")]
+        [Expose(nameof(ISettingsManager.ShowGuidedTour))]
         public ISettingsManager SettingsManager { get; set; }
         #endregion properties
 
@@ -97,9 +96,14 @@ namespace WolvenKit.ViewModels.Wizards.FirstSetupWizard
             }
 
             if (string.IsNullOrEmpty(FirstSetupWizardModel.Author))
+            {
                 FirstSetupWizardModel.Author = "RedModdingUser";
+            }
+
             if (string.IsNullOrEmpty(FirstSetupWizardModel.Email))
+            {
                 FirstSetupWizardModel.Email = "contact@redmodding.org";
+            }
 
             return Task.CompletedTask;
         }

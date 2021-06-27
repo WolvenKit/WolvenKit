@@ -3,12 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:local="clr-namespace:WolvenKit.Views.Foundation"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
     xmlns:views="clr-namespace:WolvenKit.Views.Editor"
-    xmlns:views1="clr-namespace:WolvenKit.Views.Editor.VisualEditor"
-    xmlns:vm="clr-namespace:WolvenKit.Views.ViewModels">
+    xmlns:views1="clr-namespace:WolvenKit.Views.Editor.VisualEditor">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -131,9 +129,6 @@
                     </DataTemplate>
                 </ResourceDictionary>
 
-                <ResourceDictionary>
-                    <vm:RootViewModel x:Key="ViewModel" />
-                </ResourceDictionary>
                 <!--  Global Styles  -->
                 <ResourceDictionary>
                     <Style x:Key="SidePanelContainerBorderStyle" TargetType="Border">
@@ -148,17 +143,8 @@
 
                 <!--  Converters  -->
                 <ResourceDictionary>
-                    <local:TimeSpanToSecondsConverter x:Key="TimeSpanToSecondsConverter" />
-                    <local:TimeSpanFormatter x:Key="TimeSpanFormatter" />
-                    <local:PercentageFormatter x:Key="PercentageFormatter" />
-                    <local:ByteFormatter x:Key="ByteFormatter" />
-                    <local:BitFormatter x:Key="BitFormatter" />
+
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                    <local:PlaylistDurationFormatter x:Key="PlaylistDurationFormatter" />
-                    <local:PlaylistEntryThumbnailConverter x:Key="PlaylistEntryThumbnailConverter" />
-                    <local:UtcDateToLocalTimeString x:Key="UtcDateToLocalTimeString" />
-                    <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-                    <local:ClosedCaptionsChannelConverter x:Key="ClosedCaptionsChannelConverter" />
                 </ResourceDictionary>
 
                 <!--  Resource Dictionaries  -->
@@ -191,6 +177,8 @@
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/EditControl/EditControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfRichTextBoxAdv/SfRichTextBoxAdv.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfHubTile/SfHubTile.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/CardView/CardView.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
 

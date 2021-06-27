@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -8,7 +9,6 @@ using System.Windows.Media.Imaging;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
-using FFmpeg.AutoGen;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
 using Orc.Squirrel;
@@ -16,12 +16,10 @@ using Orchestra.Services;
 using Orchestra.Views;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
-using Unosquare.FFME;
 using WolvenKit.Controls;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Editor.Tools;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
@@ -37,7 +35,7 @@ namespace WolvenKit.Functionality.Initialization
         /// </summary>
         public async static void InitializeWebview2()
         {
-            string WebViewData = Path.Combine(IGameController.WKitAppData, "WebViewData");
+            string WebViewData = ISettingsManager.GetWebViewDataPath();
             Directory.CreateDirectory(WebViewData);
             Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, WebViewData, null);
         }
@@ -66,7 +64,7 @@ namespace WolvenKit.Functionality.Initialization
                 var themeResources = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
                 var themeSettings = new MaterialDarkThemeSettings
                 {
-                    PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent),
+                    PrimaryBackground = new SolidColorBrush(SettingsManag.GetThemeAccent()),
                     BodyFontSize = 11,
                     HeaderFontSize = 14,
                     SubHeaderFontSize = 13,
@@ -77,22 +75,6 @@ namespace WolvenKit.Functionality.Initialization
                 };
                 SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
                 SfSkinManager.ApplyStylesOnApplication = true;
-            }
-            catch (Exception e)
-            {
-                StaticReferences.Logger.Error(e);
-            }
-        }
-
-        // Initialize FFME
-        public static void InitializeFFME()
-        {
-            try
-            {
-                string path = System.AppDomain.CurrentDomain.BaseDirectory;
-                Unosquare.FFME.Library.FFmpegDirectory = path + "FFME";
-                Library.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
-                Library.EnableWpfMultiThreadedVideo = false;
             }
             catch (Exception e)
             {
@@ -205,7 +187,6 @@ namespace WolvenKit.Functionality.Initialization
                 viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
-                viewModelLocator.Register(typeof(AddPathDialogView), typeof(AddPathDialogViewModel));
 
                 // Fixes
                 // Custom Registrations
@@ -275,10 +256,10 @@ namespace WolvenKit.Functionality.Initialization
             var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.ThemeAccent, false));
+                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.GetThemeAccent(), false));
             MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings
             {
-                PrimaryBackground = new SolidColorBrush(SettingsManag.ThemeAccent),
+                PrimaryBackground = new SolidColorBrush(SettingsManag.GetThemeAccent()),
                 BodyFontSize = 11,
                 HeaderFontSize = 14,
                 SubHeaderFontSize = 13,

@@ -16,10 +16,6 @@ namespace WolvenKit.Views.Wizards
 
         private LocateGameDateView LGDV;
 
-        private SetInitialPreferencesView SIPV;
-
-        private SelectThemeView STV;
-
         #endregion Fields
 
         #region Constructors
@@ -58,26 +54,15 @@ namespace WolvenKit.Views.Wizards
 
                 case 1:
                     PageGrid.Children.Clear();
-                    PageGrid.Children.Add(STV);
-                    break;
-
-                case 2:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(SIPV);
-                    break;
-
-                case 3:
-                    PageGrid.Children.Clear();
                     PageGrid.Children.Add(LGDV);
                     break;
 
-                case 4:
+                case 2:
                     PageGrid.Children.Clear();
                     PageGrid.Children.Add(FSV);
                     break;
             }
         }
-
 
         private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
         {
@@ -86,10 +71,8 @@ namespace WolvenKit.Views.Wizards
                 ServiceLocator.Default.RegisterInstance(vm);
 
                 CUV = new CreateUserView();
-                STV = new SelectThemeView();
                 LGDV = new LocateGameDateView();
                 FSV = new FinalizeSetupView();
-                SIPV = new SetInitialPreferencesView();
 
                 ShowPage();
             }

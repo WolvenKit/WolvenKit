@@ -386,6 +386,12 @@ namespace WolvenKit.Common.Model.Arguments
         public string ArchiveDepot { get; set; }
 
         /// <summary>
+        /// Material Repository path for WithMaterials Mesh Export.
+        /// </summary>
+        [Browsable(false)]
+        public string MaterialRepo { get; set; }
+
+        /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>

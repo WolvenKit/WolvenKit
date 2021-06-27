@@ -1,10 +1,12 @@
 using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using Catel.MVVM;
 using HandyControl.Controls;
 using HandyControl.Data;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
 
@@ -16,14 +18,22 @@ namespace WolvenKit.ViewModels.HomePage
 
         #region Fields
 
+        private readonly ISettingsManager _settingsManager;
+
+        
+        
+
+
         public static HomePageViewModel GlobalHomePageVM;
 
         #endregion Fields
 
         #region Constructors
 
-        public HomePageViewModel()
+        public HomePageViewModel(ISettingsManager settingsManager)
         {
+            _settingsManager = settingsManager;
+
             GlobalHomePageVM = this;
             RegisterCommands();
             SetCurrentPage("Welcome");
@@ -79,6 +89,8 @@ namespace WolvenKit.ViewModels.HomePage
 
         public bool WikitPV { get; set; }
 
+        public string VersionNumber => _settingsManager.GetVersionNumber();
+
         #endregion Properties
 
         #region Methods
@@ -129,7 +141,7 @@ namespace WolvenKit.ViewModels.HomePage
                 case "Welcome":
                     WelcomePV = true;
                     ReturnButtonVisibile = false;
-                    //DiscordHelper.SetDiscordRPCStatus("Home");
+                    DiscordHelper.SetDiscordRPCStatus("Home");
                     break;
 
                 case "Project":
@@ -137,28 +149,28 @@ namespace WolvenKit.ViewModels.HomePage
                     RecentPV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("Recent projects.");
+                    DiscordHelper.SetDiscordRPCStatus("Recent projects.");
                     break;
 
                 case "Integrated Tools":
                     IntegratedTPV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("Integrated tools.");
+                    DiscordHelper.SetDiscordRPCStatus("Integrated tools.");
                     break;
 
                 case "Settings":
                     SettingsPV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("Adjusting settings.");
+                    DiscordHelper.SetDiscordRPCStatus("Adjusting settings.");
                     break;
 
                 case "Account":
                     UserPV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("Profile.");
+                    DiscordHelper.SetDiscordRPCStatus("Profile.");
                     break;
 
                 case "Information":
@@ -166,14 +178,14 @@ namespace WolvenKit.ViewModels.HomePage
                     WikitPV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("Integrated Wiki.");
+                    DiscordHelper.SetDiscordRPCStatus("Integrated Wiki.");
                     break;
 
                 case "Github":
                     GithubPV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("Github page.");
+                    DiscordHelper.SetDiscordRPCStatus("Github page.");
                     break;
 
                 case "SDK":
@@ -183,14 +195,14 @@ namespace WolvenKit.ViewModels.HomePage
                     AboutPV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("About section.");
+                    DiscordHelper.SetDiscordRPCStatus("About section.");
                     break;
 
                 case "Website":
                     WebsitePV = true;
                     ReturnButtonVisibile = true;
 
-                    //DiscordHelper.SetDiscordRPCStatus("Integrated website.");
+                    DiscordHelper.SetDiscordRPCStatus("Integrated website.");
                     break;
 
                 case "DEBUG":

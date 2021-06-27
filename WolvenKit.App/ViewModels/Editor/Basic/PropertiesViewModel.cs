@@ -5,8 +5,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Catel;
 using Catel.IoC;
 using Catel.MVVM;
@@ -73,6 +76,38 @@ namespace WolvenKit.ViewModels.Editor
             // global commands
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanOpenFile);
             commandManager.RegisterCommand(AppCommands.Application.FileSelected, FileSelectedCommand, this);
+
+            StopAudioCommand = new RelayCommand(ExecuteStopPlaying, CanStopPlaying);
+            PlayAudioCommand = new RelayCommand(ExecuteStartPlaying, CanStartPlaying);
+            PauseAudioCommand = new RelayCommand(ExecutePausePlaying, CanPausePlaying);
+        }
+
+        public ICommand PlayAudioCommand { get; private set; }
+
+        public ICommand PauseAudioCommand { get; private set; }
+
+        public ICommand StopAudioCommand { get; private set; }
+
+        private bool CanStopPlaying() => true;
+
+        private void ExecuteStopPlaying()
+        {
+            mediaPlayer.Stop();
+            mediaPlayer.Position = new TimeSpan(0);
+        }
+
+        private bool CanStartPlaying() => true;
+
+        private void ExecuteStartPlaying()
+        {
+            mediaPlayer.Play();
+        }
+
+        private bool CanPausePlaying() => true;
+
+        private void ExecutePausePlaying()
+        {
+            mediaPlayer.Pause();
         }
 
         #region properties
@@ -100,6 +135,9 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected Item from Project Explorer If Available.
         /// </summary>
+        ///
+
+        public bool canShowPrev { get; set; } = true;
         public FileModel PE_SelectedItem { get; set; }
 
         /// <summary>
@@ -134,6 +172,7 @@ namespace WolvenKit.ViewModels.Editor
 
         public bool IsAudioPreviewVisible { get; set; }
         public bool IsImagePreviewVisible { get; set; }
+        public bool IsVideoPreviewVisible { get; set; }
 
         #endregion properties
 
@@ -158,10 +197,16 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
-            PE_SelectedItem = model;
+            if (canShowPrev)
+            {
+                PE_SelectedItem = model;
+            }
+            else
+            { return; }
             PE_MeshPreviewVisible = false;
             IsAudioPreviewVisible = false;
             IsImagePreviewVisible = false;
+            IsVideoPreviewVisible = false;
 
             // check additional changes
             if (model.IsDirectory)
@@ -169,12 +214,18 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
+            if (PE_SelectedItem == null)
+            {
+                return;
+            }
+            //
             if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                  string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                  string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
-                  || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
-                )
+              string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
+
+              string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+              || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
             )
+        )
             {
                 return;
             }
@@ -188,7 +239,7 @@ namespace WolvenKit.ViewModels.Editor
                     {
                         PE_MeshPreviewVisible = true;
 
-                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName, Path.Combine(IGameController.WKitAppData, "Temp_OBJ"));
+                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
                         if (q.Length > 0)
                         {
                             LoadModel(q);
@@ -247,6 +298,8 @@ namespace WolvenKit.ViewModels.Editor
             }
             DecideForMeshPreview();
         }
+
+        public string ExeCommand { get; set; }
 
         public string LoadedModelPath { get; set; }
 
@@ -332,9 +385,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="path"></param>
         public void TempConvertToWemWav(string path)
         {
-            string WKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
-
-            string ManagerCacheDir = Path.Combine(WKitAppData, "Temp_Audio");
+            string ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
 
             //Clean directory
             Directory.CreateDirectory(ManagerCacheDir);
@@ -371,17 +422,54 @@ namespace WolvenKit.ViewModels.Editor
             proc.WaitForExit();
             Trace.WriteLine(proc.StandardOutput.ReadToEnd());
 
-            var lvi = new TextBlock()
-            {
-                Text = Path.GetFullPath(outf),
-                Tag = Path.GetFileName(outf)
-            };
+            mediaPlayer.Open(new Uri(outf));
 
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+
+            timer.Start();
+
+            DispatcherTimer ChannelPositionTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1)
+            };
+            ChannelPositionTimer.Tick += ChannelPositionTimer_Tick;
+            ;
+
+            ChannelPositionTimer.Start();
+
+            ChannelLength =
+                mediaPlayer.Position.TotalMinutes.ToString() + " : " +
+                mediaPlayer.Position.TotalSeconds.ToString() + " : " +
+                mediaPlayer.Position.TotalMilliseconds.ToString();
             NAudioSimpleEngine.Instance.OpenFile(outf);
             CurrentTrackName = Path.GetFileNameWithoutExtension(outf);
 
             //AudioFileList.Add(lvi);
         }
+
+        private void ChannelPositionTimer_Tick(object sender, EventArgs e)
+        {
+            NAudioSimpleEngine.Instance.ChannelPosition = mediaPlayer.Position.TotalSeconds;
+        }
+
+        public string AudioPositionText { get; set; }
+        public string ChannelLength { get; set; }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (mediaPlayer.Source != null)
+            {
+                ChannelPosition = mediaPlayer.Position;
+            }
+            else
+            {
+                AudioPositionText = "No file selected...";
+            }
+        }
+
+        private MediaPlayer mediaPlayer = new MediaPlayer();
 
         /// <summary>
         /// property changed for naudio

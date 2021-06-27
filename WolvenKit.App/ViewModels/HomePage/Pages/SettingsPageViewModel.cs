@@ -9,25 +9,26 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using Catel.Fody;
 using Catel.MVVM;
-using HandyControl.Data;
 using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.Controls;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Editor.Tools;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
     public class SettingsPageViewModel : ViewModelBase
     {
-        ISettingsManager _settingsManager;
-        ILoggerService _loggerService;
+        private ISettingsManager _settingsManager;
+        private ILoggerService _loggerService;
+
         //ItemCollection subProperties;
-        List<SfAccordionItem> originalAccordionItems;
+        private List<SfAccordionItem> originalAccordionItems;
 
         public SettingsPageViewModel(
             ISettingsManager settingsManager,
@@ -36,7 +37,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         {
             _settingsManager = settingsManager;
             _loggerService = loggerService;
-            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
+            //SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
             originalAccordionItems = new List<SfAccordionItem>();
         }
 
@@ -51,11 +52,13 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             get { return new GeneralSettingsPGModel(_settingsManager); }
             set { }
         }
+
         public CP77SettingsPGModel cp77SettingsPGModel
         {
             get { return new CP77SettingsPGModel(_settingsManager); }
             set { }
         }
+
         public TW3SettingsPGModel tw3SettingsPGModel
         {
             get { return new TW3SettingsPGModel(_settingsManager); }
@@ -74,72 +77,68 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             set { }
         }
 
-        public AddPathDialogViewModel AddPathDialogViewModel
-        {
-            get { return new AddPathDialogViewModel(); }
-            set { }
-        }
-        #endregion
+        #endregion properties
 
         #region commands
+
         public ICommand SearchStartedCommand { get; set; }
-        #endregion
+
+        #endregion commands
 
         #region methods
+
         private bool CanSearchStartedCommand(object arg) => true;
 
-        private void ExecuteSearchStartedCommand(object arg)
-        {
-            
+        //private void ExecuteSearchStartedCommand(object arg)
+        //{
+        //    if (arg is FunctionEventArgs<string> e)
+        //    {
+        //        var query = e.Info;
+        //        //bool subItemContains = false;
 
-            if (arg is FunctionEventArgs<string> e)
-            {
-                var query = e.Info;
-                //bool subItemContains = false;
+        //        if (!string.IsNullOrWhiteSpace(query))
+        //        {
+        //            if (AccordionItems.Count == 0)
+        //            {
+        //                AccordionItems.Filter = null;
+        //            }
+        //            else
+        //            {
+        //                // filters the itemcollection, if an item's header doesn't match with the query, it gets filtered out.
 
-                if (!string.IsNullOrWhiteSpace(query))
-                {
-                    if (AccordionItems.Count == 0)
-                    {
-                        AccordionItems.Filter = null;
-                    }
-                    else
-                    {
-                        // filters the itemcollection, if an item's header doesn't match with the query, it gets filtered out.
+        //                AccordionItems.Filter = item =>
+        //                {
+        //                    //SfAccordionItem accordionItem = item as SfAccordionItem;
+        //                    if (item == null)
+        //                        return false;
 
-                        AccordionItems.Filter = item =>
-                        {
-                            //SfAccordionItem accordionItem = item as SfAccordionItem;
-                            if (item == null)
-                                return false;
+        //                    return (item as SfAccordionItem).Header.ToString().ToLower().Contains(query.ToLower());
 
-                            return (item as SfAccordionItem).Header.ToString().ToLower().Contains(query.ToLower());
+        //                    //subProperties = GetPropertyViews(accordionItem);
 
-                            //subProperties = GetPropertyViews(accordionItem);
+        //                    //// filters the subCategories aswell based on the Category string.
+        //                    //subProperties.Filter = subItem =>
+        //                    //{
+        //                    //    PropertyCategoryViewItemCollection viewItemCollection = subItem as PropertyCategoryViewItemCollection;
+        //                    //    subItemContains = viewItemCollection.Category.ToLower().Contains(query.ToLower());
+        //                    //    return subItemContains;
+        //                    //};
 
-                            //// filters the subCategories aswell based on the Category string.
-                            //subProperties.Filter = subItem =>
-                            //{
-                            //    PropertyCategoryViewItemCollection viewItemCollection = subItem as PropertyCategoryViewItemCollection;
-                            //    subItemContains = viewItemCollection.Category.ToLower().Contains(query.ToLower());
-                            //    return subItemContains;
-                            //};
+        //                    //// If theres still an element in the collection after the filter,
+        //                    //// then we still allow the current accordionItem to be shown.
+        //                    //if (subProperties.Count > 0)
+        //                    //    return true;
 
-                            //// If theres still an element in the collection after the filter,
-                            //// then we still allow the current accordionItem to be shown.
-                            //if (subProperties.Count > 0)
-                            //    return true;
-
-                            //return headerContains;
-                        };
-                    }
-                }   // reseting filter.
-                else // if the search bar gets emptied out, then all items should be seen again by removing the filter.
-                {
-                    AccordionItems.Filter = null;
-                }
-            }
-        }
+        //                    //return headerContains;
+        //                };
+        //            }
+        //        }   // reseting filter.
+        //        else // if the search bar gets emptied out, then all items should be seen again by removing the filter.
+        //        {
+        //            AccordionItems.Filter = null;
+        //        }
+        //    }
+        //}
 
         // Starting from the AccordionItem, this method recurseviley goes down the visual tree
         // until it finds the element with the PropertyView type.
@@ -165,17 +164,22 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                 }
             }
 
-
             return foundCollection;
         }
-        #endregion
+
+        #endregion methods
     }
 
     #region PropertyGridModels
-    [Editor(typeof(string), typeof(PathEditor))]
-    public class CP77SettingsPGModel
+
+    [Editor(nameof(Game_Executable_Path), typeof(SingleFilePathEditor))]
+    [Editor(nameof(MaterialRepositoryPath), typeof(SingleFolderPathEditor))]
+    public class CP77SettingsPGModel : Catel.Data.ObservableObject
     {
-        ISettingsManager _settingsManager;
+        /// <summary>
+        /// Gets or sets the SettingsManager.
+        /// </summary>
+        private ISettingsManager _settingsManager { get; set; }
 
         public CP77SettingsPGModel(ISettingsManager settingsManager)
         {
@@ -193,12 +197,35 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                 _settingsManager.Save();
             }
         }
+
+        [Category("General")]
+        [Display(Name = "Materialrepository path")]
+        public string MaterialRepositoryPath
+        {
+            get => _settingsManager.MaterialRepositoryPath;
+            set
+            {
+                _settingsManager.MaterialRepositoryPath = value;
+                _settingsManager.Save();
+            }
+        }
+
+        [Category("Xtras")]
+        [Display(Name = "Fact Animal of Choice")]
+        public EAnimals CatFacts_Animal
+        {
+            get => _settingsManager.CatFactAnimal;
+            set
+            {
+                _settingsManager.CatFactAnimal = value;
+                _settingsManager.Save();
+            }
+        }
     }
 
-    [Editor(typeof(string), typeof(PathEditor))]
     public class TW3SettingsPGModel
     {
-        ISettingsManager _settingsManager;
+        private ISettingsManager _settingsManager;
 
         public TW3SettingsPGModel(ISettingsManager settingsManager)
         {
@@ -222,95 +249,55 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
         [Display(Name = "Uncooked Depot Path")]
         public string Uncooked_Depot_Path { get; set; }
-
     }
 
-    public class PathEditor : ITypeEditor
+    public class GeneralSettingsPGModel : ObservableObject
     {
-        AddPathDialogView addPathDialogView;
-
-        public void Attach(PropertyViewItem property, PropertyItem info)
-        {
-            if (info.CanWrite)
-            {
-                var binding = new Binding("Value")
-                {
-                    Mode = BindingMode.TwoWay,
-                    Source = info,
-                    ValidatesOnExceptions = true,
-                    ValidatesOnDataErrors = true
-                };
-                BindingOperations.SetBinding(addPathDialogView, AddPathDialogView.PathProperty, binding);
-            }
-            else
-            {
-                addPathDialogView.IsEnabled = false;
-                var binding = new Binding("Value")
-                {
-                    Source = info,
-                    ValidatesOnExceptions = true,
-                    ValidatesOnDataErrors = true
-                };
-                BindingOperations.SetBinding(addPathDialogView, AddPathDialogView.PathProperty, binding);
-            }
-        }
-        public object Create(PropertyInfo PropertyInfo)
-        {
-            addPathDialogView = new AddPathDialogView();
-            addPathDialogView.Path = "";
-            return addPathDialogView;
-        }
-
-        public void Detach(PropertyViewItem property)
-        {
-
-        }
-    }
-
-    [Editor(typeof(string), typeof(PathEditor))]
-    public class GeneralSettingsPGModel
-    {
-
-        ISettingsManager _settingsManager;
+        private ISettingsManager _settingsManager;
 
         public GeneralSettingsPGModel(ISettingsManager settingsManager)
         {
             _settingsManager = settingsManager;
         }
 
-        [Category("General")]
-        public ApplicationLanguage Language { get; set; }
+        //[Category("General")]
+        //public ApplicationLanguage Language { get; set; }
+
         //public bool Desktop_Notifications { get; set; }  // Doesn't work yet I think?
-        [Category("Updates")]
-        [Display(Name = "Receive Auto updates?")]
-        public bool ReceiveAutoUpdates { get; set; }
-        [Category("Updates")]
-        [Display(Name = "Set auto update channel.")]
-        public AutoUpdateChannel UpdateChannel { get; set; }
-        [Category("Mods")]
-        [Display(Name = "Automatically install mods.")]
-        public bool AutoInstallMods { get; set; }
-        [Category("Mods")]
-        [Display(Name = "Material depot path.")]
-        public string MaterialDepotPath { get; set; }
+
+        //[Category("Updates")]
+        //[Display(Name = "Receive Auto updates?")]
+        //public bool ReceiveAutoUpdates { get; set; }
+
+        //[Category("Updates")]
+        //[Display(Name = "Set auto update channel.")]
+        //public AutoUpdateChannel UpdateChannel { get; set; }
+
+        //[Category("Mods")]
+        //[Display(Name = "Automatically install mods.")]
+        //public bool AutoInstallMods { get; set; }
+
+        //[Category("Mods")]
+        //[Display(Name = "Material depot path.")]
+        //public string MaterialDepotPath { get; set; }
 
         [Category("Theme")]
         [Display(Name = "Application theme accent.")]
         public Brush BrushProperty
         {
-            get { return new SolidColorBrush(_settingsManager.ThemeAccent); }
+            get => new SolidColorBrush(_settingsManager.GetThemeAccent());
             set
             {
-                _settingsManager.ThemeAccent = ((SolidColorBrush)value).Color;
+                _settingsManager.SetThemeAccent(((SolidColorBrush)value).Color);
                 _settingsManager.Save();
-
             }
         }
     }
 
     public class ToolSettingsPGModel
     {
-        ISettingsManager _settingsManager;
+        private ISettingsManager _settingsManager;
+
         public ToolSettingsPGModel(ISettingsManager settingsManager)
         {
             _settingsManager = settingsManager;
@@ -333,10 +320,10 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         public VisualEditorType VisualEditorType { get; set; }
     }
 
-    [Editor(typeof(string), typeof(PathEditor))]
     public class EditorSettingsPGModel
     {
-        ISettingsManager _settingsManager;
+        private ISettingsManager _settingsManager;
+
         public EditorSettingsPGModel(ISettingsManager settingsManager)
         {
             _settingsManager = settingsManager;
@@ -353,41 +340,51 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         [Display(Name = "Editor path")]
         public string EditorPath { get; set; }
     }
-    #endregion
+
+    #endregion PropertyGridModels
 
     #region enums
+
     public enum AutoUpdateChannel
     {
         Global,
     }
+
     public enum ApplicationLanguage
     {
         English,
     }
+
     public enum AssetBrowserType
     {
         None,
     }
+
     public enum CodeEditorType
     {
         None,
     }
+
     public enum PluginManagerType
     {
         None,
     }
+
     public enum VisualEditorType
     {
         None,
     }
+
     public enum AutoInstallMods
     {
         On,
         Off,
     }
+
     public enum AutoSaveType
     {
         Interval,
     }
-    #endregion
+
+    #endregion enums
 }

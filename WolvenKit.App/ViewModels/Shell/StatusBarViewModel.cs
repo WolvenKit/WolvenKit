@@ -1,9 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusBarViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Threading.Tasks;
 using Catel;
@@ -22,24 +16,20 @@ namespace WolvenKit.ViewModels.Shell
         #region Fields
 
         private readonly IConfigurationService _configurationService;
-        private readonly IProjectManager _projectManager;
-        private readonly IServiceLocator _serviceLocator;
+        private readonly ISettingsManager _settingsManager;
         private readonly IUpdateService _updateService;
 
         #endregion Fields
 
         #region Constructors
 
-        public StatusBarViewModel(IProjectManager projectManager, IServiceLocator serviceLocator, IConfigurationService configurationService,
-            IUpdateService updateService)
+        public StatusBarViewModel(
+            ISettingsManager settingsManager,
+            IConfigurationService configurationService,
+            IUpdateService updateService
+            )
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => serviceLocator);
-            Argument.IsNotNull(() => configurationService);
-            Argument.IsNotNull(() => updateService);
-
-            _projectManager = projectManager;
-            _serviceLocator = serviceLocator;
+            _settingsManager = settingsManager;
             _configurationService = configurationService;
             _updateService = updateService;
             StaticReferencesVM.GlobalStatusBar = this;
@@ -59,8 +49,9 @@ namespace WolvenKit.ViewModels.Shell
         public int Line { get; private set; }
         public string LoadingString { get; set; }
         public string ReceivingAutomaticUpdates { get; private set; }
-        public string Version { get; private set; }
         public string CurrentProject { get; set; }
+
+        public object VersionNumber => _settingsManager.GetVersionNumber();
 
         #endregion Properties
 
@@ -82,8 +73,6 @@ namespace WolvenKit.ViewModels.Shell
             _updateService.UpdateInstalled += OnUpdateInstalled;
 
             IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
-            //Version = VersionHelper.GetCurrentVersion(); //TODO
-            Version = "Version 0.8.1"; // TempFix
             var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
             if (Connected)
             { InternetConnected = "Connected"; }

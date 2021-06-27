@@ -34,9 +34,6 @@ namespace WolvenKit.Functionality.Controllers
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
 
-
-
-
         public Cp77Controller(ILoggerService loggerService,
             IProjectManager projectManager,
             ISettingsManager settingsManager,
@@ -58,6 +55,7 @@ namespace WolvenKit.Functionality.Controllers
         private static ArchiveManager ArchiveManager { get; set; }
 
         private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+
         public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
 
         #endregion Properties
@@ -98,10 +96,9 @@ namespace WolvenKit.Functionality.Controllers
                 return null;
             }
             _loggerService.Info("Loading archive Manager ... ");
-            var chachePath = Path.Combine(IGameController.WKitAppData, "archive_cache.bin");
+            var chachePath = Path.Combine(ISettingsManager.GetWolvenkitAppData(), "archive_cache.bin");
             try
             {
-
                 if (File.Exists(chachePath))
                 {
                     using var file = File.OpenRead(chachePath);
@@ -131,25 +128,18 @@ namespace WolvenKit.Functionality.Controllers
             }
             _loggerService.Info("Finished loading archive manager.");
 
-
-
             _rootCache.Edit(innerCache =>
             {
                 innerCache.Clear();
                 innerCache.AddOrUpdate(ArchiveManager.RootNode);
             });
 
-
-
             assetBrowserViewModel.ReInit(false);
 
             return ArchiveManager;
         }
 
-
         public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
-
-
 
         public Task<bool> PackageMod()
         {
@@ -255,8 +245,7 @@ namespace WolvenKit.Functionality.Controllers
                     return;
                 }
 
-                fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.RED4GameRootDir, true));
-
+                fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.GetRED4GameRootDir(), true));
 
                 //var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
                 //if (Directory.Exists(packeddlcdir))
@@ -276,8 +265,10 @@ namespace WolvenKit.Functionality.Controllers
         public void AddToMod(IGameFile file)
         {
             var project = _projectManager.ActiveProject;
-            NotificationHelper.Growl.Info($"Added file: {file.Name} to project: {project.Name} ");
-
+            if (NotificationHelper.IsShowNotificationsEnabled)
+            {
+                NotificationHelper.Growl.Info($"Added file: {file.Name} to project: {project.Name} ");
+            }
             switch (project.GameType)
             {
                 case GameType.Witcher3:

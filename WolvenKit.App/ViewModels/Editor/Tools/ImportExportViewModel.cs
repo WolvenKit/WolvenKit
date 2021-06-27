@@ -57,7 +57,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
-
+        private readonly ISettingsManager _settingsManager;
         /// <summary>
         /// Private NameOf Selected Item in Grid.
         /// </summary>
@@ -96,6 +96,7 @@ namespace WolvenKit.ViewModels.Editor
            IWatcherService watcherService,
            IGrowlNotificationService notificationService,
            IGameControllerFactory gameController,
+           ISettingsManager settingsManager,
            ModTools modTools
            ) : base(ToolTitle)
         {
@@ -106,6 +107,7 @@ namespace WolvenKit.ViewModels.Editor
             Argument.IsNotNull(() => modTools);
             Argument.IsNotNull(() => gameController);
             Argument.IsNotNull(() => notificationService);
+            Argument.IsNotNull(() => settingsManager);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -114,6 +116,7 @@ namespace WolvenKit.ViewModels.Editor
             _modTools = modTools;
             _gameController = gameController;
             _notificationService = notificationService;
+            _settingsManager = settingsManager;
 
             SetupToolDefaults();
 
@@ -578,6 +581,7 @@ namespace WolvenKit.ViewModels.Editor
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
+
                 if (item.Properties is MeshExportArgs meshExportArgs)
                 {
                     if (_gameController.GetController() is Cp77Controller cp77Controller)
@@ -585,6 +589,7 @@ namespace WolvenKit.ViewModels.Editor
                         var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                         meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                     }
+                    meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
                 }
                 if (item.Properties is OpusExportArgs opusExportArgs)
                 {

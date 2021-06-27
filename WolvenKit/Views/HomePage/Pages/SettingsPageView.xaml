@@ -19,7 +19,6 @@
     <Grid
         MinWidth="300"
         MinHeight="300"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
         <Grid x:Name="settingsGrid" Margin="3,75,3,0">
 
@@ -61,13 +60,25 @@
                             x:Name="GeneralSettingsPG"
                             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                             EnableGrouping="True"
-                            SelectedObject="{Binding generalSettingsPGModel}"
+                            SelectedObject="{Binding generalSettingsPGModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             SortDirection="{x:Null}" />
-                        <TextBlock
+
+                        <StackPanel
                             Margin="5"
-                            HorizontalAlignment="Center"
-                            Foreground="Gray"
-                            Text="Theme changes will take affect after restart." />
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="5"
+                                HorizontalAlignment="Center"
+                                Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
+                                Text="Theme changes will take affect after restart." />
+                            <Button
+                                x:Name="ExitRestart"
+                                Click="ExitRestart_Click"
+                                Content="Exit and Restart" />
+
+                        </StackPanel>
+
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
@@ -92,7 +103,7 @@
                             x:Name="CP77SettingsPG"
                             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                             EnableGrouping="True"
-                            SelectedObject="{Binding cp77SettingsPGModel}" />
+                            SelectedObject="{Binding cp77SettingsPGModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
@@ -105,7 +116,8 @@
                 </syncfusion:SfAccordionItem>
             </syncfusion:SfAccordion>
         </Grid>
-        <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+
+        <!--<hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
             <hc:SearchBar
                 x:Name="settingsSearch"
                 Margin="200,40,200,0"
@@ -119,8 +131,9 @@
                     </hc:EventTrigger>
                 </hc:Interaction.Triggers>
             </hc:SearchBar>
-        </hc:TransitioningContentControl>
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
+        </hc:TransitioningContentControl>-->
+
+        <!--<hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
             <StackPanel
                 Margin="5"
@@ -152,6 +165,6 @@
                     StrokeThickness="1.5"
                     Duration="00:00:06" />
             </StackPanel>
-        </hc:TransitioningContentControl>
+        </hc:TransitioningContentControl>-->
     </Grid>
 </catel:UserControl>

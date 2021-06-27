@@ -59,7 +59,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             bool w3IsValid = true, cp77IsValid = true;
             if (_firstSetupWizardModel.CreateModForW3)
             {
-                w3IsValid = w3ExeTxtb.VerifyData() && wccLiteExeTxtb.VerifyData() && uncookedDepTxtb.VerifyData();
+                w3IsValid = w3ExeTxtb.VerifyData() && wccLiteExeTxtb.VerifyData();
             }
 
             if (_firstSetupWizardModel.CreateModForCP77)

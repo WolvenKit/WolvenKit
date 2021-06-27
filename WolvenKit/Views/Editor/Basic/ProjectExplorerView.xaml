@@ -14,6 +14,7 @@
     d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
+    MouseDown="UserControl_MouseDown"
     mc:Ignorable="d">
 
     <catel:UserControl.Resources>
@@ -35,16 +36,17 @@
             Name="TreeGrid"
             AllowEditing="False"
             AllowFiltering="False"
-            FilterLevel="Extended"
             AllowResizingColumns="False"
             AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             ChildPropertyName="ParentHash"
             ColumnSizer="Star"
             ExpandStateMappingName="IsExpanded"
+            FilterLevel="Extended"
             IsReadOnly="True"
             ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
+            MouseDown="TreeGrid_MouseDown"
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"
@@ -83,9 +85,8 @@
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Name"
                     HorizontalHeaderContentAlignment="Left"
-                    MappingName="Name"
                     ImmediateUpdateColumnFilter="True"
-                >
+                    MappingName="Name">
                     <syncfusion:TreeGridTextColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -97,6 +98,42 @@
                                     <Image.Style>
                                         <Style TargetType="Image">
                                             <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding Extension}" Value="glb">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="gltf">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="tga">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="dds">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="bmp">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="jpg">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="jpeg">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="png">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding Extension}" Value="Wav">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="Mp3">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="png">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+
                                                 <DataTrigger Binding="{Binding Extension}" Value="w2cent">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/entity.svg}" />
                                                 </DataTrigger>
@@ -783,17 +820,23 @@
                         <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
                     </MenuItem>
 
-                    <MenuItem Margin="0" Header="Actions">
+                    <MenuItem
+                        Margin="0"
+                        Header="Actions"
+                        Visibility="Collapsed">
 
                         <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
-                    <MenuItem Header="Export selected - Simple" />
-                    <MenuItem Header="Export selected - Advanced" />
+                    <MenuItem Header="Export selected - Simple" Visibility="Collapsed" />
+                    <MenuItem Header="Export selected - Advanced" Visibility="Collapsed" />
 
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}" Header="Open in asset browser" />
+                    <MenuItem
+                        Command="{Binding OpenInAssetBrowserCommand}"
+                        Header="Open in asset browser"
+                        Visibility="Collapsed" />
 
                     <MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
                     <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />
@@ -801,7 +844,6 @@
                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                 </ContextMenu>
             </syncfusion:SfTreeGrid.ContextMenu>
-
         </syncfusion:SfTreeGrid>
 
         <hc:SearchBar
@@ -811,10 +853,8 @@
             Background="{DynamicResource ContentBackground}"
             BorderBrush="{DynamicResource BorderBrush}"
             FlowDirection="LeftToRight"
-            Text="search"
             SearchStarted="PESearchBar_OnSearchStarted"
             ShowClearButton="True"
-            >
-        </hc:SearchBar>
+            Text="search" />
     </Grid>
 </catel:UserControl>

@@ -149,7 +149,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     w3StringManager = new W3StringManager();
                     w3StringManager.Load(_settings.TextLanguage, Path.GetDirectoryName(_settings.W3ExecutablePath));
-                    Directory.CreateDirectory(IGameController.ManagerCacheDir);
+                    Directory.CreateDirectory(ISettingsManager.GetManagerCacheDir());
                     using (var file = File.Open(IGameController.GetManagerPath(EManagerType.W3StringManager), FileMode.Create))
                     {
                         Serializer.Serialize(file, w3StringManager);
@@ -982,13 +982,13 @@ namespace WolvenKit.Functionality.Controllers
                 var packedmoddir = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "packed", "Mods");
                 if (Directory.Exists(packedmoddir))
                 {
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settings.W3GameModDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settings.GetW3GameModDir(), true));
                 }
 
                 var packeddlcdir = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "packed", "DLC");
                 if (Directory.Exists(packeddlcdir))
                 {
-                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, _settings.W3GameDlcDir, true));
+                    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, _settings.GetW3GameDlcDir(), true));
                 }
 
                 installlog.Root.Add(fileroot);
@@ -1773,7 +1773,7 @@ namespace WolvenKit.Functionality.Controllers
             {
                 throw new GameMismatchException(nameof(Tw3Project), _projectManager.ActiveProject.GetType().Name);
             }
-            var workDir = Path.GetFullPath($"{IGameController.WorkDir}_export");
+            var workDir = Path.GetFullPath($"{ISettingsManager.GetWorkDir()}_export");
             if (!Directory.Exists(workDir))
             {
                 Directory.CreateDirectory(workDir);
@@ -1890,7 +1890,7 @@ namespace WolvenKit.Functionality.Controllers
             #region Unbundle relative file directory to temp dir
 
             // create temporary uncooked directory
-            var outdir = Path.GetFullPath(IGameController.WorkDir);
+            var outdir = Path.GetFullPath(ISettingsManager.GetWorkDir());
             if (Directory.Exists(outdir))
             {
                 Directory.Delete(outdir, true);
@@ -1908,9 +1908,9 @@ namespace WolvenKit.Functionality.Controllers
             // uncook the folder with wcc
             // check if mod or vanilla file
             var indir = isDLC
-                ? Path.GetFullPath(_settings.W3GameDlcDir)
+                ? Path.GetFullPath(_settings.GetW3GameDlcDir())
                 : Path.GetFullPath(_settings.W3ExecutablePath);
-            if (basedir.Contains(Path.GetFullPath(_settings.W3GameModDir)))
+            if (basedir.Contains(Path.GetFullPath(_settings.GetW3GameModDir())))
             {
                 indir = basedir;
             }

@@ -14,6 +14,8 @@ using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
@@ -33,9 +35,6 @@ namespace WolvenKit.Views.Shell
         {
             InitializeComponent();
             G_Dock = this;
-
-
-
 
             PART_DockingManager.Loaded += PART_DockingManager_Loaded;
             PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
@@ -65,7 +64,6 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-
         private bool DebuggingLayouts = false;
 
         public void SetLayoutToDefault()
@@ -81,24 +79,19 @@ namespace WolvenKit.Views.Shell
             ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(
                 DocumentContainer.AddTabDocumentAtLastProperty, true);
 
-
-
-
             // Add setting to persist State or not ? ( Load Default Docking on Startup : Yes/No )
             // if (XSETTINGX){ SetLayoutToDefault();}else{
-
-            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
+            var serviceLocator = ServiceLocator.Default;
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            if (settings.ShowFirstTimeSetupForUser())
             {
                 SetLayoutToDefault();
-
             }
             else
             {
                 var Debugging_A = PART_DockingManager.LoadDockState();
                 Trace.WriteLine(Debugging_A);
-
             }
-
 
             if (DebuggingLayouts)
             {
@@ -231,8 +224,6 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-
-
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems != null)
@@ -297,7 +288,6 @@ namespace WolvenKit.Views.Shell
         {
             if (StaticReferences.GlobalShell != null)
             {
-
                 StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
                 StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
                 StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
@@ -306,6 +296,10 @@ namespace WolvenKit.Views.Shell
                 {
                     var x = DockingManager.GetHeader((DependencyObject)e.NewValue);
                     var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+                    if (!string.IsNullOrEmpty(x as string))
+                    {
+                        DiscordHelper.SetDiscordRPCStatus(x as string);
+                    }
 
                     switch (x)
                     {
@@ -315,62 +309,73 @@ namespace WolvenKit.Views.Shell
                             propertiesViewModel.PE_FileInfoVisible = true;
 
                             break;
+
                         case "Asset Browser":
                             StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
                             propertiesViewModel.SetToNullAndResetVisibility();
                             propertiesViewModel.AB_FileInfoVisible = true;
                             break;
+
                         case "CR2W Editor":
                             // This never happens as CR2W editor is always named after its active document.
                             break;
+
                         case "Properties":
                             break;
+
                         case "Log":
                             break;
+
                         case "Visual Editor":
                             break;
+
                         case "Import Export Tool":
                             break;
+
                         case "Audio Tool":
                             break;
+
                         case "Bulk Editor":
                             break;
+
                         case "Mimics":
                             break;
+
                         case "CR2W To Text Tool":
                             break;
+
                         case "WCC Tool":
                             break;
+
                         case "Plugin Manager":
                             break;
+
                         case "Menu Creator Tool":
                             break;
+
                         case "Importer Tool":
                             break;
+
                         case "Code Editor":
                             break;
+
                         case "Csv Editor":
                             break;
+
                         case "Hex Editor":
                             break;
+
                         case "Journal Editor":
                             break;
-
 
                         default:
                             StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
 
                             break;
-
-
                     }
 
                     if (((IDockElement)content.Content).State == DockState.Document)
                     {
-
-
-
-
                         SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
                     }
                 }

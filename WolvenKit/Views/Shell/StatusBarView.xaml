@@ -12,7 +12,9 @@
  xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
  xmlns:orchestra="http://schemas.wildgums.com/orchestra"
  xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+ xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
  mc:Ignorable="d"
+ d:DataContext="{d:DesignInstance Type=shell:StatusBarViewModel}"
  >
 
     <catel:UserControl.Resources>
@@ -96,7 +98,7 @@
                  Margin="0"
                  hc:TitleElement.Background="{DynamicResource RegionBrush}"
                  Background="{DynamicResource GrayBrush10}"
-                 Content="0.8.0.1-Beta"
+                 Content="{Binding VersionNumber}"
                  FontSize="11"
                  ShowCloseButton="False"
                  ToolTip="Version"

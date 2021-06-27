@@ -36,6 +36,7 @@
                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                 Text="Show guided tour after completing setup" />
                             <TextBlock
+                                Visibility="Hidden"
                                 Margin="35,40,5,5"
                                 VerticalAlignment="Center"
                                 FontSize="14"
@@ -102,7 +103,7 @@
                                         Text="Off" />
                                 </Border>
                             </ToggleButton>
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical" Visibility="Hidden">
                                 <ToggleButton
                                     Margin="5,30,5,15"
                                     HorizontalAlignment="Left"

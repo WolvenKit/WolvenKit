@@ -99,7 +99,7 @@ namespace WolvenKit.ViewModels.Shell
                     ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
 
                     _loggerService.Info("Changed theme : " + value.ToString());
-                    _settingsManager.ThemeAccent = value;
+                    _settingsManager.SetThemeAccent(value);
                     _settingsManager.Save();
                 }
             }

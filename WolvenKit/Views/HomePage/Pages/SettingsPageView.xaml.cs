@@ -54,6 +54,10 @@ namespace WolvenKit.Views.HomePage.Pages
 
         }
 
-
+        private void ExitRestart_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.Application.Restart();
+            System.Windows.Application.Current.Shutdown();
+        }
     }
 }

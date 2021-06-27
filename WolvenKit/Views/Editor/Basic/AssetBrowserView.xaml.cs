@@ -23,11 +23,14 @@ using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.ViewModels.Editor;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
+using Wolvenkit.InteropControls;
 
 namespace WolvenKit.Views.Editor
 {
@@ -75,12 +78,18 @@ namespace WolvenKit.Views.Editor
             if (propertiesViewModel.State is DockState.AutoHidden or DockState.Hidden)
             { return; }
 
-            propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
+            if (propertiesViewModel.canShowPrev)
+            {
+                propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
+            }
+            else
+            {
+                return;
+            }
+
             propertiesViewModel.AB_MeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
-
-            var wKitAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
 
             if (propertiesViewModel.AB_SelectedItem != null)
             {
@@ -89,24 +98,24 @@ namespace WolvenKit.Views.Editor
 
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.mesh.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
-                { PreviewMesh(propertiesViewModel, wKitAppData, selectedItem, selectedGameFile); }
+                { PreviewMesh(propertiesViewModel, selectedItem, selectedGameFile); }
 
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.wem.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
-                { PreviewWem(propertiesViewModel, wKitAppData, selectedItem, selectedGameFile); }
+                { PreviewWem(propertiesViewModel, selectedItem, selectedGameFile); }
 
                 if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.xbm.ToString(),
                                             System.StringComparison.OrdinalIgnoreCase))
-                { PreviewTexture(propertiesViewModel, wKitAppData, selectedItem, selectedGameFile); }
+                { PreviewTexture(propertiesViewModel, selectedItem, selectedGameFile); }
             }
             propertiesViewModel.DecideForMeshPreview();
         }
 
-        private void PreviewMesh(PropertiesViewModel propertiesViewModel, string wKitAppData, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewMesh(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.AB_MeshPreviewVisible = true;
 
-            var managerCacheDir = Path.Combine(wKitAppData, "Temp_Mesh");
+            var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
             Directory.CreateDirectory(managerCacheDir);
             foreach (var f in Directory.GetFiles(managerCacheDir))
             {
@@ -116,32 +125,42 @@ namespace WolvenKit.Views.Editor
             }
 
             var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
-            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, Path.Combine(IGameController.WKitAppData, "Temp_OBJ"));
+            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, ISettingsManager.GetTemp_OBJPath());
             if (q2.Length > 0)
             { StaticReferences.GlobalPropertiesView.LoadModel(q2); }
         }
 
-        private void PreviewWem(PropertiesViewModel propertiesViewModel, string wKitAppData, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewWem(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsAudioPreviewVisible = true;
 
-            var managerCacheDir = Path.Combine(wKitAppData, "Temp_Audio_import");
-            string EndPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
+            var managerCacheDir = ISettingsManager.GetTemp_Audio_importPath();
             Directory.CreateDirectory(managerCacheDir);
+
+            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
             foreach (var f in Directory.GetFiles(managerCacheDir))
             {
                 try
-                { File.Delete(f); }
-                catch { }
+                {
+                    File.Delete(f);
+                }
+                catch
+                {
+                }
             }
-            using var fs = new FileStream(EndPath, FileMode.Create, FileAccess.Write);
-            selectedGameFile.Extract(fs);
 
-            if (File.Exists(EndPath))
-            { propertiesViewModel.AddAudioItem(EndPath); }
+            using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
+            {
+                selectedGameFile.Extract(fs);
+            }
+
+            if (File.Exists(endPath))
+            {
+                propertiesViewModel.AddAudioItem(endPath);
+            }
         }
 
-        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, string wKitAppData, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsImagePreviewVisible = true;
 
@@ -219,15 +238,21 @@ namespace WolvenKit.Views.Editor
 
         private void LeftNavigationHomeButton_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
 
-        private void Expand_OnClick(object sender, RoutedEventArgs e)
+        private void Expand_OnClick(object sender, RoutedEventArgs e) => ExpandNode();
+
+        public void ExpandNode()
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
             LeftNavigation.ExpandNode(selectedIndex);
         }
 
-        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.ExpandAllNodes();
+        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAllNodes();
 
-        private void Collapse_OnClick(object sender, RoutedEventArgs e)
+        public void ExpandAllNodes() => LeftNavigation.ExpandAllNodes();
+
+        private void Collapse_OnClick(object sender, RoutedEventArgs e) => CollapseNode();
+
+        public void CollapseNode()
         {
             var selectedItem = LeftNavigation.SelectedItem;
             if (selectedItem == null)
@@ -238,14 +263,93 @@ namespace WolvenKit.Views.Editor
             LeftNavigation.CollapseNode(node);
         }
 
-        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => LeftNavigation.CollapseAllNodes();
+        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAllNodes();
+
+        public void CollapseAllNodes() => LeftNavigation.CollapseAllNodes();
 
         private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
         {
             if (ViewModel is AssetBrowserViewModel vm)
             {
+                NotificationHelper.IsShowNotificationsEnabled = false;
                 vm.AddSelectedCommand.SafeExecute();
             }
+        }
+
+        private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (!StaticReferences.AllowVideoPreview)
+            {
+                return;
+            }
+
+            if (InnerList.SelectedItem == null)
+            {
+                return;
+            }
+            var selected = InnerList.SelectedItem as FileEntryViewModel;
+
+            if (!selected.FullName.ToLower().Contains("bk2"))
+            {
+                return;
+            }
+
+            ///Extract to Temp dir
+
+            var tempPath = ISettingsManager.GetTemp_Video_PreviewPath();
+            var endPath = Path.Combine(tempPath, Path.GetFileName(selected.Name));
+
+            foreach (var f in Directory.GetFiles(tempPath))
+            {
+                try
+                {
+                    File.Delete(f);
+                }
+                catch
+                {
+                }
+            }
+
+            using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
+            {
+                selected.GetGameFile().Extract(fs);
+            }
+
+            if (File.Exists(endPath))
+            {
+            }
+
+            var x = "Resources\\Media\\test.exe | " + endPath + "/I2 /P /L";
+
+            var appControl = new AppControl();
+            appControl.ExeName = x.Split('|')[0];
+            appControl.Args = x.Split('|')[1];
+            appControl.VisualPoint = new Point(0.0, 30.0);
+
+            if (StaticReferences.XoWindow == null)
+            {
+                StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+                StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
+            }
+
+            if (StaticReferences.XoWindow.Content != null)
+            {
+                return;
+            }
+            StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
+            {
+                var q = s as HandyControl.Controls.GlowWindow;
+                q.Close();
+                StaticReferences.XoWindow = null;
+                StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+            });
+
+            Grid grid = new Grid();
+            grid.Children.Add(appControl);
+            StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
+            StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
+            StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            StaticReferences.XoWindow.Show();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using AutoUpdaterDotNET;
 using Catel.Logging;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.Views.Others;
 using WolvenKit.Views.Wizards;
@@ -14,9 +15,9 @@ namespace WolvenKit.Functionality.Helpers
 
 
         // Show the first time setup to the user.
-        public static void ShowFirstTimeSetup()
+        public static void ShowFirstTimeSetup(ISettingsManager settings)
         {
-            if (Functionality.Services.SettingsManager.FirstTimeSetupForUser)
+            if (settings.ShowFirstTimeSetupForUser())
             {
                 try
                 {

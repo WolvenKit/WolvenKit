@@ -10,7 +10,11 @@
     xmlns:local="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:WolvenKit.Views.HomePage.Pages"
-    mc:Ignorable="av">
+    mc:Ignorable="av"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
+    >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -326,7 +330,7 @@
                 CornerRadius="0">
                 <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
                     <Grid>
-                       
+
                         <Grid
                             x:Name="DebugPage"
                             Margin="0"
@@ -490,7 +494,7 @@
                     FontSize="10"
                     Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
                     IsEnabled="False"
-                    Text="ENTER CURRENT VERSION" />
+                    Text="{Binding VersionNumber}" />
                 <iconPacks:PackIconCodicons
                     Width="20"
                     Height="20"

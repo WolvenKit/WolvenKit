@@ -13,6 +13,7 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    Height="300"
     d:DataContext="{d:DesignInstance Type=editor:ImportExportViewModel}"
     mc:Ignorable="d">
 
@@ -158,6 +159,7 @@
 
                 <StackPanel Orientation="Vertical">
                     <StackPanel
+                        Margin="0,5,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
@@ -186,6 +188,7 @@
                         <Button
                             Margin="5,0,5,0"
                             Padding="2,0,2,0"
+                            VerticalAlignment="Center"
                             Background="{DynamicResource ContentBackground}"
                             BorderBrush="{DynamicResource ContentBackgroundAlt}"
                             BorderThickness="1"
@@ -258,7 +261,7 @@
                                 <TextBlock Text="Copy" />
                             </StackPanel>
                         </Button>
-                        <TextBlock Text="settings from selected file to : " />
+                        <TextBlock VerticalAlignment="Center" Text="settings from selected file to : " />
                         <syncfusion:ComboBoxAdv
                             x:Name="ToThese"
                             VerticalAlignment="Center"
@@ -272,6 +275,7 @@
                         <Button
                             Margin="5,0,5,0"
                             Padding="2,0,2,0"
+                            VerticalAlignment="Center"
                             Click="Button_Click"
                             FontSize="12"
                             Style="{DynamicResource ButtonCustom}">

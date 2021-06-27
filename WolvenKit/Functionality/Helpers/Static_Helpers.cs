@@ -16,6 +16,7 @@ namespace WolvenKit.Functionality.Helpers
         public static MainView MainView { get; set; }
 
 
+        public static HandyControl.Controls.GlowWindow XoWindow;
 
 
 
@@ -23,7 +24,7 @@ namespace WolvenKit.Functionality.Helpers
         public static bool ShowGuidedTour { get; set; } = false;
 
 
-
+        public static bool AllowVideoPreview { get; set; } = false;
 
 
 
