@@ -2,33 +2,34 @@ name: WolvenKit-Nightly
 on:
   schedule:
     - cron: "0 12 * * *"
-  workflow_dispatch:
-    branches:
-      - master
 
 jobs:
-  build:
+  wkit-win:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout
+      uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
-        
-    - name: Clean
+    - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
-    - name: Install dependencies
+    - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
-    - name: Build
+
+    - name: dotnet build WolvenKit.sln
       run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: artifact
+        name: artifact_wkit-windows
         path: ./WolvenKit/bin/Release/net5.0-windows
-    - uses: papeloto/action-zip@v1
+
+    - name: zip
+      uses: papeloto/action-zip@v1
       with:
         files: ./WolvenKit/bin/Release/net5.0-windows
         dest: wolvenkit.zip
