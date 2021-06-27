@@ -30,13 +30,13 @@ public static class ModuleInitializer
 
         // Orchestra
         serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
+        serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
+
 
         // Wkit
-
         var config = SettingsManager.Load();
         serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
 
-        serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
         serviceLocator.RegisterInstance(typeof(IProgress<double>), new MockProgressService());
         serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
 

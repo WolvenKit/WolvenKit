@@ -82,7 +82,6 @@ namespace WolvenKit.Functionality.Controllers
         public async Task HandleStartup()
         {
             var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
-            assetBrowserViewModel.LoadVisibility = Visibility.Visible;
 
             //await Task.Run( LoadStringsManager);
             LoadStringsManager();

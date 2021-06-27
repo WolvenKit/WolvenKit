@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -34,6 +35,7 @@ namespace WolvenKit.Functionality.Services
         string WccLitePath { get; set; }
 
         #endregion Properties
+
     }
 
     public interface ISettingsManager : ISettingsDto
@@ -46,7 +48,9 @@ namespace WolvenKit.Functionality.Services
 
         string MaterialRepositoryPath { get; set; }
 
-        #region Methods
+        string GetOodleDll();
+        string GetRED4OodleDll();
+
 
         string GetW3GameContentDir();
 
@@ -60,7 +64,6 @@ namespace WolvenKit.Functionality.Services
 
         string GetRED4GameModDir();
 
-        #region Properties
 
         public static string GetWolvenkitAppData()
         {
@@ -167,18 +170,13 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        #endregion Properties
-
         void Save();
 
-        #endregion Methods
-
-        bool ShowFirstTimeSetupForUser();
-
         Color GetThemeAccent();
-
         void SetThemeAccent(Color color);
 
         string GetVersionNumber();
+        List<string> IsHealthy();
+
     }
 }

@@ -78,6 +78,15 @@
                                  Text="{Binding CP77ExePath}"
                                  TextChanged="Field_TextChanged"
                                  VerifyFunc="VerifyFile" />
+                                <TextBlock Visibility="Collapsed"
+                                    x:Name="ValidationText"
+                                    TextWrapping="Wrap"
+                                    MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
+                                   Background="OrangeRed"
+                                   FontSize="14"
+                                   TextAlignment="Center"
+                                   Text ="TEMP"
+                                />
                             </StackPanel>
                         </StackPanel>
 

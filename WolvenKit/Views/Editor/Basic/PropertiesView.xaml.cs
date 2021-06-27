@@ -69,6 +69,19 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
+            if (ViewModel is PropertiesViewModel vm)
+            {
+                //vm.SetExeCommand += (obj) =>
+                //{
+                //    var x = obj as string;
+
+                //    var appControl = new AppControl();
+                //    appControl.ExeName = x.Split('|')[0];
+                //    appControl.Args = x.Split('|')[1];
+                //    //StaticReferences.RibbonViewInstance.VideoDrawerContent.Child = appControl;
+                //};
+            }
+
             switch (property.PropertyName)
             {
                 case nameof(PropertiesViewModel.LoadedBitmapFrame):

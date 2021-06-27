@@ -41,7 +41,6 @@ namespace WolvenKit
 
             // Set service locator.
             var serviceLocator = ServiceLocator.Default;
-            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
             serviceLocator.RegisterType<IRibbonService, RibbonService>();
 
@@ -62,7 +61,9 @@ namespace WolvenKit
 
             StaticReferences.Logger.Info("Initializing Shell");
             await Initializations.InitializeShell();
-            Helpers.ShowFirstTimeSetup(settings);
+            var growl = ServiceLocator.Default.ResolveType<IGrowlNotificationService>();
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            Helpers.ShowFirstTimeSetup(settings, growl);
 
             StaticReferences.Logger.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
@@ -125,7 +126,6 @@ namespace WolvenKit
             else
             {
                 StaticReferences.AllowVideoPreview = false;
-
             }
         }
     }

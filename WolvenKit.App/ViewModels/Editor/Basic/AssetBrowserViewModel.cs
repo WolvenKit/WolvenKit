@@ -212,8 +212,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public void ReInit(bool loadmods)
         {
-            LoadVisibility = Visibility.Visible;
-
             _managers = _gameController.GetController().GetArchiveManagers(loadmods);
 
             Extensions = _gameController
@@ -227,7 +225,6 @@ namespace WolvenKit.ViewModels.Editor
             PreviewVisible = false;
 
             _notificationService.Success($"Asset Browser is initialized");
-            LoadVisibility = Visibility.Collapsed;
         }
 
         protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
