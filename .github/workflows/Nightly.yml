@@ -2,6 +2,7 @@ name: WolvenKit-Nightly
 on:
   schedule:
     - cron: "0 12 * * *"
+  workflow_dispatch:
 
 jobs:
   wkit-win:
