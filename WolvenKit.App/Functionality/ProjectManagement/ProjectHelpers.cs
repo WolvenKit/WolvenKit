@@ -25,7 +25,7 @@ namespace WolvenKit.Functionality.ProjectManagement
             var openFileService = ServiceLocator.Default.ResolveType<IOpenFileService>();
             var messageService = ServiceLocator.Default.ResolveType<IMessageService>();
 
-            switch (await messageService.ShowAsync("The file doesn't seem to exist. Would you like to locate it?" +
+            switch (await messageService.ShowAsync("The file doesn't seem to exist. Would you like to locate it? " +
                                                    "Select No to remove the project from your recent items.",
                     "File not found",
                     MessageButton.YesNoCancel))
@@ -48,7 +48,7 @@ namespace WolvenKit.Functionality.ProjectManagement
                         parameter = result.FileName;
 
                         var items = recentlyUsedItemsService.Items
-                            .Where(_ => _.Name == parameter)
+                            .Where(_ => Path.GetFileName(_.Name) == Path.GetFileName(parameter))
                             .ToList();
                         if (items.Count > 0)
                         {

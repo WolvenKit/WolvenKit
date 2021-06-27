@@ -1,5 +1,8 @@
+using System.IO;
+using System.Windows;
 using Catel.IoC;
 using Catel.Services;
+using WolvenKit.Core;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
@@ -39,6 +42,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             {
                 _firstSetupWizardViewModel.OpenCP77GamePathCommand.Execute(null);
             }
+            validateAllFields();
         }
 
         private async void DepotPathBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -70,9 +74,27 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
             _firstSetupWizardViewModel.AllFieldIsValid = w3IsValid && cp77IsValid;
         }
 
-        private HandyControl.Data.OperationResult<bool> VerifyFile(string str) => System.IO.File.Exists(str)
-                ? HandyControl.Data.OperationResult.Success()
-                : HandyControl.Data.OperationResult.Failed();
+        private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
+        {
+            if (File.Exists(str) && Path.GetFileName(str).Equals(Constants.Exe))
+            {
+                var oodle = Path.Combine(new FileInfo(str).Directory.FullName, Constants.Oodle);
+                if (!File.Exists(oodle))
+                {
+                    ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    ValidationText.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty,
+                        $"Oodle dll was not found with the game. Please make sure you have {Constants.Oodle} next to your game executable.");
+                    return HandyControl.Data.OperationResult.Failed();
+                }
+                ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                return HandyControl.Data.OperationResult.Success();
+            }
+
+            ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            ValidationText.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty,
+                "Game exe location was not found.");
+            return HandyControl.Data.OperationResult.Failed();
+        }
 
         private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()

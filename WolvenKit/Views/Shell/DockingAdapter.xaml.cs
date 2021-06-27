@@ -83,7 +83,7 @@ namespace WolvenKit.Views.Shell
             // if (XSETTINGX){ SetLayoutToDefault();}else{
             var serviceLocator = ServiceLocator.Default;
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            if (settings.ShowFirstTimeSetupForUser())
+            if (settings.IsHealthy().Any())
             {
                 SetLayoutToDefault();
             }

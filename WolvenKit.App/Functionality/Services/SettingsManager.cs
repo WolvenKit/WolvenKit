@@ -9,6 +9,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 using Catel.Data;
+using Orchestra.Services;
+using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
 
@@ -67,7 +69,7 @@ namespace WolvenKit.Functionality.Services
             using (mlc)
             {
                 // Load assembly into MetadataLoadContext.
-                var assembly = mlc.LoadFromAssemblyPath("WolvenKit.dll");
+                var assembly = mlc.LoadFromAssemblyPath(Constants.WolvenKitDll);
                 var name = assembly.GetName();
                 return name.Version.ToString();
             }
@@ -128,6 +130,8 @@ namespace WolvenKit.Functionality.Services
 
         #region methods
 
+        #region red4
+
         public string GetRED4GameRootDir()
         {
             if (string.IsNullOrEmpty(CP77ExecutablePath))
@@ -150,6 +154,14 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
+        public string GetOodleDll() =>
+            Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) ?? string.Empty, Constants.Oodle);
+        public string GetRED4OodleDll() => Path.Combine(GetRED4GameRootDir(), "bin", "x64", Constants.Oodle);
+
+        #endregion
+
+        #region red3
+
         public string GetW3GameContentDir() => Path.Combine(GetW3GameRootDir(), "content");
 
         public string GetW3GameDlcDir() => Path.Combine(GetW3GameRootDir(), "DLC");
@@ -167,9 +179,24 @@ namespace WolvenKit.Functionality.Services
             return fi.Directory is { Parent: { Parent: { } } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
         }
 
-        public bool IsHealthy()
+        #endregion
+
+        public List<string> IsHealthy()
         {
-            return File.Exists(CP77ExecutablePath);
+            var messages = new List<string>();
+
+            if (!File.Exists(CP77ExecutablePath))
+            {
+                messages.Add("Game exe location was not found.");
+                return messages;
+            }
+
+            if (!File.Exists(GetOodleDll()))
+            {
+                messages.Add($"Oodle dll was not found with the game. Please make sure you have {Constants.Oodle} next to your game executable.");
+            }
+
+            return messages;
         }
 
         private static SettingsManager FromDto(SettingsDto settings)
@@ -256,8 +283,6 @@ namespace WolvenKit.Functionality.Services
             var json = JsonSerializer.Serialize(new SettingsDto(this), options);
             File.WriteAllText(ConfigurationPath, json);
         }
-
-        public bool ShowFirstTimeSetupForUser() => !IsHealthy();
 
         #endregion methods
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -61,7 +62,8 @@ namespace WolvenKit.Functionality.Services
         string GetRED4GameRootDir();
         string GetRED4GameModDir();
 
-
+        string GetOodleDll();
+        string GetRED4OodleDll();
 
         #region Properties
 
@@ -169,10 +171,10 @@ namespace WolvenKit.Functionality.Services
 
         #endregion Methods
 
-        bool ShowFirstTimeSetupForUser();
         Color GetThemeAccent();
         void SetThemeAccent(Color color);
 
         string GetVersionNumber();
+        List<string> IsHealthy();
     }
 }

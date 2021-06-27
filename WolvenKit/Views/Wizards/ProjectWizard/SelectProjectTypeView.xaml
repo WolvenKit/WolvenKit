@@ -21,7 +21,7 @@
                      Margin="22,0,0,0"
                      Columns="1"
                      Rows="2">
-                        <RadioButton
+                        <RadioButton Visibility="Collapsed"
                          Margin="10,10,0,0"
                          Background="{DynamicResource SecondaryRegionBrush}"
                          Content="{x:Static local:ProjectWizardModel.WitcherGameName}"
