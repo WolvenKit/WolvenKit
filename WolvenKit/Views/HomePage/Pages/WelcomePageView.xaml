@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:catel="http://schemas.catelproject.com"
     xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
-    xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
@@ -32,7 +31,6 @@
                         Rect="0,0,15,15" />
                 </DrawingBrush.Drawing>
             </DrawingBrush>
-
         </ResourceDictionary>
     </catel:UserControl.Resources>
 
@@ -419,7 +417,6 @@
 
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="500" />
-
             </Grid.ColumnDefinitions>
 
             <Border
@@ -492,8 +489,6 @@
                         Text="Recent Projects" />
                 </StackPanel>
                 <hc:Divider Margin="0,0,0,0" />
-
-
             </StackPanel>
             <syncfusion:CardView
                 Name="cardView"
@@ -560,7 +555,6 @@
                                 <Grid>
                                     <StackPanel Margin="5" Orientation="Vertical">
                                         <StackPanel Margin="5" Orientation="Horizontal">
-
 
                                             <Border
                                                 Height="25"
@@ -641,8 +635,6 @@
                                             </Button>
                                         </StackPanel>
                                     </StackPanel>
-
-
                                 </Grid>
                             </Border>
                         </StackPanel>
