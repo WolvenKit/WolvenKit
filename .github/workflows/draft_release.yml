@@ -24,6 +24,7 @@ jobs:
       
   wkit-win:
     runs-on: windows-latest
+    needs: create_release
 
     steps:
     - name: checkout
@@ -63,6 +64,7 @@ jobs:
 
   console-win:
     runs-on: windows-latest
+    needs: create_release
 
     steps:
     - name: checkout
