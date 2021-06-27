@@ -24,7 +24,7 @@ namespace WolvenKit.Functionality.Helpers
         public static bool ShowGuidedTour { get; set; } = false;
 
 
-
+        public static bool AllowVideoPreview { get; set; } = false;
 
 
 

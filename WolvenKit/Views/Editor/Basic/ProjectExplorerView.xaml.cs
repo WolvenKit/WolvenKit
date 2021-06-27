@@ -169,9 +169,13 @@ namespace WolvenKit.Views.Editor
             StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
         }
 
-
         private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            if (!StaticReferences.AllowVideoPreview)
+            {
+                return;
+            }
+
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
             {
                 SfTreeGrid dg = sender as SfTreeGrid;

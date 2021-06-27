@@ -94,21 +94,38 @@ namespace WolvenKit
             // Message system for video tool.
 
             // Init FFMPEG libraries.
-
-            if (!File.Exists(@"Resources\Media\test.exe"))
+            if (ApplicationHelper.IsConnectedToInternet())
             {
-                try
+
+                if (!File.Exists(@"Resources\Media\test.exe"))
                 {
-                    var uri = new Uri("https://filebin.net/9nrr98uwas3k1auo/binkpl64.exe");
-                    var client = new HttpClient();
-                    var response = await client.GetAsync(uri);
-                    using var fs = new FileStream(@"Resources\Media\test.exe",
-                        FileMode.CreateNew);
-                    await response.Content.CopyToAsync(fs);
+                    try
+                    {
+                        var uri = new Uri("https://filebin.net/9nrr98uwas3k1auo/binkpl64.exe");
+                        var client = new HttpClient();
+                        var response = await client.GetAsync(uri);
+                        using var fs = new FileStream(@"Resources\Media\test.exe",
+                            FileMode.CreateNew);
+                        await response.Content.CopyToAsync(fs);
+
+                        if (File.Exists(@"Resources\Media\test.exe"))
+                        {
+                            StaticReferences.AllowVideoPreview = true;
+                        }
+                    }
+                    catch
+                    {
+                    }
                 }
-                catch
+                else
                 {
+                    StaticReferences.AllowVideoPreview = true;
                 }
+            }
+            else
+            {
+                StaticReferences.AllowVideoPreview = false;
+
             }
         }
     }

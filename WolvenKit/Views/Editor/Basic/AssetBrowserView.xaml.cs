@@ -278,6 +278,11 @@ namespace WolvenKit.Views.Editor
 
         private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (!StaticReferences.AllowVideoPreview)
+            {
+                return;
+            }
+
             if (InnerList.SelectedItem == null)
             {
                 return;
