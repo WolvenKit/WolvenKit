@@ -23,18 +23,18 @@ namespace WolvenKit.Views.Editor
             InitializeComponent();
             GlobalPEView = this;
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
-
-
         }
 
-
         private bool _isfirsttime { get; set; } = true;
+
         private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
         {
             if (ViewModel is not ProjectExplorerViewModel viewModel)
             {
                 return;
             }
+            if (TreeGrid == null)
+            { return; }
             if (TreeGrid.View != null)
             {
                 if (!_isfirsttime)
@@ -59,7 +59,6 @@ namespace WolvenKit.Views.Editor
 
         //private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         //{
-
         //    Trace.WriteLine("hello");
         //    //if (e.NewItems != null)
         //    //{
@@ -80,7 +79,6 @@ namespace WolvenKit.Views.Editor
         //    //{
         //    //    TreeGrid.ExpandNode(rootnode);
         //    //}
-
 
         //    Trace.WriteLine(e.Action.ToString());
         //}
@@ -146,8 +144,8 @@ namespace WolvenKit.Views.Editor
 
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
 
-
         private string _currentFolderQuery = "";
+
         private bool FilterNodes(object o) => o is FileModel data && data.Name.Contains(_currentFolderQuery);
 
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
@@ -159,14 +157,11 @@ namespace WolvenKit.Views.Editor
             // filter programmatially
             TreeGrid.View.Filter = FilterNodes;
             TreeGrid.View.RefreshFilter();
-
         }
-
-
 
         private void UserControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-                    StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+            StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
         }
     }
 }

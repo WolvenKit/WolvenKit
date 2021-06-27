@@ -12,6 +12,8 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         /// </summary>
         public static IGrowlNotificationService Growl => ServiceLocator.Default.ResolveType<IGrowlNotificationService>();
 
+        public static bool IsShowNotificationsEnabled { get; set; }
+
         #endregion Properties
 
         #region Methods

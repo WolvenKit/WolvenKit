@@ -29,6 +29,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.ViewModels.Editor;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.Editor
 {
@@ -76,17 +77,14 @@ namespace WolvenKit.Views.Editor
             if (propertiesViewModel.State is DockState.AutoHidden or DockState.Hidden)
             { return; }
 
-
             if (propertiesViewModel.canShowPrev)
             {
                 propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
-
             }
             else
             {
                 return;
             }
-
 
             propertiesViewModel.AB_MeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
@@ -147,7 +145,6 @@ namespace WolvenKit.Views.Editor
                 }
                 catch
                 {
-
                 }
             }
 
@@ -155,7 +152,7 @@ namespace WolvenKit.Views.Editor
             {
                 selectedGameFile.Extract(fs);
             }
-            
+
             if (File.Exists(endPath))
             {
                 propertiesViewModel.AddAudioItem(endPath);
@@ -249,6 +246,7 @@ namespace WolvenKit.Views.Editor
         }
 
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAllNodes();
+
         public void ExpandAllNodes() => LeftNavigation.ExpandAllNodes();
 
         private void Collapse_OnClick(object sender, RoutedEventArgs e) => CollapseNode();
@@ -272,6 +270,7 @@ namespace WolvenKit.Views.Editor
         {
             if (ViewModel is AssetBrowserViewModel vm)
             {
+                NotificationHelper.IsShowNotificationsEnabled = false;
                 vm.AddSelectedCommand.SafeExecute();
             }
         }

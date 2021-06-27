@@ -18,6 +18,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 
 namespace WolvenKit.ViewModels.Editor
@@ -108,6 +109,7 @@ namespace WolvenKit.ViewModels.Editor
 
         // binding properties. do not make private
         public bool PreviewVisible { get; set; }
+
         public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
         public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
@@ -136,9 +138,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ObservableCollection<object> RightSelectedItems { get; set; }
 
-
-
-
         public List<string> Extensions { get; set; }
         public List<string> Classes { get; set; }
         public string SelectedClass { get; set; }
@@ -159,6 +158,11 @@ namespace WolvenKit.ViewModels.Editor
                 if (o is FileEntryViewModel fileVm)
                 {
                     AddFile(fileVm);
+
+                    if (RightSelectedItems.LastOrDefault() == o)
+                    {
+                        NotificationHelper.IsShowNotificationsEnabled = true;
+                    }
                 }
             }
         }
@@ -257,7 +261,6 @@ namespace WolvenKit.ViewModels.Editor
                 .Select(_ => new FileEntryViewModel(_));
         }
 
-        
         private void SetupToolDefaults()
         {
             ContentId = ToolContentId;

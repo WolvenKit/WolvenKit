@@ -97,6 +97,42 @@
                                     <Image.Style>
                                         <Style TargetType="Image">
                                             <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding Extension}" Value="glb">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="gltf">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="tga">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="dds">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="bmp">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="jpg">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="jpeg">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="png">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding Extension}" Value="Wav">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="Mp3">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="png">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                </DataTrigger>
+
                                                 <DataTrigger Binding="{Binding Extension}" Value="w2cent">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/entity.svg}" />
                                                 </DataTrigger>
@@ -807,7 +843,6 @@
                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                 </ContextMenu>
             </syncfusion:SfTreeGrid.ContextMenu>
-
         </syncfusion:SfTreeGrid>
 
         <hc:SearchBar

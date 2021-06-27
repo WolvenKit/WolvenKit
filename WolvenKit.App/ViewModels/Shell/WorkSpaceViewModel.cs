@@ -63,6 +63,7 @@ namespace WolvenKit.ViewModels.Shell
         )
         {
             #region dependency injection
+
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
@@ -88,7 +89,6 @@ namespace WolvenKit.ViewModels.Shell
             ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
-
 
             ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
             ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
@@ -181,13 +181,12 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
-           // commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
+            // commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.ShowImportExportTool, ShowImportExportToolCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.ShowCodeEditor, ShowCodeEditorCommand, this);
-
 
             commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
@@ -218,6 +217,7 @@ namespace WolvenKit.ViewModels.Shell
         #region commands
 
         public ICommand FileSelectedCommand { get; private set; }
+
         private bool CanSelectFile(FileModel model) => true;
 
         private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
@@ -271,13 +271,14 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowAudioToolCommand { get; private set; }
-        public ICommand ShowVideoToolCommand { get; private set; }
 
+        public ICommand ShowVideoToolCommand { get; private set; }
 
         /// <summary>
         /// Displays the BulkEditor.
         /// </summary>
         public ICommand ShowBulkEditorCommand { get; private set; }
+
         public ICommand ShowCodeEditorCommand { get; private set; }
 
         /// <summary>
@@ -294,6 +295,7 @@ namespace WolvenKit.ViewModels.Shell
         /// Displays the AssetBrowser.
         /// </summary>
         public ICommand ShowGameDebuggerToolCommand { get; private set; }
+
         public ICommand ShowImportExportToolCommand { get; private set; }
 
         /// <summary>
@@ -366,11 +368,11 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         public ICommand ShowWccToolCommand { get; private set; }
 
-        #endregion
+        #endregion commands
 
         #region command implementation
 
-       // public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
+        // public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
         public void ExecuteVideoTool()
         {
@@ -379,9 +381,7 @@ namespace WolvenKit.ViewModels.Shell
             mediator.SendMessage<bool>(true);
         }
 
-
         private void ExecutePackMod() => _gameControllerFactory.GetController().PackAndInstallProject();
-
 
         private bool CanBackupMod() => _projectManager.ActiveProject != null;
 
@@ -398,16 +398,16 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
 
         private bool CanShowAudioTool() => _projectManager.ActiveProject != null;
-        private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
 
+        private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
 
         private bool CanShowBulkEditor() => false;
 
         private bool CanShowCR2WToTextTool() => false;
 
         private bool CanShowCsvEditor() => _projectManager.ActiveProject != null;
-        private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
 
+        private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
 
         private bool CanShowGameDebuggerTool() => false;
 
@@ -451,6 +451,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             // TODO: Implement this
         }
+
         private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
 
         private void ExecuteBulkEditor() => BulkEditorVM.IsVisible = false;
@@ -460,7 +461,6 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = !CsvEditorVM.IsVisible;
 
         private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
-
 
         private void ExecuteImporterTool() => ImporterToolVM.IsVisible = false;
 
@@ -472,9 +472,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteNewFile()
         {
-
-
-
             //TODO
         }
 
@@ -521,7 +518,6 @@ namespace WolvenKit.ViewModels.Shell
             //  }
         }
 
-
         private void ExecuteShowImportUtility() => ImportViewModel.IsVisible = !ImportViewModel.IsVisible;
 
         private void ExecuteShowInstaller()
@@ -544,6 +540,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanSaveAll() => _projectManager.ActiveProject is EditorProject proj
                                      && Files?.Count > 0;
+
         private void ExecuteSaveAll()
         {
             foreach (var file in Files)
@@ -554,9 +551,10 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanSaveFile() => _projectManager.ActiveProject is EditorProject proj
                                       && ActiveDocument != null;
+
         private void ExecuteSaveFile() => Save(ActiveDocument);
 
-        #endregion commands
+        #endregion command implementation
 
         #region properties
 
@@ -736,6 +734,7 @@ namespace WolvenKit.ViewModels.Shell
                 return _CsvEditorVM;
             }
         }
+
         public GameDebuggerToolViewModel GameDebuggerToolVM
         {
             get
@@ -755,8 +754,6 @@ namespace WolvenKit.ViewModels.Shell
                 return _importExportToolViewModel;
             }
         }
-
-        
 
         public ImporterToolViewModel ImporterToolVM
         {
@@ -857,7 +854,8 @@ namespace WolvenKit.ViewModels.Shell
                 return _WccToolVM;
             }
         }
-        #endregion
+
+        #endregion ToolViewModels
 
         /// <summary>
         /// Event is raised when AvalonDock (or the user) selects a new document.
@@ -889,7 +887,6 @@ namespace WolvenKit.ViewModels.Shell
             .OfType<DocumentViewModel>()
             .Where(_ => _.State == DockState.Document)
             .ToList();
-
 
         /// <summary>
         /// Gets an enumeration of all currently available tool window viewmodels.
@@ -1076,11 +1073,14 @@ namespace WolvenKit.ViewModels.Shell
                 case ".DDS":
                 //text
 
-
                 case ".XML":
                 case ".TXT":
                 case ".WS":
                 // other
+                case ".MP3":
+                case ".WAV":
+                case ".GLB":
+                case ".GLTF":
                 case ".FBX":
                 case ".XCF":
                 case ".PSD":
@@ -1097,24 +1097,17 @@ namespace WolvenKit.ViewModels.Shell
                     ShellExecute(fullpath);
                     break;
 
-
-
-
                 // VIDEO
                 case ".BK2":
                     OpenVideoFile(fullpath);
                     break;
 
-
-
-
-
                 // AUDIO
-
 
                 case ".WEM":
                     OpenAudioFile(fullpath);
                     break;
+
                 case ".SUBS":
                     PolymorphExecute(fullpath, ".txt");
                     break;
@@ -1138,8 +1131,7 @@ namespace WolvenKit.ViewModels.Shell
 
             void OpenAudioFile(string full)
             {
-
-                // commented for testing 
+                // commented for testing
 
                 //var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
                 //ExecuteAudioTool();
@@ -1178,21 +1170,13 @@ namespace WolvenKit.ViewModels.Shell
 
         private void OpenVideoFile(string fullpath)
         {
-
             var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
             mediator.SendMessage<int>(0);
 
             mediator.SendMessage<bool>(true);
 
             mediator.SendMessage<string>(fullpath);
-
-
-
         }
-
-
-
-
 
         #endregion methods
     }
