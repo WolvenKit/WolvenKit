@@ -58,6 +58,8 @@ namespace WolvenKit.Views.Editor
             //this.Unloaded += new RoutedEventHandler((s, e) => { appControl.Dispose(); });
         }
 
+        private static HandyControl.Controls.GlowWindow XoWindow = new HandyControl.Controls.GlowWindow();
+
         protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnViewModelPropertyChanged(e);

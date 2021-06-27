@@ -74,9 +74,8 @@
                                     <syncfusion:TreeGridTextColumn
                                         HeaderText="Name"
                                         HorizontalHeaderContentAlignment="Left"
-                                        MappingName="Name"
                                         ImmediateUpdateColumnFilter="True"
-                                        >
+                                        MappingName="Name">
                                         <syncfusion:TreeGridTextColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -146,10 +145,10 @@
 
                                 <syncfusion:SfTreeGrid.ExpanderContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Expand" Click="Expand_OnClick"  />
-                                        <MenuItem Header="Expand all" Click="ExpandAll_OnClick" />
-                                        <MenuItem Header="Collapse" Click="Collapse_OnClick" />
-                                        <MenuItem Header="Collapse all" Click="CollapseAll_OnClick" />
+                                        <MenuItem Click="Expand_OnClick" Header="Expand" />
+                                        <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                                        <MenuItem Click="Collapse_OnClick" Header="Collapse" />
+                                        <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                                     </ContextMenu>
                                 </syncfusion:SfTreeGrid.ExpanderContextMenu>
 
@@ -163,11 +162,9 @@
                                 Background="{DynamicResource ContentBackground}"
                                 BorderBrush="{DynamicResource BorderBrush}"
                                 FlowDirection="LeftToRight"
-                                Text="search"
                                 SearchStarted="FolderSearchBar_OnSearchStarted"
                                 ShowClearButton="True"
-                                >
-                            </hc:SearchBar>
+                                Text="search" />
 
                             <Button
                                 HorizontalAlignment="Right"
@@ -231,7 +228,12 @@
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Add selected items to Project" Click="RightContextMenuAddAll_OnClick" />
+                                        <MenuItem Click="RightContextMenuAddAll_OnClick" Header="Add selected items to Project" />
+                                        <MenuItem
+                                            x:Name="VidPreviewMenuItem"
+                                            Click="VidPreviewMenuItem_Click"
+                                            Header="Preview BK2" />
+
                                     </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
 

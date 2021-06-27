@@ -1099,7 +1099,6 @@ namespace WolvenKit.ViewModels.Shell
 
                 // VIDEO
                 case ".BK2":
-                    OpenVideoFile(fullpath);
                     break;
 
                 // AUDIO

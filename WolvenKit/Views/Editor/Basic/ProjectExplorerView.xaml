@@ -46,6 +46,7 @@
             IsReadOnly="True"
             ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
+            MouseDown="TreeGrid_MouseDown"
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"

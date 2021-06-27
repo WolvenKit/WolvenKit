@@ -1186,7 +1186,10 @@
                     Header="The Witcher 3" />
             </syncfusion:RibbonTab>
             <!--  TOOLS TAB  -->
-            <syncfusion:RibbonTab Caption="TOOLS" IsChecked="False">
+            <syncfusion:RibbonTab
+                Caption="TOOLS"
+                IsChecked="False"
+                Visibility="Collapsed">
 
                 <!--  Tools bar  -->
 
