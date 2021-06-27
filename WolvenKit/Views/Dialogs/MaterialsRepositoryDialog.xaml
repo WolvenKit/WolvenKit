@@ -7,8 +7,9 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Materials Repository Generator"
-    Width="600"
+    Width="650"
     Height="450"
+    Closed="Window_Closed"
     ResizeMode="NoResize"
     SizeToContent="Height"
     mc:Ignorable="d">
@@ -22,70 +23,62 @@
         </ResourceDictionary>
     </hc:Window.Resources>
 
-    <Grid Background="{DynamicResource RegionBrush}"
-          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hc:Window}}}">
+    <Grid Background="{DynamicResource RegionBrush}" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hc:Window}}}">
         <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Margin="15"
-                    VerticalAlignment="Center"
-                    Text="Do you want to generate a Materials Repository?" />
-
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
                 <Border
-                    Margin="10"
-                    VerticalAlignment="Center"
+                    Margin="15,15,15,15"
+                    VerticalAlignment="Stretch"
                     Style="{StaticResource BorderTipWarning}">
-                    <TextBlock Text="Warning this takes up quite a bit of space locally." />
+                    <TextBlock Text="Warning this takes up to or more than 30GB's of space locally. (Default Textures output is TGA)" />
                 </Border>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" IsEnabled="False">
-                <TextBox
+            <StackPanel
+                HorizontalAlignment="Center"
+                IsEnabled="False"
+                Orientation="Horizontal">
+                <TextBlock
                     Width="150"
                     HorizontalAlignment="Stretch"
-                    IsEnabled="False"
-                    Text="Game archives path"
-                    />
+                    Text="Game archives path" />
                 <TextBox
                     x:Name="ArchivesTextBox"
-                    Width="400"
+                    Width="390"
                     HorizontalAlignment="Stretch"
                     IsEnabled="False"
                     Text="{Binding ArchivesFolderPath, Mode=OneWay}" />
                 <Button
                     x:Name="ArchivesButton"
+                    Margin="5,0,0,0"
                     Click="ArchivesButton_Click"
                     Content="Find" />
-
-
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBox
+            <StackPanel
+                Margin="0,15,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
                     Width="150"
                     HorizontalAlignment="Stretch"
-                    IsEnabled="False"
                     Text="Materials Repository Path" />
                 <TextBox
                     x:Name="MaterialsTextBox"
-                    Width="400"
+                    Width="390"
                     HorizontalAlignment="Stretch"
                     hc:InfoElement.Necessary="True"
                     IsEnabled="False"
                     Text="{Binding MaterialsDepotPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     x:Name="MaterialsButton"
+                    Margin="5,0,0,0"
                     Click="MaterialsButton_Click"
                     Content="Find" />
-
-
             </StackPanel>
             <Button
                 Margin="15"
                 HorizontalAlignment="Stretch"
                 Click="GenerateButton_Click"
                 Content="Generate" />
-
-
         </StackPanel>
-
     </Grid>
 </hc:Window>

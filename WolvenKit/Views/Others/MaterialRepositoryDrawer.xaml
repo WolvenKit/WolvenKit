@@ -32,7 +32,10 @@
         <Border
             Grid.Row="1"
             Grid.RowSpan="3"
-            Grid.Column="0">
+            Grid.Column="0"
+            Background="{DynamicResource ContentBackgroundAlt}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1">
             <ListBox
                 x:Name="Henry"
                 ItemsSource="{Binding Folders, Mode=OneWay}"
@@ -63,33 +66,17 @@
         <Border
             Grid.Row="1"
             Grid.RowSpan="2"
-            Grid.Column="1">
+            Grid.Column="1"
+            Background="{DynamicResource ContentBackgroundAlt}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1">
 
             <ListBox
                 x:Name="x"
-                ItemsSource="{Binding ImageSources, Mode=OneWay}"
                 SelectionChanged="x_SelectionChanged"
-                SelectionMode="Single">
-
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image
-                                Height="16"
-                                Margin="5"
-                                Source="{Binding localBmp}" />
-                            <TextBlock VerticalAlignment="Center" Text="{Binding SafeName}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                SelectionMode="Single" />
         </Border>
-        <hc:HoneycombPanel
-            x:Name="HoneyCombPanelAccess"
-            Grid.Row="1"
-            Grid.RowSpan="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2" />
+
         <syncfusion:SfImageEditor
             x:Name="bold"
             Grid.Row="3"

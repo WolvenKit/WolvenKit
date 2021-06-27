@@ -1714,7 +1714,18 @@
                 BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                 BorderThickness="0"
                 CornerRadius="0,0,0,0">
-                <others:MaterialRepositoryDrawer />
+                <Grid>
+
+                    <others:MaterialRepositoryDrawer />
+                    <Button
+                        Width="150"
+                        Height="30"
+                        Margin="20"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Click="Button_Click_2"
+                        Content="Close" />
+                </Grid>
             </Border>
         </hc:Drawer>
 

@@ -121,7 +121,18 @@ namespace WolvenKit.Views.Shell
             DXEngineSettings.Current.GraphicsProfiles = DXEngineSettings.Current.SystemCapabilities.CreateArrayOfRecommendedGraphicsProfiles(selectedGraphicsProfile);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e) => new MaterialsRepositoryDialog().Show();
+        public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+
+        {
+            if (MaterialsRepositoryDia == null)
+            {
+                var x = new MaterialsRepositoryDialog();
+                MaterialsRepositoryDia = x;
+                x.Show();
+            }
+        }
 
         private void RibbonButton_Click(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
 
@@ -140,5 +151,12 @@ namespace WolvenKit.Views.Shell
         private void ExpandSingleAB_Click(object sender, RoutedEventArgs e) => AssetBrowserView.GlobalABView.ExpandAllNodes();
 
         private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => AssetBrowserView.GlobalABView.CollapseNode();
+
+        /// <summary>
+        /// Closes material drawer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click_2(object sender, RoutedEventArgs e) => MatRepoDrawer.SetCurrentValue(HandyControl.Controls.Drawer.IsOpenProperty, false);
     }
 }

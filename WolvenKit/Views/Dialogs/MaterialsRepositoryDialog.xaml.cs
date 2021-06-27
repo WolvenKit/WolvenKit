@@ -11,8 +11,10 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.Views.Shell;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.Views.Dialogs
@@ -28,9 +30,7 @@ namespace WolvenKit.Views.Dialogs
         private readonly ModTools _modTools;
         private readonly ILoggerService _loggerService;
 
-
         private readonly string _archivesFolderPath;
-
 
         public MaterialsRepositoryDialog()
         {
@@ -41,7 +41,6 @@ namespace WolvenKit.Views.Dialogs
             _modTools = ServiceLocator.Default.ResolveType<ModTools>();
             _progress = ServiceLocator.Default.ResolveType<IProgress<double>>();
             _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
-
 
             _archivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");
             MaterialsDepotPath = _settingsManager.MaterialRepositoryPath;
@@ -54,7 +53,7 @@ namespace WolvenKit.Views.Dialogs
 
         private async void GenerateButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            await Task.Run(() => GenerateMaterialRepo(new DirectoryInfo(MaterialsDepotPath), EUncookExtension.dds));
+            await Task.Run(() => GenerateMaterialRepo(new DirectoryInfo(MaterialsDepotPath), EUncookExtension.tga));
         }
 
         private void GenerateMaterialRepo(DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
@@ -116,7 +115,6 @@ namespace WolvenKit.Views.Dialogs
 
                 _loggerService.Success($"{key}: Unbundled {fileslist.Count} files.");
             }
-            
 
             // uncook
             var exportArgs =
@@ -149,14 +147,13 @@ namespace WolvenKit.Views.Dialogs
             }
         }
 
-
         private void GenerateMaterials(object obj)
         {
         }
 
         private void MaterialsButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog {IsFolderPicker = true};
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog { IsFolderPicker = true };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 MaterialsTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, dialog.FileName);
@@ -176,6 +173,10 @@ namespace WolvenKit.Views.Dialogs
             //    ArchivesTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, dialog.FileName);
             //}
         }
-    }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            RibbonView.MaterialsRepositoryDia = null;
+        }
+    }
 }
