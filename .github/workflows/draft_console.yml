@@ -42,12 +42,12 @@ jobs:
       uses: actions/upload-artifact@v2.2.1
       with:
         name: artifact_console-windows
-        path: ./WolvenKit.CLI/bin/Release/net5.0
+        path: ./WolvenKit.CLI/bin/Release
 
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./WolvenKit.CLI/bin/Release/net5.0
+        files: ./WolvenKit.CLI/bin/Release
         dest: wolvenkit_console.zip
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1

@@ -24,7 +24,7 @@ jobs:
       run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
 
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
+      uses: actions/upload-artifact@v2
       with:
         name: artifact_wkit-windows
         path: ./WolvenKit/bin/Release/net5.0-windows
