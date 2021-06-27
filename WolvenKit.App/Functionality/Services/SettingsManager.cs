@@ -11,6 +11,7 @@ using System.Windows.Media;
 using Catel.Data;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -96,6 +97,8 @@ namespace WolvenKit.Functionality.Services
         {
             ThemeAccentString = color.ToString();
         }
+
+        public EAnimals  CatFactAnimal { get; set; } =  EAnimals.Cat;
 
         private string _assemblyVersion;
 
@@ -186,7 +189,8 @@ namespace WolvenKit.Functionality.Services
                 CP77ExecutablePath = settings.CP77ExecutablePath,
                 MaterialRepositoryPath = settings.MaterialRepositoryPath,
                 W3ExecutablePath = settings.W3ExecutablePath,
-                WccLitePath = settings.WccLitePath
+                WccLitePath = settings.WccLitePath,
+                CatFactAnimal = settings.CatFactAnimal
             };
             return config;
         }
@@ -281,7 +285,11 @@ namespace WolvenKit.Functionality.Services
             MaterialRepositoryPath = settings.MaterialRepositoryPath;
             W3ExecutablePath = settings.W3ExecutablePath;
             WccLitePath = settings.WccLitePath;
+
+            CatFactAnimal = settings.CatFactAnimal;
         }
+
+        public EAnimals CatFactAnimal { get; set; }
 
         public bool CheckForUpdates { get; set; }
 

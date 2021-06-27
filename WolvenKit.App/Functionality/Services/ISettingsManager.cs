@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -12,22 +13,19 @@ namespace WolvenKit.Functionality.Services
 
         bool CheckForUpdates { get; set; }
 
-
         string TextLanguage { get; set; }
 
         string ThemeAccentString { get; set; }
 
-
+        EAnimals CatFactAnimal { get; set; }
 
         string[] ManagerVersions { get; set; }
 
         string DepotPath { get; set; }
 
-
         // red 4
 
         string CP77ExecutablePath { get; set; }
-
 
         // red 3
 
@@ -36,7 +34,6 @@ namespace WolvenKit.Functionality.Services
         string WccLitePath { get; set; }
 
         #endregion Properties
-
     }
 
     public interface ISettingsManager : ISettingsDto
@@ -49,19 +46,19 @@ namespace WolvenKit.Functionality.Services
 
         string MaterialRepositoryPath { get; set; }
 
-
         #region Methods
 
         string GetW3GameContentDir();
+
         string GetW3GameDlcDir();
+
         string GetW3GameModDir();
+
         string GetW3GameRootDir();
 
-
         string GetRED4GameRootDir();
+
         string GetRED4GameModDir();
-
-
 
         #region Properties
 
@@ -147,6 +144,7 @@ namespace WolvenKit.Functionality.Services
 
             return dir;
         }
+
         public static string GetTemp_Video_PreviewPath()
         {
             var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Video_Preview");
@@ -171,16 +169,14 @@ namespace WolvenKit.Functionality.Services
 
         #endregion Properties
 
-
-
-
-
         void Save();
 
         #endregion Methods
 
         bool ShowFirstTimeSetupForUser();
+
         Color GetThemeAccent();
+
         void SetThemeAccent(Color color);
 
         string GetVersionNumber();

@@ -17,4 +17,12 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         //  public static PropertiesView GlobalPropertiesView;
     }
+
+    public enum EAnimals
+    {
+        Cat,
+        Dog,
+        Horse,
+        Snail
+    }
 }
