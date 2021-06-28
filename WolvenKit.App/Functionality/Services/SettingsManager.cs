@@ -24,27 +24,8 @@ namespace WolvenKit.Functionality.Services
     {
         #region fields
 
-        private static string ConfigurationPath
-        {
-            get
-            {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var filename = Path.GetFileNameWithoutExtension(path);
-                var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir ?? "", filename + "_config_n.json");
-            }
-        }
-
-        private static string ImagePath
-        {
-            get
-            {
-                var path = AppDomain.CurrentDomain.BaseDirectory;
-                var filename = Path.GetFileNameWithoutExtension(path);
-                var dir = Path.GetDirectoryName(path);
-                return Path.Combine(dir ?? "", filename + "_profile_image.png");
-            }
-        }
+        private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetWolvenkitAppData(), "config.json");
+        private static string GetImagePath() => Path.Combine(ISettingsManager.GetWolvenkitAppData(), "_profile_image.png");
 
         #endregion fields
 
@@ -157,8 +138,6 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public string GetOodleDll() =>
-            Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) ?? string.Empty, Constants.Oodle);
         public string GetRED4OodleDll() => Path.Combine(GetRED4GameRootDir(), "bin", "x64", Constants.Oodle);
 
         #endregion
@@ -191,7 +170,7 @@ namespace WolvenKit.Functionality.Services
                 return messages;
             }
 
-            if (!File.Exists(GetOodleDll()))
+            if (!File.Exists(GetRED4OodleDll()))
             {
                 messages.Add($"Oodle dll was not found with the game. Please make sure you have {Constants.Oodle} next to your game executable.");
             }
@@ -224,9 +203,9 @@ namespace WolvenKit.Functionality.Services
             SettingsManager config = null;
             try
             {
-                if (File.Exists(ConfigurationPath))
+                if (File.Exists(GetConfigurationPath()))
                 {
-                    var jsonString = File.ReadAllText(ConfigurationPath);
+                    var jsonString = File.ReadAllText(GetConfigurationPath());
                     var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString);
                     if (dto != null)
                     {
@@ -270,7 +249,7 @@ namespace WolvenKit.Functionality.Services
             var src = (System.Windows.Media.Imaging.BitmapSource)ProfileImageBrush?.ImageSource;
             if (src != null)
             {
-                using var fs1 = new FileStream(ImagePath, FileMode.OpenOrCreate);
+                using var fs1 = new FileStream(GetImagePath(), FileMode.OpenOrCreate);
                 var frame = System.Windows.Media.Imaging.BitmapFrame.Create(src);
                 var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
                 enc.Frames.Add(frame);
@@ -282,7 +261,7 @@ namespace WolvenKit.Functionality.Services
                 WriteIndented = true,
             };
             var json = JsonSerializer.Serialize(new SettingsDto(this), options);
-            File.WriteAllText(ConfigurationPath, json);
+            File.WriteAllText(GetConfigurationPath(), json);
         }
 
         #endregion methods
