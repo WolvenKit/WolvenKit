@@ -48,7 +48,6 @@ namespace WolvenKit.Functionality.Services
 
         string MaterialRepositoryPath { get; set; }
 
-        string GetOodleDll();
         string GetRED4OodleDll();
 
 

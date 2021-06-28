@@ -113,7 +113,7 @@
                                 DisplayText="False"
                                 LightBarBrush="{DynamicResource MahApps.Brushes.Accent4}"
                                 Symbology="QRBarcode"
-                                Text="http://www.syncfusion.com" />
+                                Text="http://www.redmodding.org" />
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -417,7 +417,6 @@
 
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="500" />
-
             </Grid.ColumnDefinitions>
 
             <Border
@@ -455,7 +454,7 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 FontSize="18"
-                                Text="Featured Modding Guide" />
+                                Text="Featured Showcase" />
                         </StackPanel>
                     </StackPanel>
                     <hc:Divider Margin="15,5,15,3" />
@@ -465,7 +464,7 @@
                         Height="{Binding ElementName=lokz, Path=ActualHeight}"
                         MaxWidth="414"
                         Margin="0,0,15,0"
-                        Source="https://www.youtube.com/embed/ZR23YFquZBg" />
+                        Source="https://www.youtube.com/embed/WfEi3QwhTIs" />
                 </StackPanel>
             </Border>
         </Grid>
@@ -490,7 +489,6 @@
                         Text="Recent Projects" />
                 </StackPanel>
                 <hc:Divider Margin="0,0,0,0" />
-
             </StackPanel>
             <syncfusion:CardView
                 Name="cardView"
