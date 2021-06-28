@@ -24,7 +24,7 @@ namespace CP77Tools.Commands
             AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to file/directory or list of files/directories"));
             AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path"));
             AddOption(new Option<EUncookExtension?>(new[] { "--uext" }, "Format to uncook textures into (tga, bmp, jpg, png, dds), DDS by default"));
-            AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically (can help with legibility if there's text)"));
+            AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically"));
             AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
 
             Handler = CommandHandler.Create<string[], string, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action);

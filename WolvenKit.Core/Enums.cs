@@ -8,6 +8,41 @@ namespace WolvenKit.Common
         xml
     }
 
+    public enum EVanillaArchives
+    {
+        audio_1_general,
+        audio_2_soundbanks,
+        basegame_1_engine,
+        basegame_2_mainmenu,
+        basegame_3_nightcity,
+        basegame_3_nightcity_gi,
+        basegame_3_nightcity_terrain,
+        basegame_4_animation,
+        basegame_4_appearance,
+        basegame_4_gamedata,
+        basegame_5_video,
+
+        lang_ar_text,
+        lang_cs_text,
+        lang_de_text,
+        lang_en_text,
+        lang_en_voice,
+        //lang_es-es_text,
+        //lang_es-mx_text,
+        lang_fr_text,
+        lang_hu_text,
+        lang_it_text,
+        lang_ja_text,
+        lang_ko_text,
+        lang_pl_text,
+        lang_pt_text,
+        lang_ru_text,
+        lang_th_text,
+        lang_tr_text,
+        //lang_zh-cn_text,
+        //lang_zh-tw_text
+    }
+
     public enum ERedExtension
     {
         actionanimdb,

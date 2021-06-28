@@ -21,7 +21,7 @@ namespace CP77Tools.Commands
 
         public ArchiveCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to .archive."));
+            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input archives path. Can be a file or a folder or a list of files/folders"));
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
             AddOption(new Option<bool>(new[] { "--diff", "-d" }, "Dump archive json for diff"));

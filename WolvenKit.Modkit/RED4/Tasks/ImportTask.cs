@@ -14,8 +14,6 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        #region Methods
-
         /// <summary>
         /// Recombine split buffers and textures in a folder.
         /// </summary>
@@ -133,7 +131,5 @@ namespace CP77Tools.Tasks
 
             }
         }
-
-        #endregion Methods
     }
 }

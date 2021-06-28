@@ -25,7 +25,7 @@ namespace CP77Tools.Commands
         public UnbundleCommand() : base(Name, Description)
         {
             AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to .archive."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to extract files to."));
+            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory."));
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
             AddOption(new Option<string>(new[] { "--hash" }, "Extract single file with a given hash. If a path is supplied, all hashes will be extracted."));
