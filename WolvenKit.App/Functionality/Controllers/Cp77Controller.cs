@@ -64,14 +64,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task HandleStartup()
         {
-            // oodle
-            if (!TryCopyOodleLib())
-            {
-                _loggerService.Error($"Oodle DLL not found.");
-                throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
-            }
-
-            if (!OodleLoadLib.Load(_settingsManager.GetOodleDll()))
+            if (!OodleLoadLib.Load(_settingsManager.GetRED4OodleDll()))
             {
                 throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
             }
@@ -82,38 +75,6 @@ namespace WolvenKit.Functionality.Controllers
             };
             Parallel.ForEach(todo, _ => Task.Run(_));
             return Task.CompletedTask;
-        }
-
-        private bool TryCopyOodleLib()
-        {
-            try
-            {
-                var destFileName = _settingsManager.GetOodleDll();
-                if (File.Exists(destFileName))
-                {
-                    return true;
-                }
-
-                if (!File.Exists(_settingsManager.CP77ExecutablePath))
-                {
-                    return false;
-                }
-               
-                // copy oodle dll
-                var oodleInfo = new FileInfo(_settingsManager.GetRED4OodleDll());
-                if (!oodleInfo.Exists)
-                {
-                    return false;
-                }
-                oodleInfo.CopyTo(destFileName);
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
 
         public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) =>
