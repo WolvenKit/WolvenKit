@@ -13,7 +13,6 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    Height="300"
     d:DataContext="{d:DesignInstance Type=editor:ImportExportViewModel}"
     mc:Ignorable="d">
 
