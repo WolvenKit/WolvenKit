@@ -128,7 +128,7 @@ namespace WolvenKit.Common.DDS
     {
         #region Fields
 
-        private static string textconvpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "texconv.exe");
+        private static string textconvpath = Path.Combine(System.AppContext.BaseDirectory, "texconv.exe");
 
         #endregion Fields
 

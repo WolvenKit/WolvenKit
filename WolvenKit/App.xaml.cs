@@ -81,7 +81,7 @@ namespace WolvenKit
             NotificationHelper.InitializeNotificationHelper();
 
             StaticReferences.Logger.Info("Check for new updates");
-            Helpers.CheckForUpdates();
+            //Helpers.CheckForUpdates();
 
             //Window window = new Window();
             //window.AllowsTransparency = true;

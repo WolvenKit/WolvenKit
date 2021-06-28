@@ -94,7 +94,7 @@ namespace WolvenKit.Common.Services
             LoadEmbeddedHashes(s_used, _hashes);
 
             // user hashes
-            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var assemblyPath = Path.GetDirectoryName(System.AppContext.BaseDirectory);
             var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
             if (File.Exists(userHashesPath))
             {
