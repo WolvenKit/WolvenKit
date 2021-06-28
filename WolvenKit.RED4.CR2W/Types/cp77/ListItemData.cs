@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ListItemData : IScriptable
 	{
-		[Ordinal(0)] [RED("label")] public CString Label { get; set; }
+		private CString _label;
 
-		public ListItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("label")] 
+		public CString Label
+		{
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
+		}
+
+		public ListItemData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

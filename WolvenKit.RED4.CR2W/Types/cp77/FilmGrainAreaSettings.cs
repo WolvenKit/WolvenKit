@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FilmGrainAreaSettings : IAreaSettings
 	{
-		[Ordinal(2)] [RED("strength")] public curveData<Vector4> Strength { get; set; }
-		[Ordinal(3)] [RED("luminanceBias")] public curveData<CFloat> LuminanceBias { get; set; }
-		[Ordinal(4)] [RED("grainSize")] public Vector3 GrainSize { get; set; }
-		[Ordinal(5)] [RED("applyAfterUpsampling")] public CBool ApplyAfterUpsampling { get; set; }
+		private curveData<Vector4> _strength;
+		private curveData<CFloat> _luminanceBias;
+		private Vector3 _grainSize;
+		private CBool _applyAfterUpsampling;
 
-		public FilmGrainAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("strength")] 
+		public curveData<Vector4> Strength
+		{
+			get => GetProperty(ref _strength);
+			set => SetProperty(ref _strength, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("luminanceBias")] 
+		public curveData<CFloat> LuminanceBias
+		{
+			get => GetProperty(ref _luminanceBias);
+			set => SetProperty(ref _luminanceBias, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("grainSize")] 
+		public Vector3 GrainSize
+		{
+			get => GetProperty(ref _grainSize);
+			set => SetProperty(ref _grainSize, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("applyAfterUpsampling")] 
+		public CBool ApplyAfterUpsampling
+		{
+			get => GetProperty(ref _applyAfterUpsampling);
+			set => SetProperty(ref _applyAfterUpsampling, value);
+		}
+
+		public FilmGrainAreaSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

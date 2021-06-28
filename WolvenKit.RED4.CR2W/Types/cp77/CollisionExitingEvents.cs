@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CollisionExitingEvents : ImmediateExitWithForceEvents
 	{
-		[Ordinal(6)] [RED("animFeatureStatusEffect")] public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect { get; set; }
+		private CHandle<AnimFeature_StatusEffect> _animFeatureStatusEffect;
 
-		public CollisionExitingEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("animFeatureStatusEffect")] 
+		public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect
+		{
+			get => GetProperty(ref _animFeatureStatusEffect);
+			set => SetProperty(ref _animFeatureStatusEffect, value);
+		}
+
+		public CollisionExitingEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

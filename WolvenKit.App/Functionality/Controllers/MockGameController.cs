@@ -1,25 +1,44 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using DynamicData;
 using WolvenKit.Common;
+using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    internal class MockGameController : GameControllerBase
+    public class MockGameController : IGameController
     {
+        public MockGameController()
+        {
+            _rootCache = new SourceCache<GameFileTreeNode, string>(t => t.FullPath);
+        }
+
+
         #region Methods
 
-        public override List<IGameArchiveManager> GetArchiveManagersManagers() => new List<IGameArchiveManager>();
+        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
 
-        public override List<string> GetAvaliableClasses() => new List<string>();
+        public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new List<IGameArchiveManager>();
 
-        public override async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
+        public void AddToMod(IGameFile file) => throw new NotImplementedException();
 
-        public override Task<bool> PackageMod() =>
+        public List<string> GetAvaliableClasses() => new List<string>();
+
+        public async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
+
+        public Task<bool> PackageMod() =>
             //Nothing to do here :)
             Task.FromResult(true);
 
-        public override Task<bool> PackAndInstallProject() =>
+        public void InstallMod()
+        {
+        }
+
+        public Task<bool> PackAndInstallProject() =>
             //Nothing to do here :)
             new Task<bool>(new Func<bool>(() => true));
 

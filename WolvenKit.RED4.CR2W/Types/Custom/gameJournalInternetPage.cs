@@ -5,8 +5,16 @@ namespace WolvenKit.RED4.CR2W.Types
 {
     public class gameJournalInternetPage : gameJournalInternetPage_
     {
-        [Ordinal(3)] [RED("activatedAtStart")] public CBool ActivatedAtStart { get; set; }
+        private CBool _activatedAtStart;
 
-        public gameJournalInternetPage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(3)]
+        [RED("activatedAtStart")]
+        public CBool ActivatedAtStart
+        {
+            get => GetProperty(ref _activatedAtStart);
+            set => SetProperty(ref _activatedAtStart, value);
+        }
+
+        public gameJournalInternetPage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

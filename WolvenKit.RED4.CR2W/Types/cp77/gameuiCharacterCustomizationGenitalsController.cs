@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCharacterCustomizationGenitalsController : gameuiCharacterCustomizationBodyPartsController
 	{
-		[Ordinal(3)] [RED("upperBodyGroupName")] public CName UpperBodyGroupName { get; set; }
-		[Ordinal(4)] [RED("bottomBodyGroupName")] public CName BottomBodyGroupName { get; set; }
-		[Ordinal(5)] [RED("forceHideGenitals")] public CBool ForceHideGenitals { get; set; }
+		private CName _upperBodyGroupName;
+		private CName _bottomBodyGroupName;
+		private CBool _forceHideGenitals;
 
-		public gameuiCharacterCustomizationGenitalsController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("upperBodyGroupName")] 
+		public CName UpperBodyGroupName
+		{
+			get => GetProperty(ref _upperBodyGroupName);
+			set => SetProperty(ref _upperBodyGroupName, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("bottomBodyGroupName")] 
+		public CName BottomBodyGroupName
+		{
+			get => GetProperty(ref _bottomBodyGroupName);
+			set => SetProperty(ref _bottomBodyGroupName, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("forceHideGenitals")] 
+		public CBool ForceHideGenitals
+		{
+			get => GetProperty(ref _forceHideGenitals);
+			set => SetProperty(ref _forceHideGenitals, value);
+		}
+
+		public gameuiCharacterCustomizationGenitalsController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

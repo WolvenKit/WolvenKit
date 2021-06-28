@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AISetHealthRegenerationState : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("healthRegeneration")] public CBool HealthRegeneration { get; set; }
+		private CBool _healthRegeneration;
 
-		public AISetHealthRegenerationState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("healthRegeneration")] 
+		public CBool HealthRegeneration
+		{
+			get => GetProperty(ref _healthRegeneration);
+			set => SetProperty(ref _healthRegeneration, value);
+		}
+
+		public AISetHealthRegenerationState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

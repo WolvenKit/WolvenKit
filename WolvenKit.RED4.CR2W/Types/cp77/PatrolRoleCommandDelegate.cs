@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PatrolRoleCommandDelegate : AIbehaviorScriptBehaviorDelegate
 	{
-		[Ordinal(0)] [RED("patrolWithWeapon")] public CBool PatrolWithWeapon { get; set; }
-		[Ordinal(1)] [RED("forceAlerted")] public CBool ForceAlerted { get; set; }
+		private CBool _patrolWithWeapon;
+		private CBool _forceAlerted;
 
-		public PatrolRoleCommandDelegate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("patrolWithWeapon")] 
+		public CBool PatrolWithWeapon
+		{
+			get => GetProperty(ref _patrolWithWeapon);
+			set => SetProperty(ref _patrolWithWeapon, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("forceAlerted")] 
+		public CBool ForceAlerted
+		{
+			get => GetProperty(ref _forceAlerted);
+			set => SetProperty(ref _forceAlerted, value);
+		}
+
+		public PatrolRoleCommandDelegate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApplyStatusEffectDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("statusEffects")] public CArray<SStatusEffectOperationData> StatusEffects { get; set; }
+		private CArray<SStatusEffectOperationData> _statusEffects;
 
-		public ApplyStatusEffectDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("statusEffects")] 
+		public CArray<SStatusEffectOperationData> StatusEffects
+		{
+			get => GetProperty(ref _statusEffects);
+			set => SetProperty(ref _statusEffects, value);
+		}
+
+		public ApplyStatusEffectDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FirstEquipSystem : gameScriptableSystem
 	{
-		[Ordinal(0)] [RED("equipDataArray")] public CArray<EFirstEquipData> EquipDataArray { get; set; }
+		private CArray<EFirstEquipData> _equipDataArray;
 
-		public FirstEquipSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("equipDataArray")] 
+		public CArray<EFirstEquipData> EquipDataArray
+		{
+			get => GetProperty(ref _equipDataArray);
+			set => SetProperty(ref _equipDataArray, value);
+		}
+
+		public FirstEquipSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

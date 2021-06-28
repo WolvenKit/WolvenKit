@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DelayedStatusEffectApplicationEvent : redEvent
 	{
-		[Ordinal(0)] [RED("statusEffectEvent")] public CHandle<gameeventsApplyStatusEffectEvent> StatusEffectEvent { get; set; }
+		private CHandle<gameeventsApplyStatusEffectEvent> _statusEffectEvent;
 
-		public DelayedStatusEffectApplicationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("statusEffectEvent")] 
+		public CHandle<gameeventsApplyStatusEffectEvent> StatusEffectEvent
+		{
+			get => GetProperty(ref _statusEffectEvent);
+			set => SetProperty(ref _statusEffectEvent, value);
+		}
+
+		public DelayedStatusEffectApplicationEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

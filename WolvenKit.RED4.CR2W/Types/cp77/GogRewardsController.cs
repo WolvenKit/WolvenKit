@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GogRewardsController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("containerWidget")] public inkWidgetReference ContainerWidget { get; set; }
+		private inkWidgetReference _containerWidget;
 
-		public GogRewardsController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("containerWidget")] 
+		public inkWidgetReference ContainerWidget
+		{
+			get => GetProperty(ref _containerWidget);
+			set => SetProperty(ref _containerWidget, value);
+		}
+
+		public GogRewardsController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

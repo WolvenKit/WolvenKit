@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questInstancedCrowdControlNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("crowdVariantTag")] public CName CrowdVariantTag { get; set; }
-		[Ordinal(3)] [RED("enable")] public CBool Enable { get; set; }
+		private CName _crowdVariantTag;
+		private CBool _enable;
 
-		public questInstancedCrowdControlNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("crowdVariantTag")] 
+		public CName CrowdVariantTag
+		{
+			get => GetProperty(ref _crowdVariantTag);
+			set => SetProperty(ref _crowdVariantTag, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("enable")] 
+		public CBool Enable
+		{
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
+		}
+
+		public questInstancedCrowdControlNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

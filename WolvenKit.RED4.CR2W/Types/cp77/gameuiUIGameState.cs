@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiUIGameState : ISerializable
 	{
-		[Ordinal(0)] [RED("uiData")] public CArray<CHandle<gameuiBaseUIData>> UiData { get; set; }
+		private CArray<CHandle<gameuiBaseUIData>> _uiData;
 
-		public gameuiUIGameState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("uiData")] 
+		public CArray<CHandle<gameuiBaseUIData>> UiData
+		{
+			get => GetProperty(ref _uiData);
+			set => SetProperty(ref _uiData, value);
+		}
+
+		public gameuiUIGameState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

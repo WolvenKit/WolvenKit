@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;}
+	.st1{fill:#99CC00;}
+	.st2{font-family:'Calibri';}
+	.st3{font-size:26px;}
+	.st4{fill:#FFFFFF;}
+</style>
+<g id="Layer_1">
+	<rect width="22" height="22"/>
+	<rect x="7" y="1.7" class="st0" width="15" height="18.7"/>
+	<text transform="matrix(1 0 0 1 8.5049 19.2909)" class="st1 st2 st3">X</text>
+</g>
+<g id="Layer_2">
+	<g>
+		<rect y="0" class="st4" width="4" height="3.7"/>
+		<rect y="3.7" class="st1" width="4" height="3.7"/>
+		<rect y="7.3" class="st4" width="4" height="3.7"/>
+		<rect y="11" class="st1" width="4" height="3.7"/>
+		<rect y="14.7" class="st4" width="4" height="3.7"/>
+		<rect y="18.3" class="st1" width="4" height="3.7"/>
+	</g>
+	<g>
+		<rect x="4" y="18.3" class="st4" width="4" height="3.7"/>
+		<rect x="4" y="14.7" class="st1" width="4" height="3.7"/>
+		<rect x="4" y="11" class="st4" width="4" height="3.7"/>
+		<rect x="4" y="7.3" class="st1" width="4" height="3.7"/>
+		<rect x="4" y="3.7" class="st4" width="4" height="3.7"/>
+		<rect x="4" class="st1" width="4" height="3.7"/>
+	</g>
+</g>
+</svg>

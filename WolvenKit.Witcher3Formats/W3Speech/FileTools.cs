@@ -56,7 +56,7 @@ namespace WolvenKit.W3Speech
             var w3speech_stream = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
             var info = Coder.Decode(new W3Speech(w3speech_file_path), w3speech_stream);
             w3speech_stream.Close();
-            return info.item_infos.Select(item_info =>
+            return info.Files.Cast<SpeechEntry>().Select(item_info =>
                 new WemCr2wInputPair(item_info.id, item_info.id_high, () =>
                 {
                     var reader = new BinaryReader(new FileStream(w3speech_file_path, FileMode.Open));
@@ -125,7 +125,7 @@ namespace WolvenKit.W3Speech
             var info = Coder.Decode(new W3Speech(w3speech_file), input);
             var language = languages.First(lang => lang.Key.value == info.language_key.value);
             var dir = directory.EndsWith("\\") ? directory : directory + "\\";
-            info.item_infos.ToList().ForEach(item =>
+            info.Files.Values.Cast<SpeechEntry>().ToList().ForEach(item =>
             {
                 var neutral_id = LanguageTools.Convert(item.id, language);
                 var wem_file_name = neutral_id.value.ToString("D10") + "[" + item.duration.ToString("R", CultureInfo.InvariantCulture) + "](" + item.id_high.ToString("D10") + ").wem";

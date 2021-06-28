@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ChangeStanceStateAbstract : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("changeStateOnDeactivate")] public CBool ChangeStateOnDeactivate { get; set; }
+		private CBool _changeStateOnDeactivate;
 
-		public ChangeStanceStateAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("changeStateOnDeactivate")] 
+		public CBool ChangeStateOnDeactivate
+		{
+			get => GetProperty(ref _changeStateOnDeactivate);
+			set => SetProperty(ref _changeStateOnDeactivate, value);
+		}
+
+		public ChangeStanceStateAbstract(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

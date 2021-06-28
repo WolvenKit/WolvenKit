@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleInitializerLifeTime : IParticleInitializer
 	{
-		[Ordinal(4)] [RED("lifeTime")] public CHandle<IEvaluatorFloat> LifeTime { get; set; }
+		private CHandle<IEvaluatorFloat> _lifeTime;
 
-		public CParticleInitializerLifeTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("lifeTime")] 
+		public CHandle<IEvaluatorFloat> LifeTime
+		{
+			get => GetProperty(ref _lifeTime);
+			set => SetProperty(ref _lifeTime, value);
+		}
+
+		public CParticleInitializerLifeTime(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

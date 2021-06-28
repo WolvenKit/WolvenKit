@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UIMenuNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(5)] [RED("canBeMerged")] public CBool CanBeMerged { get; set; }
+		private CBool _canBeMerged;
 
-		public UIMenuNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("canBeMerged")] 
+		public CBool CanBeMerged
+		{
+			get => GetProperty(ref _canBeMerged);
+			set => SetProperty(ref _canBeMerged, value);
+		}
+
+		public UIMenuNotificationViewData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

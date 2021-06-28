@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatsDetailListController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("StatLabelRef")] public inkTextWidgetReference StatLabelRef { get; set; }
-		[Ordinal(2)] [RED("statsList")] public inkCompoundWidgetReference StatsList { get; set; }
+		private inkTextWidgetReference _statLabelRef;
+		private inkCompoundWidgetReference _statsList;
 
-		public StatsDetailListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("StatLabelRef")] 
+		public inkTextWidgetReference StatLabelRef
+		{
+			get => GetProperty(ref _statLabelRef);
+			set => SetProperty(ref _statLabelRef, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("statsList")] 
+		public inkCompoundWidgetReference StatsList
+		{
+			get => GetProperty(ref _statsList);
+			set => SetProperty(ref _statsList, value);
+		}
+
+		public StatsDetailListController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class interopStringWithID : CVariable
 	{
-		[Ordinal(0)] [RED("text")] public CString Text { get; set; }
-		[Ordinal(1)] [RED("id")] public CUInt64 Id { get; set; }
+		private CString _text;
+		private CUInt64 _id;
 
-		public interopStringWithID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("text")] 
+		public CString Text
+		{
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("id")] 
+		public CUInt64 Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		public interopStringWithID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

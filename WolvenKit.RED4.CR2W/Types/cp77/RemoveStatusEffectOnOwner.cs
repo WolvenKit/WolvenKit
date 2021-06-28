@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RemoveStatusEffectOnOwner : StatusEffectTasks
 	{
-		[Ordinal(0)] [RED("statusEffectID")] public TweakDBID StatusEffectID { get; set; }
+		private TweakDBID _statusEffectID;
 
-		public RemoveStatusEffectOnOwner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("statusEffectID")] 
+		public TweakDBID StatusEffectID
+		{
+			get => GetProperty(ref _statusEffectID);
+			set => SetProperty(ref _statusEffectID, value);
+		}
+
+		public RemoveStatusEffectOnOwner(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

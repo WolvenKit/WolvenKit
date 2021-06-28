@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorConvertToDynamicWorkspotTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("workspotData")] public CHandle<AIArgumentMapping> WorkspotData { get; set; }
-		[Ordinal(2)] [RED("spotInstance")] public CHandle<AIArgumentMapping> SpotInstance { get; set; }
-		[Ordinal(3)] [RED("jumpToEntry")] public CHandle<AIArgumentMapping> JumpToEntry { get; set; }
-		[Ordinal(4)] [RED("entryId")] public CHandle<AIArgumentMapping> EntryId { get; set; }
+		private CHandle<AIArgumentMapping> _workspotData;
+		private CHandle<AIArgumentMapping> _spotInstance;
+		private CHandle<AIArgumentMapping> _jumpToEntry;
+		private CHandle<AIArgumentMapping> _entryId;
 
-		public AIbehaviorConvertToDynamicWorkspotTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("workspotData")] 
+		public CHandle<AIArgumentMapping> WorkspotData
+		{
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("spotInstance")] 
+		public CHandle<AIArgumentMapping> SpotInstance
+		{
+			get => GetProperty(ref _spotInstance);
+			set => SetProperty(ref _spotInstance, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("jumpToEntry")] 
+		public CHandle<AIArgumentMapping> JumpToEntry
+		{
+			get => GetProperty(ref _jumpToEntry);
+			set => SetProperty(ref _jumpToEntry, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("entryId")] 
+		public CHandle<AIArgumentMapping> EntryId
+		{
+			get => GetProperty(ref _entryId);
+			set => SetProperty(ref _entryId, value);
+		}
+
+		public AIbehaviorConvertToDynamicWorkspotTaskDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

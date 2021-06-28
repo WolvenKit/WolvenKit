@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioUiSound : CVariable
 	{
-		[Ordinal(0)] [RED("events")] public CArray<CName> Events { get; set; }
+		private CArray<CName> _events;
 
-		public audioUiSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("events")] 
+		public CArray<CName> Events
+		{
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
+		}
+
+		public audioUiSound(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

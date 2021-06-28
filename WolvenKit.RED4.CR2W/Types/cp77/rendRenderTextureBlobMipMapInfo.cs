@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class rendRenderTextureBlobMipMapInfo : CVariable
 	{
-		[Ordinal(0)] [RED("layout")] public rendRenderTextureBlobMemoryLayout Layout { get; set; }
-		[Ordinal(1)] [RED("placement")] public rendRenderTextureBlobPlacement Placement { get; set; }
+		private rendRenderTextureBlobMemoryLayout _layout;
+		private rendRenderTextureBlobPlacement _placement;
 
-		public rendRenderTextureBlobMipMapInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("layout")] 
+		public rendRenderTextureBlobMemoryLayout Layout
+		{
+			get => GetProperty(ref _layout);
+			set => SetProperty(ref _layout, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("placement")] 
+		public rendRenderTextureBlobPlacement Placement
+		{
+			get => GetProperty(ref _placement);
+			set => SetProperty(ref _placement, value);
+		}
+
+		public rendRenderTextureBlobMipMapInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameDeviceVisibilityChangedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isVisible")] public CUInt32 IsVisible { get; set; }
+		private CUInt32 _isVisible;
 
-		public gameDeviceVisibilityChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isVisible")] 
+		public CUInt32 IsVisible
+		{
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
+		}
+
+		public gameDeviceVisibilityChangedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

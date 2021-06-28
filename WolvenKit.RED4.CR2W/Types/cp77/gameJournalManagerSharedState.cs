@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalManagerSharedState : gameIGameSystemReplicatedState
 	{
-		[Ordinal(0)] [RED("entryData")] public CArray<gameJournalSharedStateData> EntryData { get; set; }
-		[Ordinal(1)] [RED("trackedQuestPath")] public CUInt32 TrackedQuestPath { get; set; }
+		private CArray<gameJournalSharedStateData> _entryData;
+		private CUInt32 _trackedQuestPath;
 
-		public gameJournalManagerSharedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entryData")] 
+		public CArray<gameJournalSharedStateData> EntryData
+		{
+			get => GetProperty(ref _entryData);
+			set => SetProperty(ref _entryData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("trackedQuestPath")] 
+		public CUInt32 TrackedQuestPath
+		{
+			get => GetProperty(ref _trackedQuestPath);
+			set => SetProperty(ref _trackedQuestPath, value);
+		}
+
+		public gameJournalManagerSharedState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

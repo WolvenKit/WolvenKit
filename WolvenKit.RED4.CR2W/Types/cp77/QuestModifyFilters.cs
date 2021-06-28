@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuestModifyFilters : redEvent
 	{
-		[Ordinal(0)] [RED("incomingFilters")] public CEnum<EQuestFilterType> IncomingFilters { get; set; }
-		[Ordinal(1)] [RED("outgoingFilters")] public CEnum<EQuestFilterType> OutgoingFilters { get; set; }
+		private CEnum<EQuestFilterType> _incomingFilters;
+		private CEnum<EQuestFilterType> _outgoingFilters;
 
-		public QuestModifyFilters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("incomingFilters")] 
+		public CEnum<EQuestFilterType> IncomingFilters
+		{
+			get => GetProperty(ref _incomingFilters);
+			set => SetProperty(ref _incomingFilters, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("outgoingFilters")] 
+		public CEnum<EQuestFilterType> OutgoingFilters
+		{
+			get => GetProperty(ref _outgoingFilters);
+			set => SetProperty(ref _outgoingFilters, value);
+		}
+
+		public QuestModifyFilters(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

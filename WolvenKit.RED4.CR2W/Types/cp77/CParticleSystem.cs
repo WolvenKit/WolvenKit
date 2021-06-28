@@ -7,17 +7,97 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleSystem : resStreamedResource
 	{
-		[Ordinal(1)] [RED("visibleThroughWalls")] public CBool VisibleThroughWalls { get; set; }
-		[Ordinal(2)] [RED("prewarmingTime")] public CFloat PrewarmingTime { get; set; }
-		[Ordinal(3)] [RED("emitters")] public CArray<CHandle<CParticleEmitter>> Emitters { get; set; }
-		[Ordinal(4)] [RED("boundingBox")] public Box BoundingBox { get; set; }
-		[Ordinal(5)] [RED("forceDynamicBbox")] public CBool ForceDynamicBbox { get; set; }
-		[Ordinal(6)] [RED("autoHideDistance")] public CFloat AutoHideDistance { get; set; }
-		[Ordinal(7)] [RED("autoHideRange")] public CFloat AutoHideRange { get; set; }
-		[Ordinal(8)] [RED("lastLODFadeoutRange")] public CFloat LastLODFadeoutRange { get; set; }
-		[Ordinal(9)] [RED("renderingPlane")] public CEnum<ERenderingPlane> RenderingPlane { get; set; }
-		[Ordinal(10)] [RED("particleDamage")] public CHandle<ParticleDamage> ParticleDamage { get; set; }
+		private CBool _visibleThroughWalls;
+		private CFloat _prewarmingTime;
+		private CArray<CHandle<CParticleEmitter>> _emitters;
+		private Box _boundingBox;
+		private CBool _forceDynamicBbox;
+		private CFloat _autoHideDistance;
+		private CFloat _autoHideRange;
+		private CFloat _lastLODFadeoutRange;
+		private CEnum<ERenderingPlane> _renderingPlane;
+		private CHandle<ParticleDamage> _particleDamage;
 
-		public CParticleSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("visibleThroughWalls")] 
+		public CBool VisibleThroughWalls
+		{
+			get => GetProperty(ref _visibleThroughWalls);
+			set => SetProperty(ref _visibleThroughWalls, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("prewarmingTime")] 
+		public CFloat PrewarmingTime
+		{
+			get => GetProperty(ref _prewarmingTime);
+			set => SetProperty(ref _prewarmingTime, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("emitters")] 
+		public CArray<CHandle<CParticleEmitter>> Emitters
+		{
+			get => GetProperty(ref _emitters);
+			set => SetProperty(ref _emitters, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("boundingBox")] 
+		public Box BoundingBox
+		{
+			get => GetProperty(ref _boundingBox);
+			set => SetProperty(ref _boundingBox, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("forceDynamicBbox")] 
+		public CBool ForceDynamicBbox
+		{
+			get => GetProperty(ref _forceDynamicBbox);
+			set => SetProperty(ref _forceDynamicBbox, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("autoHideDistance")] 
+		public CFloat AutoHideDistance
+		{
+			get => GetProperty(ref _autoHideDistance);
+			set => SetProperty(ref _autoHideDistance, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("autoHideRange")] 
+		public CFloat AutoHideRange
+		{
+			get => GetProperty(ref _autoHideRange);
+			set => SetProperty(ref _autoHideRange, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("lastLODFadeoutRange")] 
+		public CFloat LastLODFadeoutRange
+		{
+			get => GetProperty(ref _lastLODFadeoutRange);
+			set => SetProperty(ref _lastLODFadeoutRange, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("renderingPlane")] 
+		public CEnum<ERenderingPlane> RenderingPlane
+		{
+			get => GetProperty(ref _renderingPlane);
+			set => SetProperty(ref _renderingPlane, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("particleDamage")] 
+		public CHandle<ParticleDamage> ParticleDamage
+		{
+			get => GetProperty(ref _particleDamage);
+			set => SetProperty(ref _particleDamage, value);
+		}
+
+		public CParticleSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

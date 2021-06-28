@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SwapPresetEvent : redEvent
 	{
-		[Ordinal(0)] [RED("mappingName")] public CString MappingName { get; set; }
+		private CString _mappingName;
 
-		public SwapPresetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mappingName")] 
+		public CString MappingName
+		{
+			get => GetProperty(ref _mappingName);
+			set => SetProperty(ref _mappingName, value);
+		}
+
+		public SwapPresetEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

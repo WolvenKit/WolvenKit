@@ -1,14 +1,17 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.FileSystem;
-using Orc.ProjectManagement;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
@@ -22,6 +25,12 @@ namespace WolvenKit.Functionality.Commands
         private readonly IFileService _fileService;
         private readonly IOpenFileService _openFileService;
         private new readonly IPleaseWaitService _pleaseWaitService;
+        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        private readonly Cp77Controller _cp77Controller;
+        private readonly Tw3Controller _tw3Controller;
+
+
+
 
         #endregion Fields
 
@@ -34,16 +43,25 @@ namespace WolvenKit.Functionality.Commands
             IOpenFileService openFileService,
             IPleaseWaitService pleaseWaitService,
             IGrowlNotificationService notificationService,
-            ILoggerService loggerService)
-            : base(AppCommands.Application.OpenProject, commandManager, projectManager, notificationService, loggerService)
+            IRecentlyUsedItemsService recentlyUsedItemsService,
+            ILoggerService loggerService,
+            Tw3Controller tw3Controller,
+            Cp77Controller cp77Controller
+            )
+            : base(AppCommands.Application.OpenProject, commandManager, projectManager, notificationService,
+                loggerService)
         {
             Argument.IsNotNull(() => openFileService);
             Argument.IsNotNull(() => fileService);
             Argument.IsNotNull(() => pleaseWaitService);
+            Argument.IsNotNull(() => recentlyUsedItemsService);
 
             _pleaseWaitService = pleaseWaitService;
             _openFileService = openFileService;
             _fileService = fileService;
+            _recentlyUsedItemsService = recentlyUsedItemsService;
+            _tw3Controller = tw3Controller;
+            _cp77Controller = cp77Controller;
         }
 
         #endregion Constructors
@@ -54,39 +72,99 @@ namespace WolvenKit.Functionality.Commands
 
         protected override async Task ExecuteAsync(object parameter)
         {
+            var location = parameter as string;
+            // switch from one active project to another
+
+            if (_projectManager.ActiveProject != null && !string.IsNullOrEmpty(location))
+            {
+                if (_projectManager.ActiveProject.Location == location)
+                {
+                    return;
+                }
+            }
+
             try
             {
-                var location = parameter as string;
+                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
 
                 if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
                 {
-                    var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
+                    // file was moved or deleted
+                    if (_recentlyUsedItemsService.Items.Any(_ => _.Name == location))
                     {
-                        Filter = "Cyberpunk 2077 Project | *.cpmodproj|Witcher 3 Project (*.w3modproj)|*.w3modproj",
-                        IsMultiSelect = false,
-                        Title = "Please select the WolvenKit project you would like to open."
-                    });
+                        // would you like to locate it?
+                        location = await ProjectHelpers.LocateMissingProjectAsync(location);
+                        if (string.IsNullOrEmpty(location))
+                        {
+                            // user canceled locating a project
+                            return;
+                        }
+                    }
+                    // open an existing project
+                    else
+                    {
+                        var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
+                        {
+                            Filter = "Cyberpunk 2077 Project | *.cpmodproj|Witcher 3 Project (*.w3modproj)|*.w3modproj",
+                            IsMultiSelect = false,
+                            Title = "Please select the WolvenKit project you would like to open."
+                        });
 
-                    if (result.Result)
-                    {
+                        if (!result.Result)
+                        {
+                            // user canceled locating a project
+                            return;
+                        }
+
                         location = result.FileName;
                     }
                 }
 
-                if (!string.IsNullOrWhiteSpace(location))
+                // one last check
+                if (!_fileService.Exists(location))
                 {
-                    using (_pleaseWaitService.PushInScope())
-                    {
-                        StaticReferences.MainView.OnLoadLayoutAsync();
-
-                        await _projectManager.LoadAsync(location);
-                        var btn = StaticReferences.GlobalShell.FindName("ProjectNameDisplay") as System.Windows.Controls.Button;
-                        btn?.SetCurrentValue(ContentControl.ContentProperty, Path.GetFileNameWithoutExtension(location));
-                        ;
-                    }
+                    return;
                 }
-                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+
+                // if a valid location has been set
+                //using (_pleaseWaitService.PushInScope())
+                {
+                    await _projectManager.LoadAsync(location);
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                            await _tw3Controller.HandleStartup().ContinueWith(t =>
+                            {
+                                _notificationService.Success(
+                                    "Project " + Path.GetFileNameWithoutExtension(location) +
+                                    " loaded!");
+
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        case ".cpmodproj":
+                            await _cp77Controller.HandleStartup().ContinueWith(
+                                t =>
+                                {
+                                    _notificationService.Success("Project " +
+                                                                 Path.GetFileNameWithoutExtension(location) +
+                                                                 " loaded!");
+
+                                },
+                                TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (StaticReferences.GlobalShell != null)
+                    {
+                        StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
+                    }
+
+                    StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
+                }
+
             }
             catch (Exception)
             {

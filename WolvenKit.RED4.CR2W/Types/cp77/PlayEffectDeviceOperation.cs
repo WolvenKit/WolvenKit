@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayEffectDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("VFXs")] public CArray<SVFXOperationData> VFXs { get; set; }
-		[Ordinal(6)] [RED("fxInstances")] public CArray<SVfxInstanceData> FxInstances { get; set; }
+		private CArray<SVFXOperationData> _vFXs;
+		private CArray<SVfxInstanceData> _fxInstances;
 
-		public PlayEffectDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("VFXs")] 
+		public CArray<SVFXOperationData> VFXs
+		{
+			get => GetProperty(ref _vFXs);
+			set => SetProperty(ref _vFXs, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("fxInstances")] 
+		public CArray<SVfxInstanceData> FxInstances
+		{
+			get => GetProperty(ref _fxInstances);
+			set => SetProperty(ref _fxInstances, value);
+		}
+
+		public PlayEffectDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

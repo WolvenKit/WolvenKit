@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("value", 2,0)] 		public CArray<CHandle<CAITree>> Value { get; set;}
 
-		public CBehTreeValList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeValList(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeValList(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPuppetAIManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("entries")] public CArray<questPuppetAIManagerNodeDefinitionEntry> Entries { get; set; }
+		private CArray<questPuppetAIManagerNodeDefinitionEntry> _entries;
 
-		public questPuppetAIManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("entries")] 
+		public CArray<questPuppetAIManagerNodeDefinitionEntry> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		public questPuppetAIManagerNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

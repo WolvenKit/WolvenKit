@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CacheFXOnDefeated : StatusEffectTasks
 	{
-		[Ordinal(0)] [RED("npcPuppet")] public wCHandle<NPCPuppet> NpcPuppet { get; set; }
+		private wCHandle<NPCPuppet> _npcPuppet;
 
-		public CacheFXOnDefeated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("npcPuppet")] 
+		public wCHandle<NPCPuppet> NpcPuppet
+		{
+			get => GetProperty(ref _npcPuppet);
+			set => SetProperty(ref _npcPuppet, value);
+		}
+
+		public CacheFXOnDefeated(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

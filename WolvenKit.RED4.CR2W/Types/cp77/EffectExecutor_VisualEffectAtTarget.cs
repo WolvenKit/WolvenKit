@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EffectExecutor_VisualEffectAtTarget : gameEffectExecutor_Scripted
 	{
-		[Ordinal(1)] [RED("effect")] public gameFxResource Effect { get; set; }
-		[Ordinal(2)] [RED("ignoreTimeDilation")] public CBool IgnoreTimeDilation { get; set; }
+		private gameFxResource _effect;
+		private CBool _ignoreTimeDilation;
 
-		public EffectExecutor_VisualEffectAtTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("effect")] 
+		public gameFxResource Effect
+		{
+			get => GetProperty(ref _effect);
+			set => SetProperty(ref _effect, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("ignoreTimeDilation")] 
+		public CBool IgnoreTimeDilation
+		{
+			get => GetProperty(ref _ignoreTimeDilation);
+			set => SetProperty(ref _ignoreTimeDilation, value);
+		}
+
+		public EffectExecutor_VisualEffectAtTarget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

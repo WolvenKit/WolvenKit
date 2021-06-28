@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AITargetTrackerComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("TriggersCombat")] public CBool TriggersCombat { get; set; }
+		private CBool _triggersCombat;
 
-		public AITargetTrackerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("TriggersCombat")] 
+		public CBool TriggersCombat
+		{
+			get => GetProperty(ref _triggersCombat);
+			set => SetProperty(ref _triggersCombat, value);
+		}
+
+		public AITargetTrackerComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

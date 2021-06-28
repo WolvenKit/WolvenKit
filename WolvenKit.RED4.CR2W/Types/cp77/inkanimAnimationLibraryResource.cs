@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkanimAnimationLibraryResource : CResource
 	{
-		[Ordinal(1)] [RED("sequences")] public CArray<CHandle<inkanimSequence>> Sequences { get; set; }
+		private CArray<CHandle<inkanimSequence>> _sequences;
 
-		public inkanimAnimationLibraryResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("sequences")] 
+		public CArray<CHandle<inkanimSequence>> Sequences
+		{
+			get => GetProperty(ref _sequences);
+			set => SetProperty(ref _sequences, value);
+		}
+
+		public inkanimAnimationLibraryResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

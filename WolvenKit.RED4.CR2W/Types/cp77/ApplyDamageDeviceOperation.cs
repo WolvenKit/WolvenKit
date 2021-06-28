@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApplyDamageDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("damages")] public CArray<SDamageOperationData> Damages { get; set; }
+		private CArray<SDamageOperationData> _damages;
 
-		public ApplyDamageDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("damages")] 
+		public CArray<SDamageOperationData> Damages
+		{
+			get => GetProperty(ref _damages);
+			set => SetProperty(ref _damages, value);
+		}
+
+		public ApplyDamageDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

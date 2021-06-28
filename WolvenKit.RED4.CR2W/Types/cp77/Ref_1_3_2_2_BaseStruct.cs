@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Ref_1_3_2_2_BaseStruct : CVariable
 	{
-		[Ordinal(0)] [RED("prop1")] public CInt32 Prop1 { get; set; }
+		private CInt32 _prop1;
 
-		public Ref_1_3_2_2_BaseStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("prop1")] 
+		public CInt32 Prop1
+		{
+			get => GetProperty(ref _prop1);
+			set => SetProperty(ref _prop1, value);
+		}
+
+		public Ref_1_3_2_2_BaseStruct(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

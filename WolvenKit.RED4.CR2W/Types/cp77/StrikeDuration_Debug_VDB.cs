@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StrikeDuration_Debug_VDB : StrikeDuration_Debug
 	{
-		[Ordinal(0)] [RED("UPDATE_DELAY")] public CFloat UPDATE_DELAY { get; set; }
-		[Ordinal(1)] [RED("DISPLAY_DURATION")] public CFloat DISPLAY_DURATION { get; set; }
-		[Ordinal(2)] [RED("timeToNextUpdate")] public CFloat TimeToNextUpdate { get; set; }
+		private CFloat _uPDATE_DELAY;
+		private CFloat _dISPLAY_DURATION;
+		private CFloat _timeToNextUpdate;
 
-		public StrikeDuration_Debug_VDB(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("UPDATE_DELAY")] 
+		public CFloat UPDATE_DELAY
+		{
+			get => GetProperty(ref _uPDATE_DELAY);
+			set => SetProperty(ref _uPDATE_DELAY, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("DISPLAY_DURATION")] 
+		public CFloat DISPLAY_DURATION
+		{
+			get => GetProperty(ref _dISPLAY_DURATION);
+			set => SetProperty(ref _dISPLAY_DURATION, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("timeToNextUpdate")] 
+		public CFloat TimeToNextUpdate
+		{
+			get => GetProperty(ref _timeToNextUpdate);
+			set => SetProperty(ref _timeToNextUpdate, value);
+		}
+
+		public StrikeDuration_Debug_VDB(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

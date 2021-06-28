@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameAvailableAnimset : CVariable
 	{
-		[Ordinal(0)] [RED("hash")] public CUInt64 Hash { get; set; }
-		[Ordinal(1)] [RED("resourcePath")] public CString ResourcePath { get; set; }
+		private CUInt64 _hash;
+		private CString _resourcePath;
 
-		public gameAvailableAnimset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hash")] 
+		public CUInt64 Hash
+		{
+			get => GetProperty(ref _hash);
+			set => SetProperty(ref _hash, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("resourcePath")] 
+		public CString ResourcePath
+		{
+			get => GetProperty(ref _resourcePath);
+			set => SetProperty(ref _resourcePath, value);
+		}
+
+		public gameAvailableAnimset(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

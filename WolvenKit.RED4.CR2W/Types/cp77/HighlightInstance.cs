@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HighlightInstance : ModuleInstance
 	{
-		[Ordinal(6)] [RED("context")] public CEnum<HighlightContext> Context { get; set; }
-		[Ordinal(7)] [RED("instant")] public CBool Instant { get; set; }
+		private CEnum<HighlightContext> _context;
+		private CBool _instant;
 
-		public HighlightInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("context")] 
+		public CEnum<HighlightContext> Context
+		{
+			get => GetProperty(ref _context);
+			set => SetProperty(ref _context, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("instant")] 
+		public CBool Instant
+		{
+			get => GetProperty(ref _instant);
+			set => SetProperty(ref _instant, value);
+		}
+
+		public HighlightInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

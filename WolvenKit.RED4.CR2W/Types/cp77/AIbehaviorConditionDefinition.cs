@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorConditionDefinition : AIbehaviorBehaviorComponentDefinition
 	{
-		[Ordinal(0)] [RED("isInverted")] public CBool IsInverted { get; set; }
+		private CBool _isInverted;
 
-		public AIbehaviorConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isInverted")] 
+		public CBool IsInverted
+		{
+			get => GetProperty(ref _isInverted);
+			set => SetProperty(ref _isInverted, value);
+		}
+
+		public AIbehaviorConditionDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

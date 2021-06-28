@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BountyCollectedNotificationQueue : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] [RED("duration")] public CFloat Duration { get; set; }
-		[Ordinal(3)] [RED("bountyNotification")] public CName BountyNotification { get; set; }
+		private CFloat _duration;
+		private CName _bountyNotification;
 
-		public BountyCollectedNotificationQueue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("bountyNotification")] 
+		public CName BountyNotification
+		{
+			get => GetProperty(ref _bountyNotification);
+			set => SetProperty(ref _bountyNotification, value);
+		}
+
+		public BountyCollectedNotificationQueue(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

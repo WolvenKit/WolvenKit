@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsDamageReceivedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("hitEvent")] public CHandle<gameeventsHitEvent> HitEvent { get; set; }
-		[Ordinal(1)] [RED("totalDamageReceived")] public CFloat TotalDamageReceived { get; set; }
+		private CHandle<gameeventsHitEvent> _hitEvent;
+		private CFloat _totalDamageReceived;
 
-		public gameeventsDamageReceivedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hitEvent")] 
+		public CHandle<gameeventsHitEvent> HitEvent
+		{
+			get => GetProperty(ref _hitEvent);
+			set => SetProperty(ref _hitEvent, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("totalDamageReceived")] 
+		public CFloat TotalDamageReceived
+		{
+			get => GetProperty(ref _totalDamageReceived);
+			set => SetProperty(ref _totalDamageReceived, value);
+		}
+
+		public gameeventsDamageReceivedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

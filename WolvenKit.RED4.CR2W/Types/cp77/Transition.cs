@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Transition : redEvent
 	{
-		[Ordinal(0)] [RED("listenerID")] public CUInt32 ListenerID { get; set; }
+		private CUInt32 _listenerID;
 
-		public Transition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("listenerID")] 
+		public CUInt32 ListenerID
+		{
+			get => GetProperty(ref _listenerID);
+			set => SetProperty(ref _listenerID, value);
+		}
+
+		public Transition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

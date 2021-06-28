@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BountyUI : CVariable
 	{
-		[Ordinal(0)] [RED("issuedBy")] public CString IssuedBy { get; set; }
-		[Ordinal(1)] [RED("moneyReward")] public CInt32 MoneyReward { get; set; }
-		[Ordinal(2)] [RED("streetCredReward")] public CInt32 StreetCredReward { get; set; }
-		[Ordinal(3)] [RED("transgressions")] public CArray<CString> Transgressions { get; set; }
-		[Ordinal(4)] [RED("hasAccess")] public CBool HasAccess { get; set; }
-		[Ordinal(5)] [RED("level")] public CInt32 Level { get; set; }
+		private CString _issuedBy;
+		private CInt32 _moneyReward;
+		private CInt32 _streetCredReward;
+		private CArray<CString> _transgressions;
+		private CBool _hasAccess;
+		private CInt32 _level;
 
-		public BountyUI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("issuedBy")] 
+		public CString IssuedBy
+		{
+			get => GetProperty(ref _issuedBy);
+			set => SetProperty(ref _issuedBy, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("moneyReward")] 
+		public CInt32 MoneyReward
+		{
+			get => GetProperty(ref _moneyReward);
+			set => SetProperty(ref _moneyReward, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("streetCredReward")] 
+		public CInt32 StreetCredReward
+		{
+			get => GetProperty(ref _streetCredReward);
+			set => SetProperty(ref _streetCredReward, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("transgressions")] 
+		public CArray<CString> Transgressions
+		{
+			get => GetProperty(ref _transgressions);
+			set => SetProperty(ref _transgressions, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("hasAccess")] 
+		public CBool HasAccess
+		{
+			get => GetProperty(ref _hasAccess);
+			set => SetProperty(ref _hasAccess, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("level")] 
+		public CInt32 Level
+		{
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
+		}
+
+		public BountyUI(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNodeSourceChannel_FloatTrack : animIAnimNodeSourceChannel_Float
 	{
-		[Ordinal(0)] [RED("floatTrack")] public animNamedTrackIndex FloatTrack { get; set; }
-		[Ordinal(1)] [RED("useComplementValue")] public CBool UseComplementValue { get; set; }
+		private animNamedTrackIndex _floatTrack;
+		private CBool _useComplementValue;
 
-		public animAnimNodeSourceChannel_FloatTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("floatTrack")] 
+		public animNamedTrackIndex FloatTrack
+		{
+			get => GetProperty(ref _floatTrack);
+			set => SetProperty(ref _floatTrack, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("useComplementValue")] 
+		public CBool UseComplementValue
+		{
+			get => GetProperty(ref _useComplementValue);
+			set => SetProperty(ref _useComplementValue, value);
+		}
+
+		public animAnimNodeSourceChannel_FloatTrack(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

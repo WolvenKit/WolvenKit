@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioMaterialMeleeSoundDictionary : audioInlinedAudioMetadata
 	{
-		[Ordinal(1)] [RED("entries")] public CArray<audioMaterialMeleeSoundDictionaryItem> Entries { get; set; }
-		[Ordinal(2)] [RED("entryType")] public CHandle<audioMaterialMeleeSoundDictionaryItem> EntryType { get; set; }
+		private CArray<audioMaterialMeleeSoundDictionaryItem> _entries;
+		private CHandle<audioMaterialMeleeSoundDictionaryItem> _entryType;
 
-		public audioMaterialMeleeSoundDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("entries")] 
+		public CArray<audioMaterialMeleeSoundDictionaryItem> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("entryType")] 
+		public CHandle<audioMaterialMeleeSoundDictionaryItem> EntryType
+		{
+			get => GetProperty(ref _entryType);
+			set => SetProperty(ref _entryType, value);
+		}
+
+		public audioMaterialMeleeSoundDictionary(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

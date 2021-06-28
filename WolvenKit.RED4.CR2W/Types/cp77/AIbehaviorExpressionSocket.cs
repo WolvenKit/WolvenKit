@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorExpressionSocket : ISerializable
 	{
-		[Ordinal(0)] [RED("typeHint")] public AIbehaviorTypeRef TypeHint { get; set; }
-		[Ordinal(1)] [RED("expression")] public CHandle<AIbehaviorPassiveExpressionDefinition> Expression { get; set; }
+		private AIbehaviorTypeRef _typeHint;
+		private CHandle<AIbehaviorPassiveExpressionDefinition> _expression;
 
-		public AIbehaviorExpressionSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("typeHint")] 
+		public AIbehaviorTypeRef TypeHint
+		{
+			get => GetProperty(ref _typeHint);
+			set => SetProperty(ref _typeHint, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("expression")] 
+		public CHandle<AIbehaviorPassiveExpressionDefinition> Expression
+		{
+			get => GetProperty(ref _expression);
+			set => SetProperty(ref _expression, value);
+		}
+
+		public AIbehaviorExpressionSocket(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

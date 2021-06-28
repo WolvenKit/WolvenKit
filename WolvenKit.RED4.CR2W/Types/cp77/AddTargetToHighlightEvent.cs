@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AddTargetToHighlightEvent : redEvent
 	{
-		[Ordinal(0)] [RED("target")] public CombatTarget Target { get; set; }
+		private CombatTarget _target;
 
-		public AddTargetToHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("target")] 
+		public CombatTarget Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		public AddTargetToHighlightEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

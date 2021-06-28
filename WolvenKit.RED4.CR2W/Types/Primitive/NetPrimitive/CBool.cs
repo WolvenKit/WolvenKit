@@ -10,18 +10,18 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
 
-    [Editor(typeof(IBoolEditor), typeof(IPropertyEditorBase))]
     public class CBool : CVariable, IREDBool
     {
         public CBool()
         {
 
         }
-        public CBool(CR2WFile cr2w, CVariable parent, string name)
+        public CBool(IRed4EngineFile cr2w, CVariable parent, string name)
             : base(cr2w, parent, name)
         {
         }
@@ -41,6 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
         //file.Write(val ? (byte) 1 : (byte) 0);
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             this.Value = val switch
             {
                 bool b => b,
@@ -51,6 +52,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => Value;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnAddIdleWithBlendAnimEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("performerId")] public scnPerformerId PerformerId { get; set; }
-		[Ordinal(7)] [RED("actorComponent")] public CName ActorComponent { get; set; }
-		[Ordinal(8)] [RED("targetWeight")] public CFloat TargetWeight { get; set; }
+		private scnPerformerId _performerId;
+		private CName _actorComponent;
+		private CFloat _targetWeight;
 
-		public scnAddIdleWithBlendAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("performerId")] 
+		public scnPerformerId PerformerId
+		{
+			get => GetProperty(ref _performerId);
+			set => SetProperty(ref _performerId, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("actorComponent")] 
+		public CName ActorComponent
+		{
+			get => GetProperty(ref _actorComponent);
+			set => SetProperty(ref _actorComponent, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("targetWeight")] 
+		public CFloat TargetWeight
+		{
+			get => GetProperty(ref _targetWeight);
+			set => SetProperty(ref _targetWeight, value);
+		}
+
+		public scnAddIdleWithBlendAnimEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

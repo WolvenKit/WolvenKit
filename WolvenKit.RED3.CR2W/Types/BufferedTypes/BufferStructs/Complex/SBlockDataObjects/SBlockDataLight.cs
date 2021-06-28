@@ -28,6 +28,6 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(12)] [RED] public CUInt8 padding { get; set; }
         [Ordinal(13)] [RED] public CUInt32 lightUsageMask { get; set; }
 
-        public SBlockDataLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SBlockDataLight(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

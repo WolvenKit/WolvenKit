@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioLoopedSoundEmitterMetadata : audioEmitterMetadata
 	{
-		[Ordinal(1)] [RED("loopSound")] public CName LoopSound { get; set; }
+		private CName _loopSound;
 
-		public audioLoopedSoundEmitterMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("loopSound")] 
+		public CName LoopSound
+		{
+			get => GetProperty(ref _loopSound);
+			set => SetProperty(ref _loopSound, value);
+		}
+
+		public audioLoopedSoundEmitterMetadata(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

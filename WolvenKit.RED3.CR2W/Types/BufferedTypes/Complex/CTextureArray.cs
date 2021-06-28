@@ -30,7 +30,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1009)] [REDBuffer(true)] public CBytes rawfile { get; set; }
 
 
-        public CTextureArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CTextureArray(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
             rawfile = new CBytes(cr2w, this, nameof(rawfile)) { IsSerialized = true };

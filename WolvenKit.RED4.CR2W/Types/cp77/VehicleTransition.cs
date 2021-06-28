@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleTransition : DefaultTransition
 	{
-		[Ordinal(0)] [RED("stateMachineInitData")] public wCHandle<VehicleTransitionInitData> StateMachineInitData { get; set; }
+		private wCHandle<VehicleTransitionInitData> _stateMachineInitData;
 
-		public VehicleTransition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stateMachineInitData")] 
+		public wCHandle<VehicleTransitionInitData> StateMachineInitData
+		{
+			get => GetProperty(ref _stateMachineInitData);
+			set => SetProperty(ref _stateMachineInitData, value);
+		}
+
+		public VehicleTransition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

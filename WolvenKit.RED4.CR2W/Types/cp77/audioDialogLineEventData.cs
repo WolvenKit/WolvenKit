@@ -7,16 +7,88 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioDialogLineEventData : CVariable
 	{
-		[Ordinal(0)] [RED("stringId")] public CRUID StringId { get; set; }
-		[Ordinal(1)] [RED("context")] public CEnum<locVoiceoverContext> Context { get; set; }
-		[Ordinal(2)] [RED("expression")] public CEnum<locVoiceoverExpression> Expression { get; set; }
-		[Ordinal(3)] [RED("isPlayer")] public CBool IsPlayer { get; set; }
-		[Ordinal(4)] [RED("isRewind")] public CBool IsRewind { get; set; }
-		[Ordinal(5)] [RED("isHolocall")] public CBool IsHolocall { get; set; }
-		[Ordinal(6)] [RED("customVoEvent")] public CName CustomVoEvent { get; set; }
-		[Ordinal(7)] [RED("seekTime")] public CFloat SeekTime { get; set; }
-		[Ordinal(8)] [RED("playbackSpeedParameter")] public CFloat PlaybackSpeedParameter { get; set; }
+		private CRUID _stringId;
+		private CEnum<locVoiceoverContext> _context;
+		private CEnum<locVoiceoverExpression> _expression;
+		private CBool _isPlayer;
+		private CBool _isRewind;
+		private CBool _isHolocall;
+		private CName _customVoEvent;
+		private CFloat _seekTime;
+		private CFloat _playbackSpeedParameter;
 
-		public audioDialogLineEventData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stringId")] 
+		public CRUID StringId
+		{
+			get => GetProperty(ref _stringId);
+			set => SetProperty(ref _stringId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("context")] 
+		public CEnum<locVoiceoverContext> Context
+		{
+			get => GetProperty(ref _context);
+			set => SetProperty(ref _context, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("expression")] 
+		public CEnum<locVoiceoverExpression> Expression
+		{
+			get => GetProperty(ref _expression);
+			set => SetProperty(ref _expression, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("isPlayer")] 
+		public CBool IsPlayer
+		{
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("isRewind")] 
+		public CBool IsRewind
+		{
+			get => GetProperty(ref _isRewind);
+			set => SetProperty(ref _isRewind, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("isHolocall")] 
+		public CBool IsHolocall
+		{
+			get => GetProperty(ref _isHolocall);
+			set => SetProperty(ref _isHolocall, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("customVoEvent")] 
+		public CName CustomVoEvent
+		{
+			get => GetProperty(ref _customVoEvent);
+			set => SetProperty(ref _customVoEvent, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("seekTime")] 
+		public CFloat SeekTime
+		{
+			get => GetProperty(ref _seekTime);
+			set => SetProperty(ref _seekTime, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("playbackSpeedParameter")] 
+		public CFloat PlaybackSpeedParameter
+		{
+			get => GetProperty(ref _playbackSpeedParameter);
+			set => SetProperty(ref _playbackSpeedParameter, value);
+		}
+
+		public audioDialogLineEventData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

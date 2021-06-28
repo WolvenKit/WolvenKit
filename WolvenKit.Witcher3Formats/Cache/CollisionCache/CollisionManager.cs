@@ -8,26 +8,21 @@ namespace WolvenKit.Cache
 {
     public class CollisionManager : WitcherArchiveManager
     {
+        public static string SerializationVersion => "1.0";
+
+        public override EArchiveType TypeName => EArchiveType.CollisionCache;
+        public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
+
+
         #region Constructors
 
         public CollisionManager()
         {
-            Items = new Dictionary<string, List<IGameFile>>();
-            Archives = new Dictionary<string, CollisionCache>();
-            FileList = new List<IGameFile>();
-            Extensions = new List<string>();
-            AutocompleteSource = new List<string>();
+
         }
 
         #endregion Constructors
 
-        #region Properties
-
-        public static string SerializationVersion => "1.0";
-        public Dictionary<string, CollisionCache> Archives { get; set; }
-        public override EArchiveType TypeName => EArchiveType.CollisionCache;
-
-        #endregion Properties
 
         #region Methods
 
@@ -35,7 +30,7 @@ namespace WolvenKit.Cache
         ///     Load every non-mod bundle it can find in ..\\..\\content and ..\\..\\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
-        public override void LoadAll(string exedir)
+        public override void LoadAll(string exedir, bool rebuildtree = true)
         {
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
@@ -73,7 +68,11 @@ namespace WolvenKit.Cache
                     LoadArchive(file);
                 }
             }
-            RebuildRootNode();
+
+            if (rebuildtree)
+            {
+                RebuildRootNode();
+            }
         }
 
         /// <summary>
@@ -87,34 +86,17 @@ namespace WolvenKit.Cache
 
             var bundle = new CollisionCache(filename);
 
-            foreach (var item in bundle.Files)
+            foreach (var (key, value) in bundle.Files)
             {
-                if (!Items.ContainsKey(item.Name))
-                    Items.Add(item.Name, new List<IGameFile>());
-
-                Items[item.Name].Add(item);
-            }
-
-            Archives.Add(filename, bundle);
-        }
-
-        /// <summary>
-        ///     Load a single mod collision cache
-        /// </summary>
-        /// <param name="filename"></param>
-        public override void LoadModArchive(string filename)
-        {
-            if (Archives.ContainsKey(filename))
-                return;
-
-            var bundle = new CollisionCache(filename);
-
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
-
-                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].Add(value);
+                }
             }
 
             Archives.Add(filename, bundle);
@@ -152,6 +134,35 @@ namespace WolvenKit.Cache
                 }
             }
             RebuildRootNode();
+        }
+
+        /// <summary>
+        ///     Load a single mod collision cache
+        /// </summary>
+        /// <param name="filename"></param>
+        public override void LoadModArchive(string filename)
+        {
+            if (Archives.ContainsKey(filename))
+            {
+                return;
+            }
+
+            var bundle = new CollisionCache(filename);
+
+            foreach (var (key, value) in bundle.Files)
+            {
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].Add(value);
+                }
+            }
+
+            Archives.Add(filename, bundle);
         }
 
         #endregion Methods

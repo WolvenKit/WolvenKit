@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class appearanceAppearancePartOverrides : CVariable
 	{
-		[Ordinal(0)] [RED("partResource")] public raRef<entEntityTemplate> PartResource { get; set; }
-		[Ordinal(1)] [RED("componentsOverrides")] public CArray<appearancePartComponentOverrides> ComponentsOverrides { get; set; }
+		private raRef<entEntityTemplate> _partResource;
+		private CArray<appearancePartComponentOverrides> _componentsOverrides;
 
-		public appearanceAppearancePartOverrides(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("partResource")] 
+		public raRef<entEntityTemplate> PartResource
+		{
+			get => GetProperty(ref _partResource);
+			set => SetProperty(ref _partResource, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("componentsOverrides")] 
+		public CArray<appearancePartComponentOverrides> ComponentsOverrides
+		{
+			get => GetProperty(ref _componentsOverrides);
+			set => SetProperty(ref _componentsOverrides, value);
+		}
+
+		public appearanceAppearancePartOverrides(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

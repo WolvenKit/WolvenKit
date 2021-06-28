@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameLootObject : gameObject
 	{
-		[Ordinal(40)] [RED("lootID")] public TweakDBID LootID { get; set; }
-		[Ordinal(41)] [RED("isInIconForcedVisibilityRange")] public CBool IsInIconForcedVisibilityRange { get; set; }
-		[Ordinal(42)] [RED("activeQualityRangeInteraction")] public CName ActiveQualityRangeInteraction { get; set; }
+		private TweakDBID _lootID;
+		private CBool _isInIconForcedVisibilityRange;
+		private CName _activeQualityRangeInteraction;
 
-		public gameLootObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("lootID")] 
+		public TweakDBID LootID
+		{
+			get => GetProperty(ref _lootID);
+			set => SetProperty(ref _lootID, value);
+		}
+
+		[Ordinal(41)] 
+		[RED("isInIconForcedVisibilityRange")] 
+		public CBool IsInIconForcedVisibilityRange
+		{
+			get => GetProperty(ref _isInIconForcedVisibilityRange);
+			set => SetProperty(ref _isInIconForcedVisibilityRange, value);
+		}
+
+		[Ordinal(42)] 
+		[RED("activeQualityRangeInteraction")] 
+		public CName ActiveQualityRangeInteraction
+		{
+			get => GetProperty(ref _activeQualityRangeInteraction);
+			set => SetProperty(ref _activeQualityRangeInteraction, value);
+		}
+
+		public gameLootObject(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

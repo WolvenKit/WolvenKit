@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCharacterCustomizationSystem_OnOptionUpdatedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("option")] public wCHandle<gameuiCharacterCustomizationOption> Option { get; set; }
+		private wCHandle<gameuiCharacterCustomizationOption> _option;
 
-		public gameuiCharacterCustomizationSystem_OnOptionUpdatedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("option")] 
+		public wCHandle<gameuiCharacterCustomizationOption> Option
+		{
+			get => GetProperty(ref _option);
+			set => SetProperty(ref _option, value);
+		}
+
+		public gameuiCharacterCustomizationSystem_OnOptionUpdatedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,15 +7,79 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkPointCloudEffect : inkIEffect
 	{
-		[Ordinal(2)] [RED("repeat")] public CFloat Repeat { get; set; }
-		[Ordinal(3)] [RED("offsetX")] public CFloat OffsetX { get; set; }
-		[Ordinal(4)] [RED("offsetY")] public CFloat OffsetY { get; set; }
-		[Ordinal(5)] [RED("angle")] public CFloat Angle { get; set; }
-		[Ordinal(6)] [RED("fovScale")] public CFloat FovScale { get; set; }
-		[Ordinal(7)] [RED("parallaxDepth")] public CFloat ParallaxDepth { get; set; }
-		[Ordinal(8)] [RED("depthToOpacity")] public CFloat DepthToOpacity { get; set; }
-		[Ordinal(9)] [RED("depthToBrightness")] public CFloat DepthToBrightness { get; set; }
+		private CFloat _repeat;
+		private CFloat _offsetX;
+		private CFloat _offsetY;
+		private CFloat _angle;
+		private CFloat _fovScale;
+		private CFloat _parallaxDepth;
+		private CFloat _depthToOpacity;
+		private CFloat _depthToBrightness;
 
-		public inkPointCloudEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("repeat")] 
+		public CFloat Repeat
+		{
+			get => GetProperty(ref _repeat);
+			set => SetProperty(ref _repeat, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("offsetX")] 
+		public CFloat OffsetX
+		{
+			get => GetProperty(ref _offsetX);
+			set => SetProperty(ref _offsetX, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("offsetY")] 
+		public CFloat OffsetY
+		{
+			get => GetProperty(ref _offsetY);
+			set => SetProperty(ref _offsetY, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("angle")] 
+		public CFloat Angle
+		{
+			get => GetProperty(ref _angle);
+			set => SetProperty(ref _angle, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("fovScale")] 
+		public CFloat FovScale
+		{
+			get => GetProperty(ref _fovScale);
+			set => SetProperty(ref _fovScale, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("parallaxDepth")] 
+		public CFloat ParallaxDepth
+		{
+			get => GetProperty(ref _parallaxDepth);
+			set => SetProperty(ref _parallaxDepth, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("depthToOpacity")] 
+		public CFloat DepthToOpacity
+		{
+			get => GetProperty(ref _depthToOpacity);
+			set => SetProperty(ref _depthToOpacity, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("depthToBrightness")] 
+		public CFloat DepthToBrightness
+		{
+			get => GetProperty(ref _depthToBrightness);
+			set => SetProperty(ref _depthToBrightness, value);
+		}
+
+		public inkPointCloudEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

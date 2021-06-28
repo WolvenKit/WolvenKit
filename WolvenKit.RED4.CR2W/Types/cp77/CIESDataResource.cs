@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CIESDataResource : CResource
 	{
-		[Ordinal(1)] [RED("samples", 128)] public CArrayFixedSize<CUInt8> Samples { get; set; }
+		private CArrayFixedSize<CUInt8> _samples;
 
-		public CIESDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("samples", 128)] 
+		public CArrayFixedSize<CUInt8> Samples
+		{
+			get => GetProperty(ref _samples);
+			set => SetProperty(ref _samples, value);
+		}
+
+		public CIESDataResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

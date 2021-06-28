@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SetBoneOrientation : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("bone")] public animTransformIndex Bone { get; set; }
-		[Ordinal(13)] [RED("orientationMs")] public animQuaternionLink OrientationMs { get; set; }
+		private animTransformIndex _bone;
+		private animQuaternionLink _orientationMs;
 
-		public animAnimNode_SetBoneOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("bone")] 
+		public animTransformIndex Bone
+		{
+			get => GetProperty(ref _bone);
+			set => SetProperty(ref _bone, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("orientationMs")] 
+		public animQuaternionLink OrientationMs
+		{
+			get => GetProperty(ref _orientationMs);
+			set => SetProperty(ref _orientationMs, value);
+		}
+
+		public animAnimNode_SetBoneOrientation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entVertexAnimationMapperDestination : CVariable
 	{
-		[Ordinal(0)] [RED("vertexCustomSlotIndex")] public CUInt32 VertexCustomSlotIndex { get; set; }
+		private CUInt32 _vertexCustomSlotIndex;
 
-		public entVertexAnimationMapperDestination(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vertexCustomSlotIndex")] 
+		public CUInt32 VertexCustomSlotIndex
+		{
+			get => GetProperty(ref _vertexCustomSlotIndex);
+			set => SetProperty(ref _vertexCustomSlotIndex, value);
+		}
+
+		public entVertexAnimationMapperDestination(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

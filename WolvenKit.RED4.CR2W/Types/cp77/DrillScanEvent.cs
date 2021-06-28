@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DrillScanEvent : redEvent
 	{
-		[Ordinal(0)] [RED("IsScanning")] public CBool IsScanning { get; set; }
+		private CBool _isScanning;
 
-		public DrillScanEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("IsScanning")] 
+		public CBool IsScanning
+		{
+			get => GetProperty(ref _isScanning);
+			set => SetProperty(ref _isScanning, value);
+		}
+
+		public DrillScanEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

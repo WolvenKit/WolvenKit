@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleCameraSceneEnableEvent : redEvent
 	{
-		[Ordinal(0)] [RED("scene")] public CBool Scene { get; set; }
+		private CBool _scene;
 
-		public vehicleCameraSceneEnableEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("scene")] 
+		public CBool Scene
+		{
+			get => GetProperty(ref _scene);
+			set => SetProperty(ref _scene, value);
+		}
+
+		public vehicleCameraSceneEnableEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

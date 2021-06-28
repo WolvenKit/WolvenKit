@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameaudioSoundComponentBase : entIPlacedComponent
 	{
-		[Ordinal(5)] [RED("audioName")] public CName AudioName { get; set; }
-		[Ordinal(6)] [RED("applyObstruction")] public CBool ApplyObstruction { get; set; }
-		[Ordinal(7)] [RED("applyAcousticOcclusion")] public CBool ApplyAcousticOcclusion { get; set; }
-		[Ordinal(8)] [RED("applyAcousticRepositioning")] public CBool ApplyAcousticRepositioning { get; set; }
-		[Ordinal(9)] [RED("obstructionChangeTime")] public CFloat ObstructionChangeTime { get; set; }
-		[Ordinal(10)] [RED("maxPlayDistance")] public CFloat MaxPlayDistance { get; set; }
+		private CName _audioName;
+		private CBool _applyObstruction;
+		private CBool _applyAcousticOcclusion;
+		private CBool _applyAcousticRepositioning;
+		private CFloat _obstructionChangeTime;
+		private CFloat _maxPlayDistance;
 
-		public gameaudioSoundComponentBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("audioName")] 
+		public CName AudioName
+		{
+			get => GetProperty(ref _audioName);
+			set => SetProperty(ref _audioName, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("applyObstruction")] 
+		public CBool ApplyObstruction
+		{
+			get => GetProperty(ref _applyObstruction);
+			set => SetProperty(ref _applyObstruction, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("applyAcousticOcclusion")] 
+		public CBool ApplyAcousticOcclusion
+		{
+			get => GetProperty(ref _applyAcousticOcclusion);
+			set => SetProperty(ref _applyAcousticOcclusion, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("applyAcousticRepositioning")] 
+		public CBool ApplyAcousticRepositioning
+		{
+			get => GetProperty(ref _applyAcousticRepositioning);
+			set => SetProperty(ref _applyAcousticRepositioning, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("obstructionChangeTime")] 
+		public CFloat ObstructionChangeTime
+		{
+			get => GetProperty(ref _obstructionChangeTime);
+			set => SetProperty(ref _obstructionChangeTime, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("maxPlayDistance")] 
+		public CFloat MaxPlayDistance
+		{
+			get => GetProperty(ref _maxPlayDistance);
+			set => SetProperty(ref _maxPlayDistance, value);
+		}
+
+		public gameaudioSoundComponentBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

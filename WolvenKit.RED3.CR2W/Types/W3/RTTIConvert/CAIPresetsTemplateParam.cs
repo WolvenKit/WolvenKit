@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("aiWizardAnswers")] 		public CEdWizardSavedAnswers AiWizardAnswers { get; set;}
 
-		public CAIPresetsTemplateParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAIPresetsTemplateParam(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAIPresetsTemplateParam(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

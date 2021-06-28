@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendingMachineSetup : CVariable
 	{
-		[Ordinal(0)] [RED("timeToCompletePurchase")] public CFloat TimeToCompletePurchase { get; set; }
+		private CFloat _timeToCompletePurchase;
 
-		public VendingMachineSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("timeToCompletePurchase")] 
+		public CFloat TimeToCompletePurchase
+		{
+			get => GetProperty(ref _timeToCompletePurchase);
+			set => SetProperty(ref _timeToCompletePurchase, value);
+		}
+
+		public VendingMachineSetup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

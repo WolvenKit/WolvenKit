@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTppRepAttachedObjectInfo : CVariable
 	{
-		[Ordinal(0)] [RED("slotID")] public TweakDBID SlotID { get; set; }
-		[Ordinal(1)] [RED("itemID")] public TweakDBID ItemID { get; set; }
+		private TweakDBID _slotID;
+		private TweakDBID _itemID;
 
-		public gameTppRepAttachedObjectInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("slotID")] 
+		public TweakDBID SlotID
+		{
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("itemID")] 
+		public TweakDBID ItemID
+		{
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
+		}
+
+		public gameTppRepAttachedObjectInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

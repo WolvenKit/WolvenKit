@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_FacialReaction : animAnimFeature
 	{
-		[Ordinal(0)] [RED("category")] public CInt32 Category { get; set; }
-		[Ordinal(1)] [RED("idle")] public CInt32 Idle { get; set; }
+		private CInt32 _category;
+		private CInt32 _idle;
 
-		public AnimFeature_FacialReaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("category")] 
+		public CInt32 Category
+		{
+			get => GetProperty(ref _category);
+			set => SetProperty(ref _category, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("idle")] 
+		public CInt32 Idle
+		{
+			get => GetProperty(ref _idle);
+			set => SetProperty(ref _idle, value);
+		}
+
+		public AnimFeature_FacialReaction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

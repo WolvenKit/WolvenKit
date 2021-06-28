@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnAnimationRidAudioData : ISerializable
 	{
-		[Ordinal(0)] [RED("events")] public CArray<CHandle<animAnimEvent>> Events { get; set; }
+		private CArray<CHandle<animAnimEvent>> _events;
 
-		public scnAnimationRidAudioData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("events")] 
+		public CArray<CHandle<animAnimEvent>> Events
+		{
+			get => GetProperty(ref _events);
+			set => SetProperty(ref _events, value);
+		}
+
+		public scnAnimationRidAudioData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

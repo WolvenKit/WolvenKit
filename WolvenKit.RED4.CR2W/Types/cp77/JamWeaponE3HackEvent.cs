@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class JamWeaponE3HackEvent : redEvent
 	{
-		public JamWeaponE3HackEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public JamWeaponE3HackEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FastTRavelSystemDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("DestinationPoint")] public gamebbScriptID_Variant DestinationPoint { get; set; }
-		[Ordinal(1)] [RED("StartingPoint")] public gamebbScriptID_Variant StartingPoint { get; set; }
-		[Ordinal(2)] [RED("FastTravelLoadingScreenFinished")] public gamebbScriptID_Bool FastTravelLoadingScreenFinished { get; set; }
+		private gamebbScriptID_Variant _destinationPoint;
+		private gamebbScriptID_Variant _startingPoint;
+		private gamebbScriptID_Bool _fastTravelLoadingScreenFinished;
 
-		public FastTRavelSystemDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("DestinationPoint")] 
+		public gamebbScriptID_Variant DestinationPoint
+		{
+			get => GetProperty(ref _destinationPoint);
+			set => SetProperty(ref _destinationPoint, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("StartingPoint")] 
+		public gamebbScriptID_Variant StartingPoint
+		{
+			get => GetProperty(ref _startingPoint);
+			set => SetProperty(ref _startingPoint, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("FastTravelLoadingScreenFinished")] 
+		public gamebbScriptID_Bool FastTravelLoadingScreenFinished
+		{
+			get => GetProperty(ref _fastTravelLoadingScreenFinished);
+			set => SetProperty(ref _fastTravelLoadingScreenFinished, value);
+		}
+
+		public FastTRavelSystemDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

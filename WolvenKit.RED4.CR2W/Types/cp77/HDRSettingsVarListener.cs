@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HDRSettingsVarListener : userSettingsVarListener
 	{
-		[Ordinal(0)] [RED("ctrl")] public wCHandle<gameuiHDRSettingsGameController> Ctrl { get; set; }
+		private wCHandle<gameuiHDRSettingsGameController> _ctrl;
 
-		public HDRSettingsVarListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ctrl")] 
+		public wCHandle<gameuiHDRSettingsGameController> Ctrl
+		{
+			get => GetProperty(ref _ctrl);
+			set => SetProperty(ref _ctrl, value);
+		}
+
+		public HDRSettingsVarListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

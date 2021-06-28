@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AlarmEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isValid")] public CBool IsValid { get; set; }
-		[Ordinal(1)] [RED("ID")] public gameDelayID ID { get; set; }
+		private CBool _isValid;
+		private gameDelayID _iD;
 
-		public AlarmEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isValid")] 
+		public CBool IsValid
+		{
+			get => GetProperty(ref _isValid);
+			set => SetProperty(ref _isValid, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("ID")] 
+		public gameDelayID ID
+		{
+			get => GetProperty(ref _iD);
+			set => SetProperty(ref _iD, value);
+		}
+
+		public AlarmEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

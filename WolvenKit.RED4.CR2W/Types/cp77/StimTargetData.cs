@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StimTargetData : CVariable
 	{
-		[Ordinal(0)] [RED("spawnerRef")] public NodeRef SpawnerRef { get; set; }
-		[Ordinal(1)] [RED("entryID")] public CName EntryID { get; set; }
+		private NodeRef _spawnerRef;
+		private CName _entryID;
 
-		public StimTargetData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("spawnerRef")] 
+		public NodeRef SpawnerRef
+		{
+			get => GetProperty(ref _spawnerRef);
+			set => SetProperty(ref _spawnerRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entryID")] 
+		public CName EntryID
+		{
+			get => GetProperty(ref _entryID);
+			set => SetProperty(ref _entryID, value);
+		}
+
+		public StimTargetData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

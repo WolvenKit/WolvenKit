@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficStaticCollisionData : ISerializable
 	{
-		[Ordinal(0)] [RED("laneCollisions")] public CArray<worldStaticLaneCollisions> LaneCollisions { get; set; }
+		private CArray<worldStaticLaneCollisions> _laneCollisions;
 
-		public worldTrafficStaticCollisionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("laneCollisions")] 
+		public CArray<worldStaticLaneCollisions> LaneCollisions
+		{
+			get => GetProperty(ref _laneCollisions);
+			set => SetProperty(ref _laneCollisions, value);
+		}
+
+		public worldTrafficStaticCollisionData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

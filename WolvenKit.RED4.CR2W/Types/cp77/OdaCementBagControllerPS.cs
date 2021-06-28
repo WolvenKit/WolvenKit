@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OdaCementBagControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)] [RED("cementEffectCooldown")] public CFloat CementEffectCooldown { get; set; }
+		private CFloat _cementEffectCooldown;
 
-		public OdaCementBagControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(103)] 
+		[RED("cementEffectCooldown")] 
+		public CFloat CementEffectCooldown
+		{
+			get => GetProperty(ref _cementEffectCooldown);
+			set => SetProperty(ref _cementEffectCooldown, value);
+		}
+
+		public OdaCementBagControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

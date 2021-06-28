@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DelayedVisibilityInAnimSystemRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("data")] public CHandle<ForcedVisibilityInAnimSystemData> Data { get; set; }
-		[Ordinal(1)] [RED("isVisible")] public CBool IsVisible { get; set; }
-		[Ordinal(2)] [RED("entityID")] public entEntityID EntityID { get; set; }
+		private CHandle<ForcedVisibilityInAnimSystemData> _data;
+		private CBool _isVisible;
+		private entEntityID _entityID;
 
-		public DelayedVisibilityInAnimSystemRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CHandle<ForcedVisibilityInAnimSystemData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isVisible")] 
+		public CBool IsVisible
+		{
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("entityID")] 
+		public entEntityID EntityID
+		{
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
+		}
+
+		public DelayedVisibilityInAnimSystemRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

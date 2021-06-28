@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SendScoreRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("score")] public CInt32 Score { get; set; }
-		[Ordinal(1)] [RED("gameName")] public CString GameName { get; set; }
+		private CInt32 _score;
+		private CString _gameName;
 
-		public SendScoreRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("score")] 
+		public CInt32 Score
+		{
+			get => GetProperty(ref _score);
+			set => SetProperty(ref _score, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("gameName")] 
+		public CString GameName
+		{
+			get => GetProperty(ref _gameName);
+			set => SetProperty(ref _gameName, value);
+		}
+
+		public SendScoreRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

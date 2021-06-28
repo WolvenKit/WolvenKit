@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
@@ -55,7 +56,7 @@ namespace WolvenKit.Common
 
         public GameFileTreeNode Parent { get; set; }
 
-        public List<GameFileTreeNode> SubDirectories => Directories.Values.ToList();
+        public List<GameFileTreeNode> SubDirectories => Directories.Values.OrderBy(_ => _.Name).ToList();
 
         public EArchiveType Type
         {
@@ -85,40 +86,60 @@ namespace WolvenKit.Common
 
         #region Methods
 
-        public List<AssetBrowserData> ToAssetBrowserData()
-        {
-            var ret = new List<AssetBrowserData>();
-            ret.Add(new AssetBrowserData()
-            {
-                Name = "..",
-                Extension = nameof(ECustomImageKeys.OpenDirImageKey),
-                Type = EntryType.MoveUP,
-                This = this,
-                Parent = this.Parent
-            });
-            ret.AddRange(Directories.Select(d => new AssetBrowserData()
-            {
-                Name = d.Key,
-                Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
-                Parent = this.Parent,
-                Children = d.Value,
-                Extension = nameof(ECustomImageKeys.ClosedDirImageKey),
-                This = this,
-                Type = EntryType.Directory
-            }));
+        //public List<AssetBrowserData> ToAssetBrowserData()
+        //{
+        //    var ret = new List<AssetBrowserData>();
 
-            ret.AddRange(Files.Select(f => new AssetBrowserData()
-            {
-                Name = f.Key,
-                Size = f.Value[0].Size + " bytes",
-                This = this,
-                Extension = Path.GetExtension(f.Key),
-                Type = EntryType.File,
-                Parent = this.Parent
-            }));
+        //    new Thread(() =>
+        //    {
+        //        //ret.Add(new AssetBrowserData(nameof(ECustomImageKeys.OpenDirImageKey))
+        //        //{
+        //        //    Name = "..",
+        //        //    Type = EntryType.MoveUP,
+        //        //    This = this,
+        //        //    Parent = this.Parent
+        //        //});
+        //        ret.AddRange(Directories.Select(d => new AssetBrowserData(nameof(ECustomImageKeys.ClosedDirImageKey))
+        //        {
+        //            Name = d.Key,
+        //            Size = d.Value.Directories.Count + " directories, " + d.Value.Files.Count + " files",
+        //            Parent = this.Parent,
+        //            Children = d.Value,
+        //            This = this,
+        //            Type = EntryType.Directory
+        //        }).OrderBy(_ => _.Name));
 
-            return ret;
-        }
+        //        ret.AddRange(Files.Select(f => new AssetBrowserData(Path.GetExtension(f.Key))
+        //        {
+        //            AmbigiousFiles = f.Value,
+        //            Hash = f.Value[0].Key,
+        //            Name = f.Key,
+        //            Size = FormatSize(f.Value[0].Size),
+        //            This = this,
+        //            Type = EntryType.File,
+        //            Parent = this.Parent
+        //        }).OrderBy(_ => _.Name));
+
+
+        //        string FormatSize(uint size)
+        //        {
+        //            string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
+
+        //            var counter = 0;
+        //            var number = (decimal)size;
+        //            while (Math.Round(number / 1024) >= 1)
+        //            {
+        //                number = number / 1024;
+        //                counter++;
+        //            }
+        //            return $"{number:n1} {suffixes[counter]}";
+        //        }
+        //    }).Start();
+        //    return ret;
+
+        //}
+
+        public override string ToString() => Name;
 
         #endregion Methods
     }

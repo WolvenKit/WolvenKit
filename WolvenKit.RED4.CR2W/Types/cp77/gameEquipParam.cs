@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEquipParam : CVariable
 	{
-		[Ordinal(0)] [RED("slotID")] public TweakDBID SlotID { get; set; }
-		[Ordinal(1)] [RED("itemIDToEquip")] public gameItemID ItemIDToEquip { get; set; }
-		[Ordinal(2)] [RED("forceFirstEquip")] public CBool ForceFirstEquip { get; set; }
-		[Ordinal(3)] [RED("instant")] public CBool Instant { get; set; }
+		private TweakDBID _slotID;
+		private gameItemID _itemIDToEquip;
+		private CBool _forceFirstEquip;
+		private CBool _instant;
 
-		public gameEquipParam(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("slotID")] 
+		public TweakDBID SlotID
+		{
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("itemIDToEquip")] 
+		public gameItemID ItemIDToEquip
+		{
+			get => GetProperty(ref _itemIDToEquip);
+			set => SetProperty(ref _itemIDToEquip, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("forceFirstEquip")] 
+		public CBool ForceFirstEquip
+		{
+			get => GetProperty(ref _forceFirstEquip);
+			set => SetProperty(ref _forceFirstEquip, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("instant")] 
+		public CBool Instant
+		{
+			get => GetProperty(ref _instant);
+			set => SetProperty(ref _instant, value);
+		}
+
+		public gameEquipParam(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

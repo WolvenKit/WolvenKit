@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questWorldDataManagerNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(2)] [RED("type")] public CHandle<questIWorldDataManagerNodeType> Type { get; set; }
+		private CHandle<questIWorldDataManagerNodeType> _type;
 
-		public questWorldDataManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("type")] 
+		public CHandle<questIWorldDataManagerNodeType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public questWorldDataManagerNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

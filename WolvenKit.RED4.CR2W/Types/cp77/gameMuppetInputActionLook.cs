@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMuppetInputActionLook : gameIMuppetInputAction
 	{
-		[Ordinal(0)] [RED("rotation")] public Vector2 Rotation { get; set; }
+		private Vector2 _rotation;
 
-		public gameMuppetInputActionLook(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rotation")] 
+		public Vector2 Rotation
+		{
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
+		}
+
+		public gameMuppetInputActionLook(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

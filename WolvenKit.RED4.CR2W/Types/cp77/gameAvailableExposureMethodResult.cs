@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameAvailableExposureMethodResult : CVariable
 	{
-		[Ordinal(0)] [RED("distanceToTarget")] public CFloat DistanceToTarget { get; set; }
-		[Ordinal(1)] [RED("method")] public CEnum<AICoverExposureMethod> Method { get; set; }
+		private CFloat _distanceToTarget;
+		private CEnum<AICoverExposureMethod> _method;
 
-		public gameAvailableExposureMethodResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("distanceToTarget")] 
+		public CFloat DistanceToTarget
+		{
+			get => GetProperty(ref _distanceToTarget);
+			set => SetProperty(ref _distanceToTarget, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("method")] 
+		public CEnum<AICoverExposureMethod> Method
+		{
+			get => GetProperty(ref _method);
+			set => SetProperty(ref _method, value);
+		}
+
+		public gameAvailableExposureMethodResult(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

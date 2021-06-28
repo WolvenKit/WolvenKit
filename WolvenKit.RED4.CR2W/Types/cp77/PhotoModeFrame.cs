@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PhotoModeFrame : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("images")] public CArray<inkImageWidgetReference> Images { get; set; }
-		[Ordinal(2)] [RED("keepImageAspectRatio")] public CBool KeepImageAspectRatio { get; set; }
-		[Ordinal(3)] [RED("stickersController")] public CHandle<gameuiPhotoModeStickersController> StickersController { get; set; }
-		[Ordinal(4)] [RED("currentImagePart")] public CName CurrentImagePart { get; set; }
-		[Ordinal(5)] [RED("opacity")] public CFloat Opacity { get; set; }
+		private CArray<inkImageWidgetReference> _images;
+		private CBool _keepImageAspectRatio;
+		private CHandle<gameuiPhotoModeStickersController> _stickersController;
+		private CName _currentImagePart;
+		private CFloat _opacity;
 
-		public PhotoModeFrame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("images")] 
+		public CArray<inkImageWidgetReference> Images
+		{
+			get => GetProperty(ref _images);
+			set => SetProperty(ref _images, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("keepImageAspectRatio")] 
+		public CBool KeepImageAspectRatio
+		{
+			get => GetProperty(ref _keepImageAspectRatio);
+			set => SetProperty(ref _keepImageAspectRatio, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("stickersController")] 
+		public CHandle<gameuiPhotoModeStickersController> StickersController
+		{
+			get => GetProperty(ref _stickersController);
+			set => SetProperty(ref _stickersController, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("currentImagePart")] 
+		public CName CurrentImagePart
+		{
+			get => GetProperty(ref _currentImagePart);
+			set => SetProperty(ref _currentImagePart, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("opacity")] 
+		public CFloat Opacity
+		{
+			get => GetProperty(ref _opacity);
+			set => SetProperty(ref _opacity, value);
+		}
+
+		public PhotoModeFrame(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

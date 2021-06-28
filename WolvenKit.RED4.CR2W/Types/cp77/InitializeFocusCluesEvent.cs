@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InitializeFocusCluesEvent : redEvent
 	{
-		[Ordinal(0)] [RED("requesterID")] public entEntityID RequesterID { get; set; }
+		private entEntityID _requesterID;
 
-		public InitializeFocusCluesEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requesterID")] 
+		public entEntityID RequesterID
+		{
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
+		}
+
+		public InitializeFocusCluesEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

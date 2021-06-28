@@ -9,20 +9,22 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public class CName : CVariable, IREDPrimitive
+    public class CName : CVariable, IREDString
     {
         public CName()
         {
 
         }
 
-        public CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CName(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
         #region Properties
-        [DataMember]
+
+
         public string Value { get; set; }
+
         #endregion
 
 
@@ -49,15 +51,18 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            if (val is string)
+            this.IsSerialized = true;
+            Value = val switch
             {
-                Value = (string)val;
-            }
-            else if (val is CName cval)
-                Value = cval.Value;
+                string s => s,
+                CName cval => cval.Value,
+                _ => Value
+            };
 
             return this;
         }
+
+        public object GetValue() => Value;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {
@@ -66,10 +71,8 @@ namespace WolvenKit.RED3.CR2W.Types
             return var;
         }
 
-        public override string ToString()
-        {
-            return Value;
-        }
+        public override string ToString() => Value;
+
         #endregion
 
     }

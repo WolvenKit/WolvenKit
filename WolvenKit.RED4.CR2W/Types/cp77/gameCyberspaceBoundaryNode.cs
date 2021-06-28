@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameCyberspaceBoundaryNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] [RED("marker1Ref")] public NodeRef Marker1Ref { get; set; }
-		[Ordinal(8)] [RED("marker2Ref")] public NodeRef Marker2Ref { get; set; }
+		private NodeRef _marker1Ref;
+		private NodeRef _marker2Ref;
 
-		public gameCyberspaceBoundaryNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(7)] 
+		[RED("marker1Ref")] 
+		public NodeRef Marker1Ref
+		{
+			get => GetProperty(ref _marker1Ref);
+			set => SetProperty(ref _marker1Ref, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("marker2Ref")] 
+		public NodeRef Marker2Ref
+		{
+			get => GetProperty(ref _marker2Ref);
+			set => SetProperty(ref _marker2Ref, value);
+		}
+
+		public gameCyberspaceBoundaryNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

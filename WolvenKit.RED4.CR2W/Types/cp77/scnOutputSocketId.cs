@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnOutputSocketId : CVariable
 	{
-		[Ordinal(0)] [RED("nodeId")] public scnNodeId NodeId { get; set; }
-		[Ordinal(1)] [RED("osockStamp")] public scnOutputSocketStamp OsockStamp { get; set; }
+		private scnNodeId _nodeId;
+		private scnOutputSocketStamp _osockStamp;
 
-		public scnOutputSocketId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("nodeId")] 
+		public scnNodeId NodeId
+		{
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("osockStamp")] 
+		public scnOutputSocketStamp OsockStamp
+		{
+			get => GetProperty(ref _osockStamp);
+			set => SetProperty(ref _osockStamp, value);
+		}
+
+		public scnOutputSocketId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

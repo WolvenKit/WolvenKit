@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TarotCardPreviewPopupEvent : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public CHandle<TarotCardPreviewData> Data { get; set; }
+		private CHandle<TarotCardPreviewData> _data;
 
-		public TarotCardPreviewPopupEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CHandle<TarotCardPreviewData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public TarotCardPreviewPopupEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

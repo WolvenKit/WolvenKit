@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InstigatorTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("instigatorType")] public CName InstigatorType { get; set; }
+		private CName _instigatorType;
 
-		public InstigatorTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("instigatorType")] 
+		public CName InstigatorType
+		{
+			get => GetProperty(ref _instigatorType);
+			set => SetProperty(ref _instigatorType, value);
+		}
+
+		public InstigatorTypeHitPrereqCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

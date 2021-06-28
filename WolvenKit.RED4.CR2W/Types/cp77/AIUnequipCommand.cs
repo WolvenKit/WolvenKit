@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIUnequipCommand : AICommand
 	{
-		[Ordinal(4)] [RED("slotId")] public TweakDBID SlotId { get; set; }
-		[Ordinal(5)] [RED("durationOverride")] public CFloat DurationOverride { get; set; }
+		private TweakDBID _slotId;
+		private CFloat _durationOverride;
 
-		public AIUnequipCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("slotId")] 
+		public TweakDBID SlotId
+		{
+			get => GetProperty(ref _slotId);
+			set => SetProperty(ref _slotId, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("durationOverride")] 
+		public CFloat DurationOverride
+		{
+			get => GetProperty(ref _durationOverride);
+			set => SetProperty(ref _durationOverride, value);
+		}
+
+		public AIUnequipCommand(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GenericMessageNotificationCloseData : inkGameNotificationData
 	{
-		[Ordinal(6)] [RED("identifier")] public CInt32 Identifier { get; set; }
-		[Ordinal(7)] [RED("result")] public CEnum<GenericMessageNotificationResult> Result { get; set; }
+		private CInt32 _identifier;
+		private CEnum<GenericMessageNotificationResult> _result;
 
-		public GenericMessageNotificationCloseData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("identifier")] 
+		public CInt32 Identifier
+		{
+			get => GetProperty(ref _identifier);
+			set => SetProperty(ref _identifier, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("result")] 
+		public CEnum<GenericMessageNotificationResult> Result
+		{
+			get => GetProperty(ref _result);
+			set => SetProperty(ref _result, value);
+		}
+
+		public GenericMessageNotificationCloseData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

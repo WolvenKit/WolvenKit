@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinfluenceHeatAgent : gameinfluenceIAgent
 	{
-		[Ordinal(0)] [RED("timeToNextUpdate")] public CFloat TimeToNextUpdate { get; set; }
-		[Ordinal(1)] [RED("heatRadius")] public CFloat HeatRadius { get; set; }
-		[Ordinal(2)] [RED("heatValue")] public CFloat HeatValue { get; set; }
+		private CFloat _timeToNextUpdate;
+		private CFloat _heatRadius;
+		private CFloat _heatValue;
 
-		public gameinfluenceHeatAgent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("timeToNextUpdate")] 
+		public CFloat TimeToNextUpdate
+		{
+			get => GetProperty(ref _timeToNextUpdate);
+			set => SetProperty(ref _timeToNextUpdate, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("heatRadius")] 
+		public CFloat HeatRadius
+		{
+			get => GetProperty(ref _heatRadius);
+			set => SetProperty(ref _heatRadius, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("heatValue")] 
+		public CFloat HeatValue
+		{
+			get => GetProperty(ref _heatValue);
+			set => SetProperty(ref _heatValue, value);
+		}
+
+		public gameinfluenceHeatAgent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

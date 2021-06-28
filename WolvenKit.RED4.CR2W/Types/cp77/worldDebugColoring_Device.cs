@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldDebugColoring_Device : worldEditorDebugColoringSettings
 	{
-		[Ordinal(0)] [RED("defaultColor")] public CColor DefaultColor { get; set; }
+		private CColor _defaultColor;
 
-		public worldDebugColoring_Device(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("defaultColor")] 
+		public CColor DefaultColor
+		{
+			get => GetProperty(ref _defaultColor);
+			set => SetProperty(ref _defaultColor, value);
+		}
+
+		public worldDebugColoring_Device(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

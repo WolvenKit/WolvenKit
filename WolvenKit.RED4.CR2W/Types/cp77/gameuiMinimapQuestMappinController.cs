@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiMinimapQuestMappinController : gameuiBaseMinimapMappinController
 	{
-		[Ordinal(14)] [RED("questMappin")] public wCHandle<gamemappinsQuestMappin> QuestMappin { get; set; }
+		private wCHandle<gamemappinsQuestMappin> _questMappin;
 
-		public gameuiMinimapQuestMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(14)] 
+		[RED("questMappin")] 
+		public wCHandle<gamemappinsQuestMappin> QuestMappin
+		{
+			get => GetProperty(ref _questMappin);
+			set => SetProperty(ref _questMappin, value);
+		}
+
+		public gameuiMinimapQuestMappinController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

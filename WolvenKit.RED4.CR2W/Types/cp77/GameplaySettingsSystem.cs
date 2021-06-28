@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameplaySettingsSystem : gameScriptableSystem
 	{
-		[Ordinal(0)] [RED("gameplaySettingsListener")] public CHandle<GameplaySettingsListener> GameplaySettingsListener { get; set; }
-		[Ordinal(1)] [RED("wasEverJohnny")] public CBool WasEverJohnny { get; set; }
+		private CHandle<GameplaySettingsListener> _gameplaySettingsListener;
+		private CBool _wasEverJohnny;
 
-		public GameplaySettingsSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("gameplaySettingsListener")] 
+		public CHandle<GameplaySettingsListener> GameplaySettingsListener
+		{
+			get => GetProperty(ref _gameplaySettingsListener);
+			set => SetProperty(ref _gameplaySettingsListener, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("wasEverJohnny")] 
+		public CBool WasEverJohnny
+		{
+			get => GetProperty(ref _wasEverJohnny);
+			set => SetProperty(ref _wasEverJohnny, value);
+		}
+
+		public GameplaySettingsSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

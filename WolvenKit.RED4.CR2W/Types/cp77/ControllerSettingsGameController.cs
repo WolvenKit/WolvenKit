@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ControllerSettingsGameController : gameuiMenuGameController
 	{
-		[Ordinal(3)] [RED("buttonHintsManagerRef")] public inkWidgetReference ButtonHintsManagerRef { get; set; }
-		[Ordinal(4)] [RED("buttonHintsController")] public wCHandle<ButtonHints> ButtonHintsController { get; set; }
+		private inkWidgetReference _buttonHintsManagerRef;
+		private wCHandle<ButtonHints> _buttonHintsController;
 
-		public ControllerSettingsGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("buttonHintsManagerRef")] 
+		public inkWidgetReference ButtonHintsManagerRef
+		{
+			get => GetProperty(ref _buttonHintsManagerRef);
+			set => SetProperty(ref _buttonHintsManagerRef, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("buttonHintsController")] 
+		public wCHandle<ButtonHints> ButtonHintsController
+		{
+			get => GetProperty(ref _buttonHintsController);
+			set => SetProperty(ref _buttonHintsController, value);
+		}
+
+		public ControllerSettingsGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

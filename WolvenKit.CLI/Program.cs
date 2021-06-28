@@ -1,176 +1,61 @@
 using System;
 using System.CommandLine;
-using System.ComponentModel;
+using System.CommandLine.Builder;
+using System.CommandLine.Hosting;
+using System.CommandLine.Parsing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Catel.IoC;
-using WolvenKit.RED4.CR2W;
 using CP77Tools.Commands;
-using CP77Tools.Extensions;
-using Luna.ConsoleProgressBar;
-using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.Oodle;
 
-namespace CP77Tools
+namespace WolvenKit.CLI
 {
     internal class Program
     {
+
         [STAThread]
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            ServiceLocator.Default.RegisterType<ILoggerService, LoggerService>();
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            ServiceLocator.Default.RegisterType<IWolvenkitFileService, Cp77FileService>();
-
-            var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            logger.OnStringLogged += delegate (object sender, LogStringEventArgs args)
+            // try get oodle dll from game
+            if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
-                switch (args.Logtype)
-                {
-                    case Logtype.Error:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        break;
+                Console.WriteLine("Could not automatically find oo2ext_7_win64.dll. " +
+                           "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
+                           $"{AppDomain.CurrentDomain.BaseDirectory}.");
+                return;
+            }
 
-                    case Logtype.Important:
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        break;
+            var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
+            OodleLoadLib.Load(oodlePath);
 
-                    case Logtype.Success:
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        break;
-
-                    case Logtype.Normal:
-                    case Logtype.Wcc:
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                Console.WriteLine("[" + args.Logtype + "]" + args.Message);
-                Console.ResetColor();
-            };
 
             var rootCommand = new RootCommand
             {
+                new ArchiveCommand(),
+
                 new UnbundleCommand(),
                 new UncookCommand(),
-                new RebuildCommand(),
+                new ImportCommand(),
                 new PackCommand(),
                 new ExportCommand(),
 
                 new DumpCommand(),
-                new VerifyCommand(),
                 new CR2WCommand(),
 
                 new HashCommand(),
                 new OodleCommand(),
+
+                new SettingsCommand(),
             };
 
-            //await ConsoleFunctions.UpdateHashesAsync();
-            _ = ServiceLocator.Default.ResolveType<IHashService>();
+            var parser = new CommandLineBuilder(rootCommand)
+                .UseDefaults()
+                .UseHost(GenericHost.CreateHostBuilder)
+                .Build();
 
-            // try get oodle dll from game
-            if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
-            {
-                logger.LogString("Could not automatically find oo2ext_7_win64.dll. " +
-                                 "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
-                                 $"{AppDomain.CurrentDomain.BaseDirectory}.");
-            }
-
-            // Run
-            if (args == null || args.Length == 0)
-            {
-                // write welcome message
-                rootCommand.InvokeAsync("-h").Wait();
-
-                while (true)
-                {
-                    string line = System.Console.ReadLine();
-
-                    if (line == "q()")
-                    {
-                        return;
-                    }
-
-                    var pb = new ConsoleProgressBar()
-                    {
-                        DisplayBars = false,
-                        DisplayPercentComplete = false,
-                        DisplayAnimation = false
-                    };
-                    var parsed = CommandLineExtensions.ParseText(line, ' ', '"');
-
-                    logger.PropertyChanged += OnLoggerOnPropertyChanged;
-                    void OnLoggerOnPropertyChanged(object sender, PropertyChangedEventArgs args)
-                    {
-                        switch (args.PropertyName)
-                        {
-                            case "Progress":
-                            {
-                                if (logger.Progress.Item1 == 0)
-                                {
-                                    pb = new ConsoleProgressBar() { DisplayBars = true, DisplayAnimation = false };
-                                }
-
-                                pb?.Report(logger.Progress.Item1);
-                                if (logger.Progress.Item1 == 1)
-                                {
-                                    System.Threading.Thread.Sleep(1000);
-
-                                    Console.WriteLine();
-                                    pb?.Dispose();
-                                    pb = null;
-                                }
-
-                                break;
-                            }
-                            default:
-                                break;
-                        }
-                    }
-
-                    rootCommand.InvokeAsync(parsed.ToArray()).Wait();
-
-                    await WriteLog();
-                    logger.PropertyChanged -= OnLoggerOnPropertyChanged;
-                }
-            }
-            else
-            {
-                rootCommand.InvokeAsync(args).Wait();
-
-                await WriteLog();
-            }
-
-            async Task WriteLog()
-            {
-                if (string.IsNullOrEmpty(logger.ErrorLogStr))
-                {
-                    return;
-                }
-
-                var t = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-                var baseDirectory = AppContext.BaseDirectory;
-
-                if (string.IsNullOrEmpty(baseDirectory))
-                {
-                    return;
-                }
-
-                var fi = new FileInfo(Path.Combine(baseDirectory, $"errorlogs/log_{t}.txt"));
-                if (fi.Directory != null)
-                {
-                    Directory.CreateDirectory(fi.Directory.FullName);
-                    var log = logger.ErrorLogStr;
-                    await File.WriteAllTextAsync(fi.FullName, log);
-                }
-                else
-                {
-                }
-            }
+            parser.Invoke(args);
         }
 
         private delegate void StrDelegate(string value);

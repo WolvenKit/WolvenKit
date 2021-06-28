@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Condition : CVariable
 	{
-		[Ordinal(0)] [RED("passed")] public CBool Passed { get; set; }
-		[Ordinal(1)] [RED("description")] public CString Description { get; set; }
+		private CBool _passed;
+		private CString _description;
 
-		public Condition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("passed")] 
+		public CBool Passed
+		{
+			get => GetProperty(ref _passed);
+			set => SetProperty(ref _passed, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("description")] 
+		public CString Description
+		{
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
+		}
+
+		public Condition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

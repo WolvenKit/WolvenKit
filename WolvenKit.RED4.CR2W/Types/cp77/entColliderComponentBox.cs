@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entColliderComponentBox : entColliderComponentShape
 	{
-		[Ordinal(1)] [RED("dimensions")] public Vector3 Dimensions { get; set; }
+		private Vector3 _dimensions;
 
-		public entColliderComponentBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("dimensions")] 
+		public Vector3 Dimensions
+		{
+			get => GetProperty(ref _dimensions);
+			set => SetProperty(ref _dimensions, value);
+		}
+
+		public entColliderComponentBox(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

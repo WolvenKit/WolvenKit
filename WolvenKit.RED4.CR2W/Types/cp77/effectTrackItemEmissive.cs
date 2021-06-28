@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectTrackItemEmissive : effectTrackItem
 	{
-		[Ordinal(3)] [RED("override")] public CBool Override { get; set; }
-		[Ordinal(4)] [RED("brigtness")] public effectEffectParameterEvaluatorFloat Brigtness { get; set; }
+		private CBool _override;
+		private effectEffectParameterEvaluatorFloat _brigtness;
 
-		public effectTrackItemEmissive(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("override")] 
+		public CBool Override
+		{
+			get => GetProperty(ref _override);
+			set => SetProperty(ref _override, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("brigtness")] 
+		public effectEffectParameterEvaluatorFloat Brigtness
+		{
+			get => GetProperty(ref _brigtness);
+			set => SetProperty(ref _brigtness, value);
+		}
+
+		public effectTrackItemEmissive(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

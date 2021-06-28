@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCombatNodeParams_CombatTarget : questCombatNodeParams
 	{
-		[Ordinal(0)] [RED("targetNode")] public NodeRef TargetNode { get; set; }
-		[Ordinal(1)] [RED("targetPuppet")] public gameEntityReference TargetPuppet { get; set; }
-		[Ordinal(2)] [RED("duration")] public CFloat Duration { get; set; }
-		[Ordinal(3)] [RED("immediately")] public CBool Immediately { get; set; }
+		private NodeRef _targetNode;
+		private gameEntityReference _targetPuppet;
+		private CFloat _duration;
+		private CBool _immediately;
 
-		public questCombatNodeParams_CombatTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("targetNode")] 
+		public NodeRef TargetNode
+		{
+			get => GetProperty(ref _targetNode);
+			set => SetProperty(ref _targetNode, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("targetPuppet")] 
+		public gameEntityReference TargetPuppet
+		{
+			get => GetProperty(ref _targetPuppet);
+			set => SetProperty(ref _targetPuppet, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("immediately")] 
+		public CBool Immediately
+		{
+			get => GetProperty(ref _immediately);
+			set => SetProperty(ref _immediately, value);
+		}
+
+		public questCombatNodeParams_CombatTarget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

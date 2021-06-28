@@ -68,12 +68,6 @@ namespace WolvenKit.ViewModels.Wizards
             {
                 exeSearcherSlave_DoWork();
             }
-
-            //TODO: handle this case!
-            if (!TryCopyOodleLib())
-            {
-                loggerService.LogString($"Oodle DLL not found.");
-            }
         }
 
         #endregion Constructors
@@ -170,7 +164,7 @@ namespace WolvenKit.ViewModels.Wizards
             var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
             {
                 Title = "Select Cyberpunk 2077 executable.",
-                Filter = "*.exe|*.exe",
+                Filter = "*Cyberpunk2077.exe|*Cyberpunk2077.exe",
                 IsMultiSelect = false
             });
 
@@ -277,23 +271,32 @@ namespace WolvenKit.ViewModels.Wizards
                     {
                         if (programName.ToString().Contains("Witcher 3 Mod Tools"))
                         {
-                            wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
-                                SearchOption.AllDirectories).First();
+                            if (File.Exists(installLocation.ToString()))
+                            {
+                                wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
+                                    SearchOption.AllDirectories).First();
+                            }
                         }
 
                         if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
                             programName.ToString().Contains("The Witcher 3: Wild Hunt"))
                         {
-                            w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
-                                SearchOption.AllDirectories).First();
+                            if (File.Exists(installLocation.ToString()))
+                            {
+                                w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
+                                    SearchOption.AllDirectories).First();
+                            }
                         }
 
                         if (programName.ToString().Contains("Cyberpunk 2077"))
                         {
                             if (Directory.Exists(installLocation.ToString()))
                             {
-                                cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
-                                    SearchOption.AllDirectories).First();
+                                if (File.Exists(installLocation.ToString()))
+                                {
+                                    cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
+                                        SearchOption.AllDirectories).First();
+                                }
                             }
                         }
                     }
@@ -381,54 +384,6 @@ namespace WolvenKit.ViewModels.Wizards
                     }
                 }
             }
-        }
-
-        private bool TryCopyOodleLib()
-        {
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            var dir = Path.GetDirectoryName(path);
-
-            if (dir == null)
-            {
-                return false;
-            }
-
-            var destFileName = Path.Combine(dir, "oo2ext_7_win64.dll");
-            if (File.Exists(destFileName))
-            {
-                return true;
-            }
-
-            if (!File.Exists(CP77ExePath))
-            {
-                return true;
-            }
-
-            var directory = new FileInfo(CP77ExePath).Directory;
-            if (directory == null)
-            {
-                return false;
-            }
-
-            var cp77BinDir = directory.FullName;
-            if (string.IsNullOrEmpty(cp77BinDir))
-            {
-                return false;
-            }
-
-            // copy oodle dll
-            var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, "oo2ext_7_win64.dll"));
-            if (!oodleInfo.Exists)
-            {
-                return false;
-            }
-
-            if (!File.Exists(destFileName))
-            {
-                oodleInfo.CopyTo(destFileName);
-            }
-
-            return true;
         }
 
         #endregion Methods

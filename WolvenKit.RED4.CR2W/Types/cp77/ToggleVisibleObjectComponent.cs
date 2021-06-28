@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ToggleVisibleObjectComponent : StatusEffectTasks
 	{
-		[Ordinal(0)] [RED("componentTargetState")] public CBool ComponentTargetState { get; set; }
-		[Ordinal(1)] [RED("visibleObjectDescription")] public CName VisibleObjectDescription { get; set; }
+		private CBool _componentTargetState;
+		private CName _visibleObjectDescription;
 
-		public ToggleVisibleObjectComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("componentTargetState")] 
+		public CBool ComponentTargetState
+		{
+			get => GetProperty(ref _componentTargetState);
+			set => SetProperty(ref _componentTargetState, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("visibleObjectDescription")] 
+		public CName VisibleObjectDescription
+		{
+			get => GetProperty(ref _visibleObjectDescription);
+			set => SetProperty(ref _visibleObjectDescription, value);
+		}
+
+		public ToggleVisibleObjectComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

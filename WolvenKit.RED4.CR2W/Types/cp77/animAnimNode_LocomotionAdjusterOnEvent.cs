@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_LocomotionAdjusterOnEvent : animAnimNode_LocomotionAdjuster
 	{
-		[Ordinal(19)] [RED("locomotionFeatureName")] public CName LocomotionFeatureName { get; set; }
-		[Ordinal(20)] [RED("targetAnimationName")] public CName TargetAnimationName { get; set; }
-		[Ordinal(21)] [RED("startAdjustmentAfterAnimEvent")] public CName StartAdjustmentAfterAnimEvent { get; set; }
+		private CName _locomotionFeatureName;
+		private CName _targetAnimationName;
+		private CName _startAdjustmentAfterAnimEvent;
 
-		public animAnimNode_LocomotionAdjusterOnEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(19)] 
+		[RED("locomotionFeatureName")] 
+		public CName LocomotionFeatureName
+		{
+			get => GetProperty(ref _locomotionFeatureName);
+			set => SetProperty(ref _locomotionFeatureName, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("targetAnimationName")] 
+		public CName TargetAnimationName
+		{
+			get => GetProperty(ref _targetAnimationName);
+			set => SetProperty(ref _targetAnimationName, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("startAdjustmentAfterAnimEvent")] 
+		public CName StartAdjustmentAfterAnimEvent
+		{
+			get => GetProperty(ref _startAdjustmentAfterAnimEvent);
+			set => SetProperty(ref _startAdjustmentAfterAnimEvent, value);
+		}
+
+		public animAnimNode_LocomotionAdjusterOnEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

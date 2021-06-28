@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataAITacticType_Record : gamedataTweakDBRecord
 	{
-		public gamedataAITacticType_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gamedataAITacticType_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

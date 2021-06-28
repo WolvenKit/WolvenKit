@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerArchetype : ScannerChunk
 	{
-		[Ordinal(0)] [RED("archetype")] public CEnum<gamedataArchetypeType> Archetype { get; set; }
+		private CEnum<gamedataArchetypeType> _archetype;
 
-		public ScannerArchetype(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("archetype")] 
+		public CEnum<gamedataArchetypeType> Archetype
+		{
+			get => GetProperty(ref _archetype);
+			set => SetProperty(ref _archetype, value);
+		}
+
+		public ScannerArchetype(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

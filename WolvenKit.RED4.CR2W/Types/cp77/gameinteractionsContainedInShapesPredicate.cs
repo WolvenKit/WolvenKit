@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsContainedInShapesPredicate : gameinteractionsIPredicateType
 	{
-		[Ordinal(0)] [RED("useCameraPosition")] public CBool UseCameraPosition { get; set; }
+		private CBool _useCameraPosition;
 
-		public gameinteractionsContainedInShapesPredicate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("useCameraPosition")] 
+		public CBool UseCameraPosition
+		{
+			get => GetProperty(ref _useCameraPosition);
+			set => SetProperty(ref _useCameraPosition, value);
+		}
+
+		public gameinteractionsContainedInShapesPredicate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

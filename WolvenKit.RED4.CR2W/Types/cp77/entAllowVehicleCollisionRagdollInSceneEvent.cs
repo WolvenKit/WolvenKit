@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entAllowVehicleCollisionRagdollInSceneEvent : redEvent
 	{
-		[Ordinal(0)] [RED("allow")] public CBool Allow { get; set; }
+		private CBool _allow;
 
-		public entAllowVehicleCollisionRagdollInSceneEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("allow")] 
+		public CBool Allow
+		{
+			get => GetProperty(ref _allow);
+			set => SetProperty(ref _allow, value);
+		}
+
+		public entAllowVehicleCollisionRagdollInSceneEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -24,7 +24,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(0)] [RED] public CUInt16 valueCount { get; set; }
         [Ordinal(1)] [RED] public CCompressedBuffer<CFloat> values { get; set; }
 
-        public CurvePiece(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CurvePiece(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             // This has a fixed size in memory, but for some reason file format is allowed to not provide all,
             // leaving the rest to zero values. Possibly has individual fields instead of an array.

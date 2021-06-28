@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class appearanceCookedAppearanceData : CResource
 	{
-		[Ordinal(1)] [RED("dependencies")] public CArray<rRef<CResource>> Dependencies { get; set; }
-		[Ordinal(2)] [RED("totalSizeOnDisk")] public CUInt32 TotalSizeOnDisk { get; set; }
+		private CArray<rRef<CResource>> _dependencies;
+		private CUInt32 _totalSizeOnDisk;
 
-		public appearanceCookedAppearanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("dependencies")] 
+		public CArray<rRef<CResource>> Dependencies
+		{
+			get => GetProperty(ref _dependencies);
+			set => SetProperty(ref _dependencies, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("totalSizeOnDisk")] 
+		public CUInt32 TotalSizeOnDisk
+		{
+			get => GetProperty(ref _totalSizeOnDisk);
+			set => SetProperty(ref _totalSizeOnDisk, value);
+		}
+
+		public appearanceCookedAppearanceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

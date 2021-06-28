@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ModifyDamageEffector : ModifyAttackEffector
 	{
-		[Ordinal(0)] [RED("operationType")] public CEnum<EMathOperator> OperationType { get; set; }
-		[Ordinal(1)] [RED("value")] public CFloat Value { get; set; }
+		private CEnum<EMathOperator> _operationType;
+		private CFloat _value;
 
-		public ModifyDamageEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("operationType")] 
+		public CEnum<EMathOperator> OperationType
+		{
+			get => GetProperty(ref _operationType);
+			set => SetProperty(ref _operationType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CFloat Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		public ModifyDamageEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

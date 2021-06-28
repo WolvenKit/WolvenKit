@@ -7,16 +7,88 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldProxyWindowsParams : CVariable
 	{
-		[Ordinal(0)] [RED("windowsType")] public CEnum<worldProxWindowsType> WindowsType { get; set; }
-		[Ordinal(1)] [RED("distance")] public CFloat Distance { get; set; }
-		[Ordinal(2)] [RED("distanceAboveProxy")] public CFloat DistanceAboveProxy { get; set; }
-		[Ordinal(3)] [RED("boolean")] public CBool Boolean { get; set; }
-		[Ordinal(4)] [RED("removeSmallerThan")] public CFloat RemoveSmallerThan { get; set; }
-		[Ordinal(5)] [RED("distantWindowsEmissive")] public CFloat DistantWindowsEmissive { get; set; }
-		[Ordinal(6)] [RED("distantWindowsSize")] public CFloat DistantWindowsSize { get; set; }
-		[Ordinal(7)] [RED("distantWindowsSaturation")] public CFloat DistantWindowsSaturation { get; set; }
-		[Ordinal(8)] [RED("distantWindowsTurnedOf")] public CFloat DistantWindowsTurnedOf { get; set; }
+		private CEnum<worldProxWindowsType> _windowsType;
+		private CFloat _distance;
+		private CFloat _distanceAboveProxy;
+		private CBool _boolean;
+		private CFloat _removeSmallerThan;
+		private CFloat _distantWindowsEmissive;
+		private CFloat _distantWindowsSize;
+		private CFloat _distantWindowsSaturation;
+		private CFloat _distantWindowsTurnedOf;
 
-		public worldProxyWindowsParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("windowsType")] 
+		public CEnum<worldProxWindowsType> WindowsType
+		{
+			get => GetProperty(ref _windowsType);
+			set => SetProperty(ref _windowsType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("distance")] 
+		public CFloat Distance
+		{
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("distanceAboveProxy")] 
+		public CFloat DistanceAboveProxy
+		{
+			get => GetProperty(ref _distanceAboveProxy);
+			set => SetProperty(ref _distanceAboveProxy, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("boolean")] 
+		public CBool Boolean
+		{
+			get => GetProperty(ref _boolean);
+			set => SetProperty(ref _boolean, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("removeSmallerThan")] 
+		public CFloat RemoveSmallerThan
+		{
+			get => GetProperty(ref _removeSmallerThan);
+			set => SetProperty(ref _removeSmallerThan, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("distantWindowsEmissive")] 
+		public CFloat DistantWindowsEmissive
+		{
+			get => GetProperty(ref _distantWindowsEmissive);
+			set => SetProperty(ref _distantWindowsEmissive, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("distantWindowsSize")] 
+		public CFloat DistantWindowsSize
+		{
+			get => GetProperty(ref _distantWindowsSize);
+			set => SetProperty(ref _distantWindowsSize, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("distantWindowsSaturation")] 
+		public CFloat DistantWindowsSaturation
+		{
+			get => GetProperty(ref _distantWindowsSaturation);
+			set => SetProperty(ref _distantWindowsSaturation, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("distantWindowsTurnedOf")] 
+		public CFloat DistantWindowsTurnedOf
+		{
+			get => GetProperty(ref _distantWindowsTurnedOf);
+			set => SetProperty(ref _distantWindowsTurnedOf, value);
+		}
+
+		public worldProxyWindowsParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

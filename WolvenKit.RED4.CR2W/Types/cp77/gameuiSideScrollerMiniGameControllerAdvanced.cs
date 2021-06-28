@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiSideScrollerMiniGameControllerAdvanced : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("gameplayCanvas")] public inkWidgetReference GameplayCanvas { get; set; }
+		private inkWidgetReference _gameplayCanvas;
 
-		public gameuiSideScrollerMiniGameControllerAdvanced(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("gameplayCanvas")] 
+		public inkWidgetReference GameplayCanvas
+		{
+			get => GetProperty(ref _gameplayCanvas);
+			set => SetProperty(ref _gameplayCanvas, value);
+		}
+
+		public gameuiSideScrollerMiniGameControllerAdvanced(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FollowSlotsComponent : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("followSlots")] public CArray<CHandle<FollowSlot>> FollowSlots { get; set; }
+		private CArray<CHandle<FollowSlot>> _followSlots;
 
-		public FollowSlotsComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("followSlots")] 
+		public CArray<CHandle<FollowSlot>> FollowSlots
+		{
+			get => GetProperty(ref _followSlots);
+			set => SetProperty(ref _followSlots, value);
+		}
+
+		public FollowSlotsComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

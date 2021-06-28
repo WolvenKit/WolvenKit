@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LeftHandCyberwareDataDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("ProjectileCaught")] public gamebbScriptID_Bool ProjectileCaught { get; set; }
+		private gamebbScriptID_Bool _projectileCaught;
 
-		public LeftHandCyberwareDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ProjectileCaught")] 
+		public gamebbScriptID_Bool ProjectileCaught
+		{
+			get => GetProperty(ref _projectileCaught);
+			set => SetProperty(ref _projectileCaught, value);
+		}
+
+		public LeftHandCyberwareDataDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

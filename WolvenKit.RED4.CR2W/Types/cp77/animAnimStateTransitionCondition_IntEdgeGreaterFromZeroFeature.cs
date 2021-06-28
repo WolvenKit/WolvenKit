@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_IntEdgeGreaterFromZeroFeature : animAnimStateTransitionCondition_IntEdgeFeature
 	{
-		[Ordinal(2)] [RED("greaterThenValue")] public CInt32 GreaterThenValue { get; set; }
+		private CInt32 _greaterThenValue;
 
-		public animAnimStateTransitionCondition_IntEdgeGreaterFromZeroFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("greaterThenValue")] 
+		public CInt32 GreaterThenValue
+		{
+			get => GetProperty(ref _greaterThenValue);
+			set => SetProperty(ref _greaterThenValue, value);
+		}
+
+		public animAnimStateTransitionCondition_IntEdgeGreaterFromZeroFeature(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

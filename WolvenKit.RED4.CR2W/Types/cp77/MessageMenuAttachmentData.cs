@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MessageMenuAttachmentData : IScriptable
 	{
-		[Ordinal(0)] [RED("entryHash")] public CInt32 EntryHash { get; set; }
+		private CInt32 _entryHash;
 
-		public MessageMenuAttachmentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entryHash")] 
+		public CInt32 EntryHash
+		{
+			get => GetProperty(ref _entryHash);
+			set => SetProperty(ref _entryHash, value);
+		}
+
+		public MessageMenuAttachmentData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

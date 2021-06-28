@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineStateMachineListDefinition : IScriptable
 	{
-		[Ordinal(0)] [RED("stateMachinesStorage")] public CArray<CHandle<gamestateMachineStateMachineDefinition>> StateMachinesStorage { get; set; }
+		private CArray<CHandle<gamestateMachineStateMachineDefinition>> _stateMachinesStorage;
 
-		public gamestateMachineStateMachineListDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stateMachinesStorage")] 
+		public CArray<CHandle<gamestateMachineStateMachineDefinition>> StateMachinesStorage
+		{
+			get => GetProperty(ref _stateMachinesStorage);
+			set => SetProperty(ref _stateMachinesStorage, value);
+		}
+
+		public gamestateMachineStateMachineListDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

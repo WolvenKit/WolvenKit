@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerBountySystem : ScannerChunk
 	{
-		[Ordinal(0)] [RED("bounty")] public BountyUI Bounty { get; set; }
+		private BountyUI _bounty;
 
-		public ScannerBountySystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("bounty")] 
+		public BountyUI Bounty
+		{
+			get => GetProperty(ref _bounty);
+			set => SetProperty(ref _bounty, value);
+		}
+
+		public ScannerBountySystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

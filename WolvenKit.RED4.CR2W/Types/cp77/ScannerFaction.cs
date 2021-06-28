@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerFaction : ScannerChunk
 	{
-		[Ordinal(0)] [RED("faction")] public CString Faction { get; set; }
+		private CString _faction;
 
-		public ScannerFaction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("faction")] 
+		public CString Faction
+		{
+			get => GetProperty(ref _faction);
+			set => SetProperty(ref _faction, value);
+		}
+
+		public ScannerFaction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

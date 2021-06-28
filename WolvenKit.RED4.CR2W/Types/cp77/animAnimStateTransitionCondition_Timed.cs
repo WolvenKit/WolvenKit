@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_Timed : animIAnimStateTransitionCondition
 	{
-		[Ordinal(0)] [RED("timeToFireTransition")] public CFloat TimeToFireTransition { get; set; }
+		private CFloat _timeToFireTransition;
 
-		public animAnimStateTransitionCondition_Timed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("timeToFireTransition")] 
+		public CFloat TimeToFireTransition
+		{
+			get => GetProperty(ref _timeToFireTransition);
+			set => SetProperty(ref _timeToFireTransition, value);
+		}
+
+		public animAnimStateTransitionCondition_Timed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

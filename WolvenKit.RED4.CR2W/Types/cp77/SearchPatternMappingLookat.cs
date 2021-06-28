@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SearchPatternMappingLookat : AISearchingLookat
 	{
-		[Ordinal(14)] [RED("targetObjectMapping")] public CHandle<AIArgumentMapping> TargetObjectMapping { get; set; }
-		[Ordinal(15)] [RED("lookatTargetObject")] public wCHandle<gameObject> LookatTargetObject { get; set; }
+		private CHandle<AIArgumentMapping> _targetObjectMapping;
+		private wCHandle<gameObject> _lookatTargetObject;
 
-		public SearchPatternMappingLookat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(14)] 
+		[RED("targetObjectMapping")] 
+		public CHandle<AIArgumentMapping> TargetObjectMapping
+		{
+			get => GetProperty(ref _targetObjectMapping);
+			set => SetProperty(ref _targetObjectMapping, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("lookatTargetObject")] 
+		public wCHandle<gameObject> LookatTargetObject
+		{
+			get => GetProperty(ref _lookatTargetObject);
+			set => SetProperty(ref _lookatTargetObject, value);
+		}
+
+		public SearchPatternMappingLookat(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED3.CR2W.Reflection;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -15,7 +16,7 @@ namespace WolvenKit.RED3.CR2W.Types
         public CVariable[] fields;
         public CFloat ax, ay, az, bx, by, bz, cx, cy, cz;
 
-        public CMatrix3x3(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CMatrix3x3(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
             fields = new CVariable[] {
@@ -29,11 +30,6 @@ namespace WolvenKit.RED3.CR2W.Types
                 cy = new CFloat(cr2w, this, nameof(cy)),
                 cz = new CFloat(cr2w, this, nameof(cz)),
             };
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CMatrix3x3(cr2w, parent, name);
         }
 
         public override List<IEditableVariable> GetEditableVariables()
@@ -63,7 +59,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
             for (int i = 0; i < fields.Length; i++)
             {
-                (copy.fields[i] as CFloat).val = (fields[i] as CFloat).val;
+                (copy.fields[i] as CFloat).Value = (fields[i] as CFloat).Value;
             }
 
             return copy;

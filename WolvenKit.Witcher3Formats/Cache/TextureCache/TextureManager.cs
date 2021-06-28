@@ -12,12 +12,6 @@ namespace WolvenKit.Cache
 
         public TextureManager()
         {
-            Items = new Dictionary<string, List<IGameFile>>();
-            Archives = new Dictionary<string, TextureCache>();
-            FileList = new List<IGameFile>();
-
-            Extensions = new List<string>();
-            AutocompleteSource = new List<string>();
         }
 
         #endregion Constructors
@@ -26,7 +20,7 @@ namespace WolvenKit.Cache
 
         public static string SerializationVersion => "1.1";
         public override EArchiveType TypeName => EArchiveType.TextureCache;
-        private Dictionary<string, TextureCache> Archives { get; }
+        public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
 
         #endregion Properties
 
@@ -36,7 +30,7 @@ namespace WolvenKit.Cache
         ///     Load every non-mod bundle it can find in ..\\..\\content and ..\\..\\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
-        public override void LoadAll(string exedir)
+        public override void LoadAll(string exedir, bool rebuildtree = true)
         {
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
@@ -72,7 +66,10 @@ namespace WolvenKit.Cache
                     LoadArchive(file);
                 }
             }
-            RebuildRootNode();
+            if (rebuildtree)
+            {
+                RebuildRootNode();
+            }
         }
 
         /// <summary>
@@ -82,16 +79,23 @@ namespace WolvenKit.Cache
         public override void LoadArchive(string filename, bool ispatch = false)
         {
             if (Archives.ContainsKey(filename))
+            {
                 return;
+            }
 
             var bundle = new TextureCache(filename);
 
-            foreach (var item in bundle.Files)
+            foreach (var (key, value) in bundle.Files)
             {
-                if (!Items.ContainsKey(item.Name))
-                    Items.Add(item.Name, new List<IGameFile>());
-
-                Items[item.Name].Add(item);
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].Add(value);
+                }
             }
 
             Archives.Add(filename, bundle);
@@ -104,16 +108,23 @@ namespace WolvenKit.Cache
         public override void LoadModArchive(string filename)
         {
             if (Archives.ContainsKey(filename))
+            {
                 return;
+            }
 
             var bundle = new TextureCache(filename);
 
-            foreach (var item in bundle.Files)
+            foreach (var (key, value) in bundle.Files)
             {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Name))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Name, new List<IGameFile>());
-
-                Items[GetModFolder(filename) + "\\" + item.Name].Add(item);
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].Add(value);
+                }
             }
 
             Archives.Add(filename, bundle);
@@ -129,7 +140,6 @@ namespace WolvenKit.Cache
             // this is slow
             Archives.Clear();
             Items.Clear();
-            FileList.Clear();
 
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);

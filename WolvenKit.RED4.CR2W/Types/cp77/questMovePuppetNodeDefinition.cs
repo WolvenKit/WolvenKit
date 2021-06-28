@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questMovePuppetNodeDefinition : questConfigurableAICommandNode
 	{
-		[Ordinal(2)] [RED("entityReference")] public gameEntityReference EntityReference { get; set; }
-		[Ordinal(3)] [RED("moveType")] public CName MoveType { get; set; }
-		[Ordinal(4)] [RED("nodeParams")] public CHandle<questAICommandParams> NodeParams { get; set; }
+		private gameEntityReference _entityReference;
+		private CName _moveType;
+		private CHandle<questAICommandParams> _nodeParams;
 
-		public questMovePuppetNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("entityReference")] 
+		public gameEntityReference EntityReference
+		{
+			get => GetProperty(ref _entityReference);
+			set => SetProperty(ref _entityReference, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("moveType")] 
+		public CName MoveType
+		{
+			get => GetProperty(ref _moveType);
+			set => SetProperty(ref _moveType, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("nodeParams")] 
+		public CHandle<questAICommandParams> NodeParams
+		{
+			get => GetProperty(ref _nodeParams);
+			set => SetProperty(ref _nodeParams, value);
+		}
+
+		public questMovePuppetNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

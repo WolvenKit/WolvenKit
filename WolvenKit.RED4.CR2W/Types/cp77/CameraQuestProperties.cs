@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CameraQuestProperties : CVariable
 	{
-		[Ordinal(0)] [RED("factOnFeedReceived")] public CName FactOnFeedReceived { get; set; }
-		[Ordinal(1)] [RED("questFactOnDetection")] public CName QuestFactOnDetection { get; set; }
-		[Ordinal(2)] [RED("isInFollowMode")] public CBool IsInFollowMode { get; set; }
-		[Ordinal(3)] [RED("followedTargetID")] public entEntityID FollowedTargetID { get; set; }
+		private CName _factOnFeedReceived;
+		private CName _questFactOnDetection;
+		private CBool _isInFollowMode;
+		private entEntityID _followedTargetID;
 
-		public CameraQuestProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("factOnFeedReceived")] 
+		public CName FactOnFeedReceived
+		{
+			get => GetProperty(ref _factOnFeedReceived);
+			set => SetProperty(ref _factOnFeedReceived, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("questFactOnDetection")] 
+		public CName QuestFactOnDetection
+		{
+			get => GetProperty(ref _questFactOnDetection);
+			set => SetProperty(ref _questFactOnDetection, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isInFollowMode")] 
+		public CBool IsInFollowMode
+		{
+			get => GetProperty(ref _isInFollowMode);
+			set => SetProperty(ref _isInFollowMode, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("followedTargetID")] 
+		public entEntityID FollowedTargetID
+		{
+			get => GetProperty(ref _followedTargetID);
+			set => SetProperty(ref _followedTargetID, value);
+		}
+
+		public CameraQuestProperties(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnAndNode : scnSceneGraphNode
 	{
-		[Ordinal(3)] [RED("numInSockets")] public CUInt32 NumInSockets { get; set; }
+		private CUInt32 _numInSockets;
 
-		public scnAndNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("numInSockets")] 
+		public CUInt32 NumInSockets
+		{
+			get => GetProperty(ref _numInSockets);
+			set => SetProperty(ref _numInSockets, value);
+		}
+
+		public scnAndNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

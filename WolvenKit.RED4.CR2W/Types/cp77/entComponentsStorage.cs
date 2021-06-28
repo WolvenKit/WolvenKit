@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entComponentsStorage : ISerializable
 	{
-		[Ordinal(0)] [RED("components")] public CArray<CHandle<entIComponent>> Components { get; set; }
+		private CArray<CHandle<entIComponent>> _components;
 
-		public entComponentsStorage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("components")] 
+		public CArray<CHandle<entIComponent>> Components
+		{
+			get => GetProperty(ref _components);
+			set => SetProperty(ref _components, value);
+		}
+
+		public entComponentsStorage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

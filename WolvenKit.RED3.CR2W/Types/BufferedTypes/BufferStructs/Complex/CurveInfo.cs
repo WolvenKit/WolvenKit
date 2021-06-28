@@ -17,7 +17,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         [Ordinal(3)] [RED] public CCompressedBuffer<CurvePiece> pieces { get; set; } // MAX LIMIT 4
 
-        public CurveInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CurveInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             someName = new CName(cr2w, this, nameof(someName)) { IsSerialized = true };
             someByte = new CUInt8(cr2w, this, nameof(someByte)) { IsSerialized = true };

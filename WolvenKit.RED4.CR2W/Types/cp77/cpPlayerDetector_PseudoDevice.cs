@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cpPlayerDetector_PseudoDevice : gameObject
 	{
-		[Ordinal(40)] [RED("playerDetector")] public NodeRef PlayerDetector { get; set; }
+		private NodeRef _playerDetector;
 
-		public cpPlayerDetector_PseudoDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("playerDetector")] 
+		public NodeRef PlayerDetector
+		{
+			get => GetProperty(ref _playerDetector);
+			set => SetProperty(ref _playerDetector, value);
+		}
+
+		public cpPlayerDetector_PseudoDevice(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CoopIrritationDelayCallback : gameDelaySystemScriptedDelayCallbackWrapper
 	{
-		[Ordinal(0)] [RED("companion")] public wCHandle<gameObject> Companion { get; set; }
+		private wCHandle<gameObject> _companion;
 
-		public CoopIrritationDelayCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("companion")] 
+		public wCHandle<gameObject> Companion
+		{
+			get => GetProperty(ref _companion);
+			set => SetProperty(ref _companion, value);
+		}
+
+		public CoopIrritationDelayCallback(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

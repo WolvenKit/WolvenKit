@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnAudioEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("performer")] public scnPerformerId Performer { get; set; }
-		[Ordinal(7)] [RED("audioEventName")] public CName AudioEventName { get; set; }
-		[Ordinal(8)] [RED("ambientUniqueName")] public CName AmbientUniqueName { get; set; }
-		[Ordinal(9)] [RED("emitterName")] public CName EmitterName { get; set; }
-		[Ordinal(10)] [RED("fastForwardSupport")] public CEnum<scnAudioFastForwardSupport> FastForwardSupport { get; set; }
+		private scnPerformerId _performer;
+		private CName _audioEventName;
+		private CName _ambientUniqueName;
+		private CName _emitterName;
+		private CEnum<scnAudioFastForwardSupport> _fastForwardSupport;
 
-		public scnAudioEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("performer")] 
+		public scnPerformerId Performer
+		{
+			get => GetProperty(ref _performer);
+			set => SetProperty(ref _performer, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("audioEventName")] 
+		public CName AudioEventName
+		{
+			get => GetProperty(ref _audioEventName);
+			set => SetProperty(ref _audioEventName, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("ambientUniqueName")] 
+		public CName AmbientUniqueName
+		{
+			get => GetProperty(ref _ambientUniqueName);
+			set => SetProperty(ref _ambientUniqueName, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("emitterName")] 
+		public CName EmitterName
+		{
+			get => GetProperty(ref _emitterName);
+			set => SetProperty(ref _emitterName, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("fastForwardSupport")] 
+		public CEnum<scnAudioFastForwardSupport> FastForwardSupport
+		{
+			get => GetProperty(ref _fastForwardSupport);
+			set => SetProperty(ref _fastForwardSupport, value);
+		}
+
+		public scnAudioEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

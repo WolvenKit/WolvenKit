@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecuritySystemOutputData : CVariable
 	{
-		[Ordinal(0)] [RED("link")] public DeviceLink Link { get; set; }
-		[Ordinal(1)] [RED("breachOrigin")] public CEnum<EBreachOrigin> BreachOrigin { get; set; }
-		[Ordinal(2)] [RED("delayDuration")] public CFloat DelayDuration { get; set; }
+		private DeviceLink _link;
+		private CEnum<EBreachOrigin> _breachOrigin;
+		private CFloat _delayDuration;
 
-		public SecuritySystemOutputData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("link")] 
+		public DeviceLink Link
+		{
+			get => GetProperty(ref _link);
+			set => SetProperty(ref _link, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("breachOrigin")] 
+		public CEnum<EBreachOrigin> BreachOrigin
+		{
+			get => GetProperty(ref _breachOrigin);
+			set => SetProperty(ref _breachOrigin, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("delayDuration")] 
+		public CFloat DelayDuration
+		{
+			get => GetProperty(ref _delayDuration);
+			set => SetProperty(ref _delayDuration, value);
+		}
+
+		public SecuritySystemOutputData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

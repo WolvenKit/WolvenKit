@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_HackingDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("ammoIndicator")] public gamebbScriptID_Bool AmmoIndicator { get; set; }
+		private gamebbScriptID_Bool _ammoIndicator;
 
-		public UI_HackingDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ammoIndicator")] 
+		public gamebbScriptID_Bool AmmoIndicator
+		{
+			get => GetProperty(ref _ammoIndicator);
+			set => SetProperty(ref _ammoIndicator, value);
+		}
+
+		public UI_HackingDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

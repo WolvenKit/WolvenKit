@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ToiletControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)] [RED("flushDuration")] public CFloat FlushDuration { get; set; }
-		[Ordinal(104)] [RED("flushSFX")] public CName FlushSFX { get; set; }
-		[Ordinal(105)] [RED("flushVFXname")] public CName FlushVFXname { get; set; }
-		[Ordinal(106)] [RED("isFlushing")] public CBool IsFlushing { get; set; }
+		private CFloat _flushDuration;
+		private CName _flushSFX;
+		private CName _flushVFXname;
+		private CBool _isFlushing;
 
-		public ToiletControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(103)] 
+		[RED("flushDuration")] 
+		public CFloat FlushDuration
+		{
+			get => GetProperty(ref _flushDuration);
+			set => SetProperty(ref _flushDuration, value);
+		}
+
+		[Ordinal(104)] 
+		[RED("flushSFX")] 
+		public CName FlushSFX
+		{
+			get => GetProperty(ref _flushSFX);
+			set => SetProperty(ref _flushSFX, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("flushVFXname")] 
+		public CName FlushVFXname
+		{
+			get => GetProperty(ref _flushVFXname);
+			set => SetProperty(ref _flushVFXname, value);
+		}
+
+		[Ordinal(106)] 
+		[RED("isFlushing")] 
+		public CBool IsFlushing
+		{
+			get => GetProperty(ref _isFlushing);
+			set => SetProperty(ref _isFlushing, value);
+		}
+
+		public ToiletControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

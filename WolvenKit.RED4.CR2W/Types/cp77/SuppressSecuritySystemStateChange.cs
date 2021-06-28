@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SuppressSecuritySystemStateChange : redEvent
 	{
-		[Ordinal(0)] [RED("forceSecuritySystemIntoStrictQuestControl")] public CBool ForceSecuritySystemIntoStrictQuestControl { get; set; }
+		private CBool _forceSecuritySystemIntoStrictQuestControl;
 
-		public SuppressSecuritySystemStateChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("forceSecuritySystemIntoStrictQuestControl")] 
+		public CBool ForceSecuritySystemIntoStrictQuestControl
+		{
+			get => GetProperty(ref _forceSecuritySystemIntoStrictQuestControl);
+			set => SetProperty(ref _forceSecuritySystemIntoStrictQuestControl, value);
+		}
+
+		public SuppressSecuritySystemStateChange(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

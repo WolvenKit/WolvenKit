@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("listener")] 		public CHandle<W3QuestCond_IsItemUsed_Listener> Listener { get; set;}
 
-		public W3QuestCond_IsItemUsed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3QuestCond_IsItemUsed(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3QuestCond_IsItemUsed(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

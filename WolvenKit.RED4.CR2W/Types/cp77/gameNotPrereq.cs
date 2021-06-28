@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameNotPrereq : gameIPrereq
 	{
-		[Ordinal(0)] [RED("negatedPrereq")] public CHandle<gameIPrereq> NegatedPrereq { get; set; }
+		private CHandle<gameIPrereq> _negatedPrereq;
 
-		public gameNotPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("negatedPrereq")] 
+		public CHandle<gameIPrereq> NegatedPrereq
+		{
+			get => GetProperty(ref _negatedPrereq);
+			set => SetProperty(ref _negatedPrereq, value);
+		}
+
+		public gameNotPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

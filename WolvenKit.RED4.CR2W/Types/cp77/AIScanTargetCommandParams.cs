@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIScanTargetCommandParams : questScriptedAICommandParams
 	{
-		[Ordinal(0)] [RED("targetPuppetRef")] public gameEntityReference TargetPuppetRef { get; set; }
+		private gameEntityReference _targetPuppetRef;
 
-		public AIScanTargetCommandParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("targetPuppetRef")] 
+		public gameEntityReference TargetPuppetRef
+		{
+			get => GetProperty(ref _targetPuppetRef);
+			set => SetProperty(ref _targetPuppetRef, value);
+		}
+
+		public AIScanTargetCommandParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

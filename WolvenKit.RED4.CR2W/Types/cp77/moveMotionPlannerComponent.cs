@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class moveMotionPlannerComponent : moveIMotionPlannerComponent
 	{
-		[Ordinal(3)] [RED("snapToGround")] public CBool SnapToGround { get; set; }
+		private CBool _snapToGround;
 
-		public moveMotionPlannerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("snapToGround")] 
+		public CBool SnapToGround
+		{
+			get => GetProperty(ref _snapToGround);
+			set => SetProperty(ref _snapToGround, value);
+		}
+
+		public moveMotionPlannerComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

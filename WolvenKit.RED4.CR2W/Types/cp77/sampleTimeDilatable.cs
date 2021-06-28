@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class sampleTimeDilatable : gameTimeDilatable
 	{
-		[Ordinal(40)] [RED("listener")] public CHandle<sampleTimeListener> Listener { get; set; }
+		private CHandle<sampleTimeListener> _listener;
 
-		public sampleTimeDilatable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("listener")] 
+		public CHandle<sampleTimeListener> Listener
+		{
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
+		}
+
+		public sampleTimeDilatable(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

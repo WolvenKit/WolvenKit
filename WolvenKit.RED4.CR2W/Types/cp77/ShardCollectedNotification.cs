@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ShardCollectedNotification : GenericNotificationController
 	{
-		[Ordinal(12)] [RED("shardTitle")] public inkTextWidgetReference ShardTitle { get; set; }
+		private inkTextWidgetReference _shardTitle;
 
-		public ShardCollectedNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("shardTitle")] 
+		public inkTextWidgetReference ShardTitle
+		{
+			get => GetProperty(ref _shardTitle);
+			set => SetProperty(ref _shardTitle, value);
+		}
+
+		public ShardCollectedNotification(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

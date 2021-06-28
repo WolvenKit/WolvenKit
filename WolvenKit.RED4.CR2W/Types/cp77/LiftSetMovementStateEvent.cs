@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LiftSetMovementStateEvent : redEvent
 	{
-		[Ordinal(0)] [RED("movementState")] public CEnum<gamePlatformMovementState> MovementState { get; set; }
+		private CEnum<gamePlatformMovementState> _movementState;
 
-		public LiftSetMovementStateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("movementState")] 
+		public CEnum<gamePlatformMovementState> MovementState
+		{
+			get => GetProperty(ref _movementState);
+			set => SetProperty(ref _movementState, value);
+		}
+
+		public LiftSetMovementStateEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

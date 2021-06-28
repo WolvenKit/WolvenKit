@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnCheckDistractedReturnConditionParams : CVariable
 	{
-		[Ordinal(0)] [RED("distracted")] public CBool Distracted { get; set; }
-		[Ordinal(1)] [RED("target")] public CEnum<scnDistractedConditionTarget> Target { get; set; }
+		private CBool _distracted;
+		private CEnum<scnDistractedConditionTarget> _target;
 
-		public scnCheckDistractedReturnConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("distracted")] 
+		public CBool Distracted
+		{
+			get => GetProperty(ref _distracted);
+			set => SetProperty(ref _distracted, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("target")] 
+		public CEnum<scnDistractedConditionTarget> Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		public scnCheckDistractedReturnConditionParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

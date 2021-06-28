@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStoryTierChangedEvent : AIAIEvent
 	{
-		[Ordinal(2)] [RED("newTier")] public CEnum<gameStoryTier> NewTier { get; set; }
+		private CEnum<gameStoryTier> _newTier;
 
-		public gameStoryTierChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("newTier")] 
+		public CEnum<gameStoryTier> NewTier
+		{
+			get => GetProperty(ref _newTier);
+			set => SetProperty(ref _newTier, value);
+		}
+
+		public gameStoryTierChangedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

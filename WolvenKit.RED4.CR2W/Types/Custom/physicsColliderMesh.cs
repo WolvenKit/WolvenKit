@@ -6,18 +6,50 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
 	public class physicsColliderMesh : physicsColliderMesh_
     {
-        [Ordinal(1000)] [REDBuffer] public CArrayVLQInt32<physicsColliderMeshData> Unk1 { get; set; }
-        [Ordinal(1001)] [REDBuffer] public CArrayVLQInt32<physicsColliderMeshData> Unk2 { get; set; }
-        [Ordinal(1002)] [REDBuffer] public CArrayVLQInt32<physicsColliderMeshData> Unk3 { get; set; }
+        private CArrayVLQInt32<physicsColliderMeshData> _unk1;
+        private CArrayVLQInt32<physicsColliderMeshData> _unk2;
+        private CArrayVLQInt32<physicsColliderMeshData> _unk3;
 
-		public physicsColliderMesh(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(1000)]
+        [REDBuffer]
+        public CArrayVLQInt32<physicsColliderMeshData> Unk1
+        {
+            get => GetProperty(ref _unk1);
+            set => SetProperty(ref _unk1, value);
+        }
+
+        [Ordinal(1001)]
+        [REDBuffer]
+        public CArrayVLQInt32<physicsColliderMeshData> Unk2
+        {
+            get => GetProperty(ref _unk2);
+            set => SetProperty(ref _unk2, value);
+        }
+
+        [Ordinal(1002)]
+        [REDBuffer]
+        public CArrayVLQInt32<physicsColliderMeshData> Unk3
+        {
+            get => GetProperty(ref _unk3);
+            set => SetProperty(ref _unk3, value);
+        }
+
+        public physicsColliderMesh(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class physicsColliderMeshData : CVariable
     {
-        [Ordinal(0)] [RED] public CUInt16 Unk1 { get; set; }
+        private CUInt16 _unk1;
 
-        public physicsColliderMeshData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(0)]
+        [REDBuffer]
+        public CUInt16 Unk1
+        {
+            get => GetProperty(ref _unk1);
+            set => SetProperty(ref _unk1, value);
+        }
+
+        public physicsColliderMeshData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

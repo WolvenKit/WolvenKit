@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerDevelopmentSystem : gameScriptableSystem
 	{
-		[Ordinal(0)] [RED("playerData")] public CArray<CHandle<PlayerDevelopmentData>> PlayerData { get; set; }
-		[Ordinal(1)] [RED("ownerData")] public CArray<CHandle<PlayerDevelopmentData>> OwnerData { get; set; }
+		private CArray<CHandle<PlayerDevelopmentData>> _playerData;
+		private CArray<CHandle<PlayerDevelopmentData>> _ownerData;
 
-		public PlayerDevelopmentSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("playerData")] 
+		public CArray<CHandle<PlayerDevelopmentData>> PlayerData
+		{
+			get => GetProperty(ref _playerData);
+			set => SetProperty(ref _playerData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("ownerData")] 
+		public CArray<CHandle<PlayerDevelopmentData>> OwnerData
+		{
+			get => GetProperty(ref _ownerData);
+			set => SetProperty(ref _ownerData, value);
+		}
+
+		public PlayerDevelopmentSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

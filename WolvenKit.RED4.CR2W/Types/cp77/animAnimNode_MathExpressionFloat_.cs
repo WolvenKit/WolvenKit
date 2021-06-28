@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_MathExpressionFloat_ : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] [RED("expressionData")] public animMathExpressionNodeData ExpressionData { get; set; }
+		private animMathExpressionNodeData _expressionData;
 
-		public animAnimNode_MathExpressionFloat_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(11)] 
+		[RED("expressionData")] 
+		public animMathExpressionNodeData ExpressionData
+		{
+			get => GetProperty(ref _expressionData);
+			set => SetProperty(ref _expressionData, value);
+		}
+
+		public animAnimNode_MathExpressionFloat_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

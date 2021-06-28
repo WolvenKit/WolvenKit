@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ReleaseSlotEvent : redEvent
 	{
-		[Ordinal(0)] [RED("slotID")] public CInt32 SlotID { get; set; }
+		private CInt32 _slotID;
 
-		public ReleaseSlotEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("slotID")] 
+		public CInt32 SlotID
+		{
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
+		}
+
+		public ReleaseSlotEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

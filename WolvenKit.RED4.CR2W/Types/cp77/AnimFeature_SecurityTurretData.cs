@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_SecurityTurretData : animAnimFeature
 	{
-		[Ordinal(0)] [RED("Shoot")] public CBool Shoot { get; set; }
-		[Ordinal(1)] [RED("isRippedOff")] public CBool IsRippedOff { get; set; }
-		[Ordinal(2)] [RED("ripOffSide")] public CBool RipOffSide { get; set; }
-		[Ordinal(3)] [RED("isOverriden")] public CBool IsOverriden { get; set; }
+		private CBool _shoot;
+		private CBool _isRippedOff;
+		private CBool _ripOffSide;
+		private CBool _isOverriden;
 
-		public AnimFeature_SecurityTurretData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("Shoot")] 
+		public CBool Shoot
+		{
+			get => GetProperty(ref _shoot);
+			set => SetProperty(ref _shoot, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isRippedOff")] 
+		public CBool IsRippedOff
+		{
+			get => GetProperty(ref _isRippedOff);
+			set => SetProperty(ref _isRippedOff, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("ripOffSide")] 
+		public CBool RipOffSide
+		{
+			get => GetProperty(ref _ripOffSide);
+			set => SetProperty(ref _ripOffSide, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("isOverriden")] 
+		public CBool IsOverriden
+		{
+			get => GetProperty(ref _isOverriden);
+			set => SetProperty(ref _isOverriden, value);
+		}
+
+		public AnimFeature_SecurityTurretData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

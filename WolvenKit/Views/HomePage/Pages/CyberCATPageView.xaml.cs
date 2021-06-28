@@ -19,7 +19,7 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("CyberCAT Save Editor");
+               // DiscordHelper.SetDiscordRPCStatus("CyberCAT Save Editor");
             }
         }
 

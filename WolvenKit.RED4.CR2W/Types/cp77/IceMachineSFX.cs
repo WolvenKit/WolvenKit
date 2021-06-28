@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IceMachineSFX : VendingMachineSFX
 	{
-		[Ordinal(2)] [RED("iceFalls")] public CName IceFalls { get; set; }
-		[Ordinal(3)] [RED("processing")] public CName Processing { get; set; }
+		private CName _iceFalls;
+		private CName _processing;
 
-		public IceMachineSFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("iceFalls")] 
+		public CName IceFalls
+		{
+			get => GetProperty(ref _iceFalls);
+			set => SetProperty(ref _iceFalls, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("processing")] 
+		public CName Processing
+		{
+			get => GetProperty(ref _processing);
+			set => SetProperty(ref _processing, value);
+		}
+
+		public IceMachineSFX(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

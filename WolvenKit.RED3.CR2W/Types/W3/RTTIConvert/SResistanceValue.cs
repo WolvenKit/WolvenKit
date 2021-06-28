@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("type")] 		public CEnum<ECharacterDefenseStats> Type { get; set;}
 
-		public SResistanceValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SResistanceValue(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SResistanceValue(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

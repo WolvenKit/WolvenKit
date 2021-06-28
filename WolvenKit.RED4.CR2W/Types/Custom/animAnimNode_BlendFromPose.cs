@@ -6,8 +6,16 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class animAnimNode_BlendFromPose : animAnimNode_BlendFromPose_
     {
-        [Ordinal(998)] [RED("debug")] public CBool Debug { get; set; }
+        private CBool _debug;
 
-        public animAnimNode_BlendFromPose(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(998)]
+        [RED("debug")]
+        public CBool Debug
+        {
+            get => GetProperty(ref _debug);
+            set => SetProperty(ref _debug, value);
+        }
+
+        public animAnimNode_BlendFromPose(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

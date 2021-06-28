@@ -13,7 +13,6 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("cellSize")] 		public CFloat CellSize { get; set;}
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSwarmCellMap(cr2w, parent, name);
 
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetDeviceControllerInvestigationData : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("ownerPuppet")] public wCHandle<ScriptedPuppet> OwnerPuppet { get; set; }
+		private wCHandle<ScriptedPuppet> _ownerPuppet;
 
-		public SetDeviceControllerInvestigationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ownerPuppet")] 
+		public wCHandle<ScriptedPuppet> OwnerPuppet
+		{
+			get => GetProperty(ref _ownerPuppet);
+			set => SetProperty(ref _ownerPuppet, value);
+		}
+
+		public SetDeviceControllerInvestigationData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

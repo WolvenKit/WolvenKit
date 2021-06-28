@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsCollisionPreset : ISerializable
 	{
-		[Ordinal(0)] [RED("Name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("ForceEnableCollisionCallbacks")] public CBool ForceEnableCollisionCallbacks { get; set; }
-		[Ordinal(2)] [RED("CollisionType")] public CArray<CName> CollisionType { get; set; }
-		[Ordinal(3)] [RED("CollisionMask")] public CArray<CName> CollisionMask { get; set; }
-		[Ordinal(4)] [RED("QueryDetect")] public CArray<CName> QueryDetect { get; set; }
+		private CName _name;
+		private CBool _forceEnableCollisionCallbacks;
+		private CArray<CName> _collisionType;
+		private CArray<CName> _collisionMask;
+		private CArray<CName> _queryDetect;
 
-		public physicsCollisionPreset(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("Name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("ForceEnableCollisionCallbacks")] 
+		public CBool ForceEnableCollisionCallbacks
+		{
+			get => GetProperty(ref _forceEnableCollisionCallbacks);
+			set => SetProperty(ref _forceEnableCollisionCallbacks, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("CollisionType")] 
+		public CArray<CName> CollisionType
+		{
+			get => GetProperty(ref _collisionType);
+			set => SetProperty(ref _collisionType, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("CollisionMask")] 
+		public CArray<CName> CollisionMask
+		{
+			get => GetProperty(ref _collisionMask);
+			set => SetProperty(ref _collisionMask, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("QueryDetect")] 
+		public CArray<CName> QueryDetect
+		{
+			get => GetProperty(ref _queryDetect);
+			set => SetProperty(ref _queryDetect, value);
+		}
+
+		public physicsCollisionPreset(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

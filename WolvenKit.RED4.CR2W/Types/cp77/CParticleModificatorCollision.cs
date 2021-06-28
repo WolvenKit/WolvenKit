@@ -7,17 +7,97 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorCollision : IParticleModificator
 	{
-		[Ordinal(4)] [RED("restitution")] public CFloat Restitution { get; set; }
-		[Ordinal(5)] [RED("dynamicFriction")] public CFloat DynamicFriction { get; set; }
-		[Ordinal(6)] [RED("staticFriction")] public CFloat StaticFriction { get; set; }
-		[Ordinal(7)] [RED("velocityDamp")] public CFloat VelocityDamp { get; set; }
-		[Ordinal(8)] [RED("angularVelocityDamp")] public CFloat AngularVelocityDamp { get; set; }
-		[Ordinal(9)] [RED("particleMass")] public CFloat ParticleMass { get; set; }
-		[Ordinal(10)] [RED("particleRadius")] public CFloat ParticleRadius { get; set; }
-		[Ordinal(11)] [RED("useGPUAcceleration")] public CBool UseGPUAcceleration { get; set; }
-		[Ordinal(12)] [RED("disableGravity")] public CBool DisableGravity { get; set; }
-		[Ordinal(13)] [RED("killOnCollision")] public CBool KillOnCollision { get; set; }
+		private CFloat _restitution;
+		private CFloat _dynamicFriction;
+		private CFloat _staticFriction;
+		private CFloat _velocityDamp;
+		private CFloat _angularVelocityDamp;
+		private CFloat _particleMass;
+		private CFloat _particleRadius;
+		private CBool _useGPUAcceleration;
+		private CBool _disableGravity;
+		private CBool _killOnCollision;
 
-		public CParticleModificatorCollision(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("restitution")] 
+		public CFloat Restitution
+		{
+			get => GetProperty(ref _restitution);
+			set => SetProperty(ref _restitution, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("dynamicFriction")] 
+		public CFloat DynamicFriction
+		{
+			get => GetProperty(ref _dynamicFriction);
+			set => SetProperty(ref _dynamicFriction, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("staticFriction")] 
+		public CFloat StaticFriction
+		{
+			get => GetProperty(ref _staticFriction);
+			set => SetProperty(ref _staticFriction, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("velocityDamp")] 
+		public CFloat VelocityDamp
+		{
+			get => GetProperty(ref _velocityDamp);
+			set => SetProperty(ref _velocityDamp, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("angularVelocityDamp")] 
+		public CFloat AngularVelocityDamp
+		{
+			get => GetProperty(ref _angularVelocityDamp);
+			set => SetProperty(ref _angularVelocityDamp, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("particleMass")] 
+		public CFloat ParticleMass
+		{
+			get => GetProperty(ref _particleMass);
+			set => SetProperty(ref _particleMass, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("particleRadius")] 
+		public CFloat ParticleRadius
+		{
+			get => GetProperty(ref _particleRadius);
+			set => SetProperty(ref _particleRadius, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("useGPUAcceleration")] 
+		public CBool UseGPUAcceleration
+		{
+			get => GetProperty(ref _useGPUAcceleration);
+			set => SetProperty(ref _useGPUAcceleration, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("disableGravity")] 
+		public CBool DisableGravity
+		{
+			get => GetProperty(ref _disableGravity);
+			set => SetProperty(ref _disableGravity, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("killOnCollision")] 
+		public CBool KillOnCollision
+		{
+			get => GetProperty(ref _killOnCollision);
+			set => SetProperty(ref _killOnCollision, value);
+		}
+
+		public CParticleModificatorCollision(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

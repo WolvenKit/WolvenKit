@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudBulletTimeModeMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("bulletTimeMapItems")] public CArray<audioAudBulletTimeModeMapItem> BulletTimeMapItems { get; set; }
+		private CArray<audioAudBulletTimeModeMapItem> _bulletTimeMapItems;
 
-		public audioAudBulletTimeModeMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("bulletTimeMapItems")] 
+		public CArray<audioAudBulletTimeModeMapItem> BulletTimeMapItems
+		{
+			get => GetProperty(ref _bulletTimeMapItems);
+			set => SetProperty(ref _bulletTimeMapItems, value);
+		}
+
+		public audioAudBulletTimeModeMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -1,25 +1,28 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Windows.Media;
 using Catel.Data;
-using Newtonsoft.Json;
+using Orchestra.Services;
+using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
     /// <summary>
     /// This handles the application settings defined by the user.
     /// </summary>
-    public class SettingsManager : ValidatableModelBase, ISettingsManager
+    public class SettingsManager : ObservableObject, ISettingsManager
     {
         #region fields
-
-        private string _cp77ExecutablePath = "";
-        private string _depotPath = "";
-        private System.Windows.Media.ImageBrush _profileImageBrush;
-        private string _w3ExecutablePath = "";
-        private string _wccLitePath = "";
 
         private static string ConfigurationPath
         {
@@ -52,112 +55,195 @@ namespace WolvenKit.Functionality.Services
         /// </summary>
         public SettingsManager()
         {
+            ManagerVersions = new string[(int)EManagerType.Max];
+
+            _assemblyVersion = GetAssemblyVersion();
+        }
+
+        private string GetAssemblyVersion()
+        {
+            var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            var paths = new List<string>(runtimeAssemblies);
+            var resolver = new PathAssemblyResolver(paths);
+            var mlc = new MetadataLoadContext(resolver);
+
+            using (mlc)
+            {
+                // Load assembly into MetadataLoadContext.
+                var assembly = mlc.LoadFromAssemblyPath(Constants.WolvenKitDll);
+                var name = assembly.GetName();
+                return name.Version.ToString();
+            }
         }
 
         #endregion constructors
 
         #region properties
 
-        public static bool FirstTimeSetupForUser { get; set; } = true;
+        public bool ShowGuidedTour { get; set; } = true;
 
         public bool CheckForUpdates { get; set; }
 
-        public string CP77ExecutablePath
+        public string DepotPath { get; set; }
+
+        public string MaterialRepositoryPath { get; set; }
+
+        public string ThemeAccentString { get; set; }
+
+        public Color GetThemeAccent() =>
+            !string.IsNullOrEmpty(ThemeAccentString)
+                ? (Color)ColorConverter.ConvertFromString(ThemeAccentString)
+                : (Color)ColorConverter.ConvertFromString("#DF2935");
+
+        public void SetThemeAccent(Color color)
         {
-            get => _cp77ExecutablePath;
-            set
-            {
-                _cp77ExecutablePath = value;
-                RaisePropertyChanged(nameof(CP77ExecutablePath));
-            }
+            ThemeAccentString = color.ToString();
         }
 
-        public string DepotPath
-        {
-            get => _depotPath;
-            set
-            {
-                _depotPath = value;
-                RaisePropertyChanged(nameof(DepotPath));
-            }
-        }
+        public EAnimals  CatFactAnimal { get; set; } =  EAnimals.Cat;
 
-        public string[] ManagerVersions { get; set; } = new string[(int)EManagerType.Max];
+        private string _assemblyVersion;
+
+        public string GetVersionNumber() => _assemblyVersion;
+
+        public string[] ManagerVersions { get; set; }
 
         /// <summary>
         /// Gets/Sets the author's profile image brush.
         /// </summary>
-        public System.Windows.Media.ImageBrush ProfileImageBrush
-        {
-            get => _profileImageBrush;
-            set
-            {
-                _profileImageBrush = value;
-                RaisePropertyChanged(nameof(ProfileImageBrush));
-            }
-        }
+        [JsonIgnore] public ImageBrush ProfileImageBrush { get; set; }
 
         public string TextLanguage { get; set; }
 
-        public Color ThemeAccent { get; set; }
+        #region red4
 
-        /// <summary>
-        /// Gets the internal name and Uri source for all available themes.
-        /// </summary>
+        public string CP77ExecutablePath { get; set; }
 
-        public string W3ExecutablePath
-        {
-            get => _w3ExecutablePath;
-            set
-            {
-                _w3ExecutablePath = value;
-                RaisePropertyChanged(nameof(W3ExecutablePath));
-            }
-        }
+        #endregion red4
 
-        public string WccLitePath
-        {
-            get => _wccLitePath;
-            set
-            {
-                _wccLitePath = value;
-                RaisePropertyChanged(nameof(WccLitePath));
-            }
-        }
+        #region red3
+
+        public string W3ExecutablePath { get; set; }
+
+        public string WccLitePath { get; set; }
+
+        #endregion red3
 
         #endregion properties
 
         #region methods
 
+        #region red4
+
+        public string GetRED4GameRootDir()
+        {
+            if (string.IsNullOrEmpty(CP77ExecutablePath))
+            {
+                return null;
+            }
+
+            var fi = new FileInfo(CP77ExecutablePath);
+            return fi.Directory is { Parent: { Parent: { } } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
+        }
+
+        public string GetRED4GameModDir()
+        {
+            var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
+
+        public string GetOodleDll() =>
+            Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) ?? string.Empty, Constants.Oodle);
+        public string GetRED4OodleDll() => Path.Combine(GetRED4GameRootDir(), "bin", "x64", Constants.Oodle);
+
+        #endregion
+
+        public string GetW3GameContentDir() => Path.Combine(GetW3GameRootDir(), "content");
+
+        public string GetW3GameDlcDir() => Path.Combine(GetW3GameRootDir(), "DLC");
+
+        public string GetW3GameModDir() => Path.Combine(GetW3GameRootDir(), "Mods");
+
+        public string GetW3GameRootDir()
+        {
+            if (string.IsNullOrEmpty(W3ExecutablePath))
+            {
+                return null;
+            }
+
+            var fi = new FileInfo(W3ExecutablePath);
+            return fi.Directory is { Parent: { Parent: { } } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
+        }
+
+
+        public List<string> IsHealthy()
+        {
+            var messages = new List<string>();
+
+            if (!File.Exists(CP77ExecutablePath))
+            {
+                messages.Add("Game exe location was not found.");
+                return messages;
+            }
+
+            if (!File.Exists(GetOodleDll()))
+            {
+                messages.Add($"Oodle dll was not found with the game. Please make sure you have {Constants.Oodle} next to your game executable.");
+            }
+
+            return messages;
+        }
+
+        private static SettingsManager FromDto(SettingsDto settings)
+        {
+            var config = new SettingsManager()
+            {
+                CheckForUpdates = settings.CheckForUpdates,
+                ShowGuidedTour = settings.ShowGuidedTour,
+                //ProfileImageBrush = settings.ProfileImageBrush,
+                TextLanguage = settings.TextLanguage,
+                ThemeAccentString = settings.ThemeAccentString,
+                ManagerVersions = settings.ManagerVersions,
+                DepotPath = settings.DepotPath,
+                CP77ExecutablePath = settings.CP77ExecutablePath,
+                MaterialRepositoryPath = settings.MaterialRepositoryPath,
+                W3ExecutablePath = settings.W3ExecutablePath,
+                WccLitePath = settings.WccLitePath,
+                CatFactAnimal = settings.CatFactAnimal
+            };
+            return config;
+        }
+
         public static SettingsManager Load()
         {
-            SettingsManager config;
+            SettingsManager config = null;
             try
             {
                 if (File.Exists(ConfigurationPath))
                 {
-                    config = JsonConvert.DeserializeObject<SettingsManager>(File.ReadAllText(ConfigurationPath));
-                    FirstTimeSetupForUser = false;
-                }
-                else
-                {
-                    // Defaults
-                    config = new SettingsManager
+                    var jsonString = File.ReadAllText(ConfigurationPath);
+                    var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString);
+                    if (dto != null)
                     {
-                        TextLanguage = "en",
-                        //VoiceLanguage = "en",
-                    };
+                        config = FromDto(dto);
+                    }
                 }
             }
             catch (Exception)
             {
-                // Defaults
-                config = new SettingsManager
-                {
-                    TextLanguage = "en",
-                    //VoiceLanguage = "en",
-                };
             }
+
+            // Defaults
+            config ??= new SettingsManager
+            {
+                TextLanguage = "en",
+                //VoiceLanguage = "en",
+            };
 
             // TODO: move this?
             // add a mechanism to update individual cache managers
@@ -165,13 +251,13 @@ namespace WolvenKit.Functionality.Services
             {
                 var savedversions = config.ManagerVersions[j];
                 var e = (EManagerType)j;
-                var curversion = MainController.GetManagerVersion(e);
+                var curversion = IGameController.GetManagerVersion(e);
 
                 if (savedversions != curversion)
                 {
-                    if (File.Exists(MainController.GetManagerPath(e)))
+                    if (File.Exists(IGameController.GetManagerPath(e)))
                     {
-                        File.Delete(MainController.GetManagerPath(e));
+                        File.Delete(IGameController.GetManagerPath(e));
                     }
                 }
             }
@@ -191,15 +277,54 @@ namespace WolvenKit.Functionality.Services
                 enc.Save(fs1);
             }
 
-            File.WriteAllText(ConfigurationPath,
-                JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.None,
-                    TypeNameHandling = TypeNameHandling.None
-                }));
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+            var json = JsonSerializer.Serialize(new SettingsDto(this), options);
+            File.WriteAllText(ConfigurationPath, json);
         }
 
         #endregion methods
+    }
+
+    public class SettingsDto : ISettingsDto
+    {
+        public SettingsDto()
+        {
+        }
+
+        public SettingsDto(SettingsManager settings)
+        {
+            CheckForUpdates = settings.CheckForUpdates;
+            ShowGuidedTour = settings.ShowGuidedTour;
+            //ProfileImageBrush = settings.ProfileImageBrush;
+            TextLanguage = settings.TextLanguage;
+            ThemeAccentString = settings.ThemeAccentString;
+            ManagerVersions = settings.ManagerVersions;
+            DepotPath = settings.DepotPath;
+            CP77ExecutablePath = settings.CP77ExecutablePath;
+            MaterialRepositoryPath = settings.MaterialRepositoryPath;
+            W3ExecutablePath = settings.W3ExecutablePath;
+            WccLitePath = settings.WccLitePath;
+            CatFactAnimal = settings.CatFactAnimal;
+        }
+
+        public EAnimals CatFactAnimal { get; set; }
+
+        public bool CheckForUpdates { get; set; }
+
+        //public ImageBrush ProfileImageBrush { get; set; }
+        public string TextLanguage { get; set; }
+
+        public string ThemeAccentString { get; set; }
+        public string[] ManagerVersions { get; set; }
+        public string DepotPath { get; set; }
+        public string CP77ExecutablePath { get; set; }
+        public string MaterialRepositoryPath { get; set; }
+        public string W3ExecutablePath { get; set; }
+        public string WccLitePath { get; set; }
+
+        public bool ShowGuidedTour { get; set; }
     }
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIFlatheadSetSoloModeCommand : AIFollowerCommand
 	{
-		[Ordinal(5)] [RED("soloModeState")] public CBool SoloModeState { get; set; }
+		private CBool _soloModeState;
 
-		public AIFlatheadSetSoloModeCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("soloModeState")] 
+		public CBool SoloModeState
+		{
+			get => GetProperty(ref _soloModeState);
+			set => SetProperty(ref _soloModeState, value);
+		}
+
+		public AIFlatheadSetSoloModeCommand(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameplaySettingsDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("DisableAutomaticSwitchToVehicleTPP")] public gamebbScriptID_Bool DisableAutomaticSwitchToVehicleTPP { get; set; }
-		[Ordinal(1)] [RED("EnableVehicleToggleSummonMode")] public gamebbScriptID_Bool EnableVehicleToggleSummonMode { get; set; }
+		private gamebbScriptID_Bool _disableAutomaticSwitchToVehicleTPP;
+		private gamebbScriptID_Bool _enableVehicleToggleSummonMode;
 
-		public GameplaySettingsDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("DisableAutomaticSwitchToVehicleTPP")] 
+		public gamebbScriptID_Bool DisableAutomaticSwitchToVehicleTPP
+		{
+			get => GetProperty(ref _disableAutomaticSwitchToVehicleTPP);
+			set => SetProperty(ref _disableAutomaticSwitchToVehicleTPP, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("EnableVehicleToggleSummonMode")] 
+		public gamebbScriptID_Bool EnableVehicleToggleSummonMode
+		{
+			get => GetProperty(ref _enableVehicleToggleSummonMode);
+			set => SetProperty(ref _enableVehicleToggleSummonMode, value);
+		}
+
+		public GameplaySettingsDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

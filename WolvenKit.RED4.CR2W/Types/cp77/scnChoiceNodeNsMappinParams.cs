@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnChoiceNodeNsMappinParams : ISerializable
 	{
-		[Ordinal(0)] [RED("locationType")] public CEnum<scnChoiceNodeNsMappinLocation> LocationType { get; set; }
-		[Ordinal(1)] [RED("mappinSettings")] public TweakDBID MappinSettings { get; set; }
+		private CEnum<scnChoiceNodeNsMappinLocation> _locationType;
+		private TweakDBID _mappinSettings;
 
-		public scnChoiceNodeNsMappinParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("locationType")] 
+		public CEnum<scnChoiceNodeNsMappinLocation> LocationType
+		{
+			get => GetProperty(ref _locationType);
+			set => SetProperty(ref _locationType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("mappinSettings")] 
+		public TweakDBID MappinSettings
+		{
+			get => GetProperty(ref _mappinSettings);
+			set => SetProperty(ref _mappinSettings, value);
+		}
+
+		public scnChoiceNodeNsMappinParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PerksMenuAttributeItemCreated : redEvent
 	{
-		[Ordinal(0)] [RED("perksMenuAttributeItem")] public CHandle<PerksMenuAttributeItemController> PerksMenuAttributeItem { get; set; }
+		private CHandle<PerksMenuAttributeItemController> _perksMenuAttributeItem;
 
-		public PerksMenuAttributeItemCreated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("perksMenuAttributeItem")] 
+		public CHandle<PerksMenuAttributeItemController> PerksMenuAttributeItem
+		{
+			get => GetProperty(ref _perksMenuAttributeItem);
+			set => SetProperty(ref _perksMenuAttributeItem, value);
+		}
+
+		public PerksMenuAttributeItemCreated(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

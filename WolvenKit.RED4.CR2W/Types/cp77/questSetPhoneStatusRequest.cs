@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetPhoneStatusRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("status")] public CName Status { get; set; }
+		private CName _status;
 
-		public questSetPhoneStatusRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("status")] 
+		public CName Status
+		{
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
+		}
+
+		public questSetPhoneStatusRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

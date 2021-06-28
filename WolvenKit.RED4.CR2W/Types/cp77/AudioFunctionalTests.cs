@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AudioFunctionalTests : IScriptable
 	{
-		public AudioFunctionalTests(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public AudioFunctionalTests(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

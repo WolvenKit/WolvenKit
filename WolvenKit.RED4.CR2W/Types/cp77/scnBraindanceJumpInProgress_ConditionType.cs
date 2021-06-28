@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnBraindanceJumpInProgress_ConditionType : scnIBraindanceConditionType
 	{
-		[Ordinal(0)] [RED("inProgress")] public CBool InProgress { get; set; }
-		[Ordinal(1)] [RED("sceneFile")] public raRef<scnSceneResource> SceneFile { get; set; }
+		private CBool _inProgress;
+		private raRef<scnSceneResource> _sceneFile;
 
-		public scnBraindanceJumpInProgress_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("inProgress")] 
+		public CBool InProgress
+		{
+			get => GetProperty(ref _inProgress);
+			set => SetProperty(ref _inProgress, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("sceneFile")] 
+		public raRef<scnSceneResource> SceneFile
+		{
+			get => GetProperty(ref _sceneFile);
+			set => SetProperty(ref _sceneFile, value);
+		}
+
+		public scnBraindanceJumpInProgress_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

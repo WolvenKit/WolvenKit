@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameBinkVideoData : ISerializable
 	{
-		[Ordinal(0)] [RED("data")] public CArray<gameBinkVideoRecord> Data { get; set; }
+		private CArray<gameBinkVideoRecord> _data;
 
-		public gameBinkVideoData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CArray<gameBinkVideoRecord> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public gameBinkVideoData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

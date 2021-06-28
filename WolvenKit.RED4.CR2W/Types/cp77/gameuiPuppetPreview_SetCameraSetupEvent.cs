@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiPuppetPreview_SetCameraSetupEvent : redEvent
 	{
-		[Ordinal(0)] [RED("setupIndex")] public CUInt32 SetupIndex { get; set; }
-		[Ordinal(1)] [RED("slotName")] public CName SlotName { get; set; }
-		[Ordinal(2)] [RED("delayed")] public CBool Delayed { get; set; }
+		private CUInt32 _setupIndex;
+		private CName _slotName;
+		private CBool _delayed;
 
-		public gameuiPuppetPreview_SetCameraSetupEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("setupIndex")] 
+		public CUInt32 SetupIndex
+		{
+			get => GetProperty(ref _setupIndex);
+			set => SetProperty(ref _setupIndex, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("slotName")] 
+		public CName SlotName
+		{
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("delayed")] 
+		public CBool Delayed
+		{
+			get => GetProperty(ref _delayed);
+			set => SetProperty(ref _delayed, value);
+		}
+
+		public gameuiPuppetPreview_SetCameraSetupEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

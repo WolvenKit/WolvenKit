@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiWorldMapPreviewGameController : gameuiMenuGameController
 	{
-		[Ordinal(3)] [RED("viewTemplate")] public raRef<entEntityTemplate> ViewTemplate { get; set; }
-		[Ordinal(4)] [RED("viewEnvironmentDefinition")] public rRef<worldEnvironmentAreaParameters> ViewEnvironmentDefinition { get; set; }
-		[Ordinal(5)] [RED("cursorTemplate")] public raRef<entEntityTemplate> CursorTemplate { get; set; }
+		private raRef<entEntityTemplate> _viewTemplate;
+		private rRef<worldEnvironmentAreaParameters> _viewEnvironmentDefinition;
+		private raRef<entEntityTemplate> _cursorTemplate;
 
-		public gameuiWorldMapPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("viewTemplate")] 
+		public raRef<entEntityTemplate> ViewTemplate
+		{
+			get => GetProperty(ref _viewTemplate);
+			set => SetProperty(ref _viewTemplate, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("viewEnvironmentDefinition")] 
+		public rRef<worldEnvironmentAreaParameters> ViewEnvironmentDefinition
+		{
+			get => GetProperty(ref _viewEnvironmentDefinition);
+			set => SetProperty(ref _viewEnvironmentDefinition, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("cursorTemplate")] 
+		public raRef<entEntityTemplate> CursorTemplate
+		{
+			get => GetProperty(ref _cursorTemplate);
+			set => SetProperty(ref _cursorTemplate, value);
+		}
+
+		public gameuiWorldMapPreviewGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

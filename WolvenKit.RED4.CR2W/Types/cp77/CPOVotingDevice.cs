@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CPOVotingDevice : CPOMissionDevice
 	{
-		[Ordinal(45)] [RED("deviceName")] public CName DeviceName { get; set; }
+		private CName _deviceName;
 
-		public CPOVotingDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(45)] 
+		[RED("deviceName")] 
+		public CName DeviceName
+		{
+			get => GetProperty(ref _deviceName);
+			set => SetProperty(ref _deviceName, value);
+		}
+
+		public CPOVotingDevice(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

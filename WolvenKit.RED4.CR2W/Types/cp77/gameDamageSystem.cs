@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameDamageSystem : gameIDamageSystem
 	{
-		[Ordinal(0)] [RED("previewTarget")] public previewTargetStruct PreviewTarget { get; set; }
-		[Ordinal(1)] [RED("previewLock")] public CBool PreviewLock { get; set; }
-		[Ordinal(2)] [RED("previewRWLockTemp")] public ScriptReentrantRWLock PreviewRWLockTemp { get; set; }
+		private previewTargetStruct _previewTarget;
+		private CBool _previewLock;
+		private ScriptReentrantRWLock _previewRWLockTemp;
 
-		public gameDamageSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("previewTarget")] 
+		public previewTargetStruct PreviewTarget
+		{
+			get => GetProperty(ref _previewTarget);
+			set => SetProperty(ref _previewTarget, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("previewLock")] 
+		public CBool PreviewLock
+		{
+			get => GetProperty(ref _previewLock);
+			set => SetProperty(ref _previewLock, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("previewRWLockTemp")] 
+		public ScriptReentrantRWLock PreviewRWLockTemp
+		{
+			get => GetProperty(ref _previewRWLockTemp);
+			set => SetProperty(ref _previewRWLockTemp, value);
+		}
+
+		public gameDamageSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnBraindancePaused_ConditionType : scnIBraindanceConditionType
 	{
-		[Ordinal(0)] [RED("sceneFile")] public raRef<scnSceneResource> SceneFile { get; set; }
+		private raRef<scnSceneResource> _sceneFile;
 
-		public scnBraindancePaused_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sceneFile")] 
+		public raRef<scnSceneResource> SceneFile
+		{
+			get => GetProperty(ref _sceneFile);
+			set => SetProperty(ref _sceneFile, value);
+		}
+
+		public scnBraindancePaused_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

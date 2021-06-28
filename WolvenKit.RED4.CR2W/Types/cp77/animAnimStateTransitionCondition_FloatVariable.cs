@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_FloatVariable : animIAnimStateTransitionCondition
 	{
-		[Ordinal(0)] [RED("variableName")] public CName VariableName { get; set; }
-		[Ordinal(1)] [RED("compareValue")] public CFloat CompareValue { get; set; }
-		[Ordinal(2)] [RED("compareFunc")] public CEnum<animCompareFunc> CompareFunc { get; set; }
+		private CName _variableName;
+		private CFloat _compareValue;
+		private CEnum<animCompareFunc> _compareFunc;
 
-		public animAnimStateTransitionCondition_FloatVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("variableName")] 
+		public CName VariableName
+		{
+			get => GetProperty(ref _variableName);
+			set => SetProperty(ref _variableName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("compareValue")] 
+		public CFloat CompareValue
+		{
+			get => GetProperty(ref _compareValue);
+			set => SetProperty(ref _compareValue, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("compareFunc")] 
+		public CEnum<animCompareFunc> CompareFunc
+		{
+			get => GetProperty(ref _compareFunc);
+			set => SetProperty(ref _compareFunc, value);
+		}
+
+		public animAnimStateTransitionCondition_FloatVariable(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

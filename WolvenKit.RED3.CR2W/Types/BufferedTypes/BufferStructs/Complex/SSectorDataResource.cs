@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-
 using System.Diagnostics;
 using System;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace WolvenKit.RED3.CR2W.Types
         //public CUInt64 patchHash;
         [Ordinal(7)] [RED] public CString pathHash { get; set; }
 
-        public CSectorDataResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSectorDataResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             box0 = new CFloat(cr2w, this, nameof(box0)) { IsSerialized = true };
             box1 = new CFloat(cr2w, this, nameof(box1)) { IsSerialized = true };
@@ -34,11 +33,6 @@ namespace WolvenKit.RED3.CR2W.Types
             box4 = new CFloat(cr2w, this, nameof(box4)) { IsSerialized = true };
             box5 = new CFloat(cr2w, this, nameof(box5)) { IsSerialized = true };
             pathHash = new CString(cr2w, this, nameof(pathHash)) { IsSerialized = true };
-        }
-
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CSectorDataResource(cr2w, parent, name);
         }
 
         public override void Read(BinaryReader file, uint size)
@@ -53,19 +47,19 @@ namespace WolvenKit.RED3.CR2W.Types
 
             // here for now until maincontroller is in Wkit.Common
             if (hashint == 0)
-                pathHash.val = "";
+                pathHash.Value = "";
             else
             {
                 // check for vanilla hashed paths
                 if (Cr2wResourceManager.Get().HashdumpDict.ContainsValue(hashint))
-                    pathHash.val = Cr2wResourceManager.Get().HashdumpDict.First(_ => _.Value == hashint).Key;
+                    pathHash.Value = Cr2wResourceManager.Get().HashdumpDict.First(_ => _.Value == hashint).Key;
                 else
                 {
                     // check for custom hashed paths
                     if (Cr2wResourceManager.Get().CHashdumpDict.ContainsValue(hashint))
-                        pathHash.val = Cr2wResourceManager.Get().CHashdumpDict.First(_ => _.Value == hashint).Key;
+                        pathHash.Value = Cr2wResourceManager.Get().CHashdumpDict.First(_ => _.Value == hashint).Key;
                     else
-                        pathHash.val = $"#{hashint}";
+                        pathHash.Value = $"#{hashint}";
                 }
             }
         }
@@ -82,25 +76,25 @@ namespace WolvenKit.RED3.CR2W.Types
             // here for now until maincontroller is in Wkit.Common
             ulong hashint = 0;
             // awkward test for unrecognized custom hashes
-            if (string.IsNullOrEmpty(pathHash.val))
+            if (string.IsNullOrEmpty(pathHash.Value))
                 hashint = 0;
-            else if (pathHash.val[0] == '#')
+            else if (pathHash.Value[0] == '#')
             {
-                hashint = ulong.Parse(pathHash.val.TrimStart('#'));
+                hashint = ulong.Parse(pathHash.Value.TrimStart('#'));
             }
             else
             {
                 //check if in game depot hashes
-                if (Cr2wResourceManager.Get().HashdumpDict.ContainsKey(pathHash.val))
-                    hashint = Cr2wResourceManager.Get().HashdumpDict[pathHash.val];
+                if (Cr2wResourceManager.Get().HashdumpDict.ContainsKey(pathHash.Value))
+                    hashint = Cr2wResourceManager.Get().HashdumpDict[pathHash.Value];
                 else
                 {
                     //check if in local custom hashes
-                    if (Cr2wResourceManager.Get().CHashdumpDict.ContainsKey(pathHash.val))
-                        hashint = Cr2wResourceManager.Get().CHashdumpDict[pathHash.val];
+                    if (Cr2wResourceManager.Get().CHashdumpDict.ContainsKey(pathHash.Value))
+                        hashint = Cr2wResourceManager.Get().CHashdumpDict[pathHash.Value];
                     //hash new path and add to collection
                     else
-                        hashint = Cr2wResourceManager.Get().RegisterAndWriteCustomPath(pathHash.val);
+                        hashint = Cr2wResourceManager.Get().RegisterAndWriteCustomPath(pathHash.Value);
                 }
 
             }

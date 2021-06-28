@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LocomotionAirEvents : LocomotionEventsTransition
 	{
-		[Ordinal(0)] [RED("maxSuperheroFallHeight")] public CBool MaxSuperheroFallHeight { get; set; }
-		[Ordinal(1)] [RED("updateInputToggles")] public CBool UpdateInputToggles { get; set; }
+		private CBool _maxSuperheroFallHeight;
+		private CBool _updateInputToggles;
 
-		public LocomotionAirEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("maxSuperheroFallHeight")] 
+		public CBool MaxSuperheroFallHeight
+		{
+			get => GetProperty(ref _maxSuperheroFallHeight);
+			set => SetProperty(ref _maxSuperheroFallHeight, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("updateInputToggles")] 
+		public CBool UpdateInputToggles
+		{
+			get => GetProperty(ref _updateInputToggles);
+			set => SetProperty(ref _updateInputToggles, value);
+		}
+
+		public LocomotionAirEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

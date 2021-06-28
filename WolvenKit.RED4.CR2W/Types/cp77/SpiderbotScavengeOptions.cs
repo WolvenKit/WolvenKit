@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SpiderbotScavengeOptions : CVariable
 	{
-		[Ordinal(0)] [RED("scavengableBySpiderbot")] public CBool ScavengableBySpiderbot { get; set; }
+		private CBool _scavengableBySpiderbot;
 
-		public SpiderbotScavengeOptions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("scavengableBySpiderbot")] 
+		public CBool ScavengableBySpiderbot
+		{
+			get => GetProperty(ref _scavengableBySpiderbot);
+			set => SetProperty(ref _scavengableBySpiderbot, value);
+		}
+
+		public SpiderbotScavengeOptions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

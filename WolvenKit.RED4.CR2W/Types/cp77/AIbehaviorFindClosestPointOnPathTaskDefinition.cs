@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorFindClosestPointOnPathTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("path")] public CHandle<AIArgumentMapping> Path { get; set; }
-		[Ordinal(2)] [RED("patrolProgress")] public CHandle<AIArgumentMapping> PatrolProgress { get; set; }
-		[Ordinal(3)] [RED("positionOnPath")] public CHandle<AIArgumentMapping> PositionOnPath { get; set; }
-		[Ordinal(4)] [RED("entryTangent")] public CHandle<AIArgumentMapping> EntryTangent { get; set; }
+		private CHandle<AIArgumentMapping> _path;
+		private CHandle<AIArgumentMapping> _patrolProgress;
+		private CHandle<AIArgumentMapping> _positionOnPath;
+		private CHandle<AIArgumentMapping> _entryTangent;
 
-		public AIbehaviorFindClosestPointOnPathTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("path")] 
+		public CHandle<AIArgumentMapping> Path
+		{
+			get => GetProperty(ref _path);
+			set => SetProperty(ref _path, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("patrolProgress")] 
+		public CHandle<AIArgumentMapping> PatrolProgress
+		{
+			get => GetProperty(ref _patrolProgress);
+			set => SetProperty(ref _patrolProgress, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("positionOnPath")] 
+		public CHandle<AIArgumentMapping> PositionOnPath
+		{
+			get => GetProperty(ref _positionOnPath);
+			set => SetProperty(ref _positionOnPath, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("entryTangent")] 
+		public CHandle<AIArgumentMapping> EntryTangent
+		{
+			get => GetProperty(ref _entryTangent);
+			set => SetProperty(ref _entryTangent, value);
+		}
+
+		public AIbehaviorFindClosestPointOnPathTaskDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

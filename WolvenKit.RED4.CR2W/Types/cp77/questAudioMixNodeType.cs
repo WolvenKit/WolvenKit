@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questAudioMixNodeType : questIAudioNodeType
 	{
-		[Ordinal(0)] [RED("mixSignpost")] public CName MixSignpost { get; set; }
+		private CName _mixSignpost;
 
-		public questAudioMixNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mixSignpost")] 
+		public CName MixSignpost
+		{
+			get => GetProperty(ref _mixSignpost);
+			set => SetProperty(ref _mixSignpost, value);
+		}
+
+		public questAudioMixNodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

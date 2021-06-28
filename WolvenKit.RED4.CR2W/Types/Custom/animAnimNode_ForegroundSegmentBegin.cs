@@ -6,8 +6,16 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class animAnimNode_ForegroundSegmentBegin : animAnimNode_ForegroundSegmentBegin_
     {
-        [Ordinal(991)] [RED("segmentEndNodeId")] public CUInt32 SegmentEndNodeId { get; set; }
+        private CUInt32 _segmentEndNodeId;
 
-        public animAnimNode_ForegroundSegmentBegin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(991)]
+        [RED("segmentEndNodeId")]
+        public CUInt32 SegmentEndNodeId
+        {
+            get => GetProperty(ref _segmentEndNodeId);
+            set => SetProperty(ref _segmentEndNodeId, value);
+        }
+
+        public animAnimNode_ForegroundSegmentBegin(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

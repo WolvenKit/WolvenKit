@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class populationSpawnModifier : populationModifier
 	{
-		[Ordinal(0)] [RED("spawnParameter")] public CHandle<gameObjectSpawnParameter> SpawnParameter { get; set; }
+		private CHandle<gameObjectSpawnParameter> _spawnParameter;
 
-		public populationSpawnModifier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("spawnParameter")] 
+		public CHandle<gameObjectSpawnParameter> SpawnParameter
+		{
+			get => GetProperty(ref _spawnParameter);
+			set => SetProperty(ref _spawnParameter, value);
+		}
+
+		public populationSpawnModifier(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

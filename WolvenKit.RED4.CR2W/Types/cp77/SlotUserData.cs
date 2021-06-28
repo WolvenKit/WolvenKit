@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SlotUserData : IScriptable
 	{
-		[Ordinal(0)] [RED("itemData")] public InventoryItemData ItemData { get; set; }
-		[Ordinal(1)] [RED("index")] public CInt32 Index { get; set; }
-		[Ordinal(2)] [RED("area")] public CEnum<gamedataEquipmentArea> Area { get; set; }
+		private InventoryItemData _itemData;
+		private CInt32 _index;
+		private CEnum<gamedataEquipmentArea> _area;
 
-		public SlotUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemData")] 
+		public InventoryItemData ItemData
+		{
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("index")] 
+		public CInt32 Index
+		{
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("area")] 
+		public CEnum<gamedataEquipmentArea> Area
+		{
+			get => GetProperty(ref _area);
+			set => SetProperty(ref _area, value);
+		}
+
+		public SlotUserData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

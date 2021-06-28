@@ -5,8 +5,16 @@ namespace WolvenKit.RED4.CR2W.Types
 {
     public class animAnimNode_Drag : animAnimNode_Drag_
     {
-        [Ordinal(16)] [RED("debugDrawingEnabled")] public CBool DebugDrawingEnabled { get; set; }
+        private CBool _debugDrawingEnabled;
 
-        public animAnimNode_Drag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(16)]
+        [RED("debugDrawingEnabled")]
+        public CBool DebugDrawingEnabled
+        {
+            get => GetProperty(ref _debugDrawingEnabled);
+            set => SetProperty(ref _debugDrawingEnabled, value);
+        }
+
+        public animAnimNode_Drag(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

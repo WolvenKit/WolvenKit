@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PauseMenuListItemData : ListItemData
 	{
-		[Ordinal(1)] [RED("eventName")] public CName EventName { get; set; }
-		[Ordinal(2)] [RED("action")] public CEnum<PauseMenuAction> Action { get; set; }
+		private CName _eventName;
+		private CEnum<PauseMenuAction> _action;
 
-		public PauseMenuListItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("eventName")] 
+		public CName EventName
+		{
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("action")] 
+		public CEnum<PauseMenuAction> Action
+		{
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
+		}
+
+		public PauseMenuListItemData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

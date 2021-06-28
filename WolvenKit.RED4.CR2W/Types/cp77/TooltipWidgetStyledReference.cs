@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TooltipWidgetStyledReference : CVariable
 	{
-		[Ordinal(0)] [RED("identifier")] public CName Identifier { get; set; }
-		[Ordinal(1)] [RED("widgetLibraryReference")] public inkWidgetLibraryReference WidgetLibraryReference { get; set; }
-		[Ordinal(2)] [RED("menuTooltipStylePath")] public redResourceReferenceScriptToken MenuTooltipStylePath { get; set; }
-		[Ordinal(3)] [RED("hudTooltipStylePath")] public redResourceReferenceScriptToken HudTooltipStylePath { get; set; }
+		private CName _identifier;
+		private inkWidgetLibraryReference _widgetLibraryReference;
+		private redResourceReferenceScriptToken _menuTooltipStylePath;
+		private redResourceReferenceScriptToken _hudTooltipStylePath;
 
-		public TooltipWidgetStyledReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("identifier")] 
+		public CName Identifier
+		{
+			get => GetProperty(ref _identifier);
+			set => SetProperty(ref _identifier, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("widgetLibraryReference")] 
+		public inkWidgetLibraryReference WidgetLibraryReference
+		{
+			get => GetProperty(ref _widgetLibraryReference);
+			set => SetProperty(ref _widgetLibraryReference, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("menuTooltipStylePath")] 
+		public redResourceReferenceScriptToken MenuTooltipStylePath
+		{
+			get => GetProperty(ref _menuTooltipStylePath);
+			set => SetProperty(ref _menuTooltipStylePath, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("hudTooltipStylePath")] 
+		public redResourceReferenceScriptToken HudTooltipStylePath
+		{
+			get => GetProperty(ref _hudTooltipStylePath);
+			set => SetProperty(ref _hudTooltipStylePath, value);
+		}
+
+		public TooltipWidgetStyledReference(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

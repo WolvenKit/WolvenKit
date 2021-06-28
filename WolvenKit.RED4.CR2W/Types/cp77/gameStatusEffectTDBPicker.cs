@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStatusEffectTDBPicker : CVariable
 	{
-		[Ordinal(0)] [RED("statusEffect")] public TweakDBID StatusEffect { get; set; }
+		private TweakDBID _statusEffect;
 
-		public gameStatusEffectTDBPicker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("statusEffect")] 
+		public TweakDBID StatusEffect
+		{
+			get => GetProperty(ref _statusEffect);
+			set => SetProperty(ref _statusEffect, value);
+		}
+
+		public gameStatusEffectTDBPicker(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InVehicleCombatDecorator : AIVehicleTaskAbstract
 	{
-		[Ordinal(0)] [RED("targetToChase")] public wCHandle<gameObject> TargetToChase { get; set; }
+		private wCHandle<gameObject> _targetToChase;
 
-		public InVehicleCombatDecorator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("targetToChase")] 
+		public wCHandle<gameObject> TargetToChase
+		{
+			get => GetProperty(ref _targetToChase);
+			set => SetProperty(ref _targetToChase, value);
+		}
+
+		public InVehicleCombatDecorator(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

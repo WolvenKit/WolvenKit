@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OutlineItemRequestEvent : redEvent
 	{
-		[Ordinal(0)] [RED("outlineRequest")] public CHandle<OutlineRequest> OutlineRequest { get; set; }
+		private CHandle<OutlineRequest> _outlineRequest;
 
-		public OutlineItemRequestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("outlineRequest")] 
+		public CHandle<OutlineRequest> OutlineRequest
+		{
+			get => GetProperty(ref _outlineRequest);
+			set => SetProperty(ref _outlineRequest, value);
+		}
+
+		public OutlineItemRequestEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIArgumentCNameValue : AIArgumentDefinition
 	{
-		[Ordinal(3)] [RED("type")] public CEnum<AIArgumentType> Type { get; set; }
-		[Ordinal(4)] [RED("defaultValue")] public CName DefaultValue { get; set; }
+		private CEnum<AIArgumentType> _type;
+		private CName _defaultValue;
 
-		public AIArgumentCNameValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("type")] 
+		public CEnum<AIArgumentType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("defaultValue")] 
+		public CName DefaultValue
+		{
+			get => GetProperty(ref _defaultValue);
+			set => SetProperty(ref _defaultValue, value);
+		}
+
+		public AIArgumentCNameValue(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

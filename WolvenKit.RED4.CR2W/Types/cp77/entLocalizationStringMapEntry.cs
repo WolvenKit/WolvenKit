@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entLocalizationStringMapEntry : CVariable
 	{
-		[Ordinal(0)] [RED("key")] public CName Key { get; set; }
-		[Ordinal(1)] [RED("string")] public LocalizationString String { get; set; }
+		private CName _key;
+		private LocalizationString _string;
 
-		public entLocalizationStringMapEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("key")] 
+		public CName Key
+		{
+			get => GetProperty(ref _key);
+			set => SetProperty(ref _key, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("string")] 
+		public LocalizationString String
+		{
+			get => GetProperty(ref _string);
+			set => SetProperty(ref _string, value);
+		}
+
+		public entLocalizationStringMapEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

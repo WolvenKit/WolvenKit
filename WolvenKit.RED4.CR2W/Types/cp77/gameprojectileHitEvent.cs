@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameprojectileHitEvent : redEvent
 	{
-		[Ordinal(0)] [RED("hitInstances")] public CArray<gameprojectileHitInstance> HitInstances { get; set; }
+		private CArray<gameprojectileHitInstance> _hitInstances;
 
-		public gameprojectileHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hitInstances")] 
+		public CArray<gameprojectileHitInstance> HitInstances
+		{
+			get => GetProperty(ref _hitInstances);
+			set => SetProperty(ref _hitInstances, value);
+		}
+
+		public gameprojectileHitEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

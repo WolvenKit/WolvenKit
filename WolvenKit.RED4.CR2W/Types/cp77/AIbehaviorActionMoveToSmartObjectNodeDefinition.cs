@@ -7,16 +7,88 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorActionMoveToSmartObjectNodeDefinition : AIbehaviorActionTreeNodeDefinition
 	{
-		[Ordinal(1)] [RED("smartObjectId")] public CHandle<AIArgumentMapping> SmartObjectId { get; set; }
-		[Ordinal(2)] [RED("lookAtTarget")] public CHandle<AIArgumentMapping> LookAtTarget { get; set; }
-		[Ordinal(3)] [RED("movementType")] public CHandle<AIArgumentMapping> MovementType { get; set; }
-		[Ordinal(4)] [RED("tolerance")] public CHandle<AIArgumentMapping> Tolerance { get; set; }
-		[Ordinal(5)] [RED("ignoreNavigation")] public CHandle<AIArgumentMapping> IgnoreNavigation { get; set; }
-		[Ordinal(6)] [RED("rotateEntity")] public CHandle<AIArgumentMapping> RotateEntity { get; set; }
-		[Ordinal(7)] [RED("useStart")] public CHandle<AIArgumentMapping> UseStart { get; set; }
-		[Ordinal(8)] [RED("useStop")] public CHandle<AIArgumentMapping> UseStop { get; set; }
-		[Ordinal(9)] [RED("forcedEntryAnimation")] public CHandle<AIArgumentMapping> ForcedEntryAnimation { get; set; }
+		private CHandle<AIArgumentMapping> _smartObjectId;
+		private CHandle<AIArgumentMapping> _lookAtTarget;
+		private CHandle<AIArgumentMapping> _movementType;
+		private CHandle<AIArgumentMapping> _tolerance;
+		private CHandle<AIArgumentMapping> _ignoreNavigation;
+		private CHandle<AIArgumentMapping> _rotateEntity;
+		private CHandle<AIArgumentMapping> _useStart;
+		private CHandle<AIArgumentMapping> _useStop;
+		private CHandle<AIArgumentMapping> _forcedEntryAnimation;
 
-		public AIbehaviorActionMoveToSmartObjectNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("smartObjectId")] 
+		public CHandle<AIArgumentMapping> SmartObjectId
+		{
+			get => GetProperty(ref _smartObjectId);
+			set => SetProperty(ref _smartObjectId, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("lookAtTarget")] 
+		public CHandle<AIArgumentMapping> LookAtTarget
+		{
+			get => GetProperty(ref _lookAtTarget);
+			set => SetProperty(ref _lookAtTarget, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("movementType")] 
+		public CHandle<AIArgumentMapping> MovementType
+		{
+			get => GetProperty(ref _movementType);
+			set => SetProperty(ref _movementType, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("tolerance")] 
+		public CHandle<AIArgumentMapping> Tolerance
+		{
+			get => GetProperty(ref _tolerance);
+			set => SetProperty(ref _tolerance, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("ignoreNavigation")] 
+		public CHandle<AIArgumentMapping> IgnoreNavigation
+		{
+			get => GetProperty(ref _ignoreNavigation);
+			set => SetProperty(ref _ignoreNavigation, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("rotateEntity")] 
+		public CHandle<AIArgumentMapping> RotateEntity
+		{
+			get => GetProperty(ref _rotateEntity);
+			set => SetProperty(ref _rotateEntity, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("useStart")] 
+		public CHandle<AIArgumentMapping> UseStart
+		{
+			get => GetProperty(ref _useStart);
+			set => SetProperty(ref _useStart, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("useStop")] 
+		public CHandle<AIArgumentMapping> UseStop
+		{
+			get => GetProperty(ref _useStop);
+			set => SetProperty(ref _useStop, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("forcedEntryAnimation")] 
+		public CHandle<AIArgumentMapping> ForcedEntryAnimation
+		{
+			get => GetProperty(ref _forcedEntryAnimation);
+			set => SetProperty(ref _forcedEntryAnimation, value);
+		}
+
+		public AIbehaviorActionMoveToSmartObjectNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

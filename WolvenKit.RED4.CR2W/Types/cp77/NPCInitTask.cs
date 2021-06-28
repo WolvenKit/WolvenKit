@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCInitTask : AIbehaviortaskStackScript
 	{
-		[Ordinal(0)] [RED("preventSkippingDeathAnimation")] public CBool PreventSkippingDeathAnimation { get; set; }
+		private CBool _preventSkippingDeathAnimation;
 
-		public NPCInitTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("preventSkippingDeathAnimation")] 
+		public CBool PreventSkippingDeathAnimation
+		{
+			get => GetProperty(ref _preventSkippingDeathAnimation);
+			set => SetProperty(ref _preventSkippingDeathAnimation, value);
+		}
+
+		public NPCInitTask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

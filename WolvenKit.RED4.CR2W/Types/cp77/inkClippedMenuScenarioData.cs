@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkClippedMenuScenarioData : IScriptable
 	{
-		[Ordinal(0)] [RED("menus")] public CArray<CName> Menus { get; set; }
+		private CArray<CName> _menus;
 
-		public inkClippedMenuScenarioData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("menus")] 
+		public CArray<CName> Menus
+		{
+			get => GetProperty(ref _menus);
+			set => SetProperty(ref _menus, value);
+		}
+
+		public inkClippedMenuScenarioData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

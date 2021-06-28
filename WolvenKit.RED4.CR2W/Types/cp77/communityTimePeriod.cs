@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class communityTimePeriod : CVariable
 	{
-		[Ordinal(0)] [RED("hour")] public CEnum<communityECommunitySpawnTime> Hour { get; set; }
+		private CEnum<communityECommunitySpawnTime> _hour;
 
-		public communityTimePeriod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hour")] 
+		public CEnum<communityECommunitySpawnTime> Hour
+		{
+			get => GetProperty(ref _hour);
+			set => SetProperty(ref _hour, value);
+		}
+
+		public communityTimePeriod(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

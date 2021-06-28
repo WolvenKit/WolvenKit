@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorParallelNodeDefinition : AIbehaviorCompositeTreeNodeDefinition
 	{
-		[Ordinal(1)] [RED("waitFor")] public CEnum<AIbehaviorParallelNodeWaitFor> WaitFor { get; set; }
+		private CEnum<AIbehaviorParallelNodeWaitFor> _waitFor;
 
-		public AIbehaviorParallelNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("waitFor")] 
+		public CEnum<AIbehaviorParallelNodeWaitFor> WaitFor
+		{
+			get => GetProperty(ref _waitFor);
+			set => SetProperty(ref _waitFor, value);
+		}
+
+		public AIbehaviorParallelNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

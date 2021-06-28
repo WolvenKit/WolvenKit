@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorDistanceToTargetConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(1)] [RED("target")] public CHandle<AIArgumentMapping> Target { get; set; }
-		[Ordinal(2)] [RED("distance")] public CHandle<AIArgumentMapping> Distance { get; set; }
-		[Ordinal(3)] [RED("comparisonOperator")] public CEnum<EComparisonType> ComparisonOperator { get; set; }
+		private CHandle<AIArgumentMapping> _target;
+		private CHandle<AIArgumentMapping> _distance;
+		private CEnum<EComparisonType> _comparisonOperator;
 
-		public AIbehaviorDistanceToTargetConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("target")] 
+		public CHandle<AIArgumentMapping> Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("distance")] 
+		public CHandle<AIArgumentMapping> Distance
+		{
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("comparisonOperator")] 
+		public CEnum<EComparisonType> ComparisonOperator
+		{
+			get => GetProperty(ref _comparisonOperator);
+			set => SetProperty(ref _comparisonOperator, value);
+		}
+
+		public AIbehaviorDistanceToTargetConditionDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

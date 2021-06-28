@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entInstancedAnimationComponent : entISkinableComponent
 	{
-		[Ordinal(5)] [RED("animations")] public rRef<animAnimSet> Animations { get; set; }
-		[Ordinal(6)] [RED("animToSample")] public CName AnimToSample { get; set; }
-		[Ordinal(7)] [RED("variantAnimToSample")] public CName VariantAnimToSample { get; set; }
-		[Ordinal(8)] [RED("variantTriggerTag")] public CName VariantTriggerTag { get; set; }
+		private rRef<animAnimSet> _animations;
+		private CName _animToSample;
+		private CName _variantAnimToSample;
+		private CName _variantTriggerTag;
 
-		public entInstancedAnimationComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("animations")] 
+		public rRef<animAnimSet> Animations
+		{
+			get => GetProperty(ref _animations);
+			set => SetProperty(ref _animations, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("animToSample")] 
+		public CName AnimToSample
+		{
+			get => GetProperty(ref _animToSample);
+			set => SetProperty(ref _animToSample, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("variantAnimToSample")] 
+		public CName VariantAnimToSample
+		{
+			get => GetProperty(ref _variantAnimToSample);
+			set => SetProperty(ref _variantAnimToSample, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("variantTriggerTag")] 
+		public CName VariantTriggerTag
+		{
+			get => GetProperty(ref _variantTriggerTag);
+			set => SetProperty(ref _variantTriggerTag, value);
+		}
+
+		public entInstancedAnimationComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

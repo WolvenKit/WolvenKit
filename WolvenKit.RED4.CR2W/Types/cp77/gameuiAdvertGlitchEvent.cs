@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiAdvertGlitchEvent : redEvent
 	{
-		[Ordinal(0)] [RED("glitchValue")] public CFloat GlitchValue { get; set; }
+		private CFloat _glitchValue;
 
-		public gameuiAdvertGlitchEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("glitchValue")] 
+		public CFloat GlitchValue
+		{
+			get => GetProperty(ref _glitchValue);
+			set => SetProperty(ref _glitchValue, value);
+		}
+
+		public gameuiAdvertGlitchEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

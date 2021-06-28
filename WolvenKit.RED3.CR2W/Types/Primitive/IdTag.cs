@@ -16,7 +16,7 @@ namespace WolvenKit.RED3.CR2W.Types
         public byte _type { get; set; }
         public byte[] _guid { get; set; }
 
-        [DataMember(EmitDefaultValue = false)]
+
         public string GuidString
         {
             get { return new Guid(_guid).ToString(); }
@@ -29,7 +29,7 @@ namespace WolvenKit.RED3.CR2W.Types
             }
         }
 
-        [DataMember(EmitDefaultValue = false)]
+
         public string TypeString
         {
             get { return Convert.ToString(_type); }
@@ -42,7 +42,7 @@ namespace WolvenKit.RED3.CR2W.Types
             }
         }
 
-        public IdTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public IdTag(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public override void Read(BinaryReader file, uint size)
         {
@@ -66,6 +66,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if(val is byte[])
             {
                 _guid = (byte[])val;

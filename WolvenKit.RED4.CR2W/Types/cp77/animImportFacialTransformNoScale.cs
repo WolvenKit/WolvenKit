@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animImportFacialTransformNoScale : CVariable
 	{
-		[Ordinal(0)] [RED("rotation")] public Quaternion Rotation { get; set; }
-		[Ordinal(1)] [RED("translation")] public Vector3 Translation { get; set; }
+		private Quaternion _rotation;
+		private Vector3 _translation;
 
-		public animImportFacialTransformNoScale(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rotation")] 
+		public Quaternion Rotation
+		{
+			get => GetProperty(ref _rotation);
+			set => SetProperty(ref _rotation, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("translation")] 
+		public Vector3 Translation
+		{
+			get => GetProperty(ref _translation);
+			set => SetProperty(ref _translation, value);
+		}
+
+		public animImportFacialTransformNoScale(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

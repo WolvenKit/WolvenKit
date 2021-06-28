@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameplayConditionContainer : IScriptable
 	{
-		[Ordinal(0)] [RED("logicOperator")] public CEnum<ELogicOperator> LogicOperator { get; set; }
-		[Ordinal(1)] [RED("conditionGroups")] public CArray<ConditionGroupData> ConditionGroups { get; set; }
+		private CEnum<ELogicOperator> _logicOperator;
+		private CArray<ConditionGroupData> _conditionGroups;
 
-		public GameplayConditionContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("logicOperator")] 
+		public CEnum<ELogicOperator> LogicOperator
+		{
+			get => GetProperty(ref _logicOperator);
+			set => SetProperty(ref _logicOperator, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("conditionGroups")] 
+		public CArray<ConditionGroupData> ConditionGroups
+		{
+			get => GetProperty(ref _conditionGroups);
+			set => SetProperty(ref _conditionGroups, value);
+		}
+
+		public GameplayConditionContainer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

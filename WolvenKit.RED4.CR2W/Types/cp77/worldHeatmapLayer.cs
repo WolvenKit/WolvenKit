@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldHeatmapLayer : CResource
 	{
-		[Ordinal(1)] [RED("minValue")] public CUInt32 MinValue { get; set; }
-		[Ordinal(2)] [RED("maxValue")] public CUInt32 MaxValue { get; set; }
-		[Ordinal(3)] [RED("name")] public CString Name { get; set; }
-		[Ordinal(4)] [RED("units")] public CString Units { get; set; }
-		[Ordinal(5)] [RED("invert")] public CBool Invert { get; set; }
+		private CUInt32 _minValue;
+		private CUInt32 _maxValue;
+		private CString _name;
+		private CString _units;
+		private CBool _invert;
 
-		public worldHeatmapLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("minValue")] 
+		public CUInt32 MinValue
+		{
+			get => GetProperty(ref _minValue);
+			set => SetProperty(ref _minValue, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("maxValue")] 
+		public CUInt32 MaxValue
+		{
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("name")] 
+		public CString Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("units")] 
+		public CString Units
+		{
+			get => GetProperty(ref _units);
+			set => SetProperty(ref _units, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("invert")] 
+		public CBool Invert
+		{
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
+		}
+
+		public worldHeatmapLayer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

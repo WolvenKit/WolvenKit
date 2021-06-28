@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameCategorySelectionProbability : CVariable
 	{
-		[Ordinal(0)] [RED("probabilities")] public CArray<gameSpotSequenceCategory> Probabilities { get; set; }
+		private CArray<gameSpotSequenceCategory> _probabilities;
 
-		public gameCategorySelectionProbability(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("probabilities")] 
+		public CArray<gameSpotSequenceCategory> Probabilities
+		{
+			get => GetProperty(ref _probabilities);
+			set => SetProperty(ref _probabilities, value);
+		}
+
+		public gameCategorySelectionProbability(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

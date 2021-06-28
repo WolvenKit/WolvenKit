@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAppearancesGroup : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("appearances")] public CArray<CName> Appearances { get; set; }
+		private CArray<CName> _appearances;
 
-		public audioAppearancesGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("appearances")] 
+		public CArray<CName> Appearances
+		{
+			get => GetProperty(ref _appearances);
+			set => SetProperty(ref _appearances, value);
+		}
+
+		public audioAppearancesGroup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

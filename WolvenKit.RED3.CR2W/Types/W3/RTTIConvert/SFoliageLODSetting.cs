@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("minTreeExtentPerLod", 7)] 		public CArrayFixedSize<CFloat> MinTreeExtentPerLod { get; set;}
 
-		public SFoliageLODSetting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SFoliageLODSetting(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SFoliageLODSetting(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

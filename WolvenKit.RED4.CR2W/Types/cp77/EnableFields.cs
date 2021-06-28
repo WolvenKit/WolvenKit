@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EnableFields : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("actionMask")] public SBraindanceInputMask ActionMask { get; set; }
+		private SBraindanceInputMask _actionMask;
 
-		public EnableFields(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("actionMask")] 
+		public SBraindanceInputMask ActionMask
+		{
+			get => GetProperty(ref _actionMask);
+			set => SetProperty(ref _actionMask, value);
+		}
+
+		public EnableFields(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

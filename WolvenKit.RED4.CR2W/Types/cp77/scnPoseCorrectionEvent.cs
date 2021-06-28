@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnPoseCorrectionEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("performerId")] public scnPerformerId PerformerId { get; set; }
-		[Ordinal(7)] [RED("poseCorrectionGroup")] public animPoseCorrectionGroup PoseCorrectionGroup { get; set; }
+		private scnPerformerId _performerId;
+		private animPoseCorrectionGroup _poseCorrectionGroup;
 
-		public scnPoseCorrectionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("performerId")] 
+		public scnPerformerId PerformerId
+		{
+			get => GetProperty(ref _performerId);
+			set => SetProperty(ref _performerId, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("poseCorrectionGroup")] 
+		public animPoseCorrectionGroup PoseCorrectionGroup
+		{
+			get => GetProperty(ref _poseCorrectionGroup);
+			set => SetProperty(ref _poseCorrectionGroup, value);
+		}
+
+		public scnPoseCorrectionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

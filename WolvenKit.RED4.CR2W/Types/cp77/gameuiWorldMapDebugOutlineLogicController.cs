@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiWorldMapDebugOutlineLogicController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("outlineWidget")] public inkShapeWidgetReference OutlineWidget { get; set; }
+		private inkShapeWidgetReference _outlineWidget;
 
-		public gameuiWorldMapDebugOutlineLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("outlineWidget")] 
+		public inkShapeWidgetReference OutlineWidget
+		{
+			get => GetProperty(ref _outlineWidget);
+			set => SetProperty(ref _outlineWidget, value);
+		}
+
+		public gameuiWorldMapDebugOutlineLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

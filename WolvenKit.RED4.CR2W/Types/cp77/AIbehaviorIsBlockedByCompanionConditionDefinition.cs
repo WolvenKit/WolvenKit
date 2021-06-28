@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorIsBlockedByCompanionConditionDefinition : AIbehaviorCompanionConditionDefinition
 	{
-		[Ordinal(3)] [RED("distance")] public CHandle<AIArgumentMapping> Distance { get; set; }
+		private CHandle<AIArgumentMapping> _distance;
 
-		public AIbehaviorIsBlockedByCompanionConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("distance")] 
+		public CHandle<AIArgumentMapping> Distance
+		{
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
+		}
+
+		public AIbehaviorIsBlockedByCompanionConditionDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questFlowControlNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("isOpen")] public CBool IsOpen { get; set; }
-		[Ordinal(3)] [RED("opensAt")] public CUInt16 OpensAt { get; set; }
-		[Ordinal(4)] [RED("closesAt")] public CUInt16 ClosesAt { get; set; }
+		private CBool _isOpen;
+		private CUInt16 _opensAt;
+		private CUInt16 _closesAt;
 
-		public questFlowControlNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("isOpen")] 
+		public CBool IsOpen
+		{
+			get => GetProperty(ref _isOpen);
+			set => SetProperty(ref _isOpen, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("opensAt")] 
+		public CUInt16 OpensAt
+		{
+			get => GetProperty(ref _opensAt);
+			set => SetProperty(ref _opensAt, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("closesAt")] 
+		public CUInt16 ClosesAt
+		{
+			get => GetProperty(ref _closesAt);
+			set => SetProperty(ref _closesAt, value);
+		}
+
+		public questFlowControlNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_VehicleNPCData : animAnimFeature
 	{
-		[Ordinal(0)] [RED("isDriver")] public CBool IsDriver { get; set; }
-		[Ordinal(1)] [RED("side")] public CInt32 Side { get; set; }
+		private CBool _isDriver;
+		private CInt32 _side;
 
-		public AnimFeature_VehicleNPCData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isDriver")] 
+		public CBool IsDriver
+		{
+			get => GetProperty(ref _isDriver);
+			set => SetProperty(ref _isDriver, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("side")] 
+		public CInt32 Side
+		{
+			get => GetProperty(ref _side);
+			set => SetProperty(ref _side, value);
+		}
+
+		public AnimFeature_VehicleNPCData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

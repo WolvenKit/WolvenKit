@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entVertexAnimationComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("vertexAnimationMapper")] public entVertexAnimationMapper VertexAnimationMapper { get; set; }
-		[Ordinal(4)] [RED("animatedComponent")] public CHandle<entISourceBinding> AnimatedComponent { get; set; }
+		private entVertexAnimationMapper _vertexAnimationMapper;
+		private CHandle<entISourceBinding> _animatedComponent;
 
-		public entVertexAnimationComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("vertexAnimationMapper")] 
+		public entVertexAnimationMapper VertexAnimationMapper
+		{
+			get => GetProperty(ref _vertexAnimationMapper);
+			set => SetProperty(ref _vertexAnimationMapper, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("animatedComponent")] 
+		public CHandle<entISourceBinding> AnimatedComponent
+		{
+			get => GetProperty(ref _animatedComponent);
+			set => SetProperty(ref _animatedComponent, value);
+		}
+
+		public entVertexAnimationComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

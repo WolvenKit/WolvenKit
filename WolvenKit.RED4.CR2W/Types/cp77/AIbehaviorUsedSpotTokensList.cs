@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorUsedSpotTokensList : ISerializable
 	{
-		[Ordinal(0)] [RED("tokens")] public CArray<AISpotUsageToken> Tokens { get; set; }
+		private CArray<AISpotUsageToken> _tokens;
 
-		public AIbehaviorUsedSpotTokensList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("tokens")] 
+		public CArray<AISpotUsageToken> Tokens
+		{
+			get => GetProperty(ref _tokens);
+			set => SetProperty(ref _tokens, value);
+		}
+
+		public AIbehaviorUsedSpotTokensList(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

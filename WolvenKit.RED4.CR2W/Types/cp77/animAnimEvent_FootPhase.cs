@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_FootPhase : animAnimEvent
 	{
-		[Ordinal(3)] [RED("phase")] public CEnum<animEFootPhase> Phase { get; set; }
+		private CEnum<animEFootPhase> _phase;
 
-		public animAnimEvent_FootPhase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("phase")] 
+		public CEnum<animEFootPhase> Phase
+		{
+			get => GetProperty(ref _phase);
+			set => SetProperty(ref _phase, value);
+		}
+
+		public animAnimEvent_FootPhase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

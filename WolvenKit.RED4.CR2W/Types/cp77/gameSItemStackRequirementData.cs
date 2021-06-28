@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSItemStackRequirementData : CVariable
 	{
-		[Ordinal(0)] [RED("statType")] public CEnum<gamedataStatType> StatType { get; set; }
-		[Ordinal(1)] [RED("requiredValue")] public CFloat RequiredValue { get; set; }
+		private CEnum<gamedataStatType> _statType;
+		private CFloat _requiredValue;
 
-		public gameSItemStackRequirementData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("statType")] 
+		public CEnum<gamedataStatType> StatType
+		{
+			get => GetProperty(ref _statType);
+			set => SetProperty(ref _statType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("requiredValue")] 
+		public CFloat RequiredValue
+		{
+			get => GetProperty(ref _requiredValue);
+			set => SetProperty(ref _requiredValue, value);
+		}
+
+		public gameSItemStackRequirementData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -6,6 +6,8 @@ using LZ4;
 using Snappy;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.Bundles
 {
@@ -13,6 +15,7 @@ namespace WolvenKit.Bundles
     {
         #region Properties
 
+        public ulong Key => FNV1A64HashAlgorithm.HashString(Name);
         public IGameArchive Archive { get; set; }
         public uint Compression { get; set; }
 
@@ -50,7 +53,9 @@ namespace WolvenKit.Bundles
         public string DateString { get; set; }
         public uint Empty { get; set; }
         public byte[] Hash { get; set; }
+        public string ArchiveName { get; set; }
         public string Name { get; set; }
+
 
         /// <summary>
         /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.
@@ -64,9 +69,9 @@ namespace WolvenKit.Bundles
 
         #endregion Properties
 
-
-
         #region Methods
+
+        public string Extension => Path.GetExtension(Name);
 
         public void Extract(Stream output)
         {

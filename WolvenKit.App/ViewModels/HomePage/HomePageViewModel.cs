@@ -1,10 +1,12 @@
 using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using Catel.MVVM;
 using HandyControl.Controls;
 using HandyControl.Data;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
 
@@ -16,17 +18,26 @@ namespace WolvenKit.ViewModels.HomePage
 
         #region Fields
 
+        private readonly ISettingsManager _settingsManager;
+
+        
+        
+
+
         public static HomePageViewModel GlobalHomePageVM;
 
         #endregion Fields
 
         #region Constructors
 
-        public HomePageViewModel()
+        public HomePageViewModel(ISettingsManager settingsManager)
         {
+            _settingsManager = settingsManager;
+
             GlobalHomePageVM = this;
             RegisterCommands();
             SetCurrentPage("Welcome");
+            CurrentWindowState = WindowState.Maximized;
         }
 
         #endregion Constructors
@@ -77,6 +88,8 @@ namespace WolvenKit.ViewModels.HomePage
         public bool WelcomePV { get; set; }
 
         public bool WikitPV { get; set; }
+
+        public string VersionNumber => _settingsManager.GetVersionNumber();
 
         #endregion Properties
 
@@ -193,7 +206,7 @@ namespace WolvenKit.ViewModels.HomePage
                     break;
 
                 case "DEBUG":
-                    DiscordHelper.SetDiscordRPCStatus("DEBUG");
+                    //DiscordHelper.SetDiscordRPCStatus("DEBUG");
                     break;
             }
         }

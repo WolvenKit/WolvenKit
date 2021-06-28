@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CraftingUserData : IScriptable
 	{
-		[Ordinal(0)] [RED("Mode")] public CEnum<CraftingMode> Mode { get; set; }
+		private CEnum<CraftingMode> _mode;
 
-		public CraftingUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("Mode")] 
+		public CEnum<CraftingMode> Mode
+		{
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
+		}
+
+		public CraftingUserData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

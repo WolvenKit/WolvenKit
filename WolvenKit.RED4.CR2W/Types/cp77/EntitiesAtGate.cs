@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EntitiesAtGate : MorphData
 	{
-		[Ordinal(1)] [RED("entitiesAtGate")] public CArray<entEntityID> EntitiesAtGate_ { get; set; }
+		private CArray<entEntityID> _entitiesAtGate;
 
-		public EntitiesAtGate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("entitiesAtGate")] 
+		public CArray<entEntityID> EntitiesAtGate_
+		{
+			get => GetProperty(ref _entitiesAtGate);
+			set => SetProperty(ref _entitiesAtGate, value);
+		}
+
+		public EntitiesAtGate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

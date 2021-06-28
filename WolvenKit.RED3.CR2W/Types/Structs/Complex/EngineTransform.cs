@@ -24,7 +24,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(8)] [RED] public CFloat Y { get; set; }
         [Ordinal(9)] [RED] public CFloat Z { get; set; }
 
-        public EngineTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public EngineTransform(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             X = new CFloat(cr2w, this, nameof(X));
             Y = new CFloat(cr2w, this, nameof(Y));
@@ -67,11 +67,11 @@ namespace WolvenKit.RED3.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             flags = 0;
-            if (X.val != 0 || Y.val != 0 || Z.val != 0)
+            if (X.Value != 0 || Y.Value != 0 || Z.Value != 0)
                 flags |= 1;
-            if (Pitch.val != 0 || Yaw.val != 0 || Roll.val != 0)
+            if (Pitch.Value != 0 || Yaw.Value != 0 || Roll.Value != 0)
                 flags |= 2;
-            if (Scale_x.val != 0 || Scale_y.val != 0 || Scale_z.val != 0)
+            if (Scale_x.Value != 0 || Scale_y.Value != 0 || Scale_z.Value != 0)
                 flags |= 4;
 
             file.Write(flags);
@@ -99,6 +99,6 @@ namespace WolvenKit.RED3.CR2W.Types
             }
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new EngineTransform(cr2w, parent, name);
+        
     }
 }

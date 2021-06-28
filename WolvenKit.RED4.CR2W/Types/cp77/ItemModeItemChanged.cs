@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemModeItemChanged : redEvent
 	{
-		[Ordinal(0)] [RED("equipmentArea")] public CEnum<gamedataEquipmentArea> EquipmentArea { get; set; }
-		[Ordinal(1)] [RED("slotIndex")] public CInt32 SlotIndex { get; set; }
-		[Ordinal(2)] [RED("hotkey")] public CEnum<gameEHotkey> Hotkey { get; set; }
+		private CEnum<gamedataEquipmentArea> _equipmentArea;
+		private CInt32 _slotIndex;
+		private CEnum<gameEHotkey> _hotkey;
 
-		public ItemModeItemChanged(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("equipmentArea")] 
+		public CEnum<gamedataEquipmentArea> EquipmentArea
+		{
+			get => GetProperty(ref _equipmentArea);
+			set => SetProperty(ref _equipmentArea, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("slotIndex")] 
+		public CInt32 SlotIndex
+		{
+			get => GetProperty(ref _slotIndex);
+			set => SetProperty(ref _slotIndex, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("hotkey")] 
+		public CEnum<gameEHotkey> Hotkey
+		{
+			get => GetProperty(ref _hotkey);
+			set => SetProperty(ref _hotkey, value);
+		}
+
+		public ItemModeItemChanged(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

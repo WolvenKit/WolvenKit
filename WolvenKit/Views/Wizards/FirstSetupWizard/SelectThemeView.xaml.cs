@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Catel.IoC;
 using ControlzEx.Theming;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
@@ -48,7 +49,18 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
         {
             var a = (Ellipse)sender;
 
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name.ToString());
+            ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name);
+
+            try
+            {
+                var color = ((SolidColorBrush)a.Fill).Color;
+                var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+                settings.SetThemeAccent(color);
+            }
+            catch
+            {
+                // swallow
+            }
         }
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)

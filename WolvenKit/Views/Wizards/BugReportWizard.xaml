@@ -6,7 +6,7 @@
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:wiz1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.BugReportWizard"
- IsVisibleChanged="UserControl_IsVisibleChanged">
+ >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -20,7 +20,8 @@
      Margin="5,5,2,5"
      HorizontalAlignment="Stretch"
      VerticalAlignment="Stretch"
-     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+     hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+     >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
@@ -31,7 +32,8 @@
          Margin="15,15,0,0"
          HorizontalAlignment="Left"
          VerticalAlignment="Center"
-         Orientation="Horizontal">
+         Orientation="Horizontal"
+         >
             <Grid>
                 <iconPacks:PackIconCodicons
                  Grid.Row="0"
@@ -43,7 +45,8 @@
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  Kind="Hubot"
                  Spin="False"
-                 SpinAutoReverse="False" />
+                 SpinAutoReverse="False"
+                 />
             </Grid>
             <StackPanel VerticalAlignment="Center" Orientation="Vertical">
 
@@ -54,11 +57,13 @@
                  VerticalAlignment="Center"
                  FontSize="20"
                  Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                 Text="Let's get rid of those bugs!" />
+                 Text="Let's get rid of those bugs!"
+                 />
                 <hc:Divider
                  Margin="0,5,0,0"
                  HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch" />
+                 VerticalAlignment="Stretch"
+                 />
             </StackPanel>
         </StackPanel>
 

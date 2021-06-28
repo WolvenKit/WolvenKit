@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class C4ControllerPS : ExplosiveDeviceControllerPS
 	{
-		[Ordinal(119)] [RED("itemTweakDBString")] public CName ItemTweakDBString { get; set; }
+		private CName _itemTweakDBString;
 
-		public C4ControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(119)] 
+		[RED("itemTweakDBString")] 
+		public CName ItemTweakDBString
+		{
+			get => GetProperty(ref _itemTweakDBString);
+			set => SetProperty(ref _itemTweakDBString, value);
+		}
+
+		public C4ControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

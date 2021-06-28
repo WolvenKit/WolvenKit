@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LibTreeParameterList : CVariable
 	{
-		[Ordinal(0)] [RED("parameters")] public CArray<LibTreeParameter> Parameters { get; set; }
+		private CArray<LibTreeParameter> _parameters;
 
-		public LibTreeParameterList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("parameters")] 
+		public CArray<LibTreeParameter> Parameters
+		{
+			get => GetProperty(ref _parameters);
+			set => SetProperty(ref _parameters, value);
+		}
+
+		public LibTreeParameterList(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

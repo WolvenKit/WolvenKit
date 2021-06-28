@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entReplicatedAnimWrapperVars : CVariable
 	{
-		[Ordinal(0)] [RED("serverReplicatedTime")] public netTime ServerReplicatedTime { get; set; }
-		[Ordinal(1)] [RED("data")] public CArray<entReplicatedVariableValue> Data { get; set; }
+		private netTime _serverReplicatedTime;
+		private CArray<entReplicatedVariableValue> _data;
 
-		public entReplicatedAnimWrapperVars(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("serverReplicatedTime")] 
+		public netTime ServerReplicatedTime
+		{
+			get => GetProperty(ref _serverReplicatedTime);
+			set => SetProperty(ref _serverReplicatedTime, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("data")] 
+		public CArray<entReplicatedVariableValue> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public entReplicatedAnimWrapperVars(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

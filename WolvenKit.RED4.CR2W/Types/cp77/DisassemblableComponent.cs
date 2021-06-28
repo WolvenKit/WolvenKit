@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DisassemblableComponent : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("disassembled")] public CBool Disassembled { get; set; }
-		[Ordinal(6)] [RED("disassembleTargetRequesters")] public CArray<wCHandle<gameObject>> DisassembleTargetRequesters { get; set; }
+		private CBool _disassembled;
+		private CArray<wCHandle<gameObject>> _disassembleTargetRequesters;
 
-		public DisassemblableComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("disassembled")] 
+		public CBool Disassembled
+		{
+			get => GetProperty(ref _disassembled);
+			set => SetProperty(ref _disassembled, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("disassembleTargetRequesters")] 
+		public CArray<wCHandle<gameObject>> DisassembleTargetRequesters
+		{
+			get => GetProperty(ref _disassembleTargetRequesters);
+			set => SetProperty(ref _disassembleTargetRequesters, value);
+		}
+
+		public DisassemblableComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

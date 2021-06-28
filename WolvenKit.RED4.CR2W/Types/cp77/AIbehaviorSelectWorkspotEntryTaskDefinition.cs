@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorSelectWorkspotEntryTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("workspotData")] public CHandle<AIArgumentMapping> WorkspotData { get; set; }
-		[Ordinal(2)] [RED("destinationPosition")] public CHandle<AIArgumentMapping> DestinationPosition { get; set; }
-		[Ordinal(3)] [RED("tangentPoint")] public CHandle<AIArgumentMapping> TangentPoint { get; set; }
-		[Ordinal(4)] [RED("entranceFromStand")] public CHandle<AIArgumentMapping> EntranceFromStand { get; set; }
+		private CHandle<AIArgumentMapping> _workspotData;
+		private CHandle<AIArgumentMapping> _destinationPosition;
+		private CHandle<AIArgumentMapping> _tangentPoint;
+		private CHandle<AIArgumentMapping> _entranceFromStand;
 
-		public AIbehaviorSelectWorkspotEntryTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("workspotData")] 
+		public CHandle<AIArgumentMapping> WorkspotData
+		{
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("destinationPosition")] 
+		public CHandle<AIArgumentMapping> DestinationPosition
+		{
+			get => GetProperty(ref _destinationPosition);
+			set => SetProperty(ref _destinationPosition, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("tangentPoint")] 
+		public CHandle<AIArgumentMapping> TangentPoint
+		{
+			get => GetProperty(ref _tangentPoint);
+			set => SetProperty(ref _tangentPoint, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("entranceFromStand")] 
+		public CHandle<AIArgumentMapping> EntranceFromStand
+		{
+			get => GetProperty(ref _entranceFromStand);
+			set => SetProperty(ref _entranceFromStand, value);
+		}
+
+		public AIbehaviorSelectWorkspotEntryTaskDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeDecoratorDefinition : AICTreeNodeDefinition
 	{
-		[Ordinal(0)] [RED("child")] public CHandle<LibTreeINodeDefinition> Child { get; set; }
+		private CHandle<LibTreeINodeDefinition> _child;
 
-		public AICTreeNodeDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("child")] 
+		public CHandle<LibTreeINodeDefinition> Child
+		{
+			get => GetProperty(ref _child);
+			set => SetProperty(ref _child, value);
+		}
+
+		public AICTreeNodeDecoratorDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

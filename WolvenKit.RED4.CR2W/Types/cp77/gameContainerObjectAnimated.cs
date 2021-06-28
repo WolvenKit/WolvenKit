@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameContainerObjectAnimated : gameContainerObjectBase
 	{
-		[Ordinal(51)] [RED("animFeatureName")] public CName AnimFeatureName { get; set; }
+		private CName _animFeatureName;
 
-		public gameContainerObjectAnimated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(51)] 
+		[RED("animFeatureName")] 
+		public CName AnimFeatureName
+		{
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
+		}
+
+		public gameContainerObjectAnimated(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -3,32 +3,34 @@ on:
   schedule:
     - cron: "0 12 * * *"
   workflow_dispatch:
-    branches:
-      - master
 
 jobs:
-  build:
+  wkit-win:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout
+      uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
-        
-    - name: Clean
+    - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
-    - name: Install dependencies
+    - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
-    - name: Build
+
+    - name: dotnet build WolvenKit.sln
       run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
+
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
+      uses: actions/upload-artifact@v2
       with:
-        name: artifact
+        name: artifact_wkit-windows
         path: ./WolvenKit/bin/Release/net5.0-windows
-    - uses: papeloto/action-zip@v1
+
+    - name: zip
+      uses: papeloto/action-zip@v1
       with:
         files: ./WolvenKit/bin/Release/net5.0-windows
         dest: wolvenkit.zip
@@ -37,8 +39,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: https://uploads.github.com/repos/WolvenKit/Wolven-kit/releases/11743470/assets{?name,label}
+        # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and 
+        # copy the full "upload_url" value including the {?name,label} part
+        upload_url: https://uploads.github.com/repos/WolvenKit/WolvenKit/releases/11743470/assets{?name,label}
+        # same as above (id can just be taken out the upload_url, it's used to find old releases)
         release_id: 11743470
+        # path to archive to upload
         asset_path: wolvenkit.zip
+        # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
         asset_name: WolvenKit-Nightly-$$.zip
+        # required by GitHub API
         asset_content_type: application/zip

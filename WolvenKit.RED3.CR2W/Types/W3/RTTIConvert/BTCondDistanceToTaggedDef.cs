@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("targetTag")] 		public CBehTreeValCName TargetTag { get; set;}
 
-		public BTCondDistanceToTaggedDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondDistanceToTaggedDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondDistanceToTaggedDef(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

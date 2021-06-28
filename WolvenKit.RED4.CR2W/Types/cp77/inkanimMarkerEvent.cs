@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkanimMarkerEvent : inkanimEvent
 	{
-		[Ordinal(1)] [RED("markerName")] public CName MarkerName { get; set; }
+		private CName _markerName;
 
-		public inkanimMarkerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("markerName")] 
+		public CName MarkerName
+		{
+			get => GetProperty(ref _markerName);
+			set => SetProperty(ref _markerName, value);
+		}
+
+		public inkanimMarkerEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

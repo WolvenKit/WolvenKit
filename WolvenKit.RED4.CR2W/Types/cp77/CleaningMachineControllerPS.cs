@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CleaningMachineControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(108)] [RED("cleaningMachineSkillChecks")] public CHandle<EngDemoContainer> CleaningMachineSkillChecks { get; set; }
+		private CHandle<EngDemoContainer> _cleaningMachineSkillChecks;
 
-		public CleaningMachineControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(108)] 
+		[RED("cleaningMachineSkillChecks")] 
+		public CHandle<EngDemoContainer> CleaningMachineSkillChecks
+		{
+			get => GetProperty(ref _cleaningMachineSkillChecks);
+			set => SetProperty(ref _cleaningMachineSkillChecks, value);
+		}
+
+		public CleaningMachineControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

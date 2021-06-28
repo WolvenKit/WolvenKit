@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SendAIBheaviorReactionStim : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("stimToSend")] public CEnum<gamedataStimType> StimToSend { get; set; }
+		private CEnum<gamedataStimType> _stimToSend;
 
-		public SendAIBheaviorReactionStim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stimToSend")] 
+		public CEnum<gamedataStimType> StimToSend
+		{
+			get => GetProperty(ref _stimToSend);
+			set => SetProperty(ref _stimToSend, value);
+		}
+
+		public SendAIBheaviorReactionStim(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

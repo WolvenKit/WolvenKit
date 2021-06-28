@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TargetTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("targetType")] public CName TargetType { get; set; }
+		private CName _targetType;
 
-		public TargetTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("targetType")] 
+		public CName TargetType
+		{
+			get => GetProperty(ref _targetType);
+			set => SetProperty(ref _targetType, value);
+		}
+
+		public TargetTypeHitPrereqCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

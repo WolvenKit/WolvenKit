@@ -7,10 +7,9 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
-    [Editor(typeof(ITextEditor<float>), typeof(IPropertyEditorBase))]
     public class CFloat : CVariable, IREDIntegerType<float>
     {
-        public CFloat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CFloat(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public float Value { get; set; }
 
@@ -20,8 +19,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             this.Value = val switch
             {
+                string s => float.Parse(s),
                 float o => o,
                 CFloat cvar => cvar.Value,
                 _ => this.Value
@@ -29,6 +30,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             return this;
         }
+
+        public object GetValue() => Value;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {

@@ -23,9 +23,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("isWildcardMiss")] 		public CBool IsWildcardMiss { get; set;}
 
-		public SModUiCategorizedListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SModUiCategorizedListItem(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SModUiCategorizedListItem(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

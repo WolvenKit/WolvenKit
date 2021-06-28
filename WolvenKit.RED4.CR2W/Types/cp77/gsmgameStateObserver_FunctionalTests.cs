@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gsmgameStateObserver_FunctionalTests : gsmIStateObserver
 	{
-		public gsmgameStateObserver_FunctionalTests(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gsmgameStateObserver_FunctionalTests(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

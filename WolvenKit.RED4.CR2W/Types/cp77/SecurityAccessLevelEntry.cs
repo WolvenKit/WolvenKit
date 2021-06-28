@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecurityAccessLevelEntry : CVariable
 	{
-		[Ordinal(0)] [RED("keycard")] public TweakDBID Keycard { get; set; }
-		[Ordinal(1)] [RED("password")] public CName Password { get; set; }
+		private TweakDBID _keycard;
+		private CName _password;
 
-		public SecurityAccessLevelEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("keycard")] 
+		public TweakDBID Keycard
+		{
+			get => GetProperty(ref _keycard);
+			set => SetProperty(ref _keycard, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("password")] 
+		public CName Password
+		{
+			get => GetProperty(ref _password);
+			set => SetProperty(ref _password, value);
+		}
+
+		public SecurityAccessLevelEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

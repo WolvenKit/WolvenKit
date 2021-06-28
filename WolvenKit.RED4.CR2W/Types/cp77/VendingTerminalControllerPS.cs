@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendingTerminalControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)] [RED("vendingTerminalSetup")] public VendingTerminalSetup VendingTerminalSetup { get; set; }
-		[Ordinal(104)] [RED("isReady")] public CBool IsReady { get; set; }
-		[Ordinal(105)] [RED("VendorDataManager")] public CHandle<VendorDataManager> VendorDataManager { get; set; }
+		private VendingTerminalSetup _vendingTerminalSetup;
+		private CBool _isReady;
+		private CHandle<VendorDataManager> _vendorDataManager;
 
-		public VendingTerminalControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(103)] 
+		[RED("vendingTerminalSetup")] 
+		public VendingTerminalSetup VendingTerminalSetup
+		{
+			get => GetProperty(ref _vendingTerminalSetup);
+			set => SetProperty(ref _vendingTerminalSetup, value);
+		}
+
+		[Ordinal(104)] 
+		[RED("isReady")] 
+		public CBool IsReady
+		{
+			get => GetProperty(ref _isReady);
+			set => SetProperty(ref _isReady, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("VendorDataManager")] 
+		public CHandle<VendorDataManager> VendorDataManager
+		{
+			get => GetProperty(ref _vendorDataManager);
+			set => SetProperty(ref _vendorDataManager, value);
+		}
+
+		public VendingTerminalControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerAbilities : ScannerChunk
 	{
-		[Ordinal(0)] [RED("abilities")] public CArray<wCHandle<gamedataGameplayAbility_Record>> Abilities { get; set; }
+		private CArray<wCHandle<gamedataGameplayAbility_Record>> _abilities;
 
-		public ScannerAbilities(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("abilities")] 
+		public CArray<wCHandle<gamedataGameplayAbility_Record>> Abilities
+		{
+			get => GetProperty(ref _abilities);
+			set => SetProperty(ref _abilities, value);
+		}
+
+		public ScannerAbilities(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

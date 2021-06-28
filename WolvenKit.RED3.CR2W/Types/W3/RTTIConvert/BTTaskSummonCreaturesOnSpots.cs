@@ -47,9 +47,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(18)] [RED("m_IsSpawned")] 		public CBool M_IsSpawned { get; set;}
 
-		public BTTaskSummonCreaturesOnSpots(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskSummonCreaturesOnSpots(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskSummonCreaturesOnSpots(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

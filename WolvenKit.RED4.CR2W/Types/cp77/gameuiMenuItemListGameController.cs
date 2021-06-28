@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiMenuItemListGameController : gameuiSaveHandlingController
 	{
-		[Ordinal(3)] [RED("menuList")] public inkCompoundWidgetReference MenuList { get; set; }
-		[Ordinal(4)] [RED("menuEventDispatcher")] public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher { get; set; }
-		[Ordinal(5)] [RED("menuListController")] public wCHandle<inkListController> MenuListController { get; set; }
+		private inkCompoundWidgetReference _menuList;
+		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
+		private wCHandle<inkListController> _menuListController;
 
-		public gameuiMenuItemListGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("menuList")] 
+		public inkCompoundWidgetReference MenuList
+		{
+			get => GetProperty(ref _menuList);
+			set => SetProperty(ref _menuList, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("menuEventDispatcher")] 
+		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
+		{
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("menuListController")] 
+		public wCHandle<inkListController> MenuListController
+		{
+			get => GetProperty(ref _menuListController);
+			set => SetProperty(ref _menuListController, value);
+		}
+
+		public gameuiMenuItemListGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

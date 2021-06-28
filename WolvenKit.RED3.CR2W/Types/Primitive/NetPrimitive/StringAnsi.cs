@@ -4,15 +4,16 @@ using System.Text;
 using System.Xml;
 using WolvenKit.RED3.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
     public class StringAnsi : CVariable
     {
-       
 
-        public StringAnsi(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+
+        public StringAnsi(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -30,6 +31,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is string)
             {
                 this.val = (string) val;
@@ -41,11 +43,6 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new StringAnsi(cr2w, parent, name);
-        }
-
         public override CVariable Copy(ICR2WCopyAction context)
         {
             var var = (StringAnsi) base.Copy(context);
@@ -53,7 +50,7 @@ namespace WolvenKit.RED3.CR2W.Types
             return var;
         }
 
-        
+
 
         public override string ToString()
         {

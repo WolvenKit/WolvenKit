@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecurityLocker : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("inventory")] public CHandle<gameInventory> Inventory { get; set; }
-		[Ordinal(94)] [RED("cachedEvent")] public CHandle<UseSecurityLocker> CachedEvent { get; set; }
+		private CHandle<gameInventory> _inventory;
+		private CHandle<UseSecurityLocker> _cachedEvent;
 
-		public SecurityLocker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(96)] 
+		[RED("inventory")] 
+		public CHandle<gameInventory> Inventory
+		{
+			get => GetProperty(ref _inventory);
+			set => SetProperty(ref _inventory, value);
+		}
+
+		[Ordinal(97)] 
+		[RED("cachedEvent")] 
+		public CHandle<UseSecurityLocker> CachedEvent
+		{
+			get => GetProperty(ref _cachedEvent);
+			set => SetProperty(ref _cachedEvent, value);
+		}
+
+		public SecurityLocker(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class netInputOrientation : CVariable
 	{
-		[Ordinal(0)] [RED("yaw")] public CFloat Yaw { get; set; }
-		[Ordinal(1)] [RED("pitch")] public CFloat Pitch { get; set; }
+		private CFloat _yaw;
+		private CFloat _pitch;
 
-		public netInputOrientation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("yaw")] 
+		public CFloat Yaw
+		{
+			get => GetProperty(ref _yaw);
+			set => SetProperty(ref _yaw, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("pitch")] 
+		public CFloat Pitch
+		{
+			get => GetProperty(ref _pitch);
+			set => SetProperty(ref _pitch, value);
+		}
+
+		public netInputOrientation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

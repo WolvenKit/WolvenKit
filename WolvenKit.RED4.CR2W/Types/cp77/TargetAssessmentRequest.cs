@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TargetAssessmentRequest : ScriptableDeviceAction
 	{
-		[Ordinal(25)] [RED("targetToAssess")] public wCHandle<gameObject> TargetToAssess { get; set; }
+		private wCHandle<gameObject> _targetToAssess;
 
-		public TargetAssessmentRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("targetToAssess")] 
+		public wCHandle<gameObject> TargetToAssess
+		{
+			get => GetProperty(ref _targetToAssess);
+			set => SetProperty(ref _targetToAssess, value);
+		}
+
+		public TargetAssessmentRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

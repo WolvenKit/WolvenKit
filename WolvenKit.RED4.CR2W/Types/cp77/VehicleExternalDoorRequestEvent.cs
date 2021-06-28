@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleExternalDoorRequestEvent : redEvent
 	{
-		[Ordinal(0)] [RED("slotName")] public CName SlotName { get; set; }
-		[Ordinal(1)] [RED("autoClose")] public CBool AutoClose { get; set; }
-		[Ordinal(2)] [RED("autoCloseTime")] public CFloat AutoCloseTime { get; set; }
+		private CName _slotName;
+		private CBool _autoClose;
+		private CFloat _autoCloseTime;
 
-		public VehicleExternalDoorRequestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("slotName")] 
+		public CName SlotName
+		{
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("autoClose")] 
+		public CBool AutoClose
+		{
+			get => GetProperty(ref _autoClose);
+			set => SetProperty(ref _autoClose, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("autoCloseTime")] 
+		public CFloat AutoCloseTime
+		{
+			get => GetProperty(ref _autoCloseTime);
+			set => SetProperty(ref _autoCloseTime, value);
+		}
+
+		public VehicleExternalDoorRequestEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

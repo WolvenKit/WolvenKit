@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PuppetAction : ScriptableDeviceAction
 	{
-		public PuppetAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public PuppetAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

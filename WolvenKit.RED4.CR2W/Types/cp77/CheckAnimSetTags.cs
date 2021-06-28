@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckAnimSetTags : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("animsetTagToCompare")] public CArray<CName> AnimsetTagToCompare { get; set; }
+		private CArray<CName> _animsetTagToCompare;
 
-		public CheckAnimSetTags(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("animsetTagToCompare")] 
+		public CArray<CName> AnimsetTagToCompare
+		{
+			get => GetProperty(ref _animsetTagToCompare);
+			set => SetProperty(ref _animsetTagToCompare, value);
+		}
+
+		public CheckAnimSetTags(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MinigameTooltipShowRequest : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public CHandle<MessageTooltipData> Data { get; set; }
+		private CHandle<MessageTooltipData> _data;
 
-		public MinigameTooltipShowRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CHandle<MessageTooltipData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public MinigameTooltipShowRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

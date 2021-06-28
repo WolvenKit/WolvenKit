@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ElectricLight : Device
 	{
-		[Ordinal(86)] [RED("lightComponents")] public CArray<CHandle<gameLightComponent>> LightComponents { get; set; }
-		[Ordinal(87)] [RED("lightDefinitions")] public CArray<gamedataLightPreset> LightDefinitions { get; set; }
+		private CArray<CHandle<gameLightComponent>> _lightComponents;
+		private CArray<gamedataLightPreset> _lightDefinitions;
 
-		public ElectricLight(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(86)] 
+		[RED("lightComponents")] 
+		public CArray<CHandle<gameLightComponent>> LightComponents
+		{
+			get => GetProperty(ref _lightComponents);
+			set => SetProperty(ref _lightComponents, value);
+		}
+
+		[Ordinal(87)] 
+		[RED("lightDefinitions")] 
+		public CArray<gamedataLightPreset> LightDefinitions
+		{
+			get => GetProperty(ref _lightDefinitions);
+			set => SetProperty(ref _lightDefinitions, value);
+		}
+
+		public ElectricLight(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

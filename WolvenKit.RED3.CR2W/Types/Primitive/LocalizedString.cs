@@ -7,9 +7,9 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED3.CR2W.Types
 {
     [REDMeta()]
-    public class LocalizedString : CVariable
+    public class LocalizedString : CVariable, ILocalizedString
     {
-        public LocalizedString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public LocalizedString(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             if (cr2w != null)
             {
@@ -45,6 +45,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is uint)
             {
                 this.val = (uint)val;

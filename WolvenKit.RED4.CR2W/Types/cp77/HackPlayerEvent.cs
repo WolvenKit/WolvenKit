@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HackPlayerEvent : redEvent
 	{
-		[Ordinal(0)] [RED("netrunnerID")] public entEntityID NetrunnerID { get; set; }
-		[Ordinal(1)] [RED("targetID")] public entEntityID TargetID { get; set; }
-		[Ordinal(2)] [RED("objectRecord")] public wCHandle<gamedataObjectAction_Record> ObjectRecord { get; set; }
-		[Ordinal(3)] [RED("showDirectionalIndicator")] public CBool ShowDirectionalIndicator { get; set; }
+		private entEntityID _netrunnerID;
+		private entEntityID _targetID;
+		private wCHandle<gamedataObjectAction_Record> _objectRecord;
+		private CBool _showDirectionalIndicator;
 
-		public HackPlayerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("netrunnerID")] 
+		public entEntityID NetrunnerID
+		{
+			get => GetProperty(ref _netrunnerID);
+			set => SetProperty(ref _netrunnerID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("targetID")] 
+		public entEntityID TargetID
+		{
+			get => GetProperty(ref _targetID);
+			set => SetProperty(ref _targetID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("objectRecord")] 
+		public wCHandle<gamedataObjectAction_Record> ObjectRecord
+		{
+			get => GetProperty(ref _objectRecord);
+			set => SetProperty(ref _objectRecord, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("showDirectionalIndicator")] 
+		public CBool ShowDirectionalIndicator
+		{
+			get => GetProperty(ref _showDirectionalIndicator);
+			set => SetProperty(ref _showDirectionalIndicator, value);
+		}
+
+		public HackPlayerEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

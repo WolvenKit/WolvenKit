@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_ItemLogDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("ItemLogItem")] public gamebbScriptID_Variant ItemLogItem { get; set; }
+		private gamebbScriptID_Variant _itemLogItem;
 
-		public UI_ItemLogDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ItemLogItem")] 
+		public gamebbScriptID_Variant ItemLogItem
+		{
+			get => GetProperty(ref _itemLogItem);
+			set => SetProperty(ref _itemLogItem, value);
+		}
+
+		public UI_ItemLogDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

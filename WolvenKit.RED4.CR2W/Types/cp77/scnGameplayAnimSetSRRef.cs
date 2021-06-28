@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnGameplayAnimSetSRRef : CVariable
 	{
-		[Ordinal(0)] [RED("asyncAnimSet")] public raRef<animAnimSet> AsyncAnimSet { get; set; }
+		private raRef<animAnimSet> _asyncAnimSet;
 
-		public scnGameplayAnimSetSRRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("asyncAnimSet")] 
+		public raRef<animAnimSet> AsyncAnimSet
+		{
+			get => GetProperty(ref _asyncAnimSet);
+			set => SetProperty(ref _asyncAnimSet, value);
+		}
+
+		public scnGameplayAnimSetSRRef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

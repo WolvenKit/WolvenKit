@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ReserveItemToThisDropPoint : ScriptableDeviceAction
 	{
-		[Ordinal(25)] [RED("item")] public TweakDBID Item { get; set; }
+		private TweakDBID _item;
 
-		public ReserveItemToThisDropPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("item")] 
+		public TweakDBID Item
+		{
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
+		}
+
+		public ReserveItemToThisDropPoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

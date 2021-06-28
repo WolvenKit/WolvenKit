@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckCurrentWorkspotTag : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("tag")] public CHandle<AIArgumentMapping> Tag { get; set; }
+		private CHandle<AIArgumentMapping> _tag;
 
-		public CheckCurrentWorkspotTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("tag")] 
+		public CHandle<AIArgumentMapping> Tag
+		{
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
+		}
+
+		public CheckCurrentWorkspotTag(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

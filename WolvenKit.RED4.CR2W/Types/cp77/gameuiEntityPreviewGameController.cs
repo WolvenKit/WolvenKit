@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiEntityPreviewGameController : gameuiMenuGameController
 	{
-		[Ordinal(3)] [RED("entityToPreview")] public raRef<entEntityTemplate> EntityToPreview { get; set; }
+		private raRef<entEntityTemplate> _entityToPreview;
 
-		public gameuiEntityPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("entityToPreview")] 
+		public raRef<entEntityTemplate> EntityToPreview
+		{
+			get => GetProperty(ref _entityToPreview);
+			set => SetProperty(ref _entityToPreview, value);
+		}
+
+		public gameuiEntityPreviewGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -29,9 +29,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("itemEnt2")] 		public CHandle<CEntity> ItemEnt2 { get; set;}
 
-		public CR4PlayerStateUnconscious(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4PlayerStateUnconscious(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4PlayerStateUnconscious(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

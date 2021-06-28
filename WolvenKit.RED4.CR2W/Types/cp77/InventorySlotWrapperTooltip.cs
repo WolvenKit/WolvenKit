@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InventorySlotWrapperTooltip : AGenericTooltipController
 	{
-		[Ordinal(2)] [RED("itemDisplayController")] public wCHandle<InventoryItemDisplayController> ItemDisplayController { get; set; }
+		private wCHandle<InventoryItemDisplayController> _itemDisplayController;
 
-		public InventorySlotWrapperTooltip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("itemDisplayController")] 
+		public wCHandle<InventoryItemDisplayController> ItemDisplayController
+		{
+			get => GetProperty(ref _itemDisplayController);
+			set => SetProperty(ref _itemDisplayController, value);
+		}
+
+		public InventorySlotWrapperTooltip(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

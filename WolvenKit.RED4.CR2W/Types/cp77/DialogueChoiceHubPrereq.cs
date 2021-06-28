@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DialogueChoiceHubPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("isChoiceHubActive")] public CBool IsChoiceHubActive { get; set; }
+		private CBool _isChoiceHubActive;
 
-		public DialogueChoiceHubPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isChoiceHubActive")] 
+		public CBool IsChoiceHubActive
+		{
+			get => GetProperty(ref _isChoiceHubActive);
+			set => SetProperty(ref _isChoiceHubActive, value);
+		}
+
+		public DialogueChoiceHubPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

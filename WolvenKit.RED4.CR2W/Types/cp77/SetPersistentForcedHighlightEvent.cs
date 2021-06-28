@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetPersistentForcedHighlightEvent : redEvent
 	{
-		[Ordinal(0)] [RED("sourceName")] public CName SourceName { get; set; }
-		[Ordinal(1)] [RED("highlightData")] public CHandle<HighlightEditableData> HighlightData { get; set; }
-		[Ordinal(2)] [RED("operation")] public CEnum<EToggleOperationType> Operation { get; set; }
+		private CName _sourceName;
+		private CHandle<HighlightEditableData> _highlightData;
+		private CEnum<EToggleOperationType> _operation;
 
-		public SetPersistentForcedHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sourceName")] 
+		public CName SourceName
+		{
+			get => GetProperty(ref _sourceName);
+			set => SetProperty(ref _sourceName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("highlightData")] 
+		public CHandle<HighlightEditableData> HighlightData
+		{
+			get => GetProperty(ref _highlightData);
+			set => SetProperty(ref _highlightData, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("operation")] 
+		public CEnum<EToggleOperationType> Operation
+		{
+			get => GetProperty(ref _operation);
+			set => SetProperty(ref _operation, value);
+		}
+
+		public SetPersistentForcedHighlightEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TrackQuestNotificationAction : GenericNotificationBaseAction
 	{
-		[Ordinal(0)] [RED("questEntry")] public wCHandle<gameJournalQuest> QuestEntry { get; set; }
-		[Ordinal(1)] [RED("journalMgr")] public wCHandle<gameJournalManager> JournalMgr { get; set; }
+		private wCHandle<gameJournalQuest> _questEntry;
+		private wCHandle<gameJournalManager> _journalMgr;
 
-		public TrackQuestNotificationAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("questEntry")] 
+		public wCHandle<gameJournalQuest> QuestEntry
+		{
+			get => GetProperty(ref _questEntry);
+			set => SetProperty(ref _questEntry, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("journalMgr")] 
+		public wCHandle<gameJournalManager> JournalMgr
+		{
+			get => GetProperty(ref _journalMgr);
+			set => SetProperty(ref _journalMgr, value);
+		}
+
+		public TrackQuestNotificationAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

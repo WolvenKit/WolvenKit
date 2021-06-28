@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entAnimGraphResourceContainer : entIComponent
 	{
-		[Ordinal(3)] [RED("animGraphLookupTable")] public CArray<entAnimGraphResourceContainerEntry> AnimGraphLookupTable { get; set; }
+		private CArray<entAnimGraphResourceContainerEntry> _animGraphLookupTable;
 
-		public entAnimGraphResourceContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("animGraphLookupTable")] 
+		public CArray<entAnimGraphResourceContainerEntry> AnimGraphLookupTable
+		{
+			get => GetProperty(ref _animGraphLookupTable);
+			set => SetProperty(ref _animGraphLookupTable, value);
+		}
+
+		public entAnimGraphResourceContainer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiItemPreviewGameController : gameuiPreviewGameController
 	{
-		[Ordinal(6)] [RED("sceneName")] public CName SceneName { get; set; }
-		[Ordinal(7)] [RED("cameraRef")] public NodeRef CameraRef { get; set; }
+		private CName _sceneName;
+		private NodeRef _cameraRef;
 
-		public gameuiItemPreviewGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("sceneName")] 
+		public CName SceneName
+		{
+			get => GetProperty(ref _sceneName);
+			set => SetProperty(ref _sceneName, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("cameraRef")] 
+		public NodeRef CameraRef
+		{
+			get => GetProperty(ref _cameraRef);
+			set => SetProperty(ref _cameraRef, value);
+		}
+
+		public gameuiItemPreviewGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

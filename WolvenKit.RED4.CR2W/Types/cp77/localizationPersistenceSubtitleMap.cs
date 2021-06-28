@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class localizationPersistenceSubtitleMap : ISerializable
 	{
-		[Ordinal(0)] [RED("entries")] public CArray<localizationPersistenceSubtitleMapEntry> Entries { get; set; }
+		private CArray<localizationPersistenceSubtitleMapEntry> _entries;
 
-		public localizationPersistenceSubtitleMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entries")] 
+		public CArray<localizationPersistenceSubtitleMapEntry> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		public localizationPersistenceSubtitleMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

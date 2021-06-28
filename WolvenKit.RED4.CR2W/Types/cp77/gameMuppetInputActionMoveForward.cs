@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMuppetInputActionMoveForward : gameIMuppetInputAction
 	{
-		[Ordinal(0)] [RED("direction")] public Vector2 Direction { get; set; }
-		[Ordinal(1)] [RED("isSprinting")] public CBool IsSprinting { get; set; }
+		private Vector2 _direction;
+		private CBool _isSprinting;
 
-		public gameMuppetInputActionMoveForward(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("direction")] 
+		public Vector2 Direction
+		{
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isSprinting")] 
+		public CBool IsSprinting
+		{
+			get => GetProperty(ref _isSprinting);
+			set => SetProperty(ref _isSprinting, value);
+		}
+
+		public gameMuppetInputActionMoveForward(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

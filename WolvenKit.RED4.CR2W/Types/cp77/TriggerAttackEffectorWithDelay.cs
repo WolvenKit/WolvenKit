@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TriggerAttackEffectorWithDelay : redEvent
 	{
-		[Ordinal(0)] [RED("attack")] public CHandle<gameAttack_GameEffect> Attack { get; set; }
+		private CHandle<gameAttack_GameEffect> _attack;
 
-		public TriggerAttackEffectorWithDelay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("attack")] 
+		public CHandle<gameAttack_GameEffect> Attack
+		{
+			get => GetProperty(ref _attack);
+			set => SetProperty(ref _attack, value);
+		}
+
+		public TriggerAttackEffectorWithDelay(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

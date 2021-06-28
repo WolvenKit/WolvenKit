@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkPhotoModeCursorStateChangedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("cursorEnabled")] public CBool CursorEnabled { get; set; }
+		private CBool _cursorEnabled;
 
-		public inkPhotoModeCursorStateChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("cursorEnabled")] 
+		public CBool CursorEnabled
+		{
+			get => GetProperty(ref _cursorEnabled);
+			set => SetProperty(ref _cursorEnabled, value);
+		}
+
+		public inkPhotoModeCursorStateChangedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

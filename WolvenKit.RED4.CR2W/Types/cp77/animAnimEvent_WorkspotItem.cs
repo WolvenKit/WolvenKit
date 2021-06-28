@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_WorkspotItem : animAnimEvent
 	{
-		[Ordinal(3)] [RED("actions")] public CArray<CHandle<workIWorkspotItemAction>> Actions { get; set; }
+		private CArray<CHandle<workIWorkspotItemAction>> _actions;
 
-		public animAnimEvent_WorkspotItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("actions")] 
+		public CArray<CHandle<workIWorkspotItemAction>> Actions
+		{
+			get => GetProperty(ref _actions);
+			set => SetProperty(ref _actions, value);
+		}
+
+		public animAnimEvent_WorkspotItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

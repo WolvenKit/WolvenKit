@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_VehicleNPCDeathData : animAnimFeature
 	{
-		[Ordinal(0)] [RED("deathType")] public CInt32 DeathType { get; set; }
-		[Ordinal(1)] [RED("side")] public CInt32 Side { get; set; }
+		private CInt32 _deathType;
+		private CInt32 _side;
 
-		public AnimFeature_VehicleNPCDeathData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("deathType")] 
+		public CInt32 DeathType
+		{
+			get => GetProperty(ref _deathType);
+			set => SetProperty(ref _deathType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("side")] 
+		public CInt32 Side
+		{
+			get => GetProperty(ref _side);
+			set => SetProperty(ref _side, value);
+		}
+
+		public AnimFeature_VehicleNPCDeathData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

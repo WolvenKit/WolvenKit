@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SoldItemsCache : IScriptable
 	{
-		[Ordinal(0)] [RED("cache")] public CArray<CHandle<SoldItem>> Cache { get; set; }
+		private CArray<CHandle<SoldItem>> _cache;
 
-		public SoldItemsCache(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("cache")] 
+		public CArray<CHandle<SoldItem>> Cache
+		{
+			get => GetProperty(ref _cache);
+			set => SetProperty(ref _cache, value);
+		}
+
+		public SoldItemsCache(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HackingDataDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("SpreadMap")] public gamebbScriptID_Variant SpreadMap { get; set; }
+		private gamebbScriptID_Variant _spreadMap;
 
-		public HackingDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("SpreadMap")] 
+		public gamebbScriptID_Variant SpreadMap
+		{
+			get => GetProperty(ref _spreadMap);
+			set => SetProperty(ref _spreadMap, value);
+		}
+
+		public HackingDataDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

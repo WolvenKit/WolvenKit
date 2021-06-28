@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questQuickItemsManager_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)] [RED("set")] public CEnum<questQuickItemsSet> Set { get; set; }
+		private CEnum<questQuickItemsSet> _set;
 
-		public questQuickItemsManager_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("set")] 
+		public CEnum<questQuickItemsSet> Set
+		{
+			get => GetProperty(ref _set);
+			set => SetProperty(ref _set, value);
+		}
+
+		public questQuickItemsManager_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

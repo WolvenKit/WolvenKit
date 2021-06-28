@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecuritySystem : DeviceSystemBase
 	{
-		[Ordinal(93)] [RED("savedOutputCache")] public CArray<OutputValidationDataStruct> SavedOutputCache { get; set; }
+		private CArray<OutputValidationDataStruct> _savedOutputCache;
 
-		public SecuritySystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(96)] 
+		[RED("savedOutputCache")] 
+		public CArray<OutputValidationDataStruct> SavedOutputCache
+		{
+			get => GetProperty(ref _savedOutputCache);
+			set => SetProperty(ref _savedOutputCache, value);
+		}
+
+		public SecuritySystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

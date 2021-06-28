@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnregisterNetworkLinksByIDRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("ID")] public entEntityID ID { get; set; }
+		private entEntityID _iD;
 
-		public UnregisterNetworkLinksByIDRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ID")] 
+		public entEntityID ID
+		{
+			get => GetProperty(ref _iD);
+			set => SetProperty(ref _iD, value);
+		}
+
+		public UnregisterNetworkLinksByIDRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

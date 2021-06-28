@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventImpulse : gamestateMachineeventBaseEvent
 	{
-		[Ordinal(1)] [RED("impulse")] public Vector4 Impulse { get; set; }
+		private Vector4 _impulse;
 
-		public gamestateMachineeventImpulse(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("impulse")] 
+		public Vector4 Impulse
+		{
+			get => GetProperty(ref _impulse);
+			set => SetProperty(ref _impulse, value);
+		}
+
+		public gamestateMachineeventImpulse(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

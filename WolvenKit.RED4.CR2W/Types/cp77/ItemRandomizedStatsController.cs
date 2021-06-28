@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemRandomizedStatsController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("statName")] public inkTextWidgetReference StatName { get; set; }
+		private inkTextWidgetReference _statName;
 
-		public ItemRandomizedStatsController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("statName")] 
+		public inkTextWidgetReference StatName
+		{
+			get => GetProperty(ref _statName);
+			set => SetProperty(ref _statName, value);
+		}
+
+		public ItemRandomizedStatsController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

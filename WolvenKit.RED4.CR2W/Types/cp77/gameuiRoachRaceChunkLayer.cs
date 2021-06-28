@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiRoachRaceChunkLayer : CVariable
 	{
-		[Ordinal(0)] [RED("chunks")] public CArray<gameuiRoachRaceChunk> Chunks { get; set; }
+		private CArray<gameuiRoachRaceChunk> _chunks;
 
-		public gameuiRoachRaceChunkLayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("chunks")] 
+		public CArray<gameuiRoachRaceChunk> Chunks
+		{
+			get => GetProperty(ref _chunks);
+			set => SetProperty(ref _chunks, value);
+		}
+
+		public gameuiRoachRaceChunkLayer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

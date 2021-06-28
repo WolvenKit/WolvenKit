@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_TriggerModeChange : animAnimFeature
 	{
-		[Ordinal(0)] [RED("cycleTime")] public CFloat CycleTime { get; set; }
+		private CFloat _cycleTime;
 
-		public AnimFeature_TriggerModeChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("cycleTime")] 
+		public CFloat CycleTime
+		{
+			get => GetProperty(ref _cycleTime);
+			set => SetProperty(ref _cycleTime, value);
+		}
+
+		public AnimFeature_TriggerModeChange(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

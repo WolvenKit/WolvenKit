@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SVfxInstanceData : CVariable
 	{
-		[Ordinal(0)] [RED("fx")] public CHandle<gameFxInstance> Fx { get; set; }
-		[Ordinal(1)] [RED("id")] public CName Id { get; set; }
+		private CHandle<gameFxInstance> _fx;
+		private CName _id;
 
-		public SVfxInstanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("fx")] 
+		public CHandle<gameFxInstance> Fx
+		{
+			get => GetProperty(ref _fx);
+			set => SetProperty(ref _fx, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("id")] 
+		public CName Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		public SVfxInstanceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorIfElseNodeDefinition : AIbehaviorCompositeTreeNodeDefinition
 	{
-		[Ordinal(1)] [RED("condition")] public CHandle<AIbehaviorExpressionSocket> Condition { get; set; }
+		private CHandle<AIbehaviorExpressionSocket> _condition;
 
-		public AIbehaviorIfElseNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("condition")] 
+		public CHandle<AIbehaviorExpressionSocket> Condition
+		{
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
+		}
+
+		public AIbehaviorIfElseNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

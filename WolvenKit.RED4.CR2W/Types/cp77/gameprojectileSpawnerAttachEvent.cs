@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameprojectileSpawnerAttachEvent : redEvent
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
+		private wCHandle<gameObject> _owner;
 
-		public gameprojectileSpawnerAttachEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<gameObject> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		public gameprojectileSpawnerAttachEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

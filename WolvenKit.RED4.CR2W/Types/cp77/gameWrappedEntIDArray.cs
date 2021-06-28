@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameWrappedEntIDArray : CVariable
 	{
-		[Ordinal(0)] [RED("arr")] public CArray<entEntityID> Arr { get; set; }
+		private CArray<entEntityID> _arr;
 
-		public gameWrappedEntIDArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("arr")] 
+		public CArray<entEntityID> Arr
+		{
+			get => GetProperty(ref _arr);
+			set => SetProperty(ref _arr, value);
+		}
+
+		public gameWrappedEntIDArray(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DebugMenuScenario_HubMenu : MenuScenario_BaseMenu
 	{
-		[Ordinal(4)] [RED("defaultMenu")] public CName DefaultMenu { get; set; }
-		[Ordinal(5)] [RED("cpoDefaultMenu")] public CName CpoDefaultMenu { get; set; }
+		private CName _defaultMenu;
+		private CName _cpoDefaultMenu;
 
-		public DebugMenuScenario_HubMenu(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("defaultMenu")] 
+		public CName DefaultMenu
+		{
+			get => GetProperty(ref _defaultMenu);
+			set => SetProperty(ref _defaultMenu, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("cpoDefaultMenu")] 
+		public CName CpoDefaultMenu
+		{
+			get => GetProperty(ref _cpoDefaultMenu);
+			set => SetProperty(ref _cpoDefaultMenu, value);
+		}
+
+		public DebugMenuScenario_HubMenu(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

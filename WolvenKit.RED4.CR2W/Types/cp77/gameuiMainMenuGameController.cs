@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiMainMenuGameController : gameuiMenuItemListGameController
 	{
-		[Ordinal(6)] [RED("backgroundContainer")] public inkCompoundWidgetReference BackgroundContainer { get; set; }
+		private inkCompoundWidgetReference _backgroundContainer;
 
-		public gameuiMainMenuGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("backgroundContainer")] 
+		public inkCompoundWidgetReference BackgroundContainer
+		{
+			get => GetProperty(ref _backgroundContainer);
+			set => SetProperty(ref _backgroundContainer, value);
+		}
+
+		public gameuiMainMenuGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

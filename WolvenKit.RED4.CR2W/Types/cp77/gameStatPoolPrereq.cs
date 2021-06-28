@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStatPoolPrereq : gameIComparisonPrereq
 	{
-		[Ordinal(1)] [RED("statPoolType")] public CEnum<gamedataStatPoolType> StatPoolType { get; set; }
-		[Ordinal(2)] [RED("valueToCheck")] public CFloat ValueToCheck { get; set; }
+		private CEnum<gamedataStatPoolType> _statPoolType;
+		private CFloat _valueToCheck;
 
-		public gameStatPoolPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("statPoolType")] 
+		public CEnum<gamedataStatPoolType> StatPoolType
+		{
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("valueToCheck")] 
+		public CFloat ValueToCheck
+		{
+			get => GetProperty(ref _valueToCheck);
+			set => SetProperty(ref _valueToCheck, value);
+		}
+
+		public gameStatPoolPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

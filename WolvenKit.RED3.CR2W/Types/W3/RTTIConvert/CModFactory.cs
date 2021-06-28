@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("mods", 2,0)] 		public CArray<CHandle<CMod>> Mods { get; set;}
 
-		public CModFactory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModFactory(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModFactory(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

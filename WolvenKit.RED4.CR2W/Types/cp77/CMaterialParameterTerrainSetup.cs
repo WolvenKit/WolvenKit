@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterTerrainSetup : CMaterialParameter
 	{
-		[Ordinal(2)] [RED("setup")] public rRef<CTerrainSetup> Setup { get; set; }
+		private rRef<CTerrainSetup> _setup;
 
-		public CMaterialParameterTerrainSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("setup")] 
+		public rRef<CTerrainSetup> Setup
+		{
+			get => GetProperty(ref _setup);
+			set => SetProperty(ref _setup, value);
+		}
+
+		public CMaterialParameterTerrainSetup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

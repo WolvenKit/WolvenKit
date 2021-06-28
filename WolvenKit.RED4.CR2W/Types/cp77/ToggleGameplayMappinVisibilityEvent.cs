@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ToggleGameplayMappinVisibilityEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isHidden")] public CBool IsHidden { get; set; }
+		private CBool _isHidden;
 
-		public ToggleGameplayMappinVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isHidden")] 
+		public CBool IsHidden
+		{
+			get => GetProperty(ref _isHidden);
+			set => SetProperty(ref _isHidden, value);
+		}
+
+		public ToggleGameplayMappinVisibilityEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

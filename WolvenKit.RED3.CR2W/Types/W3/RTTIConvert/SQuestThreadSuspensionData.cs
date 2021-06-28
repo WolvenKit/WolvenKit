@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("scopeData", 154,0)] 		public CByteArray ScopeData { get; set;}
 
-		public SQuestThreadSuspensionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SQuestThreadSuspensionData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SQuestThreadSuspensionData(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

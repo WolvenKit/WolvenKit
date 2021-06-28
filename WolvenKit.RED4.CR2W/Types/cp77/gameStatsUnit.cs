@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStatsUnit : ISerializable
 	{
-		[Ordinal(0)] [RED("recordID")] public TweakDBID RecordID { get; set; }
+		private TweakDBID _recordID;
 
-		public gameStatsUnit(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("recordID")] 
+		public TweakDBID RecordID
+		{
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
+		}
+
+		public gameStatsUnit(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

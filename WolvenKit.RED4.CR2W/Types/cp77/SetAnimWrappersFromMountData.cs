@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetAnimWrappersFromMountData : AIVehicleTaskAbstract
 	{
-		[Ordinal(0)] [RED("mountData")] public CHandle<AIArgumentMapping> MountData { get; set; }
+		private CHandle<AIArgumentMapping> _mountData;
 
-		public SetAnimWrappersFromMountData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mountData")] 
+		public CHandle<AIArgumentMapping> MountData
+		{
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
+		}
+
+		public SetAnimWrappersFromMountData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

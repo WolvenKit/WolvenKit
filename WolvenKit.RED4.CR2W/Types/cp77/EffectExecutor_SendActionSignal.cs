@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EffectExecutor_SendActionSignal : gameEffectExecutor_Scripted
 	{
-		[Ordinal(1)] [RED("signalName")] public CName SignalName { get; set; }
-		[Ordinal(2)] [RED("signalDuration")] public CFloat SignalDuration { get; set; }
+		private CName _signalName;
+		private CFloat _signalDuration;
 
-		public EffectExecutor_SendActionSignal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("signalName")] 
+		public CName SignalName
+		{
+			get => GetProperty(ref _signalName);
+			set => SetProperty(ref _signalName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("signalDuration")] 
+		public CFloat SignalDuration
+		{
+			get => GetProperty(ref _signalDuration);
+			set => SetProperty(ref _signalDuration, value);
+		}
+
+		public EffectExecutor_SendActionSignal(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

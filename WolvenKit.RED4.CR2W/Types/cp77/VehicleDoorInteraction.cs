@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleDoorInteraction : ActionBool
 	{
-		[Ordinal(25)] [RED("slotID")] public CName SlotID { get; set; }
-		[Ordinal(26)] [RED("isInteractionSource")] public CBool IsInteractionSource { get; set; }
+		private CName _slotID;
+		private CBool _isInteractionSource;
 
-		public VehicleDoorInteraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("slotID")] 
+		public CName SlotID
+		{
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("isInteractionSource")] 
+		public CBool IsInteractionSource
+		{
+			get => GetProperty(ref _isInteractionSource);
+			set => SetProperty(ref _isInteractionSource, value);
+		}
+
+		public VehicleDoorInteraction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorStoryEventResolverDefinition : AIbehaviorEventResolverDefinition
 	{
-		[Ordinal(0)] [RED("storyTier")] public CHandle<AIArgumentMapping> StoryTier { get; set; }
+		private CHandle<AIArgumentMapping> _storyTier;
 
-		public AIbehaviorStoryEventResolverDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("storyTier")] 
+		public CHandle<AIArgumentMapping> StoryTier
+		{
+			get => GetProperty(ref _storyTier);
+			set => SetProperty(ref _storyTier, value);
+		}
+
+		public AIbehaviorStoryEventResolverDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

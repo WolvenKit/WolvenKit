@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkSubtitlesLanguageOverride : inkUserData
 	{
-		public inkSubtitlesLanguageOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public inkSubtitlesLanguageOverride(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

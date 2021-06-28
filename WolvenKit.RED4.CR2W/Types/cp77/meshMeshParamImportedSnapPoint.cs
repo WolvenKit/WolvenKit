@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class meshMeshParamImportedSnapPoint : meshMeshParameter
 	{
-		[Ordinal(0)] [RED("snapFeatureData")] public CArray<CHandle<meshMeshImportedSnapPoint>> SnapFeatureData { get; set; }
+		private CArray<CHandle<meshMeshImportedSnapPoint>> _snapFeatureData;
 
-		public meshMeshParamImportedSnapPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("snapFeatureData")] 
+		public CArray<CHandle<meshMeshImportedSnapPoint>> SnapFeatureData
+		{
+			get => GetProperty(ref _snapFeatureData);
+			set => SetProperty(ref _snapFeatureData, value);
+		}
+
+		public meshMeshParamImportedSnapPoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SensorJammed : redEvent
 	{
-		[Ordinal(0)] [RED("sensor")] public wCHandle<SensorDevice> Sensor { get; set; }
+		private wCHandle<SensorDevice> _sensor;
 
-		public SensorJammed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sensor")] 
+		public wCHandle<SensorDevice> Sensor
+		{
+			get => GetProperty(ref _sensor);
+			set => SetProperty(ref _sensor, value);
+		}
+
+		public SensorJammed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamePickupObject : gameObject
 	{
-		[Ordinal(40)] [RED("interactionTag")] public CName InteractionTag { get; set; }
+		private CName _interactionTag;
 
-		public gamePickupObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("interactionTag")] 
+		public CName InteractionTag
+		{
+			get => GetProperty(ref _interactionTag);
+			set => SetProperty(ref _interactionTag, value);
+		}
+
+		public gamePickupObject(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

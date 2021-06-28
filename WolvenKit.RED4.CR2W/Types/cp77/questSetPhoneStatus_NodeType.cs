@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetPhoneStatus_NodeType : questIPhoneManagerNodeType
 	{
-		[Ordinal(0)] [RED("status")] public CEnum<questPhoneStatus> Status { get; set; }
-		[Ordinal(1)] [RED("customStatus")] public CName CustomStatus { get; set; }
+		private CEnum<questPhoneStatus> _status;
+		private CName _customStatus;
 
-		public questSetPhoneStatus_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("status")] 
+		public CEnum<questPhoneStatus> Status
+		{
+			get => GetProperty(ref _status);
+			set => SetProperty(ref _status, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("customStatus")] 
+		public CName CustomStatus
+		{
+			get => GetProperty(ref _customStatus);
+			set => SetProperty(ref _customStatus, value);
+		}
+
+		public questSetPhoneStatus_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

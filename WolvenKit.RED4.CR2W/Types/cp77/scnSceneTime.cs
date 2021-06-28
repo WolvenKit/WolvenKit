@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnSceneTime : CVariable
 	{
-		[Ordinal(0)] [RED("stu")] public CUInt32 Stu { get; set; }
+		private CUInt32 _stu;
 
-		public scnSceneTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stu")] 
+		public CUInt32 Stu
+		{
+			get => GetProperty(ref _stu);
+			set => SetProperty(ref _stu, value);
+		}
+
+		public scnSceneTime(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

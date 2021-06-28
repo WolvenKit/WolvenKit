@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalCodexGroup : gameJournalContainerEntry
 	{
-		[Ordinal(2)] [RED("groupName")] public LocalizationString GroupName { get; set; }
+		private LocalizationString _groupName;
 
-		public gameJournalCodexGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("groupName")] 
+		public LocalizationString GroupName
+		{
+			get => GetProperty(ref _groupName);
+			set => SetProperty(ref _groupName, value);
+		}
+
+		public gameJournalCodexGroup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

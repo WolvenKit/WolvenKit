@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cpConveyorObject : gameObject
 	{
-		[Ordinal(40)] [RED("rotationLerpFactor")] public CFloat RotationLerpFactor { get; set; }
-		[Ordinal(41)] [RED("ignoreZAxis")] public CBool IgnoreZAxis { get; set; }
+		private CFloat _rotationLerpFactor;
+		private CBool _ignoreZAxis;
 
-		public cpConveyorObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("rotationLerpFactor")] 
+		public CFloat RotationLerpFactor
+		{
+			get => GetProperty(ref _rotationLerpFactor);
+			set => SetProperty(ref _rotationLerpFactor, value);
+		}
+
+		[Ordinal(41)] 
+		[RED("ignoreZAxis")] 
+		public CBool IgnoreZAxis
+		{
+			get => GetProperty(ref _ignoreZAxis);
+			set => SetProperty(ref _ignoreZAxis, value);
+		}
+
+		public cpConveyorObject(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

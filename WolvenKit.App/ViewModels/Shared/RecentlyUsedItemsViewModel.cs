@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Catel;
@@ -18,6 +19,7 @@ using HandyControl.Tools;
 using Orc.FileSystem;
 using Orchestra.Models;
 using Orchestra.Services;
+using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.ViewModels.HomePage;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
@@ -33,23 +35,26 @@ namespace WolvenKit.ViewModels.Shared
         private readonly IMessageService _messageService;
         private readonly IProcessService _processService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        private readonly IOpenFileService _openFileService;
 
         #endregion Fields
 
         #region Constructors
 
         public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService,
-            IMessageService messageService, IProcessService processService)
+            IMessageService messageService, IProcessService processService, IOpenFileService openFileService)
         {
             Argument.IsNotNull(() => recentlyUsedItemsService);
             Argument.IsNotNull(() => fileService);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => processService);
+            Argument.IsNotNull(() => openFileService);
 
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _fileService = fileService;
             _messageService = messageService;
             _processService = processService;
+            _openFileService = openFileService;
 
             SettingsCommand = new RelayCommand(ExecSC, CanSC);
             TutorialsCommand = new RelayCommand(ExecTC, CanTC);
@@ -83,7 +88,14 @@ namespace WolvenKit.ViewModels.Shared
         public ICommand TutorialsCommand { get; private set; }
         public string TwitterLink => "https://twitter.com/ModdingRed";
         public Command<string> UnpinItem { get; private set; }
-        public string VersionWkit => GetAssemblyVersion();
+        public string VersionWkit
+        {
+            get { return GetAssemblyVersion(); }
+            set
+            {
+            }
+        }
+
         public ICommand WikiCommand { get; private set; }
 
         #endregion Properties
@@ -99,7 +111,11 @@ namespace WolvenKit.ViewModels.Shared
         {
             if (!_fileService.Exists(parameter))
             {
-                await _messageService.ShowWarningAsync("The file doesn't seem to exist. Cannot open it in explorer.");
+                parameter = await ProjectHelpers.LocateMissingProjectAsync(parameter);
+            }
+
+            if (string.IsNullOrEmpty(parameter))
+            {
                 return;
             }
 
@@ -108,6 +124,11 @@ namespace WolvenKit.ViewModels.Shared
 
         public void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
+            DispatcherHelper.RunOnMainThread(() =>
+                       {
+                           FancyProjects.Clear();
+                       });
+
             var RCUI = RecentlyUsedItems;
             foreach (var item in RCUI)
             {
@@ -147,7 +168,7 @@ namespace WolvenKit.ViewModels.Shared
             }
         }
 
-        public string GetAssemblyVersion() => GetType().Assembly.GetName().Version.ToString();
+        public string GetAssemblyVersion() => "8.2.0";
 
         protected override Task CloseAsync()
         {
@@ -230,6 +251,7 @@ namespace WolvenKit.ViewModels.Shared
                 Type = type;
                 ProjectPath = path;
                 Image = image;
+                SafeName = Path.GetFileNameWithoutExtension(name);
             }
 
             #endregion Constructors
@@ -240,6 +262,9 @@ namespace WolvenKit.ViewModels.Shared
             public string Image { get; set; }
             public DateTime LastEditDate { get; set; }
             public string Name { get; set; }
+
+
+            public string SafeName { get; set; }
             public string ProjectPath { get; set; }
             public string Type { get; set; }
 

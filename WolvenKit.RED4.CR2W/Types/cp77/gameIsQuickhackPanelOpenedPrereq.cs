@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameIsQuickhackPanelOpenedPrereq : CVariable
 	{
-		[Ordinal(0)] [RED("inverted")] public CBool Inverted { get; set; }
+		private CBool _inverted;
 
-		public gameIsQuickhackPanelOpenedPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("inverted")] 
+		public CBool Inverted
+		{
+			get => GetProperty(ref _inverted);
+			set => SetProperty(ref _inverted, value);
+		}
+
+		public gameIsQuickhackPanelOpenedPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

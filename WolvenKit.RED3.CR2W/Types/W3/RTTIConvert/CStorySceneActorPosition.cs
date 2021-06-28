@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("performAction")] 		public CEnum<EStoryScenePerformActionMode> PerformAction { get; set;}
 
-		public CStorySceneActorPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneActorPosition(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneActorPosition(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

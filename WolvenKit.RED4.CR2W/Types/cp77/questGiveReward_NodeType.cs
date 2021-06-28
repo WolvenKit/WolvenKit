@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questGiveReward_NodeType : questIRewardManagerNodeType
 	{
-		[Ordinal(0)] [RED("rewards")] public CArray<TweakDBID> Rewards { get; set; }
+		private CArray<TweakDBID> _rewards;
 
-		public questGiveReward_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rewards")] 
+		public CArray<TweakDBID> Rewards
+		{
+			get => GetProperty(ref _rewards);
+			set => SetProperty(ref _rewards, value);
+		}
+
+		public questGiveReward_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

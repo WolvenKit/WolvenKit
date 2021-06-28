@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entPhysicalImpulseAreaComponent : entPhysicalTriggerComponent
 	{
-		[Ordinal(9)] [RED("impulse")] public Vector3 Impulse { get; set; }
-		[Ordinal(10)] [RED("impulseRadius")] public CFloat ImpulseRadius { get; set; }
+		private Vector3 _impulse;
+		private CFloat _impulseRadius;
 
-		public entPhysicalImpulseAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(9)] 
+		[RED("impulse")] 
+		public Vector3 Impulse
+		{
+			get => GetProperty(ref _impulse);
+			set => SetProperty(ref _impulse, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("impulseRadius")] 
+		public CFloat ImpulseRadius
+		{
+			get => GetProperty(ref _impulseRadius);
+			set => SetProperty(ref _impulseRadius, value);
+		}
+
+		public entPhysicalImpulseAreaComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

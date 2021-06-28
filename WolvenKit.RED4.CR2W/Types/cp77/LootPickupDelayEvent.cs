@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LootPickupDelayEvent : redEvent
 	{
-		[Ordinal(0)] [RED("enableLootInteraction")] public CBool EnableLootInteraction { get; set; }
+		private CBool _enableLootInteraction;
 
-		public LootPickupDelayEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("enableLootInteraction")] 
+		public CBool EnableLootInteraction
+		{
+			get => GetProperty(ref _enableLootInteraction);
+			set => SetProperty(ref _enableLootInteraction, value);
+		}
+
+		public LootPickupDelayEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

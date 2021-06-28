@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemsPoolCachedData : IScriptable
 	{
-		[Ordinal(0)] [RED("tooltipData")] public CHandle<ATooltipData> TooltipData { get; set; }
+		private CHandle<ATooltipData> _tooltipData;
 
-		public ItemsPoolCachedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("tooltipData")] 
+		public CHandle<ATooltipData> TooltipData
+		{
+			get => GetProperty(ref _tooltipData);
+			set => SetProperty(ref _tooltipData, value);
+		}
+
+		public ItemsPoolCachedData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataGroupNodeGroupVariable : CVariable
 	{
-		[Ordinal(0)] [RED("node")] public CHandle<gamedataVariableNode> Node { get; set; }
-		[Ordinal(1)] [RED("deriveInfo")] public CEnum<gamedataGroupNodeGroupVariableDeriveInfo> DeriveInfo { get; set; }
-		[Ordinal(2)] [RED("flattened")] public CBool Flattened { get; set; }
-		[Ordinal(3)] [RED("flatId")] public TweakDBID FlatId { get; set; }
+		private CHandle<gamedataVariableNode> _node;
+		private CEnum<gamedataGroupNodeGroupVariableDeriveInfo> _deriveInfo;
+		private CBool _flattened;
+		private TweakDBID _flatId;
 
-		public gamedataGroupNodeGroupVariable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("node")] 
+		public CHandle<gamedataVariableNode> Node
+		{
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("deriveInfo")] 
+		public CEnum<gamedataGroupNodeGroupVariableDeriveInfo> DeriveInfo
+		{
+			get => GetProperty(ref _deriveInfo);
+			set => SetProperty(ref _deriveInfo, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("flattened")] 
+		public CBool Flattened
+		{
+			get => GetProperty(ref _flattened);
+			set => SetProperty(ref _flattened, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("flatId")] 
+		public TweakDBID FlatId
+		{
+			get => GetProperty(ref _flatId);
+			set => SetProperty(ref _flatId, value);
+		}
+
+		public gamedataGroupNodeGroupVariable(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

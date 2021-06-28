@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_GraphSlotConditions : animAnimNode_GraphSlot
 	{
-		[Ordinal(14)] [RED("conditions")] public CArray<animGraphSlotCondition> Conditions { get; set; }
+		private CArray<animGraphSlotCondition> _conditions;
 
-		public animAnimNode_GraphSlotConditions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(14)] 
+		[RED("conditions")] 
+		public CArray<animGraphSlotCondition> Conditions
+		{
+			get => GetProperty(ref _conditions);
+			set => SetProperty(ref _conditions, value);
+		}
+
+		public animAnimNode_GraphSlotConditions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

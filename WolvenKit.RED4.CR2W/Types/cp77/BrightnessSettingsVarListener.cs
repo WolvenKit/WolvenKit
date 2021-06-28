@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BrightnessSettingsVarListener : userSettingsVarListener
 	{
-		[Ordinal(0)] [RED("ctrl")] public wCHandle<BrightnessSettingsGameController> Ctrl { get; set; }
+		private wCHandle<BrightnessSettingsGameController> _ctrl;
 
-		public BrightnessSettingsVarListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ctrl")] 
+		public wCHandle<BrightnessSettingsGameController> Ctrl
+		{
+			get => GetProperty(ref _ctrl);
+			set => SetProperty(ref _ctrl, value);
+		}
+
+		public BrightnessSettingsVarListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

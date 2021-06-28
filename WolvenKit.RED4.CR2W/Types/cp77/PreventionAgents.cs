@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PreventionAgents : IScriptable
 	{
-		[Ordinal(0)] [RED("groupName")] public CName GroupName { get; set; }
-		[Ordinal(1)] [RED("requsteredAgents")] public CArray<SPreventionAgentData> RequsteredAgents { get; set; }
+		private CName _groupName;
+		private CArray<SPreventionAgentData> _requsteredAgents;
 
-		public PreventionAgents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("groupName")] 
+		public CName GroupName
+		{
+			get => GetProperty(ref _groupName);
+			set => SetProperty(ref _groupName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("requsteredAgents")] 
+		public CArray<SPreventionAgentData> RequsteredAgents
+		{
+			get => GetProperty(ref _requsteredAgents);
+			set => SetProperty(ref _requsteredAgents, value);
+		}
+
+		public PreventionAgents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

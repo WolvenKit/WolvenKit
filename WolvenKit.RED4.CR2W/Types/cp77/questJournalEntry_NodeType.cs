@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questJournalEntry_NodeType : questIJournal_NodeType
 	{
-		[Ordinal(0)] [RED("path")] public CHandle<gameJournalPath> Path { get; set; }
-		[Ordinal(1)] [RED("sendNotification")] public CBool SendNotification { get; set; }
+		private CHandle<gameJournalPath> _path;
+		private CBool _sendNotification;
 
-		public questJournalEntry_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("path")] 
+		public CHandle<gameJournalPath> Path
+		{
+			get => GetProperty(ref _path);
+			set => SetProperty(ref _path, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("sendNotification")] 
+		public CBool SendNotification
+		{
+			get => GetProperty(ref _sendNotification);
+			set => SetProperty(ref _sendNotification, value);
+		}
+
+		public questJournalEntry_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

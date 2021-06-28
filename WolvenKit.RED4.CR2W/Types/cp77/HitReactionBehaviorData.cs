@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HitReactionBehaviorData : IScriptable
 	{
-		[Ordinal(0)] [RED("hitReactionType")] public CEnum<animHitReactionType> HitReactionType { get; set; }
-		[Ordinal(1)] [RED("hitReactionActivationTimeStamp")] public CFloat HitReactionActivationTimeStamp { get; set; }
-		[Ordinal(2)] [RED("hitReactionDuration")] public CFloat HitReactionDuration { get; set; }
+		private CEnum<animHitReactionType> _hitReactionType;
+		private CFloat _hitReactionActivationTimeStamp;
+		private CFloat _hitReactionDuration;
 
-		public HitReactionBehaviorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hitReactionType")] 
+		public CEnum<animHitReactionType> HitReactionType
+		{
+			get => GetProperty(ref _hitReactionType);
+			set => SetProperty(ref _hitReactionType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("hitReactionActivationTimeStamp")] 
+		public CFloat HitReactionActivationTimeStamp
+		{
+			get => GetProperty(ref _hitReactionActivationTimeStamp);
+			set => SetProperty(ref _hitReactionActivationTimeStamp, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("hitReactionDuration")] 
+		public CFloat HitReactionDuration
+		{
+			get => GetProperty(ref _hitReactionDuration);
+			set => SetProperty(ref _hitReactionDuration, value);
+		}
+
+		public HitReactionBehaviorData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

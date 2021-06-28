@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioContextualAudEventMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("contextualAudEventMapItems")] public CArray<audioContextualAudEventMapItem> ContextualAudEventMapItems { get; set; }
+		private CArray<audioContextualAudEventMapItem> _contextualAudEventMapItems;
 
-		public audioContextualAudEventMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("contextualAudEventMapItems")] 
+		public CArray<audioContextualAudEventMapItem> ContextualAudEventMapItems
+		{
+			get => GetProperty(ref _contextualAudEventMapItems);
+			set => SetProperty(ref _contextualAudEventMapItems, value);
+		}
+
+		public audioContextualAudEventMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_FastForwardDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("FastForwardAvailable")] public gamebbScriptID_Bool FastForwardAvailable { get; set; }
-		[Ordinal(1)] [RED("FastForwardActive")] public gamebbScriptID_Bool FastForwardActive { get; set; }
+		private gamebbScriptID_Bool _fastForwardAvailable;
+		private gamebbScriptID_Bool _fastForwardActive;
 
-		public UI_FastForwardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("FastForwardAvailable")] 
+		public gamebbScriptID_Bool FastForwardAvailable
+		{
+			get => GetProperty(ref _fastForwardAvailable);
+			set => SetProperty(ref _fastForwardAvailable, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("FastForwardActive")] 
+		public gamebbScriptID_Bool FastForwardActive
+		{
+			get => GetProperty(ref _fastForwardActive);
+			set => SetProperty(ref _fastForwardActive, value);
+		}
+
+		public UI_FastForwardDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

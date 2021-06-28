@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnRidTag : CVariable
 	{
-		[Ordinal(0)] [RED("signature")] public CName Signature { get; set; }
-		[Ordinal(1)] [RED("serialNumber")] public scnRidSerialNumber SerialNumber { get; set; }
+		private CName _signature;
+		private scnRidSerialNumber _serialNumber;
 
-		public scnRidTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("signature")] 
+		public CName Signature
+		{
+			get => GetProperty(ref _signature);
+			set => SetProperty(ref _signature, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("serialNumber")] 
+		public scnRidSerialNumber SerialNumber
+		{
+			get => GetProperty(ref _serialNumber);
+			set => SetProperty(ref _serialNumber, value);
+		}
+
+		public scnRidTag(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

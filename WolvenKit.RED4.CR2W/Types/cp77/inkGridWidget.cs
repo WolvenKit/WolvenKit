@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkGridWidget : inkCompoundWidget
 	{
-		[Ordinal(23)] [RED("orientation")] public CEnum<inkEOrientation> Orientation { get; set; }
-		[Ordinal(24)] [RED("childPadding")] public inkMargin ChildPadding { get; set; }
-		[Ordinal(25)] [RED("childSizeStep")] public Vector2 ChildSizeStep { get; set; }
+		private CEnum<inkEOrientation> _orientation;
+		private inkMargin _childPadding;
+		private Vector2 _childSizeStep;
 
-		public inkGridWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(23)] 
+		[RED("orientation")] 
+		public CEnum<inkEOrientation> Orientation
+		{
+			get => GetProperty(ref _orientation);
+			set => SetProperty(ref _orientation, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("childPadding")] 
+		public inkMargin ChildPadding
+		{
+			get => GetProperty(ref _childPadding);
+			set => SetProperty(ref _childPadding, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("childSizeStep")] 
+		public Vector2 ChildSizeStep
+		{
+			get => GetProperty(ref _childSizeStep);
+			set => SetProperty(ref _childSizeStep, value);
+		}
+
+		public inkGridWidget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

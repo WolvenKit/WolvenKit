@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetGameplayObjectiveStateRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("objectiveData")] public CHandle<GemplayObjectiveData> ObjectiveData { get; set; }
-		[Ordinal(1)] [RED("objectiveState")] public CEnum<gameJournalEntryState> ObjectiveState { get; set; }
+		private CHandle<GemplayObjectiveData> _objectiveData;
+		private CEnum<gameJournalEntryState> _objectiveState;
 
-		public SetGameplayObjectiveStateRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("objectiveData")] 
+		public CHandle<GemplayObjectiveData> ObjectiveData
+		{
+			get => GetProperty(ref _objectiveData);
+			set => SetProperty(ref _objectiveData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("objectiveState")] 
+		public CEnum<gameJournalEntryState> ObjectiveState
+		{
+			get => GetProperty(ref _objectiveState);
+			set => SetProperty(ref _objectiveState, value);
+		}
+
+		public SetGameplayObjectiveStateRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

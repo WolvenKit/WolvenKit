@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DoorProximityDetector : ProximityDetector
 	{
-		[Ordinal(92)] [RED("debugIsBlinkOn")] public CBool DebugIsBlinkOn { get; set; }
-		[Ordinal(93)] [RED("triggeredAlarmID")] public gameDelayID TriggeredAlarmID { get; set; }
-		[Ordinal(94)] [RED("blinkInterval")] public CFloat BlinkInterval { get; set; }
+		private CBool _debugIsBlinkOn;
+		private gameDelayID _triggeredAlarmID;
+		private CFloat _blinkInterval;
 
-		public DoorProximityDetector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(92)] 
+		[RED("debugIsBlinkOn")] 
+		public CBool DebugIsBlinkOn
+		{
+			get => GetProperty(ref _debugIsBlinkOn);
+			set => SetProperty(ref _debugIsBlinkOn, value);
+		}
+
+		[Ordinal(93)] 
+		[RED("triggeredAlarmID")] 
+		public gameDelayID TriggeredAlarmID
+		{
+			get => GetProperty(ref _triggeredAlarmID);
+			set => SetProperty(ref _triggeredAlarmID, value);
+		}
+
+		[Ordinal(94)] 
+		[RED("blinkInterval")] 
+		public CFloat BlinkInterval
+		{
+			get => GetProperty(ref _blinkInterval);
+			set => SetProperty(ref _blinkInterval, value);
+		}
+
+		public DoorProximityDetector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

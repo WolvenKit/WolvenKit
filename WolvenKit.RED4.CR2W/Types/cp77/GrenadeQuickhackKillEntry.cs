@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GrenadeQuickhackKillEntry : CVariable
 	{
-		[Ordinal(0)] [RED("source")] public wCHandle<gameObject> Source { get; set; }
-		[Ordinal(1)] [RED("targets")] public CArray<wCHandle<gameObject>> Targets { get; set; }
-		[Ordinal(2)] [RED("timestamps")] public CArray<CFloat> Timestamps { get; set; }
+		private wCHandle<gameObject> _source;
+		private CArray<wCHandle<gameObject>> _targets;
+		private CArray<CFloat> _timestamps;
 
-		public GrenadeQuickhackKillEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("source")] 
+		public wCHandle<gameObject> Source
+		{
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("targets")] 
+		public CArray<wCHandle<gameObject>> Targets
+		{
+			get => GetProperty(ref _targets);
+			set => SetProperty(ref _targets, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("timestamps")] 
+		public CArray<CFloat> Timestamps
+		{
+			get => GetProperty(ref _timestamps);
+			set => SetProperty(ref _timestamps, value);
+		}
+
+		public GrenadeQuickhackKillEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

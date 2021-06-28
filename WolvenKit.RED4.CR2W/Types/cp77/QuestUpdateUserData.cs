@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuestUpdateUserData : inkGameNotificationData
 	{
-		[Ordinal(6)] [RED("data")] public wCHandle<gameJournalQuest> Data { get; set; }
+		private wCHandle<gameJournalQuest> _data;
 
-		public QuestUpdateUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("data")] 
+		public wCHandle<gameJournalQuest> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public QuestUpdateUserData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

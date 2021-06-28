@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questTriggerManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("type")] public CHandle<questITriggerManagerNodeType> Type { get; set; }
+		private CHandle<questITriggerManagerNodeType> _type;
 
-		public questTriggerManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("type")] 
+		public CHandle<questITriggerManagerNodeType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public questTriggerManagerNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

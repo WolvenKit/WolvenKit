@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SuppressNPCInSecuritySystem : redEvent
 	{
-		[Ordinal(0)] [RED("suppressIncomingEvents")] public CBool SuppressIncomingEvents { get; set; }
-		[Ordinal(1)] [RED("suppressOutgoingEvents")] public CBool SuppressOutgoingEvents { get; set; }
+		private CBool _suppressIncomingEvents;
+		private CBool _suppressOutgoingEvents;
 
-		public SuppressNPCInSecuritySystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("suppressIncomingEvents")] 
+		public CBool SuppressIncomingEvents
+		{
+			get => GetProperty(ref _suppressIncomingEvents);
+			set => SetProperty(ref _suppressIncomingEvents, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("suppressOutgoingEvents")] 
+		public CBool SuppressOutgoingEvents
+		{
+			get => GetProperty(ref _suppressOutgoingEvents);
+			set => SetProperty(ref _suppressOutgoingEvents, value);
+		}
+
+		public SuppressNPCInSecuritySystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

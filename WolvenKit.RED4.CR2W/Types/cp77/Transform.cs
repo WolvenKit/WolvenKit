@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Transform : CVariable
 	{
-		[Ordinal(0)] [RED("position")] public Vector4 Position { get; set; }
-		[Ordinal(1)] [RED("orientation")] public Quaternion Orientation { get; set; }
+		private Vector4 _position;
+		private Quaternion _orientation;
 
-		public Transform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("position")] 
+		public Vector4 Position
+		{
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("orientation")] 
+		public Quaternion Orientation
+		{
+			get => GetProperty(ref _orientation);
+			set => SetProperty(ref _orientation, value);
+		}
+
+		public Transform(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

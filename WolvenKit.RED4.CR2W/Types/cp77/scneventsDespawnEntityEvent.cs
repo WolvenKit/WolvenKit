@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scneventsDespawnEntityEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("params")] public scneventsDespawnEntityEventParams Params { get; set; }
+		private scneventsDespawnEntityEventParams _params;
 
-		public scneventsDespawnEntityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("params")] 
+		public scneventsDespawnEntityEventParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public scneventsDespawnEntityEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

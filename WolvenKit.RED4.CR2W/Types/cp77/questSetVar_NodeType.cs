@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetVar_NodeType : questIFactsDBManagerNodeType
 	{
-		[Ordinal(0)] [RED("factName")] public CString FactName { get; set; }
-		[Ordinal(1)] [RED("value")] public CInt32 Value { get; set; }
-		[Ordinal(2)] [RED("setExactValue")] public CBool SetExactValue { get; set; }
+		private CString _factName;
+		private CInt32 _value;
+		private CBool _setExactValue;
 
-		public questSetVar_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("factName")] 
+		public CString FactName
+		{
+			get => GetProperty(ref _factName);
+			set => SetProperty(ref _factName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CInt32 Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("setExactValue")] 
+		public CBool SetExactValue
+		{
+			get => GetProperty(ref _setExactValue);
+			set => SetProperty(ref _setExactValue, value);
+		}
+
+		public questSetVar_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

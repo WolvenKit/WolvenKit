@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questQuestPrefabsEntry : CVariable
 	{
-		[Ordinal(0)] [RED("nodeRef")] public worldGlobalNodeRef NodeRef { get; set; }
-		[Ordinal(1)] [RED("loadingMode")] public CEnum<worldQuestPrefabLoadingMode> LoadingMode { get; set; }
+		private worldGlobalNodeRef _nodeRef;
+		private CEnum<worldQuestPrefabLoadingMode> _loadingMode;
 
-		public questQuestPrefabsEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("nodeRef")] 
+		public worldGlobalNodeRef NodeRef
+		{
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("loadingMode")] 
+		public CEnum<worldQuestPrefabLoadingMode> LoadingMode
+		{
+			get => GetProperty(ref _loadingMode);
+			set => SetProperty(ref _loadingMode, value);
+		}
+
+		public questQuestPrefabsEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

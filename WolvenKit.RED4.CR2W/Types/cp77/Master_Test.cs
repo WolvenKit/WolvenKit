@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Master_Test : gameObject
 	{
-		[Ordinal(40)] [RED("deviceComponent")] public CHandle<gameMasterDeviceComponent> DeviceComponent { get; set; }
+		private CHandle<gameMasterDeviceComponent> _deviceComponent;
 
-		public Master_Test(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("deviceComponent")] 
+		public CHandle<gameMasterDeviceComponent> DeviceComponent
+		{
+			get => GetProperty(ref _deviceComponent);
+			set => SetProperty(ref _deviceComponent, value);
+		}
+
+		public Master_Test(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AITreeNodeInterruptionDecoratorDefinition : AICTreeNodeDecoratorDefinition
 	{
-		[Ordinal(1)] [RED("interruptions")] public CArray<CHandle<AIInterruptionHandlerDefinition>> Interruptions { get; set; }
+		private CArray<CHandle<AIInterruptionHandlerDefinition>> _interruptions;
 
-		public AITreeNodeInterruptionDecoratorDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("interruptions")] 
+		public CArray<CHandle<AIInterruptionHandlerDefinition>> Interruptions
+		{
+			get => GetProperty(ref _interruptions);
+			set => SetProperty(ref _interruptions, value);
+		}
+
+		public AITreeNodeInterruptionDecoratorDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

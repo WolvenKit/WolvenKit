@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnscreenplayStandaloneComment : CVariable
 	{
-		[Ordinal(0)] [RED("itemId")] public scnscreenplayItemId ItemId { get; set; }
-		[Ordinal(1)] [RED("comment")] public CString Comment { get; set; }
+		private scnscreenplayItemId _itemId;
+		private CString _comment;
 
-		public scnscreenplayStandaloneComment(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemId")] 
+		public scnscreenplayItemId ItemId
+		{
+			get => GetProperty(ref _itemId);
+			set => SetProperty(ref _itemId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("comment")] 
+		public CString Comment
+		{
+			get => GetProperty(ref _comment);
+			set => SetProperty(ref _comment, value);
+		}
+
+		public scnscreenplayStandaloneComment(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

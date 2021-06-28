@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class rendRenderTextureBlobSizeInfo : CVariable
 	{
-		[Ordinal(0)] [RED("width")] public CUInt16 Width { get; set; }
-		[Ordinal(1)] [RED("height")] public CUInt16 Height { get; set; }
-		[Ordinal(2)] [RED("depth")] public CUInt16 Depth { get; set; }
+		private CUInt16 _width;
+		private CUInt16 _height;
+		private CUInt16 _depth;
 
-		public rendRenderTextureBlobSizeInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("width")] 
+		public CUInt16 Width
+		{
+			get => GetProperty(ref _width);
+			set => SetProperty(ref _width, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("height")] 
+		public CUInt16 Height
+		{
+			get => GetProperty(ref _height);
+			set => SetProperty(ref _height, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("depth")] 
+		public CUInt16 Depth
+		{
+			get => GetProperty(ref _depth);
+			set => SetProperty(ref _depth, value);
+		}
+
+		public rendRenderTextureBlobSizeInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

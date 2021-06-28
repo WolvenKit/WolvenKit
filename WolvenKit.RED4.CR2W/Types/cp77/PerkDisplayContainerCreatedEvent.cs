@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PerkDisplayContainerCreatedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("index")] public CInt32 Index { get; set; }
-		[Ordinal(1)] [RED("isTrait")] public CBool IsTrait { get; set; }
-		[Ordinal(2)] [RED("container")] public wCHandle<PerkDisplayContainerController> Container { get; set; }
+		private CInt32 _index;
+		private CBool _isTrait;
+		private wCHandle<PerkDisplayContainerController> _container;
 
-		public PerkDisplayContainerCreatedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("index")] 
+		public CInt32 Index
+		{
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isTrait")] 
+		public CBool IsTrait
+		{
+			get => GetProperty(ref _isTrait);
+			set => SetProperty(ref _isTrait, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("container")] 
+		public wCHandle<PerkDisplayContainerController> Container
+		{
+			get => GetProperty(ref _container);
+			set => SetProperty(ref _container, value);
+		}
+
+		public PerkDisplayContainerCreatedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

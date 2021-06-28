@@ -1,20 +1,184 @@
 <Application
- x:Class="WolvenKit.App"
+    x:Class="WolvenKit.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:hc="https://handyorg.github.io/handycontrol">
+    xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
+    xmlns:views="clr-namespace:WolvenKit.Views.Editor"
+    xmlns:views1="clr-namespace:WolvenKit.Views.Editor.VisualEditor">
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <DataTemplate DataType="{x:Type viewmodels:LogViewModel}">
+                        <Grid>
+                            <views:LogView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:PropertiesViewModel}">
+                        <Grid>
+                            <views:PropertiesView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:ProjectExplorerViewModel}">
+                        <Grid>
+                            <views:ProjectExplorerView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AssetBrowserViewModel}">
+                        <Grid>
+                            <views:AssetBrowserView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:DocumentViewModel}">
+                        <Grid>
+                            <views:DocumentView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:MimicsViewModel}">
+                        <Grid>
+                            <views:MimicsView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:AnimsViewModel}">
+                        <Grid>
+                            <views:AnimsView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ImportViewModel}">
+                        <Grid>
+                            <views:ImportView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ImportExportViewModel}">
+                        <Grid>
+                            <views:ImportExportView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:BulkEditorViewModel}">
+                        <Grid>
+                            <views:BulkEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <!--<DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
+                        <Grid>
+                            <views:CodeEditorView />
+                        </Grid>
+                    </DataTemplate>-->
+
+                    <DataTemplate DataType="{x:Type viewmodels:CsvEditorViewModel}">
+                        <Grid>
+                            <views:CsvEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:JournalEditorViewModel}">
+                        <Grid>
+                            <views:JournalEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:VisualEditorViewModel}">
+                        <Grid>
+                            <views1:VisualEditorView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:CR2WToTextToolViewModel}">
+                        <Grid>
+                            <views:CR2WToTextToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:GameDebuggerToolViewModel}">
+                        <Grid>
+                            <views:GameDebuggerToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ImporterToolViewModel}">
+                        <Grid>
+                            <views:ImporterToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:MenuCreatorToolViewModel}">
+                        <Grid>
+                            <views:MenuCreatorToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:WccToolViewModel}">
+                        <Grid>
+                            <views:WccToolView />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:PluginManagerViewModel}">
+                        <Grid>
+                            <views:PluginManagerView />
+                        </Grid>
+                    </DataTemplate>
+                </ResourceDictionary>
+
+                <!--  Global Styles  -->
+                <ResourceDictionary>
+                    <Style x:Key="SidePanelContainerBorderStyle" TargetType="Border">
+                        <Setter Property="Margin" Value="0,16,20,-106" />
+                        <Setter Property="Padding" Value="16,10,6,16" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="DockPanel.Dock" Value="Right" />
+                    </Style>
+                </ResourceDictionary>
+
+                <!--  Converters  -->
+                <ResourceDictionary>
+
+                    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                </ResourceDictionary>
+
+                <!--  Resource Dictionaries  -->
+                <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
+
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Crimson.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 
                 <!--  Theme setting  -->
-                <hc:ThemeResources />
+                <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfDataGrid/SfDataGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfImageEditor/SfImageEditor.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/GroupBar/GroupBar.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeGrid/SfTreeGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTreeNavigator/SfTreeNavigator.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfNavigationDrawer/SfNavigationDrawer.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/HierarchyNavigator/HierarchyNavigator.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfAccordion/SfAccordion.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/PropertyGrid/PropertyGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/Ribbon/Ribbon.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfRadialMenu/SfRadialMenu.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/DockingManager/DockingManager.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/EditControl/EditControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfRichTextBoxAdv/SfRichTextBoxAdv.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfHubTile/SfHubTile.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/CardView/CardView.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
 
@@ -22,9 +186,9 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Style
-             x:Key="MessageBoxPrimaryButtonStyle"
-             BasedOn="{StaticResource {x:Type Button}}"
-             TargetType="Button">
+                x:Key="MessageBoxPrimaryButtonStyle"
+                BasedOn="{StaticResource {x:Type Button}}"
+                TargetType="Button">
                 <Setter Property="MinWidth" Value="88" />
                 <Setter Property="Visibility" Value="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource Boolean2VisibilityConverter}}" />
                 <Setter Property="Margin" Value="5,0" />
@@ -32,21 +196,21 @@
             </Style>
 
             <DrawingBrush
-             x:Key="CloudDrawingBrush"
-             o:Freeze="True"
-             Opacity=".1"
-             RenderOptions.CacheInvalidationThresholdMaximum="2.0"
-             RenderOptions.CacheInvalidationThresholdMinimum="0.5"
-             RenderOptions.CachingHint="Cache"
-             Stretch="Uniform"
-             TileMode="Tile"
-             Viewport="0,0,157,157"
-             ViewportUnits="Absolute">
+                x:Key="CloudDrawingBrush"
+                o:Freeze="True"
+                Opacity=".1"
+                RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+                RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+                RenderOptions.CachingHint="Cache"
+                Stretch="Uniform"
+                TileMode="Tile"
+                Viewport="0,0,157,157"
+                ViewportUnits="Absolute">
                 <DrawingBrush.Drawing>
                     <ImageDrawing
-                     o:Freeze="True"
-                     ImageSource="pack://application:,,,/Resources/Media/Images/Application/Cloud.png"
-                     Rect="0,0,157,157" />
+                        o:Freeze="True"
+                        ImageSource="pack://application:,,,/Resources/Media/Images/Application/Cloud.png"
+                        Rect="0,0,157,157" />
                 </DrawingBrush.Drawing>
             </DrawingBrush>
 

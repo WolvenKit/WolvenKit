@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IncreaseTraitLevel : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("trait")] public CEnum<gamedataTraitType> Trait { get; set; }
+		private CEnum<gamedataTraitType> _trait;
 
-		public IncreaseTraitLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("trait")] 
+		public CEnum<gamedataTraitType> Trait
+		{
+			get => GetProperty(ref _trait);
+			set => SetProperty(ref _trait, value);
+		}
+
+		public IncreaseTraitLevel(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

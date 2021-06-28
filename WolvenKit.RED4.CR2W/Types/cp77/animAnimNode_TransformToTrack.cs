@@ -7,16 +7,88 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_TransformToTrack : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("floatTrack")] public CInt32 FloatTrack { get; set; }
-		[Ordinal(13)] [RED("floatTrackIndex")] public animNamedTrackIndex FloatTrackIndex { get; set; }
-		[Ordinal(14)] [RED("outputTransform")] public CInt16 OutputTransform { get; set; }
-		[Ordinal(15)] [RED("transformIndex")] public animTransformIndex TransformIndex { get; set; }
-		[Ordinal(16)] [RED("channel")] public CEnum<animTransformChannel> Channel { get; set; }
-		[Ordinal(17)] [RED("mulFactor")] public CFloat MulFactor { get; set; }
-		[Ordinal(18)] [RED("weight")] public CFloat Weight { get; set; }
-		[Ordinal(19)] [RED("weightNode")] public animFloatLink WeightNode { get; set; }
-		[Ordinal(20)] [RED("mulFactorNode")] public animFloatLink MulFactorNode { get; set; }
+		private CInt32 _floatTrack;
+		private animNamedTrackIndex _floatTrackIndex;
+		private CInt16 _outputTransform;
+		private animTransformIndex _transformIndex;
+		private CEnum<animTransformChannel> _channel;
+		private CFloat _mulFactor;
+		private CFloat _weight;
+		private animFloatLink _weightNode;
+		private animFloatLink _mulFactorNode;
 
-		public animAnimNode_TransformToTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("floatTrack")] 
+		public CInt32 FloatTrack
+		{
+			get => GetProperty(ref _floatTrack);
+			set => SetProperty(ref _floatTrack, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("floatTrackIndex")] 
+		public animNamedTrackIndex FloatTrackIndex
+		{
+			get => GetProperty(ref _floatTrackIndex);
+			set => SetProperty(ref _floatTrackIndex, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("outputTransform")] 
+		public CInt16 OutputTransform
+		{
+			get => GetProperty(ref _outputTransform);
+			set => SetProperty(ref _outputTransform, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("transformIndex")] 
+		public animTransformIndex TransformIndex
+		{
+			get => GetProperty(ref _transformIndex);
+			set => SetProperty(ref _transformIndex, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("channel")] 
+		public CEnum<animTransformChannel> Channel
+		{
+			get => GetProperty(ref _channel);
+			set => SetProperty(ref _channel, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("mulFactor")] 
+		public CFloat MulFactor
+		{
+			get => GetProperty(ref _mulFactor);
+			set => SetProperty(ref _mulFactor, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("weight")] 
+		public CFloat Weight
+		{
+			get => GetProperty(ref _weight);
+			set => SetProperty(ref _weight, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("weightNode")] 
+		public animFloatLink WeightNode
+		{
+			get => GetProperty(ref _weightNode);
+			set => SetProperty(ref _weightNode, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("mulFactorNode")] 
+		public animFloatLink MulFactorNode
+		{
+			get => GetProperty(ref _mulFactorNode);
+			set => SetProperty(ref _mulFactorNode, value);
+		}
+
+		public animAnimNode_TransformToTrack(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

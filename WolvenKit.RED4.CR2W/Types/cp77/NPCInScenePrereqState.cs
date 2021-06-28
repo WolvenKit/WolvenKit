@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCInScenePrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("sceneListener")] public CHandle<gameScriptedPrereqSceneInspectionListenerWrapper> SceneListener { get; set; }
+		private CHandle<gameScriptedPrereqSceneInspectionListenerWrapper> _sceneListener;
 
-		public NPCInScenePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sceneListener")] 
+		public CHandle<gameScriptedPrereqSceneInspectionListenerWrapper> SceneListener
+		{
+			get => GetProperty(ref _sceneListener);
+			set => SetProperty(ref _sceneListener, value);
+		}
+
+		public NPCInScenePrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -39,9 +39,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("cachedControlVariableNode_B")] 		public CPtr<CBehaviorGraphValueNode> CachedControlVariableNode_B { get; set;}
 
-		public CBehaviorGraphBlend3Node(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphBlend3Node(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphBlend3Node(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

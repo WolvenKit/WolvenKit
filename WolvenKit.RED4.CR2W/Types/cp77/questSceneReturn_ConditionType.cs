@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSceneReturn_ConditionType : questISceneConditionType
 	{
-		[Ordinal(0)] [RED("sceneFile")] public raRef<scnSceneResource> SceneFile { get; set; }
-		[Ordinal(1)] [RED("returnConditions")] public CArray<CHandle<scnIReturnCondition>> ReturnConditions { get; set; }
+		private raRef<scnSceneResource> _sceneFile;
+		private CArray<CHandle<scnIReturnCondition>> _returnConditions;
 
-		public questSceneReturn_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sceneFile")] 
+		public raRef<scnSceneResource> SceneFile
+		{
+			get => GetProperty(ref _sceneFile);
+			set => SetProperty(ref _sceneFile, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("returnConditions")] 
+		public CArray<CHandle<scnIReturnCondition>> ReturnConditions
+		{
+			get => GetProperty(ref _returnConditions);
+			set => SetProperty(ref _returnConditions, value);
+		}
+
+		public questSceneReturn_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

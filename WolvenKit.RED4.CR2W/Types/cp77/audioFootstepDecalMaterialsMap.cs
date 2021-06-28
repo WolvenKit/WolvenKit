@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioFootstepDecalMaterialsMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("closestDecalDetectionRadius")] public CFloat ClosestDecalDetectionRadius { get; set; }
-		[Ordinal(2)] [RED("entries")] public CArray<audioFootstepDecalMaterialEntry> Entries { get; set; }
+		private CFloat _closestDecalDetectionRadius;
+		private CArray<audioFootstepDecalMaterialEntry> _entries;
 
-		public audioFootstepDecalMaterialsMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("closestDecalDetectionRadius")] 
+		public CFloat ClosestDecalDetectionRadius
+		{
+			get => GetProperty(ref _closestDecalDetectionRadius);
+			set => SetProperty(ref _closestDecalDetectionRadius, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("entries")] 
+		public CArray<audioFootstepDecalMaterialEntry> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		public audioFootstepDecalMaterialsMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

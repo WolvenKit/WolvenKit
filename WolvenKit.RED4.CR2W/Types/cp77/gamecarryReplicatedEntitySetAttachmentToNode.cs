@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamecarryReplicatedEntitySetAttachmentToNode : netEntityAttachmentInterface
 	{
-		[Ordinal(1)] [RED("localTransform")] public Transform LocalTransform { get; set; }
+		private Transform _localTransform;
 
-		public gamecarryReplicatedEntitySetAttachmentToNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("localTransform")] 
+		public Transform LocalTransform
+		{
+			get => GetProperty(ref _localTransform);
+			set => SetProperty(ref _localTransform, value);
+		}
+
+		public gamecarryReplicatedEntitySetAttachmentToNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

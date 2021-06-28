@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameQuestDistanceRequestFilter : gameCustomRequestFilter
 	{
-		[Ordinal(0)] [RED("distanceSquared")] public CFloat DistanceSquared { get; set; }
+		private CFloat _distanceSquared;
 
-		public gameQuestDistanceRequestFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("distanceSquared")] 
+		public CFloat DistanceSquared
+		{
+			get => GetProperty(ref _distanceSquared);
+			set => SetProperty(ref _distanceSquared, value);
+		}
+
+		public gameQuestDistanceRequestFilter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

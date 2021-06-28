@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SetRequiredDistanceCategory : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("requiredQualityDistanceCategory")] public CUInt32 RequiredQualityDistanceCategory { get; set; }
+		private CUInt32 _requiredQualityDistanceCategory;
 
-		public animAnimNode_SetRequiredDistanceCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("requiredQualityDistanceCategory")] 
+		public CUInt32 RequiredQualityDistanceCategory
+		{
+			get => GetProperty(ref _requiredQualityDistanceCategory);
+			set => SetProperty(ref _requiredQualityDistanceCategory, value);
+		}
+
+		public animAnimNode_SetRequiredDistanceCategory(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

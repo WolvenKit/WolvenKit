@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scneventsSpawnEntityEventCachedFallbackBone : CVariable
 	{
-		[Ordinal(0)] [RED("boneName")] public CName BoneName { get; set; }
-		[Ordinal(1)] [RED("modelSpaceTransform")] public Transform ModelSpaceTransform { get; set; }
+		private CName _boneName;
+		private Transform _modelSpaceTransform;
 
-		public scneventsSpawnEntityEventCachedFallbackBone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("boneName")] 
+		public CName BoneName
+		{
+			get => GetProperty(ref _boneName);
+			set => SetProperty(ref _boneName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("modelSpaceTransform")] 
+		public Transform ModelSpaceTransform
+		{
+			get => GetProperty(ref _modelSpaceTransform);
+			set => SetProperty(ref _modelSpaceTransform, value);
+		}
+
+		public scneventsSpawnEntityEventCachedFallbackBone(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

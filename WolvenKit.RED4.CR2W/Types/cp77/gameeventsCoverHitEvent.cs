@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsCoverHitEvent : gameeventsHitEvent
 	{
-		[Ordinal(12)] [RED("cover")] public wCHandle<gameObject> Cover { get; set; }
+		private wCHandle<gameObject> _cover;
 
-		public gameeventsCoverHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("cover")] 
+		public wCHandle<gameObject> Cover
+		{
+			get => GetProperty(ref _cover);
+			set => SetProperty(ref _cover, value);
+		}
+
+		public gameeventsCoverHitEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

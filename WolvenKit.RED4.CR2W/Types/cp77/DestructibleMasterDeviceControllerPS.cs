@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DestructibleMasterDeviceControllerPS : MasterControllerPS
 	{
-		[Ordinal(104)] [RED("isDestroyed")] public CBool IsDestroyed { get; set; }
+		private CBool _isDestroyed;
 
-		public DestructibleMasterDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(104)] 
+		[RED("isDestroyed")] 
+		public CBool IsDestroyed
+		{
+			get => GetProperty(ref _isDestroyed);
+			set => SetProperty(ref _isDestroyed, value);
+		}
+
+		public DestructibleMasterDeviceControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

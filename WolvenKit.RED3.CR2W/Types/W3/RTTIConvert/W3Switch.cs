@@ -51,9 +51,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(20)] [RED("BEH_OFF_FROM_ON")] 		public CFloat BEH_OFF_FROM_ON { get; set;}
 
-		public W3Switch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Switch(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Switch(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MeshAppearanceDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("meshesAppearence")] public CName MeshesAppearence { get; set; }
+		private CName _meshesAppearence;
 
-		public MeshAppearanceDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("meshesAppearence")] 
+		public CName MeshesAppearence
+		{
+			get => GetProperty(ref _meshesAppearence);
+			set => SetProperty(ref _meshesAppearence, value);
+		}
+
+		public MeshAppearanceDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

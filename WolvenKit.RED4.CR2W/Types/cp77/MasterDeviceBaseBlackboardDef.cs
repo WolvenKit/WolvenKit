@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MasterDeviceBaseBlackboardDef : DeviceBaseBlackboardDef
 	{
-		[Ordinal(7)] [RED("ThumbnailWidgetsData")] public gamebbScriptID_Variant ThumbnailWidgetsData { get; set; }
+		private gamebbScriptID_Variant _thumbnailWidgetsData;
 
-		public MasterDeviceBaseBlackboardDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(7)] 
+		[RED("ThumbnailWidgetsData")] 
+		public gamebbScriptID_Variant ThumbnailWidgetsData
+		{
+			get => GetProperty(ref _thumbnailWidgetsData);
+			set => SetProperty(ref _thumbnailWidgetsData, value);
+		}
+
+		public MasterDeviceBaseBlackboardDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

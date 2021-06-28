@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_RoadBlock : animAnimFeature
 	{
-		[Ordinal(0)] [RED("isOpening")] public CBool IsOpening { get; set; }
-		[Ordinal(1)] [RED("duration")] public CFloat Duration { get; set; }
-		[Ordinal(2)] [RED("initOpen")] public CBool InitOpen { get; set; }
+		private CBool _isOpening;
+		private CFloat _duration;
+		private CBool _initOpen;
 
-		public AnimFeature_RoadBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isOpening")] 
+		public CBool IsOpening
+		{
+			get => GetProperty(ref _isOpening);
+			set => SetProperty(ref _isOpening, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("initOpen")] 
+		public CBool InitOpen
+		{
+			get => GetProperty(ref _initOpen);
+			set => SetProperty(ref _initOpen, value);
+		}
+
+		public AnimFeature_RoadBlock(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

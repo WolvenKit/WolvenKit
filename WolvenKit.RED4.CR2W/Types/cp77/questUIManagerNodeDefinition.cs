@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questUIManagerNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(2)] [RED("type")] public CHandle<questIUIManagerNodeType> Type { get; set; }
+		private CHandle<questIUIManagerNodeType> _type;
 
-		public questUIManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("type")] 
+		public CHandle<questIUIManagerNodeType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public questUIManagerNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

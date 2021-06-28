@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_QuickMelee : animAnimFeature
 	{
-		[Ordinal(0)] [RED("state")] public CInt32 State { get; set; }
+		private CInt32 _state;
 
-		public animAnimFeature_QuickMelee(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CInt32 State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		public animAnimFeature_QuickMelee(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

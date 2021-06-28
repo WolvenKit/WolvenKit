@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectExecutor_KatanaBulletBending : gameEffectExecutor_Scripted
 	{
-		[Ordinal(1)] [RED("effects")] public CArray<gameEffectExecutor_KatanaBulletBendingEffectEntry> Effects { get; set; }
+		private CArray<gameEffectExecutor_KatanaBulletBendingEffectEntry> _effects;
 
-		public gameEffectExecutor_KatanaBulletBending(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("effects")] 
+		public CArray<gameEffectExecutor_KatanaBulletBendingEffectEntry> Effects
+		{
+			get => GetProperty(ref _effects);
+			set => SetProperty(ref _effects, value);
+		}
+
+		public gameEffectExecutor_KatanaBulletBending(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

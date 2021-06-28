@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldWaterPatchNode : worldMeshNode
 	{
-		[Ordinal(15)] [RED("type")] public worldWaterPatchNodeType Type { get; set; }
-		[Ordinal(16)] [RED("depth")] public CFloat Depth { get; set; }
+		private worldWaterPatchNodeType _type;
+		private CFloat _depth;
 
-		public worldWaterPatchNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(15)] 
+		[RED("type")] 
+		public worldWaterPatchNodeType Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("depth")] 
+		public CFloat Depth
+		{
+			get => GetProperty(ref _depth);
+			set => SetProperty(ref _depth, value);
+		}
+
+		public worldWaterPatchNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

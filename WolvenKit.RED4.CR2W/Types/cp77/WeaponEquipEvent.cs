@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeaponEquipEvent : redEvent
 	{
-		[Ordinal(0)] [RED("animFeature")] public CHandle<AnimFeature_EquipType> AnimFeature { get; set; }
-		[Ordinal(1)] [RED("item")] public wCHandle<gameItemObject> Item { get; set; }
+		private CHandle<AnimFeature_EquipType> _animFeature;
+		private wCHandle<gameItemObject> _item;
 
-		public WeaponEquipEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("animFeature")] 
+		public CHandle<AnimFeature_EquipType> AnimFeature
+		{
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("item")] 
+		public wCHandle<gameItemObject> Item
+		{
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
+		}
+
+		public WeaponEquipEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

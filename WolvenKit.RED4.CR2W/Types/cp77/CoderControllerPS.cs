@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CoderControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(108)] [RED("providedAuthorizationLevel")] public CEnum<ESecurityAccessLevel> ProvidedAuthorizationLevel { get; set; }
+		private CEnum<ESecurityAccessLevel> _providedAuthorizationLevel;
 
-		public CoderControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(108)] 
+		[RED("providedAuthorizationLevel")] 
+		public CEnum<ESecurityAccessLevel> ProvidedAuthorizationLevel
+		{
+			get => GetProperty(ref _providedAuthorizationLevel);
+			set => SetProperty(ref _providedAuthorizationLevel, value);
+		}
+
+		public CoderControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

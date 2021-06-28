@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_CameraBreathing : animAnimFeature
 	{
-		[Ordinal(0)] [RED("amplitudeWeight")] public CFloat AmplitudeWeight { get; set; }
-		[Ordinal(1)] [RED("dampIncreaseSpeed")] public CFloat DampIncreaseSpeed { get; set; }
-		[Ordinal(2)] [RED("dampDecreaseSpeed")] public CFloat DampDecreaseSpeed { get; set; }
+		private CFloat _amplitudeWeight;
+		private CFloat _dampIncreaseSpeed;
+		private CFloat _dampDecreaseSpeed;
 
-		public AnimFeature_CameraBreathing(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("amplitudeWeight")] 
+		public CFloat AmplitudeWeight
+		{
+			get => GetProperty(ref _amplitudeWeight);
+			set => SetProperty(ref _amplitudeWeight, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("dampIncreaseSpeed")] 
+		public CFloat DampIncreaseSpeed
+		{
+			get => GetProperty(ref _dampIncreaseSpeed);
+			set => SetProperty(ref _dampIncreaseSpeed, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("dampDecreaseSpeed")] 
+		public CFloat DampDecreaseSpeed
+		{
+			get => GetProperty(ref _dampDecreaseSpeed);
+			set => SetProperty(ref _dampDecreaseSpeed, value);
+		}
+
+		public AnimFeature_CameraBreathing(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

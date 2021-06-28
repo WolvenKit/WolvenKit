@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animMixerSlotAddIdleParams : ISerializable
 	{
-		public animMixerSlotAddIdleParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public animMixerSlotAddIdleParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

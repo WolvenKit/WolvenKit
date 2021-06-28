@@ -6,8 +6,16 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
 	public class CMaterialInstance : CMaterialInstance_
 	{
-        [Ordinal(1000)] [REDBuffer] public CArray<CVariantSizeNameType> CMaterialInstanceData { get; set; }
+        private CArray<CVariantSizeNameType> _cMaterialInstanceData;
 
-        public CMaterialInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(1000)]
+        [REDBuffer]
+        public CArray<CVariantSizeNameType> CMaterialInstanceData
+        {
+            get => GetProperty(ref _cMaterialInstanceData);
+            set => SetProperty(ref _cMaterialInstanceData, value);
+        }
+
+        public CMaterialInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

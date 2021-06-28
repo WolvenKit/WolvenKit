@@ -35,9 +35,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(12)] [RED("targetPos")] 		public Vector TargetPos { get; set;}
 
-		public BTTaskUpdateLookatTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTaskUpdateLookatTarget(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTaskUpdateLookatTarget(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

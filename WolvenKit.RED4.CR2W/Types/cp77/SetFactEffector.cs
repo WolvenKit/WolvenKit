@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetFactEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("fact")] public CName Fact { get; set; }
-		[Ordinal(1)] [RED("value")] public CInt32 Value { get; set; }
+		private CName _fact;
+		private CInt32 _value;
 
-		public SetFactEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("fact")] 
+		public CName Fact
+		{
+			get => GetProperty(ref _fact);
+			set => SetProperty(ref _fact, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CInt32 Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		public SetFactEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

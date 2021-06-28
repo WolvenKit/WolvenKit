@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("worldSpace")] 		public CBool WorldSpace { get; set;}
 
-		public CBehaviorGraphMotionExToAngleNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehaviorGraphMotionExToAngleNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehaviorGraphMotionExToAngleNode(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

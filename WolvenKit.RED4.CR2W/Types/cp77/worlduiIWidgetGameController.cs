@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worlduiIWidgetGameController : inkIWidgetController
 	{
-		[Ordinal(1)] [RED("elementRecordID")] public TweakDBID ElementRecordID { get; set; }
+		private TweakDBID _elementRecordID;
 
-		public worlduiIWidgetGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("elementRecordID")] 
+		public TweakDBID ElementRecordID
+		{
+			get => GetProperty(ref _elementRecordID);
+			set => SetProperty(ref _elementRecordID, value);
+		}
+
+		public worlduiIWidgetGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

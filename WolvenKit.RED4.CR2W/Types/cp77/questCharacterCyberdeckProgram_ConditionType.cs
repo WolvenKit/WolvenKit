@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCharacterCyberdeckProgram_ConditionType : questICharacterConditionType
 	{
-		[Ordinal(0)] [RED("cyberdeckProgramID")] public TweakDBID CyberdeckProgramID { get; set; }
+		private TweakDBID _cyberdeckProgramID;
 
-		public questCharacterCyberdeckProgram_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("cyberdeckProgramID")] 
+		public TweakDBID CyberdeckProgramID
+		{
+			get => GetProperty(ref _cyberdeckProgramID);
+			set => SetProperty(ref _cyberdeckProgramID, value);
+		}
+
+		public questCharacterCyberdeckProgram_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

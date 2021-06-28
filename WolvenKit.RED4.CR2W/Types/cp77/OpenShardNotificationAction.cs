@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OpenShardNotificationAction : GenericNotificationBaseAction
 	{
-		[Ordinal(0)] [RED("eventDispatcher")] public CHandle<gameuiGameSystemUI> EventDispatcher { get; set; }
+		private CHandle<gameuiGameSystemUI> _eventDispatcher;
 
-		public OpenShardNotificationAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("eventDispatcher")] 
+		public CHandle<gameuiGameSystemUI> EventDispatcher
+		{
+			get => GetProperty(ref _eventDispatcher);
+			set => SetProperty(ref _eventDispatcher, value);
+		}
+
+		public OpenShardNotificationAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

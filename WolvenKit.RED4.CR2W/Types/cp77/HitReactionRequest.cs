@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HitReactionRequest : redEvent
 	{
-		[Ordinal(0)] [RED("hitEvent")] public CHandle<gameeventsHitEvent> HitEvent { get; set; }
+		private CHandle<gameeventsHitEvent> _hitEvent;
 
-		public HitReactionRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hitEvent")] 
+		public CHandle<gameeventsHitEvent> HitEvent
+		{
+			get => GetProperty(ref _hitEvent);
+			set => SetProperty(ref _hitEvent, value);
+		}
+
+		public HitReactionRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

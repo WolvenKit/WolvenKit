@@ -29,9 +29,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("m_spawnedFish", 2,0)] 		public CArray<CHandle<W3CurveFish>> M_spawnedFish { get; set;}
 
-		public W3CurveFishManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3CurveFishManager(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3CurveFishManager(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

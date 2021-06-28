@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entEffectSpawnerComponent : entIVisualComponent
 	{
-		[Ordinal(8)] [RED("effectDescs")] public CArray<CHandle<entEffectDesc>> EffectDescs { get; set; }
+		private CArray<CHandle<entEffectDesc>> _effectDescs;
 
-		public entEffectSpawnerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(8)] 
+		[RED("effectDescs")] 
+		public CArray<CHandle<entEffectDesc>> EffectDescs
+		{
+			get => GetProperty(ref _effectDescs);
+			set => SetProperty(ref _effectDescs, value);
+		}
+
+		public entEffectSpawnerComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

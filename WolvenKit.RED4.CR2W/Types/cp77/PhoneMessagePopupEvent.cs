@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PhoneMessagePopupEvent : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public CHandle<JournalNotificationData> Data { get; set; }
+		private CHandle<JournalNotificationData> _data;
 
-		public PhoneMessagePopupEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CHandle<JournalNotificationData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public PhoneMessagePopupEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

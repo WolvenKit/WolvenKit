@@ -6,61 +6,62 @@ using WolvenKit.RED3.CR2W.Reflection;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Newtonsoft.Json;
 using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
     /// <summary>
-    /// Handles are Int32 that store 
+    /// Handles are Int32 that store
     /// if > 0: a reference to a chunk inside the cr2w file (aka Soft)
     /// if < 0: a reference to a string in the imports table (aka Pointer)
-    /// Exposed are 
-    /// if ChunkHandle: 
+    /// Exposed are
+    /// if ChunkHandle:
     /// if ImportHandle: A string Handle, string Filetype and ushort Flags
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [REDMeta()]
-    public class CHandle<T> : CVariable, IHandleAccessor where T : IEditableVariable
+    public class CHandle<T> : CVariable, IREDHandle where T : IEditableVariable
     {
-        public CHandle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CHandle(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
         #region Properties
-        [Browsable(false)] public bool ChunkHandle { get; set; }
+        [JsonIgnore] public bool ChunkHandle { get; set; }
 
         // Soft
-        [Browsable(false)] public string DepotPath { get; set; }
+        [JsonIgnore] public string DepotPath { get; set; }
 
-        [Browsable(false)] public string ClassName { get; set; }
+        [JsonIgnore] public string ClassName { get; set; }
 
-        [Browsable(false)] public ushort Flags { get; set; }
+        [JsonIgnore] public ushort Flags { get; set; }
 
         // Pointer
         private ICR2WExport _reference;
-        [Browsable(false)]
-        public ICR2WExport Reference
-        {
-            get => _reference;
-            set
-            {
-                _reference = value;
 
-                if (value != null)
+        public int ChunkIndex => GetReference()?.ChunkIndex ?? -1;
+
+        public void SetReference(ICR2WExport value)
+        {
+            _reference = value;
+
+            if (value != null)
+            {
+                //Populate the reverse-lookups
+                GetReference().AdReferences.Add(this);
+                cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
+                //Soft mount the chunk except root chunk
+                if (GetReference().ChunkIndex != 0)
                 {
-                    //Populate the reverse-lookups
-                    Reference.AdReferences.Add(this);
-                    cr2w.Chunks[LookUpChunkIndex()].AbReferences.Add(this);
-                    //Soft mount the chunk except root chunk
-                    if (Reference.ChunkIndex != 0)
-                    {
-                        Reference.MountChunkVirtually(LookUpChunkIndex());
-                    }
+                    GetReference().MountChunkVirtually(LookUpChunkIndex());
                 }
             }
         }
 
-        public string ReferenceType => REDType.Split(':').Last();
+        public ICR2WExport GetReference() => _reference;
+
+        [JsonIgnore] public string ReferenceType => REDType.Split(':').Last();
         #endregion
 
         #region Methods
@@ -71,12 +72,12 @@ namespace WolvenKit.RED3.CR2W.Types
             // change to external path
             if (ChunkHandle)
             {
-                
+
             }
             // change to chunk handle
             else
             {
-                
+
             }
         }
 
@@ -101,7 +102,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
             if (ChunkHandle)
             {
-                Reference = val == 0 ? null : cr2w.Chunks[val - 1];
+                SetReference(val == 0 ? null : cr2w.Chunks[val - 1]);
             }
             else
             {
@@ -123,9 +124,9 @@ namespace WolvenKit.RED3.CR2W.Types
             var val = 0;
             if (ChunkHandle)
             {
-                if (Reference != null)
+                if (GetReference() != null)
                 {
-                    val = Reference.ChunkIndex + 1;
+                    val = GetReference().ChunkIndex + 1;
                 }
             }
             else
@@ -138,23 +139,28 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case int o:
                     SetValueInternal(o);
                     break;
-                case IHandleAccessor cvar:
+                case IREDHandle cvar:
                     this.ChunkHandle = cvar.ChunkHandle;
                     this.DepotPath = cvar.DepotPath;
                     this.ClassName = cvar.ClassName;
                     this.Flags = cvar.Flags;
 
-                    this.Reference = cvar.Reference;
+                    this.SetReference(cvar.GetReference());
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this;
         }
+
+        public object GetValue() => ChunkIndex;
 
         public override CVariable Copy(ICR2WCopyAction context)
         {
@@ -167,15 +173,15 @@ namespace WolvenKit.RED3.CR2W.Types
             copy.Flags = Flags;
 
             // Ptr
-            if (ChunkHandle && Reference != null)
+            if (ChunkHandle && GetReference() != null)
             {
-                var newref = context.TryLookupReference(Reference, copy);
+                var newref = context.TryLookupReference(GetReference(), copy);
                 if (newref != null)
                 {
-                    copy.Reference = newref;
+                    copy.SetReference(newref);
                 }
             }
-            
+
             return copy;
         }
 
@@ -183,12 +189,12 @@ namespace WolvenKit.RED3.CR2W.Types
         {
             if (ChunkHandle)
             {
-                return Reference == null ? "NULL" : $"{Reference.REDType} #{Reference.ChunkIndex}";
+                return GetReference() == null ? "NULL" : $"{GetReference().REDType} #{GetReference().ChunkIndex}";
             }
 
             return ClassName + ": " + DepotPath;
         }
-        public override string REDLeanValue() => Reference == null ? "" : $"{Reference.ChunkIndex}";
+        public override string REDLeanValue() => GetReference() == null ? "" : $"{GetReference().ChunkIndex}";
 
         #endregion
     }

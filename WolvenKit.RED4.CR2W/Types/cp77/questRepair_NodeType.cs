@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questRepair_NodeType : questIVehicleManagerNodeType
 	{
-		[Ordinal(0)] [RED("vehicleRef")] public gameEntityReference VehicleRef { get; set; }
+		private gameEntityReference _vehicleRef;
 
-		public questRepair_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vehicleRef")] 
+		public gameEntityReference VehicleRef
+		{
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
+		}
+
+		public questRepair_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

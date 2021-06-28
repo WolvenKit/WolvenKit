@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GrappleForceShovePreyEvents : LocomotionTakedownEvents
 	{
-		[Ordinal(1)] [RED("unmountCalled")] public CBool UnmountCalled { get; set; }
+		private CBool _unmountCalled;
 
-		public GrappleForceShovePreyEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("unmountCalled")] 
+		public CBool UnmountCalled
+		{
+			get => GetProperty(ref _unmountCalled);
+			set => SetProperty(ref _unmountCalled, value);
+		}
+
+		public GrappleForceShovePreyEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

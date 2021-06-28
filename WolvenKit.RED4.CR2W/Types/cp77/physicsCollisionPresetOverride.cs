@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsCollisionPresetOverride : CVariable
 	{
-		[Ordinal(0)] [RED("from")] public CName From { get; set; }
-		[Ordinal(1)] [RED("to")] public CName To { get; set; }
+		private CName _from;
+		private CName _to;
 
-		public physicsCollisionPresetOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("from")] 
+		public CName From
+		{
+			get => GetProperty(ref _from);
+			set => SetProperty(ref _from, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("to")] 
+		public CName To
+		{
+			get => GetProperty(ref _to);
+			set => SetProperty(ref _to, value);
+		}
+
+		public physicsCollisionPresetOverride(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

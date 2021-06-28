@@ -7,19 +7,115 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BriefingScreenLogic : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("lastSizeSet")] public Vector2 LastSizeSet { get; set; }
-		[Ordinal(2)] [RED("isBriefingVisible")] public CBool IsBriefingVisible { get; set; }
-		[Ordinal(3)] [RED("briefingToOpen")] public wCHandle<gameJournalEntry> BriefingToOpen { get; set; }
-		[Ordinal(4)] [RED("videoWidget")] public inkVideoWidgetReference VideoWidget { get; set; }
-		[Ordinal(5)] [RED("mapWidget")] public inkWidgetReference MapWidget { get; set; }
-		[Ordinal(6)] [RED("paperdollWidget")] public inkWidgetReference PaperdollWidget { get; set; }
-		[Ordinal(7)] [RED("animatedWidget")] public inkWidgetReference AnimatedWidget { get; set; }
-		[Ordinal(8)] [RED("fadeDuration")] public CFloat FadeDuration { get; set; }
-		[Ordinal(9)] [RED("InterpolationType")] public CEnum<inkanimInterpolationType> InterpolationType { get; set; }
-		[Ordinal(10)] [RED("InterpolationMode")] public CEnum<inkanimInterpolationMode> InterpolationMode { get; set; }
-		[Ordinal(11)] [RED("minimizedSize")] public Vector2 MinimizedSize { get; set; }
-		[Ordinal(12)] [RED("maximizedSize")] public Vector2 MaximizedSize { get; set; }
+		private Vector2 _lastSizeSet;
+		private CBool _isBriefingVisible;
+		private wCHandle<gameJournalEntry> _briefingToOpen;
+		private inkVideoWidgetReference _videoWidget;
+		private inkWidgetReference _mapWidget;
+		private inkWidgetReference _paperdollWidget;
+		private inkWidgetReference _animatedWidget;
+		private CFloat _fadeDuration;
+		private CEnum<inkanimInterpolationType> _interpolationType;
+		private CEnum<inkanimInterpolationMode> _interpolationMode;
+		private Vector2 _minimizedSize;
+		private Vector2 _maximizedSize;
 
-		public BriefingScreenLogic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("lastSizeSet")] 
+		public Vector2 LastSizeSet
+		{
+			get => GetProperty(ref _lastSizeSet);
+			set => SetProperty(ref _lastSizeSet, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isBriefingVisible")] 
+		public CBool IsBriefingVisible
+		{
+			get => GetProperty(ref _isBriefingVisible);
+			set => SetProperty(ref _isBriefingVisible, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("briefingToOpen")] 
+		public wCHandle<gameJournalEntry> BriefingToOpen
+		{
+			get => GetProperty(ref _briefingToOpen);
+			set => SetProperty(ref _briefingToOpen, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("videoWidget")] 
+		public inkVideoWidgetReference VideoWidget
+		{
+			get => GetProperty(ref _videoWidget);
+			set => SetProperty(ref _videoWidget, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("mapWidget")] 
+		public inkWidgetReference MapWidget
+		{
+			get => GetProperty(ref _mapWidget);
+			set => SetProperty(ref _mapWidget, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("paperdollWidget")] 
+		public inkWidgetReference PaperdollWidget
+		{
+			get => GetProperty(ref _paperdollWidget);
+			set => SetProperty(ref _paperdollWidget, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("animatedWidget")] 
+		public inkWidgetReference AnimatedWidget
+		{
+			get => GetProperty(ref _animatedWidget);
+			set => SetProperty(ref _animatedWidget, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("fadeDuration")] 
+		public CFloat FadeDuration
+		{
+			get => GetProperty(ref _fadeDuration);
+			set => SetProperty(ref _fadeDuration, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("InterpolationType")] 
+		public CEnum<inkanimInterpolationType> InterpolationType
+		{
+			get => GetProperty(ref _interpolationType);
+			set => SetProperty(ref _interpolationType, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("InterpolationMode")] 
+		public CEnum<inkanimInterpolationMode> InterpolationMode
+		{
+			get => GetProperty(ref _interpolationMode);
+			set => SetProperty(ref _interpolationMode, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("minimizedSize")] 
+		public Vector2 MinimizedSize
+		{
+			get => GetProperty(ref _minimizedSize);
+			set => SetProperty(ref _minimizedSize, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("maximizedSize")] 
+		public Vector2 MaximizedSize
+		{
+			get => GetProperty(ref _maximizedSize);
+			set => SetProperty(ref _maximizedSize, value);
+		}
+
+		public BriefingScreenLogic(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

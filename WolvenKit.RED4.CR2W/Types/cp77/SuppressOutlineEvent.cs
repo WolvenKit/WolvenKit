@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SuppressOutlineEvent : redEvent
 	{
-		[Ordinal(0)] [RED("requestToSuppress")] public CHandle<OutlineRequest> RequestToSuppress { get; set; }
+		private CHandle<OutlineRequest> _requestToSuppress;
 
-		public SuppressOutlineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requestToSuppress")] 
+		public CHandle<OutlineRequest> RequestToSuppress
+		{
+			get => GetProperty(ref _requestToSuppress);
+			set => SetProperty(ref _requestToSuppress, value);
+		}
+
+		public SuppressOutlineEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

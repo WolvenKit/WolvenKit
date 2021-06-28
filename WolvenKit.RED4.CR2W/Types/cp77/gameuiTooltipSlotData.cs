@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiTooltipSlotData : inkUserData
 	{
-		[Ordinal(0)] [RED("margin")] public inkMargin Margin { get; set; }
-		[Ordinal(1)] [RED("placement")] public CEnum<gameuiETooltipPlacement> Placement { get; set; }
+		private inkMargin _margin;
+		private CEnum<gameuiETooltipPlacement> _placement;
 
-		public gameuiTooltipSlotData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("margin")] 
+		public inkMargin Margin
+		{
+			get => GetProperty(ref _margin);
+			set => SetProperty(ref _margin, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("placement")] 
+		public CEnum<gameuiETooltipPlacement> Placement
+		{
+			get => GetProperty(ref _placement);
+			set => SetProperty(ref _placement, value);
+		}
+
+		public gameuiTooltipSlotData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

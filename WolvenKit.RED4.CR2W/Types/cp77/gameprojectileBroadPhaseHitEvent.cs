@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameprojectileBroadPhaseHitEvent : redEvent
 	{
-		[Ordinal(0)] [RED("traceResult")] public physicsTraceResult TraceResult { get; set; }
-		[Ordinal(1)] [RED("position")] public Vector4 Position { get; set; }
-		[Ordinal(2)] [RED("hitObject")] public wCHandle<entEntity> HitObject { get; set; }
-		[Ordinal(3)] [RED("hitComponent")] public wCHandle<entIComponent> HitComponent { get; set; }
+		private physicsTraceResult _traceResult;
+		private Vector4 _position;
+		private wCHandle<entEntity> _hitObject;
+		private wCHandle<entIComponent> _hitComponent;
 
-		public gameprojectileBroadPhaseHitEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("traceResult")] 
+		public physicsTraceResult TraceResult
+		{
+			get => GetProperty(ref _traceResult);
+			set => SetProperty(ref _traceResult, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("position")] 
+		public Vector4 Position
+		{
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("hitObject")] 
+		public wCHandle<entEntity> HitObject
+		{
+			get => GetProperty(ref _hitObject);
+			set => SetProperty(ref _hitObject, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("hitComponent")] 
+		public wCHandle<entIComponent> HitComponent
+		{
+			get => GetProperty(ref _hitComponent);
+			set => SetProperty(ref _hitComponent, value);
+		}
+
+		public gameprojectileBroadPhaseHitEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

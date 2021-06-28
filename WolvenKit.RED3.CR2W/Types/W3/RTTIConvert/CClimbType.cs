@@ -33,9 +33,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("cameraAnimation")] 		public CName CameraAnimation { get; set;}
 
-		public CClimbType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CClimbType(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CClimbType(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsStartTakedownEvent : redEvent
 	{
-		[Ordinal(0)] [RED("target")] public wCHandle<gameObject> Target { get; set; }
-		[Ordinal(1)] [RED("slideTime")] public CFloat SlideTime { get; set; }
-		[Ordinal(2)] [RED("actionName")] public CName ActionName { get; set; }
+		private wCHandle<gameObject> _target;
+		private CFloat _slideTime;
+		private CName _actionName;
 
-		public gameeventsStartTakedownEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("target")] 
+		public wCHandle<gameObject> Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("slideTime")] 
+		public CFloat SlideTime
+		{
+			get => GetProperty(ref _slideTime);
+			set => SetProperty(ref _slideTime, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("actionName")] 
+		public CName ActionName
+		{
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
+		}
+
+		public gameeventsStartTakedownEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

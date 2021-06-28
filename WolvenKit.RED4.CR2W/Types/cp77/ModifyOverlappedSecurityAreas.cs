@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ModifyOverlappedSecurityAreas : redEvent
 	{
-		[Ordinal(0)] [RED("isEntering")] public CBool IsEntering { get; set; }
-		[Ordinal(1)] [RED("zoneID")] public gamePersistentID ZoneID { get; set; }
+		private CBool _isEntering;
+		private gamePersistentID _zoneID;
 
-		public ModifyOverlappedSecurityAreas(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isEntering")] 
+		public CBool IsEntering
+		{
+			get => GetProperty(ref _isEntering);
+			set => SetProperty(ref _isEntering, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("zoneID")] 
+		public gamePersistentID ZoneID
+		{
+			get => GetProperty(ref _zoneID);
+			set => SetProperty(ref _zoneID, value);
+		}
+
+		public ModifyOverlappedSecurityAreas(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

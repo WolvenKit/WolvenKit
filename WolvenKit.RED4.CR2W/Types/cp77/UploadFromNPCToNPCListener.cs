@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UploadFromNPCToNPCListener : QuickHackUploadListener
 	{
-		[Ordinal(2)] [RED("npcPuppet")] public wCHandle<ScriptedPuppet> NpcPuppet { get; set; }
+		private wCHandle<ScriptedPuppet> _npcPuppet;
 
-		public UploadFromNPCToNPCListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("npcPuppet")] 
+		public wCHandle<ScriptedPuppet> NpcPuppet
+		{
+			get => GetProperty(ref _npcPuppet);
+			set => SetProperty(ref _npcPuppet, value);
+		}
+
+		public UploadFromNPCToNPCListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

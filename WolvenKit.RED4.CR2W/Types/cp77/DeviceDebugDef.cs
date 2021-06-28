@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeviceDebugDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("CurrentlyDebuggedDevice")] public gamebbScriptID_CName CurrentlyDebuggedDevice { get; set; }
-		[Ordinal(1)] [RED("DebuggedEntityIDAsString")] public gamebbScriptID_String DebuggedEntityIDAsString { get; set; }
+		private gamebbScriptID_CName _currentlyDebuggedDevice;
+		private gamebbScriptID_String _debuggedEntityIDAsString;
 
-		public DeviceDebugDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("CurrentlyDebuggedDevice")] 
+		public gamebbScriptID_CName CurrentlyDebuggedDevice
+		{
+			get => GetProperty(ref _currentlyDebuggedDevice);
+			set => SetProperty(ref _currentlyDebuggedDevice, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("DebuggedEntityIDAsString")] 
+		public gamebbScriptID_String DebuggedEntityIDAsString
+		{
+			get => GetProperty(ref _debuggedEntityIDAsString);
+			set => SetProperty(ref _debuggedEntityIDAsString, value);
+		}
+
+		public DeviceDebugDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

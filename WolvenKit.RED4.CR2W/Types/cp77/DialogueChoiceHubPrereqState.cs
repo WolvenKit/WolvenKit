@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DialogueChoiceHubPrereqState : gamePrereqState
 	{
-		public DialogueChoiceHubPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public DialogueChoiceHubPrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

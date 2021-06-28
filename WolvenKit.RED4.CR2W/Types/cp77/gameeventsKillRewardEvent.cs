@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsKillRewardEvent : redEvent
 	{
-		[Ordinal(0)] [RED("victim")] public wCHandle<gameObject> Victim { get; set; }
-		[Ordinal(1)] [RED("killType")] public CEnum<gameKillType> KillType { get; set; }
+		private wCHandle<gameObject> _victim;
+		private CEnum<gameKillType> _killType;
 
-		public gameeventsKillRewardEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("victim")] 
+		public wCHandle<gameObject> Victim
+		{
+			get => GetProperty(ref _victim);
+			set => SetProperty(ref _victim, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("killType")] 
+		public CEnum<gameKillType> KillType
+		{
+			get => GetProperty(ref _killType);
+			set => SetProperty(ref _killType, value);
+		}
+
+		public gameeventsKillRewardEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiEntityPreviewGameObject : gameObject
 	{
-		[Ordinal(40)] [RED("cameraSettings")] public gameuiEntityPreviewCameraSettings CameraSettings { get; set; }
+		private gameuiEntityPreviewCameraSettings _cameraSettings;
 
-		public gameuiEntityPreviewGameObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("cameraSettings")] 
+		public gameuiEntityPreviewCameraSettings CameraSettings
+		{
+			get => GetProperty(ref _cameraSettings);
+			set => SetProperty(ref _cameraSettings, value);
+		}
+
+		public gameuiEntityPreviewGameObject(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

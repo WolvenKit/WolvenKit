@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamemappinsMappinScriptData : IScriptable
 	{
-		[Ordinal(0)] [RED("statPoolType")] public CEnum<gamedataStatPoolType> StatPoolType { get; set; }
+		private CEnum<gamedataStatPoolType> _statPoolType;
 
-		public gamemappinsMappinScriptData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("statPoolType")] 
+		public CEnum<gamedataStatPoolType> StatPoolType
+		{
+			get => GetProperty(ref _statPoolType);
+			set => SetProperty(ref _statPoolType, value);
+		}
+
+		public gamemappinsMappinScriptData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LaserDetector : ProximityDetector
 	{
-		[Ordinal(92)] [RED("lasers", 2)] public CArrayFixedSize<CHandle<entMeshComponent>> Lasers { get; set; }
+		private CArrayFixedSize<CHandle<entMeshComponent>> _lasers;
 
-		public LaserDetector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(92)] 
+		[RED("lasers", 2)] 
+		public CArrayFixedSize<CHandle<entMeshComponent>> Lasers
+		{
+			get => GetProperty(ref _lasers);
+			set => SetProperty(ref _lasers, value);
+		}
+
+		public LaserDetector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

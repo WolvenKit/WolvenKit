@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);stroke:#0C0C0C;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.3161;}
+	.st1{fill:#C1272D;stroke:#C1272D;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;}
+	.st3{font-family:'Calibri';}
+	.st4{font-size:11px;}
+</style>
+<g id="Layer_1">
+	<g id="File-outline_1_" transform="matrix(1,0,0,1,-502.815,-339.547)">
+		
+			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="210.5052" y1="745.9138" x2="210.7684" y2="745.9138" gradientTransform="matrix(5.000000e-15 79.5383 106.0507 -6.000000e-15 -78590.625 -16403.1992)">
+			<stop  offset="0" style="stop-color:#FFFFFF"/>
+			<stop  offset="0.92" style="stop-color:#FFFFFF"/>
+		</linearGradient>
+		<path class="st0" d="M506.3,345.4l5.2-5.2h10.4h-10.4h10.4v20.7h-15.5V345.4z"/>
+	</g>
+</g>
+<g id="Layer_3">
+	<rect x="1.1" y="10.4" class="st1" width="19.1" height="8.7"/>
+</g>
+<g id="Layer_2">
+	<text transform="matrix(1 0 0 1 0.6948 18.3285)" class="st2 st3 st4">fb2lt</text>
+</g>
+</svg>

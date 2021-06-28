@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalQuestDescription : gameJournalEntry
 	{
-		[Ordinal(1)] [RED("description")] public LocalizationString Description { get; set; }
+		private LocalizationString _description;
 
-		public gameJournalQuestDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("description")] 
+		public LocalizationString Description
+		{
+			get => GetProperty(ref _description);
+			set => SetProperty(ref _description, value);
+		}
+
+		public gameJournalQuestDescription(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

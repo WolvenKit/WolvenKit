@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCustomQuestNotificationData : CVariable
 	{
-		[Ordinal(0)] [RED("header")] public CString Header { get; set; }
-		[Ordinal(1)] [RED("desc")] public CString Desc { get; set; }
-		[Ordinal(2)] [RED("icon")] public CName Icon { get; set; }
-		[Ordinal(3)] [RED("fluffHeader")] public CString FluffHeader { get; set; }
+		private CString _header;
+		private CString _desc;
+		private CName _icon;
+		private CString _fluffHeader;
 
-		public questCustomQuestNotificationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("header")] 
+		public CString Header
+		{
+			get => GetProperty(ref _header);
+			set => SetProperty(ref _header, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("desc")] 
+		public CString Desc
+		{
+			get => GetProperty(ref _desc);
+			set => SetProperty(ref _desc, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("icon")] 
+		public CName Icon
+		{
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("fluffHeader")] 
+		public CString FluffHeader
+		{
+			get => GetProperty(ref _fluffHeader);
+			set => SetProperty(ref _fluffHeader, value);
+		}
+
+		public questCustomQuestNotificationData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

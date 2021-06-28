@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameprojectileForwardEventToProjectileEvent : redEvent
 	{
-		[Ordinal(0)] [RED("eventToForward")] public CHandle<redEvent> EventToForward { get; set; }
+		private CHandle<redEvent> _eventToForward;
 
-		public gameprojectileForwardEventToProjectileEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("eventToForward")] 
+		public CHandle<redEvent> EventToForward
+		{
+			get => GetProperty(ref _eventToForward);
+			set => SetProperty(ref _eventToForward, value);
+		}
+
+		public gameprojectileForwardEventToProjectileEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

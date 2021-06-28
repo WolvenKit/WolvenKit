@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudioSceneStateOverride : CVariable
 	{
-		[Ordinal(0)] [RED("templateStateName")] public CName TemplateStateName { get; set; }
-		[Ordinal(1)] [RED("enterEventOverride")] public CName EnterEventOverride { get; set; }
-		[Ordinal(2)] [RED("exitEventOverride")] public CName ExitEventOverride { get; set; }
+		private CName _templateStateName;
+		private CName _enterEventOverride;
+		private CName _exitEventOverride;
 
-		public audioAudioSceneStateOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("templateStateName")] 
+		public CName TemplateStateName
+		{
+			get => GetProperty(ref _templateStateName);
+			set => SetProperty(ref _templateStateName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("enterEventOverride")] 
+		public CName EnterEventOverride
+		{
+			get => GetProperty(ref _enterEventOverride);
+			set => SetProperty(ref _enterEventOverride, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("exitEventOverride")] 
+		public CName ExitEventOverride
+		{
+			get => GetProperty(ref _exitEventOverride);
+			set => SetProperty(ref _exitEventOverride, value);
+		}
+
+		public audioAudioSceneStateOverride(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("spawnTree")] 		public CHandle<CSpawnTree> SpawnTree { get; set;}
 
-		public CSpawnTreeIncludeTreeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSpawnTreeIncludeTreeNode(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSpawnTreeIncludeTreeNode(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

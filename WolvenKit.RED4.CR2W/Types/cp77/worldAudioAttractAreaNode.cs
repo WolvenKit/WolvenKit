@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldAudioAttractAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] [RED("interestingConversationsNodeRef")] public NodeRef InterestingConversationsNodeRef { get; set; }
-		[Ordinal(8)] [RED("audioAttractSoundSettings")] public CArray<worldAudioAttractAreaNodeSettings> AudioAttractSoundSettings { get; set; }
+		private NodeRef _interestingConversationsNodeRef;
+		private CArray<worldAudioAttractAreaNodeSettings> _audioAttractSoundSettings;
 
-		public worldAudioAttractAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(7)] 
+		[RED("interestingConversationsNodeRef")] 
+		public NodeRef InterestingConversationsNodeRef
+		{
+			get => GetProperty(ref _interestingConversationsNodeRef);
+			set => SetProperty(ref _interestingConversationsNodeRef, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("audioAttractSoundSettings")] 
+		public CArray<worldAudioAttractAreaNodeSettings> AudioAttractSoundSettings
+		{
+			get => GetProperty(ref _audioAttractSoundSettings);
+			set => SetProperty(ref _audioAttractSoundSettings, value);
+		}
+
+		public worldAudioAttractAreaNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

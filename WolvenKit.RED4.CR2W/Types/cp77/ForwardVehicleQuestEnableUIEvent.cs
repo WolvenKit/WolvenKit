@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ForwardVehicleQuestEnableUIEvent : redEvent
 	{
-		[Ordinal(0)] [RED("mode")] public CEnum<vehicleQuestUIEnable> Mode { get; set; }
+		private CEnum<vehicleQuestUIEnable> _mode;
 
-		public ForwardVehicleQuestEnableUIEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mode")] 
+		public CEnum<vehicleQuestUIEnable> Mode
+		{
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
+		}
+
+		public ForwardVehicleQuestEnableUIEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

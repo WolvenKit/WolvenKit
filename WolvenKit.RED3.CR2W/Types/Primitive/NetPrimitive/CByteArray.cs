@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
         public string InternalType { get; set; }
         public override string REDType => string.IsNullOrEmpty(InternalType) ? base.REDType : InternalType;
 
-        public CByteArray(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CByteArray(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public byte[] Bytes { get; set; }
         public byte[] GetBytes() => Bytes;
@@ -39,6 +39,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case byte[] bytes:
@@ -57,11 +58,11 @@ namespace WolvenKit.RED3.CR2W.Types
             var copy = (CByteArray) base.Copy(context);
 
             if (Bytes == null) return copy;
-            
+
             var newbytes = new byte[Bytes.Length];
             Bytes.CopyTo(newbytes, 0);
             copy.Bytes = newbytes;
-            
+
             return copy;
         }
 

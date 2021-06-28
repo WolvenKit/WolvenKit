@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecuritySystemForceAttitudeChange : ScriptableDeviceAction
 	{
-		[Ordinal(25)] [RED("newAttitude")] public CName NewAttitude { get; set; }
+		private CName _newAttitude;
 
-		public SecuritySystemForceAttitudeChange(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("newAttitude")] 
+		public CName NewAttitude
+		{
+			get => GetProperty(ref _newAttitude);
+			set => SetProperty(ref _newAttitude, value);
+		}
+
+		public SecuritySystemForceAttitudeChange(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

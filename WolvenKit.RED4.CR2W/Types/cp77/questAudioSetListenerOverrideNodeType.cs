@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questAudioSetListenerOverrideNodeType : questIAudioNodeType
 	{
-		[Ordinal(0)] [RED("enable")] public CBool Enable { get; set; }
+		private CBool _enable;
 
-		public questAudioSetListenerOverrideNodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("enable")] 
+		public CBool Enable
+		{
+			get => GetProperty(ref _enable);
+			set => SetProperty(ref _enable, value);
+		}
+
+		public questAudioSetListenerOverrideNodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

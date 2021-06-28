@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace WolvenKit.Common.Services
 {
     public interface IHashService
@@ -7,6 +9,10 @@ namespace WolvenKit.Common.Services
         bool Contains(ulong key);
 
         string Get(ulong key);
+
+        void Add(string path);
+
+        public IEnumerable<ulong> GetAllHashes();
 
         #endregion Methods
     }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entVectorFieldComponent : entIVisualComponent
 	{
-		[Ordinal(8)] [RED("direction")] public Vector3 Direction { get; set; }
-		[Ordinal(9)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
+		private Vector3 _direction;
+		private CBool _isEnabled;
 
-		public entVectorFieldComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(8)] 
+		[RED("direction")] 
+		public Vector3 Direction
+		{
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
+		}
+
+		public entVectorFieldComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

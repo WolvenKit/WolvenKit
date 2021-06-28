@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ReloadWeaponEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
+		private wCHandle<gameObject> _owner;
 
-		public ReloadWeaponEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<gameObject> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		public ReloadWeaponEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

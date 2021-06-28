@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIFSMTransitionListDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("firstTransitionIndex")] public CUInt16 FirstTransitionIndex { get; set; }
-		[Ordinal(1)] [RED("transitionsCount")] public CUInt16 TransitionsCount { get; set; }
+		private CUInt16 _firstTransitionIndex;
+		private CUInt16 _transitionsCount;
 
-		public AIFSMTransitionListDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("firstTransitionIndex")] 
+		public CUInt16 FirstTransitionIndex
+		{
+			get => GetProperty(ref _firstTransitionIndex);
+			set => SetProperty(ref _firstTransitionIndex, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("transitionsCount")] 
+		public CUInt16 TransitionsCount
+		{
+			get => GetProperty(ref _transitionsCount);
+			set => SetProperty(ref _transitionsCount, value);
+		}
+
+		public AIFSMTransitionListDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

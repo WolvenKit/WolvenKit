@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class characterCreationGenderBackstoryBtn : inkButtonController
 	{
-		[Ordinal(10)] [RED("selector")] public inkWidgetReference Selector { get; set; }
-		[Ordinal(11)] [RED("fluffText")] public inkWidgetReference FluffText { get; set; }
+		private inkWidgetReference _selector;
+		private inkWidgetReference _fluffText;
 
-		public characterCreationGenderBackstoryBtn(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(10)] 
+		[RED("selector")] 
+		public inkWidgetReference Selector
+		{
+			get => GetProperty(ref _selector);
+			set => SetProperty(ref _selector, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("fluffText")] 
+		public inkWidgetReference FluffText
+		{
+			get => GetProperty(ref _fluffText);
+			set => SetProperty(ref _fluffText, value);
+		}
+
+		public characterCreationGenderBackstoryBtn(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

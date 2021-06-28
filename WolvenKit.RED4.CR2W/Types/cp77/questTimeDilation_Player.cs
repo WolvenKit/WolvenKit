@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questTimeDilation_Player : questTimeDilation_NodeTypeParam
 	{
-		[Ordinal(0)] [RED("operation")] public CHandle<questTimeDilation_Operation> Operation { get; set; }
-		[Ordinal(1)] [RED("globalTimeDilationOverride")] public CEnum<questETimeDilationOverride> GlobalTimeDilationOverride { get; set; }
+		private CHandle<questTimeDilation_Operation> _operation;
+		private CEnum<questETimeDilationOverride> _globalTimeDilationOverride;
 
-		public questTimeDilation_Player(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("operation")] 
+		public CHandle<questTimeDilation_Operation> Operation
+		{
+			get => GetProperty(ref _operation);
+			set => SetProperty(ref _operation, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("globalTimeDilationOverride")] 
+		public CEnum<questETimeDilationOverride> GlobalTimeDilationOverride
+		{
+			get => GetProperty(ref _globalTimeDilationOverride);
+			set => SetProperty(ref _globalTimeDilationOverride, value);
+		}
+
+		public questTimeDilation_Player(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

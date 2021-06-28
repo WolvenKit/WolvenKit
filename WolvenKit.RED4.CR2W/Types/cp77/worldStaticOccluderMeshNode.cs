@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldStaticOccluderMeshNode : worldNode
 	{
-		[Ordinal(4)] [RED("occluderType")] public CEnum<visWorldOccluderType> OccluderType { get; set; }
-		[Ordinal(5)] [RED("color")] public CColor Color { get; set; }
-		[Ordinal(6)] [RED("autohideDistanceScale")] public CUInt8 AutohideDistanceScale { get; set; }
-		[Ordinal(7)] [RED("mesh")] public raRef<CMesh> Mesh { get; set; }
+		private CEnum<visWorldOccluderType> _occluderType;
+		private CColor _color;
+		private CUInt8 _autohideDistanceScale;
+		private raRef<CMesh> _mesh;
 
-		public worldStaticOccluderMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("occluderType")] 
+		public CEnum<visWorldOccluderType> OccluderType
+		{
+			get => GetProperty(ref _occluderType);
+			set => SetProperty(ref _occluderType, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("color")] 
+		public CColor Color
+		{
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("autohideDistanceScale")] 
+		public CUInt8 AutohideDistanceScale
+		{
+			get => GetProperty(ref _autohideDistanceScale);
+			set => SetProperty(ref _autohideDistanceScale, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("mesh")] 
+		public raRef<CMesh> Mesh
+		{
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
+		}
+
+		public worldStaticOccluderMeshNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

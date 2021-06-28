@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipClothingInfoModule : ItemTooltipModuleController
 	{
-		[Ordinal(2)] [RED("value")] public inkTextWidgetReference Value { get; set; }
-		[Ordinal(3)] [RED("arrow")] public inkImageWidgetReference Arrow { get; set; }
+		private inkTextWidgetReference _value;
+		private inkImageWidgetReference _arrow;
 
-		public ItemTooltipClothingInfoModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("value")] 
+		public inkTextWidgetReference Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("arrow")] 
+		public inkImageWidgetReference Arrow
+		{
+			get => GetProperty(ref _arrow);
+			set => SetProperty(ref _arrow, value);
+		}
+
+		public ItemTooltipClothingInfoModule(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

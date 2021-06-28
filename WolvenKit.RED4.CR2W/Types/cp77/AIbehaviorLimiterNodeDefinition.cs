@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorLimiterNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
-		[Ordinal(1)] [RED("activationLimitPerFrame")] public CUInt32 ActivationLimitPerFrame { get; set; }
-		[Ordinal(2)] [RED("delayChildActivation")] public CBool DelayChildActivation { get; set; }
-		[Ordinal(3)] [RED("delayChildActivationIfAttaching")] public CBool DelayChildActivationIfAttaching { get; set; }
+		private CUInt32 _activationLimitPerFrame;
+		private CBool _delayChildActivation;
+		private CBool _delayChildActivationIfAttaching;
 
-		public AIbehaviorLimiterNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("activationLimitPerFrame")] 
+		public CUInt32 ActivationLimitPerFrame
+		{
+			get => GetProperty(ref _activationLimitPerFrame);
+			set => SetProperty(ref _activationLimitPerFrame, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("delayChildActivation")] 
+		public CBool DelayChildActivation
+		{
+			get => GetProperty(ref _delayChildActivation);
+			set => SetProperty(ref _delayChildActivation, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("delayChildActivationIfAttaching")] 
+		public CBool DelayChildActivationIfAttaching
+		{
+			get => GetProperty(ref _delayChildActivationIfAttaching);
+			set => SetProperty(ref _delayChildActivationIfAttaching, value);
+		}
+
+		public AIbehaviorLimiterNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

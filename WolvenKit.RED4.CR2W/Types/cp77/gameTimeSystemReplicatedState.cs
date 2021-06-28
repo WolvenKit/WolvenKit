@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTimeSystemReplicatedState : gameIGameSystemReplicatedState
 	{
-		[Ordinal(0)] [RED("paused")] public CBool Paused { get; set; }
-		[Ordinal(1)] [RED("gameTime")] public GameTime GameTime { get; set; }
+		private CBool _paused;
+		private GameTime _gameTime;
 
-		public gameTimeSystemReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("paused")] 
+		public CBool Paused
+		{
+			get => GetProperty(ref _paused);
+			set => SetProperty(ref _paused, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("gameTime")] 
+		public GameTime GameTime
+		{
+			get => GetProperty(ref _gameTime);
+			set => SetProperty(ref _gameTime, value);
+		}
+
+		public gameTimeSystemReplicatedState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

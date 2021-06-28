@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkipConsoleEnd : animAnimNode_Base
 	{
-		[Ordinal(11)] [RED("inputLink")] public animPoseLink InputLink { get; set; }
+		private animPoseLink _inputLink;
 
-		public animAnimNode_SkipConsoleEnd(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(11)] 
+		[RED("inputLink")] 
+		public animPoseLink InputLink
+		{
+			get => GetProperty(ref _inputLink);
+			set => SetProperty(ref _inputLink, value);
+		}
+
+		public animAnimNode_SkipConsoleEnd(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

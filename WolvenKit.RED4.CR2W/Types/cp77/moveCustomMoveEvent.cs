@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class moveCustomMoveEvent : gameActionEvent
 	{
-		[Ordinal(4)] [RED("test")] public CInt32 Test { get; set; }
+		private CInt32 _test;
 
-		public moveCustomMoveEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("test")] 
+		public CInt32 Test
+		{
+			get => GetProperty(ref _test);
+			set => SetProperty(ref _test, value);
+		}
+
+		public moveCustomMoveEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

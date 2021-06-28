@@ -21,6 +21,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string Exit = "Application.Exit";
             public const string NewFile = "Application.NewFile";
             public const string NewProject = "Application.NewProject";
+            public const string PublishProject = "Application.PublishProject";
             public const string OpenFile = "Application.OpenFile";
             public const string OpenLink = "Application.OpenLink";
             public const string OpenProject = "Application.OpenProject";
@@ -31,11 +32,13 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string SaveProject = "Application.SaveProject";
             public const string SaveFile = "Application.SaveFile";
             public const string SaveAll = "Application.SaveAll";
+            public const string ShowImportExportTool = "Application.ShowImportExportTool";
 
             public const string ShowAbout = "Application.ShowAbout";
             public const string ShowAnimationTool = "Application.ShowAnimationTool";
             public const string ShowAssetBrowser = "Application.ShowAssetBrowser";
             public const string ShowAudioTool = "Application.ShowAudioTool";
+            public const string ShowVideoTool = "Application.ShowVideoTool";
             public const string ShowBulkEditor = "Application.ShowBulkEditor";
             public const string ShowCodeEditor = "Application.ShowCodeEditor";
             public const string ShowCR2WEditor = "Application.ShowCR2WEditor";
@@ -55,15 +58,14 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string ShowPluginManager = "Application.ShowPluginManager";
             public const string ShowProjectExplorer = "Application.ShowProjectExplorer";
             public const string ShowProperties = "Application.ShowProperties";
-            public const string ShowRadishTool = "Application.ShowRadishTool";
+            //public const string ShowRadishTool = "Application.ShowRadishTool";
             public const string ShowSettings = "Application.ShowSettings";
             public const string ShowVisualEditor = "Application.ShowVisualEditor";
             public const string ShowWccTool = "Application.ShowWccTool";
 
 
             public const string ViewSelected = "Application.ViewSelected";
-
-
+            public const string FileSelected = "Application.FileSelected";
 
 
             public static readonly InputGesture AboutInputGesture = new InputGesture(Key.F1);
@@ -82,10 +84,6 @@ namespace WolvenKit.Functionality.WKitGlobal
         {
             #region Fields
 
-            public const string Collapse = "ProjectExplorer.Collapse";
-            public const string CollapseAll = "ProjectExplorer.CollapseAll";
-            public const string Expand = "ProjectExplorer.Expand";
-            public const string ExpandAll = "ProjectExplorer.ExpandAll";
             public const string Refresh = "ProjectExplorer.Refresh";
 
             #endregion Fields

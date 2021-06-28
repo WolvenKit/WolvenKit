@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animLookAtAnimationDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("minTransitionDuration")] public CFloat MinTransitionDuration { get; set; }
-		[Ordinal(1)] [RED("playAnimProbability")] public CFloat PlayAnimProbability { get; set; }
-		[Ordinal(2)] [RED("animDelay")] public CFloat AnimDelay { get; set; }
-		[Ordinal(3)] [RED("animations")] public CArray<CName> Animations { get; set; }
+		private CFloat _minTransitionDuration;
+		private CFloat _playAnimProbability;
+		private CFloat _animDelay;
+		private CArray<CName> _animations;
 
-		public animLookAtAnimationDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("minTransitionDuration")] 
+		public CFloat MinTransitionDuration
+		{
+			get => GetProperty(ref _minTransitionDuration);
+			set => SetProperty(ref _minTransitionDuration, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("playAnimProbability")] 
+		public CFloat PlayAnimProbability
+		{
+			get => GetProperty(ref _playAnimProbability);
+			set => SetProperty(ref _playAnimProbability, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("animDelay")] 
+		public CFloat AnimDelay
+		{
+			get => GetProperty(ref _animDelay);
+			set => SetProperty(ref _animDelay, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("animations")] 
+		public CArray<CName> Animations
+		{
+			get => GetProperty(ref _animations);
+			set => SetProperty(ref _animations, value);
+		}
+
+		public animLookAtAnimationDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

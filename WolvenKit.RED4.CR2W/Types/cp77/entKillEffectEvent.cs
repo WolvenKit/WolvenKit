@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entKillEffectEvent : redEvent
 	{
-		[Ordinal(0)] [RED("effectName")] public CName EffectName { get; set; }
-		[Ordinal(1)] [RED("breakAllLoops")] public CBool BreakAllLoops { get; set; }
+		private CName _effectName;
+		private CBool _breakAllLoops;
 
-		public entKillEffectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("effectName")] 
+		public CName EffectName
+		{
+			get => GetProperty(ref _effectName);
+			set => SetProperty(ref _effectName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("breakAllLoops")] 
+		public CBool BreakAllLoops
+		{
+			get => GetProperty(ref _breakAllLoops);
+			set => SetProperty(ref _breakAllLoops, value);
+		}
+
+		public entKillEffectEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

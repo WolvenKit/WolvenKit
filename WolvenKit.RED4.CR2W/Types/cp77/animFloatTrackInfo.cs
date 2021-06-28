@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animFloatTrackInfo : CVariable
 	{
-		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("referenceValue")] public CFloat ReferenceValue { get; set; }
+		private CName _name;
+		private CFloat _referenceValue;
 
-		public animFloatTrackInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("referenceValue")] 
+		public CFloat ReferenceValue
+		{
+			get => GetProperty(ref _referenceValue);
+			set => SetProperty(ref _referenceValue, value);
+		}
+
+		public animFloatTrackInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

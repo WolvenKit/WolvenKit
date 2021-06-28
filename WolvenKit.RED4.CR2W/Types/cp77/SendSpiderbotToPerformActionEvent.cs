@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SendSpiderbotToPerformActionEvent : redEvent
 	{
-		[Ordinal(0)] [RED("executor")] public wCHandle<gameObject> Executor { get; set; }
+		private wCHandle<gameObject> _executor;
 
-		public SendSpiderbotToPerformActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("executor")] 
+		public wCHandle<gameObject> Executor
+		{
+			get => GetProperty(ref _executor);
+			set => SetProperty(ref _executor, value);
+		}
+
+		public SendSpiderbotToPerformActionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

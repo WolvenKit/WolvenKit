@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSmartObjectWorkspotDefinition : gameSmartObjectDefinition
 	{
-		[Ordinal(5)] [RED("workspotTemplate")] public rRef<workWorkspotResource> WorkspotTemplate { get; set; }
+		private rRef<workWorkspotResource> _workspotTemplate;
 
-		public gameSmartObjectWorkspotDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("workspotTemplate")] 
+		public rRef<workWorkspotResource> WorkspotTemplate
+		{
+			get => GetProperty(ref _workspotTemplate);
+			set => SetProperty(ref _workspotTemplate, value);
+		}
+
+		public gameSmartObjectWorkspotDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

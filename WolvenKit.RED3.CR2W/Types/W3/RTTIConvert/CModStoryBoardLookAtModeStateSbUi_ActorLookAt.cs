@@ -21,9 +21,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(5)] [RED("theController")] 		public CHandle<CModStoryBoardInteractiveLookAt> TheController { get; set;}
 
-		public CModStoryBoardLookAtModeStateSbUi_ActorLookAt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CModStoryBoardLookAtModeStateSbUi_ActorLookAt(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CModStoryBoardLookAtModeStateSbUi_ActorLookAt(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

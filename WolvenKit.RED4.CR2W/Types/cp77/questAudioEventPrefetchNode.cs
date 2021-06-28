@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questAudioEventPrefetchNode : questIAudioNodeType
 	{
-		[Ordinal(0)] [RED("prefetchEvents")] public CArray<questAudioEventPrefetchStruct> PrefetchEvents { get; set; }
+		private CArray<questAudioEventPrefetchStruct> _prefetchEvents;
 
-		public questAudioEventPrefetchNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("prefetchEvents")] 
+		public CArray<questAudioEventPrefetchStruct> PrefetchEvents
+		{
+			get => GetProperty(ref _prefetchEvents);
+			set => SetProperty(ref _prefetchEvents, value);
+		}
+
+		public questAudioEventPrefetchNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

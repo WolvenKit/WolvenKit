@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficPersistentDebugResource : resStreamedResource
 	{
-		[Ordinal(1)] [RED("brokenUIDs")] public CArray<worldTrafficLaneUID> BrokenUIDs { get; set; }
-		[Ordinal(2)] [RED("brokenUIDsDeadEnds")] public CArray<worldTrafficLaneUID> BrokenUIDsDeadEnds { get; set; }
+		private CArray<worldTrafficLaneUID> _brokenUIDs;
+		private CArray<worldTrafficLaneUID> _brokenUIDsDeadEnds;
 
-		public worldTrafficPersistentDebugResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("brokenUIDs")] 
+		public CArray<worldTrafficLaneUID> BrokenUIDs
+		{
+			get => GetProperty(ref _brokenUIDs);
+			set => SetProperty(ref _brokenUIDs, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("brokenUIDsDeadEnds")] 
+		public CArray<worldTrafficLaneUID> BrokenUIDsDeadEnds
+		{
+			get => GetProperty(ref _brokenUIDsDeadEnds);
+			set => SetProperty(ref _brokenUIDsDeadEnds, value);
+		}
+
+		public worldTrafficPersistentDebugResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameActionHitReactionState : gameActionReplicatedState
 	{
-		[Ordinal(5)] [RED("animFeature")] public CHandle<animAnimFeature_HitReactionsData> AnimFeature { get; set; }
+		private CHandle<animAnimFeature_HitReactionsData> _animFeature;
 
-		public gameActionHitReactionState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("animFeature")] 
+		public CHandle<animAnimFeature_HitReactionsData> AnimFeature
+		{
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
+		}
+
+		public gameActionHitReactionState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

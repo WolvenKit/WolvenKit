@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entRenderScanEvent : redEvent
 	{
-		[Ordinal(0)] [RED("scanState")] public CEnum<rendPostFx_ScanningState> ScanState { get; set; }
+		private CEnum<rendPostFx_ScanningState> _scanState;
 
-		public entRenderScanEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("scanState")] 
+		public CEnum<rendPostFx_ScanningState> ScanState
+		{
+			get => GetProperty(ref _scanState);
+			set => SetProperty(ref _scanState, value);
+		}
+
+		public entRenderScanEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

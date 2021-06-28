@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudioScenesMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("defaultScene")] public CName DefaultScene { get; set; }
-		[Ordinal(2)] [RED("scenesToActivateByQuestEvent")] public CHandle<audioAudioSceneDictionary> ScenesToActivateByQuestEvent { get; set; }
+		private CName _defaultScene;
+		private CHandle<audioAudioSceneDictionary> _scenesToActivateByQuestEvent;
 
-		public audioAudioScenesMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("defaultScene")] 
+		public CName DefaultScene
+		{
+			get => GetProperty(ref _defaultScene);
+			set => SetProperty(ref _defaultScene, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("scenesToActivateByQuestEvent")] 
+		public CHandle<audioAudioSceneDictionary> ScenesToActivateByQuestEvent
+		{
+			get => GetProperty(ref _scenesToActivateByQuestEvent);
+			set => SetProperty(ref _scenesToActivateByQuestEvent, value);
+		}
+
+		public audioAudioScenesMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -47,9 +47,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(18)] [RED("timeStamp")] 		public CFloat TimeStamp { get; set;}
 
-		public CBTTaskAddEffectToTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTTaskAddEffectToTarget(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTTaskAddEffectToTarget(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

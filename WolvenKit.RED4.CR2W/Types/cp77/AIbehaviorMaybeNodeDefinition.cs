@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorMaybeNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
-		[Ordinal(1)] [RED("onChildSuccess")] public CEnum<AIbehaviorMaybeNodeAction> OnChildSuccess { get; set; }
-		[Ordinal(2)] [RED("onChildFailure")] public CEnum<AIbehaviorMaybeNodeAction> OnChildFailure { get; set; }
+		private CEnum<AIbehaviorMaybeNodeAction> _onChildSuccess;
+		private CEnum<AIbehaviorMaybeNodeAction> _onChildFailure;
 
-		public AIbehaviorMaybeNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("onChildSuccess")] 
+		public CEnum<AIbehaviorMaybeNodeAction> OnChildSuccess
+		{
+			get => GetProperty(ref _onChildSuccess);
+			set => SetProperty(ref _onChildSuccess, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("onChildFailure")] 
+		public CEnum<AIbehaviorMaybeNodeAction> OnChildFailure
+		{
+			get => GetProperty(ref _onChildFailure);
+			set => SetProperty(ref _onChildFailure, value);
+		}
+
+		public AIbehaviorMaybeNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

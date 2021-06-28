@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("minSubmergeDepth")] 		public CFloat MinSubmergeDepth { get; set;}
 
-		public CBTCondIsUnderwater(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBTCondIsUnderwater(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBTCondIsUnderwater(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

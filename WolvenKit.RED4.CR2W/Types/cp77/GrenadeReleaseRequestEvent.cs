@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GrenadeReleaseRequestEvent : redEvent
 	{
-		public GrenadeReleaseRequestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public GrenadeReleaseRequestEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

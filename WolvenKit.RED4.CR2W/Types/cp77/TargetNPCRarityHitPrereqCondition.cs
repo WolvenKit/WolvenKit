@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TargetNPCRarityHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("rarity")] public CEnum<gamedataNPCRarity> Rarity { get; set; }
+		private CEnum<gamedataNPCRarity> _rarity;
 
-		public TargetNPCRarityHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("rarity")] 
+		public CEnum<gamedataNPCRarity> Rarity
+		{
+			get => GetProperty(ref _rarity);
+			set => SetProperty(ref _rarity, value);
+		}
+
+		public TargetNPCRarityHitPrereqCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

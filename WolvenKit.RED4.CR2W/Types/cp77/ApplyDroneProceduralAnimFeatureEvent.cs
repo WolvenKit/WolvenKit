@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApplyDroneProceduralAnimFeatureEvent : redEvent
 	{
-		[Ordinal(0)] [RED("feature")] public CHandle<AnimFeature_DroneProcedural> Feature { get; set; }
+		private CHandle<AnimFeature_DroneProcedural> _feature;
 
-		public ApplyDroneProceduralAnimFeatureEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("feature")] 
+		public CHandle<AnimFeature_DroneProcedural> Feature
+		{
+			get => GetProperty(ref _feature);
+			set => SetProperty(ref _feature, value);
+		}
+
+		public ApplyDroneProceduralAnimFeatureEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameHitShape_ColliderComponent : gameHitShapeBase
 	{
-		[Ordinal(3)] [RED("componentNames")] public CArray<CName> ComponentNames { get; set; }
+		private CArray<CName> _componentNames;
 
-		public gameHitShape_ColliderComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("componentNames")] 
+		public CArray<CName> ComponentNames
+		{
+			get => GetProperty(ref _componentNames);
+			set => SetProperty(ref _componentNames, value);
+		}
+
+		public gameHitShape_ColliderComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

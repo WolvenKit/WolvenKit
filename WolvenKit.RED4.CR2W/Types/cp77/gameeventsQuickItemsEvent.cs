@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsQuickItemsEvent : redEvent
 	{
-		[Ordinal(0)] [RED("questName")] public CName QuestName { get; set; }
+		private CName _questName;
 
-		public gameeventsQuickItemsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("questName")] 
+		public CName QuestName
+		{
+			get => GetProperty(ref _questName);
+			set => SetProperty(ref _questName, value);
+		}
+
+		public gameeventsQuickItemsEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ExampleNavigationTask : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("queryId")] public CUInt32 QueryId { get; set; }
-		[Ordinal(1)] [RED("queryStarted")] public CBool QueryStarted { get; set; }
+		private CUInt32 _queryId;
+		private CBool _queryStarted;
 
-		public ExampleNavigationTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("queryId")] 
+		public CUInt32 QueryId
+		{
+			get => GetProperty(ref _queryId);
+			set => SetProperty(ref _queryId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("queryStarted")] 
+		public CBool QueryStarted
+		{
+			get => GetProperty(ref _queryStarted);
+			set => SetProperty(ref _queryStarted, value);
+		}
+
+		public ExampleNavigationTask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

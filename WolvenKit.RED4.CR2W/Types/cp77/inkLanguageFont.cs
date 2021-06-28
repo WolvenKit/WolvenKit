@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkLanguageFont : CVariable
 	{
-		[Ordinal(0)] [RED("font")] public raRef<inkFontFamilyResource> Font { get; set; }
-		[Ordinal(1)] [RED("mapper")] public CHandle<inkLanguageFontMapper> Mapper { get; set; }
+		private raRef<inkFontFamilyResource> _font;
+		private CHandle<inkLanguageFontMapper> _mapper;
 
-		public inkLanguageFont(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("font")] 
+		public raRef<inkFontFamilyResource> Font
+		{
+			get => GetProperty(ref _font);
+			set => SetProperty(ref _font, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("mapper")] 
+		public CHandle<inkLanguageFontMapper> Mapper
+		{
+			get => GetProperty(ref _mapper);
+			set => SetProperty(ref _mapper, value);
+		}
+
+		public inkLanguageFont(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

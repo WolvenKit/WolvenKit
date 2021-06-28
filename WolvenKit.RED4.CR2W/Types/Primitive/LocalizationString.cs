@@ -10,11 +10,11 @@ using WolvenKit.Common.Model.Cr2w;
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta()]
-    public class LocalizationString : CVariable, IREDPrimitive
+    public class LocalizationString : CVariable
     {
-        
 
-        public LocalizationString(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+
+        public LocalizationString(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Unk1 = new CUInt64(cr2w, this, nameof(Unk1));
             Value = new CString(cr2w, this, nameof(Value));

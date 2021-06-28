@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InputDeviceController : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("isStarted")] public CBool IsStarted { get; set; }
+		private CBool _isStarted;
 
-		public InputDeviceController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("isStarted")] 
+		public CBool IsStarted
+		{
+			get => GetProperty(ref _isStarted);
+			set => SetProperty(ref _isStarted, value);
+		}
+
+		public InputDeviceController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

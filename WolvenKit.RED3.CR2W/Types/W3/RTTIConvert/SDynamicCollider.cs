@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class SDynamicCollider : CVariable
 	{
-		public SDynamicCollider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SDynamicCollider(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SDynamicCollider(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

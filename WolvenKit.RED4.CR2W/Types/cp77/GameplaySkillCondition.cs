@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameplaySkillCondition : GameplayConditionBase
 	{
-		[Ordinal(1)] [RED("skillToCheck")] public TweakDBID SkillToCheck { get; set; }
-		[Ordinal(2)] [RED("difficulty")] public CEnum<EGameplayChallengeLevel> Difficulty { get; set; }
+		private TweakDBID _skillToCheck;
+		private CEnum<EGameplayChallengeLevel> _difficulty;
 
-		public GameplaySkillCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("skillToCheck")] 
+		public TweakDBID SkillToCheck
+		{
+			get => GetProperty(ref _skillToCheck);
+			set => SetProperty(ref _skillToCheck, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("difficulty")] 
+		public CEnum<EGameplayChallengeLevel> Difficulty
+		{
+			get => GetProperty(ref _difficulty);
+			set => SetProperty(ref _difficulty, value);
+		}
+
+		public GameplaySkillCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

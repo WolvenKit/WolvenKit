@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UsingCoverPSMPrereqState : PlayerStateMachinePrereqState
 	{
-		[Ordinal(3)] [RED("bValue")] public CBool BValue { get; set; }
+		private CBool _bValue;
 
-		public UsingCoverPSMPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("bValue")] 
+		public CBool BValue
+		{
+			get => GetProperty(ref _bValue);
+			set => SetProperty(ref _bValue, value);
+		}
+
+		public UsingCoverPSMPrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

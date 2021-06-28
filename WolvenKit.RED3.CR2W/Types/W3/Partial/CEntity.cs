@@ -29,7 +29,6 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("forceAutoHideDistance")] 		public CUInt16 ForceAutoHideDistance { get; set;}
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEntity(cr2w, parent, name);
 
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldRenderProxyTransformBuffer : CVariable
 	{
-		[Ordinal(0)] [RED("sharedDataBuffer")] public CHandle<worldSharedDataBuffer> SharedDataBuffer { get; set; }
-		[Ordinal(1)] [RED("startIndex")] public CUInt32 StartIndex { get; set; }
-		[Ordinal(2)] [RED("numElements")] public CUInt32 NumElements { get; set; }
+		private CHandle<worldSharedDataBuffer> _sharedDataBuffer;
+		private CUInt32 _startIndex;
+		private CUInt32 _numElements;
 
-		public worldRenderProxyTransformBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sharedDataBuffer")] 
+		public CHandle<worldSharedDataBuffer> SharedDataBuffer
+		{
+			get => GetProperty(ref _sharedDataBuffer);
+			set => SetProperty(ref _sharedDataBuffer, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("startIndex")] 
+		public CUInt32 StartIndex
+		{
+			get => GetProperty(ref _startIndex);
+			set => SetProperty(ref _startIndex, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("numElements")] 
+		public CUInt32 NumElements
+		{
+			get => GetProperty(ref _numElements);
+			set => SetProperty(ref _numElements, value);
+		}
+
+		public worldRenderProxyTransformBuffer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

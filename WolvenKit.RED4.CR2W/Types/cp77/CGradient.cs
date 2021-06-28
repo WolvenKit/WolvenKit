@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CGradient : CResource
 	{
-		[Ordinal(1)] [RED("gradientEntries")] public CArray<rendGradientEntry> GradientEntries { get; set; }
+		private CArray<rendGradientEntry> _gradientEntries;
 
-		public CGradient(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("gradientEntries")] 
+		public CArray<rendGradientEntry> GradientEntries
+		{
+			get => GetProperty(ref _gradientEntries);
+			set => SetProperty(ref _gradientEntries, value);
+		}
+
+		public CGradient(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

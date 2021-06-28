@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnregisterTimetableRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("requesterData")] public PSOwnerData RequesterData { get; set; }
+		private PSOwnerData _requesterData;
 
-		public UnregisterTimetableRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requesterData")] 
+		public PSOwnerData RequesterData
+		{
+			get => GetProperty(ref _requesterData);
+			set => SetProperty(ref _requesterData, value);
+		}
+
+		public UnregisterTimetableRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

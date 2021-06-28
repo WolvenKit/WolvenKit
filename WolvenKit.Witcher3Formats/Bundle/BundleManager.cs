@@ -7,31 +7,23 @@ namespace WolvenKit.Bundles
 {
     public class BundleManager : WitcherArchiveManager
     {
+        public static string SerializationVersion => "1.0";
+        public override EArchiveType TypeName => EArchiveType.Bundle;
+        public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
+
         #region Constructors
 
         public BundleManager()
         {
-            Items = new Dictionary<string, List<IGameFile>>();
-            Bundles = new Dictionary<string, Bundle>();
-            FileList = new List<IGameFile>();
-            Extensions = new List<string>();
-            AutocompleteSource = new List<string>();
         }
 
         #endregion Constructors
 
-
-
         #region Properties
 
-        public static string SerializationVersion => "1.0";
-        public Dictionary<string, Bundle> Bundles { get; }
 
-        public override EArchiveType TypeName => EArchiveType.Bundle;
 
         #endregion Properties
-
-
 
         #region Methods
 
@@ -39,7 +31,7 @@ namespace WolvenKit.Bundles
         ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
-        public override void LoadAll(string exedir)
+        public override void LoadAll(string exedir, bool rebuildtree = true)
         {
             var di = new DirectoryInfo(exedir);
             if (!di.Exists)
@@ -76,7 +68,10 @@ namespace WolvenKit.Bundles
                 }
             }
 
-            RebuildRootNode();
+            if (rebuildtree)
+            {
+                RebuildRootNode();
+            }
         }
 
         /// <summary>
@@ -86,37 +81,50 @@ namespace WolvenKit.Bundles
         /// <param name="ispatch"></param>
         public override void LoadArchive(string filename, bool ispatch = false)
         {
-            if (Bundles.ContainsKey(filename))
+            if (Archives.ContainsKey(filename))
                 return;
 
             var bundle = new Bundle(filename);
-            foreach (KeyValuePair<string, BundleItem> item in bundle.Items)
+            //foreach (var item in bundle.Files)
+            //{
+            //    // add new key if the file isn't already in another bundle
+            //    if (!Items.ContainsKey(item.Key))
+            //        Items.TryAdd(item.Key, new List<IGameFile>());
+
+            //    // if file is already in another bundle
+            //    if (ispatch && Items[item.Key].Count() > 0)
+            //    {
+            //        // check if file is already in contentN directory (content0, content1 etc)
+            //        var filesInBundles = Items[item.Key].ToList();
+            //        var splits = filesInBundles.First().Archive.ArchiveAbsolutePath.Split(Path.DirectorySeparatorChar);
+            //        var contentdir = splits[splits.Length - 3];
+            //        if (contentdir.Contains("content"))
+            //        {
+            //            // then remove all other existing files
+            //            for (var i = 0; i < filesInBundles.Count; i++)
+            //            {
+            //                bundle.Patchedfiles.Add(filesInBundles[i]);
+            //                filesInBundles.RemoveAt(0);
+            //            }
+            //        }
+            //    }
+            //    Items[item.Key].Add(item.Value);
+            //}
+
+            foreach (var (key, value) in bundle.Files)
             {
                 // add new key if the file isn't already in another bundle
-                if (!Items.ContainsKey(item.Key))
-                    Items.TryAdd(item.Key, new List<IGameFile>());
-
-                // if file is already in another bundle
-                if (ispatch && Items[item.Key].Count > 0)
+                if (!Items.ContainsKey(key))
                 {
-                    // check if file is already in contentN directory (content0, content1 etc)
-                    List<IGameFile> filesInBundles = Items[item.Key];
-                    var splits = filesInBundles.First().Archive.ArchiveAbsolutePath.Split(Path.DirectorySeparatorChar);
-                    var contentdir = splits[splits.Length - 3];
-                    if (contentdir.Contains("content"))
-                    {
-                        // then remove all other existing files
-                        for (var i = 0; i < filesInBundles.Count; i++)
-                        {
-                            bundle.Patchedfiles.Add(filesInBundles[i]);
-                            filesInBundles.RemoveAt(0);
-                        }
-                    }
+                    Items.Add(key, new List<IGameFile>());
                 }
-                Items[item.Key].Add(item.Value);
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].Add(value);
+                }
             }
 
-            Bundles.Add(filename, bundle);
+            Archives.Add(filename, bundle);
         }
 
         /// <summary>
@@ -127,20 +135,25 @@ namespace WolvenKit.Bundles
         /// </param>
         public override void LoadModArchive(string filename)
         {
-            if (Bundles.ContainsKey(filename))
+            if (Archives.ContainsKey(filename))
                 return;
 
             var bundle = new Bundle(filename);
 
-            foreach (var item in bundle.Items)
+            foreach (var (key, value) in bundle.Files)
             {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Key))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<IGameFile>());
-
-                Items[GetModFolder(filename) + "\\" + item.Key].Add(item.Value);
+                // add new key if the file isn't already in another bundle
+                if (!Items.ContainsKey(key))
+                {
+                    Items.Add(key, new List<IGameFile>());
+                }
+                if (!Items[key].ToList().Contains(value))
+                {
+                    Items[key].Add(value);
+                }
             }
 
-            Bundles.Add(filename, bundle);
+            Archives.Add(filename, bundle);
         }
 
         /// <summary>

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_NPCState : animAnimFeature
 	{
-		[Ordinal(0)] [RED("state")] public CInt32 State { get; set; }
+		private CInt32 _state;
 
-		public animAnimFeature_NPCState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CInt32 State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		public animAnimFeature_NPCState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

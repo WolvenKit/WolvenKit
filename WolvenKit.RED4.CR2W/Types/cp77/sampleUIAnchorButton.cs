@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class sampleUIAnchorButton : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("anchorLocation")] public CEnum<inkEAnchor> AnchorLocation { get; set; }
+		private CEnum<inkEAnchor> _anchorLocation;
 
-		public sampleUIAnchorButton(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("anchorLocation")] 
+		public CEnum<inkEAnchor> AnchorLocation
+		{
+			get => GetProperty(ref _anchorLocation);
+			set => SetProperty(ref _anchorLocation, value);
+		}
+
+		public sampleUIAnchorButton(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

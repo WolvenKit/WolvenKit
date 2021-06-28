@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectTrackItemChromaticAberration : effectTrackItem
 	{
-		[Ordinal(3)] [RED("override")] public CBool Override { get; set; }
-		[Ordinal(4)] [RED("chromaticAberrationOffset")] public effectEffectParameterEvaluatorFloat ChromaticAberrationOffset { get; set; }
-		[Ordinal(5)] [RED("chromaticAberrationExp")] public effectEffectParameterEvaluatorFloat ChromaticAberrationExp { get; set; }
+		private CBool _override;
+		private effectEffectParameterEvaluatorFloat _chromaticAberrationOffset;
+		private effectEffectParameterEvaluatorFloat _chromaticAberrationExp;
 
-		public effectTrackItemChromaticAberration(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("override")] 
+		public CBool Override
+		{
+			get => GetProperty(ref _override);
+			set => SetProperty(ref _override, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("chromaticAberrationOffset")] 
+		public effectEffectParameterEvaluatorFloat ChromaticAberrationOffset
+		{
+			get => GetProperty(ref _chromaticAberrationOffset);
+			set => SetProperty(ref _chromaticAberrationOffset, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("chromaticAberrationExp")] 
+		public effectEffectParameterEvaluatorFloat ChromaticAberrationExp
+		{
+			get => GetProperty(ref _chromaticAberrationExp);
+			set => SetProperty(ref _chromaticAberrationExp, value);
+		}
+
+		public effectTrackItemChromaticAberration(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

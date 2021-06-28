@@ -7,14 +7,70 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entEffectDesc : ISerializable
 	{
-		[Ordinal(0)] [RED("id")] public CRUID Id { get; set; }
-		[Ordinal(1)] [RED("effectName")] public CName EffectName { get; set; }
-		[Ordinal(2)] [RED("effect")] public raRef<worldEffect> Effect { get; set; }
-		[Ordinal(3)] [RED("compiledEffectInfo")] public worldCompiledEffectInfo CompiledEffectInfo { get; set; }
-		[Ordinal(4)] [RED("autoSpawnTag")] public CName AutoSpawnTag { get; set; }
-		[Ordinal(5)] [RED("isAutoSpawn")] public CBool IsAutoSpawn { get; set; }
-		[Ordinal(6)] [RED("randomWeight")] public CUInt8 RandomWeight { get; set; }
+		private CRUID _id;
+		private CName _effectName;
+		private raRef<worldEffect> _effect;
+		private worldCompiledEffectInfo _compiledEffectInfo;
+		private CName _autoSpawnTag;
+		private CBool _isAutoSpawn;
+		private CUInt8 _randomWeight;
 
-		public entEffectDesc(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("id")] 
+		public CRUID Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("effectName")] 
+		public CName EffectName
+		{
+			get => GetProperty(ref _effectName);
+			set => SetProperty(ref _effectName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("effect")] 
+		public raRef<worldEffect> Effect
+		{
+			get => GetProperty(ref _effect);
+			set => SetProperty(ref _effect, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("compiledEffectInfo")] 
+		public worldCompiledEffectInfo CompiledEffectInfo
+		{
+			get => GetProperty(ref _compiledEffectInfo);
+			set => SetProperty(ref _compiledEffectInfo, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("autoSpawnTag")] 
+		public CName AutoSpawnTag
+		{
+			get => GetProperty(ref _autoSpawnTag);
+			set => SetProperty(ref _autoSpawnTag, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("isAutoSpawn")] 
+		public CBool IsAutoSpawn
+		{
+			get => GetProperty(ref _isAutoSpawn);
+			set => SetProperty(ref _isAutoSpawn, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("randomWeight")] 
+		public CUInt8 RandomWeight
+		{
+			get => GetProperty(ref _randomWeight);
+			set => SetProperty(ref _randomWeight, value);
+		}
+
+		public entEffectDesc(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

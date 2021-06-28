@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LibTreeCTreeReference : ISerializable
 	{
-		[Ordinal(0)] [RED("TreeDefinition")] public rRef<LibTreeCTreeResource> TreeDefinition { get; set; }
-		[Ordinal(1)] [RED("parameters")] public LibTreeParameterList Parameters { get; set; }
+		private rRef<LibTreeCTreeResource> _treeDefinition;
+		private LibTreeParameterList _parameters;
 
-		public LibTreeCTreeReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("TreeDefinition")] 
+		public rRef<LibTreeCTreeResource> TreeDefinition
+		{
+			get => GetProperty(ref _treeDefinition);
+			set => SetProperty(ref _treeDefinition, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("parameters")] 
+		public LibTreeParameterList Parameters
+		{
+			get => GetProperty(ref _parameters);
+			set => SetProperty(ref _parameters, value);
+		}
+
+		public LibTreeCTreeReference(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

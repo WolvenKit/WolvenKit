@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_SceneItem : animAnimEvent
 	{
-		[Ordinal(3)] [RED("boneName")] public CName BoneName { get; set; }
+		private CName _boneName;
 
-		public animAnimEvent_SceneItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("boneName")] 
+		public CName BoneName
+		{
+			get => GetProperty(ref _boneName);
+			set => SetProperty(ref _boneName, value);
+		}
+
+		public animAnimEvent_SceneItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

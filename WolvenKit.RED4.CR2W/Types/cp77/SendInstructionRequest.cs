@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SendInstructionRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("jobs")] public CArray<HUDJob> Jobs { get; set; }
+		private CArray<HUDJob> _jobs;
 
-		public SendInstructionRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("jobs")] 
+		public CArray<HUDJob> Jobs
+		{
+			get => GetProperty(ref _jobs);
+			set => SetProperty(ref _jobs, value);
+		}
+
+		public SendInstructionRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

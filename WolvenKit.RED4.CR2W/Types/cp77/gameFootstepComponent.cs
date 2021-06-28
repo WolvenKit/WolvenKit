@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameFootstepComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("tweakDBID")] public TweakDBID TweakDBID { get; set; }
-		[Ordinal(4)] [RED("leftFootSlot")] public CName LeftFootSlot { get; set; }
-		[Ordinal(5)] [RED("rightFootSlot")] public CName RightFootSlot { get; set; }
+		private TweakDBID _tweakDBID;
+		private CName _leftFootSlot;
+		private CName _rightFootSlot;
 
-		public gameFootstepComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("tweakDBID")] 
+		public TweakDBID TweakDBID
+		{
+			get => GetProperty(ref _tweakDBID);
+			set => SetProperty(ref _tweakDBID, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("leftFootSlot")] 
+		public CName LeftFootSlot
+		{
+			get => GetProperty(ref _leftFootSlot);
+			set => SetProperty(ref _leftFootSlot, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("rightFootSlot")] 
+		public CName RightFootSlot
+		{
+			get => GetProperty(ref _rightFootSlot);
+			set => SetProperty(ref _rightFootSlot, value);
+		}
+
+		public gameFootstepComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

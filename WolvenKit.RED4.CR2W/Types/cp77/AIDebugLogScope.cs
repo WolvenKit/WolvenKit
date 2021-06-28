@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIDebugLogScope : CVariable
 	{
-		[Ordinal(0)] [RED("index")] public CUInt32 Index { get; set; }
-		[Ordinal(1)] [RED("id")] public CUInt32 Id { get; set; }
+		private CUInt32 _index;
+		private CUInt32 _id;
 
-		public AIDebugLogScope(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("index")] 
+		public CUInt32 Index
+		{
+			get => GetProperty(ref _index);
+			set => SetProperty(ref _index, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("id")] 
+		public CUInt32 Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		public AIDebugLogScope(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

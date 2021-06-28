@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_WallRun : animAnimFeature
 	{
-		[Ordinal(0)] [RED("wallOnRightSide")] public CBool WallOnRightSide { get; set; }
-		[Ordinal(1)] [RED("wallPosition")] public Vector4 WallPosition { get; set; }
-		[Ordinal(2)] [RED("wallNormal")] public Vector4 WallNormal { get; set; }
+		private CBool _wallOnRightSide;
+		private Vector4 _wallPosition;
+		private Vector4 _wallNormal;
 
-		public animAnimFeature_WallRun(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("wallOnRightSide")] 
+		public CBool WallOnRightSide
+		{
+			get => GetProperty(ref _wallOnRightSide);
+			set => SetProperty(ref _wallOnRightSide, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("wallPosition")] 
+		public Vector4 WallPosition
+		{
+			get => GetProperty(ref _wallPosition);
+			set => SetProperty(ref _wallPosition, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("wallNormal")] 
+		public Vector4 WallNormal
+		{
+			get => GetProperty(ref _wallNormal);
+			set => SetProperty(ref _wallNormal, value);
+		}
+
+		public animAnimFeature_WallRun(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

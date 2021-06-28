@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataAISubActionGameplayLogicPackage_Record : gamedataAISubAction_Record
 	{
-		public gamedataAISubActionGameplayLogicPackage_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gamedataAISubActionGameplayLogicPackage_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ForwardAction : redEvent
 	{
-		[Ordinal(0)] [RED("requester")] public gamePersistentID Requester { get; set; }
-		[Ordinal(1)] [RED("actionToForward")] public CHandle<ScriptableDeviceAction> ActionToForward { get; set; }
+		private gamePersistentID _requester;
+		private CHandle<ScriptableDeviceAction> _actionToForward;
 
-		public ForwardAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requester")] 
+		public gamePersistentID Requester
+		{
+			get => GetProperty(ref _requester);
+			set => SetProperty(ref _requester, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("actionToForward")] 
+		public CHandle<ScriptableDeviceAction> ActionToForward
+		{
+			get => GetProperty(ref _actionToForward);
+			set => SetProperty(ref _actionToForward, value);
+		}
+
+		public ForwardAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

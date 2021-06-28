@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleGlassDestructionEvent : redEvent
 	{
-		[Ordinal(0)] [RED("glassName")] public CName GlassName { get; set; }
+		private CName _glassName;
 
-		public vehicleGlassDestructionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("glassName")] 
+		public CName GlassName
+		{
+			get => GetProperty(ref _glassName);
+			set => SetProperty(ref _glassName, value);
+		}
+
+		public vehicleGlassDestructionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

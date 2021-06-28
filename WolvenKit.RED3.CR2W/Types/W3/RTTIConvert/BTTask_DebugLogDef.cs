@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("taskName")] 		public CString TaskName { get; set;}
 
-		public BTTask_DebugLogDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTTask_DebugLogDef(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTTask_DebugLogDef(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

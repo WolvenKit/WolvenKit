@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetDetectionMultiplier : redEvent
 	{
-		[Ordinal(0)] [RED("multiplier")] public CFloat Multiplier { get; set; }
+		private CFloat _multiplier;
 
-		public SetDetectionMultiplier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("multiplier")] 
+		public CFloat Multiplier
+		{
+			get => GetProperty(ref _multiplier);
+			set => SetProperty(ref _multiplier, value);
+		}
+
+		public SetDetectionMultiplier(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InteractionMappinController : gameuiInteractionMappinController
 	{
-		[Ordinal(11)] [RED("mappin")] public wCHandle<gamemappinsInteractionMappin> Mappin { get; set; }
-		[Ordinal(12)] [RED("root")] public wCHandle<inkWidget> Root { get; set; }
-		[Ordinal(13)] [RED("isConnected")] public CBool IsConnected { get; set; }
+		private wCHandle<gamemappinsInteractionMappin> _mappin;
+		private wCHandle<inkWidget> _root;
+		private CBool _isConnected;
 
-		public InteractionMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(11)] 
+		[RED("mappin")] 
+		public wCHandle<gamemappinsInteractionMappin> Mappin
+		{
+			get => GetProperty(ref _mappin);
+			set => SetProperty(ref _mappin, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("root")] 
+		public wCHandle<inkWidget> Root
+		{
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("isConnected")] 
+		public CBool IsConnected
+		{
+			get => GetProperty(ref _isConnected);
+			set => SetProperty(ref _isConnected, value);
+		}
+
+		public InteractionMappinController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

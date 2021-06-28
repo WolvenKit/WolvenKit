@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("cachedCombatMessages", 2,0)] 		public CArray<SCachedCombatMessage> CachedCombatMessages { get; set;}
 
-		public W3GameLog(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3GameLog(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3GameLog(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

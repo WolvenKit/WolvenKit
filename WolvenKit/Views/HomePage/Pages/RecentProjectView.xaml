@@ -5,6 +5,7 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+
     <catel:UserControl.Resources>
         <ResourceDictionary>
             <ControlTemplate x:Key="GroupBoxBaseTopTemplate" TargetType="GroupBox">

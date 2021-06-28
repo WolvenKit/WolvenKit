@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_InputSwitch : animAnimNode_BaseSwitch
 	{
-		[Ordinal(16)] [RED("selectIntNode")] public animIntLink SelectIntNode { get; set; }
-		[Ordinal(17)] [RED("selectFloatNode")] public animFloatLink SelectFloatNode { get; set; }
+		private animIntLink _selectIntNode;
+		private animFloatLink _selectFloatNode;
 
-		public animAnimNode_InputSwitch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(16)] 
+		[RED("selectIntNode")] 
+		public animIntLink SelectIntNode
+		{
+			get => GetProperty(ref _selectIntNode);
+			set => SetProperty(ref _selectIntNode, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("selectFloatNode")] 
+		public animFloatLink SelectFloatNode
+		{
+			get => GetProperty(ref _selectFloatNode);
+			set => SetProperty(ref _selectFloatNode, value);
+		}
+
+		public animAnimNode_InputSwitch(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

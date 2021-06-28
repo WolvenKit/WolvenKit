@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entAnimInputSetterUsesSleepMode : redEvent
 	{
-		[Ordinal(0)] [RED("value")] public CBool Value { get; set; }
+		private CBool _value;
 
-		public entAnimInputSetterUsesSleepMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("value")] 
+		public CBool Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		public entAnimInputSetterUsesSleepMode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

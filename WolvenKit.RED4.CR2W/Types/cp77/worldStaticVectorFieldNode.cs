@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldStaticVectorFieldNode : worldNode
 	{
-		[Ordinal(4)] [RED("direction")] public Vector3 Direction { get; set; }
-		[Ordinal(5)] [RED("autoHideDistance")] public CFloat AutoHideDistance { get; set; }
+		private Vector3 _direction;
+		private CFloat _autoHideDistance;
 
-		public worldStaticVectorFieldNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("direction")] 
+		public Vector3 Direction
+		{
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("autoHideDistance")] 
+		public CFloat AutoHideDistance
+		{
+			get => GetProperty(ref _autoHideDistance);
+			set => SetProperty(ref _autoHideDistance, value);
+		}
+
+		public worldStaticVectorFieldNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

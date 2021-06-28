@@ -15,11 +15,12 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(0)] [RED] public CFloat x { get; set; }
         [Ordinal(1)] [RED] public CFloat y { get; set; }
 
-        public SVector2D(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SVector2D(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is SVector2D v)
             {
                 this.x = v.x;
@@ -29,15 +30,10 @@ namespace WolvenKit.RED3.CR2W.Types
             return this;
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new SVector2D(cr2w, parent, name);
-        }
-
 
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "V2[{0:0.00}, {1:0.00}]", x.val, y.val);
+            return String.Format(CultureInfo.InvariantCulture, "V2[{0:0.00}, {1:0.00}]", x.Value, y.Value);
         }
     }
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TechQA_ImageSwappingButtonController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("textWidgetPath")] public CName TextWidgetPath { get; set; }
-		[Ordinal(2)] [RED("textWidget")] public wCHandle<inkTextWidget> TextWidget { get; set; }
+		private CName _textWidgetPath;
+		private wCHandle<inkTextWidget> _textWidget;
 
-		public TechQA_ImageSwappingButtonController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("textWidgetPath")] 
+		public CName TextWidgetPath
+		{
+			get => GetProperty(ref _textWidgetPath);
+			set => SetProperty(ref _textWidgetPath, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("textWidget")] 
+		public wCHandle<inkTextWidget> TextWidget
+		{
+			get => GetProperty(ref _textWidget);
+			set => SetProperty(ref _textWidget, value);
+		}
+
+		public TechQA_ImageSwappingButtonController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using WolvenKit.RED3.CR2W.Reflection;
 using static WolvenKit.RED3.CR2W.Types.Enums;
 using FastMember;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -20,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1002)] [REDBuffer(true)] public CCompressedBuffer<SBufferwaypointsGroup> WaypointsGroups { get; set; }
         [Ordinal(1003)] [REDBuffer(true)] public CCompressedBuffer<CUInt16> Indexes { get; set; }
 
-        public CWayPointsCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CWayPointsCollection(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Waypoints = new CCompressedBuffer<SBufferWaypoints>(cr2w, this, nameof(Waypoints)) { IsSerialized = true };
             ComponentsMappings = new CCompressedBuffer<SBufferComponentsMappings>(cr2w, this, nameof(ComponentsMappings)) { IsSerialized = true };
@@ -102,9 +103,9 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(2)][RED] public CInt32 componentsMapping { get; set; }
 
 
-        public SBufferWaypoints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SBufferWaypoints(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferWaypoints(cr2w, parent, name);
+        
     }
     #endregion
 
@@ -116,9 +117,9 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(2)] [RED] public CGUID guid2 { get; set; }
 
 
-        public SBufferComponentsMappings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SBufferComponentsMappings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferComponentsMappings(cr2w, parent, name);
+        
     }
     #endregion
 
@@ -132,8 +133,8 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(4)] [RED] public CUInt16 groupIdx { get; set; }
 
 
-        public SBufferwaypointsGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SBufferwaypointsGroup(cr2w, parent, name);
+        public SBufferwaypointsGroup(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        
     }
     #endregion
 

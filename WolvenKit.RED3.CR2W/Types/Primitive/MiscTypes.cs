@@ -11,39 +11,34 @@ namespace WolvenKit.RED3.CR2W.Types
     public class DataBuffer : CVariable
     {
         [REDBuffer] public CByteArray Bufferdata { get; set; }
-        public DataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DataBuffer(cr2w, parent, name);
+        public DataBuffer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SharedDataBuffer : CVariable
     {
         [REDBuffer] public CByteArray Bufferdata { get; set; }
-        public SharedDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SharedDataBuffer(cr2w, parent, name);
+        public SharedDataBuffer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class DeferredDataBuffer : CVariable
     {
         [REDBuffer] public CInt16 Bufferdata { get; set; }
-        public DeferredDataBuffer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {  }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new DeferredDataBuffer(cr2w, parent, name);
+        public DeferredDataBuffer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) {  }
     }
 
     //FIXME is that an ID?
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class GlobalVisID : CVariable
     {
-        public GlobalVisID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new GlobalVisID(cr2w, parent, name);
+        public GlobalVisID(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class SMeshTypeResourceLODLevel : CVariable
     {
         [REDBuffer] public CFloat ResourceLODLevel { get; set; }
-        public SMeshTypeResourceLODLevel(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SMeshTypeResourceLODLevel(cr2w, parent, name);
+        public SMeshTypeResourceLODLevel(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

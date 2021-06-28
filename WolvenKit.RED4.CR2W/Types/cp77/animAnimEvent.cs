@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent : ISerializable
 	{
-		[Ordinal(0)] [RED("startFrame")] public CUInt32 StartFrame { get; set; }
-		[Ordinal(1)] [RED("durationInFrames")] public CUInt32 DurationInFrames { get; set; }
-		[Ordinal(2)] [RED("eventName")] public CName EventName { get; set; }
+		private CUInt32 _startFrame;
+		private CUInt32 _durationInFrames;
+		private CName _eventName;
 
-		public animAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("startFrame")] 
+		public CUInt32 StartFrame
+		{
+			get => GetProperty(ref _startFrame);
+			set => SetProperty(ref _startFrame, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("durationInFrames")] 
+		public CUInt32 DurationInFrames
+		{
+			get => GetProperty(ref _durationInFrames);
+			set => SetProperty(ref _durationInFrames, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("eventName")] 
+		public CName EventName
+		{
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
+		}
+
+		public animAnimEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

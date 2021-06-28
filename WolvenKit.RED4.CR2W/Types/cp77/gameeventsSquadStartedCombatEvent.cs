@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsSquadStartedCombatEvent : redEvent
 	{
-		[Ordinal(0)] [RED("started")] public CBool Started { get; set; }
+		private CBool _started;
 
-		public gameeventsSquadStartedCombatEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("started")] 
+		public CBool Started
+		{
+			get => GetProperty(ref _started);
+			set => SetProperty(ref _started, value);
+		}
+
+		public gameeventsSquadStartedCombatEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

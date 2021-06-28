@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SGenericDevicePersistentData : CVariable
 	{
-		[Ordinal(0)] [RED("genericActions")] public SGenericDeviceActionsData GenericActions { get; set; }
-		[Ordinal(1)] [RED("customActions")] public SCustomDeviceActionsData CustomActions { get; set; }
+		private SGenericDeviceActionsData _genericActions;
+		private SCustomDeviceActionsData _customActions;
 
-		public SGenericDevicePersistentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("genericActions")] 
+		public SGenericDeviceActionsData GenericActions
+		{
+			get => GetProperty(ref _genericActions);
+			set => SetProperty(ref _genericActions, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("customActions")] 
+		public SCustomDeviceActionsData CustomActions
+		{
+			get => GetProperty(ref _customActions);
+			set => SetProperty(ref _customActions, value);
+		}
+
+		public SGenericDevicePersistentData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

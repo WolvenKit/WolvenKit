@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCHitReactionTypePrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("listener")] public CHandle<PuppetListener> Listener { get; set; }
+		private CHandle<PuppetListener> _listener;
 
-		public NPCHitReactionTypePrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("listener")] 
+		public CHandle<PuppetListener> Listener
+		{
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
+		}
+
+		public NPCHitReactionTypePrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

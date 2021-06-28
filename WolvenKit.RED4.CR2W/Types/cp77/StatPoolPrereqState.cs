@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatPoolPrereqState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("listener")] public CHandle<BaseStatPoolPrereqListener> Listener { get; set; }
+		private CHandle<BaseStatPoolPrereqListener> _listener;
 
-		public StatPoolPrereqState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("listener")] 
+		public CHandle<BaseStatPoolPrereqListener> Listener
+		{
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
+		}
+
+		public StatPoolPrereqState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

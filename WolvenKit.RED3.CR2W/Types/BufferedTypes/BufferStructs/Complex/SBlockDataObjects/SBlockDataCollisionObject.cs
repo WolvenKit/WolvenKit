@@ -18,6 +18,6 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(2)] [RED] public CUInt64 collisionMask { get; set; }
         [Ordinal(3)] [RED] public CUInt64 collisionGroup { get; set; }
 
-        public SBlockDataCollisionObject(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public SBlockDataCollisionObject(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

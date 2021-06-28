@@ -39,9 +39,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(14)] [RED("HANGING_AREA_NAME")] 		public CName HANGING_AREA_NAME { get; set;}
 
-		public CBeehiveEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBeehiveEntity(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBeehiveEntity(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

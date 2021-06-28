@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSmartObjectTransformDictionary : ISerializable
 	{
-		[Ordinal(0)] [RED("transforms")] public CArray<gameSmartObjectTransformDictionaryTransformEntry> Transforms { get; set; }
+		private CArray<gameSmartObjectTransformDictionaryTransformEntry> _transforms;
 
-		public gameSmartObjectTransformDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("transforms")] 
+		public CArray<gameSmartObjectTransformDictionaryTransformEntry> Transforms
+		{
+			get => GetProperty(ref _transforms);
+			set => SetProperty(ref _transforms, value);
+		}
+
+		public gameSmartObjectTransformDictionary(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

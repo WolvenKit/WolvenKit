@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SquadMemberBaseComponent : gameSquadMemberComponent
 	{
-		[Ordinal(4)] [RED("baseSquadRecord")] public wCHandle<gamedataAISquadParams_Record> BaseSquadRecord { get; set; }
+		private wCHandle<gamedataAISquadParams_Record> _baseSquadRecord;
 
-		public SquadMemberBaseComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("baseSquadRecord")] 
+		public wCHandle<gamedataAISquadParams_Record> BaseSquadRecord
+		{
+			get => GetProperty(ref _baseSquadRecord);
+			set => SetProperty(ref _baseSquadRecord, value);
+		}
+
+		public SquadMemberBaseComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

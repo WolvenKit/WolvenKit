@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UIScriptableSystemSetBackpackFilter : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("filterMode")] public CInt32 FilterMode { get; set; }
+		private CInt32 _filterMode;
 
-		public UIScriptableSystemSetBackpackFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("filterMode")] 
+		public CInt32 FilterMode
+		{
+			get => GetProperty(ref _filterMode);
+			set => SetProperty(ref _filterMode, value);
+		}
+
+		public UIScriptableSystemSetBackpackFilter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

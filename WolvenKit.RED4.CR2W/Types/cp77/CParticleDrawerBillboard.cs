@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleDrawerBillboard : IParticleDrawer
 	{
-		[Ordinal(1)] [RED("isGPUBased")] public CBool IsGPUBased { get; set; }
+		private CBool _isGPUBased;
 
-		public CParticleDrawerBillboard(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("isGPUBased")] 
+		public CBool IsGPUBased
+		{
+			get => GetProperty(ref _isGPUBased);
+			set => SetProperty(ref _isGPUBased, value);
+		}
+
+		public CParticleDrawerBillboard(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

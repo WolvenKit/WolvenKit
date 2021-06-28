@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioPlayerInVehicleASTCD : audioAudioStateTransitionConditionData
 	{
-		[Ordinal(1)] [RED("isInside")] public CBool IsInside { get; set; }
+		private CBool _isInside;
 
-		public audioPlayerInVehicleASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("isInside")] 
+		public CBool IsInside
+		{
+			get => GetProperty(ref _isInside);
+			set => SetProperty(ref _isInside, value);
+		}
+
+		public audioPlayerInVehicleASTCD(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

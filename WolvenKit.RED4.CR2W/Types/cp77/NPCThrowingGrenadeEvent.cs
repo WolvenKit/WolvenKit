@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCThrowingGrenadeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("target")] public wCHandle<gameObject> Target { get; set; }
+		private wCHandle<gameObject> _target;
 
-		public NPCThrowingGrenadeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("target")] 
+		public wCHandle<gameObject> Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		public NPCThrowingGrenadeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

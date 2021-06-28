@@ -1,8 +1,9 @@
 using CsvHelper.Configuration;
+using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.Models
 {
-    public class CBoolMap : ClassMap<CR2W.Types.CBool>
+    public class CBoolMap : ClassMap<CBool>
     {
         #region Constructors
 
@@ -11,16 +12,16 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CFloatMap : ClassMap<CR2W.Types.CFloat>
+    public class CFloatMap : ClassMap<CFloat>
     {
         #region Constructors
 
-        public CFloatMap() => Map(m => m.val);
+        public CFloatMap() => Map(m => m.Value);
 
         #endregion Constructors
     }
 
-    public class CInt16Map : ClassMap<CR2W.Types.CInt16>
+    public class CInt16Map : ClassMap<CInt16>
     {
         #region Constructors
 
@@ -29,7 +30,7 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CInt32Map : ClassMap<CR2W.Types.CInt32>
+    public class CInt32Map : ClassMap<CInt32>
     {
         #region Constructors
 
@@ -38,7 +39,7 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CInt64Map : ClassMap<CR2W.Types.CInt64>
+    public class CInt64Map : ClassMap<CInt64>
     {
         #region Constructors
 
@@ -47,7 +48,7 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CInt8Map : ClassMap<CR2W.Types.CInt8>
+    public class CInt8Map : ClassMap<CInt8>
     {
         #region Constructors
 
@@ -56,7 +57,7 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CNameMap : ClassMap<CR2W.Types.CName>
+    public class CNameMap : ClassMap<CName>
     {
         #region Constructors
 
@@ -65,16 +66,16 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CStringMap : ClassMap<CR2W.Types.CString>
+    public class CStringMap : ClassMap<CString>
     {
         #region Constructors
 
-        public CStringMap() => Map(m => m.val);
+        public CStringMap() => Map(m => m.Value);
 
         #endregion Constructors
     }
 
-    public class CUInt16Map : ClassMap<CR2W.Types.CUInt16>
+    public class CUInt16Map : ClassMap<CUInt16>
     {
         #region Constructors
 
@@ -83,7 +84,7 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CUInt32Map : ClassMap<CR2W.Types.CUInt32>
+    public class CUInt32Map : ClassMap<CUInt32>
     {
         #region Constructors
 
@@ -92,7 +93,7 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CUInt64Map : ClassMap<CR2W.Types.CUInt64>
+    public class CUInt64Map : ClassMap<CUInt64>
     {
         #region Constructors
 
@@ -101,7 +102,7 @@ namespace WolvenKit.Models
         #endregion Constructors
     }
 
-    public class CUInt8Map : ClassMap<CR2W.Types.CUInt8>
+    public class CUInt8Map : ClassMap<CUInt8>
     {
         #region Constructors
 

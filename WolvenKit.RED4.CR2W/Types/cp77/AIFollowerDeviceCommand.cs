@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIFollowerDeviceCommand : AIFollowerCommand
 	{
-		[Ordinal(5)] [RED("target")] public wCHandle<gameObject> Target { get; set; }
-		[Ordinal(6)] [RED("overrideMovementTarget")] public wCHandle<gameObject> OverrideMovementTarget { get; set; }
+		private wCHandle<gameObject> _target;
+		private wCHandle<gameObject> _overrideMovementTarget;
 
-		public AIFollowerDeviceCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("target")] 
+		public wCHandle<gameObject> Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("overrideMovementTarget")] 
+		public wCHandle<gameObject> OverrideMovementTarget
+		{
+			get => GetProperty(ref _overrideMovementTarget);
+			set => SetProperty(ref _overrideMovementTarget, value);
+		}
+
+		public AIFollowerDeviceCommand(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

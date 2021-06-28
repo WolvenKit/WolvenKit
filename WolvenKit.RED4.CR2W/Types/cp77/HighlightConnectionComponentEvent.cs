@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HighlightConnectionComponentEvent : redEvent
 	{
-		[Ordinal(0)] [RED("IsHighlightON")] public CBool IsHighlightON { get; set; }
+		private CBool _isHighlightON;
 
-		public HighlightConnectionComponentEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("IsHighlightON")] 
+		public CBool IsHighlightON
+		{
+			get => GetProperty(ref _isHighlightON);
+			set => SetProperty(ref _isHighlightON, value);
+		}
+
+		public HighlightConnectionComponentEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

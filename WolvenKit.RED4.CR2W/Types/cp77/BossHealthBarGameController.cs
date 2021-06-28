@@ -7,16 +7,88 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BossHealthBarGameController : gameuiHUDGameController
 	{
-		[Ordinal(9)] [RED("healthControllerRef")] public inkWidgetReference HealthControllerRef { get; set; }
-		[Ordinal(10)] [RED("healthPersentage")] public inkTextWidgetReference HealthPersentage { get; set; }
-		[Ordinal(11)] [RED("bossName")] public inkTextWidgetReference BossName { get; set; }
-		[Ordinal(12)] [RED("statListener")] public CHandle<BossHealthStatListener> StatListener { get; set; }
-		[Ordinal(13)] [RED("boss")] public wCHandle<NPCPuppet> Boss { get; set; }
-		[Ordinal(14)] [RED("healthController")] public wCHandle<NameplateBarLogicController> HealthController { get; set; }
-		[Ordinal(15)] [RED("root")] public CHandle<inkWidget> Root { get; set; }
-		[Ordinal(16)] [RED("foldAnimation")] public CHandle<inkanimProxy> FoldAnimation { get; set; }
-		[Ordinal(17)] [RED("bossPuppets")] public CArray<wCHandle<NPCPuppet>> BossPuppets { get; set; }
+		private inkWidgetReference _healthControllerRef;
+		private inkTextWidgetReference _healthPersentage;
+		private inkTextWidgetReference _bossName;
+		private CHandle<BossHealthStatListener> _statListener;
+		private wCHandle<NPCPuppet> _boss;
+		private wCHandle<NameplateBarLogicController> _healthController;
+		private wCHandle<inkWidget> _root;
+		private CHandle<inkanimProxy> _foldAnimation;
+		private CArray<wCHandle<NPCPuppet>> _bossPuppets;
 
-		public BossHealthBarGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(9)] 
+		[RED("healthControllerRef")] 
+		public inkWidgetReference HealthControllerRef
+		{
+			get => GetProperty(ref _healthControllerRef);
+			set => SetProperty(ref _healthControllerRef, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("healthPersentage")] 
+		public inkTextWidgetReference HealthPersentage
+		{
+			get => GetProperty(ref _healthPersentage);
+			set => SetProperty(ref _healthPersentage, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("bossName")] 
+		public inkTextWidgetReference BossName
+		{
+			get => GetProperty(ref _bossName);
+			set => SetProperty(ref _bossName, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("statListener")] 
+		public CHandle<BossHealthStatListener> StatListener
+		{
+			get => GetProperty(ref _statListener);
+			set => SetProperty(ref _statListener, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("boss")] 
+		public wCHandle<NPCPuppet> Boss
+		{
+			get => GetProperty(ref _boss);
+			set => SetProperty(ref _boss, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("healthController")] 
+		public wCHandle<NameplateBarLogicController> HealthController
+		{
+			get => GetProperty(ref _healthController);
+			set => SetProperty(ref _healthController, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("root")] 
+		public wCHandle<inkWidget> Root
+		{
+			get => GetProperty(ref _root);
+			set => SetProperty(ref _root, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("foldAnimation")] 
+		public CHandle<inkanimProxy> FoldAnimation
+		{
+			get => GetProperty(ref _foldAnimation);
+			set => SetProperty(ref _foldAnimation, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("bossPuppets")] 
+		public CArray<wCHandle<NPCPuppet>> BossPuppets
+		{
+			get => GetProperty(ref _bossPuppets);
+			set => SetProperty(ref _bossPuppets, value);
+		}
+
+		public BossHealthBarGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

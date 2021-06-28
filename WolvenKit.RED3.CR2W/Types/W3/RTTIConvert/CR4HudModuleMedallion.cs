@@ -29,9 +29,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("m_medallionThreshold")] 		public CFloat M_medallionThreshold { get; set;}
 
-		public CR4HudModuleMedallion(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleMedallion(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleMedallion(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

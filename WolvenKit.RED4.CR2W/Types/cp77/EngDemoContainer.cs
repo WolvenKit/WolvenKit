@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EngDemoContainer : BaseSkillCheckContainer
 	{
-		[Ordinal(3)] [RED("engineeringCheck")] public CHandle<EngineeringSkillCheck> EngineeringCheck { get; set; }
-		[Ordinal(4)] [RED("demolitionCheck")] public CHandle<DemolitionSkillCheck> DemolitionCheck { get; set; }
+		private CHandle<EngineeringSkillCheck> _engineeringCheck;
+		private CHandle<DemolitionSkillCheck> _demolitionCheck;
 
-		public EngDemoContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("engineeringCheck")] 
+		public CHandle<EngineeringSkillCheck> EngineeringCheck
+		{
+			get => GetProperty(ref _engineeringCheck);
+			set => SetProperty(ref _engineeringCheck, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("demolitionCheck")] 
+		public CHandle<DemolitionSkillCheck> DemolitionCheck
+		{
+			get => GetProperty(ref _demolitionCheck);
+			set => SetProperty(ref _demolitionCheck, value);
+		}
+
+		public EngDemoContainer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

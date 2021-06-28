@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCombatNodeParams_SwitchWeapon : questCombatNodeParams
 	{
-		[Ordinal(0)] [RED("mode")] public CEnum<questSwitchWeaponModes> Mode { get; set; }
+		private CEnum<questSwitchWeaponModes> _mode;
 
-		public questCombatNodeParams_SwitchWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mode")] 
+		public CEnum<questSwitchWeaponModes> Mode
+		{
+			get => GetProperty(ref _mode);
+			set => SetProperty(ref _mode, value);
+		}
+
+		public questCombatNodeParams_SwitchWeapon(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

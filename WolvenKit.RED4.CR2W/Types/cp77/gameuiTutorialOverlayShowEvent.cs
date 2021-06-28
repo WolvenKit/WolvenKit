@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiTutorialOverlayShowEvent : redEvent
 	{
-		[Ordinal(0)] [RED("itemName")] public CName ItemName { get; set; }
+		private CName _itemName;
 
-		public gameuiTutorialOverlayShowEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemName")] 
+		public CName ItemName
+		{
+			get => GetProperty(ref _itemName);
+			set => SetProperty(ref _itemName, value);
+		}
+
+		public gameuiTutorialOverlayShowEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TryStopMovingOnTrafficLane : AIbehaviortaskScript
 	{
-		public TryStopMovingOnTrafficLane(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public TryStopMovingOnTrafficLane(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

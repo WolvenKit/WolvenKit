@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InputProgressView : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("TargetImage")] public wCHandle<inkImageWidget> TargetImage { get; set; }
-		[Ordinal(2)] [RED("ProgressPercent")] public CInt32 ProgressPercent { get; set; }
-		[Ordinal(3)] [RED("PartName")] public CString PartName { get; set; }
+		private wCHandle<inkImageWidget> _targetImage;
+		private CInt32 _progressPercent;
+		private CString _partName;
 
-		public InputProgressView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("TargetImage")] 
+		public wCHandle<inkImageWidget> TargetImage
+		{
+			get => GetProperty(ref _targetImage);
+			set => SetProperty(ref _targetImage, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("ProgressPercent")] 
+		public CInt32 ProgressPercent
+		{
+			get => GetProperty(ref _progressPercent);
+			set => SetProperty(ref _progressPercent, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("PartName")] 
+		public CString PartName
+		{
+			get => GetProperty(ref _partName);
+			set => SetProperty(ref _partName, value);
+		}
+
+		public InputProgressView(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

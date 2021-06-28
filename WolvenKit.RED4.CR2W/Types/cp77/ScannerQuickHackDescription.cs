@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerQuickHackDescription : ScannerChunk
 	{
-		[Ordinal(0)] [RED("QuickHackDescription")] public CHandle<QuickhackData> QuickHackDescription { get; set; }
+		private CHandle<QuickhackData> _quickHackDescription;
 
-		public ScannerQuickHackDescription(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("QuickHackDescription")] 
+		public CHandle<QuickhackData> QuickHackDescription
+		{
+			get => GetProperty(ref _quickHackDescription);
+			set => SetProperty(ref _quickHackDescription, value);
+		}
+
+		public ScannerQuickHackDescription(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

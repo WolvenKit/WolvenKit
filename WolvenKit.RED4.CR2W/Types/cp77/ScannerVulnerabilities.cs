@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerVulnerabilities : ScannerChunk
 	{
-		[Ordinal(0)] [RED("vulnerabilities")] public CArray<Vulnerability> Vulnerabilities { get; set; }
+		private CArray<Vulnerability> _vulnerabilities;
 
-		public ScannerVulnerabilities(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vulnerabilities")] 
+		public CArray<Vulnerability> Vulnerabilities
+		{
+			get => GetProperty(ref _vulnerabilities);
+			set => SetProperty(ref _vulnerabilities, value);
+		}
+
+		public ScannerVulnerabilities(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

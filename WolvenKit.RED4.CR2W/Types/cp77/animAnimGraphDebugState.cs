@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimGraphDebugState : ISerializable
 	{
-		[Ordinal(0)] [RED("nodes")] public CArray<animAnimNodeDebugState> Nodes { get; set; }
+		private CArray<animAnimNodeDebugState> _nodes;
 
-		public animAnimGraphDebugState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("nodes")] 
+		public CArray<animAnimNodeDebugState> Nodes
+		{
+			get => GetProperty(ref _nodes);
+			set => SetProperty(ref _nodes, value);
+		}
+
+		public animAnimGraphDebugState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

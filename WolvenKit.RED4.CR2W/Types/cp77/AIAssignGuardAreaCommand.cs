@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIAssignGuardAreaCommand : AICommand
 	{
-		[Ordinal(4)] [RED("restrictMovementAreaRef")] public NodeRef RestrictMovementAreaRef { get; set; }
+		private NodeRef _restrictMovementAreaRef;
 
-		public AIAssignGuardAreaCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("restrictMovementAreaRef")] 
+		public NodeRef RestrictMovementAreaRef
+		{
+			get => GetProperty(ref _restrictMovementAreaRef);
+			set => SetProperty(ref _restrictMovementAreaRef, value);
+		}
+
+		public AIAssignGuardAreaCommand(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

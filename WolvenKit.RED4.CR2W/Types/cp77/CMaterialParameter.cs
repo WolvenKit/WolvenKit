@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameter : ISerializable
 	{
-		[Ordinal(0)] [RED("parameterName")] public CName ParameterName { get; set; }
-		[Ordinal(1)] [RED("register")] public CUInt32 Register { get; set; }
+		private CName _parameterName;
+		private CUInt32 _register;
 
-		public CMaterialParameter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("parameterName")] 
+		public CName ParameterName
+		{
+			get => GetProperty(ref _parameterName);
+			set => SetProperty(ref _parameterName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("register")] 
+		public CUInt32 Register
+		{
+			get => GetProperty(ref _register);
+			set => SetProperty(ref _register, value);
+		}
+
+		public CMaterialParameter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

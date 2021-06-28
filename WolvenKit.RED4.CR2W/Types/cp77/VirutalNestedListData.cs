@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VirutalNestedListData : IScriptable
 	{
-		[Ordinal(0)] [RED("collapsable")] public CBool Collapsable { get; set; }
-		[Ordinal(1)] [RED("isHeader")] public CBool IsHeader { get; set; }
-		[Ordinal(2)] [RED("level")] public CInt32 Level { get; set; }
-		[Ordinal(3)] [RED("widgetType")] public CUInt32 WidgetType { get; set; }
-		[Ordinal(4)] [RED("data")] public CHandle<IScriptable> Data { get; set; }
+		private CBool _collapsable;
+		private CBool _isHeader;
+		private CInt32 _level;
+		private CUInt32 _widgetType;
+		private CHandle<IScriptable> _data;
 
-		public VirutalNestedListData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("collapsable")] 
+		public CBool Collapsable
+		{
+			get => GetProperty(ref _collapsable);
+			set => SetProperty(ref _collapsable, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isHeader")] 
+		public CBool IsHeader
+		{
+			get => GetProperty(ref _isHeader);
+			set => SetProperty(ref _isHeader, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("level")] 
+		public CInt32 Level
+		{
+			get => GetProperty(ref _level);
+			set => SetProperty(ref _level, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("widgetType")] 
+		public CUInt32 WidgetType
+		{
+			get => GetProperty(ref _widgetType);
+			set => SetProperty(ref _widgetType, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("data")] 
+		public CHandle<IScriptable> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public VirutalNestedListData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

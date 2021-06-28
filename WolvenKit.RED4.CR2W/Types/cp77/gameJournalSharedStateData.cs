@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalSharedStateData : CVariable
 	{
-		[Ordinal(0)] [RED("pathHash")] public CUInt32 PathHash { get; set; }
-		[Ordinal(1)] [RED("entryState")] public CEnum<gameJournalEntryState> EntryState { get; set; }
+		private CUInt32 _pathHash;
+		private CEnum<gameJournalEntryState> _entryState;
 
-		public gameJournalSharedStateData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("pathHash")] 
+		public CUInt32 PathHash
+		{
+			get => GetProperty(ref _pathHash);
+			set => SetProperty(ref _pathHash, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entryState")] 
+		public CEnum<gameJournalEntryState> EntryState
+		{
+			get => GetProperty(ref _entryState);
+			set => SetProperty(ref _entryState, value);
+		}
+
+		public gameJournalSharedStateData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

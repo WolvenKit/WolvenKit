@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMuppetInputActionSelectWeapon : gameIMuppetInputAction
 	{
-		[Ordinal(0)] [RED("wantedWeapon")] public gameItemID WantedWeapon { get; set; }
+		private gameItemID _wantedWeapon;
 
-		public gameMuppetInputActionSelectWeapon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("wantedWeapon")] 
+		public gameItemID WantedWeapon
+		{
+			get => GetProperty(ref _wantedWeapon);
+			set => SetProperty(ref _wantedWeapon, value);
+		}
+
+		public gameMuppetInputActionSelectWeapon(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

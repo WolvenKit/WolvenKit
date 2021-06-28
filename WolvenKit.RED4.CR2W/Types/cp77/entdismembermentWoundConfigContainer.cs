@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entdismembermentWoundConfigContainer : ISerializable
 	{
-		[Ordinal(0)] [RED("AppearanceName")] public CName AppearanceName { get; set; }
-		[Ordinal(1)] [RED("Wounds")] public CArray<entdismembermentWoundConfig> Wounds { get; set; }
+		private CName _appearanceName;
+		private CArray<entdismembermentWoundConfig> _wounds;
 
-		public entdismembermentWoundConfigContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("AppearanceName")] 
+		public CName AppearanceName
+		{
+			get => GetProperty(ref _appearanceName);
+			set => SetProperty(ref _appearanceName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("Wounds")] 
+		public CArray<entdismembermentWoundConfig> Wounds
+		{
+			get => GetProperty(ref _wounds);
+			set => SetProperty(ref _wounds, value);
+		}
+
+		public entdismembermentWoundConfigContainer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

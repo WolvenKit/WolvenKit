@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CRenderResourceBlobContainer : ISerializable
 	{
-		[Ordinal(0)] [RED("blob")] public CHandle<IRenderResourceBlob> Blob { get; set; }
+		private CHandle<IRenderResourceBlob> _blob;
 
-		public CRenderResourceBlobContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("blob")] 
+		public CHandle<IRenderResourceBlob> Blob
+		{
+			get => GetProperty(ref _blob);
+			set => SetProperty(ref _blob, value);
+		}
+
+		public CRenderResourceBlobContainer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiMinimapQuestAreaMappinController : gameuiBaseMinimapMappinController
 	{
-		[Ordinal(14)] [RED("areaShapeWidget")] public inkShapeWidgetReference AreaShapeWidget { get; set; }
+		private inkShapeWidgetReference _areaShapeWidget;
 
-		public gameuiMinimapQuestAreaMappinController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(14)] 
+		[RED("areaShapeWidget")] 
+		public inkShapeWidgetReference AreaShapeWidget
+		{
+			get => GetProperty(ref _areaShapeWidget);
+			set => SetProperty(ref _areaShapeWidget, value);
+		}
+
+		public gameuiMinimapQuestAreaMappinController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

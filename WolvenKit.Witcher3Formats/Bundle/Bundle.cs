@@ -5,10 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Bundles
 {
-    public class Bundle : IGameArchive
+    public class Bundle : IWitcherGameArchive
     {
         #region Fields
 
@@ -49,10 +50,13 @@ namespace WolvenKit.Bundles
 
         #region Properties
 
+        public Dictionary<ulong, IGameFile> Files { get; } = new();
+
+
         public string ArchiveAbsolutePath { get; set; }
         public uint GetSize => this.bundlesize;
-        public Dictionary<string, BundleItem> Items { get; set; }
-        public List<IGameFile> Patchedfiles { get; set; } = new List<IGameFile>();
+        public List<IGameFile> Patchedfiles { get; set; } = new();
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
         public EArchiveType TypeName { get { return EArchiveType.Bundle; } }
 
         #endregion Properties
@@ -189,8 +193,6 @@ namespace WolvenKit.Bundles
         /// </summary>
         private void Read()
         {
-            Items = new Dictionary<string, BundleItem>();
-
             using (var reader = new BinaryReader(new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.Read)))
             {
                 var idstring = reader.ReadBytes(IDString.Length);
@@ -238,9 +240,9 @@ namespace WolvenKit.Bundles
                     item.CRC = reader.ReadUInt32();    //CRC32 for the uncompressed data
                     item.Compression = reader.ReadUInt32();
 
-                    if (!Items.ContainsKey(item.Name))
+                    if (!Files.ContainsKey(item.Key))
                     {
-                        Items.Add(item.Name, item);
+                        Files.Add(item.Key, item);
                     }
                     else
                     {

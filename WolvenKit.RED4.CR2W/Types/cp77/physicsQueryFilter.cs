@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsQueryFilter : CVariable
 	{
-		[Ordinal(0)] [RED("mask1")] public CUInt64 Mask1 { get; set; }
-		[Ordinal(1)] [RED("mask2")] public CUInt64 Mask2 { get; set; }
+		private CUInt64 _mask1;
+		private CUInt64 _mask2;
 
-		public physicsQueryFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mask1")] 
+		public CUInt64 Mask1
+		{
+			get => GetProperty(ref _mask1);
+			set => SetProperty(ref _mask1, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("mask2")] 
+		public CUInt64 Mask2
+		{
+			get => GetProperty(ref _mask2);
+			set => SetProperty(ref _mask2, value);
+		}
+
+		public physicsQueryFilter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

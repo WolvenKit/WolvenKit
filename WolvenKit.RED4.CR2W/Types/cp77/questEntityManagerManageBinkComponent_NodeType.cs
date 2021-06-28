@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questEntityManagerManageBinkComponent_NodeType : questIEntityManager_NodeType
 	{
-		[Ordinal(0)] [RED("params")] public CArray<questEntityManagerManageBinkComponent_NodeTypeParams> Params { get; set; }
+		private CArray<questEntityManagerManageBinkComponent_NodeTypeParams> _params;
 
-		public questEntityManagerManageBinkComponent_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("params")] 
+		public CArray<questEntityManagerManageBinkComponent_NodeTypeParams> Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public questEntityManagerManageBinkComponent_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Multilayer_LayerTemplateOverridesNormalStrength : CVariable
 	{
-		[Ordinal(0)] [RED("n")] public CName N { get; set; }
-		[Ordinal(1)] [RED("v")] public CFloat V { get; set; }
+		private CName _n;
+		private CFloat _v;
 
-		public Multilayer_LayerTemplateOverridesNormalStrength(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("n")] 
+		public CName N
+		{
+			get => GetProperty(ref _n);
+			set => SetProperty(ref _n, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("v")] 
+		public CFloat V
+		{
+			get => GetProperty(ref _v);
+			set => SetProperty(ref _v, value);
+		}
+
+		public Multilayer_LayerTemplateOverridesNormalStrength(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

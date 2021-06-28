@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WoundedInstigated : redEvent
 	{
-		[Ordinal(0)] [RED("bodyPart")] public CEnum<EHitReactionZone> BodyPart { get; set; }
+		private CEnum<EHitReactionZone> _bodyPart;
 
-		public WoundedInstigated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("bodyPart")] 
+		public CEnum<EHitReactionZone> BodyPart
+		{
+			get => GetProperty(ref _bodyPart);
+			set => SetProperty(ref _bodyPart, value);
+		}
+
+		public WoundedInstigated(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

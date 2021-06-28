@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GodModeStatListener : gameScriptStatsListener
 	{
-		[Ordinal(0)] [RED("healthbar")] public CHandle<healthbarWidgetGameController> Healthbar { get; set; }
+		private CHandle<healthbarWidgetGameController> _healthbar;
 
-		public GodModeStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("healthbar")] 
+		public CHandle<healthbarWidgetGameController> Healthbar
+		{
+			get => GetProperty(ref _healthbar);
+			set => SetProperty(ref _healthbar, value);
+		}
+
+		public GodModeStatListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CrosshairWeaponStatsListener : gameScriptStatsListener
 	{
-		[Ordinal(0)] [RED("controller")] public wCHandle<BaseTechCrosshairController> Controller { get; set; }
+		private wCHandle<BaseTechCrosshairController> _controller;
 
-		public CrosshairWeaponStatsListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("controller")] 
+		public wCHandle<BaseTechCrosshairController> Controller
+		{
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
+		}
+
+		public CrosshairWeaponStatsListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

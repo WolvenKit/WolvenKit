@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SComponentOperationData : CVariable
 	{
-		[Ordinal(0)] [RED("componentName")] public CName ComponentName { get; set; }
-		[Ordinal(1)] [RED("operationType")] public CEnum<EComponentOperation> OperationType { get; set; }
+		private CName _componentName;
+		private CEnum<EComponentOperation> _operationType;
 
-		public SComponentOperationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("componentName")] 
+		public CName ComponentName
+		{
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("operationType")] 
+		public CEnum<EComponentOperation> OperationType
+		{
+			get => GetProperty(ref _operationType);
+			set => SetProperty(ref _operationType, value);
+		}
+
+		public SComponentOperationData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

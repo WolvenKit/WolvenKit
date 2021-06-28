@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ToggleFactEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("fact")] public CName Fact { get; set; }
-		[Ordinal(1)] [RED("valueOn")] public CInt32 ValueOn { get; set; }
-		[Ordinal(2)] [RED("valueOff")] public CInt32 ValueOff { get; set; }
+		private CName _fact;
+		private CInt32 _valueOn;
+		private CInt32 _valueOff;
 
-		public ToggleFactEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("fact")] 
+		public CName Fact
+		{
+			get => GetProperty(ref _fact);
+			set => SetProperty(ref _fact, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("valueOn")] 
+		public CInt32 ValueOn
+		{
+			get => GetProperty(ref _valueOn);
+			set => SetProperty(ref _valueOn, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("valueOff")] 
+		public CInt32 ValueOff
+		{
+			get => GetProperty(ref _valueOff);
+			set => SetProperty(ref _valueOff, value);
+		}
+
+		public ToggleFactEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

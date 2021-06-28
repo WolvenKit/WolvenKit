@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ResourceLibraryComponent : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("resources")] public CArray<FxResourceMapData> Resources { get; set; }
+		private CArray<FxResourceMapData> _resources;
 
-		public ResourceLibraryComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("resources")] 
+		public CArray<FxResourceMapData> Resources
+		{
+			get => GetProperty(ref _resources);
+			set => SetProperty(ref _resources, value);
+		}
+
+		public ResourceLibraryComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

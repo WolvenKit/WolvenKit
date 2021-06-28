@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BlackBoardRequestEvent : redEvent
 	{
-		[Ordinal(0)] [RED("blackBoard")] public CHandle<gameIBlackboard> BlackBoard { get; set; }
-		[Ordinal(1)] [RED("storageClass")] public CEnum<gameScriptedBlackboardStorage> StorageClass { get; set; }
-		[Ordinal(2)] [RED("entryTag")] public CName EntryTag { get; set; }
+		private CHandle<gameIBlackboard> _blackBoard;
+		private CEnum<gameScriptedBlackboardStorage> _storageClass;
+		private CName _entryTag;
 
-		public BlackBoardRequestEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("blackBoard")] 
+		public CHandle<gameIBlackboard> BlackBoard
+		{
+			get => GetProperty(ref _blackBoard);
+			set => SetProperty(ref _blackBoard, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("storageClass")] 
+		public CEnum<gameScriptedBlackboardStorage> StorageClass
+		{
+			get => GetProperty(ref _storageClass);
+			set => SetProperty(ref _storageClass, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("entryTag")] 
+		public CName EntryTag
+		{
+			get => GetProperty(ref _entryTag);
+			set => SetProperty(ref _entryTag, value);
+		}
+
+		public BlackBoardRequestEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

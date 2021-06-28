@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemFilterToggleController : ToggleController
 	{
-		[Ordinal(16)] [RED("newItemDot")] public inkWidgetReference NewItemDot { get; set; }
-		[Ordinal(17)] [RED("useCategoryFilter")] public CBool UseCategoryFilter { get; set; }
+		private inkWidgetReference _newItemDot;
+		private CBool _useCategoryFilter;
 
-		public ItemFilterToggleController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(16)] 
+		[RED("newItemDot")] 
+		public inkWidgetReference NewItemDot
+		{
+			get => GetProperty(ref _newItemDot);
+			set => SetProperty(ref _newItemDot, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("useCategoryFilter")] 
+		public CBool UseCategoryFilter
+		{
+			get => GetProperty(ref _useCategoryFilter);
+			set => SetProperty(ref _useCategoryFilter, value);
+		}
+
+		public ItemFilterToggleController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

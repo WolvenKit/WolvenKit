@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldSpawnPointMarker : worldIMarker
 	{
-		[Ordinal(0)] [RED("type")] public CUInt32 Type { get; set; }
+		private CUInt32 _type;
 
-		public worldSpawnPointMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CUInt32 Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public worldSpawnPointMarker(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiPhotoModeUIVisibilityEvent : redEvent
 	{
-		[Ordinal(0)] [RED("visible")] public CBool Visible { get; set; }
+		private CBool _visible;
 
-		public gameuiPhotoModeUIVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("visible")] 
+		public CBool Visible
+		{
+			get => GetProperty(ref _visible);
+			set => SetProperty(ref _visible, value);
+		}
+
+		public gameuiPhotoModeUIVisibilityEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

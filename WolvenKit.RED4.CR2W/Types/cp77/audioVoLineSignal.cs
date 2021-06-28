@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVoLineSignal : CVariable
 	{
-		[Ordinal(0)] [RED("ruid")] public CRUID Ruid { get; set; }
-		[Ordinal(1)] [RED("signal")] public CName Signal { get; set; }
+		private CRUID _ruid;
+		private CName _signal;
 
-		public audioVoLineSignal(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ruid")] 
+		public CRUID Ruid
+		{
+			get => GetProperty(ref _ruid);
+			set => SetProperty(ref _ruid, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("signal")] 
+		public CName Signal
+		{
+			get => GetProperty(ref _signal);
+			set => SetProperty(ref _signal, value);
+		}
+
+		public audioVoLineSignal(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

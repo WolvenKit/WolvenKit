@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         //[Ordinal(1000)] [REDBuffer(true)] public CBytes swfTexture { get; set; }
 
-        public CSwfTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSwfTexture(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             //swfTexture = new CBytes(cr2w, this, nameof(swfTexture));
         }

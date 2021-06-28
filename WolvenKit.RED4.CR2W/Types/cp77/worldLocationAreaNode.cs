@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldLocationAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] [RED("locationName")] public CString LocationName { get; set; }
+		private CString _locationName;
 
-		public worldLocationAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(7)] 
+		[RED("locationName")] 
+		public CString LocationName
+		{
+			get => GetProperty(ref _locationName);
+			set => SetProperty(ref _locationName, value);
+		}
+
+		public worldLocationAreaNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiMinigameState : IScriptable
 	{
-		[Ordinal(0)] [RED("currentLives")] public CInt32 CurrentLives { get; set; }
-		[Ordinal(1)] [RED("currentScore")] public CInt32 CurrentScore { get; set; }
+		private CInt32 _currentLives;
+		private CInt32 _currentScore;
 
-		public gameuiMinigameState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("currentLives")] 
+		public CInt32 CurrentLives
+		{
+			get => GetProperty(ref _currentLives);
+			set => SetProperty(ref _currentLives, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("currentScore")] 
+		public CInt32 CurrentScore
+		{
+			get => GetProperty(ref _currentScore);
+			set => SetProperty(ref _currentScore, value);
+		}
+
+		public gameuiMinigameState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

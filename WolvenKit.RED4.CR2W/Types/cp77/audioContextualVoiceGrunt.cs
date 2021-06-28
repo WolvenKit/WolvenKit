@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioContextualVoiceGrunt : CVariable
 	{
-		[Ordinal(0)] [RED("regularGrunt")] public CName RegularGrunt { get; set; }
-		[Ordinal(1)] [RED("stealthGrunt")] public CName StealthGrunt { get; set; }
+		private CName _regularGrunt;
+		private CName _stealthGrunt;
 
-		public audioContextualVoiceGrunt(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("regularGrunt")] 
+		public CName RegularGrunt
+		{
+			get => GetProperty(ref _regularGrunt);
+			set => SetProperty(ref _regularGrunt, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("stealthGrunt")] 
+		public CName StealthGrunt
+		{
+			get => GetProperty(ref _stealthGrunt);
+			set => SetProperty(ref _stealthGrunt, value);
+		}
+
+		public audioContextualVoiceGrunt(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

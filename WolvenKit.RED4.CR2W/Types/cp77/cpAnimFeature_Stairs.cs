@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cpAnimFeature_Stairs : animAnimFeature
 	{
-		[Ordinal(0)] [RED("onOff")] public CBool OnOff { get; set; }
+		private CBool _onOff;
 
-		public cpAnimFeature_Stairs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("onOff")] 
+		public CBool OnOff
+		{
+			get => GetProperty(ref _onOff);
+			set => SetProperty(ref _onOff, value);
+		}
+
+		public cpAnimFeature_Stairs(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

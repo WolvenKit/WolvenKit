@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BrowserGameController : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("logicControllerRef")] public inkWidgetReference LogicControllerRef { get; set; }
-		[Ordinal(3)] [RED("journalManager")] public wCHandle<gameJournalManager> JournalManager { get; set; }
-		[Ordinal(4)] [RED("locationTags")] public CArray<CName> LocationTags { get; set; }
+		private inkWidgetReference _logicControllerRef;
+		private wCHandle<gameJournalManager> _journalManager;
+		private CArray<CName> _locationTags;
 
-		public BrowserGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("logicControllerRef")] 
+		public inkWidgetReference LogicControllerRef
+		{
+			get => GetProperty(ref _logicControllerRef);
+			set => SetProperty(ref _logicControllerRef, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("journalManager")] 
+		public wCHandle<gameJournalManager> JournalManager
+		{
+			get => GetProperty(ref _journalManager);
+			set => SetProperty(ref _journalManager, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("locationTags")] 
+		public CArray<CName> LocationTags
+		{
+			get => GetProperty(ref _locationTags);
+			set => SetProperty(ref _locationTags, value);
+		}
+
+		public BrowserGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

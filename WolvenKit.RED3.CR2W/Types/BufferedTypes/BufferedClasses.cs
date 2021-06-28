@@ -14,7 +14,7 @@ namespace WolvenKit.RED3.CR2W.Types
     {
         [Ordinal(1000)] [REDBuffer] public CBytes Data { get; set; }
 
-        public CClipMapCookedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CClipMapCookedData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Data = new CBytes(cr2w, this, nameof(Data));
         }
@@ -102,7 +102,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1000)] [REDBuffer] public CHandle<CBehaviorVariable> Outputnode { get; set; }
     }
 
-    
+
 
     public partial class CEntityTemplate : CResource
     {
@@ -180,6 +180,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is CXml)
             {
                 Ragdolldata = (CXml)val;
@@ -258,7 +259,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1010)] [REDBuffer(true)] public CInt32 DataSizeBits { get; set; }
         [Ordinal(1011)] [REDBuffer(true)] public CFloat SizeInKbytes { get; set; }
 
-        public CSwarmCellMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSwarmCellMap(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Data = new CBytes(cr2w, this, nameof(Data)) {IsSerialized = true};
             CornerPositionX = new CFloat(cr2w, this, nameof(CornerPositionX)) { IsSerialized = true };

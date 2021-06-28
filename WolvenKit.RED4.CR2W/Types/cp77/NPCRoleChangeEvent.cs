@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NPCRoleChangeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("newRole")] public CHandle<AIRole> NewRole { get; set; }
+		private CHandle<AIRole> _newRole;
 
-		public NPCRoleChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("newRole")] 
+		public CHandle<AIRole> NewRole
+		{
+			get => GetProperty(ref _newRole);
+			set => SetProperty(ref _newRole, value);
+		}
+
+		public NPCRoleChangeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

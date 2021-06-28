@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioRadioStationMetadataMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("radioStations")] public CArray<CName> RadioStations { get; set; }
-		[Ordinal(2)] [RED("switchStationEvent")] public CName SwitchStationEvent { get; set; }
-		[Ordinal(3)] [RED("turnOnRadioEvent")] public CName TurnOnRadioEvent { get; set; }
-		[Ordinal(4)] [RED("turnOffRadioEvent")] public CName TurnOffRadioEvent { get; set; }
-		[Ordinal(5)] [RED("defaultBackgroundJingle")] public audioRadioStationJingleMetadata DefaultBackgroundJingle { get; set; }
+		private CArray<CName> _radioStations;
+		private CName _switchStationEvent;
+		private CName _turnOnRadioEvent;
+		private CName _turnOffRadioEvent;
+		private audioRadioStationJingleMetadata _defaultBackgroundJingle;
 
-		public audioRadioStationMetadataMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("radioStations")] 
+		public CArray<CName> RadioStations
+		{
+			get => GetProperty(ref _radioStations);
+			set => SetProperty(ref _radioStations, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("switchStationEvent")] 
+		public CName SwitchStationEvent
+		{
+			get => GetProperty(ref _switchStationEvent);
+			set => SetProperty(ref _switchStationEvent, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("turnOnRadioEvent")] 
+		public CName TurnOnRadioEvent
+		{
+			get => GetProperty(ref _turnOnRadioEvent);
+			set => SetProperty(ref _turnOnRadioEvent, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("turnOffRadioEvent")] 
+		public CName TurnOffRadioEvent
+		{
+			get => GetProperty(ref _turnOffRadioEvent);
+			set => SetProperty(ref _turnOffRadioEvent, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("defaultBackgroundJingle")] 
+		public audioRadioStationJingleMetadata DefaultBackgroundJingle
+		{
+			get => GetProperty(ref _defaultBackgroundJingle);
+			set => SetProperty(ref _defaultBackgroundJingle, value);
+		}
+
+		public audioRadioStationMetadataMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

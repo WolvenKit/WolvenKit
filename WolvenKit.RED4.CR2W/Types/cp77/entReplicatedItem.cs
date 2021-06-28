@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entReplicatedItem : CVariable
 	{
-		[Ordinal(0)] [RED("entity")] public wCHandle<entEntity> Entity { get; set; }
-		[Ordinal(1)] [RED("netTime")] public netTime NetTime { get; set; }
+		private wCHandle<entEntity> _entity;
+		private netTime _netTime;
 
-		public entReplicatedItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entity")] 
+		public wCHandle<entEntity> Entity
+		{
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("netTime")] 
+		public netTime NetTime
+		{
+			get => GetProperty(ref _netTime);
+			set => SetProperty(ref _netTime, value);
+		}
+
+		public entReplicatedItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

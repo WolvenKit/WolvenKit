@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnOverrideTalkOnReturn_InterruptionScenarioOperation : scnIInterruptionScenarioOperation
 	{
-		[Ordinal(0)] [RED("talkOnReturn")] public CBool TalkOnReturn { get; set; }
+		private CBool _talkOnReturn;
 
-		public scnOverrideTalkOnReturn_InterruptionScenarioOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("talkOnReturn")] 
+		public CBool TalkOnReturn
+		{
+			get => GetProperty(ref _talkOnReturn);
+			set => SetProperty(ref _talkOnReturn, value);
+		}
+
+		public scnOverrideTalkOnReturn_InterruptionScenarioOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

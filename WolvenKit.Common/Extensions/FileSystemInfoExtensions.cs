@@ -1,13 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WolvenKit.Common.Extensions
 {
     public static class FileSystemInfoExtensions
     {
-        #region Methods
-
         public static void CopyToAndCreate(this FileInfo fi, string destinationpath, bool overwrite = false)
         {
             try
@@ -22,36 +21,42 @@ namespace WolvenKit.Common.Extensions
             }
         }
 
-        public static DirectoryInfo GetParent(this FileSystemInfo fsi)
-        {
-            if (fsi.IsDirectory())
-                return (fsi as DirectoryInfo).Parent;
-            else
-                return (fsi as FileInfo).Directory;
-        }
-
-        public static bool HasFilesOrFolders(this FileSystemInfo fsi)
-        {
-            if (!fsi.Exists)
-                return false;
-            if (!fsi.IsDirectory())
-                return false;
-            var di = fsi as DirectoryInfo;
-            try
-            {
-                return ((di.GetFiles() != null && di.GetFiles().Any()) || (di.GetDirectories() != null && di.GetDirectories().Any()));
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+        public static DirectoryInfo GetParent(this FileSystemInfo fsi) => fsi.IsDirectory() ? (fsi as DirectoryInfo).Parent : (fsi as FileInfo).Directory;
 
         public static bool IsDirectory(this FileSystemInfo fsi)
         {
-            return fsi != null && (fsi.Attributes & FileAttributes.Directory) == FileAttributes.Directory;
+            var b1 = fsi != null && (fsi.Attributes & FileAttributes.Directory) == FileAttributes.Directory;
+            var b2 = fsi switch
+            {
+                DirectoryInfo => true,
+                _ => false
+            };
+            if (b1 != b2)
+            {
+                throw new DirectoryNotFoundException();
+            }
+            else
+            {
+                return b1;
+            }
         }
 
-        #endregion Methods
+        public static string TrimmedExtension(this FileInfo fi) => fi.Extension.TrimStart('.');
+
+        public static string GetRelativePath(this FileInfo fi, DirectoryInfo baseDir)
+        {
+            if (fi.FullName.Contains(baseDir.FullName))
+            {
+
+            }
+
+            var rel = fi.FullName[(baseDir.FullName.Length + 1)..];
+
+
+            return fi.FullName.Contains(baseDir.FullName)
+                ? fi.FullName[(baseDir.FullName.Length + 1)..]
+                : "";
+        }
+
     }
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldPrefabInstanceData : ISerializable
 	{
-		[Ordinal(0)] [RED("buffer")] public DataBuffer Buffer { get; set; }
+		private DataBuffer _buffer;
 
-		public worldPrefabInstanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("buffer")] 
+		public DataBuffer Buffer
+		{
+			get => GetProperty(ref _buffer);
+			set => SetProperty(ref _buffer, value);
+		}
+
+		public worldPrefabInstanceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

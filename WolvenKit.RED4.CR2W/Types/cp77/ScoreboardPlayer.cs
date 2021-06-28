@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScoreboardPlayer : CVariable
 	{
-		[Ordinal(0)] [RED("playerName")] public CString PlayerName { get; set; }
-		[Ordinal(1)] [RED("playerScore")] public CInt32 PlayerScore { get; set; }
+		private CString _playerName;
+		private CInt32 _playerScore;
 
-		public ScoreboardPlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("playerName")] 
+		public CString PlayerName
+		{
+			get => GetProperty(ref _playerName);
+			set => SetProperty(ref _playerName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("playerScore")] 
+		public CInt32 PlayerScore
+		{
+			get => GetProperty(ref _playerScore);
+			set => SetProperty(ref _playerScore, value);
+		}
+
+		public ScoreboardPlayer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

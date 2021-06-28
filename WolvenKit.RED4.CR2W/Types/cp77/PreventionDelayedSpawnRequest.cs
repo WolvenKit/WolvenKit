@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PreventionDelayedSpawnRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("heatStage")] public CEnum<EPreventionHeatStage> HeatStage { get; set; }
+		private CEnum<EPreventionHeatStage> _heatStage;
 
-		public PreventionDelayedSpawnRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("heatStage")] 
+		public CEnum<EPreventionHeatStage> HeatStage
+		{
+			get => GetProperty(ref _heatStage);
+			set => SetProperty(ref _heatStage, value);
+		}
+
+		public PreventionDelayedSpawnRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

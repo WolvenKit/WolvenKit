@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectPostAction_BeamVFX : gameEffectPostAction
 	{
-		public gameEffectPostAction_BeamVFX(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gameEffectPostAction_BeamVFX(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LookedAtEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isLookedAt")] public CBool IsLookedAt { get; set; }
+		private CBool _isLookedAt;
 
-		public LookedAtEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isLookedAt")] 
+		public CBool IsLookedAt
+		{
+			get => GetProperty(ref _isLookedAt);
+			set => SetProperty(ref _isLookedAt, value);
+		}
+
+		public LookedAtEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

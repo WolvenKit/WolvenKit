@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioUiGenericControlSettingsMapItem : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("uiEventToAudioEventDictionary")] public CHandle<audioKeySoundEventDictionary> UiEventToAudioEventDictionary { get; set; }
+		private CHandle<audioKeySoundEventDictionary> _uiEventToAudioEventDictionary;
 
-		public audioUiGenericControlSettingsMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("uiEventToAudioEventDictionary")] 
+		public CHandle<audioKeySoundEventDictionary> UiEventToAudioEventDictionary
+		{
+			get => GetProperty(ref _uiEventToAudioEventDictionary);
+			set => SetProperty(ref _uiEventToAudioEventDictionary, value);
+		}
+
+		public audioUiGenericControlSettingsMapItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

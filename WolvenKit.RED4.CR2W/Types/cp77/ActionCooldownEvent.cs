@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ActionCooldownEvent : redEvent
 	{
-		[Ordinal(0)] [RED("storageID")] public CooldownStorageID StorageID { get; set; }
+		private CooldownStorageID _storageID;
 
-		public ActionCooldownEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("storageID")] 
+		public CooldownStorageID StorageID
+		{
+			get => GetProperty(ref _storageID);
+			set => SetProperty(ref _storageID, value);
+		}
+
+		public ActionCooldownEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

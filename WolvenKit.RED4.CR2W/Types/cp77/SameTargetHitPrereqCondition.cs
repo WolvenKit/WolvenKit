@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SameTargetHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("previousTarget")] public wCHandle<gameObject> PreviousTarget { get; set; }
-		[Ordinal(2)] [RED("previousSource")] public wCHandle<gameObject> PreviousSource { get; set; }
-		[Ordinal(3)] [RED("previousWeapon")] public wCHandle<gameweaponObject> PreviousWeapon { get; set; }
+		private wCHandle<gameObject> _previousTarget;
+		private wCHandle<gameObject> _previousSource;
+		private wCHandle<gameweaponObject> _previousWeapon;
 
-		public SameTargetHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("previousTarget")] 
+		public wCHandle<gameObject> PreviousTarget
+		{
+			get => GetProperty(ref _previousTarget);
+			set => SetProperty(ref _previousTarget, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("previousSource")] 
+		public wCHandle<gameObject> PreviousSource
+		{
+			get => GetProperty(ref _previousSource);
+			set => SetProperty(ref _previousSource, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("previousWeapon")] 
+		public wCHandle<gameweaponObject> PreviousWeapon
+		{
+			get => GetProperty(ref _previousWeapon);
+			set => SetProperty(ref _previousWeapon, value);
+		}
+
+		public SameTargetHitPrereqCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

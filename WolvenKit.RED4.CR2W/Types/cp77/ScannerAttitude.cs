@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerAttitude : ScannerChunk
 	{
-		[Ordinal(0)] [RED("attitude")] public CEnum<EAIAttitude> Attitude { get; set; }
+		private CEnum<EAIAttitude> _attitude;
 
-		public ScannerAttitude(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("attitude")] 
+		public CEnum<EAIAttitude> Attitude
+		{
+			get => GetProperty(ref _attitude);
+			set => SetProperty(ref _attitude, value);
+		}
+
+		public ScannerAttitude(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

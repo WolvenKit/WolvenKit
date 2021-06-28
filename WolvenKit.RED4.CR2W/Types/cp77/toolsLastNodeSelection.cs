@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class toolsLastNodeSelection : CVariable
 	{
-		[Ordinal(0)] [RED("editorName")] public CString EditorName { get; set; }
-		[Ordinal(1)] [RED("selectedNodeIDPath")] public toolsEditorObjectIDPath SelectedNodeIDPath { get; set; }
+		private CString _editorName;
+		private toolsEditorObjectIDPath _selectedNodeIDPath;
 
-		public toolsLastNodeSelection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("editorName")] 
+		public CString EditorName
+		{
+			get => GetProperty(ref _editorName);
+			set => SetProperty(ref _editorName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("selectedNodeIDPath")] 
+		public toolsEditorObjectIDPath SelectedNodeIDPath
+		{
+			get => GetProperty(ref _selectedNodeIDPath);
+			set => SetProperty(ref _selectedNodeIDPath, value);
+		}
+
+		public toolsLastNodeSelection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

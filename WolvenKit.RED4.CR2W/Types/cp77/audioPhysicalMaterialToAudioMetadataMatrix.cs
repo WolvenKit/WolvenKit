@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioPhysicalMaterialToAudioMetadataMatrix : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("physicalToAudioMaterialAssignments")] public CArray<audioAudioMaterialMetadataMapItem> PhysicalToAudioMaterialAssignments { get; set; }
+		private CArray<audioAudioMaterialMetadataMapItem> _physicalToAudioMaterialAssignments;
 
-		public audioPhysicalMaterialToAudioMetadataMatrix(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("physicalToAudioMaterialAssignments")] 
+		public CArray<audioAudioMaterialMetadataMapItem> PhysicalToAudioMaterialAssignments
+		{
+			get => GetProperty(ref _physicalToAudioMaterialAssignments);
+			set => SetProperty(ref _physicalToAudioMaterialAssignments, value);
+		}
+
+		public audioPhysicalMaterialToAudioMetadataMatrix(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPlaylistTrackChanged_ConditionType : questISystemConditionType
 	{
-		[Ordinal(0)] [RED("playlistName")] public CName PlaylistName { get; set; }
+		private CName _playlistName;
 
-		public questPlaylistTrackChanged_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("playlistName")] 
+		public CName PlaylistName
+		{
+			get => GetProperty(ref _playlistName);
+			set => SetProperty(ref _playlistName, value);
+		}
+
+		public questPlaylistTrackChanged_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

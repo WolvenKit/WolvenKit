@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IsNPCDriver : AIVehicleConditionAbstract
 	{
-		public IsNPCDriver(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public IsNPCDriver(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

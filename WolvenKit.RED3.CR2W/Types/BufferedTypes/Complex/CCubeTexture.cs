@@ -26,7 +26,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1007)] [REDBuffer(true)] public CBytes Rawfile { get; set; }
 
 
-        public CCubeTexture(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CCubeTexture(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Rawfile = new CBytes(cr2w, this, "Image") {IsSerialized = true};
 

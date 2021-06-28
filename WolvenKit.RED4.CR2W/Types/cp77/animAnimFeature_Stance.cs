@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_Stance : animAnimFeature
 	{
-		[Ordinal(0)] [RED("stanceState")] public CInt32 StanceState { get; set; }
+		private CInt32 _stanceState;
 
-		public animAnimFeature_Stance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stanceState")] 
+		public CInt32 StanceState
+		{
+			get => GetProperty(ref _stanceState);
+			set => SetProperty(ref _stanceState, value);
+		}
+
+		public animAnimFeature_Stance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

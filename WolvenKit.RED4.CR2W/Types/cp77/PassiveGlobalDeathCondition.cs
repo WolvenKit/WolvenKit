@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PassiveGlobalDeathCondition : AIbehaviorexpressionScript
 	{
-		[Ordinal(0)] [RED("onDeathCbId")] public CUInt32 OnDeathCbId { get; set; }
+		private CUInt32 _onDeathCbId;
 
-		public PassiveGlobalDeathCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("onDeathCbId")] 
+		public CUInt32 OnDeathCbId
+		{
+			get => GetProperty(ref _onDeathCbId);
+			set => SetProperty(ref _onDeathCbId, value);
+		}
+
+		public PassiveGlobalDeathCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

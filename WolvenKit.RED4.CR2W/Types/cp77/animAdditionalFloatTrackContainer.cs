@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAdditionalFloatTrackContainer : CVariable
 	{
-		[Ordinal(0)] [RED("entries")] public CArray<animAdditionalFloatTrackEntry> Entries { get; set; }
-		[Ordinal(1)] [RED("overwriteExistingValues")] public CBool OverwriteExistingValues { get; set; }
+		private CArray<animAdditionalFloatTrackEntry> _entries;
+		private CBool _overwriteExistingValues;
 
-		public animAdditionalFloatTrackContainer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entries")] 
+		public CArray<animAdditionalFloatTrackEntry> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("overwriteExistingValues")] 
+		public CBool OverwriteExistingValues
+		{
+			get => GetProperty(ref _overwriteExistingValues);
+			set => SetProperty(ref _overwriteExistingValues, value);
+		}
+
+		public animAdditionalFloatTrackContainer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

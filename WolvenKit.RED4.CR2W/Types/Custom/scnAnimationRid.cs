@@ -6,8 +6,16 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class scnAnimationRid : scnAnimationRid_
     {
-        [Ordinal(999)] [RED("backendData")] public CHandle<IBackendData> BackendData { get; set; }
+        private CHandle<IBackendData> _backendData;
 
-        public scnAnimationRid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(999)]
+        [RED("backendData")]
+        public CHandle<IBackendData> BackendData
+        {
+            get => GetProperty(ref _backendData);
+            set => SetProperty(ref _backendData, value);
+        }
+
+        public scnAnimationRid(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

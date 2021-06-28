@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EndFour : DefaultTransition
 	{
-		public EndFour(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public EndFour(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

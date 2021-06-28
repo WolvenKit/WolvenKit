@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeathEvents : HighLevelTransition
 	{
-		[Ordinal(0)] [RED("isDyingEffectPlaying")] public CBool IsDyingEffectPlaying { get; set; }
+		private CBool _isDyingEffectPlaying;
 
-		public DeathEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isDyingEffectPlaying")] 
+		public CBool IsDyingEffectPlaying
+		{
+			get => GetProperty(ref _isDyingEffectPlaying);
+			set => SetProperty(ref _isDyingEffectPlaying, value);
+		}
+
+		public DeathEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

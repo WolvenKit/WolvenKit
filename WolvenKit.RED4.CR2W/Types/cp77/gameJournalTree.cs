@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalTree : ISerializable
 	{
-		[Ordinal(0)] [RED("rootEntries")] public CArray<CHandle<gameJournalRootFolderEntry>> RootEntries { get; set; }
+		private CArray<CHandle<gameJournalRootFolderEntry>> _rootEntries;
 
-		public gameJournalTree(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rootEntries")] 
+		public CArray<CHandle<gameJournalRootFolderEntry>> RootEntries
+		{
+			get => GetProperty(ref _rootEntries);
+			set => SetProperty(ref _rootEntries, value);
+		}
+
+		public gameJournalTree(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

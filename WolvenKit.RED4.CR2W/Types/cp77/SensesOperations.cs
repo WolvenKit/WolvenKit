@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SensesOperations : DeviceOperations
 	{
-		[Ordinal(2)] [RED("sensesOperations")] public CArray<SSensesOperationData> SensesOperations_ { get; set; }
+		private CArray<SSensesOperationData> _sensesOperations;
 
-		public SensesOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("sensesOperations")] 
+		public CArray<SSensesOperationData> SensesOperations_
+		{
+			get => GetProperty(ref _sensesOperations);
+			set => SetProperty(ref _sensesOperations, value);
+		}
+
+		public SensesOperations(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

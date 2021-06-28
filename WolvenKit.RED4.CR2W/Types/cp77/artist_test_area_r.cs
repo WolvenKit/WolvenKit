@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class artist_test_area_r : gameuiHUDGameController
 	{
-		[Ordinal(9)] [RED("rootWidget")] public wCHandle<inkWidget> RootWidget { get; set; }
-		[Ordinal(10)] [RED("linesWidget")] public wCHandle<inkCanvasWidget> LinesWidget { get; set; }
+		private wCHandle<inkWidget> _rootWidget;
+		private wCHandle<inkCanvasWidget> _linesWidget;
 
-		public artist_test_area_r(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(9)] 
+		[RED("rootWidget")] 
+		public wCHandle<inkWidget> RootWidget
+		{
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("linesWidget")] 
+		public wCHandle<inkCanvasWidget> LinesWidget
+		{
+			get => GetProperty(ref _linesWidget);
+			set => SetProperty(ref _linesWidget, value);
+		}
+
+		public artist_test_area_r(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

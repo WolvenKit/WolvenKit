@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameRootTransformAnimatorComponent : entIMoverComponent
 	{
-		[Ordinal(3)] [RED("animations")] public CArray<gameTransformAnimationDefinition> Animations { get; set; }
+		private CArray<gameTransformAnimationDefinition> _animations;
 
-		public gameRootTransformAnimatorComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("animations")] 
+		public CArray<gameTransformAnimationDefinition> Animations
+		{
+			get => GetProperty(ref _animations);
+			set => SetProperty(ref _animations, value);
+		}
+
+		public gameRootTransformAnimatorComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

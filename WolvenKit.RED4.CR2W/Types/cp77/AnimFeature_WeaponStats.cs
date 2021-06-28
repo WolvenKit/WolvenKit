@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_WeaponStats : animAnimFeature
 	{
-		[Ordinal(0)] [RED("magazineCapacity")] public CInt32 MagazineCapacity { get; set; }
-		[Ordinal(1)] [RED("cycleTime")] public CFloat CycleTime { get; set; }
+		private CInt32 _magazineCapacity;
+		private CFloat _cycleTime;
 
-		public AnimFeature_WeaponStats(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("magazineCapacity")] 
+		public CInt32 MagazineCapacity
+		{
+			get => GetProperty(ref _magazineCapacity);
+			set => SetProperty(ref _magazineCapacity, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("cycleTime")] 
+		public CFloat CycleTime
+		{
+			get => GetProperty(ref _cycleTime);
+			set => SetProperty(ref _cycleTime, value);
+		}
+
+		public AnimFeature_WeaponStats(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

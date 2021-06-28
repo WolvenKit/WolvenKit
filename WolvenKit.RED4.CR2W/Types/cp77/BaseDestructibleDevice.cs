@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BaseDestructibleDevice : Device
 	{
-		[Ordinal(86)] [RED("minTime")] public CFloat MinTime { get; set; }
-		[Ordinal(87)] [RED("maxTime")] public CFloat MaxTime { get; set; }
-		[Ordinal(88)] [RED("destroyedMesh")] public CHandle<entPhysicalMeshComponent> DestroyedMesh { get; set; }
+		private CFloat _minTime;
+		private CFloat _maxTime;
+		private CHandle<entPhysicalMeshComponent> _destroyedMesh;
 
-		public BaseDestructibleDevice(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(86)] 
+		[RED("minTime")] 
+		public CFloat MinTime
+		{
+			get => GetProperty(ref _minTime);
+			set => SetProperty(ref _minTime, value);
+		}
+
+		[Ordinal(87)] 
+		[RED("maxTime")] 
+		public CFloat MaxTime
+		{
+			get => GetProperty(ref _maxTime);
+			set => SetProperty(ref _maxTime, value);
+		}
+
+		[Ordinal(88)] 
+		[RED("destroyedMesh")] 
+		public CHandle<entPhysicalMeshComponent> DestroyedMesh
+		{
+			get => GetProperty(ref _destroyedMesh);
+			set => SetProperty(ref _destroyedMesh, value);
+		}
+
+		public BaseDestructibleDevice(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

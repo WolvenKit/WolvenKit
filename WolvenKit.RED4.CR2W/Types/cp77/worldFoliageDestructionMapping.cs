@@ -7,10 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldFoliageDestructionMapping : ISerializable
 	{
-		[Ordinal(0)] [RED("baseMesh")] public raRef<CMesh> BaseMesh { get; set; }
-		[Ordinal(1)] [RED("destructibleMesh")] public raRef<CMesh> DestructibleMesh { get; set; }
-		[Ordinal(2)] [RED("meshAppearance")] public CName MeshAppearance { get; set; }
+		private raRef<CMesh> _baseMesh;
+		private raRef<CMesh> _destructibleMesh;
 
-		public worldFoliageDestructionMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("baseMesh")] 
+		public raRef<CMesh> BaseMesh
+		{
+			get => GetProperty(ref _baseMesh);
+			set => SetProperty(ref _baseMesh, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("destructibleMesh")] 
+		public raRef<CMesh> DestructibleMesh
+		{
+			get => GetProperty(ref _destructibleMesh);
+			set => SetProperty(ref _destructibleMesh, value);
+		}
+
+		public worldFoliageDestructionMapping(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

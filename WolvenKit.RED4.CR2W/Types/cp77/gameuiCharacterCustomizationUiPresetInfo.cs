@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCharacterCustomizationUiPresetInfo : CVariable
 	{
-		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("resource")] public raRef<gameuiCharacterCustomizationUiPreset> Resource { get; set; }
+		private CName _name;
+		private raRef<gameuiCharacterCustomizationUiPreset> _resource;
 
-		public gameuiCharacterCustomizationUiPresetInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("resource")] 
+		public raRef<gameuiCharacterCustomizationUiPreset> Resource
+		{
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
+		}
+
+		public gameuiCharacterCustomizationUiPresetInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameplayQuestSystem : gameScriptableSystem
 	{
-		[Ordinal(0)] [RED("quests")] public CArray<CHandle<GamplayQuestData>> Quests { get; set; }
+		private CArray<CHandle<GamplayQuestData>> _quests;
 
-		public GameplayQuestSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("quests")] 
+		public CArray<CHandle<GamplayQuestData>> Quests
+		{
+			get => GetProperty(ref _quests);
+			set => SetProperty(ref _quests, value);
+		}
+
+		public GameplayQuestSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

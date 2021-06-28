@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SDocumentAdress : CVariable
 	{
-		[Ordinal(0)] [RED("folderID")] public CInt32 FolderID { get; set; }
-		[Ordinal(1)] [RED("documentID")] public CInt32 DocumentID { get; set; }
+		private CInt32 _folderID;
+		private CInt32 _documentID;
 
-		public SDocumentAdress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("folderID")] 
+		public CInt32 FolderID
+		{
+			get => GetProperty(ref _folderID);
+			set => SetProperty(ref _folderID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("documentID")] 
+		public CInt32 DocumentID
+		{
+			get => GetProperty(ref _documentID);
+			set => SetProperty(ref _documentID, value);
+		}
+
+		public SDocumentAdress(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

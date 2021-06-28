@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scneventsVFXEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("effectEntry")] public scnEffectEntry EffectEntry { get; set; }
-		[Ordinal(7)] [RED("action")] public CEnum<scneventsVFXActionType> Action { get; set; }
-		[Ordinal(8)] [RED("sequenceShift")] public CUInt32 SequenceShift { get; set; }
-		[Ordinal(9)] [RED("performerId")] public scnPerformerId PerformerId { get; set; }
-		[Ordinal(10)] [RED("nodeRef")] public NodeRef NodeRef { get; set; }
-		[Ordinal(11)] [RED("muteSound")] public CBool MuteSound { get; set; }
+		private scnEffectEntry _effectEntry;
+		private CEnum<scneventsVFXActionType> _action;
+		private CUInt32 _sequenceShift;
+		private scnPerformerId _performerId;
+		private NodeRef _nodeRef;
+		private CBool _muteSound;
 
-		public scneventsVFXEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("effectEntry")] 
+		public scnEffectEntry EffectEntry
+		{
+			get => GetProperty(ref _effectEntry);
+			set => SetProperty(ref _effectEntry, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("action")] 
+		public CEnum<scneventsVFXActionType> Action
+		{
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("sequenceShift")] 
+		public CUInt32 SequenceShift
+		{
+			get => GetProperty(ref _sequenceShift);
+			set => SetProperty(ref _sequenceShift, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("performerId")] 
+		public scnPerformerId PerformerId
+		{
+			get => GetProperty(ref _performerId);
+			set => SetProperty(ref _performerId, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("nodeRef")] 
+		public NodeRef NodeRef
+		{
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("muteSound")] 
+		public CBool MuteSound
+		{
+			get => GetProperty(ref _muteSound);
+			set => SetProperty(ref _muteSound, value);
+		}
+
+		public scneventsVFXEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

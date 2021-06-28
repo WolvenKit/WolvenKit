@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalRequestClassFilter : CVariable
 	{
-		[Ordinal(0)] [RED("className")] public CName ClassName { get; set; }
+		private CName _className;
 
-		public gameJournalRequestClassFilter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("className")] 
+		public CName ClassName
+		{
+			get => GetProperty(ref _className);
+			set => SetProperty(ref _className, value);
+		}
+
+		public gameJournalRequestClassFilter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectExecutor_PhysicalImpulseFromInstigator_Value : gameEffectExecutor
 	{
-		[Ordinal(1)] [RED("magnitude")] public CFloat Magnitude { get; set; }
+		private CFloat _magnitude;
 
-		public gameEffectExecutor_PhysicalImpulseFromInstigator_Value(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("magnitude")] 
+		public CFloat Magnitude
+		{
+			get => GetProperty(ref _magnitude);
+			set => SetProperty(ref _magnitude, value);
+		}
+
+		public gameEffectExecutor_PhysicalImpulseFromInstigator_Value(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

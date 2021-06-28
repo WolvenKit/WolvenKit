@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entIKTargetRemoveEvent : redEvent
 	{
-		[Ordinal(0)] [RED("ikTargetRef")] public animIKTargetRef IkTargetRef { get; set; }
+		private animIKTargetRef _ikTargetRef;
 
-		public entIKTargetRemoveEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ikTargetRef")] 
+		public animIKTargetRef IkTargetRef
+		{
+			get => GetProperty(ref _ikTargetRef);
+			set => SetProperty(ref _ikTargetRef, value);
+		}
+
+		public entIKTargetRemoveEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

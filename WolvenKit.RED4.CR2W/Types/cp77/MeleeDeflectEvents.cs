@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MeleeDeflectEvents : MeleeEventsTransition
 	{
-		[Ordinal(0)] [RED("deflectStatFlag")] public CHandle<gameStatModifierData> DeflectStatFlag { get; set; }
+		private CHandle<gameStatModifierData> _deflectStatFlag;
 
-		public MeleeDeflectEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("deflectStatFlag")] 
+		public CHandle<gameStatModifierData> DeflectStatFlag
+		{
+			get => GetProperty(ref _deflectStatFlag);
+			set => SetProperty(ref _deflectStatFlag, value);
+		}
+
+		public MeleeDeflectEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

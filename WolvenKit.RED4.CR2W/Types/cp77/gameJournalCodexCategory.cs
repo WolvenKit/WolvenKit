@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalCodexCategory : gameJournalFileEntry
 	{
-		[Ordinal(2)] [RED("categoryName")] public LocalizationString CategoryName { get; set; }
+		private LocalizationString _categoryName;
 
-		public gameJournalCodexCategory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("categoryName")] 
+		public LocalizationString CategoryName
+		{
+			get => GetProperty(ref _categoryName);
+			set => SetProperty(ref _categoryName, value);
+		}
+
+		public gameJournalCodexCategory(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

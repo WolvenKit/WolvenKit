@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CyberdeckDeviceQuickhackData : CVariable
 	{
-		[Ordinal(0)] [RED("UIIcon")] public wCHandle<gamedataUIIcon_Record> UIIcon { get; set; }
-		[Ordinal(1)] [RED("ObjectActionRecord")] public wCHandle<gamedataObjectAction_Record> ObjectActionRecord { get; set; }
+		private wCHandle<gamedataUIIcon_Record> _uIIcon;
+		private wCHandle<gamedataObjectAction_Record> _objectActionRecord;
 
-		public CyberdeckDeviceQuickhackData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("UIIcon")] 
+		public wCHandle<gamedataUIIcon_Record> UIIcon
+		{
+			get => GetProperty(ref _uIIcon);
+			set => SetProperty(ref _uIIcon, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("ObjectActionRecord")] 
+		public wCHandle<gamedataObjectAction_Record> ObjectActionRecord
+		{
+			get => GetProperty(ref _objectActionRecord);
+			set => SetProperty(ref _objectActionRecord, value);
+		}
+
+		public CyberdeckDeviceQuickhackData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

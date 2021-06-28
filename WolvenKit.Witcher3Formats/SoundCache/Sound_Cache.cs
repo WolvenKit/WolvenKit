@@ -12,7 +12,7 @@ namespace WolvenKit.Wwise
     /// <summary>
     /// The soud archives of Witcher 3. Contains .wem and .bnk sound files.
     /// </summary>
-    public class SoundCache : IGameArchive
+    public class SoundCache : IWitcherGameArchive
     {
         #region Fields
 
@@ -33,11 +33,6 @@ namespace WolvenKit.Wwise
         public long buffsize;
         public long checksum;
         public long FileCount;
-
-        /// <summary>
-        /// The files packed into the original soundcache.
-        /// </summary>
-        public List<SoundCacheItem> Files;
 
         public long InfoOffset;
         public long NamesOffset;
@@ -69,7 +64,9 @@ namespace WolvenKit.Wwise
 
         #region Properties
 
+        public Dictionary<ulong, IGameFile> Files { get; } = new();
         public string ArchiveAbsolutePath { get; set; }
+        public string Name => Path.GetFileName(ArchiveAbsolutePath);
         public EArchiveType TypeName => EArchiveType.SoundCache;
 
         #endregion Properties
@@ -172,7 +169,6 @@ namespace WolvenKit.Wwise
         /// <param name="br">The binaryreader to read the file contents from.</param>
         public void Read(BinaryReader br)
         {
-            Files = new List<SoundCacheItem>();
             if (!br.ReadBytes(4).SequenceEqual(Magic))
                 throw new InvalidDataException("Wrong ID string in sound cache.");
             Version = br.ReadInt32();
@@ -196,6 +192,7 @@ namespace WolvenKit.Wwise
             buffsize = br.ReadInt64();
             checksum = br.ReadInt64();
             br.BaseStream.Seek(InfoOffset, SeekOrigin.Begin);
+            var itemslist = new List<SoundCacheItem>();
             for (var i = 0; i < FileCount; i++)
             {
                 var sf = new SoundCacheItem(this);
@@ -211,9 +208,10 @@ namespace WolvenKit.Wwise
                     sf.PageOffset = br.ReadUInt32();
                     sf.Size = br.ReadUInt32();
                 }
-                Files.Add(sf);
+                itemslist.Add(sf);
+                
             }
-            foreach (var f in Files)
+            foreach (var f in itemslist)
             {
                 br.BaseStream.Seek(NamesOffset + f.NameOffset, SeekOrigin.Begin);
                 f.Name = br.ReadCR2WString();
@@ -222,6 +220,7 @@ namespace WolvenKit.Wwise
                     f.Name = info.StreamedFiles.First(x => x.Id == (f.Name.Split('.')[0])).Path;
                 }
                 f.ParentFile = this.ArchiveAbsolutePath;
+                Files.Add(f.Key, f);
             }
         }
 
@@ -302,5 +301,6 @@ namespace WolvenKit.Wwise
         }
 
         #endregion Methods
+
     }
 }

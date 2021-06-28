@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioParamMixerDecoratorMetadata : audioEmitterMetadata
 	{
-		[Ordinal(1)] [RED("inParams")] public CArray<audioMixParamDescription> InParams { get; set; }
-		[Ordinal(2)] [RED("outputName")] public CName OutputName { get; set; }
-		[Ordinal(3)] [RED("operation")] public CEnum<audioMixParamsAction> Operation { get; set; }
-		[Ordinal(4)] [RED("globalOutput")] public CBool GlobalOutput { get; set; }
+		private CArray<audioMixParamDescription> _inParams;
+		private CName _outputName;
+		private CEnum<audioMixParamsAction> _operation;
+		private CBool _globalOutput;
 
-		public audioParamMixerDecoratorMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("inParams")] 
+		public CArray<audioMixParamDescription> InParams
+		{
+			get => GetProperty(ref _inParams);
+			set => SetProperty(ref _inParams, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("outputName")] 
+		public CName OutputName
+		{
+			get => GetProperty(ref _outputName);
+			set => SetProperty(ref _outputName, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("operation")] 
+		public CEnum<audioMixParamsAction> Operation
+		{
+			get => GetProperty(ref _operation);
+			set => SetProperty(ref _operation, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("globalOutput")] 
+		public CBool GlobalOutput
+		{
+			get => GetProperty(ref _globalOutput);
+			set => SetProperty(ref _globalOutput, value);
+		}
+
+		public audioParamMixerDecoratorMetadata(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

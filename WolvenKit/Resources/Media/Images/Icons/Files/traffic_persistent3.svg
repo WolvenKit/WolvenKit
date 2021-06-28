@@ -6,9 +6,14 @@
 	.st0{fill:none;stroke:#FFFFFF;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;}
 	.st1{fill:#FFFFFF;}
 	.st2{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
-	.st3{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
-	.st4{stroke:#000000;stroke-linecap:round;stroke-miterlimit:10;}
-	.st5{fill:#FFFFFF;stroke:#000000;stroke-linecap:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#29ABE2;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st5{filter:url(#Adobe_OpacityMaskFilter);}
+	.st6{mask:url(#SVGID_1_);fill:#29ABE2;stroke:#29ABE2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st7{fill:#FFFFFF;stroke:#29ABE2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st8{filter:url(#Adobe_OpacityMaskFilter_1_);}
+	.st9{mask:url(#SVGID_2_);fill:#FFFFFF;}
+	.st10{fill:#29ABE2;stroke:#29ABE2;stroke-linecap:round;stroke-miterlimit:10;}
 </style>
 <g id="Layer_5">
 	<g>
@@ -26,11 +31,24 @@
 		<line class="st3" x1="3" y1="9.9" x2="3" y2="13.5"/>
 	</g>
 	<g>
-		<line class="st3" x1="13.4" y1="9.9" x2="13.4" y2="13.5"/>
+		<line class="st4" x1="13.4" y1="9.9" x2="13.4" y2="13.5"/>
 	</g>
-	<path class="st4" d="M13.9,11.1H2.5c-0.3,0-0.6-0.3-0.6-0.6v-3c0-0.6,0.5-1.1,1.1-1.1h10.5c0.6,0,1.1,0.5,1.1,1.1v3
+	<defs>
+		<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="1.4" y="5.9" width="13.6" height="5.7">
+			
+				<feColorMatrix  type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0" color-interpolation-filters="sRGB" result="source"/>
+			<feFlood  style="flood-color:white;flood-opacity:1" result="back"/>
+			<feBlend  in="source" in2="back" mode="normal"/>
+		</filter>
+	</defs>
+	<mask maskUnits="userSpaceOnUse" x="1.4" y="5.9" width="13.6" height="5.7" id="SVGID_1_">
+		<g class="st5">
+			<path class="st2" d="M19.2,12.9H9.1v-2.7c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V12.9z"/>
+		</g>
+	</mask>
+	<path class="st6" d="M13.9,11.1H2.5c-0.3,0-0.6-0.3-0.6-0.6v-3c0-0.6,0.5-1.1,1.1-1.1h10.5c0.6,0,1.1,0.5,1.1,1.1v3
 		C14.5,10.9,14.2,11.1,13.9,11.1z"/>
-	<path class="st5" d="M13.2,5.9H3.1V3.2c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V5.9z"/>
+	<path class="st7" d="M13.2,5.9H3.1V3.2c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V5.9z"/>
 	<path class="st1" d="M11.5,16.9H10c-0.5,0-1-0.5-1-1v-0.4c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C12.5,16.5,12,16.9,11.5,16.9z"
 		/>
 	<path class="st1" d="M18.4,16.9h-1.4c-0.5,0-1-0.5-1-1v-0.4c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4
@@ -38,7 +56,20 @@
 </g>
 <g id="Layer_6">
 	<path class="st1" d="M5.5,9.9H4c-0.5,0-1-0.4-1-1V8.6c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C6.5,9.5,6,9.9,5.5,9.9z"/>
-	<path class="st1" d="M12.4,9.9h-1.4c-0.6,0-1-0.4-1-1V8.6c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C13.4,9.5,12.9,9.9,12.4,9.9z"/>
+	<defs>
+		<filter id="Adobe_OpacityMaskFilter_1_" filterUnits="userSpaceOnUse" x="9.9" y="7.6" width="3.4" height="2.4">
+			
+				<feColorMatrix  type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0" color-interpolation-filters="sRGB" result="source"/>
+			<feFlood  style="flood-color:white;flood-opacity:1" result="back"/>
+			<feBlend  in="source" in2="back" mode="normal"/>
+		</filter>
+	</defs>
+	<mask maskUnits="userSpaceOnUse" x="9.9" y="7.6" width="3.4" height="2.4" id="SVGID_2_">
+		<g class="st8">
+			<path class="st2" d="M19.2,12.9H9.1v-2.7c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V12.9z"/>
+		</g>
+	</mask>
+	<path class="st9" d="M12.4,9.9h-1.4c-0.6,0-1-0.4-1-1V8.6c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C13.4,9.5,12.9,9.9,12.4,9.9z"/>
 </g>
 <g id="Layer_4">
 	<g>
@@ -51,7 +82,8 @@
 	</g>
 	<path class="st2" d="M19.9,18.1H8.5c-0.3,0-0.6-0.3-0.6-0.6v-3c0-0.6,0.5-1.1,1.1-1.1h10.5c0.6,0,1.1,0.5,1.1,1.1v3
 		C20.5,17.9,20.2,18.1,19.9,18.1z"/>
-	<path class="st2" d="M19.2,12.9H9.1v-2.7c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V12.9z"/>
+</g>
+<g id="Layer_7">
 </g>
 <g id="Layer_1">
 	<g>
@@ -60,9 +92,9 @@
 	<g>
 		<line class="st3" x1="19.4" y1="16.9" x2="19.4" y2="20.5"/>
 	</g>
-	<path class="st4" d="M19.9,18.1H8.5c-0.3,0-0.6-0.3-0.6-0.6v-3c0-0.6,0.5-1.1,1.1-1.1h10.5c0.6,0,1.1,0.5,1.1,1.1v3
+	<path class="st10" d="M19.9,18.1H8.5c-0.3,0-0.6-0.3-0.6-0.6v-3c0-0.6,0.5-1.1,1.1-1.1h10.5c0.6,0,1.1,0.5,1.1,1.1v3
 		C20.5,17.9,20.2,18.1,19.9,18.1z"/>
-	<path class="st5" d="M19.2,12.9H9.1v-2.7c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V12.9z"/>
+	<path class="st7" d="M19.2,12.9H9.1v-2.7c0-0.6,0.5-1.1,1.1-1.1h7.9c0.6,0,1.1,0.5,1.1,1.1V12.9z"/>
 </g>
 <g id="Layer_3">
 	<path class="st1" d="M11.5,16.9H10c-0.5,0-1-0.5-1-1v-0.4c0-0.5,0.4-1,1-1h1.4c0.5,0,1,0.4,1,1v0.4C12.5,16.5,12,16.9,11.5,16.9z"

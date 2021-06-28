@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioElevatorSettings : audioEntitySettings
 	{
-		[Ordinal(6)] [RED("musicEvents")] public audioMusicController MusicEvents { get; set; }
-		[Ordinal(7)] [RED("movementEvents")] public audioLoopingSoundController MovementEvents { get; set; }
-		[Ordinal(8)] [RED("callingEvent")] public CName CallingEvent { get; set; }
-		[Ordinal(9)] [RED("destinationReachedEvent")] public CName DestinationReachedEvent { get; set; }
-		[Ordinal(10)] [RED("panelSelectionEvent")] public CName PanelSelectionEvent { get; set; }
+		private audioMusicController _musicEvents;
+		private audioLoopingSoundController _movementEvents;
+		private CName _callingEvent;
+		private CName _destinationReachedEvent;
+		private CName _panelSelectionEvent;
 
-		public audioElevatorSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("musicEvents")] 
+		public audioMusicController MusicEvents
+		{
+			get => GetProperty(ref _musicEvents);
+			set => SetProperty(ref _musicEvents, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("movementEvents")] 
+		public audioLoopingSoundController MovementEvents
+		{
+			get => GetProperty(ref _movementEvents);
+			set => SetProperty(ref _movementEvents, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("callingEvent")] 
+		public CName CallingEvent
+		{
+			get => GetProperty(ref _callingEvent);
+			set => SetProperty(ref _callingEvent, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("destinationReachedEvent")] 
+		public CName DestinationReachedEvent
+		{
+			get => GetProperty(ref _destinationReachedEvent);
+			set => SetProperty(ref _destinationReachedEvent, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("panelSelectionEvent")] 
+		public CName PanelSelectionEvent
+		{
+			get => GetProperty(ref _panelSelectionEvent);
+			set => SetProperty(ref _panelSelectionEvent, value);
+		}
+
+		public audioElevatorSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TweakAIActionConditionAbstract : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("actionRecord")] public wCHandle<gamedataAIAction_Record> ActionRecord { get; set; }
-		[Ordinal(1)] [RED("actionDebugName")] public CString ActionDebugName { get; set; }
+		private wCHandle<gamedataAIAction_Record> _actionRecord;
+		private CString _actionDebugName;
 
-		public TweakAIActionConditionAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("actionRecord")] 
+		public wCHandle<gamedataAIAction_Record> ActionRecord
+		{
+			get => GetProperty(ref _actionRecord);
+			set => SetProperty(ref _actionRecord, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("actionDebugName")] 
+		public CString ActionDebugName
+		{
+			get => GetProperty(ref _actionDebugName);
+			set => SetProperty(ref _actionDebugName, value);
+		}
+
+		public TweakAIActionConditionAbstract(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

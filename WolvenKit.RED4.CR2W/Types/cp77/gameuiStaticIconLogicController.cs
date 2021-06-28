@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiStaticIconLogicController : gameuiDynamicIconLogicController
 	{
-		[Ordinal(1)] [RED("iconReference")] public TweakDBID IconReference { get; set; }
+		private TweakDBID _iconReference;
 
-		public gameuiStaticIconLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("iconReference")] 
+		public TweakDBID IconReference
+		{
+			get => GetProperty(ref _iconReference);
+			set => SetProperty(ref _iconReference, value);
+		}
+
+		public gameuiStaticIconLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

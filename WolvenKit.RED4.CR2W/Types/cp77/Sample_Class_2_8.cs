@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Sample_Class_2_8 : CVariable
 	{
-		[Ordinal(0)] [RED("array")] public CArray<CInt32> Array { get; set; }
+		private CArray<CInt32> _array;
 
-		public Sample_Class_2_8(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("array")] 
+		public CArray<CInt32> Array
+		{
+			get => GetProperty(ref _array);
+			set => SetProperty(ref _array, value);
+		}
+
+		public Sample_Class_2_8(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

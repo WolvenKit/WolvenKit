@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TriggerVolumeOperations : DeviceOperations
 	{
-		[Ordinal(2)] [RED("triggerVolumeOperations")] public CArray<STriggerVolumeOperationData> TriggerVolumeOperations_ { get; set; }
+		private CArray<STriggerVolumeOperationData> _triggerVolumeOperations;
 
-		public TriggerVolumeOperations(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("triggerVolumeOperations")] 
+		public CArray<STriggerVolumeOperationData> TriggerVolumeOperations_
+		{
+			get => GetProperty(ref _triggerVolumeOperations);
+			set => SetProperty(ref _triggerVolumeOperations, value);
+		}
+
+		public TriggerVolumeOperations(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

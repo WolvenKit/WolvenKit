@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameBinkVideoSummary : CVariable
 	{
-		[Ordinal(0)] [RED("currentTimeMs")] public CUInt32 CurrentTimeMs { get; set; }
-		[Ordinal(1)] [RED("totalTimeMs")] public CUInt32 TotalTimeMs { get; set; }
-		[Ordinal(2)] [RED("currentFrame")] public CUInt32 CurrentFrame { get; set; }
-		[Ordinal(3)] [RED("totalFrames")] public CUInt32 TotalFrames { get; set; }
-		[Ordinal(4)] [RED("frameRate")] public CUInt32 FrameRate { get; set; }
+		private CUInt32 _currentTimeMs;
+		private CUInt32 _totalTimeMs;
+		private CUInt32 _currentFrame;
+		private CUInt32 _totalFrames;
+		private CUInt32 _frameRate;
 
-		public gameBinkVideoSummary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("currentTimeMs")] 
+		public CUInt32 CurrentTimeMs
+		{
+			get => GetProperty(ref _currentTimeMs);
+			set => SetProperty(ref _currentTimeMs, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("totalTimeMs")] 
+		public CUInt32 TotalTimeMs
+		{
+			get => GetProperty(ref _totalTimeMs);
+			set => SetProperty(ref _totalTimeMs, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("currentFrame")] 
+		public CUInt32 CurrentFrame
+		{
+			get => GetProperty(ref _currentFrame);
+			set => SetProperty(ref _currentFrame, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("totalFrames")] 
+		public CUInt32 TotalFrames
+		{
+			get => GetProperty(ref _totalFrames);
+			set => SetProperty(ref _totalFrames, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("frameRate")] 
+		public CUInt32 FrameRate
+		{
+			get => GetProperty(ref _frameRate);
+			set => SetProperty(ref _frameRate, value);
+		}
+
+		public gameBinkVideoSummary(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

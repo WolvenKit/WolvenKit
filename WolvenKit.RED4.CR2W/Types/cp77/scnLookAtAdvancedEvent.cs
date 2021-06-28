@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnLookAtAdvancedEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("advancedData")] public scnLookAtAdvancedEventData AdvancedData { get; set; }
+		private scnLookAtAdvancedEventData _advancedData;
 
-		public scnLookAtAdvancedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("advancedData")] 
+		public scnLookAtAdvancedEventData AdvancedData
+		{
+			get => GetProperty(ref _advancedData);
+			set => SetProperty(ref _advancedData, value);
+		}
+
+		public scnLookAtAdvancedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

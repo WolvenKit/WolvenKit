@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entShadowMeshChangeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("requestedState")] public CEnum<entAppearanceStatus> RequestedState { get; set; }
+		private CEnum<entAppearanceStatus> _requestedState;
 
-		public entShadowMeshChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requestedState")] 
+		public CEnum<entAppearanceStatus> RequestedState
+		{
+			get => GetProperty(ref _requestedState);
+			set => SetProperty(ref _requestedState, value);
+		}
+
+		public entShadowMeshChangeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

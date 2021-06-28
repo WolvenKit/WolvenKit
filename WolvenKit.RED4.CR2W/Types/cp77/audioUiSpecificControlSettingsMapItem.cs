@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioUiSpecificControlSettingsMapItem : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("uiEventSettingsMatrix")] public CArray<audioUiControlEventsSettingsMapItem> UiEventSettingsMatrix { get; set; }
+		private CArray<audioUiControlEventsSettingsMapItem> _uiEventSettingsMatrix;
 
-		public audioUiSpecificControlSettingsMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("uiEventSettingsMatrix")] 
+		public CArray<audioUiControlEventsSettingsMapItem> UiEventSettingsMatrix
+		{
+			get => GetProperty(ref _uiEventSettingsMatrix);
+			set => SetProperty(ref _uiEventSettingsMatrix, value);
+		}
+
+		public audioUiSpecificControlSettingsMapItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkTweakDBIDSelector : IScriptable
 	{
-		[Ordinal(0)] [RED("baseTweakID")] public TweakDBID BaseTweakID { get; set; }
+		private TweakDBID _baseTweakID;
 
-		public inkTweakDBIDSelector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("baseTweakID")] 
+		public TweakDBID BaseTweakID
+		{
+			get => GetProperty(ref _baseTweakID);
+			set => SetProperty(ref _baseTweakID, value);
+		}
+
+		public inkTweakDBIDSelector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

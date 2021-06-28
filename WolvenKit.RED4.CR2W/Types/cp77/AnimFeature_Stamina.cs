@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_Stamina : animAnimFeature
 	{
-		[Ordinal(0)] [RED("staminaValue")] public CFloat StaminaValue { get; set; }
-		[Ordinal(1)] [RED("tiredness")] public CFloat Tiredness { get; set; }
+		private CFloat _staminaValue;
+		private CFloat _tiredness;
 
-		public AnimFeature_Stamina(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("staminaValue")] 
+		public CFloat StaminaValue
+		{
+			get => GetProperty(ref _staminaValue);
+			set => SetProperty(ref _staminaValue, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("tiredness")] 
+		public CFloat Tiredness
+		{
+			get => GetProperty(ref _tiredness);
+			set => SetProperty(ref _tiredness, value);
+		}
+
+		public AnimFeature_Stamina(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

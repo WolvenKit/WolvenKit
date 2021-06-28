@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SCodexRecord : CVariable
 	{
-		[Ordinal(0)] [RED("RecordID")] public TweakDBID RecordID { get; set; }
-		[Ordinal(1)] [RED("RecordContent")] public CArray<SCodexRecordPart> RecordContent { get; set; }
-		[Ordinal(2)] [RED("Tags")] public CArray<CName> Tags { get; set; }
-		[Ordinal(3)] [RED("Unlocked")] public CBool Unlocked { get; set; }
+		private TweakDBID _recordID;
+		private CArray<SCodexRecordPart> _recordContent;
+		private CArray<CName> _tags;
+		private CBool _unlocked;
 
-		public SCodexRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("RecordID")] 
+		public TweakDBID RecordID
+		{
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("RecordContent")] 
+		public CArray<SCodexRecordPart> RecordContent
+		{
+			get => GetProperty(ref _recordContent);
+			set => SetProperty(ref _recordContent, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("Tags")] 
+		public CArray<CName> Tags
+		{
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("Unlocked")] 
+		public CBool Unlocked
+		{
+			get => GetProperty(ref _unlocked);
+			set => SetProperty(ref _unlocked, value);
+		}
+
+		public SCodexRecord(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

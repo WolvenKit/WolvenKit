@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkWidgetLibraryItemUnpackedView : ISerializable
 	{
-		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("instance")] public CHandle<inkWidgetLibraryItemInstance> Instance { get; set; }
+		private CName _name;
+		private CHandle<inkWidgetLibraryItemInstance> _instance;
 
-		public inkWidgetLibraryItemUnpackedView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("instance")] 
+		public CHandle<inkWidgetLibraryItemInstance> Instance
+		{
+			get => GetProperty(ref _instance);
+			set => SetProperty(ref _instance, value);
+		}
+
+		public inkWidgetLibraryItemUnpackedView(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIArgumentNodeRefValue : AIArgumentDefinition
 	{
-		[Ordinal(3)] [RED("type")] public CEnum<AIArgumentType> Type { get; set; }
-		[Ordinal(4)] [RED("defaultValue")] public NodeRef DefaultValue { get; set; }
+		private CEnum<AIArgumentType> _type;
+		private NodeRef _defaultValue;
 
-		public AIArgumentNodeRefValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("type")] 
+		public CEnum<AIArgumentType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("defaultValue")] 
+		public NodeRef DefaultValue
+		{
+			get => GetProperty(ref _defaultValue);
+			set => SetProperty(ref _defaultValue, value);
+		}
+
+		public AIArgumentNodeRefValue(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

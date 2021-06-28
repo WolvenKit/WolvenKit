@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameaudioeventsStopDialogLine : redEvent
 	{
-		[Ordinal(0)] [RED("stringId")] public CRUID StringId { get; set; }
-		[Ordinal(1)] [RED("fadeOut")] public CFloat FadeOut { get; set; }
+		private CRUID _stringId;
+		private CFloat _fadeOut;
 
-		public gameaudioeventsStopDialogLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stringId")] 
+		public CRUID StringId
+		{
+			get => GetProperty(ref _stringId);
+			set => SetProperty(ref _stringId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("fadeOut")] 
+		public CFloat FadeOut
+		{
+			get => GetProperty(ref _fadeOut);
+			set => SetProperty(ref _fadeOut, value);
+		}
+
+		public gameaudioeventsStopDialogLine(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

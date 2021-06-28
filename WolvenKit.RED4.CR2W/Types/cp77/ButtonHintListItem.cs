@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ButtonHintListItem : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("inputDisplay")] public inkWidgetReference InputDisplay { get; set; }
-		[Ordinal(2)] [RED("label")] public inkTextWidgetReference Label { get; set; }
-		[Ordinal(3)] [RED("buttonHint")] public wCHandle<inkInputDisplayController> ButtonHint { get; set; }
-		[Ordinal(4)] [RED("actionName")] public CName ActionName { get; set; }
+		private inkWidgetReference _inputDisplay;
+		private inkTextWidgetReference _label;
+		private wCHandle<inkInputDisplayController> _buttonHint;
+		private CName _actionName;
 
-		public ButtonHintListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("inputDisplay")] 
+		public inkWidgetReference InputDisplay
+		{
+			get => GetProperty(ref _inputDisplay);
+			set => SetProperty(ref _inputDisplay, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("label")] 
+		public inkTextWidgetReference Label
+		{
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("buttonHint")] 
+		public wCHandle<inkInputDisplayController> ButtonHint
+		{
+			get => GetProperty(ref _buttonHint);
+			set => SetProperty(ref _buttonHint, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("actionName")] 
+		public CName ActionName
+		{
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
+		}
+
+		public ButtonHintListItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

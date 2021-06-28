@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NetRunnerListItem : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("highlight")] public inkWidgetReference Highlight { get; set; }
+		private inkWidgetReference _highlight;
 
-		public NetRunnerListItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("highlight")] 
+		public inkWidgetReference Highlight
+		{
+			get => GetProperty(ref _highlight);
+			set => SetProperty(ref _highlight, value);
+		}
+
+		public NetRunnerListItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

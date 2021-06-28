@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeactivateC4 : ActionBool
 	{
-		[Ordinal(25)] [RED("itemID")] public gameItemID ItemID { get; set; }
+		private gameItemID _itemID;
 
-		public DeactivateC4(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("itemID")] 
+		public gameItemID ItemID
+		{
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
+		}
+
+		public DeactivateC4(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

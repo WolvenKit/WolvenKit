@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkWindowDrawMetrics : CVariable
 	{
-		[Ordinal(0)] [RED("allTextures")] public CArray<Vector2> AllTextures { get; set; }
-		[Ordinal(1)] [RED("textureSizeTypes")] public CArray<Vector2> TextureSizeTypes { get; set; }
-		[Ordinal(2)] [RED("textureTypeTotal")] public CArray<CUInt32> TextureTypeTotal { get; set; }
-		[Ordinal(3)] [RED("maxUsedTextureTypes")] public CArray<CUInt32> MaxUsedTextureTypes { get; set; }
-		[Ordinal(4)] [RED("drawMetrics")] public CArray<inkSingleDrawMetric> DrawMetrics { get; set; }
+		private CArray<Vector2> _allTextures;
+		private CArray<Vector2> _textureSizeTypes;
+		private CArray<CUInt32> _textureTypeTotal;
+		private CArray<CUInt32> _maxUsedTextureTypes;
+		private CArray<inkSingleDrawMetric> _drawMetrics;
 
-		public inkWindowDrawMetrics(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("allTextures")] 
+		public CArray<Vector2> AllTextures
+		{
+			get => GetProperty(ref _allTextures);
+			set => SetProperty(ref _allTextures, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("textureSizeTypes")] 
+		public CArray<Vector2> TextureSizeTypes
+		{
+			get => GetProperty(ref _textureSizeTypes);
+			set => SetProperty(ref _textureSizeTypes, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("textureTypeTotal")] 
+		public CArray<CUInt32> TextureTypeTotal
+		{
+			get => GetProperty(ref _textureTypeTotal);
+			set => SetProperty(ref _textureTypeTotal, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("maxUsedTextureTypes")] 
+		public CArray<CUInt32> MaxUsedTextureTypes
+		{
+			get => GetProperty(ref _maxUsedTextureTypes);
+			set => SetProperty(ref _maxUsedTextureTypes, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("drawMetrics")] 
+		public CArray<inkSingleDrawMetric> DrawMetrics
+		{
+			get => GetProperty(ref _drawMetrics);
+			set => SetProperty(ref _drawMetrics, value);
+		}
+
+		public inkWindowDrawMetrics(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

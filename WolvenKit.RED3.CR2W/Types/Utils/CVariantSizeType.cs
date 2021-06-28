@@ -16,11 +16,11 @@ namespace WolvenKit.RED3.CR2W.Types
     /// </summary>
     [DataContract(Namespace = "")]
     [REDMeta()]
-    public class CVariantSizeType : CVariable, IBufferVariantAccessor
+    public class CVariantSizeType : CVariable, IREDBufferVariant
     {
         public IEditableVariable Variant { get; set; }
 
-        public CVariantSizeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CVariantSizeType(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
         }
@@ -81,9 +81,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name)
-        {
-            return new CVariantSizeType(cr2w, parent, name);
-        }
+        public void SetVariant(IEditableVariable variant) => this.Variant = variant;
+
     }
 }

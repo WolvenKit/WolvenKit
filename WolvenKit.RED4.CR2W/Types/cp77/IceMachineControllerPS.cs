@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IceMachineControllerPS : VendingMachineControllerPS
 	{
-		[Ordinal(111)] [RED("vendorTweakID")] public TweakDBID VendorTweakID { get; set; }
-		[Ordinal(112)] [RED("iceMachineSFX")] public IceMachineSFX IceMachineSFX { get; set; }
+		private TweakDBID _vendorTweakID;
+		private IceMachineSFX _iceMachineSFX;
 
-		public IceMachineControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(111)] 
+		[RED("vendorTweakID")] 
+		public TweakDBID VendorTweakID
+		{
+			get => GetProperty(ref _vendorTweakID);
+			set => SetProperty(ref _vendorTweakID, value);
+		}
+
+		[Ordinal(112)] 
+		[RED("iceMachineSFX")] 
+		public IceMachineSFX IceMachineSFX
+		{
+			get => GetProperty(ref _iceMachineSFX);
+			set => SetProperty(ref _iceMachineSFX, value);
+		}
+
+		public IceMachineControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

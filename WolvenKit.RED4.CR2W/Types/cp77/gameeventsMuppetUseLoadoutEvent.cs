@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsMuppetUseLoadoutEvent : redEvent
 	{
-		[Ordinal(0)] [RED("adout")] public CHandle<gamedataCPOLoadoutBase_Record> Adout { get; set; }
+		private CHandle<gamedataCPOLoadoutBase_Record> _adout;
 
-		public gameeventsMuppetUseLoadoutEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("adout")] 
+		public CHandle<gamedataCPOLoadoutBase_Record> Adout
+		{
+			get => GetProperty(ref _adout);
+			set => SetProperty(ref _adout, value);
+		}
+
+		public gameeventsMuppetUseLoadoutEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

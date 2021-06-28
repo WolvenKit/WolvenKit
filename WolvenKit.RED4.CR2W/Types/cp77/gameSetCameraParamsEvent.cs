@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSetCameraParamsEvent : redEvent
 	{
-		[Ordinal(0)] [RED("paramsName")] public CName ParamsName { get; set; }
+		private CName _paramsName;
 
-		public gameSetCameraParamsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("paramsName")] 
+		public CName ParamsName
+		{
+			get => GetProperty(ref _paramsName);
+			set => SetProperty(ref _paramsName, value);
+		}
+
+		public gameSetCameraParamsEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

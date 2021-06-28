@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class KillTaggedTargetEvent : redEvent
 	{
-		[Ordinal(0)] [RED("taggedObject")] public wCHandle<gameObject> TaggedObject { get; set; }
+		private wCHandle<gameObject> _taggedObject;
 
-		public KillTaggedTargetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("taggedObject")] 
+		public wCHandle<gameObject> TaggedObject
+		{
+			get => GetProperty(ref _taggedObject);
+			set => SetProperty(ref _taggedObject, value);
+		}
+
+		public KillTaggedTargetEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

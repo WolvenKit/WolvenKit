@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsSectorCacheEntry : CVariable
 	{
-		[Ordinal(0)] [RED("entryOffset")] public CUInt32 EntryOffset { get; set; }
-		[Ordinal(1)] [RED("entrySize")] public CUInt32 EntrySize { get; set; }
+		private CUInt32 _entryOffset;
+		private CUInt32 _entrySize;
 
-		public physicsSectorCacheEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entryOffset")] 
+		public CUInt32 EntryOffset
+		{
+			get => GetProperty(ref _entryOffset);
+			set => SetProperty(ref _entryOffset, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entrySize")] 
+		public CUInt32 EntrySize
+		{
+			get => GetProperty(ref _entrySize);
+			set => SetProperty(ref _entrySize, value);
+		}
+
+		public physicsSectorCacheEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

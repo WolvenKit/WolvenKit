@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InventoryItemPreviewPopupEvent : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public CHandle<InventoryItemPreviewData> Data { get; set; }
+		private CHandle<InventoryItemPreviewData> _data;
 
-		public InventoryItemPreviewPopupEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CHandle<InventoryItemPreviewData> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public InventoryItemPreviewPopupEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

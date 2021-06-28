@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerWeaponBasic : ScannerChunk
 	{
-		[Ordinal(0)] [RED("weapon")] public CName Weapon { get; set; }
+		private CName _weapon;
 
-		public ScannerWeaponBasic(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("weapon")] 
+		public CName Weapon
+		{
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
+		}
+
+		public ScannerWeaponBasic(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

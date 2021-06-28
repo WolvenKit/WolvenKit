@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Crosshair_Melee_Hammer : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] [RED("targetColorChange")] public inkWidgetReference TargetColorChange { get; set; }
+		private inkWidgetReference _targetColorChange;
 
-		public Crosshair_Melee_Hammer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(18)] 
+		[RED("targetColorChange")] 
+		public inkWidgetReference TargetColorChange
+		{
+			get => GetProperty(ref _targetColorChange);
+			set => SetProperty(ref _targetColorChange, value);
+		}
+
+		public Crosshair_Melee_Hammer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

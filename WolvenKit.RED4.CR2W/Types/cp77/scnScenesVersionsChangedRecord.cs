@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnScenesVersionsChangedRecord : CVariable
 	{
-		[Ordinal(0)] [RED("changeInVersion")] public CUInt32 ChangeInVersion { get; set; }
-		[Ordinal(1)] [RED("sceneBeforeChange")] public raRef<scnSceneResource> SceneBeforeChange { get; set; }
+		private CUInt32 _changeInVersion;
+		private raRef<scnSceneResource> _sceneBeforeChange;
 
-		public scnScenesVersionsChangedRecord(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("changeInVersion")] 
+		public CUInt32 ChangeInVersion
+		{
+			get => GetProperty(ref _changeInVersion);
+			set => SetProperty(ref _changeInVersion, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("sceneBeforeChange")] 
+		public raRef<scnSceneResource> SceneBeforeChange
+		{
+			get => GetProperty(ref _sceneBeforeChange);
+			set => SetProperty(ref _sceneBeforeChange, value);
+		}
+
+		public scnScenesVersionsChangedRecord(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkStepperData : CVariable
 	{
-		[Ordinal(0)] [RED("label")] public CString Label { get; set; }
-		[Ordinal(1)] [RED("data")] public wCHandle<IScriptable> Data { get; set; }
+		private CString _label;
+		private wCHandle<IScriptable> _data;
 
-		public inkStepperData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("label")] 
+		public CString Label
+		{
+			get => GetProperty(ref _label);
+			set => SetProperty(ref _label, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("data")] 
+		public wCHandle<IScriptable> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public inkStepperData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

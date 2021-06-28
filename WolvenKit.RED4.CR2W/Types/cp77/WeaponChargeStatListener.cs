@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeaponChargeStatListener : gameCustomValueStatPoolsListener
 	{
-		[Ordinal(0)] [RED("weapon")] public wCHandle<gameweaponObject> Weapon { get; set; }
+		private wCHandle<gameweaponObject> _weapon;
 
-		public WeaponChargeStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("weapon")] 
+		public wCHandle<gameweaponObject> Weapon
+		{
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
+		}
+
+		public WeaponChargeStatListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

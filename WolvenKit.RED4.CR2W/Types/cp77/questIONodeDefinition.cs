@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questIONodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("socketName")] public CName SocketName { get; set; }
+		private CName _socketName;
 
-		public questIONodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("socketName")] 
+		public CName SocketName
+		{
+			get => GetProperty(ref _socketName);
+			set => SetProperty(ref _socketName, value);
+		}
+
+		public questIONodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

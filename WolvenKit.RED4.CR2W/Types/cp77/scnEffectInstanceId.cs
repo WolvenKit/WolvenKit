@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnEffectInstanceId : CVariable
 	{
-		[Ordinal(0)] [RED("effectId")] public scnEffectId EffectId { get; set; }
-		[Ordinal(1)] [RED("id")] public CUInt32 Id { get; set; }
+		private scnEffectId _effectId;
+		private CUInt32 _id;
 
-		public scnEffectInstanceId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("effectId")] 
+		public scnEffectId EffectId
+		{
+			get => GetProperty(ref _effectId);
+			set => SetProperty(ref _effectId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("id")] 
+		public CUInt32 Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		public scnEffectInstanceId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

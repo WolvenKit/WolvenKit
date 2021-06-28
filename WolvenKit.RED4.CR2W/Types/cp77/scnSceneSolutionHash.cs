@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnSceneSolutionHash : CVariable
 	{
-		[Ordinal(0)] [RED("sceneSolutionHash")] public scnSceneSolutionHashHash SceneSolutionHash { get; set; }
+		private scnSceneSolutionHashHash _sceneSolutionHash;
 
-		public scnSceneSolutionHash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sceneSolutionHash")] 
+		public scnSceneSolutionHashHash SceneSolutionHash
+		{
+			get => GetProperty(ref _sceneSolutionHash);
+			set => SetProperty(ref _sceneSolutionHash, value);
+		}
+
+		public scnSceneSolutionHash(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

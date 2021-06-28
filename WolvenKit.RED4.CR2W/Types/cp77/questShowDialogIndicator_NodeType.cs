@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questShowDialogIndicator_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)] [RED("params")] public CArray<questShowDialogIndicator_NodeTypeParams> Params { get; set; }
+		private CArray<questShowDialogIndicator_NodeTypeParams> _params;
 
-		public questShowDialogIndicator_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("params")] 
+		public CArray<questShowDialogIndicator_NodeTypeParams> Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public questShowDialogIndicator_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

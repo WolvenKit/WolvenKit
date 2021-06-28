@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameCookedMultiMappinData : CVariable
 	{
-		[Ordinal(0)] [RED("journalPathHash")] public CUInt32 JournalPathHash { get; set; }
-		[Ordinal(1)] [RED("positions")] public CArray<Vector3> Positions { get; set; }
+		private CUInt32 _journalPathHash;
+		private CArray<Vector3> _positions;
 
-		public gameCookedMultiMappinData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("journalPathHash")] 
+		public CUInt32 JournalPathHash
+		{
+			get => GetProperty(ref _journalPathHash);
+			set => SetProperty(ref _journalPathHash, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("positions")] 
+		public CArray<Vector3> Positions
+		{
+			get => GetProperty(ref _positions);
+			set => SetProperty(ref _positions, value);
+		}
+
+		public gameCookedMultiMappinData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

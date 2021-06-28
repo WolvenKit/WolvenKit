@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questToggleDoor_NodeType : questIVehicleManagerNodeType
 	{
-		[Ordinal(0)] [RED("vehicleRef")] public gameEntityReference VehicleRef { get; set; }
-		[Ordinal(1)] [RED("doorAction")] public CEnum<vehicleEQuestVehicleDoorState> DoorAction { get; set; }
-		[Ordinal(2)] [RED("door")] public CEnum<vehicleEVehicleDoor> Door { get; set; }
-		[Ordinal(3)] [RED("toOpen")] public CBool ToOpen { get; set; }
-		[Ordinal(4)] [RED("doorID")] public CName DoorID { get; set; }
+		private gameEntityReference _vehicleRef;
+		private CEnum<vehicleEQuestVehicleDoorState> _doorAction;
+		private CEnum<vehicleEVehicleDoor> _door;
+		private CBool _toOpen;
+		private CName _doorID;
 
-		public questToggleDoor_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vehicleRef")] 
+		public gameEntityReference VehicleRef
+		{
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("doorAction")] 
+		public CEnum<vehicleEQuestVehicleDoorState> DoorAction
+		{
+			get => GetProperty(ref _doorAction);
+			set => SetProperty(ref _doorAction, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("door")] 
+		public CEnum<vehicleEVehicleDoor> Door
+		{
+			get => GetProperty(ref _door);
+			set => SetProperty(ref _door, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("toOpen")] 
+		public CBool ToOpen
+		{
+			get => GetProperty(ref _toOpen);
+			set => SetProperty(ref _toOpen, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("doorID")] 
+		public CName DoorID
+		{
+			get => GetProperty(ref _doorID);
+			set => SetProperty(ref _doorID, value);
+		}
+
+		public questToggleDoor_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

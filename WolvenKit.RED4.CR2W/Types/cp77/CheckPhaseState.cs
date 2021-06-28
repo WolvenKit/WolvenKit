@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckPhaseState : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("phaseStateValue")] public CEnum<ENPCPhaseState> PhaseStateValue { get; set; }
+		private CEnum<ENPCPhaseState> _phaseStateValue;
 
-		public CheckPhaseState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("phaseStateValue")] 
+		public CEnum<ENPCPhaseState> PhaseStateValue
+		{
+			get => GetProperty(ref _phaseStateValue);
+			set => SetProperty(ref _phaseStateValue, value);
+		}
+
+		public CheckPhaseState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -20,7 +20,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(1003)] [REDBuffer(true)] public CVLQInt32 blocksize { get; set; }
         [Ordinal(1004)] [REDBuffer(true)] public CCompressedBuffer<SBlockData> BlockData { get; set; }
 
-        public CSectorData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CSectorData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
 
             blocksize = new CVLQInt32(cr2w, this, nameof(blocksize)) { IsSerialized = true };

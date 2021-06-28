@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldDeviceRef : CVariable
 	{
-		[Ordinal(0)] [RED("nodeRef")] public NodeRef NodeRef { get; set; }
-		[Ordinal(1)] [RED("componentName")] public CName ComponentName { get; set; }
-		[Ordinal(2)] [RED("deviceClassName")] public CName DeviceClassName { get; set; }
+		private NodeRef _nodeRef;
+		private CName _componentName;
+		private CName _deviceClassName;
 
-		public worldDeviceRef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("nodeRef")] 
+		public NodeRef NodeRef
+		{
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("componentName")] 
+		public CName ComponentName
+		{
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("deviceClassName")] 
+		public CName DeviceClassName
+		{
+			get => GetProperty(ref _deviceClassName);
+			set => SetProperty(ref _deviceClassName, value);
+		}
+
+		public worldDeviceRef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RecurrentStimuliEvent : redEvent
 	{
-		[Ordinal(0)] [RED("requestID")] public StimRequestID RequestID { get; set; }
+		private StimRequestID _requestID;
 
-		public RecurrentStimuliEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requestID")] 
+		public StimRequestID RequestID
+		{
+			get => GetProperty(ref _requestID);
+			set => SetProperty(ref _requestID, value);
+		}
+
+		public RecurrentStimuliEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

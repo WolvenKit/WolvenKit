@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AOEEffectorControllerPS : ActivatedDeviceControllerPS
 	{
-		[Ordinal(107)] [RED("effectsToPlay")] public CArray<CName> EffectsToPlay { get; set; }
+		private CArray<CName> _effectsToPlay;
 
-		public AOEEffectorControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(107)] 
+		[RED("effectsToPlay")] 
+		public CArray<CName> EffectsToPlay
+		{
+			get => GetProperty(ref _effectsToPlay);
+			set => SetProperty(ref _effectsToPlay, value);
+		}
+
+		public AOEEffectorControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

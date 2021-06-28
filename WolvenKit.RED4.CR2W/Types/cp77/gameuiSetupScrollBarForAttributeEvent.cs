@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiSetupScrollBarForAttributeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("attribute")] public CUInt32 Attribute { get; set; }
-		[Ordinal(1)] [RED("startValue")] public CFloat StartValue { get; set; }
-		[Ordinal(2)] [RED("minValue")] public CFloat MinValue { get; set; }
-		[Ordinal(3)] [RED("maxValue")] public CFloat MaxValue { get; set; }
-		[Ordinal(4)] [RED("step")] public CFloat Step { get; set; }
+		private CUInt32 _attribute;
+		private CFloat _startValue;
+		private CFloat _minValue;
+		private CFloat _maxValue;
+		private CFloat _step;
 
-		public gameuiSetupScrollBarForAttributeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("attribute")] 
+		public CUInt32 Attribute
+		{
+			get => GetProperty(ref _attribute);
+			set => SetProperty(ref _attribute, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("startValue")] 
+		public CFloat StartValue
+		{
+			get => GetProperty(ref _startValue);
+			set => SetProperty(ref _startValue, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("minValue")] 
+		public CFloat MinValue
+		{
+			get => GetProperty(ref _minValue);
+			set => SetProperty(ref _minValue, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("maxValue")] 
+		public CFloat MaxValue
+		{
+			get => GetProperty(ref _maxValue);
+			set => SetProperty(ref _maxValue, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("step")] 
+		public CFloat Step
+		{
+			get => GetProperty(ref _step);
+			set => SetProperty(ref _step, value);
+		}
+
+		public gameuiSetupScrollBarForAttributeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GetCurrentPatrolSpotActionPath : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("outPathArgument")] public CHandle<AIArgumentMapping> OutPathArgument { get; set; }
+		private CHandle<AIArgumentMapping> _outPathArgument;
 
-		public GetCurrentPatrolSpotActionPath(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("outPathArgument")] 
+		public CHandle<AIArgumentMapping> OutPathArgument
+		{
+			get => GetProperty(ref _outPathArgument);
+			set => SetProperty(ref _outPathArgument, value);
+		}
+
+		public GetCurrentPatrolSpotActionPath(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

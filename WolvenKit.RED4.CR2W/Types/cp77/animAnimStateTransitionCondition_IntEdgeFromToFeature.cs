@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_IntEdgeFromToFeature : animAnimStateTransitionCondition_IntEdgeFeature
 	{
-		[Ordinal(2)] [RED("fromValue")] public CInt32 FromValue { get; set; }
-		[Ordinal(3)] [RED("toValue")] public CInt32 ToValue { get; set; }
+		private CInt32 _fromValue;
+		private CInt32 _toValue;
 
-		public animAnimStateTransitionCondition_IntEdgeFromToFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("fromValue")] 
+		public CInt32 FromValue
+		{
+			get => GetProperty(ref _fromValue);
+			set => SetProperty(ref _fromValue, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("toValue")] 
+		public CInt32 ToValue
+		{
+			get => GetProperty(ref _toValue);
+			set => SetProperty(ref _toValue, value);
+		}
+
+		public animAnimStateTransitionCondition_IntEdgeFromToFeature(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

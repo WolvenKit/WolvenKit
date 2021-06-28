@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RequestDocumentWidgetUpdateEvent : RequestWidgetUpdateEvent
 	{
-		[Ordinal(2)] [RED("documentType")] public CEnum<EDocumentType> DocumentType { get; set; }
-		[Ordinal(3)] [RED("documentAdress")] public SDocumentAdress DocumentAdress { get; set; }
+		private CEnum<EDocumentType> _documentType;
+		private SDocumentAdress _documentAdress;
 
-		public RequestDocumentWidgetUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("documentType")] 
+		public CEnum<EDocumentType> DocumentType
+		{
+			get => GetProperty(ref _documentType);
+			set => SetProperty(ref _documentType, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("documentAdress")] 
+		public SDocumentAdress DocumentAdress
+		{
+			get => GetProperty(ref _documentAdress);
+			set => SetProperty(ref _documentAdress, value);
+		}
+
+		public RequestDocumentWidgetUpdateEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

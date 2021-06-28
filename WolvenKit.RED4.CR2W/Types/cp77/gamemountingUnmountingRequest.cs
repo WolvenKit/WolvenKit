@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamemountingUnmountingRequest : IScriptable
 	{
-		[Ordinal(0)] [RED("lowLevelMountingInfo")] public gamemountingMountingInfo LowLevelMountingInfo { get; set; }
-		[Ordinal(1)] [RED("mountData")] public CHandle<gameMountEventData> MountData { get; set; }
+		private gamemountingMountingInfo _lowLevelMountingInfo;
+		private CHandle<gameMountEventData> _mountData;
 
-		public gamemountingUnmountingRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("lowLevelMountingInfo")] 
+		public gamemountingMountingInfo LowLevelMountingInfo
+		{
+			get => GetProperty(ref _lowLevelMountingInfo);
+			set => SetProperty(ref _lowLevelMountingInfo, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("mountData")] 
+		public CHandle<gameMountEventData> MountData
+		{
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
+		}
+
+		public gamemountingUnmountingRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TrafficPersistentData : CVariable
 	{
-		[Ordinal(0)] [RED("invertTrafficEvents")] public CBool InvertTrafficEvents { get; set; }
+		private CBool _invertTrafficEvents;
 
-		public TrafficPersistentData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("invertTrafficEvents")] 
+		public CBool InvertTrafficEvents
+		{
+			get => GetProperty(ref _invertTrafficEvents);
+			set => SetProperty(ref _invertTrafficEvents, value);
+		}
+
+		public TrafficPersistentData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

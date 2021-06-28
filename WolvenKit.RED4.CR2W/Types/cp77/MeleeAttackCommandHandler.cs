@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MeleeAttackCommandHandler : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
-		[Ordinal(1)] [RED("currentCommand")] public wCHandle<AIMeleeAttackCommand> CurrentCommand { get; set; }
+		private CHandle<AIArgumentMapping> _inCommand;
+		private wCHandle<AIMeleeAttackCommand> _currentCommand;
 
-		public MeleeAttackCommandHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("inCommand")] 
+		public CHandle<AIArgumentMapping> InCommand
+		{
+			get => GetProperty(ref _inCommand);
+			set => SetProperty(ref _inCommand, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("currentCommand")] 
+		public wCHandle<AIMeleeAttackCommand> CurrentCommand
+		{
+			get => GetProperty(ref _currentCommand);
+			set => SetProperty(ref _currentCommand, value);
+		}
+
+		public MeleeAttackCommandHandler(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

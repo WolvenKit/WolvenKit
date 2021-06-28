@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioPhysicalObstructionSettings : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("initialAbsorbtion")] public CFloat InitialAbsorbtion { get; set; }
-		[Ordinal(2)] [RED("absorptionPerMeter")] public CFloat AbsorptionPerMeter { get; set; }
+		private CFloat _initialAbsorbtion;
+		private CFloat _absorptionPerMeter;
 
-		public audioPhysicalObstructionSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("initialAbsorbtion")] 
+		public CFloat InitialAbsorbtion
+		{
+			get => GetProperty(ref _initialAbsorbtion);
+			set => SetProperty(ref _initialAbsorbtion, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("absorptionPerMeter")] 
+		public CFloat AbsorptionPerMeter
+		{
+			get => GetProperty(ref _absorptionPerMeter);
+			set => SetProperty(ref _absorptionPerMeter, value);
+		}
+
+		public audioPhysicalObstructionSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

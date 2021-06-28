@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkLanguageOverrideProvider : inkUserData
 	{
-		[Ordinal(0)] [RED("languageId")] public CEnum<inkLanguageId> LanguageId { get; set; }
+		private CEnum<inkLanguageId> _languageId;
 
-		public inkLanguageOverrideProvider(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("languageId")] 
+		public CEnum<inkLanguageId> LanguageId
+		{
+			get => GetProperty(ref _languageId);
+			set => SetProperty(ref _languageId, value);
+		}
+
+		public inkLanguageOverrideProvider(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

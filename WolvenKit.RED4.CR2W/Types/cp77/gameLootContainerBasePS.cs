@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameLootContainerBasePS : gameObjectPS
 	{
-		[Ordinal(0)] [RED("markAsQuest")] public CBool MarkAsQuest { get; set; }
-		[Ordinal(1)] [RED("isDisabled")] public CBool IsDisabled { get; set; }
-		[Ordinal(2)] [RED("isLocked")] public CBool IsLocked { get; set; }
+		private CBool _markAsQuest;
+		private CBool _isDisabled;
+		private CBool _isLocked;
 
-		public gameLootContainerBasePS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("markAsQuest")] 
+		public CBool MarkAsQuest
+		{
+			get => GetProperty(ref _markAsQuest);
+			set => SetProperty(ref _markAsQuest, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isDisabled")] 
+		public CBool IsDisabled
+		{
+			get => GetProperty(ref _isDisabled);
+			set => SetProperty(ref _isDisabled, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isLocked")] 
+		public CBool IsLocked
+		{
+			get => GetProperty(ref _isLocked);
+			set => SetProperty(ref _isLocked, value);
+		}
+
+		public gameLootContainerBasePS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

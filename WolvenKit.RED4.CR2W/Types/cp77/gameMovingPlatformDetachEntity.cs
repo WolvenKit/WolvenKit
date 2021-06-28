@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameMovingPlatformDetachEntity : redEvent
 	{
-		[Ordinal(0)] [RED("entity")] public wCHandle<entEntity> Entity { get; set; }
+		private wCHandle<entEntity> _entity;
 
-		public gameMovingPlatformDetachEntity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entity")] 
+		public wCHandle<entEntity> Entity
+		{
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
+		}
+
+		public gameMovingPlatformDetachEntity(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

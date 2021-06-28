@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTransformAnimation_Movement_CustomCurve : gameTransformAnimation_Movement
 	{
-		[Ordinal(0)] [RED("curve")] public curveData<CFloat> Curve { get; set; }
+		private curveData<CFloat> _curve;
 
-		public gameTransformAnimation_Movement_CustomCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("curve")] 
+		public curveData<CFloat> Curve
+		{
+			get => GetProperty(ref _curve);
+			set => SetProperty(ref _curve, value);
+		}
+
+		public gameTransformAnimation_Movement_CustomCurve(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RemoveDOTStatusEffectsEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
-		[Ordinal(1)] [RED("delay")] public CFloat Delay { get; set; }
+		private wCHandle<gameObject> _owner;
+		private CFloat _delay;
 
-		public RemoveDOTStatusEffectsEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<gameObject> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("delay")] 
+		public CFloat Delay
+		{
+			get => GetProperty(ref _delay);
+			set => SetProperty(ref _delay, value);
+		}
+
+		public RemoveDOTStatusEffectsEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

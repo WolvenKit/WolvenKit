@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldCrowdNullAreaNode : worldAreaShapeNode
 	{
-		[Ordinal(6)] [RED("IsForBlockade")] public CBool IsForBlockade { get; set; }
+		private CBool _isForBlockade;
 
-		public worldCrowdNullAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("IsForBlockade")] 
+		public CBool IsForBlockade
+		{
+			get => GetProperty(ref _isForBlockade);
+			set => SetProperty(ref _isForBlockade, value);
+		}
+
+		public worldCrowdNullAreaNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsUserEnteredCoverEvent : redEvent
 	{
-		[Ordinal(0)] [RED("actionsPoints")] public CArray<WorldTransform> ActionsPoints { get; set; }
+		private CArray<WorldTransform> _actionsPoints;
 
-		public gameeventsUserEnteredCoverEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("actionsPoints")] 
+		public CArray<WorldTransform> ActionsPoints
+		{
+			get => GetProperty(ref _actionsPoints);
+			set => SetProperty(ref _actionsPoints, value);
+		}
+
+		public gameeventsUserEnteredCoverEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

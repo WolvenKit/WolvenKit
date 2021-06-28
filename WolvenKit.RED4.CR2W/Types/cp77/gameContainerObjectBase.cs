@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameContainerObjectBase : gameLootContainerBase
 	{
-		[Ordinal(50)] [RED("lockedByKey")] public TweakDBID LockedByKey { get; set; }
+		private TweakDBID _lockedByKey;
 
-		public gameContainerObjectBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(50)] 
+		[RED("lockedByKey")] 
+		public TweakDBID LockedByKey
+		{
+			get => GetProperty(ref _lockedByKey);
+			set => SetProperty(ref _lockedByKey, value);
+		}
+
+		public gameContainerObjectBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TakedownLeapToPreyDecisions : LocomotionTakedownDecisions
 	{
-		[Ordinal(0)] [RED("stateMachineInitData")] public wCHandle<LocomotionTakedownInitData> StateMachineInitData { get; set; }
+		private wCHandle<LocomotionTakedownInitData> _stateMachineInitData;
 
-		public TakedownLeapToPreyDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stateMachineInitData")] 
+		public wCHandle<LocomotionTakedownInitData> StateMachineInitData
+		{
+			get => GetProperty(ref _stateMachineInitData);
+			set => SetProperty(ref _stateMachineInitData, value);
+		}
+
+		public TakedownLeapToPreyDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

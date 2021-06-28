@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DismembermentTriggeredHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("dotType")] public CEnum<gamedataStatusEffectType> DotType { get; set; }
+		private CEnum<gamedataStatusEffectType> _dotType;
 
-		public DismembermentTriggeredHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("dotType")] 
+		public CEnum<gamedataStatusEffectType> DotType
+		{
+			get => GetProperty(ref _dotType);
+			set => SetProperty(ref _dotType, value);
+		}
+
+		public DismembermentTriggeredHitPrereqCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

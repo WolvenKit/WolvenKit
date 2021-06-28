@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIStackSignalConditionData : CVariable
 	{
-		[Ordinal(0)] [RED("callbackId")] public CUInt32 CallbackId { get; set; }
-		[Ordinal(1)] [RED("lastValue")] public CBool LastValue { get; set; }
+		private CUInt32 _callbackId;
+		private CBool _lastValue;
 
-		public AIStackSignalConditionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("callbackId")] 
+		public CUInt32 CallbackId
+		{
+			get => GetProperty(ref _callbackId);
+			set => SetProperty(ref _callbackId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("lastValue")] 
+		public CBool LastValue
+		{
+			get => GetProperty(ref _lastValue);
+			set => SetProperty(ref _lastValue, value);
+		}
+
+		public AIStackSignalConditionData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CandleControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)] [RED("candleSkillChecks")] public CHandle<EngDemoContainer> CandleSkillChecks { get; set; }
+		private CHandle<EngDemoContainer> _candleSkillChecks;
 
-		public CandleControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(103)] 
+		[RED("candleSkillChecks")] 
+		public CHandle<EngDemoContainer> CandleSkillChecks
+		{
+			get => GetProperty(ref _candleSkillChecks);
+			set => SetProperty(ref _candleSkillChecks, value);
+		}
+
+		public CandleControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

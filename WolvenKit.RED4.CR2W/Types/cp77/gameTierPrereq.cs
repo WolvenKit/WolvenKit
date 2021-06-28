@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTierPrereq : gameIComparisonPrereq
 	{
-		[Ordinal(1)] [RED("tier")] public CEnum<GameplayTier> Tier { get; set; }
+		private CEnum<GameplayTier> _tier;
 
-		public gameTierPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("tier")] 
+		public CEnum<GameplayTier> Tier
+		{
+			get => GetProperty(ref _tier);
+			set => SetProperty(ref _tier, value);
+		}
+
+		public gameTierPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

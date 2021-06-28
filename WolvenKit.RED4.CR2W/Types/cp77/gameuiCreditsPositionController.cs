@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCreditsPositionController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("titleText")] public inkTextWidgetReference TitleText { get; set; }
-		[Ordinal(2)] [RED("namesText")] public inkTextWidgetReference NamesText { get; set; }
+		private inkTextWidgetReference _titleText;
+		private inkTextWidgetReference _namesText;
 
-		public gameuiCreditsPositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("titleText")] 
+		public inkTextWidgetReference TitleText
+		{
+			get => GetProperty(ref _titleText);
+			set => SetProperty(ref _titleText, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("namesText")] 
+		public inkTextWidgetReference NamesText
+		{
+			get => GetProperty(ref _namesText);
+			set => SetProperty(ref _namesText, value);
+		}
+
+		public gameuiCreditsPositionController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

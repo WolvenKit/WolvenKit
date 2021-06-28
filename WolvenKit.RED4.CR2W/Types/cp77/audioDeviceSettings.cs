@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioDeviceSettings : audioEntitySettings
 	{
-		[Ordinal(6)] [RED("deviceSettings")] public audioDeviceStateSettings DeviceSettings { get; set; }
+		private audioDeviceStateSettings _deviceSettings;
 
-		public audioDeviceSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("deviceSettings")] 
+		public audioDeviceStateSettings DeviceSettings
+		{
+			get => GetProperty(ref _deviceSettings);
+			set => SetProperty(ref _deviceSettings, value);
+		}
+
+		public audioDeviceSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

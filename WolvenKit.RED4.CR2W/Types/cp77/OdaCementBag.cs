@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OdaCementBag : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("onCooldown")] public CBool OnCooldown { get; set; }
+		private CBool _onCooldown;
 
-		public OdaCementBag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(96)] 
+		[RED("onCooldown")] 
+		public CBool OnCooldown
+		{
+			get => GetProperty(ref _onCooldown);
+			set => SetProperty(ref _onCooldown, value);
+		}
+
+		public OdaCementBag(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

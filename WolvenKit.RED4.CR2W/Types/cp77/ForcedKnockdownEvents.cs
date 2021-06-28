@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ForcedKnockdownEvents : KnockdownEvents
 	{
-		[Ordinal(8)] [RED("firstUpdate")] public CBool FirstUpdate { get; set; }
+		private CBool _firstUpdate;
 
-		public ForcedKnockdownEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(10)] 
+		[RED("firstUpdate")] 
+		public CBool FirstUpdate
+		{
+			get => GetProperty(ref _firstUpdate);
+			set => SetProperty(ref _firstUpdate, value);
+		}
+
+		public ForcedKnockdownEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

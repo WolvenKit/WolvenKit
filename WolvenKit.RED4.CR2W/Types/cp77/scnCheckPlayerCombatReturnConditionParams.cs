@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnCheckPlayerCombatReturnConditionParams : CVariable
 	{
-		[Ordinal(0)] [RED("isInCombat")] public CBool IsInCombat { get; set; }
+		private CBool _isInCombat;
 
-		public scnCheckPlayerCombatReturnConditionParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isInCombat")] 
+		public CBool IsInCombat
+		{
+			get => GetProperty(ref _isInCombat);
+			set => SetProperty(ref _isInCombat, value);
+		}
+
+		public scnCheckPlayerCombatReturnConditionParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

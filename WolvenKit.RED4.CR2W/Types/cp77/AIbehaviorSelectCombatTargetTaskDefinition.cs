@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorSelectCombatTargetTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("target")] public CHandle<AIArgumentMapping> Target { get; set; }
-		[Ordinal(2)] [RED("targetClosest")] public CBool TargetClosest { get; set; }
+		private CHandle<AIArgumentMapping> _target;
+		private CBool _targetClosest;
 
-		public AIbehaviorSelectCombatTargetTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("target")] 
+		public CHandle<AIArgumentMapping> Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("targetClosest")] 
+		public CBool TargetClosest
+		{
+			get => GetProperty(ref _targetClosest);
+			set => SetProperty(ref _targetClosest, value);
+		}
+
+		public AIbehaviorSelectCombatTargetTaskDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

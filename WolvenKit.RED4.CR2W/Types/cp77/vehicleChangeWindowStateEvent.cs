@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleChangeWindowStateEvent : redEvent
 	{
-		[Ordinal(0)] [RED("state")] public CEnum<vehicleEQuestVehicleWindowState> State { get; set; }
-		[Ordinal(1)] [RED("door")] public CEnum<vehicleEVehicleDoor> Door { get; set; }
+		private CEnum<vehicleEQuestVehicleWindowState> _state;
+		private CEnum<vehicleEVehicleDoor> _door;
 
-		public vehicleChangeWindowStateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CEnum<vehicleEQuestVehicleWindowState> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("door")] 
+		public CEnum<vehicleEVehicleDoor> Door
+		{
+			get => GetProperty(ref _door);
+			set => SetProperty(ref _door, value);
+		}
+
+		public vehicleChangeWindowStateEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

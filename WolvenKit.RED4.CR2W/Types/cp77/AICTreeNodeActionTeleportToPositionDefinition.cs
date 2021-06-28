@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeActionTeleportToPositionDefinition : AICTreeNodeActionDefinition
 	{
-		[Ordinal(1)] [RED("positionName")] public CName PositionName { get; set; }
-		[Ordinal(2)] [RED("doNavTest")] public CBool DoNavTest { get; set; }
+		private CName _positionName;
+		private CBool _doNavTest;
 
-		public AICTreeNodeActionTeleportToPositionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("positionName")] 
+		public CName PositionName
+		{
+			get => GetProperty(ref _positionName);
+			set => SetProperty(ref _positionName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("doNavTest")] 
+		public CBool DoNavTest
+		{
+			get => GetProperty(ref _doNavTest);
+			set => SetProperty(ref _doNavTest, value);
+		}
+
+		public AICTreeNodeActionTeleportToPositionDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

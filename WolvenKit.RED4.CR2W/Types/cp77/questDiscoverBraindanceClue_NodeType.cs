@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questDiscoverBraindanceClue_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)] [RED("clueName")] public CName ClueName { get; set; }
+		private CName _clueName;
 
-		public questDiscoverBraindanceClue_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("clueName")] 
+		public CName ClueName
+		{
+			get => GetProperty(ref _clueName);
+			set => SetProperty(ref _clueName, value);
+		}
+
+		public questDiscoverBraindanceClue_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

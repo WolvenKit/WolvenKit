@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamehitRepresentationEventsResetSingleScaleMultiplier : redEvent
 	{
-		[Ordinal(0)] [RED("shapeName")] public CName ShapeName { get; set; }
+		private CName _shapeName;
 
-		public gamehitRepresentationEventsResetSingleScaleMultiplier(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("shapeName")] 
+		public CName ShapeName
+		{
+			get => GetProperty(ref _shapeName);
+			set => SetProperty(ref _shapeName, value);
+		}
+
+		public gamehitRepresentationEventsResetSingleScaleMultiplier(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -4,7 +4,8 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
- xmlns:iconpacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+ xmlns:iconpacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ >
     <catel:UserControl.Resources>
 
         <Geometry x:Key="Wolf">
@@ -46,7 +47,8 @@
                          x:Name="CanvasRoot"
                          Margin="0,0,0,0"
                          Background="Transparent"
-                         RenderTransformOrigin="0.5,0.5">
+                         RenderTransformOrigin="0.5,0.5"
+                         >
                             <Canvas.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform />
@@ -57,7 +59,8 @@
                              Height="{Binding ActualHeight, ElementName=CanvasRoot}"
                              Data="{TemplateBinding Icon}"
                              Fill="{TemplateBinding Background}"
-                             Stretch="Uniform">
+                             Stretch="Uniform"
+                             >
                                 <Path.LayoutTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -72,7 +75,8 @@
                                  HorizontalAlignment="Left"
                                  Data="{TemplateBinding Icon}"
                                  Fill="{TemplateBinding Foreground}"
-                                 Stretch="Uniform">
+                                 Stretch="Uniform"
+                                 >
                                     <Path.LayoutTransform>
                                         <TransformGroup>
                                             <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -99,7 +103,7 @@
             <Setter Property="ItemMargin" Value="5,0" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Icon" Value="{StaticResource StarGeometry}" />
+            <Setter Property="Icon" Value="{StaticResource Wolf}" />
             <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
             <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
             <Setter Property="ItemContainerStyle" Value="{StaticResource RateRateItemBaseStyle}" />
@@ -111,13 +115,15 @@
                             <StackPanel
                              x:Name="PART_Panel"
                              Margin="5,0"
-                             Orientation="Vertical" />
+                             Orientation="Vertical"
+                             />
                             <TextBlock
                              Margin="10,0,0,0"
                              VerticalAlignment="Center"
                              Text="{TemplateBinding Text}"
                              Visibility="{TemplateBinding ShowText,
-                                                          Converter={StaticResource Boolean2VisibilityConverter}}" />
+                                                          Converter={StaticResource Boolean2VisibilityConverter}}"
+                             />
                         </StackPanel>
                     </ControlTemplate>
                 </Setter.Value>
@@ -129,30 +135,34 @@
         <Grid
          Margin="5,5,5,5"
          HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+         >
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
                 <Grid>
 
                     <Grid Margin="22,10,0,0">
                         <hc:TextBox
                          Width="380"
-                         Margin="0,0,0,0"
+                         Margin="10,0,0,0"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
                          hc:InfoElement.Title="Review (Optional)"
                          hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.TitleWidth="130"
-                         Text="??" />
+                         Text="Title"
+                         />
 
-                        <RichTextBox Margin="10,45,80,0" />
+                        <RichTextBox Margin="140,45,0,0" />
 
                         <Border
-                         Margin="0,45,10,0"
-                         HorizontalAlignment="Right"
+                         Margin="20,45,0,0"
+                         Padding="5"
+                         HorizontalAlignment="Left"
                          VerticalAlignment="Center"
                          Background="{DynamicResource RegionBrush}"
                          BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         BorderThickness="0,2,2,2">
+                         BorderThickness="2,2,2,2"
+                         >
                             <hc:Rate
                              AllowHalf="True"
                              Background="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
@@ -160,7 +170,8 @@
                              Foreground="{DynamicResource MahApps.Brushes.Accent2}"
                              ItemMargin="3.4"
                              ShowText="True"
-                             Style="{StaticResource RateBaseStyle}">
+                             Style="{StaticResource RateBaseStyle}"
+                             >
                                 <hc:Rate.LayoutTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="2" ScaleY="2" />
@@ -170,12 +181,22 @@
                         </Border>
                     </Grid>
 
-                    <Button
-                     Width="150"
-                     Margin="0,0,10,-40"
-                     HorizontalAlignment="Right"
-                     VerticalAlignment="Bottom"
-                     Content="Send review" />
+                    <Grid Margin="0,0,0,-70">
+                        <hc:Divider
+                         Height="2"
+                         VerticalAlignment="Bottom"
+                         Orientation="Horizontal"
+                         />
+                        <Button
+                         Width="150"
+                         Height="60"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Bottom"
+                         Content="Send review"
+                         />
+                    </Grid>
+
+
                 </Grid>
             </Grid>
         </Grid>

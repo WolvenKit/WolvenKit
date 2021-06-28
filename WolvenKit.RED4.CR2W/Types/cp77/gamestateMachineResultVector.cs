@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineResultVector : CVariable
 	{
-		[Ordinal(0)] [RED("value")] public Vector4 Value { get; set; }
-		[Ordinal(1)] [RED("valid")] public CBool Valid { get; set; }
+		private Vector4 _value;
+		private CBool _valid;
 
-		public gamestateMachineResultVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("value")] 
+		public Vector4 Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("valid")] 
+		public CBool Valid
+		{
+			get => GetProperty(ref _valid);
+			set => SetProperty(ref _valid, value);
+		}
+
+		public gamestateMachineResultVector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

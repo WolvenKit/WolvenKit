@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnChoiceNodeNsAttachToPropParams : CVariable
 	{
-		[Ordinal(0)] [RED("propId")] public scnPropId PropId { get; set; }
-		[Ordinal(1)] [RED("visualizerStyle")] public CEnum<scnChoiceNodeNsVisualizerStyle> VisualizerStyle { get; set; }
+		private scnPropId _propId;
+		private CEnum<scnChoiceNodeNsVisualizerStyle> _visualizerStyle;
 
-		public scnChoiceNodeNsAttachToPropParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("propId")] 
+		public scnPropId PropId
+		{
+			get => GetProperty(ref _propId);
+			set => SetProperty(ref _propId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("visualizerStyle")] 
+		public CEnum<scnChoiceNodeNsVisualizerStyle> VisualizerStyle
+		{
+			get => GetProperty(ref _visualizerStyle);
+			set => SetProperty(ref _visualizerStyle, value);
+		}
+
+		public scnChoiceNodeNsAttachToPropParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

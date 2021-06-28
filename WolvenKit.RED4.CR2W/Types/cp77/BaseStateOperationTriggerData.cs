@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BaseStateOperationTriggerData : DeviceOperationTriggerData
 	{
-		[Ordinal(1)] [RED("state")] public CEnum<EDeviceStatus> State { get; set; }
+		private CEnum<EDeviceStatus> _state;
 
-		public BaseStateOperationTriggerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("state")] 
+		public CEnum<EDeviceStatus> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		public BaseStateOperationTriggerData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

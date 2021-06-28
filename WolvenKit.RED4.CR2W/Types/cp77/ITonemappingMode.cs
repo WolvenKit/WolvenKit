@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ITonemappingMode : ISerializable
 	{
-		[Ordinal(0)] [RED("colorPreservation")] public curveData<CFloat> ColorPreservation { get; set; }
+		private curveData<CFloat> _colorPreservation;
 
-		public ITonemappingMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("colorPreservation")] 
+		public curveData<CFloat> ColorPreservation
+		{
+			get => GetProperty(ref _colorPreservation);
+			set => SetProperty(ref _colorPreservation, value);
+		}
+
+		public ITonemappingMode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

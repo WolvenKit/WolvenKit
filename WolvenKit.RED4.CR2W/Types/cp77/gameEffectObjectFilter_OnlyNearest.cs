@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectObjectFilter_OnlyNearest : gameEffectObjectGroupFilter
 	{
-		[Ordinal(0)] [RED("count")] public CUInt32 Count { get; set; }
+		private CUInt32 _count;
 
-		public gameEffectObjectFilter_OnlyNearest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("count")] 
+		public CUInt32 Count
+		{
+			get => GetProperty(ref _count);
+			set => SetProperty(ref _count, value);
+		}
+
+		public gameEffectObjectFilter_OnlyNearest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

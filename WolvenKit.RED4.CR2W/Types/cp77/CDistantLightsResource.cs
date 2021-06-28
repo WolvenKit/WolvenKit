@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CDistantLightsResource : resStreamedResource
 	{
-		[Ordinal(1)] [RED("data")] public DataBuffer Data { get; set; }
+		private DataBuffer _data;
 
-		public CDistantLightsResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("data")] 
+		public DataBuffer Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public CDistantLightsResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnVarVsVarComparison_FactConditionType : scnInterruptFactConditionType
 	{
-		[Ordinal(0)] [RED("params")] public scnVarVsVarComparison_FactConditionTypeParams Params { get; set; }
+		private scnVarVsVarComparison_FactConditionTypeParams _params;
 
-		public scnVarVsVarComparison_FactConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("params")] 
+		public scnVarVsVarComparison_FactConditionTypeParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public scnVarVsVarComparison_FactConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

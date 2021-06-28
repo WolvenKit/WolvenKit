@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameIEffectParameter_BoolEvaluator : ISerializable
 	{
-		public gameIEffectParameter_BoolEvaluator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gameIEffectParameter_BoolEvaluator(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

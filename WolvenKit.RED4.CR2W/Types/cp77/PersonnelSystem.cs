@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PersonnelSystem : DeviceSystemBase
 	{
-		[Ordinal(93)] [RED("EnableE3QuickHacks")] public CBool EnableE3QuickHacks { get; set; }
+		private CBool _enableE3QuickHacks;
 
-		public PersonnelSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(96)] 
+		[RED("EnableE3QuickHacks")] 
+		public CBool EnableE3QuickHacks
+		{
+			get => GetProperty(ref _enableE3QuickHacks);
+			set => SetProperty(ref _enableE3QuickHacks, value);
+		}
+
+		public PersonnelSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -1,363 +1,369 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WolvenKit.RED4.CR2W.Reflection;
 // ReSharper disable InconsistentNaming
 
 namespace WolvenKit.RED4.CR2W.Types
 {
-    public static partial class Enums
-    {
-        // flags
-
-        public enum EInterPolationType
-        {
-            Constant,
-            Linear,
-            BezierQuadratic,
-            BezierCubic,
-            Hermite
-        }
-
-        public enum EChannelLinkType
-        {
-            Normal,
-            Smooth,
-            SmoothSymmertric
-        }
-
-        public enum EGameplayRole
-        {
-            [RED("")]
-            UnAssigned = 0,
-            None = 1,
-            Alarm = 2,
-            ControlNetwork = 3,
-            ControlOtherDevice = 4,
-            ControlSelf = 5,
-            CutPower = 6,
-            Distract = 7,
-            DropPoint = 8,
-            ExplodeLethal = 9,
-            ExplodeNoneLethal = 10,
-            Fall = 11,
-            FastTravel = 12,
-            GrantInformation = 13,
-            HazardWarning = 14,
-            HideBody = 15,
-            Loot = 16,
-            OpenPath = 17,
-            ClearPath = 18,
-            Push = 19,
-            ServicePoint = 20,
-            Shoot = 21,
-            SpreadGas = 22,
-            StoreItems = 23,
-            GenericRole = 24,
-            ClearPathAd = 25,
-            DistractVendingMachine = 26,
-            NPC = 27,
-            Clue = 28
-        }
-		[Flags]
-        public enum TriggerChannel
-        {
-            TC_Default,
-            TC_Player,
-            TC_Camera,
-            TC_Human,
-            TC_SoundReverbArea,
-            TC_SoundAmbientArea,
-            TC_Quest,
-            TC_Projectiles,
-            TC_Vehicle,
-            TC_Environment,
-            TC_WaterNullArea,
-            TC_Custom0,
-            TC_Custom1,
-            TC_Custom2,
-            TC_Custom3,
-            TC_Custom4,
-            TC_Custom5,
-            TC_Custom6,
-            TC_Custom7,
-            TC_Custom8,
-            TC_Custom9,
-            TC_Custom10,
-            TC_Custom11,
-            TC_Custom12,
-            TC_Custom13,
-            TC_Custom14
-        }
-		[Flags]
-        public enum RenderSceneLayerMask
-        {
-            Default,
-            Cyberspace,
-            WorldMap
-        }
-		[Flags]
-		public enum rendLightChannel
-        {
-            LC_Channel1,
-            LC_Channel2,
-            LC_Channel3,
-            LC_Channel4,
-            LC_Channel5,
-            LC_Channel6,
-            LC_Channel7,
-            LC_Channel8,
-            LC_ChannelWorld,
-            LC_Character,
-            LC_Player,
-            LC_Automated
-        }
-		[Flags]
-		public enum workWorkspotItemPolicy
-        {
-            ItemPolicy_SpawnItemOnIdleChange,
-            ItemPolicy_DespawnItemOnIdleChange,
-            ItemPolicy_DespawnItemOnReaction
-        }
-		[Flags]
-		public enum entdismembermentWoundTypeE
-        {
-            CLEAN,
-            COARSE
-        }
-        [Flags]
-        public enum entdismembermentResourceSetMask
-        {
-            fleshPartMask,
-            FleshBodyMask,
-            cyberPartMask,
-            CyberBodyMask
-        }
-		[Flags]
-		public enum entdismembermentPlacementE
-        {
-            MAIN_MESH,
-            DISM_MESH,
-            RAGDOLL_CONTACT,
-            RAGDOLL_CONTACT_SLIDE,
-            RAGDOLL_SLEEP
-        }
-        [Flags]
-		public enum scnChoiceNodeNsChoiceNodeBitFlags
-        {
-            IsFocusClue,
-            IsValidInteractionFailsafeDisabled
-        }
-		[Flags]
-		public enum worlduiContextVisibility
-        {
-            SceneDefault,
-            SceneTier1,
-            SceneTier2,
-            SceneTier3,
-            SceneTier4,
-            SceneTier5
-        }
-        [Flags]
-        public enum animMuteAnimEvents
-        {
-            STANDARD,
-            FACE_ANIMS
-        }
-		[Flags]
-		public enum gameuiContext
-        {
-            Default = 0,
-            QuickHack = 1,
-            Scanning = 2,
-            DeviceZoom = 3,
-            BraindanceEditor = 4,
-            BraindancePlayback = 5,
-            VehicleMounted = 6,
-            ModalPopup = 7,
-            RadialWheel = 8,
-            VehicleRace = 9,
-        }
-        [Flags]
-		public enum gameEItemDynamicTags
-        {
-            Quest,
-            UnequipBlocked
-        }
-		[Flags]
-		public enum EMeshChunkFlags
+	public static partial class Enums
+	{
+		public enum AIArgumentType
 		{
-			MCF_RenderInScene,
-			MCF_RenderInShadows,
-			MCF_IsTwoSided,
-			MCF_IsRayTracedEmissive,
-			MCF_IsPrefabProxy
+			Bool = 0,
+			Int = 1,
+			Uint64 = 2,
+			Enum = 3,
+			Float = 4,
+			CName = 5,
+			Vector = 6,
+			Object = 7,
+			TreeRef = 8,
+			NodeRef = 9,
+			GlobalNodeId = 10,
+			PuppetRef = 11,
+			Serializable = 12,
+			TweakDBID = 13
 		}
-		[Flags]
-        public enum physicsEClothCollisionMaskEnum
-        {
-            CONVEX,
-            TRIMESH
-        }
-		[Flags]
-		public enum CensorshipFlags
+
+		public enum AICombatSectorType
 		{
-			Censor_Nudity,
-			Censor_OverSexualised,
-			Censor_Suggestive,
-			Censor_Homosexuality,
-			Censor_Gore,
-			Censor_Drugs,
-			Censor_Religion,
-			Censor_Chinese
-
+			ToBackLeft = 0,
+			ToBackMid = 1,
+			ToBackRight = 2,
+			ToLeft = 3,
+			ToMid = 4,
+			ToRight = 5,
+			FromLeft = 6,
+			FromMid = 7,
+			FromRight = 8,
+			FromBackLeft = 9,
+			FromBackMid = 10,
+			FromBackRight = 11,
+			BeyondToLeft = 12,
+			BeyondToRight = 13,
+			BeyondFromLeft = 14,
+			BeyondFromRight = 15,
+			Unknown = 16
 		}
 
-		[Flags]
-		public enum worldEDeniedAreaFlags
+		public enum AICombatSpaceSize
 		{
-			EDAF_Togglable
+			Undefined = 0,
+			Narrow = 1,
+			Medium = 2,
+			Huge = 3
 		}
 
-        [Flags]
-		public enum physicsRagdollBodyPartE
+		public enum AICommandContextsType
 		{
-			HEAD,
-            LARM_UPPER,
-            LARM_LOWER,
-            LARM_PALM,
-            RARM_UPPER,
-            RARM_LOWER,
-            RARM_PALM,
-            LLEG_UPPER,
-            LLEG_LOWER,
-            LLEG_FOOT,
-            RLEG_UPPER,
-            RLEG_LOWER,
-            RLEG_FOOT,
-            BODY
+			Default = 0,
+			Immediate = 1,
+			Movement = 2,
+			Workspot = 3,
+			Aiming = 4
 		}
 
-
-
-        public enum toolsSocketDirection
+		public enum AICommandState
 		{
-            Output,
+			NotExecuting = 0,
+			Enqueued = 1,
+			Executing = 2,
+			Cancelled = 3,
+			Interrupted = 4,
+			Success = 5,
+			Failure = 6
 		}
-        public enum toolsSocketPlacement
+
+		public enum AICoverExposureMethod
 		{
-		    Bottom,
-		    Right,
+			Standing_Step_Left = 0,
+			Standing_Step_Right = 1,
+			Standing_Lean_Left = 2,
+			Standing_Lean_Right = 3,
+			Crouching_Step_Left = 4,
+			Crouching_Step_Right = 5,
+			Crouching_Lean_Left = 6,
+			Crouching_Lean_Right = 7,
+			Lean_Over = 8,
+			Stand_Up = 9,
+			Standing_Blind_Left = 10,
+			Standing_Blind_Right = 11,
+			Crouching_Blind_Left = 12,
+			Crouching_Blind_Right = 13,
+			Crouching_Blind_Top = 14,
+			Count = 15
 		}
-        public enum toolsAudioPlaybackDirectionSupport
-        {
-            Forward,
-            Backward
-        }
-        public enum toolsAudioFastForwardSupport
-        {
-            MuteDuringFastForward,
-            DontMuteDuringFastForward
-        }
-        public enum scnbPerformerAcquisitionPlanType
+
+		public enum AIEExecutionOutcome
 		{
-		    Community,
-            SpawnSet
+			OUTCOME_FAILURE = 0,
+			OUTCOME_SUCCESS = 1,
+			OUTCOME_IN_PROGRESS = 2
 		}
 
-        public enum ETextureRawFormat
-	    {
-		    TRF_Invalid,
-		    TRF_AlphaGrayscale,
-		    TRF_TrueColor,
-		    TRF_DeepColor,
-		    TRF_Grayscale,
-		    TRF_HDRFloat,
-		    TRF_HDRHalf,
-		    TRF_HDRFloatGrayscale,
-		    TRF_Grayscale_Font,
-		    TRF_R8G8,
-		    TRF_R32UI
-	    }
-	    public enum ETextureCompression
-	    {
-		    TCM_None,
-		    TCM_DXTNoAlpha,
-		    TCM_DXTAlpha,
-		    TCM_RGBE,
-		    TCM_Normalmap,
-		    TCM_Normals_DEPRECATED,
-		    TCM_Normals,
-		    TCM_NormalsHigh_DEPRECATED,
-		    TCM_NormalsHigh,
-		    TCM_NormalsGloss_DEPRECATED,
-		    TCM_NormalsGloss,
-		    TCM_TileMap,
-		    TCM_DXTAlphaLinear,
-		    TCM_QualityR,
-		    TCM_QualityRG,
-		    TCM_QualityColor,
-		    TCM_HalfHDR_Unsigned,
-		    TCM_HalfHDR,
-		    TCM_HalfHDR_Signed,
-		    TCM_Max,
-	    }
-
-        public enum Sample_Enum_As_Bitfield_2_9
-        {
-            Sample_Bitfield_Option_2_9_0
+		public enum AIEExecutionStatus
+		{
+			STATUS_INVALID = 0,
+			STATUS_SUCCESS = 1,
+			STATUS_FAILURE = 2,
+			STATUS_RUNNING = 3,
+			STATUS_ABORTED = 4
 		}
 
-        public enum Sample_Enum_As_Bitfield_2_2
-        {
-            Sample_Bitfield_Option_2_2_0
+		public enum AIEInterruptionImportance
+		{
+			Undefined = 0,
+			Casual = 1,
+			Rush = 2,
+			Immediate = 3,
+			ForcedImmediate = 4
 		}
 
-
-
-        public enum gameLootSlotState
-        {
-            Looted,
-            Unavailable
+		public enum AIEInterruptionOutcome
+		{
+			INTERRUPTION_SUCCESS = 0,
+			INTERRUPTION_DELAYED = 1,
+			INTERRUPTION_FAILED = 2
 		}
 
+		public enum AIESharedVarDefinitionType
+		{
+			SVInt = 0,
+			SVFloat = 1,
+			SVBool = 2,
+			SVName = 3,
+			SVTarget = 4,
+			SVPosition = 5,
+			SVNodeInstance = 6,
+			SVGlobalNodeRef = 7
+		}
 
+		public enum AIForcedBehaviourPriority
+		{
+			AboveIdle = 0,
+			AboveCombat = 1,
+			AboveCriticalState = 2,
+			AboveDeath = 3
+		}
 
+		public enum AIIWorkspotManagerSpotUsageState
+		{
+			Reserved = 0,
+			Occupied = 1,
+			None = 2
+		}
 
+		public enum AIParameterizationType
+		{
+			BehaviorArgument = 0,
+			CustomValue = 1,
+			CharacterRecord = 2,
+			TweakDB = 3,
+			ActionRecord = 4,
+			Blackboard = 5,
+			Delegate = 6
+		}
 
+		public enum AIReactionCountOutcome
+		{
+			Failed = 0,
+			Succeded = 1,
+			NotFound = 2
+		}
 
+		public enum AISignalFlags
+		{
+			Undefined = 0,
+			OverridesSelf = 1,
+			InterruptsSamePriorityTask = 2,
+			InterruptsForcedBehavior = 4,
+			AcceptsAdditives = 8
+		}
 
+		public enum AISocketsForRig
+		{
+			Undefined = 0,
+			ManAverage = 1,
+			ManBig = 2,
+			ManFat = 3,
+			WomanAverage = 4,
+			WomanBig = 5,
+			ChildMale = 6
+		}
 
+		public enum AISquadType
+		{
+			Community = 0,
+			Combat = 4,
+			Follower = 6,
+			Unknown = 7
+		}
 
+		public enum AIThreatPersistenceStatus
+		{
+			ThreatNotFound = 0,
+			Persistent = 1,
+			NotPersistent = 2
+		}
 
+		public enum AITrackedStatusType
+		{
+			Unknown = 0,
+			Friendly = 1,
+			Neutral = 2,
+			Hostile = 3
+		}
 
+		public enum AIUninterruptibleActionType
+		{
+			None = 0,
+			Default = 1,
+			EnteringCover = 2,
+			LeavingCover = 3,
+			Count = 4
+		}
 
-	    public enum EMeshChunkRenderMask
-	    {
-		    MCR_Scene,
-		    MCR_Cascade1,
-		    MCR_Cascade2,
-		    MCR_Cascade3,
-		    MCR_Cascade4,
-		    MCR_DistantShadows,
-		    MCR_LocalShadows,
-		    MCR_IsTwoSided,
-		    MCR_IsRayTracedEmissive,
-		    MCR_PrefabProxy,
-		    MCR_Cascades
-	    }
+		public enum AIactionParamsPackageTypes
+		{
+			Default = 0,
+			Reaction = 1,
+			StatusEffect = 2,
+			Undefined = 3
+		}
 
+		public enum AIbehaviorActivationStatus
+		{
+			NOT_ACTIVATED = 0,
+			ACTIVATING = 1,
+			ACTIVATED = 2,
+			DEACTIVATING = 3
+		}
 
+		public enum AIbehaviorCombatModes
+		{
+			Default = 0,
+			LowFPS = 1,
+			Background = 2
+		}
 
+		public enum AIbehaviorCompletionStatus
+		{
+			FAILURE = 0,
+			SUCCESS = 1
+		}
 
+		public enum AIbehaviorConditionOutcomes
+		{
+			True = 0,
+			False = 1,
+			Failure = 2
+		}
 
+		public enum AIbehaviorDebugNodeStatus
+		{
+			Undefined = 0,
+			NotRunning = 1,
+			ForceStopped = 2,
+			Running = 3,
+			Success = 4,
+			Failure = 5
+		}
 
+		public enum AIbehaviorEdgeConditionAction
+		{
+			None = 0,
+			Toggle = 1,
+			TurnOn = 2,
+			TurnOff = 3
+		}
 
+		public enum AIbehaviorEntityLODConditions
+		{
+			Crowd = 0,
+			Cinematic = 1,
+			WorkspotStatic = 2
+		}
 
+		public enum AIbehaviorMaybeNodeAction
+		{
+			Succeed = 0,
+			Fail = 1,
+			RepeatChild = 2
+		}
 
+		public enum AIbehaviorMovementPolicyTaskFunctions
+		{
+			SetMovementType = 0,
+			SetTargetObject = 1,
+			UseFollowSlots = 2,
+			SetLocalTargetOffset = 3,
+			SetIgnoreNavigation = 4,
+			SetStrafingTarget = 5
+		}
 
+		public enum AIbehaviorNaryExpressionOperators
+		{
+			LogicalAnd = 0,
+			LogicalOr = 1
+		}
 
-	    public enum ActiveMode
+		public enum AIbehaviorParallelNodeChildState
+		{
+			Inactive = 0,
+			Active = 1,
+			Completed = 2
+		}
+
+		public enum AIbehaviorParallelNodeWaitFor
+		{
+			LeftChild = 0,
+			RightChild = 1,
+			AllChildren = 2,
+			BothChildren = 2,
+			AnyChild = 3
+		}
+
+		public enum AIbehaviorSignalConditionModes
+		{
+			CurrentValue = 0,
+			StartOfFrameValue = 1,
+			RisingEdge = 2,
+			FallingEdge = 3,
+			AnyEdge = 4
+		}
+
+		public enum AIbehaviorStateCompletionStatus
+		{
+			ForwardBehaviorStatus = 0,
+			Failure = 1,
+			Success = 2
+		}
+
+		public enum AIbehaviorStoryActionType
+		{
+			Setup = 0,
+			Stop = 1
+		}
+
+		public enum AIbehaviorSystemVariableExpressionTypes
+		{
+			IsFPSLow = 0
+		}
+
+		public enum AIbehaviorUpdateOutcome
+		{
+			IN_PROGRESS = 0,
+			SUCCESS = 1,
+			FAILURE = 2
+		}
+
+		public enum AIinfluenceEBumpPolicy
+		{
+			Static = 0,
+			Lean = 1,
+			Move = 2
+		}
+
+		public enum ActiveMode
 		{
 			UNINITIALIZED = 0,
 			CLEAR = 1,
@@ -365,6 +371,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			COMBAT = 3,
 			FOCUS = 4
 		}
+
 		public enum ActorVisibilityStatus
 		{
 			OUTSIDE_CAMERA = 0,
@@ -372,6 +379,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			VISIBLE = 2,
 			LOOKEDAT = 3
 		}
+
 		public enum AdvertisementFormat
 		{
 			Format_0_7x1 = 0,
@@ -399,1001 +407,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Format_o = 22,
 			Format_k = 23
 		}
+
 		public enum AdvertisementLoadMode
 		{
 			TweakDB = 0,
 			Override = 1
 		}
-		public enum AIactionParamsPackageTypes
-		{
-			Default = 0,
-			Reaction = 1,
-			StatusEffect = 2,
-			Undefined = 3
-		}
-		public enum AIArgumentType
-		{
-			Bool = 0,
-			Int = 1,
-			Uint64 = 2,
-			Enum = 3,
-			Float = 4,
-			CName = 5,
-			Vector = 6,
-			Object = 7,
-			TreeRef = 8,
-			NodeRef = 9,
-			GlobalNodeId = 10,
-			PuppetRef = 11,
-			Serializable = 12,
-			TweakDBID = 13
-		}
-		public enum AIbehaviorActivationStatus
-		{
-			NOT_ACTIVATED = 0,
-			ACTIVATING = 1,
-			ACTIVATED = 2,
-			DEACTIVATING = 3
-		}
-		public enum AIbehaviorCombatModes
-		{
-			Default = 0,
-			LowFPS = 1,
-			Background = 2
-		}
-		public enum AIbehaviorCompletionStatus
-		{
-			FAILURE = 0,
-			SUCCESS = 1
-		}
-		public enum AIbehaviorConditionOutcomes
-		{
-			True = 0,
-			False = 1,
-			Failure = 2
-		}
-		public enum AIbehaviorDebugNodeStatus
-		{
-			Undefined = 0,
-			NotRunning = 1,
-			ForceStopped = 2,
-			Running = 3,
-			Success = 4,
-			Failure = 5
-		}
-		public enum AIbehaviorEdgeConditionAction
-		{
-			None = 0,
-			Toggle = 1,
-			TurnOn = 2,
-			TurnOff = 3
-		}
-		public enum AIbehaviorEntityLODConditions
-		{
-			Crowd = 0,
-			Cinematic = 1,
-			WorkspotStatic = 2
-		}
-		public enum AIbehaviorMaybeNodeAction
-		{
-			Succeed = 0,
-			Fail = 1,
-			RepeatChild = 2
-		}
-		public enum AIbehaviorMovementPolicyTaskFunctions
-		{
-			SetMovementType = 0,
-			SetTargetObject = 1,
-			UseFollowSlots = 2,
-			SetLocalTargetOffset = 3,
-			SetIgnoreNavigation = 4,
-			SetStrafingTarget = 5
-		}
-		public enum AIbehaviorNaryExpressionOperators
-		{
-			LogicalAnd = 0,
-			LogicalOr = 1
-		}
-		public enum AIbehaviorParallelNodeChildState
-		{
-			Inactive = 0,
-			Active = 1,
-			Completed = 2
-		}
-		public enum AIbehaviorParallelNodeWaitFor
-		{
-			LeftChild = 0,
-			RightChild = 1,
-			AllChildren = 2,
-			BothChildren = 2,
-			AnyChild = 3
-		}
-		public enum AIbehaviorSignalConditionModes
-		{
-			CurrentValue = 0,
-			StartOfFrameValue = 1,
-			RisingEdge = 2,
-			FallingEdge = 3,
-			AnyEdge = 4
-		}
-		public enum AIbehaviorStateCompletionStatus
-		{
-			ForwardBehaviorStatus = 0,
-			Failure = 1,
-			Success = 2
-		}
-		public enum AIbehaviorStoryActionType
-		{
-			Setup = 0,
-			Stop = 1
-		}
-		public enum AIbehaviorSystemVariableExpressionTypes
-		{
-			IsFPSLow = 0
-		}
-		public enum AIbehaviorUpdateOutcome
-		{
-			IN_PROGRESS = 0,
-			SUCCESS = 1,
-			FAILURE = 2
-		}
-		public enum AICombatSectorType
-		{
-			ToBackLeft = 0,
-			ToBackMid = 1,
-			ToBackRight = 2,
-			ToLeft = 3,
-			ToMid = 4,
-			ToRight = 5,
-			FromLeft = 6,
-			FromMid = 7,
-			FromRight = 8,
-			FromBackLeft = 9,
-			FromBackMid = 10,
-			FromBackRight = 11,
-			BeyondToLeft = 12,
-			BeyondToRight = 13,
-			BeyondFromLeft = 14,
-			BeyondFromRight = 15,
-			Unknown = 16
-		}
-		public enum AICombatSpaceSize
-		{
-			Undefined = 0,
-			Narrow = 1,
-			Medium = 2,
-			Huge = 3
-		}
-		public enum AICommandContextsType
-		{
-			Default = 0,
-			Immediate = 1,
-			Movement = 2,
-			Workspot = 3,
-			Aiming = 4
-		}
-		public enum AICommandState
-		{
-			NotExecuting = 0,
-			Enqueued = 1,
-			Executing = 2,
-			Cancelled = 3,
-			Interrupted = 4,
-			Success = 5,
-			Failure = 6
-		}
-		public enum AICoverExposureMethod
-		{
-			Standing_Step_Left = 0,
-			Standing_Step_Right = 1,
-			Standing_Lean_Left = 2,
-			Standing_Lean_Right = 3,
-			Crouching_Step_Left = 4,
-			Crouching_Step_Right = 5,
-			Crouching_Lean_Left = 6,
-			Crouching_Lean_Right = 7,
-			Lean_Over = 8,
-			Stand_Up = 9,
-			Standing_Blind_Left = 10,
-			Standing_Blind_Right = 11,
-			Crouching_Blind_Left = 12,
-			Crouching_Blind_Right = 13,
-			Crouching_Blind_Top = 14,
-			Count = 15
-		}
-		public enum AIEExecutionOutcome
-		{
-			OUTCOME_FAILURE = 0,
-			OUTCOME_SUCCESS = 1,
-			OUTCOME_IN_PROGRESS = 2
-		}
-		public enum AIEExecutionStatus
-		{
-			STATUS_INVALID = 0,
-			STATUS_SUCCESS = 1,
-			STATUS_FAILURE = 2,
-			STATUS_RUNNING = 3,
-			STATUS_ABORTED = 4
-		}
-		public enum AIEInterruptionImportance
-		{
-			Undefined = 0,
-			Casual = 1,
-			Rush = 2,
-			Immediate = 3,
-			ForcedImmediate = 4
-		}
-		public enum AIEInterruptionOutcome
-		{
-			INTERRUPTION_SUCCESS = 0,
-			INTERRUPTION_DELAYED = 1,
-			INTERRUPTION_FAILED = 2
-		}
-		public enum AIESharedVarDefinitionType
-		{
-			SVInt = 0,
-			SVFloat = 1,
-			SVBool = 2,
-			SVName = 3,
-			SVTarget = 4,
-			SVPosition = 5,
-			SVNodeInstance = 6,
-			SVGlobalNodeRef = 7
-		}
-		public enum AIForcedBehaviourPriority
-		{
-			AboveIdle = 0,
-			AboveCombat = 1,
-			AboveCriticalState = 2,
-			AboveDeath = 3
-		}
-		public enum AIinfluenceEBumpPolicy
-		{
-			Static = 0,
-			Lean = 1,
-			Move = 2
-		}
-		public enum AIIWorkspotManagerSpotUsageState
-		{
-			Reserved = 0,
-			Occupied = 1,
-			None = 2
-		}
-		public enum aimTypeEnum
-		{
-			AimIn = 0,
-			AimOut = 1,
-			Invalid = 2
-		}
-		public enum AIParameterizationType
-		{
-			BehaviorArgument = 0,
-			CustomValue = 1,
-			CharacterRecord = 2,
-			TweakDB = 3,
-			ActionRecord = 4,
-			Blackboard = 5,
-			Delegate = 6
-		}
-		public enum AIReactionCountOutcome
-		{
-			Failed = 0,
-			Succeded = 1,
-			NotFound = 2
-		}
-		public enum AISignalFlags
-		{
-			Undefined = 0,
-			OverridesSelf = 1,
-			InterruptsSamePriorityTask = 2,
-			InterruptsForcedBehavior = 4,
-			AcceptsAdditives = 8
-		}
-		public enum AISocketsForRig
-		{
-			Undefined = 0,
-			ManAverage = 1,
-			ManBig = 2,
-			ManFat = 3,
-			WomanAverage = 4,
-			WomanBig = 5,
-			ChildMale = 6
-		}
-		public enum AISquadType
-		{
-			Community = 0,
-			Global = 1,
-			Security = 2,
-			Attitude = 3,
-			Combat = 4,
-			Follower = 6,
-			Unknown = 7
-		}
-		public enum AIThreatPersistenceStatus
-		{
-			ThreatNotFound = 0,
-			Persistent = 1,
-			NotPersistent = 2
-		}
-		public enum AITrackedStatusType
-		{
-			Unknown = 0,
-			Friendly = 1,
-			Neutral = 2,
-			Hostile = 3
-		}
-		public enum AIUninterruptibleActionType
-		{
-			None = 0,
-			Default = 1,
-			EnteringCover = 2,
-			LeavingCover = 3,
-			Count = 4
-		}
-		public enum animAimState
-		{
-			Unaimed = 0,
-			Aimed = 1
-		}
-		public enum animAnimationType
-		{
-			Normal = 0,
-			AdditiveFromRefPose = 1,
-			AdditiveFromFirstFrame = 2,
-			Additive = 3,
-			AdditiveWithoutFirstFrame = 4
-		}
-		public enum animAnimEventGenderAlt
-		{
-			None = 0,
-			Female = 1,
-			Male = 2
-		}
-		public enum animAnimNode_SetDrivenKey_InternalsEChannelType
-		{
-			FloatTrack = 0,
-			TransX = 1,
-			TransY = 2,
-			TransZ = 3,
-			RotEulZ_Pitch = 4,
-			RotEulX_Roll = 5,
-			RotEulY_Yaw = 6,
-			ScaleX = 7,
-			ScaleY = 8,
-			ScaleZ = 9,
-			RotQuatX = 10,
-			RotQuatY = 11,
-			RotQuatZ = 12,
-			RotQuatW = 13
-		}
-		public enum animAnimStateInterpolationType
-		{
-			Linear = 0,
-			EaseIn = 1,
-			EaseOut = 2,
-			EaseInOut = 3
-		}
-		public enum animAxis
-		{
-			X = 0,
-			Y = 1,
-			Z = 2,
-			NegativeX = 3,
-			NegativeY = 4,
-			NegativeZ = 5
-		}
-		public enum animClampType
-		{
-			None = 0,
-			Clamp = 1,
-			WrappedClamp = 2
-		}
-		public enum animCompareFunc
-		{
-			Equal = 0,
-			NotEqual = 1,
-			Less = 2,
-			LessEqual = 3,
-			Greater = 4,
-			GreaterEqual = 5
-		}
-		public enum animcompressionBufferTypePreset
-		{
-			Spline = 0,
-			SIMD = 1,
-			TestRaw = 2
-		}
-		public enum animcompressionFrameratePreset
-		{
-			USE_30_HZ = 0,
-			USE_15_HZ = 1,
-			USE_10_HZ = 2
-		}
-		public enum animcompressionQualityPreset
-		{
-			HIGH = 0,
-			MID = 1,
-			LOW = 2,
-			CINEMATIC_HIGH = 3
-		}
-		public enum animConstraintWeightMode
-		{
-			Static = 0,
-			FloatTrack = 1
-		}
-		public enum animCoverAction
-		{
-			NoAction = 0,
-			LeanLeft = 1,
-			LeanRight = 2,
-			StepOutLeft = 3,
-			StepOutRight = 4,
-			LeanOver = 5,
-			StepUp = 6,
-			EnterCover = 7,
-			SlideTo = 8,
-			Vault = 9,
-			LeaveCover = 10,
-			BlindfireLeft = 11,
-			BlindfireRight = 12,
-			BlindfireOver = 13,
-			OverheadStepOutLeft = 14,
-			OverheadStepOutRight = 15,
-			OverheadStepUp = 16
-		}
-		public enum animCoverBehavior
-		{
-			Idle = 0,
-			PreAction = 1,
-			DoAction = 2,
-			PostAction = 3
-		}
-		public enum animCoverStance
-		{
-			None = 0,
-			LowLeft = 1,
-			HighLeft = 2,
-			LowRight = 3,
-			HighRight = 4
-		}
-		public enum animCoverState
-		{
-			LowCover = 1,
-			HighCover = 2
-		}
-		public enum animDyngConstraintLinkType
-		{
-			KeepFixedDistance = 0,
-			KeepVariableDistance = 1,
-			Greater = 2,
-			Closer = 3
-		}
-		public enum animDyngParticleProjectionType
-		{
-			Disabled = 0,
-			ShortestPath = 1,
-			Directed = 2
-		}
-		public enum animEAnimGraphAdditiveType
-		{
-			AGAT_Local = 0,
-			AGAT_Ref = 1
-		}
-		public enum animEAnimGraphCompareFunc
-		{
-			AGCF_Equal = 0,
-			AGCF_NotEqual = 1,
-			AGCF_Less = 2,
-			AGCF_LessEqual = 3,
-			AGCF_Greater = 4,
-			AGCF_GreaterEqual = 5
-		}
-		public enum animEAnimGraphLogicOp
-		{
-			AGLO_Or = 0,
-			AGLO_And = 1
-		}
-		public enum animEAnimGraphMathInterpolation
-		{
-			AGMI_LINEAR = 0,
-			AGMI_SIN = 1,
-			AGMI_BEZIER = 2
-		}
-		public enum animEAnimGraphMathOp
-		{
-			AGMO_Add = 0,
-			AGMO_Subtract = 1,
-			AGMO_Multiply = 2,
-			AGMO_Divide = 3,
-			AGMO_SafeDivide = 4,
-			AGMO_ATan = 5,
-			AGMO_AngleDiff = 6,
-			AGMO_Length = 7,
-			AGMO_Abs = 8
-		}
-		public enum animEBlendFromPoseMode
-		{
-			BFPM_AlwaysOnActivation = 0,
-			BFPM_RequestedByTag = 1
-		}
-		public enum animEBlendTracksMode
-		{
-			AGBT_BasePose = 0,
-			AGBT_Interpolate = 1,
-			AGBT_Add = 2
-		}
-		public enum animEBlendTypeLBC
-		{
-			Linear = 0,
-			Smoothstep = 1,
-			CustomCurve = 2
-		}
-		public enum animEDirectionToEuler
-		{
-			Pitch = 0,
-			Yaw = 1,
-			Roll = 2
-		}
-		public enum animEFootPhase
-		{
-			RightUp = 0,
-			RightForward = 1,
-			LeftUp = 2,
-			LeftForward = 3,
-			NotConsidered = 4
-		}
-		public enum animEInterpolationType
-		{
-			Lerp = 0,
-			Slerp = 1
-		}
-		public enum animEMotionExtractionCompressionType
-		{
-			EMECT_UNCOMPRESSED = 0,
-			EMECT_SPLINE_MID = 2,
-			EMECT_UNCOMPRESSED_ALL_ANGLES = 3,
-			EMECT_SPLINE_LOW = 4,
-			EMECT_SPLINE_HIGH = 5,
-			EMECT_LINEAR = 6,
-			EMECT_UNCOMPRESSED_2D = 7,
-			EMECT_UNCOMPRESSED_3D_FALLBACKING = 8,
-			EMECT_UNCOMPRESSED_ALL_ANGLES_FALLBACKING = 9
-		}
-		public enum animEResetTypeNode
-		{
-			RT_Reference = 0,
-			RT_Indentity = 1
-		}
-		public enum animESpace
-		{
-			Local = 0,
-			Model = 1,
-			World = 2
-		}
-		public enum animESpaceMW
-		{
-			Model = 0,
-			World = 1
-		}
-		public enum animETransformAxis
-		{
-			X_Axis = 1,
-			Y_Axis = 2,
-			Z_Axis = 4
-		}
-		public enum animEVectorWsToMsType
-		{
-			Position = 0,
-			Direction = 1
-		}
-		public enum animEventFilterType
-		{
-			Default = 0,
-			AlwaysCollect = 1,
-			Solo = 2,
-			Mute = 3
-		}
-		public enum animEventSide
-		{
-			Left = 0,
-			Right = 1
-		}
-		public enum animFacialEmotionTransitionType
-		{
-			Natural = 0,
-			Fast = 1,
-			Blend = 2,
-			Instant = 3,
-			Custom = 4
-		}
-		public enum animFloatTrackOperationType
-		{
-			Override = 0,
-			Multiply = 1,
-			Add = 2,
-			Subtract = 3,
-			SubtractSwapped = 4,
-			WeightComplement = 5
-		}
-		public enum animHitReactionType
-		{
-			None = 0,
-			Twitch = 1,
-			Impact = 2,
-			Stagger = 3,
-			Pain = 4,
-			Knockdown = 5,
-			Ragdoll = 6,
-			Death = 7,
-			Block = 8,
-			GuardBreak = 9,
-			Parry = 10,
-			Bump = 11
-		}
-		public enum animLeg
-		{
-			Left = 0,
-			Right = 1
-		}
-		public enum animLocomotion_AnimType
-		{
-			None = 0,
-			idle_stand = 1,
-			idle_to_idle_0 = 2,
-			idle_to_idle_090 = 3,
-			idle_to_idle_270 = 4,
-			idle_to_idle_180_l = 5,
-			idle_to_idle_180_r = 6,
-			walk_0 = 7,
-			walk_left = 8,
-			walk_right = 9,
-			jog_0 = 10,
-			jog_left = 11,
-			jog_right = 12,
-			sprint_0 = 13,
-			sprint_left = 14,
-			sprint_right = 15,
-			idle_to_walk_0 = 16,
-			idle_to_jog_0 = 17,
-			idle_to_sprint_0 = 18,
-			walk_to_idle_0 = 19,
-			jog_to_idle_0 = 20,
-			sprint_to_idle_0 = 21,
-			walk_to_idle_0_l_hard = 22,
-			walk_to_idle_0_r_hard = 23,
-			jog_to_idle_0_l_hard = 24,
-			jog_to_idle_0_r_hard = 25,
-			sprint_to_idle_0_l_hard = 26,
-			sprint_to_idle_0_r_hard = 27,
-			walk_to_jog_0 = 28,
-			walk_to_sprint_0 = 29,
-			jog_to_walk_0 = 30,
-			jog_to_sprint_0 = 31,
-			sprint_to_walk_0 = 32,
-			sprint_to_jog_0 = 33,
-			idle_turn_to_walk_090 = 34,
-			idle_turn_to_walk_180_l = 35,
-			idle_turn_to_walk_180_r = 36,
-			idle_turn_to_walk_270 = 37,
-			idle_turn_to_jog_090 = 38,
-			idle_turn_to_jog_180_l = 39,
-			idle_turn_to_jog_180_r = 40,
-			idle_turn_to_jog_270 = 41,
-			idle_turn_to_sprint_090 = 42,
-			idle_turn_to_sprint_180_l = 43,
-			idle_turn_to_sprint_180_r = 44,
-			idle_turn_to_sprint_270 = 45,
-			walk_180 = 46,
-			jog_180 = 47,
-			walk_0_to_walk_180_l = 48,
-			walk_0_to_walk_180_r = 49,
-			walk_180_to_walk_0_l = 50,
-			walk_180_to_walk_0_r = 51,
-			idle_to_walk_180 = 52,
-			idle_to_jog_180 = 53,
-			walk_to_idle_180 = 54,
-			jog_to_idle_180 = 55,
-			jog_0_to_jog_180_l = 56,
-			jog_0_to_jog_180_r = 57,
-			jog_180_to_jog_0_l = 58,
-			jog_180_to_jog_0_r = 59,
-			jog_to_sprint_180 = 60,
-			walk_to_jog_180 = 61,
-			jog_to_walk_180 = 62,
-			idle_to_walk_090 = 63,
-			idle_to_walk_270 = 64,
-			walk_090 = 65,
-			walk_270 = 66,
-			walk_to_idle_090 = 67,
-			walk_to_idle_270 = 68,
-			walk_0_to_walk_090 = 69,
-			walk_0_to_walk_270 = 70,
-			walk_180_to_walk_090 = 71,
-			walk_180_to_walk_270 = 72,
-			walk_090_to_walk_0 = 73,
-			walk_270_to_walk_0 = 74,
-			walk_090_to_walk_180 = 75,
-			walk_270_to_walk_180 = 76,
-			walk_090_to_walk_270_l = 77,
-			walk_090_to_walk_270_r = 78,
-			walk_270_to_walk_090_l = 79,
-			walk_270_to_walk_090_r = 80,
-			walk_0_down_stairs = 81,
-			walk_0_up_stairs = 82,
-			walk_0_down_slope = 83,
-			walk_0_up_slope = 84,
-			jog_0_down_stairs = 85,
-			jog_0_up_stairs = 86,
-			jog_0_down_slope = 87,
-			jog_0_up_slope = 88,
-			sprint_0_down_stairs = 89,
-			sprint_0_up_stairs = 90,
-			sprint_0_down_slope = 91,
-			sprint_0_up_slope = 92,
-			walk_090_up_stairs = 93,
-			walk_090_down_stairs = 94,
-			walk_270_up_stairs = 95,
-			walk_270_down_stairs = 96,
-			walk_180_up_stairs = 97,
-			walk_180_down_stairs = 98,
-			idle_step_single_0 = 99,
-			idle_step_single_090 = 100,
-			idle_step_single_180 = 101,
-			idle_step_single_270 = 102
-		}
-		public enum animLocomotion_Style
-		{
-			LS_Idle = 0,
-			LS_Rotation = 1,
-			LS_Walk = 2,
-			LS_Jog = 3,
-			LS_Sprint = 4,
-			LS_Any = 5
-		}
-		public enum animLocomotionDecision
-		{
-			LD_None = 0,
-			LD_Stop = 1,
-			LD_MoveTo = 2,
-			LD_Move = 3
-		}
-		public enum animLocoStateType
-		{
-			LS_Pre = 0,
-			LS_Loop = 1
-		}
-		public enum animLookAtChestMode
-		{
-			Default = 0,
-			NoHips = 1,
-			Horizontal = 2,
-			HorizontalNoHips = 3,
-			ENUM_SIZE = 4
-		}
-		public enum animLookAtEyesMode
-		{
-			Default = 0,
-			Horizontal = 1,
-			ENUM_SIZE = 2
-		}
-		public enum animLookAtHeadMode
-		{
-			Default = 0,
-			Horizontal = 1,
-			ENUM_SIZE = 2
-		}
-		public enum animLookAtLeftHandedMode
-		{
-			Default = 0,
-			Horizontal = 1,
-			ENUM_SIZE = 2
-		}
-		public enum animLookAtLimitDegreesType
-		{
-			Narrow = 0,
-			Normal = 1,
-			Wide = 2,
-			None = 3
-		}
-		public enum animLookAtLimitDistanceType
-		{
-			Short = 0,
-			Normal = 1,
-			Long = 2,
-			None = 3
-		}
-		public enum animLookAtRightHandedMode
-		{
-			Default = 0,
-			Horizontal = 1,
-			ENUM_SIZE = 2
-		}
-		public enum animLookAtStatus
-		{
-			Active = 2,
-			LimitReached = 4,
-			TransitionInProgress = 8
-		}
-		public enum animLookAtStyle
-		{
-			VerySlow = 0,
-			Slow = 1,
-			Normal = 2,
-			Fast = 3,
-			VeryFast = 4
-		}
-		public enum animLookAtTwoHandedMode
-		{
-			Default = 0,
-			Horizontal = 1,
-			ENUM_SIZE = 2
-		}
-		public enum animMotionTableAction
-		{
-			MTA_None = 0,
-			MTA_Start = 1,
-			MTA_Stop = 2,
-			MTA_Move = 3,
-			MTA_TurnInPlace = 4,
-			MTA_TransitionToBackward = 5,
-			MTA_BackwardMove = 6,
-			MTA_TransitionFromBackward = 7,
-			MTA_StrafeLeft = 8,
-			MTA_StrafeRight = 9,
-			MTA_ForwardToStrafeLeft = 10,
-			MTA_ForwardToStrafeRight = 11,
-			MTA_StrafeLeftToForward = 12,
-			MTA_StrafeRightToForward = 13,
-			MTA_BackwardToStrafeLeft = 14,
-			MTA_BackwardToStrafeRight = 15,
-			MTA_StrafeLeftToBackward = 16,
-			MTA_StrafeRightToBackward = 17,
-			MTA_BackwardStart = 18,
-			MTA_BackwardStop = 19,
-			MTA_StrafeLeftStart = 20,
-			MTA_StrafeLeftStop = 21,
-			MTA_StrafeRightStart = 22,
-			MTA_StrafeRightStop = 23,
-			MTA_ForwardToWalk = 24,
-			MTA_ForwardToJog = 25,
-			MTA_ForwardToSprint = 26,
-			MTA_HardStopLeftLeg = 27,
-			MTA_HardStopRightLeg = 28,
-			MTA_RepositionForward = 29,
-			MTA_RepositionLeft = 30,
-			MTA_RepositionRight = 31,
-			MTA_RepositionBackward = 32,
-			MTA_Custom = 33,
-			MTA_CrowdMove = 34,
-			MTA_CrowdMoveSlopes = 35,
-			MTA_CrowdMoveStairs = 36,
-			MTA_StrafeLeftToStrafeRight = 37,
-			MTA_StrafeRightToStrafeLeft = 38,
-			MTA_CrowdRelaxedStop = 39,
-			MTA_CrowdHardStop = 40,
-			MTA_CrowdSprintStop = 41,
-			MTA_CrowdFleeStopFront = 42,
-			MTA_CrowdFleeStopBack = 43,
-			MTA_CrowdRelaxedStart = 44,
-			MTA_CrowdFleeStartIdle = 45,
-			MTA_CrowdFleeStartMotion = 46,
-			MTA_CrowdDirectionalStartFast = 47
-		}
-		public enum animMotionTableType
-		{
-			MTT_None = 0,
-			MTT_Walk = 1,
-			MTT_Jog = 2,
-			MTT_Sprint = 3,
-			MTT_Custom = 4
-		}
-		public enum animMotionTag
-		{
-			MT_Invalid = 0,
-			Walk = 1,
-			Jog = 2,
-			Sprint = 3
-		}
-		public enum animNodeProfileTimerMode
-		{
-			Begin = 0,
-			End = 1
-		}
-		public enum animNPCVehicleDeathType
-		{
-			Default = 0,
-			Relaxed = 1,
-			Combat = 2,
-			Ragdoll = 3
-		}
-		public enum animParentStaticSwitchBranch
-		{
-			None = 0,
-			TrueBranch = 1,
-			FalseBranch = 2
-		}
-		public enum animPendulumConstraintType
-		{
-			Cone = 0,
-			HingePlane = 1,
-			HalfCone = 2
-		}
-		public enum animPendulumProjectionType
-		{
-			Disabled = 0,
-			ShortestPathRotational = 1,
-			DirectedRotational = 2
-		}
-		public enum animPositionProjectionType
-		{
-			Disabled = 0,
-			ShortestPath = 1,
-			Directional = 2
-		}
-		public enum animQuaternionInterpolationType
-		{
-			Linear = 0,
-			Spherical = 1
-		}
-		public enum animSetBoneTransformEntry_SetMethod
-		{
-			NoSnapping = 0,
-			WholeTransform = 1,
-			TranslationOnly = 2,
-			RotationOnly = 3
-		}
-		public enum animSpringProjectionType
-		{
-			Disabled = 0,
-			ShortestPath = 1
-		}
-		public enum animStackTransformsExtender_SnapToBoneMethod
-		{
-			NoSnapping = 0,
-			WholeTransform = 1,
-			TranslationOnly = 2,
-			RotationOnly = 3
-		}
-		public enum animStanceState
-		{
-			Stand = 0,
-			Crouch = 1,
-			Kneel = 2,
-			Cover = 3,
-			Swim = 4,
-			Crawl = 5
-		}
-		public enum animStateTag
-		{
-			ST_Invalid = 0,
-			Idle = 1,
-			Cover = 2
-		}
-		public enum animTransformChannel
-		{
-			PosX = 0,
-			PosY = 1,
-			PosZ = 2,
-			RotX = 3,
-			RotY = 4,
-			RotZ = 5,
-			ScaleX = 6,
-			ScaleY = 7,
-			ScaleZ = 8
-		}
-		public enum animVectorCoordinateType
-		{
-			X = 0,
-			Y = 1,
-			Z = 2,
-			W = 3
-		}
-		public enum animWeaponOwnerType
-		{
-			Player = 0,
-			NPC = 1,
-			None = 2
-		}
+
 		public enum AttitudeChange
 		{
 			DONT_CHANGE = 0,
@@ -1401,461 +421,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			NEUTRAL = 2,
 			HOSTILE = 3
 		}
+
 		public enum AttributeButtonState
 		{
 			Default = 0,
 			Hover = 1
 		}
-		public enum audioAdvertIndoorFilter
-		{
-			Always = 0,
-			OnlyIndoor = 1,
-			OnlyOutdoor = 2
-		}
-		public enum audioAmbientGroupingVariant
-		{
-			AllEntities = 0,
-			IndoorEntities = 1,
-			OutdoorEntities = 2,
-			AllEntitiesAllDirections = 3,
-			IndoorAllDirections = 4,
-			OutdoorAllDirections = 5
-		}
-		public enum audioAudioEventFlags
-		{
-			NoEventFlags = 0,
-			SloMoOnly = 1,
-			Music = 2,
-			Unique = 4,
-			Metadata = 8
-		}
-		public enum audioAudioVehicleCurve
-		{
-			ThrottleInput = 0,
-			RPM = 1,
-			Gear = 2
-		}
-		public enum audiobreathingEventTag
-		{
-			Walk = 0,
-			Jog = 1,
-			Run = 2,
-			Sneak = 3,
-			Cloth = 4,
-			FootStepRegular = 5,
-			FootStepSprint = 6,
-			LandingRegular = 7,
-			LandingHard = 8,
-			LandingVeryHard = 9,
-			Climb = 10,
-			Jump = 11,
-			Player = 12,
-			Stop = 13,
-			Drop_Body = 14,
-			Pick_Up_Body = 15,
-			Standing_Event = 16
-		}
-		public enum audiobreathingLoopBehavior
-		{
-			TimedBreathing = 0,
-			BreathEvery2ndStep = 1,
-			BreathEveryStep = 2,
-			HoldingBreath = 3
-		}
-		public enum audioBreathingTransitionComparator
-		{
-			Less = 0,
-			Equal = 1,
-			Greater = 2
-		}
-		public enum audioBreathingTransitionType
-		{
-			PlayerSpeed = 0,
-			Event = 1,
-			AllEventTags = 2,
-			AnyEventTag = 3
-		}
-		public enum audioClassificationMethod
-		{
-			HasAnyTag = 0,
-			HasAllTags = 1,
-			NameEquals = 2,
-			EventNameEquals = 3,
-			HasAllEventTags = 4
-		}
-		public enum audioConversationSavingStrategy
-		{
-			Default = 0,
-			Save = 1,
-			DontSave = 2
-		}
-		public enum audioDynamicReverbType
-		{
-			Dynamic = 0,
-			StaticSmall = 1,
-			EnvironmentSmallStaticMedium = 2,
-			DynamicSource = 3
-		}
-		public enum audioEchoPositionType
-		{
-			DynamicEnvironment = 0,
-			Simple = 1
-		}
-		public enum audioEnemyState
-		{
-			InCombat = 0,
-			Alerted = 1,
-			Afraid = 2,
-			Alive = 3,
-			Dead = 4
-		}
-		public enum audioEntityEmitterContextType
-		{
-			[RED("Entity Emitter")] Entity_Emitter = 0,
-			[RED("Radio Emitter")] Radio_Emitter = 2
-		}
-		public enum audioESoundCurveType
-		{
-			Log3 = 0,
-			Sine = 1,
-			InversedSCurve = 3,
-			Linear = 4,
-			SCurve = 5,
-			Exp1 = 6,
-			ReciprocalOfSineCurve = 7,
-			Exp3 = 8
-		}
-		public enum audioEventActionType
-		{
-			Play = 0,
-			PlayAnimation = 1,
-			SetParameter = 2,
-			StopSound = 3,
-			SetSwitch = 4,
-			StopTagged = 5,
-			PlayExternal = 6,
-			Tag = 7,
-			Untag = 8,
-			SetAppearanceName = 9,
-			SetEntityName = 10,
-			AddContainerStreamingPrefetch = 11,
-			RemoveContainerStreamingPrefetch = 12
-		}
-		public enum audioFoleyActionType
-		{
-			FastHeavy = 0,
-			FastMedium = 1,
-			FastLight = 2,
-			NormalHeavy = 3,
-			NormalMedium = 4,
-			NormalLight = 5,
-			SlowHeavy = 6,
-			SlowMedium = 7,
-			SlowLight = 8,
-			Walk = 9,
-			Run = 10
-		}
-		public enum audioFoleyItemPriority
-		{
-			P0 = 0,
-			P1 = 1,
-			P2 = 2,
-			P3 = 3,
-			P4 = 4,
-			P5 = 5,
-			P6 = 6
-		}
-		public enum audioFoleyItemType
-		{
-			Jacket = 0,
-			Top = 1,
-			Bottom = 2,
-			Jewelry = 3
-		}
-		public enum audioGameplayTier
-		{
-			Undefined = 0,
-			Tier1_FullGameplay = 1,
-			Tier2_StagedGameplay = 2,
-			Tier3_LimitedGameplay = 3,
-			Tier4_FPPCinematic = 4,
-			Tier5_Cinematic = 5
-		}
-		public enum audioMaterialHardnessOverride
-		{
-			None = 0,
-			SetAsSoft = 1,
-			SetAsSolid = 2,
-			SetAsHard = 3
-		}
-		public enum audioMeleeHitPerMaterialType
-		{
-			Light = 0,
-			Light_Hard = 1,
-			Light_Soft = 2,
-			Light_Solid = 3,
-			Light_Flesh = 4,
-			Light_Robot = 5,
-			Normal = 6,
-			Normal_Hard = 7,
-			Normal_Soft = 8,
-			Normal_Solid = 9,
-			Normal_Flesh = 10,
-			Normal_Robot = 11,
-			Heavy = 12,
-			Heavy_Hard = 13,
-			Heavy_Soft = 14,
-			Heavy_Solid = 15,
-			Heavy_Flesh = 16,
-			Heavy_Robot = 17,
-			Slash = 18,
-			Slash_Hard = 19,
-			Slash_Soft = 20,
-			Slash_Solid = 21,
-			Slash_Flesh = 22,
-			Slash_Robot = 23,
-			Cut = 24,
-			Cut_Hard = 25,
-			Cut_Soft = 26,
-			Cut_Solid = 27,
-			Cut_Flesh = 28,
-			Cut_Robot = 29,
-			Stab = 30,
-			Stab_Hard = 31,
-			Stab_Soft = 32,
-			Stab_Solid = 33,
-			Stab_Flesh = 34,
-			Stab_Robot = 35,
-			Finisher = 36,
-			Finisher_Hard = 37,
-			Finisher_Soft = 38,
-			Finisher_Solid = 39,
-			Finisher_Flesh = 40,
-			Finisher_Robot = 41,
-			Weak = 42,
-			Weak_Hard = 43,
-			Weak_Soft = 44,
-			Weak_Solid = 45,
-			Weak_Flesh = 46,
-			Weak_Robot = 47
-		}
-		public enum audioMeleeHitType
-		{
-			Light = 0,
-			Normal = 1,
-			Heavy = 2,
-			Slash = 3,
-			Cut = 4,
-			Stab = 5,
-			Finisher = 6,
-			Weak = 7
-		}
-		public enum audioMeleeMaterialType
-		{
-			Hard = 0,
-			Soft = 1,
-			Solid = 2,
-			Flesh = 3,
-			Robot = 4
-		}
-		public enum audioMixingActionType
-		{
-			VoContext = 0,
-			EmitterTag = 1,
-			SoundTag = 2,
-			ActorName = 3,
-			DisableCombatVo = 4,
-			GlobalParameter = 5
-		}
-		public enum audioMixParamsAction
-		{
-			Mull = 0,
-			MullPercent = 1,
-			MullComplemtement = 2,
-			MullComplemtementPercent = 3,
-			Add = 4
-		}
-		public enum audioMusicSyncType
-		{
-			Bar = 0,
-			Beat = 1,
-			Grid = 2,
-			User = 3,
-			Transition = 4,
-			EntryCue = 5,
-			ExitCue = 6
-		}
-		public enum audioNumberComparer
-		{
-			Equal = 0,
-			NotEqual = 1,
-			Greater = 2,
-			GreaterOrEqual = 3,
-			Lower = 4,
-			LowerOrEqual = 5
-		}
-		public enum audioNumberOperation
-		{
-			SetEqual = 0,
-			Add = 1,
-			Subtract = 2,
-			MultiplyBy = 3,
-			DivideBy = 4
-		}
-		public enum audioObstructionTestPattern
-		{
-			Direct = 0,
-			Cone = 1
-		}
-		public enum audioObstructionTestType
-		{
-			SingleShot = 0,
-			Continuous = 1
-		}
-		public enum audioRadioSoundType
-		{
-			Song = 0,
-			AnnouncementScene = 1
-		}
-		public enum audioRadioSpeakerType
-		{
-			Stanley = 0,
-			MaximumMike = 1,
-			PoliceDispatch = 2
-		}
-		public enum audioReflectionVariant
-		{
-			WorldSpaceFixedDrections = 0,
-			LocalSpaceFixedDirections = 1,
-			FindingMaximumFaceAlignemnt = 2,
-			LocalSpaceSideDirections = 3,
-			FindingMaximumFaceAligment2Sides = 4
-		}
-		public enum audiottsvoicesFemale
-		{
-			Olivia = 7,
-			Emily = 8,
-			Jessica = 9,
-			Sophie = 10,
-			Elizabeth = 11,
-			Carolina = 12,
-			Sarah = 13
-		}
-		public enum audiottsvoicesMale
-		{
-			Andrew = 0,
-			Oliver = 1,
-			Jack = 2,
-			Harry = 3,
-			Simon = 4,
-			Charlie = 5,
-			Thomas = 6
-		}
-		public enum audiottsvoicesPolishFemale
-		{
-			Iwona = 16,
-			Paulina = 17
-		}
-		public enum audiottsvoicesPolishMale
-		{
-			Mateusz = 14,
-			Pawel = 15
-		}
-		public enum audioVoBarkType
-		{
-			None = 0,
-			Curse = 1,
-			Morale = 2,
-			Combat_Aggro = 3,
-			Combat_Despair = 4,
-			Stealth_Curious = 5
-		}
-		public enum audioVoCpoCharacter
-		{
-			None = 0,
-			Solo = 1,
-			Assassin = 2,
-			Techie = 3,
-			Netrunner = 4
-		}
-		public enum audioVoGruntInterruptMode
-		{
-			DontInterrupt = 0,
-			PlayOnlyOnInterrupt = 1,
-			CanInterrupt = 2
-		}
-		public enum audioVoGruntType
-		{
-			None = -1,
-			PainLong = 0,
-			AgroShort = 1,
-			AgroLong = 2,
-			LongFall = 3,
-			Death = 4,
-			SilentDeath = 5,
-			Grapple = 6,
-			GrappleMovement = 7,
-			EnvironmentalKnockdown = 8,
-			Bump = 9,
-			Curious = 10,
-			Fear = 11,
-			Jump = 12,
-			EffortLong = 13,
-			DeathShort = 14,
-			Greet = 15,
-			LaughHard = 16,
-			LaughSoft = 17,
-			Phone = 18,
-			BraindanceExcited = 19,
-			BraindanceFearful = 20,
-			BraindanceNeutral = 21,
-			BraindanceSexual = 22,
-			PainShort = 23,
-			Effort = 25
-		}
-		public enum audioWeaponBulletType
-		{
-			standard = 0,
-			sniper = 1,
-			shot = 2,
-			rail = 3,
-			automatic = 4,
-			smart = 5,
-			smart_sniper = 6,
-			hmg = 7
-		}
-		public enum audioWeaponShellCasingDirection
-		{
-			rightFront = 0,
-			rightBack = 1,
-			leftFront = 2,
-			leftBack = 3
-		}
-		public enum audioWeaponShellCasingMode
-		{
-			none = 0,
-			onShoot = 1,
-			onReload = 2
-		}
-		public enum audioWeaponShellCasingType
-		{
-			standard = 0,
-			large = 1,
-			cartridge = 2
-		}
-		public enum audioWeaponTailEnvironment
-		{
-			InteriorDefault = 0,
-			InteriorWide = 1,
-			ExteriorWide = 2,
-			ExteriorUrbanNarrow = 3,
-			ExteriorUrbanStreet = 4,
-			ExteriorUrbanStreetWide = 5,
-			ExteriorUrbanOpen = 6,
-			ExteriorUrbanEnclosed = 7,
-			ExteriorBadlandsOpen = 8,
-			ExteriorBadlandsCanyon = 9
-		}
+
 		public enum BlacklistReason
 		{
 			UNINITIALIZED = 0,
@@ -1863,87 +435,63 @@ namespace WolvenKit.RED4.CR2W.Types
 			REPRIMAND = 2,
 			COMBAT = 3
 		}
-		public enum braindanceVisionMode
-		{
-			Default = 0,
-			Audio = 1,
-			Thermal = 2
-		}
+
 		public enum ButtonStatus
 		{
 			DEFAULT = 0,
 			PROCESSING = 1,
 			DISABLED = 2
 		}
+
+		[Flags]
+		public enum CensorshipFlags
+		{
+			Censor_Nudity = 1 << 0,
+			Censor_OverSexualised = 1 << 1,
+			Censor_Suggestive = 1 << 2,
+			Censor_Homosexuality = 1 << 3,
+			Censor_Gore = 1 << 4,
+			Censor_Drugs = 1 << 5,
+			Censor_Religion = 1 << 6,
+			Censor_Chinese = 1 << 7
+		}
+
 		public enum CharacterScreenType
 		{
 			Attributes = 0,
 			Perks = 1
 		}
+
 		public enum ClueState
 		{
 			active = 0,
 			complete = 1
 		}
+
 		public enum CodexCategoryType
 		{
-			Invalid = -1,
 			All = 0,
 			Database = 1,
 			Characters = 2,
 			Locations = 3,
 			Tutorials = 4,
-			Count = 5
+			Count = 5,
+			Invalid = -1
 		}
+
 		public enum CodexDataSource
 		{
 			Undefined = 0,
 			Codex = 1,
 			Onscreen = 2
 		}
+
 		public enum CodexImageType
 		{
 			Default = 0,
 			Character = 1
 		}
-		public enum communityECommunitySpawnTime
-		{
-			Morning = 0,
-			Day = 1,
-			Evening = 2,
-			Night = 3,
-			Midnight = 4,
-			[RED("1:00")] _1_00 = 5,
-			[RED("2:00")] _2_00 = 6,
-			[RED("3:00")] _3_00 = 7,
-			[RED("4:00")] _4_00 = 8,
-			[RED("5:00")] _5_00 = 9,
-			[RED("6:00")] _6_00 = 10,
-			[RED("7:00")] _7_00 = 11,
-			[RED("8:00")] _8_00 = 12,
-			[RED("9:00")] _9_00 = 13,
-			[RED("10:00")] _10_00 = 14,
-			[RED("11:00")] _11_00 = 15,
-			[RED("12:00 - Noon")] _12_00___Noon = 16,
-			[RED("13:00")] _13_00 = 17,
-			[RED("14:00")] _14_00 = 18,
-			[RED("15:00")] _15_00 = 19,
-			[RED("16:00")] _16_00 = 20,
-			[RED("17:00")] _17_00 = 21,
-			[RED("18:00")] _18_00 = 22,
-			[RED("19:00")] _19_00 = 23,
-			[RED("20:00")] _20_00 = 24,
-			[RED("21:00")] _21_00 = 25,
-			[RED("22:00")] _22_00 = 26,
-			[RED("23:00")] _23_00 = 27
-		}
-		public enum communityESquadType
-		{
-			Global = 0,
-			Community = 1,
-			Security = 2,
-			Unknown = 3
-		}
+
 		public enum ConfigGraphicsQualityLevel
 		{
 			Low = 0,
@@ -1965,6 +513,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			SafeMode = 16,
 			Auto = 17
 		}
+
 		public enum ConfigTextureQualityLevel
 		{
 			Console = 0,
@@ -1975,12 +524,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			SafeMode = 5,
 			Auto = 6
 		}
-		public enum coverLeanDirection
-		{
-			Top = 0,
-			Left = 1,
-			Right = 2
-		}
+
 		public enum CrafringMaterialItemHighlight
 		{
 			None = 0,
@@ -1988,6 +532,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Add = 2,
 			Remove = 3
 		}
+
 		public enum CraftingCommands
 		{
 			CraftingFinished = 0,
@@ -1995,74 +540,64 @@ namespace WolvenKit.RED4.CR2W.Types
 			UpgradingFinished = 2,
 			Failed = 3
 		}
+
 		public enum CraftingInfoType
 		{
 			QuickHack = 0,
 			Item = 1
 		}
+
 		public enum CraftingMode
 		{
 			craft = 0,
 			upgrade = 1
 		}
+
 		public enum CraftingNotificationType
 		{
 			NoPerks = 0,
 			NotEnoughMaterial = 1
 		}
-		public enum curveEInterpolationType
-		{
-			EIT_Constant = 0,
-			EIT_Linear = 1,
-			EIT_BezierQuadratic = 2,
-			EIT_BezierCubic = 3,
-			EIT_Hermite = 4
-		}
-		public enum curveESegmentsLinkType
-		{
-			ESLT_Normal = 0,
-			ESLT_Smooth = 1,
-			ESLT_SmoothSymmetric = 2
-		}
+
 		public enum CustomButtonType
 		{
 			UnlockAllVehicles = 0,
 			ShowAllPoiMappins = 1,
 			DiscoverAllPoiMappins = 2
 		}
+
 		public enum CustomWeaponWheelSlot
 		{
 			FreeHands = 0,
 			Fists = 1
 		}
+
 		public enum CyberwareInfoType
 		{
 			Default = 0,
 			Cyberdeck = 1
 		}
+
 		public enum CyberwareScreenType
 		{
 			Ripperdoc = 0,
 			Inventory = 1
 		}
+
 		public enum DamageEffectDisplayType
 		{
-			Invalid = -1,
 			Flat = 0,
-			TargetHealth = 1
+			TargetHealth = 1,
+			Invalid = -1
 		}
-		public enum damageSystemLogFlags
-		{
-			GENERAL = 1,
-			ASSERT = 2,
-			WEAKSPOTS = 4
-		}
+
 		public enum DerivedFilterResult
 		{
 			False = 0,
 			True = 1,
 			Pass = 2
 		}
+
 		public enum DeviceStimType
 		{
 			Distract = 0,
@@ -2071,29 +606,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			VentilationAreaEffect = 3,
 			None = 4
 		}
+
 		public enum DronePose
 		{
 			Relaxed = 0,
 			Combat = 1
 		}
-		public enum DropdownDisplayContext
-		{
-			NotSet = 0,
-			Default = 1,
-			ItemChooserWeapon = 2
-		}
-		public enum DropdownItemDirection
-		{
-			None = 0,
-			Down = 1,
-			Up = 2
-		}
+
 		public enum DropPointPackageStatus
 		{
 			NOT_ACTIVE = 0,
 			ACTIVE = 1,
 			COLLECTED = 2
 		}
+
+		public enum DropdownDisplayContext
+		{
+			NotSet = 0,
+			Default = 1,
+			ItemChooserWeapon = 2
+		}
+
+		public enum DropdownItemDirection
+		{
+			None = 0,
+			Down = 1,
+			Up = 2
+		}
+
 		public enum DynamicTextureDataFormat
 		{
 			R_Uint8 = 0,
@@ -2106,42 +646,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			RGBA_Float16 = 7,
 			RGBA_Float32 = 8
 		}
-		public enum EActionContext
-		{
-			None = -1,
-			Direct = 0,
-			QHack = 1,
-			Master = 2,
-			Spiderbot = 3
-		}
-		public enum EActionInactivityReson
-		{
-			Ready = 0,
-			Locked = 1,
-			Recompilation = 2,
-			OutOfMemory = 3,
-			Invalid = 4
-		}
-		public enum EActionsSequencerMode
-		{
-			REGULAR_INTERVALS = 0,
-			ACCELERATING_INTERVALS_TODO = 1,
-			DECELERATING_INTEVALS_TODO = 2,
-			RANDOM_INTERVALS_TODO = 3,
-			AT_THE_SAME_TIME_TODO = 4
-		}
-		public enum EActionType
-		{
-			QuickAction = 0,
-			ChargeAction = 1,
-			None = 2
-		}
-		public enum EActivationState
-		{
-			NONE = 0,
-			ACTIVATED = 1,
-			DEACTIVATED = 2
-		}
+
 		public enum EAIActionPhase
 		{
 			Inactive = 0,
@@ -2149,6 +654,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Loop = 2,
 			Recovery = 3
 		}
+
 		public enum EAIActionState
 		{
 			Inactive = 0,
@@ -2156,6 +662,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Loop = 2,
 			Recover = 3
 		}
+
 		public enum EAIActionTarget
 		{
 			None = 0,
@@ -2166,17 +673,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			StimSource = 5,
 			CustomWorldPosition = 6
 		}
+
 		public enum EAIAttitude
 		{
 			AIA_Friendly = 0,
 			AIA_Neutral = 1,
 			AIA_Hostile = 2
 		}
+
 		public enum EAIBackgroundCombatStep
 		{
 			ChangeCover = 0,
 			ChangeTarget = 1
 		}
+
 		public enum EAICombatPreset
 		{
 			None = 0,
@@ -2186,6 +696,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			IsDefensive = 4,
 			IsCautious = 5
 		}
+
 		public enum EAICoverAction
 		{
 			StepOut = 0,
@@ -2194,6 +705,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			LeanOver = 3,
 			Undefined = 4
 		}
+
 		public enum EAICoverActionDirection
 		{
 			Front = 0,
@@ -2205,16 +717,18 @@ namespace WolvenKit.RED4.CR2W.Types
 			Left = 6,
 			FrontLeft = 7
 		}
+
 		public enum EAIDismembermentBodyPart
 		{
-			NONE = -1,
 			LEFT_ARM = 0,
 			RIGHT_ARM = 1,
 			LEFT_LEG = 2,
 			RIGHT_LEG = 3,
 			HEAD = 4,
-			BODY = 5
+			BODY = 5,
+			NONE = -1
 		}
+
 		public enum EAIGateEventFlags
 		{
 			AIGEF_Undefined = 0,
@@ -2223,6 +737,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			AIGEF_InterruptsForcedBehavior = 3,
 			AIGEF_AcceptsAdditives = 4
 		}
+
 		public enum EAIGateSignalFlags
 		{
 			AIGSF_Undefined = 0,
@@ -2231,65 +746,67 @@ namespace WolvenKit.RED4.CR2W.Types
 			AIGSF_InterruptsForcedBehavior = 3,
 			AIGSF_AcceptsAdditives = 4
 		}
+
 		public enum EAIHitBodyPart
 		{
-			None = -1,
 			Head = 1,
 			LeftTorso = 2,
 			RightTorso = 3,
 			Belly = 4,
 			LeftLeg = 5,
-			RightLeg = 6
+			RightLeg = 6,
+			None = -1
 		}
+
 		public enum EAIHitDirection
 		{
-			None = -1,
 			Left = 0,
 			Back = 1,
 			Right = 2,
-			Front = 3
+			Front = 3,
+			None = -1
 		}
+
 		public enum EAIHitIntensity
 		{
-			None = -1,
 			Light = 0,
 			Medium = 1,
 			Heavy = 2,
-			Explosion = 3
+			Explosion = 3,
+			None = -1
 		}
+
 		public enum EAIHitSource
 		{
-			None = -1,
 			Ranged = 0,
 			MeleeSharp = 1,
 			MeleeBlunt = 2,
-			QuickMelee = 3
+			QuickMelee = 3,
+			None = -1
 		}
+
 		public enum EAILastHitReactionPlayed
 		{
-			None = -1,
 			Twitch = 0,
 			Impact = 1,
 			Stagger = 2,
-			Knockdown = 3
+			Knockdown = 3,
+			None = -1
 		}
-		public enum EAimAssistLevel
-		{
-			Off = 0,
-			Light = 1,
-			Standard = 2
-		}
+
 		public enum EAIPlayerSquadOrder
 		{
 			Takedown = 0,
 			Invalid = 1
 		}
+
 		public enum EAIRole
 		{
 			None = 0,
 			Patrol = 1,
 			Follower = 2
 		}
+
 		public enum EAIShootingPatternRange
 		{
 			Close = 0,
@@ -2297,6 +814,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Long = 2,
 			Undefined = 3
 		}
+
 		public enum EAISquadAction
 		{
 			Invalid = 0,
@@ -2322,6 +840,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			GroupReaction = 20,
 			Crouch = 21
 		}
+
 		public enum EAISquadChoiceAlgorithm
 		{
 			Invalid = 0,
@@ -2339,6 +858,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			CallOffAction = 12,
 			ShareNewThreat = 13
 		}
+
 		public enum EAISquadRing
 		{
 			Invalid = 0,
@@ -2348,6 +868,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Far = 4,
 			Extreme = 5
 		}
+
 		public enum EAISquadTactic
 		{
 			Invalid = 0,
@@ -2361,6 +882,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Medivac = 8,
 			Panic = 9
 		}
+
 		public enum EAISquadVerb
 		{
 			Invalid = 0,
@@ -2376,6 +898,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			EvaluateTicketDeactivation = 10,
 			AcknowledgeOrder = 11
 		}
+
 		public enum EAITargetType
 		{
 			AITT_Undefined = 0,
@@ -2387,12 +910,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			AITT_Companion = 6,
 			AITT_Cover = 7
 		}
+
 		public enum EAIThreatCalculationType
 		{
 			Regular = 0,
 			Boss = 1,
 			Madness = 2
 		}
+
 		public enum EAITicketStatus
 		{
 			Invalid = 0,
@@ -2401,6 +926,55 @@ namespace WolvenKit.RED4.CR2W.Types
 			OrderDone = 3,
 			OrderRevoked = 4
 		}
+
+		public enum EActionContext
+		{
+			Direct = 0,
+			QHack = 1,
+			Master = 2,
+			Spiderbot = 3,
+			None = -1
+		}
+
+		public enum EActionInactivityReson
+		{
+			Ready = 0,
+			Locked = 1,
+			Recompilation = 2,
+			OutOfMemory = 3,
+			Invalid = 4
+		}
+
+		public enum EActionType
+		{
+			QuickAction = 0,
+			ChargeAction = 1,
+			None = 2
+		}
+
+		public enum EActionsSequencerMode
+		{
+			REGULAR_INTERVALS = 0,
+			ACCELERATING_INTERVALS_TODO = 1,
+			DECELERATING_INTEVALS_TODO = 2,
+			RANDOM_INTERVALS_TODO = 3,
+			AT_THE_SAME_TIME_TODO = 4
+		}
+
+		public enum EActivationState
+		{
+			NONE = 0,
+			ACTIVATED = 1,
+			DEACTIVATED = 2
+		}
+
+		public enum EAimAssistLevel
+		{
+			Off = 0,
+			Light = 1,
+			Standard = 2
+		}
+
 		public enum EAllowedTo
 		{
 			UNDEFINED = 0,
@@ -2408,12 +982,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			ILLEGAL_ACTIONS = 2,
 			COMBAT = 3
 		}
+
 		public enum EAnimationBufferDataAvailable
 		{
 			ABDA_None = 0,
 			ABDA_Partial = 1,
 			ABDA_All = 2
 		}
+
 		public enum EAnimationType
 		{
 			REGULAR = 0,
@@ -2421,6 +997,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			TRANSFORM_TWO_SIDES = 2,
 			NONE = 3
 		}
+
 		public enum EApertureValue
 		{
 			[RED("f/1.0")] f_1_0 = 0,
@@ -2435,29 +1012,41 @@ namespace WolvenKit.RED4.CR2W.Types
 			[RED("f/22.0")] f_22_0 = 9,
 			[RED("f/32.0")] f_32_0 = 10
 		}
+
 		public enum EAreaLightShape
 		{
 			ALS_Sphere = 0,
 			ALS_Capsule = 1
 		}
+
 		public enum EArgumentType
 		{
 			Object = 0,
 			CoverID = 1,
 			Vector4 = 2
 		}
+
 		public enum EAttackType
 		{
 			Invalid = 0,
 			Ranged = 1,
 			Melee = 2
 		}
+
 		public enum EAxisType
 		{
 			X = 0,
 			Y = 1,
 			Z = 2
 		}
+
+		public enum EBOOL
+		{
+			UNINITIALZED = 0,
+			FALSE = 1,
+			TRUE = 2
+		}
+
 		public enum EBarkList
 		{
 			vo_enemy_reaction_surprised_combat_start = 0,
@@ -2485,12 +1074,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			vo_enemy_answer_to_generic_combat_question = 22,
 			vo_enemy_group_boost_combat_morale = 23
 		}
+
 		public enum EBeamStyle
 		{
 			None = 0,
 			Sweeping = 1,
 			HeadSlicer = 2
 		}
+
 		public enum EBinkOperationType
 		{
 			PLAY = 0,
@@ -2498,18 +1089,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			PAUSE = 2,
 			RESUME = 3
 		}
-		public enum EBOOL
-		{
-			UNINITIALZED = 0,
-			FALSE = 1,
-			TRUE = 2
-		}
+
 		public enum EBreachOrigin
 		{
 			LOCAL = 0,
 			EXTERNAL = 1,
 			GLOBAL = 2
 		}
+
 		public enum EBroadcasteingType
 		{
 			Active = 0,
@@ -2518,12 +1105,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			Remove = 3,
 			Single = 4
 		}
+
+		public enum ECLSForcedState
+		{
+			DEFAULT = 0,
+			ForcedON = 1,
+			ForcedOFF = 2
+		}
+
 		public enum ECallbackExpressionActions
 		{
 			SetTrue = 0,
 			SetFalse = 1,
 			Toggle = 2
 		}
+
 		public enum ECameraDirectionFunctionalTestsUtil
 		{
 			Up = 0,
@@ -2531,6 +1127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Left = 2,
 			Right = 3
 		}
+
 		public enum ECarryState
 		{
 			None = 0,
@@ -2541,6 +1138,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Dispose = 5,
 			Jump = 6
 		}
+
 		public enum ECartOperationResult
 		{
 			Success = 0,
@@ -2551,6 +1149,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			QuestItem = 5,
 			NotInCart = 6
 		}
+
 		public enum ECentaurShieldState
 		{
 			Inactive = 0,
@@ -2559,12 +1158,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Destroyed = 3,
 			Hacked = 4
 		}
-		public enum ECLSForcedState
-		{
-			DEFAULT = 0,
-			ForcedON = 1,
-			ForcedOFF = 2
-		}
+
 		public enum EColorChannel
 		{
 			COLCHANNEL_Red = 0,
@@ -2572,18 +1166,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			COLCHANNEL_Blue = 2,
 			COLCHANNEL_Alpha = 3
 		}
+
 		public enum EColorMappingFunction
 		{
 			CMF_Linear = 0,
 			CMF_sRGB = 1,
 			CMF_ArriLogC = 2
 		}
+
 		public enum EColorPrimary
 		{
 			PRIM_REC709 = 0,
 			PRIM_DCIP3 = 1,
 			PRIM_BT2020 = 2
 		}
+
 		public enum ECompanionDistancePreset
 		{
 			Medium = 0,
@@ -2591,11 +1188,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Far = 2,
 			VeryFar = 3
 		}
+
 		public enum ECompanionPositionPreset
 		{
 			Behind = 0,
 			InFront = 1
 		}
+
 		public enum ECompareOp
 		{
 			CO_Lesser = 0,
@@ -2605,6 +1204,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			CO_Equal = 4,
 			CO_NotEqual = 5
 		}
+
 		public enum EComparisonOperator
 		{
 			Equal = 0,
@@ -2614,6 +1214,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Less = 4,
 			LessOrEqual = 5
 		}
+
 		public enum EComparisonType
 		{
 			Greater = 0,
@@ -2623,17 +1224,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			Less = 4,
 			LessOrEqual = 5
 		}
+
 		public enum EComponentOperation
 		{
 			Enable = 0,
 			Disable = 1
 		}
+
 		public enum EComputerAnimationState
 		{
 			None = 0,
 			Opened = 1,
 			Closed = 2
 		}
+
 		public enum EComputerMenuType
 		{
 			MAIN = 0,
@@ -2644,6 +1248,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			INTERNET = 5,
 			INVALID = 6
 		}
+
 		public enum EConclusionQuestState
 		{
 			Undefined = 0,
@@ -2651,6 +1256,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Inactive = 2,
 			Shown = 3
 		}
+
 		public enum ECookingPlatform
 		{
 			PLATFORM_None = 0,
@@ -2660,11 +1266,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			PLATFORM_WindowsServer = 4,
 			PLATFORM_LinuxServer = 5
 		}
+
 		public enum ECooldownGameControllerMode
 		{
 			COOLDOWNS = 0,
 			BUFFS_AND_DEBUFFS = 1
 		}
+
 		public enum ECooldownIndicatorState
 		{
 			Pooled = 0,
@@ -2672,30 +1280,35 @@ namespace WolvenKit.RED4.CR2W.Types
 			Filling = 2,
 			Outro = 3
 		}
+
 		public enum ECoverSpecialAction
 		{
 			None = 0,
 			Left = 1,
 			Right = 2
 		}
+
 		public enum ECraftingIconPositioning
 		{
 			generic = 0,
 			weaponBig = 1,
 			weaponSmall = 2
 		}
+
 		public enum ECubeSourceTextureType
 		{
 			CST_CrossHorizontal = 0,
 			CST_CrossVertical = 1,
 			CST_Panorama = 2
 		}
+
 		public enum ECustomCameraTarget
 		{
 			ECCTV_All = 0,
 			ECCTV_OnlyOffscreen = 1,
 			ECCTV_OnlyOnscreen = 2
 		}
+
 		public enum ECustomMaterialParam
 		{
 			ECMP_CustomParam0 = 1,
@@ -2706,121 +1319,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			ECMP_CustomParam5 = 32,
 			ECMP_CustomParam6 = 64
 		}
-		public enum EDeathType
-		{
-			Ground = 0,
-			Air = 1,
-			Swimming = 2
-		}
-		public enum EDebuggerColor
-		{
-			RED = 0,
-			YELLOW = 1
-		}
-		public enum EDecalRenderMode
-		{
-			DRM_AllStatic = 0,
-			DRM_ObjectType = 1,
-			DRM_AllDynamic = 2
-		}
-		public enum EDepthCollisionEffect
-		{
-			DCE_Bounce = 1,
-			DCE_Glide = 2,
-			DCE_Kill = 4
-		}
-		public enum EDeviceChallengeAttribute
-		{
-			Invalid = 0,
-			Strength = 1,
-			Reflexes = 2,
-			Intelligence = 3,
-			TechnicalAbility = 4,
-			Cool = 5
-		}
-		public enum EDeviceChallengeSkill
-		{
-			Invalid = 0,
-			Hacking = 1,
-			Engineering = 2,
-			Athletics = 3
-		}
-		public enum EDeviceDurabilityState
-		{
-			NOMINAL = 0,
-			MALFUNCTIONING = 1,
-			BROKEN = 2,
-			DESTROYED = 3
-		}
-		public enum EDeviceDurabilityType
-		{
-			INVULNERABLE = 0,
-			INDESTRUCTIBLE = 1,
-			DESTRUCTIBLE = 2
-		}
-		public enum EDeviceStatus
-		{
-			DISABLED = -2,
-			UNPOWERED = -1,
-			OFF = 0,
-			ON = 1,
-			INVALID = 2
-		}
-		public enum EDocumentType
-		{
-			FILE = 0,
-			MAIL = 1,
-			Invalid = 2
-		}
-		public enum EDodgeMovementInput
-		{
-			Invalid = 0,
-			Forward = 1,
-			Right = 2,
-			Left = 3,
-			Back = 4
-		}
-		public enum EDoorOpeningType
-		{
-			SLIDING_HORIZONTALLY = 0,
-			SLIDING_VERTICALLY = 1,
-			HINGED = 2,
-			GATE = 3
-		}
-		public enum EDoorSkillcheckSide
-		{
-			BOTH = 0,
-			ONE = 1,
-			TWO = 2
-		}
-		public enum EDoorStatus
-		{
-			SEALED = -2,
-			LOCKED = -1,
-			CLOSED = 0,
-			OPENED = 1
-		}
-		public enum EDoorTriggerSide
-		{
-			OUTSIDE = 0,
-			ONE = 1,
-			TWO = 2
-		}
-		public enum EDoorType
-		{
-			NONE = 0,
-			INTERACTIVE = 1,
-			AUTOMATIC = 2,
-			PHYSICAL = 3,
-			REMOTELY_CONTROLLED = 4
-		}
-		public enum EDownedType
-		{
-			Killed = 0,
-			Finished = 1,
-			Defeated = 2,
-			Unconscious = 3
-		}
+
 		public enum EDPadSlot
 		{
 			Left = 0,
@@ -2841,6 +1340,141 @@ namespace WolvenKit.RED4.CR2W.Types
 			VehicleInsideWheel = 15,
 			ConsumableWheel = 16
 		}
+
+		public enum EDeathType
+		{
+			Ground = 0,
+			Air = 1,
+			Swimming = 2
+		}
+
+		public enum EDebuggerColor
+		{
+			RED = 0,
+			YELLOW = 1
+		}
+
+		public enum EDecalRenderMode
+		{
+			DRM_AllStatic = 0,
+			DRM_ObjectType = 1,
+			DRM_AllDynamic = 2
+		}
+
+		public enum EDepthCollisionEffect
+		{
+			DCE_Bounce = 1,
+			DCE_Glide = 2,
+			DCE_Kill = 4
+		}
+
+		public enum EDeviceChallengeAttribute
+		{
+			Invalid = 0,
+			Strength = 1,
+			Reflexes = 2,
+			Intelligence = 3,
+			TechnicalAbility = 4,
+			Cool = 5
+		}
+
+		public enum EDeviceChallengeSkill
+		{
+			Invalid = 0,
+			Hacking = 1,
+			Engineering = 2,
+			Athletics = 3
+		}
+
+		public enum EDeviceDurabilityState
+		{
+			NOMINAL = 0,
+			MALFUNCTIONING = 1,
+			BROKEN = 2,
+			DESTROYED = 3
+		}
+
+		public enum EDeviceDurabilityType
+		{
+			INVULNERABLE = 0,
+			INDESTRUCTIBLE = 1,
+			DESTRUCTIBLE = 2
+		}
+
+		public enum EDeviceStatus
+		{
+			OFF = 0,
+			ON = 1,
+			INVALID = 2,
+			DISABLED = -2,
+			UNPOWERED = -1
+		}
+
+		public enum EDocumentType
+		{
+			FILE = 0,
+			MAIL = 1,
+			Invalid = 2
+		}
+
+		public enum EDodgeMovementInput
+		{
+			Invalid = 0,
+			Forward = 1,
+			Right = 2,
+			Left = 3,
+			Back = 4
+		}
+
+		public enum EDoorOpeningType
+		{
+			SLIDING_HORIZONTALLY = 0,
+			SLIDING_VERTICALLY = 1,
+			HINGED = 2,
+			GATE = 3,
+			HINGED_SIDE_ONE = 4,
+			HINGED_SIDE_TWO = 5
+		}
+
+		public enum EDoorSkillcheckSide
+		{
+			BOTH = 0,
+			ONE = 1,
+			TWO = 2
+		}
+
+		public enum EDoorStatus
+		{
+			CLOSED = 0,
+			OPENED = 1,
+			SEALED = -2,
+			LOCKED = -1
+		}
+
+		public enum EDoorTriggerSide
+		{
+			OUTSIDE = 0,
+			ONE = 1,
+			TWO = 2
+		}
+
+		public enum EDoorType
+		{
+			NONE = 0,
+			INTERACTIVE = 1,
+			AUTOMATIC = 2,
+			PHYSICAL = 3,
+			REMOTELY_CONTROLLED = 4
+		}
+
+		public enum EDownedType
+		{
+			Killed = 0,
+			Finished = 1,
+			Defeated = 2,
+			Unconscious = 3
+		}
+
 		public enum EDrillMachineRewireState
 		{
 			InsideInteractionRange = 0,
@@ -2850,23 +1484,27 @@ namespace WolvenKit.RED4.CR2W.Types
 			RewireStarted = 4,
 			RewireFinished = 5
 		}
+
 		public enum EDynamicDecalSpawnPriority
 		{
 			RDDS_Normal = 0,
 			RDDS_Highest = 1
 		}
+
 		public enum EEasingType
 		{
 			EET_In = 0,
 			EET_Out = 1,
 			EET_InOut = 2
 		}
+
 		public enum EEffectOperationType
 		{
 			START = 0,
 			STOP = 1,
 			BRAKE_LOOP = 2
 		}
+
 		public enum EEmitterGroup
 		{
 			EG_Default = 0,
@@ -2887,6 +1525,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			EG_Group14 = 15,
 			EG_Group15 = 16
 		}
+
 		public enum EEntityHighlightType
 		{
 			EHE_None = 0,
@@ -2894,6 +1533,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			EHE_FillOnly = 2,
 			EHE_OutlineOnly = 3
 		}
+
 		public enum EEnvColorGroup
 		{
 			ECG_Default = 0,
@@ -2915,6 +1555,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			ECG_Group14 = 16,
 			ECG_Group15 = 17
 		}
+
 		public enum EEnvManagerModifier
 		{
 			EMM_None = 0,
@@ -2988,11 +1629,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			EMM_RainMask = 68,
 			EMM_VolFogDensity = 69
 		}
+
 		public enum EEquipmentSide
 		{
 			Left = 0,
 			Right = 1
 		}
+
 		public enum EEquipmentState
 		{
 			Unequipped = 0,
@@ -3001,21 +1644,31 @@ namespace WolvenKit.RED4.CR2W.Types
 			Unequipping = 3,
 			FirstEquip = 4
 		}
+
 		public enum EExplosiveAdditionalGameEffectType
 		{
 			none = 0,
 			EMP = 1
 		}
+
+		public enum EFastTravelDeviceType
+		{
+			DataTerm = 0,
+			SubwayGate = 1
+		}
+
 		public enum EFastTravelSystemInstruction
 		{
 			Forward = 0,
 			Previous = 1
 		}
+
 		public enum EFastTravelTriggerType
 		{
 			Manual = 0,
 			Auto = 1
 		}
+
 		public enum EFeatureFlag
 		{
 			FEATFLAG_Default = 0,
@@ -3041,18 +1694,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			FEATFLAG_NumLights = 20,
 			FEATFLAG_DepthPrepass = 21
 		}
+
 		public enum EFilterType
 		{
 			ALLOW_NONE = 0,
 			ALLOW_COMBAT_ONLY = 1,
 			ALLOW_ALL = 2
 		}
+
 		public enum EFocusClueInvestigationState
 		{
 			NONE = 0,
 			INSPECTED = 1,
 			NOT_INSPECTED = 2
 		}
+
 		public enum EFocusForcedHighlightType
 		{
 			INTERACTION = 0,
@@ -3072,6 +1728,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			BACKDOOR = 14,
 			INVALID = 15
 		}
+
 		public enum EFocusOutlineType
 		{
 			HOSTILE = 0,
@@ -3090,12 +1747,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			BACKDOOR = 13,
 			INVALID = 14
 		}
+
 		public enum EForcedElevatorArrowsState
 		{
 			Disabled = 0,
 			ArrowsUp = 1,
 			ArrowsDown = 2
 		}
+
 		public enum EFreeVectorAxes
 		{
 			FVA_One = 1,
@@ -3103,6 +1762,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			FVA_Three = 3,
 			FVA_Four = 4
 		}
+
+		public enum EGameSessionDataType
+		{
+			NONE = 0,
+			CameraDeadBody = 1,
+			CameraTagLimit = 2
+		}
+
 		public enum EGameplayChallengeLevel
 		{
 			NONE = 0,
@@ -3112,12 +1779,39 @@ namespace WolvenKit.RED4.CR2W.Types
 			IMPOSSIBLE = 4
 		}
 
-		public enum EGameSessionDataType
+		public enum EGameplayRole
 		{
-			NONE = 0,
-			CameraDeadBody = 1,
-			CameraTagLimit = 2
+			UnAssigned = 0,
+			None = 1,
+			Alarm = 2,
+			ControlNetwork = 3,
+			ControlOtherDevice = 4,
+			ControlSelf = 5,
+			CutPower = 6,
+			Distract = 7,
+			DropPoint = 8,
+			ExplodeLethal = 9,
+			ExplodeNoneLethal = 10,
+			Fall = 11,
+			FastTravel = 12,
+			GrantInformation = 13,
+			HazardWarning = 14,
+			HideBody = 15,
+			Loot = 16,
+			OpenPath = 17,
+			ClearPath = 18,
+			Push = 19,
+			ServicePoint = 20,
+			Shoot = 21,
+			SpreadGas = 22,
+			StoreItems = 23,
+			GenericRole = 24,
+			ClearPathAd = 25,
+			DistractVendingMachine = 26,
+			NPC = 27,
+			Clue = 28
 		}
+
 		public enum EGenericNotificationPriority
 		{
 			Default = 0,
@@ -3125,17 +1819,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			Medium = 2,
 			Height = 3
 		}
+
 		public enum EGlitchState
 		{
 			NONE = 0,
 			DEFAULT = 1,
 			SUBLIMINAL_MESSAGE = 2
 		}
+
 		public enum EGravityType
 		{
 			LowGravity = 0,
 			Regular = 1
 		}
+
 		public enum EGrenadeType
 		{
 			Frag = 0,
@@ -3148,12 +1845,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Cutting = 7,
 			Sonic = 8
 		}
+
 		public enum EHandEquipSlot
 		{
 			None = 0,
 			Left = 1,
 			Right = 2
 		}
+
 		public enum EHitReactionMode
 		{
 			Regular = 0,
@@ -3171,6 +1870,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			BulkyStaggerMin = 12,
 			Invalid = 13
 		}
+
 		public enum EHitReactionZone
 		{
 			Head = 0,
@@ -3185,20 +1885,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			LegRight = 9,
 			Special = 10
 		}
+
 		public enum EHitShapeType
 		{
-			None = -1,
 			Flesh = 0,
 			Metal = 1,
 			Cyberware = 2,
-			Armor = 3
+			Armor = 3,
+			None = -1
 		}
+
 		public enum EHotkeyRequestType
 		{
 			Assign = 0,
 			Cycle = 1,
 			Restore = 2
 		}
+
 		public enum EHudAvatarMode
 		{
 			Connecting = 0,
@@ -3206,6 +1909,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Holocall = 2,
 			Audiocall = 3
 		}
+
 		public enum EHudPhoneFunction
 		{
 			Inactive = 0,
@@ -3214,6 +1918,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Holocall = 3,
 			Audiocall = 4
 		}
+
 		public enum EHudPhoneVisibility
 		{
 			Invisible = 0,
@@ -3221,6 +1926,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Visible = 2,
 			Hiding = 3
 		}
+
 		public enum EIndustrialArmAnimations
 		{
 			Idle = 0,
@@ -3235,6 +1941,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Repair_below_loop_medium = 9,
 			Repair_loop_high = 10
 		}
+
 		public enum EInitReactionAnim
 		{
 			Shock = 0,
@@ -3242,6 +1949,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Curious = 2,
 			Call = 3
 		}
+
 		public enum EInkAnimationPlaybackOption
 		{
 			PLAY = 0,
@@ -3252,6 +1960,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			GO_TO_START = 5,
 			GO_TO_END = 6
 		}
+
 		public enum EInputAction
 		{
 			IACT_None = 0,
@@ -3259,12 +1968,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			IACT_Release = 2,
 			IACT_Axis = 3
 		}
+
 		public enum EInputCustomKey
 		{
-			ICK_Pad_DigitLeftRight = 262,
-			ICK_Pad_DigitUpDown = 263,
-			ICK_Count = 264
+			ICK_Pad_DigitLeftRight = 264,
+			ICK_Pad_DigitUpDown = 265,
+			ICK_Count = 266
 		}
+
 		public enum EInputKey
 		{
 			IK_None = 0,
@@ -3529,9 +2240,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			IK_Pad_Fake_LeftAxis = 257,
 			IK_Pad_Fake_RightAxis = 258,
 			IK_Pad_Fake_RelativeLeftAxis = 259,
-			IK_Last = 260,
-			IK_Count = 261
+			IK_Pad_Fake_DigitLeftRight = 260,
+			IK_Pad_Fake_DigitUpDown = 261,
+			IK_Last = 262,
+			IK_Count = 263
 		}
+
 		public enum EInventoryComboBoxMode
 		{
 			FromInventory = 0,
@@ -3540,32 +2254,37 @@ namespace WolvenKit.RED4.CR2W.Types
 			CustomizeFromInventory = 3,
 			CustomizeCyberware = 4
 		}
+
 		public enum EInventoryDataStatDisplayType
 		{
 			CompareBar = 0,
 			DisplayBar = 1,
 			Value = 2
 		}
+
 		public enum EItemOperationType
 		{
 			ADD = 0,
 			REMOVE = 1
 		}
+
 		public enum EItemSlotCheckType
 		{
-			NONE = -1,
 			TAG = 0,
 			TYPE = 1,
 			CATEGORY = 2,
 			EVOLUTION = 3,
-			FULLY_MODDED = 4
+			FULLY_MODDED = 4,
+			NONE = -1
 		}
+
 		public enum EJuryrigTrapState
 		{
 			UNARMED = 0,
 			ARMED = 1,
 			TRIGGERED = 2
 		}
+
 		public enum EKnockdownStates
 		{
 			Invalid = 0,
@@ -3575,6 +2294,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Recovery = 4,
 			AirRecovery = 5
 		}
+
 		public enum ELastUsed
 		{
 			Weapon = 0,
@@ -3582,18 +2302,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			Ranged = 2,
 			Heavy = 3
 		}
-		public enum ELauncherActionType
-		{
-			QuickAction = 0,
-			ChargeAction = 1,
-			None = 2
-		}
+
 		public enum ELaunchMode
 		{
 			Primary = 0,
 			Secondary = 1,
 			None = 2
 		}
+
+		public enum ELauncherActionType
+		{
+			QuickAction = 0,
+			ChargeAction = 1,
+			None = 2
+		}
+
 		public enum ELayoutType
 		{
 			Generic = 0,
@@ -3601,12 +2324,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Arasaka = 2,
 			Zetatech = 3
 		}
+
 		public enum ELightSequenceStage
 		{
 			NONE = 0,
 			INPROGRESS = 1,
 			COMPLETE = 2
 		}
+
 		public enum ELightShadowCastingMode
 		{
 			LSCM_None = 0,
@@ -3616,6 +2341,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			LSCM_NormalAndContact = 4,
 			LSCM_OnlyContact = 5
 		}
+
 		public enum ELightShadowSoftnessMode
 		{
 			LSSM_ExtraSoft = 0,
@@ -3624,18 +2350,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			LSSM_Sharp = 3,
 			LSSM_ExtraSharp = 4
 		}
+
 		public enum ELightSwitchRandomizerType
 		{
 			RANDOM = 0,
 			RANDOM_PROGRESSIVE = 1,
 			NONE = 2
 		}
+
 		public enum ELightType
 		{
 			LT_Point = 0,
 			LT_Spot = 1,
 			LT_Area = 2
 		}
+
 		public enum ELightUnit
 		{
 			LU_Lumen = 0,
@@ -3644,6 +2373,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			LU_Nit = 3,
 			LU_EV100 = 4
 		}
+
 		public enum ELinkType
 		{
 			NETWORK = 0,
@@ -3651,29 +2381,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			FREE = 2,
 			INVALID = 3
 		}
-		public enum ELogicOperator
-		{
-			OR = 0,
-			AND = 1
-		}
+
 		public enum ELogType
 		{
 			DEFAULT = 0,
 			WARNING = 1,
 			ERROR = 2
 		}
+
+		public enum ELogicOperator
+		{
+			OR = 0,
+			AND = 1
+		}
+
 		public enum EMagazineAmmoState
 		{
 			None = 0,
 			FirstBullet = 1,
 			LastBullet = 2
 		}
+
 		public enum EMappinDisplayMode
 		{
 			PLAYSTYLE = 0,
 			ROLE = 1,
 			MINIMALISTIC = 2
 		}
+
 		public enum EMappinVisualState
 		{
 			Default = 0,
@@ -3681,6 +2416,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Unavailable = 2,
 			Inactive = 3
 		}
+
 		public enum EMaterialModifier
 		{
 			EMATMOD_HitProxy = 0,
@@ -3712,11 +2448,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			EMATMOD_PlanarReflections = 26,
 			EMATMOD_MAX = 27
 		}
+
 		public enum EMaterialPriority
 		{
 			EMP_Normal = 0,
 			EMP_Front = 1
 		}
+
 		public enum EMaterialShaderTarget
 		{
 			MSH_Invalid = 0,
@@ -3724,6 +2462,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			MSH_PixelShader = 2,
 			MSH_MAX = 3
 		}
+
 		public enum EMaterialVertexFactory
 		{
 			MVF_Terrain = 1,
@@ -3760,11 +2499,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			MVF_MeshProxy = 32,
 			MVF_MeshWindowProxy = 33
 		}
+
 		public enum EMathOperationType
 		{
 			Add = 0,
 			Set = 1
 		}
+
 		public enum EMathOperator
 		{
 			None = 0,
@@ -3773,11 +2514,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Multiply = 3,
 			Divide = 4
 		}
+
 		public enum EMeasurementSystem
 		{
 			Metric = 0,
 			Imperial = 1
 		}
+
 		public enum EMeasurementUnit
 		{
 			Millimeter = 0,
@@ -3819,16 +2562,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Fahrenheit = 36,
 			MAX = 37
 		}
-		public enum EMeleeAttacks
-		{
-			Invalid = 0,
-			LightAtk_Left = 1,
-			LightAtk_Right = 2,
-			ComboAtk_3hits_Part1 = 3,
-			ComboAtk_3hits_Part2 = 4,
-			ComboAtk_3hits_Part3 = 5,
-			ChargeAttack = 6
-		}
+
 		public enum EMeleeAttackType
 		{
 			Combo = 0,
@@ -3845,20 +2579,60 @@ namespace WolvenKit.RED4.CR2W.Types
 			Dodge = 11,
 			Equip = 12
 		}
+
+		public enum EMeleeAttacks
+		{
+			Invalid = 0,
+			LightAtk_Left = 1,
+			LightAtk_Right = 2,
+			ComboAtk_3hits_Part1 = 3,
+			ComboAtk_3hits_Part2 = 4,
+			ComboAtk_3hits_Part3 = 5,
+			ChargeAttack = 6
+		}
+
+		[Flags]
+		public enum EMeshChunkFlags
+		{
+			MCF_RenderInScene = 1 << 0,
+			MCF_RenderInShadows = 1 << 1,
+			MCF_IsTwoSided = 1 << 2,
+			MCF_IsRayTracedEmissive = 1 << 3,
+			MCF_IsPrefabProxy = 1 << 6
+		}
+
+		[Flags]
+		public enum EMeshChunkRenderMask
+		{
+			MCR_Scene = 1 << 0,
+			MCR_Cascade1 = 1 << 1,
+			MCR_Cascade2 = 1 << 2,
+			MCR_Cascade3 = 1 << 3,
+			MCR_Cascade4 = 1 << 4,
+			MCR_LocalShadows = 1 << 5,
+			MCR_IsTwoSided = 1 << 6,
+			MCR_DistantShadows = 1 << 7,
+			MCR_IsRayTracedEmissive = 1 << 8,
+			MCR_PrefabProxy = 1 << 11,
+			MCR_Cascades = 1 << 12
+		}
+
 		public enum EMeshParticleOrientationMode
 		{
 			MPOM_Normal = 0,
 			MPOM_MovementDirection = 1,
 			MPOM_NoRotation = 2
 		}
+
 		public enum EMeshShadowImportanceBias
 		{
-			MSIB_EvenLessImportant = -2,
-			MSIB_LessImportant = -1,
 			MSIB_Default = 0,
 			MSIB_MoreImportant = 1,
-			MSIB_EvenMoreImportant = 2
+			MSIB_EvenMoreImportant = 2,
+			MSIB_EvenLessImportant = -2,
+			MSIB_LessImportant = -1
 		}
+
 		public enum EMeshStreamType
 		{
 			MST_Position_3F = 1,
@@ -3887,6 +2661,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			MST_FoliageBoneId_I16 = 536870912,
 			MST_LightBlockerIntensity_1F = 1073741824
 		}
+
 		public enum EMeshVertexType
 		{
 			MVT_StaticMesh = 0,
@@ -3909,18 +2684,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			MVT_ProxyMesh = 17,
 			MVT_ProxyWindowMesh = 18
 		}
+
 		public enum EMissileRainPhase
 		{
 			Init = 0,
 			Phase1 = 1,
 			Phase2 = 2
 		}
+
 		public enum EMoveAssistLevel
 		{
 			Off = 0,
 			SpecialAttacks = 1,
 			AllAttacks = 2
 		}
+
 		public enum EMovementDirection
 		{
 			left = 0,
@@ -3930,25 +2708,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			front = 4,
 			back = 5
 		}
-		public enum ENetworkRelation
-		{
-			MASTER = 0,
-			SLAVE = 1,
-			NONE = 2
-		}
-		public enum ENeutralizeType
-		{
-			None = 0,
-			Killed = 1,
-			Defeated = 2,
-			Unconscious = 3
-		}
-		public enum ENoiseType
-		{
-			NT_Random = 0,
-			NT_Simplex2D = 1,
-			NT_Simplex3D = 2
-		}
+
 		public enum ENPCPhaseState
 		{
 			Phase1 = 0,
@@ -3958,6 +2718,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Phase5 = 4,
 			Invalid = 5
 		}
+
 		public enum ENPCTelemetryData
 		{
 			HitByLightAttack = 0,
@@ -3968,160 +2729,29 @@ namespace WolvenKit.RED4.CR2W.Types
 			DeflectedAttack = 5,
 			WasGuardBreaked = 6
 		}
-		public enum entAnimParamSlotFunction
+
+		public enum ENetworkRelation
 		{
-			RenderingPlane = 0,
-			Visibility = 1
+			MASTER = 0,
+			SLAVE = 1,
+			NONE = 2
 		}
-		public enum entAppearanceStatus
+
+		public enum ENeutralizeType
 		{
 			None = 0,
-			Proxy = 1,
-			Appearance = 2
+			Killed = 1,
+			Defeated = 2,
+			Unconscious = 3
 		}
-		public enum entAttachmentTarget
+
+		public enum ENoiseType
 		{
-			Transform = 0,
-			TargetPosition = 1
+			NT_Random = 0,
+			NT_Simplex2D = 1,
+			NT_Simplex3D = 2
 		}
-		public enum entAudioDismembermentPart
-		{
-			Head = 0,
-			Leg = 1,
-			Arm = 2
-		}
-		public enum entColliderComponentSimulationType
-		{
-			Kinematic = 0,
-			Dynamic = 1
-		}
-		public enum entDebug_ShapeType
-		{
-			Sphere = 0,
-			Box = 1,
-			Capsule = 2,
-			Cylinder = 3
-		}
-		public enum entdismembermentResourceSetE
-		{
-			BARE = 0,
-			BARE1 = 1,
-			BARE2 = 2,
-			BARE3 = 3,
-			GARMENT = 4,
-			GARMENT1 = 5,
-			GARMENT2 = 6,
-			GARMENT3 = 7,
-			CYBER = 8,
-			CYBER1 = 9,
-			CYBER2 = 10,
-			CYBER3 = 11,
-			MIXED = 12,
-			MIXED1 = 13,
-			MIXED2 = 14,
-			MIXED3 = 15,
-			NONE = 16
-		}
-		public enum entdismembermentSimulationTypeE
-		{
-			NONE = 0,
-			DANGLE = 128
-		}
-		public enum entEBindingDirection
-		{
-			BindToSource = 0,
-			BindToDestination = 1
-		}
-		public enum entEntitySpawnPriority
-		{
-			Background = 0,
-			Normal = 1,
-			Immediate = 2,
-			Paramount = 3,
-			Critical = 4
-		}
-		public enum entEntityUserComponentResolutionMode
-		{
-			Select = 0,
-			Suppress = 1
-		}
-		public enum EntityNotificationType
-		{
-			DoNotNotifyEntity = 0,
-			SendThisEventToEntity = 1,
-			SendPSChangedEventToEntity = 2
-		}
-		public enum entMeshComponentLODMode
-		{
-			AlwaysVisible = 0,
-			Appearance = 1,
-			AppearanceProxy = 2
-		}
-		public enum entragdollActivationRequestType
-		{
-			Default = 0,
-			Animated = 1,
-			Forced = 2
-		}
-		public enum entRenderToTextureMode
-		{
-			Shaded = 0,
-			GBufferOnly = 1
-		}
-		public enum entRepellingShape
-		{
-			Sphere = 0,
-			Capsule = 1
-		}
-		public enum entRepellingType
-		{
-			Debris = 0,
-			BigObjects = 1,
-			WindImpulse = 2
-		}
-		public enum entTemplateComponentResolveMode
-		{
-			AutoSelect = 0,
-			Select = 1,
-			Suppress = 2
-		}
-		public enum entVertexAnimationMapperSourceType
-		{
-			FloatTrack = 0,
-			TranslationX = 1,
-			TranslationY = 2,
-			TranslationZ = 3,
-			RotationQuatX = 4,
-			RotationQuatY = 5,
-			RotationQuatZ = 6,
-			RotationQuatW = 7
-		}
-		public enum entVisibilityParamSource
-		{
-			PhantomEntitySystem = 7
-		}
-		public enum entVisualControllerComponentForcedLodDistance
-		{
-			Default = 0,
-			Background = 1,
-			Regular = 2,
-			Cinematic = 3,
-			Vehicle = 4,
-			CinematicVehicle = 5
-		}
-		public enum envUtilsNeighborMode
-		{
-			eCLOSEST = 0,
-			eONLY_GLOBAL = 1,
-			eONLY_SELF = 2,
-			eFILL_SURROUNDING = 3
-		}
-		public enum envUtilsReflectionProbeAmbientContributionMode
-		{
-			eNO_AMBIENT_CONTRIBUTION = 0,
-			eALLOW_AMBIENT_CONTRIBUTION = 1,
-			eOVERRIDE_GI_AMBIENT = 2
-		}
+
 		public enum EOperationClassType
 		{
 			Local = 0,
@@ -4135,17 +2765,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			Senses = 8,
 			FocusMode = 9
 		}
+
 		public enum EOutlineType
 		{
 			NONE = 0,
 			GREEN = 1,
 			RED = 2
 		}
+
 		public enum EParticleEventSpawnObject
 		{
 			PESO_Particle = 0,
 			PESO_Decal = 1
 		}
+
 		public enum EParticleEventType
 		{
 			PET_Death = 0,
@@ -4154,34 +2787,40 @@ namespace WolvenKit.RED4.CR2W.Types
 			PET_Collision = 3,
 			PET_Any = 4
 		}
+
 		public enum EPaymentSchedule
 		{
 			WEEKLY = 0,
 			MONTHLY = 1
 		}
+
 		public enum EPermissionSource
 		{
 			GAMEPLAY = 0,
 			PLAYER = 1,
 			QUEST = 2
 		}
+
 		public enum EPersonalLinkConnectionStatus
 		{
 			NOT_CONNECTED = 0,
 			CONNECTING = 1,
 			CONNECTED = 2
 		}
+
 		public enum EPersonalLinkSlotSide
 		{
 			FRONT = 0,
 			RIGHT = 1,
 			BOTTOM = 2
 		}
+
 		public enum EPingType
 		{
 			DIRECT = 0,
 			SPACE = 1
 		}
+
 		public enum EPlayerMovementDirection
 		{
 			Forward = 0,
@@ -4189,27 +2828,31 @@ namespace WolvenKit.RED4.CR2W.Types
 			Back = 2,
 			Left = 3
 		}
+
 		public enum EPlaystyle
 		{
 			NETRUNNER = 0,
 			SOLO = 1,
 			TECHIE = 2
 		}
+
 		public enum EPlaystyleType
 		{
-			NONE = -1,
 			TECHIE = 0,
 			NETRUNNER = 1,
-			TECHIE_AND_NETRUNNER = 2
+			TECHIE_AND_NETRUNNER = 2,
+			NONE = -1
 		}
+
 		public enum EPowerDifferential
 		{
-			IMPOSSIBLE = -6,
-			HARD = -3,
 			NORMAL = 2,
 			EASY = 4,
-			TRASH = 5
+			TRASH = 5,
+			IMPOSSIBLE = -6,
+			HARD = -3
 		}
+
 		public enum EPreventionDebugProcessReason
 		{
 			Redirected_IsPsycho = 0,
@@ -4219,6 +2862,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Abort_DamageZero = 4,
 			Abort_SystemLockedBySceneTier = 5
 		}
+
 		public enum EPreventionHeatStage
 		{
 			Heat_0 = 0,
@@ -4228,6 +2872,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Heat_4 = 4,
 			Size = 5
 		}
+
 		public enum EPreventionPsychoLogicType
 		{
 			Start = 0,
@@ -4237,6 +2882,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			DeescalationZeroExecutionLocked = 4,
 			DeescalationZeroExecute = 5
 		}
+
 		public enum EPreventionSystemInstruction
 		{
 			Safe = 0,
@@ -4244,6 +2890,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Off = 2,
 			On = 3
 		}
+
 		public enum EPriority
 		{
 			VeryLow = 0,
@@ -4253,16 +2900,19 @@ namespace WolvenKit.RED4.CR2W.Types
 			VeryHigh = 4,
 			Absolute = 5
 		}
+
 		public enum EProgressBarContext
 		{
 			QuickHack = 0,
 			PhoneCall = 1
 		}
+
 		public enum EProgressBarType
 		{
 			UPLOAD = 0,
 			DURATION = 1
 		}
+
 		public enum EQuestFilterType
 		{
 			DONT_CHANGE = 0,
@@ -4270,6 +2920,778 @@ namespace WolvenKit.RED4.CR2W.Types
 			ALLOW_COMBAT_ONLY = 2,
 			ALLOW_ALL = 3
 		}
+
+		public enum ERadialMode
+		{
+			ApplyOnlyActiveSlot = 0,
+			ApplyActiveSlotAndConsumables = 1
+		}
+
+		public enum ERadioStationList
+		{
+			AGGRO_INDUSTRIAL = 0,
+			ELECTRO_INDUSTRIAL = 1,
+			HIP_HOP = 2,
+			AGGRO_TECHNO = 3,
+			DOWNTEMPO = 4,
+			ATTITUDE_ROCK = 5,
+			POP = 6,
+			LATINO = 7,
+			METAL = 8,
+			NONE = 9
+		}
+
+		public enum EReactionValue
+		{
+			Fear = 0,
+			Aggressive = 1
+		}
+
+		public enum ERenderDynamicDecalAtlas
+		{
+			RDDA_1x1 = 0,
+			RDDA_2x1 = 1,
+			RDDA_2x2 = 2,
+			RDDA_4x2 = 3,
+			RDDA_4x4 = 4,
+			RDDA_8x4 = 5
+		}
+
+		public enum ERenderDynamicDecalProjection
+		{
+			RDDP_Ortho = 0,
+			RDDP_Sphere = 1
+		}
+
+		public enum ERenderMaterialType
+		{
+			RMT_Standard = 0,
+			RMT_Subsurface = 1,
+			RMT_Cloth = 2,
+			RMT_Eye = 3,
+			RMT_Hair = 4,
+			RMT_Foliage = 5
+		}
+
+		public enum ERenderMeshStreams
+		{
+			RMS_PositionSkinning = 1,
+			RMS_TexCoords = 2,
+			RMS_TangentFrame = 4,
+			RMS_Extended = 8,
+			RMS_Custom0 = 16,
+			RMS_BindAll = 255
+		}
+
+		public enum ERenderObjectType
+		{
+			ROT_Static = 0,
+			ROT_Terrain = 1,
+			ROT_Road = 2,
+			ROT_CustomCharacter1 = 12,
+			ROT_CustomCharacter2 = 13,
+			ROT_CustomCharacter3 = 14,
+			ROT_MainPlayer = 15,
+			ROT_NoAO = 16,
+			ROT_NoLighting = 17,
+			ROT_NoTXAA = 18,
+			ROT_Skinned = 20,
+			ROT_Character = 21,
+			ROT_Foliage = 22,
+			ROT_Grass = 23,
+			ROT_Vehicle = 24,
+			ROT_Weapon = 25,
+			ROT_Particle = 26,
+			ROT_Enemy = 27
+		}
+
+		public enum ERenderingMode
+		{
+			RM_Shaded = 0,
+			RM_Shaded_NoAmbient = 1,
+			RM_HitProxies = 2,
+			RM_GBufferOnly = 3,
+			RM_SafeMode = 4,
+			RM_OverlayOnly = 5
+		}
+
+		public enum ERenderingPlane
+		{
+			RPl_Scene = 0,
+			RPl_Background = 1,
+			RPl_Weapon = 2
+		}
+
+		public enum ERentStatus
+		{
+			PAID = 0,
+			OVERDUE = 1,
+			EVICTED = 2
+		}
+
+		public enum EReprimandInstructions
+		{
+			INITIATE_FIRST = 0,
+			INITIATE_SUCCESSIVE = 1,
+			TAKEOVER = 2,
+			CONCLUDE_SUCCESSFUL = 3,
+			CONCLUDE_FAILED = 4,
+			RELEASE_TO_ANOTHER_ENTITY = 5
+		}
+
+		public enum ERevealDurationType
+		{
+			TEMPORARY = 0,
+			PERMANENT = 1
+		}
+
+		public enum ERevealPlayerType
+		{
+			DONT_REVEAL = 0,
+			REVEAL_ONCE = 1
+		}
+
+		public enum ERevealState
+		{
+			STARTED = 0,
+			CONTINUE = 1,
+			STOPPED = 2
+		}
+
+		public enum ESSAOQualityLevel
+		{
+			SSAOQUALITY_VeryLow = 0,
+			SSAOQUALITY_Low = 1,
+			SSAOQUALITY_Medium = 2,
+			SSAOQUALITY_High = 3,
+			SSAOQUALITY_VeryHigh = 4
+		}
+
+		public enum ESaveFormat
+		{
+			SF_PNG = 2,
+			SF_EXR = 32,
+			SF_PNG_AND_EXR = 34
+		}
+
+		public enum EScreenRatio
+		{
+			Screen_21x9 = 0,
+			Screen_9x21 = 1,
+			Screen_9x16 = 2,
+			Screen_3x4 = 3,
+			Screen_4x3 = 4,
+			Screen_1x1 = 5
+		}
+
+		public enum ESecurityAccessLevel
+		{
+			ESL_NONE = 0,
+			ESL_LOCAL = 1,
+			ESL_0 = 2,
+			ESL_1 = 3,
+			ESL_2 = 4,
+			ESL_3 = 5,
+			ESL_4 = 6
+		}
+
+		public enum ESecurityAreaType
+		{
+			DISABLED = 0,
+			SAFE = 1,
+			RESTRICTED = 2,
+			DANGEROUS = 3
+		}
+
+		public enum ESecurityGateEntranceType
+		{
+			OnlySideA = 0,
+			OnlySideB = 1,
+			AnySide = 2
+		}
+
+		public enum ESecurityGateResponseType
+		{
+			AUDIOVISUAL_ONLY = 0,
+			SEC_SYS_REPRIMAND = 1,
+			SEC_SYS_COMBAT = 2
+		}
+
+		public enum ESecurityGateScannerIssueType
+		{
+			NoIssues = 0,
+			ScannerEmpty = 1,
+			Overcrowded = 2,
+			TargetAlreadyScanned = 3
+		}
+
+		public enum ESecurityGateStatus
+		{
+			READY = 0,
+			SCANNING = 1,
+			THREAT_DETECTED = 2
+		}
+
+		public enum ESecurityNotificationType
+		{
+			DEFAULT = 0,
+			ILLEGAL_ACTION = 1,
+			REPRIMAND_ESCALATE = 2,
+			DEVICE_DESTROYED = 3,
+			ALARM = 4,
+			SECURITY_GATE = 5,
+			COMBAT = 6,
+			QUEST = 7,
+			REPRIMAND_SUCCESSFUL = -2,
+			DEESCALATE = -1
+		}
+
+		public enum ESecuritySystemState
+		{
+			UNINITIALIZED = 0,
+			SAFE = 1,
+			ALERTED = 2,
+			COMBAT = 3
+		}
+
+		public enum ESecurityTurretStatus
+		{
+			SHOOTING = 0,
+			WORKING = 1,
+			SCANING = 2,
+			DAMAGED = 3,
+			THREAT = -1
+		}
+
+		public enum ESecurityTurretType
+		{
+			SIMPLE = 0
+		}
+
+		public enum ESensorDeviceStates
+		{
+			NONE = 0,
+			IDLE = 1,
+			IDLEFORCED = 2,
+			TARGETLOCK = 3,
+			TARGETLOSE = 4,
+			TARGETRECEIVED = 5,
+			REPRIMAND = 6,
+			JAMMER = 7
+		}
+
+		public enum ESensorDeviceWakeState
+		{
+			CLOSED = 0,
+			WAKEN = 1,
+			OPEN = 2,
+			NONE = -1
+		}
+
+		public enum EShouldChangeAttitude
+		{
+			PERSISTENTLY = 0,
+			TEMPORARLY = 1
+		}
+
+		public enum ESmartBulletPhase
+		{
+			Init = 0,
+			Parabolic = 1,
+			Follow = 2,
+			Linear = 3,
+			Miss = 4
+		}
+
+		public enum ESmartHousePreset
+		{
+			MorningPreset = 0,
+			EveningPreset = 1,
+			NightPreset = 2
+		}
+
+		public enum ESoundStatusEffects
+		{
+			NONE = 0,
+			DEAFENED = 1,
+			SUPRESS_NOISE = 2
+		}
+
+		public enum ESpaceFillMode
+		{
+			JustifyLeft = 0,
+			JustifyRight = 1,
+			JustifyCenter = 2
+		}
+
+		public enum EStatusEffectBehaviorType
+		{
+			Invalid = 0,
+			Basic = 1,
+			Stoppable = 2,
+			Unstoppable = 3
+		}
+
+		public enum EStatusEffects
+		{
+			Invalid = 0,
+			WeaponJammed = 1,
+			Blind = 2,
+			SmokeScreen = 3,
+			Unconscious = 4,
+			Burning = 5,
+			Stun = 6,
+			HeartAttack = 7,
+			SuicideWithWeapon = 8,
+			SuicideWithGrenade = 9,
+			Wounded = 10,
+			MonowireGrapple = 11,
+			Exhausted = 12,
+			Defeated = 13,
+			Sleep = 14,
+			Berserker = 15,
+			Pain = 16,
+			Sandevistan = 17,
+			NetwatcherHackStage1 = 18,
+			NetwatcherHackStage2 = 19,
+			NetwatcherHackStage3 = 20,
+			Count = 21
+		}
+
+		public enum ESurveillanceCameraState
+		{
+			Off = 0,
+			Active = 1
+		}
+
+		public enum ESurveillanceCameraStatus
+		{
+			STREAMING = 0,
+			WORKING = 1,
+			THREAT = -1
+		}
+
+		public enum ESwitchAction
+		{
+			ToggleOn = 0,
+			ToggleActivate = 1
+		}
+
+		public enum ESystemNotificationTypes
+		{
+			DiscOperationIndicator = 0,
+			GenericNotModal = 1,
+			GenericMenuInfo = 2,
+			GenericYesNo = 3,
+			Generic = 4,
+			ExitGame = 5,
+			StartNewGame = 6,
+			NoDiscSpace = 7,
+			OverwriteSaveFile = 8,
+			LoadSaveFileInGame = 9,
+			LoadSaveFile = 10,
+			DeleteSaveFile = 11,
+			CorruptedSaveFile = 12,
+			NoPlayerProfile = 13,
+			GameSaved = 14,
+			SaveFailed = 15,
+			UnavailableForGuest = 16,
+			EnableTelemetry = 17,
+			PointOfNoReturn = 18,
+			PointOfNoReturnWithReward = 19,
+			PointOfNoReturnLootAdded = 20,
+			GenericMenuError = 21,
+			ControllerReconnected = 22,
+			FirstModalHighPriority = 22,
+			ControllerDisconnected = 23,
+			MAX = 24
+		}
+
+		public enum ESystems
+		{
+			NONE = 0,
+			SecuritySystem = 1,
+			AccessPoints = 2,
+			MaintenanceSystem = 3,
+			PersonnelSystem = 4,
+			SurveillanceSystem = 5
+		}
+
+		public enum ETVChannel
+		{
+			CH1 = 0,
+			CH2 = 1,
+			CH3 = 2,
+			CH4 = 3,
+			CH5 = 4,
+			INVALID = 5
+		}
+
+		public enum ETakedownActionType
+		{
+			GrappleFailed = 0,
+			Grapple = 1,
+			Takedown = 2,
+			TakedownNonLethal = 3,
+			TakedownNetrunner = 4,
+			TakedownMassiveTarget = 5,
+			AerialTakedown = 6,
+			LeapToTarget = 7,
+			Struggle = 8,
+			BreakFree = 9,
+			TargetDead = 10,
+			KillTarget = 11,
+			SpareTarget = 12,
+			ForceShove = 13,
+			BossTakedown = 14,
+			DisposalTakedown = 15,
+			DisposalTakedownNonLethal = 16,
+			None = 17
+		}
+
+		public enum ETakedownBossName
+		{
+			Smasher = 0,
+			Oda = 1,
+			Royce = 2,
+			Sasquatch = 3,
+			None = 4
+		}
+
+		public enum ETargetManagerAnimGraphState
+		{
+			MODELOOKAT = 0,
+			IDLE = 1,
+			JAMMED = 2
+		}
+
+		public enum ETauntType
+		{
+			Normal = 0,
+			Melee = 1,
+			Ranged = 2
+		}
+
+		public enum ETelemetryData
+		{
+			MeleeAttacksMade = 0,
+			RangedAttacksMade = 1,
+			BluelinesSelected = 2,
+			MeleeKills = 3,
+			RangedKills = 4,
+			QuickHacksMade = 5,
+			LegendaryItemsCrafted = 6
+		}
+
+		public enum ETextureAddressing
+		{
+			TA_Wrap = 0,
+			TA_Mirror = 1,
+			TA_Clamp = 2,
+			TA_MirrorOnce = 3,
+			TA_Border = 4
+		}
+
+		public enum ETextureAnimationMode
+		{
+			TAM_Speed = 0,
+			TAM_LifeTime = 1
+		}
+
+		[Flags]
+		public enum ETextureChannel
+		{
+			TextureChannel_R = 1 << 0,
+			TextureChannel_G = 1 << 1,
+			TextureChannel_B = 1 << 2,
+			TextureChannel_A = 1 << 3
+		}
+
+		public enum ETextureComparisonFunction
+		{
+			TCF_None = 0,
+			TCF_Less = 1,
+			TCF_Equal = 2,
+			TCF_LessEqual = 3,
+			TCF_Greater = 4,
+			TCF_NotEqual = 5,
+			TCF_GreaterEqual = 6,
+			TCF_Always = 7
+		}
+
+		public enum ETextureCompression
+		{
+			TCM_None, // = 0,
+			TCM_DXTNoAlpha, // = 1,
+			TCM_DXTAlpha, // = 2,
+			TCM_RGBE, // = 3,
+			TCM_Normalmap, // = 4,
+			TCM_Normals_DEPRECATED, // = 5,
+			TCM_Normals, // = 5,
+			TCM_NormalsHigh_DEPRECATED, // = 6,
+			TCM_NormalsHigh, // = 6,
+			TCM_NormalsGloss_DEPRECATED, // = 7,
+			TCM_NormalsGloss, // = 7,
+			TCM_TileMap, // = 8,
+			TCM_DXTAlphaLinear, // = 9,
+			TCM_QualityR, // = 10,
+			TCM_QualityRG, // = 11,
+			TCM_QualityColor, // = 12,
+			TCM_HalfHDR_Unsigned, // = 13,
+			TCM_HalfHDR, // = 13,
+			TCM_HalfHDR_Signed, // = 14,
+			TCM_Max, // = 15
+		}
+
+		public enum ETextureFilteringMag
+		{
+			TFMag_Point = 0,
+			TFMag_Linear = 1
+		}
+
+		public enum ETextureFilteringMin
+		{
+			TFMin_Point = 0,
+			TFMin_Linear = 1,
+			TFMin_Anisotropic = 2,
+			TFMin_AnisotropicLow = 3
+		}
+
+		public enum ETextureFilteringMip
+		{
+			TFMip_None = 0,
+			TFMip_Point = 1,
+			TFMip_Linear = 2
+		}
+
+		public enum ETextureRawFormat
+		{
+			TRF_Invalid, // = 0,
+			TRF_AlphaGrayscale, // = 0,
+			TRF_TrueColor, // = 1,
+			TRF_DeepColor, // = 2,
+			TRF_Grayscale, // = 3,
+			TRF_HDRFloat, // = 4,
+			TRF_HDRHalf, // = 5,
+			TRF_HDRFloatGrayscale, // = 6,
+			TRF_Grayscale_Font, // = 7,
+			TRF_R8G8, // = 8,
+			TRF_R32UI, // = 9
+		}
+
+		public enum ETimeOfYearSeason
+		{
+			ETOYS_Spring = 0,
+			ETOYS_Summer = 1,
+			ETOYS_Autumn = 2,
+			ETOYS_Winter = 3
+		}
+
+		public enum EToggleActivationTypeComputer
+		{
+			None = 0,
+			Raise = 1
+		}
+
+		public enum EToggleOperationType
+		{
+			ADD = 0,
+			REMOVE = 1
+		}
+
+		public enum ETooltipsStyle
+		{
+			Menus = 0,
+			HUD = 1
+		}
+
+		public enum ETransformAnimationOperationType
+		{
+			PLAY = 0,
+			PAUSE = 1,
+			RESET = 2,
+			SKIP = 3
+		}
+
+		public enum ETransitionMode
+		{
+			GENTLE = 0,
+			FORCED = 1
+		}
+
+		public enum ETransitionType
+		{
+			EET_Linear = 0,
+			EET_Sine = 1,
+			EET_Cubic = 2,
+			EET_Quad = 3,
+			EET_Quart = 4,
+			EET_Quint = 5,
+			EET_Expo = 6,
+			EET_Circ = 7,
+			EET_Back = 8,
+			EET_Bounce = 9,
+			EET_Elastic = 10
+		}
+
+		public enum ETrap
+		{
+			Invalid = 0,
+			GridRegen = 1,
+			AppendStart = 2,
+			Hidden = 3,
+			Virus = 4
+		}
+
+		public enum ETrapEffects
+		{
+			Explosion = 0,
+			Poisoned = 1,
+			Bleeding = 2,
+			Burning = 3,
+			Blind = 4,
+			SmokeScreen = 5,
+			Stun = 6,
+			Unconcious = 7
+		}
+
+		public enum ETriggerOperationType
+		{
+			ENTER = 0,
+			EXIT = 1
+		}
+
+		public enum ETweakAINodeType
+		{
+			Action = 0,
+			Selector = 1,
+			Sequence = 2
+		}
+
+		public enum EUIActionState
+		{
+			Invalid = 0,
+			DEFAULT = 1,
+			STARTED = 2,
+			COMPLETED = 3,
+			ABORTED = 4
+		}
+
+		public enum EUIStealthIconType
+		{
+			Invalid = 0,
+			HostileHuman = 1,
+			Camera = 2,
+			Turret = 3,
+			Drone = 4
+		}
+
+		public enum EUploadProgramState
+		{
+			STARTED = 0,
+			COMPLETED = 1
+		}
+
+		public enum EVarDBMode
+		{
+			Add = 0,
+			Set = 1,
+			Invalid = 2
+		}
+
+		public enum EVendorMode
+		{
+			BuyItems = 0,
+			SellItems = 1,
+			Train = 2,
+			Ripperdoc = 3,
+			RipperdocSummary = 4
+		}
+
+		public enum EViabilityDecision
+		{
+			INCONCLUSIVE = 0,
+			VIABLE = 1,
+			NONVIABLE = 2
+		}
+
+		public enum EVirtualSystem
+		{
+			None = 0,
+			SurveillanceSystem = 1,
+			DoorSystem = 2,
+			MediaSystem = 3,
+			SecuritySystem = 4
+		}
+
+		public enum EWeaponNamesList
+		{
+			EWNL_PowerStreetRifle = 0,
+			EWNL_TechStreetShotgun = 1,
+			EWNL_PowerCorpHandgun = 2,
+			EWNL_SmartCorpRifle = 3,
+			EWNL_PowerCorpHandgunJackie = 4
+		}
+
+		public enum EWidgetPlacementType
+		{
+			DOCKED = 0,
+			FLOATING = 1
+		}
+
+		public enum EWidgetState
+		{
+			DEFAULT = 0,
+			ON = 1,
+			OFF = 2,
+			INACTIVE = 3,
+			ALLOWED = 4,
+			LOCKED = 5,
+			SEALED = 6
+		}
+
+		public enum EWindowBlindersStates
+		{
+			NonInteractive = 0,
+			Open = 1,
+			Closed = 2,
+			Tilted = 3
+		}
+
+		public enum EWorkspotOperationType
+		{
+			ENTER = 0,
+			LEAVE = 1
+		}
+
+		public enum EWorldMapView
+		{
+			Map = 0,
+			FloorPlan = 1,
+			TimeSkip = 2
+		}
+
+		public enum EWoundedBodyPart
+		{
+			Invalid = 0,
+			WoundedLeftArm = 1,
+			WoundedRightArm = 2,
+			WoundedLeftLeg = 3,
+			WoundedRightLeg = 4,
+			DismemberedLeftArm = 5,
+			DismemberedRightArm = 6,
+			DismemberedLeftLeg = 7,
+			DismemberedRightLeg = 8,
+			DismemberedBothLegs = 9
+		}
+
+		public enum EntityNotificationType
+		{
+			DoNotNotifyEntity = 0,
+			SendThisEventToEntity = 1,
+			SendPSChangedEventToEntity = 2
+		}
+
 		public enum EquipmentManipulationAction
 		{
 			Undefined = 0,
@@ -4302,6 +3724,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			RequestWeaponSlot3 = 27,
 			RequestWeaponSlot4 = 28
 		}
+
 		public enum EquipmentManipulationRequestSlot
 		{
 			Undefined = 0,
@@ -4309,673 +3732,67 @@ namespace WolvenKit.RED4.CR2W.Types
 			Left = 2,
 			Both = 3
 		}
+
 		public enum EquipmentManipulationRequestType
 		{
 			Undefined = 0,
 			Equip = 1,
 			Unequip = 2
 		}
+
 		public enum EquipmentPriority
 		{
 			Primary = 0,
 			Secondary = 1,
 			All = 2
 		}
-		public enum ERadialMode
-		{
-			ApplyOnlyActiveSlot = 0,
-			ApplyActiveSlotAndConsumables = 1
-		}
-		public enum ERadioStationList
-		{
-			AGGRO_INDUSTRIAL = 0,
-			ELECTRO_INDUSTRIAL = 1,
-			HIP_HOP = 2,
-			AGGRO_TECHNO = 3,
-			DOWNTEMPO = 4,
-			ATTITUDE_ROCK = 5,
-			POP = 6,
-			LATINO = 7,
-			METAL = 8,
-			NONE = 9
-		}
-		public enum EReactionValue
-		{
-			Fear = 0,
-			Aggressive = 1
-		}
-		public enum ERenderDynamicDecalAtlas
-		{
-			RDDA_1x1 = 0,
-			RDDA_2x1 = 1,
-			RDDA_2x2 = 2,
-			RDDA_4x2 = 3,
-			RDDA_4x4 = 4,
-			RDDA_8x4 = 5
-		}
-		public enum ERenderDynamicDecalProjection
-		{
-			RDDP_Ortho = 0,
-			RDDP_Sphere = 1
-		}
-		public enum ERenderingMode
-		{
-			RM_Shaded = 0,
-			RM_Shaded_NoAmbient = 1,
-			RM_HitProxies = 2,
-			RM_GBufferOnly = 3,
-			RM_SafeMode = 4,
-			RM_OverlayOnly = 5
-		}
-		public enum ERenderingPlane
-		{
-			RPl_Scene = 0,
-			RPl_Background = 1,
-			RPl_Weapon = 2
-		}
-		public enum ERenderMaterialType
-		{
-			RMT_Standard = 0,
-			RMT_Subsurface = 1,
-			RMT_Cloth = 2,
-			RMT_Eye = 3,
-			RMT_Hair = 4,
-			RMT_Foliage = 5
-		}
-		public enum ERenderMeshStreams
-		{
-			RMS_PositionSkinning = 1,
-			RMS_TexCoords = 2,
-			RMS_TangentFrame = 4,
-			RMS_Extended = 8,
-			RMS_Custom0 = 16,
-			RMS_BindAll = 255
-		}
-		public enum ERenderObjectType
-		{
-			ROT_Static = 0,
-			ROT_Terrain = 1,
-			ROT_Road = 2,
-			ROT_CustomCharacter1 = 12,
-			ROT_CustomCharacter2 = 13,
-			ROT_CustomCharacter3 = 14,
-			ROT_MainPlayer = 15,
-			ROT_NoAO = 16,
-			ROT_NoLighting = 17,
-			ROT_NoTXAA = 18,
-			ROT_Skinned = 20,
-			ROT_Character = 21,
-			ROT_Foliage = 22,
-			ROT_Grass = 23,
-			ROT_Vehicle = 24,
-			ROT_Weapon = 25,
-			ROT_Particle = 26,
-			ROT_Enemy = 27
-		}
-		public enum ERentStatus
-		{
-			PAID = 0,
-			OVERDUE = 1,
-			EVICTED = 2
-		}
-		public enum EReprimandInstructions
-		{
-			INITIATE_FIRST = 0,
-			INITIATE_SUCCESSIVE = 1,
-			TAKEOVER = 2,
-			CONCLUDE_SUCCESSFUL = 3,
-			CONCLUDE_FAILED = 4,
-			RELEASE_TO_ANOTHER_ENTITY = 5
-		}
-		public enum ERevealDurationType
-		{
-			TEMPORARY = 0,
-			PERMANENT = 1
-		}
-		public enum ERevealPlayerType
-		{
-			DONT_REVEAL = 0,
-			REVEAL_ONCE = 1
-		}
-		public enum ERevealState
-		{
-			STARTED = 0,
-			CONTINUE = 1,
-			STOPPED = 2
-		}
-		public enum ESaveFormat
-		{
-			SF_PNG = 2,
-			SF_EXR = 32,
-			SF_PNG_AND_EXR = 34
-		}
-		public enum EScreenRatio
-		{
-			Screen_21x9 = 0,
-			Screen_9x21 = 1,
-			Screen_9x16 = 2,
-			Screen_3x4 = 3,
-			Screen_4x3 = 4,
-			Screen_1x1 = 5
-		}
-		public enum ESecurityAccessLevel
-		{
-			ESL_NONE = 0,
-			ESL_LOCAL = 1,
-			ESL_0 = 2,
-			ESL_1 = 3,
-			ESL_2 = 4,
-			ESL_3 = 5,
-			ESL_4 = 6
-		}
-		public enum ESecurityAreaType
-		{
-			DISABLED = 0,
-			SAFE = 1,
-			RESTRICTED = 2,
-			DANGEROUS = 3
-		}
-		public enum ESecurityGateEntranceType
-		{
-			OnlySideA = 0,
-			OnlySideB = 1,
-			AnySide = 2
-		}
-		public enum ESecurityGateResponseType
-		{
-			AUDIOVISUAL_ONLY = 0,
-			SEC_SYS_REPRIMAND = 1,
-			SEC_SYS_COMBAT = 2
-		}
-		public enum ESecurityGateScannerIssueType
-		{
-			NoIssues = 0,
-			ScannerEmpty = 1,
-			Overcrowded = 2,
-			TargetAlreadyScanned = 3
-		}
-		public enum ESecurityGateStatus
-		{
-			READY = 0,
-			SCANNING = 1,
-			THREAT_DETECTED = 2
-		}
-		public enum ESecurityNotificationType
-		{
-			REPRIMAND_SUCCESSFUL = -2,
-			DEESCALATE = -1,
-			DEFAULT = 0,
-			ILLEGAL_ACTION = 1,
-			REPRIMAND_ESCALATE = 2,
-			DEVICE_DESTROYED = 3,
-			ALARM = 4,
-			SECURITY_GATE = 5,
-			COMBAT = 6,
-			QUEST = 7
-		}
-		public enum ESecuritySystemState
-		{
-			UNINITIALIZED = 0,
-			SAFE = 1,
-			ALERTED = 2,
-			COMBAT = 3
-		}
-		public enum ESecurityTurretStatus
-		{
-			THREAT = -1,
-			SHOOTING = 0,
-			WORKING = 1,
-			SCANING = 2,
-			DAMAGED = 3
-		}
-		public enum ESecurityTurretType
-		{
-			SIMPLE = 0
-		}
-		public enum ESensorDeviceStates
-		{
-			NONE = 0,
-			IDLE = 1,
-			IDLEFORCED = 2,
-			TARGETLOCK = 3,
-			TARGETLOSE = 4,
-			TARGETRECEIVED = 5,
-			REPRIMAND = 6,
-			JAMMER = 7
-		}
-		public enum ESensorDeviceWakeState
-		{
-			NONE = -1,
-			CLOSED = 0,
-			WAKEN = 1,
-			OPEN = 2
-		}
-		public enum EShouldChangeAttitude
-		{
-			PERSISTENTLY = 0,
-			TEMPORARLY = 1
-		}
-		public enum ESmartBulletPhase
-		{
-			Init = 0,
-			Parabolic = 1,
-			Follow = 2,
-			Linear = 3,
-			Miss = 4
-		}
-		public enum ESmartHousePreset
-		{
-			MorningPreset = 0,
-			EveningPreset = 1,
-			NightPreset = 2
-		}
-		public enum ESoundStatusEffects
-		{
-			NONE = 0,
-			DEAFENED = 1,
-			SUPRESS_NOISE = 2
-		}
-		public enum ESpaceFillMode
-		{
-			JustifyLeft = 0,
-			JustifyRight = 1,
-			JustifyCenter = 2
-		}
-		public enum ESSAOQualityLevel
-		{
-			SSAOQUALITY_VeryLow = 0,
-			SSAOQUALITY_Low = 1,
-			SSAOQUALITY_Medium = 2,
-			SSAOQUALITY_High = 3,
-			SSAOQUALITY_VeryHigh = 4
-		}
-		public enum EStatusEffectBehaviorType
-		{
-			Invalid = 0,
-			Basic = 1,
-			Stoppable = 2,
-			Unstoppable = 3
-		}
-		public enum EStatusEffects
-		{
-			Invalid = 0,
-			WeaponJammed = 1,
-			Blind = 2,
-			SmokeScreen = 3,
-			Unconscious = 4,
-			Burning = 5,
-			Stun = 6,
-			HeartAttack = 7,
-			SuicideWithWeapon = 8,
-			SuicideWithGrenade = 9,
-			Wounded = 10,
-			MonowireGrapple = 11,
-			Exhausted = 12,
-			Defeated = 13,
-			Sleep = 14,
-			Berserker = 15,
-			Pain = 16,
-			Sandevistan = 17,
-			NetwatcherHackStage1 = 18,
-			NetwatcherHackStage2 = 19,
-			NetwatcherHackStage3 = 20,
-			Count = 21
-		}
+
 		public enum EstatusEffectsState
 		{
 			Deactivated = 0,
 			Activating = 1,
 			Activated = 2
 		}
-		public enum ESurveillanceCameraState
-		{
-			Off = 0,
-			Active = 1
-		}
-		public enum ESurveillanceCameraStatus
-		{
-			THREAT = -1,
-			STREAMING = 0,
-			WORKING = 1
-		}
-		public enum ESwitchAction
-		{
-			ToggleOn = 0,
-			ToggleActivate = 1
-		}
-		public enum ESystemNotificationTypes
-		{
-			DiscOperationIndicator = 0,
-			GenericNotModal = 1,
-			GenericMenuInfo = 2,
-			GenericYesNo = 3,
-			Generic = 4,
-			ExitGame = 5,
-			StartNewGame = 6,
-			NoDiscSpace = 7,
-			OverwriteSaveFile = 8,
-			LoadSaveFileInGame = 9,
-			LoadSaveFile = 10,
-			DeleteSaveFile = 11,
-			CorruptedSaveFile = 12,
-			NoPlayerProfile = 13,
-			GameSaved = 14,
-			SaveFailed = 15,
-			UnavailableForGuest = 16,
-			EnableTelemetry = 17,
-			PointOfNoReturn = 18,
-			PointOfNoReturnWithReward = 19,
-			PointOfNoReturnLootAdded = 20,
-			GenericMenuError = 21,
-			ControllerReconnected = 22,
-			FirstModalHighPriority = 22,
-			ControllerDisconnected = 23,
-			MAX = 24
-		}
-		public enum ESystems
-		{
-			NONE = 0,
-			SecuritySystem = 1,
-			AccessPoints = 2,
-			MaintenanceSystem = 3,
-			PersonnelSystem = 4,
-			SurveillanceSystem = 5
-		}
-		public enum ETakedownActionType
-		{
-			GrappleFailed = 0,
-			Grapple = 1,
-			Takedown = 2,
-			TakedownNonLethal = 3,
-			TakedownNetrunner = 4,
-			TakedownMassiveTarget = 5,
-			AerialTakedown = 6,
-			LeapToTarget = 7,
-			Struggle = 8,
-			BreakFree = 9,
-			TargetDead = 10,
-			KillTarget = 11,
-			SpareTarget = 12,
-			ForceShove = 13,
-			BossTakedown = 14,
-			DisposalTakedown = 15,
-			DisposalTakedownNonLethal = 16,
-			None = 17
-		}
-		public enum ETakedownBossName
-		{
-			Smasher = 0,
-			Oda = 1,
-			Royce = 2,
-			Sasquatch = 3,
-			None = 4
-		}
-		public enum ETargetManagerAnimGraphState
-		{
-			MODELOOKAT = 0,
-			IDLE = 1,
-			JAMMED = 2
-		}
-		public enum ETauntType
-		{
-			Normal = 0,
-			Melee = 1,
-			Ranged = 2
-		}
-		public enum ETelemetryData
-		{
-			MeleeAttacksMade = 0,
-			RangedAttacksMade = 1,
-			BluelinesSelected = 2,
-			MeleeKills = 3,
-			RangedKills = 4,
-			QuickHacksMade = 5,
-			LegendaryItemsCrafted = 6
-		}
-		public enum ETextureAddressing
-		{
-			TA_Wrap = 0,
-			TA_Mirror = 1,
-			TA_Clamp = 2,
-			TA_MirrorOnce = 3,
-			TA_Border = 4
-		}
-		public enum ETextureAnimationMode
-		{
-			TAM_Speed = 0,
-			TAM_LifeTime = 1
-		}
-		public enum ETextureComparisonFunction
-		{
-			TCF_None = 0,
-			TCF_Less = 1,
-			TCF_Equal = 2,
-			TCF_LessEqual = 3,
-			TCF_Greater = 4,
-			TCF_NotEqual = 5,
-			TCF_GreaterEqual = 6,
-			TCF_Always = 7
-		}
-		public enum ETextureFilteringMag
-		{
-			TFMag_Point = 0,
-			TFMag_Linear = 1
-		}
-		public enum ETextureFilteringMin
-		{
-			TFMin_Point = 0,
-			TFMin_Linear = 1,
-			TFMin_Anisotropic = 2,
-			TFMin_AnisotropicLow = 3
-		}
-		public enum ETextureFilteringMip
-		{
-			TFMip_None = 0,
-			TFMip_Point = 1,
-			TFMip_Linear = 2
-		}
-		public enum ETimeOfYearSeason
-		{
-			ETOYS_Spring = 0,
-			ETOYS_Summer = 1,
-			ETOYS_Autumn = 2,
-			ETOYS_Winter = 3
-		}
-		public enum EToggleActivationTypeComputer
-		{
-			None = 0,
-			Raise = 1
-		}
-		public enum EToggleOperationType
-		{
-			ADD = 0,
-			REMOVE = 1
-		}
-		public enum ETooltipsStyle
-		{
-			Menus = 0,
-			HUD = 1
-		}
-		public enum ETransformAnimationOperationType
-		{
-			PLAY = 0,
-			PAUSE = 1,
-			RESET = 2,
-			SKIP = 3
-		}
-		public enum ETransitionMode
-		{
-			GENTLE = 0,
-			FORCED = 1
-		}
-		public enum ETransitionType
-		{
-			EET_Linear = 0,
-			EET_Sine = 1,
-			EET_Cubic = 2,
-			EET_Quad = 3,
-			EET_Quart = 4,
-			EET_Quint = 5,
-			EET_Expo = 6,
-			EET_Circ = 7,
-			EET_Back = 8,
-			EET_Bounce = 9,
-			EET_Elastic = 10
-		}
-		public enum ETrap
-		{
-			Invalid = 0,
-			GridRegen = 1,
-			AppendStart = 2,
-			Hidden = 3,
-			Virus = 4
-		}
-		public enum ETrapEffects
-		{
-			Explosion = 0,
-			Poisoned = 1,
-			Bleeding = 2,
-			Burning = 3,
-			Blind = 4,
-			SmokeScreen = 5,
-			Stun = 6,
-			Unconcious = 7
-		}
-		public enum ETriggerOperationType
-		{
-			ENTER = 0,
-			EXIT = 1
-		}
-		public enum ETVChannel
-		{
-			CH1 = 0,
-			CH2 = 1,
-			CH3 = 2,
-			CH4 = 3,
-			CH5 = 4,
-			INVALID = 5
-		}
-		public enum ETweakAINodeType
-		{
-			Action = 0,
-			Selector = 1,
-			Sequence = 2
-		}
-		public enum EUIActionState
-		{
-			Invalid = 0,
-			DEFAULT = 1,
-			STARTED = 2,
-			COMPLETED = 3,
-			ABORTED = 4
-		}
-		public enum EUIStealthIconType
-		{
-			Invalid = 0,
-			HostileHuman = 1,
-			Camera = 2,
-			Turret = 3,
-			Drone = 4
-		}
-		public enum EUploadProgramState
-		{
-			STARTED = 0,
-			COMPLETED = 1
-		}
-		public enum EVarDBMode
-		{
-			Add = 0,
-			Set = 1,
-			Invalid = 2
-		}
-		public enum EVendorMode
-		{
-			BuyItems = 0,
-			SellItems = 1,
-			Train = 2,
-			Ripperdoc = 3,
-			RipperdocSummary = 4
-		}
-		public enum EViabilityDecision
-		{
-			INCONCLUSIVE = 0,
-			VIABLE = 1,
-			NONVIABLE = 2
-		}
-		public enum EVirtualSystem
-		{
-			None = 0,
-			SurveillanceSystem = 1,
-			DoorSystem = 2,
-			MediaSystem = 3,
-			SecuritySystem = 4
-		}
-		public enum EWeaponNamesList
-		{
-			EWNL_PowerStreetRifle = 0,
-			EWNL_TechStreetShotgun = 1,
-			EWNL_PowerCorpHandgun = 2,
-			EWNL_SmartCorpRifle = 3,
-			EWNL_PowerCorpHandgunJackie = 4
-		}
-		public enum EWidgetPlacementType
-		{
-			DOCKED = 0,
-			FLOATING = 1
-		}
-		public enum EWidgetState
-		{
-			DEFAULT = 0,
-			ON = 1,
-			OFF = 2,
-			INACTIVE = 3,
-			ALLOWED = 4,
-			LOCKED = 5,
-			SEALED = 6
-		}
-		public enum EWindowBlindersStates
-		{
-			NonInteractive = 0,
-			Open = 1,
-			Closed = 2,
-			Tilted = 3
-		}
-		public enum EWorkspotOperationType
-		{
-			ENTER = 0,
-			LEAVE = 1
-		}
-		public enum EWorldMapView
-		{
-			Map = 0,
-			FloorPlan = 1,
-			TimeSkip = 2
-		}
-		public enum EWoundedBodyPart
-		{
-			Invalid = 0,
-			WoundedLeftArm = 1,
-			WoundedRightArm = 2,
-			WoundedLeftLeg = 3,
-			WoundedRightLeg = 4,
-			DismemberedLeftArm = 5,
-			DismemberedRightArm = 6,
-			DismemberedLeftLeg = 7,
-			DismemberedRightLeg = 8,
-			DismemberedBothLegs = 9
-		}
+
 		public enum ExplosiveTriggerDeviceLaserState
 		{
 			GREEN = 0,
 			RED = 1,
 			DISABLED = 2
 		}
+
 		public enum ExtraEffect
 		{
 			AccuracyVirus = 0,
 			PeernoidVirus = 1,
 			None = 2
 		}
+
+		public enum FTEntityRequirementsFlag : ulong
+		{
+			None = 0,
+			LookAtComponent = 1,
+			ScanningComponent = 2,
+			DestructionComponent = 4,
+			GameObject = 8,
+			ScriptedPuppet = 16,
+			AttitudeAgent = 32,
+			Device = 64,
+			VehicleObject = 128,
+			GamePuppet = 256
+		}
+
+		public enum FTNpcMountingState
+		{
+			Mounted = 0,
+			Unmounted = 1
+		}
+
+		public enum FTScriptState
+		{
+			ERROR = 0
+		}
+
 		public enum Ft_Result
 		{
 			Success = 0,
@@ -4995,6 +3812,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			TargetNotInEnemyPool = 14,
 			DescriptorFormatError = 15
 		}
+
 		public enum Ft_TakedownStage
 		{
 			Default = 0,
@@ -5003,34 +3821,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Takedown = 3,
 			Finished = 4
 		}
+
 		public enum Ft_TakedownType
 		{
 			Lethal = 0,
 			Nonlethal = 1,
 			Breach = 2
 		}
-		public enum FTEntityRequirementsFlag
-		{
-			None = 0,
-			LookAtComponent = 1,
-			ScanningComponent = 2,
-			DestructionComponent = 4,
-			GameObject = 8,
-			ScriptedPuppet = 16,
-			AttitudeAgent = 32,
-			Device = 64,
-			VehicleObject = 128,
-			GamePuppet = 256
-		}
-		public enum FTNpcMountingState
-		{
-			Mounted = 0,
-			Unmounted = 1
-		}
-		public enum FTScriptState
-		{
-			ERROR = 0
-		}
+
 		public enum FunctionalTestsResultCode
 		{
 			Valid = 0,
@@ -5046,11 +3844,3042 @@ namespace WolvenKit.RED4.CR2W.Types
 			InvalidInputActionCallback = 10,
 			EmptyContainer = 12
 		}
-		public enum gameAggregationType
+
+		public enum GIGIOverrideType
 		{
-			AND = 0,
-			OR = 1
+			Default = 0,
+			Override_True = 1,
+			Override_False = 2
 		}
+
+		public enum GameplayTier
+		{
+			Undefined = 0,
+			Tier1_FullGameplay = 1,
+			Tier2_StagedGameplay = 2,
+			Tier3_LimitedGameplay = 3,
+			Tier4_FPPCinematic = 4,
+			Tier5_Cinematic = 5
+		}
+
+		public enum GenericMessageNotificationResult
+		{
+			Cancel = 0,
+			Confirm = 1,
+			OK = 2,
+			Yes = 3,
+			No = 4
+		}
+
+		public enum GenericMessageNotificationType
+		{
+			OK = 0,
+			Confirm = 1,
+			Cancel = 2,
+			ConfirmCancel = 3,
+			YesNo = 4
+		}
+
+		public enum GenericNotificationType
+		{
+			Generic = 0,
+			JournalNotification = 1,
+			LevelUpNotification = 2,
+			VendorNotification = 3,
+			ZoneNotification = 4,
+			ProgressionNotification = 5,
+			CraftingNotification = 6,
+			InventoryNotification = 7
+		}
+
+		public enum GpuApieBufferUsageType
+		{
+			BUT_Default = 0,
+			BUT_Immutable = 1,
+			BUT_ImmutableInPlace = 2,
+			BUT_Readback = 3,
+			BUT_Dynamic_Legacy = 4,
+			BUT_Transient = 5,
+			BUT_Mapped = 6,
+			BUT_MAX = 7
+		}
+
+		public enum GpuWrapApiBufferGroup
+		{
+			System = 0,
+			MeshResource = 1,
+			MeshCustom = 2,
+			AutoSpawner = 3,
+			Debug = 4,
+			DPL = 5,
+			Weather = 6,
+			ReflectionProbe = 7,
+			Skinning = 8,
+			Lights = 9,
+			Video = 10,
+			Particles = 11,
+			GIManagerLitProbes = 12,
+			GIManagerLookup = 13,
+			GIManagerInterpolation = 14,
+			GIManagerLitBricks = 15,
+			GIManagerLights = 16,
+			GIManagerEnvVolume = 17,
+			GIProxyBrick = 18,
+			GIProxySurfel = 19,
+			GIProxyProbes = 20,
+			GIProxyFactors = 21,
+			GIProxyAcceleration = 22,
+			Raytracing = 23,
+			RaytracingUpload = 24,
+			RaytracingAS = 25,
+			Decals = 26,
+			Instances = 27,
+			Materials = 28,
+			Multilayer = 29,
+			FrameResources = 30,
+			Misc = 31,
+			MorphTargets = 32,
+			MAX = 33
+		}
+
+		public enum GpuWrapApiVertexPackingEStreamType
+		{
+			ST_PerVertex = 0,
+			ST_PerInstance = 1,
+			ST_Max = 2,
+			ST_Invalid = -1
+		}
+
+		public enum GpuWrapApiVertexPackingePackingType
+		{
+			PT_Float1 = 0,
+			PT_Float2 = 1,
+			PT_Float3 = 2,
+			PT_Float4 = 3,
+			PT_Float16_2 = 4,
+			PT_Float16_4 = 5,
+			PT_UShort1 = 6,
+			PT_UShort2 = 7,
+			PT_UShort4 = 8,
+			PT_UShort4N = 9,
+			PT_Short1 = 10,
+			PT_Short2 = 11,
+			PT_Short4 = 12,
+			PT_Short4N = 13,
+			PT_UInt1 = 14,
+			PT_UInt2 = 15,
+			PT_UInt3 = 16,
+			PT_UInt4 = 17,
+			PT_Int1 = 18,
+			PT_Int2 = 19,
+			PT_Int3 = 20,
+			PT_Int4 = 21,
+			PT_Color = 22,
+			PT_UByte1 = 23,
+			PT_UByte1F = 24,
+			PT_UByte4 = 25,
+			PT_UByte4N = 26,
+			PT_Byte4N = 27,
+			PT_Dec4 = 28,
+			PT_Index16 = 29,
+			PT_Index32 = 30,
+			PT_Max = 31,
+			PT_Invalid = -1
+		}
+
+		public enum GpuWrapApiVertexPackingePackingUsage
+		{
+			PS_SysPosition = 0,
+			PS_Position = 1,
+			PS_Normal = 2,
+			PS_Tangent = 3,
+			PS_Binormal = 4,
+			PS_TexCoord = 5,
+			PS_Color = 6,
+			PS_SkinIndices = 7,
+			PS_SkinWeights = 8,
+			PS_DestructionIndices = 9,
+			PS_MultilayerPaint = 10,
+			PS_InstanceTransform = 11,
+			PS_InstanceLODParams = 12,
+			PS_InstanceSkinningData = 13,
+			PS_PatchSize = 14,
+			PS_PatchBias = 15,
+			PS_ExtraData = 16,
+			PS_VehicleDmgNormal = 17,
+			PS_VehicleDmgPosition = 18,
+			PS_PositionDelta = 19,
+			PS_LightBlockerIntensity = 20,
+			PS_BoneIndex = 21,
+			PS_Padding = 22,
+			PS_PatchOffset = 23,
+			PS_Max = 24,
+			PS_Invalid = -1
+		}
+
+		public enum GpuWrapApieBufferChunkCategory
+		{
+			BCC_Staging = 0,
+			BCC_Vertex = 1,
+			BCC_VertexUAV = 2,
+			BCC_Index16Bit = 3,
+			BCC_Index32Bit = 4,
+			BCC_VertexIndex16Bit = 5,
+			BCC_Constant = 6,
+			BCC_TypedUAV = 7,
+			BCC_Structured = 8,
+			BCC_StructuredUAV = 9,
+			BCC_StructuredAppendUAV = 10,
+			BCC_IndirectUAV = 11,
+			BCC_Index16BitUAV = 12,
+			BCC_Raw = 13,
+			BCC_Invalid = 14
+		}
+
+		public enum GpuWrapApieIndexBufferChunkType
+		{
+			IBCT_IndexUInt = 0,
+			IBCT_IndexUShort = 1,
+			IBCT_Max = 2
+		}
+
+		public enum GpuWrapApieTextureFormat
+		{
+			TEXFMT_A8_Unorm = 0,
+			TEXFMT_A8 = 0,
+			TEXFMT_R8_Unorm = 1,
+			TEXFMT_R8 = 1,
+			TEXFMT_L8_Unorm = 2,
+			TEXFMT_L8 = 2,
+			TEXFMT_R8G8_Unorm = 3,
+			TEXFMT_R8G8 = 3,
+			TEXFMT_R8G8B8X8_Unorm = 4,
+			TEXFMT_R8G8B8X8 = 4,
+			TEXFMT_R8G8B8A8_Unorm = 5,
+			TEXFMT_R8G8B8A8 = 5,
+			TEXFMT_R8G8B8A8_Snorm = 6,
+			TEXFMT_Uint_16_norm = 7,
+			TEXFMT_R16_Unorm = 7,
+			TEXFMT_R16_Uint = 8,
+			TEXFMT_Uint_16 = 8,
+			TEXFMT_R32_Uint = 9,
+			TEXFMT_Uint_32 = 9,
+			TEXFMT_R32G32B32A32_Uint = 10,
+			TEXFMT_Uint_R32G32B32A32 = 10,
+			TEXFMT_R32G32_Uint = 11,
+			TEXFMT_R16G16B16A16_Unorm = 12,
+			TEXFMT_R16G16B16A16_Uint = 13,
+			// TEXFMT_Uint_R32G32B32A32 = 13,
+			TEXFMT_R16G16_Uint = 14,
+			TEXFMT_R10G10B10A2 = 15,
+			TEXFMT_R10G10B10A2_Unorm = 15,
+			TEXFMT_R16G16B16A16_Float = 16,
+			TEXFMT_Float_R16G16B16A16 = 16,
+			TEXFMT_R11G11B10_Float = 17,
+			TEXFMT_Float_R11G11B10 = 17,
+			TEXFMT_R16G16_Float = 18,
+			TEXFMT_Float_R16G16 = 18,
+			TEXFMT_R32G32_Float = 19,
+			TEXFMT_Float_R32G32 = 19,
+			TEXFMT_R32G32B32A32_Float = 20,
+			TEXFMT_Float_R32G32B32A32 = 20,
+			TEXFMT_R32_Float = 21,
+			TEXFMT_Float_R32 = 21,
+			TEXFMT_R16_Float = 22,
+			TEXFMT_Float_R16 = 22,
+			TEXFMT_D24S8 = 23,
+			TEXFMT_D32FS8 = 24,
+			TEXFMT_D32F = 26,
+			TEXFMT_D16U = 27,
+			TEXFMT_BC1 = 28,
+			TEXFMT_BC2 = 29,
+			TEXFMT_BC3 = 30,
+			TEXFMT_BC4 = 31,
+			TEXFMT_BC5 = 32,
+			TEXFMT_BC6H = 33,
+			TEXFMT_BC6H_UNSIGNED = 33,
+			TEXFMT_BC6H_SIGNED = 34,
+			TEXFMT_BC7 = 35,
+			TEXFMT_BC7_SRGB = 36,
+			TEXFMT_R8_Uint = 37,
+			// TEXFMT_R8G8B8A8 = 39,
+			TEXFMT_R8G8B8A8_Unorm_SRGB = 39,
+			TEXFMT_BC1_SRGB = 40,
+			TEXFMT_BC2_SRGB = 41,
+			TEXFMT_BC3_SRGB = 42,
+			TEXFMT_R16G16_Unorm = 43,
+			TEXFMT_R16G16_Sint = 44,
+			TEXFMT_R16G16_Snorm = 45,
+			TEXFMT_B5G6R5_Unorm = 46
+		}
+
+		public enum GpuWrapApieTextureGroup
+		{
+			TEXG_Generic_Color = 1,
+			TEXG_Generic_Grayscale = 2,
+			TEXG_Generic_Normal = 3,
+			TEXG_Generic_Data = 4,
+			TEXG_Generic_UI = 5,
+			TEXG_Generic_Font = 6,
+			TEXG_Generic_LUT = 7,
+			TEXG_Generic_MorphBlend = 8,
+			TEXG_Multilayer_Color = 9,
+			TEXG_Multilayer_Normal = 10,
+			TEXG_Multilayer_Grayscale = 11,
+			TEXG_Multilayer_Microblend = 12
+		}
+
+		public enum GpuWrapApieTextureType
+		{
+			TEXTYPE_2D = 0,
+			TEXTYPE_CUBE = 1,
+			TEXTYPE_ARRAY = 2,
+			TEXTYPE_3D = 3
+		}
+
+		public enum GrenadeDamageType
+		{
+			Normal = 0,
+			DoT = 1,
+			None = 2
+		}
+
+		public enum HUDActorStatus
+		{
+			UNINITIALIZED = 0,
+			REGISTERED = 1,
+			ACTIVE = 2
+		}
+
+		public enum HUDActorType
+		{
+			UNINITIALIZED = 0,
+			GAME_OBJECT = 1,
+			VEHICLE = 2,
+			DEVICE = 3,
+			BODY_DISPOSAL_DEVICE = 4,
+			PUPPET = 5,
+			ITEM = 6
+		}
+
+		public enum HUDContext
+		{
+			DEFAULT = 0,
+			FOCUS = 1,
+			LOOKEDAT = 2
+		}
+
+		public enum HUDState
+		{
+			UNINITIALIZED = 0,
+			DEACTIVATED = 1,
+			ACTIVATED = 2
+		}
+
+		public enum HighlightContext
+		{
+			DEFAULT = 0,
+			OUTLINE = 1,
+			FILL = 2,
+			FULL = 3
+		}
+
+		public enum HighlightMode
+		{
+			Row = 0,
+			Column = 1
+		}
+
+		public enum HitShape_Type
+		{
+			Normal = 0,
+			InternalWeakSpot = 1,
+			ExternalWeakSpot = 2,
+			ProtectionLayer = 3
+		}
+
+		public enum HoverStatus
+		{
+			DEFAULT = 0,
+			HOVER = 1
+		}
+
+		public enum HubMenuCharacterItems
+		{
+			Skills = 0,
+			Stats = 1
+		}
+
+		public enum HubMenuCraftingItems
+		{
+			Crafting = 0,
+			Upgrade = 1
+		}
+
+		public enum HubMenuDatabaseItems
+		{
+			Codex = 0,
+			Tarot = 1,
+			Shards = 2
+		}
+
+		public enum HubMenuInventoryItems
+		{
+			Gear = 0,
+			Cyberware = 1,
+			Backpack = 2
+		}
+
+		public enum HubMenuItems
+		{
+			Crafting = 0,
+			Character = 1,
+			Inventory = 2,
+			Map = 3,
+			Journal = 4,
+			Phone = 5,
+			Database = 6,
+			Stats = 7,
+			Backpack = 8,
+			HubMenuItems = 9,
+			Codex = 10,
+			Shards = 11,
+			Tarot = 12,
+			Gear = 13,
+			Cyberware = 14,
+			Count = 15,
+			None = -1
+		}
+
+		public enum HubVendorMenuItems
+		{
+			Trade = 0,
+			Crafting = 1,
+			Cyberware = 2
+		}
+
+		public enum IMaterialDataProviderDescEParameterType
+		{
+			PT_None = 0,
+			PT_Texture = 1,
+			PT_Color = 2,
+			PT_Cube = 3,
+			PT_Vector = 4,
+			PT_Scalar = 5,
+			PT_Bool = 6,
+			PT_TextureArray = 7,
+			PT_StructBuffer = 8,
+			PT_Cpu_NameU64 = 9,
+			PT_SkinProfile = 10,
+			PT_MultilayerSetup = 11,
+			PT_MultilayerMask = 12,
+			PT_HairProfile = 13,
+			PT_FoliageProfile = 14,
+			PT_TerrainSetup = 15,
+			PT_Gradient = 16,
+			PT_MAX = 17
+		}
+
+		public enum InGameConfigChangeReason
+		{
+			Accepted = 0,
+			Rejected = 1,
+			NeedsConfirmation = 2,
+			NeedsRestart = 3,
+			Invalid = -1
+		}
+
+		public enum InGameConfigNotificationType
+		{
+			RestartRequiredConfirmed = 0,
+			RestartRequiredRejected = 1,
+			ChangesApplied = 2,
+			ChangesRejected = 3,
+			ChangesLoadLastCheckpointApplied = 4,
+			ChangesLoadLastCheckpointRejected = 5,
+			Saved = 6,
+			ErrorSaving = 7,
+			Loaded = 8,
+			LoadCanceled = 9,
+			LoadInternalError = 10,
+			Refresh = 11,
+			LanguagePackInstalled = 12
+		}
+
+		public enum InGameConfigUserSettingsLoadStatus
+		{
+			NotLoaded = 0,
+			InternalError = 1,
+			FileIsMissing = 2,
+			FileIsCorrupted = 3,
+			Loaded = 4,
+			ImportedFromOldVersion = 5
+		}
+
+		public enum InGameConfigUserSettingsSaveStatus
+		{
+			NotSaved = 0,
+			InternalError = 1,
+			Saved = 2
+		}
+
+		public enum InGameConfigVarType
+		{
+			Bool = 0,
+			Int = 1,
+			Float = 2,
+			Name = 3,
+			IntList = 4,
+			FloatList = 5,
+			StringList = 6,
+			NameList = 7
+		}
+
+		public enum InGameConfigVarUpdatePolicy
+		{
+			Disabled = 0,
+			Immediately = 1,
+			ConfirmationRequired = 2,
+			RestartRequired = 3,
+			LoadLastCheckpointRequired = 4
+		}
+
+		public enum InstanceState
+		{
+			DISABLED = 0,
+			HIDDEN = 1,
+			RUNNING = 2,
+			MALFUNCTIONING = 3,
+			ON = 4
+		}
+
+		public enum IntercomStatus
+		{
+			DEFAULT = 0,
+			CALLING = 1,
+			TALKING = 2,
+			CALL_MISSED = 3,
+			CALL_ENDED = 4
+		}
+
+		public enum InventoryModes
+		{
+			Default = 0,
+			Item = 1
+		}
+
+		public enum InventoryPaperdollZoomArea
+		{
+			Default = 0,
+			Weapon = 1,
+			Legs = 2,
+			Feet = 3,
+			Cyberware = 4,
+			QuickSlot = 5,
+			Consumable = 6,
+			Outfit = 7,
+			Head = 8,
+			Face = 9,
+			InnerChest = 10,
+			OuterChest = 11
+		}
+
+		public enum InventoryTooltipDisplayContext
+		{
+			Default = 0,
+			Attachment = 1,
+			Crafting = 2,
+			Upgrading = 3,
+			HUD = 4
+		}
+
+		public enum ItemAdditionalInfoType
+		{
+			NONE = 0,
+			PRICE = 1,
+			TYPE = 2
+		}
+
+		public enum ItemDisplayType
+		{
+			Item = 0,
+			Weapon = 1
+		}
+
+		public enum ItemFilterCategory
+		{
+			RangedWeapons = 0,
+			MeleeWeapons = 1,
+			Clothes = 2,
+			Consumables = 3,
+			Grenades = 4,
+			SoftwareMods = 5,
+			Attachments = 6,
+			Programs = 7,
+			Cyberware = 8,
+			Junk = 9,
+			BaseCount = 10,
+			Quest = 11,
+			Buyback = 12,
+			AllItems = 13,
+			AllCount = 14,
+			Invalid = -1
+		}
+
+		public enum ItemFilterType
+		{
+			All = 0,
+			Weapons = 1,
+			Clothes = 2,
+			Consumables = 3,
+			Cyberware = 4,
+			Attachments = 5,
+			Quest = 6,
+			Buyback = 7,
+			LightWeapons = 8,
+			HeavyWeapons = 9,
+			MeleeWeapons = 10,
+			Hacks = 11
+		}
+
+		public enum ItemLabelType
+		{
+			New = 0,
+			Quest = 1,
+			Money = 2,
+			Equipped = 3,
+			Owned = 4,
+			Buyback = 5
+		}
+
+		public enum ItemSortMode
+		{
+			Default = 0,
+			NewItems = 1,
+			NameAsc = 2,
+			NameDesc = 3,
+			QualityAsc = 4,
+			QualityDesc = 5,
+			WeightAsc = 6,
+			WeightDesc = 7,
+			PriceAsc = 8,
+			PriceDesc = 9,
+			ItemType = 10,
+			DpsAsc = 11,
+			DpsDesc = 12
+		}
+
+		public enum ItemViewModes
+		{
+			Item = 0,
+			Mod = 1
+		}
+
+		public enum LandingType
+		{
+			Off = 0,
+			Regular = 1,
+			Hard = 2,
+			VeryHard = 3,
+			Superhero = 4,
+			Death = 5
+		}
+
+		public enum LaserTargettingState
+		{
+			Start = 0,
+			Update = 1,
+			End = 2
+		}
+
+		public enum LibTreeEParameterType
+		{
+			PARAM_Bool = 0,
+			PARAM_Int32 = 1,
+			PARAM_Enum = 2,
+			PARAM_Float = 3,
+			PARAM_CName = 4,
+			PARAM_TreeRef = 5,
+			PARAM_TreeRefList = 6,
+			PARAM_NodeRef = 7,
+			PARAM_Vector = 9
+		}
+
+		public enum MechanicalScanType
+		{
+			None = 0,
+			Short = 1,
+			Long = 2,
+			Danger = 3
+		}
+
+		public enum MessageViewType
+		{
+			Sent = 0,
+			Received = 1
+		}
+
+		public enum MessengerContactType
+		{
+			Contact = 0,
+			Group = 1,
+			Thread = 2
+		}
+
+		public enum MinigameActionType
+		{
+			Device = 0,
+			NPC = 1,
+			Both = 2,
+			AccessPoint = 3
+		}
+
+		public enum ModuleState
+		{
+			DISABLED = 0,
+			HIDDEN = 1,
+			ASLEEP = 2,
+			MALFUNCTIONING = 3,
+			ON = 4
+		}
+
+		public enum MorphTargetsDiffTextureSize
+		{
+			TEXTURE_SIZE_1024x1024 = 0,
+			TEXTURE_SIZE_512x512 = 1,
+			TEXTURE_SIZE_256x256 = 2
+		}
+
+		public enum MorphTargetsFaceRegion
+		{
+			FACE_REGION_EYES = 0,
+			FACE_REGION_NOSE = 1,
+			FACE_REGION_MOUTH = 2,
+			FACE_REGION_JAW = 3,
+			FACE_REGION_EARS = 4,
+			FACE_REGION_NONE = 255
+		}
+
+		public enum NavGenAgentSize
+		{
+			Human = 0
+		}
+
+		public enum NavGenNavmeshImpact
+		{
+			Walkable = 0,
+			Ignored = 1,
+			Blocking = 2,
+			Road = 3,
+			CrowdWalkable = 4,
+			Stairs = 5,
+			Drones = 6
+		}
+
+		public enum OutcomeMessage
+		{
+			Success = 0,
+			Failure = 1
+		}
+
+		public enum PSODescBlendModeFactor
+		{
+			FAC_Zero = 0,
+			FAC_One = 1,
+			FAC_SrcColor = 2,
+			FAC_InvSrcColor = 3,
+			FAC_SrcAlpha = 4,
+			FAC_InvSrcAlpha = 5,
+			FAC_DestColor = 6,
+			FAC_InvDestColor = 7,
+			FAC_DestAlpha = 8,
+			FAC_InvDestAlpha = 9,
+			FAC_BlendFactor = 10,
+			FAC_InvBlendFactor = 11,
+			FAC_Src1Color = 12,
+			FAC_InvSrc1Color = 13,
+			FAC_Src1Alpha = 14,
+			FAC_InvSrc1Alpha = 15
+		}
+
+		public enum PSODescBlendModeOp
+		{
+			OP_Add = 0,
+			OP_Subtract = 1,
+			OP_RevSub = 2,
+			OP_Min = 3,
+			OP_Max = 4,
+			OP_Or = 5,
+			OP_And = 6,
+			OP_Xor = 7,
+			OP_nAnd = 8,
+			OP_nOr = 9
+		}
+
+		public enum PSODescBlendModeWriteMask
+		{
+			MASK_None = 0,
+			MASK_R = 1,
+			MASK_G = 2,
+			MASK_RG = 3,
+			MASK_B = 4,
+			MASK_RB = 5,
+			MASK_GB = 6,
+			MASK_RGB = 7,
+			MASK_A = 8,
+			MASK_RA = 9,
+			MASK_GA = 10,
+			MASK_RGA = 11,
+			MASK_BA = 12,
+			MASK_RBA = 13,
+			MASK_GBA = 14,
+			MASK_RGBA = 15
+		}
+
+		public enum PSODescDepthStencilModeComparisonMode
+		{
+			COMPARISON_Never = 0,
+			COMPARISON_Less = 1,
+			COMPARISON_Equal = 2,
+			COMPARISON_LessEqual = 3,
+			COMPARISON_Greater = 4,
+			COMPARISON_NotEqual = 5,
+			COMPARISON_GreaterEqual = 6,
+			COMPARISON_Always = 7
+		}
+
+		public enum PSODescDepthStencilModeStencilOpMode
+		{
+			STENCILOP_Keep = 0,
+			STENCILOP_Zero = 1,
+			STENCILOP_Replace = 2,
+			STENCILOP_IncreaseSaturate = 3,
+			STENCILOP_DecreaseSaturate = 4,
+			STENCILOP_Invert = 5,
+			STENCILOP_Increase = 6,
+			STENCILOP_Decrease = 7
+		}
+
+		public enum PSODescPrimitiveTopologyType
+		{
+			Invalid = 0,
+			Point = 1,
+			Line = 2,
+			Triangle = 3,
+			Patch = 4
+		}
+
+		public enum PSODescRasterizerModeCullMode
+		{
+			CULL_None = 0,
+			CULL_Front = 1,
+			CULL_Back = 2
+		}
+
+		public enum PSODescRasterizerModeFrontFaceWinding
+		{
+			FRONTFACE_CCW = 0,
+			FRONTFACE_CW = 1
+		}
+
+		public enum PSODescRasterizerModeOffsetMode
+		{
+			OFFSET_None = 0,
+			OFFSET_NormalBias = 1,
+			OFFSET_ShadowBias = 2,
+			OFFSET_DecalBias = 3
+		}
+
+		public enum PackageStatus
+		{
+			UNINITIALIZED = 0,
+			ON_HOLD = 1,
+			FOR_IMMEDIATE_TRIGGER = 2,
+			TRIGGERED = 3
+		}
+
+		public enum PaperdollPositionAnimation
+		{
+			Center = 0,
+			Left = 1,
+			Right = 2,
+			LeftFullBody = 3
+		}
+
+		public enum PauseMenuAction
+		{
+			OpenSubMenu = 0,
+			QuickSave = 1,
+			Save = 2,
+			ExitGame = 3,
+			ExitToMainMenu = 4,
+			QuickLoad = 5
+		}
+
+		public enum PaymentStatus
+		{
+			DEFAULT = 0,
+			IN_PROGRESS = 1,
+			NO_MONEY = 2
+		}
+
+		public enum PerkMenuAttribute
+		{
+			Body = 0,
+			Reflex = 1,
+			Technical_Ability = 2,
+			Johnny = 3,
+			Cool = 4,
+			Intelligence = 5
+		}
+
+		public enum PersistenceSource
+		{
+			AddThreat = 0,
+			SetNewCombatTarget = 1,
+			CommandAimWithWeapon = 2,
+			CommandForceShoot = 3,
+			CommandInjectCombatTarget = 4,
+			CommandMeleeAttack = 5,
+			CommandShoot = 6,
+			CommandThrowGrenade = 7,
+			CommandInjectThreat = 8,
+			TrackedBySecuritySystemAgent = 9
+		}
+
+		public enum PlayerVisionModeControllerRefreshPolicyEnum
+		{
+			Persistent = 0,
+			Eventful = 1
+		}
+
+		public enum ProgramEffect
+		{
+			GrantAccess = 0,
+			BlockAccess = 1,
+			UnlockQuestFact = 2
+		}
+
+		public enum ProgramType
+		{
+			BasicAccess = 0,
+			ExtraPlayerProgram = 1,
+			ExtraServerProgram = 2,
+			EnemyProgram = 3,
+			EnemyLockNetwork = 4
+		}
+
+		public enum QuantityPickerActionType
+		{
+			Buy = 0,
+			Sell = 1,
+			TransferToStorage = 2,
+			TransferToPlayer = 3,
+			Drop = 4,
+			Disassembly = 5,
+			Craft = 6
+		}
+
+		public enum QuickSlotActionType
+		{
+			Undefined = 0,
+			SelectItem = 1,
+			HideWeapon = 2,
+			OpenPhone = 3,
+			SummonCar = 4,
+			SummonBike = 5,
+			ToggleRadio = 6,
+			SelectRadioStation = 7,
+			TurnOffRadio = 8,
+			CycleTrackedQuest = 9,
+			SummonVehicle = 10,
+			SetActiveVehicle = 11,
+			QuickHack = 12,
+			ToggleSummonMode = 13,
+			EquipFists = 14
+		}
+
+		public enum QuickSlotItemType
+		{
+			Undefined = 0,
+			Vehicle = 1,
+			Gadget = 2,
+			Consumable = 3,
+			Cyberware = 4,
+			Weapon = 5,
+			Interaction = 6
+		}
+
+		public enum ReactionZones_Humanoid_Side
+		{
+			Head = 0,
+			ChestLeft = 1,
+			ArmLeft = 2,
+			HandLeft = 3,
+			ChestRight = 4,
+			ArmRight = 5,
+			HandRight = 6,
+			Abdomen = 7,
+			LegLeft = 8,
+			LegRight = 9
+		}
+
+		public enum Ref_1_3_3_BigEnum : ulong
+		{
+			BigValue = 68719476735
+		}
+
+		public enum Ref_1_3_3_Colors
+		{
+			Red = 0,
+			Green = 4,
+			Blue = 5
+		}
+
+		public enum Ref_1_3_3_CustomSize_1
+		{
+			Test = 0,
+			Test2 = 127,
+			Test1 = -128
+		}
+
+		public enum Ref_1_3_3_CustomSize_2
+		{
+			Test = 0,
+			Test1 = 256,
+			Test2 = 12345
+		}
+
+		public enum Ref_2_3_3_Enum32Bit
+		{
+			Value = 0
+		}
+
+		public enum Ref_2_3_3_Enum64Bit : ulong
+		{
+			BigValue = 68719476735
+		}
+
+		public enum RenderDecalNormalsBlendingMode
+		{
+			AlphaBlending = 0,
+			Reorient = 1
+		}
+
+		public enum RenderDecalOrderPriority
+		{
+			Priority0 = 0,
+			Priority1 = 1,
+			Priority2 = 2,
+			Priority3 = 3
+		}
+
+		public enum RenderSceneLayer
+		{
+			Default = 0,
+			Cyberspace = 1,
+			WorldMap = 2
+		}
+
+		[Flags]
+		public enum RenderSceneLayerMask
+		{
+			Default = 1 << 0,
+			Cyberspace = 1 << 1,
+			WorldMap = 1 << 2
+		}
+
+		public enum RequestType
+		{
+			INSTANTLY_TRIGGER = 0,
+			MANUALLY_TRIGGERED = 1
+		}
+
+		public enum RipperdocFilter
+		{
+			All = 0,
+			Vendor = 1,
+			Player = 2
+		}
+
+		public enum RipperdocModes
+		{
+			Default = 0,
+			Item = 1
+		}
+
+		public enum SAnimationBufferBitwiseCompression
+		{
+			ABBC_None = 0,
+			ABBC_24b = 1,
+			ABBC_16b = 2
+		}
+
+		public enum SAnimationBufferBitwiseCompressionPreset
+		{
+			ABBCP_Custom = 0,
+			ABBCP_VeryHighQuality = 1,
+			ABBCP_HighQuality = 2,
+			ABBCP_NormalQuality = 3,
+			ABBCP_LowQuality = 4,
+			ABBCP_VeryLowQuality = 5,
+			ABBCP_Raw = 6
+		}
+
+		public enum SAnimationBufferDataCompressionMethod
+		{
+			ABDCM_Invalid = 0,
+			ABDCM_Plain = 1,
+			ABDCM_Quaternion = 2,
+			ABDCM_QuaternionXYZSignedW = 3,
+			ABDCM_QuaternionXYZSignedWLastBit = 4,
+			ABDCM_Quaternion48b = 5,
+			ABDCM_Quaternion40b = 6,
+			ABDCM_Quaternion32b = 7,
+			ABDCM_Quaternion64bW = 8,
+			ABDCM_Quaternion48bW = 9,
+			ABDCM_Quaternion40bW = 10
+		}
+
+		public enum SAnimationBufferOrientationCompressionMethod
+		{
+			ABOCM_PackIn64bitsW = 0,
+			ABOCM_PackIn48bitsW = 1,
+			ABOCM_PackIn40bitsW = 2,
+			ABOCM_AsFloat_XYZW = 3,
+			ABOCM_AsFloat_XYZSignedW = 4,
+			ABOCM_AsFloat_XYZSignedWInLastBit = 5,
+			ABOCM_PackIn48bits = 6,
+			ABOCM_PackIn40bits = 7,
+			ABOCM_PackIn32bits = 8
+		}
+
+		public enum SAnimationBufferStreamingOption
+		{
+			ABSO_NonStreamable = 0,
+			ABSO_PartiallyStreamable = 1,
+			ABSO_FullyStreamable = 2
+		}
+
+		public enum Sample_Enum_4_1
+		{
+			Sample_Enum_Option_4_1_0 = 0,
+			Sample_Enum_Option_4_1_1 = 7,
+			Sample_Enum_Option_4_1_2 = 8,
+			MyCustomEnumOptionName413 = 9
+		}
+
+		public enum Sample_Enum_4_4
+		{
+			Sample_Enum_Option_4_4_0 = 0,
+			Sample_Enum_Option_4_4_1 = 1,
+			Sample_Enum_Option_4_4_2 = 2
+		}
+
+		public enum Sample_Enum_4_5
+		{
+			Sample_Enum_Option_4_5_0 = 10,
+			Sample_Enum_Option_4_5_1 = 27,
+			Sample_Enum_Option_4_5_2 = 108
+		}
+
+		public enum Sample_Enum_4_6
+		{
+			Sample_Enum_Option_4_6_0 = 0,
+			Sample_Enum_Option_4_6_1_with_a_new_name = 1,
+			Sample_Enum_Option_4_6_1 = 1
+		}
+
+		public enum Sample_Enum_6_8
+		{
+		}
+
+		[Flags]
+		public enum Sample_Enum_As_Bitfield_2_2
+		{
+			Sample_Bitfield_Option_2_2_0 = 1 << 0
+		}
+
+		[Flags]
+		public enum Sample_Enum_As_Bitfield_2_9
+		{
+			Sample_Bitfield_Option_2_9_0 = 1 << 0
+		}
+
+		[Flags]
+		public enum Sample_Enum_As_Bitfield_5_1
+		{
+			Sample_Bitfield_Option_5_1_0 = 1 << 0,
+			Sample_Bitfield_Option_5_1_1 = 1 << 1,
+			MyCustomBitfieldOptionName512 = 1 << 2
+		}
+
+		[Flags]
+		public enum Sample_Enum_As_Bitfield_6_9
+		{
+			Sample_Bitfield_Option_6_9_0 = 1 << 0
+		}
+
+		public enum Sample_Namespace_4_2Sample_Enum_4_2
+		{
+			Sample_Enum_Option_4_2_0 = 0,
+			Sample_Enum_Option_4_2_1 = 7,
+			Sample_Enum_Option_4_2_2 = 8,
+			MyCustomEnumOptionName423 = 9
+		}
+
+		public enum Sample_Namespace_4_3_0Sample_Namespace_4_3_1Sample_Enum_4_3
+		{
+			Sample_Enum_Option_4_3_0 = 0,
+			Sample_Enum_Option_4_3_1 = 7,
+			Sample_Enum_Option_4_3_2 = 8,
+			MyCustomEnumOptionName433 = 9
+		}
+
+		[Flags]
+		public enum Sample_Namespace_5_2Sample_Enum_As_Bitfield_5_2
+		{
+			Sample_Option_5_2_0 = 1 << 0,
+			Sample_Option_5_2_1 = 1 << 1,
+			MyCustomBitfieldOptionName522 = 1 << 2
+		}
+
+		[Flags]
+		public enum Sample_Namespace_5_3_0Sample_Namespace_5_3_1Sample_Enum_As_Bitfield_5_3
+		{
+			Sample_Option_5_3_0 = 1 << 0,
+			Sample_Option_5_3_1 = 1 << 1,
+			MyCustomBitfieldOptionName532 = 1 << 2
+		}
+
+		public enum Sample_Replicated_Enum
+		{
+			One = 0,
+			Two = 1,
+			Three = 2
+		}
+
+		public enum ScannerDataType
+		{
+			None = 0,
+			Name = 1,
+			Level = 2,
+			Health = 3,
+			Rarity = 4,
+			WeaponBasic = 5,
+			WeaponDetailed = 6,
+			BountySystem = 7,
+			Vulnerabilities = 8,
+			Faction = 9,
+			Attitude = 10,
+			SquadInfo = 11,
+			Resistances = 12,
+			Abilities = 13,
+			Requirements = 14,
+			Description = 15,
+			DeviceStatus = 16,
+			NetworkStatus = 17,
+			NetworkLevel = 18,
+			DeviceConnections = 19,
+			QuestEntry = 20,
+			VehicleName = 21,
+			VehicleManufacturer = 22,
+			VehicleProductionYears = 23,
+			VehicleDriveLayout = 24,
+			VehicleHorsepower = 25,
+			VehicleMass = 26,
+			VehicleState = 27,
+			VehicleInfo = 28,
+			QuickHackDescription = 29
+		}
+
+		public enum ScannerNetworkState
+		{
+			NOT_CONNECTED = 0,
+			NOT_BREACHED = 1,
+			TIER1 = 2,
+			TIER2 = 3,
+			TIER3 = 4,
+			BREACHED = 5
+		}
+
+		public enum ScannerObjectType
+		{
+			INVALID = 0,
+			PUPPET = 1,
+			VEHICLE = 2,
+			DEVICE = 3,
+			GENERIC = 4
+		}
+
+		public enum SecurityEventScopeSettings
+		{
+			GLOBAL = 0,
+			AREA_WHERE_PLAYER_IS = 1,
+			SPECIFIC_AGENTS_ONLY = 2
+		}
+
+		public enum SettingsType
+		{
+			Slider = 0,
+			Toggle = 1,
+			DropdownList = 2
+		}
+
+		public enum SignShape
+		{
+			RECTANGLE = 0,
+			ARROWLEFT = 1,
+			ARROWRIGHT = 2,
+			SQUARE = 3
+		}
+
+		public enum SignType
+		{
+			INFORMATION = 0,
+			ATTENTION = 1,
+			WARNING = 2
+		}
+
+		public enum SignalType
+		{
+			DEFAULT = 0,
+			REGISTRATION = 1,
+			UNREGISTRATION = 2
+		}
+
+		public enum SlotType
+		{
+			DEFAULT = 0,
+			HOLSTER = 1,
+			WEAPON = 2,
+			COMBAT_CYBERWARE = 3,
+			TOOLTIP = 4,
+			MISC = 5
+		}
+
+		public enum StaticShaderInputLayout
+		{
+			DebugVertexBase = 0,
+			DebugVertexUV = 1,
+			DebugVertexUV_Fullscreen = 2,
+			NoBuffers_Fullscreen = 3,
+			NoBuffers_PointList = 4
+		}
+
+		public enum ThrowType
+		{
+			Quick = 0,
+			Charge = 1
+		}
+
+		public enum Tier2WalkType
+		{
+			Undefined = 0,
+			Slow = 1,
+			Normal = 2,
+			Fast = 3
+		}
+
+		public enum TrafficGenDynamicImpact
+		{
+			Ignored = 0,
+			Blocking = 1
+		}
+
+		public enum TrafficGenMeshImpact
+		{
+			UseNavigation = 0,
+			ForceIgnored = 1,
+			ForceBlocking = 2
+		}
+
+		[Flags]
+		public enum TriggerChannel
+		{
+			TC_Default = 1 << 0,
+			TC_Player = 1 << 1,
+			TC_Camera = 1 << 2,
+			TC_Human = 1 << 3,
+			TC_SoundReverbArea = 1 << 4,
+			TC_SoundAmbientArea = 1 << 5,
+			TC_Quest = 1 << 6,
+			TC_Projectiles = 1 << 7,
+			TC_Vehicle = 1 << 8,
+			TC_Environment = 1 << 9,
+			TC_WaterNullArea = 1 << 10,
+			TC_Custom0 = 1 << 16,
+			TC_Custom1 = 1 << 17,
+			TC_Custom2 = 1 << 18,
+			TC_Custom3 = 1 << 19,
+			TC_Custom4 = 1 << 20,
+			TC_Custom5 = 1 << 21,
+			TC_Custom6 = 1 << 22,
+			TC_Custom7 = 1 << 23,
+			TC_Custom8 = 1 << 24,
+			TC_Custom9 = 1 << 25,
+			TC_Custom10 = 1 << 26,
+			TC_Custom11 = 1 << 27,
+			TC_Custom12 = 1 << 28,
+			TC_Custom13 = 1 << 29,
+			TC_Custom14 = 1 << 30
+		}
+
+		public enum TweakWeaponPose
+		{
+			Nothing = 0,
+			Position = 1,
+			Rotation = 2
+		}
+
+		public enum UIGameContext
+		{
+			Default = 0,
+			QuickHack = 1,
+			Scanning = 2,
+			DeviceZoom = 3,
+			BraindanceEditor = 4,
+			BraindancePlayback = 5,
+			VehicleMounted = 6,
+			ModalPopup = 7,
+			RadialWheel = 8,
+			VehicleRace = 9
+		}
+
+		public enum UIInGameNotificationType
+		{
+			ActionRestriction = 0,
+			CombatRestriction = 1,
+			CantSaveActionRestriction = 2,
+			CantSaveCombatRestriction = 3,
+			CantSaveQuestRestriction = 4,
+			CantSaveDeathRestriction = 5,
+			NotEnoughSlotsSaveResctriction = 6,
+			NotEnoughSpaceSaveResctriction = 7,
+			PhotoModeDisabledRestriction = 8
+		}
+
+		public enum UIMenuNotificationType
+		{
+			VendorNotEnoughMoney = 0,
+			VNotEnoughMoney = 1,
+			VendorRequirementsNotMet = 2,
+			InventoryActionBlocked = 3,
+			CraftingNoPerks = 4,
+			CraftingNotEnoughMaterial = 5,
+			UpgradingLevelToLow = 6,
+			NoPerksPoints = 7,
+			PerksLocked = 8,
+			MaxLevelPerks = 9,
+			NoAttributePoints = 10,
+			InCombat = 11,
+			CraftingQuickhack = 12
+		}
+
+		public enum UIObjectiveEntryType
+		{
+			Invalid = 0,
+			Quest = 1,
+			Objective = 2,
+			SubObjective = 3
+		}
+
+		public enum UpdateBucketEnum
+		{
+			Vehicle = 0,
+			Character = 1,
+			AttachedObject = 2
+		}
+
+		public enum VendorConfirmationPopupType
+		{
+			Default = 0,
+			ExpensiveItem = 1,
+			EquippedItem = 2,
+			BuyCyberware = 3,
+			DisassembeIconic = 4
+		}
+
+		public enum VisualState
+		{
+			OFF = 0,
+			RUNNING = 1,
+			MALFUNCTIONING = 2,
+			ON = 3
+		}
+
+		public enum WeaponPartType
+		{
+			Scope = 0,
+			Magazine = 1,
+			Silencer = 2
+		}
+
+		public enum WorkspotConditionOperators
+		{
+			OR = 0,
+			AND = 1
+		}
+
+		public enum WorkspotWeaponConditionEnum
+		{
+			None = 0,
+			Any = 1,
+			Ranged = 2,
+			OneHandedRanged = 3,
+			Melee = 4,
+			MeleeCyberware = 5,
+			LMG = 6
+		}
+
+		public enum WorldMapTooltipType
+		{
+			Default = 0,
+			Police = 1,
+			District = 2
+		}
+
+		public enum aimTypeEnum
+		{
+			AimIn = 0,
+			AimOut = 1,
+			Invalid = 2
+		}
+
+		public enum animAimState
+		{
+			Unaimed = 0,
+			Aimed = 1
+		}
+
+		public enum animAnimEventGenderAlt
+		{
+			None = 0,
+			Female = 1,
+			Male = 2
+		}
+
+		public enum animAnimNode_SetDrivenKey_InternalsEChannelType
+		{
+			FloatTrack = 0,
+			TransX = 1,
+			TransY = 2,
+			TransZ = 3,
+			RotEulZ_Pitch = 4,
+			RotEulX_Roll = 5,
+			RotEulY_Yaw = 6,
+			ScaleX = 7,
+			ScaleY = 8,
+			ScaleZ = 9,
+			RotQuatX = 10,
+			RotQuatY = 11,
+			RotQuatZ = 12,
+			RotQuatW = 13
+		}
+
+		public enum animAnimStateInterpolationType
+		{
+			Linear = 0,
+			EaseIn = 1,
+			EaseOut = 2,
+			EaseInOut = 3
+		}
+
+		public enum animAnimationType
+		{
+			Normal = 0,
+			AdditiveFromRefPose = 1,
+			AdditiveFromFirstFrame = 2,
+			Additive = 3,
+			AdditiveWithoutFirstFrame = 4
+		}
+
+		public enum animAxis
+		{
+			X = 0,
+			Y = 1,
+			Z = 2,
+			NegativeX = 3,
+			NegativeY = 4,
+			NegativeZ = 5
+		}
+
+		public enum animClampType
+		{
+			None = 0,
+			Clamp = 1,
+			WrappedClamp = 2
+		}
+
+		public enum animCompareFunc
+		{
+			Equal = 0,
+			NotEqual = 1,
+			Less = 2,
+			LessEqual = 3,
+			Greater = 4,
+			GreaterEqual = 5
+		}
+
+		public enum animConstraintWeightMode
+		{
+			Static = 0,
+			FloatTrack = 1
+		}
+
+		public enum animCoverAction
+		{
+			NoAction = 0,
+			LeanLeft = 1,
+			LeanRight = 2,
+			StepOutLeft = 3,
+			StepOutRight = 4,
+			LeanOver = 5,
+			StepUp = 6,
+			EnterCover = 7,
+			SlideTo = 8,
+			Vault = 9,
+			LeaveCover = 10,
+			BlindfireLeft = 11,
+			BlindfireRight = 12,
+			BlindfireOver = 13,
+			OverheadStepOutLeft = 14,
+			OverheadStepOutRight = 15,
+			OverheadStepUp = 16
+		}
+
+		public enum animCoverBehavior
+		{
+			Idle = 0,
+			PreAction = 1,
+			DoAction = 2,
+			PostAction = 3
+		}
+
+		public enum animCoverStance
+		{
+			None = 0,
+			LowLeft = 1,
+			HighLeft = 2,
+			LowRight = 3,
+			HighRight = 4
+		}
+
+		public enum animCoverState
+		{
+			LowCover = 1,
+			HighCover = 2
+		}
+
+		public enum animDyngConstraintLinkType
+		{
+			KeepFixedDistance = 0,
+			KeepVariableDistance = 1,
+			Greater = 2,
+			Closer = 3
+		}
+
+		public enum animDyngParticleProjectionType
+		{
+			Disabled = 0,
+			ShortestPath = 1,
+			Directed = 2
+		}
+
+		public enum animEAnimGraphAdditiveType
+		{
+			AGAT_Local = 0,
+			AGAT_Ref = 1
+		}
+
+		public enum animEAnimGraphCompareFunc
+		{
+			AGCF_Equal = 0,
+			AGCF_NotEqual = 1,
+			AGCF_Less = 2,
+			AGCF_LessEqual = 3,
+			AGCF_Greater = 4,
+			AGCF_GreaterEqual = 5
+		}
+
+		public enum animEAnimGraphLogicOp
+		{
+			AGLO_Or = 0,
+			AGLO_And = 1
+		}
+
+		public enum animEAnimGraphMathInterpolation
+		{
+			AGMI_LINEAR = 0,
+			AGMI_SIN = 1,
+			AGMI_BEZIER = 2
+		}
+
+		public enum animEAnimGraphMathOp
+		{
+			AGMO_Add = 0,
+			AGMO_Subtract = 1,
+			AGMO_Multiply = 2,
+			AGMO_Divide = 3,
+			AGMO_SafeDivide = 4,
+			AGMO_ATan = 5,
+			AGMO_AngleDiff = 6,
+			AGMO_Length = 7,
+			AGMO_Abs = 8
+		}
+
+		public enum animEBlendFromPoseMode
+		{
+			BFPM_AlwaysOnActivation = 0,
+			BFPM_RequestedByTag = 1
+		}
+
+		public enum animEBlendTracksMode
+		{
+			AGBT_BasePose = 0,
+			AGBT_Interpolate = 1,
+			AGBT_Add = 2
+		}
+
+		public enum animEBlendTypeLBC
+		{
+			Linear = 0,
+			Smoothstep = 1,
+			CustomCurve = 2
+		}
+
+		public enum animEDirectionToEuler
+		{
+			Pitch = 0,
+			Yaw = 1,
+			Roll = 2
+		}
+
+		public enum animEFootPhase
+		{
+			RightUp = 0,
+			RightForward = 1,
+			LeftUp = 2,
+			LeftForward = 3,
+			NotConsidered = 4
+		}
+
+		public enum animEInterpolationType
+		{
+			Lerp = 0,
+			Slerp = 1
+		}
+
+		public enum animEMotionExtractionCompressionType
+		{
+			EMECT_UNCOMPRESSED = 0,
+			EMECT_SPLINE_MID = 2,
+			EMECT_UNCOMPRESSED_ALL_ANGLES = 3,
+			EMECT_SPLINE_LOW = 4,
+			EMECT_SPLINE_HIGH = 5,
+			EMECT_LINEAR = 6,
+			EMECT_UNCOMPRESSED_2D = 7,
+			EMECT_UNCOMPRESSED_3D_FALLBACKING = 8,
+			EMECT_UNCOMPRESSED_ALL_ANGLES_FALLBACKING = 9
+		}
+
+		public enum animEResetTypeNode
+		{
+			RT_Reference = 0,
+			RT_Indentity = 1
+		}
+
+		public enum animESpace
+		{
+			Local = 0,
+			Model = 1,
+			World = 2
+		}
+
+		public enum animESpaceMW
+		{
+			Model = 0,
+			World = 1
+		}
+
+		public enum animETransformAxis
+		{
+			X_Axis = 1,
+			Y_Axis = 2,
+			Z_Axis = 4
+		}
+
+		public enum animEVectorWsToMsType
+		{
+			Position = 0,
+			Direction = 1
+		}
+
+		public enum animEventFilterType
+		{
+			Default = 0,
+			AlwaysCollect = 1,
+			Solo = 2,
+			Mute = 3
+		}
+
+		public enum animEventSide
+		{
+			Left = 0,
+			Right = 1
+		}
+
+		public enum animFacialEmotionTransitionType
+		{
+			Natural = 0,
+			Fast = 1,
+			Blend = 2,
+			Instant = 3,
+			Custom = 4
+		}
+
+		public enum animFloatTrackOperationType
+		{
+			Override = 0,
+			Multiply = 1,
+			Add = 2,
+			Subtract = 3,
+			SubtractSwapped = 4,
+			WeightComplement = 5
+		}
+
+		public enum animHitReactionType
+		{
+			None = 0,
+			Twitch = 1,
+			Impact = 2,
+			Stagger = 3,
+			Pain = 4,
+			Knockdown = 5,
+			Ragdoll = 6,
+			Death = 7,
+			Block = 8,
+			GuardBreak = 9,
+			Parry = 10,
+			Bump = 11
+		}
+
+		public enum animLeg
+		{
+			Left = 0,
+			Right = 1
+		}
+
+		public enum animLocoStateType
+		{
+			LS_Pre = 0,
+			LS_Loop = 1
+		}
+
+		public enum animLocomotionDecision
+		{
+			LD_None = 0,
+			LD_Stop = 1,
+			LD_MoveTo = 2,
+			LD_Move = 3
+		}
+
+		public enum animLocomotion_AnimType
+		{
+			None = 0,
+			idle_stand = 1,
+			idle_to_idle_0 = 2,
+			idle_to_idle_090 = 3,
+			idle_to_idle_270 = 4,
+			idle_to_idle_180_l = 5,
+			idle_to_idle_180_r = 6,
+			walk_0 = 7,
+			walk_left = 8,
+			walk_right = 9,
+			jog_0 = 10,
+			jog_left = 11,
+			jog_right = 12,
+			sprint_0 = 13,
+			sprint_left = 14,
+			sprint_right = 15,
+			idle_to_walk_0 = 16,
+			idle_to_jog_0 = 17,
+			idle_to_sprint_0 = 18,
+			walk_to_idle_0 = 19,
+			jog_to_idle_0 = 20,
+			sprint_to_idle_0 = 21,
+			walk_to_idle_0_l_hard = 22,
+			walk_to_idle_0_r_hard = 23,
+			jog_to_idle_0_l_hard = 24,
+			jog_to_idle_0_r_hard = 25,
+			sprint_to_idle_0_l_hard = 26,
+			sprint_to_idle_0_r_hard = 27,
+			walk_to_jog_0 = 28,
+			walk_to_sprint_0 = 29,
+			jog_to_walk_0 = 30,
+			jog_to_sprint_0 = 31,
+			sprint_to_walk_0 = 32,
+			sprint_to_jog_0 = 33,
+			idle_turn_to_walk_090 = 34,
+			idle_turn_to_walk_180_l = 35,
+			idle_turn_to_walk_180_r = 36,
+			idle_turn_to_walk_270 = 37,
+			idle_turn_to_jog_090 = 38,
+			idle_turn_to_jog_180_l = 39,
+			idle_turn_to_jog_180_r = 40,
+			idle_turn_to_jog_270 = 41,
+			idle_turn_to_sprint_090 = 42,
+			idle_turn_to_sprint_180_l = 43,
+			idle_turn_to_sprint_180_r = 44,
+			idle_turn_to_sprint_270 = 45,
+			walk_180 = 46,
+			jog_180 = 47,
+			walk_0_to_walk_180_l = 48,
+			walk_0_to_walk_180_r = 49,
+			walk_180_to_walk_0_l = 50,
+			walk_180_to_walk_0_r = 51,
+			idle_to_walk_180 = 52,
+			idle_to_jog_180 = 53,
+			walk_to_idle_180 = 54,
+			jog_to_idle_180 = 55,
+			jog_0_to_jog_180_l = 56,
+			jog_0_to_jog_180_r = 57,
+			jog_180_to_jog_0_l = 58,
+			jog_180_to_jog_0_r = 59,
+			jog_to_sprint_180 = 60,
+			walk_to_jog_180 = 61,
+			jog_to_walk_180 = 62,
+			idle_to_walk_090 = 63,
+			idle_to_walk_270 = 64,
+			walk_090 = 65,
+			walk_270 = 66,
+			walk_to_idle_090 = 67,
+			walk_to_idle_270 = 68,
+			walk_0_to_walk_090 = 69,
+			walk_0_to_walk_270 = 70,
+			walk_180_to_walk_090 = 71,
+			walk_180_to_walk_270 = 72,
+			walk_090_to_walk_0 = 73,
+			walk_270_to_walk_0 = 74,
+			walk_090_to_walk_180 = 75,
+			walk_270_to_walk_180 = 76,
+			walk_090_to_walk_270_l = 77,
+			walk_090_to_walk_270_r = 78,
+			walk_270_to_walk_090_l = 79,
+			walk_270_to_walk_090_r = 80,
+			walk_0_down_stairs = 81,
+			walk_0_up_stairs = 82,
+			walk_0_down_slope = 83,
+			walk_0_up_slope = 84,
+			jog_0_down_stairs = 85,
+			jog_0_up_stairs = 86,
+			jog_0_down_slope = 87,
+			jog_0_up_slope = 88,
+			sprint_0_down_stairs = 89,
+			sprint_0_up_stairs = 90,
+			sprint_0_down_slope = 91,
+			sprint_0_up_slope = 92,
+			walk_090_up_stairs = 93,
+			walk_090_down_stairs = 94,
+			walk_270_up_stairs = 95,
+			walk_270_down_stairs = 96,
+			walk_180_up_stairs = 97,
+			walk_180_down_stairs = 98,
+			idle_step_single_0 = 99,
+			idle_step_single_090 = 100,
+			idle_step_single_180 = 101,
+			idle_step_single_270 = 102
+		}
+
+		public enum animLocomotion_Style
+		{
+			LS_Idle = 0,
+			LS_Rotation = 1,
+			LS_Walk = 2,
+			LS_Jog = 3,
+			LS_Sprint = 4,
+			LS_Any = 5
+		}
+
+		public enum animLookAtChestMode
+		{
+			Default = 0,
+			NoHips = 1,
+			Horizontal = 2,
+			HorizontalNoHips = 3,
+			ENUM_SIZE = 4
+		}
+
+		public enum animLookAtEyesMode
+		{
+			Default = 0,
+			Horizontal = 1,
+			ENUM_SIZE = 2
+		}
+
+		public enum animLookAtHeadMode
+		{
+			Default = 0,
+			Horizontal = 1,
+			ENUM_SIZE = 2
+		}
+
+		public enum animLookAtLeftHandedMode
+		{
+			Default = 0,
+			Horizontal = 1,
+			ENUM_SIZE = 2
+		}
+
+		public enum animLookAtLimitDegreesType
+		{
+			Narrow = 0,
+			Normal = 1,
+			Wide = 2,
+			None = 3
+		}
+
+		public enum animLookAtLimitDistanceType
+		{
+			Short = 0,
+			Normal = 1,
+			Long = 2,
+			None = 3
+		}
+
+		public enum animLookAtRightHandedMode
+		{
+			Default = 0,
+			Horizontal = 1,
+			ENUM_SIZE = 2
+		}
+
+		public enum animLookAtStatus
+		{
+			Active = 2,
+			LimitReached = 4,
+			TransitionInProgress = 8
+		}
+
+		public enum animLookAtStyle
+		{
+			VerySlow = 0,
+			Slow = 1,
+			Normal = 2,
+			Fast = 3,
+			VeryFast = 4
+		}
+
+		public enum animLookAtTwoHandedMode
+		{
+			Default = 0,
+			Horizontal = 1,
+			ENUM_SIZE = 2
+		}
+
+		public enum animMotionTableAction
+		{
+			MTA_None = 0,
+			MTA_Start = 1,
+			MTA_Stop = 2,
+			MTA_Move = 3,
+			MTA_TurnInPlace = 4,
+			MTA_TransitionToBackward = 5,
+			MTA_BackwardMove = 6,
+			MTA_TransitionFromBackward = 7,
+			MTA_StrafeLeft = 8,
+			MTA_StrafeRight = 9,
+			MTA_ForwardToStrafeLeft = 10,
+			MTA_ForwardToStrafeRight = 11,
+			MTA_StrafeLeftToForward = 12,
+			MTA_StrafeRightToForward = 13,
+			MTA_BackwardToStrafeLeft = 14,
+			MTA_BackwardToStrafeRight = 15,
+			MTA_StrafeLeftToBackward = 16,
+			MTA_StrafeRightToBackward = 17,
+			MTA_BackwardStart = 18,
+			MTA_BackwardStop = 19,
+			MTA_StrafeLeftStart = 20,
+			MTA_StrafeLeftStop = 21,
+			MTA_StrafeRightStart = 22,
+			MTA_StrafeRightStop = 23,
+			MTA_ForwardToWalk = 24,
+			MTA_ForwardToJog = 25,
+			MTA_ForwardToSprint = 26,
+			MTA_HardStopLeftLeg = 27,
+			MTA_HardStopRightLeg = 28,
+			MTA_RepositionForward = 29,
+			MTA_RepositionLeft = 30,
+			MTA_RepositionRight = 31,
+			MTA_RepositionBackward = 32,
+			MTA_Custom = 33,
+			MTA_CrowdMove = 34,
+			MTA_CrowdMoveSlopes = 35,
+			MTA_CrowdMoveStairs = 36,
+			MTA_StrafeLeftToStrafeRight = 37,
+			MTA_StrafeRightToStrafeLeft = 38,
+			MTA_CrowdRelaxedStop = 39,
+			MTA_CrowdHardStop = 40,
+			MTA_CrowdSprintStop = 41,
+			MTA_CrowdFleeStopFront = 42,
+			MTA_CrowdFleeStopBack = 43,
+			MTA_CrowdRelaxedStart = 44,
+			MTA_CrowdFleeStartIdle = 45,
+			MTA_CrowdFleeStartMotion = 46,
+			MTA_CrowdDirectionalStartFast = 47
+		}
+
+		public enum animMotionTableType
+		{
+			MTT_None = 0,
+			MTT_Walk = 1,
+			MTT_Jog = 2,
+			MTT_Sprint = 3,
+			MTT_Custom = 4
+		}
+
+		public enum animMotionTag
+		{
+			MT_Invalid = 0,
+			Walk = 1,
+			Jog = 2,
+			Sprint = 3
+		}
+
+		[Flags]
+		public enum animMuteAnimEvents
+		{
+			STANDARD = 1 << 0,
+			FACE_ANIMS = 1 << 1
+		}
+
+		public enum animNPCVehicleDeathType
+		{
+			Default = 0,
+			Relaxed = 1,
+			Combat = 2,
+			Ragdoll = 3
+		}
+
+		public enum animNodeProfileTimerMode
+		{
+			Begin = 0,
+			End = 1
+		}
+
+		public enum animParentStaticSwitchBranch
+		{
+			None = 0,
+			TrueBranch = 1,
+			FalseBranch = 2
+		}
+
+		public enum animPendulumConstraintType
+		{
+			Cone = 0,
+			HingePlane = 1,
+			HalfCone = 2
+		}
+
+		public enum animPendulumProjectionType
+		{
+			Disabled = 0,
+			ShortestPathRotational = 1,
+			DirectedRotational = 2
+		}
+
+		public enum animPositionProjectionType
+		{
+			Disabled = 0,
+			ShortestPath = 1,
+			Directional = 2
+		}
+
+		public enum animQuaternionInterpolationType
+		{
+			Linear = 0,
+			Spherical = 1
+		}
+
+		public enum animSetBoneTransformEntry_SetMethod
+		{
+			NoSnapping = 0,
+			WholeTransform = 1,
+			TranslationOnly = 2,
+			RotationOnly = 3
+		}
+
+		public enum animSpringProjectionType
+		{
+			Disabled = 0,
+			ShortestPath = 1
+		}
+
+		public enum animStackTransformsExtender_SnapToBoneMethod
+		{
+			NoSnapping = 0,
+			WholeTransform = 1,
+			TranslationOnly = 2,
+			RotationOnly = 3
+		}
+
+		public enum animStanceState
+		{
+			Stand = 0,
+			Crouch = 1,
+			Kneel = 2,
+			Cover = 3,
+			Swim = 4,
+			Crawl = 5
+		}
+
+		public enum animStateTag
+		{
+			ST_Invalid = 0,
+			Idle = 1,
+			Cover = 2
+		}
+
+		public enum animTransformChannel
+		{
+			PosX = 0,
+			PosY = 1,
+			PosZ = 2,
+			RotX = 3,
+			RotY = 4,
+			RotZ = 5,
+			ScaleX = 6,
+			ScaleY = 7,
+			ScaleZ = 8
+		}
+
+		public enum animVectorCoordinateType
+		{
+			X = 0,
+			Y = 1,
+			Z = 2,
+			W = 3
+		}
+
+		public enum animWeaponOwnerType
+		{
+			Player = 0,
+			NPC = 1,
+			None = 2
+		}
+
+		public enum animcompressionBufferTypePreset
+		{
+			Spline = 0,
+			SIMD = 1,
+			TestRaw = 2
+		}
+
+		public enum animcompressionFrameratePreset
+		{
+			USE_30_HZ = 0,
+			USE_15_HZ = 1,
+			USE_10_HZ = 2
+		}
+
+		public enum animcompressionQualityPreset
+		{
+			HIGH = 0,
+			MID = 1,
+			LOW = 2,
+			CINEMATIC_HIGH = 3
+		}
+
+		public enum audioAdvertIndoorFilter
+		{
+			Always = 0,
+			OnlyIndoor = 1,
+			OnlyOutdoor = 2
+		}
+
+		public enum audioAmbientGroupingVariant
+		{
+			AllEntities = 0,
+			IndoorEntities = 1,
+			OutdoorEntities = 2,
+			AllEntitiesAllDirections = 3,
+			IndoorAllDirections = 4,
+			OutdoorAllDirections = 5
+		}
+
+		public enum audioAudioEventFlags
+		{
+			NoEventFlags = 0,
+			SloMoOnly = 1,
+			Music = 2,
+			Unique = 4,
+			Metadata = 8
+		}
+
+		public enum audioAudioVehicleCurve
+		{
+			ThrottleInput = 0,
+			RPM = 1,
+			Gear = 2
+		}
+
+		public enum audioBreathingTransitionComparator
+		{
+			Less = 0,
+			Equal = 1,
+			Greater = 2
+		}
+
+		public enum audioBreathingTransitionType
+		{
+			PlayerSpeed = 0,
+			Event = 1,
+			AllEventTags = 2,
+			AnyEventTag = 3
+		}
+
+		public enum audioClassificationMethod
+		{
+			HasAnyTag = 0,
+			HasAllTags = 1,
+			NameEquals = 2,
+			EventNameEquals = 3,
+			HasAllEventTags = 4
+		}
+
+		public enum audioConversationSavingStrategy
+		{
+			Default = 0,
+			Save = 1,
+			DontSave = 2
+		}
+
+		public enum audioDynamicReverbType
+		{
+			Dynamic = 0,
+			StaticSmall = 1,
+			EnvironmentSmallStaticMedium = 2,
+			DynamicSource = 3
+		}
+
+		public enum audioESoundCurveType
+		{
+			Log3 = 0,
+			Sine = 1,
+			InversedSCurve = 3,
+			Linear = 4,
+			SCurve = 5,
+			Exp1 = 6,
+			ReciprocalOfSineCurve = 7,
+			Exp3 = 8
+		}
+
+		public enum audioEchoPositionType
+		{
+			DynamicEnvironment = 0,
+			Simple = 1
+		}
+
+		public enum audioEnemyState
+		{
+			InCombat = 0,
+			Alerted = 1,
+			Afraid = 2,
+			Alive = 3,
+			Dead = 4
+		}
+
+		public enum audioEntityEmitterContextType
+		{
+			[RED("Entity Emitter")] Entity_Emitter = 0,
+			[RED("Radio Emitter")] Radio_Emitter = 2
+		}
+
+		public enum audioEventActionType
+		{
+			Play = 0,
+			PlayAnimation = 1,
+			SetParameter = 2,
+			StopSound = 3,
+			SetSwitch = 4,
+			StopTagged = 5,
+			PlayExternal = 6,
+			Tag = 7,
+			Untag = 8,
+			SetAppearanceName = 9,
+			SetEntityName = 10,
+			AddContainerStreamingPrefetch = 11,
+			RemoveContainerStreamingPrefetch = 12
+		}
+
+		public enum audioFoleyActionType
+		{
+			FastHeavy = 0,
+			FastMedium = 1,
+			FastLight = 2,
+			NormalHeavy = 3,
+			NormalMedium = 4,
+			NormalLight = 5,
+			SlowHeavy = 6,
+			SlowMedium = 7,
+			SlowLight = 8,
+			Walk = 9,
+			Run = 10
+		}
+
+		public enum audioFoleyItemPriority
+		{
+			P0 = 0,
+			P1 = 1,
+			P2 = 2,
+			P3 = 3,
+			P4 = 4,
+			P5 = 5,
+			P6 = 6
+		}
+
+		public enum audioFoleyItemType
+		{
+			Jacket = 0,
+			Top = 1,
+			Bottom = 2,
+			Jewelry = 3
+		}
+
+		public enum audioGameplayTier
+		{
+			Undefined = 0,
+			Tier1_FullGameplay = 1,
+			Tier2_StagedGameplay = 2,
+			Tier3_LimitedGameplay = 3,
+			Tier4_FPPCinematic = 4,
+			Tier5_Cinematic = 5
+		}
+
+		public enum audioMaterialHardnessOverride
+		{
+			None = 0,
+			SetAsSoft = 1,
+			SetAsSolid = 2,
+			SetAsHard = 3
+		}
+
+		public enum audioMeleeHitPerMaterialType
+		{
+			Light = 0,
+			Light_Hard = 1,
+			Light_Soft = 2,
+			Light_Solid = 3,
+			Light_Flesh = 4,
+			Light_Robot = 5,
+			Normal = 6,
+			Normal_Hard = 7,
+			Normal_Soft = 8,
+			Normal_Solid = 9,
+			Normal_Flesh = 10,
+			Normal_Robot = 11,
+			Heavy = 12,
+			Heavy_Hard = 13,
+			Heavy_Soft = 14,
+			Heavy_Solid = 15,
+			Heavy_Flesh = 16,
+			Heavy_Robot = 17,
+			Slash = 18,
+			Slash_Hard = 19,
+			Slash_Soft = 20,
+			Slash_Solid = 21,
+			Slash_Flesh = 22,
+			Slash_Robot = 23,
+			Cut = 24,
+			Cut_Hard = 25,
+			Cut_Soft = 26,
+			Cut_Solid = 27,
+			Cut_Flesh = 28,
+			Cut_Robot = 29,
+			Stab = 30,
+			Stab_Hard = 31,
+			Stab_Soft = 32,
+			Stab_Solid = 33,
+			Stab_Flesh = 34,
+			Stab_Robot = 35,
+			Finisher = 36,
+			Finisher_Hard = 37,
+			Finisher_Soft = 38,
+			Finisher_Solid = 39,
+			Finisher_Flesh = 40,
+			Finisher_Robot = 41,
+			Weak = 42,
+			Weak_Hard = 43,
+			Weak_Soft = 44,
+			Weak_Solid = 45,
+			Weak_Flesh = 46,
+			Weak_Robot = 47
+		}
+
+		public enum audioMeleeHitType
+		{
+			Light = 0,
+			Normal = 1,
+			Heavy = 2,
+			Slash = 3,
+			Cut = 4,
+			Stab = 5,
+			Finisher = 6,
+			Weak = 7
+		}
+
+		public enum audioMeleeMaterialType
+		{
+			Hard = 0,
+			Soft = 1,
+			Solid = 2,
+			Flesh = 3,
+			Robot = 4
+		}
+
+		public enum audioMixParamsAction
+		{
+			Mull = 0,
+			MullPercent = 1,
+			MullComplemtement = 2,
+			MullComplemtementPercent = 3,
+			Add = 4
+		}
+
+		public enum audioMixingActionType
+		{
+			VoContext = 0,
+			EmitterTag = 1,
+			SoundTag = 2,
+			ActorName = 3,
+			DisableCombatVo = 4,
+			GlobalParameter = 5
+		}
+
+		public enum audioMusicSyncType
+		{
+			Bar = 0,
+			Beat = 1,
+			Grid = 2,
+			User = 3,
+			Transition = 4,
+			EntryCue = 5,
+			ExitCue = 6
+		}
+
+		public enum audioNumberComparer
+		{
+			Equal = 0,
+			NotEqual = 1,
+			Greater = 2,
+			GreaterOrEqual = 3,
+			Lower = 4,
+			LowerOrEqual = 5
+		}
+
+		public enum audioNumberOperation
+		{
+			SetEqual = 0,
+			Add = 1,
+			Subtract = 2,
+			MultiplyBy = 3,
+			DivideBy = 4
+		}
+
+		public enum audioObstructionTestPattern
+		{
+			Direct = 0,
+			Cone = 1
+		}
+
+		public enum audioObstructionTestType
+		{
+			SingleShot = 0,
+			Continuous = 1
+		}
+
+		public enum audioRadioSoundType
+		{
+			Song = 0,
+			AnnouncementScene = 1
+		}
+
+		public enum audioRadioSpeakerType
+		{
+			Stanley = 0,
+			MaximumMike = 1,
+			PoliceDispatch = 2
+		}
+
+		public enum audioReflectionVariant
+		{
+			WorldSpaceFixedDrections = 0,
+			LocalSpaceFixedDirections = 1,
+			FindingMaximumFaceAlignemnt = 2,
+			LocalSpaceSideDirections = 3,
+			FindingMaximumFaceAligment2Sides = 4
+		}
+
+		public enum audioVoBarkType
+		{
+			None = 0,
+			Curse = 1,
+			Morale = 2,
+			Combat_Aggro = 3,
+			Combat_Despair = 4,
+			Stealth_Curious = 5
+		}
+
+		public enum audioVoCpoCharacter
+		{
+			None = 0,
+			Solo = 1,
+			Assassin = 2,
+			Techie = 3,
+			Netrunner = 4
+		}
+
+		public enum audioVoGruntInterruptMode
+		{
+			DontInterrupt = 0,
+			PlayOnlyOnInterrupt = 1,
+			CanInterrupt = 2
+		}
+
+		public enum audioVoGruntType
+		{
+			PainLong = 0,
+			AgroShort = 1,
+			AgroLong = 2,
+			LongFall = 3,
+			Death = 4,
+			SilentDeath = 5,
+			Grapple = 6,
+			GrappleMovement = 7,
+			EnvironmentalKnockdown = 8,
+			Bump = 9,
+			Curious = 10,
+			Fear = 11,
+			Jump = 12,
+			EffortLong = 13,
+			DeathShort = 14,
+			Greet = 15,
+			LaughHard = 16,
+			LaughSoft = 17,
+			Phone = 18,
+			BraindanceExcited = 19,
+			BraindanceFearful = 20,
+			BraindanceNeutral = 21,
+			BraindanceSexual = 22,
+			PainShort = 23,
+			Effort = 25,
+			None = -1
+		}
+
+		public enum audioWeaponBulletType
+		{
+			standard = 0,
+			sniper = 1,
+			shot = 2,
+			rail = 3,
+			automatic = 4,
+			smart = 5,
+			smart_sniper = 6,
+			hmg = 7
+		}
+
+		public enum audioWeaponShellCasingDirection
+		{
+			rightFront = 0,
+			rightBack = 1,
+			leftFront = 2,
+			leftBack = 3
+		}
+
+		public enum audioWeaponShellCasingMode
+		{
+			none = 0,
+			onShoot = 1,
+			onReload = 2
+		}
+
+		public enum audioWeaponShellCasingType
+		{
+			standard = 0,
+			large = 1,
+			cartridge = 2
+		}
+
+		public enum audioWeaponTailEnvironment
+		{
+			InteriorDefault = 0,
+			InteriorWide = 1,
+			ExteriorWide = 2,
+			ExteriorUrbanNarrow = 3,
+			ExteriorUrbanStreet = 4,
+			ExteriorUrbanStreetWide = 5,
+			ExteriorUrbanOpen = 6,
+			ExteriorUrbanEnclosed = 7,
+			ExteriorBadlandsOpen = 8,
+			ExteriorBadlandsCanyon = 9
+		}
+
+		public enum audiobreathingEventTag
+		{
+			Walk = 0,
+			Jog = 1,
+			Run = 2,
+			Sneak = 3,
+			Cloth = 4,
+			FootStepRegular = 5,
+			FootStepSprint = 6,
+			LandingRegular = 7,
+			LandingHard = 8,
+			LandingVeryHard = 9,
+			Climb = 10,
+			Jump = 11,
+			Player = 12,
+			Stop = 13,
+			Drop_Body = 14,
+			Pick_Up_Body = 15,
+			Standing_Event = 16
+		}
+
+		public enum audiobreathingLoopBehavior
+		{
+			TimedBreathing = 0,
+			BreathEvery2ndStep = 1,
+			BreathEveryStep = 2,
+			HoldingBreath = 3
+		}
+
+		public enum audiottsvoicesFemale
+		{
+			Olivia = 7,
+			Emily = 8,
+			Jessica = 9,
+			Sophie = 10,
+			Elizabeth = 11,
+			Carolina = 12,
+			Sarah = 13
+		}
+
+		public enum audiottsvoicesMale
+		{
+			Andrew = 0,
+			Oliver = 1,
+			Jack = 2,
+			Harry = 3,
+			Simon = 4,
+			Charlie = 5,
+			Thomas = 6
+		}
+
+		public enum audiottsvoicesPolishFemale
+		{
+			Iwona = 16,
+			Paulina = 17
+		}
+
+		public enum audiottsvoicesPolishMale
+		{
+			Mateusz = 14,
+			Pawel = 15
+		}
+
+		public enum braindanceVisionMode
+		{
+			Default = 0,
+			Audio = 1,
+			Thermal = 2
+		}
+
+		public enum communityECommunitySpawnTime
+		{
+			Morning = 0,
+			Day = 1,
+			Evening = 2,
+			Night = 3,
+			Midnight = 4,
+			[RED("1:00")] _1_00 = 5,
+			[RED("2:00")] _2_00 = 6,
+			[RED("3:00")] _3_00 = 7,
+			[RED("4:00")] _4_00 = 8,
+			[RED("5:00")] _5_00 = 9,
+			[RED("6:00")] _6_00 = 10,
+			[RED("7:00")] _7_00 = 11,
+			[RED("8:00")] _8_00 = 12,
+			[RED("9:00")] _9_00 = 13,
+			[RED("10:00")] _10_00 = 14,
+			[RED("11:00")] _11_00 = 15,
+			[RED("12:00 - Noon")] _12_00___Noon = 16,
+			[RED("13:00")] _13_00 = 17,
+			[RED("14:00")] _14_00 = 18,
+			[RED("15:00")] _15_00 = 19,
+			[RED("16:00")] _16_00 = 20,
+			[RED("17:00")] _17_00 = 21,
+			[RED("18:00")] _18_00 = 22,
+			[RED("19:00")] _19_00 = 23,
+			[RED("20:00")] _20_00 = 24,
+			[RED("21:00")] _21_00 = 25,
+			[RED("22:00")] _22_00 = 26,
+			[RED("23:00")] _23_00 = 27
+		}
+
+		public enum communityESquadType
+		{
+			Global = 0,
+			Community = 1,
+			Security = 2,
+			Unknown = 3
+		}
+
+		public enum coverLeanDirection
+		{
+			Top = 0,
+			Left = 1,
+			Right = 2
+		}
+
+		public enum curveEInterpolationType
+		{
+			EIT_Constant = 0,
+			EIT_Linear = 1,
+			EIT_BezierQuadratic = 2,
+			EIT_BezierCubic = 3,
+			EIT_Hermite = 4
+		}
+
+		public enum curveESegmentsLinkType
+		{
+			ESLT_Normal = 0,
+			ESLT_Smooth = 1,
+			ESLT_SmoothSymmetric = 2
+		}
+
+		public enum damageSystemLogFlags
+		{
+			GENERAL = 1,
+			ASSERT = 2,
+			WEAKSPOTS = 4
+		}
+
+		public enum entAnimParamSlotFunction
+		{
+			RenderingPlane = 0,
+			Visibility = 1
+		}
+
+		public enum entAppearanceStatus
+		{
+			None = 0,
+			Proxy = 1,
+			Appearance = 2
+		}
+
+		public enum entAttachmentTarget
+		{
+			Transform = 0,
+			TargetPosition = 1
+		}
+
+		public enum entAudioDismembermentPart
+		{
+			Head = 0,
+			Leg = 1,
+			Arm = 2
+		}
+
+		public enum entColliderComponentSimulationType
+		{
+			Kinematic = 0,
+			Dynamic = 1
+		}
+
+		public enum entDebug_ShapeType
+		{
+			Sphere = 0,
+			Box = 1,
+			Capsule = 2,
+			Cylinder = 3
+		}
+
+		public enum entEBindingDirection
+		{
+			BindToSource = 0,
+			BindToDestination = 1
+		}
+
+		public enum entEntitySpawnPriority
+		{
+			Background = 0,
+			Normal = 1,
+			Immediate = 2,
+			Paramount = 3,
+			Critical = 4
+		}
+
+		public enum entEntityUserComponentResolutionMode
+		{
+			Select = 0,
+			Suppress = 1
+		}
+
+		public enum entMeshComponentLODMode
+		{
+			AlwaysVisible = 0,
+			Appearance = 1,
+			AppearanceProxy = 2
+		}
+
+		public enum entRenderToTextureMode
+		{
+			Shaded = 0,
+			GBufferOnly = 1
+		}
+
+		public enum entRepellingShape
+		{
+			Sphere = 0,
+			Capsule = 1
+		}
+
+		public enum entRepellingType
+		{
+			Debris = 0,
+			BigObjects = 1,
+			WindImpulse = 2
+		}
+
+		public enum entTemplateComponentResolveMode
+		{
+			AutoSelect = 0,
+			Select = 1,
+			Suppress = 2
+		}
+
+		public enum entVertexAnimationMapperSourceType
+		{
+			FloatTrack = 0,
+			TranslationX = 1,
+			TranslationY = 2,
+			TranslationZ = 3,
+			RotationQuatX = 4,
+			RotationQuatY = 5,
+			RotationQuatZ = 6,
+			RotationQuatW = 7
+		}
+
+		public enum entVisibilityParamSource
+		{
+			PhantomEntitySystem = 7
+		}
+
+		public enum entVisualControllerComponentForcedLodDistance
+		{
+			Default = 0,
+			Background = 1,
+			Regular = 2,
+			Cinematic = 3,
+			Vehicle = 4,
+			CinematicVehicle = 5
+		}
+
+		[Flags]
+		public enum entdismembermentGoreTypeE
+		{
+			FLESH = 1 << 2,
+			CYBER = 1 << 3
+		}
+
+		[Flags]
+		public enum entdismembermentPlacementE
+		{
+			MAIN_MESH = 1 << 4,
+			DISM_MESH = 1 << 5,
+			RAGDOLL_CONTACT = 1 << 8,
+			RAGDOLL_CONTACT_SLIDE = 1 << 9,
+			RAGDOLL_SLEEP = 1 << 10
+		}
+
+		public enum entdismembermentResourceSetE
+		{
+			BARE = 0,
+			BARE1 = 1,
+			BARE2 = 2,
+			BARE3 = 3,
+			GARMENT = 4,
+			GARMENT1 = 5,
+			GARMENT2 = 6,
+			GARMENT3 = 7,
+			CYBER = 8,
+			CYBER1 = 9,
+			CYBER2 = 10,
+			CYBER3 = 11,
+			MIXED = 12,
+			MIXED1 = 13,
+			MIXED2 = 14,
+			MIXED3 = 15,
+			NONE = 16
+		}
+
+		[Flags]
+		public enum entdismembermentResourceSetMask
+		{
+			BARE = 1 << 0,
+			BARE1 = 1 << 1,
+			BARE2 = 1 << 2,
+			BARE3 = 1 << 3,
+			GARMENT = 1 << 4,
+			GARMENT1 = 1 << 5,
+			GARMENT2 = 1 << 6,
+			GARMENT3 = 1 << 7,
+			CYBER = 1 << 8,
+			CYBER1 = 1 << 9,
+			CYBER2 = 1 << 10,
+			CYBER3 = 1 << 11,
+			MIXED = 1 << 12,
+			MIXED1 = 1 << 13,
+			MIXED2 = 1 << 14,
+			MIXED3 = 1 << 15
+		}
+
+		public enum entdismembermentSimulationTypeE
+		{
+			NONE = 0,
+			DANGLE = 128
+		}
+
+		[Flags]
+		public enum entdismembermentWoundTypeE
+		{
+			CLEAN = 1 << 0,
+			COARSE = 1 << 1,
+			HOLE = 1 << 6
+		}
+
+		public enum entragdollActivationRequestType
+		{
+			Default = 0,
+			Animated = 1,
+			Forced = 2
+		}
+
+		public enum envUtilsNeighborMode
+		{
+			eCLOSEST = 0,
+			eONLY_GLOBAL = 1,
+			eONLY_SELF = 2,
+			eFILL_SURROUNDING = 3
+		}
+
+		public enum envUtilsReflectionProbeAmbientContributionMode
+		{
+			eNO_AMBIENT_CONTRIBUTION = 0,
+			eALLOW_AMBIENT_CONTRIBUTION = 1,
+			eOVERRIDE_GI_AMBIENT = 2
+		}
+
 		public enum gameAIDirectorTensionEventType
 		{
 			Time = 0,
@@ -5059,12 +6888,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			TakingDamage = 3,
 			Kill = 4
 		}
+
+		public enum gameAggregationType
+		{
+			AND = 0,
+			OR = 1
+		}
+
 		public enum gameAlwaysSpawnedState
 		{
 			[RED("default (false)")] default__false_ = 0,
-			[RED("true")] _true = 1,
-			[RED("false")] _false = 2
+			[RED("true")] true_ = 1,
+			[RED("false")] false_ = 2
 		}
+
 		public enum gameAppearanceSource
 		{
 			EntityResource = 0,
@@ -5075,24 +6912,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			VisualTag = 5,
 			Invalid = 7
 		}
-		public enum gameaudioeventsSurfaceDirection
-		{
-			Normal = 0,
-			WallLeft = 1,
-			WallRight = 2
-		}
+
 		public enum gameBinkVideoAction
 		{
 			Undefined = 0,
 			Start = 1,
 			Stop = 2
 		}
+
 		public enum gameBoolSignalAction
 		{
 			None = 0,
 			TurnOn = 1,
 			TurnOff = 2
 		}
+
 		public enum gameCameraCurve
 		{
 			CentricPitchOfSpeed = 0,
@@ -5108,17 +6942,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			PivotOffsetZOfTurnCoeff = 10,
 			COUNT = 11
 		}
-		public enum gamecheatsystemFlag
-		{
-			God_Immortal = 1,
-			God_Invulnerable = 2,
-			Resurrect = 4,
-			IgnoreTimeDilation = 8,
-			BypassMagazine = 16,
-			InfiniteAmmo = 32,
-			Kill = 64,
-			Invisible = 128
-		}
+
 		public enum gameCityAreaType
 		{
 			Undefined = 0,
@@ -5127,6 +6951,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			RestrictedZone = 3,
 			DangerousZone = 4
 		}
+
 		public enum gameCombinedStatOperation
 		{
 			Addition = 0,
@@ -5138,6 +6963,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 6,
 			Invalid = 7
 		}
+
 		public enum gameComparisonType
 		{
 			EQUAL = 0,
@@ -5147,28 +6973,33 @@ namespace WolvenKit.RED4.CR2W.Types
 			LESS_OR_EQUAL = 4,
 			GREATER_OR_EQUAL = 5
 		}
+
 		public enum gameContactType
 		{
 			Caller = 0,
 			Texter = 1
 		}
+
 		public enum gameCoverHeight
 		{
 			Invalid = 0,
 			Low = 1,
 			High = 2
 		}
+
 		public enum gameCrowdCreationDataMergeMode
 		{
 			Average = 0,
 			Override = 1
 		}
+
 		public enum gameCrowdEntryType
 		{
 			Pedestrian = 0,
 			Vehicle = 1,
 			AV = 2
 		}
+
 		public enum gameDamageCallbackType
 		{
 			HitTriggered = 0,
@@ -5177,6 +7008,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			COUNT = 3,
 			INVALID = 4
 		}
+
 		public enum gameDamageListenerPipelineType
 		{
 			None = 0,
@@ -5184,6 +7016,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			ProjectedDamage = 2,
 			All = -1
 		}
+
 		public enum gameDamagePipelineStage
 		{
 			PreProcess = 0,
@@ -5192,88 +7025,1373 @@ namespace WolvenKit.RED4.CR2W.Types
 			COUNT = 3,
 			INVALID = 4
 		}
-		public enum gamedataAchievement
+
+		public enum gameDebugViewETextAlignment
 		{
-			Bladerunner = 0,
-			BornToBeWild = 1,
-			Breathtaking = 2,
-			BushidoAndChill = 3,
-			Cyberjunkie = 4,
-			Denied = 5,
-			FollowingTheRiver = 6,
-			Fortuneteller = 7,
-			Gearhead = 8,
-			GetMeThereScottie = 9,
-			GunKata = 10,
-			Gunslinger = 11,
-			HandyMan = 12,
-			IAmMaxTac = 13,
-			LikeFatherLikeSon = 14,
-			LittleTokyo = 15,
-			MasterRunner = 16,
-			MaxPain = 17,
-			MustBeTheRats = 18,
-			NeverFadeAway = 19,
-			NoMansLand = 20,
-			NotTheMobile = 21,
-			QueenOfTheHighway = 22,
-			Roleplayer = 23,
-			Specialist = 24,
-			Temperance = 25,
-			ThatIsSoHardForTheKnees = 26,
-			TheDevil = 27,
-			TheFool = 28,
-			TheHermit = 29,
-			TheHightPriestess = 30,
-			TheLovers = 31,
-			TheStar = 32,
-			TheSun = 33,
-			TheWheelOfFortune = 34,
-			TheWorld = 35,
-			ThisIsPacifica = 36,
-			TradeUnion = 37,
-			TrueSoldier = 38,
-			TrueWarrior = 39,
-			TwoHeadsOneBullet = 40,
-			UnderPressure = 41,
-			VForVendetta = 42,
-			YipMan = 43,
-			YouKnowWhoIAm = 44,
-			Count = 45,
-			Invalid = 46
+			Center = 0,
+			Right = 1,
+			Left = -1
 		}
-		public enum gamedataAffiliation
+
+		public enum gameDelayContext
 		{
-			AfterlifeMercs = 0,
-			Aldecaldos = 1,
-			Animals = 2,
-			Arasaka = 3,
-			Biotechnica = 4,
-			CityCouncil = 5,
-			Civilian = 6,
-			KangTao = 7,
-			Maelstrom = 8,
-			Militech = 9,
-			NCPD = 10,
-			NetWatch = 11,
-			News54 = 12,
-			RecordingAgency = 13,
-			SSI = 14,
-			Scavengers = 15,
-			SixthStreet = 16,
-			SouthCalifornia = 17,
-			TheMox = 18,
-			TraumaTeam = 19,
-			TygerClaws = 20,
-			Unaffiliated = 21,
-			UnaffiliatedCorpo = 22,
-			Unknown = 23,
-			Valentinos = 24,
-			VoodooBoys = 25,
-			Wraiths = 26,
-			Count = 27,
-			Invalid = 28
+			Standard_TD = 1,
+			Standard_ND = 2,
+			Quest_TD = 4,
+			SpawnManager_ND = 8
 		}
+
+		public enum gameDifficulty
+		{
+			Easy = 0,
+			Hard = 1,
+			VeryHard = 2,
+			Story = 3
+		}
+
+		public enum gameDismBodyPart
+		{
+			HEAD = 1,
+			LEFT_ARM = 14,
+			RIGHT_ARM = 112,
+			LEFT_LEG = 896,
+			RIGHT_LEG = 7168,
+			BODY = 8192
+		}
+
+		public enum gameDismWoundType
+		{
+			CLEAN = 1,
+			COARSE = 2,
+			HOLE = 64
+		}
+
+		public enum gameEActionFlags
+		{
+			NONE = 0,
+			USE_ANIMATION = 1,
+			USE_MOVEMENT = 2
+		}
+
+		public enum gameEActionStatus
+		{
+			STATUS_INVALID = 0,
+			STATUS_BOUND = 1,
+			STATUS_READY = 2,
+			STATUS_PROGRESS = 3,
+			STATUS_COMPLETE = 4,
+			STATUS_FAILURE = 5
+		}
+
+		public enum gameEAreaShape
+		{
+			NONE = 0,
+			SPHERE = 1,
+			CUBE = 2,
+			COUNT = 3
+		}
+
+		public enum gameEAreaType
+		{
+			NONE = 0,
+			LOCATION = 1,
+			AFFILIATION = 2,
+			COUNT = 3
+		}
+
+		public enum gameECharacterStance
+		{
+			Stance_Stand = 0,
+			Stance_Crouch = 1,
+			Stance_Kneel = 2,
+			Stance_Cover = 3,
+			Stance_Standing_Cover = 4,
+			Stance_Crouching_Cover = 5
+		}
+
+		public enum gameEContinuousMode
+		{
+			None = 0,
+			Start = 1,
+			Stop = 2
+		}
+
+		public enum gameEEquipmentManagerState
+		{
+			InfiniteAmmo = 1
+		}
+
+		public enum gameEHotkey
+		{
+			DPAD_UP = 0,
+			DPAD_DOWN = 1,
+			DPAD_RIGHT = 2,
+			RB = 3,
+			INVALID = -1
+		}
+
+		public enum gameEInventoryFlags
+		{
+			MustSave = 1
+		}
+
+		[Flags]
+		public enum gameEItemDynamicTags
+		{
+			Quest = 1 << 0,
+			UnequipBlocked = 1 << 1
+		}
+
+		public enum gameELootGenerationType
+		{
+			DropChance = 0,
+			NumberBased = 1,
+			Weights = 2,
+			Count = 3
+		}
+
+		public enum gameEMaterialZone
+		{
+			Zero = 0,
+			One = 1,
+			Two = 2,
+			Three = 3
+		}
+
+		public enum gameEPrerequisiteType
+		{
+			None = 0,
+			NestedPrereq = 1,
+			StatValue = 2,
+			StatPoolValue = 3,
+			HealthAbsolute = 4,
+			HealthPercent = 5,
+			ItemInInventory = 6,
+			ItemEquipped = 7,
+			ItemCount = 8,
+			QuestAchieved = 9,
+			WasScanned = 10,
+			Attitude = 11,
+			Count = 12
+		}
+
+		public enum gameESlotState
+		{
+			Taken = 0,
+			Empty = 1,
+			Available = 2
+		}
+
+		public enum gameEStatFlags
+		{
+			Bool = 1,
+			EquipOnPlayer = 2,
+			EquipOnNPC = 4,
+			ExcludeRootCombination = 8
+		}
+
+		public enum gameEStatProviderDataSource
+		{
+			gameItemData = 0,
+			InventoryItemData = 1,
+			InnerItemData = 2,
+			Invalid = 3
+		}
+
+		public enum gameEffectAction_KillFXAction
+		{
+			Stop = 0,
+			BreakLoop = 1
+		}
+
+		public enum gameEffectExecutor_AnimFeatureApplyTo
+		{
+			Target = 0,
+			Instigator = 1
+		}
+
+		public enum gameEffectHitDataType
+		{
+			Entity = 0,
+			Node = 1,
+			Static = 2
+		}
+
+		public enum gameEffectObjectFilter_AxisRangeAxis
+		{
+			X = 0,
+			Y = 1,
+			Z = 2
+		}
+
+		public enum gameEffectObjectFilter_HitTypeAction
+		{
+			Accept = 0,
+			Reject = 1
+		}
+
+		public enum gameEffectTriggerPositioningType
+		{
+			PlayerRoot = 0,
+			CameraRoot = 1,
+			AtSpawn = 2,
+			XYCameraZPlayer = 3,
+			XYPlayerZCamera = 4,
+			XYCameraZTerrain = 5,
+			XYPlayerZTerrain = 6
+		}
+
+		public enum gameEffectTriggerRotationType
+		{
+			None = 0,
+			AtSpawn = 1,
+			Continuous = 2
+		}
+
+		public enum gameEnemyStealthAwarenessState
+		{
+			Relaxed = 0,
+			Aware = 1,
+			Alerted = 2,
+			Combat = 3
+		}
+
+		public enum gameEntityReferenceType
+		{
+			EntityRef = 0,
+			Tag = 1,
+			SlotID = 2,
+			SceneActorContextName = 3
+		}
+
+		public enum gameEntitySpawnerEventType
+		{
+			Spawn = 2,
+			Despawn = 3,
+			Death = 4
+		}
+
+		public enum gameEquipAnimationType
+		{
+			Default = 0,
+			Instant = 1,
+			FirstEquip = 2
+		}
+
+		public enum gameEquipmentSetType
+		{
+			Offensive = 0,
+			Defensive = 1,
+			Cyberware = 2
+		}
+
+		public enum gameFearStage
+		{
+			Relaxed = 0,
+			Stressed = 1,
+			Alarmed = 2,
+			Panic = 3
+		}
+
+		public enum gameGOGRewardsSystemErrors
+		{
+			None = 0,
+			RequestFailed = 1,
+			TemporaryFailure = 2,
+			NoInternetConnection = 3,
+			NotSignedInGalaxy = 4,
+			NotSignedInLauncher = 5
+		}
+
+		public enum gameGOGRewardsSystemStatus
+		{
+			Uninitialized = 0,
+			GeneratingCPID = 1,
+			CheckingRegistrationStatus = 2,
+			RegistrationPending = 3,
+			Registered = 4,
+			Error = 5
+		}
+
+		public enum gameGameVersion
+		{
+			CP77_Initial = 0,
+			CP77_Development = 1,
+			CP77_GoldMaster = 2,
+			CP77_ActualGoldMaster = 3,
+			CP77_AlmostPatchDay0 = 4,
+			CP77_PatchDay0 = 5,
+			CP77_PatchDay0_Hotfix1 = 6,
+			CP77_PatchDay0_Hotfix2 = 7,
+			CP77_PatchDay0_Hotfix2_V2 = 8,
+			CP77_PatchDay0_Hotfix3 = 9,
+			CP77_PatchDay0_ChristmasHotfix = 10,
+			CP77_PatchDay0_Hotfix4_Internal = 11,
+			CP77_Patch_1_Internal = 12,
+			CP77_Patch_1_1 = 1100,
+			CP77_Patch_1_1_Hotfix1 = 1110,
+			CP77_Patch_1_1_Hotfix2 = 1120,
+			CP77_Patch_1_2 = 1200,
+			CP77_Patch_1_2_Hotfix1 = 1210,
+			CP77_Patch_1_2_Hotfix2 = 1220,
+			CP77_Patch_1_2_Hotfix3 = 1230,
+			Current = 1230,
+			CP77_Patch_1_3 = 1300
+		}
+
+		public enum gameGameplayEventFlag
+		{
+			Ai = 1,
+			Trigger = 2,
+			Component = 4,
+			Script = 8
+		}
+
+		public enum gameGlobalTierSubtype
+		{
+			Quest = 0,
+			Supervisor = 1
+		}
+
+		public enum gameGodModeType
+		{
+			Invulnerable = 0,
+			Immortal = 1,
+			Mortal = 3
+		}
+
+		public enum gameGrenadeThrowStartType
+		{
+			Invalid = 0,
+			LeftSide = 1,
+			RightSide = 2,
+			Top = 3,
+			Count = 4
+		}
+
+		public enum gameInitalChoiceStage
+		{
+			None = 0,
+			LifePath = 1,
+			Gender = 2,
+			Customizations = 3,
+			Attributes = 4,
+			Finished = 5
+		}
+
+		public enum gameInventoryItemAttachmentType
+		{
+			Generic = 0,
+			Dedicated = 1
+		}
+
+		public enum gameInventoryItemShape
+		{
+			SingleSlot = 0,
+			DoubleSlot = 1
+		}
+
+		public enum gameItemComparisonState
+		{
+			Default = 0,
+			NoChange = 1,
+			Better = 2,
+			Worse = 3
+		}
+
+		public enum gameItemDisplayContext
+		{
+			None = 0,
+			Vendor = 1,
+			Tooltip = 2,
+			VendorPlayer = 3,
+			GearPanel = 4,
+			Backpack = 5,
+			DPAD_RADIAL = 6,
+			Attachment = 7,
+			Ripperdoc = 8,
+			Crafting = 9
+		}
+
+		public enum gameItemEquipContexts
+		{
+			LastWeaponEquipped = 0,
+			LastUsedMeleeWeapon = 1,
+			LastUsedRangedWeapon = 2,
+			Gadget = 3,
+			MeleeCyberware = 4,
+			LauncherCyberware = 5,
+			Fists = 6
+		}
+
+		public enum gameItemIconGender
+		{
+			Female = 0,
+			Male = 1
+		}
+
+		public enum gameItemUnequipContexts
+		{
+			AllWeapons = 0,
+			HeadClothing = 1,
+			FaceClothing = 2,
+			OuterChestClothing = 3,
+			InnerChestClothing = 4,
+			LegClothing = 5,
+			FootClothing = 6,
+			AllClothing = 7,
+			RightHandWeapon = 8,
+			LeftHandWeapon = 9,
+			AllQuestItems = 10,
+			AllItems = 11
+		}
+
+		public enum gameJournalBriefingContentType
+		{
+			MapLocation = 0,
+			VideoContent = 1,
+			Paperdoll = 2
+		}
+
+		public enum gameJournalCallbackOption
+		{
+			DoNotFire = 0,
+			Fire = 1
+		}
+
+		public enum gameJournalChangeType
+		{
+			Undefined = 0,
+			Direct = 1,
+			Indirect = 2,
+			IndirectDependent = 3
+		}
+
+		public enum gameJournalEntryState
+		{
+			Undefined = 0,
+			Inactive = 1,
+			Active = 2,
+			Succeeded = 3,
+			Failed = 4
+		}
+
+		public enum gameJournalEntryUserState
+		{
+			Undefined = 0,
+			Inactive = 1,
+			Active = 2,
+			Succeeded = 3,
+			Failed = 4,
+			[RED("Read")] Read_ = 5,
+			Open = 6
+		}
+
+		public enum gameJournalListenerType
+		{
+			State = 0,
+			Visited = 1,
+			Tracked = 2,
+			Untracked = 3,
+			Counter = 4
+		}
+
+		public enum gameJournalNotifyOption
+		{
+			Undefined = 0,
+			DoNotNotify = 1,
+			Notify = 2
+		}
+
+		public enum gameJournalQuestType
+		{
+			MainQuest = 0,
+			SideQuest = 1,
+			MinorQuest = 2,
+			StreetStory = 3,
+			Contract = 4,
+			VehicleQuest = 5
+		}
+
+		public enum gameKillType
+		{
+			Normal = 0,
+			Defeat = 1
+		}
+
+		public enum gameLoSMode
+		{
+			Invalid = 0,
+			Keep = 1,
+			Avoid = 2
+		}
+
+		public enum gameLootItemType
+		{
+			Default = 0,
+			Quest = 1,
+			Shard = 2
+		}
+
+		[Flags]
+		public enum gameLootSlotState
+		{
+			Looted = 1 << 0,
+			Unavailable = 1 << 1
+		}
+
+		public enum gameMessageSender
+		{
+			NPC = 0,
+			Player = 1
+		}
+
+		public enum gameMountDescriptorMountType
+		{
+			Unmounted = 0,
+			KeepState = 1,
+			Vehicle = 3,
+			MovingPlatform = 4
+		}
+
+		public enum gameMountingObjectType
+		{
+			Object = 0,
+			Vehicle = 1,
+			Puppet = 2,
+			Platform = 3,
+			Invalid = -1
+		}
+
+		public enum gameMountingRelationshipType
+		{
+			Parent = 0,
+			Child = 1,
+			Invalid = -1
+		}
+
+		public enum gameMountingSlotRole
+		{
+			Driver = 0,
+			Passenger = 1,
+			Invalid = -1
+		}
+
+		public enum gameMovingPlatformLoopType
+		{
+			NoLooping = 0,
+			Bounce = 1,
+			Repeat = 2
+		}
+
+		public enum gameMovingPlatformMovementInitializationType
+		{
+			Time = 0,
+			Speed = 1
+		}
+
+		public enum gameMuppetComparisonReportItemType
+		{
+			Different = 0,
+			WithinTolerance = 1,
+			Equal = 2
+		}
+
+		public enum gameMuppetDebugCommand
+		{
+			None = 0,
+			Kill = 1,
+			KillAll = 2
+		}
+
+		public enum gameMuppetInputActionType
+		{
+			Unknown = 0,
+			Impulse = 1,
+			Press = 2
+		}
+
+		public enum gameMuppetMoveStyle
+		{
+			Invalid = 0,
+			Walk = 1,
+			Sprint = 2,
+			Crouch = 3,
+			WalkAim = 4,
+			GravityOnly = 5
+		}
+
+		public enum gamePSMBodyCarrying
+		{
+			Default = 0,
+			PickUp = 1,
+			Carry = 2,
+			Dispose = 3,
+			Drop = 4,
+			Any = -1
+		}
+
+		public enum gamePSMBodyCarryingLocomotion
+		{
+			Default = 0,
+			Jump = 1,
+			Crouch = 2,
+			Sprint = 3,
+			Fall = 4,
+			Land = 5,
+			DropBody = 6
+		}
+
+		public enum gamePSMBodyCarryingStyle
+		{
+			Any = 0,
+			Default = 1,
+			Friendly = 2,
+			Strong = 3
+		}
+
+		public enum gamePSMCombat
+		{
+			Default = 0,
+			InCombat = 1,
+			OutOfCombat = 2,
+			Stealth = 3,
+			Any = -1
+		}
+
+		public enum gamePSMCombatGadget
+		{
+			Default = 0,
+			EquipRequest = 1,
+			Equipped = 2,
+			Charging = 3,
+			Throwing = 4,
+			WaitForUnequip = 5,
+			QuickThrow = 6
+		}
+
+		public enum gamePSMCover
+		{
+			Default = 0,
+			InCover = 1,
+			Peek = 2,
+			Lean = 3,
+			OutOfCover = 4,
+			Any = -1
+		}
+
+		public enum gamePSMCrosshairStates
+		{
+			Default = 0,
+			Safe = 1,
+			Scanning = 2,
+			GrenadeCharging = 3,
+			Aim = 4,
+			Reload = 5,
+			Sprint = 6,
+			HipFire = 7,
+			LeftHandCyberware = 8,
+			QuickHack = 9
+		}
+
+		public enum gamePSMDetailedBodyDisposal
+		{
+			Default = 0,
+			Dispose = 1,
+			Lethal = 2,
+			NonLethal = 3
+		}
+
+		public enum gamePSMDetailedLocomotionStates
+		{
+			NotInBaseLocomotion = 0,
+			Stand = 1,
+			AimWalk = 2,
+			Crouch = 3,
+			Sprint = 4,
+			Slide = 5,
+			SlideFall = 6,
+			Dodge = 7,
+			Climb = 8,
+			Vault = 9,
+			Ladder = 10,
+			LadderSprint = 11,
+			LadderSlide = 12,
+			LadderJump = 13,
+			Fall = 14,
+			AirThrusters = 15,
+			AirHover = 16,
+			SuperheroFall = 17,
+			Jump = 18,
+			DoubleJump = 19,
+			ChargeJump = 20,
+			HoverJump = 21,
+			DodgeAir = 22,
+			RegularLand = 23,
+			HardLand = 24,
+			VeryHardLand = 25,
+			DeathLand = 26,
+			SuperheroLand = 27,
+			SuperheroLandRecovery = 28,
+			Knockdown = 29
+		}
+
+		public enum gamePSMFallStates
+		{
+			Default = 0,
+			RegularFall = 1,
+			SafeFall = 2,
+			FastFall = 3,
+			VeryFastFall = 4,
+			DeathFall = 5
+		}
+
+		public enum gamePSMHighLevel
+		{
+			Default = 0,
+			SceneTier1 = 1,
+			SceneTier2 = 2,
+			SceneTier3 = 3,
+			SceneTier4 = 4,
+			SceneTier5 = 5,
+			Swimming = 6,
+			Any = -1
+		}
+
+		public enum gamePSMLandingState
+		{
+			Default = 0,
+			RegularLand = 1,
+			HardLand = 2,
+			VeryHardLand = 3,
+			DeathLand = 4,
+			SuperheroLand = 5,
+			SuperheroLandRecovery = 6
+		}
+
+		public enum gamePSMLeftHandCyberware
+		{
+			Default = 0,
+			Safe = 1,
+			EquipRequest = 2,
+			Idle = 3,
+			Equipped = 4,
+			Charge = 5,
+			Loop = 6,
+			Catch = 7,
+			QuickAction = 8,
+			ChargeAction = 9,
+			CatchAction = 10,
+			StartUnequip = 11,
+			Unequip = 12
+		}
+
+		public enum gamePSMLocomotionStates
+		{
+			Default = 0,
+			Crouch = 1,
+			Sprint = 2,
+			Kereznikov = 3,
+			Jump = 5,
+			Any = -1
+		}
+
+		public enum gamePSMMelee
+		{
+			Default = 0,
+			Attack = 1,
+			Block = 2,
+			Any = -1
+		}
+
+		public enum gamePSMMeleeWeapon
+		{
+			NotReady = 0,
+			Idle = 1,
+			Safe = 2,
+			PublicSafe = 3,
+			Parried = 4,
+			Hold = 5,
+			ChargedHold = 6,
+			Block = 7,
+			Targeting = 8,
+			Deflect = 9,
+			ComboAttack = 10,
+			FinalAttack = 11,
+			StrongAttack = 12,
+			SafeAttack = 13,
+			BlockAttack = 14,
+			SprintAttack = 15,
+			CrouchAttack = 16,
+			JumpAttack = 17,
+			ThrowAttack = 18,
+			DeflectAttack = 19,
+			EquipAttack = 20,
+			Default = 21
+		}
+
+		public enum gamePSMNanoWireLaunchMode
+		{
+			Default = 0,
+			Primary = 1,
+			Secondary = 2
+		}
+
+		public enum gamePSMRangedWeaponStates
+		{
+			Default = 0,
+			Charging = 1,
+			Reload = 2,
+			QuickMelee = 3,
+			NoAmmo = 4,
+			Ready = 5,
+			Safe = 6,
+			Overheat = 7,
+			Shoot = 8
+		}
+
+		public enum gamePSMReaction
+		{
+			Default = 0,
+			Stagger = 1
+		}
+
+		public enum gamePSMStamina
+		{
+			Rested = 0,
+			Exhausted = 1
+		}
+
+		public enum gamePSMSwimming
+		{
+			Default = 0,
+			Surface = 1,
+			Diving = 2,
+			Any = -1
+		}
+
+		public enum gamePSMTakedown
+		{
+			Default = 0,
+			EnteringGrapple = 1,
+			Grapple = 2,
+			Leap = 3,
+			Takedown = 4,
+			Any = -1
+		}
+
+		public enum gamePSMTimeDilation
+		{
+			Default = 0,
+			Sandevistan = 1,
+			Any = -1
+		}
+
+		public enum gamePSMUIState
+		{
+			None = 0,
+			WeaponSelect = 1
+		}
+
+		public enum gamePSMUpperBodyStates
+		{
+			Default = 0,
+			SwitchItems = 1,
+			SwitchCyberware = 2,
+			Reload = 3,
+			Aim = 4,
+			Any = -1
+		}
+
+		public enum gamePSMVehicle
+		{
+			Default = 0,
+			Driving = 1,
+			Combat = 2,
+			Passenger = 3,
+			Transition = 4,
+			Turret = 5,
+			DriverCombat = 6,
+			Scene = 7,
+			Any = -1
+		}
+
+		public enum gamePSMVision
+		{
+			Default = 0,
+			Focus = 1,
+			Any = -1
+		}
+
+		public enum gamePSMVisionDebug
+		{
+			Default = 0,
+			VisionToggle = 1
+		}
+
+		public enum gamePSMVitals
+		{
+			Alive = 0,
+			Dead = 1,
+			Resurrecting = 2
+		}
+
+		public enum gamePSMWeaponStates
+		{
+			Default = 0,
+			NoAmmo = 1,
+			Ready = 2,
+			Safe = 3,
+			Any = -1
+		}
+
+		public enum gamePSMWhip
+		{
+			Default = 0,
+			Charging = 1,
+			Pulling = 2
+		}
+
+		public enum gamePSMWorkspotState
+		{
+			Default = 0,
+			Workspot = 1
+		}
+
+		public enum gamePSMZones
+		{
+			Default = 0,
+			Public = 1,
+			Safe = 2,
+			Restricted = 3,
+			Dangerous = 4,
+			Any = -1
+		}
+
+		public enum gamePlatformMovementState
+		{
+			Stopped = 0,
+			Paused = 1,
+			MovingUp = 2,
+			MovingDown = 3
+		}
+
+		public enum gamePlayerCoverDirection
+		{
+			Up = 0,
+			Left = 1,
+			Right = 2,
+			None = -1
+		}
+
+		public enum gamePlayerCoverMode
+		{
+			None = 0,
+			Auto = 1,
+			Manual = 2
+		}
+
+		public enum gamePlayerObstacleSystemQueryType
+		{
+			Climb_Vault = 0,
+			Covers = 1,
+			AverageNormal = 2
+		}
+
+		public enum gamePlayerStateMachine
+		{
+			Locomotion = 0,
+			UpperBody = 1,
+			Weapon = 2,
+			HighLevel = 3,
+			Projectile = 4,
+			Vision = 5,
+			TimeDilation = 6,
+			CoverAction = 7,
+			IconicItem = 8,
+			Combat = 9,
+			Vehicle = 10,
+			Takedown = 11
+		}
+
+		public enum gamePopulationEntityPriority
+		{
+			Quest = 0,
+			Community = 1,
+			Crowd = 2
+		}
+
+		public enum gamePopupPosition
+		{
+			Undefined = 0,
+			UpperRight = 1,
+			UpperLeft = 2,
+			LowerLeft = 3,
+			LowerRight = 4,
+			Center = 5
+		}
+
+		public enum gamePuppetVehicleState
+		{
+			IdleMounted = 0,
+			IdleStand = 1,
+			CombatWindowed = 2,
+			CombatSeated = 3,
+			Turret = 4,
+			GunnerSlot = 5
+		}
+
+		public enum gameQuestGuidanceMarkerPathfindingType
+		{
+			Auto = 0,
+			Navmesh = 1,
+			Traffic = 2
+		}
+
+		public enum gameRegular1v1FinisherScenarioPivotSetting
+		{
+			AttackerSlidesAndRotates_TargetStandsStill = 0,
+			AttackerStandsStill_TargetSlidesAndRotates = 1
+		}
+
+		public enum gameReprimandMappinAnimationState
+		{
+			None = 0,
+			Normal = 1,
+			Fast = 2
+		}
+
+		public enum gameSaveLockReason
+		{
+			Nothing = 0,
+			Combat = 1,
+			Scene = 2,
+			Quest = 3,
+			Script = 4,
+			Boundary = 5,
+			MainMenu = 6,
+			LoadingScreen = 7,
+			PlayerStateMachine = 8,
+			PlayerState = 9,
+			Tier = 10,
+			NotEnoughSlots = 11,
+			NotEnoughSpace = 12,
+			PlayerOnMovingPlatform = 13
+		}
+
+		public enum gameScanningMode
+		{
+			Inactive = 0,
+			Light = 1,
+			Heavy = 2
+		}
+
+		public enum gameScanningState
+		{
+			Default = 0,
+			Started = 1,
+			Stopped = 2,
+			Complete = 3,
+			ShallowComplete = 4,
+			Reset = 5
+		}
+
+		public enum gameSceneAnimationMotionActionParamsActionPlayDirection
+		{
+			Forward = 0,
+			Backward = 1
+		}
+
+		public enum gameSceneAnimationMotionActionParamsEasingType
+		{
+			Linear = 0,
+			SinusoidalEaseInOut = 1,
+			QuadraticEaseIn = 2,
+			QuadraticEaseOut = 3,
+			CubicEaseInOut = 4,
+			CubicEaseIn = 5,
+			CubicEaseOut = 6
+		}
+
+		public enum gameSceneAnimationMotionActionParamsMotionType
+		{
+			Rid = 0,
+			Anim = 1
+		}
+
+		public enum gameSceneAnimationMotionActionParamsPlacementMode
+		{
+			Blend = 0,
+			TeleportToStart = 1,
+			PlayAtActorPosition = 2
+		}
+
+		public enum gameScriptedBlackboardStorage
+		{
+			Default = 0
+		}
+
+		public enum gameSharedInventoryTag
+		{
+			None = 0,
+			PlayerStash = 1000000
+		}
+
+		public enum gameSmartObjectInstanceEntryType
+		{
+			UseEntryAnimation = 0,
+			UseLocomotion = 1
+		}
+
+		public enum gameSmartObjectPointType
+		{
+			Entry = 0,
+			Exit = 1,
+			Action = 2
+		}
+
+		public enum gameSmartObjectType
+		{
+			Default = 0,
+			LadderUp = 1,
+			LadderDown = 2,
+			JumpOnSameLevel = 3,
+			Jump3mUp = 4,
+			Jump3mDown = 5,
+			Climb110cmUp = 6,
+			Climb110cmDown = 7,
+			Climb200cmUp = 8,
+			Climb200cmDown = 9,
+			Climb300cmUp = 10,
+			Climb300cmDown = 11,
+			Vault10cm = 12,
+			Vault40cm = 13,
+			Vault100cm = 14,
+			ChargedJump400cmUp = 15,
+			ChargedJump400cmDown = 16,
+			ChargedJump600cmUp = 17,
+			ChargedJump600cmDown = 18,
+			ChargedJump800cmUp = 19,
+			ChargedJump800cmDown = 20,
+			ThrusterJumpUp = 21,
+			ThrusterJumpDown = 22,
+			Climb400cmDown = 23
+		}
+
+		public enum gameSpawnInViewState
+		{
+			[RED("default (true)")] default__true_ = 0,
+			[RED("true")] true_ = 1,
+			[RED("false")] false_ = 2
+		}
+
+		public enum gameStatIDType
+		{
+			EntityID = 0,
+			ItemID = 1,
+			Invalid = 2
+		}
+
+		public enum gameStatModifierType
+		{
+			Additive = 0,
+			AdditiveMultiplier = 1,
+			Multiplier = 2,
+			Count = 3,
+			Invalid = 4
+		}
+
+		public enum gameStatObjectsRelation
+		{
+			Self = 0,
+			Owner = 1,
+			Root = 2,
+			Parent = 3,
+			Target = 4,
+			Player = 5,
+			Instigator = 6,
+			Count = 7,
+			Invalid = 9
+		}
+
+		public enum gameStatPoolDataBonusType
+		{
+			None = 0,
+			Persistent = 1,
+			NonPersistent = 2
+		}
+
+		public enum gameStatPoolDataStatPoolModificationStatus
+		{
+			Regeneration = 0,
+			Decay = 1,
+			NoModification = 2
+		}
+
+		public enum gameStatPoolDataValueChangeMode
+		{
+			Normal = 0,
+			IncreasingOnly = 1,
+			DecreasingOnly = 2,
+			NonZero = 3
+		}
+
+		public enum gameStatPoolModificationTypes
+		{
+			Regeneration = 0,
+			Decay = 1
+		}
+
+		public enum gameStatPoolModifierProperty
+		{
+			RangeBegin = 0,
+			RangeEnd = 1,
+			StartDelay = 2,
+			ValuePerSec = 3,
+			Enabled = 4,
+			DelayOnChange = 5,
+			Count = 6
+		}
+
+		public enum gameStatsBundleOwnerType
+		{
+			None = 0,
+			Cleared = 1,
+			UniqueItem = 2,
+			StackableItem = 3,
+			InnerItem = 4,
+			Entity = 5,
+			Stub = 6,
+			Reinitialized = 7,
+			Count = 8,
+			Invalid = 9
+		}
+
+		public enum gameStoryTier
+		{
+			Gameplay = 0,
+			Cinematic = 1
+		}
+
+		public enum gameTargetingSet
+		{
+			Visible = 0,
+			Frustum = 2,
+			Complete = 3,
+			None = 4
+		}
+
+		public enum gameTelemetryDamageSituation
+		{
+			Irrelevant = 0,
+			EnemyToPlayer = 1,
+			EnemyToCompanion = 2,
+			PlayerToEnemy = 3,
+			CompanionToEnemy = 4
+		}
+
+		public enum gameTelemetryMilestoneType
+		{
+			StartFact = 0,
+			ImportantFact = 1,
+			Reward = 2,
+			EndReward = 3,
+			EndFact = 4,
+			Invalid = 5
+		}
+
+		public enum gameTickableEventState
+		{
+			Idle = 0,
+			FirstTick = 1,
+			NormalTick = 2,
+			LastTick = 3,
+			Canceled = 4
+		}
+
+		public enum gameTransformAnimation_MoveOnSplineRotationMode
+		{
+			Disabled = 0,
+			Yaw = 1,
+			PitchAndYaw = 2
+		}
+
+		public enum gameTransformAnimation_RotateOnAxisAxis
+		{
+			X = 0,
+			Y = 1,
+			Z = 2
+		}
+
+		public enum gameTutorialBracketType
+		{
+			WidgetArea = 0,
+			CustomArea = 1
+		}
+
+		public enum gameVehicleCommonCurve
+		{
+			RPMLimit = 0,
+			ForcedBrakeForce = 1,
+			COUNT = 2
+		}
+
+		public enum gameVehicleCurve
+		{
+			SpeedToWheelMaxTurn = 0,
+			InputToWheelMaxTurn = 1,
+			SpeedToWheelTurnSpeed = 2,
+			InputToWheelTurnSpeed = 3,
+			COUNT = 4
+		}
+
+		public enum gameVideoType
+		{
+			Tutorial_720x405 = 0,
+			Tutorial_1024x576 = 1,
+			Tutorial_1280x720 = 2,
+			Tutorial_1360x768 = 3,
+			Unknown = 4
+		}
+
+		public enum gameVisionModePatternType
+		{
+			Default = 0,
+			Netrunner = 1
+		}
+
+		public enum gameVisionModeType
+		{
+			Default = 0,
+			Focus = 1
+		}
+
+		public enum gameWorkspotSlidingBehaviour
+		{
+			DontPlayAtResourcePosition = 0,
+			PlayAtResourcePosition = 1,
+			SlideActorAndRotateDevice = 2
+		}
+
+		public enum gameaudioeventsSurfaceDirection
+		{
+			Normal = 0,
+			WallLeft = 1,
+			WallRight = 2
+		}
+
+		public enum gamecheatsystemFlag
+		{
+			God_Immortal = 1,
+			God_Invulnerable = 2,
+			Resurrect = 4,
+			IgnoreTimeDilation = 8,
+			BypassMagazine = 16,
+			InfiniteAmmo = 32,
+			Kill = 64,
+			Invisible = 128
+		}
+
 		public enum gamedataAIActionSecurityAreaType
 		{
 			DANGEROUS = 0,
@@ -5283,6 +8401,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataAIActionSecurityNotificationType
 		{
 			COMBAT = 0,
@@ -5295,6 +8414,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataAIActionTarget
 		{
 			AssignedVehicle = 0,
@@ -5345,6 +8465,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 45,
 			Invalid = 46
 		}
+
 		public enum gamedataAIActionType
 		{
 			BackUp = 0,
@@ -5370,6 +8491,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 20,
 			Invalid = 21
 		}
+
 		public enum gamedataAIAdditionalTraceType
 		{
 			Chest = 0,
@@ -5379,6 +8501,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataAIDirectorEntryStartType
 		{
 			Default = 0,
@@ -5389,6 +8512,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataAIExposureMethodType
 		{
 			BlindFire = 0,
@@ -5397,20 +8521,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
-		public enum gamedataAimAssistType
-		{
-			HeadTarget = 0,
-			LegTarget = 1,
-			MechanicalTarget = 2,
-			Melee = 3,
-			None = 4,
-			QuickHack = 5,
-			Scanning = 6,
-			Shooting = 7,
-			ShootingLimbCyber = 8,
-			Count = 9,
-			Invalid = 10
-		}
+
 		public enum gamedataAIRingType
 		{
 			Approach = 0,
@@ -5427,6 +8538,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 11,
 			Invalid = 12
 		}
+
 		public enum gamedataAIRole
 		{
 			Follower = 0,
@@ -5434,6 +8546,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataAISmartCompositeType
 		{
 			Selector = 0,
@@ -5445,6 +8558,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 6,
 			Invalid = 7
 		}
+
 		public enum gamedataAISquadType
 		{
 			Attitude = 0,
@@ -5455,6 +8569,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataAITacticType
 		{
 			Assault = 0,
@@ -5469,6 +8584,25 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 9,
 			Invalid = 10
 		}
+
+		public enum gamedataAIThreatPersistenceSource
+		{
+			AddThreat = 0,
+			CatchUp = 1,
+			CommandAimWithWeapon = 2,
+			CommandForceShoot = 3,
+			CommandInjectCombatTarget = 4,
+			CommandInjectThreat = 5,
+			CommandMeleeAttack = 6,
+			CommandShoot = 7,
+			CommandThrowGrenade = 8,
+			Default = 9,
+			SetNewCombatTarget = 10,
+			TrackedBySecuritySystemAgent = 11,
+			Count = 12,
+			Invalid = 13
+		}
+
 		public enum gamedataAITicketType
 		{
 			BackUp = 0,
@@ -5522,6 +8656,110 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 48,
 			Invalid = 49
 		}
+
+		public enum gamedataAchievement
+		{
+			Bladerunner = 0,
+			BornToBeWild = 1,
+			Breathtaking = 2,
+			BushidoAndChill = 3,
+			Cyberjunkie = 4,
+			Denied = 5,
+			FollowingTheRiver = 6,
+			Fortuneteller = 7,
+			Gearhead = 8,
+			GetMeThereScottie = 9,
+			GunKata = 10,
+			Gunslinger = 11,
+			HandyMan = 12,
+			IAmMaxTac = 13,
+			LikeFatherLikeSon = 14,
+			LittleTokyo = 15,
+			MasterRunner = 16,
+			MaxPain = 17,
+			MustBeTheRats = 18,
+			NeverFadeAway = 19,
+			NoMansLand = 20,
+			NotTheMobile = 21,
+			QueenOfTheHighway = 22,
+			Roleplayer = 23,
+			Specialist = 24,
+			Temperance = 25,
+			ThatIsSoHardForTheKnees = 26,
+			TheDevil = 27,
+			TheFool = 28,
+			TheHermit = 29,
+			TheHightPriestess = 30,
+			TheLovers = 31,
+			TheStar = 32,
+			TheSun = 33,
+			TheWheelOfFortune = 34,
+			TheWorld = 35,
+			ThisIsPacifica = 36,
+			TradeUnion = 37,
+			TrueSoldier = 38,
+			TrueWarrior = 39,
+			TwoHeadsOneBullet = 40,
+			UnderPressure = 41,
+			VForVendetta = 42,
+			YipMan = 43,
+			YouKnowWhoIAm = 44,
+			Count = 45,
+			Invalid = 46
+		}
+
+		public enum gamedataAffiliation
+		{
+			AfterlifeMercs = 0,
+			Aldecaldos = 1,
+			Animals = 2,
+			Arasaka = 3,
+			Biotechnica = 4,
+			CityCouncil = 5,
+			Civilian = 6,
+			KangTao = 7,
+			Maelstrom = 8,
+			MaelstromAndroid = 9,
+			Militech = 10,
+			NCPD = 11,
+			NetWatch = 12,
+			News54 = 13,
+			RecordingAgency = 14,
+			SSI = 15,
+			Scavengers = 16,
+			ScavengersAndroid = 17,
+			SixthStreet = 18,
+			SixthStreetAndroid = 19,
+			SouthCalifornia = 20,
+			TheMox = 21,
+			TraumaTeam = 22,
+			TygerClaws = 23,
+			Unaffiliated = 24,
+			UnaffiliatedCorpo = 25,
+			Unknown = 26,
+			Valentinos = 27,
+			VoodooBoys = 28,
+			Wraiths = 29,
+			WraithsAndroid = 30,
+			Count = 31,
+			Invalid = 32
+		}
+
+		public enum gamedataAimAssistType
+		{
+			HeadTarget = 0,
+			LegTarget = 1,
+			MechanicalTarget = 2,
+			Melee = 3,
+			None = 4,
+			QuickHack = 5,
+			Scanning = 6,
+			Shooting = 7,
+			ShootingLimbCyber = 8,
+			Count = 9,
+			Invalid = 10
+		}
+
 		public enum gamedataArchetypeType
 		{
 			AndroidMeleeT1 = 0,
@@ -5555,6 +8793,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 28,
 			Invalid = 29
 		}
+
 		public enum gamedataAttackSubtype
 		{
 			BlockAttack = 0,
@@ -5570,6 +8809,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 10,
 			Invalid = 11
 		}
+
 		public enum gamedataAttackType
 		{
 			ChargedWhipAttack = 0,
@@ -5589,6 +8829,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 14,
 			Invalid = 15
 		}
+
 		public enum gamedataBuildType
 		{
 			CombatNetrunner0 = 0,
@@ -5671,6 +8912,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 77,
 			Invalid = 78
 		}
+
 		public enum gamedataChargeStep
 		{
 			Idle = 0,
@@ -5679,6 +8921,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Overcharging = 3,
 			Discharging = 4
 		}
+
 		public enum gamedataChoiceCaptionPartType
 		{
 			Blueline = 0,
@@ -5689,6 +8932,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataCompanionDistancePreset
 		{
 			Close = 0,
@@ -5698,6 +8942,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataConsumableBaseName
 		{
 			Alcohol = 0,
@@ -5713,6 +8958,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 10,
 			Invalid = 11
 		}
+
 		public enum gamedataConsumableType
 		{
 			Drug = 0,
@@ -5720,6 +8966,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataDamageType
 		{
 			Chemical = 0,
@@ -5729,6 +8976,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataDataNodeType
 		{
 			File = 0,
@@ -5738,6 +8986,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			SimpleValue = 4,
 			ComplexValue = 5
 		}
+
 		public enum gamedataDefenseMode
 		{
 			DefendAll = 0,
@@ -5747,6 +8996,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataDevelopmentPointType
 		{
 			Attribute = 0,
@@ -5755,6 +9005,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataDistrict
 		{
 			ArasakaWaterfront = 0,
@@ -5775,105 +9026,107 @@ namespace WolvenKit.RED4.CR2W.Types
 			Badlands_JacksonPlains = 15,
 			Badlands_LagunaBend = 16,
 			Badlands_LasPalapas = 17,
-			Badlands_RattlesnakeCreek = 18,
-			Badlands_RedPeaks = 19,
-			Badlands_RockyRidge = 20,
-			Badlands_SantaClara = 21,
-			Badlands_SierraSonora = 22,
-			Badlands_SoCalBorderCrossing = 23,
-			Badlands_VasquezPass = 24,
-			Badlands_Yucca = 25,
-			Badlands_YuccaGarage = 26,
-			Badlands_YuccaRadioTower = 27,
-			CharterHill = 28,
-			CharterHill_PowerPlant = 29,
-			CityCenter = 30,
-			Coastview = 31,
-			Coastview_BattysHotel = 32,
-			Coastview_ButcherShop = 33,
-			Coastview_GrandImperialMall = 34,
-			Coastview_RundownApartment = 35,
-			Coastview_VDBChapel = 36,
-			Coastview_VDBMaglev = 37,
-			Coastview_q110Cyberspace = 38,
-			CorpoPlaza = 39,
-			CorpoPlaza_ArasakaTowerAtrium = 40,
-			CorpoPlaza_ArasakaTowerCEOFloor = 41,
-			CorpoPlaza_ArasakaTowerJenkins = 42,
-			CorpoPlaza_ArasakaTowerJungle = 43,
-			CorpoPlaza_ArasakaTowerLobby = 44,
-			CorpoPlaza_ArasakaTowerNest = 45,
-			CorpoPlaza_ArasakaTowerSaburoOffice = 46,
-			CorpoPlaza_ArasakaTowerUnlistedFloors = 47,
-			CorpoPlaza_ArasakaTowerUpperAtrium = 48,
-			CorpoPlaza_q201Cyberspace = 49,
-			Downtown = 50,
-			Downtown_Jinguji = 51,
-			Downtown_TheHammer = 52,
-			Glen = 53,
-			Glen_Embers = 54,
-			Glen_MusicStore = 55,
-			Glen_NCPDLab = 56,
-			Glen_WichedTires = 57,
-			Heywood = 58,
-			JapanTown = 59,
-			JapanTown_Clouds = 60,
-			JapanTown_DarkMatter = 61,
-			JapanTown_Fingers = 62,
-			JapanTown_FourthWallBdStudio = 63,
-			JapanTown_HiromisApartment = 64,
-			JapanTown_MegabuildingH8 = 65,
-			JapanTown_VR_Tutorial = 66,
-			JapanTown_Wakakos_Pachinko_Parlor = 67,
-			Kabuki = 68,
-			Kabuki_JudysApartment = 69,
-			Kabuki_LizziesBar = 70,
-			Kabuki_NoTellMotel = 71,
-			LagunaBend_LakeHut = 72,
-			LittleChina = 73,
-			LittleChina_Afterlife = 74,
-			LittleChina_MistysShop = 75,
-			LittleChina_Q101Cyberspace = 76,
-			LittleChina_RiotClub = 77,
-			LittleChina_TomsDiner = 78,
-			LittleChina_VApartment = 79,
-			LittleChina_VictorsClinic = 80,
-			NorthBadlands = 81,
-			NorthOaks = 82,
-			NorthOaks_Arasaka_Estate = 83,
-			NorthOaks_Columbarium = 84,
-			NorthOaks_Denny_Estate = 85,
-			NorthOaks_Kerry_Estate = 86,
-			Northside = 87,
-			Northside_All_Foods = 88,
-			Northside_CleanCut = 89,
-			Northside_Totentaz = 90,
-			Northside_WNS = 91,
-			Pacifica = 92,
-			RanchoCoronado = 93,
-			RanchoCoronado_Caliente = 94,
-			RanchoCoronado_GunORama = 95,
-			RanchoCoronado_Piez = 96,
-			RanchoCoronado_Softsys = 97,
-			RanchoCoronado_Stylishly = 98,
-			SantoDomingo = 99,
-			SouthBadlands = 100,
-			SouthBadlands_EdgewoodFarm = 101,
-			SouthBadlands_PoppyFarm = 102,
-			SouthBadlands_TrailerPark = 103,
-			SouthBadlands_q201SpaceStation = 104,
-			VistaDelRey = 105,
-			Vista_del_Rey_Delamain = 106,
-			Vista_del_Rey_LaCatrina = 107,
-			Vista_del_rey_Abandoned_Apartment_Building = 108,
-			Vista_del_rey_ElCoyoteCojo = 109,
-			Watson = 110,
-			Wellsprings = 111,
-			WestWindEstate = 112,
-			Westbrook = 113,
-			Count = 114,
-			Invalid = 115
+			Badlands_NorthSunriseOilField = 18,
+			Badlands_RattlesnakeCreek = 19,
+			Badlands_RedPeaks = 20,
+			Badlands_RockyRidge = 21,
+			Badlands_SantaClara = 22,
+			Badlands_SierraSonora = 23,
+			Badlands_SoCalBorderCrossing = 24,
+			Badlands_VasquezPass = 25,
+			Badlands_Yucca = 26,
+			Badlands_YuccaGarage = 27,
+			Badlands_YuccaRadioTower = 28,
+			CharterHill = 29,
+			CharterHill_PowerPlant = 30,
+			CityCenter = 31,
+			Coastview = 32,
+			Coastview_BattysHotel = 33,
+			Coastview_ButcherShop = 34,
+			Coastview_GrandImperialMall = 35,
+			Coastview_RundownApartment = 36,
+			Coastview_VDBChapel = 37,
+			Coastview_VDBMaglev = 38,
+			Coastview_q110Cyberspace = 39,
+			CorpoPlaza = 40,
+			CorpoPlaza_ArasakaTowerAtrium = 41,
+			CorpoPlaza_ArasakaTowerCEOFloor = 42,
+			CorpoPlaza_ArasakaTowerJenkins = 43,
+			CorpoPlaza_ArasakaTowerJungle = 44,
+			CorpoPlaza_ArasakaTowerLobby = 45,
+			CorpoPlaza_ArasakaTowerNest = 46,
+			CorpoPlaza_ArasakaTowerSaburoOffice = 47,
+			CorpoPlaza_ArasakaTowerUnlistedFloors = 48,
+			CorpoPlaza_ArasakaTowerUpperAtrium = 49,
+			CorpoPlaza_q201Cyberspace = 50,
+			Downtown = 51,
+			Downtown_Jinguji = 52,
+			Downtown_TheHammer = 53,
+			Glen = 54,
+			Glen_Embers = 55,
+			Glen_MusicStore = 56,
+			Glen_NCPDLab = 57,
+			Glen_WichedTires = 58,
+			Heywood = 59,
+			JapanTown = 60,
+			JapanTown_Clouds = 61,
+			JapanTown_DarkMatter = 62,
+			JapanTown_Fingers = 63,
+			JapanTown_FourthWallBdStudio = 64,
+			JapanTown_HiromisApartment = 65,
+			JapanTown_MegabuildingH8 = 66,
+			JapanTown_VR_Tutorial = 67,
+			JapanTown_Wakakos_Pachinko_Parlor = 68,
+			Kabuki = 69,
+			Kabuki_JudysApartment = 70,
+			Kabuki_LizziesBar = 71,
+			Kabuki_NoTellMotel = 72,
+			LagunaBend_LakeHut = 73,
+			LittleChina = 74,
+			LittleChina_Afterlife = 75,
+			LittleChina_MistysShop = 76,
+			LittleChina_Q101Cyberspace = 77,
+			LittleChina_RiotClub = 78,
+			LittleChina_TomsDiner = 79,
+			LittleChina_VApartment = 80,
+			LittleChina_VictorsClinic = 81,
+			NorthBadlands = 82,
+			NorthOaks = 83,
+			NorthOaks_Arasaka_Estate = 84,
+			NorthOaks_Columbarium = 85,
+			NorthOaks_Denny_Estate = 86,
+			NorthOaks_Kerry_Estate = 87,
+			Northside = 88,
+			Northside_All_Foods = 89,
+			Northside_CleanCut = 90,
+			Northside_Totentaz = 91,
+			Northside_WNS = 92,
+			Pacifica = 93,
+			RanchoCoronado = 94,
+			RanchoCoronado_Caliente = 95,
+			RanchoCoronado_GunORama = 96,
+			RanchoCoronado_Piez = 97,
+			RanchoCoronado_Softsys = 98,
+			RanchoCoronado_Stylishly = 99,
+			SantoDomingo = 100,
+			SouthBadlands = 101,
+			SouthBadlands_EdgewoodFarm = 102,
+			SouthBadlands_PoppyFarm = 103,
+			SouthBadlands_TrailerPark = 104,
+			SouthBadlands_q201SpaceStation = 105,
+			VistaDelRey = 106,
+			Vista_del_Rey_Delamain = 107,
+			Vista_del_Rey_LaCatrina = 108,
+			Vista_del_rey_Abandoned_Apartment_Building = 109,
+			Vista_del_rey_ElCoyoteCojo = 110,
+			Watson = 111,
+			Wellsprings = 112,
+			WestWindEstate = 113,
+			Westbrook = 114,
+			Count = 115,
+			Invalid = 116
 		}
+
 		public enum gamedataEquipmentArea
 		{
 			AbilityCW = 0,
@@ -5922,6 +9175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 43,
 			Invalid = 44
 		}
+
 		public enum gamedataEthnicity
 		{
 			African = 0,
@@ -5941,6 +9195,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 14,
 			Invalid = 15
 		}
+
 		public enum gamedataFxAction
 		{
 			EnterCharge = 0,
@@ -5962,6 +9217,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 16,
 			Invalid = 17
 		}
+
 		public enum gamedataFxActionType
 		{
 			BreakLoop = 0,
@@ -5970,6 +9226,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataGender
 		{
 			Default = 0,
@@ -5978,6 +9235,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataGrenadeDeliveryMethodType
 		{
 			Homing = 0,
@@ -5986,6 +9244,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataGroupNodeGroupVariableDeriveInfo
 		{
 			FullyDerived = 0,
@@ -5993,12 +9252,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			ValueChanged = 2,
 			NotDerived = 3
 		}
+
 		public enum gamedataGroupNodeInheritanceState
 		{
 			Unresolved = 0,
 			Resolving = 1,
 			Resolved = 2
 		}
+
 		public enum gamedataHitPrereqConditionType
 		{
 			AgentMoving = 0,
@@ -6025,6 +9286,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 21,
 			Invalid = 22
 		}
+
 		public enum gamedataImprovementRelation
 		{
 			Direct = 0,
@@ -6033,6 +9295,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataItemCategory
 		{
 			Clothing = 0,
@@ -6045,6 +9308,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataItemStructure
 		{
 			BlueprintStackable = 0,
@@ -6053,6 +9317,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataItemType
 		{
 			Clo_Face = 0,
@@ -6121,6 +9386,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 63,
 			Invalid = 64
 		}
+
 		public enum gamedataLifePath
 		{
 			Corporate = 0,
@@ -6129,6 +9395,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataLocomotionMode
 		{
 			Moving = 0,
@@ -6136,6 +9403,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataMappinPhase
 		{
 			CompletedPhase = 0,
@@ -6145,6 +9413,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataMappinVariant
 		{
 			ActionDealDamageVariant = 0,
@@ -6268,13 +9537,16 @@ namespace WolvenKit.RED4.CR2W.Types
 			UseVariant = 118,
 			VehicleVariant = 119,
 			WanderingMerchantVariant = 120,
-			CPO_PingDoorVariant = 121,
-			CPO_PingGoHereVariant = 122,
-			CPO_PingLootVariant = 123,
-			CPO_RemotePlayerVariant = 124,
-			Count = 125,
-			Invalid = 126
+			Zzz01_CarForPurchaseVariant = 121,
+			Zzz02_MotorcycleForPurchaseVariant = 122,
+			CPO_PingDoorVariant = 123,
+			CPO_PingGoHereVariant = 124,
+			CPO_PingLootVariant = 125,
+			CPO_RemotePlayerVariant = 126,
+			Count = 127,
+			Invalid = 128
 		}
+
 		public enum gamedataMeleeAttackDirection
 		{
 			Center = 0,
@@ -6289,6 +9561,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 9,
 			Invalid = 10
 		}
+
 		public enum gamedataMetaQuest
 		{
 			MetaQuest1 = 0,
@@ -6297,6 +9570,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataMovementType
 		{
 			Run = 0,
@@ -6306,6 +9580,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataNPCBehaviorState
 		{
 			State1 = 0,
@@ -6316,6 +9591,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataNPCHighLevelState
 		{
 			Alerted = 0,
@@ -6330,6 +9606,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 9,
 			Invalid = 10
 		}
+
 		public enum gamedataNPCQuestAffiliation
 		{
 			General = 0,
@@ -6341,6 +9618,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 6,
 			Invalid = 7
 		}
+
 		public enum gamedataNPCRarity
 		{
 			Boss = 0,
@@ -6353,6 +9631,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataNPCStanceState
 		{
 			Any = 0,
@@ -6365,6 +9644,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataNPCType
 		{
 			Android = 0,
@@ -6376,6 +9656,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 6,
 			Invalid = 7
 		}
+
 		public enum gamedataNPCUpperBodyState
 		{
 			Aim = 0,
@@ -6392,6 +9673,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 11,
 			Invalid = 12
 		}
+
 		public enum gamedataObjectActionReference
 		{
 			Instigator = 0,
@@ -6400,6 +9682,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataObjectActionType
 		{
 			DeviceQuickHack = 0,
@@ -6412,6 +9695,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataOutput
 		{
 			AskToFollowOrder = 0,
@@ -6440,6 +9724,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 23,
 			Invalid = 24
 		}
+
 		public enum gamedataParentAttachmentType
 		{
 			Animated = 0,
@@ -6448,6 +9733,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataPerkArea
 		{
 			Assault_Area_01 = 0,
@@ -6569,6 +9855,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 116,
 			Invalid = 117
 		}
+
 		public enum gamedataPerkType
 		{
 			Assault_Area_01_Perk_1 = 0,
@@ -6802,6 +10089,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 228,
 			Invalid = 229
 		}
+
 		public enum gamedataPerkUtility
 		{
 			ActiveUtility = 0,
@@ -6810,6 +10098,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataPingType
 		{
 			Device = 0,
@@ -6822,6 +10111,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataPlayerBuild
 		{
 			Cool = 0,
@@ -6832,6 +10122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataPlayerPossesion
 		{
 			Default = 0,
@@ -6839,6 +10130,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataProficiencyType
 		{
 			Assault = 0,
@@ -6858,6 +10150,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 14,
 			Invalid = 15
 		}
+
 		public enum gamedataProjectileLaunchMode
 		{
 			Regular = 0,
@@ -6865,6 +10158,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataProjectileOnCollisionAction
 		{
 			Bounce = 0,
@@ -6875,6 +10169,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataQuality
 		{
 			Common = 0,
@@ -6887,6 +10182,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataReactionPresetType
 		{
 			Child = 0,
@@ -6916,6 +10212,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 24,
 			Invalid = 25
 		}
+
 		public enum gamedataSenseObjectType
 		{
 			Camera = 0,
@@ -6928,6 +10225,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataSimpleValueNodeValueType
 		{
 			String = 0,
@@ -6935,6 +10233,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Bool = 2,
 			Ident = 3
 		}
+
 		public enum gamedataSpawnableObjectPriority
 		{
 			Crowd = 0,
@@ -6943,6 +10242,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataStatPoolType
 		{
 			Adrenaline = 0,
@@ -6978,6 +10278,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 30,
 			Invalid = 31
 		}
+
 		public enum gamedataStatType
 		{
 			Acceleration = 0,
@@ -7893,100 +11194,103 @@ namespace WolvenKit.RED4.CR2W.Types
 			SwayStartBlendTime = 910,
 			SwayStartDelay = 911,
 			SwayTraversalTime = 912,
-			TBHsBaseCoefficient = 913,
-			TBHsBaseSourceMultiplierCoefficient = 914,
-			TBHsCoverTraceLoSIncreaseSpeed = 915,
-			TBHsMinimumLineOfSightTime = 916,
-			TBHsSensesTraceLoSIncreaseSpeed = 917,
-			TBHsVisibilityCooldown = 918,
-			TechBaseChargeThreshold = 919,
-			TechMaxChargeThreshold = 920,
-			TechOverChargeThreshold = 921,
-			TechPierceChargeLevel = 922,
-			TechPierceEnabled = 923,
-			TechnicalAbility = 924,
-			ThermalDamage = 925,
-			ThermalDamageMax = 926,
-			ThermalDamageMin = 927,
-			ThermalDamagePercent = 928,
-			ThermalResistance = 929,
-			ThreeOrMoreProgramsCooldownRedPerk = 930,
-			ThreeOrMoreProgramsMemoryRegPerk = 931,
-			TimeDilationGenericDuration = 932,
-			TimeDilationGenericTimeScale = 933,
-			TimeDilationKerenzikovDuration = 934,
-			TimeDilationKerenzikovPlayerTimeScale = 935,
-			TimeDilationKerenzikovTimeScale = 936,
-			TimeDilationOnDodgesCooldownDuration = 937,
-			TimeDilationOnDodgesDuration = 938,
-			TimeDilationOnDodgesTimeScale = 939,
-			TimeDilationOnHealthDropCooldownDuration = 940,
-			TimeDilationOnHealthDropDuration = 941,
-			TimeDilationOnHealthDropTimeScale = 942,
-			TimeDilationSandevistanCooldownBase = 943,
-			TimeDilationSandevistanCooldownReduction = 944,
-			TimeDilationSandevistanDuration = 945,
-			TimeDilationSandevistanTimeScale = 946,
-			TimeDilationWhenEnteringCombatCooldownDuration = 947,
-			TimeDilationWhenEnteringCombatDuration = 948,
-			TimeDilationWhenEnteringCombatTimeScale = 949,
-			TriggerDismembermentChance = 950,
-			TriggerWoundedChance = 951,
-			TurretFriendlyExtension = 952,
-			TurretShutdownExtension = 953,
-			UltimateHackSpread = 954,
-			UltimateHacksCostReduction = 955,
-			UltimateMemoryCostReduction = 956,
-			UnconsciousImmunity = 957,
-			UnequipAnimationDuration_Corpo = 958,
-			UnequipAnimationDuration_Gang = 959,
-			UnequipDuration = 960,
-			UnequipDuration_Corpo = 961,
-			UnequipDuration_Gang = 962,
-			UnequipItemTime_Corpo = 963,
-			UnequipItemTime_Gang = 964,
-			UnlockProgress = 965,
-			UpgradingCostReduction = 966,
-			UpgradingMaterialDropChance = 967,
-			UpgradingMaterialRandomGrantChance = 968,
-			UpgradingMaterialRetrieveChance = 969,
-			UploadQuickHackMod = 970,
-			Visibility = 971,
-			VisualStimRangeMultiplier = 972,
-			VulnerabilityExtension = 973,
-			WallRunHorSpeedToEnterMin = 974,
-			WallRunStrafeAngleMax = 975,
-			WallRunTimeMax = 976,
-			WallRunVertSpeedToEnterMax = 977,
-			WasItemUpgraded = 978,
-			WasQuickHacked = 979,
-			WeakspotDamageMultiplier = 980,
-			WeaponHasAutoloader = 981,
-			WeaponNoise = 982,
-			WeaponPosAdsX = 983,
-			WeaponPosAdsY = 984,
-			WeaponPosAdsZ = 985,
-			WeaponPosX = 986,
-			WeaponPosY = 987,
-			WeaponPosZ = 988,
-			WeaponRotAdsX = 989,
-			WeaponRotAdsY = 990,
-			WeaponRotAdsZ = 991,
-			WeaponRotX = 992,
-			WeaponRotY = 993,
-			WeaponRotZ = 994,
-			Weight = 995,
-			WoundHeadDamageThreshold = 996,
-			WoundLArmDamageThreshold = 997,
-			WoundLLegDamageThreshold = 998,
-			WoundRArmDamageThreshold = 999,
-			WoundRLegDamageThreshold = 1000,
-			ZoomLevel = 1001,
-			CPO_Armor = 1002,
-			CPO_NPC_Importance = 1003,
-			Count = 1004,
-			Invalid = 1005
+			SystemCollapseImmunity = 913,
+			TBHsBaseCoefficient = 914,
+			TBHsBaseSourceMultiplierCoefficient = 915,
+			TBHsCoverTraceLoSIncreaseSpeed = 916,
+			TBHsMinimumLineOfSightTime = 917,
+			TBHsSensesTraceLoSIncreaseSpeed = 918,
+			TBHsVisibilityCooldown = 919,
+			TechBaseChargeThreshold = 920,
+			TechMaxChargeThreshold = 921,
+			TechOverChargeThreshold = 922,
+			TechPierceChargeLevel = 923,
+			TechPierceEnabled = 924,
+			TechnicalAbility = 925,
+			ThermalDamage = 926,
+			ThermalDamageMax = 927,
+			ThermalDamageMin = 928,
+			ThermalDamagePercent = 929,
+			ThermalResistance = 930,
+			ThreeOrMoreProgramsCooldownRedPerk = 931,
+			ThreeOrMoreProgramsMemoryRegPerk = 932,
+			TimeDilationGenericDuration = 933,
+			TimeDilationGenericTimeScale = 934,
+			TimeDilationKerenzikovDuration = 935,
+			TimeDilationKerenzikovPlayerTimeScale = 936,
+			TimeDilationKerenzikovTimeScale = 937,
+			TimeDilationOnDodgesCooldownDuration = 938,
+			TimeDilationOnDodgesDuration = 939,
+			TimeDilationOnDodgesTimeScale = 940,
+			TimeDilationOnHealthDropCooldownDuration = 941,
+			TimeDilationOnHealthDropDuration = 942,
+			TimeDilationOnHealthDropTimeScale = 943,
+			TimeDilationSandevistanCooldownBase = 944,
+			TimeDilationSandevistanCooldownReduction = 945,
+			TimeDilationSandevistanDuration = 946,
+			TimeDilationSandevistanTimeScale = 947,
+			TimeDilationWhenEnteringCombatCooldownDuration = 948,
+			TimeDilationWhenEnteringCombatDuration = 949,
+			TimeDilationWhenEnteringCombatTimeScale = 950,
+			TranquilizerImmunity = 951,
+			TriggerDismembermentChance = 952,
+			TriggerWoundedChance = 953,
+			TurretFriendlyExtension = 954,
+			TurretShutdownExtension = 955,
+			UltimateHackSpread = 956,
+			UltimateHacksCostReduction = 957,
+			UltimateMemoryCostReduction = 958,
+			UnconsciousImmunity = 959,
+			UnequipAnimationDuration_Corpo = 960,
+			UnequipAnimationDuration_Gang = 961,
+			UnequipDuration = 962,
+			UnequipDuration_Corpo = 963,
+			UnequipDuration_Gang = 964,
+			UnequipItemTime_Corpo = 965,
+			UnequipItemTime_Gang = 966,
+			UnlockProgress = 967,
+			UpgradingCostReduction = 968,
+			UpgradingMaterialDropChance = 969,
+			UpgradingMaterialRandomGrantChance = 970,
+			UpgradingMaterialRetrieveChance = 971,
+			UploadQuickHackMod = 972,
+			Visibility = 973,
+			VisualStimRangeMultiplier = 974,
+			VulnerabilityExtension = 975,
+			WallRunHorSpeedToEnterMin = 976,
+			WallRunStrafeAngleMax = 977,
+			WallRunTimeMax = 978,
+			WallRunVertSpeedToEnterMax = 979,
+			WasItemUpgraded = 980,
+			WasQuickHacked = 981,
+			WeakspotDamageMultiplier = 982,
+			WeaponHasAutoloader = 983,
+			WeaponNoise = 984,
+			WeaponPosAdsX = 985,
+			WeaponPosAdsY = 986,
+			WeaponPosAdsZ = 987,
+			WeaponPosX = 988,
+			WeaponPosY = 989,
+			WeaponPosZ = 990,
+			WeaponRotAdsX = 991,
+			WeaponRotAdsY = 992,
+			WeaponRotAdsZ = 993,
+			WeaponRotX = 994,
+			WeaponRotY = 995,
+			WeaponRotZ = 996,
+			Weight = 997,
+			WoundHeadDamageThreshold = 998,
+			WoundLArmDamageThreshold = 999,
+			WoundLLegDamageThreshold = 1000,
+			WoundRArmDamageThreshold = 1001,
+			WoundRLegDamageThreshold = 1002,
+			ZoomLevel = 1003,
+			CPO_Armor = 1004,
+			CPO_NPC_Importance = 1005,
+			Count = 1006,
+			Invalid = 1007
 		}
+
 		public enum gamedataStatusEffectAIBehaviorFlag
 		{
 			AcceptsAdditives = 0,
@@ -7997,6 +11301,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataStatusEffectAIBehaviorType
 		{
 			Basic = 0,
@@ -8006,6 +11311,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataStatusEffectType
 		{
 			AndroidTurnOff = 0,
@@ -8071,6 +11377,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 60,
 			Invalid = 61
 		}
+
 		public enum gamedataStatusEffectVariation
 		{
 			Bike = 0,
@@ -8079,6 +11386,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataStimPriority
 		{
 			High = 0,
@@ -8086,6 +11394,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataStimPropagation
 		{
 			Audio = 0,
@@ -8093,6 +11402,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataStimType
 		{
 			AimingAt = 0,
@@ -8159,12 +11469,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 61,
 			Invalid = 62
 		}
+
 		public enum gamedataSubCharacter
 		{
 			Flathead = 0,
 			Count = 1,
 			Invalid = 2
 		}
+
 		public enum gamedataTrackingMode
 		{
 			BeliefPosition = 0,
@@ -8175,6 +11487,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 5,
 			Invalid = 6
 		}
+
 		public enum gamedataTraitType
 		{
 			AssaultTrait01 = 0,
@@ -8192,6 +11505,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 12,
 			Invalid = 13
 		}
+
 		public enum gamedataTriggerMode
 		{
 			Burst = 0,
@@ -8203,6 +11517,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 6,
 			Invalid = 7
 		}
+
 		public enum gamedataTweakDBType
 		{
 			Invalid = 0,
@@ -8220,6 +11535,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			EulerAngles = 12,
 			Quaternion = 13
 		}
+
 		public enum gamedataUICondition
 		{
 			InEyesSubMenu = 0,
@@ -8229,6 +11545,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataUIIconCensorFlag
 		{
 			Drugs = 0,
@@ -8242,6 +11559,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 8,
 			Invalid = 9
 		}
+
 		public enum gamedataUINameplateDisplayType
 		{
 			AfterScan = 0,
@@ -8251,11 +11569,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 4,
 			Invalid = 5
 		}
+
 		public enum gamedataVariableNodeVariableValueDeriveInfo
 		{
 			NotDerived = 0,
 			ArrayAddition = 1
 		}
+
 		public enum gamedataVehicleManufacturer
 		{
 			Arch = 0,
@@ -8280,6 +11600,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 19,
 			Invalid = 20
 		}
+
 		public enum gamedataVehicleModel
 		{
 			Aerondight = 0,
@@ -8305,6 +11626,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 20,
 			Invalid = 21
 		}
+
 		public enum gamedataVehicleType
 		{
 			Bike = 0,
@@ -8313,6 +11635,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataVendorType
 		{
 			Armorsmith = 0,
@@ -8337,6 +11660,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 19,
 			Invalid = 20
 		}
+
 		public enum gamedataWeaponEvolution
 		{
 			Blade = 0,
@@ -8348,6 +11672,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 6,
 			Invalid = 7
 		}
+
 		public enum gamedataWeaponManufacturer
 		{
 			Corporation = 0,
@@ -8355,6 +11680,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 2,
 			Invalid = 3
 		}
+
 		public enum gamedataWorkspotActionType
 		{
 			DeviceInvestigation = 0,
@@ -8363,6 +11689,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 3,
 			Invalid = 4
 		}
+
 		public enum gamedataWorkspotCategory
 		{
 			Any = 0,
@@ -8374,6 +11701,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 6,
 			Invalid = 7
 		}
+
 		public enum gamedataWorkspotReactionType
 		{
 			Anger = 0,
@@ -8386,6 +11714,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 7,
 			Invalid = 8
 		}
+
 		public enum gamedataWorldMapFilter
 		{
 			All = 0,
@@ -8395,27 +11724,17 @@ namespace WolvenKit.RED4.CR2W.Types
 			Quest = 4,
 			ServicePoint = 5,
 			Story = 6,
-			Count = 7,
-			Invalid = 8
+			VehiclesForPurchaseFilter = 7,
+			Count = 8,
+			Invalid = 9
 		}
-		public enum gameDebugViewETextAlignment
-		{
-			Left = -1,
-			Center = 0,
-			Right = 1
-		}
-		public enum gameDelayContext
-		{
-			Standard_TD = 1,
-			Standard_ND = 2,
-			Quest_TD = 4,
-			SpawnManager_ND = 8
-		}
+
 		public enum gamedeviceActionPropertyFlags
 		{
 			None = 0,
 			IsUsedByQuest = 1
 		}
+
 		public enum gamedeviceRequestType
 		{
 			None = 0,
@@ -8424,213 +11743,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Direct = 3,
 			Internal = 4
 		}
-		public enum gameDifficulty
-		{
-			Easy = 0,
-			Hard = 1,
-			VeryHard = 2,
-			Story = 3
-		}
-		public enum gameDismBodyPart
-		{
-			HEAD = 1,
-			LEFT_ARM = 14,
-			RIGHT_ARM = 112,
-			LEFT_LEG = 896,
-			RIGHT_LEG = 7168,
-			BODY = 8192
-		}
-		public enum gameDismWoundType
-		{
-			CLEAN = 1,
-			COARSE = 2,
-			HOLE = 64
-		}
-		public enum gameEActionFlags
-		{
-			NONE = 0,
-			USE_ANIMATION = 1,
-			USE_MOVEMENT = 2
-		}
-		public enum gameEActionStatus
-		{
-			STATUS_INVALID = 0,
-			STATUS_BOUND = 1,
-			STATUS_READY = 2,
-			STATUS_PROGRESS = 3,
-			STATUS_COMPLETE = 4,
-			STATUS_FAILURE = 5
-		}
-		public enum gameEAreaShape
-		{
-			NONE = 0,
-			SPHERE = 1,
-			CUBE = 2,
-			COUNT = 3
-		}
-		public enum gameEAreaType
-		{
-			NONE = 0,
-			LOCATION = 1,
-			AFFILIATION = 2,
-			COUNT = 3
-		}
-		public enum gameECharacterStance
-		{
-			Stance_Stand = 0,
-			Stance_Crouch = 1,
-			Stance_Kneel = 2,
-			Stance_Cover = 3,
-			Stance_Standing_Cover = 4,
-			Stance_Crouching_Cover = 5
-		}
-		public enum gameEContinuousMode
-		{
-			None = 0,
-			Start = 1,
-			Stop = 2
-		}
-		public enum gameEEquipmentManagerState
-		{
-			InfiniteAmmo = 1
-		}
-		public enum gameEffectAction_KillFXAction
-		{
-			Stop = 0,
-			BreakLoop = 1
-		}
-		public enum gameEffectExecutor_AnimFeatureApplyTo
-		{
-			Target = 0,
-			Instigator = 1
-		}
-		public enum gameEffectHitDataType
-		{
-			Entity = 0,
-			Node = 1,
-			Static = 2
-		}
-		public enum gameEffectObjectFilter_AxisRangeAxis
-		{
-			X = 0,
-			Y = 1,
-			Z = 2
-		}
-		public enum gameEffectObjectFilter_HitTypeAction
-		{
-			Accept = 0,
-			Reject = 1
-		}
-		public enum gameEffectTriggerPositioningType
-		{
-			PlayerRoot = 0,
-			CameraRoot = 1,
-			AtSpawn = 2,
-			XYCameraZPlayer = 3,
-			XYPlayerZCamera = 4,
-			XYCameraZTerrain = 5,
-			XYPlayerZTerrain = 6
-		}
-		public enum gameEffectTriggerRotationType
-		{
-			None = 0,
-			AtSpawn = 1,
-			Continuous = 2
-		}
-		public enum gameEHotkey
-		{
-			INVALID = -1,
-			DPAD_UP = 0,
-			DPAD_DOWN = 1,
-			DPAD_RIGHT = 2,
-			RB = 3
-		}
-		public enum gameEInventoryFlags
-		{
-			MustSave = 1
-		}
-		public enum gameELootGenerationType
-		{
-			DropChance = 0,
-			NumberBased = 1,
-			Weights = 2,
-			Count = 3
-		}
-		public enum gameEMaterialZone
-		{
-			Zero = 0,
-			One = 1,
-			Two = 2,
-			Three = 3
-		}
-		public enum gameEnemyStealthAwarenessState
-		{
-			Relaxed = 0,
-			Aware = 1,
-			Alerted = 2,
-			Combat = 3
-		}
-		public enum gameEntityReferenceType
-		{
-			EntityRef = 0,
-			Tag = 1,
-			SlotID = 2,
-			SceneActorContextName = 3
-		}
-		public enum gameEntitySpawnerEventType
-		{
-			Spawn = 2,
-			Despawn = 3,
-			Death = 4
-		}
-		public enum gameEPrerequisiteType
-		{
-			None = 0,
-			NestedPrereq = 1,
-			StatValue = 2,
-			StatPoolValue = 3,
-			HealthAbsolute = 4,
-			HealthPercent = 5,
-			ItemInInventory = 6,
-			ItemEquipped = 7,
-			ItemCount = 8,
-			QuestAchieved = 9,
-			WasScanned = 10,
-			Attitude = 11,
-			Count = 12
-		}
-		public enum gameEquipAnimationType
-		{
-			Default = 0,
-			Instant = 1,
-			FirstEquip = 2
-		}
-		public enum gameEquipmentSetType
-		{
-			Offensive = 0,
-			Defensive = 1,
-			Cyberware = 2
-		}
-		public enum gameESlotState
-		{
-			Taken = 0,
-			Empty = 1,
-			Available = 2
-		}
-		public enum gameEStatFlags
-		{
-			Bool = 1,
-			EquipOnPlayer = 2,
-			EquipOnNPC = 4,
-			ExcludeRootCombination = 8
-		}
-		public enum gameEStatProviderDataSource
-		{
-			gameItemData = 0,
-			InventoryItemData = 1,
-			InnerItemData = 2,
-			Invalid = 3
-		}
+
 		public enum gameeventsDeathDirection
 		{
 			Undefined = 0,
@@ -8639,99 +11752,27 @@ namespace WolvenKit.RED4.CR2W.Types
 			Right = 3,
 			Forward = 4
 		}
-		public enum gameFearStage
-		{
-			Relaxed = 0,
-			Stressed = 1,
-			Alarmed = 2,
-			Panic = 3
-		}
-		public enum gameGameplayEventFlag
-		{
-			Ai = 1,
-			Trigger = 2,
-			Component = 4,
-			Script = 8
-		}
-		public enum gameGameVersion
-		{
-			CP77_Initial = 0,
-			CP77_Development = 1,
-			CP77_GoldMaster = 2,
-			CP77_ActualGoldMaster = 3,
-			CP77_AlmostPatchDay0 = 4,
-			CP77_PatchDay0 = 5,
-			CP77_PatchDay0_Hotfix1 = 6,
-			CP77_PatchDay0_Hotfix2 = 7,
-			CP77_PatchDay0_Hotfix2_V2 = 8,
-			CP77_PatchDay0_Hotfix3 = 9,
-			CP77_PatchDay0_Hotfix4 = 10,
-			Current = 10,
-			CP77_Patch1 = 11
-		}
-		public enum gameGlobalTierSubtype
-		{
-			Quest = 0,
-			Supervisor = 1
-		}
-		public enum gameGodModeType
-		{
-			Invulnerable = 0,
-			Immortal = 1,
-			Mortal = 3
-		}
-		public enum gameGOGRewardsSystemErrors
-		{
-			None = 0,
-			RequestFailed = 1,
-			TemporaryFailure = 2,
-			NoInternetConnection = 3,
-			NotSignedInGalaxy = 4,
-			NotSignedInLauncher = 5
-		}
-		public enum gameGOGRewardsSystemStatus
-		{
-			Uninitialized = 0,
-			GeneratingCPID = 1,
-			CheckingRegistrationStatus = 2,
-			RegistrationPending = 3,
-			Registered = 4,
-			Error = 5
-		}
-		public enum gameGrenadeThrowStartType
-		{
-			Invalid = 0,
-			LeftSide = 1,
-			RightSide = 2,
-			Top = 3,
-			Count = 4
-		}
+
 		public enum gameinfluenceCollisionTestOutcome
 		{
 			NoCell = 0,
 			Empty = 1,
 			Full = 2
 		}
+
 		public enum gameinfluenceEBoundingBoxType
 		{
 			Colider = 0,
 			Custom = 1
 		}
+
 		public enum gameinfluenceTestLineResult
 		{
 			Fail = 0,
 			Success = 1,
 			Unknown = 2
 		}
-		public enum gameInitalChoiceStage
-		{
-			None = 0,
-			LifePath = 1,
-			Gender = 2,
-			Customizations = 3,
-			Attributes = 4,
-			Finished = 5
-		}
+
 		public enum gameinputActionType
 		{
 			BUTTON_PRESSED = 0,
@@ -8746,6 +11787,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			TOGGLE_RELEASED = 9,
 			REPEAT = 10
 		}
+
 		public enum gameinteractionsBumpIntensity
 		{
 			Invalid = 0,
@@ -8754,29 +11796,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			Heavy = 3,
 			Strafe = 4
 		}
+
 		public enum gameinteractionsBumpLocation
 		{
 			Invalid = 0,
 			Front = 1,
 			Back = 2
 		}
+
 		public enum gameinteractionsBumpSide
 		{
 			Invalid = 0,
 			Left = 1,
 			Right = 2
 		}
+
 		public enum gameinteractionsBumpType
 		{
 			Workspot = 0,
 			Crowd = 1
 		}
+
 		public enum gameinteractionsChoiceLookAtType
 		{
 			Root = 0,
 			Slot = 1,
 			Orb = 2
 		}
+
 		public enum gameinteractionsChoiceType
 		{
 			QuestImportant = 1,
@@ -8792,42 +11839,50 @@ namespace WolvenKit.RED4.CR2W.Types
 			Selected = 1024,
 			Illegal = 2048
 		}
+
 		public enum gameinteractionsEBinaryOperator
 		{
 			EBinaryOperator_and = 0,
 			EBinaryOperator_or = 1
 		}
+
 		public enum gameinteractionsEGroupType
 		{
 			EGT_default = 0,
 			EGT_noInput = 1,
 			EGT_hint = 2
 		}
+
 		public enum gameinteractionsEInteractionEventType
 		{
 			EIET_activate = 0,
 			EIET_deactivate = 1
 		}
+
 		public enum gameinteractionsELookAtTarget
 		{
 			Entity = 0,
 			Component = 1
 		}
+
 		public enum gameinteractionsELookAtTest
 		{
 			Targeting = 0,
 			Interaction = 1
 		}
+
 		public enum gameinteractionsELootChoiceType
 		{
 			Available = 0,
 			Unavailable = 1,
 			Invisible = 2
 		}
+
 		public enum gameinteractionsELootVisualiserControlOperation
 		{
 			Locked = 1
 		}
+
 		public enum gameinteractionsEPredicateType
 		{
 			EPredicateFunction_true = 0,
@@ -8841,11 +11896,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			EPredicateFunction_logicalLookAt = 7,
 			EPredicateFunction_obstructedLookAt = 8
 		}
+
 		public enum gameinteractionsEUnaryOperator
 		{
 			EUnaryOperator_empty = 0,
 			EUnaryOperator_not = 1
 		}
+
 		public enum gameinteractionsReactionState
 		{
 			Idle = 0,
@@ -8854,6 +11911,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Finishing = 3,
 			Canceling = 4
 		}
+
 		public enum gameinteractionsvisEVisualizerActivityState
 		{
 			None = 0,
@@ -8861,6 +11919,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Available = 2,
 			Active = 3
 		}
+
 		public enum gameinteractionsvisEVisualizerDefinitionFlags
 		{
 			None = 0,
@@ -8869,6 +11928,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			QuestImportant = 8,
 			CPO_Mode = 16
 		}
+
 		public enum gameinteractionsvisEVisualizerRuntimeFlags
 		{
 			None = 0,
@@ -8876,6 +11936,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Failsafe = 2,
 			Dbg_Active = 4
 		}
+
 		public enum gameinteractionsvisEVisualizerType
 		{
 			Device = 0,
@@ -8883,299 +11944,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			Loot = 2,
 			Invalid = 3
 		}
+
 		public enum gameinteractionsvisInteractionType
 		{
 			LookAt = 0,
 			Proximity = 1
 		}
-		public enum gameInventoryItemAttachmentType
-		{
-			Generic = 0,
-			Dedicated = 1
-		}
-		public enum gameInventoryItemShape
-		{
-			SingleSlot = 0,
-			DoubleSlot = 1
-		}
-		public enum gameItemComparisonState
-		{
-			Default = 0,
-			NoChange = 1,
-			Better = 2,
-			Worse = 3
-		}
-		public enum gameItemDisplayContext
-		{
-			None = 0,
-			Vendor = 1,
-			Tooltip = 2,
-			VendorPlayer = 3,
-			GearPanel = 4,
-			Backpack = 5,
-			DPAD_RADIAL = 6,
-			Attachment = 7,
-			Ripperdoc = 8
-		}
-		public enum gameItemEquipContexts
-		{
-			LastWeaponEquipped = 0,
-			LastUsedMeleeWeapon = 1,
-			LastUsedRangedWeapon = 2,
-			Gadget = 3,
-			MeleeCyberware = 4,
-			LauncherCyberware = 5,
-			Fists = 6
-		}
-		public enum gameItemIconGender
-		{
-			Female = 0,
-			Male = 1
-		}
-		public enum gameItemUnequipContexts
-		{
-			AllWeapons = 0,
-			HeadClothing = 1,
-			FaceClothing = 2,
-			OuterChestClothing = 3,
-			InnerChestClothing = 4,
-			LegClothing = 5,
-			FootClothing = 6,
-			AllClothing = 7,
-			RightHandWeapon = 8,
-			LeftHandWeapon = 9,
-			AllQuestItems = 10,
-			AllItems = 11
-		}
-		public enum gameJournalBriefingContentType
-		{
-			MapLocation = 0,
-			VideoContent = 1,
-			Paperdoll = 2
-		}
-		public enum gameJournalCallbackOption
-		{
-			DoNotFire = 0,
-			Fire = 1
-		}
-		public enum gameJournalChangeType
-		{
-			Undefined = 0,
-			Direct = 1,
-			Indirect = 2,
-			IndirectDependent = 3
-		}
-		public enum gameJournalEntryState
-		{
-			Undefined = 0,
-			Inactive = 1,
-			Active = 2,
-			Succeeded = 3,
-			Failed = 4
-		}
-		public enum gameJournalEntryUserState
-		{
-			Undefined = 0,
-			Inactive = 1,
-			Active = 2,
-			Succeeded = 3,
-			Failed = 4,
-			Read = 5,
-			Open = 6
-		}
-		public enum gameJournalListenerType
-		{
-			State = 0,
-			Visited = 1,
-			Tracked = 2,
-			Untracked = 3,
-			Counter = 4
-		}
-		public enum gameJournalNotifyOption
-		{
-			Undefined = 0,
-			DoNotNotify = 1,
-			Notify = 2
-		}
-		public enum gameJournalQuestType
-		{
-			MainQuest = 0,
-			SideQuest = 1,
-			MinorQuest = 2,
-			StreetStory = 3,
-			Contract = 4,
-			VehicleQuest = 5
-		}
-		public enum gameKillType
-		{
-			Normal = 0,
-			Defeat = 1
-		}
-		public enum gameLootItemType
-		{
-			Default = 0,
-			Quest = 1,
-			Shard = 2
-		}
-		public enum gameLoSMode
-		{
-			Invalid = 0,
-			Keep = 1,
-			Avoid = 2
-		}
+
 		public enum gamemappinsMappinTargetType
 		{
 			World = 0,
 			Minimap = 1,
 			Map = 2
 		}
+
 		public enum gamemappinsVerticalPositioning
 		{
 			Above = 0,
 			Same = 1,
 			Below = 2
 		}
-		public enum gameMessageSender
-		{
-			NPC = 0,
-			Player = 1
-		}
-		public enum gameMountDescriptorMountType
-		{
-			Unmounted = 0,
-			KeepState = 1,
-			Vehicle = 3,
-			MovingPlatform = 4
-		}
-		public enum gameMountingObjectType
-		{
-			Invalid = -1,
-			Object = 0,
-			Vehicle = 1,
-			Puppet = 2,
-			Platform = 3
-		}
-		public enum gameMountingRelationshipType
-		{
-			Invalid = -1,
-			Parent = 0,
-			Child = 1
-		}
-		public enum gameMountingSlotRole
-		{
-			Invalid = -1,
-			Driver = 0,
-			Passenger = 1
-		}
-		public enum gameMovingPlatformLoopType
-		{
-			NoLooping = 0,
-			Bounce = 1,
-			Repeat = 2
-		}
-		public enum gameMovingPlatformMovementInitializationType
-		{
-			Time = 0,
-			Speed = 1
-		}
-		public enum gameMuppetComparisonReportItemType
-		{
-			Different = 0,
-			WithinTolerance = 1,
-			Equal = 2
-		}
-		public enum gameMuppetDebugCommand
-		{
-			None = 0,
-			Kill = 1,
-			KillAll = 2
-		}
-		public enum gameMuppetInputActionType
-		{
-			Unknown = 0,
-			Impulse = 1,
-			Press = 2
-		}
-		public enum gameMuppetMoveStyle
-		{
-			Invalid = 0,
-			Walk = 1,
-			Sprint = 2,
-			Crouch = 3,
-			WalkAim = 4,
-			GravityOnly = 5
-		}
-		public enum gamePlatformMovementState
-		{
-			Stopped = 0,
-			Paused = 1,
-			MovingUp = 2,
-			MovingDown = 3
-		}
-		public enum gamePlayerCoverDirection
-		{
-			None = -1,
-			Up = 0,
-			Left = 1,
-			Right = 2
-		}
-		public enum gamePlayerCoverMode
-		{
-			None = 0,
-			Auto = 1,
-			Manual = 2
-		}
-		public enum gamePlayerObstacleSystemQueryType
-		{
-			Climb_Vault = 0,
-			Covers = 1,
-			AverageNormal = 2
-		}
-		public enum gamePlayerStateMachine
-		{
-			Locomotion = 0,
-			UpperBody = 1,
-			Weapon = 2,
-			HighLevel = 3,
-			Projectile = 4,
-			Vision = 5,
-			TimeDilation = 6,
-			CoverAction = 7,
-			IconicItem = 8,
-			Combat = 9,
-			Vehicle = 10,
-			Takedown = 11
-		}
-		public enum GameplayTier
-		{
-			Undefined = 0,
-			Tier1_FullGameplay = 1,
-			Tier2_StagedGameplay = 2,
-			Tier3_LimitedGameplay = 3,
-			Tier4_FPPCinematic = 4,
-			Tier5_Cinematic = 5
-		}
-		public enum gamePopulationEntityPriority
-		{
-			Quest = 0,
-			Community = 1,
-			Crowd = 2
-		}
-		public enum gamePopupPosition
-		{
-			Undefined = 0,
-			UpperRight = 1,
-			UpperLeft = 2,
-			LowerLeft = 3,
-			LowerRight = 4,
-			Center = 5
-		}
+
 		public enum gameprojectileELaunchMode
 		{
 			Default = 0,
 			FromLogic = 1,
 			FromVisuals = 2
 		}
+
 		public enum gameprojectileOnCollisionAction
 		{
 			None = 0,
@@ -9185,418 +11981,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			StopAndStickPerpendicular = 4,
 			Pierce = 5
 		}
+
 		public enum gameprojectileParabolicUnknownVariable
 		{
 			TargetPoint = 0,
 			VelocityValue = 1,
 			Accel = 2
 		}
-		public enum gamePSMBodyCarrying
-		{
-			Any = -1,
-			Default = 0,
-			PickUp = 1,
-			Carry = 2,
-			Dispose = 3,
-			Drop = 4
-		}
-		public enum gamePSMBodyCarryingLocomotion
-		{
-			Default = 0,
-			Jump = 1,
-			Crouch = 2,
-			Sprint = 3,
-			Fall = 4,
-			Land = 5,
-			DropBody = 6
-		}
-		public enum gamePSMBodyCarryingStyle
-		{
-			Any = 0,
-			Default = 1,
-			Friendly = 2,
-			Strong = 3
-		}
-		public enum gamePSMCombat
-		{
-			Any = -1,
-			Default = 0,
-			InCombat = 1,
-			OutOfCombat = 2,
-			Stealth = 3
-		}
-		public enum gamePSMCombatGadget
-		{
-			Default = 0,
-			EquipRequest = 1,
-			Equipped = 2,
-			Charging = 3,
-			Throwing = 4,
-			WaitForUnequip = 5,
-			QuickThrow = 6
-		}
-		public enum gamePSMCover
-		{
-			Any = -1,
-			Default = 0,
-			InCover = 1,
-			Peek = 2,
-			Lean = 3,
-			OutOfCover = 4
-		}
-		public enum gamePSMCrosshairStates
-		{
-			Default = 0,
-			Safe = 1,
-			Scanning = 2,
-			GrenadeCharging = 3,
-			Aim = 4,
-			Reload = 5,
-			Sprint = 6,
-			HipFire = 7,
-			LeftHandCyberware = 8,
-			QuickHack = 9
-		}
-		public enum gamePSMDetailedBodyDisposal
-		{
-			Default = 0,
-			Dispose = 1,
-			Lethal = 2,
-			NonLethal = 3
-		}
-		public enum gamePSMDetailedLocomotionStates
-		{
-			NotInBaseLocomotion = 0,
-			Stand = 1,
-			AimWalk = 2,
-			Crouch = 3,
-			Sprint = 4,
-			Slide = 5,
-			SlideFall = 6,
-			Dodge = 7,
-			Climb = 8,
-			Vault = 9,
-			Ladder = 10,
-			LadderSprint = 11,
-			LadderSlide = 12,
-			LadderJump = 13,
-			Fall = 14,
-			AirThrusters = 15,
-			AirHover = 16,
-			SuperheroFall = 17,
-			Jump = 18,
-			DoubleJump = 19,
-			ChargeJump = 20,
-			HoverJump = 21,
-			DodgeAir = 22,
-			RegularLand = 23,
-			HardLand = 24,
-			VeryHardLand = 25,
-			DeathLand = 26,
-			SuperheroLand = 27,
-			SuperheroLandRecovery = 28,
-			Knockdown = 29
-		}
-		public enum gamePSMFallStates
-		{
-			Default = 0,
-			RegularFall = 1,
-			SafeFall = 2,
-			FastFall = 3,
-			VeryFastFall = 4,
-			DeathFall = 5
-		}
-		public enum gamePSMHighLevel
-		{
-			Any = -1,
-			Default = 0,
-			SceneTier1 = 1,
-			SceneTier2 = 2,
-			SceneTier3 = 3,
-			SceneTier4 = 4,
-			SceneTier5 = 5
-		}
-		public enum gamePSMLandingState
-		{
-			Default = 0,
-			RegularLand = 1,
-			HardLand = 2,
-			VeryHardLand = 3,
-			DeathLand = 4,
-			SuperheroLand = 5,
-			SuperheroLandRecovery = 6
-		}
-		public enum gamePSMLeftHandCyberware
-		{
-			Default = 0,
-			Safe = 1,
-			EquipRequest = 2,
-			Idle = 3,
-			Equipped = 4,
-			Charge = 5,
-			Loop = 6,
-			Catch = 7,
-			QuickAction = 8,
-			ChargeAction = 9,
-			CatchAction = 10,
-			StartUnequip = 11,
-			Unequip = 12
-		}
-		public enum gamePSMLocomotionStates
-		{
-			Any = -1,
-			Default = 0,
-			Crouch = 1,
-			Sprint = 2,
-			Kereznikov = 3,
-			Jump = 5
-		}
-		public enum gamePSMMelee
-		{
-			Any = -1,
-			Default = 0,
-			Attack = 1,
-			Block = 2
-		}
-		public enum gamePSMMeleeWeapon
-		{
-			NotReady = 0,
-			Idle = 1,
-			Safe = 2,
-			PublicSafe = 3,
-			Parried = 4,
-			Hold = 5,
-			ChargedHold = 6,
-			Block = 7,
-			Targeting = 8,
-			Deflect = 9,
-			ComboAttack = 10,
-			FinalAttack = 11,
-			StrongAttack = 12,
-			SafeAttack = 13,
-			BlockAttack = 14,
-			SprintAttack = 15,
-			CrouchAttack = 16,
-			JumpAttack = 17,
-			ThrowAttack = 18,
-			DeflectAttack = 19,
-			EquipAttack = 20,
-			Default = 21
-		}
-		public enum gamePSMNanoWireLaunchMode
-		{
-			Default = 0,
-			Primary = 1,
-			Secondary = 2
-		}
-		public enum gamePSMRangedWeaponStates
-		{
-			Default = 0,
-			Charging = 1,
-			Reload = 2,
-			QuickMelee = 3,
-			NoAmmo = 4,
-			Ready = 5,
-			Safe = 6,
-			Overheat = 7,
-			Shoot = 8
-		}
-		public enum gamePSMReaction
-		{
-			Default = 0,
-			Stagger = 1
-		}
-		public enum gamePSMStamina
-		{
-			Rested = 0,
-			Exhausted = 1
-		}
-		public enum gamePSMSwimming
-		{
-			Any = -1,
-			Default = 0,
-			Surface = 1,
-			Diving = 2
-		}
-		public enum gamePSMTakedown
-		{
-			Any = -1,
-			Default = 0,
-			EnteringGrapple = 1,
-			Grapple = 2,
-			Leap = 3,
-			Takedown = 4
-		}
-		public enum gamePSMTimeDilation
-		{
-			Any = -1,
-			Default = 0,
-			Sandevistan = 1
-		}
-		public enum gamePSMUIState
-		{
-			None = 0,
-			WeaponSelect = 1
-		}
-		public enum gamePSMUpperBodyStates
-		{
-			Any = -1,
-			Default = 0,
-			SwitchItems = 1,
-			SwitchCyberware = 2,
-			Reload = 3,
-			Aim = 4
-		}
-		public enum gamePSMVehicle
-		{
-			Any = -1,
-			Default = 0,
-			Driving = 1,
-			Combat = 2,
-			Passenger = 3,
-			Transition = 4,
-			Turret = 5,
-			DriverCombat = 6,
-			Scene = 7
-		}
-		public enum gamePSMVision
-		{
-			Any = -1,
-			Default = 0,
-			Focus = 1
-		}
-		public enum gamePSMVisionDebug
-		{
-			Default = 0,
-			VisionToggle = 1
-		}
-		public enum gamePSMVitals
-		{
-			Alive = 0,
-			Dead = 1,
-			Resurrecting = 2
-		}
-		public enum gamePSMWeaponStates
-		{
-			Any = -1,
-			Default = 0,
-			NoAmmo = 1,
-			Ready = 2,
-			Safe = 3
-		}
-		public enum gamePSMWhip
-		{
-			Default = 0,
-			Charging = 1,
-			Pulling = 2
-		}
-		public enum gamePSMWorkspotState
-		{
-			Default = 0,
-			Workspot = 1
-		}
-		public enum gamePSMZones
-		{
-			Any = -1,
-			Default = 0,
-			Public = 1,
-			Safe = 2,
-			Restricted = 3,
-			Dangerous = 4
-		}
-		public enum gamePuppetVehicleState
-		{
-			IdleMounted = 0,
-			IdleStand = 1,
-			CombatWindowed = 2,
-			CombatSeated = 3,
-			Turret = 4,
-			GunnerSlot = 5
-		}
-		public enum gameQuestGuidanceMarkerPathfindingType
-		{
-			Auto = 0,
-			Navmesh = 1,
-			Traffic = 2
-		}
-		public enum gameRegular1v1FinisherScenarioPivotSetting
-		{
-			AttackerSlidesAndRotates_TargetStandsStill = 0,
-			AttackerStandsStill_TargetSlidesAndRotates = 1
-		}
-		public enum gameReprimandMappinAnimationState
-		{
-			None = 0,
-			Normal = 1,
-			Fast = 2
-		}
-		public enum gameSaveLockReason
-		{
-			Nothing = 0,
-			Combat = 1,
-			Scene = 2,
-			Quest = 3,
-			Script = 4,
-			Boundary = 5,
-			MainMenu = 6,
-			LoadingScreen = 7,
-			PlayerStateMachine = 8,
-			PlayerState = 9,
-			Tier = 10,
-			NotEnoughSlots = 11,
-			NotEnoughSpace = 12,
-			PlayerOnMovingPlatform = 13
-		}
-		public enum gameScanningMode
-		{
-			Inactive = 0,
-			Light = 1,
-			Heavy = 2
-		}
-		public enum gameScanningState
-		{
-			Default = 0,
-			Started = 1,
-			Stopped = 2,
-			Complete = 3,
-			ShallowComplete = 4,
-			Reset = 5
-		}
-		public enum gameSceneAnimationMotionActionParamsActionPlayDirection
-		{
-			Forward = 0,
-			Backward = 1
-		}
-		public enum gameSceneAnimationMotionActionParamsEasingType
-		{
-			Linear = 0,
-			SinusoidalEaseInOut = 1,
-			QuadraticEaseIn = 2,
-			QuadraticEaseOut = 3,
-			CubicEaseInOut = 4,
-			CubicEaseIn = 5,
-			CubicEaseOut = 6
-		}
-		public enum gameSceneAnimationMotionActionParamsMotionType
-		{
-			Rid = 0,
-			Anim = 1
-		}
-		public enum gameSceneAnimationMotionActionParamsPlacementMode
-		{
-			Blend = 0,
-			TeleportToStart = 1,
-			PlayAtActorPosition = 2
-		}
-		public enum gameScriptedBlackboardStorage
-		{
-			Default = 0
-		}
-		public enum gameSharedInventoryTag
-		{
-			None = 0,
-			PlayerStash = 1000000
-		}
+
 		public enum gamesmartGunTargetState
 		{
 			Visible = 0,
@@ -9605,146 +11997,33 @@ namespace WolvenKit.RED4.CR2W.Types
 			Locked = 3,
 			Unlocking = 4
 		}
-		public enum gameSmartObjectInstanceEntryType
-		{
-			UseEntryAnimation = 0,
-			UseLocomotion = 1
-		}
-		public enum gameSmartObjectPointType
-		{
-			Entry = 0,
-			Exit = 1,
-			Action = 2
-		}
-		public enum gameSmartObjectType
-		{
-			Default = 0,
-			LadderUp = 1,
-			LadderDown = 2,
-			JumpOnSameLevel = 3,
-			Jump3mUp = 4,
-			Jump3mDown = 5,
-			Climb110cmUp = 6,
-			Climb110cmDown = 7,
-			Climb200cmUp = 8,
-			Climb200cmDown = 9,
-			Climb300cmUp = 10,
-			Climb300cmDown = 11,
-			Vault10cm = 12,
-			Vault40cm = 13,
-			Vault100cm = 14,
-			ChargedJump400cmUp = 15,
-			ChargedJump400cmDown = 16,
-			ChargedJump600cmUp = 17,
-			ChargedJump600cmDown = 18,
-			ChargedJump800cmUp = 19,
-			ChargedJump800cmDown = 20,
-			ThrusterJumpUp = 21,
-			ThrusterJumpDown = 22,
-			Climb400cmDown = 23
-		}
-		public enum gameSpawnInViewState
-		{
-			[RED("default (true)")] default__true_ = 0,
-			[RED("true")] _true = 1,
-			[RED("false")] _false = 2
-		}
+
 		public enum gamestateMachineParameterAspect
 		{
 			Temporary = 0,
 			Permanent = 1,
 			Conditional = 2
 		}
-		public enum gameStatIDType
+
+		[Flags]
+		public enum gametargetingSystemAimAssistFilter
 		{
-			EntityID = 0,
-			ItemID = 1,
-			Invalid = 2
+			Melee = 1 << 0,
+			Shooting = 1 << 1,
+			Scanning = 1 << 2,
+			QuickHack = 1 << 3,
+			ShootingLimbCyber = 1 << 4,
+			HeadTarget = 1 << 5,
+			LegTarget = 1 << 6,
+			MechanicalTarget = 1 << 7
 		}
-		public enum gameStatModifierType
-		{
-			Additive = 0,
-			AdditiveMultiplier = 1,
-			Multiplier = 2,
-			Count = 3,
-			Invalid = 4
-		}
-		public enum gameStatObjectsRelation
-		{
-			Self = 0,
-			Owner = 1,
-			Root = 2,
-			Parent = 3,
-			Target = 4,
-			Player = 5,
-			Instigator = 6,
-			Count = 7,
-			Invalid = 9
-		}
-		public enum gameStatPoolDataBonusType
-		{
-			None = 0,
-			Persistent = 1,
-			NonPersistent = 2
-		}
-		public enum gameStatPoolDataStatPoolModificationStatus
-		{
-			Regeneration = 0,
-			Decay = 1,
-			NoModification = 2
-		}
-		public enum gameStatPoolDataValueChangeMode
-		{
-			Normal = 0,
-			IncreasingOnly = 1,
-			DecreasingOnly = 2,
-			NonZero = 3
-		}
-		public enum gameStatPoolModificationTypes
-		{
-			Regeneration = 0,
-			Decay = 1
-		}
-		public enum gameStatPoolModifierProperty
-		{
-			RangeBegin = 0,
-			RangeEnd = 1,
-			StartDelay = 2,
-			ValuePerSec = 3,
-			Enabled = 4,
-			DelayOnChange = 5,
-			Count = 6
-		}
-		public enum gameStatsBundleOwnerType
-		{
-			None = 0,
-			Cleared = 1,
-			UniqueItem = 2,
-			StackableItem = 3,
-			InnerItem = 4,
-			Entity = 5,
-			Stub = 6,
-			Reinitialized = 7,
-			Count = 8,
-			Invalid = 9
-		}
-		public enum gameStoryTier
-		{
-			Gameplay = 0,
-			Cinematic = 1
-		}
-		public enum gameTargetingSet
-		{
-			Visible = 0,
-			Frustum = 2,
-			Complete = 3,
-			None = 4
-		}
+
 		public enum gametargetingSystemETargetFilterStatus
 		{
 			Stop = 0,
 			Continue = 1
 		}
+
 		public enum gametargetingSystemScriptFilter
 		{
 			Melee = 1,
@@ -9756,6 +12035,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			LegTarget = 64,
 			MechanicalTarget = 128
 		}
+
 		public enum gametargetingSystemSearchFilterMaskValue
 		{
 			Obj_Player = 1,
@@ -9779,60 +12059,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			St_TurnedOff = 262144,
 			St_QuickHackable = 524288
 		}
-		public enum gameTelemetryDamageSituation
-		{
-			Irrelevant = 0,
-			EnemyToPlayer = 1,
-			EnemyToCompanion = 2,
-			PlayerToEnemy = 3,
-			CompanionToEnemy = 4
-		}
-		public enum gameTelemetryMilestoneType
-		{
-			StartFact = 0,
-			ImportantFact = 1,
-			Reward = 2,
-			EndReward = 3,
-			EndFact = 4,
-			Invalid = 5
-		}
-		public enum gameTickableEventState
-		{
-			Idle = 0,
-			FirstTick = 1,
-			NormalTick = 2,
-			LastTick = 3,
-			Canceled = 4
-		}
-		public enum gameTransformAnimation_MoveOnSplineRotationMode
-		{
-			Disabled = 0,
-			Yaw = 1,
-			PitchAndYaw = 2
-		}
-		public enum gameTransformAnimation_RotateOnAxisAxis
-		{
-			X = 0,
-			Y = 1,
-			Z = 2
-		}
-		public enum gameTutorialBracketType
-		{
-			WidgetArea = 0,
-			CustomArea = 1
-		}
+
 		public enum gameuiAuthorisationNotificationType
 		{
 			Unknown = 0,
 			GotKeycard = 1,
 			AccessGranted = 2
 		}
+
 		public enum gameuiBaseMenuGameControllerPuppetGenderInfo
 		{
 			Male = 0,
 			Female = 1,
 			ShouldBeDetermined = 2
 		}
+
 		public enum gameuiBinkVideoStatus
 		{
 			Idle = 0,
@@ -9844,12 +12085,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Stopped = 6,
 			Error = 7
 		}
-		public enum gameuiCharacterCustomization_BrokenNoseStage
-		{
-			CCBN_Disabled = 0,
-			CCBN_Stage1 = 1,
-			CCBN_Stage2 = 2
-		}
+
 		public enum gameuiCharacterCustomizationActionType
 		{
 			Activate = 0,
@@ -9857,12 +12093,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			EquipItem = 2,
 			UnequipItem = 3
 		}
+
 		public enum gameuiCharacterCustomizationPart
 		{
 			Head = 0,
 			Body = 1,
 			Arms = 2
 		}
+
+		public enum gameuiCharacterCustomization_BrokenNoseStage
+		{
+			CCBN_Disabled = 0,
+			CCBN_Stage1 = 1,
+			CCBN_Stage2 = 2
+		}
+
 		public enum gameuiChoiceIndicatorType
 		{
 			Default = 0,
@@ -9877,16 +12122,35 @@ namespace WolvenKit.RED4.CR2W.Types
 			Netrunner = 10,
 			Techie = 12
 		}
+
 		public enum gameuiChoiceListVisualizerType
 		{
 			Interaction = 0,
 			Dialog = 1
 		}
+
+		[Flags]
+		public enum gameuiContext
+		{
+			Default = 1 << 0,
+			QuickHack = 1 << 1,
+			Scanning = 1 << 2,
+			DeviceZoom = 1 << 3,
+			BraindanceEditor = 1 << 4,
+			BraindancePlayback = 1 << 5,
+			VehicleMounted = 1 << 6,
+			ModalPopup = 1 << 7,
+			RadialWheel = 1 << 8,
+			VehicleRace = 1 << 9,
+			MAX = 1 << 31
+		}
+
 		public enum gameuiCyberspaceElementType
 		{
 			CyberspaceNPC = 0,
 			CyberspaceFakeObject = 1
 		}
+
 		public enum gameuiDamageDigitsMode
 		{
 			Off = 0,
@@ -9894,6 +12158,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Accumulated = 2,
 			Both = 3
 		}
+
 		public enum gameuiDamageDigitsStickingMode
 		{
 			None = 0,
@@ -9901,29 +12166,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			Accumulated = 2,
 			Both = 3
 		}
+
 		public enum gameuiDamageIndicatorMode
 		{
 			Off = 0,
 			DamageOnly = 1,
 			On = 2
 		}
+
 		public enum gameuiEBraindanceLayer
 		{
 			Visual = 0,
 			Audio = 1,
 			Thermal = 2
 		}
+
 		public enum gameuiEClueDescriptorMode
 		{
 			Invalid = 0,
 			Add = 1,
 			Finish = 2
 		}
+
 		public enum gameuiEIconOrientation
 		{
 			Upright = 0,
 			Entity = 1
 		}
+
 		public enum gameuiETooltipPlacement
 		{
 			LeftCenter = 0,
@@ -9931,6 +12201,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			LeftTop = 2,
 			RightTop = 3
 		}
+
 		public enum gameuiEWorldMapCameraMode
 		{
 			TopDown = 0,
@@ -9938,12 +12209,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			ZoomLevels = 2,
 			COUNT = 3
 		}
+
 		public enum gameuiEWorldMapDistrictView
 		{
 			None = 0,
 			Districts = 1,
 			SubDistricts = 2
 		}
+
 		public enum gameuiGenericNotificationType
 		{
 			Generic = 0,
@@ -9954,6 +12227,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			PreventionBounty = 6,
 			ProgressionView = 7
 		}
+
 		public enum gameuiHackingMinigameState
 		{
 			Unknown = 0,
@@ -9961,6 +12235,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Succeeded = 2,
 			Failed = 3
 		}
+
 		public enum gameuiHitType
 		{
 			Miss = 0,
@@ -9969,6 +12244,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			CriticalHit = 3,
 			CriticalHit_x2 = 4
 		}
+
 		public enum gameuiMappinGroupState
 		{
 			Ungrouped = 0,
@@ -9976,328 +12252,19 @@ namespace WolvenKit.RED4.CR2W.Types
 			GroupedCollection = 2,
 			GroupedHidden = 3
 		}
-		public enum gameVehicleCommonCurve
-		{
-			RPMLimit = 0,
-			ForcedBrakeForce = 1,
-			COUNT = 2
-		}
-		public enum gameVehicleCurve
-		{
-			SpeedToWheelMaxTurn = 0,
-			InputToWheelMaxTurn = 1,
-			SpeedToWheelTurnSpeed = 2,
-			InputToWheelTurnSpeed = 3,
-			COUNT = 4
-		}
-		public enum gameVideoType
-		{
-			Tutorial_720x405 = 0,
-			Tutorial_1024x576 = 1,
-			Tutorial_1280x720 = 2,
-			Tutorial_1360x768 = 3,
-			Unknown = 4
-		}
-		public enum gameVisionModePatternType
-		{
-			Default = 0,
-			Netrunner = 1
-		}
-		public enum gameVisionModeType
-		{
-			Default = 0,
-			Focus = 1
-		}
+
 		public enum gameweaponReloadStatus
 		{
 			Standard = 0,
 			Interrupted = 1
 		}
-		public enum gameWorkspotSlidingBehaviour
-		{
-			DontPlayAtResourcePosition = 0,
-			PlayAtResourcePosition = 1,
-			SlideActorAndRotateDevice = 2
-		}
-		public enum GenericMessageNotificationResult
-		{
-			Cancel = 0,
-			Confirm = 1,
-			OK = 2,
-			Yes = 3,
-			No = 4
-		}
-		public enum GenericMessageNotificationType
-		{
-			OK = 0,
-			Confirm = 1,
-			Cancel = 2,
-			ConfirmCancel = 3,
-			YesNo = 4
-		}
-		public enum GenericNotificationType
-		{
-			Generic = 0,
-			JournalNotification = 1,
-			LevelUpNotification = 2,
-			VendorNotification = 3,
-			ZoneNotification = 4,
-			ProgressionNotification = 5,
-			CraftingNotification = 6,
-			InventoryNotification = 7
-		}
+
 		public enum genLevelRandomizerDataSource
 		{
 			Entries = 0,
 			Markers = 1
 		}
-		public enum GIGIOverrideType
-		{
-			Default = 0,
-			Override_True = 1,
-			Override_False = 2
-		}
-		public enum GpuApieBufferUsageType
-		{
-			BUT_Default = 0,
-			BUT_Immutable = 1,
-			BUT_ImmutableInPlace = 2,
-			BUT_Readback = 3,
-			BUT_Dynamic_Legacy = 4,
-			BUT_Transient = 5,
-			BUT_Mapped = 6,
-			BUT_MAX = 7
-		}
-		public enum GpuWrapApiBufferGroup
-		{
-			System = 0,
-			MeshResource = 1,
-			MeshCustom = 2,
-			AutoSpawner = 3,
-			Debug = 4,
-			DPL = 5,
-			Weather = 6,
-			ReflectionProbe = 7,
-			Skinning = 8,
-			Lights = 9,
-			Video = 10,
-			Particles = 11,
-			GIManagerLitProbes = 12,
-			GIManagerLookup = 13,
-			GIManagerInterpolation = 14,
-			GIManagerLitBricks = 15,
-			GIManagerLights = 16,
-			GIManagerEnvVolume = 17,
-			GIProxyBrick = 18,
-			GIProxySurfel = 19,
-			GIProxyProbes = 20,
-			GIProxyFactors = 21,
-			GIProxyAcceleration = 22,
-			Raytracing = 23,
-			RaytracingUpload = 24,
-			RaytracingAS = 25,
-			Decals = 26,
-			Instances = 27,
-			Materials = 28,
-			Multilayer = 29,
-			FrameResources = 30,
-			Misc = 31,
-			MorphTargets = 32,
-			MAX = 33
-		}
-		public enum GpuWrapApieBufferChunkCategory
-		{
-			BCC_Staging = 0,
-			BCC_Vertex = 1,
-			BCC_VertexUAV = 2,
-			BCC_Index16Bit = 3,
-			BCC_Index32Bit = 4,
-			BCC_VertexIndex16Bit = 5,
-			BCC_Constant = 6,
-			BCC_TypedUAV = 7,
-			BCC_Structured = 8,
-			BCC_StructuredUAV = 9,
-			BCC_StructuredAppendUAV = 10,
-			BCC_IndirectUAV = 11,
-			BCC_Index16BitUAV = 12,
-			BCC_Raw = 13,
-			BCC_Invalid = 14
-		}
-		public enum GpuWrapApieIndexBufferChunkType
-		{
-			IBCT_IndexUInt = 0,
-			IBCT_IndexUShort = 1,
-			IBCT_Max = 2
-		}
-		public enum GpuWrapApieTextureFormat
-		{
-			TEXFMT_A8_Unorm ,
-			TEXFMT_A8,
-			TEXFMT_R8_Unorm ,
-			TEXFMT_R8 ,
-			TEXFMT_L8_Unorm,
-			TEXFMT_L8,
-			TEXFMT_R8G8_Unorm,
-			TEXFMT_R8G8,
-			TEXFMT_R8G8B8X8_Unorm,
-			TEXFMT_R8G8B8X8,
-			TEXFMT_R8G8B8A8_Unorm,
-			TEXFMT_R8G8B8A8 ,
-			TEXFMT_R8G8B8A8_Snorm,
-			TEXFMT_Uint_16_norm,
-			TEXFMT_R16_Unorm,
-			TEXFMT_R16_Uint,
-			TEXFMT_Uint_16,
-			TEXFMT_R32_Uint,
-			TEXFMT_Uint_32 ,
-			TEXFMT_R32G32B32A32_Uint ,
-			TEXFMT_Uint_R32G32B32A32 ,
-			TEXFMT_R32G32_Uint ,
-			TEXFMT_R16G16B16A16_Unorm ,
-			TEXFMT_R16G16B16A16_Uint,
-			//TEXFMT_Uint_R32G32B32A32,
-			TEXFMT_R16G16_Uint,
-			TEXFMT_R10G10B10A2,
-			TEXFMT_R10G10B10A2_Unorm = 15,
-			TEXFMT_R16G16B16A16_Float,
-			TEXFMT_Float_R16G16B16A16 = 16,
-			TEXFMT_R11G11B10_Float,
-			TEXFMT_Float_R11G11B10 = 17,
-			TEXFMT_R16G16_Float,
-			TEXFMT_Float_R16G16 = 18,
-			TEXFMT_R32G32_Float,
-			TEXFMT_Float_R32G32 = 19,
-			TEXFMT_R32G32B32A32_Float,
-			TEXFMT_Float_R32G32B32A32 = 20,
-			TEXFMT_R32_Float,
-			TEXFMT_Float_R32 = 21,
-			TEXFMT_R16_Float,
-			TEXFMT_Float_R16 = 22,
-			TEXFMT_D24S8 = 23,
-			TEXFMT_D32FS8 = 24,
-			TEXFMT_D32F = 26,
-			TEXFMT_D16U = 27,
-			TEXFMT_BC1 = 28,
-			TEXFMT_BC2 = 29,
-			TEXFMT_BC3 = 30,
-			TEXFMT_BC4 = 31,
-			TEXFMT_BC5 = 32,
-			TEXFMT_BC6H = 33,
-			TEXFMT_BC6H_UNSIGNED,
-			TEXFMT_BC6H_SIGNED = 34,
-			TEXFMT_BC7 = 35,
-			TEXFMT_BC7_SRGB = 36,
-			TEXFMT_R8_Uint = 37,
-			//TEXFMT_R8G8B8A8,
-			TEXFMT_R8G8B8A8_Unorm_SRGB = 39,
-			TEXFMT_BC1_SRGB = 40,
-			TEXFMT_BC2_SRGB = 41,
-			TEXFMT_BC3_SRGB = 42,
-			TEXFMT_R16G16_Unorm = 43,
-			TEXFMT_R16G16_Sint = 44,
-			TEXFMT_R16G16_Snorm = 45,
-			TEXFMT_B5G6R5_Unorm = 46
-		}
-		public enum GpuWrapApieTextureGroup
-		{
-			TEXG_Generic_Color = 1,
-			TEXG_Generic_Grayscale = 2,
-			TEXG_Generic_Normal = 3,
-			TEXG_Generic_Data = 4,
-			TEXG_Generic_UI = 5,
-			TEXG_Generic_Font = 6,
-			TEXG_Generic_LUT = 7,
-			TEXG_Generic_MorphBlend = 8,
-			TEXG_Multilayer_Color = 9,
-			TEXG_Multilayer_Normal = 10,
-			TEXG_Multilayer_Grayscale = 11,
-			TEXG_Multilayer_Microblend = 12
-		}
-		public enum GpuWrapApieTextureType
-		{
-			TEXTYPE_2D = 0,
-			TEXTYPE_CUBE = 1,
-			TEXTYPE_ARRAY = 2,
-			TEXTYPE_3D = 3
-		}
-		public enum GpuWrapApiVertexPackingePackingType
-		{
-			PT_Invalid = -1,
-			PT_Float1 = 0,
-			PT_Float2 = 1,
-			PT_Float3 = 2,
-			PT_Float4 = 3,
-			PT_Float16_2 = 4,
-			PT_Float16_4 = 5,
-			PT_UShort1 = 6,
-			PT_UShort2 = 7,
-			PT_UShort4 = 8,
-			PT_UShort4N = 9,
-			PT_Short1 = 10,
-			PT_Short2 = 11,
-			PT_Short4 = 12,
-			PT_Short4N = 13,
-			PT_UInt1 = 14,
-			PT_UInt2 = 15,
-			PT_UInt3 = 16,
-			PT_UInt4 = 17,
-			PT_Int1 = 18,
-			PT_Int2 = 19,
-			PT_Int3 = 20,
-			PT_Int4 = 21,
-			PT_Color = 22,
-			PT_UByte1 = 23,
-			PT_UByte1F = 24,
-			PT_UByte4 = 25,
-			PT_UByte4N = 26,
-			PT_Byte4N = 27,
-			PT_Dec4 = 28,
-			PT_Index16 = 29,
-			PT_Index32 = 30,
-			PT_Max = 31
-		}
-		public enum GpuWrapApiVertexPackingePackingUsage
-		{
-			PS_Invalid = -1,
-			PS_SysPosition = 0,
-			PS_Position = 1,
-			PS_Normal = 2,
-			PS_Tangent = 3,
-			PS_Binormal = 4,
-			PS_TexCoord = 5,
-			PS_Color = 6,
-			PS_SkinIndices = 7,
-			PS_SkinWeights = 8,
-			PS_DestructionIndices = 9,
-			PS_MultilayerPaint = 10,
-			PS_InstanceTransform = 11,
-			PS_InstanceLODParams = 12,
-			PS_InstanceSkinningData = 13,
-			PS_PatchSize = 14,
-			PS_PatchBias = 15,
-			PS_ExtraData = 16,
-			PS_VehicleDmgNormal = 17,
-			PS_VehicleDmgPosition = 18,
-			PS_PositionDelta = 19,
-			PS_LightBlockerIntensity = 20,
-			PS_BoneIndex = 21,
-			PS_Padding = 22,
-			PS_PatchOffset = 23,
-			PS_Max = 24
-		}
-		public enum GpuWrapApiVertexPackingEStreamType
-		{
-			ST_Invalid = -1,
-			ST_PerVertex = 0,
-			ST_PerInstance = 1,
-			ST_Max = 2
-		}
-		public enum GrenadeDamageType
-		{
-			Normal = 0,
-			DoT = 1,
-			None = 2
-		}
+
 		public enum grsDeathmatchStatus
 		{
 			Waiting = 0,
@@ -10307,6 +12274,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Ending = 4,
 			Sumup = 5
 		}
+
 		public enum grsHeistStatus
 		{
 			Waiting = 0,
@@ -10317,6 +12285,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Victory = 5,
 			Failure = 6
 		}
+
 		public enum gsmStateError
 		{
 			StateError_OK = 0,
@@ -10334,18 +12303,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			StateError_CantLoadSave_Corrupted = 12,
 			StateError_CantLoadSave_SessionDescInvalid = 13
 		}
-		public enum HighlightContext
-		{
-			DEFAULT = 0,
-			OUTLINE = 1,
-			FILL = 2,
-			FULL = 3
-		}
-		public enum HighlightMode
-		{
-			Row = 0,
-			Column = 1
-		}
+
 		public enum hitFlag
 		{
 			None = 0,
@@ -10400,227 +12358,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			ForceNoCrit = 100007,
 			ReduceDamage = 100008
 		}
-		public enum HitShape_Type
-		{
-			Normal = 0,
-			InternalWeakSpot = 1,
-			ExternalWeakSpot = 2,
-			ProtectionLayer = 3
-		}
-		public enum HoverStatus
-		{
-			DEFAULT = 0,
-			HOVER = 1
-		}
-		public enum HubMenuCharacterItems
-		{
-			Skills = 0,
-			Stats = 1
-		}
-		public enum HubMenuCraftingItems
-		{
-			Crafting = 0,
-			Upgrade = 1
-		}
-		public enum HubMenuDatabaseItems
-		{
-			Codex = 0,
-			Tarot = 1,
-			Shards = 2
-		}
-		public enum HubMenuInventoryItems
-		{
-			Gear = 0,
-			Cyberware = 1,
-			Backpack = 2
-		}
-		public enum HubMenuItems
-		{
-			None = -1,
-			Crafting = 0,
-			Character = 1,
-			Inventory = 2,
-			Map = 3,
-			Journal = 4,
-			Phone = 5,
-			Database = 6,
-			Stats = 7,
-			Backpack = 8,
-			HubMenuItems = 9,
-			Codex = 10,
-			Shards = 11,
-			Tarot = 12,
-			Gear = 13,
-			Cyberware = 14,
-			Count = 15
-		}
-		public enum HubVendorMenuItems
-		{
-			Trade = 0,
-			Crafting = 1,
-			Cyberware = 2
-		}
-		public enum HUDActorStatus
-		{
-			UNINITIALIZED = 0,
-			REGISTERED = 1,
-			ACTIVE = 2
-		}
-		public enum HUDActorType
-		{
-			UNINITIALIZED = 0,
-			GAME_OBJECT = 1,
-			VEHICLE = 2,
-			DEVICE = 3,
-			BODY_DISPOSAL_DEVICE = 4,
-			PUPPET = 5,
-			ITEM = 6
-		}
-		public enum HUDContext
-		{
-			DEFAULT = 0,
-			FOCUS = 1,
-			LOOKEDAT = 2
-		}
-		public enum HUDState
-		{
-			UNINITIALIZED = 0,
-			DEACTIVATED = 1,
-			ACTIVATED = 2
-		}
-		public enum IMaterialDataProviderDescEParameterType
-		{
-			PT_None = 0,
-			PT_Texture = 1,
-			PT_Color = 2,
-			PT_Cube = 3,
-			PT_Vector = 4,
-			PT_Scalar = 5,
-			PT_Bool = 6,
-			PT_TextureArray = 7,
-			PT_StructBuffer = 8,
-			PT_Cpu_NameU64 = 9,
-			PT_SkinProfile = 10,
-			PT_MultilayerSetup = 11,
-			PT_MultilayerMask = 12,
-			PT_HairProfile = 13,
-			PT_FoliageProfile = 14,
-			PT_TerrainSetup = 15,
-			PT_Gradient = 16,
-			PT_MAX = 17
-		}
-		public enum InGameConfigChangeReason
-		{
-			Invalid = -1,
-			Accepted = 0,
-			Rejected = 1,
-			NeedsConfirmation = 2,
-			NeedsRestart = 3
-		}
-		public enum InGameConfigNotificationType
-		{
-			RestartRequiredConfirmed = 0,
-			ChangesApplied = 1,
-			ChangesRejected = 2,
-			ChangesLoadLastCheckpointApplied = 3,
-			Saved = 4,
-			ErrorSaving = 5,
-			RequiresRestart = 6,
-			Loaded = 7,
-			LoadCanceled = 8,
-			Refresh = 10
-		}
-		public enum InGameConfigUserSettingsLoadStatus
-		{
-			NotLoaded = 0,
-			InternalError = 1,
-			FileIsMissing = 2,
-			FileIsCorrupted = 3,
-			Loaded = 4,
-			ImportedFromOldVersion = 5
-		}
-		public enum InGameConfigUserSettingsSaveStatus
-		{
-			NotSaved = 0,
-			InternalError = 1,
-			Saved = 2
-		}
-		public enum InGameConfigVarType
-		{
-			Bool = 0,
-			Int = 1,
-			Float = 2,
-			Name = 3,
-			IntList = 4,
-			FloatList = 5,
-			StringList = 6,
-			NameList = 7
-		}
-		public enum InGameConfigVarUpdatePolicy
-		{
-			Disabled = 0,
-			Immediately = 1,
-			ConfirmationRequired = 2,
-			RestartRequired = 3,
-			LoadLastCheckpointRequired = 4
-		}
-		public enum inkanimEventType
-		{
-			OnLoaded = 0,
-			OnStart = 1,
-			OnFinish = 2,
-			OnPause = 3,
-			OnResume = 4,
-			OnStartLoop = 5,
-			OnEndLoop = 6
-		}
-		public enum inkanimInterpolationDirection
-		{
-			To = 0,
-			From = 1,
-			FromTo = 2
-		}
-		public enum inkanimInterpolationMode
-		{
-			EasyIn = 0,
-			EasyOut = 1,
-			EasyInOut = 2,
-			EasyOutIn = 3
-		}
-		public enum inkanimInterpolationType
-		{
-			Linear = 0,
-			Quadratic = 1,
-			Qubic = 2,
-			Quartic = 3,
-			Quintic = 4,
-			Sinusoidal = 5,
-			Exponential = 6,
-			Elastic = 7,
-			Circular = 8,
-			Back = 9
-		}
-		public enum inkanimLoopType
-		{
-			None = 0,
-			Cycle = 1,
-			PingPong = 2
-		}
-		public enum inkanimPropertyType
-		{
-			Size = 0,
-			Color = 1,
-			Margin = 2,
-			Padding = 3,
-			Transparency = 4,
-			Rotation = 5
-		}
+
 		public enum inkBrushDrawType
 		{
 			NoDraw = 0,
 			Solid = 1,
 			Wire = 2
 		}
+
 		public enum inkBrushMirrorType
 		{
 			NoMirror = 0,
@@ -10628,6 +12373,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Vertical = 2,
 			Both = 3
 		}
+
 		public enum inkBrushTileType
 		{
 			NoTile = 0,
@@ -10635,12 +12381,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Vertical = 2,
 			Both = 3
 		}
+
 		public enum inkCacheMode
 		{
 			Normal = 0,
 			Minimap = 1,
 			ExternalDynamicTexture = 2
 		}
+
 		public enum inkCharacterEventType
 		{
 			CharInput = 0,
@@ -10649,11 +12397,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Delete = 3,
 			Backspace = 4
 		}
+
 		public enum inkCompositionParamType
 		{
 			FLOAT = 0,
 			VECTOR2 = 1
 		}
+
 		public enum inkDiscreteNavigationDirection
 		{
 			Up = 0,
@@ -10661,6 +12411,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Down = 2,
 			Left = 3
 		}
+
 		public enum inkDisplayMode
 		{
 			Invalid = 0,
@@ -10669,6 +12420,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Header = 3,
 			Single = 4
 		}
+
 		public enum inkEAnchor
 		{
 			TopLeft = 0,
@@ -10688,11 +12440,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			RightFillVerticaly = 14,
 			Fill = 15
 		}
+
 		public enum inkEBlurDimension
 		{
 			Horizontal = 0,
 			Vertical = 1
 		}
+
 		public enum inkEButtonState
 		{
 			Normal = 0,
@@ -10700,11 +12454,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Press = 2,
 			Disabled = 3
 		}
+
 		public enum inkEChildOrder
 		{
 			Forward = 0,
 			Backward = 1
 		}
+
 		public enum inkEEndCapStyle
 		{
 			BUTT = 0,
@@ -10712,21 +12468,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			ROUND = 2,
 			JOINED = 3
 		}
-		public enum inkEffectType
-		{
-			ScanlineWipe = 0,
-			LinearWipe = 1,
-			RadialWipe = 2,
-			LightSweep = 3,
-			BoxBlur = 4,
-			Mask = 5,
-			Glitch = 6,
-			PointCloud = 7,
-			ColorFill = 8,
-			InnerGlow = 9,
-			ColorCorrection = 10,
-			Multisampling = 11
-		}
+
 		public enum inkEHorizontalAlign
 		{
 			Fill = 0,
@@ -10734,12 +12476,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Center = 2,
 			Right = 3
 		}
+
 		public enum inkEJointStyle
 		{
 			MITER = 0,
 			BEVEL = 1,
 			ROUND = 2
 		}
+
 		public enum inkELayerType
 		{
 			Watermarks = 0,
@@ -10758,44 +12502,52 @@ namespace WolvenKit.RED4.CR2W.Types
 			Debug = 13,
 			MAX = 14
 		}
+
 		public enum inkEOrientation
 		{
 			Horizontal = 0,
 			Vertical = 1
 		}
+
 		public enum inkEScrollDirection
 		{
 			Vertical = 0,
 			Horizontal = 1
 		}
+
 		public enum inkEShapeVariant
 		{
 			Fill = 0,
 			Border = 1,
 			FillAndBorder = 2
 		}
+
 		public enum inkESizeRule
 		{
 			Fixed = 0,
 			Stretch = 1
 		}
+
 		public enum inkESliderDirection
 		{
 			Horizontal = 0,
 			Vertical = 1
 		}
+
 		public enum inkETextDirection
 		{
 			LeftToRight = 0,
 			RightToLeft = 1,
 			Mixed = 2
 		}
+
 		public enum inkETextureResolution
 		{
 			UltraHD_3840_2160 = 0,
 			FullHD_1920_1080 = 1,
 			HD_1280_720 = 2
 		}
+
 		public enum inkEToggleState
 		{
 			Normal = 0,
@@ -10806,6 +12558,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			ToggledPress = 5,
 			ToggledHover = 6
 		}
+
 		public enum inkEVerticalAlign
 		{
 			Fill = 0,
@@ -10813,17 +12566,36 @@ namespace WolvenKit.RED4.CR2W.Types
 			Center = 2,
 			Bottom = 3
 		}
+
+		public enum inkEffectType
+		{
+			ScanlineWipe = 0,
+			LinearWipe = 1,
+			RadialWipe = 2,
+			LightSweep = 3,
+			BoxBlur = 4,
+			Mask = 5,
+			Glitch = 6,
+			PointCloud = 7,
+			ColorFill = 8,
+			InnerGlow = 9,
+			ColorCorrection = 10,
+			Multisampling = 11
+		}
+
 		public enum inkFinalConfigurationVisibility
 		{
 			VisibleOnlyInFinal = 0,
 			HiddenOnlyInFinal = 1
 		}
+
 		public enum inkFitToContentDirection
 		{
 			None = 0,
 			Vertical = 1,
 			Horizontal = 2
 		}
+
 		public enum inkFocusCause
 		{
 			Mouse = 0,
@@ -10833,11 +12605,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			OtherWidgetLostFocus = 4,
 			WindowActivate = 5
 		}
+
 		public enum inkGradientMode
 		{
 			Linear = 0,
 			Rectangular = 1
 		}
+
 		public enum inkIconResult
 		{
 			Success = 0,
@@ -10845,12 +12619,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			AtlasResourceNotFound = 2,
 			PartNotFoundInAtlas = 3
 		}
+
 		public enum inkInputHintHoldIndicationType
 		{
 			Press = 0,
 			Hold = 1,
 			FromInputConfig = 2
 		}
+
 		public enum inkLanguageId
 		{
 			EN = 0,
@@ -10874,12 +12650,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			HT = 18,
 			DEBUG = 19
 		}
+
 		public enum inkLastTickVideoState
 		{
 			NotDrawn = 0,
 			Drawn = 1,
 			Paused = 2
 		}
+
 		public enum inkLifePath
 		{
 			Corporate = 0,
@@ -10887,11 +12665,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			StreetKid = 2,
 			Invalid = 3
 		}
+
 		public enum inkLineType
 		{
 			RegularPatternSpacing = 0,
 			LoosePatternSpacing = 1
 		}
+
 		public enum inkLoadingScreenType
 		{
 			Unknown = 0,
@@ -10899,11 +12679,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Initial = 2,
 			FastTravel = 3
 		}
+
 		public enum inkMaskDataSource
 		{
 			TextureAtlas = 0,
 			DynamicTexture = 1
 		}
+
 		public enum inkMenuMode
 		{
 			Unknown = 0,
@@ -10911,11 +12693,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			HubMenu = 2,
 			CustomMenu = 3
 		}
+
 		public enum inkMenuState
 		{
 			Enabled = 0,
 			Disabled = 1
 		}
+
 		public enum inkSaveType
 		{
 			ManualSave = 0,
@@ -10924,6 +12708,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			PointOfNoReturn = 3,
 			EndGameSave = 4
 		}
+
 		public enum inkSelectionRule
 		{
 			Single = 0,
@@ -10932,18 +12717,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			TypeBased = 3,
 			NameBased = 4
 		}
+
 		public enum inkSelectorChangeDirection
 		{
 			None = 0,
 			Prior = 1,
 			Next = 2
 		}
+
 		public enum inkSpawnMode
 		{
 			SingleAndMultiplayer = 0,
 			OnlySingleplayer = 1,
 			OnlyMultiplayer = 2
 		}
+
 		public enum inkState
 		{
 			InitEngine = 0,
@@ -10958,198 +12746,125 @@ namespace WolvenKit.RED4.CR2W.Types
 			EndGameLoading = 11,
 			EditorMode = 12
 		}
+
 		public enum inkTextReplaceAnimationControllerWidgetTextUsage
 		{
 			BaseText = 0,
 			TargetText = 1,
 			NoUsage = 2
 		}
-		public enum inkTextureType
-		{
-			StaticTexture = 0,
-			DynamicTexture = 1,
-			InvalidTexture = 2
-		}
+
 		public enum inkTextWrappingPolicy
 		{
 			SingleLine = 0,
 			MultiLine = 1,
 			MultilineNoWrap = 2
 		}
+
+		public enum inkTextureType
+		{
+			StaticTexture = 0,
+			DynamicTexture = 1,
+			InvalidTexture = 2
+		}
+
 		public enum inkVideoInstanceDoneReason
 		{
 			Failed = 0,
 			Stopped = 1,
 			Finished = 2
 		}
+
 		public enum inkVideoOptimizationState
 		{
 			None = 0,
 			TooManyBinks = 1,
 			FullscreenBinkVisible = 2
 		}
+
 		public enum inkWidgetResourceVersion
 		{
 			Default = 0,
 			BrushToAtlas = 1
 		}
+
+		public enum inkanimEventType
+		{
+			OnLoaded = 0,
+			OnStart = 1,
+			OnFinish = 2,
+			OnPause = 3,
+			OnResume = 4,
+			OnStartLoop = 5,
+			OnEndLoop = 6
+		}
+
+		public enum inkanimInterpolationDirection
+		{
+			To = 0,
+			From = 1,
+			FromTo = 2
+		}
+
+		public enum inkanimInterpolationMode
+		{
+			EasyIn = 0,
+			EasyOut = 1,
+			EasyInOut = 2,
+			EasyOutIn = 3
+		}
+
+		public enum inkanimInterpolationType
+		{
+			Linear = 0,
+			Quadratic = 1,
+			Qubic = 2,
+			Quartic = 3,
+			Quintic = 4,
+			Sinusoidal = 5,
+			Exponential = 6,
+			Elastic = 7,
+			Circular = 8,
+			Back = 9
+		}
+
+		public enum inkanimLoopType
+		{
+			None = 0,
+			Cycle = 1,
+			PingPong = 2
+		}
+
+		public enum inkanimPropertyType
+		{
+			Size = 0,
+			Color = 1,
+			Margin = 2,
+			Padding = 3,
+			Transparency = 4,
+			Rotation = 5
+		}
+
 		public enum inputContextType
 		{
 			Action = 0,
 			RPG = 1
 		}
-		public enum InstanceState
-		{
-			DISABLED = 0,
-			HIDDEN = 1,
-			RUNNING = 2,
-			MALFUNCTIONING = 3,
-			ON = 4
-		}
-		public enum IntercomStatus
-		{
-			DEFAULT = 0,
-			CALLING = 1,
-			TALKING = 2,
-			CALL_MISSED = 3,
-			CALL_ENDED = 4
-		}
-		public enum InventoryModes
-		{
-			Default = 0,
-			Item = 1
-		}
-		public enum InventoryPaperdollZoomArea
-		{
-			Default = 0,
-			Weapon = 1,
-			Legs = 2,
-			Feet = 3,
-			Cyberware = 4,
-			QuickSlot = 5,
-			Consumable = 6,
-			Outfit = 7,
-			Head = 8,
-			Face = 9,
-			InnerChest = 10,
-			OuterChest = 11
-		}
-		public enum InventoryTooltipDisplayContext
-		{
-			Default = 0,
-			Attachment = 1,
-			Crafting = 2,
-			Upgrading = 3,
-			HUD = 4
-		}
-		public enum ItemAdditionalInfoType
-		{
-			NONE = 0,
-			PRICE = 1,
-			TYPE = 2
-		}
-		public enum ItemDisplayType
-		{
-			Item = 0,
-			Weapon = 1
-		}
-		public enum ItemFilterCategory
-		{
-			Invalid = -1,
-			RangedWeapons = 0,
-			MeleeWeapons = 1,
-			Clothes = 2,
-			Consumables = 3,
-			Grenades = 4,
-			SoftwareMods = 5,
-			Attachments = 6,
-			Programs = 7,
-			Cyberware = 8,
-			Junk = 9,
-			BaseCount = 10,
-			Quest = 11,
-			Buyback = 12,
-			AllItems = 13,
-			AllCount = 14
-		}
-		public enum ItemFilterType
-		{
-			All = 0,
-			Weapons = 1,
-			Clothes = 2,
-			Consumables = 3,
-			Cyberware = 4,
-			Attachments = 5,
-			Quest = 6,
-			Buyback = 7,
-			LightWeapons = 8,
-			HeavyWeapons = 9,
-			MeleeWeapons = 10,
-			Hacks = 11
-		}
-		public enum ItemLabelType
-		{
-			New = 0,
-			Quest = 1,
-			Money = 2,
-			Equipped = 3,
-			Owned = 4,
-			Buyback = 5
-		}
-		public enum ItemSortMode
-		{
-			Default = 0,
-			NewItems = 1,
-			NameAsc = 2,
-			NameDesc = 3,
-			QualityAsc = 4,
-			QualityDesc = 5,
-			WeightAsc = 6,
-			WeightDesc = 7,
-			PriceAsc = 8,
-			PriceDesc = 9,
-			ItemType = 10,
-			DpsAsc = 11,
-			DpsDesc = 12
-		}
-		public enum ItemViewModes
-		{
-			Item = 0,
-			Mod = 1
-		}
-		public enum LandingType
-		{
-			Off = 0,
-			Regular = 1,
-			Hard = 2,
-			VeryHard = 3,
-			Superhero = 4,
-			Death = 5
-		}
-		public enum LaserTargettingState
-		{
-			Start = 0,
-			Update = 1,
-			End = 2
-		}
-		public enum LibTreeEParameterType
-		{
-			PARAM_Bool = 0,
-			PARAM_Int32 = 1,
-			PARAM_Enum = 2,
-			PARAM_Float = 3,
-			PARAM_CName = 4,
-			PARAM_TreeRef = 5,
-			PARAM_TreeRefList = 6,
-			PARAM_NodeRef = 7,
-			PARAM_Vector = 9
-		}
+
 		public enum locHolocallActorMode
 		{
 			Default = 0,
 			ActorUsesHolocall = 1,
 			ActorDoesntUseHolocall = 2
 		}
+
+		public enum locVoiceTagGender
+		{
+			Undefined = 0,
+			Male = 1,
+			Female = 2
+		}
+
 		public enum locVoiceoverContext
 		{
 			Vo_Context_Quest = 0,
@@ -11158,6 +12873,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Vo_Context_Minor_Activity = 3,
 			Default_Vo_Context = 5
 		}
+
 		public enum locVoiceoverExpression
 		{
 			Vo_Expression_Spoken = 0,
@@ -11173,19 +12889,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Vo_Expression_Possessed = 10,
 			Vo_Expression_Helmet = 11
 		}
-		public enum locVoiceTagGender
-		{
-			Undefined = 0,
-			Male = 1,
-			Female = 2
-		}
-		public enum MechanicalScanType
-		{
-			None = 0,
-			Short = 1,
-			Long = 2,
-			Danger = 3
-		}
+
 		public enum meleeMoveDirection
 		{
 			Forward = 0,
@@ -11193,6 +12897,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Back = 2,
 			Left = 3
 		}
+
 		public enum meleeQueuedAttack
 		{
 			Block = 0,
@@ -11205,53 +12910,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Strong = 7,
 			Throw = 8
 		}
-		public enum MessageViewType
-		{
-			Sent = 0,
-			Received = 1
-		}
-		public enum MessengerContactType
-		{
-			Contact = 0,
-			Group = 1,
-			Thread = 2
-		}
-		public enum MinigameActionType
-		{
-			Device = 0,
-			NPC = 1,
-			Both = 2,
-			AccessPoint = 3
-		}
-		public enum ModuleState
-		{
-			DISABLED = 0,
-			HIDDEN = 1,
-			ASLEEP = 2,
-			MALFUNCTIONING = 3,
-			ON = 4
-		}
-		public enum MorphTargetsDiffTextureSize
-		{
-			TEXTURE_SIZE_1024x1024 = 0,
-			TEXTURE_SIZE_512x512 = 1,
-			TEXTURE_SIZE_256x256 = 2
-		}
-		public enum MorphTargetsFaceRegion
-		{
-			FACE_REGION_EYES = 0,
-			FACE_REGION_NOSE = 1,
-			FACE_REGION_MOUTH = 2,
-			FACE_REGION_JAW = 3,
-			FACE_REGION_EARS = 4,
-			FACE_REGION_NONE = 255
-		}
+
 		public enum moveCirclingDirection
 		{
 			None = 0,
 			Left = 1,
 			Right = 2
 		}
+
 		public enum moveExplorationType
 		{
 			None = 0,
@@ -11262,12 +12928,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			ChargedJump = 5,
 			ThrusterJump = 6
 		}
+
 		public enum moveLineOfSight
 		{
 			None = 0,
 			Keep = 1,
 			Avoid = 2
 		}
+
 		public enum moveMovementOrientationType
 		{
 			NotSet = 0,
@@ -11276,6 +12944,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Left = 3,
 			Right = 4
 		}
+
 		public enum moveMovementType
 		{
 			Walk = 0,
@@ -11284,6 +12953,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Strafe = 3,
 			Stand = 4
 		}
+
 		public enum moveSecureFootingFailureReason
 		{
 			Invalid = 0,
@@ -11291,56 +12961,35 @@ namespace WolvenKit.RED4.CR2W.Types
 			SimulationType = 2,
 			Ground = 3
 		}
+
 		public enum moveSecureFootingFailureType
 		{
 			Invalid = 0,
 			Edge = 1,
 			Slope = 2
 		}
-		public enum NavGenAgentSize
-		{
-			Human = 0
-		}
-		public enum NavGenNavmeshImpact
-		{
-			Walkable = 0,
-			Ignored = 1,
-			Blocking = 2,
-			Road = 3,
-			CrowdWalkable = 4,
-			Stairs = 5,
-			Drones = 6
-		}
+
 		public enum navLocomotionPathSegmentTypes
 		{
 			Invalid = 0,
 			Spline = 1,
 			OffMeshLink = 2
 		}
+
 		public enum navNaviPositionType
 		{
 			None = 0,
 			Normal = 1,
 			Projected = 2
 		}
+
 		public enum operationsMode
 		{
 			PLAYER = 0,
 			FLATHEAD = 1,
 			TOOLBOX = 2
 		}
-		public enum OutcomeMessage
-		{
-			Success = 0,
-			Failure = 1
-		}
-		public enum PackageStatus
-		{
-			UNINITIALIZED = 0,
-			ON_HOLD = 1,
-			FOR_IMMEDIATE_TRIGGER = 2,
-			TRIGGERED = 3
-		}
+
 		public enum panzerBootupUI
 		{
 			UnbootedIdle = 0,
@@ -11348,50 +12997,17 @@ namespace WolvenKit.RED4.CR2W.Types
 			BootingSuccess = 2,
 			Loop = 3
 		}
-		public enum PaperdollPositionAnimation
+
+		[Flags]
+		public enum physicsEClothCollisionMaskEnum
 		{
-			Center = 0,
-			Left = 1,
-			Right = 2,
-			LeftFullBody = 3
+			SPHERE = 1 << 0,
+			BOX = 1 << 1,
+			CONVEX = 1 << 2,
+			TRIMESH = 1 << 3,
+			CAPSULE = 1 << 4
 		}
-		public enum PauseMenuAction
-		{
-			OpenSubMenu = 0,
-			QuickSave = 1,
-			Save = 2,
-			ExitGame = 3,
-			ExitToMainMenu = 4,
-			QuickLoad = 5
-		}
-		public enum PaymentStatus
-		{
-			DEFAULT = 0,
-			IN_PROGRESS = 1,
-			NO_MONEY = 2
-		}
-		public enum PerkMenuAttribute
-		{
-			Body = 0,
-			Reflex = 1,
-			Technical_Ability = 2,
-			Johnny = 3,
-			Cool = 4,
-			Intelligence = 5
-		}
-		public enum PersistenceSource
-		{
-			AddThreat = 0,
-			SetNewCombatTarget = 1,
-			CommandAimWithWeapon = 2,
-			CommandForceShoot = 3,
-			CommandInjectCombatTarget = 4,
-			CommandMeleeAttack = 5,
-			CommandShoot = 6,
-			CommandThrowGrenade = 7,
-			CommandInjectThreat = 8,
-			TrackedBySecuritySystemAgent = 9
-		}
+
 		public enum physicsFilterDataSource
 		{
 			Parent = 0,
@@ -11399,18 +13015,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			Collider = 1,
 			Body = 1
 		}
+
 		public enum physicsMaterialFriction
 		{
 			Enabled = 0,
 			DisabledStrong = 1,
 			Disabled = 2
 		}
+
 		public enum physicsMaterialTagAIVisibility
 		{
 			None = 0,
 			SemiTransparent = 1,
 			Transparent = 2
 		}
+
 		public enum physicsMaterialTagProjectilePenetration
 		{
 			TechOnly = 0,
@@ -11419,17 +13038,28 @@ namespace WolvenKit.RED4.CR2W.Types
 			Heavy = 3,
 			Never = 4
 		}
+
 		public enum physicsMaterialTagType
 		{
 			AIVisibility = 0,
-			ProjectilePenetration = 1,
-			VehicleTraction = 2
+			PlayerVisibility = 1,
+			ProjectilePenetration = 2,
+			VehicleTraction = 3
 		}
+
 		public enum physicsMaterialTagVehicleTraction
 		{
 			Default = 0,
 			Gravel = 1
 		}
+
+		public enum physicsMaterialTagVisibility
+		{
+			None = 0,
+			SemiTransparent = 1,
+			Transparent = 2
+		}
+
 		public enum physicsPhysicalSystemOwner
 		{
 			Unknown = 0,
@@ -11463,6 +13093,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			VehicleChassisComponent = 28,
 			FoliageDestruction = 29
 		}
+
 		public enum physicsPhysicsJointAxis
 		{
 			AxisX = 0,
@@ -11472,6 +13103,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Swing1 = 4,
 			Swing2 = 5
 		}
+
 		public enum physicsPhysicsJointDriveType
 		{
 			AxisX = 0,
@@ -11481,12 +13113,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Twist = 4,
 			SLERP = 5
 		}
+
 		public enum physicsPhysicsJointMotion
 		{
 			Locked = 0,
 			Limited = 1,
 			Free = 2
 		}
+
 		public enum physicsProxyType
 		{
 			Invalid = 0,
@@ -11502,6 +13136,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			AggregateSystem = 10,
 			FoliageDestruction = 13
 		}
+
 		public enum physicsQueryUseCase
 		{
 			Default = 0,
@@ -11528,12 +13163,33 @@ namespace WolvenKit.RED4.CR2W.Types
 			VehicleWater = 21,
 			WorldUI = 22
 		}
+
+		[Flags]
+		public enum physicsRagdollBodyPartE
+		{
+			HEAD = 1 << 0,
+			LARM_UPPER = 1 << 1,
+			LARM_LOWER = 1 << 2,
+			LARM_PALM = 1 << 3,
+			RARM_UPPER = 1 << 4,
+			RARM_LOWER = 1 << 5,
+			RARM_PALM = 1 << 6,
+			LLEG_UPPER = 1 << 7,
+			LLEG_LOWER = 1 << 8,
+			LLEG_FOOT = 1 << 9,
+			RLEG_UPPER = 1 << 10,
+			RLEG_LOWER = 1 << 11,
+			RLEG_FOOT = 1 << 12,
+			BODY = 1 << 13
+		}
+
 		public enum physicsRagdollShapeType
 		{
 			CAPSULE = 0,
 			BOX = 1,
 			SPHERE = 2
 		}
+
 		public enum physicsShapeType
 		{
 			Box = 0,
@@ -11543,6 +13199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			TriangleMesh = 4,
 			Invalid = 6
 		}
+
 		public enum physicsSimulationType
 		{
 			Static = 0,
@@ -11550,6 +13207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Kinematic = 2,
 			Invalid = 3
 		}
+
 		public enum physicsStateValue
 		{
 			Position = 1,
@@ -11570,11 +13228,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Radius = 30,
 			SimulationFilter = 32
 		}
-		public enum PlayerVisionModeControllerRefreshPolicyEnum
-		{
-			Persistent = 0,
-			Eventful = 1
-		}
+
 		public enum populationSpawnerObjectCtrlAction
 		{
 			Undefined = 0,
@@ -11586,138 +13240,19 @@ namespace WolvenKit.RED4.CR2W.Types
 			Respawn = 3,
 			ResetKillCount = 4
 		}
-		public enum ProgramEffect
-		{
-			GrantAccess = 0,
-			BlockAccess = 1,
-			UnlockQuestFact = 2
-		}
-		public enum ProgramType
-		{
-			BasicAccess = 0,
-			ExtraPlayerProgram = 1,
-			ExtraServerProgram = 2,
-			EnemyProgram = 3,
-			EnemyLockNetwork = 4
-		}
-		public enum PSODescBlendModeFactor
-		{
-			FAC_Zero = 0,
-			FAC_One = 1,
-			FAC_SrcColor = 2,
-			FAC_InvSrcColor = 3,
-			FAC_SrcAlpha = 4,
-			FAC_InvSrcAlpha = 5,
-			FAC_DestColor = 6,
-			FAC_InvDestColor = 7,
-			FAC_DestAlpha = 8,
-			FAC_InvDestAlpha = 9,
-			FAC_BlendFactor = 10,
-			FAC_InvBlendFactor = 11,
-			FAC_Src1Color = 12,
-			FAC_InvSrc1Color = 13,
-			FAC_Src1Alpha = 14,
-			FAC_InvSrc1Alpha = 15
-		}
-		public enum PSODescBlendModeOp
-		{
-			OP_Add = 0,
-			OP_Subtract = 1,
-			OP_RevSub = 2,
-			OP_Min = 3,
-			OP_Max = 4,
-			OP_Or = 5,
-			OP_And = 6,
-			OP_Xor = 7,
-			OP_nAnd = 8,
-			OP_nOr = 9
-		}
-		public enum PSODescBlendModeWriteMask
-		{
-			MASK_None = 0,
-			MASK_R = 1,
-			MASK_G = 2,
-			MASK_RG = 3,
-			MASK_B = 4,
-			MASK_RB = 5,
-			MASK_GB = 6,
-			MASK_RGB = 7,
-			MASK_A = 8,
-			MASK_RA = 9,
-			MASK_GA = 10,
-			MASK_RGA = 11,
-			MASK_BA = 12,
-			MASK_RBA = 13,
-			MASK_GBA = 14,
-			MASK_RGBA = 15
-		}
-		public enum PSODescDepthStencilModeComparisonMode
-		{
-			COMPARISON_Never = 0,
-			COMPARISON_Less = 1,
-			COMPARISON_Equal = 2,
-			COMPARISON_LessEqual = 3,
-			COMPARISON_Greater = 4,
-			COMPARISON_NotEqual = 5,
-			COMPARISON_GreaterEqual = 6,
-			COMPARISON_Always = 7
-		}
-		public enum PSODescDepthStencilModeStencilOpMode
-		{
-			STENCILOP_Keep = 0,
-			STENCILOP_Zero = 1,
-			STENCILOP_Replace = 2,
-			STENCILOP_IncreaseSaturate = 3,
-			STENCILOP_DecreaseSaturate = 4,
-			STENCILOP_Invert = 5,
-			STENCILOP_Increase = 6,
-			STENCILOP_Decrease = 7
-		}
-		public enum PSODescPrimitiveTopologyType
-		{
-			Invalid = 0,
-			Point = 1,
-			Line = 2,
-			Triangle = 3,
-			Patch = 4
-		}
-		public enum PSODescRasterizerModeCullMode
-		{
-			CULL_None = 0,
-			CULL_Front = 1,
-			CULL_Back = 2
-		}
-		public enum PSODescRasterizerModeFrontFaceWinding
-		{
-			FRONTFACE_CCW = 0,
-			FRONTFACE_CW = 1
-		}
-		public enum PSODescRasterizerModeOffsetMode
-		{
-			OFFSET_None = 0,
-			OFFSET_NormalBias = 1,
-			OFFSET_ShadowBias = 2,
-			OFFSET_DecalBias = 3
-		}
-		public enum QuantityPickerActionType
-		{
-			Buy = 0,
-			Sell = 1,
-			TransferToStorage = 2,
-			TransferToPlayer = 3,
-			Drop = 4,
-			Disassembly = 5
-		}
+
 		public enum questAttachmentOffsetMode
 		{
 			UseRealOffset = 0,
 			UseCustomOffset = 1
 		}
+
 		public enum questAudioEventPrefetchMode
 		{
 			AddEventPrefetch = 0,
 			RemoveEventPrefetch = 1
 		}
+
 		public enum questAvailableVehicleType
 		{
 			AnyCar = 0,
@@ -11725,6 +13260,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			AnyVehicle = 2,
 			SpecificVehicle = 3
 		}
+
 		public enum questBehindInteractionEventType
 		{
 			Undefined = 0,
@@ -11733,29 +13269,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			IsBehind = 3,
 			IsNotBehind = 4
 		}
+
 		public enum questBlockAction
 		{
 			Block = 0,
 			Unblock = 1,
 			UnblockAll = 2
 		}
+
 		public enum questBriefingSequencePlayerFunction
 		{
 			StartSequence = 0,
 			ChangeSequence = 1,
 			FinishSequence = 2
 		}
+
 		public enum questBriefingType
 		{
 			Fullscreen = 0,
 			Hud = 1
 		}
+
 		public enum questCameraParallaxSpace
 		{
 			Trajectory = 0,
 			Camera = 1,
 			Chest = 2
 		}
+
 		public enum questCameraPlanesPreset
 		{
 			Undefined = 0,
@@ -11763,6 +13304,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Near = 2,
 			Normal = 3
 		}
+
 		public enum questCharacterHitEventType
 		{
 			Bullet = 0,
@@ -11770,6 +13312,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Melee = 2,
 			Other = 3
 		}
+
 		public enum questCombatNodeFunctions
 		{
 			CombatTarget = 0,
@@ -11782,27 +13325,32 @@ namespace WolvenKit.RED4.CR2W.Types
 			SecondaryWeapon = 7,
 			RestrictMovementToArea = 8
 		}
+
 		public enum questCompanionPositions
 		{
 			Behind = 0,
 			InFront = 1
 		}
+
 		public enum questControlCrowdAction
 		{
 			Disable = 0,
 			Enable = 1
 		}
+
 		public enum questCustomStyle
 		{
 			PlacidePhone = 0,
 			VideoCallInterupt = 1
 		}
+
 		public enum questDrillingState
 		{
 			Undefined = 0,
 			Started = 1,
 			Finished = 2
 		}
+
 		public enum questEAddRemoveItemType
 		{
 			AddItem = 0,
@@ -11810,11 +13358,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			RemoveByTag = 2,
 			RemoveAll = 3
 		}
+
 		public enum questEComparisonTypeEquality
 		{
 			Equal = 0,
 			NotEqual = 1
 		}
+
 		public enum questEDebugViewMode
 		{
 			NONE = 0,
@@ -11831,43 +13381,51 @@ namespace WolvenKit.RED4.CR2W.Types
 			WIREFRAME = 11,
 			OVERDRAW = 12
 		}
-		public enum questElevator_ManageNPCAttachment_NodeTypeParamsAction
-		{
-			Attach = 0,
-			Detach = 1
-		}
+
 		public enum questESwitchBehaviourType
 		{
 			[RED("First Fulfilled")] First_Fulfilled = 0,
 			[RED("All Fulfilled")] All_Fulfilled = 1
 		}
+
 		public enum questETimeDilationOverride
 		{
 			None = 0,
 			Ignore = 1,
 			Inherit = 2
 		}
+
 		public enum questETimeShiftType
 		{
 			ShiftByTime = 0,
 			ShiftToHour = 1
 		}
+
 		public enum questEUIMenuState
 		{
 			Open = 0,
 			Closed = 1
 		}
+
+		public enum questElevator_ManageNPCAttachment_NodeTypeParamsAction
+		{
+			Attach = 0,
+			Detach = 1
+		}
+
 		public enum questExitType
 		{
 			Terminating = 0,
 			NonTerminating = 1
 		}
+
 		public enum questGameplayRestrictionAction
 		{
 			AddRestriction = 0,
 			RemoveRestriction = 1,
 			RemoveAllRestrictions = 2
 		}
+
 		public enum questImpulseMagnitude
 		{
 			Any = 0,
@@ -11875,11 +13433,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Medium = 2,
 			High = 3
 		}
+
 		public enum questInjectLootOperationType
 		{
 			Inject = 0,
 			Remove = 1
 		}
+
 		public enum questInputDevice
 		{
 			Undefined = 0,
@@ -11887,17 +13447,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			XBoxGamepad = 2,
 			PS4Gamepad = 3
 		}
+
 		public enum questJournalAlignmentEventType
 		{
 			Left = 0,
 			Center = 1,
 			Right = 2
 		}
+
 		public enum questJournalSizeEventType
 		{
 			Maximize = 0,
 			Minimize = 1
 		}
+
 		public enum questLanguageMode
 		{
 			Undefined = 0,
@@ -11905,11 +13468,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			SubsLang = 2,
 			TextLang = 3
 		}
+
 		public enum questLocationAction
 		{
 			Entered = 0,
 			Exited = 1
 		}
+
 		public enum questLogicalOperation
 		{
 			AND = 0,
@@ -11919,6 +13484,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			NOR = 4,
 			NXOR = 5
 		}
+
 		public enum questLookAtDrivenTurnsMode
 		{
 			Start = 0,
@@ -11927,6 +13493,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Stop = 3,
 			ForceStop = 4
 		}
+
 		public enum questLootTokenState
 		{
 			Enabled = 0,
@@ -11934,29 +13501,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			Sealed = 2,
 			Unsealed = 3
 		}
+
 		public enum questMountConditionType
 		{
 			OnMount = 0,
 			OnUnmount = 1
 		}
+
 		public enum questMountVehicleOrigin
 		{
 			Any = 0,
 			NotStolen = 1,
 			Stolen = 2
 		}
+
 		public enum questMountVehicleType
 		{
 			Any = 0,
 			Car = 1,
 			Motorcycle = 2
 		}
+
 		public enum questMoveOnSplineType
 		{
 			Simple = 0,
 			Anim = 1,
 			WithCompanion = 2
 		}
+
 		public enum questMoveType
 		{
 			MoveOnSpline = 0,
@@ -11965,6 +13537,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Patrol = 3,
 			Follow = 4
 		}
+
 		public enum questMultiplayerAIDirectorFunction
 		{
 			SetStatus = 0,
@@ -11972,28 +13545,33 @@ namespace WolvenKit.RED4.CR2W.Types
 			OverrideScheduleEntry = 2,
 			SetCurrentShedule = 3
 		}
+
 		public enum questMultiplayerAIDirectorStatus
 		{
 			Enabled = 0,
 			Disabled = 1
 		}
+
 		public enum questMultiplayerHeistState
 		{
 			Invalid = 0,
 			Failure = 1,
 			Victory = 2
 		}
+
 		public enum questNodeType
 		{
 			Equip = 0,
 			Unequip = 1
 		}
+
 		public enum questObjectInspectEventType
 		{
 			Undefined = 0,
 			Started = 1,
 			Finished = 2
 		}
+
 		public enum questObjectInteractionEventType
 		{
 			Undefined = 0,
@@ -12001,12 +13579,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Exited = 2,
 			Executed = 3
 		}
+
 		public enum questObjectScanEventType
 		{
 			Undefined = 0,
 			Started = 1,
 			Finished = 2
 		}
+
 		public enum questPhaseNodeType
 		{
 			Quest = 0,
@@ -12014,12 +13594,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Combat = 2,
 			Audio = 3
 		}
+
 		public enum questPhoneCallMode
 		{
 			Undefined = 0,
 			Audio = 1,
 			Video = 2
 		}
+
 		public enum questPhoneCallPhase
 		{
 			Undefined = 0,
@@ -12027,6 +13609,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			StartCall = 2,
 			EndCall = 3
 		}
+
 		public enum questPhoneStatus
 		{
 			Available = 0,
@@ -12034,17 +13617,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			Busy = 2,
 			Minimized = 3
 		}
+
 		public enum questPhoneTalkingState
 		{
 			Ended = 0,
 			Initializing = 1,
 			Talking = 2
 		}
+
 		public enum questPlatform
 		{
 			PC = 0,
 			Console = 1
 		}
+
 		public enum questProximityProgressBarAction
 		{
 			Activated = 0,
@@ -12052,12 +13638,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Completed = 2,
 			WentOutOfRange = 3
 		}
+
 		public enum questProximityProgressBarOrientation
 		{
 			Undefined = 0,
 			InRange = 1,
 			OutOfRange = 2
 		}
+
 		public enum questProximityProgressBarState
 		{
 			None = 0,
@@ -12065,6 +13653,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Inactive = 2,
 			Complete = 3
 		}
+
 		public enum questQuestContentType
 		{
 			Fixer = 0,
@@ -12074,22 +13663,26 @@ namespace WolvenKit.RED4.CR2W.Types
 			SideQuest_Standalone = 4,
 			MinorQuestAndSts = 5
 		}
+
 		public enum questQuickItemsSet
 		{
 			Q001_Kereznikov_Heal_Phone = 0,
 			Q003_All = 1
 		}
+
 		public enum questRandomizerMode
 		{
 			Random = 0,
 			IgnoreLastUsed = 1,
 			IgnoreAllUsed = 2
 		}
+
 		public enum questScanningState
 		{
 			NotScanned = 0,
 			Scanned = 1
 		}
+
 		public enum questSceneConditionType
 		{
 			Undefined = 0,
@@ -12098,11 +13691,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			Entered = 3,
 			Exited = 4
 		}
+
 		public enum questSetDestructionStateAction
 		{
 			Undefined = 0,
 			Trigger = 1
 		}
+
 		public enum questSocketType
 		{
 			Undefined = 0,
@@ -12111,6 +13706,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			CutSource = 3,
 			CutDestination = 4
 		}
+
 		public enum questSpawnedVehicleType
 		{
 			EntityReferenced = 0,
@@ -12118,11 +13714,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			AnyMotorcycle = 2,
 			SpecificVehicle = 3
 		}
+
 		public enum questSwitchWeaponModes
 		{
 			PrimaryWeapon = 0,
 			SecondaryWeapon = 1
 		}
+
 		public enum questTriggerConditionType
 		{
 			Undefined = 0,
@@ -12133,18 +13731,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			AllInsideMP = 5,
 			AllOutsideMP = 6
 		}
+
 		public enum questTutorialScreenMode
 		{
 			Undefined = 0,
 			Fullscreen = 1,
 			Popup = 2
 		}
+
 		public enum questUIGameContextRequestType
 		{
 			Push = 0,
 			Pop = 1,
 			Reset = 2
 		}
+
 		public enum questUseWorkspotNodeFunctions
 		{
 			UseWorkspot = 0,
@@ -12152,16 +13753,19 @@ namespace WolvenKit.RED4.CR2W.Types
 			StopWorkspot = 2,
 			IdleOnlyMode = 3
 		}
+
 		public enum questUseWorkspotTier
 		{
 			Tier3 = 0,
 			Tier4 = 1
 		}
+
 		public enum questVehicleCameraPerspective
 		{
 			TPP = 0,
 			FPP = 1
 		}
+
 		public enum questVehicleCameraType
 		{
 			Undefined = 0,
@@ -12170,6 +13774,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			TPP = 2,
 			DriverFPP = 3
 		}
+
 		public enum questVehicleCommandType
 		{
 			[RED("Move On Spline")] Move_On_Spline = 0,
@@ -12178,6 +13783,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Racing = 3,
 			[RED("Join Traffic")] Join_Traffic = 4
 		}
+
 		public enum questVehicleWeaponQuestID
 		{
 			Primary = 0,
@@ -12190,104 +13796,141 @@ namespace WolvenKit.RED4.CR2W.Types
 			Octonary = 7,
 			All = 8
 		}
+
 		public enum questVisionModeType
 		{
 			Undefined = 0,
 			FocusMode = 1,
 			EnhancedMode = 2
 		}
+
 		public enum questWeaponUsageType
 		{
 			Shoot = 0,
 			Reload = 1
 		}
-		public enum QuickSlotActionType
-		{
-			Undefined = 0,
-			SelectItem = 1,
-			HideWeapon = 2,
-			OpenPhone = 3,
-			SummonCar = 4,
-			SummonBike = 5,
-			ToggleRadio = 6,
-			SelectRadioStation = 7,
-			TurnOffRadio = 8,
-			CycleTrackedQuest = 9,
-			SummonVehicle = 10,
-			SetActiveVehicle = 11,
-			QuickHack = 12,
-			ToggleSummonMode = 13,
-			EquipFists = 14
-		}
-		public enum QuickSlotItemType
-		{
-			Undefined = 0,
-			Vehicle = 1,
-			Gadget = 2,
-			Consumable = 3,
-			Cyberware = 4,
-			Weapon = 5,
-			Interaction = 6
-		}
-		public enum ReactionZones_Humanoid_Side
-		{
-			Head = 0,
-			ChestLeft = 1,
-			ArmLeft = 2,
-			HandLeft = 3,
-			ChestRight = 4,
-			ArmRight = 5,
-			HandRight = 6,
-			Abdomen = 7,
-			LegLeft = 8,
-			LegRight = 9
-		}
+
 		public enum redTaskTextMessageType
 		{
 			Info = 0,
 			Error = 1
 		}
-		public enum Ref_1_3_3_BigEnum
-		{
-			BigValue //= 68719476735
-		}
-		public enum Ref_1_3_3_Colors
-		{
-			Red = 0,
-			Green = 4,
-			Blue = 5
-		}
-		public enum Ref_1_3_3_CustomSize_1
-		{
-			Test1 = -128,
-			Test = 0,
-			Test2 = 127
-		}
-		public enum Ref_1_3_3_CustomSize_2
-		{
-			Test = 0,
-			Test1 = 256,
-			Test2 = 12345
-		}
-		public enum Ref_2_3_3_Enum32Bit
-		{
-			Value = 0
-		}
-		public enum Ref_2_3_3_Enum64Bit
-		{
-			BigValue //= 68719476735
-		}
+
 		public enum rendCaptureContextType
 		{
 			SceneGamedef = 0,
 			AnimViewer = 1
 		}
+
 		public enum rendContactShadowReciever
 		{
 			CSR_None = 0,
 			CSR_CharacterOnly = 2,
 			CSR_All = 3
 		}
+
+		public enum rendEParticleSortingMode
+		{
+			PSM_None = 0,
+			PSM_Billboard = 1,
+			PSM_Regular = 2
+		}
+
+		public enum rendGIGroup
+		{
+			GI_Group0 = 0,
+			GI_Group1 = 1
+		}
+
+		public enum rendGIVolume
+		{
+			GI_Exterior = 0,
+			GI_Interior1 = 1,
+			GI_Interior2 = 2,
+			GI_Interior3 = 3,
+			GI_Interior4 = 4
+		}
+
+		public enum rendLightAttenuation
+		{
+			LA_InverseSquare = 0,
+			LA_Linear = 1
+		}
+
+		[Flags]
+		public enum rendLightChannel
+		{
+			LC_Channel1 = 1 << 0,
+			LC_Channel2 = 1 << 1,
+			LC_Channel3 = 1 << 2,
+			LC_Channel4 = 1 << 3,
+			LC_Channel5 = 1 << 4,
+			LC_Channel6 = 1 << 5,
+			LC_Channel7 = 1 << 6,
+			LC_Channel8 = 1 << 7,
+			LC_ChannelWorld = 1 << 8,
+			LC_Character = 1 << 9,
+			LC_Player = 1 << 10,
+			LC_Automated = 1 << 15
+		}
+
+		public enum rendLightGroup
+		{
+			LG_Group0 = 0,
+			LG_Group1 = 1,
+			LG_Group2 = 2,
+			LG_Group3 = 3,
+			LG_Group4 = 4,
+			LG_Group5 = 5,
+			LG_Group6 = 6,
+			LG_Group7 = 7
+		}
+
+		public enum rendPostFx_ScanningState
+		{
+			Off = 0,
+			Scanning = 2,
+			Cancelled = 3,
+			Complete = 4
+		}
+
+		public enum rendResolutionMultiplier
+		{
+			X1 = 1,
+			X2 = 2,
+			X4 = 4
+		}
+
+		public enum rendScreenshotMode
+		{
+			NONE = 0,
+			NORMAL = 1,
+			LAYERED = 3,
+			HIGH_RESOLUTION = 4,
+			HIGH_RESOLUTION_LAYERED = 5
+		}
+
+		public enum rendWindShapeAnchorPointDepth
+		{
+			AP_CENTER = 0,
+			AP_FRONT = 1,
+			AP_BACK = 2
+		}
+
+		public enum rendWindShapeAnchorPointHorz
+		{
+			AP_CENTER = 0,
+			AP_RIGHT = 1,
+			AP_LEFT = 2
+		}
+
+		public enum rendWindShapeAnchorPointVert
+		{
+			AP_CENTER = 0,
+			AP_TOP = 1,
+			AP_BOTTOM = 2
+		}
+
 		public enum renddimEPreset
 		{
 			[RED("228x128")] _228x128 = 0,
@@ -12308,24 +13951,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			[RED("3840x2160")] _3840x2160 = 13,
 			Console_Scorpio = 13
 		}
-		public enum rendEParticleSortingMode
-		{
-			PSM_None = 0,
-			PSM_Billboard = 1,
-			PSM_Regular = 2
-		}
-		public enum RenderDecalNormalsBlendingMode
-		{
-			AlphaBlending = 0,
-			Reorient = 1
-		}
-		public enum RenderDecalOrderPriority
-		{
-			Priority0 = 0,
-			Priority1 = 1,
-			Priority2 = 2,
-			Priority3 = 3
-		}
+
 		public enum renderDevEnvProbeView
 		{
 			RADIANCE = 0,
@@ -12336,6 +13962,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			EMISSIVE = 5,
 			SKY_MASK = 6
 		}
+
 		public enum renderDevGIProbeView
 		{
 			RADIANCE = 0,
@@ -12346,6 +13973,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			FLAG_2 = 5,
 			CURRENT_ID = 6
 		}
+
 		public enum renderDevSurfelView
 		{
 			ALBEDO = 0,
@@ -12358,297 +13986,65 @@ namespace WolvenKit.RED4.CR2W.Types
 			INSIDE = 7,
 			SHADOW = 8
 		}
+
 		public enum renderDevTXAADebugMode
 		{
 			TXAA_NoDebug = 0,
 			TXAA_ShowHistoryBlendFactor = 1
 		}
-		public enum RenderSceneLayer
-		{
-			Default = 0,
-			Cyberspace = 1,
-			WorldMap = 2
-		}
-		public enum rendGIGroup
-		{
-			GI_Group0 = 0,
-			GI_Group1 = 1
-		}
-		public enum rendGIVolume
-		{
-			GI_Exterior = 0,
-			GI_Interior1 = 1,
-			GI_Interior2 = 2,
-			GI_Interior3 = 3,
-			GI_Interior4 = 4
-		}
-		public enum rendLightAttenuation
-		{
-			LA_InverseSquare = 0,
-			LA_Linear = 1
-		}
-		public enum rendLightGroup
-		{
-			LG_Group0 = 0,
-			LG_Group1 = 1,
-			LG_Group2 = 2,
-			LG_Group3 = 3,
-			LG_Group4 = 4,
-			LG_Group5 = 5,
-			LG_Group6 = 6,
-			LG_Group7 = 7
-		}
-		public enum rendPostFx_ScanningState
-		{
-			Off = 0,
-			Scanning = 2,
-			Cancelled = 3,
-			Complete = 4
-		}
-		public enum rendResolutionMultiplier
-		{
-			X1 = 1,
-			X2 = 2,
-			X4 = 4
-		}
-		public enum rendScreenshotMode
-		{
-			NONE = 0,
-			NORMAL = 1,
-			LAYERED = 3,
-			HIGH_RESOLUTION = 4,
-			HIGH_RESOLUTION_LAYERED = 5
-		}
-		public enum rendWindShapeAnchorPointDepth
-		{
-			AP_CENTER = 0,
-			AP_FRONT = 1,
-			AP_BACK = 2
-		}
-		public enum rendWindShapeAnchorPointHorz
-		{
-			AP_CENTER = 0,
-			AP_RIGHT = 1,
-			AP_LEFT = 2
-		}
-		public enum rendWindShapeAnchorPointVert
-		{
-			AP_CENTER = 0,
-			AP_TOP = 1,
-			AP_BOTTOM = 2
-		}
-		public enum RequestType
-		{
-			INSTANTLY_TRIGGER = 0,
-			MANUALLY_TRIGGERED = 1
-		}
-		public enum RipperdocFilter
-		{
-			All = 0,
-			Vendor = 1,
-			Player = 2
-		}
-		public enum RipperdocModes
-		{
-			Default = 0,
-			Item = 1
-		}
-		public enum Sample_Enum_4_1
-		{
-			Sample_Enum_Option_4_1_0 = 0,
-			Sample_Enum_Option_4_1_1 = 7,
-			Sample_Enum_Option_4_1_2 = 8,
-			MyCustomEnumOptionName413 = 9
-		}
-		public enum Sample_Enum_4_4
-		{
-			Sample_Enum_Option_4_4_0 = 0,
-			Sample_Enum_Option_4_4_1 = 1,
-			Sample_Enum_Option_4_4_2 = 2
-		}
-		public enum Sample_Enum_4_5
-		{
-			Sample_Enum_Option_4_5_0 = 10,
-			Sample_Enum_Option_4_5_1 = 27,
-			Sample_Enum_Option_4_5_2 = 108
-		}
-		public enum Sample_Enum_4_6
-		{
-			Sample_Enum_Option_4_6_0 = 0,
-			Sample_Enum_Option_4_6_1_with_a_new_name = 1,
-			Sample_Enum_Option_4_6_1 = 1
-		}
-		public enum Sample_Enum_6_8
-		{
-		}
-		public enum Sample_Namespace_4_2Sample_Enum_4_2
-		{
-			Sample_Enum_Option_4_2_0 = 0,
-			Sample_Enum_Option_4_2_1 = 7,
-			Sample_Enum_Option_4_2_2 = 8,
-			MyCustomEnumOptionName423 = 9
-		}
-		public enum Sample_Namespace_4_3_0Sample_Namespace_4_3_1Sample_Enum_4_3
-		{
-			Sample_Enum_Option_4_3_0 = 0,
-			Sample_Enum_Option_4_3_1 = 7,
-			Sample_Enum_Option_4_3_2 = 8,
-			MyCustomEnumOptionName433 = 9
-		}
-		public enum Sample_Replicated_Enum
-		{
-			One = 0,
-			Two = 1,
-			Three = 2
-		}
-		public enum SAnimationBufferBitwiseCompression
-		{
-			ABBC_None = 0,
-			ABBC_24b = 1,
-			ABBC_16b = 2
-		}
-		public enum SAnimationBufferBitwiseCompressionPreset
-		{
-			ABBCP_Custom = 0,
-			ABBCP_VeryHighQuality = 1,
-			ABBCP_HighQuality = 2,
-			ABBCP_NormalQuality = 3,
-			ABBCP_LowQuality = 4,
-			ABBCP_VeryLowQuality = 5,
-			ABBCP_Raw = 6
-		}
-		public enum SAnimationBufferDataCompressionMethod
-		{
-			ABDCM_Invalid = 0,
-			ABDCM_Plain = 1,
-			ABDCM_Quaternion = 2,
-			ABDCM_QuaternionXYZSignedW = 3,
-			ABDCM_QuaternionXYZSignedWLastBit = 4,
-			ABDCM_Quaternion48b = 5,
-			ABDCM_Quaternion40b = 6,
-			ABDCM_Quaternion32b = 7,
-			ABDCM_Quaternion64bW = 8,
-			ABDCM_Quaternion48bW = 9,
-			ABDCM_Quaternion40bW = 10
-		}
-		public enum SAnimationBufferOrientationCompressionMethod
-		{
-			ABOCM_PackIn64bitsW = 0,
-			ABOCM_PackIn48bitsW = 1,
-			ABOCM_PackIn40bitsW = 2,
-			ABOCM_AsFloat_XYZW = 3,
-			ABOCM_AsFloat_XYZSignedW = 4,
-			ABOCM_AsFloat_XYZSignedWInLastBit = 5,
-			ABOCM_PackIn48bits = 6,
-			ABOCM_PackIn40bits = 7,
-			ABOCM_PackIn32bits = 8
-		}
-		public enum SAnimationBufferStreamingOption
-		{
-			ABSO_NonStreamable = 0,
-			ABSO_PartiallyStreamable = 1,
-			ABSO_FullyStreamable = 2
-		}
-		public enum ScannerDataType
-		{
-			None = 0,
-			Name = 1,
-			Level = 2,
-			Health = 3,
-			Rarity = 4,
-			WeaponBasic = 5,
-			WeaponDetailed = 6,
-			BountySystem = 7,
-			Vulnerabilities = 8,
-			Faction = 9,
-			Attitude = 10,
-			SquadInfo = 11,
-			Resistances = 12,
-			Abilities = 13,
-			Requirements = 14,
-			Description = 15,
-			DeviceStatus = 16,
-			NetworkStatus = 17,
-			NetworkLevel = 18,
-			DeviceConnections = 19,
-			QuestEntry = 20,
-			VehicleName = 21,
-			VehicleManufacturer = 22,
-			VehicleProductionYears = 23,
-			VehicleDriveLayout = 24,
-			VehicleHorsepower = 25,
-			VehicleMass = 26,
-			VehicleState = 27,
-			VehicleInfo = 28,
-			QuickHackDescription = 29
-		}
-		public enum ScannerNetworkState
-		{
-			NOT_CONNECTED = 0,
-			NOT_BREACHED = 1,
-			TIER1 = 2,
-			TIER2 = 3,
-			TIER3 = 4,
-			BREACHED = 5
-		}
-		public enum ScannerObjectType
-		{
-			INVALID = 0,
-			PUPPET = 1,
-			VEHICLE = 2,
-			DEVICE = 3,
-			GENERIC = 4
-		}
+
 		public enum scnAdditionalSpeakerRole
 		{
 			Full = 0,
 			OnlyLipsync = 1
 		}
+
 		public enum scnAdditionalSpeakerType
 		{
 			Normal = 0,
 			Holocall = 1
 		}
-		public enum scnAnimationCategory
-		{
-			Body = 0,
-			Facial = 1,
-			Cyberware = 2
-		}
-        public enum scnAnimNameType
+
+		public enum scnAnimNameType
 		{
 			direct = 0,
 			reference = 1,
 			container = 2,
 			dynamic = 3
 		}
+
+		public enum scnAnimationCategory
+		{
+			Body = 0,
+			Facial = 1,
+			Cyberware = 2
+		}
+
 		public enum scnAudioFastForwardSupport
 		{
 			MuteDuringFastForward = 1,
 			DontMuteDuringFastForward = 2
 		}
+
 		public enum scnAudioPlaybackDirectionSupportFlag
 		{
 			Forward = 1,
 			Backward = 2
 		}
-		public enum scnblocLocaleId
-		{
-			db_db = 0,
-			pl_pl = 1,
-			en_us = 2
-		}
+
 		public enum scnBraindanceLayer
 		{
 			Visual = 0,
 			Audio = 1,
 			Thermal = 2
 		}
+
 		public enum scnBraindancePerspective
 		{
 			FirstPerson = 0,
 			ThirdPerson = 1
 		}
+
 		public enum scnBraindanceSpeed
 		{
 			Any = 0,
@@ -12657,11 +14053,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			Fast = 3,
 			VeryFast = 4
 		}
+
+		[Flags]
+		public enum scnChoiceNodeNsChoiceNodeBitFlags
+		{
+			IsFocusClue = 1 << 0,
+			IsValidInteractionFailsafeDisabled = 1 << 1
+		}
+
 		public enum scnChoiceNodeNsChoiceNodeFlags
 		{
 			IsFocusClue = 1,
 			IsValidInteractionFailsafeDisabled = 2
 		}
+
 		public enum scnChoiceNodeNsMappinLocation
 		{
 			None = 0,
@@ -12669,6 +14074,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Nameplate = 2,
 			ObjectDefault = 4
 		}
+
 		public enum scnChoiceNodeNsOperationMode
 		{
 			attachToActor = 0,
@@ -12677,6 +14083,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			attachToScreen = 3,
 			attachToWorld = 4
 		}
+
 		public enum scnChoiceNodeNsSizePreset
 		{
 			small = 0,
@@ -12686,17 +14093,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			Interaction = 4,
 			Dialogue360 = 5
 		}
+
 		public enum scnChoiceNodeNsTimedAction
 		{
 			appear = 0,
 			disappear = 1,
 			disappearFading = 2
 		}
+
 		public enum scnChoiceNodeNsVisualizerStyle
 		{
 			onScreen = 0,
 			inWorld = 1
 		}
+
 		public enum scnContextualActorName
 		{
 			Player = 0,
@@ -12705,12 +14115,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			SpecificVoicetagHolder = 3,
 			ContextActorName = 4
 		}
-		public enum scndevEventType
-		{
-			DebugMessage = 0,
-			NodeFailed = 1,
-			NodeProgressSet = 2
-		}
+
 		public enum scnDialogLineLanguage
 		{
 			Origin = 0,
@@ -12723,6 +14128,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			English = 8,
 			Korean = 9
 		}
+
 		public enum scnDialogLineType
 		{
 			None = 0,
@@ -12738,6 +14144,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			AlwaysCinematicNoSpeaker = 11,
 			GlobalTVAlwaysVisible = 12
 		}
+
 		public enum scnDialogLineVisualStyle
 		{
 			regular = 0,
@@ -12750,12 +14157,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			alwaysCinematicNoSpeaker = 7,
 			globalTVAlwaysVisible = 8
 		}
+
 		public enum scnDistractedConditionTarget
 		{
 			Anyone = 0,
 			Speaker = 1,
 			SpeakerOrAddressee = 2
 		}
+
 		public enum scnEasingType
 		{
 			Linear = 0,
@@ -12766,11 +14175,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			CubicEaseIn = 5,
 			CubicEaseOut = 6
 		}
+
 		public enum scnEndNodeNsType
 		{
 			Terminating = 0,
 			NonTerminating = 1
 		}
+
 		public enum scnEntityAcquisitionPlan
 		{
 			findInContext = 1,
@@ -12783,34 +14194,17 @@ namespace WolvenKit.RED4.CR2W.Types
 			findInNode = 8,
 			findNetworkPlayer = 9
 		}
-		public enum scneventsRidCameraPlacement
-		{
-			SceneOrigin = 0,
-			Actual = 1,
-			Player = 2
-		}
-		public enum scneventsUIAnimActionType
-		{
-			Play = 0,
-			Update = 1,
-			Resume = 2,
-			Pause = 3,
-			Stop = 4
-		}
-		public enum scneventsVFXActionType
-		{
-			Play = 0,
-			Break = 1,
-			Kill = 2
-		}
+
 		public enum scnEventType
 		{
 		}
+
 		public enum scnFastForwardMode
 		{
 			Default = 0,
 			GameplayReview = 1
 		}
+
 		public enum scnFastForwardStrategy
 		{
 			automatic = 0,
@@ -12821,59 +14215,46 @@ namespace WolvenKit.RED4.CR2W.Types
 			block_fully = 5,
 			block_on_end_if_activator_matched = 6
 		}
-		public enum scnfppBlendOverride
-		{
-			Centering = 0,
-			CopyPitch_CenteringYaw = 1,
-			CopyPitch_CopyYaw = 2,
-			Custom_PitchYaw = 3
-		}
-		public enum scnfppParallaxSpace
-		{
-			Default = 0,
-			Camera = 1,
-			Trajectory = 2,
-			Chest = 3
-		}
+
 		public enum scnInterruptCapability
 		{
 			None = 0,
 			Interruptable = 1,
 			NotInterruptable = 2
 		}
+
 		public enum scnInterruptReturnLinesBehavior
 		{
 			Default = 0,
 			Vehicle = 1,
 			Holocall = 2
 		}
-		public enum scnlocLocaleId
-		{
-			db_db = 0,
-			pl_pl = 1,
-			en_us = 2
-		}
+
 		public enum scnLookAtTargetType
 		{
 			Actor = 0,
 			Prop = 1
 		}
+
 		public enum scnMarkerType
 		{
 			Local = 0,
 			Global = 1,
 			Entity = 2
 		}
+
 		public enum scnOffsetMode
 		{
 			useRealOffset = 0,
 			useCustomOffset = 1
 		}
+
 		public enum scnPlayDirection
 		{
 			Forward = 0,
 			Backward = 1
 		}
+
 		public enum scnPlaySpeed
 		{
 			Pause = 0,
@@ -12882,12 +14263,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Fast = 3,
 			VeryFast = 4
 		}
+
 		public enum scnPropOwnershipTransferOptionsType
 		{
 			TransferToWorkspotSystem_Automatic = 0,
 			TransferToWorkspotSystem_Custom = 1,
 			DisposeAfterScene = 2
 		}
+
 		public enum scnPuppetVehicleState
 		{
 			IdleMounted = 0,
@@ -12897,12 +14280,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Turret = 4,
 			GunnerSlot = 5
 		}
+
 		public enum scnRandomizerMode
 		{
 			Random = 0,
 			IgnoreLastUsed = 1,
 			IgnoreAllUsed = 2
 		}
+
 		public enum scnReminderConditionProcessStep
 		{
 			ReminderA = 0,
@@ -12910,18 +14295,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			ReminderC = 2,
 			Looping = 3
 		}
+
 		public enum scnRidActorPlacement
 		{
 			SceneOrigin = 0,
 			Actual = 1,
 			Player = 2
 		}
+
 		public enum scnRootMotionAnimPlacementMode
 		{
 			Blend = 0,
 			TeleportToStart = 1,
 			PlayAtActorPosition = 2
 		}
+
 		public enum scnSceneCategoryTag
 		{
 			voiceset = 0,
@@ -12938,6 +14326,79 @@ namespace WolvenKit.RED4.CR2W.Types
 			otherOpenWorld = 11,
 			other = 12
 		}
+
+		public enum scnSectionInternalsActorBehaviorMode
+		{
+			OnlyIfAlive = 0,
+			EvenIfDead = 1
+		}
+
+		public enum scnWorldMarkerType
+		{
+			Tag = 0,
+			NodeRef = 1
+		}
+
+		public enum scnblocLocaleId
+		{
+			db_db = 0,
+			pl_pl = 1,
+			en_us = 2
+		}
+
+		public enum scndevEventType
+		{
+			DebugMessage = 0,
+			NodeFailed = 1,
+			NodeProgressSet = 2
+		}
+
+		public enum scneventsRidCameraPlacement
+		{
+			SceneOrigin = 0,
+			Actual = 1,
+			Player = 2
+		}
+
+		public enum scneventsUIAnimActionType
+		{
+			Play = 0,
+			Update = 1,
+			Resume = 2,
+			Pause = 3,
+			Stop = 4
+		}
+
+		public enum scneventsVFXActionType
+		{
+			Play = 0,
+			Break = 1,
+			Kill = 2
+		}
+
+		public enum scnfppBlendOverride
+		{
+			Centering = 0,
+			CopyPitch_CenteringYaw = 1,
+			CopyPitch_CopyYaw = 2,
+			Custom_PitchYaw = 3
+		}
+
+		public enum scnfppParallaxSpace
+		{
+			Default = 0,
+			Camera = 1,
+			Trajectory = 2,
+			Chest = 3
+		}
+
+		public enum scnlocLocaleId
+		{
+			db_db = 0,
+			pl_pl = 1,
+			en_us = 2
+		}
+
 		public enum scnscreenplayItemType
 		{
 			invalid = 0,
@@ -12945,36 +14406,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			choiceOption = 2,
 			standaloneComment = 3
 		}
-		public enum scnSectionInternalsActorBehaviorMode
-		{
-			OnlyIfAlive = 0,
-			EvenIfDead = 1
-		}
-		public enum scnWorldMarkerType
-		{
-			Tag = 0,
-			NodeRef = 1
-		}
-		public enum SecurityEventScopeSettings
-		{
-			GLOBAL = 0,
-			AREA_WHERE_PLAYER_IS = 1,
-			SPECIFIC_AGENTS_ONLY = 2
-		}
+
 		public enum senseAdditionalTraceType
 		{
 			Knee = 0,
 			Hip = 1,
 			Chest = 2
 		}
+
 		public enum senseEShapeType
 		{
-			INVALID = -1,
 			BOX = 0,
 			SPHERE = 1,
 			CONE = 2,
-			ANGLE_RANGE = 3
+			ANGLE_RANGE = 3,
+			INVALID = -1
 		}
+
 		public enum senseTracingFreq
 		{
 			Never = 0,
@@ -12984,12 +14432,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			High = 4,
 			Highest = 5
 		}
-		public enum SettingsType
-		{
-			Slider = 0,
-			Toggle = 1,
-			DropdownList = 2
-		}
+
 		public enum sharedCommandResult
 		{
 			Success = 0,
@@ -12997,6 +14440,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Fail = 2,
 			Abort = 3
 		}
+
 		public enum sharedMenuItemType
 		{
 			Action = 0,
@@ -13004,72 +14448,42 @@ namespace WolvenKit.RED4.CR2W.Types
 			Group = 2,
 			Separator = 3
 		}
-		public enum SignalType
-		{
-			DEFAULT = 0,
-			REGISTRATION = 1,
-			UNREGISTRATION = 2
-		}
-		public enum SignShape
-		{
-			RECTANGLE = 0,
-			ARROWLEFT = 1,
-			ARROWRIGHT = 2,
-			SQUARE = 3
-		}
-		public enum SignType
-		{
-			INFORMATION = 0,
-			ATTENTION = 1,
-			WARNING = 2
-		}
-		public enum SlotType
-		{
-			DEFAULT = 0,
-			HOLSTER = 1,
-			WEAPON = 2,
-			COMBAT_CYBERWARE = 3,
-			TOOLTIP = 4,
-			MISC = 5
-		}
-		public enum StaticShaderInputLayout
-		{
-			DebugVertexBase = 0,
-			DebugVertexUV = 1,
-			DebugVertexUV_Fullscreen = 2,
-			NoBuffers_Fullscreen = 3,
-			NoBuffers_PointList = 4
-		}
+
 		public enum telemetryLevelGainReason
 		{
 			Ignore = 0,
 			Gameplay = 1,
 			IsDebug = 2
 		}
+
 		public enum tempshitMapPinOperation
 		{
 			Undefined = 0,
 			Add = 1,
 			Remove = 2
 		}
+
 		public enum textHorizontalAlignment
 		{
 			Left = 0,
 			Center = 1,
 			Right = 2
 		}
+
 		public enum textJustificationType
 		{
 			Left = 0,
 			Center = 1,
 			Right = 2
 		}
+
 		public enum textLetterCase
 		{
 			OriginalCase = 0,
 			UpperCase = 1,
 			LowerCase = 2
 		}
+
 		public enum textOverflowPolicy
 		{
 			None = 0,
@@ -13079,47 +14493,41 @@ namespace WolvenKit.RED4.CR2W.Types
 			PingPongScroll = 4,
 			AdjustToSize = 5
 		}
+
 		public enum textTextDirection
 		{
 			LeftToRight = 0,
 			RightToLeft = 1,
 			Mixed = 2
 		}
+
 		public enum textTextFlowDirection
 		{
 			Auto = 0,
 			LeftToRight = 1,
 			RightToLeft = 2
 		}
+
 		public enum textTextShapingMethod
 		{
 			Auto = 0,
 			KerningOnly = 1,
 			FullShaping = 2
 		}
+
 		public enum textVerticalAlignment
 		{
 			Top = 0,
 			Center = 1,
 			Bottom = 2
 		}
+
 		public enum textWrappingPolicy
 		{
 			Default = 0,
 			PerCharacter = 1
 		}
-		public enum ThrowType
-		{
-			Quick = 0,
-			Charge = 1
-		}
-		public enum Tier2WalkType
-		{
-			Undefined = 0,
-			Slow = 1,
-			Normal = 2,
-			Fast = 3
-		}
+
 		public enum toolsMessageSeverity
 		{
 			Success = 0,
@@ -13127,81 +14535,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Warning = 2,
 			Error = 3
 		}
+
 		public enum toolsMessageTokenType
 		{
 			Text = 0,
 			Location = 1,
 			Tag = 2
 		}
-		public enum TrafficGenDynamicImpact
-		{
-			Ignored = 0,
-			Blocking = 1
-		}
-		public enum TrafficGenMeshImpact
-		{
-			UseNavigation = 0,
-			ForceIgnored = 1,
-			ForceBlocking = 2
-		}
-		public enum TweakWeaponPose
-		{
-			Nothing = 0,
-			Position = 1,
-			Rotation = 2
-		}
-		public enum UIGameContext
-		{
-			Default = 0,
-			QuickHack = 1,
-			Scanning = 2,
-			DeviceZoom = 3,
-			BraindanceEditor = 4,
-			BraindancePlayback = 5,
-			VehicleMounted = 6,
-			ModalPopup = 7,
-			RadialWheel = 8,
-			VehicleRace = 9
-		}
-		public enum UIInGameNotificationType
-		{
-			ActionRestriction = 0,
-			CombatRestriction = 1,
-			CantSaveActionRestriction = 2,
-			CantSaveCombatRestriction = 3,
-			CantSaveQuestRestriction = 4,
-			CantSaveDeathRestriction = 5,
-			NotEnoughSlotsSaveResctriction = 6,
-			NotEnoughSpaceSaveResctriction = 7
-		}
-		public enum UIMenuNotificationType
-		{
-			VendorNotEnoughMoney = 0,
-			VNotEnoughMoney = 1,
-			VendorRequirementsNotMet = 2,
-			InventoryActionBlocked = 3,
-			CraftingNoPerks = 4,
-			CraftingNotEnoughMaterial = 5,
-			UpgradingLevelToLow = 6,
-			NoPerksPoints = 7,
-			PerksLocked = 8,
-			MaxLevelPerks = 9,
-			NoAttributePoints = 10,
-			InCombat = 11
-		}
-		public enum UIObjectiveEntryType
-		{
-			Invalid = 0,
-			Quest = 1,
-			Objective = 2,
-			SubObjective = 3
-		}
-		public enum UpdateBucketEnum
-		{
-			Vehicle = 0,
-			Character = 1,
-			AttachedObject = 2
-		}
+
 		public enum vehicleAudioEventAction
 		{
 			OnPlayerDriving = 0,
@@ -13211,28 +14552,33 @@ namespace WolvenKit.RED4.CR2W.Types
 			OnPlayerExitVehicle = 4,
 			OnPlayerVehicleSummoned = 5
 		}
+
 		public enum vehicleBikeCurve
 		{
 			SpeedToTilt = 0,
 			InputToTilt = 1
 		}
+
 		public enum vehicleCameraPerspective
 		{
 			FPP = 0,
 			TPPClose = 1,
 			TPPFar = 2
 		}
+
 		public enum vehicleCameraType
 		{
 			FPP = 0,
 			TPP = 1
 		}
+
 		public enum vehicleELightMode
 		{
 			Off = 0,
 			On = 1,
 			HighBeams = 2
 		}
+
 		public enum vehicleELightType
 		{
 			Head = 1,
@@ -13245,6 +14591,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Default = 47,
 			Utility = 64
 		}
+
 		public enum vehicleEQuestVehicleDoorState
 		{
 			ForceOpen = 0,
@@ -13265,6 +14612,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Count = 15,
 			Invalid = 16
 		}
+
 		public enum vehicleEQuestVehicleWindowState
 		{
 			ForceOpen = 0,
@@ -13272,6 +14620,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			OpenAll = 2,
 			CloseAll = 3
 		}
+
 		public enum vehicleEState
 		{
 			Default = 1,
@@ -13279,12 +14628,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Disabled = 3,
 			Destroyed = 4
 		}
+
 		public enum vehicleESummonedVehicleType
 		{
 			Any = 0,
 			Car = 1,
 			Motorcycle = 2
 		}
+
 		public enum vehicleEVehicleDoor
 		{
 			seat_front_left = 0,
@@ -13296,6 +14647,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			count = 6,
 			invalid = 7
 		}
+
 		public enum vehicleEVehicleSpeedConditionType
 		{
 			CT_EQUAL = 0,
@@ -13309,32 +14661,37 @@ namespace WolvenKit.RED4.CR2W.Types
 			CT_ABS_LESS = 8,
 			CT_ABS_LESS_EQUAL = 9
 		}
+
 		public enum vehicleEVehicleWindowState
 		{
 			Closed = 0,
 			Open = 1
 		}
+
 		public enum vehicleExitDirection
 		{
-			NoDirection = -1,
 			Left = 0,
 			Right = 1,
 			Front = 2,
 			Back = 3,
-			Top = 4
+			Top = 4,
+			NoDirection = -1
 		}
+
 		public enum vehicleFormationType
 		{
 			FORMATION_TRIANGLE = 0,
 			FORMATION_TURTLE = 1,
 			FORMATION_QUINCUNX = 2
 		}
+
 		public enum vehicleGarageState
 		{
 			NoVehiclesAvailable = 0,
 			SummonAvailable = 1,
 			SummonDisabled = 2
 		}
+
 		public enum vehiclePlayerToAIInterpolationType
 		{
 			PTAIT_INSTANT = 0,
@@ -13357,12 +14714,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			PTAIT_EASE_OUT_SIN_NON_SMOOTHED = 17,
 			PTAIT_EASE_IN_OUT_SIN_NON_SMOOTHED = 18
 		}
+
 		public enum vehicleQuestUIEnable
 		{
 			Gameplay = 0,
 			ForceEnable = 1,
 			ForceDisable = 2
 		}
+
 		public enum vehicleQuestWindowDestruction
 		{
 			window_f = 0,
@@ -13372,6 +14731,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			window_br = 4,
 			window_b = 5
 		}
+
 		public enum vehicleRaceUI
 		{
 			PreRaceSetup = 0,
@@ -13380,10 +14740,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			RaceEnd = 3,
 			Disable = 4
 		}
+
 		public enum vehicleSummonFinishState
 		{
 			Arrived = 0
 		}
+
 		public enum vehicleSummonState
 		{
 			Idle = 0,
@@ -13392,16 +14754,19 @@ namespace WolvenKit.RED4.CR2W.Types
 			PathfindingFailed = 3,
 			Arrived = 4
 		}
+
 		public enum vehicleTPPCameraDistance
 		{
 			Close = 0,
 			Far = 1
 		}
+
 		public enum vehicleTPPCameraHeight
 		{
 			Low = 0,
 			High = 1
 		}
+
 		public enum vehicleVehicleDoorInteractionState
 		{
 			Available = 0,
@@ -13410,18 +14775,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			QuestLocked = 3,
 			Reserved = 4
 		}
+
 		public enum vehicleVehicleDoorState
 		{
 			Closed = 0,
 			Open = 1,
 			Detached = 2
 		}
-		public enum VendorConfirmationPopupType
-		{
-			Default = 0,
-			ExpensiveItem = 1,
-			EquippedItem = 2
-		}
+
 		public enum vgEStyleAttributeType
 		{
 			FillColor = 0,
@@ -13431,16 +14792,9 @@ namespace WolvenKit.RED4.CR2W.Types
 			FontFamily = 4,
 			FontSize = 5
 		}
-		public enum VisualState
-		{
-			OFF = 0,
-			RUNNING = 1,
-			MALFUNCTIONING = 2,
-			ON = 3
-		}
+
 		public enum visWorldOccluderType
 		{
-            [RED("")]
 			Default = 0,
 			None = 1,
 			Detail = 2,
@@ -13448,38 +14802,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			MajorInterior = 4,
 			Exterior = 5
 		}
-		public enum WeaponPartType
-		{
-			Scope = 0,
-			Magazine = 1,
-			Silencer = 2
-		}
+
 		public enum workLogicalOperation
 		{
 			AND = 0,
 			OR = 1
 		}
+
 		public enum workPropAttachMethod
 		{
 			BonePosition = 0,
 			RelativePosition = 1,
 			Custom = 2
 		}
-		public enum WorkspotConditionOperators
-		{
-			OR = 0,
-			AND = 1
-		}
-		public enum WorkspotWeaponConditionEnum
-		{
-			None = 0,
-			Any = 1,
-			Ranged = 2,
-			OneHandedRanged = 3,
-			Melee = 4,
-			MeleeCyberware = 5,
-			LMG = 6
-		}
+
 		public enum workWeaponType
 		{
 			Any = 0,
@@ -13505,6 +14841,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			SubmachineGun = 21,
 			TwoHandedClub = 22
 		}
+
 		public enum workWorkspotDebugMode
 		{
 			VisualLogToogle = 2,
@@ -13520,17 +14857,34 @@ namespace WolvenKit.RED4.CR2W.Types
 			Invalid = 4096,
 			FunctionalTests = 8192
 		}
+
+		[Flags]
+		public enum workWorkspotItemPolicy
+		{
+			ItemPolicy_SpawnItemOnIdleChange = 1 << 0,
+			ItemPolicy_DespawnItemOnIdleChange = 1 << 1,
+			ItemPolicy_DespawnItemOnReaction = 1 << 2
+		}
+
 		public enum workWorkspotLogic
 		{
 			Allow = 0,
 			Deny = 1
 		}
+
 		public enum worldEClusteringModel
 		{
 			HierarchicalGrid = 0,
 			AlwaysLoaded = 1,
 			Discard = 2
 		}
+
+		[Flags]
+		public enum worldEDeniedAreaFlags
+		{
+			EDAF_Togglable = 1 << 0
+		}
+
 		public enum worldEditablePrefabType
 		{
 			Regular = 0,
@@ -13539,12 +14893,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Building = 3,
 			Road = 4
 		}
-		public enum worldenvUtilsEBlendParamsType
-		{
-			EBPS_Tick = 0,
-			EBPS_Game = 1,
-			EBPS_Frame = 2
-		}
+
 		public enum worldFindLaneFilter
 		{
 			None = 0,
@@ -13552,41 +14901,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			PatrolRoute = 2,
 			Pavement = 3
 		}
-		public enum worldgeometryaverageNormalDetectionHelperQueryStatus
-		{
-			Finished = 0,
-			NoGeometry = 1
-		}
-		public enum worldgeometryDescriptionQueryFlags
-		{
-			DistanceVector = 1,
-			CollisionNormal = 2,
-			ObstacleDepth = 4,
-			UpExtent = 8,
-			DownExtent = 16,
-			TopExtent = 32,
-			TopPoint = 64,
-			BehindPoint = 128
-		}
-		public enum worldgeometryDescriptionQueryStatus
-		{
-			OK = 0,
-			NoGeometry = 1,
-			UpVectorSameAsDirection = 2
-		}
-		public enum worldgeometryProbingStatus
-		{
-			None = 0,
-			StillInObstacle = 1,
-			GeometryDiverged = 2,
-			Failure = 3
-		}
-		public enum WorldMapTooltipType
-		{
-			Default = 0,
-			Police = 1,
-			District = 2
-		}
+
 		public enum worldNavigationRequestStatus
 		{
 			OK = 0,
@@ -13594,6 +14909,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			InvalidEndPosition = 2,
 			OtherError = 3
 		}
+
 		public enum worldNodeGroupType
 		{
 			RegularGroup = 0,
@@ -13601,6 +14917,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			DecorationCell = 2,
 			ProxyGroup = 3
 		}
+
 		public enum worldNodeSocketType
 		{
 			Bidirectional = 0,
@@ -13608,6 +14925,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Outward = 2,
 			Disabled = 3
 		}
+
 		public enum worldObjectTag
 		{
 			WallExterior = 1164730711,
@@ -13620,12 +14938,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Cover = 1920364355,
 			Stairs = 1936880723
 		}
+
 		public enum worldObjectTagExt
 		{
 			Default = 1634100548,
 			NonClimbable = 1651262286,
 			None = 1701736270
 		}
+
 		public enum worldOffMeshConnectionType
 		{
 			Door = 0,
@@ -13638,18 +14958,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			Custom = 7,
 			Blockade = 8
 		}
+
 		public enum worldPatrolSplinePointTypes
 		{
 			Workspot = 0,
 			LookAt = 1,
 			ClearLookAt = 2
 		}
+
 		public enum worldPrefabMinimapContribution
 		{
 			Auto = 0,
 			Include = 1,
 			Discard = 2
 		}
+
 		public enum worldPrefabOwnership
 		{
 			None = 0,
@@ -13662,18 +14985,21 @@ namespace WolvenKit.RED4.CR2W.Types
 			OpenWorld = 7,
 			Cinematics = 8
 		}
+
 		public enum worldPrefabProxyMeshOnly
 		{
 			SettingFromResource = 0,
 			Enabled = 1,
 			Disabled = 2
 		}
+
 		public enum worldPrefabStreamingOcclusion
 		{
 			Default = 0,
 			Interior = 1,
 			OpenInterior = 2
 		}
+
 		public enum worldPrefabType
 		{
 			Regular = 0,
@@ -13685,6 +15011,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			Building = 6,
 			Terrain = 7
 		}
+
 		public enum worldProxWindowsType
 		{
 			SkipWindows = 0,
@@ -13692,34 +15019,40 @@ namespace WolvenKit.RED4.CR2W.Types
 			BakeLongDistantWindows = 2,
 			BakeWindowsToBuffer = 3
 		}
+
 		public enum worldProxyBBoxSyncOptions
 		{
 			Do_Nothing = 0,
 			Pull = 1,
 			Pull_And_Delete = 2
 		}
+
 		public enum worldProxyCoreAxis
 		{
 			X = 0,
 			Y = 1,
 			Z = 2
 		}
+
 		public enum worldProxyGroupingNormals
 		{
 			Around_Core_Axis = 0,
 			Around_All_Axes = 1
 		}
+
 		public enum worldProxyMeshBuildType
 		{
 			ProxyFromProxy = 0,
 			ProxyFromScratch = 1,
 			OnlyFromChildProxies = 2
 		}
+
 		public enum worldProxyMeshDependencyMode
 		{
 			Auto = 0,
 			Discard = 1
 		}
+
 		public enum worldProxyMeshOutputType
 		{
 			RayScan = 0,
@@ -13733,6 +15066,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			BlobCrowd = 8,
 			KeepCurrent = 127
 		}
+
 		public enum worldProxyMeshTexRes
 		{
 			RES_64 = 0,
@@ -13741,11 +15075,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			RES_512 = 3,
 			RES_1024 = 4
 		}
+
 		public enum worldProxyMeshUVType
 		{
 			UvUseExisting = 0,
 			UvGenerateNew = 1
 		}
+
 		public enum worldProxyNormalAngleStepSize
 		{
 			STEP_90 = 0,
@@ -13753,28 +15089,33 @@ namespace WolvenKit.RED4.CR2W.Types
 			STEP_15 = 2,
 			STEP_5 = 3
 		}
+
 		public enum worldProxySyncNormalSource
 		{
 			From_Groups = 0,
 			From_Face_Average = 1
 		}
+
 		public enum worldQuestPrefabLoadingMode
 		{
 			Disable = 0,
 			ForceLoad = 1
 		}
+
 		public enum worldQuestType
 		{
 			MainQuest = 0,
 			SideQuest = 1,
 			StreetStory = 2
 		}
+
 		public enum worldRainIntensity
 		{
 			NoRain = 0,
 			LightRain = 1,
 			HeavyRain = 2
 		}
+
 		public enum worldRoadMaterial
 		{
 			Concrete = 0,
@@ -13782,12 +15123,14 @@ namespace WolvenKit.RED4.CR2W.Types
 			Dirt = 2,
 			HardenedDirtDestroyed = 3
 		}
+
 		public enum worldRotatingMeshNodeAxis
 		{
 			X = 0,
 			Y = 1,
 			Z = 2
 		}
+
 		public enum worldSpeedSplineOrientationMarkerType
 		{
 			UseSplineOrientation = 0,
@@ -13800,11 +15143,13 @@ namespace WolvenKit.RED4.CR2W.Types
 			KeepRoll_WorldSpacePitchYaw = 7,
 			KeepPitch_WorldSpaceYawRoll = 8
 		}
+
 		public enum worldStreamingTestCheckpointType
 		{
 			BeginMove = 0,
 			EndMove = 1
 		}
+
 		public enum worldTrafficLightColor
 		{
 			GREEN = 0,
@@ -13812,27 +15157,83 @@ namespace WolvenKit.RED4.CR2W.Types
 			YELLOW = 2,
 			INVALID = 3
 		}
+
 		public enum worldTrafficMovementBehavior
 		{
 			Pedestrian = 0,
 			Car = 1
 		}
+
 		public enum worldTrafficSplineNodeUsage
 		{
 			Pavement = 0,
 			Road = 1
 		}
+
 		public enum worldTrafficSpotDirection
 		{
 			Forward = 0,
 			Backward = 1,
 			Both = 2
 		}
+
+		public enum worldenvUtilsEBlendParamsType
+		{
+			EBPS_Tick = 0,
+			EBPS_Game = 1,
+			EBPS_Frame = 2
+		}
+
+		public enum worldgeometryDescriptionQueryFlags
+		{
+			DistanceVector = 1,
+			CollisionNormal = 2,
+			ObstacleDepth = 4,
+			UpExtent = 8,
+			DownExtent = 16,
+			TopExtent = 32,
+			TopPoint = 64,
+			BehindPoint = 128
+		}
+
+		public enum worldgeometryDescriptionQueryStatus
+		{
+			OK = 0,
+			NoGeometry = 1,
+			UpVectorSameAsDirection = 2
+		}
+
+		public enum worldgeometryProbingStatus
+		{
+			None = 0,
+			StillInObstacle = 1,
+			GeometryDiverged = 2,
+			Failure = 3
+		}
+
+		public enum worldgeometryaverageNormalDetectionHelperQueryStatus
+		{
+			Finished = 0,
+			NoGeometry = 1
+		}
+
+		[Flags]
+		public enum worlduiContextVisibility : ulong
+		{
+			SceneDefault = 1UL << 0,
+			SceneTier1 = 1UL << 8,
+			SceneTier2 = 1UL << 16,
+			SceneTier3 = 1UL << 24,
+			SceneTier4 = 1UL << 32,
+			SceneTier5 = 1UL << 40
+		}
+
 		public enum worlduiEntryVisibility
 		{
 			TierVisibility = 0,
 			ForceShow = 1,
 			ForceHide = 2
 		}
-    }
+
+	}
 }

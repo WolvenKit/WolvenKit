@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FriendlyTargetWeaponChangeCallback : gameAttachmentSlotsScriptCallback
 	{
-		[Ordinal(2)] [RED("followerRole")] public CHandle<AIFollowerRole> FollowerRole { get; set; }
+		private CHandle<AIFollowerRole> _followerRole;
 
-		public FriendlyTargetWeaponChangeCallback(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("followerRole")] 
+		public CHandle<AIFollowerRole> FollowerRole
+		{
+			get => GetProperty(ref _followerRole);
+			set => SetProperty(ref _followerRole, value);
+		}
+
+		public FriendlyTargetWeaponChangeCallback(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

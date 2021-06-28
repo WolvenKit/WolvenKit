@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HUDJob : CVariable
 	{
-		[Ordinal(0)] [RED("actor")] public wCHandle<gameHudActor> Actor { get; set; }
-		[Ordinal(1)] [RED("instruction")] public CHandle<HUDInstruction> Instruction { get; set; }
+		private wCHandle<gameHudActor> _actor;
+		private CHandle<HUDInstruction> _instruction;
 
-		public HUDJob(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("actor")] 
+		public wCHandle<gameHudActor> Actor
+		{
+			get => GetProperty(ref _actor);
+			set => SetProperty(ref _actor, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("instruction")] 
+		public CHandle<HUDInstruction> Instruction
+		{
+			get => GetProperty(ref _instruction);
+			set => SetProperty(ref _instruction, value);
+		}
+
+		public HUDJob(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

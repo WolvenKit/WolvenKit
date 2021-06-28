@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_ItemEffect : animAnimEvent
 	{
-		[Ordinal(3)] [RED("effectName")] public CName EffectName { get; set; }
+		private CName _effectName;
 
-		public animAnimEvent_ItemEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("effectName")] 
+		public CName EffectName
+		{
+			get => GetProperty(ref _effectName);
+			set => SetProperty(ref _effectName, value);
+		}
+
+		public animAnimEvent_ItemEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

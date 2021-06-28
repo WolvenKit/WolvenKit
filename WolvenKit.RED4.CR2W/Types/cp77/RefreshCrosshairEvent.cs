@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RefreshCrosshairEvent : redEvent
 	{
-		[Ordinal(0)] [RED("force")] public CBool Force { get; set; }
+		private CBool _force;
 
-		public RefreshCrosshairEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("force")] 
+		public CBool Force
+		{
+			get => GetProperty(ref _force);
+			set => SetProperty(ref _force, value);
+		}
+
+		public RefreshCrosshairEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ActivatedDeviceIndustrialArm : ActivatedDeviceTrap
 	{
-		[Ordinal(95)] [RED("loopAnimation")] public CEnum<EIndustrialArmAnimations> LoopAnimation { get; set; }
+		private CEnum<EIndustrialArmAnimations> _loopAnimation;
 
-		public ActivatedDeviceIndustrialArm(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(98)] 
+		[RED("loopAnimation")] 
+		public CEnum<EIndustrialArmAnimations> LoopAnimation
+		{
+			get => GetProperty(ref _loopAnimation);
+			set => SetProperty(ref _loopAnimation, value);
+		}
+
+		public ActivatedDeviceIndustrialArm(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

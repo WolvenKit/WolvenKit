@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldClothMeshNode : worldMeshNode
 	{
-		[Ordinal(15)] [RED("affectedByWind")] public CBool AffectedByWind { get; set; }
-		[Ordinal(16)] [RED("collisionMask")] public CEnum<physicsEClothCollisionMaskEnum> CollisionMask { get; set; }
+		private CBool _affectedByWind;
+		private CEnum<physicsEClothCollisionMaskEnum> _collisionMask;
 
-		public worldClothMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(15)] 
+		[RED("affectedByWind")] 
+		public CBool AffectedByWind
+		{
+			get => GetProperty(ref _affectedByWind);
+			set => SetProperty(ref _affectedByWind, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("collisionMask")] 
+		public CEnum<physicsEClothCollisionMaskEnum> CollisionMask
+		{
+			get => GetProperty(ref _collisionMask);
+			set => SetProperty(ref _collisionMask, value);
+		}
+
+		public worldClothMeshNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

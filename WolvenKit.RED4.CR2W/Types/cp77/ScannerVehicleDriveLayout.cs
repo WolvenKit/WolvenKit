@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerVehicleDriveLayout : ScannerChunk
 	{
-		[Ordinal(0)] [RED("vehicleDriveLayout")] public CString VehicleDriveLayout { get; set; }
+		private CString _vehicleDriveLayout;
 
-		public ScannerVehicleDriveLayout(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vehicleDriveLayout")] 
+		public CString VehicleDriveLayout
+		{
+			get => GetProperty(ref _vehicleDriveLayout);
+			set => SetProperty(ref _vehicleDriveLayout, value);
+		}
+
+		public ScannerVehicleDriveLayout(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

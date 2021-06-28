@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questTimeManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("type")] public CHandle<questITimeManagerNodeType> Type { get; set; }
+		private CHandle<questITimeManagerNodeType> _type;
 
-		public questTimeManagerNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("type")] 
+		public CHandle<questITimeManagerNodeType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public questTimeManagerNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

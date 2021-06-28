@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiPhoneMessageNotificationViewData : gameuiQuestUpdateNotificationViewData
 	{
-		[Ordinal(14)] [RED("threadHash")] public CInt32 ThreadHash { get; set; }
-		[Ordinal(15)] [RED("contactHash")] public CInt32 ContactHash { get; set; }
+		private CInt32 _threadHash;
+		private CInt32 _contactHash;
 
-		public gameuiPhoneMessageNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(14)] 
+		[RED("threadHash")] 
+		public CInt32 ThreadHash
+		{
+			get => GetProperty(ref _threadHash);
+			set => SetProperty(ref _threadHash, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("contactHash")] 
+		public CInt32 ContactHash
+		{
+			get => GetProperty(ref _contactHash);
+			set => SetProperty(ref _contactHash, value);
+		}
+
+		public gameuiPhoneMessageNotificationViewData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

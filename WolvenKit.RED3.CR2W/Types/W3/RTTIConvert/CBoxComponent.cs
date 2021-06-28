@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("drawingColor")] 		public CColor DrawingColor { get; set;}
 
-		public CBoxComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBoxComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBoxComponent(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

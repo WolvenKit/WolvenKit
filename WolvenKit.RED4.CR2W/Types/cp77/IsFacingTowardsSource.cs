@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IsFacingTowardsSource : gameEffectObjectSingleFilter_Scripted
 	{
-		[Ordinal(0)] [RED("applyForPlayer")] public CBool ApplyForPlayer { get; set; }
-		[Ordinal(1)] [RED("applyForNPCs")] public CBool ApplyForNPCs { get; set; }
-		[Ordinal(2)] [RED("invert")] public CBool Invert { get; set; }
-		[Ordinal(3)] [RED("maxAllowedAngleYaw")] public CFloat MaxAllowedAngleYaw { get; set; }
-		[Ordinal(4)] [RED("maxAllowedAnglePitch")] public CFloat MaxAllowedAnglePitch { get; set; }
+		private CBool _applyForPlayer;
+		private CBool _applyForNPCs;
+		private CBool _invert;
+		private CFloat _maxAllowedAngleYaw;
+		private CFloat _maxAllowedAnglePitch;
 
-		public IsFacingTowardsSource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("applyForPlayer")] 
+		public CBool ApplyForPlayer
+		{
+			get => GetProperty(ref _applyForPlayer);
+			set => SetProperty(ref _applyForPlayer, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("applyForNPCs")] 
+		public CBool ApplyForNPCs
+		{
+			get => GetProperty(ref _applyForNPCs);
+			set => SetProperty(ref _applyForNPCs, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("invert")] 
+		public CBool Invert
+		{
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("maxAllowedAngleYaw")] 
+		public CFloat MaxAllowedAngleYaw
+		{
+			get => GetProperty(ref _maxAllowedAngleYaw);
+			set => SetProperty(ref _maxAllowedAngleYaw, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("maxAllowedAnglePitch")] 
+		public CFloat MaxAllowedAnglePitch
+		{
+			get => GetProperty(ref _maxAllowedAnglePitch);
+			set => SetProperty(ref _maxAllowedAnglePitch, value);
+		}
+
+		public IsFacingTowardsSource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

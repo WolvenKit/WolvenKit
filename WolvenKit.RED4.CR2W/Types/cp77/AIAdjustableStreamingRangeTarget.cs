@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIAdjustableStreamingRangeTarget : gameObject
 	{
-		[Ordinal(40)] [RED("minStreamingDistance")] public CFloat MinStreamingDistance { get; set; }
+		private CFloat _minStreamingDistance;
 
-		public AIAdjustableStreamingRangeTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("minStreamingDistance")] 
+		public CFloat MinStreamingDistance
+		{
+			get => GetProperty(ref _minStreamingDistance);
+			set => SetProperty(ref _minStreamingDistance, value);
+		}
+
+		public AIAdjustableStreamingRangeTarget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

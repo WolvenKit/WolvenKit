@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterFoliageParameters : CMaterialParameter
 	{
-		[Ordinal(2)] [RED("foliageProfile")] public rRef<CFoliageProfile> FoliageProfile { get; set; }
+		private rRef<CFoliageProfile> _foliageProfile;
 
-		public CMaterialParameterFoliageParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("foliageProfile")] 
+		public rRef<CFoliageProfile> FoliageProfile
+		{
+			get => GetProperty(ref _foliageProfile);
+			set => SetProperty(ref _foliageProfile, value);
+		}
+
+		public CMaterialParameterFoliageParameters(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

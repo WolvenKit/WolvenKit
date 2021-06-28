@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StimDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("stims")] public CArray<SStimOperationData> Stims { get; set; }
+		private CArray<SStimOperationData> _stims;
 
-		public StimDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("stims")] 
+		public CArray<SStimOperationData> Stims
+		{
+			get => GetProperty(ref _stims);
+			set => SetProperty(ref _stims, value);
+		}
+
+		public StimDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

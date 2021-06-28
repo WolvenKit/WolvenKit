@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeviceActionOperationsTrigger : DeviceOperationsTrigger
 	{
-		[Ordinal(0)] [RED("triggerData")] public CHandle<DeviceActionOperationTriggerData> TriggerData { get; set; }
+		private CHandle<DeviceActionOperationTriggerData> _triggerData;
 
-		public DeviceActionOperationsTrigger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("triggerData")] 
+		public CHandle<DeviceActionOperationTriggerData> TriggerData
+		{
+			get => GetProperty(ref _triggerData);
+			set => SetProperty(ref _triggerData, value);
+		}
+
+		public DeviceActionOperationsTrigger(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

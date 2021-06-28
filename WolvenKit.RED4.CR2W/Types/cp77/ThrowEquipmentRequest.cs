@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ThrowEquipmentRequest : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("itemObject")] public wCHandle<gameItemObject> ItemObject { get; set; }
+		private wCHandle<gameItemObject> _itemObject;
 
-		public ThrowEquipmentRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("itemObject")] 
+		public wCHandle<gameItemObject> ItemObject
+		{
+			get => GetProperty(ref _itemObject);
+			set => SetProperty(ref _itemObject, value);
+		}
+
+		public ThrowEquipmentRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

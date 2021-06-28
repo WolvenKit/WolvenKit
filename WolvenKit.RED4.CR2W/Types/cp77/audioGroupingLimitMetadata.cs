@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioGroupingLimitMetadata : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("limit")] public CFloat Limit { get; set; }
+		private CFloat _limit;
 
-		public audioGroupingLimitMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("limit")] 
+		public CFloat Limit
+		{
+			get => GetProperty(ref _limit);
+			set => SetProperty(ref _limit, value);
+		}
+
+		public audioGroupingLimitMetadata(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

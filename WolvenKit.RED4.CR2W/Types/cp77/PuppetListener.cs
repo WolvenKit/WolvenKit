@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PuppetListener : IScriptable
 	{
-		[Ordinal(0)] [RED("prereqOwner")] public CHandle<gamePrereqState> PrereqOwner { get; set; }
+		private CHandle<gamePrereqState> _prereqOwner;
 
-		public PuppetListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("prereqOwner")] 
+		public CHandle<gamePrereqState> PrereqOwner
+		{
+			get => GetProperty(ref _prereqOwner);
+			set => SetProperty(ref _prereqOwner, value);
+		}
+
+		public PuppetListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

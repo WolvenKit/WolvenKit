@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_FloatJoin : animAnimNode_FloatValue
 	{
-		[Ordinal(11)] [RED("input")] public animFloatLink Input { get; set; }
+		private animFloatLink _input;
 
-		public animAnimNode_FloatJoin(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(11)] 
+		[RED("input")] 
+		public animFloatLink Input
+		{
+			get => GetProperty(ref _input);
+			set => SetProperty(ref _input, value);
+		}
+
+		public animAnimNode_FloatJoin(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

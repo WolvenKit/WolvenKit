@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BasePerksMenuTooltipData : ATooltipData
 	{
-		[Ordinal(0)] [RED("manager")] public CHandle<PlayerDevelopmentDataManager> Manager { get; set; }
+		private CHandle<PlayerDevelopmentDataManager> _manager;
 
-		public BasePerksMenuTooltipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("manager")] 
+		public CHandle<PlayerDevelopmentDataManager> Manager
+		{
+			get => GetProperty(ref _manager);
+			set => SetProperty(ref _manager, value);
+		}
+
+		public BasePerksMenuTooltipData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

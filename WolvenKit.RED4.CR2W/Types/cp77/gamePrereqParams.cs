@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamePrereqParams : CVariable
 	{
-		[Ordinal(0)] [RED("objectID")] public gameStatsObjectID ObjectID { get; set; }
-		[Ordinal(1)] [RED("otherObjectID")] public gameStatsObjectID OtherObjectID { get; set; }
-		[Ordinal(2)] [RED("otherData")] public CVariant OtherData { get; set; }
+		private gameStatsObjectID _objectID;
+		private gameStatsObjectID _otherObjectID;
+		private CVariant _otherData;
 
-		public gamePrereqParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("objectID")] 
+		public gameStatsObjectID ObjectID
+		{
+			get => GetProperty(ref _objectID);
+			set => SetProperty(ref _objectID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("otherObjectID")] 
+		public gameStatsObjectID OtherObjectID
+		{
+			get => GetProperty(ref _otherObjectID);
+			set => SetProperty(ref _otherObjectID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("otherData")] 
+		public CVariant OtherData
+		{
+			get => GetProperty(ref _otherData);
+			set => SetProperty(ref _otherData, value);
+		}
+
+		public gamePrereqParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

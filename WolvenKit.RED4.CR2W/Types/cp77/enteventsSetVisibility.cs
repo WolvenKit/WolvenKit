@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class enteventsSetVisibility : redEvent
 	{
-		[Ordinal(0)] [RED("visible")] public CBool Visible { get; set; }
-		[Ordinal(1)] [RED("source")] public CEnum<entVisibilityParamSource> Source { get; set; }
+		private CBool _visible;
+		private CEnum<entVisibilityParamSource> _source;
 
-		public enteventsSetVisibility(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("visible")] 
+		public CBool Visible
+		{
+			get => GetProperty(ref _visible);
+			set => SetProperty(ref _visible, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("source")] 
+		public CEnum<entVisibilityParamSource> Source
+		{
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
+		}
+
+		public enteventsSetVisibility(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

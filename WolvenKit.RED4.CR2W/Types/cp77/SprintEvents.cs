@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SprintEvents : LocomotionGroundEvents
 	{
-		[Ordinal(0)] [RED("previousStimTimeStamp")] public CFloat PreviousStimTimeStamp { get; set; }
-		[Ordinal(1)] [RED("reloadModifier")] public CHandle<gameStatModifierData> ReloadModifier { get; set; }
-		[Ordinal(2)] [RED("isInSecondSprint")] public CBool IsInSecondSprint { get; set; }
-		[Ordinal(3)] [RED("sprintModifier")] public CHandle<gameStatModifierData> SprintModifier { get; set; }
+		private CFloat _previousStimTimeStamp;
+		private CHandle<gameStatModifierData> _reloadModifier;
+		private CBool _isInSecondSprint;
+		private CHandle<gameStatModifierData> _sprintModifier;
 
-		public SprintEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("previousStimTimeStamp")] 
+		public CFloat PreviousStimTimeStamp
+		{
+			get => GetProperty(ref _previousStimTimeStamp);
+			set => SetProperty(ref _previousStimTimeStamp, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("reloadModifier")] 
+		public CHandle<gameStatModifierData> ReloadModifier
+		{
+			get => GetProperty(ref _reloadModifier);
+			set => SetProperty(ref _reloadModifier, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isInSecondSprint")] 
+		public CBool IsInSecondSprint
+		{
+			get => GetProperty(ref _isInSecondSprint);
+			set => SetProperty(ref _isInSecondSprint, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("sprintModifier")] 
+		public CHandle<gameStatModifierData> SprintModifier
+		{
+			get => GetProperty(ref _sprintModifier);
+			set => SetProperty(ref _sprintModifier, value);
+		}
+
+		public SprintEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

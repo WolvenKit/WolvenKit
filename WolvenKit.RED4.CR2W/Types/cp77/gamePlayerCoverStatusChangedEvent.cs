@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamePlayerCoverStatusChangedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("direction")] public CEnum<gamePlayerCoverDirection> Direction { get; set; }
-		[Ordinal(1)] [RED("fullyBehindCover")] public CBool FullyBehindCover { get; set; }
+		private CEnum<gamePlayerCoverDirection> _direction;
+		private CBool _fullyBehindCover;
 
-		public gamePlayerCoverStatusChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("direction")] 
+		public CEnum<gamePlayerCoverDirection> Direction
+		{
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("fullyBehindCover")] 
+		public CBool FullyBehindCover
+		{
+			get => GetProperty(ref _fullyBehindCover);
+			set => SetProperty(ref _fullyBehindCover, value);
+		}
+
+		public gamePlayerCoverStatusChangedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

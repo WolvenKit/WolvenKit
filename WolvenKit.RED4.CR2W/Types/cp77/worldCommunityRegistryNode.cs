@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldCommunityRegistryNode : worldNode
 	{
-		[Ordinal(4)] [RED("spawnSetNameToCommunityID")] public gameCommunitySpawnSetNameToID SpawnSetNameToCommunityID { get; set; }
-		[Ordinal(5)] [RED("crowdCreationRegistry")] public CHandle<gameCrowdCreationDataRegistry> CrowdCreationRegistry { get; set; }
-		[Ordinal(6)] [RED("communitiesData")] public CArray<worldCommunityRegistryItem> CommunitiesData { get; set; }
-		[Ordinal(7)] [RED("workspotsPersistentData")] public CArray<AISpotPersistentData> WorkspotsPersistentData { get; set; }
-		[Ordinal(8)] [RED("representsCrowd")] public CBool RepresentsCrowd { get; set; }
+		private gameCommunitySpawnSetNameToID _spawnSetNameToCommunityID;
+		private CHandle<gameCrowdCreationDataRegistry> _crowdCreationRegistry;
+		private CArray<worldCommunityRegistryItem> _communitiesData;
+		private CArray<AISpotPersistentData> _workspotsPersistentData;
+		private CBool _representsCrowd;
 
-		public worldCommunityRegistryNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("spawnSetNameToCommunityID")] 
+		public gameCommunitySpawnSetNameToID SpawnSetNameToCommunityID
+		{
+			get => GetProperty(ref _spawnSetNameToCommunityID);
+			set => SetProperty(ref _spawnSetNameToCommunityID, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("crowdCreationRegistry")] 
+		public CHandle<gameCrowdCreationDataRegistry> CrowdCreationRegistry
+		{
+			get => GetProperty(ref _crowdCreationRegistry);
+			set => SetProperty(ref _crowdCreationRegistry, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("communitiesData")] 
+		public CArray<worldCommunityRegistryItem> CommunitiesData
+		{
+			get => GetProperty(ref _communitiesData);
+			set => SetProperty(ref _communitiesData, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("workspotsPersistentData")] 
+		public CArray<AISpotPersistentData> WorkspotsPersistentData
+		{
+			get => GetProperty(ref _workspotsPersistentData);
+			set => SetProperty(ref _workspotsPersistentData, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("representsCrowd")] 
+		public CBool RepresentsCrowd
+		{
+			get => GetProperty(ref _representsCrowd);
+			set => SetProperty(ref _representsCrowd, value);
+		}
+
+		public worldCommunityRegistryNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

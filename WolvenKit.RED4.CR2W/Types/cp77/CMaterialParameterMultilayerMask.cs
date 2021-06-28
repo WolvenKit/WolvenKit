@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterMultilayerMask : CMaterialParameter
 	{
-		[Ordinal(2)] [RED("mask")] public rRef<Multilayer_Mask> Mask { get; set; }
+		private rRef<Multilayer_Mask> _mask;
 
-		public CMaterialParameterMultilayerMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("mask")] 
+		public rRef<Multilayer_Mask> Mask
+		{
+			get => GetProperty(ref _mask);
+			set => SetProperty(ref _mask, value);
+		}
+
+		public CMaterialParameterMultilayerMask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetScriptExecutionContextEvent : redEvent
 	{
-		[Ordinal(0)] [RED("scriptExecutionContext")] public AIbehaviorScriptExecutionContext ScriptExecutionContext { get; set; }
+		private AIbehaviorScriptExecutionContext _scriptExecutionContext;
 
-		public SetScriptExecutionContextEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("scriptExecutionContext")] 
+		public AIbehaviorScriptExecutionContext ScriptExecutionContext
+		{
+			get => GetProperty(ref _scriptExecutionContext);
+			set => SetProperty(ref _scriptExecutionContext, value);
+		}
+
+		public SetScriptExecutionContextEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

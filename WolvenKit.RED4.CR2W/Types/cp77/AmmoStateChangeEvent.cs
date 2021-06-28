@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AmmoStateChangeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("weaponOwner")] public wCHandle<gameObject> WeaponOwner { get; set; }
+		private wCHandle<gameObject> _weaponOwner;
 
-		public AmmoStateChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("weaponOwner")] 
+		public wCHandle<gameObject> WeaponOwner
+		{
+			get => GetProperty(ref _weaponOwner);
+			set => SetProperty(ref _weaponOwner, value);
+		}
+
+		public AmmoStateChangeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

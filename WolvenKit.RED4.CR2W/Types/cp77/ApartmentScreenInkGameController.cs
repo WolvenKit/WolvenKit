@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApartmentScreenInkGameController : LcdScreenInkGameController
 	{
-		[Ordinal(25)] [RED("backgroundFrameWidget")] public wCHandle<inkImageWidget> BackgroundFrameWidget { get; set; }
+		private wCHandle<inkImageWidget> _backgroundFrameWidget;
 
-		public ApartmentScreenInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("backgroundFrameWidget")] 
+		public wCHandle<inkImageWidget> BackgroundFrameWidget
+		{
+			get => GetProperty(ref _backgroundFrameWidget);
+			set => SetProperty(ref _backgroundFrameWidget, value);
+		}
+
+		public ApartmentScreenInkGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

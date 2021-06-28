@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OnProgressBarAnimFinish : redEvent
 	{
-		[Ordinal(0)] [RED("FullbarSize")] public CFloat FullbarSize { get; set; }
-		[Ordinal(1)] [RED("IsNegative")] public CBool IsNegative { get; set; }
+		private CFloat _fullbarSize;
+		private CBool _isNegative;
 
-		public OnProgressBarAnimFinish(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("FullbarSize")] 
+		public CFloat FullbarSize
+		{
+			get => GetProperty(ref _fullbarSize);
+			set => SetProperty(ref _fullbarSize, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("IsNegative")] 
+		public CBool IsNegative
+		{
+			get => GetProperty(ref _isNegative);
+			set => SetProperty(ref _isNegative, value);
+		}
+
+		public OnProgressBarAnimFinish(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

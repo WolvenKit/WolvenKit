@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSetQuickHackableMask : redEvent
 	{
-		[Ordinal(0)] [RED("isQuickHackable")] public CBool IsQuickHackable { get; set; }
+		private CBool _isQuickHackable;
 
-		public gameSetQuickHackableMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isQuickHackable")] 
+		public CBool IsQuickHackable
+		{
+			get => GetProperty(ref _isQuickHackable);
+			set => SetProperty(ref _isQuickHackable, value);
+		}
+
+		public gameSetQuickHackableMask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

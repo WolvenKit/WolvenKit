@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkCensorshipController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("censorshipFlags")] public CEnum<CensorshipFlags> CensorshipFlags { get; set; }
+		private CEnum<CensorshipFlags> _censorshipFlags;
 
-		public inkCensorshipController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("censorshipFlags")] 
+		public CEnum<CensorshipFlags> CensorshipFlags
+		{
+			get => GetProperty(ref _censorshipFlags);
+			set => SetProperty(ref _censorshipFlags, value);
+		}
+
+		public inkCensorshipController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

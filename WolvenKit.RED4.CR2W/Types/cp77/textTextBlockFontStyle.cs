@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class textTextBlockFontStyle : CVariable
 	{
-		[Ordinal(0)] [RED("fontStyle")] public CName FontStyle { get; set; }
-		[Ordinal(1)] [RED("outlineSize")] public CInt32 OutlineSize { get; set; }
-		[Ordinal(2)] [RED("outlineColor")] public HDRColor OutlineColor { get; set; }
+		private CName _fontStyle;
+		private CInt32 _outlineSize;
+		private HDRColor _outlineColor;
 
-		public textTextBlockFontStyle(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("fontStyle")] 
+		public CName FontStyle
+		{
+			get => GetProperty(ref _fontStyle);
+			set => SetProperty(ref _fontStyle, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("outlineSize")] 
+		public CInt32 OutlineSize
+		{
+			get => GetProperty(ref _outlineSize);
+			set => SetProperty(ref _outlineSize, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("outlineColor")] 
+		public HDRColor OutlineColor
+		{
+			get => GetProperty(ref _outlineColor);
+			set => SetProperty(ref _outlineColor, value);
+		}
+
+		public textTextBlockFontStyle(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

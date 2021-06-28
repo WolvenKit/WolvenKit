@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetTargetHealthEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("healthValueToSet")] public CFloat HealthValueToSet { get; set; }
+		private CFloat _healthValueToSet;
 
-		public SetTargetHealthEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("healthValueToSet")] 
+		public CFloat HealthValueToSet
+		{
+			get => GetProperty(ref _healthValueToSet);
+			set => SetProperty(ref _healthValueToSet, value);
+		}
+
+		public SetTargetHealthEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

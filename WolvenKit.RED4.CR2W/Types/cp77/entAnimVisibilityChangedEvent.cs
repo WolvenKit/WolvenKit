@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entAnimVisibilityChangedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isVisible")] public CBool IsVisible { get; set; }
+		private CBool _isVisible;
 
-		public entAnimVisibilityChangedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isVisible")] 
+		public CBool IsVisible
+		{
+			get => GetProperty(ref _isVisible);
+			set => SetProperty(ref _isVisible, value);
+		}
+
+		public entAnimVisibilityChangedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

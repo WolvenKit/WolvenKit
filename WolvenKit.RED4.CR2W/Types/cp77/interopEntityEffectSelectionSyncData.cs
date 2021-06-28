@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class interopEntityEffectSelectionSyncData : CVariable
 	{
-		[Ordinal(0)] [RED("effectName")] public CName EffectName { get; set; }
-		[Ordinal(1)] [RED("effectIDPath")] public toolsEditorObjectIDPath EffectIDPath { get; set; }
+		private CName _effectName;
+		private toolsEditorObjectIDPath _effectIDPath;
 
-		public interopEntityEffectSelectionSyncData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("effectName")] 
+		public CName EffectName
+		{
+			get => GetProperty(ref _effectName);
+			set => SetProperty(ref _effectName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("effectIDPath")] 
+		public toolsEditorObjectIDPath EffectIDPath
+		{
+			get => GetProperty(ref _effectIDPath);
+			set => SetProperty(ref _effectIDPath, value);
+		}
+
+		public interopEntityEffectSelectionSyncData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

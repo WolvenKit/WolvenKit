@@ -5,17 +5,38 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.MVVM.Model;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
 {
-    public class ModkitViewModel : ViewModel
+    public class ModkitViewModel : ToolViewModel
     {
+        /// <summary>
+        /// Identifies the caption string used for this tool window.
+        /// </summary>
+        public const string ToolTitle = "Bulk Editor";
+
+        #region Fields
+
+        private readonly IProjectManager _projectManager;
+        private readonly ILoggerService Logger;
+        private readonly Tw3Controller _tw3Controller;
+
+        #endregion Fields
+
         #region Constructors
 
-        public ModkitViewModel(IWindowFactory windowFactory) : base(windowFactory)
+        public ModkitViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            Tw3Controller tw3Controller
+        ) : base(ToolTitle)
         {
-            Logger = MainController.Get().Logger;
+            _projectManager = projectManager;
+            Logger = loggerService;
+            _tw3Controller = tw3Controller;
 
             RunCommand = new Functionality.Commands.RelayCommand(Run, CanRun);
 
@@ -30,11 +51,6 @@ namespace WolvenKit.ViewModels.Editor
 
         #endregion Constructors
 
-        #region Fields
-
-        private /*readonly*/ LoggerService Logger;
-
-        #endregion Fields
 
         #region Properties
 
@@ -72,7 +88,7 @@ namespace WolvenKit.ViewModels.Editor
 
         protected bool CanRun() => true;
 
-        protected async void Run() => await Task.Run(() => MainController.Get().WccHelper.RunCommand(SelectedObject));
+        protected async void Run() => await Task.Run(() => _tw3Controller.RunCommand(SelectedObject));
 
         #endregion Commands Implementation
     }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OpenPerksNotificationAction : GenericNotificationBaseAction
 	{
-		[Ordinal(0)] [RED("eventDispatcher")] public wCHandle<worlduiIWidgetGameController> EventDispatcher { get; set; }
+		private wCHandle<worlduiIWidgetGameController> _eventDispatcher;
 
-		public OpenPerksNotificationAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("eventDispatcher")] 
+		public wCHandle<worlduiIWidgetGameController> EventDispatcher
+		{
+			get => GetProperty(ref _eventDispatcher);
+			set => SetProperty(ref _eventDispatcher, value);
+		}
+
+		public OpenPerksNotificationAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

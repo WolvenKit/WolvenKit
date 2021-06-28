@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FastTravelPointsUpdated : redEvent
 	{
-		[Ordinal(0)] [RED("updateTrackingAlternative")] public CBool UpdateTrackingAlternative { get; set; }
+		private CBool _updateTrackingAlternative;
 
-		public FastTravelPointsUpdated(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("updateTrackingAlternative")] 
+		public CBool UpdateTrackingAlternative
+		{
+			get => GetProperty(ref _updateTrackingAlternative);
+			set => SetProperty(ref _updateTrackingAlternative, value);
+		}
+
+		public FastTravelPointsUpdated(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

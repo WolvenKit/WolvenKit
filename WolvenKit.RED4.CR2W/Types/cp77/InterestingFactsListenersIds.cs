@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InterestingFactsListenersIds : CVariable
 	{
-		[Ordinal(0)] [RED("zone")] public CUInt32 Zone { get; set; }
+		private CUInt32 _zone;
 
-		public InterestingFactsListenersIds(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("zone")] 
+		public CUInt32 Zone
+		{
+			get => GetProperty(ref _zone);
+			set => SetProperty(ref _zone, value);
+		}
+
+		public InterestingFactsListenersIds(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

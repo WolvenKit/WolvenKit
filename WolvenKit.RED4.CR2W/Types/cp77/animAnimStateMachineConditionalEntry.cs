@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateMachineConditionalEntry : ISerializable
 	{
-		[Ordinal(0)] [RED("targetStateIndex")] public CUInt32 TargetStateIndex { get; set; }
-		[Ordinal(1)] [RED("condition")] public CHandle<animIAnimStateTransitionCondition> Condition { get; set; }
-		[Ordinal(2)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
-		[Ordinal(3)] [RED("priority")] public CInt32 Priority { get; set; }
-		[Ordinal(4)] [RED("isForcedToTrue")] public CBool IsForcedToTrue { get; set; }
+		private CUInt32 _targetStateIndex;
+		private CHandle<animIAnimStateTransitionCondition> _condition;
+		private CBool _isEnabled;
+		private CInt32 _priority;
+		private CBool _isForcedToTrue;
 
-		public animAnimStateMachineConditionalEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("targetStateIndex")] 
+		public CUInt32 TargetStateIndex
+		{
+			get => GetProperty(ref _targetStateIndex);
+			set => SetProperty(ref _targetStateIndex, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("condition")] 
+		public CHandle<animIAnimStateTransitionCondition> Condition
+		{
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("priority")] 
+		public CInt32 Priority
+		{
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("isForcedToTrue")] 
+		public CBool IsForcedToTrue
+		{
+			get => GetProperty(ref _isForcedToTrue);
+			set => SetProperty(ref _isForcedToTrue, value);
+		}
+
+		public animAnimStateMachineConditionalEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

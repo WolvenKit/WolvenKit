@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkWidgetLibraryResourceWrapper : CVariable
 	{
-		[Ordinal(0)] [RED("library")] public raRef<inkWidgetLibraryResource> Library { get; set; }
+		private raRef<inkWidgetLibraryResource> _library;
 
-		public inkWidgetLibraryResourceWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("library")] 
+		public raRef<inkWidgetLibraryResource> Library
+		{
+			get => GetProperty(ref _library);
+			set => SetProperty(ref _library, value);
+		}
+
+		public inkWidgetLibraryResourceWrapper(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

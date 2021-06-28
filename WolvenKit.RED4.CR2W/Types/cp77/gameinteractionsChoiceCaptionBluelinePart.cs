@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsChoiceCaptionBluelinePart : gameinteractionsChoiceCaptionPart
 	{
-		[Ordinal(0)] [RED("blueline")] public CHandle<gameinteractionsvisBluelineDescription> Blueline { get; set; }
+		private CHandle<gameinteractionsvisBluelineDescription> _blueline;
 
-		public gameinteractionsChoiceCaptionBluelinePart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("blueline")] 
+		public CHandle<gameinteractionsvisBluelineDescription> Blueline
+		{
+			get => GetProperty(ref _blueline);
+			set => SetProperty(ref _blueline, value);
+		}
+
+		public gameinteractionsChoiceCaptionBluelinePart(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

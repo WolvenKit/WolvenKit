@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scneventsDespawnEntityEventParams : CVariable
 	{
-		[Ordinal(0)] [RED("performer")] public scnPerformerId Performer { get; set; }
+		private scnPerformerId _performer;
 
-		public scneventsDespawnEntityEventParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("performer")] 
+		public scnPerformerId Performer
+		{
+			get => GetProperty(ref _performer);
+			set => SetProperty(ref _performer, value);
+		}
+
+		public scneventsDespawnEntityEventParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

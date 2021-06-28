@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIHostJoinedSquad : AIAIEvent
 	{
-		[Ordinal(2)] [RED("squad")] public CName Squad { get; set; }
+		private CName _squad;
 
-		public AIHostJoinedSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("squad")] 
+		public CName Squad
+		{
+			get => GetProperty(ref _squad);
+			set => SetProperty(ref _squad, value);
+		}
+
+		public AIHostJoinedSquad(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

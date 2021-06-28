@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AITrafficExternalWorkspotDefinition : worldTrafficSpotDefinition
 	{
-		[Ordinal(2)] [RED("nearestPointEntry")] public CBool NearestPointEntry { get; set; }
-		[Ordinal(3)] [RED("globalWorkspotNodeRef")] public NodeRef GlobalWorkspotNodeRef { get; set; }
+		private CBool _nearestPointEntry;
+		private NodeRef _globalWorkspotNodeRef;
 
-		public AITrafficExternalWorkspotDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("nearestPointEntry")] 
+		public CBool NearestPointEntry
+		{
+			get => GetProperty(ref _nearestPointEntry);
+			set => SetProperty(ref _nearestPointEntry, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("globalWorkspotNodeRef")] 
+		public NodeRef GlobalWorkspotNodeRef
+		{
+			get => GetProperty(ref _globalWorkspotNodeRef);
+			set => SetProperty(ref _globalWorkspotNodeRef, value);
+		}
+
+		public AITrafficExternalWorkspotDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

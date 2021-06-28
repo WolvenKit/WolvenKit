@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FillTakeOverChainBBoardEvent : redEvent
 	{
-		[Ordinal(0)] [RED("requesterID")] public gamePersistentID RequesterID { get; set; }
+		private gamePersistentID _requesterID;
 
-		public FillTakeOverChainBBoardEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requesterID")] 
+		public gamePersistentID RequesterID
+		{
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
+		}
+
+		public FillTakeOverChainBBoardEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

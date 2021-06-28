@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsLookAtPredicate : gameinteractionsIPredicateType
 	{
-		[Ordinal(0)] [RED("testTarget")] public CEnum<gameinteractionsELookAtTarget> TestTarget { get; set; }
-		[Ordinal(1)] [RED("testType")] public CEnum<gameinteractionsELookAtTest> TestType { get; set; }
-		[Ordinal(2)] [RED("stopOnTransparent")] public CBool StopOnTransparent { get; set; }
+		private CEnum<gameinteractionsELookAtTarget> _testTarget;
+		private CEnum<gameinteractionsELookAtTest> _testType;
+		private CBool _stopOnTransparent;
 
-		public gameinteractionsLookAtPredicate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("testTarget")] 
+		public CEnum<gameinteractionsELookAtTarget> TestTarget
+		{
+			get => GetProperty(ref _testTarget);
+			set => SetProperty(ref _testTarget, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("testType")] 
+		public CEnum<gameinteractionsELookAtTest> TestType
+		{
+			get => GetProperty(ref _testType);
+			set => SetProperty(ref _testType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("stopOnTransparent")] 
+		public CBool StopOnTransparent
+		{
+			get => GetProperty(ref _stopOnTransparent);
+			set => SetProperty(ref _stopOnTransparent, value);
+		}
+
+		public gameinteractionsLookAtPredicate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

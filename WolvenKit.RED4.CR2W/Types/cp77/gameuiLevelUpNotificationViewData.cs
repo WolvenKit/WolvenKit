@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiLevelUpNotificationViewData : gameuiGenericNotificationViewData
 	{
-		[Ordinal(5)] [RED("canBeMerged")] public CBool CanBeMerged { get; set; }
-		[Ordinal(6)] [RED("levelupdata")] public questLevelUpData Levelupdata { get; set; }
-		[Ordinal(7)] [RED("proficiencyRecord")] public CHandle<gamedataProficiency_Record> ProficiencyRecord { get; set; }
-		[Ordinal(8)] [RED("profString")] public CString ProfString { get; set; }
+		private CBool _canBeMerged;
+		private questLevelUpData _levelupdata;
+		private CHandle<gamedataProficiency_Record> _proficiencyRecord;
+		private CString _profString;
 
-		public gameuiLevelUpNotificationViewData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("canBeMerged")] 
+		public CBool CanBeMerged
+		{
+			get => GetProperty(ref _canBeMerged);
+			set => SetProperty(ref _canBeMerged, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("levelupdata")] 
+		public questLevelUpData Levelupdata
+		{
+			get => GetProperty(ref _levelupdata);
+			set => SetProperty(ref _levelupdata, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("proficiencyRecord")] 
+		public CHandle<gamedataProficiency_Record> ProficiencyRecord
+		{
+			get => GetProperty(ref _proficiencyRecord);
+			set => SetProperty(ref _proficiencyRecord, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("profString")] 
+		public CString ProfString
+		{
+			get => GetProperty(ref _profString);
+			set => SetProperty(ref _profString, value);
+		}
+
+		public gameuiLevelUpNotificationViewData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

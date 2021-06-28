@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UIActionEvent : redEvent
 	{
-		[Ordinal(0)] [RED("action")] public CHandle<gamedeviceAction> Action { get; set; }
-		[Ordinal(1)] [RED("executor")] public wCHandle<gameObject> Executor { get; set; }
+		private CHandle<gamedeviceAction> _action;
+		private wCHandle<gameObject> _executor;
 
-		public UIActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("action")] 
+		public CHandle<gamedeviceAction> Action
+		{
+			get => GetProperty(ref _action);
+			set => SetProperty(ref _action, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("executor")] 
+		public wCHandle<gameObject> Executor
+		{
+			get => GetProperty(ref _executor);
+			set => SetProperty(ref _executor, value);
+		}
+
+		public UIActionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

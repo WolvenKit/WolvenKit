@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTickableEvent : redEvent
 	{
-		[Ordinal(0)] [RED("state")] public CEnum<gameTickableEventState> State { get; set; }
+		private CEnum<gameTickableEventState> _state;
 
-		public gameTickableEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CEnum<gameTickableEventState> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		public gameTickableEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

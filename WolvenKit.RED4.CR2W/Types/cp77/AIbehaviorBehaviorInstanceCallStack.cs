@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorBehaviorInstanceCallStack : CVariable
 	{
-		[Ordinal(0)] [RED("resourceHashes")] public CArray<CUInt32> ResourceHashes { get; set; }
+		private CArray<CUInt32> _resourceHashes;
 
-		public AIbehaviorBehaviorInstanceCallStack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("resourceHashes")] 
+		public CArray<CUInt32> ResourceHashes
+		{
+			get => GetProperty(ref _resourceHashes);
+			set => SetProperty(ref _resourceHashes, value);
+		}
+
+		public AIbehaviorBehaviorInstanceCallStack(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

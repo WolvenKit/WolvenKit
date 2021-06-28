@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannerSkillCheckConditionDescriptionLogicController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("NameRef")] public inkTextWidgetReference NameRef { get; set; }
-		[Ordinal(2)] [RED("PassedStateName")] public CName PassedStateName { get; set; }
-		[Ordinal(3)] [RED("FailedStateName")] public CName FailedStateName { get; set; }
+		private inkTextWidgetReference _nameRef;
+		private CName _passedStateName;
+		private CName _failedStateName;
 
-		public ScannerSkillCheckConditionDescriptionLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("NameRef")] 
+		public inkTextWidgetReference NameRef
+		{
+			get => GetProperty(ref _nameRef);
+			set => SetProperty(ref _nameRef, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("PassedStateName")] 
+		public CName PassedStateName
+		{
+			get => GetProperty(ref _passedStateName);
+			set => SetProperty(ref _passedStateName, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("FailedStateName")] 
+		public CName FailedStateName
+		{
+			get => GetProperty(ref _failedStateName);
+			set => SetProperty(ref _failedStateName, value);
+		}
+
+		public ScannerSkillCheckConditionDescriptionLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

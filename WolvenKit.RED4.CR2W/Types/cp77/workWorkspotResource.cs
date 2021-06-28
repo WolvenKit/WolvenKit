@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workWorkspotResource : animAnimGraph
 	{
-		[Ordinal(16)] [RED("workspotTree")] public CHandle<workWorkspotTree> WorkspotTree { get; set; }
+		private CHandle<workWorkspotTree> _workspotTree;
 
-		public workWorkspotResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(16)] 
+		[RED("workspotTree")] 
+		public CHandle<workWorkspotTree> WorkspotTree
+		{
+			get => GetProperty(ref _workspotTree);
+			set => SetProperty(ref _workspotTree, value);
+		}
+
+		public workWorkspotResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

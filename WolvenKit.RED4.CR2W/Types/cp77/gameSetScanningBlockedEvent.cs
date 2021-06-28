@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSetScanningBlockedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isBlocked")] public CBool IsBlocked { get; set; }
+		private CBool _isBlocked;
 
-		public gameSetScanningBlockedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isBlocked")] 
+		public CBool IsBlocked
+		{
+			get => GetProperty(ref _isBlocked);
+			set => SetProperty(ref _isBlocked, value);
+		}
+
+		public gameSetScanningBlockedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

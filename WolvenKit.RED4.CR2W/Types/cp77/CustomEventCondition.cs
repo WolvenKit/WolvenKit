@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CustomEventCondition : AISignalCondition
 	{
-		[Ordinal(5)] [RED("eventName")] public CName EventName { get; set; }
+		private CName _eventName;
 
-		public CustomEventCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("eventName")] 
+		public CName EventName
+		{
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
+		}
+
+		public CustomEventCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questIStatsScriptConditionType : questIStatsConditionType
 	{
-		[Ordinal(0)] [RED("scriptCondition")] public CHandle<IScriptable> ScriptCondition { get; set; }
+		private CHandle<IScriptable> _scriptCondition;
 
-		public questIStatsScriptConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("scriptCondition")] 
+		public CHandle<IScriptable> ScriptCondition
+		{
+			get => GetProperty(ref _scriptCondition);
+			set => SetProperty(ref _scriptCondition, value);
+		}
+
+		public questIStatsScriptConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

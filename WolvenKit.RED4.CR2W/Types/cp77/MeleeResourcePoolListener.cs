@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MeleeResourcePoolListener : gameScriptStatPoolsListener
 	{
-		[Ordinal(0)] [RED("meleeCrosshair")] public wCHandle<CrosshairGameController_Melee> MeleeCrosshair { get; set; }
+		private wCHandle<CrosshairGameController_Melee> _meleeCrosshair;
 
-		public MeleeResourcePoolListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("meleeCrosshair")] 
+		public wCHandle<CrosshairGameController_Melee> MeleeCrosshair
+		{
+			get => GetProperty(ref _meleeCrosshair);
+			set => SetProperty(ref _meleeCrosshair, value);
+		}
+
+		public MeleeResourcePoolListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

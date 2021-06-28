@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnlockCodexPartRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("codexRecordID")] public TweakDBID CodexRecordID { get; set; }
-		[Ordinal(1)] [RED("partName")] public CName PartName { get; set; }
+		private TweakDBID _codexRecordID;
+		private CName _partName;
 
-		public UnlockCodexPartRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("codexRecordID")] 
+		public TweakDBID CodexRecordID
+		{
+			get => GetProperty(ref _codexRecordID);
+			set => SetProperty(ref _codexRecordID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("partName")] 
+		public CName PartName
+		{
+			get => GetProperty(ref _partName);
+			set => SetProperty(ref _partName, value);
+		}
+
+		public UnlockCodexPartRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

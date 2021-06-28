@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTppRepItemAppearanceInfo : CVariable
 	{
-		[Ordinal(0)] [RED("itemID")] public TweakDBID ItemID { get; set; }
-		[Ordinal(1)] [RED("appearance")] public CName Appearance { get; set; }
+		private TweakDBID _itemID;
+		private CName _appearance;
 
-		public gameTppRepItemAppearanceInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemID")] 
+		public TweakDBID ItemID
+		{
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("appearance")] 
+		public CName Appearance
+		{
+			get => GetProperty(ref _appearance);
+			set => SetProperty(ref _appearance, value);
+		}
+
+		public gameTppRepItemAppearanceInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

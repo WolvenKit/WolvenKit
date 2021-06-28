@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStatPrereq : gameIRPGPrereq
 	{
-		[Ordinal(1)] [RED("statType")] public CEnum<gamedataStatType> StatType { get; set; }
-		[Ordinal(2)] [RED("valueToCheck")] public CFloat ValueToCheck { get; set; }
+		private CEnum<gamedataStatType> _statType;
+		private CFloat _valueToCheck;
 
-		public gameStatPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("statType")] 
+		public CEnum<gamedataStatType> StatType
+		{
+			get => GetProperty(ref _statType);
+			set => SetProperty(ref _statType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("valueToCheck")] 
+		public CFloat ValueToCheck
+		{
+			get => GetProperty(ref _valueToCheck);
+			set => SetProperty(ref _valueToCheck, value);
+		}
+
+		public gameStatPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

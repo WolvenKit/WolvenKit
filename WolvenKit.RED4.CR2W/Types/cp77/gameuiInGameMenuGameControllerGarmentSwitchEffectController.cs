@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiInGameMenuGameControllerGarmentSwitchEffectController : CVariable
 	{
-		[Ordinal(0)] [RED("sceneName")] public CName SceneName { get; set; }
-		[Ordinal(1)] [RED("effectName")] public CName EffectName { get; set; }
+		private CName _sceneName;
+		private CName _effectName;
 
-		public gameuiInGameMenuGameControllerGarmentSwitchEffectController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sceneName")] 
+		public CName SceneName
+		{
+			get => GetProperty(ref _sceneName);
+			set => SetProperty(ref _sceneName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("effectName")] 
+		public CName EffectName
+		{
+			get => GetProperty(ref _effectName);
+			set => SetProperty(ref _effectName, value);
+		}
+
+		public gameuiInGameMenuGameControllerGarmentSwitchEffectController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

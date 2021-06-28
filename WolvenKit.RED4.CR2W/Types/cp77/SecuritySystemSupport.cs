@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SecuritySystemSupport : redEvent
 	{
-		[Ordinal(0)] [RED("supportGranted")] public CBool SupportGranted { get; set; }
+		private CBool _supportGranted;
 
-		public SecuritySystemSupport(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("supportGranted")] 
+		public CBool SupportGranted
+		{
+			get => GetProperty(ref _supportGranted);
+			set => SetProperty(ref _supportGranted, value);
+		}
+
+		public SecuritySystemSupport(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

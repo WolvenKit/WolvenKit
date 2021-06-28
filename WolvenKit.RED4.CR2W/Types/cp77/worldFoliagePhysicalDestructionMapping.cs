@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldFoliagePhysicalDestructionMapping : worldFoliageDestructionMapping
 	{
-		[Ordinal(3)] [RED("audioMetadata")] public CName AudioMetadata { get; set; }
-		[Ordinal(4)] [RED("destructionParams")] public physicsDestructionParams DestructionParams { get; set; }
-		[Ordinal(5)] [RED("destructionLevelData")] public CArray<physicsDestructionLevelData> DestructionLevelData { get; set; }
+		private CName _audioMetadata;
+		private physicsDestructionParams _destructionParams;
+		private CArray<physicsDestructionLevelData> _destructionLevelData;
 
-		public worldFoliagePhysicalDestructionMapping(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("audioMetadata")] 
+		public CName AudioMetadata
+		{
+			get => GetProperty(ref _audioMetadata);
+			set => SetProperty(ref _audioMetadata, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("destructionParams")] 
+		public physicsDestructionParams DestructionParams
+		{
+			get => GetProperty(ref _destructionParams);
+			set => SetProperty(ref _destructionParams, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("destructionLevelData")] 
+		public CArray<physicsDestructionLevelData> DestructionLevelData
+		{
+			get => GetProperty(ref _destructionLevelData);
+			set => SetProperty(ref _destructionLevelData, value);
+		}
+
+		public worldFoliagePhysicalDestructionMapping(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

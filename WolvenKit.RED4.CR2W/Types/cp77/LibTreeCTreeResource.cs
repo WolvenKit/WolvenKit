@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LibTreeCTreeResource : CResource
 	{
-		[Ordinal(1)] [RED("variables")] public LibTreeDefTreeVariablesList Variables { get; set; }
+		private LibTreeDefTreeVariablesList _variables;
 
-		public LibTreeCTreeResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("variables")] 
+		public LibTreeDefTreeVariablesList Variables
+		{
+			get => GetProperty(ref _variables);
+			set => SetProperty(ref _variables, value);
+		}
+
+		public LibTreeCTreeResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

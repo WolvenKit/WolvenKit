@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioPlaylistTrackEventStruct : CVariable
 	{
-		[Ordinal(0)] [RED("playlistName")] public CName PlaylistName { get; set; }
-		[Ordinal(1)] [RED("trackName")] public CName TrackName { get; set; }
+		private CName _playlistName;
+		private CName _trackName;
 
-		public audioPlaylistTrackEventStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("playlistName")] 
+		public CName PlaylistName
+		{
+			get => GetProperty(ref _playlistName);
+			set => SetProperty(ref _playlistName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("trackName")] 
+		public CName TrackName
+		{
+			get => GetProperty(ref _trackName);
+			set => SetProperty(ref _trackName, value);
+		}
+
+		public audioPlaylistTrackEventStruct(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

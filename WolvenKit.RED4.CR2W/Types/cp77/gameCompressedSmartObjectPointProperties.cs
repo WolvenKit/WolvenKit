@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameCompressedSmartObjectPointProperties : CVariable
 	{
-		[Ordinal(0)] [RED("propertyId")] public CUInt16 PropertyId { get; set; }
+		private CUInt16 _propertyId;
 
-		public gameCompressedSmartObjectPointProperties(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("propertyId")] 
+		public CUInt16 PropertyId
+		{
+			get => GetProperty(ref _propertyId);
+			set => SetProperty(ref _propertyId, value);
+		}
+
+		public gameCompressedSmartObjectPointProperties(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

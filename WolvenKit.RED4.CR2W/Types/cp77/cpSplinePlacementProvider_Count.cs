@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cpSplinePlacementProvider_Count : cpSplinePlacementProvider_Distance
 	{
-		[Ordinal(1)] [RED("count")] public CUInt32 Count { get; set; }
+		private CUInt32 _count;
 
-		public cpSplinePlacementProvider_Count(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("count")] 
+		public CUInt32 Count
+		{
+			get => GetProperty(ref _count);
+			set => SetProperty(ref _count, value);
+		}
+
+		public cpSplinePlacementProvider_Count(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

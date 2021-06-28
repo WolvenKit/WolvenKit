@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using WolvenKit.RED3.CR2W.Reflection;
 using FastMember;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Interfaces.Core;
 
 namespace WolvenKit.RED3.CR2W.Types
 {
@@ -25,7 +26,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public CVariable packedObject;
 
-        public SBlockData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SBlockData(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 

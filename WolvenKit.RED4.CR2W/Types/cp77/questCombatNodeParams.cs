@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCombatNodeParams : questAICommandParams
 	{
-		public questCombatNodeParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public questCombatNodeParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -19,7 +19,7 @@ namespace WolvenKit.RED3.CR2W.Types.Utils
         [Ordinal(1)] [REDBuffer] public CGUID Guid { get; set; }
         [Ordinal(2)] [REDBuffer] public CByteArray2 Buffer { get; set; }
 
-        public SEntityBufferType1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SEntityBufferType1(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             ComponentName = new CName(cr2w, this, nameof(ComponentName)) { IsSerialized = true };
             Guid = new CGUID(cr2w, this, nameof(Guid)) { IsSerialized = true };

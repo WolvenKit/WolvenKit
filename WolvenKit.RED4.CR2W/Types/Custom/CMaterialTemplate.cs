@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types
@@ -9,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
 	public class CMaterialTemplate : CMaterialTemplate_
     {
-        public CMaterialTemplate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CMaterialTemplate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         private List<CMaterialTemplateCustomdata> customData = new ();
         public override void Read(BinaryReader file, uint size)
@@ -18,7 +20,11 @@ namespace WolvenKit.RED4.CR2W.Types
 
             // read additonal data but not expose it, it will be created on write
 
-            if (Parameters == null)
+            cr2w.CreatePropertyOnAccess = false;
+            var isNull = Parameters == null;
+            cr2w.CreatePropertyOnAccess = true;
+
+            if (isNull)
             {
                 var zero = file.ReadBytes(2);
                 return;
@@ -57,9 +63,9 @@ namespace WolvenKit.RED4.CR2W.Types
                 ushort offset = 0;
                 foreach (var handle in parameter)
                 {
-                    if (handle.Reference?.data is not CMaterialParameter param) continue;
+                    if (handle.GetReference()?.Data is not CMaterialParameter param) continue;
                     var nam = param.ParameterName;
-                    
+
                     // write
                     if (!Enum.TryParse(param.REDType, out EMaterialTemplateType type))
                         throw new InvalidParsingException(nameof(CMaterialTemplate));

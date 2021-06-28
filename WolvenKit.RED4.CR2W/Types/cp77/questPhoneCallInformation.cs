@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPhoneCallInformation : CVariable
 	{
-		[Ordinal(0)] [RED("callMode")] public CEnum<questPhoneCallMode> CallMode { get; set; }
-		[Ordinal(1)] [RED("isAudioCall")] public CBool IsAudioCall { get; set; }
-		[Ordinal(2)] [RED("contactName")] public CName ContactName { get; set; }
-		[Ordinal(3)] [RED("isPlayerCalling")] public CBool IsPlayerCalling { get; set; }
-		[Ordinal(4)] [RED("callPhase")] public CEnum<questPhoneCallPhase> CallPhase { get; set; }
+		private CEnum<questPhoneCallMode> _callMode;
+		private CBool _isAudioCall;
+		private CName _contactName;
+		private CBool _isPlayerCalling;
+		private CEnum<questPhoneCallPhase> _callPhase;
 
-		public questPhoneCallInformation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("callMode")] 
+		public CEnum<questPhoneCallMode> CallMode
+		{
+			get => GetProperty(ref _callMode);
+			set => SetProperty(ref _callMode, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isAudioCall")] 
+		public CBool IsAudioCall
+		{
+			get => GetProperty(ref _isAudioCall);
+			set => SetProperty(ref _isAudioCall, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("contactName")] 
+		public CName ContactName
+		{
+			get => GetProperty(ref _contactName);
+			set => SetProperty(ref _contactName, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("isPlayerCalling")] 
+		public CBool IsPlayerCalling
+		{
+			get => GetProperty(ref _isPlayerCalling);
+			set => SetProperty(ref _isPlayerCalling, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("callPhase")] 
+		public CEnum<questPhoneCallPhase> CallPhase
+		{
+			get => GetProperty(ref _callPhase);
+			set => SetProperty(ref _callPhase, value);
+		}
+
+		public questPhoneCallInformation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -19,9 +19,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(4)] [RED("BLOOD_SPAWN_DELAY_MAX")] 		public CInt32 BLOOD_SPAWN_DELAY_MAX { get; set;}
 
-		public W3Effect_BleedingTracking(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public W3Effect_BleedingTracking(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new W3Effect_BleedingTracking(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

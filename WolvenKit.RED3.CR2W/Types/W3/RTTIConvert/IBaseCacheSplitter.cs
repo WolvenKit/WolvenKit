@@ -8,8 +8,8 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class IBaseCacheSplitter : CVariable
 	{
-		public IBaseCacheSplitter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public IBaseCacheSplitter(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new IBaseCacheSplitter(cr2w, parent, name);
+		
 	}
 }

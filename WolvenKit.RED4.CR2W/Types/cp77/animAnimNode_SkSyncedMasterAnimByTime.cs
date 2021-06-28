@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkSyncedMasterAnimByTime : animAnimNode_SkFrameAnim
 	{
-		[Ordinal(34)] [RED("syncTag")] public CName SyncTag { get; set; }
+		private CName _syncTag;
 
-		public animAnimNode_SkSyncedMasterAnimByTime(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(34)] 
+		[RED("syncTag")] 
+		public CName SyncTag
+		{
+			get => GetProperty(ref _syncTag);
+			set => SetProperty(ref _syncTag, value);
+		}
+
+		public animAnimNode_SkSyncedMasterAnimByTime(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

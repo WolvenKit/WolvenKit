@@ -3,7 +3,6 @@
 	<PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Authors>Hambalkó Bence, Moritz Baron</Authors>
 		<Company>WolvenKit</Company>
 		<Description>File formats (Cyberpunk 2077) for the WolvenKit Mod Editor.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -11,9 +10,10 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
 		<PackageTags>wolvenkit, cyberpunk2077</PackageTags>
-		<AssemblyVersion>2.0.0.0</AssemblyVersion>
-		<FileVersion>2.0.0.0</FileVersion>
-		<Version>2.0.0</Version>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+		<AssemblyVersion>3.23.0.0</AssemblyVersion>
+		<FileVersion>3.23.0.0</FileVersion>
+		<Version>3.23.0</Version>
 		<NoWarn>$(NoWarn);NU5104</NoWarn>
 	</PropertyGroup>
 
@@ -24,17 +24,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Catel.Core" Version="5.12.11" />
 		<PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
 		<PackageReference Include="FastMember" Version="1.5.0" />
-		<PackageReference Include="FastMember.NetCore" Version="1.1.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0020" />
-		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0020" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+		<ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkDebugLayerDefinition : inkLayerDefinition
 	{
-		[Ordinal(8)] [RED("entries")] public CArray<inkDebugLayerEntry> Entries { get; set; }
+		private CArray<inkDebugLayerEntry> _entries;
 
-		public inkDebugLayerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(8)] 
+		[RED("entries")] 
+		public CArray<inkDebugLayerEntry> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		public inkDebugLayerDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

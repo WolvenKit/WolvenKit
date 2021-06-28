@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCustomizationAppearance : gameuiCensorshipInfo
 	{
-		[Ordinal(2)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(3)] [RED("resource")] public raRef<appearanceAppearanceResource> Resource { get; set; }
-		[Ordinal(4)] [RED("definition")] public CName Definition { get; set; }
+		private CName _name;
+		private raRef<appearanceAppearanceResource> _resource;
+		private CName _definition;
 
-		public gameuiCustomizationAppearance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("resource")] 
+		public raRef<appearanceAppearanceResource> Resource
+		{
+			get => GetProperty(ref _resource);
+			set => SetProperty(ref _resource, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("definition")] 
+		public CName Definition
+		{
+			get => GetProperty(ref _definition);
+			set => SetProperty(ref _definition, value);
+		}
+
+		public gameuiCustomizationAppearance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

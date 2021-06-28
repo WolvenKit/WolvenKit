@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameplayFunctionalTestReturnValue : CVariable
 	{
-		[Ordinal(0)] [RED("value")] public CString Value { get; set; }
-		[Ordinal(1)] [RED("errorInfo")] public CString ErrorInfo { get; set; }
+		private CString _value;
+		private CString _errorInfo;
 
-		public GameplayFunctionalTestReturnValue(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("value")] 
+		public CString Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("errorInfo")] 
+		public CString ErrorInfo
+		{
+			get => GetProperty(ref _errorInfo);
+			set => SetProperty(ref _errorInfo, value);
+		}
+
+		public GameplayFunctionalTestReturnValue(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

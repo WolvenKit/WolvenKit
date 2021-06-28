@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkGameNotificationToken : IScriptable
 	{
-		public inkGameNotificationToken(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public inkGameNotificationToken(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

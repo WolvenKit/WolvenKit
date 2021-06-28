@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkHUDLayerDefinition : inkLayerDefinition
 	{
-		[Ordinal(8)] [RED("entriesResource")] public rRef<inkHudEntriesResource> EntriesResource { get; set; }
+		private rRef<inkHudEntriesResource> _entriesResource;
 
-		public inkHUDLayerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(8)] 
+		[RED("entriesResource")] 
+		public rRef<inkHudEntriesResource> EntriesResource
+		{
+			get => GetProperty(ref _entriesResource);
+			set => SetProperty(ref _entriesResource, value);
+		}
+
+		public inkHUDLayerDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

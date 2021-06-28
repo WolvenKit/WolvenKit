@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VentilationAreaSetup : CVariable
 	{
-		[Ordinal(0)] [RED("areaEffect")] public CEnum<ETrapEffects> AreaEffect { get; set; }
-		[Ordinal(1)] [RED("actionName")] public CName ActionName { get; set; }
+		private CEnum<ETrapEffects> _areaEffect;
+		private CName _actionName;
 
-		public VentilationAreaSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("areaEffect")] 
+		public CEnum<ETrapEffects> AreaEffect
+		{
+			get => GetProperty(ref _areaEffect);
+			set => SetProperty(ref _areaEffect, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("actionName")] 
+		public CName ActionName
+		{
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
+		}
+
+		public VentilationAreaSetup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

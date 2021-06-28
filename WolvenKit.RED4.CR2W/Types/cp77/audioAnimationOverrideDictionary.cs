@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAnimationOverrideDictionary : audioInlinedAudioMetadata
 	{
-		[Ordinal(1)] [RED("entries")] public CArray<audioAnimationOverrideDictionaryItem> Entries { get; set; }
-		[Ordinal(2)] [RED("entryType")] public CHandle<audioAnimationOverrideDictionaryItem> EntryType { get; set; }
+		private CArray<audioAnimationOverrideDictionaryItem> _entries;
+		private CHandle<audioAnimationOverrideDictionaryItem> _entryType;
 
-		public audioAnimationOverrideDictionary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("entries")] 
+		public CArray<audioAnimationOverrideDictionaryItem> Entries
+		{
+			get => GetProperty(ref _entries);
+			set => SetProperty(ref _entries, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("entryType")] 
+		public CHandle<audioAnimationOverrideDictionaryItem> EntryType
+		{
+			get => GetProperty(ref _entryType);
+			set => SetProperty(ref _entryType, value);
+		}
+
+		public audioAnimationOverrideDictionary(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

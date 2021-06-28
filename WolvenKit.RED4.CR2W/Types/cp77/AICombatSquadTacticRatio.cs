@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICombatSquadTacticRatio : CVariable
 	{
-		[Ordinal(0)] [RED("ratioSum")] public CFloat RatioSum { get; set; }
-		[Ordinal(1)] [RED("reachSum")] public CFloat ReachSum { get; set; }
-		[Ordinal(2)] [RED("area")] public CFloat Area { get; set; }
+		private CFloat _ratioSum;
+		private CFloat _reachSum;
+		private CFloat _area;
 
-		public AICombatSquadTacticRatio(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ratioSum")] 
+		public CFloat RatioSum
+		{
+			get => GetProperty(ref _ratioSum);
+			set => SetProperty(ref _ratioSum, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("reachSum")] 
+		public CFloat ReachSum
+		{
+			get => GetProperty(ref _reachSum);
+			set => SetProperty(ref _reachSum, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("area")] 
+		public CFloat Area
+		{
+			get => GetProperty(ref _area);
+			set => SetProperty(ref _area, value);
+		}
+
+		public AICombatSquadTacticRatio(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnregisterTrafficRunner : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("onDeactivation")] public CBool OnDeactivation { get; set; }
+		private CBool _onDeactivation;
 
-		public UnregisterTrafficRunner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("onDeactivation")] 
+		public CBool OnDeactivation
+		{
+			get => GetProperty(ref _onDeactivation);
+			set => SetProperty(ref _onDeactivation, value);
+		}
+
+		public UnregisterTrafficRunner(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

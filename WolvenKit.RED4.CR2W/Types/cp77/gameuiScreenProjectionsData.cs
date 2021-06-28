@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiScreenProjectionsData : IScriptable
 	{
-		[Ordinal(0)] [RED("data")] public CArray<CHandle<inkScreenProjection>> Data { get; set; }
+		private CArray<CHandle<inkScreenProjection>> _data;
 
-		public gameuiScreenProjectionsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CArray<CHandle<inkScreenProjection>> Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public gameuiScreenProjectionsData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

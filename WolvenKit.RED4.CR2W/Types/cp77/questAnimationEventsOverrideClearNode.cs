@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questAnimationEventsOverrideClearNode : questIAudioNodeType
 	{
-		[Ordinal(0)] [RED("resetGlobalOverride")] public CBool ResetGlobalOverride { get; set; }
-		[Ordinal(1)] [RED("resetActorsOverride")] public CBool ResetActorsOverride { get; set; }
+		private CBool _resetGlobalOverride;
+		private CBool _resetActorsOverride;
 
-		public questAnimationEventsOverrideClearNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("resetGlobalOverride")] 
+		public CBool ResetGlobalOverride
+		{
+			get => GetProperty(ref _resetGlobalOverride);
+			set => SetProperty(ref _resetGlobalOverride, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("resetActorsOverride")] 
+		public CBool ResetActorsOverride
+		{
+			get => GetProperty(ref _resetActorsOverride);
+			set => SetProperty(ref _resetActorsOverride, value);
+		}
+
+		public questAnimationEventsOverrideClearNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

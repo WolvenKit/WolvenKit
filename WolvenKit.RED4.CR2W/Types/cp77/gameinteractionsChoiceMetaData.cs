@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsChoiceMetaData : CVariable
 	{
-		[Ordinal(0)] [RED("tweakDBName")] public CString TweakDBName { get; set; }
-		[Ordinal(1)] [RED("tweakDBID")] public TweakDBID TweakDBID { get; set; }
-		[Ordinal(2)] [RED("type")] public gameinteractionsChoiceTypeWrapper Type { get; set; }
+		private CString _tweakDBName;
+		private TweakDBID _tweakDBID;
+		private gameinteractionsChoiceTypeWrapper _type;
 
-		public gameinteractionsChoiceMetaData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("tweakDBName")] 
+		public CString TweakDBName
+		{
+			get => GetProperty(ref _tweakDBName);
+			set => SetProperty(ref _tweakDBName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("tweakDBID")] 
+		public TweakDBID TweakDBID
+		{
+			get => GetProperty(ref _tweakDBID);
+			set => SetProperty(ref _tweakDBID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("type")] 
+		public gameinteractionsChoiceTypeWrapper Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public gameinteractionsChoiceMetaData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

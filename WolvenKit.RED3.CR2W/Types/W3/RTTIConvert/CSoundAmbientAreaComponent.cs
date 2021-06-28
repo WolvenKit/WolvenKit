@@ -97,9 +97,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(43)] [RED("dynamicEvents", 2,0)] 		public CArray<SSoundAmbientDynamicSoundEvents> DynamicEvents { get; set;}
 
-		public CSoundAmbientAreaComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CSoundAmbientAreaComponent(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CSoundAmbientAreaComponent(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

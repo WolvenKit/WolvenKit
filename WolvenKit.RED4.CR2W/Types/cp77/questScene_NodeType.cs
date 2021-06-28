@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questScene_NodeType : questSpawnManagerNodeType
 	{
-		[Ordinal(1)] [RED("entityReference")] public gameEntityReference EntityReference { get; set; }
+		private gameEntityReference _entityReference;
 
-		public questScene_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("entityReference")] 
+		public gameEntityReference EntityReference
+		{
+			get => GetProperty(ref _entityReference);
+			set => SetProperty(ref _entityReference, value);
+		}
+
+		public questScene_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

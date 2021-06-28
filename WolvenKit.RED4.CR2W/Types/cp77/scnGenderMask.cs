@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnGenderMask : CVariable
 	{
-		[Ordinal(0)] [RED("mask")] public CUInt8 Mask { get; set; }
+		private CUInt8 _mask;
 
-		public scnGenderMask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mask")] 
+		public CUInt8 Mask
+		{
+			get => GetProperty(ref _mask);
+			set => SetProperty(ref _mask, value);
+		}
+
+		public scnGenderMask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MadnessDebuff : redEvent
 	{
-		[Ordinal(0)] [RED("object")] public wCHandle<gameObject> Object { get; set; }
+		private wCHandle<gameObject> _object;
 
-		public MadnessDebuff(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("object")] 
+		public wCHandle<gameObject> Object
+		{
+			get => GetProperty(ref _object);
+			set => SetProperty(ref _object, value);
+		}
+
+		public MadnessDebuff(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

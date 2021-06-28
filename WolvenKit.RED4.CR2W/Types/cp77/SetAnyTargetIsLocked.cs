@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetAnyTargetIsLocked : redEvent
 	{
-		[Ordinal(0)] [RED("wasSeen")] public CBool WasSeen { get; set; }
+		private CBool _wasSeen;
 
-		public SetAnyTargetIsLocked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("wasSeen")] 
+		public CBool WasSeen
+		{
+			get => GetProperty(ref _wasSeen);
+			set => SetProperty(ref _wasSeen, value);
+		}
+
+		public SetAnyTargetIsLocked(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

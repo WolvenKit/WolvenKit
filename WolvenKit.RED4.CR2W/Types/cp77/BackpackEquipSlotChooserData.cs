@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BackpackEquipSlotChooserData : inkGameNotificationData
 	{
-		[Ordinal(6)] [RED("item")] public InventoryItemData Item { get; set; }
-		[Ordinal(7)] [RED("inventoryManager")] public CHandle<InventoryDataManagerV2> InventoryManager { get; set; }
+		private InventoryItemData _item;
+		private CHandle<InventoryDataManagerV2> _inventoryManager;
 
-		public BackpackEquipSlotChooserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("item")] 
+		public InventoryItemData Item
+		{
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("inventoryManager")] 
+		public CHandle<InventoryDataManagerV2> InventoryManager
+		{
+			get => GetProperty(ref _inventoryManager);
+			set => SetProperty(ref _inventoryManager, value);
+		}
+
+		public BackpackEquipSlotChooserData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

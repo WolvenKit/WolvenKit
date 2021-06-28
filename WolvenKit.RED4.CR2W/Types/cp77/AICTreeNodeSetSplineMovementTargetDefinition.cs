@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeSetSplineMovementTargetDefinition : AICTreeNodeDecoratorDefinition
 	{
-		[Ordinal(1)] [RED("splineNode")] public LibTreeSharedVarReferenceName SplineNode { get; set; }
-		[Ordinal(2)] [RED("movementTarget")] public LibTreeSharedVarRegistrationName MovementTarget { get; set; }
+		private LibTreeSharedVarReferenceName _splineNode;
+		private LibTreeSharedVarRegistrationName _movementTarget;
 
-		public AICTreeNodeSetSplineMovementTargetDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("splineNode")] 
+		public LibTreeSharedVarReferenceName SplineNode
+		{
+			get => GetProperty(ref _splineNode);
+			set => SetProperty(ref _splineNode, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("movementTarget")] 
+		public LibTreeSharedVarRegistrationName MovementTarget
+		{
+			get => GetProperty(ref _movementTarget);
+			set => SetProperty(ref _movementTarget, value);
+		}
+
+		public AICTreeNodeSetSplineMovementTargetDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIOffMeshConnectionComponent : entIComponent
 	{
-		[Ordinal(3)] [RED("offMeshConnectionNodesRefs")] public CArray<NodeRef> OffMeshConnectionNodesRefs { get; set; }
-		[Ordinal(4)] [RED("agentSize")] public CEnum<NavGenAgentSize> AgentSize { get; set; }
+		private CArray<NodeRef> _offMeshConnectionNodesRefs;
+		private CEnum<NavGenAgentSize> _agentSize;
 
-		public AIOffMeshConnectionComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("offMeshConnectionNodesRefs")] 
+		public CArray<NodeRef> OffMeshConnectionNodesRefs
+		{
+			get => GetProperty(ref _offMeshConnectionNodesRefs);
+			set => SetProperty(ref _offMeshConnectionNodesRefs, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("agentSize")] 
+		public CEnum<NavGenAgentSize> AgentSize
+		{
+			get => GetProperty(ref _agentSize);
+			set => SetProperty(ref _agentSize, value);
+		}
+
+		public AIOffMeshConnectionComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

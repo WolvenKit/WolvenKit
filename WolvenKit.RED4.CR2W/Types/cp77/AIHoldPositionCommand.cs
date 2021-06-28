@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIHoldPositionCommand : AIMoveCommand
 	{
-		[Ordinal(7)] [RED("duration")] public CFloat Duration { get; set; }
+		private CFloat _duration;
 
-		public AIHoldPositionCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(7)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
+		}
+
+		public AIHoldPositionCommand(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

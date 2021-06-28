@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_DisableSleepMode : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("forceUpdate")] public CBool ForceUpdate { get; set; }
+		private CBool _forceUpdate;
 
-		public animAnimNode_DisableSleepMode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("forceUpdate")] 
+		public CBool ForceUpdate
+		{
+			get => GetProperty(ref _forceUpdate);
+			set => SetProperty(ref _forceUpdate, value);
+		}
+
+		public animAnimNode_DisableSleepMode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

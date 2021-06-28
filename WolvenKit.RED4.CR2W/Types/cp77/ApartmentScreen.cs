@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApartmentScreen : LcdScreen
 	{
-		[Ordinal(95)] [RED("timeSystemCallbackID")] public CUInt32 TimeSystemCallbackID { get; set; }
+		private CUInt32 _timeSystemCallbackID;
 
-		public ApartmentScreen(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(98)] 
+		[RED("timeSystemCallbackID")] 
+		public CUInt32 TimeSystemCallbackID
+		{
+			get => GetProperty(ref _timeSystemCallbackID);
+			set => SetProperty(ref _timeSystemCallbackID, value);
+		}
+
+		public ApartmentScreen(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

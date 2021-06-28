@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ChangeMusicAction : ActionBool
 	{
-		[Ordinal(25)] [RED("interactionRecordName")] public CString InteractionRecordName { get; set; }
-		[Ordinal(26)] [RED("settings")] public CHandle<MusicSettings> Settings { get; set; }
+		private CString _interactionRecordName;
+		private CHandle<MusicSettings> _settings;
 
-		public ChangeMusicAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("interactionRecordName")] 
+		public CString InteractionRecordName
+		{
+			get => GetProperty(ref _interactionRecordName);
+			set => SetProperty(ref _interactionRecordName, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("settings")] 
+		public CHandle<MusicSettings> Settings
+		{
+			get => GetProperty(ref _settings);
+			set => SetProperty(ref _settings, value);
+		}
+
+		public ChangeMusicAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

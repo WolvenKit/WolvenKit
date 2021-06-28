@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class moveEnteredSplineEvent : redEvent
 	{
-		[Ordinal(0)] [RED("useDoors")] public CBool UseDoors { get; set; }
+		private CBool _useDoors;
 
-		public moveEnteredSplineEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("useDoors")] 
+		public CBool UseDoors
+		{
+			get => GetProperty(ref _useDoors);
+			set => SetProperty(ref _useDoors, value);
+		}
+
+		public moveEnteredSplineEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameTransformAnimationTimeline : CVariable
 	{
-		[Ordinal(0)] [RED("items")] public CArray<gameTransformAnimationTrackItem> Items { get; set; }
+		private CArray<gameTransformAnimationTrackItem> _items;
 
-		public gameTransformAnimationTimeline(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("items")] 
+		public CArray<gameTransformAnimationTrackItem> Items
+		{
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
+		}
+
+		public gameTransformAnimationTimeline(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class meshMeshParamCompiledPhysics : meshMeshParameter
 	{
-		[Ordinal(0)] [RED("collection")] public CHandle<physicsDeferredCollection> Collection { get; set; }
+		private CHandle<physicsDeferredCollection> _collection;
 
-		public meshMeshParamCompiledPhysics(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("collection")] 
+		public CHandle<physicsDeferredCollection> Collection
+		{
+			get => GetProperty(ref _collection);
+			set => SetProperty(ref _collection, value);
+		}
+
+		public meshMeshParamCompiledPhysics(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

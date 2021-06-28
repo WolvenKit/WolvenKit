@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workWorkspotItemOverride : CVariable
 	{
-		[Ordinal(0)] [RED("propOverrides")] public CArray<workWorkspotItemOverridePropOverride> PropOverrides { get; set; }
-		[Ordinal(1)] [RED("itemOverrides")] public CArray<workWorkspotItemOverrideItemOverride> ItemOverrides { get; set; }
+		private CArray<workWorkspotItemOverridePropOverride> _propOverrides;
+		private CArray<workWorkspotItemOverrideItemOverride> _itemOverrides;
 
-		public workWorkspotItemOverride(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("propOverrides")] 
+		public CArray<workWorkspotItemOverridePropOverride> PropOverrides
+		{
+			get => GetProperty(ref _propOverrides);
+			set => SetProperty(ref _propOverrides, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("itemOverrides")] 
+		public CArray<workWorkspotItemOverrideItemOverride> ItemOverrides
+		{
+			get => GetProperty(ref _itemOverrides);
+			set => SetProperty(ref _itemOverrides, value);
+		}
+
+		public workWorkspotItemOverride(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameFocusClueStateChangeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("clueIndex")] public CInt32 ClueIndex { get; set; }
-		[Ordinal(1)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
+		private CInt32 _clueIndex;
+		private CBool _isEnabled;
 
-		public gameFocusClueStateChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("clueIndex")] 
+		public CInt32 ClueIndex
+		{
+			get => GetProperty(ref _clueIndex);
+			set => SetProperty(ref _clueIndex, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
+		}
+
+		public gameFocusClueStateChangeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questInputController_ConditionType : questISystemConditionType
 	{
-		[Ordinal(0)] [RED("inputController")] public CEnum<questInputDevice> InputController { get; set; }
+		private CEnum<questInputDevice> _inputController;
 
-		public questInputController_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("inputController")] 
+		public CEnum<questInputDevice> InputController
+		{
+			get => GetProperty(ref _inputController);
+			set => SetProperty(ref _inputController, value);
+		}
+
+		public questInputController_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldStreamingSectorInplaceContent : CResource
 	{
-		[Ordinal(1)] [RED("inplaceResources")] public CArray<rRef<CResource>> InplaceResources { get; set; }
+		private CArray<rRef<CResource>> _inplaceResources;
 
-		public worldStreamingSectorInplaceContent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("inplaceResources")] 
+		public CArray<rRef<CResource>> InplaceResources
+		{
+			get => GetProperty(ref _inplaceResources);
+			set => SetProperty(ref _inplaceResources, value);
+		}
+
+		public worldStreamingSectorInplaceContent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldBlockoutResource : CResource
 	{
-		[Ordinal(1)] [RED("blockoutData")] public CHandle<worldBlockoutData> BlockoutData { get; set; }
+		private CHandle<worldBlockoutData> _blockoutData;
 
-		public worldBlockoutResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("blockoutData")] 
+		public CHandle<worldBlockoutData> BlockoutData
+		{
+			get => GetProperty(ref _blockoutData);
+			set => SetProperty(ref _blockoutData, value);
+		}
+
+		public worldBlockoutResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

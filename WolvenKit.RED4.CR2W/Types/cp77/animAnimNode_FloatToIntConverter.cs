@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_FloatToIntConverter : animAnimNode_IntValue
 	{
-		[Ordinal(11)] [RED("inputNode")] public animFloatLink InputNode { get; set; }
+		private animFloatLink _inputNode;
 
-		public animAnimNode_FloatToIntConverter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(11)] 
+		[RED("inputNode")] 
+		public animFloatLink InputNode
+		{
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
+		}
+
+		public animAnimNode_FloatToIntConverter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

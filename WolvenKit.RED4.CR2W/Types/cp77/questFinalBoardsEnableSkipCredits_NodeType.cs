@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questFinalBoardsEnableSkipCredits_NodeType : questIUIManagerNodeType
 	{
-		[Ordinal(0)] [RED("enableSkipping")] public CBool EnableSkipping { get; set; }
+		private CBool _enableSkipping;
 
-		public questFinalBoardsEnableSkipCredits_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("enableSkipping")] 
+		public CBool EnableSkipping
+		{
+			get => GetProperty(ref _enableSkipping);
+			set => SetProperty(ref _enableSkipping, value);
+		}
+
+		public questFinalBoardsEnableSkipCredits_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkGameNotificationsLayerDefinition : inkLayerDefinition
 	{
-		[Ordinal(8)] [RED("cursorResource")] public rRef<inkWidgetLibraryResource> CursorResource { get; set; }
+		private rRef<inkWidgetLibraryResource> _cursorResource;
 
-		public inkGameNotificationsLayerDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(8)] 
+		[RED("cursorResource")] 
+		public rRef<inkWidgetLibraryResource> CursorResource
+		{
+			get => GetProperty(ref _cursorResource);
+			set => SetProperty(ref _cursorResource, value);
+		}
+
+		public inkGameNotificationsLayerDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

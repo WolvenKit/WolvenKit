@@ -13,7 +13,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         [Ordinal(1000)] [REDBuffer(true)] public CCompressedBuffer<CVariant> BufferParameters { get; set; }
 
-        public CQuestScriptBlock(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CQuestScriptBlock(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             BufferParameters = new CCompressedBuffer<CVariant>(cr2w, this, nameof(BufferParameters)) { IsSerialized = true };
         }

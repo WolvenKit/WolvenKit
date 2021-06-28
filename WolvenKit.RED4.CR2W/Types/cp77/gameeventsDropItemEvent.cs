@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsDropItemEvent : redEvent
 	{
-		[Ordinal(0)] [RED("slotId")] public TweakDBID SlotId { get; set; }
+		private TweakDBID _slotId;
 
-		public gameeventsDropItemEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("slotId")] 
+		public TweakDBID SlotId
+		{
+			get => GetProperty(ref _slotId);
+			set => SetProperty(ref _slotId, value);
+		}
+
+		public gameeventsDropItemEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

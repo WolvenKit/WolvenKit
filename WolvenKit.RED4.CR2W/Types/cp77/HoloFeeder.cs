@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HoloFeeder : Device
 	{
-		[Ordinal(86)] [RED("feederMesh")] public CHandle<entIPlacedComponent> FeederMesh { get; set; }
+		private CHandle<entIPlacedComponent> _feederMesh;
 
-		public HoloFeeder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(86)] 
+		[RED("feederMesh")] 
+		public CHandle<entIPlacedComponent> FeederMesh
+		{
+			get => GetProperty(ref _feederMesh);
+			set => SetProperty(ref _feederMesh, value);
+		}
+
+		public HoloFeeder(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

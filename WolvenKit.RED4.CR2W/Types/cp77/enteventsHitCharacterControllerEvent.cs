@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class enteventsHitCharacterControllerEvent : redEvent
 	{
-		[Ordinal(0)] [RED("entity")] public wCHandle<entEntity> Entity { get; set; }
-		[Ordinal(1)] [RED("component")] public wCHandle<entIComponent> Component { get; set; }
+		private wCHandle<entEntity> _entity;
+		private wCHandle<entIComponent> _component;
 
-		public enteventsHitCharacterControllerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entity")] 
+		public wCHandle<entEntity> Entity
+		{
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("component")] 
+		public wCHandle<entIComponent> Component
+		{
+			get => GetProperty(ref _component);
+			set => SetProperty(ref _component, value);
+		}
+
+		public enteventsHitCharacterControllerEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

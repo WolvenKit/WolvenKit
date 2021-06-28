@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry : CVariable
 	{
-		[Ordinal(0)] [RED("puppetRef")] public gameEntityReference PuppetRef { get; set; }
-		[Ordinal(1)] [RED("isPlayer")] public CBool IsPlayer { get; set; }
-		[Ordinal(2)] [RED("appearanceName")] public CName AppearanceName { get; set; }
+		private gameEntityReference _puppetRef;
+		private CBool _isPlayer;
+		private CName _appearanceName;
 
-		public questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("puppetRef")] 
+		public gameEntityReference PuppetRef
+		{
+			get => GetProperty(ref _puppetRef);
+			set => SetProperty(ref _puppetRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isPlayer")] 
+		public CBool IsPlayer
+		{
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("appearanceName")] 
+		public CName AppearanceName
+		{
+			get => GetProperty(ref _appearanceName);
+			set => SetProperty(ref _appearanceName, value);
+		}
+
+		public questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

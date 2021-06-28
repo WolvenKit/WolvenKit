@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamemappinsQuestMappinManagerReplicatedState : CVariable
 	{
-		[Ordinal(0)] [RED("dynamicQuestMappinRepInfo")] public CArray<gamemappinsDynamicQuestMappinRepInfo> DynamicQuestMappinRepInfo { get; set; }
+		private CArray<gamemappinsDynamicQuestMappinRepInfo> _dynamicQuestMappinRepInfo;
 
-		public gamemappinsQuestMappinManagerReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("dynamicQuestMappinRepInfo")] 
+		public CArray<gamemappinsDynamicQuestMappinRepInfo> DynamicQuestMappinRepInfo
+		{
+			get => GetProperty(ref _dynamicQuestMappinRepInfo);
+			set => SetProperty(ref _dynamicQuestMappinRepInfo, value);
+		}
+
+		public gamemappinsQuestMappinManagerReplicatedState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

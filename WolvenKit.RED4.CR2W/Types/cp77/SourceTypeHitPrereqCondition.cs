@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SourceTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("source")] public CName Source { get; set; }
+		private CName _source;
 
-		public SourceTypeHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("source")] 
+		public CName Source
+		{
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
+		}
+
+		public SourceTypeHitPrereqCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

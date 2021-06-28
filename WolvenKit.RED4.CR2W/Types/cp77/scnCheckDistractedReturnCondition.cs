@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnCheckDistractedReturnCondition : scnIReturnCondition
 	{
-		[Ordinal(0)] [RED("params")] public scnCheckDistractedReturnConditionParams Params { get; set; }
+		private scnCheckDistractedReturnConditionParams _params;
 
-		public scnCheckDistractedReturnCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("params")] 
+		public scnCheckDistractedReturnConditionParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public scnCheckDistractedReturnCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

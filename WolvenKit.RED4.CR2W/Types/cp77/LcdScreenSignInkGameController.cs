@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LcdScreenSignInkGameController : DeviceInkGameControllerBase
 	{
-		[Ordinal(16)] [RED("messegeRecord")] public wCHandle<gamedataScreenMessageData_Record> MessegeRecord { get; set; }
-		[Ordinal(17)] [RED("replaceTextWithCustomNumber")] public CBool ReplaceTextWithCustomNumber { get; set; }
-		[Ordinal(18)] [RED("customNumber")] public CInt32 CustomNumber { get; set; }
-		[Ordinal(19)] [RED("onGlitchingStateChangedListener")] public CUInt32 OnGlitchingStateChangedListener { get; set; }
-		[Ordinal(20)] [RED("onMessegeChangedListener")] public CUInt32 OnMessegeChangedListener { get; set; }
+		private wCHandle<gamedataScreenMessageData_Record> _messegeRecord;
+		private CBool _replaceTextWithCustomNumber;
+		private CInt32 _customNumber;
+		private CUInt32 _onGlitchingStateChangedListener;
+		private CUInt32 _onMessegeChangedListener;
 
-		public LcdScreenSignInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(16)] 
+		[RED("messegeRecord")] 
+		public wCHandle<gamedataScreenMessageData_Record> MessegeRecord
+		{
+			get => GetProperty(ref _messegeRecord);
+			set => SetProperty(ref _messegeRecord, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("replaceTextWithCustomNumber")] 
+		public CBool ReplaceTextWithCustomNumber
+		{
+			get => GetProperty(ref _replaceTextWithCustomNumber);
+			set => SetProperty(ref _replaceTextWithCustomNumber, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("customNumber")] 
+		public CInt32 CustomNumber
+		{
+			get => GetProperty(ref _customNumber);
+			set => SetProperty(ref _customNumber, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("onGlitchingStateChangedListener")] 
+		public CUInt32 OnGlitchingStateChangedListener
+		{
+			get => GetProperty(ref _onGlitchingStateChangedListener);
+			set => SetProperty(ref _onGlitchingStateChangedListener, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("onMessegeChangedListener")] 
+		public CUInt32 OnMessegeChangedListener
+		{
+			get => GetProperty(ref _onMessegeChangedListener);
+			set => SetProperty(ref _onMessegeChangedListener, value);
+		}
+
+		public LcdScreenSignInkGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipModuleController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("lineWidget")] public inkWidgetReference LineWidget { get; set; }
+		private inkWidgetReference _lineWidget;
 
-		public ItemTooltipModuleController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("lineWidget")] 
+		public inkWidgetReference LineWidget
+		{
+			get => GetProperty(ref _lineWidget);
+			set => SetProperty(ref _lineWidget, value);
+		}
+
+		public ItemTooltipModuleController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TrafficGenTrafficSetting : CVariable
 	{
-		[Ordinal(0)] [RED("meshImpact")] public CEnum<TrafficGenMeshImpact> MeshImpact { get; set; }
+		private CEnum<TrafficGenMeshImpact> _meshImpact;
 
-		public TrafficGenTrafficSetting(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("meshImpact")] 
+		public CEnum<TrafficGenMeshImpact> MeshImpact
+		{
+			get => GetProperty(ref _meshImpact);
+			set => SetProperty(ref _meshImpact, value);
+		}
+
+		public TrafficGenTrafficSetting(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

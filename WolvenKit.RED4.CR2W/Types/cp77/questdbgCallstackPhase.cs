@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questdbgCallstackPhase : questdbgCallstackBlock
 	{
-		[Ordinal(2)] [RED("phases")] public CArray<CUInt64> Phases { get; set; }
-		[Ordinal(3)] [RED("blocks")] public CArray<CUInt64> Blocks { get; set; }
+		private CArray<CUInt64> _phases;
+		private CArray<CUInt64> _blocks;
 
-		public questdbgCallstackPhase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("phases")] 
+		public CArray<CUInt64> Phases
+		{
+			get => GetProperty(ref _phases);
+			set => SetProperty(ref _phases, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("blocks")] 
+		public CArray<CUInt64> Blocks
+		{
+			get => GetProperty(ref _blocks);
+			set => SetProperty(ref _blocks, value);
+		}
+
+		public questdbgCallstackPhase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

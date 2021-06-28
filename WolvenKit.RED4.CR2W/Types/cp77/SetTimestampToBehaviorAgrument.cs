@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetTimestampToBehaviorAgrument : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("timestampArgument")] public CName TimestampArgument { get; set; }
+		private CName _timestampArgument;
 
-		public SetTimestampToBehaviorAgrument(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("timestampArgument")] 
+		public CName TimestampArgument
+		{
+			get => GetProperty(ref _timestampArgument);
+			set => SetProperty(ref _timestampArgument, value);
+		}
+
+		public SetTimestampToBehaviorAgrument(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

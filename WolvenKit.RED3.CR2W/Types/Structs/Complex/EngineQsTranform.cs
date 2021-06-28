@@ -25,7 +25,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(9)] [RED] public CFloat Y { get; set; }
         [Ordinal(10)] [RED] public CFloat Z { get; set; }
 
-        public EngineQsTransform(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public EngineQsTransform(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             X = new CFloat(cr2w, this, nameof(X));
             Y = new CFloat(cr2w, this, nameof(Y));
@@ -38,7 +38,7 @@ namespace WolvenKit.RED3.CR2W.Types
             Scale_y = new CFloat(cr2w, this, nameof(Scale_y));
             Scale_z = new CFloat(cr2w, this, nameof(Scale_z));
 
-            W.val = 1;
+            W.Value = 1;
         }
 
         
@@ -73,11 +73,11 @@ namespace WolvenKit.RED3.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             flags = 0;
-            if (X.val != 0 || Y.val != 0 || Z.val != 0)
+            if (X.Value != 0 || Y.Value != 0 || Z.Value != 0)
                 flags |= 1;
-            if (Pitch.val != 0 || Yaw.val != 0 || Roll.val != 0 || W.val != 1)
+            if (Pitch.Value != 0 || Yaw.Value != 0 || Roll.Value != 0 || W.Value != 1)
                 flags |= 2;
-            if (Scale_x.val != 0 || Scale_y.val != 0 || Scale_z.val != 0)
+            if (Scale_x.Value != 0 || Scale_y.Value != 0 || Scale_z.Value != 0)
                 flags |= 4;
 
             file.Write(flags);
@@ -106,6 +106,6 @@ namespace WolvenKit.RED3.CR2W.Types
             }
         }
 
-        public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new EngineQsTransform(cr2w, parent, name);
+        
     }
 }

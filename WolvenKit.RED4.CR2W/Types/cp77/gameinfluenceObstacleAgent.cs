@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinfluenceObstacleAgent : gameinfluenceIAgent
 	{
-		[Ordinal(0)] [RED("useMeshes")] public CBool UseMeshes { get; set; }
-		[Ordinal(1)] [RED("radius")] public CFloat Radius { get; set; }
+		private CBool _useMeshes;
+		private CFloat _radius;
 
-		public gameinfluenceObstacleAgent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("useMeshes")] 
+		public CBool UseMeshes
+		{
+			get => GetProperty(ref _useMeshes);
+			set => SetProperty(ref _useMeshes, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("radius")] 
+		public CFloat Radius
+		{
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
+		}
+
+		public gameinfluenceObstacleAgent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

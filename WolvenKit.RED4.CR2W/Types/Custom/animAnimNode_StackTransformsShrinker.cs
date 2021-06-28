@@ -6,8 +6,16 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class animAnimNode_StackTransformsShrinker : animAnimNode_StackTransformsShrinker_
     {
-        [Ordinal(999)] [RED("extenderNodeId")] public CUInt32 ExtenderNodeId { get; set; }
+        private CUInt32 _extenderNodeId;
 
-        public animAnimNode_StackTransformsShrinker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        [Ordinal(999)]
+        [RED("extenderNodeId")]
+        public CUInt32 ExtenderNodeId
+        {
+            get => GetProperty(ref _extenderNodeId);
+            set => SetProperty(ref _extenderNodeId, value);
+        }
+
+        public animAnimNode_StackTransformsShrinker(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
     }
 }

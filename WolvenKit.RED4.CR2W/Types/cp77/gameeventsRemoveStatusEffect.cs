@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsRemoveStatusEffect : gameeventsStatusEffectEvent
 	{
-		[Ordinal(2)] [RED("isFinalRemoval")] public CBool IsFinalRemoval { get; set; }
+		private CBool _isFinalRemoval;
 
-		public gameeventsRemoveStatusEffect(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("isFinalRemoval")] 
+		public CBool IsFinalRemoval
+		{
+			get => GetProperty(ref _isFinalRemoval);
+			set => SetProperty(ref _isFinalRemoval, value);
+		}
+
+		public gameeventsRemoveStatusEffect(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCharacterState_ConditionType : questICharacterConditionType
 	{
-		[Ordinal(0)] [RED("subType")] public CHandle<questICharacterConditionSubType> SubType { get; set; }
+		private CHandle<questICharacterConditionSubType> _subType;
 
-		public questCharacterState_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("subType")] 
+		public CHandle<questICharacterConditionSubType> SubType
+		{
+			get => GetProperty(ref _subType);
+			set => SetProperty(ref _subType, value);
+		}
+
+		public questCharacterState_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

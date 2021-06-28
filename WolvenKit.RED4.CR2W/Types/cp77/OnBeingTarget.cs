@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class OnBeingTarget : redEvent
 	{
-		[Ordinal(0)] [RED("objectThatTargets")] public wCHandle<gameObject> ObjectThatTargets { get; set; }
-		[Ordinal(1)] [RED("noLongerTarget")] public CBool NoLongerTarget { get; set; }
+		private wCHandle<gameObject> _objectThatTargets;
+		private CBool _noLongerTarget;
 
-		public OnBeingTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("objectThatTargets")] 
+		public wCHandle<gameObject> ObjectThatTargets
+		{
+			get => GetProperty(ref _objectThatTargets);
+			set => SetProperty(ref _objectThatTargets, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("noLongerTarget")] 
+		public CBool NoLongerTarget
+		{
+			get => GetProperty(ref _noLongerTarget);
+			set => SetProperty(ref _noLongerTarget, value);
+		}
+
+		public OnBeingTarget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

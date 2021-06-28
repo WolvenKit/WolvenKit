@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entMusicSyncEvent : redEvent
 	{
-		[Ordinal(0)] [RED("syncType")] public CEnum<audioMusicSyncType> SyncType { get; set; }
-		[Ordinal(1)] [RED("syncParameter")] public CFloat SyncParameter { get; set; }
+		private CEnum<audioMusicSyncType> _syncType;
+		private CFloat _syncParameter;
 
-		public entMusicSyncEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("syncType")] 
+		public CEnum<audioMusicSyncType> SyncType
+		{
+			get => GetProperty(ref _syncType);
+			set => SetProperty(ref _syncType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("syncParameter")] 
+		public CFloat SyncParameter
+		{
+			get => GetProperty(ref _syncParameter);
+			set => SetProperty(ref _syncParameter, value);
+		}
+
+		public entMusicSyncEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

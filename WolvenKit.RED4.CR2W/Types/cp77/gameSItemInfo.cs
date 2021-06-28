@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSItemInfo : CVariable
 	{
-		[Ordinal(0)] [RED("itemID")] public gameItemID ItemID { get; set; }
-		[Ordinal(1)] [RED("slotIndex")] public CInt32 SlotIndex { get; set; }
+		private gameItemID _itemID;
+		private CInt32 _slotIndex;
 
-		public gameSItemInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemID")] 
+		public gameItemID ItemID
+		{
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("slotIndex")] 
+		public CInt32 SlotIndex
+		{
+			get => GetProperty(ref _slotIndex);
+			set => SetProperty(ref _slotIndex, value);
+		}
+
+		public gameSItemInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -37,9 +37,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("bolt")] 		public CHandle<W3AdvancedProjectile> Bolt { get; set;}
 
-		public CBehTreeTaskRequiredItems(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CBehTreeTaskRequiredItems(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CBehTreeTaskRequiredItems(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

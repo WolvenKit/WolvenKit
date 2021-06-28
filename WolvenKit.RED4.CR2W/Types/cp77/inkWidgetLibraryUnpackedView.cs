@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkWidgetLibraryUnpackedView : ISerializable
 	{
-		[Ordinal(0)] [RED("libraryItems")] public CArray<CHandle<inkWidgetLibraryItemUnpackedView>> LibraryItems { get; set; }
-		[Ordinal(1)] [RED("externalLibraries")] public CArray<rRef<inkWidgetLibraryResource>> ExternalLibraries { get; set; }
+		private CArray<CHandle<inkWidgetLibraryItemUnpackedView>> _libraryItems;
+		private CArray<rRef<inkWidgetLibraryResource>> _externalLibraries;
 
-		public inkWidgetLibraryUnpackedView(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("libraryItems")] 
+		public CArray<CHandle<inkWidgetLibraryItemUnpackedView>> LibraryItems
+		{
+			get => GetProperty(ref _libraryItems);
+			set => SetProperty(ref _libraryItems, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("externalLibraries")] 
+		public CArray<rRef<inkWidgetLibraryResource>> ExternalLibraries
+		{
+			get => GetProperty(ref _externalLibraries);
+			set => SetProperty(ref _externalLibraries, value);
+		}
+
+		public inkWidgetLibraryUnpackedView(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

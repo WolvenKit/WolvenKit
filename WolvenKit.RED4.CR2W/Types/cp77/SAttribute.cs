@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SAttribute : CVariable
 	{
-		[Ordinal(0)] [RED("attributeName")] public CEnum<gamedataStatType> AttributeName { get; set; }
-		[Ordinal(1)] [RED("value")] public CInt32 Value { get; set; }
-		[Ordinal(2)] [RED("id")] public TweakDBID Id { get; set; }
+		private CEnum<gamedataStatType> _attributeName;
+		private CInt32 _value;
+		private TweakDBID _id;
 
-		public SAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("attributeName")] 
+		public CEnum<gamedataStatType> AttributeName
+		{
+			get => GetProperty(ref _attributeName);
+			set => SetProperty(ref _attributeName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CInt32 Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("id")] 
+		public TweakDBID Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		public SAttribute(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

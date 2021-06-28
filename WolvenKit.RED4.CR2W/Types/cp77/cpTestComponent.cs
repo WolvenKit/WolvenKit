@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cpTestComponent : gameComponent
 	{
-		[Ordinal(4)] [RED("whatever")] public CFloat Whatever { get; set; }
-		[Ordinal(5)] [RED("whateverIE")] public CFloat WhateverIE { get; set; }
+		private CFloat _whatever;
+		private CFloat _whateverIE;
 
-		public cpTestComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("whatever")] 
+		public CFloat Whatever
+		{
+			get => GetProperty(ref _whatever);
+			set => SetProperty(ref _whatever, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("whateverIE")] 
+		public CFloat WhateverIE
+		{
+			get => GetProperty(ref _whateverIE);
+			set => SetProperty(ref _whateverIE, value);
+		}
+
+		public cpTestComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

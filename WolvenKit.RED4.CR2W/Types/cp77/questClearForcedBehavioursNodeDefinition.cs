@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questClearForcedBehavioursNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(2)] [RED("puppet")] public gameEntityReference Puppet { get; set; }
+		private gameEntityReference _puppet;
 
-		public questClearForcedBehavioursNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("puppet")] 
+		public gameEntityReference Puppet
+		{
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
+		}
+
+		public questClearForcedBehavioursNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

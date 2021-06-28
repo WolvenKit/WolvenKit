@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSetRenderLayer_NodeType : questIRenderFxManagerNodeType
 	{
-		[Ordinal(0)] [RED("renderSceneLayer")] public CEnum<RenderSceneLayer> RenderSceneLayer { get; set; }
+		private CEnum<RenderSceneLayer> _renderSceneLayer;
 
-		public questSetRenderLayer_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("renderSceneLayer")] 
+		public CEnum<RenderSceneLayer> RenderSceneLayer
+		{
+			get => GetProperty(ref _renderSceneLayer);
+			set => SetProperty(ref _renderSceneLayer, value);
+		}
+
+		public questSetRenderLayer_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

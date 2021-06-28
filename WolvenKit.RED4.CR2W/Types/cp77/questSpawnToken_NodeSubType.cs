@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSpawnToken_NodeSubType : questIContentTokenManager_NodeSubType
 	{
-		[Ordinal(0)] [RED("immediate")] public CBool Immediate { get; set; }
+		private CBool _immediate;
 
-		public questSpawnToken_NodeSubType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("immediate")] 
+		public CBool Immediate
+		{
+			get => GetProperty(ref _immediate);
+			set => SetProperty(ref _immediate, value);
+		}
+
+		public questSpawnToken_NodeSubType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

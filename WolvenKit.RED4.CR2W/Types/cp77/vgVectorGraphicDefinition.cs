@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vgVectorGraphicDefinition : ISerializable
 	{
-		[Ordinal(0)] [RED("rootShapeGroup")] public CHandle<vgVectorGraphicShape_Group> RootShapeGroup { get; set; }
-		[Ordinal(1)] [RED("dimensions")] public Vector2 Dimensions { get; set; }
+		private CHandle<vgVectorGraphicShape_Group> _rootShapeGroup;
+		private Vector2 _dimensions;
 
-		public vgVectorGraphicDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rootShapeGroup")] 
+		public CHandle<vgVectorGraphicShape_Group> RootShapeGroup
+		{
+			get => GetProperty(ref _rootShapeGroup);
+			set => SetProperty(ref _rootShapeGroup, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("dimensions")] 
+		public Vector2 Dimensions
+		{
+			get => GetProperty(ref _dimensions);
+			set => SetProperty(ref _dimensions, value);
+		}
+
+		public vgVectorGraphicDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

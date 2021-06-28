@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CreditsData : inkUserData
 	{
-		[Ordinal(0)] [RED("isFinalBoards")] public CBool IsFinalBoards { get; set; }
-		[Ordinal(1)] [RED("showRewardPrompt")] public CBool ShowRewardPrompt { get; set; }
+		private CBool _isFinalBoards;
+		private CBool _showRewardPrompt;
 
-		public CreditsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isFinalBoards")] 
+		public CBool IsFinalBoards
+		{
+			get => GetProperty(ref _isFinalBoards);
+			set => SetProperty(ref _isFinalBoards, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("showRewardPrompt")] 
+		public CBool ShowRewardPrompt
+		{
+			get => GetProperty(ref _showRewardPrompt);
+			set => SetProperty(ref _showRewardPrompt, value);
+		}
+
+		public CreditsData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

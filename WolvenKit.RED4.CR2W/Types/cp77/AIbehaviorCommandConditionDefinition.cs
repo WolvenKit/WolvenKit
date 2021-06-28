@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorCommandConditionDefinition : AIbehaviorConditionDefinition
 	{
-		[Ordinal(1)] [RED("commandName")] public CHandle<AIArgumentMapping> CommandName { get; set; }
-		[Ordinal(2)] [RED("useInheritance")] public CBool UseInheritance { get; set; }
-		[Ordinal(3)] [RED("isWaiting")] public CBool IsWaiting { get; set; }
-		[Ordinal(4)] [RED("isExecuting")] public CBool IsExecuting { get; set; }
-		[Ordinal(5)] [RED("commandOut")] public CHandle<AIArgumentMapping> CommandOut { get; set; }
+		private CHandle<AIArgumentMapping> _commandName;
+		private CBool _useInheritance;
+		private CBool _isWaiting;
+		private CBool _isExecuting;
+		private CHandle<AIArgumentMapping> _commandOut;
 
-		public AIbehaviorCommandConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("commandName")] 
+		public CHandle<AIArgumentMapping> CommandName
+		{
+			get => GetProperty(ref _commandName);
+			set => SetProperty(ref _commandName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("useInheritance")] 
+		public CBool UseInheritance
+		{
+			get => GetProperty(ref _useInheritance);
+			set => SetProperty(ref _useInheritance, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("isWaiting")] 
+		public CBool IsWaiting
+		{
+			get => GetProperty(ref _isWaiting);
+			set => SetProperty(ref _isWaiting, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("isExecuting")] 
+		public CBool IsExecuting
+		{
+			get => GetProperty(ref _isExecuting);
+			set => SetProperty(ref _isExecuting, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("commandOut")] 
+		public CHandle<AIArgumentMapping> CommandOut
+		{
+			get => GetProperty(ref _commandOut);
+			set => SetProperty(ref _commandOut, value);
+		}
+
+		public AIbehaviorCommandConditionDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

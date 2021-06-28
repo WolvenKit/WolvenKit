@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameDynamicCookedDeviceData : gameCookedDeviceData
 	{
-		[Ordinal(4)] [RED("componentName")] public CName ComponentName { get; set; }
+		private CName _componentName;
 
-		public gameDynamicCookedDeviceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("componentName")] 
+		public CName ComponentName
+		{
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
+		}
+
+		public gameDynamicCookedDeviceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

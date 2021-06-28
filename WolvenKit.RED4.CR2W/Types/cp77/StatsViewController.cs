@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatsViewController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("StatLabelRef")] public inkTextWidgetReference StatLabelRef { get; set; }
-		[Ordinal(2)] [RED("StatValueRef")] public inkTextWidgetReference StatValueRef { get; set; }
-		[Ordinal(3)] [RED("icon")] public inkImageWidgetReference Icon { get; set; }
-		[Ordinal(4)] [RED("stat")] public gameStatViewData Stat { get; set; }
-		[Ordinal(5)] [RED("buttonConctroller")] public wCHandle<inkButtonController> ButtonConctroller { get; set; }
+		private inkTextWidgetReference _statLabelRef;
+		private inkTextWidgetReference _statValueRef;
+		private inkImageWidgetReference _icon;
+		private gameStatViewData _stat;
+		private wCHandle<inkButtonController> _buttonConctroller;
 
-		public StatsViewController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("StatLabelRef")] 
+		public inkTextWidgetReference StatLabelRef
+		{
+			get => GetProperty(ref _statLabelRef);
+			set => SetProperty(ref _statLabelRef, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("StatValueRef")] 
+		public inkTextWidgetReference StatValueRef
+		{
+			get => GetProperty(ref _statValueRef);
+			set => SetProperty(ref _statValueRef, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("icon")] 
+		public inkImageWidgetReference Icon
+		{
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("stat")] 
+		public gameStatViewData Stat
+		{
+			get => GetProperty(ref _stat);
+			set => SetProperty(ref _stat, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("buttonConctroller")] 
+		public wCHandle<inkButtonController> ButtonConctroller
+		{
+			get => GetProperty(ref _buttonConctroller);
+			set => SetProperty(ref _buttonConctroller, value);
+		}
+
+		public StatsViewController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

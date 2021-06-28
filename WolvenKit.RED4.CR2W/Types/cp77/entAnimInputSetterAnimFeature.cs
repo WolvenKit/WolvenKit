@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entAnimInputSetterAnimFeature : entAnimInputSetter
 	{
-		[Ordinal(1)] [RED("value")] public CHandle<animAnimFeature> Value { get; set; }
-		[Ordinal(2)] [RED("delay")] public CFloat Delay { get; set; }
+		private CHandle<animAnimFeature> _value;
+		private CFloat _delay;
 
-		public entAnimInputSetterAnimFeature(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CHandle<animAnimFeature> Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("delay")] 
+		public CFloat Delay
+		{
+			get => GetProperty(ref _delay);
+			set => SetProperty(ref _delay, value);
+		}
+
+		public entAnimInputSetterAnimFeature(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

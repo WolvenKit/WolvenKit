@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimVariableBool : animAnimVariable
 	{
-		[Ordinal(2)] [RED("value")] public CBool Value { get; set; }
-		[Ordinal(3)] [RED("default")] public CBool Default { get; set; }
+		private CBool _value;
+		private CBool _default;
 
-		public animAnimVariableBool(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("value")] 
+		public CBool Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("default")] 
+		public CBool Default
+		{
+			get => GetProperty(ref _default);
+			set => SetProperty(ref _default, value);
+		}
+
+		public animAnimVariableBool(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

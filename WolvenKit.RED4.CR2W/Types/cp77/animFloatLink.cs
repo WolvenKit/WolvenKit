@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animFloatLink : CVariable
 	{
-		[Ordinal(0)] [RED("node")] public wCHandle<animAnimNode_FloatValue> Node { get; set; }
+		private wCHandle<animAnimNode_FloatValue> _node;
 
-		public animFloatLink(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("node")] 
+		public wCHandle<animAnimNode_FloatValue> Node
+		{
+			get => GetProperty(ref _node);
+			set => SetProperty(ref _node, value);
+		}
+
+		public animFloatLink(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

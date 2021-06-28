@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnSceneEventId : CVariable
 	{
-		[Ordinal(0)] [RED("id")] public CUInt64 Id { get; set; }
+		private CUInt64 _id;
 
-		public scnSceneEventId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("id")] 
+		public CUInt64 Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		public scnSceneEventId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

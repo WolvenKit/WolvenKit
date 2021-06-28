@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GlitchedTurret : Device
 	{
-		[Ordinal(86)] [RED("animFeature")] public CHandle<AnimFeature_SensorDevice> AnimFeature { get; set; }
+		private CHandle<AnimFeature_SensorDevice> _animFeature;
 
-		public GlitchedTurret(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(86)] 
+		[RED("animFeature")] 
+		public CHandle<AnimFeature_SensorDevice> AnimFeature
+		{
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
+		}
+
+		public GlitchedTurret(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

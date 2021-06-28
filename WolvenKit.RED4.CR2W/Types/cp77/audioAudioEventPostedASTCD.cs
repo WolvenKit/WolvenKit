@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudioEventPostedASTCD : audioAudioStateTransitionConditionData
 	{
-		[Ordinal(1)] [RED("audioEvent")] public CName AudioEvent { get; set; }
+		private CName _audioEvent;
 
-		public audioAudioEventPostedASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("audioEvent")] 
+		public CName AudioEvent
+		{
+			get => GetProperty(ref _audioEvent);
+			set => SetProperty(ref _audioEvent, value);
+		}
+
+		public audioAudioEventPostedASTCD(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

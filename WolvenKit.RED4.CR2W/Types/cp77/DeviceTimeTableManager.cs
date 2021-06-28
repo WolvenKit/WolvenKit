@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeviceTimeTableManager : IScriptable
 	{
-		[Ordinal(0)] [RED("timeTable")] public CArray<SDeviceTimetableEntry> TimeTable { get; set; }
+		private CArray<SDeviceTimetableEntry> _timeTable;
 
-		public DeviceTimeTableManager(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("timeTable")] 
+		public CArray<SDeviceTimetableEntry> TimeTable
+		{
+			get => GetProperty(ref _timeTable);
+			set => SetProperty(ref _timeTable, value);
+		}
+
+		public DeviceTimeTableManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

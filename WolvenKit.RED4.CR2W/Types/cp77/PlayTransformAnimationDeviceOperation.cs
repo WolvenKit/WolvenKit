@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayTransformAnimationDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("transformAnimations")] public CArray<STransformAnimationData> TransformAnimations { get; set; }
+		private CArray<STransformAnimationData> _transformAnimations;
 
-		public PlayTransformAnimationDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("transformAnimations")] 
+		public CArray<STransformAnimationData> TransformAnimations
+		{
+			get => GetProperty(ref _transformAnimations);
+			set => SetProperty(ref _transformAnimations, value);
+		}
+
+		public PlayTransformAnimationDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CharParamTimeout : AITimeoutCondition
 	{
-		[Ordinal(1)] [RED("timeoutParamName")] public CString TimeoutParamName { get; set; }
+		private CString _timeoutParamName;
 
-		public CharParamTimeout(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("timeoutParamName")] 
+		public CString TimeoutParamName
+		{
+			get => GetProperty(ref _timeoutParamName);
+			set => SetProperty(ref _timeoutParamName, value);
+		}
+
+		public CharParamTimeout(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

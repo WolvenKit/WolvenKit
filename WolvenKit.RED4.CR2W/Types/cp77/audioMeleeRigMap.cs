@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioMeleeRigMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("mapItems")] public CArray<audioMeleeRigMapItem> MapItems { get; set; }
+		private CArray<audioMeleeRigMapItem> _mapItems;
 
-		public audioMeleeRigMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("mapItems")] 
+		public CArray<audioMeleeRigMapItem> MapItems
+		{
+			get => GetProperty(ref _mapItems);
+			set => SetProperty(ref _mapItems, value);
+		}
+
+		public audioMeleeRigMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

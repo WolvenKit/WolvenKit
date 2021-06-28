@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetAttribute : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("statLevel")] public CFloat StatLevel { get; set; }
-		[Ordinal(2)] [RED("attributeType")] public CEnum<gamedataStatType> AttributeType { get; set; }
+		private CFloat _statLevel;
+		private CEnum<gamedataStatType> _attributeType;
 
-		public SetAttribute(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("statLevel")] 
+		public CFloat StatLevel
+		{
+			get => GetProperty(ref _statLevel);
+			set => SetProperty(ref _statLevel, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("attributeType")] 
+		public CEnum<gamedataStatType> AttributeType
+		{
+			get => GetProperty(ref _attributeType);
+			set => SetProperty(ref _attributeType, value);
+		}
+
+		public SetAttribute(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

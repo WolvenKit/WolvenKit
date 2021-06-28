@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("creatureDefinition")] 		public CName CreatureDefinition { get; set;}
 
-		public SCreatureDefinitionWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SCreatureDefinitionWrapper(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SCreatureDefinitionWrapper(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

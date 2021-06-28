@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_PlayerCoverActionWeaponHolster : animAnimFeature
 	{
-		[Ordinal(0)] [RED("isWeaponHolstered")] public CBool IsWeaponHolstered { get; set; }
+		private CBool _isWeaponHolstered;
 
-		public AnimFeature_PlayerCoverActionWeaponHolster(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isWeaponHolstered")] 
+		public CBool IsWeaponHolstered
+		{
+			get => GetProperty(ref _isWeaponHolstered);
+			set => SetProperty(ref _isWeaponHolstered, value);
+		}
+
+		public AnimFeature_PlayerCoverActionWeaponHolster(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

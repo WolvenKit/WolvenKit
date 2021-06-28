@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questTogglePrefabVariant_NodeType : questIWorldDataManagerNodeType
 	{
-		[Ordinal(0)] [RED("params")] public CArray<questTogglePrefabVariant_NodeTypeParams> Params { get; set; }
+		private CArray<questTogglePrefabVariant_NodeTypeParams> _params;
 
-		public questTogglePrefabVariant_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("params")] 
+		public CArray<questTogglePrefabVariant_NodeTypeParams> Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public questTogglePrefabVariant_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

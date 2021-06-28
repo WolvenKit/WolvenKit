@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatusEffectManagerComponent : AIMandatoryComponents
 	{
-		[Ordinal(5)] [RED("weaponDropedInWounded")] public CBool WeaponDropedInWounded { get; set; }
+		private CBool _weaponDropedInWounded;
 
-		public StatusEffectManagerComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("weaponDropedInWounded")] 
+		public CBool WeaponDropedInWounded
+		{
+			get => GetProperty(ref _weaponDropedInWounded);
+			set => SetProperty(ref _weaponDropedInWounded, value);
+		}
+
+		public StatusEffectManagerComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

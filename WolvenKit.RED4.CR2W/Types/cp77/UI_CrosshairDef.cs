@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_CrosshairDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("EnemyNeutralized")] public gamebbScriptID_Variant EnemyNeutralized { get; set; }
+		private gamebbScriptID_Variant _enemyNeutralized;
 
-		public UI_CrosshairDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("EnemyNeutralized")] 
+		public gamebbScriptID_Variant EnemyNeutralized
+		{
+			get => GetProperty(ref _enemyNeutralized);
+			set => SetProperty(ref _enemyNeutralized, value);
+		}
+
+		public UI_CrosshairDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

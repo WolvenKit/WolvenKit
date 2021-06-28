@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameIComparisonPrereq : gameIPrereq
 	{
-		[Ordinal(0)] [RED("comparisonType")] public CEnum<gameComparisonType> ComparisonType { get; set; }
+		private CEnum<gameComparisonType> _comparisonType;
 
-		public gameIComparisonPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("comparisonType")] 
+		public CEnum<gameComparisonType> ComparisonType
+		{
+			get => GetProperty(ref _comparisonType);
+			set => SetProperty(ref _comparisonType, value);
+		}
+
+		public gameIComparisonPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldPlayerProximityStopEvent : redEvent
 	{
-		[Ordinal(0)] [RED("profile")] public CName Profile { get; set; }
+		private CName _profile;
 
-		public worldPlayerProximityStopEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("profile")] 
+		public CName Profile
+		{
+			get => GetProperty(ref _profile);
+			set => SetProperty(ref _profile, value);
+		}
+
+		public worldPlayerProximityStopEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

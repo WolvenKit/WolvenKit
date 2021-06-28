@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LiftDepartedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("floor")] public CString Floor { get; set; }
+		private CString _floor;
 
-		public LiftDepartedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("floor")] 
+		public CString Floor
+		{
+			get => GetProperty(ref _floor);
+			set => SetProperty(ref _floor, value);
+		}
+
+		public LiftDepartedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

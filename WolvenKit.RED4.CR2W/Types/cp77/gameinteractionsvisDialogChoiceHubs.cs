@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsvisDialogChoiceHubs : CVariable
 	{
-		[Ordinal(0)] [RED("choiceHubs")] public CArray<gameinteractionsvisListChoiceHubData> ChoiceHubs { get; set; }
+		private CArray<gameinteractionsvisListChoiceHubData> _choiceHubs;
 
-		public gameinteractionsvisDialogChoiceHubs(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("choiceHubs")] 
+		public CArray<gameinteractionsvisListChoiceHubData> ChoiceHubs
+		{
+			get => GetProperty(ref _choiceHubs);
+			set => SetProperty(ref _choiceHubs, value);
+		}
+
+		public gameinteractionsvisDialogChoiceHubs(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

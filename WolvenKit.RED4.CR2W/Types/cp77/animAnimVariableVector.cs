@@ -7,14 +7,70 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimVariableVector : animAnimVariable
 	{
-		[Ordinal(2)] [RED("x")] public CFloat X { get; set; }
-		[Ordinal(3)] [RED("y")] public CFloat Y { get; set; }
-		[Ordinal(4)] [RED("z")] public CFloat Z { get; set; }
-		[Ordinal(5)] [RED("w")] public CFloat W { get; set; }
-		[Ordinal(6)] [RED("default")] public Vector4 Default { get; set; }
-		[Ordinal(7)] [RED("min")] public Vector4 Min { get; set; }
-		[Ordinal(8)] [RED("max")] public Vector4 Max { get; set; }
+		private CFloat _x;
+		private CFloat _y;
+		private CFloat _z;
+		private CFloat _w;
+		private Vector4 _default;
+		private Vector4 _min;
+		private Vector4 _max;
 
-		public animAnimVariableVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("x")] 
+		public CFloat X
+		{
+			get => GetProperty(ref _x);
+			set => SetProperty(ref _x, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("y")] 
+		public CFloat Y
+		{
+			get => GetProperty(ref _y);
+			set => SetProperty(ref _y, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("z")] 
+		public CFloat Z
+		{
+			get => GetProperty(ref _z);
+			set => SetProperty(ref _z, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("w")] 
+		public CFloat W
+		{
+			get => GetProperty(ref _w);
+			set => SetProperty(ref _w, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("default")] 
+		public Vector4 Default
+		{
+			get => GetProperty(ref _default);
+			set => SetProperty(ref _default, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("min")] 
+		public Vector4 Min
+		{
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("max")] 
+		public Vector4 Max
+		{
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
+		}
+
+		public animAnimVariableVector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

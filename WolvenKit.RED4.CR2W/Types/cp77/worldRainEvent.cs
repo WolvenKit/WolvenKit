@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldRainEvent : redEvent
 	{
-		[Ordinal(0)] [RED("rainIntensity")] public CEnum<worldRainIntensity> RainIntensity { get; set; }
+		private CEnum<worldRainIntensity> _rainIntensity;
 
-		public worldRainEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rainIntensity")] 
+		public CEnum<worldRainIntensity> RainIntensity
+		{
+			get => GetProperty(ref _rainIntensity);
+			set => SetProperty(ref _rainIntensity, value);
+		}
+
+		public worldRainEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Ref_4_4_Hints : CVariable
 	{
-		[Ordinal(0)] [RED("i")] public CInt32 I { get; set; }
-		[Ordinal(1)] [RED("f")] public CFloat F { get; set; }
-		[Ordinal(2)] [RED("b")] public CBool B { get; set; }
-		[Ordinal(3)] [RED("s")] public CString S { get; set; }
+		private CInt32 _i;
+		private CFloat _f;
+		private CBool _b;
+		private CString _s;
 
-		public Ref_4_4_Hints(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("i")] 
+		public CInt32 I
+		{
+			get => GetProperty(ref _i);
+			set => SetProperty(ref _i, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("f")] 
+		public CFloat F
+		{
+			get => GetProperty(ref _f);
+			set => SetProperty(ref _f, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("b")] 
+		public CBool B
+		{
+			get => GetProperty(ref _b);
+			set => SetProperty(ref _b, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("s")] 
+		public CString S
+		{
+			get => GetProperty(ref _s);
+			set => SetProperty(ref _s, value);
+		}
+
+		public Ref_4_4_Hints(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

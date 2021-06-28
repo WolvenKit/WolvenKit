@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AuthorisationNotificationEvent : redEvent
 	{
-		[Ordinal(0)] [RED("type")] public CEnum<gameuiAuthorisationNotificationType> Type { get; set; }
+		private CEnum<gameuiAuthorisationNotificationType> _type;
 
-		public AuthorisationNotificationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CEnum<gameuiAuthorisationNotificationType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public AuthorisationNotificationEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questForcedBehaviourNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(2)] [RED("puppet")] public gameEntityReference Puppet { get; set; }
-		[Ordinal(3)] [RED("tree")] public CHandle<questForcedBehaviorReference> Tree { get; set; }
-		[Ordinal(4)] [RED("behavior")] public CHandle<AIbehaviorParameterizedBehavior> Behavior { get; set; }
+		private gameEntityReference _puppet;
+		private CHandle<questForcedBehaviorReference> _tree;
+		private CHandle<AIbehaviorParameterizedBehavior> _behavior;
 
-		public questForcedBehaviourNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("puppet")] 
+		public gameEntityReference Puppet
+		{
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("tree")] 
+		public CHandle<questForcedBehaviorReference> Tree
+		{
+			get => GetProperty(ref _tree);
+			set => SetProperty(ref _tree, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("behavior")] 
+		public CHandle<AIbehaviorParameterizedBehavior> Behavior
+		{
+			get => GetProperty(ref _behavior);
+			set => SetProperty(ref _behavior, value);
+		}
+
+		public questForcedBehaviourNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

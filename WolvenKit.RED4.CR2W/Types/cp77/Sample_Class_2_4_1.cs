@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Sample_Class_2_4_1 : CVariable
 	{
-		[Ordinal(0)] [RED("var0")] public CHandle<Sample_Class_2_4_0> Var0 { get; set; }
+		private CHandle<Sample_Class_2_4_0> _var0;
 
-		public Sample_Class_2_4_1(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("var0")] 
+		public CHandle<Sample_Class_2_4_0> Var0
+		{
+			get => GetProperty(ref _var0);
+			set => SetProperty(ref _var0, value);
+		}
+
+		public Sample_Class_2_4_1(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

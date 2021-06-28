@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeBrainDefinition : AICTreeNodeCompositeDefinition
 	{
-		[Ordinal(0)] [RED("children")] public CArray<CHandle<LibTreeINodeDefinition>> Children { get; set; }
-		[Ordinal(1)] [RED("useScoring")] public CBool UseScoring { get; set; }
+		private CArray<CHandle<LibTreeINodeDefinition>> _children;
+		private CBool _useScoring;
 
-		public AICTreeNodeBrainDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("children")] 
+		public CArray<CHandle<LibTreeINodeDefinition>> Children
+		{
+			get => GetProperty(ref _children);
+			set => SetProperty(ref _children, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("useScoring")] 
+		public CBool UseScoring
+		{
+			get => GetProperty(ref _useScoring);
+			set => SetProperty(ref _useScoring, value);
+		}
+
+		public AICTreeNodeBrainDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

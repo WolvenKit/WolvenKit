@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSignalPriorityDefinition : ISerializable
 	{
-		[Ordinal(0)] [RED("defaultPriority")] public CUInt16 DefaultPriority { get; set; }
+		private CUInt16 _defaultPriority;
 
-		public gameSignalPriorityDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("defaultPriority")] 
+		public CUInt16 DefaultPriority
+		{
+			get => GetProperty(ref _defaultPriority);
+			set => SetProperty(ref _defaultPriority, value);
+		}
+
+		public gameSignalPriorityDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

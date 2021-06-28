@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficGlobalPathPosition : ISerializable
 	{
-		[Ordinal(0)] [RED("worldPosition")] public Vector3 WorldPosition { get; set; }
-		[Ordinal(1)] [RED("pathIdx")] public CUInt32 PathIdx { get; set; }
+		private Vector3 _worldPosition;
+		private CUInt32 _pathIdx;
 
-		public worldTrafficGlobalPathPosition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("worldPosition")] 
+		public Vector3 WorldPosition
+		{
+			get => GetProperty(ref _worldPosition);
+			set => SetProperty(ref _worldPosition, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("pathIdx")] 
+		public CUInt32 PathIdx
+		{
+			get => GetProperty(ref _pathIdx);
+			set => SetProperty(ref _pathIdx, value);
+		}
+
+		public worldTrafficGlobalPathPosition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

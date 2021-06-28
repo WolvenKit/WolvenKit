@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficStaticCollisionSphere : CVariable
 	{
-		[Ordinal(0)] [RED("worldPos")] public Vector3 WorldPos { get; set; }
+		private Vector3 _worldPos;
 
-		public worldTrafficStaticCollisionSphere(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("worldPos")] 
+		public Vector3 WorldPos
+		{
+			get => GetProperty(ref _worldPos);
+			set => SetProperty(ref _worldPos, value);
+		}
+
+		public worldTrafficStaticCollisionSphere(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

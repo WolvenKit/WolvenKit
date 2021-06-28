@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_ChestPress : animAnimFeature
 	{
-		[Ordinal(0)] [RED("lifting")] public CBool Lifting { get; set; }
-		[Ordinal(1)] [RED("kill")] public CBool Kill { get; set; }
+		private CBool _lifting;
+		private CBool _kill;
 
-		public AnimFeature_ChestPress(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("lifting")] 
+		public CBool Lifting
+		{
+			get => GetProperty(ref _lifting);
+			set => SetProperty(ref _lifting, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("kill")] 
+		public CBool Kill
+		{
+			get => GetProperty(ref _kill);
+			set => SetProperty(ref _kill, value);
+		}
+
+		public AnimFeature_ChestPress(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

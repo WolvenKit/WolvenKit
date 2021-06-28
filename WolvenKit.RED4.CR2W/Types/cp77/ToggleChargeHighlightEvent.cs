@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ToggleChargeHighlightEvent : redEvent
 	{
-		[Ordinal(0)] [RED("active")] public CBool Active { get; set; }
+		private CBool _active;
 
-		public ToggleChargeHighlightEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("active")] 
+		public CBool Active
+		{
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
+		}
+
+		public ToggleChargeHighlightEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

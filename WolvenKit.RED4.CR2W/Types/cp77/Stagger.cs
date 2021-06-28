@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Stagger : ReactionTransition
 	{
-		[Ordinal(0)] [RED("textLayerId")] public CUInt32 TextLayerId { get; set; }
+		private CUInt32 _textLayerId;
 
-		public Stagger(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("textLayerId")] 
+		public CUInt32 TextLayerId
+		{
+			get => GetProperty(ref _textLayerId);
+			set => SetProperty(ref _textLayerId, value);
+		}
+
+		public Stagger(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

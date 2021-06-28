@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RemoveFromChainRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("requestSource")] public entEntityID RequestSource { get; set; }
+		private entEntityID _requestSource;
 
-		public RemoveFromChainRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requestSource")] 
+		public entEntityID RequestSource
+		{
+			get => GetProperty(ref _requestSource);
+			set => SetProperty(ref _requestSource, value);
+		}
+
+		public RemoveFromChainRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

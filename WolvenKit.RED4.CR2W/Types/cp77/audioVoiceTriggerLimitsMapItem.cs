@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVoiceTriggerLimitsMapItem : CVariable
 	{
-		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("limits")] public audioVoiceTriggerLimits Limits { get; set; }
+		private CName _name;
+		private audioVoiceTriggerLimits _limits;
 
-		public audioVoiceTriggerLimitsMapItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("limits")] 
+		public audioVoiceTriggerLimits Limits
+		{
+			get => GetProperty(ref _limits);
+			set => SetProperty(ref _limits, value);
+		}
+
+		public audioVoiceTriggerLimitsMapItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

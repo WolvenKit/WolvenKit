@@ -10,7 +10,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using Catel.Threading;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -48,8 +48,6 @@ namespace WolvenKit.Functionality.Commands
             _notificationService = notificationService;
 
             _pleaseWaitService = ServiceLocator.Default.ResolveType<IPleaseWaitService>();
-
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
         }
 
         #endregion Constructors
@@ -64,27 +62,6 @@ namespace WolvenKit.Functionality.Commands
             }
 
             return base.CanExecute(parameter);
-        }
-
-        protected virtual async Task ProjectActivated(EditorProject oldEditorProject, EditorProject newEditorProject)
-        {
-            if (newEditorProject == null)
-            {
-                return;
-            }
-
-            await Task.Run(() => newEditorProject.Initialize());
-        }
-
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs e)
-        {
-            //Task.Run(() => ProjectActivated((EditorProject) e.OldProject, (EditorProject) e.NewProject));
-            var asd = ProjectActivated((EditorProject)e.OldProject, (EditorProject)e.NewProject);
-
-            //TODO: why is that here?
-            _commandManager.InvalidateCommands();
-
-            return TaskHelper.Completed;
         }
 
         #endregion Methods

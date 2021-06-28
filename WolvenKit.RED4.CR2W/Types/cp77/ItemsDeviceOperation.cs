@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemsDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("items")] public CArray<SInventoryOperationData> Items { get; set; }
+		private CArray<SInventoryOperationData> _items;
 
-		public ItemsDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("items")] 
+		public CArray<SInventoryOperationData> Items
+		{
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
+		}
+
+		public ItemsDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

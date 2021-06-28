@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkVirtualUniformListController : inkVirtualCompoundController
 	{
-		[Ordinal(6)] [RED("itemTemplate")] public inkWidgetLibraryReference ItemTemplate { get; set; }
+		private inkWidgetLibraryReference _itemTemplate;
 
-		public inkVirtualUniformListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("itemTemplate")] 
+		public inkWidgetLibraryReference ItemTemplate
+		{
+			get => GetProperty(ref _itemTemplate);
+			set => SetProperty(ref _itemTemplate, value);
+		}
+
+		public inkVirtualUniformListController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectTrackItemVignette : effectTrackItem
 	{
-		[Ordinal(3)] [RED("overrideRadiusAndExp")] public CBool OverrideRadiusAndExp { get; set; }
-		[Ordinal(4)] [RED("overrideColor")] public CBool OverrideColor { get; set; }
-		[Ordinal(5)] [RED("vignetteRadius")] public effectEffectParameterEvaluatorFloat VignetteRadius { get; set; }
-		[Ordinal(6)] [RED("vignetteExp")] public effectEffectParameterEvaluatorFloat VignetteExp { get; set; }
-		[Ordinal(7)] [RED("color")] public effectEffectParameterEvaluatorColor Color { get; set; }
+		private CBool _overrideRadiusAndExp;
+		private CBool _overrideColor;
+		private effectEffectParameterEvaluatorFloat _vignetteRadius;
+		private effectEffectParameterEvaluatorFloat _vignetteExp;
+		private effectEffectParameterEvaluatorColor _color;
 
-		public effectTrackItemVignette(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("overrideRadiusAndExp")] 
+		public CBool OverrideRadiusAndExp
+		{
+			get => GetProperty(ref _overrideRadiusAndExp);
+			set => SetProperty(ref _overrideRadiusAndExp, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("overrideColor")] 
+		public CBool OverrideColor
+		{
+			get => GetProperty(ref _overrideColor);
+			set => SetProperty(ref _overrideColor, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("vignetteRadius")] 
+		public effectEffectParameterEvaluatorFloat VignetteRadius
+		{
+			get => GetProperty(ref _vignetteRadius);
+			set => SetProperty(ref _vignetteRadius, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("vignetteExp")] 
+		public effectEffectParameterEvaluatorFloat VignetteExp
+		{
+			get => GetProperty(ref _vignetteExp);
+			set => SetProperty(ref _vignetteExp, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("color")] 
+		public effectEffectParameterEvaluatorColor Color
+		{
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
+		}
+
+		public effectTrackItemVignette(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

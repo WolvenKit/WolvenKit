@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorDecoratorNodeDefinition : AIbehaviorTreeNodeDefinition
 	{
-		[Ordinal(0)] [RED("child")] public CHandle<AIbehaviorTreeNodeDefinition> Child { get; set; }
+		private CHandle<AIbehaviorTreeNodeDefinition> _child;
 
-		public AIbehaviorDecoratorNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("child")] 
+		public CHandle<AIbehaviorTreeNodeDefinition> Child
+		{
+			get => GetProperty(ref _child);
+			set => SetProperty(ref _child, value);
+		}
+
+		public AIbehaviorDecoratorNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

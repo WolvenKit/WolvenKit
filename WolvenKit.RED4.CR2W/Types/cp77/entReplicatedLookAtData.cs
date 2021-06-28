@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entReplicatedLookAtData : CVariable
 	{
-		[Ordinal(0)] [RED("creationNetTime")] public netTime CreationNetTime { get; set; }
+		private netTime _creationNetTime;
 
-		public entReplicatedLookAtData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("creationNetTime")] 
+		public netTime CreationNetTime
+		{
+			get => GetProperty(ref _creationNetTime);
+			set => SetProperty(ref _creationNetTime, value);
+		}
+
+		public entReplicatedLookAtData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleRadioLogicController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("isSoundStopped")] public CBool IsSoundStopped { get; set; }
+		private CBool _isSoundStopped;
 
-		public VehicleRadioLogicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("isSoundStopped")] 
+		public CBool IsSoundStopped
+		{
+			get => GetProperty(ref _isSoundStopped);
+			set => SetProperty(ref _isSoundStopped, value);
+		}
+
+		public VehicleRadioLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

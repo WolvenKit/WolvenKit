@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameIObjectScriptBase : IScriptable
 	{
-		[Ordinal(0)] [RED("gameObject")] public CHandle<gameObject> GameObject { get; set; }
+		private CHandle<gameObject> _gameObject;
 
-		public gameIObjectScriptBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("gameObject")] 
+		public CHandle<gameObject> GameObject
+		{
+			get => GetProperty(ref _gameObject);
+			set => SetProperty(ref _gameObject, value);
+		}
+
+		public gameIObjectScriptBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

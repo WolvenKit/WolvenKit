@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FixedPoint : CVariable
 	{
-		[Ordinal(0)] [RED("Bits")] public CInt32 Bits { get; set; }
+		private CInt32 _bits;
 
-		public FixedPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("Bits")] 
+		public CInt32 Bits
+		{
+			get => GetProperty(ref _bits);
+			set => SetProperty(ref _bits, value);
+		}
+
+		public FixedPoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -17,9 +17,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(3)] [RED("speakingTo")] 		public CName SpeakingTo { get; set;}
 
-		public CAbstractStorySceneLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAbstractStorySceneLine(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAbstractStorySceneLine(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

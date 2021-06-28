@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WorkspotMapperComponent : gameScriptableComponent
 	{
-		[Ordinal(5)] [RED("workspotsMap")] public CArray<CHandle<WorkspotMapData>> WorkspotsMap { get; set; }
+		private CArray<CHandle<WorkspotMapData>> _workspotsMap;
 
-		public WorkspotMapperComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("workspotsMap")] 
+		public CArray<CHandle<WorkspotMapData>> WorkspotsMap
+		{
+			get => GetProperty(ref _workspotsMap);
+			set => SetProperty(ref _workspotsMap, value);
+		}
+
+		public WorkspotMapperComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

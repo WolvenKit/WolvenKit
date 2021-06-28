@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldProxyMeshGroupBuildParams : CVariable
 	{
-		[Ordinal(0)] [RED("overridePrefabBuildParams")] public CBool OverridePrefabBuildParams { get; set; }
-		[Ordinal(1)] [RED("buildParams")] public worldGroupProxyMeshBuildParams BuildParams { get; set; }
+		private CBool _overridePrefabBuildParams;
+		private worldGroupProxyMeshBuildParams _buildParams;
 
-		public worldProxyMeshGroupBuildParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("overridePrefabBuildParams")] 
+		public CBool OverridePrefabBuildParams
+		{
+			get => GetProperty(ref _overridePrefabBuildParams);
+			set => SetProperty(ref _overridePrefabBuildParams, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("buildParams")] 
+		public worldGroupProxyMeshBuildParams BuildParams
+		{
+			get => GetProperty(ref _buildParams);
+			set => SetProperty(ref _buildParams, value);
+		}
+
+		public worldProxyMeshGroupBuildParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

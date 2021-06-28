@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CleanUpTimeDilationEvent : redEvent
 	{
-		[Ordinal(0)] [RED("reason")] public CName Reason { get; set; }
+		private CName _reason;
 
-		public CleanUpTimeDilationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("reason")] 
+		public CName Reason
+		{
+			get => GetProperty(ref _reason);
+			set => SetProperty(ref _reason, value);
+		}
+
+		public CleanUpTimeDilationEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

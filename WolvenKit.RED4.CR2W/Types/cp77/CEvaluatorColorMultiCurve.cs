@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CEvaluatorColorMultiCurve : IEvaluatorColor
 	{
-		[Ordinal(0)] [RED("curves")] public multiChannelCurve<CFloat> Curves { get; set; }
-		[Ordinal(1)] [RED("numberOfCurveSamples")] public CUInt32 NumberOfCurveSamples { get; set; }
+		private multiChannelCurve<CFloat> _curves;
+		private CUInt32 _numberOfCurveSamples;
 
-		public CEvaluatorColorMultiCurve(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("curves")] 
+		public multiChannelCurve<CFloat> Curves
+		{
+			get => GetProperty(ref _curves);
+			set => SetProperty(ref _curves, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("numberOfCurveSamples")] 
+		public CUInt32 NumberOfCurveSamples
+		{
+			get => GetProperty(ref _numberOfCurveSamples);
+			set => SetProperty(ref _numberOfCurveSamples, value);
+		}
+
+		public CEvaluatorColorMultiCurve(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

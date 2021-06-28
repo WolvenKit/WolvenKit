@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICTreeNodeCompleteImmediatelyDefinition : AICTreeNodeAtomicDefinition
 	{
-		[Ordinal(0)] [RED("completeWithSuccess")] public CBool CompleteWithSuccess { get; set; }
+		private CBool _completeWithSuccess;
 
-		public AICTreeNodeCompleteImmediatelyDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("completeWithSuccess")] 
+		public CBool CompleteWithSuccess
+		{
+			get => GetProperty(ref _completeWithSuccess);
+			set => SetProperty(ref _completeWithSuccess, value);
+		}
+
+		public AICTreeNodeCompleteImmediatelyDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

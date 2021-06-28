@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerWokrspotDeviceOperation : DeviceOperationBase
 	{
-		[Ordinal(5)] [RED("playerWorkspot")] public SWorkspotData PlayerWorkspot { get; set; }
+		private SWorkspotData _playerWorkspot;
 
-		public PlayerWokrspotDeviceOperation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("playerWorkspot")] 
+		public SWorkspotData PlayerWorkspot
+		{
+			get => GetProperty(ref _playerWorkspot);
+			set => SetProperty(ref _playerWorkspot, value);
+		}
+
+		public PlayerWokrspotDeviceOperation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

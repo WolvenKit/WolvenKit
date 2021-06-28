@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StopVFXEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("vfxName")] public CName VfxName { get; set; }
-		[Ordinal(1)] [RED("owner")] public wCHandle<gameObject> Owner { get; set; }
+		private CName _vfxName;
+		private wCHandle<gameObject> _owner;
 
-		public StopVFXEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vfxName")] 
+		public CName VfxName
+		{
+			get => GetProperty(ref _vfxName);
+			set => SetProperty(ref _vfxName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("owner")] 
+		public wCHandle<gameObject> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		public StopVFXEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

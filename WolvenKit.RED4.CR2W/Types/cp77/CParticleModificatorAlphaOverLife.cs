@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CParticleModificatorAlphaOverLife : IParticleModificator
 	{
-		[Ordinal(4)] [RED("alpha")] public CHandle<IEvaluatorFloat> Alpha { get; set; }
-		[Ordinal(5)] [RED("modulate")] public CBool Modulate { get; set; }
+		private CHandle<IEvaluatorFloat> _alpha;
+		private CBool _modulate;
 
-		public CParticleModificatorAlphaOverLife(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("alpha")] 
+		public CHandle<IEvaluatorFloat> Alpha
+		{
+			get => GetProperty(ref _alpha);
+			set => SetProperty(ref _alpha, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("modulate")] 
+		public CBool Modulate
+		{
+			get => GetProperty(ref _modulate);
+			set => SetProperty(ref _modulate, value);
+		}
+
+		public CParticleModificatorAlphaOverLife(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

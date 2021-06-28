@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldCommunityEntryInitialState : CVariable
 	{
-		[Ordinal(0)] [RED("entryName")] public CName EntryName { get; set; }
-		[Ordinal(1)] [RED("initialPhaseName")] public CName InitialPhaseName { get; set; }
-		[Ordinal(2)] [RED("entryActiveOnStart")] public CBool EntryActiveOnStart { get; set; }
+		private CName _entryName;
+		private CName _initialPhaseName;
+		private CBool _entryActiveOnStart;
 
-		public worldCommunityEntryInitialState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entryName")] 
+		public CName EntryName
+		{
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("initialPhaseName")] 
+		public CName InitialPhaseName
+		{
+			get => GetProperty(ref _initialPhaseName);
+			set => SetProperty(ref _initialPhaseName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("entryActiveOnStart")] 
+		public CBool EntryActiveOnStart
+		{
+			get => GetProperty(ref _entryActiveOnStart);
+			set => SetProperty(ref _entryActiveOnStart, value);
+		}
+
+		public worldCommunityEntryInitialState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsLootedItemEvent : redEvent
 	{
-		[Ordinal(0)] [RED("itemID")] public gameItemID ItemID { get; set; }
+		private gameItemID _itemID;
 
-		public gameeventsLootedItemEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemID")] 
+		public gameItemID ItemID
+		{
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
+		}
+
+		public gameeventsLootedItemEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

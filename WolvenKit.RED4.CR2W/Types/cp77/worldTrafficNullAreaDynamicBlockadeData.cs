@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficNullAreaDynamicBlockadeData : ISerializable
 	{
-		[Ordinal(0)] [RED("nullAreasBlockades")] public CArray<worldTrafficNullAreaDynamicBlockade> NullAreasBlockades { get; set; }
+		private CArray<worldTrafficNullAreaDynamicBlockade> _nullAreasBlockades;
 
-		public worldTrafficNullAreaDynamicBlockadeData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("nullAreasBlockades")] 
+		public CArray<worldTrafficNullAreaDynamicBlockade> NullAreasBlockades
+		{
+			get => GetProperty(ref _nullAreasBlockades);
+			set => SetProperty(ref _nullAreasBlockades, value);
+		}
+
+		public worldTrafficNullAreaDynamicBlockadeData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

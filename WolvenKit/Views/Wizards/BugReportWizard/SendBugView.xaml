@@ -3,7 +3,8 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:catel="http://schemas.catelproject.com"
- xmlns:hc="https://handyorg.github.io/handycontrol">
+ xmlns:hc="https://handyorg.github.io/handycontrol"
+ >
 
     <catel:UserControl.Resources>
 
@@ -46,7 +47,8 @@
                          x:Name="CanvasRoot"
                          Margin="0,0,0,0"
                          Background="Transparent"
-                         RenderTransformOrigin="0.5,0.5">
+                         RenderTransformOrigin="0.5,0.5"
+                         >
                             <Canvas.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform />
@@ -57,7 +59,8 @@
                              Height="{Binding ActualHeight, ElementName=CanvasRoot}"
                              Data="{TemplateBinding Icon}"
                              Fill="{TemplateBinding Background}"
-                             Stretch="Uniform">
+                             Stretch="Uniform"
+                             >
                                 <Path.LayoutTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -72,7 +75,8 @@
                                  HorizontalAlignment="Left"
                                  Data="{TemplateBinding Icon}"
                                  Fill="{TemplateBinding Foreground}"
-                                 Stretch="Uniform">
+                                 Stretch="Uniform"
+                                 >
                                     <Path.LayoutTransform>
                                         <TransformGroup>
                                             <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -99,7 +103,7 @@
             <Setter Property="ItemMargin" Value="5,0" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Icon" Value="{StaticResource StarGeometry}" />
+            <Setter Property="Icon" Value="{StaticResource Wolf}" />
             <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
             <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
             <Setter Property="ItemContainerStyle" Value="{StaticResource RateRateItemBaseStyle}" />
@@ -111,13 +115,15 @@
                             <StackPanel
                              x:Name="PART_Panel"
                              Margin="5,0"
-                             Orientation="Vertical" />
+                             Orientation="Vertical"
+                             />
                             <TextBlock
                              Margin="10,0,0,0"
                              VerticalAlignment="Center"
                              Text="{TemplateBinding Text}"
                              Visibility="{TemplateBinding ShowText,
-                                                          Converter={StaticResource Boolean2VisibilityConverter}}" />
+                                                          Converter={StaticResource Boolean2VisibilityConverter}}"
+                             />
                         </StackPanel>
                     </ControlTemplate>
                 </Setter.Value>
@@ -142,14 +148,16 @@
          Margin="0,45,10,0"
          Background="{DynamicResource RegionBrush}"
          BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-         BorderThickness="0">
+         BorderThickness="0"
+         >
             <Grid>
                 <StackPanel>
                     <TextBlock
                      Margin="15"
                      HorizontalAlignment="Left"
                      FontSize="18"
-                     Text="Where did it happen and what did happen?" />
+                     Text="Where did it happen and what did happen?"
+                     />
                     <hc:Divider Margin="0" Orientation="Horizontal" />
                 </StackPanel>
 
@@ -161,18 +169,21 @@
                  hc:InfoElement.TitlePlacement="Left"
                  hc:InfoElement.TitleWidth="80"
                  IsEditable="True"
-                 Text="" />
+                 Text=""
+                 />
                 <TextBlock
                  Margin="8,180,0,0"
                  VerticalAlignment="Top"
-                 Text="What?" />
+                 Text="What?"
+                 />
 
                 <RichTextBox
                  MinHeight="200"
                  Margin="85,100,5,5"
                  hc:InfoElement.Title="Where?"
                  hc:InfoElement.TitlePlacement="Left"
-                 hc:InfoElement.TitleWidth="80" />
+                 hc:InfoElement.TitleWidth="80"
+                 />
             </Grid>
         </Border>
 
@@ -181,7 +192,8 @@
          Margin="0,45,10,0"
          Background="{DynamicResource RegionBrush}"
          BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-         BorderThickness="0">
+         BorderThickness="0"
+         >
 
             <Grid>
                 <StackPanel>
@@ -189,7 +201,8 @@
                      Margin="15"
                      HorizontalAlignment="Left"
                      FontSize="18"
-                     Text="Severity" />
+                     Text="Severity"
+                     />
                     <hc:Divider Margin="0" Orientation="Horizontal" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
@@ -200,7 +213,8 @@
                      Foreground="{DynamicResource MahApps.Brushes.Accent2}"
                      ItemMargin="3.4"
                      ShowText="True"
-                     Style="{StaticResource RateBaseStyle}">
+                     Style="{StaticResource RateBaseStyle}"
+                     >
                         <hc:Rate.LayoutTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
@@ -212,27 +226,32 @@
                          Margin="5,10,0,0"
                          FontSize="13"
                          Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         Text="Frustrating" />
+                         Text="Frustrating"
+                         />
                         <TextBlock
                          Margin="5,24,0,0"
                          FontSize="13"
                          Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         Text="Unexpected behavior" />
+                         Text="Unexpected behavior"
+                         />
                         <TextBlock
                          Margin="5,24,0,0"
                          FontSize="13"
                          Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         Text="Unresponsive" />
+                         Text="Unresponsive"
+                         />
                         <TextBlock
                          Margin="5,24,0,0"
                          FontSize="13"
                          Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         Text="Crash" />
+                         Text="Crash"
+                         />
                         <TextBlock
                          Margin="5,24,0,0"
                          FontSize="13"
                          Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                         Text="Lost work" />
+                         Text="Lost work"
+                         />
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -244,18 +263,21 @@
          Margin="0,0,0,0"
          HorizontalAlignment="Right"
          VerticalAlignment="Bottom"
-         Orientation="Horizontal">
+         Orientation="Horizontal"
+         >
             <Button
              Width="150"
              Height="35"
              Margin="0,0,10,0"
-             Content="Attach file" />
+             Content="Attach file"
+             />
 
             <Button
              Width="150"
              Height="35"
              Margin="0,0,10,0"
-             Content="Send bug report" />
+             Content="Send bug report"
+             />
         </StackPanel>
     </Grid>
 </catel:UserControl>

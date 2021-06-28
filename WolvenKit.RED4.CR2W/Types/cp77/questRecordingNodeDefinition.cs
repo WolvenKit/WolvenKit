@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questRecordingNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("type")] public CHandle<questIRecordingNodeType> Type { get; set; }
+		private CHandle<questIRecordingNodeType> _type;
 
-		public questRecordingNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("type")] 
+		public CHandle<questIRecordingNodeType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public questRecordingNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

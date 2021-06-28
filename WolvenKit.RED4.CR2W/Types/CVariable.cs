@@ -1,27 +1,22 @@
 using DotNetHelper.FastMember.Extension.Extension;
 using FastMember;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Schema;
-using Catel.Data;
-using Catel.IoC;
 using Newtonsoft.Json;
 using WolvenKit.Common;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Common.Extensions;
-using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using ObservableObject = Catel.Data.ObservableObject;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Interfaces.Core;
+using WolvenKit.RED4.CR2W.Helpers;
+using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
@@ -32,55 +27,27 @@ namespace WolvenKit.RED4.CR2W.Types
         protected CVariable()
         {
             this.VarChunkIndex = -1;
-            
+
             accessor = TypeAccessor.Create(this.GetType());
         }
 
-        protected CVariable(CR2WFile cr2w, CVariable parent, string name)
+        protected CVariable(IRed4EngineFile cr2w, CVariable parent, string name)
         {
             this.Cr2wFile = cr2w;
             this.ParentVar = parent;
             this.REDName = name;
             this.VarChunkIndex = -1;
 
-            
+
             accessor = TypeAccessor.Create(this.GetType());
-
-            // instantiate all REDproperties
-            InstantiateAllRedProps();
-        }
-
-        private void InstantiateAllRedProps()
-        {
-            foreach (var item in this.GetREDMembers(true))
-            {
-                var o = accessor[this, item.Name];
-                if (o is CVariable cvar)
-                {
-                }
-                else // is null
-                {
-                    var att = item.GetMemberAttribute<REDAttribute>();
-                    // instantiate
-                    var vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
-                    var varname = REDReflection.GetREDNameString(item);
-
-                    var newvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
-                    if (newvar != null)
-                    {
-                        accessor[this, item.Name] = newvar;
-                    }
-                }
-            }
         }
 
         #endregion
 
-
         #region Fields
 
         /// <summary>
-        /// an internal id that is used to track typenames 
+        /// an internal id that is used to track typenames
         /// </summary>
         private string TypeNameWithParents => GetREDTypeNameWithParents();
 
@@ -88,89 +55,23 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Properties
 
-#if DEBUG
-        [JsonIgnore] [Browsable(false)] public int GottenVarChunkIndex => LookUpChunkIndex();
-#endif
-        [JsonIgnore] [Browsable(false)] public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
-
-        [JsonIgnore] [Browsable(false)] public List<IEditableVariable> ChildrExistingVariables => GetExistingVariables(false);
-
-        [JsonIgnore] [Browsable(false)] public TypeAccessor accessor { get; }
-
-        [JsonIgnore] [Browsable(false)] public List<CVariable> UnknownCVariables { get; set; } = new List<CVariable>();
-
-        [JsonIgnore] [Browsable(false)] public IWolvenkitFile Cr2wFile { get; set; }
-
         /// <summary>
-        /// Stores the parent cr2w file.
-        /// used a lot
+        /// AspectName in frmChunkProperties
+        /// Gets the RedEngine Typename from the WkitType
+        /// e.g. Color from CColor, or Uint64 from CUInt64
+        /// Can be overwritten (e.g. in Array, Ptr and other generic types)
         /// </summary>
-        [JsonIgnore] [Browsable(false)] public CR2WFile cr2w => Cr2wFile as CR2WFile;
+        [JsonIgnore] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
 
-        /// <summary>
-        /// Shows if the CVariable is to be serialized
-        /// important because cr2w files only serialize initialized variables
-        /// and some types are not null by default
-        /// Is set upon read
-        /// Must also be set when a variable is edited in the editor
-        /// </summary>
-        [JsonIgnore]
-        [Browsable(false)]
-        public bool IsSerialized
-        {
-            get => _isSerialized;
-            set
-            {
-                if (_isSerialized != value)
-                {
-                    var oldValue = _isSerialized;
-                    _isSerialized = value;
-                    if (ParentVar != null && !ParentVar.IsSerialized)
-                    {
-                        ParentVar.IsSerialized = true;
-                    }
-                    RaisePropertyChanged(() => IsSerialized, oldValue, value);
-                }
-            }
-        }
+        [JsonIgnore] public List<IEditableVariable> SerializedProperties => GetExistingVariables();
 
-
-        [JsonIgnore] [Browsable(false)] public bool IsNulled { get; set; }
-
-        private ushort _redFlags;
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
-        /// 0 means chunk is uncooked (useful for some file types that have 
+        /// 0 means chunk is uncooked (useful for some file types that have
         /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
         /// Is set on file read and should not be modified
         /// </summary>
-        [Browsable(false)] public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
-        public void SetREDFlags(ushort flag) => _redFlags = flag;
-
-        /// <summary>
-        /// an internal id that is used to track cvariables 
-        /// </summary>
-        [JsonIgnore] [Browsable(false)] public string UniqueIdentifier => GetFullDependencyStringName();
-
-
-
-
-        /// <summary>
-        /// Stores the parent CVariable 
-        /// Is set on read,
-        /// otherwise must be set manually
-        /// Consider moving this to the constructor
-        /// </summary>
-        [JsonIgnore] [Browsable(false)] public IEditableVariable ParentVar { get; set; }
-
-        /// <summary>
-        /// -1 for children CVars, actual chunk index for root cvar aka cr2wexportwrapper.data
-        /// </summary>
-        [JsonIgnore] [Browsable(false)] public int VarChunkIndex { get; set; }
-
-
-        private string name;
-        private bool _isSerialized;
+        [JsonIgnore] public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
 
         /// <summary>
         /// AspectName in frmChunkProperties
@@ -178,8 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// otherwise has to be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        [Browsable(false)]
-        public string REDName
+        [JsonIgnore] public string REDName
         {
             get
             {
@@ -196,24 +96,99 @@ namespace WolvenKit.RED4.CR2W.Types
             private set => name = value;
         }
 
+
+
+#if DEBUG
+        [JsonIgnore] public int GottenVarChunkIndex => LookUpChunkIndex();
+#endif
+        [JsonIgnore] public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
+
+
+
+        [JsonIgnore] public TypeAccessor accessor { get; }
+
+        [JsonIgnore] public List<IEditableVariable> UnknownCVariables { get; set; } = new();
+
+        [JsonIgnore] public IWolvenkitFile Cr2wFile { get; set; }
+
+        /// <summary>
+        /// Stores the parent cr2w file.
+        /// used a lot
+        /// </summary>
+        [JsonIgnore] public IRed4EngineFile cr2w => Cr2wFile as IRed4EngineFile;
+
+        /// <summary>
+        /// Shows if the CVariable is to be serialized
+        /// important because cr2w files only serialize initialized variables
+        /// and some types are not null by default
+        /// Is set upon read
+        /// Must also be set when a variable is edited in the editor
+        /// </summary>
+        [JsonIgnore]
+        public bool IsSerialized
+        {
+            get => _isSerialized;
+            set
+            {
+                if (_isSerialized != value)
+                {
+                    var oldValue = _isSerialized;
+                    _isSerialized = value;
+                    if (ParentVar != null && !ParentVar.IsSerialized)
+                    {
+                        ParentVar.IsSerialized = true;
+                    }
+                    //RaisePropertyChanged(nameof(IsSerialized), oldValue, value);
+                }
+            }
+        }
+
+
+        [JsonIgnore] public bool IsNulled { get; set; }
+
+        private ushort _redFlags;
+
+        public void SetREDFlags(ushort flag) => _redFlags = flag;
+
+        /// <summary>
+        /// an internal id that is used to track cvariables
+        /// </summary>
+        [JsonIgnore] public string UniqueIdentifier => GetFullDependencyStringName();
+
+
+
+
+        /// <summary>
+        /// Stores the parent CVariable
+        /// Is set on read,
+        /// otherwise must be set manually
+        /// Consider moving this to the constructor
+        /// </summary>
+        [JsonIgnore] public IEditableVariable ParentVar { get; set; }
+
+        /// <summary>
+        /// -1 for children CVars, actual chunk index for root cvar aka cr2wexportwrapper.data
+        /// </summary>
+        [JsonIgnore] public int VarChunkIndex { get; set; }
+
+
+        private string name;
+        private bool _isSerialized;
+
+
+
         /// <summary>
         /// !! Must ONLY be called from CArray type variables!!
         /// </summary>
         /// <param name="val"></param>
         public void SetREDName(string val) => REDName = val;
 
-        /// <summary>
-        /// AspectName in frmChunkProperties
-        /// Gets the RedEngine Typename from the WkitType
-        /// e.g. Color from CColor, or Uint64 from CUInt64
-        /// Can be overwritten (e.g. in Array, Ptr and other generic types)
-        /// </summary>
-        [Browsable(false)] public virtual string REDType => REDReflection.GetREDTypeString(this.GetType());
+
 
         /// <summary>
         /// AspectName in frmChunkProperties
         /// </summary>
-        [Browsable(false)] public string REDValue => this.ToString();
+        [JsonIgnore] public string REDValue => this.ToString();
         /// <summary>
         /// Exported to database
         /// </summary>
@@ -221,18 +196,75 @@ namespace WolvenKit.RED4.CR2W.Types
         #endregion
 
         #region Methods
+
+        protected T GetProperty<T>(ref T backingField, [CallerMemberName] string callerName = "") where T : class
+        {
+            if (backingField == null && cr2w.CreatePropertyOnAccess)
+            {
+                backingField = Create<T>(callerName);
+            }
+
+            return backingField;
+        }
+
+        protected void SetProperty<T>(ref T backingField, T value, [CallerMemberName] string callerName = "") where T : class
+        {
+            if (backingField == value)
+            {
+                return;
+            }
+            backingField = value;
+            PropertySet(callerName);
+        }
+
+        protected T Create<T>(string varName = null, params int[] flags)
+        {
+            var result = (T)System.Activator.CreateInstance(typeof(T), cr2w, this, varName);
+
+            if (result is IREDArray arr)
+            {
+                arr.Flags = flags.ToList();
+            }
+
+            return result;
+        }
+
+        protected T Create<T>([CallerMemberName] string callerName = "")
+        {
+            var attr = (REDAttribute)GetType().GetProperty(callerName).GetCustomAttribute(typeof(REDAttribute));
+            if (attr == null)
+            {
+                throw new Exception("REDAttribute not defined!");
+            }
+
+            var varName = attr.Name;
+            if (string.IsNullOrWhiteSpace(varName) && attr is REDBufferAttribute)
+            {
+                varName = callerName;
+            }
+
+            return Create<T>(varName, attr.Flags);
+        }
+
+        protected void PropertySet([CallerMemberName] string callerName = "")
+        {
+
+        }
+
         private string GetFullDependencyStringName()
         {
             var par = this.ParentVar;
             // top level chunk variables return the chunk index
             if (par == null)
+            {
                 return $"{this.VarChunkIndex}.{this.REDName}";
+            }
 
             // all chunks get their chunk id prefixed
-            var depstr = this.VarChunkIndex > 0 
-                ? $"{this.VarChunkIndex}.{this.REDName}" 
+            var depstr = this.VarChunkIndex > 0
+                ? $"{this.VarChunkIndex}.{this.REDName}"
                 : this.REDName;
-            
+
             while (true)
             {
                 //depstr = $"{par.REDName}.{depstr}";
@@ -325,23 +357,20 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public List<IEditableVariable> GetExistingVariables(bool includeBuffers = true)
         {
-            List<IEditableVariable> redvariables = new List<IEditableVariable>(UnknownCVariables);
+            var redvariables = new List<IEditableVariable>(UnknownCVariables);
 
-            foreach (Member item in this.GetREDMembers(includeBuffers))
+            foreach (var item in this.GetREDMembers(includeBuffers))
             {
-                // ??
-                //if (includeBuffers && item.GetMemberAttribute<REDBufferAttribute>()==null)
-                //    continue;
-
                 var o = accessor[this, item.Name];
                 if (o is CVariable cvar)
                 {
-                    if (cvar.IsSerialized)
+                    // is buffer
+                    var isbuffer = item.GetMemberAttribute<REDBufferAttribute>() != null;
+
+                    if (cvar.IsSerialized || isbuffer)
+                    {
                         redvariables.Add(cvar);
-                }
-                else // is null
-                {
-                    // do nothing
+                    }
                 }
             }
 
@@ -382,7 +411,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(true);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     // don't write ignored buffers, they get written in the class
                     if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
                     {
@@ -400,7 +429,72 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
         /// <summary>
-        /// Reads a CVariable from a binaryreader stream
+        /// Reads the <see cref="CVariable"/> and all his children as values only.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="size"></param>
+        public virtual void ReadWithoutMeta(BinaryReader file, uint size)
+        {
+            if (this is IREDPrimitive)
+            {
+                Read(file, size);
+            }
+            else
+            {
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
+                {
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    // don't write ignored buffers, they get written in the class
+                    if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
+                    {
+                        // add IsSerialized?
+                        continue;
+                    }
+
+                    // just write the RedBuffer without variable id
+                    if (this.accessor[this, item.Name] is CVariable av)
+                    {
+                        av.ReadWithoutMeta(file, size);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write the <see cref="CVariable"/> and all his children as values only.
+        /// </summary>
+        /// <param name="file"></param>
+        public virtual void WriteWithoutMeta(BinaryWriter file)
+        {
+            if (this is IREDPrimitive)
+            {
+                Write(file);
+            }
+            else
+            {
+                var members = this.GetREDMembers(true);
+                foreach (var item in members)
+                {
+                    var att = item.GetMemberAttribute<REDAttribute>();
+                    // don't write ignored buffers, they get written in the class
+                    if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
+                    {
+                        // add IsSerialized?
+                        continue;
+                    }
+
+                    // just write the RedBuffer without variable id
+                    if (this.accessor[this, item.Name] is CVariable av)
+                    {
+                        av.WriteWithoutMeta(file);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads a CVariable from a Binaryreader stream
         /// Can be overwritten by child classes
         /// </summary>
         /// <param name="file"></param>
@@ -462,9 +556,13 @@ namespace WolvenKit.RED4.CR2W.Types
 
                     // unknown types
                     if (cvar.REDName.Contains("UNKNOWN:"))
+                    {
                         UnknownCVariables.Add(cvar);
+                    }
                     else
+                    {
                         TrySettingFastMemberAccessor(cvar);
+                    }
                 }
                 #endregion
 
@@ -499,7 +597,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
         /// <summary>
-        /// Instantiates and reads all REDVariables and REDBuffers in a CVariable 
+        /// Instantiates and reads all REDVariables and REDBuffers in a CVariable
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="br"></param>
@@ -507,13 +605,18 @@ namespace WolvenKit.RED4.CR2W.Types
         private List<CVariable> ReadAllRedVariables<T>(BinaryReader br) where T : REDAttribute
         {
             var parsedvars = new List<CVariable>();
-            var redproperties = typeof(T) == typeof(REDBufferAttribute) 
-                ? this.GetREDBuffers() 
+            var redproperties = typeof(T) == typeof(REDBufferAttribute)
+                ? this.GetREDBuffers()
                 : this.GetREDMembers(true);
 
             foreach (Member item in redproperties)
             {
-                var att = item.GetMemberAttribute<T>();
+                var att = REDReflection.GetREDAttribute(item);
+                if (att is not T)
+                {
+                    continue;
+                }
+
                 if (att is REDBufferAttribute {IsIgnored: true})
                 {
                     // add IsSerialized?
@@ -523,7 +626,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 string vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
                 string varname = REDReflection.GetREDNameString(item);
 
-                var parsedvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
+                var parsedvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this
                 if (parsedvar == null)
                     throw new InvalidParsingException($"Variable {vartype}:{varname} was not read in class {this.GetType().Name}");
 
@@ -544,7 +647,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <param name="value"></param>
         private bool TrySettingFastMemberAccessor(IEditableVariable value)
         {
-            foreach (var member in this.accessor.GetMembers())
+            foreach (var member in REDReflection.GetMembers(this))
             {
                 try
                 {
@@ -561,10 +664,9 @@ namespace WolvenKit.RED4.CR2W.Types
                 }
             }
             //throw new InvalidParsingException($"({value.REDType}){value.REDName} not found in ({this.TypeNameWithParents}){this.REDName}");
-            var Logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-            Logger.LogString($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}", Logtype.Error);
-            
-            
+            //Logger.Error($"{this.TypeNameWithParents} - {value.REDType} {value.REDName}");
+
+
             return false;
         }
 
@@ -592,7 +694,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(true);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     // don't write ignored buffers, they get written in the class
                     if (att is REDBufferAttribute bufferAttribute && bufferAttribute.IsIgnored)
                     {
@@ -615,7 +717,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 var members = this.GetREDMembers(false);
                 foreach (var item in members)
                 {
-                    var att = item.GetMemberAttribute<REDAttribute>();
+                    var att = REDReflection.GetREDAttribute(item);
                     if (this.accessor[this, item.Name] is CVariable av)
                     {
                         if (av != null)
@@ -626,7 +728,7 @@ namespace WolvenKit.RED4.CR2W.Types
                                 // check if healthy? don't know how
 
                                 // finally: write to stream
-                                CR2WFile.WriteVariable(file, av);
+                                Cr2wHelper.WriteVariable(file, av);
                             }
                             else
                             {
@@ -644,11 +746,17 @@ namespace WolvenKit.RED4.CR2W.Types
                 // write all Buffers
                 foreach (Member item in this.GetREDBuffers())
                 {
-                    var att = item.GetMemberAttribute<REDBufferAttribute>();
+                    var att = REDReflection.GetREDAttribute(item) as REDBufferAttribute;
+                    if (att == null)
+                    {
+                        continue;
+                    }
 
                     // ignore some RedBuffers (formerly unknown bytes)
                     if (att.IsIgnored)
+                    {
                         continue;
+                    }
                     else
                     {
                         var b = this.accessor[this, item.Name];
@@ -658,7 +766,7 @@ namespace WolvenKit.RED4.CR2W.Types
                             // so if they are null, we still need to instantiate an empty variable
                             string vartype = REDReflection.GetREDTypeString(item.Type, att.Flags);
                             string varname = REDReflection.GetREDNameString(item);
-                            var parsedvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this 
+                            var parsedvar = CR2WTypeManager.Create(vartype, varname, this.cr2w, this);     // create new variable and parent to this
                             if (parsedvar == null)
                                 throw new InvalidParsingException($"Variable {vartype}:{varname} was not read in class {this.GetType().Name}");
                             parsedvar.Write(file);
@@ -670,7 +778,7 @@ namespace WolvenKit.RED4.CR2W.Types
                                 cbuf.Write(file);
                             }
                         }
-                        
+
 
                         continue;
                         //throw new NotImplementedException();
@@ -685,20 +793,16 @@ namespace WolvenKit.RED4.CR2W.Types
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual IEditableVariable Copy(ICR2WCopyAction icontext)
+        public virtual IEditableVariable Copy(ICR2WCopyAction context)
         {
-            if (icontext is not CR2WCopyAction context)
-                throw new InvalidParsingException("Tried copying tw3 assets.");
-
-
             // creates a new instance of the CVariable
             // with a new destination cr2wFile and a new parent CVariable if needed
-            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile, context.Parent as CVariable, false);
+            var copy = CR2WTypeManager.Create(this.REDType, this.REDName, context.DestinationFile as IRed4EngineFile, context.Parent as CVariable, false);
             //copy.REDFlags = this.REDFlags;
             copy.IsSerialized = this.IsSerialized;
 
             // don't try to set children with reflection, it aint gonna work
-            if (this is IArrayAccessor || this is IVariantAccessor)
+            if (this is IREDArray || this is IREDVariant)
                 return copy;
 
             // copy all REDProperties and REDBuffers
@@ -716,6 +820,7 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (val is CVariable cvar)
             {
+                this.IsSerialized = true;
                 // set all REDProperties and REDBuffers
                 foreach (var item in cvar.GetEditableVariables())
                 {
@@ -765,8 +870,8 @@ namespace WolvenKit.RED4.CR2W.Types
         public override string ToString()
         {
             // check first if there is a property called "Name"
-            var dbg = this.accessor.GetMembers();
-            foreach (var member in this.accessor.GetMembers())
+            var dbg = REDReflection.GetMembers(this);
+            foreach (var member in REDReflection.GetMembers(this))
             {
                 if (member.Name == "Name")
                 {
@@ -877,7 +982,7 @@ namespace WolvenKit.RED4.CR2W.Types
             }
             return new string(c);
         }
-        
+
         /// <summary>
         /// Normalizes enum names with special characters.
         /// </summary>
@@ -907,7 +1012,7 @@ namespace WolvenKit.RED4.CR2W.Types
             return finalvalue;
         }
 
-       
+
         #endregion
     }
 }

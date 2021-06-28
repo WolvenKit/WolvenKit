@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EquippedEvents : EquipmentBaseEvents
 	{
-		[Ordinal(0)] [RED("stateMachineInstanceData")] public gamestateMachineStateMachineInstanceData StateMachineInstanceData { get; set; }
+		private gamestateMachineStateMachineInstanceData _stateMachineInstanceData;
 
-		public EquippedEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stateMachineInstanceData")] 
+		public gamestateMachineStateMachineInstanceData StateMachineInstanceData
+		{
+			get => GetProperty(ref _stateMachineInstanceData);
+			set => SetProperty(ref _stateMachineInstanceData, value);
+		}
+
+		public EquippedEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldCompiledCommunityAreaNode_Streamable : worldCompiledCommunityAreaNode
 	{
-		[Ordinal(6)] [RED("streamingDistance")] public CFloat StreamingDistance { get; set; }
+		private CFloat _streamingDistance;
 
-		public worldCompiledCommunityAreaNode_Streamable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("streamingDistance")] 
+		public CFloat StreamingDistance
+		{
+			get => GetProperty(ref _streamingDistance);
+			set => SetProperty(ref _streamingDistance, value);
+		}
+
+		public worldCompiledCommunityAreaNode_Streamable(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

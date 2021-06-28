@@ -1,9 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusBarViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Threading.Tasks;
 using Catel;
@@ -11,7 +5,7 @@ using Catel.Configuration;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.Threading;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using Orc.Squirrel;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
@@ -22,26 +16,25 @@ namespace WolvenKit.ViewModels.Shell
         #region Fields
 
         private readonly IConfigurationService _configurationService;
-        private readonly IProjectManager _projectManager;
-        private readonly IServiceLocator _serviceLocator;
+        private readonly ISettingsManager _settingsManager;
         private readonly IUpdateService _updateService;
 
         #endregion Fields
 
         #region Constructors
 
-        public StatusBarViewModel(IProjectManager projectManager, IServiceLocator serviceLocator, IConfigurationService configurationService,
-            IUpdateService updateService)
+        public StatusBarViewModel(
+            ISettingsManager settingsManager,
+            IConfigurationService configurationService,
+            IUpdateService updateService
+            )
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => serviceLocator);
-            Argument.IsNotNull(() => configurationService);
-            Argument.IsNotNull(() => updateService);
-
-            _projectManager = projectManager;
-            _serviceLocator = serviceLocator;
+            _settingsManager = settingsManager;
             _configurationService = configurationService;
             _updateService = updateService;
+            StaticReferencesVM.GlobalStatusBar = this;
+
+            CurrentProject = "-";
         }
 
         #endregion Constructors
@@ -56,7 +49,9 @@ namespace WolvenKit.ViewModels.Shell
         public int Line { get; private set; }
         public string LoadingString { get; set; }
         public string ReceivingAutomaticUpdates { get; private set; }
-        public string Version { get; private set; }
+        public string CurrentProject { get; set; }
+
+        public object VersionNumber => _settingsManager.GetVersionNumber();
 
         #endregion Properties
 
@@ -66,7 +61,6 @@ namespace WolvenKit.ViewModels.Shell
         {
             _configurationService.ConfigurationChanged -= OnConfigurationChanged;
             _updateService.UpdateInstalled -= OnUpdateInstalled;
-            _projectManager.ProjectActivatedAsync -= OnProjectActivatedAsync;
 
             await base.CloseAsync();
         }
@@ -77,11 +71,8 @@ namespace WolvenKit.ViewModels.Shell
             StaticReferencesVM.GlobalStatusBar = this;
             _configurationService.ConfigurationChanged += OnConfigurationChanged;
             _updateService.UpdateInstalled += OnUpdateInstalled;
-            _projectManager.ProjectActivatedAsync += OnProjectActivatedAsync;
 
             IsUpdatedInstalled = _updateService.IsUpdatedInstalled;
-            //Version = VersionHelper.GetCurrentVersion(); //TODO
-            Version = "Version 0.8.1"; // TempFix
             var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
             if (Connected)
             { InternetConnected = "Connected"; }
@@ -97,17 +88,6 @@ namespace WolvenKit.ViewModels.Shell
             {
                 UpdateAutoUpdateInfo();
             }
-        }
-
-        private Task OnProjectActivatedAsync(object sender, ProjectUpdatedEventArgs args)
-        {
-            var activeProject = args.NewProject;
-            if (activeProject == null)
-            {
-                return TaskHelper.Completed;
-            }
-
-            return TaskHelper.Completed;
         }
 
         private void OnUpdateInstalled(object sender, EventArgs e) => IsUpdatedInstalled = _updateService.IsUpdatedInstalled;

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkVisualStateChangeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("visualState")] public CName VisualState { get; set; }
+		private CName _visualState;
 
-		public inkVisualStateChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("visualState")] 
+		public CName VisualState
+		{
+			get => GetProperty(ref _visualState);
+			set => SetProperty(ref _visualState, value);
+		}
+
+		public inkVisualStateChangeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

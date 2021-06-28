@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questContentTokenManager_NodeType : questIGameManagerNonSignalStoppingNodeType
 	{
-		[Ordinal(0)] [RED("subtype")] public CHandle<questIContentTokenManager_NodeSubType> Subtype { get; set; }
+		private CHandle<questIContentTokenManager_NodeSubType> _subtype;
 
-		public questContentTokenManager_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("subtype")] 
+		public CHandle<questIContentTokenManager_NodeSubType> Subtype
+		{
+			get => GetProperty(ref _subtype);
+			set => SetProperty(ref _subtype, value);
+		}
+
+		public questContentTokenManager_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

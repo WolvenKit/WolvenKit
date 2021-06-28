@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SubtitlesSettingsListener : userSettingsVarListener
 	{
-		[Ordinal(0)] [RED("ctrl")] public wCHandle<BaseSubtitlesGameController> Ctrl { get; set; }
+		private wCHandle<BaseSubtitlesGameController> _ctrl;
 
-		public SubtitlesSettingsListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ctrl")] 
+		public wCHandle<BaseSubtitlesGameController> Ctrl
+		{
+			get => GetProperty(ref _ctrl);
+			set => SetProperty(ref _ctrl, value);
+		}
+
+		public SubtitlesSettingsListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

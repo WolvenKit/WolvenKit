@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ManagePersonalLinkChangeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("shouldEquip")] public CBool ShouldEquip { get; set; }
+		private CBool _shouldEquip;
 
-		public ManagePersonalLinkChangeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("shouldEquip")] 
+		public CBool ShouldEquip
+		{
+			get => GetProperty(ref _shouldEquip);
+			set => SetProperty(ref _shouldEquip, value);
+		}
+
+		public ManagePersonalLinkChangeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

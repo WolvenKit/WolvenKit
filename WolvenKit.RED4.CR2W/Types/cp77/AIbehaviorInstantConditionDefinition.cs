@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorInstantConditionDefinition : ISerializable
 	{
-		[Ordinal(0)] [RED("condition")] public CHandle<AIbehaviorConditionDefinition> Condition { get; set; }
+		private CHandle<AIbehaviorConditionDefinition> _condition;
 
-		public AIbehaviorInstantConditionDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("condition")] 
+		public CHandle<AIbehaviorConditionDefinition> Condition
+		{
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
+		}
+
+		public AIbehaviorInstantConditionDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

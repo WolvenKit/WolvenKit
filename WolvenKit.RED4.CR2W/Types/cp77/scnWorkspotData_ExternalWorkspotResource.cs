@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnWorkspotData_ExternalWorkspotResource : scnWorkspotData
 	{
-		[Ordinal(1)] [RED("workspotResource")] public rRef<workWorkspotResource> WorkspotResource { get; set; }
+		private rRef<workWorkspotResource> _workspotResource;
 
-		public scnWorkspotData_ExternalWorkspotResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("workspotResource")] 
+		public rRef<workWorkspotResource> WorkspotResource
+		{
+			get => GetProperty(ref _workspotResource);
+			set => SetProperty(ref _workspotResource, value);
+		}
+
+		public scnWorkspotData_ExternalWorkspotResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

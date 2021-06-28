@@ -1,6 +1,7 @@
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Wwise
 {
@@ -28,13 +29,18 @@ namespace WolvenKit.Wwise
 
         #region Properties
 
+        public ulong Key => FNV1A64HashAlgorithm.HashString(Name);
         public IGameArchive Archive { get; set; }
         public string CompressionType => "None";
+
+        public string ArchiveName { get; set; }
 
         /// <summary>
         /// Name of the bundled item in the archive.
         /// </summary>
         public string Name { get; set; }
+
+        public string Extension => Path.GetExtension(Name);
 
         /// <summary>
         /// !!! Double check when writing !!! Some files use 64bit, older files may use 32bit.

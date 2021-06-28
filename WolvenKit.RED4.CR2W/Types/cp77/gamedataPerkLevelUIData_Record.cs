@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataPerkLevelUIData_Record : gamedataTweakDBRecord
 	{
-		public gamedataPerkLevelUIData_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gamedataPerkLevelUIData_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

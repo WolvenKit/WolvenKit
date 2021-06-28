@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class interopSelectionChangeInfo : CVariable
 	{
-		[Ordinal(0)] [RED("selected")] public CArray<CUInt64> Selected { get; set; }
-		[Ordinal(1)] [RED("deselected")] public CArray<CUInt64> Deselected { get; set; }
+		private CArray<CUInt64> _selected;
+		private CArray<CUInt64> _deselected;
 
-		public interopSelectionChangeInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("selected")] 
+		public CArray<CUInt64> Selected
+		{
+			get => GetProperty(ref _selected);
+			set => SetProperty(ref _selected, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("deselected")] 
+		public CArray<CUInt64> Deselected
+		{
+			get => GetProperty(ref _deselected);
+			set => SetProperty(ref _deselected, value);
+		}
+
+		public interopSelectionChangeInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

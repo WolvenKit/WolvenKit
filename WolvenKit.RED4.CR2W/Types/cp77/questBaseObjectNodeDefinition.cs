@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questBaseObjectNodeDefinition : questDisableableNodeDefinition
 	{
-		[Ordinal(2)] [RED("reference")] public NodeRef Reference { get; set; }
+		private NodeRef _reference;
 
-		public questBaseObjectNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("reference")] 
+		public NodeRef Reference
+		{
+			get => GetProperty(ref _reference);
+			set => SetProperty(ref _reference, value);
+		}
+
+		public questBaseObjectNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

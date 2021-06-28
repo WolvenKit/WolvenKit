@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BlacklistPeriodEnded : redEvent
 	{
-		[Ordinal(0)] [RED("entityID")] public entEntityID EntityID { get; set; }
+		private entEntityID _entityID;
 
-		public BlacklistPeriodEnded(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entityID")] 
+		public entEntityID EntityID
+		{
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
+		}
+
+		public BlacklistPeriodEnded(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -41,9 +41,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(15)] [RED("additionalRaycastCheckEventName")] 		public CName AdditionalRaycastCheckEventName { get; set;}
 
-		public SVirtualControllerParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SVirtualControllerParams(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SVirtualControllerParams(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

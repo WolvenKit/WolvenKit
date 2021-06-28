@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVoiceTagGroup : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("voiceTags")] public CArray<CName> VoiceTags { get; set; }
+		private CArray<CName> _voiceTags;
 
-		public audioVoiceTagGroup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("voiceTags")] 
+		public CArray<CName> VoiceTags
+		{
+			get => GetProperty(ref _voiceTags);
+			set => SetProperty(ref _voiceTags, value);
+		}
+
+		public audioVoiceTagGroup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

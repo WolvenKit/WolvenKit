@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameCameraCurvesLibrary : entEntity
 	{
-		[Ordinal(2)] [RED("cameraCurves")] public CArray<rRef<gameCameraCurveSet>> CameraCurves { get; set; }
+		private CArray<rRef<gameCameraCurveSet>> _cameraCurves;
 
-		public gameCameraCurvesLibrary(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("cameraCurves")] 
+		public CArray<rRef<gameCameraCurveSet>> CameraCurves
+		{
+			get => GetProperty(ref _cameraCurves);
+			set => SetProperty(ref _cameraCurves, value);
+		}
+
+		public gameCameraCurvesLibrary(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

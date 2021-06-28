@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSmartObjectPoint : CVariable
 	{
-		[Ordinal(0)] [RED("isReachable")] public CBool IsReachable { get; set; }
+		private CBool _isReachable;
 
-		public gameSmartObjectPoint(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isReachable")] 
+		public CBool IsReachable
+		{
+			get => GetProperty(ref _isReachable);
+			set => SetProperty(ref _isReachable, value);
+		}
+
+		public gameSmartObjectPoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class sampleTextScrolling : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("scrollingText")] public inkTextWidgetReference ScrollingText { get; set; }
-		[Ordinal(2)] [RED("infiniteloop")] public inkanimPlaybackOptions Infiniteloop { get; set; }
+		private inkTextWidgetReference _scrollingText;
+		private inkanimPlaybackOptions _infiniteloop;
 
-		public sampleTextScrolling(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("scrollingText")] 
+		public inkTextWidgetReference ScrollingText
+		{
+			get => GetProperty(ref _scrollingText);
+			set => SetProperty(ref _scrollingText, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("infiniteloop")] 
+		public inkanimPlaybackOptions Infiniteloop
+		{
+			get => GetProperty(ref _infiniteloop);
+			set => SetProperty(ref _infiniteloop, value);
+		}
+
+		public sampleTextScrolling(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

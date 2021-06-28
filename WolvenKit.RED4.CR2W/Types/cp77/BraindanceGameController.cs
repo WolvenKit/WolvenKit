@@ -7,45 +7,349 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BraindanceGameController : gameuiHUDGameController
 	{
-		[Ordinal(9)] [RED("currentTimerMarker")] public inkWidgetReference CurrentTimerMarker { get; set; }
-		[Ordinal(10)] [RED("currentTimerText")] public inkTextWidgetReference CurrentTimerText { get; set; }
-		[Ordinal(11)] [RED("activeLayer")] public inkTextWidgetReference ActiveLayer { get; set; }
-		[Ordinal(12)] [RED("layerIcon")] public inkImageWidgetReference LayerIcon { get; set; }
-		[Ordinal(13)] [RED("layerThermalIcon")] public inkImageWidgetReference LayerThermalIcon { get; set; }
-		[Ordinal(14)] [RED("layerVisualIcon")] public inkImageWidgetReference LayerVisualIcon { get; set; }
-		[Ordinal(15)] [RED("layerAudioIcon")] public inkImageWidgetReference LayerAudioIcon { get; set; }
-		[Ordinal(16)] [RED("cursorPoint")] public inkWidgetReference CursorPoint { get; set; }
-		[Ordinal(17)] [RED("buttonHintsManagerRef")] public inkWidgetReference ButtonHintsManagerRef { get; set; }
-		[Ordinal(18)] [RED("clueHolder")] public CArray<inkCompoundWidgetReference> ClueHolder { get; set; }
-		[Ordinal(19)] [RED("clueBarHolder")] public CArray<inkWidgetReference> ClueBarHolder { get; set; }
-		[Ordinal(20)] [RED("speedIndicatorManagers")] public CArray<inkWidgetReference> SpeedIndicatorManagers { get; set; }
-		[Ordinal(21)] [RED("clueArray")] public CArray<CHandle<BraindanceClueLogicController>> ClueArray { get; set; }
-		[Ordinal(22)] [RED("buttonHintsController")] public wCHandle<ButtonHints> ButtonHintsController { get; set; }
-		[Ordinal(23)] [RED("barSize")] public CFloat BarSize { get; set; }
-		[Ordinal(24)] [RED("braindanceDuration")] public CFloat BraindanceDuration { get; set; }
-		[Ordinal(25)] [RED("currentTime")] public CFloat CurrentTime { get; set; }
-		[Ordinal(26)] [RED("rootWidget")] public CHandle<inkWidget> RootWidget { get; set; }
-		[Ordinal(27)] [RED("currentLayer")] public CEnum<gameuiEBraindanceLayer> CurrentLayer { get; set; }
-		[Ordinal(28)] [RED("currentSpeed")] public CEnum<scnPlaySpeed> CurrentSpeed { get; set; }
-		[Ordinal(29)] [RED("currentDirection")] public CEnum<scnPlayDirection> CurrentDirection { get; set; }
-		[Ordinal(30)] [RED("startingTimerTopMargin")] public CFloat StartingTimerTopMargin { get; set; }
-		[Ordinal(31)] [RED("gameInstance")] public ScriptGameInstance GameInstance { get; set; }
-		[Ordinal(32)] [RED("braindanceBB")] public CHandle<gameIBlackboard> BraindanceBB { get; set; }
-		[Ordinal(33)] [RED("braindanceDef")] public CHandle<BraindanceBlackboardDef> BraindanceDef { get; set; }
-		[Ordinal(34)] [RED("ClueBBID")] public CUInt32 ClueBBID { get; set; }
-		[Ordinal(35)] [RED("VisionModeBBID")] public CUInt32 VisionModeBBID { get; set; }
-		[Ordinal(36)] [RED("ProgressBBID")] public CUInt32 ProgressBBID { get; set; }
-		[Ordinal(37)] [RED("SectionTimeBBID")] public CUInt32 SectionTimeBBID { get; set; }
-		[Ordinal(38)] [RED("IsActiveBBID")] public CUInt32 IsActiveBBID { get; set; }
-		[Ordinal(39)] [RED("EnableExitBBID")] public CUInt32 EnableExitBBID { get; set; }
-		[Ordinal(40)] [RED("IsFPPBBID")] public CUInt32 IsFPPBBID { get; set; }
-		[Ordinal(41)] [RED("PlaybackSpeedID")] public CUInt32 PlaybackSpeedID { get; set; }
-		[Ordinal(42)] [RED("PlaybackDirectionID")] public CUInt32 PlaybackDirectionID { get; set; }
-		[Ordinal(43)] [RED("isFPPMode")] public CBool IsFPPMode { get; set; }
-		[Ordinal(44)] [RED("showTimelineAnimation")] public CHandle<inkanimProxy> ShowTimelineAnimation { get; set; }
-		[Ordinal(45)] [RED("hideTimelineAnimation")] public CHandle<inkanimProxy> HideTimelineAnimation { get; set; }
-		[Ordinal(46)] [RED("showWidgetAnimation")] public CHandle<inkanimProxy> ShowWidgetAnimation { get; set; }
+		private inkWidgetReference _currentTimerMarker;
+		private inkTextWidgetReference _currentTimerText;
+		private inkTextWidgetReference _activeLayer;
+		private inkImageWidgetReference _layerIcon;
+		private inkImageWidgetReference _layerThermalIcon;
+		private inkImageWidgetReference _layerVisualIcon;
+		private inkImageWidgetReference _layerAudioIcon;
+		private inkWidgetReference _cursorPoint;
+		private inkWidgetReference _buttonHintsManagerRef;
+		private CArray<inkCompoundWidgetReference> _clueHolder;
+		private CArray<inkWidgetReference> _clueBarHolder;
+		private CArray<inkWidgetReference> _speedIndicatorManagers;
+		private CArray<CHandle<BraindanceClueLogicController>> _clueArray;
+		private wCHandle<ButtonHints> _buttonHintsController;
+		private CFloat _barSize;
+		private CFloat _braindanceDuration;
+		private CFloat _currentTime;
+		private wCHandle<inkWidget> _rootWidget;
+		private CEnum<gameuiEBraindanceLayer> _currentLayer;
+		private CEnum<scnPlaySpeed> _currentSpeed;
+		private CEnum<scnPlayDirection> _currentDirection;
+		private CFloat _startingTimerTopMargin;
+		private ScriptGameInstance _gameInstance;
+		private CHandle<gameIBlackboard> _braindanceBB;
+		private CHandle<BraindanceBlackboardDef> _braindanceDef;
+		private CUInt32 _clueBBID;
+		private CUInt32 _visionModeBBID;
+		private CUInt32 _progressBBID;
+		private CUInt32 _sectionTimeBBID;
+		private CUInt32 _isActiveBBID;
+		private CUInt32 _enableExitBBID;
+		private CUInt32 _isFPPBBID;
+		private CUInt32 _playbackSpeedID;
+		private CUInt32 _playbackDirectionID;
+		private CBool _isFPPMode;
+		private CHandle<inkanimProxy> _showTimelineAnimation;
+		private CHandle<inkanimProxy> _hideTimelineAnimation;
+		private CHandle<inkanimProxy> _showWidgetAnimation;
 
-		public BraindanceGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(9)] 
+		[RED("currentTimerMarker")] 
+		public inkWidgetReference CurrentTimerMarker
+		{
+			get => GetProperty(ref _currentTimerMarker);
+			set => SetProperty(ref _currentTimerMarker, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("currentTimerText")] 
+		public inkTextWidgetReference CurrentTimerText
+		{
+			get => GetProperty(ref _currentTimerText);
+			set => SetProperty(ref _currentTimerText, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("activeLayer")] 
+		public inkTextWidgetReference ActiveLayer
+		{
+			get => GetProperty(ref _activeLayer);
+			set => SetProperty(ref _activeLayer, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("layerIcon")] 
+		public inkImageWidgetReference LayerIcon
+		{
+			get => GetProperty(ref _layerIcon);
+			set => SetProperty(ref _layerIcon, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("layerThermalIcon")] 
+		public inkImageWidgetReference LayerThermalIcon
+		{
+			get => GetProperty(ref _layerThermalIcon);
+			set => SetProperty(ref _layerThermalIcon, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("layerVisualIcon")] 
+		public inkImageWidgetReference LayerVisualIcon
+		{
+			get => GetProperty(ref _layerVisualIcon);
+			set => SetProperty(ref _layerVisualIcon, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("layerAudioIcon")] 
+		public inkImageWidgetReference LayerAudioIcon
+		{
+			get => GetProperty(ref _layerAudioIcon);
+			set => SetProperty(ref _layerAudioIcon, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("cursorPoint")] 
+		public inkWidgetReference CursorPoint
+		{
+			get => GetProperty(ref _cursorPoint);
+			set => SetProperty(ref _cursorPoint, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("buttonHintsManagerRef")] 
+		public inkWidgetReference ButtonHintsManagerRef
+		{
+			get => GetProperty(ref _buttonHintsManagerRef);
+			set => SetProperty(ref _buttonHintsManagerRef, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("clueHolder")] 
+		public CArray<inkCompoundWidgetReference> ClueHolder
+		{
+			get => GetProperty(ref _clueHolder);
+			set => SetProperty(ref _clueHolder, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("clueBarHolder")] 
+		public CArray<inkWidgetReference> ClueBarHolder
+		{
+			get => GetProperty(ref _clueBarHolder);
+			set => SetProperty(ref _clueBarHolder, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("speedIndicatorManagers")] 
+		public CArray<inkWidgetReference> SpeedIndicatorManagers
+		{
+			get => GetProperty(ref _speedIndicatorManagers);
+			set => SetProperty(ref _speedIndicatorManagers, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("clueArray")] 
+		public CArray<CHandle<BraindanceClueLogicController>> ClueArray
+		{
+			get => GetProperty(ref _clueArray);
+			set => SetProperty(ref _clueArray, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("buttonHintsController")] 
+		public wCHandle<ButtonHints> ButtonHintsController
+		{
+			get => GetProperty(ref _buttonHintsController);
+			set => SetProperty(ref _buttonHintsController, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("barSize")] 
+		public CFloat BarSize
+		{
+			get => GetProperty(ref _barSize);
+			set => SetProperty(ref _barSize, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("braindanceDuration")] 
+		public CFloat BraindanceDuration
+		{
+			get => GetProperty(ref _braindanceDuration);
+			set => SetProperty(ref _braindanceDuration, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("currentTime")] 
+		public CFloat CurrentTime
+		{
+			get => GetProperty(ref _currentTime);
+			set => SetProperty(ref _currentTime, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("rootWidget")] 
+		public wCHandle<inkWidget> RootWidget
+		{
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("currentLayer")] 
+		public CEnum<gameuiEBraindanceLayer> CurrentLayer
+		{
+			get => GetProperty(ref _currentLayer);
+			set => SetProperty(ref _currentLayer, value);
+		}
+
+		[Ordinal(28)] 
+		[RED("currentSpeed")] 
+		public CEnum<scnPlaySpeed> CurrentSpeed
+		{
+			get => GetProperty(ref _currentSpeed);
+			set => SetProperty(ref _currentSpeed, value);
+		}
+
+		[Ordinal(29)] 
+		[RED("currentDirection")] 
+		public CEnum<scnPlayDirection> CurrentDirection
+		{
+			get => GetProperty(ref _currentDirection);
+			set => SetProperty(ref _currentDirection, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("startingTimerTopMargin")] 
+		public CFloat StartingTimerTopMargin
+		{
+			get => GetProperty(ref _startingTimerTopMargin);
+			set => SetProperty(ref _startingTimerTopMargin, value);
+		}
+
+		[Ordinal(31)] 
+		[RED("gameInstance")] 
+		public ScriptGameInstance GameInstance
+		{
+			get => GetProperty(ref _gameInstance);
+			set => SetProperty(ref _gameInstance, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("braindanceBB")] 
+		public CHandle<gameIBlackboard> BraindanceBB
+		{
+			get => GetProperty(ref _braindanceBB);
+			set => SetProperty(ref _braindanceBB, value);
+		}
+
+		[Ordinal(33)] 
+		[RED("braindanceDef")] 
+		public CHandle<BraindanceBlackboardDef> BraindanceDef
+		{
+			get => GetProperty(ref _braindanceDef);
+			set => SetProperty(ref _braindanceDef, value);
+		}
+
+		[Ordinal(34)] 
+		[RED("ClueBBID")] 
+		public CUInt32 ClueBBID
+		{
+			get => GetProperty(ref _clueBBID);
+			set => SetProperty(ref _clueBBID, value);
+		}
+
+		[Ordinal(35)] 
+		[RED("VisionModeBBID")] 
+		public CUInt32 VisionModeBBID
+		{
+			get => GetProperty(ref _visionModeBBID);
+			set => SetProperty(ref _visionModeBBID, value);
+		}
+
+		[Ordinal(36)] 
+		[RED("ProgressBBID")] 
+		public CUInt32 ProgressBBID
+		{
+			get => GetProperty(ref _progressBBID);
+			set => SetProperty(ref _progressBBID, value);
+		}
+
+		[Ordinal(37)] 
+		[RED("SectionTimeBBID")] 
+		public CUInt32 SectionTimeBBID
+		{
+			get => GetProperty(ref _sectionTimeBBID);
+			set => SetProperty(ref _sectionTimeBBID, value);
+		}
+
+		[Ordinal(38)] 
+		[RED("IsActiveBBID")] 
+		public CUInt32 IsActiveBBID
+		{
+			get => GetProperty(ref _isActiveBBID);
+			set => SetProperty(ref _isActiveBBID, value);
+		}
+
+		[Ordinal(39)] 
+		[RED("EnableExitBBID")] 
+		public CUInt32 EnableExitBBID
+		{
+			get => GetProperty(ref _enableExitBBID);
+			set => SetProperty(ref _enableExitBBID, value);
+		}
+
+		[Ordinal(40)] 
+		[RED("IsFPPBBID")] 
+		public CUInt32 IsFPPBBID
+		{
+			get => GetProperty(ref _isFPPBBID);
+			set => SetProperty(ref _isFPPBBID, value);
+		}
+
+		[Ordinal(41)] 
+		[RED("PlaybackSpeedID")] 
+		public CUInt32 PlaybackSpeedID
+		{
+			get => GetProperty(ref _playbackSpeedID);
+			set => SetProperty(ref _playbackSpeedID, value);
+		}
+
+		[Ordinal(42)] 
+		[RED("PlaybackDirectionID")] 
+		public CUInt32 PlaybackDirectionID
+		{
+			get => GetProperty(ref _playbackDirectionID);
+			set => SetProperty(ref _playbackDirectionID, value);
+		}
+
+		[Ordinal(43)] 
+		[RED("isFPPMode")] 
+		public CBool IsFPPMode
+		{
+			get => GetProperty(ref _isFPPMode);
+			set => SetProperty(ref _isFPPMode, value);
+		}
+
+		[Ordinal(44)] 
+		[RED("showTimelineAnimation")] 
+		public CHandle<inkanimProxy> ShowTimelineAnimation
+		{
+			get => GetProperty(ref _showTimelineAnimation);
+			set => SetProperty(ref _showTimelineAnimation, value);
+		}
+
+		[Ordinal(45)] 
+		[RED("hideTimelineAnimation")] 
+		public CHandle<inkanimProxy> HideTimelineAnimation
+		{
+			get => GetProperty(ref _hideTimelineAnimation);
+			set => SetProperty(ref _hideTimelineAnimation, value);
+		}
+
+		[Ordinal(46)] 
+		[RED("showWidgetAnimation")] 
+		public CHandle<inkanimProxy> ShowWidgetAnimation
+		{
+			get => GetProperty(ref _showWidgetAnimation);
+			set => SetProperty(ref _showWidgetAnimation, value);
+		}
+
+		public BraindanceGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

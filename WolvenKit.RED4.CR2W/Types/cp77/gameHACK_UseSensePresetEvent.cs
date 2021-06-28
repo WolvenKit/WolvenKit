@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameHACK_UseSensePresetEvent : redEvent
 	{
-		[Ordinal(0)] [RED("sensePreset")] public TweakDBID SensePreset { get; set; }
+		private TweakDBID _sensePreset;
 
-		public gameHACK_UseSensePresetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sensePreset")] 
+		public TweakDBID SensePreset
+		{
+			get => GetProperty(ref _sensePreset);
+			set => SetProperty(ref _sensePreset, value);
+		}
+
+		public gameHACK_UseSensePresetEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

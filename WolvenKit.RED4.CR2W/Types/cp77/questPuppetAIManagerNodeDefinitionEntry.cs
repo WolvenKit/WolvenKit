@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPuppetAIManagerNodeDefinitionEntry : CVariable
 	{
-		[Ordinal(0)] [RED("entityReference")] public gameEntityReference EntityReference { get; set; }
-		[Ordinal(1)] [RED("aiTier")] public CEnum<gameStoryTier> AiTier { get; set; }
+		private gameEntityReference _entityReference;
+		private CEnum<gameStoryTier> _aiTier;
 
-		public questPuppetAIManagerNodeDefinitionEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entityReference")] 
+		public gameEntityReference EntityReference
+		{
+			get => GetProperty(ref _entityReference);
+			set => SetProperty(ref _entityReference, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("aiTier")] 
+		public CEnum<gameStoryTier> AiTier
+		{
+			get => GetProperty(ref _aiTier);
+			set => SetProperty(ref _aiTier, value);
+		}
+
+		public questPuppetAIManagerNodeDefinitionEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

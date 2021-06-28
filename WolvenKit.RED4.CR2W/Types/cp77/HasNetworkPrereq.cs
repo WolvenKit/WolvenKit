@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HasNetworkPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("invert")] public CBool Invert { get; set; }
+		private CBool _invert;
 
-		public HasNetworkPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("invert")] 
+		public CBool Invert
+		{
+			get => GetProperty(ref _invert);
+			set => SetProperty(ref _invert, value);
+		}
+
+		public HasNetworkPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

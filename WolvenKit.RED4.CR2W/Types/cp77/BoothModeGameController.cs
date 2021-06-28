@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BoothModeGameController : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("buttonRef")] public inkWidgetReference ButtonRef { get; set; }
+		private inkWidgetReference _buttonRef;
 
-		public BoothModeGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("buttonRef")] 
+		public inkWidgetReference ButtonRef
+		{
+			get => GetProperty(ref _buttonRef);
+			set => SetProperty(ref _buttonRef, value);
+		}
+
+		public BoothModeGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

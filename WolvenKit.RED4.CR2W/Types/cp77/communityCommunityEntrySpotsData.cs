@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class communityCommunityEntrySpotsData : CVariable
 	{
-		[Ordinal(0)] [RED("phasesData")] public CArray<communityCommunityEntryPhaseSpotsData> PhasesData { get; set; }
-		[Ordinal(1)] [RED("entryName")] public CName EntryName { get; set; }
+		private CArray<communityCommunityEntryPhaseSpotsData> _phasesData;
+		private CName _entryName;
 
-		public communityCommunityEntrySpotsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("phasesData")] 
+		public CArray<communityCommunityEntryPhaseSpotsData> PhasesData
+		{
+			get => GetProperty(ref _phasesData);
+			set => SetProperty(ref _phasesData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entryName")] 
+		public CName EntryName
+		{
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
+		}
+
+		public communityCommunityEntrySpotsData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

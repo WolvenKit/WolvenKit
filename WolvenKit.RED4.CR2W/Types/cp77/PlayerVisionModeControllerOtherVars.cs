@@ -7,9 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerVisionModeControllerOtherVars : CVariable
 	{
-		[Ordinal(0)] [RED("enabledByToggle")] public CBool EnabledByToggle { get; set; }
-		[Ordinal(1)] [RED("active")] public CBool Active { get; set; }
+		private CBool _enabledByToggle;
+		private CBool _active;
+		private CBool _toggledDuringHold;
 
-		public PlayerVisionModeControllerOtherVars(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("enabledByToggle")] 
+		public CBool EnabledByToggle
+		{
+			get => GetProperty(ref _enabledByToggle);
+			set => SetProperty(ref _enabledByToggle, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("active")] 
+		public CBool Active
+		{
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("toggledDuringHold")] 
+		public CBool ToggledDuringHold
+		{
+			get => GetProperty(ref _toggledDuringHold);
+			set => SetProperty(ref _toggledDuringHold, value);
+		}
+
+		public PlayerVisionModeControllerOtherVars(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

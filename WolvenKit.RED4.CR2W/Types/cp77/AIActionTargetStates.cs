@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIActionTargetStates : CVariable
 	{
-		[Ordinal(0)] [RED("npcStates")] public AIActionNPCStates NpcStates { get; set; }
-		[Ordinal(1)] [RED("playerStates")] public AIActionPlayerStates PlayerStates { get; set; }
+		private AIActionNPCStates _npcStates;
+		private AIActionPlayerStates _playerStates;
 
-		public AIActionTargetStates(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("npcStates")] 
+		public AIActionNPCStates NpcStates
+		{
+			get => GetProperty(ref _npcStates);
+			set => SetProperty(ref _npcStates, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("playerStates")] 
+		public AIActionPlayerStates PlayerStates
+		{
+			get => GetProperty(ref _playerStates);
+			set => SetProperty(ref _playerStates, value);
+		}
+
+		public AIActionTargetStates(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

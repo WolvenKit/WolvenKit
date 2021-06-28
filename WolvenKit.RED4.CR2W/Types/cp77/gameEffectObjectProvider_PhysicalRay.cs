@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectObjectProvider_PhysicalRay : gameEffectObjectProvider
 	{
-		[Ordinal(0)] [RED("inputPosition")] public gameEffectInputParameter_Vector InputPosition { get; set; }
-		[Ordinal(1)] [RED("inputForward")] public gameEffectInputParameter_Vector InputForward { get; set; }
-		[Ordinal(2)] [RED("inputRange")] public gameEffectInputParameter_Float InputRange { get; set; }
-		[Ordinal(3)] [RED("outputRaycastEnd")] public gameEffectOutputParameter_Vector OutputRaycastEnd { get; set; }
-		[Ordinal(4)] [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
+		private gameEffectInputParameter_Vector _inputPosition;
+		private gameEffectInputParameter_Vector _inputForward;
+		private gameEffectInputParameter_Float _inputRange;
+		private gameEffectOutputParameter_Vector _outputRaycastEnd;
+		private CHandle<physicsFilterData> _filterData;
 
-		public gameEffectObjectProvider_PhysicalRay(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("inputPosition")] 
+		public gameEffectInputParameter_Vector InputPosition
+		{
+			get => GetProperty(ref _inputPosition);
+			set => SetProperty(ref _inputPosition, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("inputForward")] 
+		public gameEffectInputParameter_Vector InputForward
+		{
+			get => GetProperty(ref _inputForward);
+			set => SetProperty(ref _inputForward, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("inputRange")] 
+		public gameEffectInputParameter_Float InputRange
+		{
+			get => GetProperty(ref _inputRange);
+			set => SetProperty(ref _inputRange, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("outputRaycastEnd")] 
+		public gameEffectOutputParameter_Vector OutputRaycastEnd
+		{
+			get => GetProperty(ref _outputRaycastEnd);
+			set => SetProperty(ref _outputRaycastEnd, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("filterData")] 
+		public CHandle<physicsFilterData> FilterData
+		{
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
+		}
+
+		public gameEffectObjectProvider_PhysicalRay(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

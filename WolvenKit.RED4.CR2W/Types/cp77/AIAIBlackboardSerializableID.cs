@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIAIBlackboardSerializableID : CVariable
 	{
-		[Ordinal(0)] [RED("id")] public gameBlackboardSerializableID Id { get; set; }
+		private gameBlackboardSerializableID _id;
 
-		public AIAIBlackboardSerializableID(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("id")] 
+		public gameBlackboardSerializableID Id
+		{
+			get => GetProperty(ref _id);
+			set => SetProperty(ref _id, value);
+		}
+
+		public AIAIBlackboardSerializableID(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

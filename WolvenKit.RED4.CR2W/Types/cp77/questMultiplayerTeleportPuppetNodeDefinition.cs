@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questMultiplayerTeleportPuppetNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		[Ordinal(2)] [RED("params")] public questMultiplayerTeleportPuppetParams Params { get; set; }
+		private questMultiplayerTeleportPuppetParams _params;
 
-		public questMultiplayerTeleportPuppetNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("params")] 
+		public questMultiplayerTeleportPuppetParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public questMultiplayerTeleportPuppetNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

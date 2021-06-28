@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questConditionItem : CVariable
 	{
-		[Ordinal(0)] [RED("condition")] public CHandle<questIBaseCondition> Condition { get; set; }
-		[Ordinal(1)] [RED("socketId")] public CUInt32 SocketId { get; set; }
+		private CHandle<questIBaseCondition> _condition;
+		private CUInt32 _socketId;
 
-		public questConditionItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("condition")] 
+		public CHandle<questIBaseCondition> Condition
+		{
+			get => GetProperty(ref _condition);
+			set => SetProperty(ref _condition, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("socketId")] 
+		public CUInt32 SocketId
+		{
+			get => GetProperty(ref _socketId);
+			set => SetProperty(ref _socketId, value);
+		}
+
+		public questConditionItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LeftHandCyberwareCatchActionDecisions : LeftHandCyberwareActionAbstractDecisions
 	{
-		public LeftHandCyberwareCatchActionDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public LeftHandCyberwareCatchActionDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

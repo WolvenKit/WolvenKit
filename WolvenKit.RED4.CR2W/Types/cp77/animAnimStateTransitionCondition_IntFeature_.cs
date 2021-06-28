@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_IntFeature_ : animIAnimStateTransitionCondition
 	{
-		[Ordinal(0)] [RED("compareValue")] public CInt32 CompareValue { get; set; }
-		[Ordinal(1)] [RED("featureName")] public CName FeatureName { get; set; }
-		[Ordinal(2)] [RED("featurePropertyName")] public CName FeaturePropertyName { get; set; }
-		[Ordinal(3)] [RED("compareFunc")] public CEnum<animCompareFunc> CompareFunc { get; set; }
+		private CInt32 _compareValue;
+		private CName _featureName;
+		private CName _featurePropertyName;
+		private CEnum<animCompareFunc> _compareFunc;
 
-		public animAnimStateTransitionCondition_IntFeature_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("compareValue")] 
+		public CInt32 CompareValue
+		{
+			get => GetProperty(ref _compareValue);
+			set => SetProperty(ref _compareValue, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("featureName")] 
+		public CName FeatureName
+		{
+			get => GetProperty(ref _featureName);
+			set => SetProperty(ref _featureName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("featurePropertyName")] 
+		public CName FeaturePropertyName
+		{
+			get => GetProperty(ref _featurePropertyName);
+			set => SetProperty(ref _featurePropertyName, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("compareFunc")] 
+		public CEnum<animCompareFunc> CompareFunc
+		{
+			get => GetProperty(ref _compareFunc);
+			set => SetProperty(ref _compareFunc, value);
+		}
+
+		public animAnimStateTransitionCondition_IntFeature_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

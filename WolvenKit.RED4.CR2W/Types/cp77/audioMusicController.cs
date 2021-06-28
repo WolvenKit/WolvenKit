@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioMusicController : CVariable
 	{
-		[Ordinal(0)] [RED("playEvent")] public CName PlayEvent { get; set; }
-		[Ordinal(1)] [RED("stopEvent")] public CName StopEvent { get; set; }
-		[Ordinal(2)] [RED("muteEvent")] public CName MuteEvent { get; set; }
-		[Ordinal(3)] [RED("unmuteEvent")] public CName UnmuteEvent { get; set; }
+		private CName _playEvent;
+		private CName _stopEvent;
+		private CName _muteEvent;
+		private CName _unmuteEvent;
 
-		public audioMusicController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("playEvent")] 
+		public CName PlayEvent
+		{
+			get => GetProperty(ref _playEvent);
+			set => SetProperty(ref _playEvent, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("stopEvent")] 
+		public CName StopEvent
+		{
+			get => GetProperty(ref _stopEvent);
+			set => SetProperty(ref _stopEvent, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("muteEvent")] 
+		public CName MuteEvent
+		{
+			get => GetProperty(ref _muteEvent);
+			set => SetProperty(ref _muteEvent, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("unmuteEvent")] 
+		public CName UnmuteEvent
+		{
+			get => GetProperty(ref _unmuteEvent);
+			set => SetProperty(ref _unmuteEvent, value);
+		}
+
+		public audioMusicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

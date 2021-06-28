@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HitFlagHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] [RED("hitFlag")] public CEnum<hitFlag> HitFlag { get; set; }
+		private CEnum<hitFlag> _hitFlag;
 
-		public HitFlagHitPrereqCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("hitFlag")] 
+		public CEnum<hitFlag> HitFlag
+		{
+			get => GetProperty(ref _hitFlag);
+			set => SetProperty(ref _hitFlag, value);
+		}
+
+		public HitFlagHitPrereqCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

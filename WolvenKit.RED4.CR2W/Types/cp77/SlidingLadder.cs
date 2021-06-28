@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SlidingLadder : BaseAnimatedDevice
 	{
-		[Ordinal(98)] [RED("offMeshConnectionDown")] public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionDown { get; set; }
-		[Ordinal(99)] [RED("offMeshConnectionUp")] public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionUp { get; set; }
-		[Ordinal(100)] [RED("ladderInteraction")] public CHandle<gameinteractionsComponent> LadderInteraction { get; set; }
-		[Ordinal(101)] [RED("wasShot")] public CBool WasShot { get; set; }
+		private CHandle<AIOffMeshConnectionComponent> _offMeshConnectionDown;
+		private CHandle<AIOffMeshConnectionComponent> _offMeshConnectionUp;
+		private CHandle<gameinteractionsComponent> _ladderInteraction;
+		private CBool _wasShot;
 
-		public SlidingLadder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(101)] 
+		[RED("offMeshConnectionDown")] 
+		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionDown
+		{
+			get => GetProperty(ref _offMeshConnectionDown);
+			set => SetProperty(ref _offMeshConnectionDown, value);
+		}
+
+		[Ordinal(102)] 
+		[RED("offMeshConnectionUp")] 
+		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionUp
+		{
+			get => GetProperty(ref _offMeshConnectionUp);
+			set => SetProperty(ref _offMeshConnectionUp, value);
+		}
+
+		[Ordinal(103)] 
+		[RED("ladderInteraction")] 
+		public CHandle<gameinteractionsComponent> LadderInteraction
+		{
+			get => GetProperty(ref _ladderInteraction);
+			set => SetProperty(ref _ladderInteraction, value);
+		}
+
+		[Ordinal(104)] 
+		[RED("wasShot")] 
+		public CBool WasShot
+		{
+			get => GetProperty(ref _wasShot);
+			set => SetProperty(ref _wasShot, value);
+		}
+
+		public SlidingLadder(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

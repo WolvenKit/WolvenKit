@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckArgumentName : CheckArguments
 	{
-		[Ordinal(1)] [RED("customVar")] public CName CustomVar { get; set; }
+		private CName _customVar;
 
-		public CheckArgumentName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("customVar")] 
+		public CName CustomVar
+		{
+			get => GetProperty(ref _customVar);
+			set => SetProperty(ref _customVar, value);
+		}
+
+		public CheckArgumentName(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

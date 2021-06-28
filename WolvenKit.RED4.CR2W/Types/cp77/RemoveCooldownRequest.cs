@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RemoveCooldownRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("cid")] public CInt32 Cid { get; set; }
+		private CInt32 _cid;
 
-		public RemoveCooldownRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("cid")] 
+		public CInt32 Cid
+		{
+			get => GetProperty(ref _cid);
+			set => SetProperty(ref _cid, value);
+		}
+
+		public RemoveCooldownRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

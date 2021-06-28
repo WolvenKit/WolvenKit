@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LibTreeDefTreeVariableISerializable : LibTreeDefTreeVariable
 	{
-		[Ordinal(2)] [RED("exportAsProperty")] public CBool ExportAsProperty { get; set; }
+		private CBool _exportAsProperty;
 
-		public LibTreeDefTreeVariableISerializable(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("exportAsProperty")] 
+		public CBool ExportAsProperty
+		{
+			get => GetProperty(ref _exportAsProperty);
+			set => SetProperty(ref _exportAsProperty, value);
+		}
+
+		public LibTreeDefTreeVariableISerializable(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

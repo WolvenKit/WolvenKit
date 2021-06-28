@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkWidgetBackendData : IBackendData
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<inkWidget> Owner { get; set; }
-		[Ordinal(1)] [RED("isHiddenInEditor")] public CBool IsHiddenInEditor { get; set; }
-		[Ordinal(2)] [RED("isLocked")] public CBool IsLocked { get; set; }
-		[Ordinal(3)] [RED("boundLibraryItemName")] public CName BoundLibraryItemName { get; set; }
+		private wCHandle<inkWidget> _owner;
+		private CBool _isHiddenInEditor;
+		private CBool _isLocked;
+		private CName _boundLibraryItemName;
 
-		public inkWidgetBackendData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<inkWidget> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isHiddenInEditor")] 
+		public CBool IsHiddenInEditor
+		{
+			get => GetProperty(ref _isHiddenInEditor);
+			set => SetProperty(ref _isHiddenInEditor, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isLocked")] 
+		public CBool IsLocked
+		{
+			get => GetProperty(ref _isLocked);
+			set => SetProperty(ref _isLocked, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("boundLibraryItemName")] 
+		public CName BoundLibraryItemName
+		{
+			get => GetProperty(ref _boundLibraryItemName);
+			set => SetProperty(ref _boundLibraryItemName, value);
+		}
+
+		public inkWidgetBackendData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

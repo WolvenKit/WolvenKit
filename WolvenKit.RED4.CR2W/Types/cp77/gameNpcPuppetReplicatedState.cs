@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameNpcPuppetReplicatedState : gamePuppetReplicatedState
 	{
-		[Ordinal(12)] [RED("weaponStates")] public gameWeaponsReplicatedState WeaponStates { get; set; }
+		private gameWeaponsReplicatedState _weaponStates;
 
-		public gameNpcPuppetReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("weaponStates")] 
+		public gameWeaponsReplicatedState WeaponStates
+		{
+			get => GetProperty(ref _weaponStates);
+			set => SetProperty(ref _weaponStates, value);
+		}
+
+		public gameNpcPuppetReplicatedState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

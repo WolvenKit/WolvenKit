@@ -1,77 +1,46 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Orc.ProjectManagement;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
-    public abstract class EditorProject : ProjectBase, IEquatable<EditorProject>
+    public abstract class EditorProject : ObservableObject, IEquatable<EditorProject>
     {
-        #region Fields
-
-        public EditorProjectData Data;
-
-        #endregion Fields
-
         #region Constructors
 
-        protected EditorProject(string location)
-                    : base(location)
+        public EditorProject(string location)
         {
-        }
-
-        protected EditorProject() : base("")
-        {
+            Location = location;
         }
 
         #endregion Constructors
 
-        #region Methods
-
-        public abstract void Load(string path);
-
-        public abstract void Save(string path);
-
-        #endregion Methods
-
         #region properties
 
-        [XmlIgnore]
-        public GameType GameType;
+        public string Location { get; set; }
 
-        [Category("About")]
-        [Description("The name of your mod.")]
         public string Author { get; set; }
 
-        [Category("About")]
-        [Description("Your contact email.")]
         public string Email { get; set; }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public abstract bool IsInitialized { get; }
-
-        [Category("About")]
-        [Description("The name of your mod.")]
         public string Name { get; set; }
 
-        [Browsable(false)]
-        [Category("About")]
-        [Description("The version of your mod. It's a string so 0.1-ALPHA and such is possible.")]
-        public string Version { get; set; } = "0.62";
+        public string Version { get; set; }
+
+
 
         #region not serialized
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
+        public abstract GameType GameType { get; }
+
+        public abstract string PackedModDirectory { get; }
+        public abstract string PackedRootDirectory { get; }
+
+
+        public bool IsDirty { get; set; }
+
         public string FileDirectory
         {
             get
@@ -86,9 +55,49 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
+        public string ModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "Mod");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public string BackupDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(ProjectDirectory, "_backups");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public string RawDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "Raw");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+
         public List<string> Files
         {
             get
@@ -103,9 +112,34 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        [XmlIgnore]
-        [ReadOnly(true)]
-        [Browsable(false)]
+        public List<string> ModFiles
+        {
+            get
+            {
+                if (!Directory.Exists(ModDirectory))
+                {
+                    Directory.CreateDirectory(ModDirectory);
+                }
+                return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file[(ModDirectory.Length + 1)..])
+                    .ToList();
+            }
+        }
+
+        public List<string> RawFiles
+        {
+            get
+            {
+                if (!Directory.Exists(RawDirectory))
+                {
+                    Directory.CreateDirectory(RawDirectory);
+                }
+                return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
+                    .Select(file => file[(RawDirectory.Length + 1)..])
+                    .ToList();
+            }
+        }
+
         public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(Location), Name);
 
         #endregion not serialized
@@ -114,9 +148,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #region Methods
 
-        public abstract void Check();
-
-        public abstract Task Initialize();
+        public override string ToString() => Location;
 
         #endregion Methods
 
@@ -156,8 +188,5 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         #endregion implements IEquatable
 
-        public void SetIsDirty(bool isDirty) => IsDirty = isDirty;
-
-        public override string ToString() => Location;
     }
 }

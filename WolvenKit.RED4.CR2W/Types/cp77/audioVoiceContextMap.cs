@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVoiceContextMap : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("includes")] public CArray<CName> Includes { get; set; }
-		[Ordinal(2)] [RED("contexts")] public CArray<audioVoiceContextMapItem> Contexts { get; set; }
+		private CArray<CName> _includes;
+		private CArray<audioVoiceContextMapItem> _contexts;
 
-		public audioVoiceContextMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("includes")] 
+		public CArray<CName> Includes
+		{
+			get => GetProperty(ref _includes);
+			set => SetProperty(ref _includes, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("contexts")] 
+		public CArray<audioVoiceContextMapItem> Contexts
+		{
+			get => GetProperty(ref _contexts);
+			set => SetProperty(ref _contexts, value);
+		}
+
+		public audioVoiceContextMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIFollowSlotDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("slotID")] public gamebbScriptID_Int32 SlotID { get; set; }
-		[Ordinal(1)] [RED("slotTransform")] public gamebbScriptID_Variant SlotTransform { get; set; }
+		private gamebbScriptID_Int32 _slotID;
+		private gamebbScriptID_Variant _slotTransform;
 
-		public AIFollowSlotDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("slotID")] 
+		public gamebbScriptID_Int32 SlotID
+		{
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("slotTransform")] 
+		public gamebbScriptID_Variant SlotTransform
+		{
+			get => GetProperty(ref _slotTransform);
+			set => SetProperty(ref _slotTransform, value);
+		}
+
+		public AIFollowSlotDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

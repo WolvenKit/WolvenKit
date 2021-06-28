@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ForceCLSStateRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("state")] public CEnum<ECLSForcedState> State { get; set; }
-		[Ordinal(1)] [RED("sourceName")] public CName SourceName { get; set; }
-		[Ordinal(2)] [RED("priority")] public CEnum<EPriority> Priority { get; set; }
-		[Ordinal(3)] [RED("removePreviousRequests")] public CBool RemovePreviousRequests { get; set; }
-		[Ordinal(4)] [RED("savable")] public CBool Savable { get; set; }
+		private CEnum<ECLSForcedState> _state;
+		private CName _sourceName;
+		private CEnum<EPriority> _priority;
+		private CBool _removePreviousRequests;
+		private CBool _savable;
 
-		public ForceCLSStateRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CEnum<ECLSForcedState> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("sourceName")] 
+		public CName SourceName
+		{
+			get => GetProperty(ref _sourceName);
+			set => SetProperty(ref _sourceName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("priority")] 
+		public CEnum<EPriority> Priority
+		{
+			get => GetProperty(ref _priority);
+			set => SetProperty(ref _priority, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("removePreviousRequests")] 
+		public CBool RemovePreviousRequests
+		{
+			get => GetProperty(ref _removePreviousRequests);
+			set => SetProperty(ref _removePreviousRequests, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("savable")] 
+		public CBool Savable
+		{
+			get => GetProperty(ref _savable);
+			set => SetProperty(ref _savable, value);
+		}
+
+		public ForceCLSStateRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

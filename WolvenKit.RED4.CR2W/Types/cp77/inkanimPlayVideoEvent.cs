@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkanimPlayVideoEvent : inkanimEvent
 	{
-		[Ordinal(1)] [RED("videoResource")] public raRef<Bink> VideoResource { get; set; }
+		private raRef<Bink> _videoResource;
 
-		public inkanimPlayVideoEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("videoResource")] 
+		public raRef<Bink> VideoResource
+		{
+			get => GetProperty(ref _videoResource);
+			set => SetProperty(ref _videoResource, value);
+		}
+
+		public inkanimPlayVideoEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

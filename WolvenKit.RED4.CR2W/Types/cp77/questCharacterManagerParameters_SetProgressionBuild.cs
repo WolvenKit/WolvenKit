@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCharacterManagerParameters_SetProgressionBuild : questICharacterManagerParameters_NodeSubType
 	{
-		[Ordinal(0)] [RED("buildID")] public TweakDBID BuildID { get; set; }
+		private TweakDBID _buildID;
 
-		public questCharacterManagerParameters_SetProgressionBuild(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("buildID")] 
+		public TweakDBID BuildID
+		{
+			get => GetProperty(ref _buildID);
+			set => SetProperty(ref _buildID, value);
+		}
+
+		public questCharacterManagerParameters_SetProgressionBuild(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

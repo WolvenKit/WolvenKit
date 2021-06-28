@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DisassembleOptions : CVariable
 	{
-		[Ordinal(0)] [RED("canBeDisassembled")] public CBool CanBeDisassembled { get; set; }
+		private CBool _canBeDisassembled;
 
-		public DisassembleOptions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("canBeDisassembled")] 
+		public CBool CanBeDisassembled
+		{
+			get => GetProperty(ref _canBeDisassembled);
+			set => SetProperty(ref _canBeDisassembled, value);
+		}
+
+		public DisassembleOptions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

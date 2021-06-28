@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSceneTier3Data : gameSceneTierDataMotionConstrained
 	{
-		[Ordinal(8)] [RED("cameraSettings")] public gameTier3CameraSettings CameraSettings { get; set; }
+		private gameTier3CameraSettings _cameraSettings;
 
-		public gameSceneTier3Data(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(8)] 
+		[RED("cameraSettings")] 
+		public gameTier3CameraSettings CameraSettings
+		{
+			get => GetProperty(ref _cameraSettings);
+			set => SetProperty(ref _cameraSettings, value);
+		}
+
+		public gameSceneTier3Data(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

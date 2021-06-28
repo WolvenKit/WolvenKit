@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HitIndicatorWeaponZoomListener : gameScriptStatsListener
 	{
-		[Ordinal(0)] [RED("gameController")] public wCHandle<TargetHitIndicatorGameController> GameController { get; set; }
+		private wCHandle<TargetHitIndicatorGameController> _gameController;
 
-		public HitIndicatorWeaponZoomListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("gameController")] 
+		public wCHandle<TargetHitIndicatorGameController> GameController
+		{
+			get => GetProperty(ref _gameController);
+			set => SetProperty(ref _gameController, value);
+		}
+
+		public HitIndicatorWeaponZoomListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

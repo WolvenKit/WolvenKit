@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HitData_Humanoid : HitData_Base
 	{
-		[Ordinal(3)] [RED("reactionZonesSide")] public CEnum<ReactionZones_Humanoid_Side> ReactionZonesSide { get; set; }
+		private CEnum<ReactionZones_Humanoid_Side> _reactionZonesSide;
 
-		public HitData_Humanoid(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("reactionZonesSide")] 
+		public CEnum<ReactionZones_Humanoid_Side> ReactionZonesSide
+		{
+			get => GetProperty(ref _reactionZonesSide);
+			set => SetProperty(ref _reactionZonesSide, value);
+		}
+
+		public HitData_Humanoid(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

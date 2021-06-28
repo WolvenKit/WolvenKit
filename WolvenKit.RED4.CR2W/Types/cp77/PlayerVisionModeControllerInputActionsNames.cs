@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerVisionModeControllerInputActionsNames : CVariable
 	{
-		[Ordinal(0)] [RED("buttonHold")] public CName ButtonHold { get; set; }
-		[Ordinal(1)] [RED("buttonToggle")] public CName ButtonToggle { get; set; }
+		private CName _buttonHold;
+		private CName _buttonToggle;
 
-		public PlayerVisionModeControllerInputActionsNames(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("buttonHold")] 
+		public CName ButtonHold
+		{
+			get => GetProperty(ref _buttonHold);
+			set => SetProperty(ref _buttonHold, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("buttonToggle")] 
+		public CName ButtonToggle
+		{
+			get => GetProperty(ref _buttonToggle);
+			set => SetProperty(ref _buttonToggle, value);
+		}
+
+		public PlayerVisionModeControllerInputActionsNames(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

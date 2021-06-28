@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entdismembermentAppearanceMatch : CVariable
 	{
-		[Ordinal(0)] [RED("Character")] public CName Character { get; set; }
-		[Ordinal(1)] [RED("Mesh")] public CName Mesh { get; set; }
-		[Ordinal(2)] [RED("SetByUser")] public CBool SetByUser { get; set; }
+		private CName _character;
+		private CName _mesh;
+		private CBool _setByUser;
 
-		public entdismembermentAppearanceMatch(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("Character")] 
+		public CName Character
+		{
+			get => GetProperty(ref _character);
+			set => SetProperty(ref _character, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("Mesh")] 
+		public CName Mesh
+		{
+			get => GetProperty(ref _mesh);
+			set => SetProperty(ref _mesh, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("SetByUser")] 
+		public CBool SetByUser
+		{
+			get => GetProperty(ref _setByUser);
+			set => SetProperty(ref _setByUser, value);
+		}
+
+		public entdismembermentAppearanceMatch(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

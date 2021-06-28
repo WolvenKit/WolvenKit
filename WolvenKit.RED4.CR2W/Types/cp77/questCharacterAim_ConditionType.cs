@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCharacterAim_ConditionType : questICharacterConditionType
 	{
-		[Ordinal(0)] [RED("isPlayer")] public CBool IsPlayer { get; set; }
-		[Ordinal(1)] [RED("preciseAiming")] public CBool PreciseAiming { get; set; }
-		[Ordinal(2)] [RED("targetRef")] public gameEntityReference TargetRef { get; set; }
+		private CBool _isPlayer;
+		private CBool _preciseAiming;
+		private gameEntityReference _targetRef;
 
-		public questCharacterAim_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isPlayer")] 
+		public CBool IsPlayer
+		{
+			get => GetProperty(ref _isPlayer);
+			set => SetProperty(ref _isPlayer, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("preciseAiming")] 
+		public CBool PreciseAiming
+		{
+			get => GetProperty(ref _preciseAiming);
+			set => SetProperty(ref _preciseAiming, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("targetRef")] 
+		public gameEntityReference TargetRef
+		{
+			get => GetProperty(ref _targetRef);
+			set => SetProperty(ref _targetRef, value);
+		}
+
+		public questCharacterAim_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

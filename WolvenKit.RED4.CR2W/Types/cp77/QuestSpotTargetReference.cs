@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuestSpotTargetReference : ActionEntityReference
 	{
-		[Ordinal(25)] [RED("ForcedTarget")] public entEntityID ForcedTarget { get; set; }
+		private entEntityID _forcedTarget;
 
-		public QuestSpotTargetReference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("ForcedTarget")] 
+		public entEntityID ForcedTarget
+		{
+			get => GetProperty(ref _forcedTarget);
+			set => SetProperty(ref _forcedTarget, value);
+		}
+
+		public QuestSpotTargetReference(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

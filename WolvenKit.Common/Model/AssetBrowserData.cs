@@ -1,4 +1,9 @@
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using ReactiveUI;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model
 {
@@ -9,19 +14,29 @@ namespace WolvenKit.Common.Model
         MoveUP
     }
 
-    public class AssetBrowserData
+    public class FileEntryViewModel
     {
-        #region Properties
+        private readonly IGameFile _fileEntry;
 
-        public List<IGameFile> AmbigiousFiles { get; set; }
-        public GameFileTreeNode Children { get; set; }
-        public string Extension { get; set; }
-        public string Name { get; set; }
-        public GameFileTreeNode Parent { get; set; }
-        public string Size { get; set; }
-        public GameFileTreeNode This { get; set; }
-        public EntryType Type { get; set; }
+        public FileEntryViewModel(IGameFile fileEntry)
+        {
+            _fileEntry = fileEntry;
+        }
 
-        #endregion Properties
+        public string Extension => _fileEntry.Extension.TrimStart('.');
+
+        public string Name => Path.GetFileName(_fileEntry.Name);
+        public string FullName => _fileEntry.Name;
+        public string Archive => _fileEntry.Archive.Name;
+        [Display(Name = "Hash")] public string HashStr => Key.ToString();
+
+        [Browsable(false)] public ulong Key => _fileEntry.Key;
+
+
+        public uint Size => _fileEntry.Size;
+
+
+        public IGameFile GetGameFile() => _fileEntry;
+
     }
 }

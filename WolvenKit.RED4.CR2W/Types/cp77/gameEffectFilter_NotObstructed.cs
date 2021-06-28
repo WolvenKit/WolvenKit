@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectFilter_NotObstructed : gameEffectObjectSingleFilter
 	{
-		[Ordinal(0)] [RED("forwardOffset")] public CFloat ForwardOffset { get; set; }
-		[Ordinal(1)] [RED("filterData")] public CHandle<physicsFilterData> FilterData { get; set; }
+		private CFloat _forwardOffset;
+		private CHandle<physicsFilterData> _filterData;
 
-		public gameEffectFilter_NotObstructed(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("forwardOffset")] 
+		public CFloat ForwardOffset
+		{
+			get => GetProperty(ref _forwardOffset);
+			set => SetProperty(ref _forwardOffset, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("filterData")] 
+		public CHandle<physicsFilterData> FilterData
+		{
+			get => GetProperty(ref _filterData);
+			set => SetProperty(ref _filterData, value);
+		}
+
+		public gameEffectFilter_NotObstructed(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

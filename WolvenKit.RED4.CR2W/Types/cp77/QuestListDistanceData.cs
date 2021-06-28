@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class QuestListDistanceData : IScriptable
 	{
-		[Ordinal(0)] [RED("objective")] public wCHandle<gameJournalQuestObjective> Objective { get; set; }
-		[Ordinal(1)] [RED("distance")] public CFloat Distance { get; set; }
+		private wCHandle<gameJournalQuestObjective> _objective;
+		private CFloat _distance;
 
-		public QuestListDistanceData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("objective")] 
+		public wCHandle<gameJournalQuestObjective> Objective
+		{
+			get => GetProperty(ref _objective);
+			set => SetProperty(ref _objective, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("distance")] 
+		public CFloat Distance
+		{
+			get => GetProperty(ref _distance);
+			set => SetProperty(ref _distance, value);
+		}
+
+		public QuestListDistanceData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

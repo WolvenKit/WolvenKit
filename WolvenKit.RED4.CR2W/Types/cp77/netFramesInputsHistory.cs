@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class netFramesInputsHistory : CVariable
 	{
-		[Ordinal(0)] [RED("frames")] public CArray<netFrameInputs> Frames { get; set; }
+		private CArray<netFrameInputs> _frames;
 
-		public netFramesInputsHistory(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("frames")] 
+		public CArray<netFrameInputs> Frames
+		{
+			get => GetProperty(ref _frames);
+			set => SetProperty(ref _frames, value);
+		}
+
+		public netFramesInputsHistory(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

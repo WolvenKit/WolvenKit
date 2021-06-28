@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ChargeEventsAbstract : WeaponEventsTransition
 	{
-		[Ordinal(0)] [RED("layerId")] public CUInt32 LayerId { get; set; }
+		private CUInt32 _layerId;
 
-		public ChargeEventsAbstract(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("layerId")] 
+		public CUInt32 LayerId
+		{
+			get => GetProperty(ref _layerId);
+			set => SetProperty(ref _layerId, value);
+		}
+
+		public ChargeEventsAbstract(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

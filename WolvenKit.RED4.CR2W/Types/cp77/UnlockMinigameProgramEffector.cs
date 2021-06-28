@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnlockMinigameProgramEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("minigameProgram")] public gameuiMinigameProgramData MinigameProgram { get; set; }
+		private gameuiMinigameProgramData _minigameProgram;
 
-		public UnlockMinigameProgramEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("minigameProgram")] 
+		public gameuiMinigameProgramData MinigameProgram
+		{
+			get => GetProperty(ref _minigameProgram);
+			set => SetProperty(ref _minigameProgram, value);
+		}
+
+		public UnlockMinigameProgramEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

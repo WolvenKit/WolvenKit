@@ -7,14 +7,70 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_TranslateBone : animAnimNode_Base
 	{
-		[Ordinal(11)] [RED("inputNode")] public animPoseLink InputNode { get; set; }
-		[Ordinal(12)] [RED("inputTranslation")] public animVectorLink InputTranslation { get; set; }
-		[Ordinal(13)] [RED("scale")] public Vector4 Scale { get; set; }
-		[Ordinal(14)] [RED("biasValue")] public Vector4 BiasValue { get; set; }
-		[Ordinal(15)] [RED("bone")] public animTransformIndex Bone { get; set; }
-		[Ordinal(16)] [RED("useIncrementalMode")] public CBool UseIncrementalMode { get; set; }
-		[Ordinal(17)] [RED("resetOnActivation")] public CBool ResetOnActivation { get; set; }
+		private animPoseLink _inputNode;
+		private animVectorLink _inputTranslation;
+		private Vector4 _scale;
+		private Vector4 _biasValue;
+		private animTransformIndex _bone;
+		private CBool _useIncrementalMode;
+		private CBool _resetOnActivation;
 
-		public animAnimNode_TranslateBone(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(11)] 
+		[RED("inputNode")] 
+		public animPoseLink InputNode
+		{
+			get => GetProperty(ref _inputNode);
+			set => SetProperty(ref _inputNode, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("inputTranslation")] 
+		public animVectorLink InputTranslation
+		{
+			get => GetProperty(ref _inputTranslation);
+			set => SetProperty(ref _inputTranslation, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("scale")] 
+		public Vector4 Scale
+		{
+			get => GetProperty(ref _scale);
+			set => SetProperty(ref _scale, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("biasValue")] 
+		public Vector4 BiasValue
+		{
+			get => GetProperty(ref _biasValue);
+			set => SetProperty(ref _biasValue, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("bone")] 
+		public animTransformIndex Bone
+		{
+			get => GetProperty(ref _bone);
+			set => SetProperty(ref _bone, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("useIncrementalMode")] 
+		public CBool UseIncrementalMode
+		{
+			get => GetProperty(ref _useIncrementalMode);
+			set => SetProperty(ref _useIncrementalMode, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("resetOnActivation")] 
+		public CBool ResetOnActivation
+		{
+			get => GetProperty(ref _resetOnActivation);
+			set => SetProperty(ref _resetOnActivation, value);
+		}
+
+		public animAnimNode_TranslateBone(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

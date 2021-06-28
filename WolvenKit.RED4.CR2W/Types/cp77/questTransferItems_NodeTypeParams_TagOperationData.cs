@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questTransferItems_NodeTypeParams_TagOperationData : CVariable
 	{
-		[Ordinal(0)] [RED("tagToTransfer")] public CName TagToTransfer { get; set; }
-		[Ordinal(1)] [RED("itemIDsToIgnore")] public CArray<TweakDBID> ItemIDsToIgnore { get; set; }
-		[Ordinal(2)] [RED("tagsToIgnore")] public CArray<CName> TagsToIgnore { get; set; }
+		private CName _tagToTransfer;
+		private CArray<TweakDBID> _itemIDsToIgnore;
+		private CArray<CName> _tagsToIgnore;
 
-		public questTransferItems_NodeTypeParams_TagOperationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("tagToTransfer")] 
+		public CName TagToTransfer
+		{
+			get => GetProperty(ref _tagToTransfer);
+			set => SetProperty(ref _tagToTransfer, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("itemIDsToIgnore")] 
+		public CArray<TweakDBID> ItemIDsToIgnore
+		{
+			get => GetProperty(ref _itemIDsToIgnore);
+			set => SetProperty(ref _itemIDsToIgnore, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("tagsToIgnore")] 
+		public CArray<CName> TagsToIgnore
+		{
+			get => GetProperty(ref _tagsToIgnore);
+			set => SetProperty(ref _tagsToIgnore, value);
+		}
+
+		public questTransferItems_NodeTypeParams_TagOperationData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

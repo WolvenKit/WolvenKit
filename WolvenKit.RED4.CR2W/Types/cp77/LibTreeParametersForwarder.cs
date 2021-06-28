@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LibTreeParametersForwarder : CVariable
 	{
-		[Ordinal(0)] [RED("overrides")] public CArray<CUInt32> Overrides { get; set; }
+		private CArray<CUInt32> _overrides;
 
-		public LibTreeParametersForwarder(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("overrides")] 
+		public CArray<CUInt32> Overrides
+		{
+			get => GetProperty(ref _overrides);
+			set => SetProperty(ref _overrides, value);
+		}
+
+		public LibTreeParametersForwarder(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

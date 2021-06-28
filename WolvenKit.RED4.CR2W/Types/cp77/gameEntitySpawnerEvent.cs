@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEntitySpawnerEvent : redEvent
 	{
-		[Ordinal(0)] [RED("spawnedEntityId")] public entEntityID SpawnedEntityId { get; set; }
-		[Ordinal(1)] [RED("eventType")] public CEnum<gameEntitySpawnerEventType> EventType { get; set; }
+		private entEntityID _spawnedEntityId;
+		private CEnum<gameEntitySpawnerEventType> _eventType;
 
-		public gameEntitySpawnerEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("spawnedEntityId")] 
+		public entEntityID SpawnedEntityId
+		{
+			get => GetProperty(ref _spawnedEntityId);
+			set => SetProperty(ref _spawnedEntityId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("eventType")] 
+		public CEnum<gameEntitySpawnerEventType> EventType
+		{
+			get => GetProperty(ref _eventType);
+			set => SetProperty(ref _eventType, value);
+		}
+
+		public gameEntitySpawnerEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

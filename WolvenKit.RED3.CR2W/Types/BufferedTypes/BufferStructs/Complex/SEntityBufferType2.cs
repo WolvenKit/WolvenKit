@@ -23,7 +23,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(2)] [REDBuffer] public CBufferUInt32<CVariantSizeTypeName> variables { get; set; }
 
 
-        public SEntityBufferType2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public SEntityBufferType2(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             componentName = new CName(cr2w, this, nameof(componentName)) {IsSerialized = true};
             sizeofdata = new CUInt32(cr2w, this, nameof(sizeofdata)) { IsSerialized = true };

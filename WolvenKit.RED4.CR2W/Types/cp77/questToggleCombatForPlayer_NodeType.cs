@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questToggleCombatForPlayer_NodeType : questIVehicleManagerNodeType
 	{
-		[Ordinal(0)] [RED("startCombat")] public CBool StartCombat { get; set; }
+		private CBool _startCombat;
 
-		public questToggleCombatForPlayer_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("startCombat")] 
+		public CBool StartCombat
+		{
+			get => GetProperty(ref _startCombat);
+			set => SetProperty(ref _startCombat, value);
+		}
+
+		public questToggleCombatForPlayer_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

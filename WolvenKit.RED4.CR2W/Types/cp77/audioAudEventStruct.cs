@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudEventStruct : CVariable
 	{
-		[Ordinal(0)] [RED("event")] public CName Event { get; set; }
+		private CName _event;
 
-		public audioAudEventStruct(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("event")] 
+		public CName Event
+		{
+			get => GetProperty(ref _event);
+			set => SetProperty(ref _event, value);
+		}
+
+		public audioAudEventStruct(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

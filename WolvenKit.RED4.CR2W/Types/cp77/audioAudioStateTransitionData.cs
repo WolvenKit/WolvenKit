@@ -7,14 +7,70 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudioStateTransitionData : CVariable
 	{
-		[Ordinal(0)] [RED("targetStateId")] public CUInt8 TargetStateId { get; set; }
-		[Ordinal(1)] [RED("allConditionsFulfilled")] public CBool AllConditionsFulfilled { get; set; }
-		[Ordinal(2)] [RED("transitionTime")] public CFloat TransitionTime { get; set; }
-		[Ordinal(3)] [RED("exitTime")] public CFloat ExitTime { get; set; }
-		[Ordinal(4)] [RED("exitSignal")] public CName ExitSignal { get; set; }
-		[Ordinal(5)] [RED("readVariableActions")] public CArray<audioAudioSceneVariableReadActionData> ReadVariableActions { get; set; }
-		[Ordinal(6)] [RED("conditions")] public CArray<CName> Conditions { get; set; }
+		private CUInt8 _targetStateId;
+		private CBool _allConditionsFulfilled;
+		private CFloat _transitionTime;
+		private CFloat _exitTime;
+		private CName _exitSignal;
+		private CArray<audioAudioSceneVariableReadActionData> _readVariableActions;
+		private CArray<CName> _conditions;
 
-		public audioAudioStateTransitionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("targetStateId")] 
+		public CUInt8 TargetStateId
+		{
+			get => GetProperty(ref _targetStateId);
+			set => SetProperty(ref _targetStateId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("allConditionsFulfilled")] 
+		public CBool AllConditionsFulfilled
+		{
+			get => GetProperty(ref _allConditionsFulfilled);
+			set => SetProperty(ref _allConditionsFulfilled, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("transitionTime")] 
+		public CFloat TransitionTime
+		{
+			get => GetProperty(ref _transitionTime);
+			set => SetProperty(ref _transitionTime, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("exitTime")] 
+		public CFloat ExitTime
+		{
+			get => GetProperty(ref _exitTime);
+			set => SetProperty(ref _exitTime, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("exitSignal")] 
+		public CName ExitSignal
+		{
+			get => GetProperty(ref _exitSignal);
+			set => SetProperty(ref _exitSignal, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("readVariableActions")] 
+		public CArray<audioAudioSceneVariableReadActionData> ReadVariableActions
+		{
+			get => GetProperty(ref _readVariableActions);
+			set => SetProperty(ref _readVariableActions, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("conditions")] 
+		public CArray<CName> Conditions
+		{
+			get => GetProperty(ref _conditions);
+			set => SetProperty(ref _conditions, value);
+		}
+
+		public audioAudioStateTransitionData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

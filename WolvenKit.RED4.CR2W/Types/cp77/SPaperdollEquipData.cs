@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SPaperdollEquipData : CVariable
 	{
-		[Ordinal(0)] [RED("equipArea")] public gameSEquipArea EquipArea { get; set; }
-		[Ordinal(1)] [RED("slotIndex")] public CInt32 SlotIndex { get; set; }
-		[Ordinal(2)] [RED("placementSlot")] public TweakDBID PlacementSlot { get; set; }
-		[Ordinal(3)] [RED("equipped")] public CBool Equipped { get; set; }
+		private gameSEquipArea _equipArea;
+		private CInt32 _slotIndex;
+		private TweakDBID _placementSlot;
+		private CBool _equipped;
 
-		public SPaperdollEquipData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("equipArea")] 
+		public gameSEquipArea EquipArea
+		{
+			get => GetProperty(ref _equipArea);
+			set => SetProperty(ref _equipArea, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("slotIndex")] 
+		public CInt32 SlotIndex
+		{
+			get => GetProperty(ref _slotIndex);
+			set => SetProperty(ref _slotIndex, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("placementSlot")] 
+		public TweakDBID PlacementSlot
+		{
+			get => GetProperty(ref _placementSlot);
+			set => SetProperty(ref _placementSlot, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("equipped")] 
+		public CBool Equipped
+		{
+			get => GetProperty(ref _equipped);
+			set => SetProperty(ref _equipped, value);
+		}
+
+		public SPaperdollEquipData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

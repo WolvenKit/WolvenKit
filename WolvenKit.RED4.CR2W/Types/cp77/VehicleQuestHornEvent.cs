@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleQuestHornEvent : redEvent
 	{
-		[Ordinal(0)] [RED("honkTime")] public CFloat HonkTime { get; set; }
+		private CFloat _honkTime;
 
-		public VehicleQuestHornEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("honkTime")] 
+		public CFloat HonkTime
+		{
+			get => GetProperty(ref _honkTime);
+			set => SetProperty(ref _honkTime, value);
+		}
+
+		public VehicleQuestHornEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

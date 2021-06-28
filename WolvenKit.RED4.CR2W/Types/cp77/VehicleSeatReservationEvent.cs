@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VehicleSeatReservationEvent : redEvent
 	{
-		[Ordinal(0)] [RED("slotID")] public CName SlotID { get; set; }
-		[Ordinal(1)] [RED("reserve")] public CBool Reserve { get; set; }
+		private CName _slotID;
+		private CBool _reserve;
 
-		public VehicleSeatReservationEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("slotID")] 
+		public CName SlotID
+		{
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("reserve")] 
+		public CBool Reserve
+		{
+			get => GetProperty(ref _reserve);
+			set => SetProperty(ref _reserve, value);
+		}
+
+		public VehicleSeatReservationEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

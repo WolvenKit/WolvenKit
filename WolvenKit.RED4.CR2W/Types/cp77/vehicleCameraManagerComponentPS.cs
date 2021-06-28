@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleCameraManagerComponentPS : gameComponentPS
 	{
-		[Ordinal(0)] [RED("perspective")] public CEnum<vehicleCameraPerspective> Perspective { get; set; }
+		private CEnum<vehicleCameraPerspective> _perspective;
 
-		public vehicleCameraManagerComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("perspective")] 
+		public CEnum<vehicleCameraPerspective> Perspective
+		{
+			get => GetProperty(ref _perspective);
+			set => SetProperty(ref _perspective, value);
+		}
+
+		public vehicleCameraManagerComponentPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

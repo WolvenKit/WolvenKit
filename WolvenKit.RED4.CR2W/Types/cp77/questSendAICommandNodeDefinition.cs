@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questSendAICommandNodeDefinition : questAICommandNodeBase
 	{
-		[Ordinal(2)] [RED("puppet")] public gameEntityReference Puppet { get; set; }
-		[Ordinal(3)] [RED("commandParams")] public CHandle<questAICommandParams> CommandParams { get; set; }
+		private gameEntityReference _puppet;
+		private CHandle<questAICommandParams> _commandParams;
 
-		public questSendAICommandNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("puppet")] 
+		public gameEntityReference Puppet
+		{
+			get => GetProperty(ref _puppet);
+			set => SetProperty(ref _puppet, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("commandParams")] 
+		public CHandle<questAICommandParams> CommandParams
+		{
+			get => GetProperty(ref _commandParams);
+			set => SetProperty(ref _commandParams, value);
+		}
+
+		public questSendAICommandNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

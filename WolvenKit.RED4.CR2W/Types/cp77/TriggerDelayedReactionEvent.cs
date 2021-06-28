@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TriggerDelayedReactionEvent : DelayedCrowdReactionEvent
 	{
-		[Ordinal(2)] [RED("initAnim")] public CBool InitAnim { get; set; }
-		[Ordinal(3)] [RED("behavior")] public CEnum<gamedataOutput> Behavior { get; set; }
+		private CBool _initAnim;
+		private CEnum<gamedataOutput> _behavior;
 
-		public TriggerDelayedReactionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("initAnim")] 
+		public CBool InitAnim
+		{
+			get => GetProperty(ref _initAnim);
+			set => SetProperty(ref _initAnim, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("behavior")] 
+		public CEnum<gamedataOutput> Behavior
+		{
+			get => GetProperty(ref _behavior);
+			set => SetProperty(ref _behavior, value);
+		}
+
+		public TriggerDelayedReactionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

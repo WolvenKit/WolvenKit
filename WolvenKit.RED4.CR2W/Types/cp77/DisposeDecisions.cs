@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DisposeDecisions : CarriedObject
 	{
-		public DisposeDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public DisposeDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVehicleGridDestruction : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("minGridCellRawChangeThreshold")] public CFloat MinGridCellRawChangeThreshold { get; set; }
-		[Ordinal(2)] [RED("specificGridCellImpactCooldown")] public CFloat SpecificGridCellImpactCooldown { get; set; }
-		[Ordinal(3)] [RED("minGridCellValueToPlayDetailedEvent")] public CFloat MinGridCellValueToPlayDetailedEvent { get; set; }
-		[Ordinal(4)] [RED("bottomLayer")] public audioVehicleDestructionGridLayer BottomLayer { get; set; }
-		[Ordinal(5)] [RED("upperLayer")] public audioVehicleDestructionGridLayer UpperLayer { get; set; }
+		private CFloat _minGridCellRawChangeThreshold;
+		private CFloat _specificGridCellImpactCooldown;
+		private CFloat _minGridCellValueToPlayDetailedEvent;
+		private audioVehicleDestructionGridLayer _bottomLayer;
+		private audioVehicleDestructionGridLayer _upperLayer;
 
-		public audioVehicleGridDestruction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("minGridCellRawChangeThreshold")] 
+		public CFloat MinGridCellRawChangeThreshold
+		{
+			get => GetProperty(ref _minGridCellRawChangeThreshold);
+			set => SetProperty(ref _minGridCellRawChangeThreshold, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("specificGridCellImpactCooldown")] 
+		public CFloat SpecificGridCellImpactCooldown
+		{
+			get => GetProperty(ref _specificGridCellImpactCooldown);
+			set => SetProperty(ref _specificGridCellImpactCooldown, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("minGridCellValueToPlayDetailedEvent")] 
+		public CFloat MinGridCellValueToPlayDetailedEvent
+		{
+			get => GetProperty(ref _minGridCellValueToPlayDetailedEvent);
+			set => SetProperty(ref _minGridCellValueToPlayDetailedEvent, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("bottomLayer")] 
+		public audioVehicleDestructionGridLayer BottomLayer
+		{
+			get => GetProperty(ref _bottomLayer);
+			set => SetProperty(ref _bottomLayer, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("upperLayer")] 
+		public audioVehicleDestructionGridLayer UpperLayer
+		{
+			get => GetProperty(ref _upperLayer);
+			set => SetProperty(ref _upperLayer, value);
+		}
+
+		public audioVehicleGridDestruction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

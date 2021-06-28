@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PingSquad : PuppetAction
 	{
-		[Ordinal(25)] [RED("shouldForward")] public CBool ShouldForward { get; set; }
+		private CBool _shouldForward;
 
-		public PingSquad(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("shouldForward")] 
+		public CBool ShouldForward
+		{
+			get => GetProperty(ref _shouldForward);
+			set => SetProperty(ref _shouldForward, value);
+		}
+
+		public PingSquad(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

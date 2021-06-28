@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class senseVisibleObjectTypeEvent : redEvent
 	{
-		[Ordinal(0)] [RED("type")] public CEnum<gamedataSenseObjectType> Type { get; set; }
+		private CEnum<gamedataSenseObjectType> _type;
 
-		public senseVisibleObjectTypeEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CEnum<gamedataSenseObjectType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		public senseVisibleObjectTypeEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

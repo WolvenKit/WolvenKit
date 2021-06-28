@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animPlaneUncompressedMotionExtraction : animIMotionExtraction
 	{
-		[Ordinal(0)] [RED("frames")] public CArray<Vector3> Frames { get; set; }
-		[Ordinal(1)] [RED("duration")] public CFloat Duration { get; set; }
+		private CArray<Vector3> _frames;
+		private CFloat _duration;
 
-		public animPlaneUncompressedMotionExtraction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("frames")] 
+		public CArray<Vector3> Frames
+		{
+			get => GetProperty(ref _frames);
+			set => SetProperty(ref _frames, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
+		}
+
+		public animPlaneUncompressedMotionExtraction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CyberwareDisplayWrapper : IScriptable
 	{
-		[Ordinal(0)] [RED("controller")] public CHandle<InventoryItemDisplayController> Controller { get; set; }
+		private CHandle<InventoryItemDisplayController> _controller;
 
-		public CyberwareDisplayWrapper(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("controller")] 
+		public CHandle<InventoryItemDisplayController> Controller
+		{
+			get => GetProperty(ref _controller);
+			set => SetProperty(ref _controller, value);
+		}
+
+		public CyberwareDisplayWrapper(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

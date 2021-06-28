@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MenuItemDimRequest : redEvent
 	{
-		[Ordinal(0)] [RED("dim")] public CBool Dim { get; set; }
+		private CBool _dim;
 
-		public MenuItemDimRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("dim")] 
+		public CBool Dim
+		{
+			get => GetProperty(ref _dim);
+			set => SetProperty(ref _dim, value);
+		}
+
+		public MenuItemDimRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

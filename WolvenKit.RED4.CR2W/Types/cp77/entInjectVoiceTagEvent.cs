@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entInjectVoiceTagEvent : redEvent
 	{
-		[Ordinal(0)] [RED("voiceTagName")] public CName VoiceTagName { get; set; }
-		[Ordinal(1)] [RED("forceInjection")] public CBool ForceInjection { get; set; }
+		private CName _voiceTagName;
+		private CBool _forceInjection;
 
-		public entInjectVoiceTagEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("voiceTagName")] 
+		public CName VoiceTagName
+		{
+			get => GetProperty(ref _voiceTagName);
+			set => SetProperty(ref _voiceTagName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("forceInjection")] 
+		public CBool ForceInjection
+		{
+			get => GetProperty(ref _forceInjection);
+			set => SetProperty(ref _forceInjection, value);
+		}
+
+		public entInjectVoiceTagEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

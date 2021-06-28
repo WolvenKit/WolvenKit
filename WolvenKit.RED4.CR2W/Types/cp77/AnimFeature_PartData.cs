@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimFeature_PartData : animAnimFeatureMarkUnstable
 	{
-		[Ordinal(0)] [RED("state")] public CInt32 State { get; set; }
-		[Ordinal(1)] [RED("duration")] public CFloat Duration { get; set; }
+		private CInt32 _state;
+		private CFloat _duration;
 
-		public AnimFeature_PartData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CInt32 State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
+		}
+
+		public AnimFeature_PartData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

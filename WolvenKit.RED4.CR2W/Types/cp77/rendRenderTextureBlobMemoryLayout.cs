@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class rendRenderTextureBlobMemoryLayout : CVariable
 	{
-		[Ordinal(0)] [RED("rowPitch")] public CUInt32 RowPitch { get; set; }
-		[Ordinal(1)] [RED("slicePitch")] public CUInt32 SlicePitch { get; set; }
+		private CUInt32 _rowPitch;
+		private CUInt32 _slicePitch;
 
-		public rendRenderTextureBlobMemoryLayout(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rowPitch")] 
+		public CUInt32 RowPitch
+		{
+			get => GetProperty(ref _rowPitch);
+			set => SetProperty(ref _rowPitch, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("slicePitch")] 
+		public CUInt32 SlicePitch
+		{
+			get => GetProperty(ref _slicePitch);
+			set => SetProperty(ref _slicePitch, value);
+		}
+
+		public rendRenderTextureBlobMemoryLayout(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

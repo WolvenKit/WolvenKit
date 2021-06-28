@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataStatsArray_Record : gamedataTweakDBRecord
 	{
-		public gamedataStatsArray_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gamedataStatsArray_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

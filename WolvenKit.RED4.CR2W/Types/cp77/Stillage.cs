@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Stillage : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("collider")] public CHandle<entIPlacedComponent> Collider { get; set; }
+		private CHandle<entIPlacedComponent> _collider;
 
-		public Stillage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(96)] 
+		[RED("collider")] 
+		public CHandle<entIPlacedComponent> Collider
+		{
+			get => GetProperty(ref _collider);
+			set => SetProperty(ref _collider, value);
+		}
+
+		public Stillage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EmitterGroupParams : CVariable
 	{
-		[Ordinal(0)] [RED("group")] public CEnum<EEmitterGroup> Group { get; set; }
-		[Ordinal(1)] [RED("emissionScale")] public CFloat EmissionScale { get; set; }
-		[Ordinal(2)] [RED("opacityScale")] public CFloat OpacityScale { get; set; }
+		private CEnum<EEmitterGroup> _group;
+		private CFloat _emissionScale;
+		private CFloat _opacityScale;
 
-		public EmitterGroupParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("group")] 
+		public CEnum<EEmitterGroup> Group
+		{
+			get => GetProperty(ref _group);
+			set => SetProperty(ref _group, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("emissionScale")] 
+		public CFloat EmissionScale
+		{
+			get => GetProperty(ref _emissionScale);
+			set => SetProperty(ref _emissionScale, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("opacityScale")] 
+		public CFloat OpacityScale
+		{
+			get => GetProperty(ref _opacityScale);
+			set => SetProperty(ref _opacityScale, value);
+		}
+
+		public EmitterGroupParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

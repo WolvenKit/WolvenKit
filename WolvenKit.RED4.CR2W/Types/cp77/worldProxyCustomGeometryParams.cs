@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldProxyCustomGeometryParams : CVariable
 	{
-		[Ordinal(0)] [RED("useLimiterHelper")] public CBool UseLimiterHelper { get; set; }
-		[Ordinal(1)] [RED("uvType")] public CEnum<worldProxyMeshUVType> UvType { get; set; }
+		private CBool _useLimiterHelper;
+		private CEnum<worldProxyMeshUVType> _uvType;
 
-		public worldProxyCustomGeometryParams(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("useLimiterHelper")] 
+		public CBool UseLimiterHelper
+		{
+			get => GetProperty(ref _useLimiterHelper);
+			set => SetProperty(ref _useLimiterHelper, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("uvType")] 
+		public CEnum<worldProxyMeshUVType> UvType
+		{
+			get => GetProperty(ref _uvType);
+			set => SetProperty(ref _uvType, value);
+		}
+
+		public worldProxyCustomGeometryParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

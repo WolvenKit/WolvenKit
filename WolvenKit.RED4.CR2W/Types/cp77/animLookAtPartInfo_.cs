@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animLookAtPartInfo_ : CVariable
 	{
-		[Ordinal(0)] [RED("partName")] public CName PartName { get; set; }
-		[Ordinal(1)] [RED("defaultPositionBoneName")] public CName DefaultPositionBoneName { get; set; }
+		private CName _partName;
+		private CName _defaultPositionBoneName;
 
-		public animLookAtPartInfo_(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("partName")] 
+		public CName PartName
+		{
+			get => GetProperty(ref _partName);
+			set => SetProperty(ref _partName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("defaultPositionBoneName")] 
+		public CName DefaultPositionBoneName
+		{
+			get => GetProperty(ref _defaultPositionBoneName);
+			set => SetProperty(ref _defaultPositionBoneName, value);
+		}
+
+		public animLookAtPartInfo_(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

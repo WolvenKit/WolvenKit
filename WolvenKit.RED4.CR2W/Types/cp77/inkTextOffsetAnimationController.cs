@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkTextOffsetAnimationController : inkTextAnimationController
 	{
-		[Ordinal(8)] [RED("timeToSkip")] public CFloat TimeToSkip { get; set; }
+		private CFloat _timeToSkip;
 
-		public inkTextOffsetAnimationController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(8)] 
+		[RED("timeToSkip")] 
+		public CFloat TimeToSkip
+		{
+			get => GetProperty(ref _timeToSkip);
+			set => SetProperty(ref _timeToSkip, value);
+		}
+
+		public inkTextOffsetAnimationController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

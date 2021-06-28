@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameinteractionsCSharedDataDefinition : CVariable
 	{
-		[Ordinal(0)] [RED("defaultChoices")] public CArray<CString> DefaultChoices { get; set; }
-		[Ordinal(1)] [RED("visualizer")] public CHandle<gameuiIChoiceVisualizer> Visualizer { get; set; }
+		private CArray<CString> _defaultChoices;
+		private CHandle<gameuiIChoiceVisualizer> _visualizer;
 
-		public gameinteractionsCSharedDataDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("defaultChoices")] 
+		public CArray<CString> DefaultChoices
+		{
+			get => GetProperty(ref _defaultChoices);
+			set => SetProperty(ref _defaultChoices, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("visualizer")] 
+		public CHandle<gameuiIChoiceVisualizer> Visualizer
+		{
+			get => GetProperty(ref _visualizer);
+			set => SetProperty(ref _visualizer, value);
+		}
+
+		public gameinteractionsCSharedDataDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

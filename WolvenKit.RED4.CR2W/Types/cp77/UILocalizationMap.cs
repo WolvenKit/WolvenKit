@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UILocalizationMap : IScriptable
 	{
-		[Ordinal(0)] [RED("map")] public CArray<UILocRecord> Map { get; set; }
+		private CArray<UILocRecord> _map;
 
-		public UILocalizationMap(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("map")] 
+		public CArray<UILocRecord> Map
+		{
+			get => GetProperty(ref _map);
+			set => SetProperty(ref _map, value);
+		}
+
+		public UILocalizationMap(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

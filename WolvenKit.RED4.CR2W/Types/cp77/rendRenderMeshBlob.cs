@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class rendRenderMeshBlob : IRenderResourceBlob
 	{
-		[Ordinal(0)] [RED("header")] public rendRenderMeshBlobHeader Header { get; set; }
-		[Ordinal(1)] [RED("renderBuffer")] public DataBuffer RenderBuffer { get; set; }
+		private rendRenderMeshBlobHeader _header;
+		private DataBuffer _renderBuffer;
 
-		public rendRenderMeshBlob(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("header")] 
+		public rendRenderMeshBlobHeader Header
+		{
+			get => GetProperty(ref _header);
+			set => SetProperty(ref _header, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("renderBuffer")] 
+		public DataBuffer RenderBuffer
+		{
+			get => GetProperty(ref _renderBuffer);
+			set => SetProperty(ref _renderBuffer, value);
+		}
+
+		public rendRenderMeshBlob(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

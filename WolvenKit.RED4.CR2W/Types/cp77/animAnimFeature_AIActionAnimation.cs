@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_AIActionAnimation : animAnimFeature_AIAction
 	{
-		[Ordinal(4)] [RED("animFeatureName")] public CName AnimFeatureName { get; set; }
+		private CName _animFeatureName;
 
-		public animAnimFeature_AIActionAnimation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("animFeatureName")] 
+		public CName AnimFeatureName
+		{
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
+		}
+
+		public animAnimFeature_AIActionAnimation(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

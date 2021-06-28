@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TagObjectEvent : redEvent
 	{
-		[Ordinal(0)] [RED("isTagged")] public CBool IsTagged { get; set; }
+		private CBool _isTagged;
 
-		public TagObjectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isTagged")] 
+		public CBool IsTagged
+		{
+			get => GetProperty(ref _isTagged);
+			set => SetProperty(ref _isTagged, value);
+		}
+
+		public TagObjectEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

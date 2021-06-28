@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FilterNPCDodgeOpportunity : gameEffectObjectSingleFilter_Scripted
 	{
-		[Ordinal(0)] [RED("applyToTechWeapons")] public CBool ApplyToTechWeapons { get; set; }
-		[Ordinal(1)] [RED("doDodgingTargetsGetFilteredOut")] public CBool DoDodgingTargetsGetFilteredOut { get; set; }
+		private CBool _applyToTechWeapons;
+		private CBool _doDodgingTargetsGetFilteredOut;
 
-		public FilterNPCDodgeOpportunity(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("applyToTechWeapons")] 
+		public CBool ApplyToTechWeapons
+		{
+			get => GetProperty(ref _applyToTechWeapons);
+			set => SetProperty(ref _applyToTechWeapons, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("doDodgingTargetsGetFilteredOut")] 
+		public CBool DoDodgingTargetsGetFilteredOut
+		{
+			get => GetProperty(ref _doDodgingTargetsGetFilteredOut);
+			set => SetProperty(ref _doDodgingTargetsGetFilteredOut, value);
+		}
+
+		public FilterNPCDodgeOpportunity(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

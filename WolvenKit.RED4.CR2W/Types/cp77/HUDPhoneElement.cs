@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HUDPhoneElement : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("RootWidget")] public wCHandle<inkWidget> RootWidget { get; set; }
+		private wCHandle<inkWidget> _rootWidget;
 
-		public HUDPhoneElement(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("RootWidget")] 
+		public wCHandle<inkWidget> RootWidget
+		{
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
+		}
+
+		public HUDPhoneElement(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

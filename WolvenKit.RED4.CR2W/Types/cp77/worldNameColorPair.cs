@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldNameColorPair : CVariable
 	{
-		[Ordinal(0)] [RED("name")] public CString Name { get; set; }
-		[Ordinal(1)] [RED("color")] public CColor Color { get; set; }
+		private CString _name;
+		private CColor _color;
 
-		public worldNameColorPair(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CString Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("color")] 
+		public CColor Color
+		{
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
+		}
+
+		public worldNameColorPair(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

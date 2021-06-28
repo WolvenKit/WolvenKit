@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PerksMenuAttributeItemClicked : redEvent
 	{
-		[Ordinal(0)] [RED("widget")] public wCHandle<inkWidget> Widget { get; set; }
-		[Ordinal(1)] [RED("attributeType")] public CEnum<PerkMenuAttribute> AttributeType { get; set; }
-		[Ordinal(2)] [RED("attributeData")] public CHandle<AttributeData> AttributeData { get; set; }
+		private wCHandle<inkWidget> _widget;
+		private CEnum<PerkMenuAttribute> _attributeType;
+		private CHandle<AttributeData> _attributeData;
 
-		public PerksMenuAttributeItemClicked(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("widget")] 
+		public wCHandle<inkWidget> Widget
+		{
+			get => GetProperty(ref _widget);
+			set => SetProperty(ref _widget, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("attributeType")] 
+		public CEnum<PerkMenuAttribute> AttributeType
+		{
+			get => GetProperty(ref _attributeType);
+			set => SetProperty(ref _attributeType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("attributeData")] 
+		public CHandle<AttributeData> AttributeData
+		{
+			get => GetProperty(ref _attributeData);
+			set => SetProperty(ref _attributeData, value);
+		}
+
+		public PerksMenuAttributeItemClicked(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

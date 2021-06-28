@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CanDoReactionAction : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("reactionName")] public CName ReactionName { get; set; }
+		private CName _reactionName;
 
-		public CanDoReactionAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("reactionName")] 
+		public CName ReactionName
+		{
+			get => GetProperty(ref _reactionName);
+			set => SetProperty(ref _reactionName, value);
+		}
+
+		public CanDoReactionAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class sharedMenuCollection : CVariable
 	{
-		[Ordinal(0)] [RED("items")] public CArray<sharedMenuItem> Items { get; set; }
+		private CArray<sharedMenuItem> _items;
 
-		public sharedMenuCollection(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("items")] 
+		public CArray<sharedMenuItem> Items
+		{
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
+		}
+
+		public sharedMenuCollection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

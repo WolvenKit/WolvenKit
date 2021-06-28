@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendorShoppingCartItem : CVariable
 	{
-		[Ordinal(0)] [RED("itemData")] public wCHandle<gameItemData> ItemData { get; set; }
-		[Ordinal(1)] [RED("amount")] public CInt32 Amount { get; set; }
+		private wCHandle<gameItemData> _itemData;
+		private CInt32 _amount;
 
-		public VendorShoppingCartItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemData")] 
+		public wCHandle<gameItemData> ItemData
+		{
+			get => GetProperty(ref _itemData);
+			set => SetProperty(ref _itemData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("amount")] 
+		public CInt32 Amount
+		{
+			get => GetProperty(ref _amount);
+			set => SetProperty(ref _amount, value);
+		}
+
+		public VendorShoppingCartItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

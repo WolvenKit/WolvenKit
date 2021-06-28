@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiPhotoModeUIHideForScreenshotEvent : redEvent
 	{
-		[Ordinal(0)] [RED("hide")] public CBool Hide { get; set; }
+		private CBool _hide;
 
-		public gameuiPhotoModeUIHideForScreenshotEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hide")] 
+		public CBool Hide
+		{
+			get => GetProperty(ref _hide);
+			set => SetProperty(ref _hide, value);
+		}
+
+		public gameuiPhotoModeUIHideForScreenshotEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

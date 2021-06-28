@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeaponMalfunctionHudEffector : gameEffector
 	{
-		[Ordinal(0)] [RED("bb")] public CHandle<gameIBlackboard> Bb { get; set; }
+		private CHandle<gameIBlackboard> _bb;
 
-		public WeaponMalfunctionHudEffector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("bb")] 
+		public CHandle<gameIBlackboard> Bb
+		{
+			get => GetProperty(ref _bb);
+			set => SetProperty(ref _bb, value);
+		}
+
+		public WeaponMalfunctionHudEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

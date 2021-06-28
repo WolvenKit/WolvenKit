@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DamageStatListener : gameScriptStatsListener
 	{
-		[Ordinal(0)] [RED("weapon")] public wCHandle<gameweaponObject> Weapon { get; set; }
-		[Ordinal(1)] [RED("updateEvt")] public CHandle<UpdateDamageChangeEvent> UpdateEvt { get; set; }
+		private wCHandle<gameweaponObject> _weapon;
+		private CHandle<UpdateDamageChangeEvent> _updateEvt;
 
-		public DamageStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("weapon")] 
+		public wCHandle<gameweaponObject> Weapon
+		{
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("updateEvt")] 
+		public CHandle<UpdateDamageChangeEvent> UpdateEvt
+		{
+			get => GetProperty(ref _updateEvt);
+			set => SetProperty(ref _updateEvt, value);
+		}
+
+		public DamageStatListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

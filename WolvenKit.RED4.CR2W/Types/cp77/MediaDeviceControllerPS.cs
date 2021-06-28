@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MediaDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(103)] [RED("previousStation")] public CInt32 PreviousStation { get; set; }
-		[Ordinal(104)] [RED("activeChannelName")] public CString ActiveChannelName { get; set; }
-		[Ordinal(105)] [RED("dataInitialized")] public CBool DataInitialized { get; set; }
-		[Ordinal(106)] [RED("amountOfStations")] public CInt32 AmountOfStations { get; set; }
-		[Ordinal(107)] [RED("activeStation")] public CInt32 ActiveStation { get; set; }
+		private CInt32 _previousStation;
+		private CString _activeChannelName;
+		private CBool _dataInitialized;
+		private CInt32 _amountOfStations;
+		private CInt32 _activeStation;
 
-		public MediaDeviceControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(103)] 
+		[RED("previousStation")] 
+		public CInt32 PreviousStation
+		{
+			get => GetProperty(ref _previousStation);
+			set => SetProperty(ref _previousStation, value);
+		}
+
+		[Ordinal(104)] 
+		[RED("activeChannelName")] 
+		public CString ActiveChannelName
+		{
+			get => GetProperty(ref _activeChannelName);
+			set => SetProperty(ref _activeChannelName, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("dataInitialized")] 
+		public CBool DataInitialized
+		{
+			get => GetProperty(ref _dataInitialized);
+			set => SetProperty(ref _dataInitialized, value);
+		}
+
+		[Ordinal(106)] 
+		[RED("amountOfStations")] 
+		public CInt32 AmountOfStations
+		{
+			get => GetProperty(ref _amountOfStations);
+			set => SetProperty(ref _amountOfStations, value);
+		}
+
+		[Ordinal(107)] 
+		[RED("activeStation")] 
+		public CInt32 ActiveStation
+		{
+			get => GetProperty(ref _activeStation);
+			set => SetProperty(ref _activeStation, value);
+		}
+
+		public MediaDeviceControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

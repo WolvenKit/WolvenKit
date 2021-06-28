@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using WolvenKit.Common.Exceptions;
 using WolvenKit.RED3.CR2W;
 using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.Nvidia.HairWorks;
@@ -46,7 +47,7 @@ namespace WolvenKit
 
             public static XDocument ConvertToApexXml(CR2WFile ApexChunk)
             {
-                if (ApexChunk.Chunks[0].REDType == "CFurMeshResource" && ApexChunk.Chunks[0].data is CFurMeshResource cFurMesh)
+                if (ApexChunk.Chunks[0].REDType == "CFurMeshResource" && ApexChunk.Chunks[0].Data is CFurMeshResource cFurMesh)
                 {
                     var root = new XElement("root", "");
                     // NvParameters

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workWorkspotFinishedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("nodeId")] public worldGlobalNodeID NodeId { get; set; }
-		[Ordinal(1)] [RED("tags")] public CArray<CName> Tags { get; set; }
-		[Ordinal(2)] [RED("statusEffectID")] public TweakDBID StatusEffectID { get; set; }
+		private worldGlobalNodeID _nodeId;
+		private CArray<CName> _tags;
+		private TweakDBID _statusEffectID;
 
-		public workWorkspotFinishedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("nodeId")] 
+		public worldGlobalNodeID NodeId
+		{
+			get => GetProperty(ref _nodeId);
+			set => SetProperty(ref _nodeId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("tags")] 
+		public CArray<CName> Tags
+		{
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("statusEffectID")] 
+		public TweakDBID StatusEffectID
+		{
+			get => GetProperty(ref _statusEffectID);
+			set => SetProperty(ref _statusEffectID, value);
+		}
+
+		public workWorkspotFinishedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

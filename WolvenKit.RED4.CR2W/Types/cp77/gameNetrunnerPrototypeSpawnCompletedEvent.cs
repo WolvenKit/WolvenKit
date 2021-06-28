@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameNetrunnerPrototypeSpawnCompletedEvent : redEvent
 	{
-		[Ordinal(0)] [RED("spawnedObject")] public wCHandle<gameObject> SpawnedObject { get; set; }
+		private wCHandle<gameObject> _spawnedObject;
 
-		public gameNetrunnerPrototypeSpawnCompletedEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("spawnedObject")] 
+		public wCHandle<gameObject> SpawnedObject
+		{
+			get => GetProperty(ref _spawnedObject);
+			set => SetProperty(ref _spawnedObject, value);
+		}
+
+		public gameNetrunnerPrototypeSpawnCompletedEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

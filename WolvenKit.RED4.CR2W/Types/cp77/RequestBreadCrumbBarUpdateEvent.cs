@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RequestBreadCrumbBarUpdateEvent : redEvent
 	{
-		[Ordinal(0)] [RED("requester")] public gamePersistentID Requester { get; set; }
-		[Ordinal(1)] [RED("breadCrumbData")] public SBreadCrumbUpdateData BreadCrumbData { get; set; }
+		private gamePersistentID _requester;
+		private SBreadCrumbUpdateData _breadCrumbData;
 
-		public RequestBreadCrumbBarUpdateEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("requester")] 
+		public gamePersistentID Requester
+		{
+			get => GetProperty(ref _requester);
+			set => SetProperty(ref _requester, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("breadCrumbData")] 
+		public SBreadCrumbUpdateData BreadCrumbData
+		{
+			get => GetProperty(ref _breadCrumbData);
+			set => SetProperty(ref _breadCrumbData, value);
+		}
+
+		public RequestBreadCrumbBarUpdateEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

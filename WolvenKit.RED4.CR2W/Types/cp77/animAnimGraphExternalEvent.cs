@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimGraphExternalEvent : ISerializable
 	{
-		[Ordinal(0)] [RED("eventName")] public CName EventName { get; set; }
+		private CName _eventName;
 
-		public animAnimGraphExternalEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("eventName")] 
+		public CName EventName
+		{
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
+		}
+
+		public animAnimGraphExternalEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

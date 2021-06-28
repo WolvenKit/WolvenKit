@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectTrack : effectTrackBase
 	{
-		[Ordinal(0)] [RED("items")] public CArray<CHandle<effectTrackItem>> Items { get; set; }
+		private CArray<CHandle<effectTrackItem>> _items;
 
-		public effectTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("items")] 
+		public CArray<CHandle<effectTrackItem>> Items
+		{
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
+		}
+
+		public effectTrack(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

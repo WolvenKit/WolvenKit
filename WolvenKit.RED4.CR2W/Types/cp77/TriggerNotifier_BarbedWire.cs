@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TriggerNotifier_BarbedWire : entTriggerNotifier_Script
 	{
-		[Ordinal(3)] [RED("attackType")] public TweakDBID AttackType { get; set; }
+		private TweakDBID _attackType;
 
-		public TriggerNotifier_BarbedWire(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("attackType")] 
+		public TweakDBID AttackType
+		{
+			get => GetProperty(ref _attackType);
+			set => SetProperty(ref _attackType, value);
+		}
+
+		public TriggerNotifier_BarbedWire(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

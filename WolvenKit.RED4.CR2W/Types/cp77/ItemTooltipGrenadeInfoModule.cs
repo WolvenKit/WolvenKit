@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemTooltipGrenadeInfoModule : ItemTooltipModuleController
 	{
-		[Ordinal(2)] [RED("headerText")] public inkTextWidgetReference HeaderText { get; set; }
-		[Ordinal(3)] [RED("totalDamageText")] public inkTextWidgetReference TotalDamageText { get; set; }
-		[Ordinal(4)] [RED("durationText")] public inkTextWidgetReference DurationText { get; set; }
-		[Ordinal(5)] [RED("rangeText")] public inkTextWidgetReference RangeText { get; set; }
-		[Ordinal(6)] [RED("deliveryIcon")] public inkImageWidgetReference DeliveryIcon { get; set; }
-		[Ordinal(7)] [RED("deliveryText")] public inkTextWidgetReference DeliveryText { get; set; }
+		private inkTextWidgetReference _headerText;
+		private inkTextWidgetReference _totalDamageText;
+		private inkTextWidgetReference _durationText;
+		private inkTextWidgetReference _rangeText;
+		private inkImageWidgetReference _deliveryIcon;
+		private inkTextWidgetReference _deliveryText;
 
-		public ItemTooltipGrenadeInfoModule(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("headerText")] 
+		public inkTextWidgetReference HeaderText
+		{
+			get => GetProperty(ref _headerText);
+			set => SetProperty(ref _headerText, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("totalDamageText")] 
+		public inkTextWidgetReference TotalDamageText
+		{
+			get => GetProperty(ref _totalDamageText);
+			set => SetProperty(ref _totalDamageText, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("durationText")] 
+		public inkTextWidgetReference DurationText
+		{
+			get => GetProperty(ref _durationText);
+			set => SetProperty(ref _durationText, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("rangeText")] 
+		public inkTextWidgetReference RangeText
+		{
+			get => GetProperty(ref _rangeText);
+			set => SetProperty(ref _rangeText, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("deliveryIcon")] 
+		public inkImageWidgetReference DeliveryIcon
+		{
+			get => GetProperty(ref _deliveryIcon);
+			set => SetProperty(ref _deliveryIcon, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("deliveryText")] 
+		public inkTextWidgetReference DeliveryText
+		{
+			get => GetProperty(ref _deliveryText);
+			set => SetProperty(ref _deliveryText, value);
+		}
+
+		public ItemTooltipGrenadeInfoModule(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

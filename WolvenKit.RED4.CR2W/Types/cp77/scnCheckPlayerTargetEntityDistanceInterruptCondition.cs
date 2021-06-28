@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnCheckPlayerTargetEntityDistanceInterruptCondition : scnIInterruptCondition
 	{
-		[Ordinal(0)] [RED("params")] public scnCheckPlayerTargetEntityDistanceInterruptConditionParams Params { get; set; }
+		private scnCheckPlayerTargetEntityDistanceInterruptConditionParams _params;
 
-		public scnCheckPlayerTargetEntityDistanceInterruptCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("params")] 
+		public scnCheckPlayerTargetEntityDistanceInterruptConditionParams Params
+		{
+			get => GetProperty(ref _params);
+			set => SetProperty(ref _params, value);
+		}
+
+		public scnCheckPlayerTargetEntityDistanceInterruptCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

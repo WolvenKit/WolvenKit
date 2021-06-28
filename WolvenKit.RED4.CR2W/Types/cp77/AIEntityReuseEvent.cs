@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIEntityReuseEvent : AIAIEvent
 	{
-		[Ordinal(2)] [RED("destination")] public worldGlobalNodeID Destination { get; set; }
+		private worldGlobalNodeID _destination;
 
-		public AIEntityReuseEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("destination")] 
+		public worldGlobalNodeID Destination
+		{
+			get => GetProperty(ref _destination);
+			set => SetProperty(ref _destination, value);
+		}
+
+		public AIEntityReuseEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

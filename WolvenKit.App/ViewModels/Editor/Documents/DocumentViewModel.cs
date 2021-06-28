@@ -8,17 +8,24 @@ using System.Windows.Media;
 using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
+using CP77.CR2W;
 using HandyControl.Controls;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.CR2W.SRT;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED3.CR2W.SRT;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Shell;
+using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -38,15 +45,20 @@ namespace WolvenKit.ViewModels.Editor
         private ChunkViewModel _selectedChunk;
         private string _textContent = string.Empty;
         private IWorkSpaceViewModel _workSpaceViewModel = null;
-        private FileSystemInfoModel fileinfo;
+        private FileModel fileinfo;
+
+        private readonly IGameControllerFactory _gameControllerFactory;
+        private readonly IProjectManager _projectManager;
+        private readonly Red4ParserService _wolvenkitFileService;
+        private readonly ModTools _modTools;
+
 
         #endregion fields
 
         #region ctors
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel,
-                                FileSystemInfoModel model,
-                                bool isExistingInFileSystem)
+        public DocumentViewModel(
+            IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem)
             : this(workSpaceViewModel)
         {
             fileinfo = model;
@@ -54,34 +66,58 @@ namespace WolvenKit.ViewModels.Editor
 
             try
             {
-                Title = System.IO.Path.GetFileName(fileinfo.FullName);
+                Title = Path.GetFileName(fileinfo.FullName);
+                Header = Title;
             }
-            catch { }
+            catch
+            {
+
+            }
 
             ContentId = fileinfo.FullName;
             _IsExistingInFileSystem = isExistingInFileSystem;
         }
 
-        public DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel)
+        private DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel)
             : this()
         {
             _workSpaceViewModel = workSpaceViewModel;
         }
 
-        public DocumentViewModel()
+        private DocumentViewModel()
         {
+            State = DockState.Document;
+            
+
+            _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
+            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
+            _modTools = ServiceLocator.Default.ResolveType<ModTools>();
+            _wolvenkitFileService = ServiceLocator.Default.ResolveType<Red4ParserService>();
+
             IsDirty = false;
 
-            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor, CanOpenEditor);
-            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer, CanOpenBuffer);
-            OpenImportCommand = new RelayCommand(ExecuteOpenImport, CanOpenImport);
+            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
+            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
+            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
 
-
+            OpenImportCommand = new RelayCommand(ExecuteViewImports, CanViewImports);
         }
 
         #endregion ctors
 
         #region commands
+
+        public ICommand ViewImportsCommand { get; private set; }
+        private bool CanViewImports() => true;
+        private void ExecuteViewImports()
+        {
+            // TODO: Handle command logic here
+        }
+
+        private bool CanOpenBuffer() => true;
+
+        private bool CanOpenEditor() => true;
+
 
         public ICommand OpenBufferCommand { get; private set; }
         public ICommand OpenEditorCommand { get; private set; }
@@ -115,11 +151,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        private bool CanOpenBuffer() => true;
-
-        private bool CanOpenEditor() => true;
-
-        private bool CanOpenImport() => true;
+        
 
         private void ExecuteOpenBuffer()
         {
@@ -131,9 +163,22 @@ namespace WolvenKit.ViewModels.Editor
             // TODO: Handle command logic here
         }
 
-        private void ExecuteOpenImport()
+        private void ExecuteOpenImport(ICR2WImport input)
         {
-            // TODO: Handle command logic here
+            var depotpath = input.DepotPathStr;
+            var key = FNV1A64HashAlgorithm.HashString(depotpath);
+            var foundItems = new List<IGameFile>();
+            foreach (var manager in _gameControllerFactory.GetController().GetArchiveManagers(false)
+                .Where(manager => manager.Items.ContainsKey(key)))
+            {
+                foundItems.AddRange(manager.Items[key]);
+            }
+
+            var itemToImport = foundItems.FirstOrDefault();
+            if (itemToImport != null)
+            {
+                _gameControllerFactory.GetController().AddToMod(itemToImport);
+            }
         }
 
         #endregion commands
@@ -253,7 +298,22 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        
+        private ICR2WImport _selectedImport;
+        public ICR2WImport SelectedImport
+        {
+            get => _selectedImport;
+            set
+            {
+                if (_selectedImport != value)
+                {
+                    var oldValue = _selectedImport;
+                    _selectedImport = value;
+                    RaisePropertyChanged(() => SelectedImport, oldValue, value);
+                }
+            }
+        }
+
+
 
         private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file) => new();
 
@@ -283,31 +343,30 @@ namespace WolvenKit.ViewModels.Editor
                 // FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
                 var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                logger.LogString("Opening file: " + path + "...");
+                logger.Log("Opening file: " + path + "...");
 
                 //TODO
-                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    EFileReadErrorCodes errorcode;
                     using var reader = new BinaryReader(stream);
 
                     if (Path.GetExtension(path) == ".srt")
                     {
-                        File = new Srtfile()
-                        {
-                            FileName = path
-                        };
-                        errorcode = await File.Read(reader);
+                        //File = new Srtfile()
+                        //{
+                        //    FileName = path
+                        //};
+                        //errorcode = await File.Read(reader);
+
                     }
                     else
                     {
                         // check game
                         var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-                        //var fileService = ServiceLocator.Default.ResolveType<IWolvenkitFileService>();
                         switch (pm.ActiveProject)
                         {
                             case Cp77Project cp77proj:
-                                var cr2w = CP77.CR2W.ModTools.TryReadCr2WFile(reader);
+                                var cr2w = _wolvenkitFileService.TryReadCr2WFile(reader);
                                 if (cr2w == null)
                                 {
                                     logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);

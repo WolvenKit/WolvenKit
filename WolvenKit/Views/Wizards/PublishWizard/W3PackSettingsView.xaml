@@ -67,26 +67,6 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
-            <Grid
-             Grid.Row="1"
-             Grid.ColumnSpan="10"
-             Margin="0,35,0,0">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-
-                    <Button
-                     Width="170"
-                     Background="{DynamicResource MahApps.Brushes.Gray10}"
-                     Content="Cancel" />
-
-                    <hc:Divider Height="25" Orientation="Vertical" />
-
-                    <Button
-                     Width="170"
-                     Background="{DynamicResource MahApps.Brushes.Accent4}"
-                     Content="Confirm" />
-                </StackPanel>
-            </Grid>
-
             <StackPanel Grid.Column="1" Margin="3,15,3,0">
                 <!--
                     Order :
@@ -105,67 +85,79 @@
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modPackBundles}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modGenMetadata}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modGenTexCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modGenCollCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modSound}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modShaderCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modDeprecationCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modSpeech}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modScripts}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="Mod" />
+                 Content="Mod"
+                 IsChecked="{Binding modStrings}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,9,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="All" />
+                 Content="All"
+                 Command="{Binding AllModChanged}"
+                 CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" />
             </StackPanel>
 
             <StackPanel Grid.Column="2" Margin="0,15,0,0">
@@ -186,67 +178,79 @@
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcPackBundles}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcGenMetadata}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcGenTexCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcGenCollCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcSound}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcShaderCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcDeprecationCache}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcSpeech}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcScripts}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,0,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="DLC" />
+                 Content="DLC"
+                 IsChecked="{Binding dlcStrings}" />
                 <hc:Divider Margin="0,0,0,0" />
                 <CheckBox
                  Margin="0,8,9,0"
                  Background="{DynamicResource MahApps.Brushes.Accent3}"
                  BorderBrush="Transparent"
-                 Content="All" />
+                 Content="All"
+                 Command="{Binding AllDlcChanged}"
+                 CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" />
             </StackPanel>
 
             <StackPanel Grid.Column="0" Margin="0,15,0,0">

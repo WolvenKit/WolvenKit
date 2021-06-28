@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedeviceComputerUIData : CVariable
 	{
-		[Ordinal(0)] [RED("mails")] public CArray<gamedeviceGenericDataContent> Mails { get; set; }
-		[Ordinal(1)] [RED("files")] public CArray<gamedeviceGenericDataContent> Files { get; set; }
+		private CArray<gamedeviceGenericDataContent> _mails;
+		private CArray<gamedeviceGenericDataContent> _files;
 
-		public gamedeviceComputerUIData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mails")] 
+		public CArray<gamedeviceGenericDataContent> Mails
+		{
+			get => GetProperty(ref _mails);
+			set => SetProperty(ref _mails, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("files")] 
+		public CArray<gamedeviceGenericDataContent> Files
+		{
+			get => GetProperty(ref _files);
+			set => SetProperty(ref _files, value);
+		}
+
+		public gamedeviceComputerUIData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

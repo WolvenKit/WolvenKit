@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GameplayItemCondition : GameplayConditionBase
 	{
-		[Ordinal(1)] [RED("itemToCheck")] public TweakDBID ItemToCheck { get; set; }
+		private TweakDBID _itemToCheck;
 
-		public GameplayItemCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("itemToCheck")] 
+		public TweakDBID ItemToCheck
+		{
+			get => GetProperty(ref _itemToCheck);
+			set => SetProperty(ref _itemToCheck, value);
+		}
+
+		public GameplayItemCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

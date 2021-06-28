@@ -25,7 +25,7 @@ namespace WolvenKit.Views.Shared
         {
             if (IsVisible)
             {
-                DiscordHelper.SetDiscordRPCStatus("BackStage - Recently Used");
+               // DiscordHelper.SetDiscordRPCStatus("BackStage - Recently Used");
             }
         }
 

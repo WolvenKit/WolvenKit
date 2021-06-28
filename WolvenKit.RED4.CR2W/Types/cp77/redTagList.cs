@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class redTagList : CVariable
 	{
-		[Ordinal(0)] [RED("tags")] public CArray<CName> Tags { get; set; }
+		private CArray<CName> _tags;
 
-		public redTagList(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("tags")] 
+		public CArray<CName> Tags
+		{
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
+		}
+
+		public redTagList(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

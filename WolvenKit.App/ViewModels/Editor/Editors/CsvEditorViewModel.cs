@@ -1,7 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Catel;
 using Catel.Services;
-using Orc.ProjectManagement;
+using WolvenKit.Functionality.Services;
+using Orc.CsvTextEditor;
 using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
@@ -24,7 +26,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
-
+        public Type EditorInstanceType { get; private set; }
         #endregion Fields
 
         #region Constructors
@@ -40,6 +42,11 @@ namespace WolvenKit.ViewModels.Editor
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
+
+
+
+            EditorInstanceType = typeof(CsvTextEditorInstance);
+            
             SetupToolDefaults();
         }
 

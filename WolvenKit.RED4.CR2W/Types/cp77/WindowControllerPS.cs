@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WindowControllerPS : DoorControllerPS
 	{
-		[Ordinal(113)] [RED("windowSkillChecks")] public CHandle<EngDemoContainer> WindowSkillChecks { get; set; }
+		private CHandle<EngDemoContainer> _windowSkillChecks;
 
-		public WindowControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(113)] 
+		[RED("windowSkillChecks")] 
+		public CHandle<EngDemoContainer> WindowSkillChecks
+		{
+			get => GetProperty(ref _windowSkillChecks);
+			set => SetProperty(ref _windowSkillChecks, value);
+		}
+
+		public WindowControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

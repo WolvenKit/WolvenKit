@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LiftStatus : BaseDeviceStatus
 	{
-		[Ordinal(26)] [RED("libraryName")] public CName LibraryName { get; set; }
+		private CName _libraryName;
 
-		public LiftStatus(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(26)] 
+		[RED("libraryName")] 
+		public CName LibraryName
+		{
+			get => GetProperty(ref _libraryName);
+			set => SetProperty(ref _libraryName, value);
+		}
+
+		public LiftStatus(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

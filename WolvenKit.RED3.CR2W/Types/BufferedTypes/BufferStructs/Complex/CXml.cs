@@ -15,7 +15,7 @@ namespace WolvenKit.RED3.CR2W.Types
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class CXml : CVariable
     {
-        public CXml(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CXml(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
         }
 
@@ -48,6 +48,8 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
+
             switch (val)
             {
                 case XDocument document:

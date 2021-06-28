@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsToggleMinimapVisibilityEvent : redEvent
 	{
-		[Ordinal(0)] [RED("show")] public CBool Show { get; set; }
+		private CBool _show;
 
-		public gameeventsToggleMinimapVisibilityEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("show")] 
+		public CBool Show
+		{
+			get => GetProperty(ref _show);
+			set => SetProperty(ref _show, value);
+		}
+
+		public gameeventsToggleMinimapVisibilityEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

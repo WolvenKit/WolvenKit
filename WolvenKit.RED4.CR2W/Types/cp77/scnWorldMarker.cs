@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnWorldMarker : CVariable
 	{
-		[Ordinal(0)] [RED("type")] public CEnum<scnWorldMarkerType> Type { get; set; }
-		[Ordinal(1)] [RED("tag")] public CName Tag { get; set; }
-		[Ordinal(2)] [RED("nodeRef")] public NodeRef NodeRef { get; set; }
+		private CEnum<scnWorldMarkerType> _type;
+		private CName _tag;
+		private NodeRef _nodeRef;
 
-		public scnWorldMarker(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("type")] 
+		public CEnum<scnWorldMarkerType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("tag")] 
+		public CName Tag
+		{
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("nodeRef")] 
+		public NodeRef NodeRef
+		{
+			get => GetProperty(ref _nodeRef);
+			set => SetProperty(ref _nodeRef, value);
+		}
+
+		public scnWorldMarker(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

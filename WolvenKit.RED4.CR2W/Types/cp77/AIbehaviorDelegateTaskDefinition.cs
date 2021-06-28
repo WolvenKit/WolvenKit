@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorDelegateTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("onActivate")] public AIbehaviorDelegateTaskRef OnActivate { get; set; }
-		[Ordinal(2)] [RED("onUpdate")] public AIbehaviorDelegateTaskRef OnUpdate { get; set; }
-		[Ordinal(3)] [RED("onDeactivate")] public AIbehaviorDelegateTaskRef OnDeactivate { get; set; }
+		private AIbehaviorDelegateTaskRef _onActivate;
+		private AIbehaviorDelegateTaskRef _onUpdate;
+		private AIbehaviorDelegateTaskRef _onDeactivate;
 
-		public AIbehaviorDelegateTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("onActivate")] 
+		public AIbehaviorDelegateTaskRef OnActivate
+		{
+			get => GetProperty(ref _onActivate);
+			set => SetProperty(ref _onActivate, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("onUpdate")] 
+		public AIbehaviorDelegateTaskRef OnUpdate
+		{
+			get => GetProperty(ref _onUpdate);
+			set => SetProperty(ref _onUpdate, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("onDeactivate")] 
+		public AIbehaviorDelegateTaskRef OnDeactivate
+		{
+			get => GetProperty(ref _onDeactivate);
+			set => SetProperty(ref _onDeactivate, value);
+		}
+
+		public AIbehaviorDelegateTaskDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

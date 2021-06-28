@@ -7,8 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UnregisterListenerOnTargetHPEvent : redEvent
 	{
-		[Ordinal(0)] [RED("listener")] public CHandle<TargetedObjectDeathListener> Listener { get; set; }
+		private CHandle<TargetedObjectDeathListener> _listener;
+		private CBool _isFromListenerEvent;
 
-		public UnregisterListenerOnTargetHPEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("listener")] 
+		public CHandle<TargetedObjectDeathListener> Listener
+		{
+			get => GetProperty(ref _listener);
+			set => SetProperty(ref _listener, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isFromListenerEvent")] 
+		public CBool IsFromListenerEvent
+		{
+			get => GetProperty(ref _isFromListenerEvent);
+			set => SetProperty(ref _isFromListenerEvent, value);
+		}
+
+		public UnregisterListenerOnTargetHPEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

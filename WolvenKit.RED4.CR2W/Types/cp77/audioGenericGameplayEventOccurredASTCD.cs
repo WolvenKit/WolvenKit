@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioGenericGameplayEventOccurredASTCD : audioAudioStateTransitionConditionData
 	{
-		[Ordinal(1)] [RED("gameplayEvent")] public CName GameplayEvent { get; set; }
+		private CName _gameplayEvent;
 
-		public audioGenericGameplayEventOccurredASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("gameplayEvent")] 
+		public CName GameplayEvent
+		{
+			get => GetProperty(ref _gameplayEvent);
+			set => SetProperty(ref _gameplayEvent, value);
+		}
+
+		public audioGenericGameplayEventOccurredASTCD(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

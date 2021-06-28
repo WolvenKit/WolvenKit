@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EntityHasVisualTag : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("visualTag")] public CName VisualTag { get; set; }
-		[Ordinal(1)] [RED("hasTag")] public CBool HasTag { get; set; }
+		private CName _visualTag;
+		private CBool _hasTag;
 
-		public EntityHasVisualTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("visualTag")] 
+		public CName VisualTag
+		{
+			get => GetProperty(ref _visualTag);
+			set => SetProperty(ref _visualTag, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("hasTag")] 
+		public CBool HasTag
+		{
+			get => GetProperty(ref _hasTag);
+			set => SetProperty(ref _hasTag, value);
+		}
+
+		public EntityHasVisualTag(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

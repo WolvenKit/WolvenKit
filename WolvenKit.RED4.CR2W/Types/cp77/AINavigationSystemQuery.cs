@@ -7,15 +7,79 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AINavigationSystemQuery : CVariable
 	{
-		[Ordinal(0)] [RED("source")] public AIPositionSpec Source { get; set; }
-		[Ordinal(1)] [RED("target")] public AIPositionSpec Target { get; set; }
-		[Ordinal(2)] [RED("allowedTags")] public CArray<CName> AllowedTags { get; set; }
-		[Ordinal(3)] [RED("blockedTags")] public CArray<CName> BlockedTags { get; set; }
-		[Ordinal(4)] [RED("minDesiredDistance")] public CFloat MinDesiredDistance { get; set; }
-		[Ordinal(5)] [RED("maxDesiredDistance")] public CFloat MaxDesiredDistance { get; set; }
-		[Ordinal(6)] [RED("useFollowSlots")] public CBool UseFollowSlots { get; set; }
-		[Ordinal(7)] [RED("usePredictionTime")] public CBool UsePredictionTime { get; set; }
+		private AIPositionSpec _source;
+		private AIPositionSpec _target;
+		private CArray<CName> _allowedTags;
+		private CArray<CName> _blockedTags;
+		private CFloat _minDesiredDistance;
+		private CFloat _maxDesiredDistance;
+		private CBool _useFollowSlots;
+		private CBool _usePredictionTime;
 
-		public AINavigationSystemQuery(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("source")] 
+		public AIPositionSpec Source
+		{
+			get => GetProperty(ref _source);
+			set => SetProperty(ref _source, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("target")] 
+		public AIPositionSpec Target
+		{
+			get => GetProperty(ref _target);
+			set => SetProperty(ref _target, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("allowedTags")] 
+		public CArray<CName> AllowedTags
+		{
+			get => GetProperty(ref _allowedTags);
+			set => SetProperty(ref _allowedTags, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("blockedTags")] 
+		public CArray<CName> BlockedTags
+		{
+			get => GetProperty(ref _blockedTags);
+			set => SetProperty(ref _blockedTags, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("minDesiredDistance")] 
+		public CFloat MinDesiredDistance
+		{
+			get => GetProperty(ref _minDesiredDistance);
+			set => SetProperty(ref _minDesiredDistance, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("maxDesiredDistance")] 
+		public CFloat MaxDesiredDistance
+		{
+			get => GetProperty(ref _maxDesiredDistance);
+			set => SetProperty(ref _maxDesiredDistance, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("useFollowSlots")] 
+		public CBool UseFollowSlots
+		{
+			get => GetProperty(ref _useFollowSlots);
+			set => SetProperty(ref _useFollowSlots, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("usePredictionTime")] 
+		public CBool UsePredictionTime
+		{
+			get => GetProperty(ref _usePredictionTime);
+			set => SetProperty(ref _usePredictionTime, value);
+		}
+
+		public AINavigationSystemQuery(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

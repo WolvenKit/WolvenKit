@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EquipSecondaryWeaponCommandDelegate : AIbehaviorScriptBehaviorDelegate
 	{
-		[Ordinal(0)] [RED("command")] public wCHandle<AISwitchToSecondaryWeaponCommand> Command { get; set; }
-		[Ordinal(1)] [RED("unEquip")] public CBool UnEquip { get; set; }
+		private wCHandle<AISwitchToSecondaryWeaponCommand> _command;
+		private CBool _unEquip;
 
-		public EquipSecondaryWeaponCommandDelegate(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("command")] 
+		public wCHandle<AISwitchToSecondaryWeaponCommand> Command
+		{
+			get => GetProperty(ref _command);
+			set => SetProperty(ref _command, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("unEquip")] 
+		public CBool UnEquip
+		{
+			get => GetProperty(ref _unEquip);
+			set => SetProperty(ref _unEquip, value);
+		}
+
+		public EquipSecondaryWeaponCommandDelegate(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

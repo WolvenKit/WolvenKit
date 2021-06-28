@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataStatusEffectAttackData_Record : gamedataTweakDBRecord
 	{
-		public gamedataStatusEffectAttackData_Record(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public gamedataStatusEffectAttackData_Record(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

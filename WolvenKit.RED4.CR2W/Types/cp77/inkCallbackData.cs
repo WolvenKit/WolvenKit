@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkCallbackData : IScriptable
 	{
-		[Ordinal(0)] [RED("loadResult")] public CEnum<inkIconResult> LoadResult { get; set; }
-		[Ordinal(1)] [RED("targetWidget")] public CHandle<inkImageWidget> TargetWidget { get; set; }
-		[Ordinal(2)] [RED("errorMsg")] public CString ErrorMsg { get; set; }
-		[Ordinal(3)] [RED("iconSrc")] public TweakDBID IconSrc { get; set; }
+		private CEnum<inkIconResult> _loadResult;
+		private CHandle<inkImageWidget> _targetWidget;
+		private CString _errorMsg;
+		private TweakDBID _iconSrc;
 
-		public inkCallbackData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("loadResult")] 
+		public CEnum<inkIconResult> LoadResult
+		{
+			get => GetProperty(ref _loadResult);
+			set => SetProperty(ref _loadResult, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("targetWidget")] 
+		public CHandle<inkImageWidget> TargetWidget
+		{
+			get => GetProperty(ref _targetWidget);
+			set => SetProperty(ref _targetWidget, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("errorMsg")] 
+		public CString ErrorMsg
+		{
+			get => GetProperty(ref _errorMsg);
+			set => SetProperty(ref _errorMsg, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("iconSrc")] 
+		public TweakDBID IconSrc
+		{
+			get => GetProperty(ref _iconSrc);
+			set => SetProperty(ref _iconSrc, value);
+		}
+
+		public inkCallbackData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

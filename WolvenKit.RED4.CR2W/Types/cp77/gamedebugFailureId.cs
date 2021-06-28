@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedebugFailureId : CVariable
 	{
-		[Ordinal(0)] [RED("threadId")] public CUInt32 ThreadId { get; set; }
-		[Ordinal(1)] [RED("unsignedId")] public CUInt32 UnsignedId { get; set; }
+		private CUInt32 _threadId;
+		private CUInt32 _unsignedId;
 
-		public gamedebugFailureId(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("threadId")] 
+		public CUInt32 ThreadId
+		{
+			get => GetProperty(ref _threadId);
+			set => SetProperty(ref _threadId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("unsignedId")] 
+		public CUInt32 UnsignedId
+		{
+			get => GetProperty(ref _unsignedId);
+			set => SetProperty(ref _unsignedId, value);
+		}
+
+		public gamedebugFailureId(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

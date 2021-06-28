@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FanResaveData : CVariable
 	{
-		[Ordinal(0)] [RED("animationType")] public CEnum<EAnimationType> AnimationType { get; set; }
-		[Ordinal(1)] [RED("rotateClockwise")] public CBool RotateClockwise { get; set; }
-		[Ordinal(2)] [RED("randomizeBladesSpeed")] public CBool RandomizeBladesSpeed { get; set; }
-		[Ordinal(3)] [RED("maxRotationSpeed")] public CFloat MaxRotationSpeed { get; set; }
-		[Ordinal(4)] [RED("timeToMaxRotation")] public CFloat TimeToMaxRotation { get; set; }
+		private CEnum<EAnimationType> _animationType;
+		private CBool _rotateClockwise;
+		private CBool _randomizeBladesSpeed;
+		private CFloat _maxRotationSpeed;
+		private CFloat _timeToMaxRotation;
 
-		public FanResaveData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("animationType")] 
+		public CEnum<EAnimationType> AnimationType
+		{
+			get => GetProperty(ref _animationType);
+			set => SetProperty(ref _animationType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("rotateClockwise")] 
+		public CBool RotateClockwise
+		{
+			get => GetProperty(ref _rotateClockwise);
+			set => SetProperty(ref _rotateClockwise, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("randomizeBladesSpeed")] 
+		public CBool RandomizeBladesSpeed
+		{
+			get => GetProperty(ref _randomizeBladesSpeed);
+			set => SetProperty(ref _randomizeBladesSpeed, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("maxRotationSpeed")] 
+		public CFloat MaxRotationSpeed
+		{
+			get => GetProperty(ref _maxRotationSpeed);
+			set => SetProperty(ref _maxRotationSpeed, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("timeToMaxRotation")] 
+		public CFloat TimeToMaxRotation
+		{
+			get => GetProperty(ref _timeToMaxRotation);
+			set => SetProperty(ref _timeToMaxRotation, value);
+		}
+
+		public FanResaveData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

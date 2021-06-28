@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkWidgetLibraryItemInstance : ISerializable
 	{
-		[Ordinal(0)] [RED("rootWidget")] public CHandle<inkWidget> RootWidget { get; set; }
-		[Ordinal(1)] [RED("gameController")] public CHandle<inkIWidgetController> GameController { get; set; }
-		[Ordinal(2)] [RED("rootResolution")] public CEnum<inkETextureResolution> RootResolution { get; set; }
+		private CHandle<inkWidget> _rootWidget;
+		private CHandle<inkIWidgetController> _gameController;
+		private CEnum<inkETextureResolution> _rootResolution;
 
-		public inkWidgetLibraryItemInstance(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("rootWidget")] 
+		public CHandle<inkWidget> RootWidget
+		{
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("gameController")] 
+		public CHandle<inkIWidgetController> GameController
+		{
+			get => GetProperty(ref _gameController);
+			set => SetProperty(ref _gameController, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("rootResolution")] 
+		public CEnum<inkETextureResolution> RootResolution
+		{
+			get => GetProperty(ref _rootResolution);
+			set => SetProperty(ref _rootResolution, value);
+		}
+
+		public inkWidgetLibraryItemInstance(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

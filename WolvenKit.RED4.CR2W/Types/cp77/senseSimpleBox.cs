@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class senseSimpleBox : senseIShape
 	{
-		[Ordinal(1)] [RED("box")] public Box Box { get; set; }
+		private Box _box;
 
-		public senseSimpleBox(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("box")] 
+		public Box Box
+		{
+			get => GetProperty(ref _box);
+			set => SetProperty(ref _box, value);
+		}
+
+		public senseSimpleBox(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

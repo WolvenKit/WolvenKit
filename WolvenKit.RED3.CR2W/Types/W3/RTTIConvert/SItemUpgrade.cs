@@ -27,9 +27,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(8)] [RED("requiredUpgrades", 2,0)] 		public CArray<CName> RequiredUpgrades { get; set;}
 
-		public SItemUpgrade(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SItemUpgrade(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SItemUpgrade(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

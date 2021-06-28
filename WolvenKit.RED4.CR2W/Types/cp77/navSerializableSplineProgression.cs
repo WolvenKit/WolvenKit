@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class navSerializableSplineProgression : CVariable
 	{
-		[Ordinal(0)] [RED("sectionIdx")] public CUInt32 SectionIdx { get; set; }
-		[Ordinal(1)] [RED("alpha")] public CFloat Alpha { get; set; }
+		private CUInt32 _sectionIdx;
+		private CFloat _alpha;
 
-		public navSerializableSplineProgression(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sectionIdx")] 
+		public CUInt32 SectionIdx
+		{
+			get => GetProperty(ref _sectionIdx);
+			set => SetProperty(ref _sectionIdx, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("alpha")] 
+		public CFloat Alpha
+		{
+			get => GetProperty(ref _alpha);
+			set => SetProperty(ref _alpha, value);
+		}
+
+		public navSerializableSplineProgression(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

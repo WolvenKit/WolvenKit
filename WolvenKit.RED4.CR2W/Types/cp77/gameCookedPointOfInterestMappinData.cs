@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameCookedPointOfInterestMappinData : CVariable
 	{
-		[Ordinal(0)] [RED("journalPathHash")] public CUInt32 JournalPathHash { get; set; }
-		[Ordinal(1)] [RED("entityID")] public entEntityID EntityID { get; set; }
-		[Ordinal(2)] [RED("position")] public Vector3 Position { get; set; }
+		private CUInt32 _journalPathHash;
+		private entEntityID _entityID;
+		private Vector3 _position;
 
-		public gameCookedPointOfInterestMappinData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("journalPathHash")] 
+		public CUInt32 JournalPathHash
+		{
+			get => GetProperty(ref _journalPathHash);
+			set => SetProperty(ref _journalPathHash, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entityID")] 
+		public entEntityID EntityID
+		{
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("position")] 
+		public Vector3 Position
+		{
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
+		}
+
+		public gameCookedPointOfInterestMappinData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

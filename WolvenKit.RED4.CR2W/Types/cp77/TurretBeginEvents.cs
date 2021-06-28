@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TurretBeginEvents : TurretTransition
 	{
-		[Ordinal(0)] [RED("stateMachineInitData")] public wCHandle<TurretInitData> StateMachineInitData { get; set; }
+		private wCHandle<TurretInitData> _stateMachineInitData;
 
-		public TurretBeginEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stateMachineInitData")] 
+		public wCHandle<TurretInitData> StateMachineInitData
+		{
+			get => GetProperty(ref _stateMachineInitData);
+			set => SetProperty(ref _stateMachineInitData, value);
+		}
+
+		public TurretBeginEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

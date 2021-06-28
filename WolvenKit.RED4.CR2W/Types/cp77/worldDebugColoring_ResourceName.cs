@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldDebugColoring_ResourceName : worldEditorDebugColoringSettings
 	{
-		[Ordinal(0)] [RED("names")] public CArray<worldNameColorPair> Names { get; set; }
-		[Ordinal(1)] [RED("defaultColor")] public CColor DefaultColor { get; set; }
+		private CArray<worldNameColorPair> _names;
+		private CColor _defaultColor;
 
-		public worldDebugColoring_ResourceName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("names")] 
+		public CArray<worldNameColorPair> Names
+		{
+			get => GetProperty(ref _names);
+			set => SetProperty(ref _names, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("defaultColor")] 
+		public CColor DefaultColor
+		{
+			get => GetProperty(ref _defaultColor);
+			set => SetProperty(ref _defaultColor, value);
+		}
+
+		public worldDebugColoring_ResourceName(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

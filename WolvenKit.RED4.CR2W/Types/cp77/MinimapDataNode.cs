@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MinimapDataNode : worldNode
 	{
-		[Ordinal(4)] [RED("encodedShapesRef")] public raRef<minimapEncodedShapes> EncodedShapesRef { get; set; }
-		[Ordinal(5)] [RED("localBounds")] public Box LocalBounds { get; set; }
-		[Ordinal(6)] [RED("allInteriorShapes")] public CBool AllInteriorShapes { get; set; }
+		private raRef<minimapEncodedShapes> _encodedShapesRef;
+		private Box _localBounds;
+		private CBool _allInteriorShapes;
 
-		public MinimapDataNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("encodedShapesRef")] 
+		public raRef<minimapEncodedShapes> EncodedShapesRef
+		{
+			get => GetProperty(ref _encodedShapesRef);
+			set => SetProperty(ref _encodedShapesRef, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("localBounds")] 
+		public Box LocalBounds
+		{
+			get => GetProperty(ref _localBounds);
+			set => SetProperty(ref _localBounds, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("allInteriorShapes")] 
+		public CBool AllInteriorShapes
+		{
+			get => GetProperty(ref _allInteriorShapes);
+			set => SetProperty(ref _allInteriorShapes, value);
+		}
+
+		public MinimapDataNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

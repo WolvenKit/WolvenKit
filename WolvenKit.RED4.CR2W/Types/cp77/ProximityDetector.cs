@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ProximityDetector : Device
 	{
-		[Ordinal(86)] [RED("scanningAreaName")] public CName ScanningAreaName { get; set; }
-		[Ordinal(87)] [RED("surroundingAreaName")] public CName SurroundingAreaName { get; set; }
-		[Ordinal(88)] [RED("scanningArea")] public CHandle<gameStaticTriggerAreaComponent> ScanningArea { get; set; }
-		[Ordinal(89)] [RED("surroundingArea")] public CHandle<gameStaticTriggerAreaComponent> SurroundingArea { get; set; }
-		[Ordinal(90)] [RED("securityAreaType")] public CEnum<ESecurityAreaType> SecurityAreaType { get; set; }
-		[Ordinal(91)] [RED("notifiactionType")] public CEnum<ESecurityNotificationType> NotifiactionType { get; set; }
+		private CName _scanningAreaName;
+		private CName _surroundingAreaName;
+		private CHandle<gameStaticTriggerAreaComponent> _scanningArea;
+		private CHandle<gameStaticTriggerAreaComponent> _surroundingArea;
+		private CEnum<ESecurityAreaType> _securityAreaType;
+		private CEnum<ESecurityNotificationType> _notifiactionType;
 
-		public ProximityDetector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(86)] 
+		[RED("scanningAreaName")] 
+		public CName ScanningAreaName
+		{
+			get => GetProperty(ref _scanningAreaName);
+			set => SetProperty(ref _scanningAreaName, value);
+		}
+
+		[Ordinal(87)] 
+		[RED("surroundingAreaName")] 
+		public CName SurroundingAreaName
+		{
+			get => GetProperty(ref _surroundingAreaName);
+			set => SetProperty(ref _surroundingAreaName, value);
+		}
+
+		[Ordinal(88)] 
+		[RED("scanningArea")] 
+		public CHandle<gameStaticTriggerAreaComponent> ScanningArea
+		{
+			get => GetProperty(ref _scanningArea);
+			set => SetProperty(ref _scanningArea, value);
+		}
+
+		[Ordinal(89)] 
+		[RED("surroundingArea")] 
+		public CHandle<gameStaticTriggerAreaComponent> SurroundingArea
+		{
+			get => GetProperty(ref _surroundingArea);
+			set => SetProperty(ref _surroundingArea, value);
+		}
+
+		[Ordinal(90)] 
+		[RED("securityAreaType")] 
+		public CEnum<ESecurityAreaType> SecurityAreaType
+		{
+			get => GetProperty(ref _securityAreaType);
+			set => SetProperty(ref _securityAreaType, value);
+		}
+
+		[Ordinal(91)] 
+		[RED("notifiactionType")] 
+		public CEnum<ESecurityNotificationType> NotifiactionType
+		{
+			get => GetProperty(ref _notifiactionType);
+			set => SetProperty(ref _notifiactionType, value);
+		}
+
+		public ProximityDetector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

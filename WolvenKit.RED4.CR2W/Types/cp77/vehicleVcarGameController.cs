@@ -7,76 +7,628 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class vehicleVcarGameController : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("activeVehicleBlackboard")] public CHandle<gameIBlackboard> ActiveVehicleBlackboard { get; set; }
-		[Ordinal(3)] [RED("vehicleBlackboard")] public wCHandle<gameIBlackboard> VehicleBlackboard { get; set; }
-		[Ordinal(4)] [RED("mountBBConnectionId")] public CUInt32 MountBBConnectionId { get; set; }
-		[Ordinal(5)] [RED("speedBBConnectionId")] public CUInt32 SpeedBBConnectionId { get; set; }
-		[Ordinal(6)] [RED("rpmValueBBConnectionId")] public CUInt32 RpmValueBBConnectionId { get; set; }
-		[Ordinal(7)] [RED("rpmMaxBBConnectionId")] public CUInt32 RpmMaxBBConnectionId { get; set; }
-		[Ordinal(8)] [RED("autopilotOnId")] public CUInt32 AutopilotOnId { get; set; }
-		[Ordinal(9)] [RED("playerVehStateId")] public CUInt32 PlayerVehStateId { get; set; }
-		[Ordinal(10)] [RED("isInAutoPilot")] public CBool IsInAutoPilot { get; set; }
-		[Ordinal(11)] [RED("isInCombat")] public CBool IsInCombat { get; set; }
-		[Ordinal(12)] [RED("wasCombat")] public CBool WasCombat { get; set; }
-		[Ordinal(13)] [RED("rootWidget")] public wCHandle<inkCanvasWidget> RootWidget { get; set; }
-		[Ordinal(14)] [RED("windowWidget")] public wCHandle<inkCanvasWidget> WindowWidget { get; set; }
-		[Ordinal(15)] [RED("speedTextWidget")] public wCHandle<inkTextWidget> SpeedTextWidget { get; set; }
-		[Ordinal(16)] [RED("rpmGaugeFullWidget")] public wCHandle<inkImageWidget> RpmGaugeFullWidget { get; set; }
-		[Ordinal(17)] [RED("rpmGaugeMaxSize")] public Vector2 RpmGaugeMaxSize { get; set; }
-		[Ordinal(18)] [RED("interiorRootWidget")] public wCHandle<inkCanvasWidget> InteriorRootWidget { get; set; }
-		[Ordinal(19)] [RED("interiorRPMWidget")] public wCHandle<inkCanvasWidget> InteriorRPMWidget { get; set; }
-		[Ordinal(20)] [RED("interiorFluff1Widget")] public wCHandle<inkCanvasWidget> InteriorFluff1Widget { get; set; }
-		[Ordinal(21)] [RED("interiorFluff2Widget")] public wCHandle<inkCanvasWidget> InteriorFluff2Widget { get; set; }
-		[Ordinal(22)] [RED("interiorFluff3Widget")] public wCHandle<inkCanvasWidget> InteriorFluff3Widget { get; set; }
-		[Ordinal(23)] [RED("interiorFluff4Widget")] public wCHandle<inkCanvasWidget> InteriorFluff4Widget { get; set; }
-		[Ordinal(24)] [RED("interiorFluff5Widget")] public wCHandle<inkCanvasWidget> InteriorFluff5Widget { get; set; }
-		[Ordinal(25)] [RED("interiorFluff1Anim1Widget")] public wCHandle<inkCanvasWidget> InteriorFluff1Anim1Widget { get; set; }
-		[Ordinal(26)] [RED("interiorFluff1Anim2Widget")] public wCHandle<inkCanvasWidget> InteriorFluff1Anim2Widget { get; set; }
-		[Ordinal(27)] [RED("interiorFluff2Anim1Widget")] public wCHandle<inkCanvasWidget> InteriorFluff2Anim1Widget { get; set; }
-		[Ordinal(28)] [RED("interiorFluff2Anim2Widget")] public wCHandle<inkCanvasWidget> InteriorFluff2Anim2Widget { get; set; }
-		[Ordinal(29)] [RED("activeChunks")] public CInt32 ActiveChunks { get; set; }
-		[Ordinal(30)] [RED("animFadeOutProxy")] public CHandle<inkanimProxy> AnimFadeOutProxy { get; set; }
-		[Ordinal(31)] [RED("anim_exterior_fadein")] public CHandle<inkanimDefinition> Anim_exterior_fadein { get; set; }
-		[Ordinal(32)] [RED("anim_exterior_fadeout")] public CHandle<inkanimDefinition> Anim_exterior_fadeout { get; set; }
-		[Ordinal(33)] [RED("anim_interior_fadeout")] public CHandle<inkanimDefinition> Anim_interior_fadeout { get; set; }
-		[Ordinal(34)] [RED("anim_interior_rpm_fadein")] public CHandle<inkanimDefinition> Anim_interior_rpm_fadein { get; set; }
-		[Ordinal(35)] [RED("anim_interior_fluff1_fadein")] public CHandle<inkanimDefinition> Anim_interior_fluff1_fadein { get; set; }
-		[Ordinal(36)] [RED("anim_interior_fluff2_fadein")] public CHandle<inkanimDefinition> Anim_interior_fluff2_fadein { get; set; }
-		[Ordinal(37)] [RED("anim_interior_fluff3_fadein")] public CHandle<inkanimDefinition> Anim_interior_fluff3_fadein { get; set; }
-		[Ordinal(38)] [RED("anim_interior_fluff4_fadein")] public CHandle<inkanimDefinition> Anim_interior_fluff4_fadein { get; set; }
-		[Ordinal(39)] [RED("anim_interior_fluff5_fadein")] public CHandle<inkanimDefinition> Anim_interior_fluff5_fadein { get; set; }
-		[Ordinal(40)] [RED("animFluffFadeInProxy")] public CHandle<inkanimProxy> AnimFluffFadeInProxy { get; set; }
-		[Ordinal(41)] [RED("anim_interior_fluff1_anim1")] public CHandle<inkanimDefinition> Anim_interior_fluff1_anim1 { get; set; }
-		[Ordinal(42)] [RED("anim_interior_fluff1_anim2")] public CHandle<inkanimDefinition> Anim_interior_fluff1_anim2 { get; set; }
-		[Ordinal(43)] [RED("anim_interior_fluff2_anim1")] public CHandle<inkanimDefinition> Anim_interior_fluff2_anim1 { get; set; }
-		[Ordinal(44)] [RED("anim_interior_fluff2_anim2")] public CHandle<inkanimDefinition> Anim_interior_fluff2_anim2 { get; set; }
-		[Ordinal(45)] [RED("fluff1animOptions1")] public inkanimPlaybackOptions Fluff1animOptions1 { get; set; }
-		[Ordinal(46)] [RED("fluff1animOptions2")] public inkanimPlaybackOptions Fluff1animOptions2 { get; set; }
-		[Ordinal(47)] [RED("fluff2animOptions1")] public inkanimPlaybackOptions Fluff2animOptions1 { get; set; }
-		[Ordinal(48)] [RED("fluff2animOptions2")] public inkanimPlaybackOptions Fluff2animOptions2 { get; set; }
-		[Ordinal(49)] [RED("isWindow")] public CBool IsWindow { get; set; }
-		[Ordinal(50)] [RED("isInterior")] public CBool IsInterior { get; set; }
-		[Ordinal(51)] [RED("hasSpeed")] public CBool HasSpeed { get; set; }
-		[Ordinal(52)] [RED("hasRPM")] public CBool HasRPM { get; set; }
-		[Ordinal(53)] [RED("chunksNumber")] public CInt32 ChunksNumber { get; set; }
-		[Ordinal(54)] [RED("dynamicRpmPath")] public CName DynamicRpmPath { get; set; }
-		[Ordinal(55)] [RED("rpmPerChunk")] public CInt32 RpmPerChunk { get; set; }
-		[Ordinal(56)] [RED("hasRevMax")] public CBool HasRevMax { get; set; }
-		[Ordinal(57)] [RED("revMaxPath")] public CName RevMaxPath { get; set; }
-		[Ordinal(58)] [RED("revMaxChunk")] public CInt32 RevMaxChunk { get; set; }
-		[Ordinal(59)] [RED("windowWidgetPath")] public CName WindowWidgetPath { get; set; }
-		[Ordinal(60)] [RED("interiorWidgetPath")] public CName InteriorWidgetPath { get; set; }
-		[Ordinal(61)] [RED("interiorRPMWidgetPath")] public CName InteriorRPMWidgetPath { get; set; }
-		[Ordinal(62)] [RED("interiorFluff1WidgetPath")] public CName InteriorFluff1WidgetPath { get; set; }
-		[Ordinal(63)] [RED("interiorFluff2WidgetPath")] public CName InteriorFluff2WidgetPath { get; set; }
-		[Ordinal(64)] [RED("interiorFluff3WidgetPath")] public CName InteriorFluff3WidgetPath { get; set; }
-		[Ordinal(65)] [RED("interiorFluff4WidgetPath")] public CName InteriorFluff4WidgetPath { get; set; }
-		[Ordinal(66)] [RED("interiorFluff5WidgetPath")] public CName InteriorFluff5WidgetPath { get; set; }
-		[Ordinal(67)] [RED("interiorFluff1Anim1WidgetPath")] public CName InteriorFluff1Anim1WidgetPath { get; set; }
-		[Ordinal(68)] [RED("interiorFluff1Anim2WidgetPath")] public CName InteriorFluff1Anim2WidgetPath { get; set; }
-		[Ordinal(69)] [RED("interiorFluff2Anim1WidgetPath")] public CName InteriorFluff2Anim1WidgetPath { get; set; }
-		[Ordinal(70)] [RED("interiorFluff2Anim2WidgetPath")] public CName InteriorFluff2Anim2WidgetPath { get; set; }
+		private CHandle<gameIBlackboard> _activeVehicleBlackboard;
+		private wCHandle<gameIBlackboard> _vehicleBlackboard;
+		private CUInt32 _mountBBConnectionId;
+		private CUInt32 _speedBBConnectionId;
+		private CUInt32 _rpmValueBBConnectionId;
+		private CUInt32 _rpmMaxBBConnectionId;
+		private CUInt32 _autopilotOnId;
+		private CUInt32 _playerVehStateId;
+		private CBool _isInAutoPilot;
+		private CBool _isInCombat;
+		private CBool _wasCombat;
+		private wCHandle<inkCanvasWidget> _rootWidget;
+		private wCHandle<inkCanvasWidget> _windowWidget;
+		private wCHandle<inkTextWidget> _speedTextWidget;
+		private wCHandle<inkImageWidget> _rpmGaugeFullWidget;
+		private Vector2 _rpmGaugeMaxSize;
+		private wCHandle<inkCanvasWidget> _interiorRootWidget;
+		private wCHandle<inkCanvasWidget> _interiorRPMWidget;
+		private wCHandle<inkCanvasWidget> _interiorFluff1Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff2Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff3Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff4Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff5Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff1Anim1Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff1Anim2Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff2Anim1Widget;
+		private wCHandle<inkCanvasWidget> _interiorFluff2Anim2Widget;
+		private CInt32 _activeChunks;
+		private CHandle<inkanimProxy> _animFadeOutProxy;
+		private CHandle<inkanimDefinition> _anim_exterior_fadein;
+		private CHandle<inkanimDefinition> _anim_exterior_fadeout;
+		private CHandle<inkanimDefinition> _anim_interior_fadeout;
+		private CHandle<inkanimDefinition> _anim_interior_rpm_fadein;
+		private CHandle<inkanimDefinition> _anim_interior_fluff1_fadein;
+		private CHandle<inkanimDefinition> _anim_interior_fluff2_fadein;
+		private CHandle<inkanimDefinition> _anim_interior_fluff3_fadein;
+		private CHandle<inkanimDefinition> _anim_interior_fluff4_fadein;
+		private CHandle<inkanimDefinition> _anim_interior_fluff5_fadein;
+		private CHandle<inkanimProxy> _animFluffFadeInProxy;
+		private CHandle<inkanimDefinition> _anim_interior_fluff1_anim1;
+		private CHandle<inkanimDefinition> _anim_interior_fluff1_anim2;
+		private CHandle<inkanimDefinition> _anim_interior_fluff2_anim1;
+		private CHandle<inkanimDefinition> _anim_interior_fluff2_anim2;
+		private inkanimPlaybackOptions _fluff1animOptions1;
+		private inkanimPlaybackOptions _fluff1animOptions2;
+		private inkanimPlaybackOptions _fluff2animOptions1;
+		private inkanimPlaybackOptions _fluff2animOptions2;
+		private CBool _isWindow;
+		private CBool _isInterior;
+		private CBool _hasSpeed;
+		private CBool _hasRPM;
+		private CInt32 _chunksNumber;
+		private CName _dynamicRpmPath;
+		private CInt32 _rpmPerChunk;
+		private CBool _hasRevMax;
+		private CName _revMaxPath;
+		private CInt32 _revMaxChunk;
+		private CName _windowWidgetPath;
+		private CName _interiorWidgetPath;
+		private CName _interiorRPMWidgetPath;
+		private CName _interiorFluff1WidgetPath;
+		private CName _interiorFluff2WidgetPath;
+		private CName _interiorFluff3WidgetPath;
+		private CName _interiorFluff4WidgetPath;
+		private CName _interiorFluff5WidgetPath;
+		private CName _interiorFluff1Anim1WidgetPath;
+		private CName _interiorFluff1Anim2WidgetPath;
+		private CName _interiorFluff2Anim1WidgetPath;
+		private CName _interiorFluff2Anim2WidgetPath;
 
-		public vehicleVcarGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("activeVehicleBlackboard")] 
+		public CHandle<gameIBlackboard> ActiveVehicleBlackboard
+		{
+			get => GetProperty(ref _activeVehicleBlackboard);
+			set => SetProperty(ref _activeVehicleBlackboard, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("vehicleBlackboard")] 
+		public wCHandle<gameIBlackboard> VehicleBlackboard
+		{
+			get => GetProperty(ref _vehicleBlackboard);
+			set => SetProperty(ref _vehicleBlackboard, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("mountBBConnectionId")] 
+		public CUInt32 MountBBConnectionId
+		{
+			get => GetProperty(ref _mountBBConnectionId);
+			set => SetProperty(ref _mountBBConnectionId, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("speedBBConnectionId")] 
+		public CUInt32 SpeedBBConnectionId
+		{
+			get => GetProperty(ref _speedBBConnectionId);
+			set => SetProperty(ref _speedBBConnectionId, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("rpmValueBBConnectionId")] 
+		public CUInt32 RpmValueBBConnectionId
+		{
+			get => GetProperty(ref _rpmValueBBConnectionId);
+			set => SetProperty(ref _rpmValueBBConnectionId, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("rpmMaxBBConnectionId")] 
+		public CUInt32 RpmMaxBBConnectionId
+		{
+			get => GetProperty(ref _rpmMaxBBConnectionId);
+			set => SetProperty(ref _rpmMaxBBConnectionId, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("autopilotOnId")] 
+		public CUInt32 AutopilotOnId
+		{
+			get => GetProperty(ref _autopilotOnId);
+			set => SetProperty(ref _autopilotOnId, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("playerVehStateId")] 
+		public CUInt32 PlayerVehStateId
+		{
+			get => GetProperty(ref _playerVehStateId);
+			set => SetProperty(ref _playerVehStateId, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("isInAutoPilot")] 
+		public CBool IsInAutoPilot
+		{
+			get => GetProperty(ref _isInAutoPilot);
+			set => SetProperty(ref _isInAutoPilot, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("isInCombat")] 
+		public CBool IsInCombat
+		{
+			get => GetProperty(ref _isInCombat);
+			set => SetProperty(ref _isInCombat, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("wasCombat")] 
+		public CBool WasCombat
+		{
+			get => GetProperty(ref _wasCombat);
+			set => SetProperty(ref _wasCombat, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("rootWidget")] 
+		public wCHandle<inkCanvasWidget> RootWidget
+		{
+			get => GetProperty(ref _rootWidget);
+			set => SetProperty(ref _rootWidget, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("windowWidget")] 
+		public wCHandle<inkCanvasWidget> WindowWidget
+		{
+			get => GetProperty(ref _windowWidget);
+			set => SetProperty(ref _windowWidget, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("speedTextWidget")] 
+		public wCHandle<inkTextWidget> SpeedTextWidget
+		{
+			get => GetProperty(ref _speedTextWidget);
+			set => SetProperty(ref _speedTextWidget, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("rpmGaugeFullWidget")] 
+		public wCHandle<inkImageWidget> RpmGaugeFullWidget
+		{
+			get => GetProperty(ref _rpmGaugeFullWidget);
+			set => SetProperty(ref _rpmGaugeFullWidget, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("rpmGaugeMaxSize")] 
+		public Vector2 RpmGaugeMaxSize
+		{
+			get => GetProperty(ref _rpmGaugeMaxSize);
+			set => SetProperty(ref _rpmGaugeMaxSize, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("interiorRootWidget")] 
+		public wCHandle<inkCanvasWidget> InteriorRootWidget
+		{
+			get => GetProperty(ref _interiorRootWidget);
+			set => SetProperty(ref _interiorRootWidget, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("interiorRPMWidget")] 
+		public wCHandle<inkCanvasWidget> InteriorRPMWidget
+		{
+			get => GetProperty(ref _interiorRPMWidget);
+			set => SetProperty(ref _interiorRPMWidget, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("interiorFluff1Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff1Widget
+		{
+			get => GetProperty(ref _interiorFluff1Widget);
+			set => SetProperty(ref _interiorFluff1Widget, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("interiorFluff2Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff2Widget
+		{
+			get => GetProperty(ref _interiorFluff2Widget);
+			set => SetProperty(ref _interiorFluff2Widget, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("interiorFluff3Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff3Widget
+		{
+			get => GetProperty(ref _interiorFluff3Widget);
+			set => SetProperty(ref _interiorFluff3Widget, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("interiorFluff4Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff4Widget
+		{
+			get => GetProperty(ref _interiorFluff4Widget);
+			set => SetProperty(ref _interiorFluff4Widget, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("interiorFluff5Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff5Widget
+		{
+			get => GetProperty(ref _interiorFluff5Widget);
+			set => SetProperty(ref _interiorFluff5Widget, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("interiorFluff1Anim1Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff1Anim1Widget
+		{
+			get => GetProperty(ref _interiorFluff1Anim1Widget);
+			set => SetProperty(ref _interiorFluff1Anim1Widget, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("interiorFluff1Anim2Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff1Anim2Widget
+		{
+			get => GetProperty(ref _interiorFluff1Anim2Widget);
+			set => SetProperty(ref _interiorFluff1Anim2Widget, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("interiorFluff2Anim1Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff2Anim1Widget
+		{
+			get => GetProperty(ref _interiorFluff2Anim1Widget);
+			set => SetProperty(ref _interiorFluff2Anim1Widget, value);
+		}
+
+		[Ordinal(28)] 
+		[RED("interiorFluff2Anim2Widget")] 
+		public wCHandle<inkCanvasWidget> InteriorFluff2Anim2Widget
+		{
+			get => GetProperty(ref _interiorFluff2Anim2Widget);
+			set => SetProperty(ref _interiorFluff2Anim2Widget, value);
+		}
+
+		[Ordinal(29)] 
+		[RED("activeChunks")] 
+		public CInt32 ActiveChunks
+		{
+			get => GetProperty(ref _activeChunks);
+			set => SetProperty(ref _activeChunks, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("animFadeOutProxy")] 
+		public CHandle<inkanimProxy> AnimFadeOutProxy
+		{
+			get => GetProperty(ref _animFadeOutProxy);
+			set => SetProperty(ref _animFadeOutProxy, value);
+		}
+
+		[Ordinal(31)] 
+		[RED("anim_exterior_fadein")] 
+		public CHandle<inkanimDefinition> Anim_exterior_fadein
+		{
+			get => GetProperty(ref _anim_exterior_fadein);
+			set => SetProperty(ref _anim_exterior_fadein, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("anim_exterior_fadeout")] 
+		public CHandle<inkanimDefinition> Anim_exterior_fadeout
+		{
+			get => GetProperty(ref _anim_exterior_fadeout);
+			set => SetProperty(ref _anim_exterior_fadeout, value);
+		}
+
+		[Ordinal(33)] 
+		[RED("anim_interior_fadeout")] 
+		public CHandle<inkanimDefinition> Anim_interior_fadeout
+		{
+			get => GetProperty(ref _anim_interior_fadeout);
+			set => SetProperty(ref _anim_interior_fadeout, value);
+		}
+
+		[Ordinal(34)] 
+		[RED("anim_interior_rpm_fadein")] 
+		public CHandle<inkanimDefinition> Anim_interior_rpm_fadein
+		{
+			get => GetProperty(ref _anim_interior_rpm_fadein);
+			set => SetProperty(ref _anim_interior_rpm_fadein, value);
+		}
+
+		[Ordinal(35)] 
+		[RED("anim_interior_fluff1_fadein")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff1_fadein
+		{
+			get => GetProperty(ref _anim_interior_fluff1_fadein);
+			set => SetProperty(ref _anim_interior_fluff1_fadein, value);
+		}
+
+		[Ordinal(36)] 
+		[RED("anim_interior_fluff2_fadein")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff2_fadein
+		{
+			get => GetProperty(ref _anim_interior_fluff2_fadein);
+			set => SetProperty(ref _anim_interior_fluff2_fadein, value);
+		}
+
+		[Ordinal(37)] 
+		[RED("anim_interior_fluff3_fadein")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff3_fadein
+		{
+			get => GetProperty(ref _anim_interior_fluff3_fadein);
+			set => SetProperty(ref _anim_interior_fluff3_fadein, value);
+		}
+
+		[Ordinal(38)] 
+		[RED("anim_interior_fluff4_fadein")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff4_fadein
+		{
+			get => GetProperty(ref _anim_interior_fluff4_fadein);
+			set => SetProperty(ref _anim_interior_fluff4_fadein, value);
+		}
+
+		[Ordinal(39)] 
+		[RED("anim_interior_fluff5_fadein")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff5_fadein
+		{
+			get => GetProperty(ref _anim_interior_fluff5_fadein);
+			set => SetProperty(ref _anim_interior_fluff5_fadein, value);
+		}
+
+		[Ordinal(40)] 
+		[RED("animFluffFadeInProxy")] 
+		public CHandle<inkanimProxy> AnimFluffFadeInProxy
+		{
+			get => GetProperty(ref _animFluffFadeInProxy);
+			set => SetProperty(ref _animFluffFadeInProxy, value);
+		}
+
+		[Ordinal(41)] 
+		[RED("anim_interior_fluff1_anim1")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff1_anim1
+		{
+			get => GetProperty(ref _anim_interior_fluff1_anim1);
+			set => SetProperty(ref _anim_interior_fluff1_anim1, value);
+		}
+
+		[Ordinal(42)] 
+		[RED("anim_interior_fluff1_anim2")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff1_anim2
+		{
+			get => GetProperty(ref _anim_interior_fluff1_anim2);
+			set => SetProperty(ref _anim_interior_fluff1_anim2, value);
+		}
+
+		[Ordinal(43)] 
+		[RED("anim_interior_fluff2_anim1")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff2_anim1
+		{
+			get => GetProperty(ref _anim_interior_fluff2_anim1);
+			set => SetProperty(ref _anim_interior_fluff2_anim1, value);
+		}
+
+		[Ordinal(44)] 
+		[RED("anim_interior_fluff2_anim2")] 
+		public CHandle<inkanimDefinition> Anim_interior_fluff2_anim2
+		{
+			get => GetProperty(ref _anim_interior_fluff2_anim2);
+			set => SetProperty(ref _anim_interior_fluff2_anim2, value);
+		}
+
+		[Ordinal(45)] 
+		[RED("fluff1animOptions1")] 
+		public inkanimPlaybackOptions Fluff1animOptions1
+		{
+			get => GetProperty(ref _fluff1animOptions1);
+			set => SetProperty(ref _fluff1animOptions1, value);
+		}
+
+		[Ordinal(46)] 
+		[RED("fluff1animOptions2")] 
+		public inkanimPlaybackOptions Fluff1animOptions2
+		{
+			get => GetProperty(ref _fluff1animOptions2);
+			set => SetProperty(ref _fluff1animOptions2, value);
+		}
+
+		[Ordinal(47)] 
+		[RED("fluff2animOptions1")] 
+		public inkanimPlaybackOptions Fluff2animOptions1
+		{
+			get => GetProperty(ref _fluff2animOptions1);
+			set => SetProperty(ref _fluff2animOptions1, value);
+		}
+
+		[Ordinal(48)] 
+		[RED("fluff2animOptions2")] 
+		public inkanimPlaybackOptions Fluff2animOptions2
+		{
+			get => GetProperty(ref _fluff2animOptions2);
+			set => SetProperty(ref _fluff2animOptions2, value);
+		}
+
+		[Ordinal(49)] 
+		[RED("isWindow")] 
+		public CBool IsWindow
+		{
+			get => GetProperty(ref _isWindow);
+			set => SetProperty(ref _isWindow, value);
+		}
+
+		[Ordinal(50)] 
+		[RED("isInterior")] 
+		public CBool IsInterior
+		{
+			get => GetProperty(ref _isInterior);
+			set => SetProperty(ref _isInterior, value);
+		}
+
+		[Ordinal(51)] 
+		[RED("hasSpeed")] 
+		public CBool HasSpeed
+		{
+			get => GetProperty(ref _hasSpeed);
+			set => SetProperty(ref _hasSpeed, value);
+		}
+
+		[Ordinal(52)] 
+		[RED("hasRPM")] 
+		public CBool HasRPM
+		{
+			get => GetProperty(ref _hasRPM);
+			set => SetProperty(ref _hasRPM, value);
+		}
+
+		[Ordinal(53)] 
+		[RED("chunksNumber")] 
+		public CInt32 ChunksNumber
+		{
+			get => GetProperty(ref _chunksNumber);
+			set => SetProperty(ref _chunksNumber, value);
+		}
+
+		[Ordinal(54)] 
+		[RED("dynamicRpmPath")] 
+		public CName DynamicRpmPath
+		{
+			get => GetProperty(ref _dynamicRpmPath);
+			set => SetProperty(ref _dynamicRpmPath, value);
+		}
+
+		[Ordinal(55)] 
+		[RED("rpmPerChunk")] 
+		public CInt32 RpmPerChunk
+		{
+			get => GetProperty(ref _rpmPerChunk);
+			set => SetProperty(ref _rpmPerChunk, value);
+		}
+
+		[Ordinal(56)] 
+		[RED("hasRevMax")] 
+		public CBool HasRevMax
+		{
+			get => GetProperty(ref _hasRevMax);
+			set => SetProperty(ref _hasRevMax, value);
+		}
+
+		[Ordinal(57)] 
+		[RED("revMaxPath")] 
+		public CName RevMaxPath
+		{
+			get => GetProperty(ref _revMaxPath);
+			set => SetProperty(ref _revMaxPath, value);
+		}
+
+		[Ordinal(58)] 
+		[RED("revMaxChunk")] 
+		public CInt32 RevMaxChunk
+		{
+			get => GetProperty(ref _revMaxChunk);
+			set => SetProperty(ref _revMaxChunk, value);
+		}
+
+		[Ordinal(59)] 
+		[RED("windowWidgetPath")] 
+		public CName WindowWidgetPath
+		{
+			get => GetProperty(ref _windowWidgetPath);
+			set => SetProperty(ref _windowWidgetPath, value);
+		}
+
+		[Ordinal(60)] 
+		[RED("interiorWidgetPath")] 
+		public CName InteriorWidgetPath
+		{
+			get => GetProperty(ref _interiorWidgetPath);
+			set => SetProperty(ref _interiorWidgetPath, value);
+		}
+
+		[Ordinal(61)] 
+		[RED("interiorRPMWidgetPath")] 
+		public CName InteriorRPMWidgetPath
+		{
+			get => GetProperty(ref _interiorRPMWidgetPath);
+			set => SetProperty(ref _interiorRPMWidgetPath, value);
+		}
+
+		[Ordinal(62)] 
+		[RED("interiorFluff1WidgetPath")] 
+		public CName InteriorFluff1WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff1WidgetPath);
+			set => SetProperty(ref _interiorFluff1WidgetPath, value);
+		}
+
+		[Ordinal(63)] 
+		[RED("interiorFluff2WidgetPath")] 
+		public CName InteriorFluff2WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff2WidgetPath);
+			set => SetProperty(ref _interiorFluff2WidgetPath, value);
+		}
+
+		[Ordinal(64)] 
+		[RED("interiorFluff3WidgetPath")] 
+		public CName InteriorFluff3WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff3WidgetPath);
+			set => SetProperty(ref _interiorFluff3WidgetPath, value);
+		}
+
+		[Ordinal(65)] 
+		[RED("interiorFluff4WidgetPath")] 
+		public CName InteriorFluff4WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff4WidgetPath);
+			set => SetProperty(ref _interiorFluff4WidgetPath, value);
+		}
+
+		[Ordinal(66)] 
+		[RED("interiorFluff5WidgetPath")] 
+		public CName InteriorFluff5WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff5WidgetPath);
+			set => SetProperty(ref _interiorFluff5WidgetPath, value);
+		}
+
+		[Ordinal(67)] 
+		[RED("interiorFluff1Anim1WidgetPath")] 
+		public CName InteriorFluff1Anim1WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff1Anim1WidgetPath);
+			set => SetProperty(ref _interiorFluff1Anim1WidgetPath, value);
+		}
+
+		[Ordinal(68)] 
+		[RED("interiorFluff1Anim2WidgetPath")] 
+		public CName InteriorFluff1Anim2WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff1Anim2WidgetPath);
+			set => SetProperty(ref _interiorFluff1Anim2WidgetPath, value);
+		}
+
+		[Ordinal(69)] 
+		[RED("interiorFluff2Anim1WidgetPath")] 
+		public CName InteriorFluff2Anim1WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff2Anim1WidgetPath);
+			set => SetProperty(ref _interiorFluff2Anim1WidgetPath, value);
+		}
+
+		[Ordinal(70)] 
+		[RED("interiorFluff2Anim2WidgetPath")] 
+		public CName InteriorFluff2Anim2WidgetPath
+		{
+			get => GetProperty(ref _interiorFluff2Anim2WidgetPath);
+			set => SetProperty(ref _interiorFluff2Anim2WidgetPath, value);
+		}
+
+		public vehicleVcarGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

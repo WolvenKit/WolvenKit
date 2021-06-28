@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamemappinsMappinComponent : entIPlacedComponent
 	{
-		[Ordinal(5)] [RED("data")] public gamemappinsMappinData Data { get; set; }
+		private gamemappinsMappinData _data;
 
-		public gamemappinsMappinComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("data")] 
+		public gamemappinsMappinData Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public gamemappinsMappinComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

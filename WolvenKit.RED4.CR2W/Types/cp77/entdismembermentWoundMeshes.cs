@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entdismembermentWoundMeshes : CVariable
 	{
-		[Ordinal(0)] [RED("ResourceSet")] public CEnum<entdismembermentResourceSetE> ResourceSet { get; set; }
-		[Ordinal(1)] [RED("Meshes")] public CArray<entdismembermentMeshInfo> Meshes { get; set; }
-		[Ordinal(2)] [RED("FillMeshes")] public CArray<entdismembermentFillMeshInfo> FillMeshes { get; set; }
+		private CEnum<entdismembermentResourceSetE> _resourceSet;
+		private CArray<entdismembermentMeshInfo> _meshes;
+		private CArray<entdismembermentFillMeshInfo> _fillMeshes;
 
-		public entdismembermentWoundMeshes(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ResourceSet")] 
+		public CEnum<entdismembermentResourceSetE> ResourceSet
+		{
+			get => GetProperty(ref _resourceSet);
+			set => SetProperty(ref _resourceSet, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("Meshes")] 
+		public CArray<entdismembermentMeshInfo> Meshes
+		{
+			get => GetProperty(ref _meshes);
+			set => SetProperty(ref _meshes, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("FillMeshes")] 
+		public CArray<entdismembermentFillMeshInfo> FillMeshes
+		{
+			get => GetProperty(ref _fillMeshes);
+			set => SetProperty(ref _fillMeshes, value);
+		}
+
+		public entdismembermentWoundMeshes(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

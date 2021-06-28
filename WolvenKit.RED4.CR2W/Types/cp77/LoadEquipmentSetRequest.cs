@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LoadEquipmentSetRequest : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("setName")] public CString SetName { get; set; }
+		private CString _setName;
 
-		public LoadEquipmentSetRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("setName")] 
+		public CString SetName
+		{
+			get => GetProperty(ref _setName);
+			set => SetProperty(ref _setName, value);
+		}
+
+		public LoadEquipmentSetRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioVehicleDoorsSettings : CVariable
 	{
-		[Ordinal(0)] [RED("openEvent")] public CName OpenEvent { get; set; }
-		[Ordinal(1)] [RED("closeEvent")] public CName CloseEvent { get; set; }
+		private CName _openEvent;
+		private CName _closeEvent;
 
-		public audioVehicleDoorsSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("openEvent")] 
+		public CName OpenEvent
+		{
+			get => GetProperty(ref _openEvent);
+			set => SetProperty(ref _openEvent, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("closeEvent")] 
+		public CName CloseEvent
+		{
+			get => GetProperty(ref _closeEvent);
+			set => SetProperty(ref _closeEvent, value);
+		}
+
+		public audioVehicleDoorsSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

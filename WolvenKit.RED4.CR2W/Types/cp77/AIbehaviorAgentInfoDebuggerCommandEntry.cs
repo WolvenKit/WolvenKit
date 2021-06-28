@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorAgentInfoDebuggerCommandEntry : CVariable
 	{
-		[Ordinal(0)] [RED("callStack")] public AIbehaviorBehaviorInstanceCallStack CallStack { get; set; }
-		[Ordinal(1)] [RED("behaviorResourcePath")] public CString BehaviorResourcePath { get; set; }
+		private AIbehaviorBehaviorInstanceCallStack _callStack;
+		private CString _behaviorResourcePath;
 
-		public AIbehaviorAgentInfoDebuggerCommandEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("callStack")] 
+		public AIbehaviorBehaviorInstanceCallStack CallStack
+		{
+			get => GetProperty(ref _callStack);
+			set => SetProperty(ref _callStack, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("behaviorResourcePath")] 
+		public CString BehaviorResourcePath
+		{
+			get => GetProperty(ref _behaviorResourcePath);
+			set => SetProperty(ref _behaviorResourcePath, value);
+		}
+
+		public AIbehaviorAgentInfoDebuggerCommandEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

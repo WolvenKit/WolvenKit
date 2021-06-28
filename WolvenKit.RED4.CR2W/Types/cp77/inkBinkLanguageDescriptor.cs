@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkBinkLanguageDescriptor : CVariable
 	{
-		[Ordinal(0)] [RED("bink")] public raRef<Bink> Bink { get; set; }
-		[Ordinal(1)] [RED("languageId")] public CEnum<inkLanguageId> LanguageId { get; set; }
+		private raRef<Bink> _bink;
+		private CEnum<inkLanguageId> _languageId;
 
-		public inkBinkLanguageDescriptor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("bink")] 
+		public raRef<Bink> Bink
+		{
+			get => GetProperty(ref _bink);
+			set => SetProperty(ref _bink, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("languageId")] 
+		public CEnum<inkLanguageId> LanguageId
+		{
+			get => GetProperty(ref _languageId);
+			set => SetProperty(ref _languageId, value);
+		}
+
+		public inkBinkLanguageDescriptor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

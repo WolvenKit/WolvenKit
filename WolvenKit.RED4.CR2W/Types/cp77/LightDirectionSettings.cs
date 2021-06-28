@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LightDirectionSettings : IAreaSettings
 	{
-		[Ordinal(2)] [RED("direction")] public GlobalLightingTrajectoryOverride Direction { get; set; }
+		private GlobalLightingTrajectoryOverride _direction;
 
-		public LightDirectionSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("direction")] 
+		public GlobalLightingTrajectoryOverride Direction
+		{
+			get => GetProperty(ref _direction);
+			set => SetProperty(ref _direction, value);
+		}
+
+		public LightDirectionSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

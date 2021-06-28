@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TargetIndicatorEntry : CVariable
 	{
-		[Ordinal(0)] [RED("targetID")] public entEntityID TargetID { get; set; }
-		[Ordinal(1)] [RED("indicator")] public wCHandle<inkWidget> Indicator { get; set; }
+		private entEntityID _targetID;
+		private wCHandle<inkWidget> _indicator;
 
-		public TargetIndicatorEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("targetID")] 
+		public entEntityID TargetID
+		{
+			get => GetProperty(ref _targetID);
+			set => SetProperty(ref _targetID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("indicator")] 
+		public wCHandle<inkWidget> Indicator
+		{
+			get => GetProperty(ref _indicator);
+			set => SetProperty(ref _indicator, value);
+		}
+
+		public TargetIndicatorEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

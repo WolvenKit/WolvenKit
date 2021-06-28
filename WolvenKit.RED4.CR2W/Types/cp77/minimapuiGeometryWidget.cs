@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class minimapuiGeometryWidget : inkCanvasWidget
 	{
-		[Ordinal(23)] [RED("widgetTemplates")] public CArray<inkWidgetReference> WidgetTemplates { get; set; }
-		[Ordinal(24)] [RED("settings")] public minimapuiSettings Settings { get; set; }
+		private CArray<inkWidgetReference> _widgetTemplates;
+		private minimapuiSettings _settings;
 
-		public minimapuiGeometryWidget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(23)] 
+		[RED("widgetTemplates")] 
+		public CArray<inkWidgetReference> WidgetTemplates
+		{
+			get => GetProperty(ref _widgetTemplates);
+			set => SetProperty(ref _widgetTemplates, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("settings")] 
+		public minimapuiSettings Settings
+		{
+			get => GetProperty(ref _settings);
+			set => SetProperty(ref _settings, value);
+		}
+
+		public minimapuiGeometryWidget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

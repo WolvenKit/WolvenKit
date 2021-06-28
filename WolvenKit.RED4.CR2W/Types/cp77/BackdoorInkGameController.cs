@@ -7,17 +7,97 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BackdoorInkGameController : MasterDeviceInkGameControllerBase
 	{
-		[Ordinal(18)] [RED("IdleGroup")] public inkWidgetReference IdleGroup { get; set; }
-		[Ordinal(19)] [RED("ConnectedGroup")] public inkWidgetReference ConnectedGroup { get; set; }
-		[Ordinal(20)] [RED("IntroAnimationName")] public CName IntroAnimationName { get; set; }
-		[Ordinal(21)] [RED("IdleAnimationName")] public CName IdleAnimationName { get; set; }
-		[Ordinal(22)] [RED("GlitchAnimationName")] public CName GlitchAnimationName { get; set; }
-		[Ordinal(23)] [RED("RunningAnimation")] public CHandle<inkanimProxy> RunningAnimation { get; set; }
-		[Ordinal(24)] [RED("onGlitchingListener")] public CUInt32 OnGlitchingListener { get; set; }
-		[Ordinal(25)] [RED("onIsInDefaultStateListener")] public CUInt32 OnIsInDefaultStateListener { get; set; }
-		[Ordinal(26)] [RED("onShutdownModuleListener")] public CUInt32 OnShutdownModuleListener { get; set; }
-		[Ordinal(27)] [RED("onBootModuleListener")] public CUInt32 OnBootModuleListener { get; set; }
+		private inkWidgetReference _idleGroup;
+		private inkWidgetReference _connectedGroup;
+		private CName _introAnimationName;
+		private CName _idleAnimationName;
+		private CName _glitchAnimationName;
+		private CHandle<inkanimProxy> _runningAnimation;
+		private CUInt32 _onGlitchingListener;
+		private CUInt32 _onIsInDefaultStateListener;
+		private CUInt32 _onShutdownModuleListener;
+		private CUInt32 _onBootModuleListener;
 
-		public BackdoorInkGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(18)] 
+		[RED("IdleGroup")] 
+		public inkWidgetReference IdleGroup
+		{
+			get => GetProperty(ref _idleGroup);
+			set => SetProperty(ref _idleGroup, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("ConnectedGroup")] 
+		public inkWidgetReference ConnectedGroup
+		{
+			get => GetProperty(ref _connectedGroup);
+			set => SetProperty(ref _connectedGroup, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("IntroAnimationName")] 
+		public CName IntroAnimationName
+		{
+			get => GetProperty(ref _introAnimationName);
+			set => SetProperty(ref _introAnimationName, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("IdleAnimationName")] 
+		public CName IdleAnimationName
+		{
+			get => GetProperty(ref _idleAnimationName);
+			set => SetProperty(ref _idleAnimationName, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("GlitchAnimationName")] 
+		public CName GlitchAnimationName
+		{
+			get => GetProperty(ref _glitchAnimationName);
+			set => SetProperty(ref _glitchAnimationName, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("RunningAnimation")] 
+		public CHandle<inkanimProxy> RunningAnimation
+		{
+			get => GetProperty(ref _runningAnimation);
+			set => SetProperty(ref _runningAnimation, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("onGlitchingListener")] 
+		public CUInt32 OnGlitchingListener
+		{
+			get => GetProperty(ref _onGlitchingListener);
+			set => SetProperty(ref _onGlitchingListener, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("onIsInDefaultStateListener")] 
+		public CUInt32 OnIsInDefaultStateListener
+		{
+			get => GetProperty(ref _onIsInDefaultStateListener);
+			set => SetProperty(ref _onIsInDefaultStateListener, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("onShutdownModuleListener")] 
+		public CUInt32 OnShutdownModuleListener
+		{
+			get => GetProperty(ref _onShutdownModuleListener);
+			set => SetProperty(ref _onShutdownModuleListener, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("onBootModuleListener")] 
+		public CUInt32 OnBootModuleListener
+		{
+			get => GetProperty(ref _onBootModuleListener);
+			set => SetProperty(ref _onBootModuleListener, value);
+		}
+
+		public BackdoorInkGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

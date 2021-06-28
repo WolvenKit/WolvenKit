@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkFrameAnimByTrack : animAnimNode_SkFrameAnim
 	{
-		[Ordinal(34)] [RED("progressFloatTrack")] public animNamedTrackIndex ProgressFloatTrack { get; set; }
-		[Ordinal(35)] [RED("timeFloatTrack")] public animNamedTrackIndex TimeFloatTrack { get; set; }
-		[Ordinal(36)] [RED("frameFloatTrack")] public animNamedTrackIndex FrameFloatTrack { get; set; }
-		[Ordinal(37)] [RED("inputWithTracks")] public animPoseLink InputWithTracks { get; set; }
+		private animNamedTrackIndex _progressFloatTrack;
+		private animNamedTrackIndex _timeFloatTrack;
+		private animNamedTrackIndex _frameFloatTrack;
+		private animPoseLink _inputWithTracks;
 
-		public animAnimNode_SkFrameAnimByTrack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(34)] 
+		[RED("progressFloatTrack")] 
+		public animNamedTrackIndex ProgressFloatTrack
+		{
+			get => GetProperty(ref _progressFloatTrack);
+			set => SetProperty(ref _progressFloatTrack, value);
+		}
+
+		[Ordinal(35)] 
+		[RED("timeFloatTrack")] 
+		public animNamedTrackIndex TimeFloatTrack
+		{
+			get => GetProperty(ref _timeFloatTrack);
+			set => SetProperty(ref _timeFloatTrack, value);
+		}
+
+		[Ordinal(36)] 
+		[RED("frameFloatTrack")] 
+		public animNamedTrackIndex FrameFloatTrack
+		{
+			get => GetProperty(ref _frameFloatTrack);
+			set => SetProperty(ref _frameFloatTrack, value);
+		}
+
+		[Ordinal(37)] 
+		[RED("inputWithTracks")] 
+		public animPoseLink InputWithTracks
+		{
+			get => GetProperty(ref _inputWithTracks);
+			set => SetProperty(ref _inputWithTracks, value);
+		}
+
+		public animAnimNode_SkFrameAnimByTrack(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

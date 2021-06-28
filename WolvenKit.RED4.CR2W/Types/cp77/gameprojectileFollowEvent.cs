@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameprojectileFollowEvent : redEvent
 	{
-		[Ordinal(0)] [RED("followObject")] public wCHandle<gameObject> FollowObject { get; set; }
+		private wCHandle<gameObject> _followObject;
 
-		public gameprojectileFollowEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("followObject")] 
+		public wCHandle<gameObject> FollowObject
+		{
+			get => GetProperty(ref _followObject);
+			set => SetProperty(ref _followObject, value);
+		}
+
+		public gameprojectileFollowEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldTrafficSyncPointCompiled : CVariable
 	{
-		[Ordinal(0)] [RED("lanes")] public CArray<worldTrafficLaneUID> Lanes { get; set; }
-		[Ordinal(1)] [RED("lanePositions")] public CArray<CFloat> LanePositions { get; set; }
-		[Ordinal(2)] [RED("length")] public CFloat Length { get; set; }
+		private CArray<worldTrafficLaneUID> _lanes;
+		private CArray<CFloat> _lanePositions;
+		private CFloat _length;
 
-		public worldTrafficSyncPointCompiled(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("lanes")] 
+		public CArray<worldTrafficLaneUID> Lanes
+		{
+			get => GetProperty(ref _lanes);
+			set => SetProperty(ref _lanes, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("lanePositions")] 
+		public CArray<CFloat> LanePositions
+		{
+			get => GetProperty(ref _lanePositions);
+			set => SetProperty(ref _lanePositions, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("length")] 
+		public CFloat Length
+		{
+			get => GetProperty(ref _length);
+			set => SetProperty(ref _length, value);
+		}
+
+		public worldTrafficSyncPointCompiled(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

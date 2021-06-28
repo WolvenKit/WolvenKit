@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeviceConnectionScannerData : CVariable
 	{
-		[Ordinal(0)] [RED("connectionType")] public CString ConnectionType { get; set; }
-		[Ordinal(1)] [RED("icon")] public CName Icon { get; set; }
-		[Ordinal(2)] [RED("amount")] public CInt32 Amount { get; set; }
+		private CString _connectionType;
+		private CName _icon;
+		private CInt32 _amount;
 
-		public DeviceConnectionScannerData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("connectionType")] 
+		public CString ConnectionType
+		{
+			get => GetProperty(ref _connectionType);
+			set => SetProperty(ref _connectionType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("icon")] 
+		public CName Icon
+		{
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("amount")] 
+		public CInt32 Amount
+		{
+			get => GetProperty(ref _amount);
+			set => SetProperty(ref _amount, value);
+		}
+
+		public DeviceConnectionScannerData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

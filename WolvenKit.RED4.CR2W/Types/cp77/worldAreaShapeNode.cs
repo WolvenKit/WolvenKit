@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldAreaShapeNode : worldNode
 	{
-		[Ordinal(4)] [RED("color")] public CColor Color { get; set; }
-		[Ordinal(5)] [RED("outline")] public CHandle<AreaShapeOutline> Outline { get; set; }
+		private CColor _color;
+		private CHandle<AreaShapeOutline> _outline;
 
-		public worldAreaShapeNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("color")] 
+		public CColor Color
+		{
+			get => GetProperty(ref _color);
+			set => SetProperty(ref _color, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("outline")] 
+		public CHandle<AreaShapeOutline> Outline
+		{
+			get => GetProperty(ref _outline);
+			set => SetProperty(ref _outline, value);
+		}
+
+		public worldAreaShapeNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

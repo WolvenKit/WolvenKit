@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WindowBlindersReplicatedState : gameDeviceReplicatedState
 	{
-		[Ordinal(0)] [RED("isOpen")] public CBool IsOpen { get; set; }
-		[Ordinal(1)] [RED("isTilted")] public CBool IsTilted { get; set; }
+		private CBool _isOpen;
+		private CBool _isTilted;
 
-		public WindowBlindersReplicatedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isOpen")] 
+		public CBool IsOpen
+		{
+			get => GetProperty(ref _isOpen);
+			set => SetProperty(ref _isOpen, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isTilted")] 
+		public CBool IsTilted
+		{
+			get => GetProperty(ref _isTilted);
+			set => SetProperty(ref _isTilted, value);
+		}
+
+		public WindowBlindersReplicatedState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

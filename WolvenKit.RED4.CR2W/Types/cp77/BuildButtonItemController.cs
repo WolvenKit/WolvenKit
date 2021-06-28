@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BuildButtonItemController : inkButtonDpadSupportedController
 	{
-		[Ordinal(26)] [RED("associatedBuild")] public CEnum<gamedataBuildType> AssociatedBuild { get; set; }
+		private CEnum<gamedataBuildType> _associatedBuild;
 
-		public BuildButtonItemController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(26)] 
+		[RED("associatedBuild")] 
+		public CEnum<gamedataBuildType> AssociatedBuild
+		{
+			get => GetProperty(ref _associatedBuild);
+			set => SetProperty(ref _associatedBuild, value);
+		}
+
+		public BuildButtonItemController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

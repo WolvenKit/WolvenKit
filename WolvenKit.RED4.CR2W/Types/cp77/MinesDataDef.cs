@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MinesDataDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("CurrentNormal")] public gamebbScriptID_Vector4 CurrentNormal { get; set; }
+		private gamebbScriptID_Vector4 _currentNormal;
 
-		public MinesDataDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("CurrentNormal")] 
+		public gamebbScriptID_Vector4 CurrentNormal
+		{
+			get => GetProperty(ref _currentNormal);
+			set => SetProperty(ref _currentNormal, value);
+		}
+
+		public MinesDataDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

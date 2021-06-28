@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MarkBackdoorAsRevealedRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("device")] public CHandle<SharedGameplayPS> Device { get; set; }
+		private CHandle<SharedGameplayPS> _device;
 
-		public MarkBackdoorAsRevealedRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("device")] 
+		public CHandle<SharedGameplayPS> Device
+		{
+			get => GetProperty(ref _device);
+			set => SetProperty(ref _device, value);
+		}
+
+		public MarkBackdoorAsRevealedRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

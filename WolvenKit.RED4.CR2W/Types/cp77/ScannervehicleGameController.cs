@@ -7,38 +7,286 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannervehicleGameController : BaseChunkGameController
 	{
-		[Ordinal(5)] [RED("vehicleNameCallbackID")] public CUInt32 VehicleNameCallbackID { get; set; }
-		[Ordinal(6)] [RED("vehicleManufacturerCallbackID")] public CUInt32 VehicleManufacturerCallbackID { get; set; }
-		[Ordinal(7)] [RED("vehicleProdYearsCallbackID")] public CUInt32 VehicleProdYearsCallbackID { get; set; }
-		[Ordinal(8)] [RED("vehicleDriveLayoutCallbackID")] public CUInt32 VehicleDriveLayoutCallbackID { get; set; }
-		[Ordinal(9)] [RED("vehicleHorsepowerCallbackID")] public CUInt32 VehicleHorsepowerCallbackID { get; set; }
-		[Ordinal(10)] [RED("vehicleMassCallbackID")] public CUInt32 VehicleMassCallbackID { get; set; }
-		[Ordinal(11)] [RED("vehicleStateCallbackID")] public CUInt32 VehicleStateCallbackID { get; set; }
-		[Ordinal(12)] [RED("vehicleInfoCallbackID")] public CUInt32 VehicleInfoCallbackID { get; set; }
-		[Ordinal(13)] [RED("isValidVehicleManufacturer")] public CBool IsValidVehicleManufacturer { get; set; }
-		[Ordinal(14)] [RED("isValidVehicleName")] public CBool IsValidVehicleName { get; set; }
-		[Ordinal(15)] [RED("isValidVehicleProdYears")] public CBool IsValidVehicleProdYears { get; set; }
-		[Ordinal(16)] [RED("isValidVehicleDriveLayout")] public CBool IsValidVehicleDriveLayout { get; set; }
-		[Ordinal(17)] [RED("isValidVehicleHorsepower")] public CBool IsValidVehicleHorsepower { get; set; }
-		[Ordinal(18)] [RED("isValidVehicleMass")] public CBool IsValidVehicleMass { get; set; }
-		[Ordinal(19)] [RED("isValidVehicleState")] public CBool IsValidVehicleState { get; set; }
-		[Ordinal(20)] [RED("isValidVehicleInfo")] public CBool IsValidVehicleInfo { get; set; }
-		[Ordinal(21)] [RED("vehicleNameText")] public inkTextWidgetReference VehicleNameText { get; set; }
-		[Ordinal(22)] [RED("vehicleManufacturer")] public inkImageWidgetReference VehicleManufacturer { get; set; }
-		[Ordinal(23)] [RED("vehicleProdYearsText")] public inkTextWidgetReference VehicleProdYearsText { get; set; }
-		[Ordinal(24)] [RED("vehicleDriveLayoutText")] public inkTextWidgetReference VehicleDriveLayoutText { get; set; }
-		[Ordinal(25)] [RED("vehicleHorsepowerText")] public inkTextWidgetReference VehicleHorsepowerText { get; set; }
-		[Ordinal(26)] [RED("vehicleMassText")] public inkTextWidgetReference VehicleMassText { get; set; }
-		[Ordinal(27)] [RED("vehicleStateText")] public inkTextWidgetReference VehicleStateText { get; set; }
-		[Ordinal(28)] [RED("vehicleInfoText")] public inkTextWidgetReference VehicleInfoText { get; set; }
-		[Ordinal(29)] [RED("vehicleNameHolder")] public inkWidgetReference VehicleNameHolder { get; set; }
-		[Ordinal(30)] [RED("vehicleProdYearsHolder")] public inkWidgetReference VehicleProdYearsHolder { get; set; }
-		[Ordinal(31)] [RED("vehicleDriveLayoutHolder")] public inkWidgetReference VehicleDriveLayoutHolder { get; set; }
-		[Ordinal(32)] [RED("vehicleHorsepowerHolder")] public inkWidgetReference VehicleHorsepowerHolder { get; set; }
-		[Ordinal(33)] [RED("vehicleMassHolder")] public inkWidgetReference VehicleMassHolder { get; set; }
-		[Ordinal(34)] [RED("vehicleStateHolder")] public inkWidgetReference VehicleStateHolder { get; set; }
-		[Ordinal(35)] [RED("vehicleInfoHolder")] public inkWidgetReference VehicleInfoHolder { get; set; }
+		private CUInt32 _vehicleNameCallbackID;
+		private CUInt32 _vehicleManufacturerCallbackID;
+		private CUInt32 _vehicleProdYearsCallbackID;
+		private CUInt32 _vehicleDriveLayoutCallbackID;
+		private CUInt32 _vehicleHorsepowerCallbackID;
+		private CUInt32 _vehicleMassCallbackID;
+		private CUInt32 _vehicleStateCallbackID;
+		private CUInt32 _vehicleInfoCallbackID;
+		private CBool _isValidVehicleManufacturer;
+		private CBool _isValidVehicleName;
+		private CBool _isValidVehicleProdYears;
+		private CBool _isValidVehicleDriveLayout;
+		private CBool _isValidVehicleHorsepower;
+		private CBool _isValidVehicleMass;
+		private CBool _isValidVehicleState;
+		private CBool _isValidVehicleInfo;
+		private inkTextWidgetReference _vehicleNameText;
+		private inkImageWidgetReference _vehicleManufacturer;
+		private inkTextWidgetReference _vehicleProdYearsText;
+		private inkTextWidgetReference _vehicleDriveLayoutText;
+		private inkTextWidgetReference _vehicleHorsepowerText;
+		private inkTextWidgetReference _vehicleMassText;
+		private inkTextWidgetReference _vehicleStateText;
+		private inkTextWidgetReference _vehicleInfoText;
+		private inkWidgetReference _vehicleNameHolder;
+		private inkWidgetReference _vehicleProdYearsHolder;
+		private inkWidgetReference _vehicleDriveLayoutHolder;
+		private inkWidgetReference _vehicleHorsepowerHolder;
+		private inkWidgetReference _vehicleMassHolder;
+		private inkWidgetReference _vehicleStateHolder;
+		private inkWidgetReference _vehicleInfoHolder;
 
-		public ScannervehicleGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("vehicleNameCallbackID")] 
+		public CUInt32 VehicleNameCallbackID
+		{
+			get => GetProperty(ref _vehicleNameCallbackID);
+			set => SetProperty(ref _vehicleNameCallbackID, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("vehicleManufacturerCallbackID")] 
+		public CUInt32 VehicleManufacturerCallbackID
+		{
+			get => GetProperty(ref _vehicleManufacturerCallbackID);
+			set => SetProperty(ref _vehicleManufacturerCallbackID, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("vehicleProdYearsCallbackID")] 
+		public CUInt32 VehicleProdYearsCallbackID
+		{
+			get => GetProperty(ref _vehicleProdYearsCallbackID);
+			set => SetProperty(ref _vehicleProdYearsCallbackID, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("vehicleDriveLayoutCallbackID")] 
+		public CUInt32 VehicleDriveLayoutCallbackID
+		{
+			get => GetProperty(ref _vehicleDriveLayoutCallbackID);
+			set => SetProperty(ref _vehicleDriveLayoutCallbackID, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("vehicleHorsepowerCallbackID")] 
+		public CUInt32 VehicleHorsepowerCallbackID
+		{
+			get => GetProperty(ref _vehicleHorsepowerCallbackID);
+			set => SetProperty(ref _vehicleHorsepowerCallbackID, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("vehicleMassCallbackID")] 
+		public CUInt32 VehicleMassCallbackID
+		{
+			get => GetProperty(ref _vehicleMassCallbackID);
+			set => SetProperty(ref _vehicleMassCallbackID, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("vehicleStateCallbackID")] 
+		public CUInt32 VehicleStateCallbackID
+		{
+			get => GetProperty(ref _vehicleStateCallbackID);
+			set => SetProperty(ref _vehicleStateCallbackID, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("vehicleInfoCallbackID")] 
+		public CUInt32 VehicleInfoCallbackID
+		{
+			get => GetProperty(ref _vehicleInfoCallbackID);
+			set => SetProperty(ref _vehicleInfoCallbackID, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("isValidVehicleManufacturer")] 
+		public CBool IsValidVehicleManufacturer
+		{
+			get => GetProperty(ref _isValidVehicleManufacturer);
+			set => SetProperty(ref _isValidVehicleManufacturer, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("isValidVehicleName")] 
+		public CBool IsValidVehicleName
+		{
+			get => GetProperty(ref _isValidVehicleName);
+			set => SetProperty(ref _isValidVehicleName, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("isValidVehicleProdYears")] 
+		public CBool IsValidVehicleProdYears
+		{
+			get => GetProperty(ref _isValidVehicleProdYears);
+			set => SetProperty(ref _isValidVehicleProdYears, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("isValidVehicleDriveLayout")] 
+		public CBool IsValidVehicleDriveLayout
+		{
+			get => GetProperty(ref _isValidVehicleDriveLayout);
+			set => SetProperty(ref _isValidVehicleDriveLayout, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("isValidVehicleHorsepower")] 
+		public CBool IsValidVehicleHorsepower
+		{
+			get => GetProperty(ref _isValidVehicleHorsepower);
+			set => SetProperty(ref _isValidVehicleHorsepower, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("isValidVehicleMass")] 
+		public CBool IsValidVehicleMass
+		{
+			get => GetProperty(ref _isValidVehicleMass);
+			set => SetProperty(ref _isValidVehicleMass, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("isValidVehicleState")] 
+		public CBool IsValidVehicleState
+		{
+			get => GetProperty(ref _isValidVehicleState);
+			set => SetProperty(ref _isValidVehicleState, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("isValidVehicleInfo")] 
+		public CBool IsValidVehicleInfo
+		{
+			get => GetProperty(ref _isValidVehicleInfo);
+			set => SetProperty(ref _isValidVehicleInfo, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("vehicleNameText")] 
+		public inkTextWidgetReference VehicleNameText
+		{
+			get => GetProperty(ref _vehicleNameText);
+			set => SetProperty(ref _vehicleNameText, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("vehicleManufacturer")] 
+		public inkImageWidgetReference VehicleManufacturer
+		{
+			get => GetProperty(ref _vehicleManufacturer);
+			set => SetProperty(ref _vehicleManufacturer, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("vehicleProdYearsText")] 
+		public inkTextWidgetReference VehicleProdYearsText
+		{
+			get => GetProperty(ref _vehicleProdYearsText);
+			set => SetProperty(ref _vehicleProdYearsText, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("vehicleDriveLayoutText")] 
+		public inkTextWidgetReference VehicleDriveLayoutText
+		{
+			get => GetProperty(ref _vehicleDriveLayoutText);
+			set => SetProperty(ref _vehicleDriveLayoutText, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("vehicleHorsepowerText")] 
+		public inkTextWidgetReference VehicleHorsepowerText
+		{
+			get => GetProperty(ref _vehicleHorsepowerText);
+			set => SetProperty(ref _vehicleHorsepowerText, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("vehicleMassText")] 
+		public inkTextWidgetReference VehicleMassText
+		{
+			get => GetProperty(ref _vehicleMassText);
+			set => SetProperty(ref _vehicleMassText, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("vehicleStateText")] 
+		public inkTextWidgetReference VehicleStateText
+		{
+			get => GetProperty(ref _vehicleStateText);
+			set => SetProperty(ref _vehicleStateText, value);
+		}
+
+		[Ordinal(28)] 
+		[RED("vehicleInfoText")] 
+		public inkTextWidgetReference VehicleInfoText
+		{
+			get => GetProperty(ref _vehicleInfoText);
+			set => SetProperty(ref _vehicleInfoText, value);
+		}
+
+		[Ordinal(29)] 
+		[RED("vehicleNameHolder")] 
+		public inkWidgetReference VehicleNameHolder
+		{
+			get => GetProperty(ref _vehicleNameHolder);
+			set => SetProperty(ref _vehicleNameHolder, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("vehicleProdYearsHolder")] 
+		public inkWidgetReference VehicleProdYearsHolder
+		{
+			get => GetProperty(ref _vehicleProdYearsHolder);
+			set => SetProperty(ref _vehicleProdYearsHolder, value);
+		}
+
+		[Ordinal(31)] 
+		[RED("vehicleDriveLayoutHolder")] 
+		public inkWidgetReference VehicleDriveLayoutHolder
+		{
+			get => GetProperty(ref _vehicleDriveLayoutHolder);
+			set => SetProperty(ref _vehicleDriveLayoutHolder, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("vehicleHorsepowerHolder")] 
+		public inkWidgetReference VehicleHorsepowerHolder
+		{
+			get => GetProperty(ref _vehicleHorsepowerHolder);
+			set => SetProperty(ref _vehicleHorsepowerHolder, value);
+		}
+
+		[Ordinal(33)] 
+		[RED("vehicleMassHolder")] 
+		public inkWidgetReference VehicleMassHolder
+		{
+			get => GetProperty(ref _vehicleMassHolder);
+			set => SetProperty(ref _vehicleMassHolder, value);
+		}
+
+		[Ordinal(34)] 
+		[RED("vehicleStateHolder")] 
+		public inkWidgetReference VehicleStateHolder
+		{
+			get => GetProperty(ref _vehicleStateHolder);
+			set => SetProperty(ref _vehicleStateHolder, value);
+		}
+
+		[Ordinal(35)] 
+		[RED("vehicleInfoHolder")] 
+		public inkWidgetReference VehicleInfoHolder
+		{
+			get => GetProperty(ref _vehicleInfoHolder);
+			set => SetProperty(ref _vehicleInfoHolder, value);
+		}
+
+		public ScannervehicleGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

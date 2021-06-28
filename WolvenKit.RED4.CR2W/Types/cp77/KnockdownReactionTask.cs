@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class KnockdownReactionTask : AIHitReactionTask
 	{
-		[Ordinal(4)] [RED("tweakDBPackage")] public TweakDBID TweakDBPackage { get; set; }
+		private TweakDBID _tweakDBPackage;
 
-		public KnockdownReactionTask(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("tweakDBPackage")] 
+		public TweakDBID TweakDBPackage
+		{
+			get => GetProperty(ref _tweakDBPackage);
+			set => SetProperty(ref _tweakDBPackage, value);
+		}
+
+		public KnockdownReactionTask(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

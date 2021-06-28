@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class toolsMessageLocation_Webpage : toolsIMessageLocation
 	{
-		[Ordinal(0)] [RED("link")] public CString Link { get; set; }
-		[Ordinal(1)] [RED("text")] public CString Text { get; set; }
+		private CString _link;
+		private CString _text;
 
-		public toolsMessageLocation_Webpage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("link")] 
+		public CString Link
+		{
+			get => GetProperty(ref _link);
+			set => SetProperty(ref _link, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("text")] 
+		public CString Text
+		{
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
+		}
+
+		public toolsMessageLocation_Webpage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

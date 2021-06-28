@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldFoliageBrush : CResource
 	{
-		[Ordinal(1)] [RED("items")] public CArray<CHandle<worldFoliageBrushItem>> Items { get; set; }
+		private CArray<CHandle<worldFoliageBrushItem>> _items;
 
-		public worldFoliageBrush(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("items")] 
+		public CArray<CHandle<worldFoliageBrushItem>> Items
+		{
+			get => GetProperty(ref _items);
+			set => SetProperty(ref _items, value);
+		}
+
+		public worldFoliageBrush(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

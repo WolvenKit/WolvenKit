@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudioSceneDefaults : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("parameters")] public CArray<audioAudSimpleParameter> Parameters { get; set; }
+		private CArray<audioAudSimpleParameter> _parameters;
 
-		public audioAudioSceneDefaults(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("parameters")] 
+		public CArray<audioAudSimpleParameter> Parameters
+		{
+			get => GetProperty(ref _parameters);
+			set => SetProperty(ref _parameters, value);
+		}
+
+		public audioAudioSceneDefaults(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

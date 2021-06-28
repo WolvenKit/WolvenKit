@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkInputKeyDictionaryJSON : ISerializable
 	{
-		[Ordinal(0)] [RED("devicesMappings")] public CArray<inkInputDevicesMappingsJSON> DevicesMappings { get; set; }
+		private CArray<inkInputDevicesMappingsJSON> _devicesMappings;
 
-		public inkInputKeyDictionaryJSON(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("devicesMappings")] 
+		public CArray<inkInputDevicesMappingsJSON> DevicesMappings
+		{
+			get => GetProperty(ref _devicesMappings);
+			set => SetProperty(ref _devicesMappings, value);
+		}
+
+		public inkInputKeyDictionaryJSON(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

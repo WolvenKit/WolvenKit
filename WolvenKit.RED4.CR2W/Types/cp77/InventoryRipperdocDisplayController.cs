@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InventoryRipperdocDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(78)] [RED("ownedBackground")] public inkWidgetReference OwnedBackground { get; set; }
-		[Ordinal(79)] [RED("ownedSign")] public inkWidgetReference OwnedSign { get; set; }
+		private inkWidgetReference _ownedBackground;
+		private inkWidgetReference _ownedSign;
 
-		public InventoryRipperdocDisplayController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(80)] 
+		[RED("ownedBackground")] 
+		public inkWidgetReference OwnedBackground
+		{
+			get => GetProperty(ref _ownedBackground);
+			set => SetProperty(ref _ownedBackground, value);
+		}
+
+		[Ordinal(81)] 
+		[RED("ownedSign")] 
+		public inkWidgetReference OwnedSign
+		{
+			get => GetProperty(ref _ownedSign);
+			set => SetProperty(ref _ownedSign, value);
+		}
+
+		public InventoryRipperdocDisplayController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

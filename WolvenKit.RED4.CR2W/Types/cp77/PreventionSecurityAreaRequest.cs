@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PreventionSecurityAreaRequest : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("playerIsIn")] public CBool PlayerIsIn { get; set; }
-		[Ordinal(1)] [RED("areaID")] public gamePersistentID AreaID { get; set; }
+		private CBool _playerIsIn;
+		private gamePersistentID _areaID;
 
-		public PreventionSecurityAreaRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("playerIsIn")] 
+		public CBool PlayerIsIn
+		{
+			get => GetProperty(ref _playerIsIn);
+			set => SetProperty(ref _playerIsIn, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("areaID")] 
+		public gamePersistentID AreaID
+		{
+			get => GetProperty(ref _areaID);
+			set => SetProperty(ref _areaID, value);
+		}
+
+		public PreventionSecurityAreaRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

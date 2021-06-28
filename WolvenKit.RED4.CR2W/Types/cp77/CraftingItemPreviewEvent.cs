@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CraftingItemPreviewEvent : redEvent
 	{
-		[Ordinal(0)] [RED("itemID")] public gameItemID ItemID { get; set; }
+		private gameItemID _itemID;
 
-		public CraftingItemPreviewEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemID")] 
+		public gameItemID ItemID
+		{
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
+		}
+
+		public CraftingItemPreviewEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

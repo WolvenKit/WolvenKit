@@ -7,14 +7,70 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameScanningComponentPS : gameComponentPS
 	{
-		[Ordinal(0)] [RED("scanningState")] public CEnum<gameScanningState> ScanningState { get; set; }
-		[Ordinal(1)] [RED("pctScanned")] public CFloat PctScanned { get; set; }
-		[Ordinal(2)] [RED("isBlocked")] public CBool IsBlocked { get; set; }
-		[Ordinal(3)] [RED("storedClues")] public CArray<CHandle<CluePSData>> StoredClues { get; set; }
-		[Ordinal(4)] [RED("isScanningDisabled")] public CBool IsScanningDisabled { get; set; }
-		[Ordinal(5)] [RED("isDecriptionEnabled")] public CBool IsDecriptionEnabled { get; set; }
-		[Ordinal(6)] [RED("objectDescriptionOverride")] public CHandle<ObjectScanningDescription> ObjectDescriptionOverride { get; set; }
+		private CEnum<gameScanningState> _scanningState;
+		private CFloat _pctScanned;
+		private CBool _isBlocked;
+		private CArray<CHandle<CluePSData>> _storedClues;
+		private CBool _isScanningDisabled;
+		private CBool _isDecriptionEnabled;
+		private CHandle<ObjectScanningDescription> _objectDescriptionOverride;
 
-		public gameScanningComponentPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("scanningState")] 
+		public CEnum<gameScanningState> ScanningState
+		{
+			get => GetProperty(ref _scanningState);
+			set => SetProperty(ref _scanningState, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("pctScanned")] 
+		public CFloat PctScanned
+		{
+			get => GetProperty(ref _pctScanned);
+			set => SetProperty(ref _pctScanned, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isBlocked")] 
+		public CBool IsBlocked
+		{
+			get => GetProperty(ref _isBlocked);
+			set => SetProperty(ref _isBlocked, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("storedClues")] 
+		public CArray<CHandle<CluePSData>> StoredClues
+		{
+			get => GetProperty(ref _storedClues);
+			set => SetProperty(ref _storedClues, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("isScanningDisabled")] 
+		public CBool IsScanningDisabled
+		{
+			get => GetProperty(ref _isScanningDisabled);
+			set => SetProperty(ref _isScanningDisabled, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("isDecriptionEnabled")] 
+		public CBool IsDecriptionEnabled
+		{
+			get => GetProperty(ref _isDecriptionEnabled);
+			set => SetProperty(ref _isDecriptionEnabled, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("objectDescriptionOverride")] 
+		public CHandle<ObjectScanningDescription> ObjectDescriptionOverride
+		{
+			get => GetProperty(ref _objectDescriptionOverride);
+			set => SetProperty(ref _objectDescriptionOverride, value);
+		}
+
+		public gameScanningComponentPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterMultilayerSetup : CMaterialParameter
 	{
-		[Ordinal(2)] [RED("setup")] public rRef<Multilayer_Setup> Setup { get; set; }
+		private rRef<Multilayer_Setup> _setup;
 
-		public CMaterialParameterMultilayerSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("setup")] 
+		public rRef<Multilayer_Setup> Setup
+		{
+			get => GetProperty(ref _setup);
+			set => SetProperty(ref _setup, value);
+		}
+
+		public CMaterialParameterMultilayerSetup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questMappinState_ConditionType : questIJournalConditionType
 	{
-		[Ordinal(0)] [RED("mappinPath")] public CHandle<gameJournalPath> MappinPath { get; set; }
-		[Ordinal(1)] [RED("active")] public CBool Active { get; set; }
+		private CHandle<gameJournalPath> _mappinPath;
+		private CBool _active;
 
-		public questMappinState_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mappinPath")] 
+		public CHandle<gameJournalPath> MappinPath
+		{
+			get => GetProperty(ref _mappinPath);
+			set => SetProperty(ref _mappinPath, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("active")] 
+		public CBool Active
+		{
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
+		}
+
+		public questMappinState_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

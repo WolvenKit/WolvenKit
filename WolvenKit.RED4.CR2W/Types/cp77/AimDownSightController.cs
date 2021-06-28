@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AimDownSightController : BasicAnimationController
 	{
-		[Ordinal(6)] [RED("isAiming")] public CBool IsAiming { get; set; }
+		private CBool _isAiming;
 
-		public AimDownSightController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("isAiming")] 
+		public CBool IsAiming
+		{
+			get => GetProperty(ref _isAiming);
+			set => SetProperty(ref _isAiming, value);
+		}
+
+		public AimDownSightController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemAttachments : CVariable
 	{
-		[Ordinal(0)] [RED("itemID")] public gameItemID ItemID { get; set; }
-		[Ordinal(1)] [RED("attachmentSlotID")] public TweakDBID AttachmentSlotID { get; set; }
+		private gameItemID _itemID;
+		private TweakDBID _attachmentSlotID;
 
-		public ItemAttachments(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemID")] 
+		public gameItemID ItemID
+		{
+			get => GetProperty(ref _itemID);
+			set => SetProperty(ref _itemID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("attachmentSlotID")] 
+		public TweakDBID AttachmentSlotID
+		{
+			get => GetProperty(ref _attachmentSlotID);
+			set => SetProperty(ref _attachmentSlotID, value);
+		}
+
+		public ItemAttachments(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiSetCharacterCreationDataRequest : gamePlayerScriptableSystemRequest
 	{
-		[Ordinal(1)] [RED("lifepath")] public TweakDBID Lifepath { get; set; }
-		[Ordinal(2)] [RED("attributes")] public CArray<gameuiCharacterCustomizationAttribute> Attributes { get; set; }
+		private TweakDBID _lifepath;
+		private CArray<gameuiCharacterCustomizationAttribute> _attributes;
 
-		public gameuiSetCharacterCreationDataRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("lifepath")] 
+		public TweakDBID Lifepath
+		{
+			get => GetProperty(ref _lifepath);
+			set => SetProperty(ref _lifepath, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("attributes")] 
+		public CArray<gameuiCharacterCustomizationAttribute> Attributes
+		{
+			get => GetProperty(ref _attributes);
+			set => SetProperty(ref _attributes, value);
+		}
+
+		public gameuiSetCharacterCreationDataRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

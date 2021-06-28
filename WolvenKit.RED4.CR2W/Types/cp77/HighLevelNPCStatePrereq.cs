@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class HighLevelNPCStatePrereq : NPCStatePrereq
 	{
-		[Ordinal(3)] [RED("valueToListen")] public CEnum<gamedataNPCHighLevelState> ValueToListen { get; set; }
+		private CEnum<gamedataNPCHighLevelState> _valueToListen;
 
-		public HighLevelNPCStatePrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("valueToListen")] 
+		public CEnum<gamedataNPCHighLevelState> ValueToListen
+		{
+			get => GetProperty(ref _valueToListen);
+			set => SetProperty(ref _valueToListen, value);
+		}
+
+		public HighLevelNPCStatePrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

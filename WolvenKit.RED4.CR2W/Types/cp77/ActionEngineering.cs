@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ActionEngineering : ActionSkillCheck
 	{
-		public ActionEngineering(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public ActionEngineering(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

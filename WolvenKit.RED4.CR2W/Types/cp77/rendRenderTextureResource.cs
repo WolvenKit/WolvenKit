@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class rendRenderTextureResource : CVariable
 	{
-		[Ordinal(0)] [RED("renderResourceBlobPC")] public CHandle<IRenderResourceBlob> RenderResourceBlobPC { get; set; }
+		private CHandle<IRenderResourceBlob> _renderResourceBlobPC;
 
-		public rendRenderTextureResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("renderResourceBlobPC")] 
+		public CHandle<IRenderResourceBlob> RenderResourceBlobPC
+		{
+			get => GetProperty(ref _renderResourceBlobPC);
+			set => SetProperty(ref _renderResourceBlobPC, value);
+		}
+
+		public rendRenderTextureResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

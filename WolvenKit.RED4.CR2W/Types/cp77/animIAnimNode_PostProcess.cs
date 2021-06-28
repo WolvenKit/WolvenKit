@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animIAnimNode_PostProcess : ISerializable
 	{
-		[Ordinal(0)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
+		private CBool _isEnabled;
 
-		public animIAnimNode_PostProcess(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
+		}
+
+		public animIAnimNode_PostProcess(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

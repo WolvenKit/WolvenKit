@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIRoleCondition : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("role")] public CEnum<EAIRole> Role { get; set; }
+		private CEnum<EAIRole> _role;
 
-		public AIRoleCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("role")] 
+		public CEnum<EAIRole> Role
+		{
+			get => GetProperty(ref _role);
+			set => SetProperty(ref _role, value);
+		}
+
+		public AIRoleCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class toolsMessageToken_Text : toolsIMessageToken
 	{
-		[Ordinal(0)] [RED("text")] public CString Text { get; set; }
+		private CString _text;
 
-		public toolsMessageToken_Text(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("text")] 
+		public CString Text
+		{
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
+		}
+
+		public toolsMessageToken_Text(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

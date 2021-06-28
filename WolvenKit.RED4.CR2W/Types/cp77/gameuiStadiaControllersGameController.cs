@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiStadiaControllersGameController : gameuiMenuGameController
 	{
-		[Ordinal(3)] [RED("stadiaControllerPage")] public inkWidgetReference StadiaControllerPage { get; set; }
-		[Ordinal(4)] [RED("nintendoControllerPage")] public inkWidgetReference NintendoControllerPage { get; set; }
-		[Ordinal(5)] [RED("durangoControllerPage")] public inkWidgetReference DurangoControllerPage { get; set; }
-		[Ordinal(6)] [RED("orbisControllerPage")] public inkWidgetReference OrbisControllerPage { get; set; }
+		private inkWidgetReference _stadiaControllerPage;
+		private inkWidgetReference _nintendoControllerPage;
+		private inkWidgetReference _durangoControllerPage;
+		private inkWidgetReference _orbisControllerPage;
 
-		public gameuiStadiaControllersGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("stadiaControllerPage")] 
+		public inkWidgetReference StadiaControllerPage
+		{
+			get => GetProperty(ref _stadiaControllerPage);
+			set => SetProperty(ref _stadiaControllerPage, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("nintendoControllerPage")] 
+		public inkWidgetReference NintendoControllerPage
+		{
+			get => GetProperty(ref _nintendoControllerPage);
+			set => SetProperty(ref _nintendoControllerPage, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("durangoControllerPage")] 
+		public inkWidgetReference DurangoControllerPage
+		{
+			get => GetProperty(ref _durangoControllerPage);
+			set => SetProperty(ref _durangoControllerPage, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("orbisControllerPage")] 
+		public inkWidgetReference OrbisControllerPage
+		{
+			get => GetProperty(ref _orbisControllerPage);
+			set => SetProperty(ref _orbisControllerPage, value);
+		}
+
+		public gameuiStadiaControllersGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

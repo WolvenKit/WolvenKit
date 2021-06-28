@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_FrozenFrame : animAnimNode_OnePoseInput
 	{
-		[Ordinal(12)] [RED("maxFramesFrozen")] public CInt32 MaxFramesFrozen { get; set; }
-		[Ordinal(13)] [RED("triggerEventName")] public CName TriggerEventName { get; set; }
-		[Ordinal(14)] [RED("clearEventName")] public CName ClearEventName { get; set; }
+		private CInt32 _maxFramesFrozen;
+		private CName _triggerEventName;
+		private CName _clearEventName;
 
-		public animAnimNode_FrozenFrame(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(12)] 
+		[RED("maxFramesFrozen")] 
+		public CInt32 MaxFramesFrozen
+		{
+			get => GetProperty(ref _maxFramesFrozen);
+			set => SetProperty(ref _maxFramesFrozen, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("triggerEventName")] 
+		public CName TriggerEventName
+		{
+			get => GetProperty(ref _triggerEventName);
+			set => SetProperty(ref _triggerEventName, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("clearEventName")] 
+		public CName ClearEventName
+		{
+			get => GetProperty(ref _clearEventName);
+			set => SetProperty(ref _clearEventName, value);
+		}
+
+		public animAnimNode_FrozenFrame(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AISetAutocraftingState : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("newState")] public CBool NewState { get; set; }
+		private CBool _newState;
 
-		public AISetAutocraftingState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("newState")] 
+		public CBool NewState
+		{
+			get => GetProperty(ref _newState);
+			set => SetProperty(ref _newState, value);
+		}
+
+		public AISetAutocraftingState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

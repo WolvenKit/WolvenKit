@@ -22,7 +22,7 @@ namespace WolvenKit.RED3.CR2W.Types
         [Ordinal(4)][RED] public CUInt8 Alpha { get; set; }
 
 
-        public CColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
+        public CColor(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
             Red = new CUInt8(cr2w, this, nameof(Red));
             Green = new CUInt8(cr2w, this, nameof(Green));
@@ -54,6 +54,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             if (val is Color)
             {
                 Color = (Color)val;

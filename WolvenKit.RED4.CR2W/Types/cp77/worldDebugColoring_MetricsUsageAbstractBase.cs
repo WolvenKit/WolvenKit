@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldDebugColoring_MetricsUsageAbstractBase : worldEditorDebugColoringSettings
 	{
-		[Ordinal(0)] [RED("maxColor")] public CColor MaxColor { get; set; }
-		[Ordinal(1)] [RED("minColor")] public CColor MinColor { get; set; }
-		[Ordinal(2)] [RED("minSize")] public CUInt32 MinSize { get; set; }
-		[Ordinal(3)] [RED("maxSize")] public CUInt32 MaxSize { get; set; }
+		private CColor _maxColor;
+		private CColor _minColor;
+		private CUInt32 _minSize;
+		private CUInt32 _maxSize;
 
-		public worldDebugColoring_MetricsUsageAbstractBase(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("maxColor")] 
+		public CColor MaxColor
+		{
+			get => GetProperty(ref _maxColor);
+			set => SetProperty(ref _maxColor, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("minColor")] 
+		public CColor MinColor
+		{
+			get => GetProperty(ref _minColor);
+			set => SetProperty(ref _minColor, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("minSize")] 
+		public CUInt32 MinSize
+		{
+			get => GetProperty(ref _minSize);
+			set => SetProperty(ref _minSize, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("maxSize")] 
+		public CUInt32 MaxSize
+		{
+			get => GetProperty(ref _maxSize);
+			set => SetProperty(ref _maxSize, value);
+		}
+
+		public worldDebugColoring_MetricsUsageAbstractBase(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PassiveIsPlayerCompanionCondition : PassiveAutonomousCondition
 	{
-		[Ordinal(0)] [RED("roleCbId")] public CUInt32 RoleCbId { get; set; }
+		private CUInt32 _roleCbId;
 
-		public PassiveIsPlayerCompanionCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("roleCbId")] 
+		public CUInt32 RoleCbId
+		{
+			get => GetProperty(ref _roleCbId);
+			set => SetProperty(ref _roleCbId, value);
+		}
+
+		public PassiveIsPlayerCompanionCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

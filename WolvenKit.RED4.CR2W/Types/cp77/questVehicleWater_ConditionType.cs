@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questVehicleWater_ConditionType : questIVehicleConditionType
 	{
-		[Ordinal(0)] [RED("submergedOnly")] public CBool SubmergedOnly { get; set; }
-		[Ordinal(1)] [RED("onEnter")] public CBool OnEnter { get; set; }
+		private CBool _submergedOnly;
+		private CBool _onEnter;
 
-		public questVehicleWater_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("submergedOnly")] 
+		public CBool SubmergedOnly
+		{
+			get => GetProperty(ref _submergedOnly);
+			set => SetProperty(ref _submergedOnly, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("onEnter")] 
+		public CBool OnEnter
+		{
+			get => GetProperty(ref _onEnter);
+			set => SetProperty(ref _onEnter, value);
+		}
+
+		public questVehicleWater_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

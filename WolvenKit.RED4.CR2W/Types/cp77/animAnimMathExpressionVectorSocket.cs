@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimMathExpressionVectorSocket : CVariable
 	{
-		[Ordinal(0)] [RED("link")] public animVectorLink Link { get; set; }
-		[Ordinal(1)] [RED("expressionVarId")] public CUInt16 ExpressionVarId { get; set; }
+		private animVectorLink _link;
+		private CUInt16 _expressionVarId;
 
-		public animAnimMathExpressionVectorSocket(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("link")] 
+		public animVectorLink Link
+		{
+			get => GetProperty(ref _link);
+			set => SetProperty(ref _link, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("expressionVarId")] 
+		public CUInt16 ExpressionVarId
+		{
+			get => GetProperty(ref _expressionVarId);
+			set => SetProperty(ref _expressionVarId, value);
+		}
+
+		public animAnimMathExpressionVectorSocket(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

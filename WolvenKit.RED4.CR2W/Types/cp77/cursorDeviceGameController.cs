@@ -7,21 +7,133 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cursorDeviceGameController : gameuiWidgetGameController
 	{
-		[Ordinal(2)] [RED("bbUIData")] public CHandle<gameIBlackboard> BbUIData { get; set; }
-		[Ordinal(3)] [RED("bbWeaponInfo")] public wCHandle<gameIBlackboard> BbWeaponInfo { get; set; }
-		[Ordinal(4)] [RED("bbWeaponEventId")] public CUInt32 BbWeaponEventId { get; set; }
-		[Ordinal(5)] [RED("bbPlayerTierEventId")] public CUInt32 BbPlayerTierEventId { get; set; }
-		[Ordinal(6)] [RED("interactionBlackboardId")] public CUInt32 InteractionBlackboardId { get; set; }
-		[Ordinal(7)] [RED("upperBodyStateBlackboardId")] public CUInt32 UpperBodyStateBlackboardId { get; set; }
-		[Ordinal(8)] [RED("sceneTier")] public CEnum<GameplayTier> SceneTier { get; set; }
-		[Ordinal(9)] [RED("upperBodyState")] public CEnum<gamePSMUpperBodyStates> UpperBodyState { get; set; }
-		[Ordinal(10)] [RED("isUnarmed")] public CBool IsUnarmed { get; set; }
-		[Ordinal(11)] [RED("cursorDevice")] public wCHandle<inkImageWidget> CursorDevice { get; set; }
-		[Ordinal(12)] [RED("fadeOutAnimation")] public CHandle<inkanimDefinition> FadeOutAnimation { get; set; }
-		[Ordinal(13)] [RED("fadeInAnimation")] public CHandle<inkanimDefinition> FadeInAnimation { get; set; }
-		[Ordinal(14)] [RED("wasLastInteractionWithDevice")] public CBool WasLastInteractionWithDevice { get; set; }
-		[Ordinal(15)] [RED("interactionDeviceState")] public CBool InteractionDeviceState { get; set; }
+		private CHandle<gameIBlackboard> _bbUIData;
+		private wCHandle<gameIBlackboard> _bbWeaponInfo;
+		private CUInt32 _bbWeaponEventId;
+		private CUInt32 _bbPlayerTierEventId;
+		private CUInt32 _interactionBlackboardId;
+		private CUInt32 _upperBodyStateBlackboardId;
+		private CEnum<GameplayTier> _sceneTier;
+		private CEnum<gamePSMUpperBodyStates> _upperBodyState;
+		private CBool _isUnarmed;
+		private wCHandle<inkImageWidget> _cursorDevice;
+		private CHandle<inkanimDefinition> _fadeOutAnimation;
+		private CHandle<inkanimDefinition> _fadeInAnimation;
+		private CBool _wasLastInteractionWithDevice;
+		private CBool _interactionDeviceState;
 
-		public cursorDeviceGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("bbUIData")] 
+		public CHandle<gameIBlackboard> BbUIData
+		{
+			get => GetProperty(ref _bbUIData);
+			set => SetProperty(ref _bbUIData, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("bbWeaponInfo")] 
+		public wCHandle<gameIBlackboard> BbWeaponInfo
+		{
+			get => GetProperty(ref _bbWeaponInfo);
+			set => SetProperty(ref _bbWeaponInfo, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("bbWeaponEventId")] 
+		public CUInt32 BbWeaponEventId
+		{
+			get => GetProperty(ref _bbWeaponEventId);
+			set => SetProperty(ref _bbWeaponEventId, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("bbPlayerTierEventId")] 
+		public CUInt32 BbPlayerTierEventId
+		{
+			get => GetProperty(ref _bbPlayerTierEventId);
+			set => SetProperty(ref _bbPlayerTierEventId, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("interactionBlackboardId")] 
+		public CUInt32 InteractionBlackboardId
+		{
+			get => GetProperty(ref _interactionBlackboardId);
+			set => SetProperty(ref _interactionBlackboardId, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("upperBodyStateBlackboardId")] 
+		public CUInt32 UpperBodyStateBlackboardId
+		{
+			get => GetProperty(ref _upperBodyStateBlackboardId);
+			set => SetProperty(ref _upperBodyStateBlackboardId, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("sceneTier")] 
+		public CEnum<GameplayTier> SceneTier
+		{
+			get => GetProperty(ref _sceneTier);
+			set => SetProperty(ref _sceneTier, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("upperBodyState")] 
+		public CEnum<gamePSMUpperBodyStates> UpperBodyState
+		{
+			get => GetProperty(ref _upperBodyState);
+			set => SetProperty(ref _upperBodyState, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("isUnarmed")] 
+		public CBool IsUnarmed
+		{
+			get => GetProperty(ref _isUnarmed);
+			set => SetProperty(ref _isUnarmed, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("cursorDevice")] 
+		public wCHandle<inkImageWidget> CursorDevice
+		{
+			get => GetProperty(ref _cursorDevice);
+			set => SetProperty(ref _cursorDevice, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("fadeOutAnimation")] 
+		public CHandle<inkanimDefinition> FadeOutAnimation
+		{
+			get => GetProperty(ref _fadeOutAnimation);
+			set => SetProperty(ref _fadeOutAnimation, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("fadeInAnimation")] 
+		public CHandle<inkanimDefinition> FadeInAnimation
+		{
+			get => GetProperty(ref _fadeInAnimation);
+			set => SetProperty(ref _fadeInAnimation, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("wasLastInteractionWithDevice")] 
+		public CBool WasLastInteractionWithDevice
+		{
+			get => GetProperty(ref _wasLastInteractionWithDevice);
+			set => SetProperty(ref _wasLastInteractionWithDevice, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("interactionDeviceState")] 
+		public CBool InteractionDeviceState
+		{
+			get => GetProperty(ref _interactionDeviceState);
+			set => SetProperty(ref _interactionDeviceState, value);
+		}
+
+		public cursorDeviceGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

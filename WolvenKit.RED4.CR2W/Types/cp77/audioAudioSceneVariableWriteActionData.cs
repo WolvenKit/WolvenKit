@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAudioSceneVariableWriteActionData : CVariable
 	{
-		[Ordinal(0)] [RED("name")] public CName Name { get; set; }
-		[Ordinal(1)] [RED("operation")] public CEnum<audioNumberOperation> Operation { get; set; }
-		[Ordinal(2)] [RED("value")] public CInt32 Value { get; set; }
+		private CName _name;
+		private CEnum<audioNumberOperation> _operation;
+		private CInt32 _value;
 
-		public audioAudioSceneVariableWriteActionData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("name")] 
+		public CName Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("operation")] 
+		public CEnum<audioNumberOperation> Operation
+		{
+			get => GetProperty(ref _operation);
+			set => SetProperty(ref _operation, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("value")] 
+		public CInt32 Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		public audioAudioSceneVariableWriteActionData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

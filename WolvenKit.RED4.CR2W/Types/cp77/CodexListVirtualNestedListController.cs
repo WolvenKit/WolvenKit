@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CodexListVirtualNestedListController : VirtualNestedListController
 	{
-		[Ordinal(13)] [RED("currentDataView")] public wCHandle<CodexListVirtualNestedDataView> CurrentDataView { get; set; }
+		private wCHandle<CodexListVirtualNestedDataView> _currentDataView;
 
-		public CodexListVirtualNestedListController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(13)] 
+		[RED("currentDataView")] 
+		public wCHandle<CodexListVirtualNestedDataView> CurrentDataView
+		{
+			get => GetProperty(ref _currentDataView);
+			set => SetProperty(ref _currentDataView, value);
+		}
+
+		public CodexListVirtualNestedListController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

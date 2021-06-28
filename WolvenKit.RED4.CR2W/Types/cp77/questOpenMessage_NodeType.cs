@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questOpenMessage_NodeType : questIPhoneManagerNodeType
 	{
-		[Ordinal(0)] [RED("msg")] public CHandle<gameJournalPath> Msg { get; set; }
+		private CHandle<gameJournalPath> _msg;
 
-		public questOpenMessage_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("msg")] 
+		public CHandle<gameJournalPath> Msg
+		{
+			get => GetProperty(ref _msg);
+			set => SetProperty(ref _msg, value);
+		}
+
+		public questOpenMessage_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIThrowGrenadeCommand : AICombatRelatedCommand
 	{
-		[Ordinal(5)] [RED("targetOverrideNodeRef")] public NodeRef TargetOverrideNodeRef { get; set; }
-		[Ordinal(6)] [RED("targetOverridePuppetRef")] public gameEntityReference TargetOverridePuppetRef { get; set; }
-		[Ordinal(7)] [RED("duration")] public CFloat Duration { get; set; }
-		[Ordinal(8)] [RED("once")] public CBool Once { get; set; }
+		private NodeRef _targetOverrideNodeRef;
+		private gameEntityReference _targetOverridePuppetRef;
+		private CFloat _duration;
+		private CBool _once;
 
-		public AIThrowGrenadeCommand(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(5)] 
+		[RED("targetOverrideNodeRef")] 
+		public NodeRef TargetOverrideNodeRef
+		{
+			get => GetProperty(ref _targetOverrideNodeRef);
+			set => SetProperty(ref _targetOverrideNodeRef, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("targetOverridePuppetRef")] 
+		public gameEntityReference TargetOverridePuppetRef
+		{
+			get => GetProperty(ref _targetOverridePuppetRef);
+			set => SetProperty(ref _targetOverridePuppetRef, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetProperty(ref _duration);
+			set => SetProperty(ref _duration, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("once")] 
+		public CBool Once
+		{
+			get => GetProperty(ref _once);
+			set => SetProperty(ref _once, value);
+		}
+
+		public AIThrowGrenadeCommand(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

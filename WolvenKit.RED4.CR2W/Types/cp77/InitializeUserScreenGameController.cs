@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InitializeUserScreenGameController : gameuiMenuGameController
 	{
-		[Ordinal(3)] [RED("backgroundVideo")] public inkVideoWidgetReference BackgroundVideo { get; set; }
-		[Ordinal(4)] [RED("menuEventDispatcher")] public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher { get; set; }
+		private inkVideoWidgetReference _backgroundVideo;
+		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
 
-		public InitializeUserScreenGameController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("backgroundVideo")] 
+		public inkVideoWidgetReference BackgroundVideo
+		{
+			get => GetProperty(ref _backgroundVideo);
+			set => SetProperty(ref _backgroundVideo, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("menuEventDispatcher")] 
+		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
+		{
+			get => GetProperty(ref _menuEventDispatcher);
+			set => SetProperty(ref _menuEventDispatcher, value);
+		}
+
+		public InitializeUserScreenGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

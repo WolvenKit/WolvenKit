@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldDestructibleProxyMeshNode : worldPrefabProxyMeshNode
 	{
-		[Ordinal(19)] [RED("ownerHash")] public CUInt64 OwnerHash { get; set; }
+		private CUInt64 _ownerHash;
 
-		public worldDestructibleProxyMeshNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(19)] 
+		[RED("ownerHash")] 
+		public CUInt64 OwnerHash
+		{
+			get => GetProperty(ref _ownerHash);
+			set => SetProperty(ref _ownerHash, value);
+		}
+
+		public worldDestructibleProxyMeshNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

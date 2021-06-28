@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questCharacterTriggeredCombatInSecuritySystem_ConditionType : questICharacterConditionType
 	{
-		[Ordinal(0)] [RED("objectRef")] public gameEntityReference ObjectRef { get; set; }
+		private gameEntityReference _objectRef;
 
-		public questCharacterTriggeredCombatInSecuritySystem_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("objectRef")] 
+		public gameEntityReference ObjectRef
+		{
+			get => GetProperty(ref _objectRef);
+			set => SetProperty(ref _objectRef, value);
+		}
+
+		public questCharacterTriggeredCombatInSecuritySystem_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

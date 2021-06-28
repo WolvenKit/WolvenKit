@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InstallItemPart : gameScriptableSystemRequest
 	{
-		[Ordinal(0)] [RED("obj")] public wCHandle<gameObject> Obj { get; set; }
-		[Ordinal(1)] [RED("baseItem")] public gameItemID BaseItem { get; set; }
-		[Ordinal(2)] [RED("partToInstall")] public gameItemID PartToInstall { get; set; }
-		[Ordinal(3)] [RED("slotID")] public TweakDBID SlotID { get; set; }
+		private wCHandle<gameObject> _obj;
+		private gameItemID _baseItem;
+		private gameItemID _partToInstall;
+		private TweakDBID _slotID;
 
-		public InstallItemPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("obj")] 
+		public wCHandle<gameObject> Obj
+		{
+			get => GetProperty(ref _obj);
+			set => SetProperty(ref _obj, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("baseItem")] 
+		public gameItemID BaseItem
+		{
+			get => GetProperty(ref _baseItem);
+			set => SetProperty(ref _baseItem, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("partToInstall")] 
+		public gameItemID PartToInstall
+		{
+			get => GetProperty(ref _partToInstall);
+			set => SetProperty(ref _partToInstall, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("slotID")] 
+		public TweakDBID SlotID
+		{
+			get => GetProperty(ref _slotID);
+			set => SetProperty(ref _slotID, value);
+		}
+
+		public InstallItemPart(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

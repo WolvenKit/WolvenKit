@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioWaitTimeASTCD : audioAudioStateTransitionConditionData
 	{
-		[Ordinal(1)] [RED("timeToWait")] public CFloat TimeToWait { get; set; }
+		private CFloat _timeToWait;
 
-		public audioWaitTimeASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("timeToWait")] 
+		public CFloat TimeToWait
+		{
+			get => GetProperty(ref _timeToWait);
+			set => SetProperty(ref _timeToWait, value);
+		}
+
+		public audioWaitTimeASTCD(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AITakedownHandler : AIbehaviortaskScript
 	{
-		[Ordinal(0)] [RED("inCommand")] public CHandle<AIArgumentMapping> InCommand { get; set; }
+		private CHandle<AIArgumentMapping> _inCommand;
 
-		public AITakedownHandler(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("inCommand")] 
+		public CHandle<AIArgumentMapping> InCommand
+		{
+			get => GetProperty(ref _inCommand);
+			set => SetProperty(ref _inCommand, value);
+		}
+
+		public AITakedownHandler(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

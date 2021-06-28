@@ -1,15 +1,15 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel;
 using Catel.IoC;
-using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
-using Orc.ProjectManagement;
+using ProtoBuf.Meta;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -20,7 +20,7 @@ using WolvenKit.ViewModels.Editor;
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
     // #SortNameSpace
-    public class RibbonViewModel : ViewModel
+    public class RibbonViewModel : ViewModelBase
     {
         #region fields
 
@@ -58,7 +58,9 @@ namespace WolvenKit.ViewModels.Shell
             StartScreenShown = false;
             BackstageIsOpen = true;
             GlobalRibbonVM = this;
+
             ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
+            AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
 
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title();
@@ -77,6 +79,7 @@ namespace WolvenKit.ViewModels.Shell
             Visible,
         }
 
+
         public bool BackstageIsOpen { get; set; }
         public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
 
@@ -94,9 +97,9 @@ namespace WolvenKit.ViewModels.Shell
                     _selectedTheme = value;
                     var color = new SolidColorBrush(value);
                     ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
-                    ILog _logger = LogManager.GetCurrentClassLogger();
-                    _logger.Info("Changed theme : " + value.ToString());
-                    _settingsManager.ThemeAccent = value;
+
+                    _loggerService.Info("Changed theme : " + value.ToString());
+                    _settingsManager.SetThemeAccent(value);
                     _settingsManager.Save();
                 }
             }
@@ -107,6 +110,24 @@ namespace WolvenKit.ViewModels.Shell
         #endregion properties
 
         #region commands
+
+        public ICommand AssetBrowserAddCommand { get; private set; }
+
+        private bool CanAssetBrowserAdd()
+        {
+            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            return abvm is {RightSelectedItems: { }} && abvm.RightSelectedItems.Any();
+        }
+
+        private void ExecuteAssetBrowserAdd()
+        {
+            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            abvm.AddSelectedCommand.SafeExecute();
+        }
+
+        
+
+
 
         /// <summary>
         /// Is raised when a PaneView is selected: shows the contextual ribbon tab
@@ -129,7 +150,7 @@ namespace WolvenKit.ViewModels.Shell
                     : ERibbonContextualTabGroupVisibility.Collapsed;
             }
 
-            DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
+            //DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
         }
 
         #endregion commands

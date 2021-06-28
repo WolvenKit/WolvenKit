@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SampleInteractiveEntityThatBumpsTheCounter : gameObject
 	{
-		[Ordinal(40)] [RED("targetEntityWithCounter")] public NodeRef TargetEntityWithCounter { get; set; }
-		[Ordinal(41)] [RED("targetPersistentID")] public gamePersistentID TargetPersistentID { get; set; }
+		private NodeRef _targetEntityWithCounter;
+		private gamePersistentID _targetPersistentID;
 
-		public SampleInteractiveEntityThatBumpsTheCounter(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("targetEntityWithCounter")] 
+		public NodeRef TargetEntityWithCounter
+		{
+			get => GetProperty(ref _targetEntityWithCounter);
+			set => SetProperty(ref _targetEntityWithCounter, value);
+		}
+
+		[Ordinal(41)] 
+		[RED("targetPersistentID")] 
+		public gamePersistentID TargetPersistentID
+		{
+			get => GetProperty(ref _targetPersistentID);
+			set => SetProperty(ref _targetPersistentID, value);
+		}
+
+		public SampleInteractiveEntityThatBumpsTheCounter(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

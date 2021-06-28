@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameCursorInterpolationOverrides : inkUserData
 	{
-		[Ordinal(0)] [RED("minSpeed")] public Vector2 MinSpeed { get; set; }
-		[Ordinal(1)] [RED("enterTime")] public CFloat EnterTime { get; set; }
+		private Vector2 _minSpeed;
+		private CFloat _enterTime;
 
-		public gameCursorInterpolationOverrides(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("minSpeed")] 
+		public Vector2 MinSpeed
+		{
+			get => GetProperty(ref _minSpeed);
+			set => SetProperty(ref _minSpeed, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("enterTime")] 
+		public CFloat EnterTime
+		{
+			get => GetProperty(ref _enterTime);
+			set => SetProperty(ref _enterTime, value);
+		}
+
+		public gameCursorInterpolationOverrides(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

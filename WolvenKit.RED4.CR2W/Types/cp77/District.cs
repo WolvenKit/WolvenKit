@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class District : IScriptable
 	{
-		[Ordinal(0)] [RED("districtID")] public TweakDBID DistrictID { get; set; }
-		[Ordinal(1)] [RED("presetID")] public TweakDBID PresetID { get; set; }
+		private TweakDBID _districtID;
+		private TweakDBID _presetID;
 
-		public District(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("districtID")] 
+		public TweakDBID DistrictID
+		{
+			get => GetProperty(ref _districtID);
+			set => SetProperty(ref _districtID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("presetID")] 
+		public TweakDBID PresetID
+		{
+			get => GetProperty(ref _presetID);
+			set => SetProperty(ref _presetID, value);
+		}
+
+		public District(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

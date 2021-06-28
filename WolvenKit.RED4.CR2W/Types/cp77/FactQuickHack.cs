@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FactQuickHack : ActionBool
 	{
-		[Ordinal(25)] [RED("factProperties")] public ComputerQuickHackData FactProperties { get; set; }
+		private ComputerQuickHackData _factProperties;
 
-		public FactQuickHack(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("factProperties")] 
+		public ComputerQuickHackData FactProperties
+		{
+			get => GetProperty(ref _factProperties);
+			set => SetProperty(ref _factProperties, value);
+		}
+
+		public FactQuickHack(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

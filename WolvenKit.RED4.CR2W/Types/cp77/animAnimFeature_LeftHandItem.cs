@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimFeature_LeftHandItem : animAnimFeature
 	{
-		[Ordinal(0)] [RED("itemInLeftHand")] public CBool ItemInLeftHand { get; set; }
+		private CBool _itemInLeftHand;
 
-		public animAnimFeature_LeftHandItem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("itemInLeftHand")] 
+		public CBool ItemInLeftHand
+		{
+			get => GetProperty(ref _itemInLeftHand);
+			set => SetProperty(ref _itemInLeftHand, value);
+		}
+
+		public animAnimFeature_LeftHandItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

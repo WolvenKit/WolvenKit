@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class senseVisibleObjectSecondaryPositionEvent : redEvent
 	{
-		[Ordinal(0)] [RED("offset")] public Vector3 Offset { get; set; }
+		private Vector3 _offset;
 
-		public senseVisibleObjectSecondaryPositionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("offset")] 
+		public Vector3 Offset
+		{
+			get => GetProperty(ref _offset);
+			set => SetProperty(ref _offset, value);
+		}
+
+		public senseVisibleObjectSecondaryPositionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

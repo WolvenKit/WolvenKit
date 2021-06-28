@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectPlacedSpawner : effectSpawner
 	{
-		[Ordinal(0)] [RED("placement")] public CHandle<effectIPlacementEntries> Placement { get; set; }
+		private CHandle<effectIPlacementEntries> _placement;
 
-		public effectPlacedSpawner(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("placement")] 
+		public CHandle<effectIPlacementEntries> Placement
+		{
+			get => GetProperty(ref _placement);
+			set => SetProperty(ref _placement, value);
+		}
+
+		public effectPlacedSpawner(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

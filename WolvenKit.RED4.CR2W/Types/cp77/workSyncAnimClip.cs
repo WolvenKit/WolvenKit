@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workSyncAnimClip : workAnimClip
 	{
-		[Ordinal(4)] [RED("slotName")] public CName SlotName { get; set; }
-		[Ordinal(5)] [RED("syncOffset")] public Transform SyncOffset { get; set; }
+		private CName _slotName;
+		private Transform _syncOffset;
 
-		public workSyncAnimClip(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("slotName")] 
+		public CName SlotName
+		{
+			get => GetProperty(ref _slotName);
+			set => SetProperty(ref _slotName, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("syncOffset")] 
+		public Transform SyncOffset
+		{
+			get => GetProperty(ref _syncOffset);
+			set => SetProperty(ref _syncOffset, value);
+		}
+
+		public workSyncAnimClip(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameHitRepresentationResult : CVariable
 	{
-		[Ordinal(0)] [RED("sult")] public gameQueryResult Sult { get; set; }
-		[Ordinal(1)] [RED("tityID")] public entEntityID TityID { get; set; }
+		private gameQueryResult _sult;
+		private entEntityID _tityID;
 
-		public gameHitRepresentationResult(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("sult")] 
+		public gameQueryResult Sult
+		{
+			get => GetProperty(ref _sult);
+			set => SetProperty(ref _sult, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("tityID")] 
+		public entEntityID TityID
+		{
+			get => GetProperty(ref _tityID);
+			set => SetProperty(ref _tityID, value);
+		}
+
+		public gameHitRepresentationResult(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

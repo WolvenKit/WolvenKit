@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SActionTypeForward : CVariable
 	{
-		[Ordinal(0)] [RED("qHack")] public CBool QHack { get; set; }
-		[Ordinal(1)] [RED("techie")] public CBool Techie { get; set; }
-		[Ordinal(2)] [RED("master")] public CBool Master { get; set; }
+		private CBool _qHack;
+		private CBool _techie;
+		private CBool _master;
 
-		public SActionTypeForward(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("qHack")] 
+		public CBool QHack
+		{
+			get => GetProperty(ref _qHack);
+			set => SetProperty(ref _qHack, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("techie")] 
+		public CBool Techie
+		{
+			get => GetProperty(ref _techie);
+			set => SetProperty(ref _techie, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("master")] 
+		public CBool Master
+		{
+			get => GetProperty(ref _master);
+			set => SetProperty(ref _master, value);
+		}
+
+		public SActionTypeForward(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

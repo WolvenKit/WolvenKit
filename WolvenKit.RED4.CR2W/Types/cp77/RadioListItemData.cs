@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RadioListItemData : IScriptable
 	{
-		[Ordinal(0)] [RED("record")] public wCHandle<gamedataRadioStation_Record> Record { get; set; }
+		private wCHandle<gamedataRadioStation_Record> _record;
 
-		public RadioListItemData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("record")] 
+		public wCHandle<gamedataRadioStation_Record> Record
+		{
+			get => GetProperty(ref _record);
+			set => SetProperty(ref _record, value);
+		}
+
+		public RadioListItemData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

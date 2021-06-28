@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AlarmLightControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(108)] [RED("securityAlarmState")] public CEnum<ESecuritySystemState> SecurityAlarmState { get; set; }
+		private CEnum<ESecuritySystemState> _securityAlarmState;
 
-		public AlarmLightControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(108)] 
+		[RED("securityAlarmState")] 
+		public CEnum<ESecuritySystemState> SecurityAlarmState
+		{
+			get => GetProperty(ref _securityAlarmState);
+			set => SetProperty(ref _securityAlarmState, value);
+		}
+
+		public AlarmLightControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

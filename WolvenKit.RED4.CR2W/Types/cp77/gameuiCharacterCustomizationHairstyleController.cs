@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCharacterCustomizationHairstyleController : gameuiCharacterCustomizationBodyPartsController
 	{
-		[Ordinal(3)] [RED("headGroupName")] public CName HeadGroupName { get; set; }
+		private CName _headGroupName;
 
-		public gameuiCharacterCustomizationHairstyleController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("headGroupName")] 
+		public CName HeadGroupName
+		{
+			get => GetProperty(ref _headGroupName);
+			set => SetProperty(ref _headGroupName, value);
+		}
+
+		public gameuiCharacterCustomizationHairstyleController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

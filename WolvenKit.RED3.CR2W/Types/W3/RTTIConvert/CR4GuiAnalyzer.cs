@@ -11,9 +11,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	[REDMeta]
 	public class CR4GuiAnalyzer : IAnalyzer
 	{
-		public CR4GuiAnalyzer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4GuiAnalyzer(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4GuiAnalyzer(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

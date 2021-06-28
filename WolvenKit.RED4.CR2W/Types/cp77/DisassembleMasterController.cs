@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DisassembleMasterController : MasterController
 	{
-		public DisassembleMasterController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public DisassembleMasterController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

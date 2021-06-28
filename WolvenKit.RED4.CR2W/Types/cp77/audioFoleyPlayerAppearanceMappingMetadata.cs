@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioFoleyPlayerAppearanceMappingMetadata : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("fallbackMetadata")] public CName FallbackMetadata { get; set; }
-		[Ordinal(2)] [RED("jacketSettings")] public CArray<audioAppearanceToPlayerMetadata> JacketSettings { get; set; }
-		[Ordinal(3)] [RED("topSettings")] public CArray<audioAppearanceToPlayerMetadata> TopSettings { get; set; }
-		[Ordinal(4)] [RED("bottomSettings")] public CArray<audioAppearanceToPlayerMetadata> BottomSettings { get; set; }
-		[Ordinal(5)] [RED("jewelrySettings")] public CArray<audioAppearanceToPlayerMetadata> JewelrySettings { get; set; }
+		private CName _fallbackMetadata;
+		private CArray<audioAppearanceToPlayerMetadata> _jacketSettings;
+		private CArray<audioAppearanceToPlayerMetadata> _topSettings;
+		private CArray<audioAppearanceToPlayerMetadata> _bottomSettings;
+		private CArray<audioAppearanceToPlayerMetadata> _jewelrySettings;
 
-		public audioFoleyPlayerAppearanceMappingMetadata(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("fallbackMetadata")] 
+		public CName FallbackMetadata
+		{
+			get => GetProperty(ref _fallbackMetadata);
+			set => SetProperty(ref _fallbackMetadata, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("jacketSettings")] 
+		public CArray<audioAppearanceToPlayerMetadata> JacketSettings
+		{
+			get => GetProperty(ref _jacketSettings);
+			set => SetProperty(ref _jacketSettings, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("topSettings")] 
+		public CArray<audioAppearanceToPlayerMetadata> TopSettings
+		{
+			get => GetProperty(ref _topSettings);
+			set => SetProperty(ref _topSettings, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("bottomSettings")] 
+		public CArray<audioAppearanceToPlayerMetadata> BottomSettings
+		{
+			get => GetProperty(ref _bottomSettings);
+			set => SetProperty(ref _bottomSettings, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("jewelrySettings")] 
+		public CArray<audioAppearanceToPlayerMetadata> JewelrySettings
+		{
+			get => GetProperty(ref _jewelrySettings);
+			set => SetProperty(ref _jewelrySettings, value);
+		}
+
+		public audioFoleyPlayerAppearanceMappingMetadata(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

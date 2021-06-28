@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questVehicleWeaponUsed_ConditionType : questIVehicleConditionType
 	{
-		[Ordinal(0)] [RED("vehicleRef")] public gameEntityReference VehicleRef { get; set; }
-		[Ordinal(1)] [RED("weapon")] public CEnum<questVehicleWeaponQuestID> Weapon { get; set; }
+		private gameEntityReference _vehicleRef;
+		private CEnum<questVehicleWeaponQuestID> _weapon;
 
-		public questVehicleWeaponUsed_ConditionType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vehicleRef")] 
+		public gameEntityReference VehicleRef
+		{
+			get => GetProperty(ref _vehicleRef);
+			set => SetProperty(ref _vehicleRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("weapon")] 
+		public CEnum<questVehicleWeaponQuestID> Weapon
+		{
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
+		}
+
+		public questVehicleWeaponUsed_ConditionType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

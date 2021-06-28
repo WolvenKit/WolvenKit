@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("entry")] 		public CPtr<CJournalBase> Entry { get; set;}
 
-		public CJournalResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CJournalResource(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CJournalResource(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

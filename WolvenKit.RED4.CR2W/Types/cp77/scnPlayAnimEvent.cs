@@ -7,16 +7,88 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnPlayAnimEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("animData")] public scneventsPlayAnimEventExData AnimData { get; set; }
-		[Ordinal(7)] [RED("performer")] public scnPerformerId Performer { get; set; }
-		[Ordinal(8)] [RED("actorComponent")] public CName ActorComponent { get; set; }
-		[Ordinal(9)] [RED("convertToAdditive")] public CBool ConvertToAdditive { get; set; }
-		[Ordinal(10)] [RED("muteAnimEvents")] public CEnum<animMuteAnimEvents> MuteAnimEvents { get; set; }
-		[Ordinal(11)] [RED("neckWeight")] public CFloat NeckWeight { get; set; }
-		[Ordinal(12)] [RED("upperFaceBlendAdditive")] public CBool UpperFaceBlendAdditive { get; set; }
-		[Ordinal(13)] [RED("lowerFaceBlendAdditive")] public CBool LowerFaceBlendAdditive { get; set; }
-		[Ordinal(14)] [RED("eyesBlendAdditive")] public CBool EyesBlendAdditive { get; set; }
+		private scneventsPlayAnimEventExData _animData;
+		private scnPerformerId _performer;
+		private CName _actorComponent;
+		private CBool _convertToAdditive;
+		private CEnum<animMuteAnimEvents> _muteAnimEvents;
+		private CFloat _neckWeight;
+		private CBool _upperFaceBlendAdditive;
+		private CBool _lowerFaceBlendAdditive;
+		private CBool _eyesBlendAdditive;
 
-		public scnPlayAnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("animData")] 
+		public scneventsPlayAnimEventExData AnimData
+		{
+			get => GetProperty(ref _animData);
+			set => SetProperty(ref _animData, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("performer")] 
+		public scnPerformerId Performer
+		{
+			get => GetProperty(ref _performer);
+			set => SetProperty(ref _performer, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("actorComponent")] 
+		public CName ActorComponent
+		{
+			get => GetProperty(ref _actorComponent);
+			set => SetProperty(ref _actorComponent, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("convertToAdditive")] 
+		public CBool ConvertToAdditive
+		{
+			get => GetProperty(ref _convertToAdditive);
+			set => SetProperty(ref _convertToAdditive, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("muteAnimEvents")] 
+		public CEnum<animMuteAnimEvents> MuteAnimEvents
+		{
+			get => GetProperty(ref _muteAnimEvents);
+			set => SetProperty(ref _muteAnimEvents, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("neckWeight")] 
+		public CFloat NeckWeight
+		{
+			get => GetProperty(ref _neckWeight);
+			set => SetProperty(ref _neckWeight, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("upperFaceBlendAdditive")] 
+		public CBool UpperFaceBlendAdditive
+		{
+			get => GetProperty(ref _upperFaceBlendAdditive);
+			set => SetProperty(ref _upperFaceBlendAdditive, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("lowerFaceBlendAdditive")] 
+		public CBool LowerFaceBlendAdditive
+		{
+			get => GetProperty(ref _lowerFaceBlendAdditive);
+			set => SetProperty(ref _lowerFaceBlendAdditive, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("eyesBlendAdditive")] 
+		public CBool EyesBlendAdditive
+		{
+			get => GetProperty(ref _eyesBlendAdditive);
+			set => SetProperty(ref _eyesBlendAdditive, value);
+		}
+
+		public scnPlayAnimEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

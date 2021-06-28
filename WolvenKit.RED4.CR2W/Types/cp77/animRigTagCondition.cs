@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animRigTagCondition : animIStaticCondition
 	{
-		[Ordinal(0)] [RED("tag")] public CName Tag { get; set; }
+		private CName _tag;
 
-		public animRigTagCondition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("tag")] 
+		public CName Tag
+		{
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
+		}
+
+		public animRigTagCondition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

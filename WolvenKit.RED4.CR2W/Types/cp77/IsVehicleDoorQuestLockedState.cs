@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IsVehicleDoorQuestLockedState : gamePrereqState
 	{
-		[Ordinal(0)] [RED("psListener")] public CHandle<gameScriptedPrereqPSChangeListenerWrapper> PsListener { get; set; }
+		private CHandle<gameScriptedPrereqPSChangeListenerWrapper> _psListener;
 
-		public IsVehicleDoorQuestLockedState(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("psListener")] 
+		public CHandle<gameScriptedPrereqPSChangeListenerWrapper> PsListener
+		{
+			get => GetProperty(ref _psListener);
+			set => SetProperty(ref _psListener, value);
+		}
+
+		public IsVehicleDoorQuestLockedState(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

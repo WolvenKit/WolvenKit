@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ThumbnailUI : ActionBool
 	{
-		[Ordinal(25)] [RED("thumbnailWidgetPackage")] public SThumbnailWidgetPackage ThumbnailWidgetPackage { get; set; }
+		private SThumbnailWidgetPackage _thumbnailWidgetPackage;
 
-		public ThumbnailUI(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("thumbnailWidgetPackage")] 
+		public SThumbnailWidgetPackage ThumbnailWidgetPackage
+		{
+			get => GetProperty(ref _thumbnailWidgetPackage);
+			set => SetProperty(ref _thumbnailWidgetPackage, value);
+		}
+
+		public ThumbnailUI(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

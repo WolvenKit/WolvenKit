@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class communityCommunityEntryPhaseSpotsData : CVariable
 	{
-		[Ordinal(0)] [RED("timePeriodsData")] public CArray<communityCommunityEntryPhaseTimePeriodData> TimePeriodsData { get; set; }
-		[Ordinal(1)] [RED("entryPhaseName")] public CName EntryPhaseName { get; set; }
+		private CArray<communityCommunityEntryPhaseTimePeriodData> _timePeriodsData;
+		private CName _entryPhaseName;
 
-		public communityCommunityEntryPhaseSpotsData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("timePeriodsData")] 
+		public CArray<communityCommunityEntryPhaseTimePeriodData> TimePeriodsData
+		{
+			get => GetProperty(ref _timePeriodsData);
+			set => SetProperty(ref _timePeriodsData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entryPhaseName")] 
+		public CName EntryPhaseName
+		{
+			get => GetProperty(ref _entryPhaseName);
+			set => SetProperty(ref _entryPhaseName, value);
+		}
+
+		public communityCommunityEntryPhaseSpotsData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

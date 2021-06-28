@@ -23,9 +23,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(6)] [RED("m_Target")] 		public CHandle<CNode> M_Target { get; set;}
 
-		public BTCondThreatLevelDifference(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public BTCondThreatLevelDifference(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new BTCondThreatLevelDifference(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

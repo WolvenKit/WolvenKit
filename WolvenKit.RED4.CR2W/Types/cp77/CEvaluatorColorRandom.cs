@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CEvaluatorColorRandom : IEvaluatorColor
 	{
-		[Ordinal(0)] [RED("min")] public CColor Min { get; set; }
-		[Ordinal(1)] [RED("max")] public CColor Max { get; set; }
-		[Ordinal(2)] [RED("randomPerChannel")] public CBool RandomPerChannel { get; set; }
+		private CColor _min;
+		private CColor _max;
+		private CBool _randomPerChannel;
 
-		public CEvaluatorColorRandom(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("min")] 
+		public CColor Min
+		{
+			get => GetProperty(ref _min);
+			set => SetProperty(ref _min, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("max")] 
+		public CColor Max
+		{
+			get => GetProperty(ref _max);
+			set => SetProperty(ref _max, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("randomPerChannel")] 
+		public CBool RandomPerChannel
+		{
+			get => GetProperty(ref _randomPerChannel);
+			set => SetProperty(ref _randomPerChannel, value);
+		}
+
+		public CEvaluatorColorRandom(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

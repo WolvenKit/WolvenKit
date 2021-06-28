@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameRegisterCooldownFromRecordRequest : CVariable
 	{
-		[Ordinal(0)] [RED("owner")] public wCHandle<entEntity> Owner { get; set; }
-		[Ordinal(1)] [RED("ownerItemId")] public gameItemID OwnerItemId { get; set; }
-		[Ordinal(2)] [RED("ownerRecord")] public TweakDBID OwnerRecord { get; set; }
-		[Ordinal(3)] [RED("cooldownRecord")] public CHandle<gamedataCooldown_Record> CooldownRecord { get; set; }
+		private wCHandle<entEntity> _owner;
+		private gameItemID _ownerItemId;
+		private TweakDBID _ownerRecord;
+		private CHandle<gamedataCooldown_Record> _cooldownRecord;
 
-		public gameRegisterCooldownFromRecordRequest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("owner")] 
+		public wCHandle<entEntity> Owner
+		{
+			get => GetProperty(ref _owner);
+			set => SetProperty(ref _owner, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("ownerItemId")] 
+		public gameItemID OwnerItemId
+		{
+			get => GetProperty(ref _ownerItemId);
+			set => SetProperty(ref _ownerItemId, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("ownerRecord")] 
+		public TweakDBID OwnerRecord
+		{
+			get => GetProperty(ref _ownerRecord);
+			set => SetProperty(ref _ownerRecord, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("cooldownRecord")] 
+		public CHandle<gamedataCooldown_Record> CooldownRecord
+		{
+			get => GetProperty(ref _cooldownRecord);
+			set => SetProperty(ref _cooldownRecord, value);
+		}
+
+		public gameRegisterCooldownFromRecordRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

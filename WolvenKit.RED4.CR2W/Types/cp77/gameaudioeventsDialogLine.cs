@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameaudioeventsDialogLine : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public audioDialogLineEventData Data { get; set; }
+		private audioDialogLineEventData _data;
 
-		public gameaudioeventsDialogLine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public audioDialogLineEventData Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public gameaudioeventsDialogLine(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

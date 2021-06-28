@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendorUserData : IScriptable
 	{
-		[Ordinal(0)] [RED("vendorData")] public CHandle<questVendorPanelData> VendorData { get; set; }
-		[Ordinal(1)] [RED("menu")] public CString Menu { get; set; }
+		private CHandle<questVendorPanelData> _vendorData;
+		private CString _menu;
 
-		public VendorUserData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("vendorData")] 
+		public CHandle<questVendorPanelData> VendorData
+		{
+			get => GetProperty(ref _vendorData);
+			set => SetProperty(ref _vendorData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("menu")] 
+		public CString Menu
+		{
+			get => GetProperty(ref _menu);
+			set => SetProperty(ref _menu, value);
+		}
+
+		public VendorUserData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

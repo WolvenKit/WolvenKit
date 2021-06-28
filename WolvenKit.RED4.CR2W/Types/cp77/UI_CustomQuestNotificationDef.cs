@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UI_CustomQuestNotificationDef : gamebbScriptDefinition
 	{
-		[Ordinal(0)] [RED("data")] public gamebbScriptID_Variant Data { get; set; }
+		private gamebbScriptID_Variant _data;
 
-		public UI_CustomQuestNotificationDef(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public gamebbScriptID_Variant Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public UI_CustomQuestNotificationDef(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

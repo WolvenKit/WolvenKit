@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameJournalMetaQuest : gameJournalFileEntry
 	{
-		[Ordinal(2)] [RED("title")] public LocalizationString Title { get; set; }
+		private LocalizationString _title;
 
-		public gameJournalMetaQuest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("title")] 
+		public LocalizationString Title
+		{
+			get => GetProperty(ref _title);
+			set => SetProperty(ref _title, value);
+		}
+
+		public gameJournalMetaQuest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AimingStateDecisions : UpperBodyTransition
 	{
-		[Ordinal(0)] [RED("mouseZoomLevel")] public CFloat MouseZoomLevel { get; set; }
+		private CFloat _mouseZoomLevel;
 
-		public AimingStateDecisions(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("mouseZoomLevel")] 
+		public CFloat MouseZoomLevel
+		{
+			get => GetProperty(ref _mouseZoomLevel);
+			set => SetProperty(ref _mouseZoomLevel, value);
+		}
+
+		public AimingStateDecisions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

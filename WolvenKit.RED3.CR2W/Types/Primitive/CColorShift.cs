@@ -21,7 +21,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public HslColor Color = new HslColor(0, 0, 0);
 
-        public CColorShift(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+        public CColorShift(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
 
         public override void Read(BinaryReader file, uint size) => base.Read(file, size);
@@ -30,6 +30,7 @@ namespace WolvenKit.RED3.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
+            this.IsSerialized = true;
             switch (val)
             {
                 case Color o:

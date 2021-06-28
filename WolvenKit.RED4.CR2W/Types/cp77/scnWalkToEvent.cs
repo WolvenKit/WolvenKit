@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnWalkToEvent : scnSceneEvent
 	{
-		[Ordinal(6)] [RED("actorId")] public scnActorId ActorId { get; set; }
-		[Ordinal(7)] [RED("targetWaypointTag")] public CName TargetWaypointTag { get; set; }
-		[Ordinal(8)] [RED("usePathfinding")] public CBool UsePathfinding { get; set; }
+		private scnActorId _actorId;
+		private CName _targetWaypointTag;
+		private CBool _usePathfinding;
 
-		public scnWalkToEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(6)] 
+		[RED("actorId")] 
+		public scnActorId ActorId
+		{
+			get => GetProperty(ref _actorId);
+			set => SetProperty(ref _actorId, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("targetWaypointTag")] 
+		public CName TargetWaypointTag
+		{
+			get => GetProperty(ref _targetWaypointTag);
+			set => SetProperty(ref _targetWaypointTag, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("usePathfinding")] 
+		public CBool UsePathfinding
+		{
+			get => GetProperty(ref _usePathfinding);
+			set => SetProperty(ref _usePathfinding, value);
+		}
+
+		public scnWalkToEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

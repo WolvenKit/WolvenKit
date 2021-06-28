@@ -1,4 +1,4 @@
-using WolvenKit.CR2W;
+using WolvenKit.RED3.CR2W;
 
 namespace WolvenKit.Models.Arguments
 {

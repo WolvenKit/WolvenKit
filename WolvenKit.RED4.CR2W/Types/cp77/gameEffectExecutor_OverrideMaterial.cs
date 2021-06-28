@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectExecutor_OverrideMaterial : gameEffectExecutor
 	{
-		[Ordinal(1)] [RED("material")] public rRef<IMaterial> Material { get; set; }
+		private rRef<IMaterial> _material;
 
-		public gameEffectExecutor_OverrideMaterial(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("material")] 
+		public rRef<IMaterial> Material
+		{
+			get => GetProperty(ref _material);
+			set => SetProperty(ref _material, value);
+		}
+
+		public gameEffectExecutor_OverrideMaterial(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

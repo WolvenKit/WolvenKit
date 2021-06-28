@@ -7,19 +7,115 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamedataGroupNode : gamedataDataNode
 	{
-		[Ordinal(3)] [RED("name")] public CString Name { get; set; }
-		[Ordinal(4)] [RED("base")] public CString Base { get; set; }
-		[Ordinal(5)] [RED("schema")] public CString Schema { get; set; }
-		[Ordinal(6)] [RED("isInline")] public CBool IsInline { get; set; }
-		[Ordinal(7)] [RED("baseGroup")] public wCHandle<gamedataGroupNode> BaseGroup { get; set; }
-		[Ordinal(8)] [RED("schemaGroup")] public wCHandle<gamedataGroupNode> SchemaGroup { get; set; }
-		[Ordinal(9)] [RED("package")] public wCHandle<gamedataPackageNode> Package { get; set; }
-		[Ordinal(10)] [RED("fileNode")] public CHandle<gamedataFileNode> FileNode { get; set; }
-		[Ordinal(11)] [RED("inlineGroupId")] public CUInt32 InlineGroupId { get; set; }
-		[Ordinal(12)] [RED("inheritanceState")] public CEnum<gamedataGroupNodeInheritanceState> InheritanceState { get; set; }
-		[Ordinal(13)] [RED("serializedVariables")] public CArray<gamedataGroupNodeGroupVariable> SerializedVariables { get; set; }
-		[Ordinal(14)] [RED("tags")] public CArray<CName> Tags { get; set; }
+		private CString _name;
+		private CString _base;
+		private CString _schema;
+		private CBool _isInline;
+		private wCHandle<gamedataGroupNode> _baseGroup;
+		private wCHandle<gamedataGroupNode> _schemaGroup;
+		private wCHandle<gamedataPackageNode> _package;
+		private CHandle<gamedataFileNode> _fileNode;
+		private CUInt32 _inlineGroupId;
+		private CEnum<gamedataGroupNodeInheritanceState> _inheritanceState;
+		private CArray<gamedataGroupNodeGroupVariable> _serializedVariables;
+		private CArray<CName> _tags;
 
-		public gamedataGroupNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("name")] 
+		public CString Name
+		{
+			get => GetProperty(ref _name);
+			set => SetProperty(ref _name, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("base")] 
+		public CString Base
+		{
+			get => GetProperty(ref _base);
+			set => SetProperty(ref _base, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("schema")] 
+		public CString Schema
+		{
+			get => GetProperty(ref _schema);
+			set => SetProperty(ref _schema, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("isInline")] 
+		public CBool IsInline
+		{
+			get => GetProperty(ref _isInline);
+			set => SetProperty(ref _isInline, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("baseGroup")] 
+		public wCHandle<gamedataGroupNode> BaseGroup
+		{
+			get => GetProperty(ref _baseGroup);
+			set => SetProperty(ref _baseGroup, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("schemaGroup")] 
+		public wCHandle<gamedataGroupNode> SchemaGroup
+		{
+			get => GetProperty(ref _schemaGroup);
+			set => SetProperty(ref _schemaGroup, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("package")] 
+		public wCHandle<gamedataPackageNode> Package
+		{
+			get => GetProperty(ref _package);
+			set => SetProperty(ref _package, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("fileNode")] 
+		public CHandle<gamedataFileNode> FileNode
+		{
+			get => GetProperty(ref _fileNode);
+			set => SetProperty(ref _fileNode, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("inlineGroupId")] 
+		public CUInt32 InlineGroupId
+		{
+			get => GetProperty(ref _inlineGroupId);
+			set => SetProperty(ref _inlineGroupId, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("inheritanceState")] 
+		public CEnum<gamedataGroupNodeInheritanceState> InheritanceState
+		{
+			get => GetProperty(ref _inheritanceState);
+			set => SetProperty(ref _inheritanceState, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("serializedVariables")] 
+		public CArray<gamedataGroupNodeGroupVariable> SerializedVariables
+		{
+			get => GetProperty(ref _serializedVariables);
+			set => SetProperty(ref _serializedVariables, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("tags")] 
+		public CArray<CName> Tags
+		{
+			get => GetProperty(ref _tags);
+			set => SetProperty(ref _tags, value);
+		}
+
+		public gamedataGroupNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

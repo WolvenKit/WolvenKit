@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AnimatedSign : InteractiveDevice
 	{
-		[Ordinal(93)] [RED("animFeature")] public CHandle<AnimFeature_AnimatedDevice> AnimFeature { get; set; }
+		private CHandle<AnimFeature_AnimatedDevice> _animFeature;
 
-		public AnimatedSign(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(96)] 
+		[RED("animFeature")] 
+		public CHandle<AnimFeature_AnimatedDevice> AnimFeature
+		{
+			get => GetProperty(ref _animFeature);
+			set => SetProperty(ref _animFeature, value);
+		}
+
+		public AnimatedSign(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

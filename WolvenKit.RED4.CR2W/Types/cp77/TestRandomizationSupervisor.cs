@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class TestRandomizationSupervisor : genScriptedRandomizationSupervisor
 	{
-		[Ordinal(0)] [RED("firstWasGenerated")] public CBool FirstWasGenerated { get; set; }
+		private CBool _firstWasGenerated;
 
-		public TestRandomizationSupervisor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("firstWasGenerated")] 
+		public CBool FirstWasGenerated
+		{
+			get => GetProperty(ref _firstWasGenerated);
+			set => SetProperty(ref _firstWasGenerated, value);
+		}
+
+		public TestRandomizationSupervisor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

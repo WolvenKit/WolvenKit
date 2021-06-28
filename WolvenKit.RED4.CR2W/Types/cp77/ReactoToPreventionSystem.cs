@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ReactoToPreventionSystem : redEvent
 	{
-		[Ordinal(0)] [RED("wakeUp")] public CBool WakeUp { get; set; }
+		private CBool _wakeUp;
 
-		public ReactoToPreventionSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("wakeUp")] 
+		public CBool WakeUp
+		{
+			get => GetProperty(ref _wakeUp);
+			set => SetProperty(ref _wakeUp, value);
+		}
+
+		public ReactoToPreventionSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

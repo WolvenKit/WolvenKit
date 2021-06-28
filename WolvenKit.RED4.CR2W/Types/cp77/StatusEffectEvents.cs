@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatusEffectEvents : LocomotionGroundEvents
 	{
-		[Ordinal(0)] [RED("statusEffectRecord")] public wCHandle<gamedataStatusEffect_Record> StatusEffectRecord { get; set; }
-		[Ordinal(1)] [RED("playerStatusEffectRecordData")] public wCHandle<gamedataStatusEffectPlayerData_Record> PlayerStatusEffectRecordData { get; set; }
-		[Ordinal(2)] [RED("animFeatureStatusEffect")] public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect { get; set; }
+		private wCHandle<gamedataStatusEffect_Record> _statusEffectRecord;
+		private wCHandle<gamedataStatusEffectPlayerData_Record> _playerStatusEffectRecordData;
+		private CHandle<AnimFeature_StatusEffect> _animFeatureStatusEffect;
 
-		public StatusEffectEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("statusEffectRecord")] 
+		public wCHandle<gamedataStatusEffect_Record> StatusEffectRecord
+		{
+			get => GetProperty(ref _statusEffectRecord);
+			set => SetProperty(ref _statusEffectRecord, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("playerStatusEffectRecordData")] 
+		public wCHandle<gamedataStatusEffectPlayerData_Record> PlayerStatusEffectRecordData
+		{
+			get => GetProperty(ref _playerStatusEffectRecordData);
+			set => SetProperty(ref _playerStatusEffectRecordData, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("animFeatureStatusEffect")] 
+		public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect
+		{
+			get => GetProperty(ref _animFeatureStatusEffect);
+			set => SetProperty(ref _animFeatureStatusEffect, value);
+		}
+
+		public StatusEffectEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

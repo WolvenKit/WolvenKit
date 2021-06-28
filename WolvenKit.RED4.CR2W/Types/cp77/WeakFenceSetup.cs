@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeakFenceSetup : CVariable
 	{
-		[Ordinal(0)] [RED("hasGenericInteraction")] public CBool HasGenericInteraction { get; set; }
+		private CBool _hasGenericInteraction;
 
-		public WeakFenceSetup(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("hasGenericInteraction")] 
+		public CBool HasGenericInteraction
+		{
+			get => GetProperty(ref _hasGenericInteraction);
+			set => SetProperty(ref _hasGenericInteraction, value);
+		}
+
+		public WeakFenceSetup(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

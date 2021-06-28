@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cpTimerTest : gameObject
 	{
-		[Ordinal(40)] [RED("counter")] public CInt32 Counter { get; set; }
+		private CInt32 _counter;
 
-		public cpTimerTest(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(40)] 
+		[RED("counter")] 
+		public CInt32 Counter
+		{
+			get => GetProperty(ref _counter);
+			set => SetProperty(ref _counter, value);
+		}
+
+		public cpTimerTest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

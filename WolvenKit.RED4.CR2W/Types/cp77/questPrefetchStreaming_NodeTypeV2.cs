@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questPrefetchStreaming_NodeTypeV2 : questIWorldDataManagerNodeType
 	{
-		[Ordinal(0)] [RED("prefetchPositionRef")] public NodeRef PrefetchPositionRef { get; set; }
-		[Ordinal(1)] [RED("useStreamingOcclusion")] public CBool UseStreamingOcclusion { get; set; }
-		[Ordinal(2)] [RED("maxDistance")] public CFloat MaxDistance { get; set; }
+		private NodeRef _prefetchPositionRef;
+		private CBool _useStreamingOcclusion;
+		private CFloat _maxDistance;
 
-		public questPrefetchStreaming_NodeTypeV2(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("prefetchPositionRef")] 
+		public NodeRef PrefetchPositionRef
+		{
+			get => GetProperty(ref _prefetchPositionRef);
+			set => SetProperty(ref _prefetchPositionRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("useStreamingOcclusion")] 
+		public CBool UseStreamingOcclusion
+		{
+			get => GetProperty(ref _useStreamingOcclusion);
+			set => SetProperty(ref _useStreamingOcclusion, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("maxDistance")] 
+		public CFloat MaxDistance
+		{
+			get => GetProperty(ref _maxDistance);
+			set => SetProperty(ref _maxDistance, value);
+		}
+
+		public questPrefetchStreaming_NodeTypeV2(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ExperiencePointsEvent : redEvent
 	{
-		[Ordinal(0)] [RED("amount")] public CInt32 Amount { get; set; }
-		[Ordinal(1)] [RED("type")] public CEnum<gamedataProficiencyType> Type { get; set; }
-		[Ordinal(2)] [RED("isDebug")] public CBool IsDebug { get; set; }
+		private CInt32 _amount;
+		private CEnum<gamedataProficiencyType> _type;
+		private CBool _isDebug;
 
-		public ExperiencePointsEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("amount")] 
+		public CInt32 Amount
+		{
+			get => GetProperty(ref _amount);
+			set => SetProperty(ref _amount, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("type")] 
+		public CEnum<gamedataProficiencyType> Type
+		{
+			get => GetProperty(ref _type);
+			set => SetProperty(ref _type, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isDebug")] 
+		public CBool IsDebug
+		{
+			get => GetProperty(ref _isDebug);
+			set => SetProperty(ref _isDebug, value);
+		}
+
+		public ExperiencePointsEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

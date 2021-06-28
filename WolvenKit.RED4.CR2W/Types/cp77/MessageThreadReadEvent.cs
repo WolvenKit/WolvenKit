@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MessageThreadReadEvent : redEvent
 	{
-		[Ordinal(0)] [RED("parentHash")] public CInt32 ParentHash { get; set; }
+		private CInt32 _parentHash;
 
-		public MessageThreadReadEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("parentHash")] 
+		public CInt32 ParentHash
+		{
+			get => GetProperty(ref _parentHash);
+			set => SetProperty(ref _parentHash, value);
+		}
+
+		public MessageThreadReadEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("modEntity")] 		public CHandle<CEntity> ModEntity { get; set;}
 
-		public CEntityMod(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEntityMod(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEntityMod(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

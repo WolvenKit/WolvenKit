@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class FanControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(108)] [RED("fanSetup")] public FanSetup FanSetup { get; set; }
+		private FanSetup _fanSetup;
 
-		public FanControllerPS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(108)] 
+		[RED("fanSetup")] 
+		public FanSetup FanSetup
+		{
+			get => GetProperty(ref _fanSetup);
+			set => SetProperty(ref _fanSetup, value);
+		}
+
+		public FanControllerPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

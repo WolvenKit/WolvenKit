@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameOccupantSlotComponent : entSlotComponent
 	{
-		[Ordinal(7)] [RED("slotData")] public CArray<gameOccupantSlotData> SlotData { get; set; }
+		private CArray<gameOccupantSlotData> _slotData;
 
-		public gameOccupantSlotComponent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(7)] 
+		[RED("slotData")] 
+		public CArray<gameOccupantSlotData> SlotData
+		{
+			get => GetProperty(ref _slotData);
+			set => SetProperty(ref _slotData, value);
+		}
+
+		public gameOccupantSlotComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

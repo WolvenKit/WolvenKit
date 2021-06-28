@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CallElevator : ActionBool
 	{
-		[Ordinal(25)] [RED("destination")] public CInt32 Destination { get; set; }
+		private CInt32 _destination;
 
-		public CallElevator(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(25)] 
+		[RED("destination")] 
+		public CInt32 Destination
+		{
+			get => GetProperty(ref _destination);
+			set => SetProperty(ref _destination, value);
+		}
+
+		public CallElevator(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

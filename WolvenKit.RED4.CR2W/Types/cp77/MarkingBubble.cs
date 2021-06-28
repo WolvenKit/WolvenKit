@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MarkingBubble : gameEffectExecutor_Scripted
 	{
-		[Ordinal(1)] [RED("delaySecondsPerMeterOfDistance")] public CFloat DelaySecondsPerMeterOfDistance { get; set; }
-		[Ordinal(2)] [RED("delayAdditionalRandomDelayMax")] public CFloat DelayAdditionalRandomDelayMax { get; set; }
+		private CFloat _delaySecondsPerMeterOfDistance;
+		private CFloat _delayAdditionalRandomDelayMax;
 
-		public MarkingBubble(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("delaySecondsPerMeterOfDistance")] 
+		public CFloat DelaySecondsPerMeterOfDistance
+		{
+			get => GetProperty(ref _delaySecondsPerMeterOfDistance);
+			set => SetProperty(ref _delaySecondsPerMeterOfDistance, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("delayAdditionalRandomDelayMax")] 
+		public CFloat DelayAdditionalRandomDelayMax
+		{
+			get => GetProperty(ref _delayAdditionalRandomDelayMax);
+			set => SetProperty(ref _delayAdditionalRandomDelayMax, value);
+		}
+
+		public MarkingBubble(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

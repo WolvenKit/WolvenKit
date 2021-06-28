@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class IsPuppetBreachedPrereq : gameIScriptablePrereq
 	{
-		[Ordinal(0)] [RED("isBreached")] public CBool IsBreached { get; set; }
+		private CBool _isBreached;
 
-		public IsPuppetBreachedPrereq(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("isBreached")] 
+		public CBool IsBreached
+		{
+			get => GetProperty(ref _isBreached);
+			set => SetProperty(ref _isBreached, value);
+		}
+
+		public IsPuppetBreachedPrereq(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

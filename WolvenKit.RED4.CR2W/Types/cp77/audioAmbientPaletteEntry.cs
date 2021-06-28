@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioAmbientPaletteEntry : CVariable
 	{
-		[Ordinal(0)] [RED("brushCategory")] public CName BrushCategory { get; set; }
+		private CName _brushCategory;
 
-		public audioAmbientPaletteEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("brushCategory")] 
+		public CName BrushCategory
+		{
+			get => GetProperty(ref _brushCategory);
+			set => SetProperty(ref _brushCategory, value);
+		}
+
+		public audioAmbientPaletteEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

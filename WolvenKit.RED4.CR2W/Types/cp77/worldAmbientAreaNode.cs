@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldAmbientAreaNode : worldTriggerAreaNode
 	{
-		[Ordinal(7)] [RED("useCustomColor")] public CBool UseCustomColor { get; set; }
+		private CBool _useCustomColor;
 
-		public worldAmbientAreaNode(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(7)] 
+		[RED("useCustomColor")] 
+		public CBool UseCustomColor
+		{
+			get => GetProperty(ref _useCustomColor);
+			set => SetProperty(ref _useCustomColor, value);
+		}
+
+		public worldAmbientAreaNode(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

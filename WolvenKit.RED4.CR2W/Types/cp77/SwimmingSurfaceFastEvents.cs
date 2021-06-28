@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SwimmingSurfaceFastEvents : LocomotionSwimmingEvents
 	{
-		[Ordinal(0)] [RED("lapsedTime")] public CFloat LapsedTime { get; set; }
+		private CFloat _lapsedTime;
 
-		public SwimmingSurfaceFastEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("lapsedTime")] 
+		public CFloat LapsedTime
+		{
+			get => GetProperty(ref _lapsedTime);
+			set => SetProperty(ref _lapsedTime, value);
+		}
+
+		public SwimmingSurfaceFastEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

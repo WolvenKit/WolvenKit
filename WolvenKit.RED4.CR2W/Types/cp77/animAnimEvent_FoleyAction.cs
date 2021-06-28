@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimEvent_FoleyAction : animAnimEvent
 	{
-		[Ordinal(3)] [RED("actionName")] public CName ActionName { get; set; }
+		private CName _actionName;
 
-		public animAnimEvent_FoleyAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("actionName")] 
+		public CName ActionName
+		{
+			get => GetProperty(ref _actionName);
+			set => SetProperty(ref _actionName, value);
+		}
+
+		public animAnimEvent_FoleyAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

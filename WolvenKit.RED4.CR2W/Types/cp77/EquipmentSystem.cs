@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EquipmentSystem : gameScriptableSystem
 	{
-		[Ordinal(0)] [RED("ownerData")] public CArray<CHandle<EquipmentSystemPlayerData>> OwnerData { get; set; }
+		private CArray<CHandle<EquipmentSystemPlayerData>> _ownerData;
 
-		public EquipmentSystem(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("ownerData")] 
+		public CArray<CHandle<EquipmentSystemPlayerData>> OwnerData
+		{
+			get => GetProperty(ref _ownerData);
+			set => SetProperty(ref _ownerData, value);
+		}
+
+		public EquipmentSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -33,9 +33,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(11)] [RED("translucencyInfluence")] 		public SSimpleCurve TranslucencyInfluence { get; set;}
 
-		public CEnvNVSSAOParameters(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CEnvNVSSAOParameters(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CEnvNVSSAOParameters(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

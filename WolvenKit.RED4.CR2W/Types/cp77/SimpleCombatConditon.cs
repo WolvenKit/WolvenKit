@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SimpleCombatConditon : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("firstCoverEvaluationDone")] public CBool FirstCoverEvaluationDone { get; set; }
-		[Ordinal(1)] [RED("takeCoverAbility")] public CHandle<gamedataGameplayAbility_Record> TakeCoverAbility { get; set; }
-		[Ordinal(2)] [RED("quickhackAbility")] public CHandle<gamedataGameplayAbility_Record> QuickhackAbility { get; set; }
+		private CBool _firstCoverEvaluationDone;
+		private CHandle<gamedataGameplayAbility_Record> _takeCoverAbility;
+		private CHandle<gamedataGameplayAbility_Record> _quickhackAbility;
 
-		public SimpleCombatConditon(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("firstCoverEvaluationDone")] 
+		public CBool FirstCoverEvaluationDone
+		{
+			get => GetProperty(ref _firstCoverEvaluationDone);
+			set => SetProperty(ref _firstCoverEvaluationDone, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("takeCoverAbility")] 
+		public CHandle<gamedataGameplayAbility_Record> TakeCoverAbility
+		{
+			get => GetProperty(ref _takeCoverAbility);
+			set => SetProperty(ref _takeCoverAbility, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("quickhackAbility")] 
+		public CHandle<gamedataGameplayAbility_Record> QuickhackAbility
+		{
+			get => GetProperty(ref _quickhackAbility);
+			set => SetProperty(ref _quickhackAbility, value);
+		}
+
+		public SimpleCombatConditon(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

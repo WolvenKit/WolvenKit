@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questJournalBulkUpdate_NodeType : questIJournal_NodeType
 	{
-		[Ordinal(0)] [RED("path")] public CHandle<gameJournalPath> Path { get; set; }
-		[Ordinal(1)] [RED("requiredEntryType")] public CName RequiredEntryType { get; set; }
-		[Ordinal(2)] [RED("requiredEntryState")] public CName RequiredEntryState { get; set; }
-		[Ordinal(3)] [RED("newEntryState")] public CName NewEntryState { get; set; }
-		[Ordinal(4)] [RED("sendNotification")] public CBool SendNotification { get; set; }
-		[Ordinal(5)] [RED("propagateChange")] public CBool PropagateChange { get; set; }
+		private CHandle<gameJournalPath> _path;
+		private CName _requiredEntryType;
+		private CName _requiredEntryState;
+		private CName _newEntryState;
+		private CBool _sendNotification;
+		private CBool _propagateChange;
 
-		public questJournalBulkUpdate_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("path")] 
+		public CHandle<gameJournalPath> Path
+		{
+			get => GetProperty(ref _path);
+			set => SetProperty(ref _path, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("requiredEntryType")] 
+		public CName RequiredEntryType
+		{
+			get => GetProperty(ref _requiredEntryType);
+			set => SetProperty(ref _requiredEntryType, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("requiredEntryState")] 
+		public CName RequiredEntryState
+		{
+			get => GetProperty(ref _requiredEntryState);
+			set => SetProperty(ref _requiredEntryState, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("newEntryState")] 
+		public CName NewEntryState
+		{
+			get => GetProperty(ref _newEntryState);
+			set => SetProperty(ref _newEntryState, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("sendNotification")] 
+		public CBool SendNotification
+		{
+			get => GetProperty(ref _sendNotification);
+			set => SetProperty(ref _sendNotification, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("propagateChange")] 
+		public CBool PropagateChange
+		{
+			get => GetProperty(ref _propagateChange);
+			set => SetProperty(ref _propagateChange, value);
+		}
+
+		public questJournalBulkUpdate_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

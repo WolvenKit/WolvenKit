@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workEquipItemToSlotAction : workIWorkspotItemAction
 	{
-		[Ordinal(0)] [RED("item")] public TweakDBID Item { get; set; }
-		[Ordinal(1)] [RED("itemSlot")] public TweakDBID ItemSlot { get; set; }
+		private TweakDBID _item;
+		private TweakDBID _itemSlot;
 
-		public workEquipItemToSlotAction(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("item")] 
+		public TweakDBID Item
+		{
+			get => GetProperty(ref _item);
+			set => SetProperty(ref _item, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("itemSlot")] 
+		public TweakDBID ItemSlot
+		{
+			get => GetProperty(ref _itemSlot);
+			set => SetProperty(ref _itemSlot, value);
+		}
+
+		public workEquipItemToSlotAction(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

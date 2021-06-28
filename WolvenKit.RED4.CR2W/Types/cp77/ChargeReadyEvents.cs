@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ChargeReadyEvents : ChargeEventsAbstract
 	{
-		public ChargeReadyEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+
+		public ChargeReadyEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

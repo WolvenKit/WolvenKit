@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkanimEvent : IScriptable
 	{
-		[Ordinal(0)] [RED("startTime")] public CFloat StartTime { get; set; }
+		private CFloat _startTime;
 
-		public inkanimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("startTime")] 
+		public CFloat StartTime
+		{
+			get => GetProperty(ref _startTime);
+			set => SetProperty(ref _startTime, value);
+		}
+
+		public inkanimEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

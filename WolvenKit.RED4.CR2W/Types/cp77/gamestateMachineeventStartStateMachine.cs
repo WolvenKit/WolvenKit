@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamestateMachineeventStartStateMachine : redEvent
 	{
-		[Ordinal(0)] [RED("stateMachineIdentifier")] public gamestateMachineStateMachineIdentifier StateMachineIdentifier { get; set; }
+		private gamestateMachineStateMachineIdentifier _stateMachineIdentifier;
 
-		public gamestateMachineeventStartStateMachine(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stateMachineIdentifier")] 
+		public gamestateMachineStateMachineIdentifier StateMachineIdentifier
+		{
+			get => GetProperty(ref _stateMachineIdentifier);
+			set => SetProperty(ref _stateMachineIdentifier, value);
+		}
+
+		public gamestateMachineeventStartStateMachine(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

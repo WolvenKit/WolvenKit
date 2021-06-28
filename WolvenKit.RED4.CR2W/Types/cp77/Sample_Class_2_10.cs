@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class Sample_Class_2_10 : CVariable
 	{
-		[Ordinal(0)] [RED("MyCustomNameForProperty")] public CFloat MyCustomNameForProperty { get; set; }
+		private CFloat _myCustomNameForProperty;
 
-		public Sample_Class_2_10(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("MyCustomNameForProperty")] 
+		public CFloat MyCustomNameForProperty
+		{
+			get => GetProperty(ref _myCustomNameForProperty);
+			set => SetProperty(ref _myCustomNameForProperty, value);
+		}
+
+		public Sample_Class_2_10(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioEnemyStateCountASTCD : audioAudioStateTransitionConditionData
 	{
-		[Ordinal(1)] [RED("enemiesState")] public CEnum<audioEnemyState> EnemiesState { get; set; }
-		[Ordinal(2)] [RED("countComparer")] public CEnum<audioNumberComparer> CountComparer { get; set; }
-		[Ordinal(3)] [RED("enemiesCount")] public CUInt32 EnemiesCount { get; set; }
+		private CEnum<audioEnemyState> _enemiesState;
+		private CEnum<audioNumberComparer> _countComparer;
+		private CUInt32 _enemiesCount;
 
-		public audioEnemyStateCountASTCD(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("enemiesState")] 
+		public CEnum<audioEnemyState> EnemiesState
+		{
+			get => GetProperty(ref _enemiesState);
+			set => SetProperty(ref _enemiesState, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("countComparer")] 
+		public CEnum<audioNumberComparer> CountComparer
+		{
+			get => GetProperty(ref _countComparer);
+			set => SetProperty(ref _countComparer, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("enemiesCount")] 
+		public CUInt32 EnemiesCount
+		{
+			get => GetProperty(ref _enemiesCount);
+			set => SetProperty(ref _enemiesCount, value);
+		}
+
+		public audioEnemyStateCountASTCD(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

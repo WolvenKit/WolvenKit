@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
-using System.Text;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Oodle;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.Common.Services
 {
@@ -12,18 +14,20 @@ namespace WolvenKit.Common.Services
     {
         #region Fields
 
-        private const string HashFileName = "archivehashes.txt";
-        private const string HashZipName = "WolvenKit.Common.Resources.archivehashes.zip";
+        private const string s_used = "WolvenKit.Common.Resources.usedhashes.kark";
+        private const string s_unused = "WolvenKit.Common.Resources.unusedhashes.kark";
+        private const string s_userHashes = "user_hashes.txt";
+
         private readonly Dictionary<ulong, string> _hashes = new();
-        private readonly ILoggerService _loggerService;
+        private readonly Dictionary<ulong, string> _additionalhashes = new();
+        private readonly Dictionary<ulong, string> _userHashes = new();
 
         #endregion Fields
 
         #region Constructors
 
-        public HashService(ILoggerService loggerService)
+        public HashService()
         {
-            _loggerService = loggerService;
             Load();
         }
 
@@ -31,59 +35,122 @@ namespace WolvenKit.Common.Services
 
         #region Methods
 
-        public bool Contains(ulong key)
+        private bool IsAdditionalLoaded() => _additionalhashes.Count > 0;
+
+        public IEnumerable<ulong> GetAllHashes()
         {
-            return _hashes.ContainsKey(key);
+            // load additional
+            LoadAdditional();
+            return _hashes.Keys.Concat(_userHashes.Keys).Concat(_additionalhashes.Keys);
         }
+
+        public bool Contains(ulong key) => _hashes.ContainsKey(key) || _userHashes.ContainsKey(key);
 
         public string Get(ulong key)
         {
-            _hashes.TryGetValue(key, out var value);
-            return value;
-        }
-
-        public void ReloadLocally()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void AddHashesFromStream(Stream stream)
-        {
-            string line;
-            using var sr = new StreamReader(stream, Encoding.UTF8);
-            while ((line = sr.ReadLine()) != null)
+            if (_hashes.ContainsKey(key))
             {
-                _hashes[FNV1A64HashAlgorithm.HashString(line)] = line;
+                return _hashes[key];
             }
+            if (_userHashes.ContainsKey(key))
+            {
+                return _userHashes[key];
+            }
+
+            // load additional
+            LoadAdditional();
+            if (_additionalhashes.ContainsKey(key))
+            {
+                return _additionalhashes[key];
+            }
+
+            return "";
+        }
+
+        public void Add(string path)
+        {
+            var hash = FNV1A64HashAlgorithm.HashString(path);
+            if (!Contains(hash))
+            {
+                _userHashes.Add(hash, path);
+            }
+        }
+
+
+
+
+        private void LoadAdditional()
+        {
+            if (IsAdditionalLoaded())
+            {
+                return;
+            }
+
+            LoadEmbeddedHashes(s_unused, _additionalhashes);
         }
 
         private void Load()
         {
-            _loggerService.LogString("Loading local filename hashes...", Logtype.Important);
+            LoadEmbeddedHashes(s_used, _hashes);
 
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            _hashes.EnsureCapacity(1_500_000);
-
-            var assembly = Assembly.GetExecutingAssembly();
-            using var stream = assembly.GetManifestResourceStream(HashZipName);
-            if (stream is null)
+            // user hashes
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
+            if (File.Exists(userHashesPath))
             {
-                _loggerService.LogString($"'{HashZipName}' not found", Logtype.Error);
-                return;
+                using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
+                ReadHashes(userFs, _userHashes);
+            }
+        }
+
+        private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, string> hashDictionary)
+        {
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+
+            // read KARK header
+            var oodleCompression = stream.ReadStruct<uint>();
+            if (oodleCompression != OodleHelper.KARK)
+            {
+                throw new DecompressionException($"Incorrect hash file.");
             }
 
-            var archive = new ZipArchive(stream);
-            var zipArchiveEntry = archive.GetEntry(HashFileName);
-            if (zipArchiveEntry != null)
-            {
-                using var zipstream = zipArchiveEntry.Open();
-                AddHashesFromStream(zipstream);
-            }
+            var outputsize = stream.ReadStruct<uint>();
 
-            stopwatch.Stop();
-            _loggerService.LogString($"Loaded {_hashes.Count} hashes in {stopwatch.ElapsedMilliseconds}ms.", Logtype.Success);
+            // read the rest of the stream
+            var outputbuffer = new byte[outputsize];
+
+            var inbuffer = stream.ToByteArray(true);
+
+            OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
+
+            hashDictionary.EnsureCapacity(1_100_000);
+
+            using var ms = new MemoryStream(outputbuffer);
+            ReadHashes(ms, hashDictionary);
+        }
+
+        private void ReadHashes(Stream memoryStream, IDictionary<ulong, string> hashDict)
+        {
+            using var sr = new StreamReader(memoryStream);
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                var hash = FNV1A64HashAlgorithm.HashString(line);
+                if (_hashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+                if (_userHashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+                if (_additionalhashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+
+                hashDict.Add(hash, line);
+            }
         }
 
         #endregion Methods

@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WorkspotEntryData : IScriptable
 	{
-		[Ordinal(0)] [RED("workspotRef")] public NodeRef WorkspotRef { get; set; }
-		[Ordinal(1)] [RED("isEnabled")] public CBool IsEnabled { get; set; }
-		[Ordinal(2)] [RED("isAvailable")] public CBool IsAvailable { get; set; }
+		private NodeRef _workspotRef;
+		private CBool _isEnabled;
+		private CBool _isAvailable;
 
-		public WorkspotEntryData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("workspotRef")] 
+		public NodeRef WorkspotRef
+		{
+			get => GetProperty(ref _workspotRef);
+			set => SetProperty(ref _workspotRef, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("isEnabled")] 
+		public CBool IsEnabled
+		{
+			get => GetProperty(ref _isEnabled);
+			set => SetProperty(ref _isEnabled, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isAvailable")] 
+		public CBool IsAvailable
+		{
+			get => GetProperty(ref _isAvailable);
+			set => SetProperty(ref _isAvailable, value);
+		}
+
+		public WorkspotEntryData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

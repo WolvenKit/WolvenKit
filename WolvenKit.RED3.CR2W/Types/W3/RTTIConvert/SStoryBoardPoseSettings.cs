@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("idleAnimName")] 		public CName IdleAnimName { get; set;}
 
-		public SStoryBoardPoseSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStoryBoardPoseSettings(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStoryBoardPoseSettings(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

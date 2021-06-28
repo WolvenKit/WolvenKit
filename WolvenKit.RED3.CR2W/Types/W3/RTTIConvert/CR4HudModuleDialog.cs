@@ -67,9 +67,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(28)] [RED("lastSetChoices", 2,0)] 		public CArray<SSceneChoice> LastSetChoices { get; set;}
 
-		public CR4HudModuleDialog(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CR4HudModuleDialog(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CR4HudModuleDialog(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

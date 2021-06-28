@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scannerQuestEntry : CVariable
 	{
-		[Ordinal(0)] [RED("categoryName")] public CName CategoryName { get; set; }
-		[Ordinal(1)] [RED("entryName")] public CName EntryName { get; set; }
-		[Ordinal(2)] [RED("recordID")] public TweakDBID RecordID { get; set; }
+		private CName _categoryName;
+		private CName _entryName;
+		private TweakDBID _recordID;
 
-		public scannerQuestEntry(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("categoryName")] 
+		public CName CategoryName
+		{
+			get => GetProperty(ref _categoryName);
+			set => SetProperty(ref _categoryName, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entryName")] 
+		public CName EntryName
+		{
+			get => GetProperty(ref _entryName);
+			set => SetProperty(ref _entryName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("recordID")] 
+		public TweakDBID RecordID
+		{
+			get => GetProperty(ref _recordID);
+			set => SetProperty(ref _recordID, value);
+		}
+
+		public scannerQuestEntry(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class interopGraphConnectionCreationData : CVariable
 	{
-		[Ordinal(0)] [RED("data")] public CString Data { get; set; }
-		[Ordinal(1)] [RED("extraData")] public CArray<CString> ExtraData { get; set; }
+		private CString _data;
+		private CArray<CString> _extraData;
 
-		public interopGraphConnectionCreationData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public CString Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("extraData")] 
+		public CArray<CString> ExtraData
+		{
+			get => GetProperty(ref _extraData);
+			set => SetProperty(ref _extraData, value);
+		}
+
+		public interopGraphConnectionCreationData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

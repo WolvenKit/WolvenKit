@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entContextualLookAtRemoveEvent : entLookAtRemoveEvent
 	{
-		[Ordinal(3)] [RED("contextName")] public CName ContextName { get; set; }
+		private CName _contextName;
 
-		public entContextualLookAtRemoveEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(3)] 
+		[RED("contextName")] 
+		public CName ContextName
+		{
+			get => GetProperty(ref _contextName);
+			set => SetProperty(ref _contextName, value);
+		}
+
+		public entContextualLookAtRemoveEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

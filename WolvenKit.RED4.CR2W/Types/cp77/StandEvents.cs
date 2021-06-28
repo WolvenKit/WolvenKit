@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StandEvents : LocomotionGroundEvents
 	{
-		[Ordinal(0)] [RED("previousStimTimeStamp")] public CFloat PreviousStimTimeStamp { get; set; }
+		private CFloat _previousStimTimeStamp;
 
-		public StandEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("previousStimTimeStamp")] 
+		public CFloat PreviousStimTimeStamp
+		{
+			get => GetProperty(ref _previousStimTimeStamp);
+			set => SetProperty(ref _previousStimTimeStamp, value);
+		}
+
+		public StandEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

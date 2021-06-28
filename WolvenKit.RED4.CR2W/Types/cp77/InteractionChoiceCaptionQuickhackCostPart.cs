@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InteractionChoiceCaptionQuickhackCostPart : gameinteractionsChoiceCaptionScriptPart
 	{
-		[Ordinal(0)] [RED("cost")] public CInt32 Cost { get; set; }
+		private CInt32 _cost;
 
-		public InteractionChoiceCaptionQuickhackCostPart(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("cost")] 
+		public CInt32 Cost
+		{
+			get => GetProperty(ref _cost);
+			set => SetProperty(ref _cost, value);
+		}
+
+		public InteractionChoiceCaptionQuickhackCostPart(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CMaterialParameterVector : CMaterialParameter
 	{
-		[Ordinal(2)] [RED("vector")] public Vector4 Vector { get; set; }
+		private Vector4 _vector;
 
-		public CMaterialParameterVector(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("vector")] 
+		public Vector4 Vector
+		{
+			get => GetProperty(ref _vector);
+			set => SetProperty(ref _vector, value);
+		}
+
+		public CMaterialParameterVector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

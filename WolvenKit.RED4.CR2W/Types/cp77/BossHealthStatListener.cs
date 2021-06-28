@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BossHealthStatListener : gameScriptStatPoolsListener
 	{
-		[Ordinal(0)] [RED("healthbar")] public wCHandle<BossHealthBarGameController> Healthbar { get; set; }
+		private wCHandle<BossHealthBarGameController> _healthbar;
 
-		public BossHealthStatListener(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("healthbar")] 
+		public wCHandle<BossHealthBarGameController> Healthbar
+		{
+			get => GetProperty(ref _healthbar);
+			set => SetProperty(ref _healthbar, value);
+		}
+
+		public BossHealthStatListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

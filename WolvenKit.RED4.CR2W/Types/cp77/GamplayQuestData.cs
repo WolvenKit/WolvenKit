@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GamplayQuestData : IScriptable
 	{
-		[Ordinal(0)] [RED("questUniqueID")] public CString QuestUniqueID { get; set; }
-		[Ordinal(1)] [RED("objectives")] public CArray<CHandle<GemplayObjectiveData>> Objectives { get; set; }
+		private CString _questUniqueID;
+		private CArray<CHandle<GemplayObjectiveData>> _objectives;
 
-		public GamplayQuestData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("questUniqueID")] 
+		public CString QuestUniqueID
+		{
+			get => GetProperty(ref _questUniqueID);
+			set => SetProperty(ref _questUniqueID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("objectives")] 
+		public CArray<CHandle<GemplayObjectiveData>> Objectives
+		{
+			get => GetProperty(ref _objectives);
+			set => SetProperty(ref _objectives, value);
+		}
+
+		public GamplayQuestData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

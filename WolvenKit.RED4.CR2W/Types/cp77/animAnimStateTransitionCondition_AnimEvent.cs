@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimStateTransitionCondition_AnimEvent : animIAnimStateTransitionCondition
 	{
-		[Ordinal(0)] [RED("eventName")] public CName EventName { get; set; }
+		private CName _eventName;
 
-		public animAnimStateTransitionCondition_AnimEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("eventName")] 
+		public CName EventName
+		{
+			get => GetProperty(ref _eventName);
+			set => SetProperty(ref _eventName, value);
+		}
+
+		public animAnimStateTransitionCondition_AnimEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

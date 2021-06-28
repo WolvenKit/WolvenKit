@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PublicSafeEvents : WeaponEventsTransition
 	{
-		[Ordinal(0)] [RED("weaponUnequipRequestSent")] public CBool WeaponUnequipRequestSent { get; set; }
+		private CBool _weaponUnequipRequestSent;
 
-		public PublicSafeEvents(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("weaponUnequipRequestSent")] 
+		public CBool WeaponUnequipRequestSent
+		{
+			get => GetProperty(ref _weaponUnequipRequestSent);
+			set => SetProperty(ref _weaponUnequipRequestSent, value);
+		}
+
+		public PublicSafeEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CuttingGrenadePotentialTarget : CVariable
 	{
-		[Ordinal(0)] [RED("entity")] public wCHandle<ScriptedPuppet> Entity { get; set; }
-		[Ordinal(1)] [RED("hits")] public CInt32 Hits { get; set; }
+		private wCHandle<ScriptedPuppet> _entity;
+		private CInt32 _hits;
 
-		public CuttingGrenadePotentialTarget(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("entity")] 
+		public wCHandle<ScriptedPuppet> Entity
+		{
+			get => GetProperty(ref _entity);
+			set => SetProperty(ref _entity, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("hits")] 
+		public CInt32 Hits
+		{
+			get => GetProperty(ref _hits);
+			set => SetProperty(ref _hits, value);
+		}
+
+		public CuttingGrenadePotentialTarget(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

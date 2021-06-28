@@ -15,9 +15,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(2)] [RED("curveNames", 2,0)] 		public CArray<CName> CurveNames { get; set;}
 
-		public ICustomCameraScriptedCurveSetPivotPositionController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public ICustomCameraScriptedCurveSetPivotPositionController(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new ICustomCameraScriptedCurveSetPivotPositionController(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

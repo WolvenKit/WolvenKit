@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ObjectInspectEvent : redEvent
 	{
-		[Ordinal(0)] [RED("showItem")] public CBool ShowItem { get; set; }
+		private CBool _showItem;
 
-		public ObjectInspectEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("showItem")] 
+		public CBool ShowItem
+		{
+			get => GetProperty(ref _showItem);
+			set => SetProperty(ref _showItem, value);
+		}
+
+		public ObjectInspectEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkPhaseSlotWithDurationAnim : animAnimNode_SkPhaseWithDurationAnim
 	{
-		[Ordinal(32)] [RED("animFeatureName")] public CName AnimFeatureName { get; set; }
-		[Ordinal(33)] [RED("actionAnimDatabaseRef")] public rRef<animActionAnimDatabase> ActionAnimDatabaseRef { get; set; }
+		private CName _animFeatureName;
+		private rRef<animActionAnimDatabase> _actionAnimDatabaseRef;
 
-		public animAnimNode_SkPhaseSlotWithDurationAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(32)] 
+		[RED("animFeatureName")] 
+		public CName AnimFeatureName
+		{
+			get => GetProperty(ref _animFeatureName);
+			set => SetProperty(ref _animFeatureName, value);
+		}
+
+		[Ordinal(33)] 
+		[RED("actionAnimDatabaseRef")] 
+		public rRef<animActionAnimDatabase> ActionAnimDatabaseRef
+		{
+			get => GetProperty(ref _actionAnimDatabaseRef);
+			set => SetProperty(ref _actionAnimDatabaseRef, value);
+		}
+
+		public animAnimNode_SkPhaseSlotWithDurationAnim(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameEffectInputParameter_CName : CVariable
 	{
-		[Ordinal(0)] [RED("evaluator")] public CHandle<gameIEffectParameter_CNameEvaluator> Evaluator { get; set; }
+		private CHandle<gameIEffectParameter_CNameEvaluator> _evaluator;
 
-		public gameEffectInputParameter_CName(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("evaluator")] 
+		public CHandle<gameIEffectParameter_CNameEvaluator> Evaluator
+		{
+			get => GetProperty(ref _evaluator);
+			set => SetProperty(ref _evaluator, value);
+		}
+
+		public gameEffectInputParameter_CName(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

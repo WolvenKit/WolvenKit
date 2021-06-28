@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiTutorialBracketShowEvent : redEvent
 	{
-		[Ordinal(0)] [RED("data")] public gameTutorialBracketData Data { get; set; }
+		private gameTutorialBracketData _data;
 
-		public gameuiTutorialBracketShowEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("data")] 
+		public gameTutorialBracketData Data
+		{
+			get => GetProperty(ref _data);
+			set => SetProperty(ref _data, value);
+		}
+
+		public gameuiTutorialBracketShowEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

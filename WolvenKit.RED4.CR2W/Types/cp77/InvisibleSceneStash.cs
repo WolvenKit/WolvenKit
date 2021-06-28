@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InvisibleSceneStash : Device
 	{
-		[Ordinal(86)] [RED("itemSlots")] public CArray<CEnum<gamedataEquipmentArea>> ItemSlots { get; set; }
-		[Ordinal(87)] [RED("equipmentData")] public CHandle<EquipmentSystemPlayerData> EquipmentData { get; set; }
+		private CArray<CEnum<gamedataEquipmentArea>> _itemSlots;
+		private CHandle<EquipmentSystemPlayerData> _equipmentData;
 
-		public InvisibleSceneStash(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(86)] 
+		[RED("itemSlots")] 
+		public CArray<CEnum<gamedataEquipmentArea>> ItemSlots
+		{
+			get => GetProperty(ref _itemSlots);
+			set => SetProperty(ref _itemSlots, value);
+		}
+
+		[Ordinal(87)] 
+		[RED("equipmentData")] 
+		public CHandle<EquipmentSystemPlayerData> EquipmentData
+		{
+			get => GetProperty(ref _equipmentData);
+			set => SetProperty(ref _equipmentData, value);
+		}
+
+		public InvisibleSceneStash(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

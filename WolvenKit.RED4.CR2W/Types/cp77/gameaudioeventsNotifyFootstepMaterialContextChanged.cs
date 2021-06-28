@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameaudioeventsNotifyFootstepMaterialContextChanged : redEvent
 	{
-		[Ordinal(0)] [RED("footwareType")] public CName FootwareType { get; set; }
-		[Ordinal(1)] [RED("surfaceFlavourName")] public CName SurfaceFlavourName { get; set; }
+		private CName _footwareType;
+		private CName _surfaceFlavourName;
 
-		public gameaudioeventsNotifyFootstepMaterialContextChanged(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("footwareType")] 
+		public CName FootwareType
+		{
+			get => GetProperty(ref _footwareType);
+			set => SetProperty(ref _footwareType, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("surfaceFlavourName")] 
+		public CName SurfaceFlavourName
+		{
+			get => GetProperty(ref _surfaceFlavourName);
+			set => SetProperty(ref _surfaceFlavourName, value);
+		}
+
+		public gameaudioeventsNotifyFootstepMaterialContextChanged(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

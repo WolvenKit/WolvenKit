@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class effectEffectParameterEvaluatorColor : CVariable
 	{
-		[Ordinal(0)] [RED("evaluator")] public CHandle<IEvaluatorColor> Evaluator { get; set; }
-		[Ordinal(1)] [RED("inputParameterOverride")] public CName InputParameterOverride { get; set; }
+		private CHandle<IEvaluatorColor> _evaluator;
+		private CName _inputParameterOverride;
 
-		public effectEffectParameterEvaluatorColor(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("evaluator")] 
+		public CHandle<IEvaluatorColor> Evaluator
+		{
+			get => GetProperty(ref _evaluator);
+			set => SetProperty(ref _evaluator, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("inputParameterOverride")] 
+		public CName InputParameterOverride
+		{
+			get => GetProperty(ref _inputParameterOverride);
+			set => SetProperty(ref _inputParameterOverride, value);
+		}
+
+		public effectEffectParameterEvaluatorColor(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

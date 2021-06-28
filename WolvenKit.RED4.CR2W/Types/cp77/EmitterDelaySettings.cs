@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EmitterDelaySettings : CVariable
 	{
-		[Ordinal(0)] [RED("emitterDelay")] public CFloat EmitterDelay { get; set; }
-		[Ordinal(1)] [RED("emitterDelayLow")] public CFloat EmitterDelayLow { get; set; }
-		[Ordinal(2)] [RED("useEmitterDelayRange")] public CBool UseEmitterDelayRange { get; set; }
-		[Ordinal(3)] [RED("useEmitterDelayOnce")] public CBool UseEmitterDelayOnce { get; set; }
+		private CFloat _emitterDelay;
+		private CFloat _emitterDelayLow;
+		private CBool _useEmitterDelayRange;
+		private CBool _useEmitterDelayOnce;
 
-		public EmitterDelaySettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("emitterDelay")] 
+		public CFloat EmitterDelay
+		{
+			get => GetProperty(ref _emitterDelay);
+			set => SetProperty(ref _emitterDelay, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("emitterDelayLow")] 
+		public CFloat EmitterDelayLow
+		{
+			get => GetProperty(ref _emitterDelayLow);
+			set => SetProperty(ref _emitterDelayLow, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("useEmitterDelayRange")] 
+		public CBool UseEmitterDelayRange
+		{
+			get => GetProperty(ref _useEmitterDelayRange);
+			set => SetProperty(ref _useEmitterDelayRange, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("useEmitterDelayOnce")] 
+		public CBool UseEmitterDelayOnce
+		{
+			get => GetProperty(ref _useEmitterDelayOnce);
+			set => SetProperty(ref _useEmitterDelayOnce, value);
+		}
+
+		public EmitterDelaySettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

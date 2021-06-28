@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class animAnimNode_SkPhaseWithSpeedAnim : animAnimNode_SkPhaseAnim
 	{
-		[Ordinal(31)] [RED("speedLink")] public animFloatLink SpeedLink { get; set; }
+		private animFloatLink _speedLink;
 
-		public animAnimNode_SkPhaseWithSpeedAnim(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(31)] 
+		[RED("speedLink")] 
+		public animFloatLink SpeedLink
+		{
+			get => GetProperty(ref _speedLink);
+			set => SetProperty(ref _speedLink, value);
+		}
+
+		public animAnimNode_SkPhaseWithSpeedAnim(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

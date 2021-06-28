@@ -7,10 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DeviceTimetableEvent : redEvent
 	{
-		[Ordinal(0)] [RED("state")] public CEnum<EDeviceStatus> State { get; set; }
-		[Ordinal(1)] [RED("requesterID")] public entEntityID RequesterID { get; set; }
-		[Ordinal(2)] [RED("restorePower")] public CBool RestorePower { get; set; }
+		private CEnum<EDeviceStatus> _state;
+		private entEntityID _requesterID;
+		private CBool _restorePower;
 
-		public DeviceTimetableEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("state")] 
+		public CEnum<EDeviceStatus> State
+		{
+			get => GetProperty(ref _state);
+			set => SetProperty(ref _state, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("requesterID")] 
+		public entEntityID RequesterID
+		{
+			get => GetProperty(ref _requesterID);
+			set => SetProperty(ref _requesterID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("restorePower")] 
+		public CBool RestorePower
+		{
+			get => GetProperty(ref _restorePower);
+			set => SetProperty(ref _restorePower, value);
+		}
+
+		public DeviceTimetableEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

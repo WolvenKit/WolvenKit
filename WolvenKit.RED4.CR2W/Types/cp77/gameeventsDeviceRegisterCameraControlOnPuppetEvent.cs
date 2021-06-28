@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameeventsDeviceRegisterCameraControlOnPuppetEvent : redEvent
 	{
-		[Ordinal(0)] [RED("component")] public CHandle<gameDeviceCameraControlComponent> Component { get; set; }
-		[Ordinal(1)] [RED("register")] public CBool Register { get; set; }
+		private CHandle<gameDeviceCameraControlComponent> _component;
+		private CBool _register;
 
-		public gameeventsDeviceRegisterCameraControlOnPuppetEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("component")] 
+		public CHandle<gameDeviceCameraControlComponent> Component
+		{
+			get => GetProperty(ref _component);
+			set => SetProperty(ref _component, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("register")] 
+		public CBool Register
+		{
+			get => GetProperty(ref _register);
+			set => SetProperty(ref _register, value);
+		}
+
+		public gameeventsDeviceRegisterCameraControlOnPuppetEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

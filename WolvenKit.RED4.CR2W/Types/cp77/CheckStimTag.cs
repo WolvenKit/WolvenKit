@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CheckStimTag : AIbehaviorconditionScript
 	{
-		[Ordinal(0)] [RED("stimTagToCompare")] public CArray<CName> StimTagToCompare { get; set; }
+		private CArray<CName> _stimTagToCompare;
 
-		public CheckStimTag(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("stimTagToCompare")] 
+		public CArray<CName> StimTagToCompare
+		{
+			get => GetProperty(ref _stimTagToCompare);
+			set => SetProperty(ref _stimTagToCompare, value);
+		}
+
+		public CheckStimTag(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

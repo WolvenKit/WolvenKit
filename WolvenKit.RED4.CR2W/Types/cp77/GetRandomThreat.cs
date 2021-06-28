@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class GetRandomThreat : AIRandomTasks
 	{
-		[Ordinal(0)] [RED("outThreatArgument")] public CHandle<AIArgumentMapping> OutThreatArgument { get; set; }
+		private CHandle<AIArgumentMapping> _outThreatArgument;
 
-		public GetRandomThreat(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("outThreatArgument")] 
+		public CHandle<AIArgumentMapping> OutThreatArgument
+		{
+			get => GetProperty(ref _outThreatArgument);
+			set => SetProperty(ref _outThreatArgument, value);
+		}
+
+		public GetRandomThreat(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

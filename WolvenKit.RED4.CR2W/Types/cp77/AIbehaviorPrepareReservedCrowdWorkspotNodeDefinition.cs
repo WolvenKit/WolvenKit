@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorPrepareReservedCrowdWorkspotNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
-		[Ordinal(1)] [RED("workspotData")] public CHandle<AIArgumentMapping> WorkspotData { get; set; }
-		[Ordinal(2)] [RED("returnPosition")] public CHandle<AIArgumentMapping> ReturnPosition { get; set; }
-		[Ordinal(3)] [RED("returnPositionVector")] public CHandle<AIArgumentMapping> ReturnPositionVector { get; set; }
-		[Ordinal(4)] [RED("workspotExitTangent")] public CHandle<AIArgumentMapping> WorkspotExitTangent { get; set; }
-		[Ordinal(5)] [RED("joinTrafficSettings")] public CHandle<AIArgumentMapping> JoinTrafficSettings { get; set; }
-		[Ordinal(6)] [RED("overrideExit")] public CHandle<AIArgumentMapping> OverrideExit { get; set; }
+		private CHandle<AIArgumentMapping> _workspotData;
+		private CHandle<AIArgumentMapping> _returnPosition;
+		private CHandle<AIArgumentMapping> _returnPositionVector;
+		private CHandle<AIArgumentMapping> _workspotExitTangent;
+		private CHandle<AIArgumentMapping> _joinTrafficSettings;
+		private CHandle<AIArgumentMapping> _overrideExit;
 
-		public AIbehaviorPrepareReservedCrowdWorkspotNodeDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("workspotData")] 
+		public CHandle<AIArgumentMapping> WorkspotData
+		{
+			get => GetProperty(ref _workspotData);
+			set => SetProperty(ref _workspotData, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("returnPosition")] 
+		public CHandle<AIArgumentMapping> ReturnPosition
+		{
+			get => GetProperty(ref _returnPosition);
+			set => SetProperty(ref _returnPosition, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("returnPositionVector")] 
+		public CHandle<AIArgumentMapping> ReturnPositionVector
+		{
+			get => GetProperty(ref _returnPositionVector);
+			set => SetProperty(ref _returnPositionVector, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("workspotExitTangent")] 
+		public CHandle<AIArgumentMapping> WorkspotExitTangent
+		{
+			get => GetProperty(ref _workspotExitTangent);
+			set => SetProperty(ref _workspotExitTangent, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("joinTrafficSettings")] 
+		public CHandle<AIArgumentMapping> JoinTrafficSettings
+		{
+			get => GetProperty(ref _joinTrafficSettings);
+			set => SetProperty(ref _joinTrafficSettings, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("overrideExit")] 
+		public CHandle<AIArgumentMapping> OverrideExit
+		{
+			get => GetProperty(ref _overrideExit);
+			set => SetProperty(ref _overrideExit, value);
+		}
+
+		public AIbehaviorPrepareReservedCrowdWorkspotNodeDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

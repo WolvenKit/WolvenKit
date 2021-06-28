@@ -7,11 +7,43 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AIbehaviorFindAlertedWorkspotTaskDefinition : AIbehaviorTaskDefinition
 	{
-		[Ordinal(1)] [RED("usedTokens")] public CHandle<AIArgumentMapping> UsedTokens { get; set; }
-		[Ordinal(2)] [RED("spots")] public CHandle<AIArgumentMapping> Spots { get; set; }
-		[Ordinal(3)] [RED("radius")] public CHandle<AIArgumentMapping> Radius { get; set; }
-		[Ordinal(4)] [RED("outWorkspotData")] public CHandle<AIArgumentMapping> OutWorkspotData { get; set; }
+		private CHandle<AIArgumentMapping> _usedTokens;
+		private CHandle<AIArgumentMapping> _spots;
+		private CHandle<AIArgumentMapping> _radius;
+		private CHandle<AIArgumentMapping> _outWorkspotData;
 
-		public AIbehaviorFindAlertedWorkspotTaskDefinition(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("usedTokens")] 
+		public CHandle<AIArgumentMapping> UsedTokens
+		{
+			get => GetProperty(ref _usedTokens);
+			set => SetProperty(ref _usedTokens, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("spots")] 
+		public CHandle<AIArgumentMapping> Spots
+		{
+			get => GetProperty(ref _spots);
+			set => SetProperty(ref _spots, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("radius")] 
+		public CHandle<AIArgumentMapping> Radius
+		{
+			get => GetProperty(ref _radius);
+			set => SetProperty(ref _radius, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("outWorkspotData")] 
+		public CHandle<AIArgumentMapping> OutWorkspotData
+		{
+			get => GetProperty(ref _outWorkspotData);
+			set => SetProperty(ref _outWorkspotData, value);
+		}
+
+		public AIbehaviorFindAlertedWorkspotTaskDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

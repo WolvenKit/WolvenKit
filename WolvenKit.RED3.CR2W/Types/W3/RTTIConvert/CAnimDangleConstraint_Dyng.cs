@@ -37,9 +37,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(13)] [RED("max_links_iterations")] 		public CInt32 Max_links_iterations { get; set;}
 
-		public CAnimDangleConstraint_Dyng(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CAnimDangleConstraint_Dyng(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CAnimDangleConstraint_Dyng(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

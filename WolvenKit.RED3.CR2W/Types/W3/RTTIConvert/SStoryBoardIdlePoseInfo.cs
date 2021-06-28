@@ -29,9 +29,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
 		[Ordinal(9)] [RED("status")] 		public CString Status { get; set;}
 
-		public SStoryBoardIdlePoseInfo(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public SStoryBoardIdlePoseInfo(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new SStoryBoardIdlePoseInfo(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

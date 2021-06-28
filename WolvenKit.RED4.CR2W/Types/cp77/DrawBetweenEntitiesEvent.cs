@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class DrawBetweenEntitiesEvent : redEvent
 	{
-		[Ordinal(0)] [RED("shouldDraw")] public CBool ShouldDraw { get; set; }
-		[Ordinal(1)] [RED("fxResource")] public gameFxResource FxResource { get; set; }
-		[Ordinal(2)] [RED("revealMaster")] public CBool RevealMaster { get; set; }
-		[Ordinal(3)] [RED("revealSlave")] public CBool RevealSlave { get; set; }
-		[Ordinal(4)] [RED("masterEntity")] public entEntityID MasterEntity { get; set; }
-		[Ordinal(5)] [RED("slaveEntity")] public entEntityID SlaveEntity { get; set; }
+		private CBool _shouldDraw;
+		private gameFxResource _fxResource;
+		private CBool _revealMaster;
+		private CBool _revealSlave;
+		private entEntityID _masterEntity;
+		private entEntityID _slaveEntity;
 
-		public DrawBetweenEntitiesEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("shouldDraw")] 
+		public CBool ShouldDraw
+		{
+			get => GetProperty(ref _shouldDraw);
+			set => SetProperty(ref _shouldDraw, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("fxResource")] 
+		public gameFxResource FxResource
+		{
+			get => GetProperty(ref _fxResource);
+			set => SetProperty(ref _fxResource, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("revealMaster")] 
+		public CBool RevealMaster
+		{
+			get => GetProperty(ref _revealMaster);
+			set => SetProperty(ref _revealMaster, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("revealSlave")] 
+		public CBool RevealSlave
+		{
+			get => GetProperty(ref _revealSlave);
+			set => SetProperty(ref _revealSlave, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("masterEntity")] 
+		public entEntityID MasterEntity
+		{
+			get => GetProperty(ref _masterEntity);
+			set => SetProperty(ref _masterEntity, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("slaveEntity")] 
+		public entEntityID SlaveEntity
+		{
+			get => GetProperty(ref _slaveEntity);
+			set => SetProperty(ref _slaveEntity, value);
+		}
+
+		public DrawBetweenEntitiesEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

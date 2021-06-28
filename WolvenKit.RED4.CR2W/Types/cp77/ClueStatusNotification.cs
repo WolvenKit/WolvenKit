@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ClueStatusNotification : HUDManagerRequest
 	{
-		[Ordinal(1)] [RED("isClue")] public CBool IsClue { get; set; }
-		[Ordinal(2)] [RED("clueGroupID")] public CName ClueGroupID { get; set; }
+		private CBool _isClue;
+		private CName _clueGroupID;
 
-		public ClueStatusNotification(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("isClue")] 
+		public CBool IsClue
+		{
+			get => GetProperty(ref _isClue);
+			set => SetProperty(ref _isClue, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("clueGroupID")] 
+		public CName ClueGroupID
+		{
+			get => GetProperty(ref _clueGroupID);
+			set => SetProperty(ref _clueGroupID, value);
+		}
+
+		public ClueStatusNotification(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

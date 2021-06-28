@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class scnscreenplayOptionUsage : CVariable
 	{
-		[Ordinal(0)] [RED("playerGenderMask")] public scnGenderMask PlayerGenderMask { get; set; }
+		private scnGenderMask _playerGenderMask;
 
-		public scnscreenplayOptionUsage(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("playerGenderMask")] 
+		public scnGenderMask PlayerGenderMask
+		{
+			get => GetProperty(ref _playerGenderMask);
+			set => SetProperty(ref _playerGenderMask, value);
+		}
+
+		public scnscreenplayOptionUsage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSetDestinationActionEvent : gameActionEvent
 	{
-		[Ordinal(4)] [RED("position")] public Vector3 Position { get; set; }
+		private Vector3 _position;
 
-		public gameSetDestinationActionEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(4)] 
+		[RED("position")] 
+		public Vector3 Position
+		{
+			get => GetProperty(ref _position);
+			set => SetProperty(ref _position, value);
+		}
+
+		public gameSetDestinationActionEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

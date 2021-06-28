@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class questRequestVehicleCameraPerspective_NodeType : questIVehicleManagerNodeType
 	{
-		[Ordinal(0)] [RED("cameraPerspective")] public CEnum<questVehicleCameraPerspective> CameraPerspective { get; set; }
+		private CEnum<questVehicleCameraPerspective> _cameraPerspective;
 
-		public questRequestVehicleCameraPerspective_NodeType(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("cameraPerspective")] 
+		public CEnum<questVehicleCameraPerspective> CameraPerspective
+		{
+			get => GetProperty(ref _cameraPerspective);
+			set => SetProperty(ref _cameraPerspective, value);
+		}
+
+		public questRequestVehicleCameraPerspective_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

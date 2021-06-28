@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AttributeBoughtEvent : redEvent
 	{
-		[Ordinal(0)] [RED("attributeType")] public CEnum<gamedataStatType> AttributeType { get; set; }
+		private CEnum<gamedataStatType> _attributeType;
 
-		public AttributeBoughtEvent(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("attributeType")] 
+		public CEnum<gamedataStatType> AttributeType
+		{
+			get => GetProperty(ref _attributeType);
+			set => SetProperty(ref _attributeType, value);
+		}
+
+		public AttributeBoughtEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

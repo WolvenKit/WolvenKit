@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gamePlayer : CVariable
 	{
-		[Ordinal(0)] [RED("peerID")] public netPeerID PeerID { get; set; }
-		[Ordinal(1)] [RED("nickname")] public CString Nickname { get; set; }
+		private netPeerID _peerID;
+		private CString _nickname;
 
-		public gamePlayer(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("peerID")] 
+		public netPeerID PeerID
+		{
+			get => GetProperty(ref _peerID);
+			set => SetProperty(ref _peerID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("nickname")] 
+		public CString Nickname
+		{
+			get => GetProperty(ref _nickname);
+			set => SetProperty(ref _nickname, value);
+		}
+
+		public gamePlayer(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

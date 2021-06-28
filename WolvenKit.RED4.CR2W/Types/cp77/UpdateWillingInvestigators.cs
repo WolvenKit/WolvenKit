@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class UpdateWillingInvestigators : redEvent
 	{
-		[Ordinal(0)] [RED("investigator")] public entEntityID Investigator { get; set; }
+		private entEntityID _investigator;
 
-		public UpdateWillingInvestigators(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("investigator")] 
+		public entEntityID Investigator
+		{
+			get => GetProperty(ref _investigator);
+			set => SetProperty(ref _investigator, value);
+		}
+
+		public UpdateWillingInvestigators(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AICNameArgumentInstancePS : AIArgumentInstancePS
 	{
-		[Ordinal(1)] [RED("value")] public CName Value { get; set; }
+		private CName _value;
 
-		public AICNameArgumentInstancePS(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("value")] 
+		public CName Value
+		{
+			get => GetProperty(ref _value);
+			set => SetProperty(ref _value, value);
+		}
+
+		public AICNameArgumentInstancePS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

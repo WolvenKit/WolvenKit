@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameaudioeventsStopSound : redEvent
 	{
-		[Ordinal(0)] [RED("soundName")] public CName SoundName { get; set; }
+		private CName _soundName;
 
-		public gameaudioeventsStopSound(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("soundName")] 
+		public CName SoundName
+		{
+			get => GetProperty(ref _soundName);
+			set => SetProperty(ref _soundName, value);
+		}
+
+		public gameaudioeventsStopSound(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

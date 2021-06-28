@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ImageButtonCustomData : WidgetCustomData
 	{
-		[Ordinal(0)] [RED("imageAtlasImageID")] public CName ImageAtlasImageID { get; set; }
-		[Ordinal(1)] [RED("additionalText")] public CString AdditionalText { get; set; }
+		private CName _imageAtlasImageID;
+		private CString _additionalText;
 
-		public ImageButtonCustomData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(0)] 
+		[RED("imageAtlasImageID")] 
+		public CName ImageAtlasImageID
+		{
+			get => GetProperty(ref _imageAtlasImageID);
+			set => SetProperty(ref _imageAtlasImageID, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("additionalText")] 
+		public CString AdditionalText
+		{
+			get => GetProperty(ref _additionalText);
+			set => SetProperty(ref _additionalText, value);
+		}
+
+		public ImageButtonCustomData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -13,9 +13,9 @@ namespace WolvenKit.RED3.CR2W.Types
 	{
 		[Ordinal(1)] [RED("keys", 2,0)] 		public CArray<CStorySceneEventDangleDisablingInterpolationKey> Keys { get; set;}
 
-		public CStorySceneEventDangleDisablingInterpolation(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
+		public CStorySceneEventDangleDisablingInterpolation(IRed3EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name){ }
 
-		public static new CVariable Create(CR2WFile cr2w, CVariable parent, string name) => new CStorySceneEventDangleDisablingInterpolation(cr2w, parent, name);
+		
 
 		public override void Read(BinaryReader file, uint size) => base.Read(file, size);
 

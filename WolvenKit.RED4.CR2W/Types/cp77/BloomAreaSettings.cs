@@ -7,13 +7,61 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BloomAreaSettings : IAreaSettings
 	{
-		[Ordinal(2)] [RED("luminanceThresholdMin")] public CFloat LuminanceThresholdMin { get; set; }
-		[Ordinal(3)] [RED("luminanceThresholdMax")] public CFloat LuminanceThresholdMax { get; set; }
-		[Ordinal(4)] [RED("sceneColorScale")] public CFloat SceneColorScale { get; set; }
-		[Ordinal(5)] [RED("bloomColorScale")] public CFloat BloomColorScale { get; set; }
-		[Ordinal(6)] [RED("numDownsamplePasses")] public CUInt8 NumDownsamplePasses { get; set; }
-		[Ordinal(7)] [RED("shaftsAreaSettings")] public ShaftsAreaSettings ShaftsAreaSettings { get; set; }
+		private CFloat _luminanceThresholdMin;
+		private CFloat _luminanceThresholdMax;
+		private CFloat _sceneColorScale;
+		private CFloat _bloomColorScale;
+		private CUInt8 _numDownsamplePasses;
+		private ShaftsAreaSettings _shaftsAreaSettings;
 
-		public BloomAreaSettings(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(2)] 
+		[RED("luminanceThresholdMin")] 
+		public CFloat LuminanceThresholdMin
+		{
+			get => GetProperty(ref _luminanceThresholdMin);
+			set => SetProperty(ref _luminanceThresholdMin, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("luminanceThresholdMax")] 
+		public CFloat LuminanceThresholdMax
+		{
+			get => GetProperty(ref _luminanceThresholdMax);
+			set => SetProperty(ref _luminanceThresholdMax, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("sceneColorScale")] 
+		public CFloat SceneColorScale
+		{
+			get => GetProperty(ref _sceneColorScale);
+			set => SetProperty(ref _sceneColorScale, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("bloomColorScale")] 
+		public CFloat BloomColorScale
+		{
+			get => GetProperty(ref _bloomColorScale);
+			set => SetProperty(ref _bloomColorScale, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("numDownsamplePasses")] 
+		public CUInt8 NumDownsamplePasses
+		{
+			get => GetProperty(ref _numDownsamplePasses);
+			set => SetProperty(ref _numDownsamplePasses, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("shaftsAreaSettings")] 
+		public ShaftsAreaSettings ShaftsAreaSettings
+		{
+			get => GetProperty(ref _shaftsAreaSettings);
+			set => SetProperty(ref _shaftsAreaSettings, value);
+		}
+
+		public BloomAreaSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

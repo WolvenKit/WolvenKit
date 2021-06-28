@@ -7,12 +7,52 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BackpackFilterButtonController : inkWidgetLogicController
 	{
-		[Ordinal(1)] [RED("icon")] public inkImageWidgetReference Icon { get; set; }
-		[Ordinal(2)] [RED("text")] public inkTextWidgetReference Text { get; set; }
-		[Ordinal(3)] [RED("filterType")] public CEnum<ItemFilterCategory> FilterType { get; set; }
-		[Ordinal(4)] [RED("active")] public CBool Active { get; set; }
-		[Ordinal(5)] [RED("hovered")] public CBool Hovered { get; set; }
+		private inkImageWidgetReference _icon;
+		private inkTextWidgetReference _text;
+		private CEnum<ItemFilterCategory> _filterType;
+		private CBool _active;
+		private CBool _hovered;
 
-		public BackpackFilterButtonController(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("icon")] 
+		public inkImageWidgetReference Icon
+		{
+			get => GetProperty(ref _icon);
+			set => SetProperty(ref _icon, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("text")] 
+		public inkTextWidgetReference Text
+		{
+			get => GetProperty(ref _text);
+			set => SetProperty(ref _text, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("filterType")] 
+		public CEnum<ItemFilterCategory> FilterType
+		{
+			get => GetProperty(ref _filterType);
+			set => SetProperty(ref _filterType, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("active")] 
+		public CBool Active
+		{
+			get => GetProperty(ref _active);
+			set => SetProperty(ref _active, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("hovered")] 
+		public CBool Hovered
+		{
+			get => GetProperty(ref _hovered);
+			set => SetProperty(ref _hovered, value);
+		}
+
+		public BackpackFilterButtonController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

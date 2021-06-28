@@ -7,9 +7,25 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class audioEditorSelectedData : audioAudioMetadata
 	{
-		[Ordinal(1)] [RED("selectedWeaponConfigurationName")] public CName SelectedWeaponConfigurationName { get; set; }
-		[Ordinal(2)] [RED("selectedFootstepsEventName")] public CName SelectedFootstepsEventName { get; set; }
+		private CName _selectedWeaponConfigurationName;
+		private CName _selectedFootstepsEventName;
 
-		public audioEditorSelectedData(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("selectedWeaponConfigurationName")] 
+		public CName SelectedWeaponConfigurationName
+		{
+			get => GetProperty(ref _selectedWeaponConfigurationName);
+			set => SetProperty(ref _selectedWeaponConfigurationName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("selectedFootstepsEventName")] 
+		public CName SelectedFootstepsEventName
+		{
+			get => GetProperty(ref _selectedFootstepsEventName);
+			set => SetProperty(ref _selectedFootstepsEventName, value);
+		}
+
+		public audioEditorSelectedData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }

@@ -7,8 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class worldWorldListResource : CResource
 	{
-		[Ordinal(1)] [RED("worlds")] public CArray<worldWorldListResourceEntry> Worlds { get; set; }
+		private CArray<worldWorldListResourceEntry> _worlds;
 
-		public worldWorldListResource(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
+		[Ordinal(1)] 
+		[RED("worlds")] 
+		public CArray<worldWorldListResourceEntry> Worlds
+		{
+			get => GetProperty(ref _worlds);
+			set => SetProperty(ref _worlds, value);
+		}
+
+		public worldWorldListResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 	}
 }
