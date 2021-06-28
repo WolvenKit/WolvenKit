@@ -1,4 +1,4 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -6,17 +6,10 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <UseWpf>true</UseWpf>
     <XamlDebuggingInformation>true</XamlDebuggingInformation>
-    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
-    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
-    <ProjectGuid>{283EA282-F15F-4978-8FF4-43EFE7A9EF69}</ProjectGuid>
+      <ProjectGuid>{283EA282-F15F-4978-8FF4-43EFE7A9EF69}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject />
-    <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>false</SelfContained>
+      <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishTrimmed>true</PublishTrimmed>
-    <PublishReadyToRun>true</PublishReadyToRun>
     <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
@@ -25,6 +18,7 @@
     <Version>8.2.0.0</Version>
     <Description>WPF</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -1050,11 +1044,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+ 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -1742,11 +1732,7 @@
     <None Remove="sample.mp4" />
     <None Remove="Views\Editor\Basic\default.svg" />
   </ItemGroup>
-  <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
-    <ItemGroup>
-      <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)\$(AssemblyName).UNK" />
-    </ItemGroup>
-  </Target>
+  
   <ItemGroup>
     <Reference Include="Ab3d.DirectX.Client.Settings">
       <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>
@@ -1754,9 +1740,6 @@
     <Reference Include="Ab3d.PowerToys.Assimp">
     </Reference>
     <Reference Include="AssimpNet">
-    </Reference>
-    <Reference Include="AutoUpdater.NET">
-      <HintPath>..\Libs\AutoUpdater.NET.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

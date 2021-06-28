@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using AutoUpdaterDotNET;
 using Catel.IoC;
 using Catel.Logging;
 using Orchestra.Services;
@@ -63,19 +62,19 @@ namespace WolvenKit.Functionality.Helpers
 
 
         // Check for program updates.
-        public static void CheckForUpdates()
-        {
-            try
-            {
-                // Start Auto updater.
-                AutoUpdater.Start("https://raw.githubusercontent.com/WolvenKit/WolvenKit/master/Update.xml");
-            }
-            catch (Exception e)
-            {
-                // Log Error
-                StaticReferences.Logger.Error(e.Message);
-            }
-        }
+        //public static void CheckForUpdates()
+        //{
+        //    try
+        //    {
+        //        // Start Auto updater.
+        //        AutoUpdater.Start("https://raw.githubusercontent.com/WolvenKit/WolvenKit/master/Update.xml");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        // Log Error
+        //        StaticReferences.Logger.Error(e.Message);
+        //    }
+        //}
 
 
 
