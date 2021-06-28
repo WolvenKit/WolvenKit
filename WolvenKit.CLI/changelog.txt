@@ -1,3 +1,6 @@
+v 1.4.3.1
+- fixed a bug where importing would not detect raw files
+
 v 1.4.3
 - fixed a bug where mesh settings would not be applied to default export/uncooking
 
