@@ -24,7 +24,7 @@ jobs:
       
   draft-wkit-win:
     runs-on: windows-latest
-    needs: create_release
+    needs: create_release-app
 
     steps:
     - name: checkout
@@ -73,7 +73,7 @@ jobs:
 
   draft-console-win:
     runs-on: windows-latest
-    needs: create_release
+    needs: create_release-app
 
     steps:
     - name: checkout
