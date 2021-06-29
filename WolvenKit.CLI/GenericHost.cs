@@ -26,7 +26,7 @@ namespace WolvenKit.CLI
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, configuration) =>
                 {
-                    var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    var assemblyFolder = Path.GetDirectoryName(System.AppContext.BaseDirectory);
 
                     configuration.SetBasePath(assemblyFolder);
                     configuration.AddJsonFile("appsettings.json");
