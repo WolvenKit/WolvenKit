@@ -3,11 +3,11 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - stable
  
 jobs:
 
-  create_release:
+  create_release-app:
     runs-on: windows-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -22,7 +22,7 @@ jobs:
         tag_name: commit-${{ github.sha }}
         draft: true
       
-  wkit-win:
+  draft-wkit-win:
     runs-on: windows-latest
     needs: create_release
 
@@ -33,36 +33,45 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
+        
     - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
 
-    - name: dotnet build WolvenKit.sln
-      run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
+    - name: Get version
+      uses: naminodarie/get-net-sdk-project-versions-action@v1
+      id: get-version
+      with:
+        proj-path: ./WolvenKit/WolvenKit.UI.csproj
+    - run: echo "${{steps.get-version.outputs.version}}"
+
+    - name: dotnet publish WolvenKit
+      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
 
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
+      uses: actions/upload-artifact@v2
       with:
         name: artifact_wkit-windows
-        path: ./WolvenKit/bin/Release/net5.0-windows
+        path: ./publish/app/${{steps.get-version.outputs.version}}
 
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./WolvenKit/bin/Release/net5.0-windows
-        dest: wolvenkit.zip
+        files: ./publish/app/${{steps.get-version.outputs.version}}
+        dest: wolvenkit-${{steps.get-version.outputs.version}}.zip
+        
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{needs.create_release.outputs.upload_url }}
-        asset_path: ./wolvenkit.zip
-        asset_name: wolvenkit.zip
+        asset_path: ./wolvenkit-${{steps.get-version.outputs.version}}.zip
+        asset_name: wolvenkit-${{steps.get-version.outputs.version}}.zip
         asset_content_type: application/zip
 
-  console-win:
+  draft-console-win:
     runs-on: windows-latest
     needs: create_release
 
@@ -78,26 +87,33 @@ jobs:
     - name: dotnet restore
       run: dotnet restore ./CP77Tools.sln
 
-    - name: dotnet build CP77Tools.sln
-      run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
+    - name: Get version
+      uses: naminodarie/get-net-sdk-project-versions-action@v1
+      id: get-version
+      with:
+        proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
+    - run: echo "${{steps.get-version.outputs.version}}"
+
+    - name: dotnet publish WolvenKit.Console
+      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
 
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
+      uses: actions/upload-artifact@v2
       with:
         name: artifact_console-windows
-        path: ./WolvenKit.CLI/bin/Release
+        path: ./publish/console/${{steps.get-version.outputs.version}}
 
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./WolvenKit.CLI/bin/Release
-        dest: wolvenkit_console.zip
+        files: ./publish/console/${{steps.get-version.outputs.version}}
+        dest: wolvenkit_console-${{steps.get-version.outputs.version}}.zip
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{needs.create_release.outputs.upload_url }}
-        asset_path: ./wolvenkit_console.zip
-        asset_name: wolvenkit_console.zip
+        asset_path: ./wolvenkit_console-${{steps.get-version.outputs.version}}.zip
+        asset_name: wolvenkit_console-${{steps.get-version.outputs.version}}.zip
         asset_content_type: application/zip
