@@ -320,7 +320,7 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
-            var x = "Resources\\Media\\test.exe | " + endPath + "/I2 /P /L";
+            var x = Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")+ " | " + endPath + "/I2 /P /L";
 
             var appControl = new AppControl();
             appControl.ExeName = x.Split('|')[0];
