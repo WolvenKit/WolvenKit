@@ -23,7 +23,7 @@ namespace WolvenKit.Wwise
         public static long DataOffset = 0x30;
 
         public static SoundBanksInfoXML info = new SoundBanksInfoXML(Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SoundCache", "soundbanksinfo.xml"));
+            Path.GetDirectoryName(System.AppContext.BaseDirectory), "SoundCache", "soundbanksinfo.xml"));
 
         public static byte[] Magic = { (byte)'C', (byte)'S', (byte)'3', (byte)'W' };
         public static UInt32 Unk3 = 1;

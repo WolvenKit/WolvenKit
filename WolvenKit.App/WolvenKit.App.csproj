@@ -4,6 +4,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
       <UseWPF>true</UseWPF>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,8 +23,8 @@
 
   <ItemGroup>
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Codicons" Version="4.8.0" />
     <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.24.1" />
     <PackageReference Include="Magick.NET.SystemDrawing" Version="2.0.17" />
     <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="3.0.11" />

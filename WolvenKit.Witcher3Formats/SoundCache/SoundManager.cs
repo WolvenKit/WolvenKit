@@ -23,12 +23,10 @@ namespace WolvenKit.Cache
 
         public SoundManager()
         {
-            soundBanksInfo = new SoundBanksInfoXML(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "SoundCache", "soundbanksinfo.xml"));
+            soundBanksInfo = new SoundBanksInfoXML(Path.Combine(Path.GetDirectoryName(System.AppContext.BaseDirectory), "SoundCache", "soundbanksinfo.xml"));
         }
 
         #endregion Constructors
-
-
 
         #region Methods
 
