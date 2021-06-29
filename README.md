@@ -91,12 +91,8 @@ Our primary focus at the moment is progressing with support for the new game, Cy
    1. If, for some reason, the LFS quota is depleted, the renderer prerequisite libs can be acquired here: https://outwa.it/lib.zip
 
 4. **Build and Run**
-   1. Open WolvenKitFormats.sln
-   2. Build WolvenKitFormats on Release (not Debug) < This is the problem causer
-   3. Switch to WolvenKit.sln
-   4. Build WolvenKit.sln on Debug or Release doesn't matter.
-   5. Run `WolvenKit.exe` (in `WolvenKit\bin\<Debug|Release>\net5.0-windows\win-x64\`).
-   6. Profit.
+   1. Build WolvenKit.sln on Debug or Release doesn't matter.
+   2. Run `WolvenKit.exe` (in `WolvenKit\bin\<Debug|Release>\net5.0-windows\win-x64\`).
 
 <div id="contributing">&zwnj;</div>
 <h3 align="center">Contribute</h3>
