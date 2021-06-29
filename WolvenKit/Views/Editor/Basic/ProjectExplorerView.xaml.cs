@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using Syncfusion.Windows.Tools.Controls;
 using Wolvenkit.InteropControls;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
@@ -222,6 +224,37 @@ namespace WolvenKit.Views.Editor
                 StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 StaticReferences.XoWindow.Show();
             }
+        }
+
+        private void BKExport_Click(object sender, RoutedEventArgs e)
+        {
+            var q = TreeGrid.SelectedItems[0] as FileModel;
+
+            if (!q.Extension.ToLower().Contains("bk2"))
+            { return; }
+            var procInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"));
+            procInfo.Arguments = q.FullName + " " + Path.ChangeExtension(q.FullName, ".avi") + "/o /#";
+            procInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"));
+            // Start the process
+            var process = System.Diagnostics.Process.Start(procInfo);
+            // Wait for process to be created and enter idle condition
+            process.WaitForInputIdle();
+        }
+
+        private void BKImport_Click(object sender, RoutedEventArgs e)
+        {
+            var q = TreeGrid.SelectedItems[0] as FileModel;
+
+            if (!q.Extension.ToLower().Contains("avi"))
+            { return; }
+
+            var procInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"));
+            procInfo.Arguments = q.FullName + " " + Path.ChangeExtension(q.FullName, ".bk2") + "/o /#";
+            procInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"));
+            // Start the process
+            var process = System.Diagnostics.Process.Start(procInfo);
+            // Wait for process to be created and enter idle condition
+            process.WaitForInputIdle();
         }
     }
 }
