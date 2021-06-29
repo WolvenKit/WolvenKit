@@ -3,7 +3,7 @@ on:
   workflow_dispatch
  
 jobs:   
-  wkit-win:
+  test-wkit:
     runs-on: windows-latest
 
     steps:

@@ -8,11 +8,12 @@ on:
       - stable
   push:
     branches:
+      - master      
       - develop
       - stable
- 
+
 jobs:   
-  wkit-win:
+  check-wkit-win:
     runs-on: windows-latest
 
     steps:
@@ -43,7 +44,7 @@ jobs:
         name: artifact_wkit-windows
         path: ./publish/app/${{steps.get-version.outputs.version}}
 
-  console-win:
+  check-console-win:
     runs-on: windows-latest
     
     steps:
@@ -58,7 +59,8 @@ jobs:
     - name: dotnet restore
       run: dotnet restore ./CP77Tools.sln
 
-    - uses: naminodarie/get-net-sdk-project-versions-action@v1
+    - name: Get version
+      uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version
       with:
         proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
