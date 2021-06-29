@@ -47,18 +47,18 @@ jobs:
     - run: echo "${{steps.get-version.outputs.version}}"
 
     - name: dotnet publish WolvenKit
-      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
+      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/wolvenkit-${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: artifact_wkit-windows
-        path: ./publish/app/${{steps.get-version.outputs.version}}
+        name: wolvenkit-${{steps.get-version.outputs.version}}
+        path: ./publish/app
 
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./publish/app/${{steps.get-version.outputs.version}}
+        files: ./publish/app
         dest: wolvenkit-${{steps.get-version.outputs.version}}.zip
         
     - name: Upload Release Asset
@@ -95,25 +95,26 @@ jobs:
     - run: echo "${{steps.get-version.outputs.version}}"
 
     - name: dotnet publish WolvenKit.Console
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
+      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/wolvenkit-console-${{steps.get-version.outputs.version}} -p:PublishSingleFile=true --no-self-contained -r win-x64 -c Release -f net5.0
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: artifact_console-windows
-        path: ./publish/console/${{steps.get-version.outputs.version}}
+        name: console-${{steps.get-version.outputs.version}}
+        path: ./publish/console
 
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./publish/console/${{steps.get-version.outputs.version}}
-        dest: wolvenkit_console-${{steps.get-version.outputs.version}}.zip
+        files: ./publish/console
+        dest: wolvenkit-console-${{steps.get-version.outputs.version}}.zip
+        
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{needs.create_release.outputs.upload_url }}
-        asset_path: ./wolvenkit_console-${{steps.get-version.outputs.version}}.zip
+        asset_path: ./wolvenkit-console-${{steps.get-version.outputs.version}}.zip
         asset_name: wolvenkit_console-${{steps.get-version.outputs.version}}.zip
         asset_content_type: application/zip

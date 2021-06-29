@@ -129,23 +129,23 @@ namespace WolvenKit.RED4.CR2W.Types
         /// </summary>
         public void ReloadAssembly()
         {
-            if (m_projectinfo != null && m_projectinfo.Exists)
-            {
-                var (count, csharpstring) = InterpretScriptClasses();
-                if (count <= 0)
-                    return;
-                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
-                if (m_assembly != null)
-                {
-                    _loggerService.Success($"Successfully compiled custom assembly {m_assembly.GetName()}");
-                    LoadTypes();
-                    LoadEnums();
-                }
-                else
-                {
-                    _loggerService.Error($"Custom class assembly could not be compiled. An error occured");
-                }
-            }
+            //if (m_projectinfo != null && m_projectinfo.Exists)
+            //{
+            //    var (count, csharpstring) = InterpretScriptClasses();
+            //    if (count <= 0)
+            //        return;
+            //    m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
+            //    if (m_assembly != null)
+            //    {
+            //        _loggerService.Success($"Successfully compiled custom assembly {m_assembly.GetName()}");
+            //        LoadTypes();
+            //        LoadEnums();
+            //    }
+            //    else
+            //    {
+            //        _loggerService.Error($"Custom class assembly could not be compiled. An error occured");
+            //    }
+            //}
         }
 
         public static bool TypeExists(string typeName) => m_types?.ContainsKey(typeName) ?? false;
