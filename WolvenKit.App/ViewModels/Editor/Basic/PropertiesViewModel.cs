@@ -414,7 +414,7 @@ namespace WolvenKit.ViewModels.Editor
 
             var arg = path + " -o " + outf;
             var si = new ProcessStartInfo(
-                    AppDomain.CurrentDomain.BaseDirectory + "\\vgmstream\\test.exe",
+                    Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"),
                     arg
                 )
             {

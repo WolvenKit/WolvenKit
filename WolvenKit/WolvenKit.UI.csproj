@@ -123,6 +123,21 @@
     <Content Include="Resources\Media\Images\Icons\Files\bnk.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Media\t1.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Media\t2.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Media\t3.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Media\t4.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Media\t5.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\Media\Images\Icons\Files\env.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -1591,6 +1606,7 @@
     <None Remove="Config\Layout\DockStatesCR2W.xml" />
     <None Remove="distraction_generic.bk2" />
     <None Remove="Obsolete.dll" />
+    <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Icons\Files\acousticdata.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\acousticdata.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\actionanimdb.bmp" />
@@ -1718,6 +1734,15 @@
     <None Remove="Resources\Media\Images\Icons\Files\w3simplex.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\wizdef.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\workspot2.svg" />
+    <None Remove="Resources\Media\rau.kark" />
+    <None Remove="Resources\Media\t1.kark" />
+    <None Remove="Resources\Media\t2.kark" />
+    <None Remove="Resources\Media\t3.kark" />
+    <None Remove="Resources\Media\t4.kark" />
+    <None Remove="Resources\Media\t5.kark" />
+    <None Remove="Resources\Media\test.kark" />
+    <None Remove="Resources\Media\testc.kark" />
+    <None Remove="Resources\Media\testconv.kark" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysBack512.png" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysDown512.png" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysFront512.png" />
