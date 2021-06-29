@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Catel.IoC;
 using CP77.CR2W;
 using HandyControl.Data;
@@ -20,7 +16,6 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
@@ -28,7 +23,6 @@ using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.ViewModels.Editor;
-using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using Wolvenkit.InteropControls;
 
@@ -315,11 +309,12 @@ namespace WolvenKit.Views.Editor
                 selected.GetGameFile().Extract(fs);
             }
 
-            if (File.Exists(endPath))
+            if (!File.Exists(endPath))
             {
+                return;
             }
 
-            var x = "Resources\\Media\\test.exe | " + endPath + "/I2 /P /L";
+            var x = Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")+ " | " + endPath + "/I2 /P /L";
 
             var appControl = new AppControl();
             appControl.ExeName = x.Split('|')[0];
@@ -350,6 +345,37 @@ namespace WolvenKit.Views.Editor
             StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
             StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             StaticReferences.XoWindow.Show();
+        }
+
+        private void BKExport_Click(object sender, RoutedEventArgs e)
+        {
+            //var q = InnerList.SelectedItems[0] as FileEntryViewModel;
+
+            //if (!q.Extension.ToLower().Contains("bk2"))
+            //{ return; }
+
+            /////Extract to Temp dir
+
+            //var tempPath = ISettingsManager.GetTemp_Video_PreviewPath();
+            //var endPath = Path.Combine(tempPath, Path.GetFileName(q.Name));
+            //using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
+            //{
+            //    q.GetGameFile().Extract(fs);
+            //}
+            //if (!File.Exists(endPath))
+            //{
+            //    return;
+            //}
+
+            //// Need to get this file to RAW
+
+            //var procInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"));
+            //procInfo.Arguments = endPath + " " + Path.ChangeExtension(endPath, ".avi") + "/o /#";
+            //procInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"));
+            //// Start the process
+            //var process = System.Diagnostics.Process.Start(procInfo);
+            //// Wait for process to be created and enter idle condition
+            //process.WaitForInputIdle();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace CP77.CR2W
 
         private string ExportMeshWithoutRigPreviewerInner(Stream meshStream, CR2WFile cr2w, string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
         {
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
             {
                 return "";
             }
@@ -65,7 +65,7 @@ namespace CP77.CR2W
 
             var expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
 
-            ModelRoot model = RawMeshesToGLTF(expMeshes, null);
+            ModelRoot model = RawMeshesToMinimalGLTF(expMeshes);
             string outfile;
 
             if(!Directory.Exists(tempmodels))
@@ -1072,7 +1072,39 @@ namespace CP77.CR2W
 
             return expmesh;
         }
+        private static ModelRoot RawMeshesToMinimalGLTF(List<RawMeshContainer> meshes)
+        {
+            var scene = new SceneBuilder();
 
+            foreach (var mesh in meshes)
+            {
+                long indCount = mesh.indices.Length;
+                var expmesh = new MeshBuilder<VertexPosition, VertexEmpty, VertexEmpty>(mesh.name);
+
+                var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
+                for (int i = 0; i < indCount; i += 3)
+                {
+                    uint idx0 = mesh.indices[i + 1];
+                    uint idx1 = mesh.indices[i];
+                    uint idx2 = mesh.indices[i + 2];
+
+                    //VPNT
+                    Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
+                    Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
+                    Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
+
+                    // vertex build
+                    var v0 = new VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty>(new VertexPosition(p_0));
+                    var v1 = new VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty>(new VertexPosition(p_1));
+                    var v2 = new VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty>(new VertexPosition(p_2));
+                    // triangle build
+                    prim.AddTriangle(v0, v1, v2);
+                }
+                scene.AddRigidMesh(expmesh, System.Numerics.Matrix4x4.Identity);
+            }
+            var model = scene.ToGltf2();
+            return model;
+        }
         public static RawArmature GetNonParentedRig(MeshBones meshBones)
         {
             RawArmature Rig = new RawArmature();

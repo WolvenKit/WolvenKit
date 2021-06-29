@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,10 +12,13 @@ using Catel.Messaging;
 using HandyControl.Tools;
 using NodeNetwork;
 using Orchestra.Services;
+using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Views;
 
 namespace WolvenKit
@@ -81,7 +86,8 @@ namespace WolvenKit
             NotificationHelper.InitializeNotificationHelper();
 
             StaticReferences.Logger.Info("Check for new updates");
-            Helpers.CheckForUpdates();
+            //Helpers.CheckForUpdates();
+            Initializations.InitializeBk();
 
             //Window window = new Window();
             //window.AllowsTransparency = true;
@@ -93,40 +99,6 @@ namespace WolvenKit
             // Create WebView Data Folder.
             //Directory.CreateDirectory(@"C:\WebViewData");
             // Message system for video tool.
-
-            // Init FFMPEG libraries.
-            if (ApplicationHelper.IsConnectedToInternet())
-            {
-
-                if (!File.Exists(@"Resources\Media\test.exe"))
-                {
-                    try
-                    {
-                        var uri = new Uri("https://filebin.net/9nrr98uwas3k1auo/binkpl64.exe");
-                        var client = new HttpClient();
-                        var response = await client.GetAsync(uri);
-                        using var fs = new FileStream(@"Resources\Media\test.exe",
-                            FileMode.CreateNew);
-                        await response.Content.CopyToAsync(fs);
-
-                        if (File.Exists(@"Resources\Media\test.exe"))
-                        {
-                            StaticReferences.AllowVideoPreview = true;
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-                else
-                {
-                    StaticReferences.AllowVideoPreview = true;
-                }
-            }
-            else
-            {
-                StaticReferences.AllowVideoPreview = false;
-            }
         }
     }
 }

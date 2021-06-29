@@ -16,6 +16,8 @@
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <Version>1.2.3</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
+      <DebugType>embedded</DebugType>
+
   </PropertyGroup>
 
     <ItemGroup>

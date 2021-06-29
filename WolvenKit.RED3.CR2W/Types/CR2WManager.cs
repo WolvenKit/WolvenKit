@@ -42,7 +42,9 @@ namespace WolvenKit.RED3.CR2W.Types
 
         private static readonly Func<string, string> funcCtor = (x) => $"\t\tpublic {x}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)\r\n\t\t{{\r\n\t\t}}\r\n";
 
+#pragma warning disable 649
         private static Assembly m_assembly;
+#pragma warning restore 649
 
         private static Dictionary<string, Type> m_enums;
 
@@ -129,26 +131,26 @@ namespace WolvenKit.RED3.CR2W.Types
         /// </summary>
         public void ReloadAssembly()
         {
-            if (m_projectinfo != null && m_projectinfo.Exists)
-            {
-                var (count, csharpstring) = InterpretScriptClasses();
-                if (count <= 0)
-                {
-                    return;
-                }
+            //if (m_projectinfo != null && m_projectinfo.Exists)
+            //{
+            //    var (count, csharpstring) = InterpretScriptClasses();
+            //    if (count <= 0)
+            //    {
+            //        return;
+            //    }
 
-                m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
-                if (m_assembly != null)
-                {
-                    _loggerService.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}.", Logtype.Success);
-                    LoadTypes();
-                    LoadEnums();
-                }
-                else
-                {
-                    _loggerService.LogString($"Custom class assembly could not be compiled. An error occurred.", Logtype.Error);
-                }
-            }
+            //    m_assembly = CSharpCompilerTools.CompileAssemblyFromStrings(csharpstring, m_assembly);
+            //    if (m_assembly != null)
+            //    {
+            //        _loggerService.LogString($"Successfully compiled custom assembly {m_assembly.GetName()}.", Logtype.Success);
+            //        LoadTypes();
+            //        LoadEnums();
+            //    }
+            //    else
+            //    {
+            //        _loggerService.LogString($"Custom class assembly could not be compiled. An error occurred.", Logtype.Error);
+            //    }
+            //}
         }
 
         public static bool TypeExists(string typeName) => m_types?.ContainsKey(typeName) ?? false;

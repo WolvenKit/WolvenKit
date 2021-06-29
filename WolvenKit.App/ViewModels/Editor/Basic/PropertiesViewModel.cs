@@ -17,6 +17,7 @@ using Catel.Services;
 using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
@@ -412,9 +413,9 @@ namespace WolvenKit.ViewModels.Editor
             Trace.WriteLine(outf);
             Trace.WriteLine(path);
 
-            var arg = path + " -o " + outf;
+            var arg = path.ToEscapedPath() + " -o " + outf.ToEscapedPath();
             var si = new ProcessStartInfo(
-                    AppDomain.CurrentDomain.BaseDirectory + "\\vgmstream\\test.exe",
+                    Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"),
                     arg
                 )
             {

@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  wkit-win:
+  nightly-wkit-win:
     runs-on: windows-latest
 
     steps:
@@ -15,25 +15,27 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
+        
     - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
 
-    - name: dotnet build WolvenKit.sln
-      run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
+    - name: dotnet publish WolvenKit
+      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/nightly --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: artifact_wkit-windows
-        path: ./WolvenKit/bin/Release/net5.0-windows
+        name: wolvenkit-nightly
+        path: ./publish/app
 
     - name: zip
       uses: papeloto/action-zip@v1
       with:
-        files: ./WolvenKit/bin/Release/net5.0-windows
+        files: ./publish/app
         dest: wolvenkit.zip
+
     - name: Deploy Nightly
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:

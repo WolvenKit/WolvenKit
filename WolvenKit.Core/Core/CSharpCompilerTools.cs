@@ -20,31 +20,31 @@ namespace WolvenKit.Interfaces.Core
         /// </summary>
         /// <param name="sourceString"></param>
         /// <returns></returns>
-        public static Assembly CompileAssemblyFromStrings(string sourceString, Assembly currentCustomAssembly, ILoggerService logger = null)
-        {
-            var syntaxTree = CSharpSyntaxTree.ParseText(sourceString);
-            string assemblyName = Guid.NewGuid().ToString();
+        //public static Assembly CompileAssemblyFromStrings(string sourceString, Assembly currentCustomAssembly, ILoggerService logger = null)
+        //{
+        //    var syntaxTree = CSharpSyntaxTree.ParseText(sourceString);
+        //    string assemblyName = Guid.NewGuid().ToString();
 
-            var references = GetAssemblyReferences(currentCustomAssembly);
+        //    var references = GetAssemblyReferences(currentCustomAssembly);
 
-            var compilation = CSharpCompilation.Create(
-                assemblyName,
-                new[] { syntaxTree },
-                references,
-                new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+        //    var compilation = CSharpCompilation.Create(
+        //        assemblyName,
+        //        new[] { syntaxTree },
+        //        references,
+        //        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-            Assembly assembly = null;
-            try
-            {
-                assembly = CompileAndLoadAssembly(compilation);
-            }
-            catch (Exception ex)
-            {
-                logger?.Error(ex.ToString());
-            }
+        //    Assembly assembly = null;
+        //    try
+        //    {
+        //        assembly = CompileAndLoadAssembly(compilation);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger?.Error(ex.ToString());
+        //    }
 
-            return assembly;
-        }
+        //    return assembly;
+        //}
 
         //https://gist.github.com/GeorgDangl/4a9982a3b520f056a9e890635b3695e0
         private static Assembly CompileAndLoadAssembly(CSharpCompilation _compilation)
@@ -59,16 +59,16 @@ namespace WolvenKit.Interfaces.Core
             }
         }
 
-        private static IEnumerable<MetadataReference> GetAssemblyReferences(Assembly currentCustomAssembly)
-        {
-            var assemblies = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Where(a => !a.IsDynamic)
-                .Where(a => !string.IsNullOrEmpty(a.Location))
-                .Select(a => MetadataReference.CreateFromFile(a.Location));
+        //private static IEnumerable<MetadataReference> GetAssemblyReferences(Assembly currentCustomAssembly)
+        //{
+        //    var assemblies = AppDomain.CurrentDomain
+        //        .GetAssemblies()
+        //        .Where(a => !a.IsDynamic)
+        //        .Where(a => !string.IsNullOrEmpty(a.Location))
+        //        .Select(a => MetadataReference.CreateFromFile(a.Location));
 
-            return assemblies;
-        }
+        //    return assemblies;
+        //}
 
         //https://gist.github.com/GeorgDangl/4a9982a3b520f056a9e890635b3695e0
         private static void ThrowExceptionIfCompilationFailure(EmitResult result)

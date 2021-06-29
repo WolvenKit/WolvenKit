@@ -19,7 +19,7 @@ namespace WolvenKit.Models
         public const string s_moddir = "wkitmoddir";
         public const string s_rawdir = "wkitrawdir";
 
-        public FileModel(string path)
+        public FileModel(string path, EditorProject project)
         {
             FullName = path;
             var parentfullname = "";
@@ -45,11 +45,8 @@ namespace WolvenKit.Models
                 throw new FileNotFoundException();
             }
 
-            RelativeName = GetRelativeName(FullName);
-            Hash = FNV1A64HashAlgorithm.HashString(RelativeName);
-            ParentHash = !string.IsNullOrEmpty(GetRelativeName(parentfullname))
-                ? FNV1A64HashAlgorithm.HashString(GetRelativeName(parentfullname))
-                : 0;
+            Hash = GenerateKey(FullName, project);
+            ParentHash = GenerateKey(parentfullname, project);
         }
 
         #region properties
@@ -65,9 +62,6 @@ namespace WolvenKit.Models
 
         [Browsable(false)] public ulong Hash { get; }
 
-        [Browsable(false)] public string RelativeName { get; }
-
-        
         [Browsable(false)] public bool IsDirectory { get; }
 
         [Browsable(false)] public ulong ParentHash { get; }
@@ -89,55 +83,57 @@ namespace WolvenKit.Models
 
         public override int GetHashCode() => (int)Hash;
 
-        public static string GetRelativeName(string fullname, EditorProject proj = null)
-        {
-            var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-            var project = proj;
-            if (proj == null)
-            {
-                project = pm.ActiveProject as EditorProject;
-                if (project == null)
-                {
-                    throw new NotImplementedException();
-                }
-            }
+        public ulong GetRedHash(EditorProject project) => FNV1A64HashAlgorithm.HashString(GetRelativeName(project));
 
+        public string GetRelativeName(EditorProject project)
+        {
             var filedir = project.FileDirectory;
             var moddir = project.ModDirectory;
             var rawDirectory = project.RawDirectory;
 
-            if (fullname.Equals(filedir, StringComparison.Ordinal))
+            if (FullName.Equals(filedir, StringComparison.Ordinal))
             {
                 return "";
             }
             // hack so that we get proper hashes
-            if (fullname.Equals(moddir, StringComparison.Ordinal))
+            if (FullName.Equals(moddir, StringComparison.Ordinal))
             {
                 return s_moddir;
             }
-            if (fullname.Equals(rawDirectory, StringComparison.Ordinal))
+            if (FullName.Equals(rawDirectory, StringComparison.Ordinal))
             {
                 return s_rawdir;
             }
 
-            if (fullname.StartsWith(moddir, StringComparison.Ordinal))
+            if (FullName.StartsWith(moddir, StringComparison.Ordinal))
             {
-                return fullname[(moddir.Length + 1)..];
+                return FullName[(moddir.Length + 1)..];
             }
-            if (fullname.StartsWith(rawDirectory, StringComparison.Ordinal))
+            if (FullName.StartsWith(rawDirectory, StringComparison.Ordinal))
             {
-                var rel = fullname[(filedir.Length + 1)..];
+                var rel = FullName[(rawDirectory.Length + 1)..];
                 return rel;
             }
 
-            if (fullname.StartsWith(filedir, StringComparison.Ordinal))
+            if (FullName.StartsWith(filedir, StringComparison.Ordinal))
             {
-                return fullname[(filedir.Length + 1)..];
+                return FullName[(filedir.Length + 1)..];
             }
 
             throw new System.NullReferenceException("fuzzy exception");
         }
 
+        public static ulong GenerateKey(string fullname, EditorProject project)
+        {
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
 
+            var filedir = project.FileDirectory;
+            return fullname.Equals(filedir, StringComparison.Ordinal)
+                ? (ulong) 0
+                : FNV1A64HashAlgorithm.HashString(fullname);
+        }
     }
 }

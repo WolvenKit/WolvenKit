@@ -18,6 +18,7 @@ using Catel.Services;
 using Microsoft.Win32;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -1141,7 +1142,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 try
                 {
-                    var proc = new ProcessStartInfo(path) { UseShellExecute = true };
+                    var proc = new ProcessStartInfo(path.ToEscapedPath()) { UseShellExecute = true };
                     Process.Start(proc);
                 }
                 catch (Win32Exception)
@@ -1158,7 +1159,7 @@ namespace WolvenKit.ViewModels.Shell
                 NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
                 if (programname.ToString().ToUpper().Contains(".EXE"))
                 {
-                    Process.Start(programname.ToString(), path);
+                    Process.Start(programname.ToString(), path.ToEscapedPath());
                 }
                 else
                 {

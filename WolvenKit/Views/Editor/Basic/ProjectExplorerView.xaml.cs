@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using Syncfusion.Windows.Tools.Controls;
 using Wolvenkit.InteropControls;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
