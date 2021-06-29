@@ -509,7 +509,7 @@ namespace WolvenKit.Modkit.RED4
                 return;
             }
 
-            var arg = infile + " -o " + outfile;
+            var arg = infile.ToEscapedPath() + " -o " + outfile.ToEscapedPath();
             var si = new ProcessStartInfo(
                     AppDomain.CurrentDomain.BaseDirectory + "\\vgmstream\\test.exe",
                     arg
