@@ -30,6 +30,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
+        
     - name: dotnet clean
       run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
@@ -39,7 +40,7 @@ jobs:
       run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
 
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
+      uses: actions/upload-artifact@v2
       with:
         name: artifact_console-windows
         path: ./WolvenKit.CLI/bin/Release

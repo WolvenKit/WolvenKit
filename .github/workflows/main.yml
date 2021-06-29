@@ -4,10 +4,12 @@ on:
   pull_request:
     branches:
       - master
-      - dev
+      - develop
+      - stable
   push:
     branches:
-      - dev
+      - develop
+      - stable
  
 jobs:   
   wkit-win:
@@ -20,18 +22,26 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
+
     - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
 
-    - name: dotnet build WolvenKit.sln
-      run: dotnet build ./WolvenKit.sln --configuration Release --no-restore
+    - uses: naminodarie/get-net-sdk-project-versions-action@v1
+      id: get-version
+      with:
+        proj-path: ./WolvenKit/WolvenKit.UI.csproj
+    - run: echo "${{steps.get-version.outputs.version}}"
+
+    - name: dotnet publish WolvenKit
+      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: artifact_wkit-windows
-        path: ./WolvenKit/bin/Release/net5.0-windows
+        path: ./publish/app/${{steps.get-version.outputs.version}}
 
   console-win:
     runs-on: windows-latest
@@ -48,10 +58,17 @@ jobs:
     - name: dotnet restore
       run: dotnet restore ./CP77Tools.sln
 
-    - name: dotnet build CP77Tools.sln
-      run: dotnet build ./CP77Tools.sln --configuration Release --no-restore
+    - uses: naminodarie/get-net-sdk-project-versions-action@v1
+      id: get-version
+      with:
+        proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
+    - run: echo "${{steps.get-version.outputs.version}}"
+
+    - name: dotnet publish WolvenKit.Console
+      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: artifact_console-windows
-        path: ./WolvenKit.CLI/bin/Release
+        path: ./publish/console/${{steps.get-version.outputs.version}}

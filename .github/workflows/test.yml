@@ -1,0 +1,22 @@
+name: Test
+on:
+  workflow_dispatch
+ 
+jobs:   
+  wkit-win:
+    runs-on: windows-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+
+    - name: Get version
+      uses: naminodarie/get-net-sdk-project-versions-action@v1
+      id: get-version
+      with:
+        proj-path: ./WolvenKit/WolvenKit.UI.csproj
+    - run: echo "${{steps.get-version.outputs.version}}"
