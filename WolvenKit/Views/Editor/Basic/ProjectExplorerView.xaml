@@ -831,11 +831,11 @@
                     <MenuItem Header="BK2">
                         <MenuItem
                             x:Name="BKImport"
-                            Click="BKImport_Click"
+                            Command="{Binding Bk2ImportCommand}"
                             Header="Import Avi to BK2" />
                         <MenuItem
                             x:Name="BKExport"
-                            Click="BKExport_Click"
+                            Command="{Binding Bk2ExportCommand}"
                             Header="Export BK2 to Avi" />
                     </MenuItem>
 
