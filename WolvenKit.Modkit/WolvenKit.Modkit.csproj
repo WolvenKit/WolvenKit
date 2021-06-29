@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <DebugType>embedded</DebugType>
+
   </PropertyGroup>
 
   <ItemGroup>

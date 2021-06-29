@@ -18,6 +18,8 @@
       <FileVersion>2.3.0.0</FileVersion>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <DebugType>embedded</DebugType>
+
   </PropertyGroup>
 
   <ItemGroup>
