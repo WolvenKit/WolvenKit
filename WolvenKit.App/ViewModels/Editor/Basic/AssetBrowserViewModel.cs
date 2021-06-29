@@ -245,7 +245,13 @@ namespace WolvenKit.ViewModels.Editor
             return ret.Values.ToList();
         }
 
-        private void AddFile(FileEntryViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
+        private void AddFile(FileEntryViewModel item)
+        {
+            if (item != null)
+            {
+                Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
+            }
+        }
 
         private void PerformSearch(string query)
         {

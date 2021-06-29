@@ -828,8 +828,16 @@
                         <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
-                    <MenuItem Header="Export selected - Simple" Visibility="Collapsed" />
-                    <MenuItem Header="Export selected - Advanced" Visibility="Collapsed" />
+                    <MenuItem Header="BK2">
+                        <MenuItem
+                            x:Name="BKImport"
+                            Command="{Binding Bk2ImportCommand}"
+                            Header="Import Avi to BK2" />
+                        <MenuItem
+                            x:Name="BKExport"
+                            Command="{Binding Bk2ExportCommand}"
+                            Header="Export BK2 to Avi" />
+                    </MenuItem>
 
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />

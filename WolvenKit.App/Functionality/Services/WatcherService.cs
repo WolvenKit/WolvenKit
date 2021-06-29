@@ -97,7 +97,7 @@ namespace WolvenKit.Functionality.Services
             _files.Edit(innerList =>
             {
                 innerList.Clear();
-                innerList.AddOrUpdate(allFiles.Select(_ => new FileModel(_)));
+                innerList.AddOrUpdate(allFiles.Select(_ => new FileModel(_, proj)));
             });
         }
 
@@ -125,16 +125,16 @@ namespace WolvenKit.Functionality.Services
             {
                 case WatcherChangeTypes.Created:
                 {
-                    LastSelect = new FileModel(e.FullPath);
+                    LastSelect = new FileModel(e.FullPath, _projectManager.ActiveProject);
                     _files.AddOrUpdate(LastSelect);
                     break;
                 }
                 case WatcherChangeTypes.Deleted:
-                    var hash = FNV1A64HashAlgorithm.HashString(FileModel.GetRelativeName(e.FullPath));
+                    var key = FileModel.GenerateKey(e.FullPath, _projectManager.ActiveProject);
                     _files.Edit(inner =>
                     {
-                        inner.RemoveKeys(GetChildrenKeysRecursive(hash));
-                        inner.Remove(hash);
+                        inner.RemoveKeys(GetChildrenKeysRecursive(key));
+                        inner.Remove(key);
                     });
                     break;
                 case WatcherChangeTypes.All:
@@ -161,9 +161,9 @@ namespace WolvenKit.Functionality.Services
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Renamed:
-                    var hash = FNV1A64HashAlgorithm.HashString(FileModel.GetRelativeName(e.OldFullPath));
-                    _files.RemoveKey(hash);
-                    _files.AddOrUpdate(new FileModel(e.FullPath));
+                    var key = FileModel.GenerateKey(e.OldFullPath, _projectManager.ActiveProject);
+                    _files.RemoveKey(key);
+                    _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
                     break;
             }
 

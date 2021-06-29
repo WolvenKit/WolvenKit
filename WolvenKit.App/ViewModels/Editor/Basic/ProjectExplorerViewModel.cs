@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -122,6 +123,9 @@ namespace WolvenKit.ViewModels.Editor
             RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
             CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
             OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
+
+            Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
+            Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);
 
             PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
 
@@ -375,6 +379,61 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         #endregion general commands
+
+        #region red4
+
+        public ICommand Bk2ImportCommand { get; private set; }
+
+        private bool CanBk2Import() => SelectedItem.Extension.ToLower().Contains("avi");
+
+        private void ExecuteBk2Import()
+        {
+            var modpath = Path.Combine(ActiveMod.ModDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            modpath = Path.ChangeExtension(modpath, ".bk2");
+            var directoryName = Path.GetDirectoryName(modpath);
+            Directory.CreateDirectory(directoryName);
+
+            var args = $"\"{SelectedItem.FullName}\" \"{modpath}\" /o /#";
+            var procInfo =
+                new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"))
+                {
+                    Arguments = args,
+                    WorkingDirectory = ISettingsManager.GetWorkDir()
+                };
+
+            var process = Process.Start(procInfo);
+            process?.WaitForInputIdle();
+        }
+
+        public ICommand Bk2ExportCommand { get; private set; }
+
+        private bool CanBk2Export() => SelectedItem.Extension.ToLower().Contains("bk2");
+
+        private void ExecuteBk2Export()
+        {
+            var rawpath = Path.Combine(ActiveMod.RawDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            rawpath = Path.ChangeExtension(rawpath, ".avi");
+            var directoryName = Path.GetDirectoryName(rawpath);
+            Directory.CreateDirectory(directoryName);
+
+            var args = $"\"{SelectedItem.FullName}\" \"{rawpath}\" /o /#";
+            var procInfo =
+                new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
+                    "testconv.exe"))
+                {
+                    Arguments = args,
+                    WorkingDirectory = ISettingsManager.GetWorkDir()
+                };
+
+            var process = Process.Start(procInfo);
+            process?.WaitForInputIdle();
+        }
+
+        
+
+
+
+        #endregion
 
         #region Tw3 Commands
 
