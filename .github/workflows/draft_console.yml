@@ -21,7 +21,7 @@ jobs:
 
   draft-standalone-console-win:
     runs-on: windows-latest
-    needs: create_release
+    needs: create_release-console
 
     steps:
     - name: checkout
