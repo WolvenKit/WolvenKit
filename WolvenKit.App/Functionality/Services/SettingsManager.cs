@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using System.Windows.Media;
 using Catel.Data;
 using Orchestra.Services;
+using WolvenKit.Common.Tools;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
@@ -38,23 +39,7 @@ namespace WolvenKit.Functionality.Services
         {
             ManagerVersions = new string[(int)EManagerType.Max];
 
-            _assemblyVersion = GetAssemblyVersion();
-        }
-
-        private string GetAssemblyVersion()
-        {
-            var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
-            var paths = new List<string>(runtimeAssemblies);
-            var resolver = new PathAssemblyResolver(paths);
-            var mlc = new MetadataLoadContext(resolver);
-
-            using (mlc)
-            {
-                // Load assembly into MetadataLoadContext.
-                var assembly = mlc.LoadFromAssemblyPath(Constants.WolvenKitDll);
-                var name = assembly.GetName();
-                return name.Version.ToString();
-            }
+            _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.WolvenKitDll).ToString();
         }
 
         #endregion constructors
