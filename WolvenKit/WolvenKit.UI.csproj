@@ -19,6 +19,7 @@
     <Description>WPF</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+      <Product>WolvenKit</Product>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
