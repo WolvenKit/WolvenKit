@@ -64,6 +64,31 @@ namespace WolvenKit.ViewModels.Editor
         }
     }
 
+    public class ConvertableItemViewModel : ImportExportItemViewModel
+    {
+        public ConvertableItemViewModel(FileModel model)
+        {
+            BaseFile = model;
+            Properties = DecideConverOptions(model);
+
+            Properties.PropertyChanged += PropertiesOnPropertyChanged;
+        }
+
+        private void PropertiesOnPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(nameof(Properties));
+
+        private ConvertArgs DecideConverOptions(FileModel model)
+        {
+            _ = Enum.TryParse(model.GetExtension(), out EConvertableFileFormat rawFileFormat);
+
+            return rawFileFormat switch
+            {
+                EConvertableFileFormat.glb => new GLBConvertArgs(),
+                EConvertableFileFormat.gltf => new GLTFConvertArgs(),
+                _ => new CommonConvertArgs()
+            };
+        }
+    }
+
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
         public ExportableItemViewModel(FileModel model)

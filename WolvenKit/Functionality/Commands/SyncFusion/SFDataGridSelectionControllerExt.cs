@@ -79,9 +79,13 @@ namespace WolvenKit
                     {
                         (row as ImportableItemViewModel).IsChecked = false;
                     }
-                    else
+                    if (IEVM.IsExportsSelected)
                     {
                         (row as ExportableItemViewModel).IsChecked = false;
+                    }
+                    if (IEVM.IsConvertsSelected)
+                    {
+                        (row as ConvertableItemViewModel).IsChecked = false;
                     }
                 }
                 else
@@ -90,9 +94,13 @@ namespace WolvenKit
                     {
                         (SelectedRows[0].RowData as ImportableItemViewModel).IsChecked = true;
                     }
-                    else
+                    if (IEVM.IsExportsSelected)
                     {
                         (SelectedRows[0].RowData as ExportableItemViewModel).IsChecked = true;
+                    }
+                    if (IEVM.IsConvertsSelected)
+                    {
+                        (SelectedRows[0].RowData as ConvertableItemViewModel).IsChecked = true;
                     }
                 }
             }
@@ -126,9 +134,14 @@ namespace WolvenKit
                         foreach (ImportableItemViewModel o in (IEVM).ImportableItems)
                             o.IsChecked = false;
                     }
-                    else
+                    if (IEVM.IsExportsSelected)
                     {
                         foreach (ExportableItemViewModel o in (IEVM).ExportableItems)
+                            o.IsChecked = false;
+                    }
+                    if (IEVM.IsConvertsSelected)
+                    {
+                        foreach (ConvertableItemViewModel o in (IEVM).ConvertableItems)
                             o.IsChecked = false;
                     }
                 }
@@ -139,9 +152,14 @@ namespace WolvenKit
                         foreach (ImportableItemViewModel o in e.NewItems)
                             o.IsChecked = true;
                     }
-                    else
+                    if (IEVM.IsExportsSelected)
                     {
                         foreach (ExportableItemViewModel o in e.NewItems)
+                            o.IsChecked = true;
+                    }
+                    if (IEVM.IsConvertsSelected)
+                    {
+                        foreach (ConvertableItemViewModel o in e.NewItems)
                             o.IsChecked = true;
                     }
                 }
@@ -152,15 +170,30 @@ namespace WolvenKit
                         foreach (ImportableItemViewModel o in e.OldItems)
                             o.IsChecked = false;
                     }
-                    else
+                    if (IEVM.IsExportsSelected)
                     {
                         foreach (ExportableItemViewModel o in e.OldItems)
+                            o.IsChecked = false;
+                    }
+                    if (IEVM.IsConvertsSelected)
+                    {
+                        foreach (ConvertableItemViewModel o in e.OldItems)
                             o.IsChecked = false;
                     }
                 }
                 else
                 {
                     if (IEVM.IsImportsSelected)
+                    {
+                        if (e.NewItems != null)
+                            foreach (ImportableItemViewModel o in e.NewItems)
+                                o.IsChecked = true;
+
+                        if (e.OldItems != null)
+                            foreach (ImportableItemViewModel o in e.OldItems)
+                                o.IsChecked = false;
+                    }
+                    if (IEVM.IsExportsSelected)
                     {
                         if (e.NewItems != null)
                             foreach (ExportableItemViewModel o in e.NewItems)
@@ -170,14 +203,14 @@ namespace WolvenKit
                             foreach (ExportableItemViewModel o in e.OldItems)
                                 o.IsChecked = false;
                     }
-                    else
+                    if (IEVM.IsConvertsSelected)
                     {
                         if (e.NewItems != null)
-                            foreach (ExportableItemViewModel o in e.NewItems)
+                            foreach (ConvertableItemViewModel o in e.NewItems)
                                 o.IsChecked = true;
 
                         if (e.OldItems != null)
-                            foreach (ExportableItemViewModel o in e.OldItems)
+                            foreach (ConvertableItemViewModel o in e.OldItems)
                                 o.IsChecked = false;
                     }
                 }

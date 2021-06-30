@@ -58,6 +58,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
         private readonly ISettingsManager _settingsManager;
+
         /// <summary>
         /// Private NameOf Selected Item in Grid.
         /// </summary>
@@ -68,14 +69,10 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private ImportExportItemViewModel lastselected;
 
-        /// <summary>
-        /// Private Importable Items
-        /// </summary>
+        private readonly ReadOnlyObservableCollection<ConvertableItemViewModel> _convertableItems;
+
         private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
 
-        /// <summary>
-        /// Private Exportable Items
-        /// </summary>
         private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
 
         #endregion fields
@@ -146,12 +143,23 @@ namespace WolvenKit.ViewModels.Editor
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _exportableItems)
                 .Subscribe();
+
+            _watcherService.Files
+                .Connect()
+                .Filter(_ => _.IsConvertable)
+                .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
+                .Transform(_ => new ConvertableItemViewModel(_))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _convertableItems)
+                .Subscribe();
         }
 
         #region properties
 
         public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
         public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
+
+        public ReadOnlyObservableCollection<ConvertableItemViewModel> ConvertableItems => _convertableItems;
 
         /// <summary>
         /// Public Importable Items
@@ -162,6 +170,8 @@ namespace WolvenKit.ViewModels.Editor
         /// Public Exportable items.
         /// </summary>
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
+
+        public ConvertableItemViewModel SelectedConvert { get; set; }
 
         /// <summary>
         /// Selected Export Item
@@ -176,7 +186,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
         /// </summary>
-        public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : SelectedExport;
+        public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
 
         public bool? IsHeaderChecked { get; set; }
 
@@ -219,6 +229,9 @@ namespace WolvenKit.ViewModels.Editor
         /// Is Import Selected, if false Export is default.
         /// </summary>
         public bool IsImportsSelected { get; set; }
+
+        public bool IsExportsSelected { get; set; }
+        public bool IsConvertsSelected { get; set; }
 
         #endregion properties
 
@@ -284,7 +297,8 @@ namespace WolvenKit.ViewModels.Editor
                             break;
                     }
                     break;
-                case {Properties: OpusExportArgs opusExportArgs}:
+
+                case { Properties: OpusExportArgs opusExportArgs }:
                     switch (v)
                     {
                         case nameof(OpusExportArgs.SelectedForExport):
@@ -294,6 +308,7 @@ namespace WolvenKit.ViewModels.Editor
                             break;
                     }
                     break;
+
                 default:
                     Trace.WriteLine("failed to confirm");
                     break;
@@ -448,7 +463,7 @@ namespace WolvenKit.ViewModels.Editor
                     item.Properties = importArgs;
                 }
             }
-            else
+            if (IsExportsSelected)
             {
                 if (current is not ExportArgs exportArgs)
                 {
@@ -466,7 +481,10 @@ namespace WolvenKit.ViewModels.Editor
                     item.Properties = exportArgs;
                 }
             }
-            _notificationService.Success($"Template has been copied to the selected items.");
+            if (IsConvertsSelected)
+            { }
+
+                _notificationService.Success($"Template has been copied to the selected items.");
         }
 
         public bool IsProcessing { get; set; } = false;
@@ -506,13 +524,15 @@ namespace WolvenKit.ViewModels.Editor
                 }
                 await ImportWavs(wavs);
             }
-            else
+            if (IsExportsSelected)
             {
                 foreach (var item in ExportableItems)
                 {
                     await ExportSingle(item);
                 }
             }
+            if (IsConvertsSelected)
+            { }
             IsProcessing = false;
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
         }
@@ -581,7 +601,6 @@ namespace WolvenKit.ViewModels.Editor
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
-
                 if (item.Properties is MeshExportArgs meshExportArgs)
                 {
                     if (_gameController.GetController() is Cp77Controller cp77Controller)
@@ -646,13 +665,15 @@ namespace WolvenKit.ViewModels.Editor
                 }
                 await ImportWavs(wavs);
             }
-            else
+            if (IsExportsSelected)
             {
                 foreach (var item in ExportableItems.Where(_ => _.IsChecked))
                 {
                     await ExportSingle(item);
                 }
             }
+            if (IsConvertsSelected)
+            { }
             IsProcessing = false;
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
         }

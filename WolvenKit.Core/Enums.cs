@@ -227,6 +227,14 @@ namespace WolvenKit.Common
         wav
     }
 
+
+    public enum EConvertableFileFormat
+    {
+        gltf,
+        glb
+
+    }
+
     /// <summary>
     /// Possible file extensions of cooked redengine files
     /// </summary>

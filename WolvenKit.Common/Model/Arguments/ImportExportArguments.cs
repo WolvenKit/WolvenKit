@@ -8,6 +8,45 @@ using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.Common.Model.Arguments
 {
+    public class GlobalConvertArgs
+    {
+        private readonly Dictionary<Type, ConvertArgs> _argsList = new()
+        {
+            { typeof(CommonConvertArgs), new CommonConvertArgs() },
+            { typeof(GLBConvertArgs), new GLBConvertArgs() },
+            { typeof(GLTFConvertArgs), new GLTFConvertArgs() },
+        };
+
+        public GlobalConvertArgs Register(params ConvertArgs[] convertArgs)
+        {
+            foreach (var arg in convertArgs)
+            {
+                var type = arg.GetType();
+                if (_argsList.ContainsKey(type))
+                {
+                    _argsList[type] = arg;
+                }
+                else
+                {
+                    _argsList.Add(type, arg);
+                }
+            }
+
+            return this;
+        }
+
+        public T Get<T>() where T : ConvertArgs
+        {
+            var arg = _argsList[typeof(T)];
+            if (arg is T t)
+            {
+                return t;
+            }
+
+            return null;
+        }
+    }
+
     /// <summary>
     /// Global Export Arguments
     /// </summary>
@@ -145,6 +184,13 @@ namespace WolvenKit.Common.Model.Arguments
     /// Export Arguments
     /// </summary>
     public abstract class ExportArgs : ImportExportArgs
+    {
+    }
+
+    /// <summary>
+    /// Convert Arguments
+    /// </summary>
+    public abstract class ConvertArgs : ImportExportArgs
     {
     }
 
@@ -442,4 +488,20 @@ namespace WolvenKit.Common.Model.Arguments
     }
 
     #endregion export args
+
+    #region convert args
+
+    public class CommonConvertArgs : ConvertArgs
+    {
+    }
+
+    public class GLTFConvertArgs : ConvertArgs
+    {
+    }
+
+    public class GLBConvertArgs : ConvertArgs
+    {
+    }
+
+    #endregion convert args
 }
