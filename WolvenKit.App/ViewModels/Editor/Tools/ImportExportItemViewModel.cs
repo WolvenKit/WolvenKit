@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using WolvenKit.Models.Arguments;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Models;
@@ -78,14 +77,8 @@ namespace WolvenKit.ViewModels.Editor
 
         private ConvertArgs DecideConverOptions(FileModel model)
         {
-            _ = Enum.TryParse(model.GetExtension(), out EConvertableFileFormat rawFileFormat);
+            return new CommonConvertArgs();
 
-            return rawFileFormat switch
-            {
-                EConvertableFileFormat.glb => new GLBConvertArgs(),
-                EConvertableFileFormat.gltf => new GLTFConvertArgs(),
-                _ => new CommonConvertArgs()
-            };
         }
     }
 

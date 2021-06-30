@@ -227,11 +227,35 @@ namespace WolvenKit.Common
         wav
     }
 
+    public enum EConvertableOutput
+    {
+        dae,
+        x,
+        stp,
+        obj,
+        stl,
+        ply,
+        assbin,
+        assxml,
+        x3d,
+        fbx,
+        json
+    }
 
     public enum EConvertableFileFormat
     {
         gltf,
-        glb
+        glb,
+        dae,
+        x,
+        stp,
+        obj,
+        stl,
+        ply,
+        assbin,
+        assxml,
+        x3d,
+        fbx,
 
     }
 

@@ -1,27 +1,26 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.Common.Oodle;
-using WolvenKit.Modkit.RED4.GeneralStructs;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using WolvenKit.Common;
+using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace CP77.CR2W
 {
-    using Vec4 = System.Numerics.Vector4;
-    using Vec3 = System.Numerics.Vector3;
-    using Vec2 = System.Numerics.Vector2;
-
     using VCT = VertexColor1Texture2;
+    using Vec2 = System.Numerics.Vector2;
+    using Vec3 = System.Numerics.Vector3;
+    using Vec4 = System.Numerics.Vector4;
     using VJ = VertexJoints8;
 
     public class MeshTools
@@ -68,9 +67,9 @@ namespace CP77.CR2W
             ModelRoot model = RawMeshesToMinimalGLTF(expMeshes);
             string outfile;
 
-            if(!Directory.Exists(tempmodels))
+            if (!Directory.Exists(tempmodels))
                 Directory.CreateDirectory(tempmodels);
-            
+
             if (Directory.GetFiles(tempmodels).Length > 5)
             {
                 foreach (var f in Directory.GetFiles(tempmodels))
@@ -88,7 +87,7 @@ namespace CP77.CR2W
 
             if (isGLBinary)
             {
-                outfile = Path.Combine(tempmodels,Path.GetFileNameWithoutExtension(FilePath) + ".glb");
+                outfile = Path.Combine(tempmodels, Path.GetFileNameWithoutExtension(FilePath) + ".glb");
                 model.SaveGLB(outfile);
             }
             else

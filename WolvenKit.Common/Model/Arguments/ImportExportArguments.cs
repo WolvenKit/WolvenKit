@@ -13,8 +13,6 @@ namespace WolvenKit.Common.Model.Arguments
         private readonly Dictionary<Type, ConvertArgs> _argsList = new()
         {
             { typeof(CommonConvertArgs), new CommonConvertArgs() },
-            { typeof(GLBConvertArgs), new GLBConvertArgs() },
-            { typeof(GLTFConvertArgs), new GLTFConvertArgs() },
         };
 
         public GlobalConvertArgs Register(params ConvertArgs[] convertArgs)
@@ -493,15 +491,17 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class CommonConvertArgs : ConvertArgs
     {
+        [Category("Convert Settings")]
+        [Display(Name = "Output format")]
+        [Description("Use this to select to what format you want to export your file.")]
+        public EConvertableOutput EConvertableOutput { get; set; }
+        public override string ToString() => EConvertableOutput.ToString();
+
     }
 
-    public class GLTFConvertArgs : ConvertArgs
-    {
-    }
 
-    public class GLBConvertArgs : ConvertArgs
-    {
-    }
+
+
 
     #endregion convert args
 }
