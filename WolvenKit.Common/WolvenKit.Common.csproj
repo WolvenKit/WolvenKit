@@ -75,6 +75,7 @@
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageReference Include="WolvenKit.RED3.CR2W" Version="3.32.3" />
     <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.23.1" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
 
   </ItemGroup>
 
