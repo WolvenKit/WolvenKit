@@ -9,8 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Navigation;
-using Catel;
 using Catel.IoC;
 using Catel.Messaging;
 using Catel.MVVM;
@@ -79,24 +77,14 @@ namespace WolvenKit.ViewModels.Shell
             ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
             ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
             ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
-            ShowBulkEditorCommand = new RelayCommand(ExecuteBulkEditor, CanShowBulkEditor);
-            ShowCsvEditorCommand = new RelayCommand(ExecuteCsvEditor, CanShowCsvEditor);
-            ShowJournalEditorCommand = new RelayCommand(ExecuteJournalEditor, CanShowJournalEditor);
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
-            ShowAnimationToolCommand = new RelayCommand(ExecuteAnimationTool, CanShowAnimationTool);
-            ShowMimicsToolCommand = new RelayCommand(ExecuteMimicsTool, CanShowMimicsTool);
             //ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
             ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
             ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
 
-            ShowImporterToolCommand = new RelayCommand(ExecuteImporterTool, CanShowImporterTool);
-            ShowCR2WToTextToolCommand = new RelayCommand(ExecuteCR2WToTextTool, CanShowCR2WToTextTool);
-            ShowGameDebuggerToolCommand = new RelayCommand(ExecuteGameDebuggerTool, CanShowGameDebuggerTool);
-            ShowMenuCreatorToolCommand = new RelayCommand(ExecuteMenuCreatorTool, CanShowMenuCreatorTool);
-            ShowPluginManagerCommand = new RelayCommand(ExecutePluginManagerTool, CanShowPluginManagerTool);
-            ShowWccToolCommand = new RelayCommand(ExecuteWccTool, CanShowWccTool);
+
 
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
@@ -125,20 +113,9 @@ namespace WolvenKit.ViewModels.Shell
                 ImportExportToolVM,
 
                 ImportViewModel,
-                BulkEditorVM,
-                CsvEditorVM,
                 //CodeEditorVM,
-                JournalEditorVM,
-                VisualEditorVM,
-                AnimationToolVM,
-                //AudioToolVM,
-                ImporterToolVM,
-                CR2WToTextToolVM,
-                GameDebuggerToolVM,
-                MenuCreatorToolVM,
-                PluginManagerVM,
-                WccToolVM,
-                MimicsToolVM,
+                //VisualEditorVM,
+
             };
         }
 
@@ -176,26 +153,11 @@ namespace WolvenKit.ViewModels.Shell
             commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowProperties, ShowPropertiesCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAssetBrowser, ShowAssetsCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowBulkEditor, ShowBulkEditorCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowCsvEditor, ShowCsvEditorCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowJournalEditor, ShowJournalEditorCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowAnimationTool, ShowAnimationToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowMimicsTool, ShowMimicsToolCommand, this);
-            // commandManager.RegisterCommand(AppCommands.Application.ShowAudioTool, ShowAudioToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowVideoTool, ShowVideoToolCommand, this);
-
             commandManager.RegisterCommand(AppCommands.Application.ShowImportExportTool, ShowImportExportToolCommand, this);
 
             commandManager.RegisterCommand(AppCommands.Application.ShowCodeEditor, ShowCodeEditorCommand, this);
 
-            commandManager.RegisterCommand(AppCommands.Application.ShowImporterTool, ShowImporterToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowCR2WToTextTool, ShowCR2WToTextToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowGameDebuggerTool, ShowGameDebuggerToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowMenuCreatorTool, ShowMenuCreatorToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowPluginManager, ShowPluginManagerCommand, this);
-            //commandManager.RegisterCommand(AppCommands.Application.ShowRadishTool, ShowRadishToolCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowWccTool, ShowWccToolCommand, this);
 
             // Home Tab
             commandManager.RegisterCommand(AppCommands.Application.SaveFile, SaveFileFileCommand, this);
@@ -444,7 +406,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
-        private void ExecuteAnimationTool() => AnimationToolVM.IsVisible = false;
 
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
@@ -455,21 +416,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
 
-        private void ExecuteBulkEditor() => BulkEditorVM.IsVisible = false;
-
-        private void ExecuteCR2WToTextTool() => CR2WToTextToolVM.IsVisible = false;
-
-        private void ExecuteCsvEditor() => CsvEditorVM.IsVisible = !CsvEditorVM.IsVisible;
-
-        private void ExecuteGameDebuggerTool() => GameDebuggerToolVM.IsVisible = false;
-
-        private void ExecuteImporterTool() => ImporterToolVM.IsVisible = false;
-
-        private void ExecuteJournalEditor() => JournalEditorVM.IsVisible = false;
-
-        private void ExecuteMenuCreatorTool() => MenuCreatorToolVM.IsVisible = false;
-
-        private void ExecuteMimicsTool() => MimicsToolVM.IsVisible = false;
 
         private void ExecuteNewFile()
         {
@@ -502,7 +448,6 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private void ExecutePluginManagerTool() => PluginManagerVM.IsVisible = !PluginManagerVM.IsVisible;
 
         private void ExecutePublishMod()
         {                // #convert2MVVMSoon
@@ -537,7 +482,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteVisualEditor() => VisualEditorVM.IsVisible = !VisualEditorVM.IsVisible;
 
-        private void ExecuteWccTool() => WccToolVM.IsVisible = !WccToolVM.IsVisible;
 
         private bool CanSaveAll() => _projectManager.ActiveProject is EditorProject proj
                                      && Files?.Count > 0;
@@ -561,120 +505,27 @@ namespace WolvenKit.ViewModels.Shell
 
         #region ToolViewModels
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private AnimsViewModel _AnimationToolVM = null;
 
-        /// <summary>
-        /// Gets an instance of the AssetBrowserViewModel.
-        /// </summary>
         private AssetBrowserViewModel _AssetBrowserViewModel = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-      //  private AudioToolViewModel _AudioToolVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private BulkEditorViewModel _BulkEditorVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
         private CodeEditorViewModel _CodeEditorVM = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private CR2WToTextToolViewModel _CR2WToTextToolVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private CsvEditorViewModel _CsvEditorVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private GameDebuggerToolViewModel _GameDebuggerToolVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ImportExportViewModel.
-        /// </summary>
         private ImportExportViewModel _importExportToolViewModel = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private ImporterToolViewModel _ImporterToolVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ImportViewModel.
-        /// </summary>
         private ImportViewModel _importViewModel = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private JournalEditorViewModel _JournalEditorVM = null;
-
-        /// <summary>
-        /// Gets an instance of the LogViewModel.
-        /// </summary>
         private LogViewModel _logViewModel = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private MenuCreatorToolViewModel _MenuCreatorToolVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        ///
-        private MimicsViewModel _MimicsToolVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private PluginManagerViewModel _PluginManagerVM = null;
-
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
         private ProjectExplorerViewModel _projectExplorerViewModel = null;
 
-        /// <summary>
-        /// Gets an instance of the PropertiesViewModel.
-        /// </summary>
         private PropertiesViewModel _propertiesViewModel = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
+
 
         private VisualEditorViewModel _VisualEditorVM = null;
 
-        /// <summary>
-        /// Gets an instance of the ProjectExplorerViewModer.
-        /// </summary>
-        private WccToolViewModel _WccToolVM = null;
 
-        public AnimsViewModel AnimationToolVM
-        {
-            get
-            {
-                _AnimationToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AnimsViewModel>();
-                _AnimationToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _AnimationToolVM;
-            }
-        }
 
         public AssetBrowserViewModel AssetBrowserVM
         {
@@ -683,26 +534,6 @@ namespace WolvenKit.ViewModels.Shell
                 _AssetBrowserViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AssetBrowserViewModel>();
                 _AssetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _AssetBrowserViewModel;
-            }
-        }
-
-        //public AudioToolViewModel AudioToolVM
-        //{
-        //    get
-        //    {
-        //        _AudioToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AudioToolViewModel>();
-        //        _AudioToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-        //        return _AudioToolVM;
-        //    }
-        //}
-
-        public BulkEditorViewModel BulkEditorVM
-        {
-            get
-            {
-                _BulkEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<BulkEditorViewModel>();
-                _BulkEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _BulkEditorVM;
             }
         }
 
@@ -716,35 +547,6 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public CR2WToTextToolViewModel CR2WToTextToolVM
-        {
-            get
-            {
-                _CR2WToTextToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CR2WToTextToolViewModel>();
-                _CR2WToTextToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _CR2WToTextToolVM;
-            }
-        }
-
-        public CsvEditorViewModel CsvEditorVM
-        {
-            get
-            {
-                _CsvEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CsvEditorViewModel>();
-                _CsvEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _CsvEditorVM;
-            }
-        }
-
-        public GameDebuggerToolViewModel GameDebuggerToolVM
-        {
-            get
-            {
-                _GameDebuggerToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<GameDebuggerToolViewModel>();
-                _GameDebuggerToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _GameDebuggerToolVM;
-            }
-        }
 
         public ImportExportViewModel ImportExportToolVM
         {
@@ -756,15 +558,6 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public ImporterToolViewModel ImporterToolVM
-        {
-            get
-            {
-                _ImporterToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImporterToolViewModel>();
-                _ImporterToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _ImporterToolVM;
-            }
-        }
 
         public ImportViewModel ImportViewModel
         {
@@ -775,47 +568,11 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public JournalEditorViewModel JournalEditorVM
-        {
-            get
-            {
-                _JournalEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<JournalEditorViewModel>();
-                _JournalEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _JournalEditorVM;
-            }
-        }
+
 
         public LogViewModel Log => _logViewModel ??= new LogViewModel();
 
-        public MenuCreatorToolViewModel MenuCreatorToolVM
-        {
-            get
-            {
-                _MenuCreatorToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<MenuCreatorToolViewModel>();
-                _MenuCreatorToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _MenuCreatorToolVM;
-            }
-        }
 
-        public MimicsViewModel MimicsToolVM
-        {
-            get
-            {
-                _MimicsToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<MimicsViewModel>();
-                _MimicsToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _MimicsToolVM;
-            }
-        }
-
-        public PluginManagerViewModel PluginManagerVM
-        {
-            get
-            {
-                _PluginManagerVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<PluginManagerViewModel>();
-                _PluginManagerVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _PluginManagerVM;
-            }
-        }
 
         public ProjectExplorerViewModel ProjectExplorer
         {
@@ -846,15 +603,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public WccToolViewModel WccToolVM
-        {
-            get
-            {
-                _WccToolVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<WccToolViewModel>();
-                _WccToolVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _WccToolVM;
-            }
-        }
+
 
         #endregion ToolViewModels
 

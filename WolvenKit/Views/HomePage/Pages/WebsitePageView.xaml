@@ -15,12 +15,9 @@
      >
 
         <Grid Margin="3,75,3,0">
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
                 <wv2:WebView2 x:Name="cal" Source="https://redmodding.org/" />
-            </hc:TransitioningContentControl>
         </Grid>
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
             <StackPanel
              Margin="5"
@@ -62,9 +59,7 @@
                     </hc:AnimationPath.RenderTransform>
                 </hc:AnimationPath>
             </StackPanel>
-        </hc:TransitioningContentControl>
 
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
             <hc:ComboBox
              x:Name="SelectWebsiteTypeCombo"
@@ -80,6 +75,5 @@
              >
                 <ComboBoxItem Content="Organization Website" />
             </hc:ComboBox>
-        </hc:TransitioningContentControl>
     </Grid>
 </catel:UserControl>

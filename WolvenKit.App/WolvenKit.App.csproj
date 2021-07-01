@@ -35,6 +35,7 @@
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
     <PackageReference Include="Orc.CsvTextEditor" Version="4.1.0" />
     <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
+    <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.2" />
       <PackageReference Include="ReactiveUI" Version="14.1.1" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.5" />
@@ -42,6 +43,7 @@
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.1.0.63" />
     <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
