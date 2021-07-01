@@ -538,7 +538,8 @@ namespace WolvenKit.ViewModels.Editor
             {
                 var wavs = new List<string>();
                 // split up wavs
-                foreach (var item in ImportableItems)
+                var toBeImported = ImportableItems.ToList();
+                foreach (var item in toBeImported)
                 {
                     if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
                     {
@@ -553,17 +554,20 @@ namespace WolvenKit.ViewModels.Editor
             }
             if (IsExportsSelected)
             {
-                foreach (var item in ExportableItems)
+                var toBeExported = ExportableItems.ToList();
+                foreach (var item in toBeExported)
                 {
                     await ExportSingle(item);
                 }
             }
             if (IsConvertsSelected)
             {
-                foreach (var item in ConvertableItems)
+                var toBeConverted = ConvertableItems.ToList();
+                foreach (var itemViewModel in toBeConverted)
                 {
-                    await Task.Run(() => ConvertSingle(item));
+                    await Task.Run(() => ConvertSingle(itemViewModel));
                 }
+                
             }
             IsProcessing = false;
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
@@ -684,7 +688,8 @@ namespace WolvenKit.ViewModels.Editor
             {
                 var wavs = new List<string>();
                 // split up wavs
-                foreach (var item in ImportableItems.Where(_ => _.IsChecked))
+                var toBeConverted = ImportableItems.Where(_ => _.IsChecked).ToList();
+                foreach (var item in toBeConverted)
                 {
                     if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
                     {
@@ -699,17 +704,19 @@ namespace WolvenKit.ViewModels.Editor
             }
             if (IsExportsSelected)
             {
-                foreach (var item in ExportableItems.Where(_ => _.IsChecked))
+                var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
+                foreach (var item in toBeConverted)
                 {
                     await ExportSingle(item);
                 }
             }
             if (IsConvertsSelected)
             {
-                foreach (var item in ConvertableItems.Where(_ => _.IsChecked))
-                {
-                    await ConvertSingle(item);
 
+                var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
+                foreach (var itemViewModel in toBeConverted)
+                {
+                    await Task.Run(() => ConvertSingle(itemViewModel));
                 }
             }
             IsProcessing = false;
@@ -717,7 +724,7 @@ namespace WolvenKit.ViewModels.Editor
         }
         private Dictionary<string, object> _namedObjects;
 
-        private Task ConvertSingle(ConvertableItemViewModel item)
+        private async Task ConvertSingle(ConvertableItemViewModel item)
         {
             IsProcessing = true;
 
@@ -726,12 +733,12 @@ namespace WolvenKit.ViewModels.Editor
 
             if (item == null)
             {
-                return Task.CompletedTask;
+                return;
             }
             var fi = new FileInfo(item.FullName);
             if (!fi.Exists)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             switch (item.Properties)
@@ -739,7 +746,7 @@ namespace WolvenKit.ViewModels.Editor
                 case CommonConvertArgs:
                     break;
                 default:
-                    return Task.CompletedTask;
+                    return;
             }
 
 
@@ -776,11 +783,12 @@ namespace WolvenKit.ViewModels.Editor
                     file = manager.Items[hash].First();
                     if (file != null)
                     {
-                        outfile = _meshTools.ExportMeshSimple(file, qx.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
+                        outfile = _meshTools.ExportMeshSimple(file, qx.FullName,
+                            Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
                     }
                     else
                     {
-                        return Task.CompletedTask;
+                        return;
                     }
                 }
                 else
@@ -797,7 +805,9 @@ namespace WolvenKit.ViewModels.Editor
 
                 try
                 {
-                    readModel3D = assimpWpfImporter.ReadModel3D(outfile, texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
+                    readModel3D =
+                        assimpWpfImporter.ReadModel3D(outfile,
+                            texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
                     _namedObjects = assimpWpfImporter.NamedObjects;
                 }
                 catch (Exception ex)
@@ -842,10 +852,14 @@ namespace WolvenKit.ViewModels.Editor
                         isExported = false;
                     }
                 }
+
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-                return Task.CompletedTask;
+            }
+            catch
+            {
+
             }
             finally
             {
@@ -854,6 +868,7 @@ namespace WolvenKit.ViewModels.Editor
 
             }
 
+            await Task.CompletedTask;
         }
 
         /// <summary>
