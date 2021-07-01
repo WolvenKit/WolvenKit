@@ -334,6 +334,7 @@ namespace WolvenKit.Functionality.Initialization
                 sh.ShowIcon = false;
                 sh.Icon = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\Media\\Images\\Icons\\Application\\TaskBarIcon.ico"));
                 StaticReferences.GlobalShell = sh;
+                sh.BringIntoView();
                 //sh.MinWidth = 1;
                 //sh.MinHeight = 1;
                 // sh.WindowState = WindowState.Maximized;
