@@ -562,7 +562,7 @@ namespace WolvenKit.ViewModels.Editor
             {
                 foreach (var item in ConvertableItems)
                 {
-                    await ConvertSingle(item);
+                    await Task.Run(() => ConvertSingle(item));
                 }
             }
             IsProcessing = false;
@@ -725,10 +725,14 @@ namespace WolvenKit.ViewModels.Editor
 
 
             if (item == null)
-            { return Task.CompletedTask; }
+            {
+                return Task.CompletedTask;
+            }
             var fi = new FileInfo(item.FullName);
             if (!fi.Exists)
-            { return Task.CompletedTask; }
+            {
+                return Task.CompletedTask;
+            }
 
             switch (item.Properties)
             {
@@ -750,7 +754,6 @@ namespace WolvenKit.ViewModels.Editor
 
             try
             {
-                Mouse.OverrideCursor = Cursors.Wait;
                 assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
                 assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
 
@@ -849,7 +852,6 @@ namespace WolvenKit.ViewModels.Editor
                 // Dispose unmanaged resources
                 assimpWpfImporter.Dispose();
 
-                Mouse.OverrideCursor = null;
             }
 
         }
