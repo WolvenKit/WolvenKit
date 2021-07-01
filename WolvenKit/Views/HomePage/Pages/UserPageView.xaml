@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:catel="http://schemas.catelproject.com"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:syncfusion="clr-namespace:Syncfusion.UI.Xaml.Kanban;assembly=Syncfusion.SfKanban.WPF">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -56,5 +56,8 @@
         Background="{DynamicResource ContentBackgroundAlt2}">
 
 
+        <syncfusion:SfKanban ItemsSource="{Binding NexusTrackedMods}" x:Name="NexusModsKanBan">
+
+        </syncfusion:SfKanban>
     </Grid>
 </catel:UserControl>
