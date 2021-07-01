@@ -308,6 +308,7 @@
     <PackageReference Include="CatFacts.Net" Version="0.1.1" />
     <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
     <PackageReference Include="Dirkster.WSF" Version="1.2.0" />
+    <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
@@ -356,6 +357,7 @@
     <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.1.0.63" />

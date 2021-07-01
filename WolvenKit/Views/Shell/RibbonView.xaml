@@ -1484,7 +1484,7 @@
                     Name="Help"
                     Width="auto"
                     Header="Help"
-                    Visibility="Collapsed">
+                    Visibility="Visible">
 
                     <!--  BugReport Button  -->
                     <syncfusion:RibbonButton

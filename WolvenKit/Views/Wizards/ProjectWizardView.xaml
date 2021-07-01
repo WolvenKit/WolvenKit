@@ -6,8 +6,8 @@
  xmlns:catel="http://schemas.catelproject.com"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- Tag="Project Wizard"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    Tag="Project Wizard"
  ViewModelChanged="UserControl_ViewModelChanged"
  mc:Ignorable="av">
 
@@ -21,7 +21,7 @@
     </catel:UserControl.Resources>
     <Grid
      MinWidth="150"
-     Margin="5,5,2,5"
+     Margin="0"
      HorizontalAlignment="Stretch"
      VerticalAlignment="Stretch"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
@@ -110,5 +110,86 @@
                 <iconPacks:PackIconCodicons Kind="ArrowRight" />
             </Button>
         </Grid>
+        <syncfusion:WizardControl Grid.RowSpan="3" Name="wizardControl">
+            <syncfusion:WizardPage Name="wizardPage1">
+
+                <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+
+                    <StackPanel
+                 Margin="0,10,0,0"
+                 VerticalAlignment="Top"
+                 Orientation="Vertical">
+
+                        <Grid Margin="22,0,0,0">
+
+                            <StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center">
+                                    <Run Text="Project icon" />
+
+                                    <LineBreak />
+                                    <Run Text="(Optional)" />
+                                    </TextBlock>
+                                    <hc:ImageSelector
+                                 x:Name="imgSelector"
+                                 Width="100"
+                                 Height="100"
+                                 Margin="10,0,0,0"
+                                 HorizontalAlignment="Left" />
+                                </StackPanel>
+
+                                <hc:TextBox
+                             x:Name="projectNameTxtbx"
+                             Margin="0,32,0,0"
+                             HorizontalAlignment="Stretch"
+                             hc:InfoElement.Necessary="True"
+                             hc:InfoElement.Title="Project Name"
+                             hc:InfoElement.TitlePlacement="Left"
+                             hc:InfoElement.TitleWidth="140"
+                             Style="{StaticResource TextBoxExtendCustom}"
+                             Text="{Binding ProjectName}"
+                             VerifyFunc="VerifyIfProjectExists" />
+                                <hc:TextBox
+                             x:Name="projectPathTxtbx"
+                             Margin="0,32,50,0"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Top"
+                             hc:InfoElement.Necessary="True"
+                             hc:InfoElement.Title="Project Path"
+                             hc:InfoElement.TitlePlacement="Left"
+                             hc:InfoElement.TitleWidth="140"
+                             Style="{StaticResource TextBoxExtendCustom}"
+                             Text="{Binding ProjectPath}"
+                             VerifyFunc="VerifyFolder" />
+                            </StackPanel>
+
+                            <Button
+                         Width="50"
+                         Height="34"
+                         Margin="5,5,0,0"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Bottom"
+>
+
+                                <iconPacks:PackIconCodicons
+                             Grid.Row="0"
+                             Width="15"
+                             Height="15"
+                             Margin="0,0,0,0"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                             Kind="FolderOpened"
+                             Spin="False"
+                             SpinAutoReverse="False" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </syncfusion:WizardPage>
+            <syncfusion:WizardPage Name="wizardPage2"/>
+            <syncfusion:WizardPage Name="wizardPage3"/>
+        </syncfusion:WizardControl>
     </Grid>
 </catel:UserControl>
