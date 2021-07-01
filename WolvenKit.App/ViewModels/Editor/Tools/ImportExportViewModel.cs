@@ -771,20 +771,20 @@ namespace WolvenKit.ViewModels.Editor
                 if (manager.Items.ContainsKey(hash))
                 {
                     file = manager.Items[hash].First();
+                    if (file != null)
+                    {
+                        outfile = _meshTools.ExportMeshSimple(file, qx.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
+                    }
+                    else
+                    {
+                        return Task.CompletedTask;
+                    }
+                }
+                else
+                {
+                    outfile = qx.FullName;
+                }
 
-                }
-                else
-                {
-                    return Task.CompletedTask;
-                }
-                if (file != null)
-                {
-                    outfile = _meshTools.ExportMeshSimple(file, qx.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
-                }
-                else
-                {
-                    return Task.CompletedTask;
-                }
 
 
 
