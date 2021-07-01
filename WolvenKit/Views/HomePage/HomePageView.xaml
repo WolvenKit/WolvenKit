@@ -153,7 +153,7 @@
                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                             Header="Profile"
                             IsSelected="False"
-                            Visibility="Collapsed">
+                            Visibility="Visible">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons
                                     Width="25"
