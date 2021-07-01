@@ -68,7 +68,9 @@ namespace WolvenKit.Models
 
         [Browsable(false)] public bool IsExpanded { get; set; }
 
-
+        [Browsable(false)] public bool IsConvertable => !IsDirectory
+                                                       && !string.IsNullOrEmpty(GetExtension())
+                                                       && Enum.GetNames(typeof(EConvertableFileFormat)).Contains(GetExtension());
         [Browsable(false)] public bool IsImportable => !IsDirectory
                                                        && !string.IsNullOrEmpty(GetExtension())
                                                        && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());

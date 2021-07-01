@@ -356,7 +356,7 @@
                         Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}" />
                 </Grid>
             </syncfusion:TabItemExt>
-            <syncfusion:TabItemExt Header="Mesh Preview" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Mesh Preview" IsSelected="{Binding IsMeshPreviewVisible}" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <Grid Name="RootGrid" Height="auto">
                     <Border Name="ViewportBorder" Background="Transparent">
                         <dxControls:DXViewportView
@@ -524,7 +524,7 @@
                 </Grid>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt IsSelected="{Binding IsAudioPreviewVisible}" Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <Border
                     Width="auto"
@@ -703,7 +703,7 @@
                 </Border>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt IsSelected="{Binding IsImagePreviewVisible}" Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <!--<hc:ImageViewer
                     x:Name="bold"
                     Width="auto"
@@ -712,7 +712,7 @@
                 <syncfusion:SfImageEditor x:Name="bold" />
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt
+            <syncfusion:TabItemExt IsSelected="{Binding IsVideoPreviewVisible}"
                 x:Name="testme"
                 Header="Video Preview"
                 Visibility="{Binding IsVideoPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}" />

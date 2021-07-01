@@ -227,6 +227,35 @@ namespace WolvenKit.Common
         wav
     }
 
+    public enum EConvertableOutput
+    {
+        fbx,
+        x,
+        stp,
+        obj,
+        stl,
+        ply,
+        assbin,
+        assxml,
+        x3d
+    }
+
+    public enum EConvertableFileFormat
+    {
+        gltf,
+        glb,
+        x,
+        stp,
+        obj,
+        stl,
+        ply,
+        assbin,
+        assxml,
+        x3d,
+        fbx,
+
+    }
+
     /// <summary>
     /// Possible file extensions of cooked redengine files
     /// </summary>

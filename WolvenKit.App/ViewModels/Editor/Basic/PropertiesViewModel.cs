@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -19,11 +18,9 @@ using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
@@ -222,8 +219,8 @@ namespace WolvenKit.ViewModels.Editor
             // string.Equals(model.GetExtension(), ERedExtension.bk2.ToString(), StringComparison.OrdinalIgnoreCase) ||
             if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
-
               string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+              || Enum.TryParse<EConvertableOutput>(PE_SelectedItem.GetExtension(), out _)
               || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
             )
         )
@@ -241,6 +238,16 @@ namespace WolvenKit.ViewModels.Editor
                     //    IsVideoPreviewVisible = true;
                     //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
                     //}
+
+
+                    if (Enum.IsDefined(typeof(EConvertableOutput), PE_SelectedItem.GetExtension()))
+                    {
+                        PE_MeshPreviewVisible = true;
+
+                        LoadModel(PE_SelectedItem.FullName);
+                    }
+
+
 
                     if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
                         System.StringComparison.OrdinalIgnoreCase))
@@ -415,7 +422,7 @@ namespace WolvenKit.ViewModels.Editor
 
             var arg = path.ToEscapedPath() + " -o " + outf.ToEscapedPath();
             var si = new ProcessStartInfo(
-                    Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"),
+                    Path.Combine("vgmstream", "test.exe"),
                     arg
                 )
             {

@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using WolvenKit.Models.Arguments;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Models;
@@ -32,6 +31,8 @@ namespace WolvenKit.ViewModels.Editor
         public bool IsChecked { get; set; }
 
         public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
+
+        public FileModel GetBaseFile() => BaseFile;
     }
 
     public class ImportableItemViewModel : ImportExportItemViewModel
@@ -61,6 +62,25 @@ namespace WolvenKit.ViewModels.Editor
                 ERawFileFormat.wav => new OpusImportArgs(),
                 _ => new CommonImportArgs()
             };
+        }
+    }
+
+    public class ConvertableItemViewModel : ImportExportItemViewModel
+    {
+        public ConvertableItemViewModel(FileModel model)
+        {
+            BaseFile = model;
+            Properties = DecideConverOptions(model);
+
+            Properties.PropertyChanged += PropertiesOnPropertyChanged;
+        }
+
+        private void PropertiesOnPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(nameof(Properties));
+
+        private ConvertArgs DecideConverOptions(FileModel model)
+        {
+            return new CommonConvertArgs();
+
         }
     }
 

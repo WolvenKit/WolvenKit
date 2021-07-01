@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -19,12 +20,11 @@ using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.ViewModels.Editor;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using Wolvenkit.InteropControls;
 
 namespace WolvenKit.Views.Editor
 {
@@ -314,37 +314,48 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
-            var x = Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")+ " | " + endPath + "/I2 /P /L";
 
-            var appControl = new AppControl();
-            appControl.ExeName = x.Split('|')[0];
-            appControl.Args = x.Split('|')[1];
-            appControl.VisualPoint = new Point(0.0, 30.0);
+            var args = $"\"{endPath}\" /I102 /p";
+            var procInfo =
+                new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
+                    "test.exe"))
+                {
 
-            if (StaticReferences.XoWindow == null)
-            {
-                StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-                StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
-            }
+                    Arguments = args,
+                    WorkingDirectory = ISettingsManager.GetWorkDir()
+                };
 
-            if (StaticReferences.XoWindow.Content != null)
-            {
-                return;
-            }
-            StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
-            {
-                var q = s as HandyControl.Controls.GlowWindow;
-                q.Close();
-                StaticReferences.XoWindow = null;
-                StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-            });
+            var process = Process.Start(procInfo);
+            process?.WaitForInputIdle();
+            //var appControl = new AppControl();
+            //appControl.ExeName = x.Split('|')[0];
+            //appControl.Args = x.Split('|')[1];
+            //appControl.VisualPoint = new Point(0.0, 30.0);
 
-            Grid grid = new Grid();
-            grid.Children.Add(appControl);
-            StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
-            StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
-            StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            StaticReferences.XoWindow.Show();
+            //if (StaticReferences.XoWindow == null)
+            //{
+            //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+            //    StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
+            //}
+
+            //if (StaticReferences.XoWindow.Content != null)
+            //{
+            //    return;
+            //}
+            //StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
+            //{
+            //    var q = s as HandyControl.Controls.GlowWindow;
+            //    q.Close();
+            //    StaticReferences.XoWindow = null;
+            //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+            //});
+
+            //Grid grid = new Grid();
+            //grid.Children.Add(appControl);
+            //StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
+            //StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
+            //StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //StaticReferences.XoWindow.Show();
         }
 
         private void BKExport_Click(object sender, RoutedEventArgs e)

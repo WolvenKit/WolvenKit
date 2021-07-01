@@ -1,32 +1,36 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using System.Linq;
+using System.Windows.Media;
+using System.Windows.Media.Media3D;
+using Ab3d.Assimp;
+using Assimp;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
+using CP77.CR2W;
 using DynamicData;
-using DynamicData.Binding;
+using Orchestra.Services;
 using ReactiveUI;
+using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Models.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W.Archive;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
-using Orchestra.Services;
-using WolvenKit.Common;
-using WolvenKit.Common.Model;
-using System.Collections.Generic;
-using System.Diagnostics;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Modkit.RED4.Opus;
-using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -57,7 +61,9 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
+        private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
+
         /// <summary>
         /// Private NameOf Selected Item in Grid.
         /// </summary>
@@ -68,14 +74,10 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         private ImportExportItemViewModel lastselected;
 
-        /// <summary>
-        /// Private Importable Items
-        /// </summary>
+        private readonly ReadOnlyObservableCollection<ConvertableItemViewModel> _convertableItems;
+
         private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
 
-        /// <summary>
-        /// Private Exportable Items
-        /// </summary>
         private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
 
         #endregion fields
@@ -97,7 +99,9 @@ namespace WolvenKit.ViewModels.Editor
            IGrowlNotificationService notificationService,
            IGameControllerFactory gameController,
            ISettingsManager settingsManager,
-           ModTools modTools
+           ModTools modTools,
+           MeshTools meshTools
+
            ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
@@ -117,6 +121,7 @@ namespace WolvenKit.ViewModels.Editor
             _gameController = gameController;
             _notificationService = notificationService;
             _settingsManager = settingsManager;
+            _meshTools = meshTools;
 
             SetupToolDefaults();
 
@@ -146,12 +151,23 @@ namespace WolvenKit.ViewModels.Editor
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _exportableItems)
                 .Subscribe();
+
+            _watcherService.Files
+                .Connect()
+                .Filter(_ => _.IsConvertable)
+                .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
+                .Transform(_ => new ConvertableItemViewModel(_))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _convertableItems)
+                .Subscribe();
         }
 
         #region properties
 
         public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
         public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
+
+        public ReadOnlyObservableCollection<ConvertableItemViewModel> ConvertableItems => _convertableItems;
 
         /// <summary>
         /// Public Importable Items
@@ -162,6 +178,8 @@ namespace WolvenKit.ViewModels.Editor
         /// Public Exportable items.
         /// </summary>
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
+
+        public ConvertableItemViewModel SelectedConvert { get; set; }
 
         /// <summary>
         /// Selected Export Item
@@ -176,7 +194,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
         /// </summary>
-        public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : SelectedExport;
+        public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
 
         public bool? IsHeaderChecked { get; set; }
 
@@ -220,10 +238,15 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public bool IsImportsSelected { get; set; }
 
+        public bool IsExportsSelected { get; set; } = true;
+        public bool IsConvertsSelected { get; set; }
+
         #endregion properties
 
         public ICommand AddItemsCommand { get; private set; }
         public ICommand RemoveItemsCommand { get; private set; }
+
+
 
         private bool CanAddItems(ObservableCollection<object> items) => true;
 
@@ -284,7 +307,8 @@ namespace WolvenKit.ViewModels.Editor
                             break;
                     }
                     break;
-                case {Properties: OpusExportArgs opusExportArgs}:
+
+                case { Properties: OpusExportArgs opusExportArgs }:
                     switch (v)
                     {
                         case nameof(OpusExportArgs.SelectedForExport):
@@ -294,6 +318,7 @@ namespace WolvenKit.ViewModels.Editor
                             break;
                     }
                     break;
+
                 default:
                     Trace.WriteLine("failed to confirm");
                     break;
@@ -448,7 +473,7 @@ namespace WolvenKit.ViewModels.Editor
                     item.Properties = importArgs;
                 }
             }
-            else
+            if (IsExportsSelected)
             {
                 if (current is not ExportArgs exportArgs)
                 {
@@ -466,6 +491,26 @@ namespace WolvenKit.ViewModels.Editor
                     item.Properties = exportArgs;
                 }
             }
+            if (IsConvertsSelected)
+            {
+
+                if (current is not ConvertArgs convertArgs)
+                {
+                    return;
+                }
+
+                var results = param switch
+                {
+                    s_selectedInGrid => ConvertableItems.Where(_ => _.IsChecked),
+                    _ => ConvertableItems
+                };
+
+                foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
+                {
+                    item.Properties = convertArgs;
+                }
+            }
+
             _notificationService.Success($"Template has been copied to the selected items.");
         }
 
@@ -493,7 +538,8 @@ namespace WolvenKit.ViewModels.Editor
             {
                 var wavs = new List<string>();
                 // split up wavs
-                foreach (var item in ImportableItems)
+                var toBeImported = ImportableItems.ToList();
+                foreach (var item in toBeImported)
                 {
                     if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
                     {
@@ -506,12 +552,22 @@ namespace WolvenKit.ViewModels.Editor
                 }
                 await ImportWavs(wavs);
             }
-            else
+            if (IsExportsSelected)
             {
-                foreach (var item in ExportableItems)
+                var toBeExported = ExportableItems.ToList();
+                foreach (var item in toBeExported)
                 {
                     await ExportSingle(item);
                 }
+            }
+            if (IsConvertsSelected)
+            {
+                var toBeConverted = ConvertableItems.ToList();
+                foreach (var itemViewModel in toBeConverted)
+                {
+                    await Task.Run(() => ConvertSingle(itemViewModel));
+                }
+                
             }
             IsProcessing = false;
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
@@ -581,7 +637,6 @@ namespace WolvenKit.ViewModels.Editor
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
-
                 if (item.Properties is MeshExportArgs meshExportArgs)
                 {
                     if (_gameController.GetController() is Cp77Controller cp77Controller)
@@ -633,7 +688,8 @@ namespace WolvenKit.ViewModels.Editor
             {
                 var wavs = new List<string>();
                 // split up wavs
-                foreach (var item in ImportableItems.Where(_ => _.IsChecked))
+                var toBeConverted = ImportableItems.Where(_ => _.IsChecked).ToList();
+                foreach (var item in toBeConverted)
                 {
                     if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
                     {
@@ -646,15 +702,173 @@ namespace WolvenKit.ViewModels.Editor
                 }
                 await ImportWavs(wavs);
             }
-            else
+            if (IsExportsSelected)
             {
-                foreach (var item in ExportableItems.Where(_ => _.IsChecked))
+                var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
+                foreach (var item in toBeConverted)
                 {
                     await ExportSingle(item);
                 }
             }
+            if (IsConvertsSelected)
+            {
+
+                var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
+                foreach (var itemViewModel in toBeConverted)
+                {
+                    await Task.Run(() => ConvertSingle(itemViewModel));
+                }
+            }
             IsProcessing = false;
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+        }
+        private Dictionary<string, object> _namedObjects;
+
+        private async Task ConvertSingle(ConvertableItemViewModel item)
+        {
+            IsProcessing = true;
+
+
+
+
+            if (item == null)
+            {
+                return;
+            }
+            var fi = new FileInfo(item.FullName);
+            if (!fi.Exists)
+            {
+                return;
+            }
+
+            switch (item.Properties)
+            {
+                case CommonConvertArgs:
+                    break;
+                default:
+                    return;
+            }
+
+
+
+
+
+
+
+
+            // Create an instance of AssimpWpfImporter
+            var assimpWpfImporter = new AssimpWpfImporter();
+
+            try
+            {
+                assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
+                assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
+
+                // When ReadPolygonIndices is true, assimpWpfImporter will read PolygonIndices collection that can be used to show polygons instead of triangles.
+                assimpWpfImporter.ReadPolygonIndices = false;
+
+                var qx = item.GetBaseFile();
+                var proj = _projectManager.ActiveProject;
+                var relativename = qx.GetRelativeName(proj);
+                var newname = Path.ChangeExtension(relativename, ".mesh");
+                ulong hash = FNV1A64HashAlgorithm.HashString(newname);
+                var cp77Controller = _gameController.GetController() as Cp77Controller;
+
+                var manager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
+
+                string outfile;
+                IGameFile file;
+                if (manager.Items.ContainsKey(hash))
+                {
+                    file = manager.Items[hash].First();
+                    if (file != null)
+                    {
+                        outfile = _meshTools.ExportMeshSimple(file, qx.FullName,
+                            Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    outfile = qx.FullName;
+                }
+
+
+
+
+
+
+                Model3D readModel3D;
+
+                try
+                {
+                    readModel3D =
+                        assimpWpfImporter.ReadModel3D(outfile,
+                            texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
+                    _namedObjects = assimpWpfImporter.NamedObjects;
+                }
+                catch (Exception ex)
+                {
+                    readModel3D = null;
+                    MessageBox.Show("Error importing file:\r\n" + ex.Message);
+                }
+
+                if (readModel3D != null)
+                {
+                    // First create an instance of AssimpWpfExporter
+                    var assimpWpfExporter = new AssimpWpfExporter();
+                    assimpWpfExporter.NamedObjects = _namedObjects;
+
+                    // We can export Model3D, Visual3D or entire Viewport3D:
+                    //assimpWpfExporter.AddModel(model3D);
+                    //assimpWpfExporter.AddVisual3D(ContentModelVisual3D);
+                    //assimpWpfExporter.AddViewport3D(MainViewport);
+
+                    // Here we export Viewport3D:
+                    assimpWpfExporter.AddModel(readModel3D);
+
+                    bool isExported;
+
+                    try
+                    {
+
+                        var qaz = item.Properties as CommonConvertArgs;
+                        var test = Path.ChangeExtension(item.FullName, "." + qaz.EConvertableOutput.ToString());
+
+
+
+                        // Item Full name has to be the end output aka raw folder ty :D
+                        isExported = assimpWpfExporter.Export(test, qaz.EConvertableOutput.ToString());
+
+                        if (!isExported)
+                            MessageBox.Show("Not exported");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error exporting:\r\n" + ex.Message);
+                        isExported = false;
+                    }
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                // Dispose unmanaged resources
+                assimpWpfImporter.Dispose();
+
+            }
+
+            await Task.CompletedTask;
         }
 
         /// <summary>
