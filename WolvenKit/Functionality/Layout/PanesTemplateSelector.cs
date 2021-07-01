@@ -152,28 +152,16 @@ namespace WolvenKit.Functionality.Layout
         /// <param name="container">Identifies the container's instance that wants to resolve this association.</param>
         public override System.Windows.DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container) => item switch
         {
-            AnimsViewModel _ => AnimsViewTemplate,
-            MimicsViewModel _ => MimicsViewTemplate,
             IDocumentViewModel _ => FileViewTemplate,
             PropertiesViewModel _ => PropertiesTemplate,
             LogViewModel _ => LogViewTemplate,
             ProjectExplorerViewModel _ => ProjectExplorerTemplate,
             AssetBrowserViewModel _ => AssetBrowserTemplate,
-            BulkEditorViewModel _ => BulkEditorTemplate,
             ImportExportViewModel _ => ImportExportToolTemplate,
 
             CodeEditorViewModel _ => CodeEditorTemplate,
-            CsvEditorViewModel _ => CsvEditorTemplate,
-            JournalEditorViewModel _ => JournalEditorTemplate,
             VisualEditorViewModel _ => VisualEditorTemplate,
-            //AudioToolViewModel _ => AudioToolTemplate,
-            CR2WToTextToolViewModel _ => CR2WToTextToolTemplate,
-            GameDebuggerToolViewModel _ => GameDebuggerToolTemplate,
-            ImporterToolViewModel _ => ImporterToolTemplate,
-            MenuCreatorToolViewModel _ => MenuToolTemplate,
-            PluginManagerViewModel _ => PluginManagerTemplate,
-            WccToolViewModel _ => WccToolTemplate,
-            CR2WEditorViewModel _ => CR2WEditorTemplate,
+
 
             _ => base.SelectTemplate(item, container)
         };

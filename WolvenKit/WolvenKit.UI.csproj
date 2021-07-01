@@ -352,6 +352,7 @@
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.1.0.63" />
+    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.1.0.63" />

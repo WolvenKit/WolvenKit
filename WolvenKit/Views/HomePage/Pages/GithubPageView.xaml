@@ -14,12 +14,9 @@
      Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
      >
         <Grid Margin="3,75,3,0">
-            <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
                 <wv2:WebView2 x:Name="cal" Source="https://github.com/WolvenKit/Wolven-kit" />
-            </hc:TransitioningContentControl>
         </Grid>
-        <hc:TransitioningContentControl TransitionMode="Right2LeftWithFade">
 
             <StackPanel
              Margin="5"
@@ -54,6 +51,5 @@
                  Duration="00:00:08"
                  />
             </StackPanel>
-        </hc:TransitioningContentControl>
     </Grid>
 </catel:UserControl>
