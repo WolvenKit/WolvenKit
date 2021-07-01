@@ -1,14 +1,11 @@
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Shell;
 using HandyControl.Data;
-using MahApps.Metro.Controls;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
 using Syncfusion.Windows.Tools.Controls;
-using Wolvenkit.InteropControls;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -192,37 +189,47 @@ namespace WolvenKit.Views.Editor
                     return;
                 }
 
-                var x = "Resources\\Media\\test.exe | " + selected.FullName + "/I2 /P /L";
+                var args = $"\"{ selected.FullName}\" /I102 /p";
+                var procInfo =
+                    new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
+                        "test.exe"))
+                    {
 
-                var appControl = new AppControl();
-                appControl.ExeName = x.Split('|')[0];
-                appControl.Args = x.Split('|')[1];
-                appControl.VisualPoint = new Point(0.0, 30.0);
+                        Arguments = args,
+                        WorkingDirectory = ISettingsManager.GetWorkDir()
+                    };
 
-                if (StaticReferences.XoWindow == null)
-                {
-                    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-                    StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
-                }
+                var process = Process.Start(procInfo);
+                process?.WaitForInputIdle();
+                //var appControl = new AppControl();
+                //appControl.ExeName = x.Split('|')[0];
+                //appControl.Args = x.Split('|')[1];
+                //appControl.VisualPoint = new Point(0.0, 30.0);
 
-                if (StaticReferences.XoWindow.Content != null)
-                {
-                    return;
-                }
-                StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
-                {
-                    var q = s as HandyControl.Controls.GlowWindow;
-                    q.Close();
-                    StaticReferences.XoWindow = null;
-                    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-                });
+                //if (StaticReferences.XoWindow == null)
+                //{
+                //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+                //    StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
+                //}
 
-                Grid grid = new Grid();
-                grid.Children.Add(appControl);
-                StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
-                StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
-                StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                StaticReferences.XoWindow.Show();
+                //if (StaticReferences.XoWindow.Content != null)
+                //{
+                //    return;
+                //}
+                //StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
+                //{
+                //    var q = s as HandyControl.Controls.GlowWindow;
+                //    q.Close();
+                //    StaticReferences.XoWindow = null;
+                //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
+                //});
+
+                //Grid grid = new Grid();
+                //grid.Children.Add(appControl);
+                //StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
+                //StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
+                //StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                //StaticReferences.XoWindow.Show();
             }
         }
     }

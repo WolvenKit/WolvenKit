@@ -236,7 +236,8 @@
                                             <MenuItem
                                                 x:Name="BKExport"
                                                 Click="BKExport_Click"
-                                                Header="Export BK2 to Avi" />
+                                                Header="Export BK2 to Avi"
+                                                Visibility="Collapsed"/>
                                         </MenuItem>
                                     </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
