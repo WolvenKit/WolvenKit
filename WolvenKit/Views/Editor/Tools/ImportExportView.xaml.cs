@@ -1,16 +1,8 @@
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Windows;
-using Catel.IoC;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -52,7 +44,7 @@ namespace WolvenKit.Views.Editor
                     }
                 }
             }
-            else
+            if (vm.IsExportsSelected)
             {
                 if (ExportGrid.SelectedItem is ImportExportItemViewModel selectedExport)
                 {
@@ -66,6 +58,22 @@ namespace WolvenKit.Views.Editor
                     { throw new ArgumentOutOfRangeException(); }
                 }
             }
+            if (vm.IsConvertsSelected)
+            {
+                if (ConvertGrid.SelectedItem is ImportExportItemViewModel selectedconvert)
+                {
+                    if (Enum.TryParse(selectedconvert.Extension.TrimStart('.'), out EConvertableFileFormat _))
+                    {
+                        XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
+                        XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedconvert.Extension);
+                        XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedconvert.Name);
+                    }
+                    else
+                    { throw new ArgumentOutOfRangeException(); }
+                }
+
+            }
+
         }
 
         /// <summary>

@@ -1,27 +1,26 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.Common.Oodle;
-using WolvenKit.Modkit.RED4.GeneralStructs;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using WolvenKit.Common;
+using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace CP77.CR2W
 {
-    using Vec4 = System.Numerics.Vector4;
-    using Vec3 = System.Numerics.Vector3;
-    using Vec2 = System.Numerics.Vector2;
-
     using VCT = VertexColor1Texture2;
+    using Vec2 = System.Numerics.Vector2;
+    using Vec3 = System.Numerics.Vector3;
+    using Vec4 = System.Numerics.Vector4;
     using VJ = VertexJoints8;
 
     public class MeshTools
@@ -34,6 +33,59 @@ namespace CP77.CR2W
             _modTools = modtools;
             _rig = rig;
         }
+
+
+        public string ExportMeshSimple(IGameFile file, string FilePath, string v)
+        {
+
+            using var meshStream = new MemoryStream();
+            file.Extract(meshStream);
+            meshStream.Seek(0, SeekOrigin.Begin);
+            var cr2w = _modTools.TryReadRED4File(meshStream);
+
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            {
+                return "";
+            }
+            var ms = GetMeshBufferStream(meshStream, cr2w);
+
+            var meshinfo = GetMeshesinfo(cr2w);
+
+            var expMeshes = ContainRawMesh(ms, meshinfo, true);
+
+            if (!Directory.Exists(v))
+                Directory.CreateDirectory(v);
+
+            if (Directory.GetFiles(v).Length > 5)
+            {
+                foreach (var f in Directory.GetFiles(v))
+                {
+                    try
+                    {
+                        File.Delete(f);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            ModelRoot model = RawMeshesToMinimalGLTF(expMeshes);
+            string outfile;
+
+
+            if (true)
+            {
+                outfile = Path.Combine(v, Path.GetFileNameWithoutExtension(FilePath) + ".glb");
+                model.SaveGLB(outfile);
+            }
+
+            meshStream.Dispose();
+            meshStream.Close();
+
+            return outfile;
+        }
+
 
         public string ExportMeshWithoutRigPreviewer(IGameFile file, string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
         {
@@ -68,9 +120,9 @@ namespace CP77.CR2W
             ModelRoot model = RawMeshesToMinimalGLTF(expMeshes);
             string outfile;
 
-            if(!Directory.Exists(tempmodels))
+            if (!Directory.Exists(tempmodels))
                 Directory.CreateDirectory(tempmodels);
-            
+
             if (Directory.GetFiles(tempmodels).Length > 5)
             {
                 foreach (var f in Directory.GetFiles(tempmodels))
@@ -88,7 +140,7 @@ namespace CP77.CR2W
 
             if (isGLBinary)
             {
-                outfile = Path.Combine(tempmodels,Path.GetFileNameWithoutExtension(FilePath) + ".glb");
+                outfile = Path.Combine(tempmodels, Path.GetFileNameWithoutExtension(FilePath) + ".glb");
                 model.SaveGLB(outfile);
             }
             else

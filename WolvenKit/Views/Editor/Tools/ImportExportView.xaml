@@ -48,14 +48,73 @@
                         Margin="5,0,5,0"
                         Background="Transparent"
                         Content="IMPORTABLES"
+                        GroupName="bob"
                         IsChecked="{Binding IsImportsSelected}" />
                     <RadioButton
                         x:Name="ExportCheckBox"
                         Background="Transparent"
+                        Margin="0,0,5,0"
                         Content="EXPORTABLES"
-                        IsChecked="True" />
+                        GroupName="bob"
+                        IsChecked="{Binding IsExportsSelected}" />
+                    <RadioButton
+                        x:Name="ConvertCheckbox"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        Content="CONVERTABLES"
+                        GroupName="bob"
+                        IsChecked="{Binding IsConvertsSelected}"
+                        Visibility="Visible" />
                 </StackPanel>
             </Grid>
+
+            <!--  Data Grid Converts! :D  -->
+            <syncfusion:SfDataGrid
+                x:Name="ConvertGrid"
+                Grid.Row="1"
+                AllowEditing="True"
+                AllowFiltering="True"
+                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
+                AllowResizingColumns="True"
+                AllowSorting="True"
+                AutoGenerateColumns="False"
+                ColumnSizer="Auto"
+                ItemsSource="{Binding ConvertableItems}"
+                SelectedItem="{Binding SelectedConvert}"
+                SelectionMode="Extended"
+                Visibility="{Binding IsConvertsSelected, Converter={StaticResource boolToVisibilityConverter}}">
+
+                <syncfusion:SfDataGrid.Columns>
+                    <syncfusion:GridCheckBoxColumn
+                        AllowEditing="True"
+                        HeaderText="#"
+                        MappingName="IsChecked">
+                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    Command="local:SFDataGridCommands.CheckAndUnCheck"
+                                    CommandParameter="{Binding ElementName=ConvertGrid}"
+                                    IsChecked="{Binding Path=IsHeaderChecked}" />
+                            </DataTemplate>
+                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                    </syncfusion:GridCheckBoxColumn>
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
+                        ColumnSizer="Star"
+                        HeaderText="Name"
+                        HorizontalHeaderContentAlignment="Left"
+                        MappingName="Name" />
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
+                        ColumnSizer="AutoLastColumnFill"
+                        HeaderText="Convert Task"
+                        HorizontalHeaderContentAlignment="Left"
+                        MappingName="ExportTaskIdentifier" />
+                </syncfusion:SfDataGrid.Columns>
+                <I:Interaction.Behaviors>
+                    <local:Behaviour />
+                </I:Interaction.Behaviors>
+            </syncfusion:SfDataGrid>
 
             <!--  Data Grid Exports  -->
             <syncfusion:SfDataGrid
@@ -71,7 +130,7 @@
                 ItemsSource="{Binding ExportableItems}"
                 SelectedItem="{Binding SelectedExport}"
                 SelectionMode="Extended"
-                Visibility="{Binding Path=IsChecked, ElementName=ExportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
+                Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked">
@@ -118,7 +177,7 @@
                 SelectedItem="{Binding SelectedImport}"
                 SelectedItems="{Binding SelectedImports}"
                 SelectionMode="Extended"
-                Visibility="{Binding Path=IsChecked, ElementName=ImportCheckBox, Converter={StaticResource boolToVisibilityConverter}}">
+                Visibility="{Binding IsImportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn

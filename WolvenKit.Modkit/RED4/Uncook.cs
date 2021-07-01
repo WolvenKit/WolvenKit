@@ -449,7 +449,7 @@ namespace WolvenKit.Modkit.RED4
                     return _meshTools.ExportMesh(cr2wStream, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
 
                 case MeshExportType.WithMaterials:
-                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, archives,meshargs.MaterialRepo,
+                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, archives, meshargs.MaterialRepo,
                         meshargs.MaterialUncookExtension, meshargs.isGLBinary, meshargs.LodFilter);
 
                 case MeshExportType.WithRig:
@@ -464,7 +464,7 @@ namespace WolvenKit.Modkit.RED4
                     using var ms = new MemoryStream();
                     ar?.CopyFileToStream(ms, entry.NameHash64, false);
 
-                    return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName);
+                    return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
                 }
                 case MeshExportType.Multimesh:
                 {

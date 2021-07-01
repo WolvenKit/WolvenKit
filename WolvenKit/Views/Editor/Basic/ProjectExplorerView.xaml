@@ -98,6 +98,34 @@
                                     <Image.Style>
                                         <Style TargetType="Image">
                                             <Style.Triggers>
+                                                
+                                                <DataTrigger Binding="{Binding Extension}" Value="fbx">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="x">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="stp">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="obj">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="stl">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="ply">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="assxml">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="assbin">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Extension}" Value="x3d">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                </DataTrigger>
 
                                                 <DataTrigger Binding="{Binding Extension}" Value="glb">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
@@ -323,9 +351,7 @@
                                                 <DataTrigger Binding="{Binding Extension}" Value="fb2tl">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fb2tl.svg}" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Extension}" Value="fbx">
-                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fbx.svg}" />
-                                                </DataTrigger>
+
                                                 <DataTrigger Binding="{Binding Extension}" Value="flyr">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/flyr.svg}" />
                                                 </DataTrigger>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -39,6 +40,12 @@ namespace WolvenKit.Functionality.Initialization
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
             string[] binkhelpers = { @"Resources\Media\t1.kark", @"Resources\Media\t2.kark", @"Resources\Media\t3.kark", @"Resources\Media\t4.kark", @"Resources\Media\t5.kark" };
+
+            if (string.IsNullOrEmpty(settings.GetRED4GameRootDir()))
+            {
+                Trace.WriteLine("That worked to cancel Loading oodle! :D");
+                return;
+            }
 
             var oodlePath = settings.GetRED4OodleDll();
 
