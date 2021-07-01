@@ -214,41 +214,41 @@
                                             FontSize="18"
                                             Text="Where did it happen and what did happen?" />
                                         <hc:Divider Margin="0" Orientation="Horizontal" />
+                                        <ScrollViewer MaxHeight="420">
 
-                                        <StackPanel Margin="10,35,5,10">
-                                            <syncfusion:SfTextInputLayout Hint="Your username">
-                                                <syncfusion:SfTextBoxExt x:Name="authortitlebox" Text="" />
-                                            </syncfusion:SfTextInputLayout>
-                                            <syncfusion:SfTextInputLayout Hint="Bug Report Title">
-                                                <syncfusion:SfTextBoxExt x:Name="messagetitlebox" Text="" />
-                                            </syncfusion:SfTextInputLayout>
+                                            <StackPanel Margin="10,35,5,10">
+                                                <syncfusion:SfTextInputLayout Hint="Your username">
+                                                    <syncfusion:SfTextBoxExt x:Name="authortitlebox" Text="" />
+                                                </syncfusion:SfTextInputLayout>
+                                                <syncfusion:SfTextInputLayout Hint="Bug Report Title">
+                                                    <syncfusion:SfTextBoxExt x:Name="messagetitlebox" Text="" />
+                                                </syncfusion:SfTextInputLayout>
 
-                                            <syncfusion:SfTextInputLayout Hint="Expected Behavior">
-                                                <syncfusion:SfTextBoxExt
-                                                    x:Name="expectedbehavbox"
-                                                    Text=""
-                                                    TextWrapping="Wrap" />
-                                            </syncfusion:SfTextInputLayout>
-                                            <syncfusion:SfTextInputLayout Hint="Actual Behavior">
-                                                <syncfusion:SfTextBoxExt x:Name="actbehavtitlebox" Text="" />
-                                            </syncfusion:SfTextInputLayout>
+                                                <syncfusion:SfTextInputLayout Hint="Expected Behavior">
+                                                    <syncfusion:SfTextBoxExt
+                                                        x:Name="expectedbehavbox"
+                                                        Text=""
+                                                        TextWrapping="Wrap" />
+                                                </syncfusion:SfTextInputLayout>
+                                                <syncfusion:SfTextInputLayout Hint="Actual Behavior">
+                                                    <syncfusion:SfTextBoxExt x:Name="actbehavtitlebox" Text="" />
+                                                </syncfusion:SfTextInputLayout>
 
-                                            <syncfusion:SfTextInputLayout Hint="Steps to reproduce">
-                                                <syncfusion:SfTextBoxExt
-                                                    x:Name="reprostepsbox"
-                                                    Text=""
-                                                    TextWrapping="Wrap" />
-                                            </syncfusion:SfTextInputLayout>
+                                                <syncfusion:SfTextInputLayout Hint="Steps to reproduce">
+                                                    <syncfusion:SfTextBoxExt
+                                                        x:Name="reprostepsbox"
+                                                        Text=""
+                                                        TextWrapping="Wrap" />
+                                                </syncfusion:SfTextInputLayout>
 
-                                            <syncfusion:SfTextInputLayout Hint="Additional Context">
-                                                <syncfusion:SfTextBoxExt
-                                                    x:Name="additioncontextbox"
-                                                    Text=""
-                                                    TextWrapping="Wrap" />
-                                            </syncfusion:SfTextInputLayout>
-
-
-                                        </StackPanel>
+                                                <syncfusion:SfTextInputLayout Hint="Additional Context">
+                                                    <syncfusion:SfTextBoxExt
+                                                        x:Name="additioncontextbox"
+                                                        Text=""
+                                                        TextWrapping="Wrap" />
+                                                </syncfusion:SfTextInputLayout>
+                                            </StackPanel>
+                                        </ScrollViewer>
                                     </StackPanel>
                                 </Grid>
                             </Border>

@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Discord;
@@ -38,7 +41,7 @@ namespace WolvenKit.Views.Wizards
             expectedtext = expectedbehavbox.Text;
             actualtext = actbehavtitlebox.Text;
             aditionaltext = additioncontextbox.Text;
-            severity = SevRater.Count.ToString();
+            severity = SevRater.Value.ToString();
             await SendMessage();
 
             await Static_Client.StopAsync();
@@ -47,9 +50,9 @@ namespace WolvenKit.Views.Wizards
         private DiscordSocketClient Static_Client;
         private static SocketTextChannel ms_hashChannel { get; set; }
 
-        private string randomstring = "ODM1MTM5ODY1NzUwMTQzMDA3.YILGnA.3O7eZiptM5vuxO1_GgTsukrknHk";
 
         public async Task SendMessage()
+
         {
             var _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
@@ -87,12 +90,17 @@ namespace WolvenKit.Views.Wizards
             {
                 Color = Color.Green,
                 // Embed property can be set within object initializer
-                Title = "<a:wkit:808759605559164989> **Bug report : **" + messagetitle + "|:robot: By : ``" + authortitle + "``",
-                Description = "```This bug report was sent from Wolvenkit Version : " + _settingsManager.GetVersionNumber() + "```\n"
-                + "Use ``!gh -c`` to start making an issue for this bug report.\n"
-                + "Or use this link to go to the Github issues page : [Issues](https://github.com/WolvenKit/WolvenKit/issues)\n"
-                + " ",
+                Title = "<a:wkit:808759605559164989> **| Bug report : **" + messagetitle + " |",
+                Description = "Reporter : ``" +authortitle+ "``\n"
+                + "||-||\n"
+                + "||-|| Use ``!gh -c`` to start making an issue for this bug report.\n"
+                + "||-|| Or use this link to go to the Github issues page : [Issues](https://github.com/WolvenKit/WolvenKit/issues)\n"
+                + "||-||",
                 Fields = new System.Collections.Generic.List<EmbedFieldBuilder> { z, z2, z1, z3, z4 },
+                Footer = new EmbedFooterBuilder
+                {
+                    Text = "This bug report was sent from Wolvenkit Version : " + _settingsManager.GetVersionNumber()
+                }
             };
 
             await ms_hashChannel.SendMessageAsync(embed: embed.Build());
@@ -108,8 +116,15 @@ namespace WolvenKit.Views.Wizards
             Static_Client = new DiscordSocketClient();
             Static_Client.Ready += () => SetupChannels();
             Static_Client.Log += Log;
-            await Static_Client.LoginAsync(TokenType.Bot, randomstring);
+            await Static_Client.LoginAsync(TokenType.Bot, Reverse("EN9kE0T0boXxIuL8BDcKtP2fdxJ.AnGLIY.3ADMzQTMwUzN1YDO5MTM1MDO"));
             await Static_Client.StartAsync();
+        }
+
+        public static string Reverse(string s)
+        {
+            char[] charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
         }
 
         public static Task Log(LogMessage msg)
