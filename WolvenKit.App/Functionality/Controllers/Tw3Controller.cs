@@ -198,7 +198,7 @@ namespace WolvenKit.Functionality.Controllers
                 else
                 {
                     bundleManager = new BundleManager();
-                    bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    bundleManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     using (var writer = new StreamWriter(
                         new FileStream(IGameController.GetManagerPath(EManagerType.BundleManager), FileMode.Open)))
                     {
@@ -222,7 +222,7 @@ namespace WolvenKit.Functionality.Controllers
                 bundleManager = new BundleManager();
                 try
                 {
-                    bundleManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    bundleManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     _loggerService.Info("Finished loading bundle manager.");
                 }
                 catch (Exception)
@@ -253,7 +253,7 @@ namespace WolvenKit.Functionality.Controllers
                 else
                 {
                     collisionManager = new CollisionManager();
-                    collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    collisionManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     File.WriteAllText(IGameController.GetManagerPath(EManagerType.CollisionManager), JsonConvert.SerializeObject(collisionManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -273,7 +273,7 @@ namespace WolvenKit.Functionality.Controllers
                 try
                 {
                     collisionManager = new CollisionManager();
-                    collisionManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    collisionManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     _loggerService.Info("Finished loading collision manager.");
                 }
                 catch (Exception)
@@ -305,7 +305,7 @@ namespace WolvenKit.Functionality.Controllers
                 else
                 {
                     soundManager = new SoundManager();
-                    soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    soundManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     File.WriteAllText(IGameController.GetManagerPath(EManagerType.SoundManager), JsonConvert.SerializeObject(soundManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -325,7 +325,7 @@ namespace WolvenKit.Functionality.Controllers
                 try
                 {
                     soundManager = new SoundManager();
-                    soundManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    soundManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     _loggerService.Info("Finished loading sound manager.");
                 }
                 catch (Exception)
@@ -344,7 +344,7 @@ namespace WolvenKit.Functionality.Controllers
             speechManager = new SpeechManager();
             try
             {
-                speechManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                speechManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                 _loggerService.Info("Finished loading speech manager.");
             }
             catch (Exception)
@@ -377,7 +377,7 @@ namespace WolvenKit.Functionality.Controllers
                 else
                 {
                     textureManager = new TextureManager();
-                    textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    textureManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     File.WriteAllText(IGameController.GetManagerPath(EManagerType.TextureManager), JsonConvert.SerializeObject(textureManager, Formatting.None, new JsonSerializerSettings()
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -397,7 +397,7 @@ namespace WolvenKit.Functionality.Controllers
                 try
                 {
                     textureManager = new TextureManager();
-                    textureManager.LoadAll(Path.GetDirectoryName(_settings.W3ExecutablePath));
+                    textureManager.LoadAll(new FileInfo(_settings.W3ExecutablePath));
                     _loggerService.Info("Finished loading texture manager.");
                 }
                 catch (Exception)

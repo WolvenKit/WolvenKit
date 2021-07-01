@@ -88,7 +88,7 @@ namespace CP77Tools.Tasks
             if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
             {
                 var bm = new ArchiveManager(_hashService);
-                bm.LoadFromFolder(archiveDepot);
+                bm.LoadFromFolder(new DirectoryInfo(archiveDepot));
                 exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
             }
 
@@ -96,7 +96,7 @@ namespace CP77Tools.Tasks
             if (isDirectory)
             {
                 var archiveManager = new ArchiveManager(_hashService);
-                archiveManager.LoadFromFolder(basedir.FullName);
+                archiveManager.LoadFromFolder(basedir);
                 archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
             }
             else

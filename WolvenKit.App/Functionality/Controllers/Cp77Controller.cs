@@ -106,7 +106,7 @@ namespace WolvenKit.Functionality.Controllers
                 else
                 {
                     ArchiveManager = new ArchiveManager(_hashService);
-                    ArchiveManager.LoadAll(Path.GetDirectoryName(_settingsManager.CP77ExecutablePath));
+                    ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                     using var file = File.Create(chachePath);
                     Serializer.Serialize(file, ArchiveManager);
@@ -119,7 +119,7 @@ namespace WolvenKit.Functionality.Controllers
             {
                 _loggerService.Log(e.Message);
                 ArchiveManager = new ArchiveManager(_hashService);
-                ArchiveManager.LoadAll(Path.GetDirectoryName(_settingsManager.CP77ExecutablePath));
+                ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                 using var file = File.Create(chachePath);
                 Serializer.Serialize(file, ArchiveManager);

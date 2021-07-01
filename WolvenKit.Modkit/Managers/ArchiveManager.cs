@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -73,16 +74,21 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// Loads all archives from a folder
         /// </summary>
         /// <param name="archivedir"></param>
-        public void LoadFromFolder(string archivedir)
+        /// <param name="rebuildtree"></param>
+        public void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false)
         {
-            var di = new DirectoryInfo(archivedir);
-            if (!di.Exists)
+            if (!archivedir.Exists)
             {
                 return;
             }
-            foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
+            foreach (var file in Directory.GetFiles(archivedir.FullName, "*.archive"))
             {
                 LoadArchive(file);
+            }
+
+            if (rebuildtree)
+            {
+                RebuildRootNode();
             }
         }
 
@@ -90,10 +96,11 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
-        /// <param name="exedir">Path to executable directory</param>
-        public override void LoadAll(string exedir, bool rebuildtree = true)
+        /// <param name="executable"></param>
+        /// <param name="rebuildtree"></param>
+        public override void LoadAll(FileInfo executable, bool rebuildtree = true)
         {
-            var di = new DirectoryInfo(exedir);
+            var di = executable.Directory;
             if (!di.Exists)
             {
                 return;
@@ -152,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </param>
         public override void LoadModArchive(string filename)
         {
-            return;
+            throw new NotImplementedException();
             /*if (Archives.ContainsKey(filename))
                 return;
 
@@ -176,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="dlc"></param>
         public override void LoadModsArchives(string mods, string dlc)
         {
-            return;
+            throw new NotImplementedException();
             /*if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
             var modsdirs = new List<string>(Directory.GetDirectories(mods));

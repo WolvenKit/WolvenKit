@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace WolvenKit.Common
 {
@@ -20,7 +21,7 @@ namespace WolvenKit.Common
 
         #endregion Properties
 
-        public void LoadAll(string exedir, bool rebuildTree = true);
+        public void LoadAll(FileInfo executable, bool rebuildtree = true);
         public void LoadArchive(string filename, bool ispatch = false);
         public void LoadModArchive(string filename);
         public void LoadModsArchives(string mods, string dlc);

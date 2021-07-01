@@ -4,6 +4,7 @@ using System.Linq;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common;
+using WolvenKit.Core;
 using WolvenKit.Interfaces.Extensions;
 
 namespace CP77Tools.Tasks
@@ -16,7 +17,8 @@ namespace CP77Tools.Tasks
         {
             var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
             var gameDirectory = new DirectoryInfo(CP77_DIR);
-            var gameArchiveDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
+            var gameArchiveDir = Path.Combine(gameDirectory.FullName, "archive", "pc", "content");
+            var exe = new FileInfo(Path.Combine(gameArchiveDir, Constants.Red4Exe));
 
             if (path != null)
             {
@@ -42,7 +44,7 @@ namespace CP77Tools.Tasks
             if (hashes != null)
             {
                 var bm =  new ArchiveManager(_hashService);
-                bm.LoadAll(gameArchiveDir.FullName, false);
+                bm.LoadAll(exe, false);
                 foreach (var hash in hashes)
                 {
                     if (!_hashService.Contains(hash))

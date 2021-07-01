@@ -29,7 +29,9 @@
     <EmbeddedResource Remove="Model\Cr2w\**" />
     <None Remove="Extensions\PropertyGridEditors\**" />
     <None Remove="Model\Cr2w\**" />
+    <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\unusedhashes.kark" />
+    <EmbeddedResource Include="Resources\missinghashes.txt" />
     <EmbeddedResource Include="Resources\unusedhashes.kark" />
     <None Remove="Resources\usedhashes.kark" />
     <EmbeddedResource Include="Resources\usedhashes.kark" />
@@ -74,7 +76,8 @@
     <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageReference Include="WolvenKit.RED3.CR2W" Version="3.32.3" />
-    <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.23.1" />
+    <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.23.2" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
 
   </ItemGroup>
 
