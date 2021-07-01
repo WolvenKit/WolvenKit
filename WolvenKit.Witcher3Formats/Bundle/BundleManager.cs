@@ -31,9 +31,9 @@ namespace WolvenKit.Bundles
         ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="exedir">Path to executable directory</param>
-        public override void LoadAll(string exedir, bool rebuildtree = true)
+        public override void LoadAll(FileInfo executable, bool rebuildtree = true)
         {
-            var di = new DirectoryInfo(exedir);
+            var di = executable.Directory;
             if (!di.Exists)
                 return;
             var dlc = Path.Combine(di.Parent.Parent.FullName, "DLC");

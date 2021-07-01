@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public void SetReference(ICR2WExport value)
         {
-            SetValueInternal(value.ChunkIndex);
+            SetValueInternal(value.ChunkIndex + 1);
 
             //Populate the reverse-lookups
             GetReference().AdReferences.Add(this);

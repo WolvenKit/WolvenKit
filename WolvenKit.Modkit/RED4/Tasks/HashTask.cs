@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace CP77Tools.Tasks
 {
@@ -9,9 +10,8 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public int HashTask(string[] input, bool missing)
+        public int HashTask(string[] input, DirectoryInfo inputDir)
         {
-            #region checks
 
             if (input is {Length: > 0})
             {
@@ -24,35 +24,37 @@ namespace CP77Tools.Tasks
                 }
             }
 
-            #endregion checks
-
-            if (missing)
+            if (inputDir != null)
             {
-                var missingh = File.ReadAllLines(@"C:\Gog\Cyberpunk 2077\archive\pc\content\missinghashes.txt");
-                var lines = File.ReadAllLines(@"X:\cp77\langs-work.txt");
-                var Hashdict = new Dictionary<ulong, string>();
-                var bad = new Dictionary<ulong, string>();
-
-                foreach (var line in lines)
+                if (!inputDir.Exists)
                 {
-                    var hash = FNV1A64HashAlgorithm.HashString(line);
-
-                    if (missingh.Contains(hash.ToString()))
-                    {
-                        if (!Hashdict.ContainsKey(hash))
-                        {
-                            Hashdict.Add(hash, line);
-                        }
-                    }
-                    else
-                    {
-                        if (!bad.ContainsKey(hash))
-                        {
-                            bad.Add(hash, line);
-                        }
-                    }
+                    _loggerService.Error(new DirectoryNotFoundException(inputDir.FullName).Message);
                 }
+
+                var bm = new ArchiveManager(_hashService);
+                bm.LoadFromFolder(inputDir);
+
+                List<ulong> missing = new();
+
+                var binfiles = bm.GroupedFiles[".bin"];
+                missing = binfiles.Select(_ => _.NameHash64).ToList();
+
+                var missinghashtxt = Path.Combine(inputDir.FullName, "missinghashes.txt");
+                using var missingWriter = File.CreateText(missinghashtxt);
+                for (var i = 0; i < missing.Count; i++)
+                {
+                    var mh = missing[i];
+                    missingWriter.WriteLine(mh);
+                    _progressService.Report((i + 1) / (float)missing.Count);
+                }
+
+
+
             }
+
+            
+
+
 
             return 1;
         }

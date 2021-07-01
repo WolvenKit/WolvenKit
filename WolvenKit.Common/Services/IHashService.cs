@@ -14,6 +14,8 @@ namespace WolvenKit.Common.Services
 
         public IEnumerable<ulong> GetAllHashes();
 
+        public IEnumerable<ulong> GetMissingHashes();
+
         #endregion Methods
     }
 }
