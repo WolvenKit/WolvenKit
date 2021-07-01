@@ -31,6 +31,8 @@ namespace WolvenKit.ViewModels.Editor
         public bool IsChecked { get; set; }
 
         public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
+
+        public FileModel GetBaseFile() => BaseFile;
     }
 
     public class ImportableItemViewModel : ImportExportItemViewModel

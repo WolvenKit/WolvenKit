@@ -15,11 +15,13 @@ using Assimp;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
+using CP77.CR2W;
 using DynamicData;
 using Orchestra.Services;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
@@ -59,6 +61,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
+        private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
 
         /// <summary>
@@ -96,7 +99,9 @@ namespace WolvenKit.ViewModels.Editor
            IGrowlNotificationService notificationService,
            IGameControllerFactory gameController,
            ISettingsManager settingsManager,
-           ModTools modTools
+           ModTools modTools,
+           MeshTools meshTools
+
            ) : base(ToolTitle)
         {
             Argument.IsNotNull(() => projectManager);
@@ -116,6 +121,7 @@ namespace WolvenKit.ViewModels.Editor
             _gameController = gameController;
             _notificationService = notificationService;
             _settingsManager = settingsManager;
+            _meshTools = meshTools;
 
             SetupToolDefaults();
 
@@ -486,7 +492,24 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
             if (IsConvertsSelected)
-            { }
+            {
+
+                if (current is not ConvertArgs convertArgs)
+                {
+                    return;
+                }
+
+                var results = param switch
+                {
+                    s_selectedInGrid => ConvertableItems.Where(_ => _.IsChecked),
+                    _ => ConvertableItems
+                };
+
+                foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
+                {
+                    item.Properties = convertArgs;
+                }
+            }
 
             _notificationService.Success($"Template has been copied to the selected items.");
         }
@@ -686,6 +709,7 @@ namespace WolvenKit.ViewModels.Editor
                 foreach (var item in ConvertableItems.Where(_ => _.IsChecked))
                 {
                     await ConvertSingle(item);
+
                 }
             }
             IsProcessing = false;
@@ -695,6 +719,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private Task ConvertSingle(ConvertableItemViewModel item)
         {
+            IsProcessing = true;
 
 
 
@@ -725,7 +750,6 @@ namespace WolvenKit.ViewModels.Editor
 
             try
             {
-                Trace.WriteLine("Step x1 x Works");
                 Mouse.OverrideCursor = Cursors.Wait;
                 assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
                 assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
@@ -733,11 +757,44 @@ namespace WolvenKit.ViewModels.Editor
                 // When ReadPolygonIndices is true, assimpWpfImporter will read PolygonIndices collection that can be used to show polygons instead of triangles.
                 assimpWpfImporter.ReadPolygonIndices = false;
 
+                var qx = item.GetBaseFile();
+                var proj = _projectManager.ActiveProject;
+                var relativename = qx.GetRelativeName(proj);
+                var newname = Path.ChangeExtension(relativename, ".mesh");
+                ulong hash = FNV1A64HashAlgorithm.HashString(newname);
+                var cp77Controller = _gameController.GetController() as Cp77Controller;
+
+                var manager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
+
+                string outfile;
+                IGameFile file;
+                if (manager.Items.ContainsKey(hash))
+                {
+                    file = manager.Items[hash].First();
+
+                }
+                else
+                {
+                    return Task.CompletedTask;
+                }
+                if (file != null)
+                {
+                    outfile = _meshTools.ExportMeshSimple(file, qx.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
+                }
+                else
+                {
+                    return Task.CompletedTask;
+                }
+
+
+
+
+
                 Model3D readModel3D;
 
                 try
                 {
-                    readModel3D = assimpWpfImporter.ReadModel3D(item.FullName, texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
+                    readModel3D = assimpWpfImporter.ReadModel3D(outfile, texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
                     _namedObjects = assimpWpfImporter.NamedObjects;
                 }
                 catch (Exception ex)
@@ -745,7 +802,6 @@ namespace WolvenKit.ViewModels.Editor
                     readModel3D = null;
                     MessageBox.Show("Error importing file:\r\n" + ex.Message);
                 }
-                Trace.WriteLine("Step x2 x Works");
 
                 if (readModel3D != null)
                 {
@@ -783,8 +839,6 @@ namespace WolvenKit.ViewModels.Editor
                         isExported = false;
                     }
                 }
-                Trace.WriteLine("Step x3 x Works");
-
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();

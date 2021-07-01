@@ -229,7 +229,7 @@ namespace WolvenKit.Common
 
     public enum EConvertableOutput
     {
-        dae,
+        fbx,
         x,
         stp,
         obj,
@@ -237,16 +237,13 @@ namespace WolvenKit.Common
         ply,
         assbin,
         assxml,
-        x3d,
-        fbx,
-        json
+        x3d
     }
 
     public enum EConvertableFileFormat
     {
         gltf,
         glb,
-        dae,
         x,
         stp,
         obj,

@@ -34,6 +34,59 @@ namespace CP77.CR2W
             _rig = rig;
         }
 
+
+        public string ExportMeshSimple(IGameFile file, string FilePath, string v)
+        {
+
+            using var meshStream = new MemoryStream();
+            file.Extract(meshStream);
+            meshStream.Seek(0, SeekOrigin.Begin);
+            var cr2w = _modTools.TryReadRED4File(meshStream);
+
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            {
+                return "";
+            }
+            var ms = GetMeshBufferStream(meshStream, cr2w);
+
+            var meshinfo = GetMeshesinfo(cr2w);
+
+            var expMeshes = ContainRawMesh(ms, meshinfo, true);
+
+            if (!Directory.Exists(v))
+                Directory.CreateDirectory(v);
+
+            if (Directory.GetFiles(v).Length > 5)
+            {
+                foreach (var f in Directory.GetFiles(v))
+                {
+                    try
+                    {
+                        File.Delete(f);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            ModelRoot model = RawMeshesToMinimalGLTF(expMeshes);
+            string outfile;
+
+
+            if (true)
+            {
+                outfile = Path.Combine(v, Path.GetFileNameWithoutExtension(FilePath) + ".glb");
+                model.SaveGLB(outfile);
+            }
+
+            meshStream.Dispose();
+            meshStream.Close();
+
+            return outfile;
+        }
+
+
         public string ExportMeshWithoutRigPreviewer(IGameFile file, string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
         {
             using var meshStream = new MemoryStream();
