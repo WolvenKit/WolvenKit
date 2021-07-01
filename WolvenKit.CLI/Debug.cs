@@ -15,6 +15,7 @@ using WolvenKit.CLI.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
@@ -67,9 +68,9 @@ namespace WolvenKit.CLI
             private void DumpBufferInfo()
             {
                 var gameDirectory = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
-                var gameBinDir = new DirectoryInfo(Path.Combine(gameDirectory, "bin", "x64"));
+                var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
                 var bm = new ArchiveManager(_hashService);
-                bm.LoadAll(gameBinDir.FullName, false);
+                bm.LoadAll(exe, false);
                 var groupedFiles = bm.GroupedFiles;
                 _logger.LogInformation("ArchiveManager loaded");
 
@@ -138,9 +139,9 @@ namespace WolvenKit.CLI
             private void DumpNameHashInfo()
             {
                 var gameDirectory = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
-                var gameBinDir = new DirectoryInfo(Path.Combine(gameDirectory, "bin", "x64"));
+                var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
                 var bm = new ArchiveManager(_hashService);
-                bm.LoadAll(gameBinDir.FullName, false);
+                bm.LoadAll(exe, false);
                 var groupedFiles = bm.GroupedFiles;
                 _logger.LogInformation("ArchiveManager loaded");
 

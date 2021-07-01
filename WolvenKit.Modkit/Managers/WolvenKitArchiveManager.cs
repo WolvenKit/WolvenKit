@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace WolvenKit.Common.Model
         public IEnumerable<string> Extensions => FileList.Select(_ => _.Extension).Distinct();
 
 
-        public abstract void LoadAll(string exedir, bool rebuildTree = true);
+        public abstract void LoadAll(FileInfo executable, bool rebuildtree = true);
 
         public abstract void LoadArchive(string filename, bool ispatch = false);
 

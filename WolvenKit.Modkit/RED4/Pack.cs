@@ -59,7 +59,8 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // get files
-            var includedExtensions = Enum.GetNames<ERedExtension>();
+            var includedExtensions = Enum.GetNames<ERedExtension>().ToList();
+            includedExtensions.Add("bin");
             var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
             var parentfiles = allfiles
                 .Where(_ => includedExtensions.Any(x => _.TrimmedExtension().ToLower() == x));
@@ -127,7 +128,12 @@ namespace WolvenKit.Modkit.RED4
 
                 if (!_hashService.Contains(hash))
                 {
-                    customPaths.Add(relpath);
+                    if (!_hashService.GetMissingHashes().Contains(hash))
+                    {
+                        customPaths.Add(relpath);
+                    }
+
+                    
                 }
 
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);

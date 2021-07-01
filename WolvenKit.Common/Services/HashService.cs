@@ -17,10 +17,13 @@ namespace WolvenKit.Common.Services
         private const string s_used = "WolvenKit.Common.Resources.usedhashes.kark";
         private const string s_unused = "WolvenKit.Common.Resources.unusedhashes.kark";
         private const string s_userHashes = "user_hashes.txt";
+        private const string s_missing = "WolvenKit.Common.Resources.missinghashes.txt";
 
         private readonly Dictionary<ulong, string> _hashes = new();
         private readonly Dictionary<ulong, string> _additionalhashes = new();
         private readonly Dictionary<ulong, string> _userHashes = new();
+
+        private List<ulong> _missing = new();
 
         #endregion Fields
 
@@ -43,6 +46,8 @@ namespace WolvenKit.Common.Services
             LoadAdditional();
             return _hashes.Keys.Concat(_userHashes.Keys).Concat(_additionalhashes.Keys);
         }
+
+        public IEnumerable<ulong> GetMissingHashes() => _missing;
 
         public bool Contains(ulong key) => _hashes.ContainsKey(key) || _userHashes.ContainsKey(key);
 
@@ -127,6 +132,26 @@ namespace WolvenKit.Common.Services
 
             using var ms = new MemoryStream(outputbuffer);
             ReadHashes(ms, hashDictionary);
+
+            LoadMissingHashes();
+        }
+
+        private void LoadMissingHashes()
+        {
+            _missing.Clear();
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_missing);
+            if (stream == null)
+            {
+                throw new FileNotFoundException(s_missing);
+            }
+            using var sr = new StreamReader(stream);
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                var hash = ulong.Parse(line);
+
+                _missing.Add(hash);
+            }
         }
 
         private void ReadHashes(Stream memoryStream, IDictionary<ulong, string> hashDict)

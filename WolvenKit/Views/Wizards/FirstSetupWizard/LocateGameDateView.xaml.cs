@@ -76,7 +76,7 @@ namespace WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard
 
         private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
         {
-            if (File.Exists(str) && Path.GetFileName(str).Equals(Constants.Exe))
+            if (File.Exists(str) && Path.GetFileName(str).Equals(Constants.Red4Exe))
             {
                 var oodle = Path.Combine(new FileInfo(str).Directory.FullName, Constants.Oodle);
                 if (!File.Exists(oodle))

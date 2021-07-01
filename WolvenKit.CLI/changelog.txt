@@ -1,3 +1,6 @@
+v 1.4.4
+- fixed a bug where bin (unknown hash) files were not packed correctly
+
 v 1.4.3.1
 - fixed a bug where importing would not detect raw files
 
