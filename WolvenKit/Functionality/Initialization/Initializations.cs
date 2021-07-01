@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -21,8 +20,6 @@ using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Tools.Oodle;
-using WolvenKit.Controls;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
@@ -306,7 +303,6 @@ namespace WolvenKit.Functionality.Initialization
                 viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors.[VW]ViewModel");
 
                 viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
-                viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
@@ -315,7 +311,6 @@ namespace WolvenKit.Functionality.Initialization
                 // Custom Registrations
 
                 viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
-                viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));

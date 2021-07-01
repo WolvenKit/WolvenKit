@@ -47,7 +47,6 @@
                 BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                 BorderThickness="1"
                 CornerRadius="15">
-                <hc:TransitioningContentControl TransitionMode="Fade">
                     <hc:SideMenu
                         x:Name="LeftSideMenu"
                         Width="200"
@@ -91,45 +90,8 @@
                             </hc:SideMenuItem>
                         </hc:SideMenuItem>
 
-                        <hc:SideMenuItem
-                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="Project"
-                            Visibility="Collapsed">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons
-                                    Width="25"
-                                    Height="25"
-                                    Kind="Repo" />
-                            </hc:SideMenuItem.Icon>
-                            <hc:SideMenuItem
-                                x:Name="SideMenu_OpenRecentProjectItem"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Header="Open Recent Project">
-                                <hc:SideMenuItem.Icon>
-                                    <iconPacks:Codicons
-                                        Width="13"
-                                        Height="13"
-                                        Kind="GoToFile" />
-                                </hc:SideMenuItem.Icon>
-                            </hc:SideMenuItem>
-                        </hc:SideMenuItem>
 
-                        <hc:SideMenuItem
-                            x:Name="SideMenu_IntegratedItem"
-                            Margin="0,0,0,0"
-                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="Integrated Tools"
-                            Visibility="Collapsed">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons
-                                    Width="25"
-                                    Height="25"
-                                    Kind="Verified" />
-                            </hc:SideMenuItem.Icon>
-                            <hc:SideMenuItem Header="Integrated Tools" Visibility="Collapsed" />
-                        </hc:SideMenuItem>
+
 
                         <hc:SideMenuItem
                             x:Name="SideMenu_SettingsItem"
@@ -146,22 +108,7 @@
                             <hc:SideMenuItem Header="Settings" Visibility="Collapsed" />
                         </hc:SideMenuItem>
 
-                        <hc:SideMenuItem
-                            x:Name="SideMenu_UserItem"
-                            Margin="0,0,0,0"
-                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="Profile"
-                            IsSelected="False"
-                            Visibility="Visible">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons
-                                    Width="25"
-                                    Height="25"
-                                    Kind="Account" />
-                            </hc:SideMenuItem.Icon>
-                            <hc:SideMenuItem Header="Account" Visibility="Collapsed" />
-                        </hc:SideMenuItem>
+
 
                         <hc:SideMenuItem
                             x:Name="SideMenu_InformationItem"
@@ -200,18 +147,7 @@
                                         Kind="LogosGithub" />
                                 </hc:SideMenuItem.Icon>
                             </hc:SideMenuItem>
-                            <hc:SideMenuItem
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Header="SDK"
-                                Visibility="Collapsed">
-                                <hc:SideMenuItem.Icon>
-                                    <iconPacks:PackIconBoxIcons
-                                        Width="13"
-                                        Height="13"
-                                        HorizontalAlignment="Center"
-                                        Kind="RegularPackage" />
-                                </hc:SideMenuItem.Icon>
-                            </hc:SideMenuItem>
+
 
                             <hc:SideMenuItem
                                 x:Name="SideMenu_WebsiteItem"
@@ -243,10 +179,9 @@
                             </hc:SideMenuItem.Icon>
                         </hc:SideMenuItem>
                     </hc:SideMenu>
-                </hc:TransitioningContentControl>
             </Border>
 
-            <Button
+            <!--<Button
                 Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
@@ -259,7 +194,7 @@
 
                 </StackPanel>
 
-            </Button>
+            </Button>-->
             <Button
                 Width="55"
                 Height="55"
@@ -327,8 +262,8 @@
             <Border
                 Margin="1,25,1,25"
                 Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                CornerRadius="0">
-                <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+                CornerRadius="0"
+                Visibility="Visible">
                     <Grid>
 
                         <Grid
@@ -343,30 +278,15 @@
                             Visibility="{Binding GithubPV, Converter={StaticResource Boolean2VisibilityConverter}}">
                             <pages:GithubPageView />
                         </Grid>
-                        <Grid
-                            x:Name="IntegratedToolsPage"
-                            Margin="0"
-                            Visibility="{Binding IntegratedTPV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:IntegratedToolsPageView x:Name="IntToolsPage" />
-                        </Grid>
-                        <Grid
-                            x:Name="RecentProjectPage"
-                            Margin="0"
-                            Visibility="{Binding RecentPV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:RecentProjectView />
-                        </Grid>
+
+
                         <Grid
                             x:Name="SettingsPage"
                             Margin="0"
                             Visibility="{Binding SettingsPV, Converter={StaticResource Boolean2VisibilityConverter}}">
                             <pages:SettingsPageView />
                         </Grid>
-                        <Grid
-                            x:Name="UserPage"
-                            Margin="0"
-                            Visibility="{Binding UserPV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:UserPageView />
-                        </Grid>
+
                         <Grid
                             x:Name="WebsitePage"
                             Margin="0"
@@ -406,7 +326,6 @@
                             </iconPacks:PackIconCodicons>
                         </Button>
                     </Grid>
-                </hc:TransitioningContentControl>
             </Border>
         </Border>
         <Border
@@ -416,7 +335,7 @@
             VerticalAlignment="Top"
             Background="{DynamicResource ContentBackgroundAlt}"
             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-            BorderThickness="1,1,1,0"
+            BorderThickness="2,1,2,0"
             CornerRadius="5">
             <StackPanel
                 Margin="0,0,0,0"
