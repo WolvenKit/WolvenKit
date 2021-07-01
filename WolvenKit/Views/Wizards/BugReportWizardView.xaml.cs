@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using Discord;
 using Discord.WebSocket;
+using HandyControl.Controls;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Wizards;
@@ -35,6 +36,22 @@ namespace WolvenKit.Views.Wizards
 
         private async void WizardControl_Finish(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (
+
+                   authortitlebox.Text == "" ||
+              messagetitlebox.Text == "" ||
+              reprostepsbox.Text == "" ||
+              expectedbehavbox.Text == "" ||
+              actbehavtitlebox.Text == "" ||
+             additioncontextbox.Text == "" ||
+             SevRater.Value.ToString() == "0"
+
+
+                )
+            {
+                MessageBox.Show("Not all boxes were filled in and or no severity was selected.\nClosing bug reporter.", "Error sending report");
+                return;
+            }
             authortitle = authortitlebox.Text;
             messagetitle = messagetitlebox.Text;
             reprosteps = reprostepsbox.Text;
