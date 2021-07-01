@@ -38,23 +38,8 @@
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type viewmodels:MimicsViewModel}">
-                        <Grid>
-                            <views:MimicsView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:AnimsViewModel}">
-                        <Grid>
-                            <views:AnimsView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:ImportViewModel}">
-                        <Grid>
-                            <views:ImportView />
-                        </Grid>
-                    </DataTemplate>
+                   
+              
 
                     <DataTemplate DataType="{x:Type viewmodels:ImportExportViewModel}">
                         <Grid>
@@ -62,11 +47,7 @@
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type viewmodels:BulkEditorViewModel}">
-                        <Grid>
-                            <views:BulkEditorView />
-                        </Grid>
-                    </DataTemplate>
+               
 
                     <!--<DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
                         <Grid>
@@ -74,17 +55,7 @@
                         </Grid>
                     </DataTemplate>-->
 
-                    <DataTemplate DataType="{x:Type viewmodels:CsvEditorViewModel}">
-                        <Grid>
-                            <views:CsvEditorView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:JournalEditorViewModel}">
-                        <Grid>
-                            <views:JournalEditorView />
-                        </Grid>
-                    </DataTemplate>
+              
 
                     <DataTemplate DataType="{x:Type viewmodels:VisualEditorViewModel}">
                         <Grid>
@@ -92,41 +63,7 @@
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type viewmodels:CR2WToTextToolViewModel}">
-                        <Grid>
-                            <views:CR2WToTextToolView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:GameDebuggerToolViewModel}">
-                        <Grid>
-                            <views:GameDebuggerToolView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:ImporterToolViewModel}">
-                        <Grid>
-                            <views:ImporterToolView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:MenuCreatorToolViewModel}">
-                        <Grid>
-                            <views:MenuCreatorToolView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:WccToolViewModel}">
-                        <Grid>
-                            <views:WccToolView />
-                        </Grid>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type viewmodels:PluginManagerViewModel}">
-                        <Grid>
-                            <views:PluginManagerView />
-                        </Grid>
-                    </DataTemplate>
+                 
                 </ResourceDictionary>
 
                 <!--  Global Styles  -->
