@@ -220,6 +220,7 @@ namespace WolvenKit.ViewModels.Editor
             if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+              || Enum.TryParse<EConvertableOutput>(PE_SelectedItem.GetExtension(), out _)
               || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
             )
         )
@@ -237,6 +238,16 @@ namespace WolvenKit.ViewModels.Editor
                     //    IsVideoPreviewVisible = true;
                     //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
                     //}
+
+
+                    if (Enum.IsDefined(typeof(EConvertableOutput), PE_SelectedItem.GetExtension()))
+                    {
+                        PE_MeshPreviewVisible = true;
+
+                        LoadModel(PE_SelectedItem.FullName);
+                    }
+
+
 
                     if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
                         System.StringComparison.OrdinalIgnoreCase))
