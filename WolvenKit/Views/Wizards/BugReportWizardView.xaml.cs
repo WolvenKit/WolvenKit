@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using Catel.IoC;
 using Discord;
 using Discord.WebSocket;
@@ -37,26 +38,23 @@ namespace WolvenKit.Views.Wizards
         private async void WizardControl_Finish(object sender, System.Windows.RoutedEventArgs e)
         {
             if (
-
-                   authortitlebox.Text == "" ||
-              messagetitlebox.Text == "" ||
-              reprostepsbox.Text == "" ||
-              expectedbehavbox.Text == "" ||
-              actbehavtitlebox.Text == "" ||
-             additioncontextbox.Text == "" ||
-             SevRater.Value.ToString() == "0"
-
-                )
+             authortitlebox.Text == "" ||
+             messagetitlebox.Text == "" ||
+             new TextRange(reprostepsbox.Document.ContentStart, reprostepsbox.Document.ContentEnd).Text == "" ||
+             new TextRange(expectedbehavbox.Document.ContentStart, expectedbehavbox.Document.ContentEnd).Text == "" ||
+             new TextRange(actbehavtitlebox.Document.ContentStart, actbehavtitlebox.Document.ContentEnd).Text == "" ||
+             new TextRange(reprostepsbox.Document.ContentStart, reprostepsbox.Document.ContentEnd).Text == "" ||
+             SevRater.Value.ToString() == "0")
             {
                 MessageBox.Show("Not all boxes were filled in and or no severity was selected.\nClosing bug reporter.", "Error sending report");
                 return;
             }
             authortitle = authortitlebox.Text;
             messagetitle = messagetitlebox.Text;
-            reprosteps = reprostepsbox.Text;
-            expectedtext = expectedbehavbox.Text;
-            actualtext = actbehavtitlebox.Text;
-            aditionaltext = additioncontextbox.Text;
+            reprosteps = new TextRange(reprostepsbox.Document.ContentStart, reprostepsbox.Document.ContentEnd).Text;
+            expectedtext = new TextRange(expectedbehavbox.Document.ContentStart, expectedbehavbox.Document.ContentEnd).Text;
+            actualtext = new TextRange(actbehavtitlebox.Document.ContentStart, actbehavtitlebox.Document.ContentEnd).Text;
+            aditionaltext = new TextRange(additioncontextbox.Document.ContentStart, additioncontextbox.Document.ContentEnd).Text;
             severity = SevRater.Value.ToString();
             await SendMessage();
 

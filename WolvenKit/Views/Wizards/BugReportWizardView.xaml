@@ -176,7 +176,7 @@
 
         <syncfusion:WizardControl
             Grid.RowSpan="3"
-            Margin="0,25,0,0"
+            Margin="0,33,0,0"
             Finish="WizardControl_Finish"
             FinishButtonClosesWindow="True">
 
@@ -217,36 +217,38 @@
                                         <ScrollViewer MaxHeight="420">
 
                                             <StackPanel Margin="10,35,5,10">
-                                                <syncfusion:SfTextInputLayout Hint="Your username">
-                                                    <syncfusion:SfTextBoxExt x:Name="authortitlebox" Text="" />
-                                                </syncfusion:SfTextInputLayout>
-                                                <syncfusion:SfTextInputLayout Hint="Bug Report Title">
-                                                    <syncfusion:SfTextBoxExt x:Name="messagetitlebox" Text="" />
-                                                </syncfusion:SfTextInputLayout>
+                                                <Grid Grid.Column="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="2*" />
+                                                        <ColumnDefinition Width="1*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <syncfusion:SfTextInputLayout Grid.Column="0" Hint="Bug Report Title">
+                                                        <syncfusion:SfTextBoxExt
+                                                            x:Name="messagetitlebox"
+                                                            Background="{DynamicResource ContentBackgroundAlt2}"
+                                                            Text=""
+                                                            TextWrapping="Wrap" />
+                                                    </syncfusion:SfTextInputLayout>
+                                                    <syncfusion:SfTextInputLayout Grid.Column="1" Hint="Author">
+                                                        <syncfusion:SfTextBoxExt
+                                                            x:Name="authortitlebox"
+                                                            Background="{DynamicResource ContentBackgroundAlt2}"
+                                                            Text=""
+                                                            TextWrapping="Wrap" />
+                                                    </syncfusion:SfTextInputLayout>
+                                                </Grid>
 
-                                                <syncfusion:SfTextInputLayout Hint="Expected Behavior">
-                                                    <syncfusion:SfTextBoxExt
-                                                        x:Name="expectedbehavbox"
-                                                        Text=""
-                                                        TextWrapping="Wrap" />
-                                                </syncfusion:SfTextInputLayout>
-                                                <syncfusion:SfTextInputLayout Hint="Actual Behavior">
-                                                    <syncfusion:SfTextBoxExt x:Name="actbehavtitlebox" Text="" />
-                                                </syncfusion:SfTextInputLayout>
+                                                <TextBlock Foreground="Gray" Text="Expected Behavior" />
+                                                <RichTextBox x:Name="expectedbehavbox" Height="50" />
 
-                                                <syncfusion:SfTextInputLayout Hint="Steps to reproduce">
-                                                    <syncfusion:SfTextBoxExt
-                                                        x:Name="reprostepsbox"
-                                                        Text=""
-                                                        TextWrapping="Wrap" />
-                                                </syncfusion:SfTextInputLayout>
+                                                <TextBlock Foreground="Gray" Text="Actual Behavior" />
+                                                <RichTextBox x:Name="actbehavtitlebox" Height="50" />
+                                                <TextBlock Foreground="Gray" Text="Steps to reproduce" />
+                                                <RichTextBox x:Name="reprostepsbox" Height="50" />
+                                                <TextBlock Foreground="Gray" Text="Additional Context" />
+                                                <RichTextBox x:Name="additioncontextbox" Height="50" />
 
-                                                <syncfusion:SfTextInputLayout Hint="Additional Context">
-                                                    <syncfusion:SfTextBoxExt
-                                                        x:Name="additioncontextbox"
-                                                        Text=""
-                                                        TextWrapping="Wrap" />
-                                                </syncfusion:SfTextInputLayout>
+
                                             </StackPanel>
                                         </ScrollViewer>
                                     </StackPanel>

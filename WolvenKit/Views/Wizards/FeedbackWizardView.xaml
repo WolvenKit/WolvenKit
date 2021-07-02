@@ -169,7 +169,7 @@
         </StackPanel>
         <syncfusion:WizardControl
             Grid.RowSpan="3"
-            Margin="0,25,0,0"
+            Margin="0,33,0,0"
             Finish="WizardControl_Finish"
             FinishButtonClosesWindow="True">
 
