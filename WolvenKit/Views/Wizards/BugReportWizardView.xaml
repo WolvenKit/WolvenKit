@@ -5,8 +5,7 @@
     xmlns:catel="http://schemas.catelproject.com"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:wiz1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.BugReportWizard">
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <catel:UserControl.Resources>
 
@@ -247,8 +246,6 @@
                                                 <RichTextBox x:Name="reprostepsbox" Height="50" />
                                                 <TextBlock Foreground="Gray" Text="Additional Context" />
                                                 <RichTextBox x:Name="additioncontextbox" Height="50" />
-
-
                                             </StackPanel>
                                         </ScrollViewer>
                                     </StackPanel>

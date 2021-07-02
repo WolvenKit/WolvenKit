@@ -6,7 +6,6 @@ using Catel.IoC;
 using Discord;
 using Discord.WebSocket;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Views.Wizards
 {

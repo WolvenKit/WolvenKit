@@ -5,7 +5,6 @@
     xmlns:catel="http://schemas.catelproject.com"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:rv1="clr-namespace:WolvenKit.Views.Wizards.WizardPages.FeedbackWizard"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Margin="0,0,0,0">
     <catel:UserControl.Resources>
@@ -181,18 +180,28 @@
 
                 <Grid
                     Grid.Row="3"
-                    Margin="0,-40,0,-10"
+                    Margin="-20,-30,0,-10"
                     HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
+                    <hc:Divider Margin="15,-10,15,0" />
+                    <hc:Divider Grid.Column="1" Margin="15,-10,15,0" />
 
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.ColumnSpan="2"
+                            Margin="0,-40,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            FontSize="15"
+                            Text="Review us"
+                            TextAlignment="Center" />
                         <syncfusion:SfTextInputLayout Grid.Column="0" Hint="Review Title">
                             <syncfusion:SfTextBoxExt
                                 x:Name="reviewtitle"
@@ -213,32 +222,41 @@
                         x:Name="reviewtext"
                         Grid.Column="1"
                         Margin="0,50,0,0"
-                        Background="{DynamicResource ContentBackgroundAlt2}" />
+                        Background="{DynamicResource ContentBackgroundAlt2}"
+                        BorderBrush="Transparent" />
 
                     <Border
                         Margin="20,0,0,0"
                         Padding="5"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Stretch"
-                        Background="{DynamicResource ContentBackgroundAlt2}"
-                        BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
-                        BorderThickness="2,2,2,2">
-                        <hc:Rate
-                            x:Name="ratingrater"
-                            Margin="0,50,0,50"
-                            VerticalAlignment="Center"
-                            AllowHalf="True"
-                            Count="5"
-                            Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                            ItemMargin="3.4"
-                            ShowText="True"
-                            Style="{StaticResource RateBaseStyle}">
-                            <hc:Rate.LayoutTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="2" ScaleY="2" />
-                                </TransformGroup>
-                            </hc:Rate.LayoutTransform>
-                        </hc:Rate>
+                        Background="{DynamicResource ContentBackgroundAlt2}">
+                        <Grid>
+
+                            <TextBlock
+                                Margin="0,-40,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                FontSize="15"
+                                Text="Rate us"
+                                TextAlignment="Center" />
+                            <hc:Rate
+                                x:Name="ratingrater"
+                                Margin="0,50,0,50"
+                                VerticalAlignment="Center"
+                                AllowHalf="True"
+                                Count="5"
+                                Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                                ItemMargin="3.4"
+                                ShowText="True"
+                                Style="{StaticResource RateBaseStyle}">
+                                <hc:Rate.LayoutTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                    </TransformGroup>
+                                </hc:Rate.LayoutTransform>
+                            </hc:Rate>
+                        </Grid>
                     </Border>
                 </Grid>
             </syncfusion:WizardPage>

@@ -10,7 +10,6 @@ using Discord.WebSocket;
 using HandyControl.Controls;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
