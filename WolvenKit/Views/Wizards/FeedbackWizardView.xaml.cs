@@ -50,16 +50,26 @@ namespace WolvenKit.Views.Wizards
 
         {
             var _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var teststring = "Reviewer : ``" + _authortitle + "``\n"
+                + "||-||\n"
+                + "||-||:arrow_down: **Review** :arrow_down: \n" +
+                "```" + _reviewtext + "```";
 
+            string qa;
+            if (teststring.Length > 2047)
+            {
+                qa = teststring.Substring(0, 2048);
+            }
+            else
+            {
+                qa = teststring;
+            }
             var embed = new EmbedBuilder
             {
                 Color = Color.Green,
                 // Embed property can be set within object initializer
                 Title = "<a:wkit:808759605559164989> **| Wolvenkit Review : **" + _reviewtitle + " |",
-                Description = "Reviewer : ``" + _authortitle + "``\n"
-                + "||-||\n"
-                + "||-||:arrow_down: **Review** :arrow_down: \n" +
-                "```" + _reviewtext + "```",
+                Description = qa,
                 Footer = new EmbedFooterBuilder
                 {
                     Text = "This review was sent from Wolvenkit Version : " + _settingsManager.GetVersionNumber()
