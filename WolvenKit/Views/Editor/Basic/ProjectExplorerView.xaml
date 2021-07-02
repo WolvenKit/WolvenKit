@@ -47,6 +47,7 @@
             ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             MouseDown="TreeGrid_MouseDown"
+            SelectionChanged="TreeGrid_SelectionChanged"
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"
@@ -98,7 +99,7 @@
                                     <Image.Style>
                                         <Style TargetType="Image">
                                             <Style.Triggers>
-                                                
+
                                                 <DataTrigger Binding="{Binding Extension}" Value="fbx">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
                                                 </DataTrigger>

@@ -54,6 +54,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public object VersionNumber => _settingsManager.GetVersionNumber();
 
+        public string SelectedFilename { get; set; }
+
         #endregion Properties
 
         #region Methods
