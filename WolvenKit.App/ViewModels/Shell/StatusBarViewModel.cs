@@ -1,12 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Catel;
 using Catel.Configuration;
-using Catel.IoC;
 using Catel.MVVM;
-using Catel.Threading;
-using WolvenKit.Functionality.Services;
 using Orc.Squirrel;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.ViewModels.Shell
@@ -34,13 +31,17 @@ namespace WolvenKit.ViewModels.Shell
             _updateService = updateService;
             StaticReferencesVM.GlobalStatusBar = this;
 
-            CurrentProject = "-";
+            CurrentProject = "No project loaded, create or load an project to be able to view the game files...";
         }
 
         #endregion Constructors
 
         #region Properties
 
+
+
+
+        public int FileCount { get; set; } = 0;
         public int Column { get; private set; }
         public string Heading { get; private set; }
         public string InternetConnected { get; private set; }
