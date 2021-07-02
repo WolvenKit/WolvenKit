@@ -61,52 +61,6 @@
                 Text="Let's create a project!" />
         </StackPanel>
 
-        <Grid x:Name="PageGrid" Grid.Row="1" />
-
-        <Grid
-            Grid.Row="2"
-            Height="95"
-            Margin="0,0,0,0"
-            VerticalAlignment="Bottom">
-
-            <Button
-                Width="50"
-                Height="30"
-                Margin="3"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                Click="Button_Click_1"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                IsEnabled="True">
-                <iconPacks:PackIconCodicons Kind="ArrowLeft" />
-            </Button>
-            <hc:StepBar
-                x:Name="StepMain"
-                Grid.Row="2"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Margin="50,0,50,3"
-                Dock="Bottom">
-                <hc:StepBarItem Content="Select project type" />
-                <hc:StepBarItem Content="Project configuration" />
-                <hc:StepBarItem Content="Finalize setup" />
-            </hc:StepBar>
-            <Button
-                Width="50"
-                Height="30"
-                Margin="3"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                Click="Button_Click"
-                Command="{Binding NextCmd}"
-                CommandParameter="{Binding ElementName=StepMain}"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                IsEnabled="{Binding AllFieldIsValid}">
-                <iconPacks:PackIconCodicons Kind="ArrowRight" />
-            </Button>
-        </Grid>
         <syncfusion:WizardControl
             Name="wizardControl"
             Grid.RowSpan="3"
