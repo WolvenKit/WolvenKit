@@ -46,7 +46,6 @@ namespace WolvenKit.Views.Wizards
              additioncontextbox.Text == "" ||
              SevRater.Value.ToString() == "0"
 
-
                 )
             {
                 MessageBox.Show("Not all boxes were filled in and or no severity was selected.\nClosing bug reporter.", "Error sending report");
@@ -66,7 +65,6 @@ namespace WolvenKit.Views.Wizards
 
         private DiscordSocketClient Static_Client;
         private static SocketTextChannel ms_hashChannel { get; set; }
-
 
         public async Task SendMessage()
 
@@ -108,7 +106,7 @@ namespace WolvenKit.Views.Wizards
                 Color = Color.Green,
                 // Embed property can be set within object initializer
                 Title = "<a:wkit:808759605559164989> **| Bug report : **" + messagetitle + " |",
-                Description = "Reporter : ``" +authortitle+ "``\n"
+                Description = "Reporter : ``" + authortitle + "``\n"
                 + "||-||\n"
                 + "||-|| Use ``!gh -c`` to start making an issue for this bug report.\n"
                 + "||-|| Or use this link to go to the Github issues page : [Issues](https://github.com/WolvenKit/WolvenKit/issues)\n"
@@ -132,7 +130,6 @@ namespace WolvenKit.Views.Wizards
         {
             Static_Client = new DiscordSocketClient();
             Static_Client.Ready += () => SetupChannels();
-            Static_Client.Log += Log;
             await Static_Client.LoginAsync(TokenType.Bot, Reverse("EN9kE0T0boXxIuL8BDcKtP2fdxJ.AnGLIY.3ADMzQTMwUzN1YDO5MTM1MDO"));
             await Static_Client.StartAsync();
         }
@@ -142,12 +139,6 @@ namespace WolvenKit.Views.Wizards
             char[] charArray = s.ToCharArray();
             Array.Reverse(charArray);
             return new string(charArray);
-        }
-
-        public static Task Log(LogMessage msg)
-        {
-            Trace.WriteLine(msg.ToString());
-            return Task.CompletedTask;
         }
 
         private Task SetupChannels()

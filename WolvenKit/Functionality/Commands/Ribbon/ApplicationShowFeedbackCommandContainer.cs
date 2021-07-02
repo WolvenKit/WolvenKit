@@ -61,7 +61,7 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                var vm = new UserControlHostWindowViewModel(new FeedbackWizardView(), 450, 1000);
+                var vm = new UserControlHostWindowViewModel(new FeedbackWizardView(), 600, 1000);
 
                 var result = await _uIVisualizerService.ShowDialogAsync(vm);
             }
