@@ -52,7 +52,6 @@ namespace WolvenManager.Installer.Commands
 
             Thread.Sleep(2000);
 
-            // close app
             var pname = Path.GetFileNameWithoutExtension(restart);
             var p = Process.GetProcessesByName(pname).FirstOrDefault();
             if (p == null)
@@ -61,7 +60,6 @@ namespace WolvenManager.Installer.Commands
                 Console.WriteLine($"Waiting...");
 
                 Thread.Sleep(2000);
-                // unzip to directory
                 try
                 {
                     Console.WriteLine($"Try unzipping");
@@ -80,16 +78,9 @@ namespace WolvenManager.Installer.Commands
                 {
                     Console.WriteLine($"{pname} Has exited");
 
-
                     var p2 = Process.GetProcessesByName(pname).FirstOrDefault();
-                    if (p2 != null)
-                    {
-                        Console.WriteLine("???");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Okay");
-                    }
+                    Console.WriteLine(p2 != null ? "???" : "Okay");
+
                     // unzip to directory
                     try
                     {
@@ -107,13 +98,11 @@ namespace WolvenManager.Installer.Commands
                     Console.WriteLine("Timeout");
                 }
             }
-            
-            Console.Read();
-
             // restart app
             if (isrestart)
             {
-
+                Console.WriteLine("Restarting ...");
+                Process.Start(restart);
             }
         }
     }

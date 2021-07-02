@@ -2,6 +2,7 @@
 
   <PropertyGroup>
       <OutputType>Exe</OutputType>
+      <RuntimeIdentifier>win-x64</RuntimeIdentifier>
       <TargetFramework>net5.0</TargetFramework>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <DebugType>embedded</DebugType>
