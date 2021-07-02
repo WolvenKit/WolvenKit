@@ -1,43 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Mime;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools;
+using WolvenKit.Core;
+using WolvenManager.Installer.Models;
 
-namespace WolvenManager.Installer
+namespace WolvenManager.Installer.Services
 {
     public class UpdateService : IUpdateService
     {
+        #region fields
+
         private readonly INotificationService _notificationService;
         private readonly ILoggerService _loggerService;
 
         private string _remoteUri;
         private string _assemblyName;
-        private Action<FileInfo> _updateAction;
+        private Action<FileInfo, bool> _updateAction;
+
+        private bool _isInitialized;
+        
+        #endregion
 
         public UpdateService(
             INotificationService notificationService,
             ILoggerService loggerService)
         {
             _loggerService = loggerService;
-            
             _notificationService = notificationService;
-
-
         }
-
 
         #region properties
 
@@ -50,37 +48,43 @@ namespace WolvenManager.Installer
         #region methods
 
         /// <summary>
-        /// /releases/latest/download/
+        /// Initializes the Updatemanager
         /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="assemblyName"></param>
-        /// <param name="updateAction"></param>
-        public void Init(string uri, string assemblyName, Action<FileInfo> updateAction)
+        /// <param name="updateUrl">full url to where the manifest is located</param>
+        /// <param name="assemblyName">loaded assembly name to check the version against</param>
+        /// <param name="updateAction">action to execute for managed installs</param>
+        public void Init(string updateUrl, string assemblyName, Action<FileInfo, bool> updateAction)
         {
-            _remoteUri = uri;
+            _remoteUri = updateUrl;
             _assemblyName = assemblyName;
             _updateAction = updateAction;
+
+            _isInitialized = true;
         }
 
         private Uri GetManifestUri() => new($"{_remoteUri.TrimEnd('/')}/{Constants.Manifest}" );
 
-        private bool IsManagedInstal() => File.Exists(Path.GetFullPath(Constants.ManagedRegistration));
+        private static bool IsManaged() => File.Exists(Path.GetFullPath(Constants.ManagedRegistration));
 
         /// <summary>
-        /// 
+        /// Public entry point to check for updates 
         /// </summary>
         /// <returns></returns>
         public async Task CheckForUpdatesAsync()
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+
+            // check versions
             var http = new HttpClient();
             var manifestJson = await http.GetStringAsync(GetManifestUri());
-
             var manifest = JsonSerializer.Deserialize<Manifest>(manifestJson);
             if (manifest == null)
             {
                 return;
             }
-
             var latestVersion = new Version(manifest.Version);
             var myVersion = CommonFunctions.GetAssemblyVersion(_assemblyName);
 
@@ -89,26 +93,26 @@ namespace WolvenManager.Installer
                 IsUpdateAvailable = true;
 
                 // check if portable
-                if (IsManagedInstal())
+                if (IsManaged())
                 {
-                    await HandleManagedInstals();
+                    await HandleUpdate(EIncludedFiles.Installer);
                 }
                 else
                 {
-                    await HandlePortableInstals();
+                    await HandleUpdate(EIncludedFiles.Portable);
                 }
             }
 
-            async Task HandleManagedInstals()
+            async Task HandleUpdate(EIncludedFiles type)
             {
                 // check if update already downloaded before
-                var physicalPath = new FileInfo(Path.Combine(Path.GetTempPath(), manifest.Installer.Key));
+                var physicalPath = new FileInfo(Path.Combine(Path.GetTempPath(), manifest.Get(type).Key));
                 if (physicalPath.Exists)
                 {
                     using (var mySha256 = SHA256.Create())
                     {
                         var hash = CommonFunctions.HashFile(physicalPath, mySha256);
-                        if (manifest.Installer.Value.Equals(hash))
+                        if (manifest.Get(type).Value.Equals(hash))
                         {
                             HandleUpdateFromFile(physicalPath);
                         }
@@ -126,29 +130,21 @@ namespace WolvenManager.Installer
                             }
                             finally
                             {
-                                await DownloadUpdateAsync(manifest, manifest.Installer.Key);
+                                await DownloadUpdateAsync(manifest, type);
                             }
                         }
                     }
                 }
                 else
                 {
-                    await DownloadUpdateAsync(manifest, manifest.Installer.Key);
+                    await DownloadUpdateAsync(manifest, type);
                 }
-            }
-
-#pragma warning disable 1998
-            async Task HandlePortableInstals()
-#pragma warning restore 1998
-            {
-                throw new NotImplementedException();
             }
         }
 
-        private async Task DownloadUpdateAsync(Manifest manifest, string filename)
+        private async Task DownloadUpdateAsync(Manifest manifest, EIncludedFiles type)
         {
             var latestVersion = new Version(manifest.Version);
-            var myVersion = CommonFunctions.GetAssemblyVersion(_assemblyName);
 
             _notificationService.Ask($"Update available. Would you like to update to the latest version {latestVersion}?",
                 delegate(bool b)
@@ -178,11 +174,11 @@ namespace WolvenManager.Installer
                             .Select(_ => _.EventArgs)
                             .Subscribe(c =>
                             {
-                                OnDownloadCompletedCallback(c, manifest, filename);
+                                OnDownloadCompletedCallback(c, manifest, type);
                             });
 
-                        var uri = new Uri($"{_remoteUri.TrimEnd('/')}/{filename}");
-                        var physicalPath = Path.Combine(Path.GetTempPath(), filename);
+                        var uri = new Uri($"{_remoteUri.TrimEnd('/')}/{manifest.Get(type).Key}");
+                        var physicalPath = Path.Combine(Path.GetTempPath(), manifest.Get(type).Key);
                         wc.DownloadFileAsync(uri, physicalPath);
                     }
                     return true;
@@ -191,7 +187,7 @@ namespace WolvenManager.Installer
             await Task.CompletedTask;
         }
 
-        private void OnDownloadCompletedCallback(AsyncCompletedEventArgs e, Manifest manifest, string key)
+        private void OnDownloadCompletedCallback(AsyncCompletedEventArgs e, Manifest manifest, EIncludedFiles type)
         {
             if (e.Cancelled)
             {
@@ -204,13 +200,13 @@ namespace WolvenManager.Installer
             }
 
             // check downloaded file
-            var physicalPath = new FileInfo(Path.Combine(Path.GetTempPath(), manifest.Installer.Key));
+            var physicalPath = new FileInfo(Path.Combine(Path.GetTempPath(), manifest.Get(type).Key));
             if (physicalPath.Exists)
             {
                 using (var mySha256 = SHA256.Create())
                 {
                     var hash = CommonFunctions.HashFile(physicalPath, mySha256);
-                    if (manifest.Installer.Value.Equals(hash))
+                    if (manifest.Get(type).Value.Equals(hash))
                     {
                         HandleUpdateFromFile(physicalPath);
                     }
@@ -239,14 +235,7 @@ namespace WolvenManager.Installer
                     return true;
                 }
 
-                if (IsManagedInstal())
-                {
-                    _updateAction(path);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                _updateAction(path, IsManaged());
 
                 return true;
             });

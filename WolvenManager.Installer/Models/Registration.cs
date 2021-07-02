@@ -1,4 +1,4 @@
-namespace WolvenManager.Installer
+namespace WolvenManager.Installer.Models
 {
     public class Registration
     {

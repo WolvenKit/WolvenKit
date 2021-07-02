@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace WolvenManager.Installer
+namespace WolvenManager.Installer.Services
 {
     public interface IUpdateService
     {
@@ -13,9 +13,9 @@ namespace WolvenManager.Installer
         /// <summary>
         /// /releases/latest/download/
         /// </summary>
-        /// <param name="uri"></param>
+        /// <param name="updateUrl"></param>
         /// <param name="assemblyName"></param>
         /// <param name="updateAction"></param>
-        void Init(string uri, string assemblyName, Action<FileInfo> updateAction);
+        void Init(string updateUrl, string assemblyName, Action<FileInfo, bool> updateAction);
     }
 }
