@@ -12,7 +12,7 @@ namespace WolvenKit.Common.Tools
 {
     public static class CommonFunctions
     {
-        public static Version GetAssemblyVersion(string assemblyName)
+        public static Assembly GetAssembly(string assemblyName)
         {
             var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             var paths = new List<string>(runtimeAssemblies);
@@ -21,11 +21,14 @@ namespace WolvenKit.Common.Tools
 
             using (mlc)
             {
-                // Load assembly into MetadataLoadContext.
-                var assembly = mlc.LoadFromAssemblyPath(assemblyName);
-                var name = assembly.GetName();
-                return name.Version;
+                return mlc.LoadFromAssemblyPath(assemblyName);
             }
+        }
+
+        public static Version GetAssemblyVersion(string assemblyName)
+        {
+            var name = GetAssembly(assemblyName)?.GetName();
+            return name?.Version;
         }
 
         public static string HashFile(FileInfo fInfo, SHA256 mySha256)
