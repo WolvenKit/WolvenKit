@@ -16,6 +16,7 @@ using SharpGLTF.IO;
 using System.Threading;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Model.Cr2w;
 using Newtonsoft.Json;
 using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -641,6 +642,7 @@ namespace WolvenKit.Modkit.RED4
 
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
 
+            // remove existing data
             while (blob.MaterialEntries.Count != 0)
             {
                 blob.MaterialEntries.Remove(blob.MaterialEntries[blob.MaterialEntries.Count - 1]);
@@ -649,7 +651,23 @@ namespace WolvenKit.Modkit.RED4
             {
                 blob.LocalMaterialBuffer.RawDataHeaders.Remove(blob.LocalMaterialBuffer.RawDataHeaders[blob.LocalMaterialBuffer.RawDataHeaders.Count - 1]);
             }
-
+            while (blob.PreloadLocalMaterialInstances.Count != 0)
+            {
+                blob.PreloadLocalMaterialInstances.Remove(blob.PreloadLocalMaterialInstances[blob.PreloadLocalMaterialInstances.Count - 1]);
+            }
+            while (blob.PreloadExternalMaterials.Count != 0)
+            {
+                blob.PreloadExternalMaterials.Remove(blob.PreloadExternalMaterials[blob.PreloadExternalMaterials.Count - 1]);
+            }
+            while (blob.ExternalMaterials.Count != 0)
+            {
+                blob.ExternalMaterials.Remove(blob.ExternalMaterials[blob.ExternalMaterials.Count - 1]);
+            }
+            while (blob.LocalMaterialInstances.Count != 0)
+            {
+                blob.LocalMaterialInstances.Remove(blob.LocalMaterialInstances[blob.LocalMaterialInstances.Count - 1]);
+            }
+            //
             for (int i = 0; i < names.Count; i++)
             {
                 var c = new CMeshMaterialEntry(cr2w, blob.MaterialEntries, Convert.ToString(i)) { IsSerialized = true, };
