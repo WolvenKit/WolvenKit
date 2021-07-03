@@ -1,5 +1,12 @@
+using System;
+using System.Threading;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using Catel.IoC;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
+using ControlzEx.Theming;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
@@ -15,7 +22,9 @@ namespace WolvenKit.Views.Wizards
         private FinalizeSetupView FSV;
 
         private LocateGameDateView LGDV;
+        private bool filled = false;
 
+        private Brush lastaccent;
         #endregion Fields
 
         #region Constructors
@@ -28,41 +37,70 @@ namespace WolvenKit.Views.Wizards
         }
 
         #endregion Constructors
-
-        #region Methods
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void Circle_MouseEnter(object sender, MouseEventArgs e)
         {
-            StepMain.Next();
-            ShowPage();
+            var a = (Ellipse)sender;
+            lastaccent = a.Fill;
+            a.Fill = new SolidColorBrush(Colors.AliceBlue);
         }
 
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        private void Circle_MouseLeave(object sender, MouseEventArgs e)
         {
-            StepMain.Prev();
-            ShowPage();
+            var a = (Ellipse)sender;
+            a.Fill = lastaccent;
         }
 
-        private void ShowPage()
+        private void Circle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            switch (StepMain.StepIndex)
+            var a = (Ellipse)sender;
+            a.Fill = new SolidColorBrush(Colors.Black);
+            //ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name);
+
+            try
             {
-                case 0:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(CUV);
-                    break;
-
-                case 1:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(LGDV);
-                    break;
-
-                case 2:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(FSV);
-                    break;
+                var color = ((SolidColorBrush)a.Fill).Color;
+                var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+                settings.SetThemeAccent(color);
+            }
+            catch
+            {
+                // swallow
             }
         }
+        #region Methods
+
+        //private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        //{
+        //    StepMain.Next();
+        //    ShowPage();
+        //}
+
+        //private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        //{
+        //    StepMain.Prev();
+        //    ShowPage();
+        //}
+
+        //private void ShowPage()
+        //{
+        //    switch (StepMain.StepIndex)
+        //    {
+        //        case 0:
+        //            PageGrid.Children.Clear();
+        //            PageGrid.Children.Add(CUV);
+        //            break;
+
+        //        case 1:
+        //            PageGrid.Children.Clear();
+        //            PageGrid.Children.Add(LGDV);
+        //            break;
+
+        //        case 2:
+        //            PageGrid.Children.Clear();
+        //            PageGrid.Children.Add(FSV);
+        //            break;
+        //    }
+        //}
 
         private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
         {
@@ -74,10 +112,54 @@ namespace WolvenKit.Views.Wizards
                 LGDV = new LocateGameDateView();
                 FSV = new FinalizeSetupView();
 
-                ShowPage();
+                //ShowPage();
             }
         }
 
         #endregion Methods
+
+        private void WizardControl_Finish(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+        private void UserControl_Initialized_1(object sender, EventArgs e)
+        {
+            if (!filled)
+            {
+                new Thread(() =>
+                {
+                    foreach (var Theme in ThemeManager.Current.Themes)
+                    {
+                        Thread.Sleep(15);
+                        if (Theme.BaseColorScheme == "Dark")
+                        {
+                            if (!Theme.DisplayName.Contains("Colorful"))
+                            {
+                                if (!Theme.DisplayName.Contains('#'))
+                                {
+                                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                                    {
+                                        var circle = new Ellipse
+                                        {
+                                            Height = 25,
+                                            Width = 25,
+                                            Margin = new Thickness(5)
+                                        };
+                                        circle.MouseEnter += Circle_MouseEnter;
+                                        circle.MouseLeave += Circle_MouseLeave;
+                                        circle.MouseLeftButtonDown += Circle_MouseLeftButtonDown;
+                                        circle.Name = Theme.DisplayName.Split('(')[0].ToString().Trim();
+                                        circle.Fill = Theme.ShowcaseBrush;
+
+                                        CircleTest.Children.Add(circle);
+                                    }));
+                                }
+                            }
+                        }
+                    }
+                }).Start();
+            }
+            filled = true;
+        }
     }
 }

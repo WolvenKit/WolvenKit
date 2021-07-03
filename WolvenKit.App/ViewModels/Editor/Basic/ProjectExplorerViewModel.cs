@@ -25,6 +25,7 @@ using WolvenKit.Common.Wcc;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
@@ -109,7 +110,12 @@ namespace WolvenKit.ViewModels.Editor
 
         public bool IsTreeBeingEdited { get; set; }
 
-        private void OnNext(IChangeSet<FileModel, ulong> obj) => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
+        private void OnNext(IChangeSet<FileModel, ulong> obj)
+        {
+            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
+            StaticReferencesVM.GlobalStatusBar.FileCount = BindGrid1.Count;
+        }
+
 
         /// <summary>
         /// Initialize commands for this window.
@@ -429,7 +435,7 @@ namespace WolvenKit.ViewModels.Editor
             process?.WaitForInputIdle();
         }
 
-        
+
 
 
 
