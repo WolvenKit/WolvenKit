@@ -62,7 +62,7 @@ namespace WolvenManager.Installer.Commands
                 Thread.Sleep(2000);
                 try
                 {
-                    Console.WriteLine($"Try unzipping");
+                    Console.WriteLine($"Unzipping ... ");
                     ZipFile.ExtractToDirectory(input.FullName, outpath.FullName, true);
                     Console.WriteLine($"{input.FullName} ----> {outpath.FullName}");
                 }
@@ -77,13 +77,10 @@ namespace WolvenManager.Installer.Commands
                 if (p.WaitForExit(5000))
                 {
                     Console.WriteLine($"{pname} Has exited");
-
-                    var p2 = Process.GetProcessesByName(pname).FirstOrDefault();
-                    Console.WriteLine(p2 != null ? "???" : "Okay");
-
                     // unzip to directory
                     try
                     {
+                        Console.WriteLine($"Unzipping ... ");
                         ZipFile.ExtractToDirectory(input.FullName, outpath.FullName, true);
                         Console.WriteLine($"{input.FullName} ----> {outpath.FullName}");
                     }
