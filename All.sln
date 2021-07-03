@@ -47,6 +47,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.MSTests", "Wolven
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenManager.Installer", "WolvenManager.Installer\WolvenManager.Installer.csproj", "{50472387-042A-4F22-9BF8-0837D68D4B78}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{E4ECEE21-F0F1-440F-A356-76BBD57E710E}"
+	ProjectSection(SolutionItems) = preProject
+		Installers\installer.iss = Installers\installer.iss
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
