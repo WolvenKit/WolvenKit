@@ -1,17 +1,10 @@
 using System;
 using System.Globalization;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.Common.Services
 {
-    public class MockProgressService : IProgress<double>
-    {
-        public void Report(double percValue)
-        {
-            // do nothing
-        }
-    }
-
-    public class PercentProgressService : IProgress<double>
+    public class PercentProgressService : IProgressService<double>
     {
         private int _maxPercent;
 
@@ -44,5 +37,9 @@ namespace WolvenKit.Common.Services
                 Console.WriteLine();
             }
         }
+#pragma warning disable CS0067
+        public event EventHandler<double> ProgressChanged;
+#pragma warning restore CS0067 
+
     }
 }

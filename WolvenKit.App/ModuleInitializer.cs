@@ -14,6 +14,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.Modkit.RED4.RigFile;
 using AboutInfoService = WolvenKit.Functionality.Services.AboutInfoService;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
+using WolvenKit.Core.Services;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
@@ -37,7 +38,7 @@ public static class ModuleInitializer
         var config = SettingsManager.Load();
         serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
 
-        serviceLocator.RegisterInstance(typeof(IProgress<double>), new MockProgressService());
+        serviceLocator.RegisterType< IProgressService<double>, ProgressService<double> > ();
         serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
 
         // singletons

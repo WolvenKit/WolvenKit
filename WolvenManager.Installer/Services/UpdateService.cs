@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
+using WolvenKit.Core.Services;
 using WolvenManager.Installer.Models;
 
 namespace WolvenManager.Installer.Services
@@ -20,6 +21,11 @@ namespace WolvenManager.Installer.Services
 
         private readonly INotificationService _notificationService;
         private readonly ILoggerService _loggerService;
+        private readonly IProgressService<double> _progressService;
+
+        
+        
+
 
         private string _remoteUri;
         private string _assemblyName;
@@ -31,17 +37,18 @@ namespace WolvenManager.Installer.Services
 
         public UpdateService(
             INotificationService notificationService,
+            IProgressService<double> progressService,
             ILoggerService loggerService)
         {
             _loggerService = loggerService;
             _notificationService = notificationService;
+            _progressService = progressService;
         }
 
         #region properties
 
         public bool IsUpdateAvailable { get; set; }
         public bool IsUpdateReadyToInstall { get; set; }
-        public double Progress { get; set; }
 
         #endregion
 
@@ -167,7 +174,7 @@ namespace WolvenManager.Installer.Services
                             .Select(_ => (double)_.EventArgs.ProgressPercentage)
                             .Subscribe(d =>
                             {
-                                Progress = d;
+                                _progressService.Report(d / 100);
                             });
 
                         _ = dlCompleteObservable

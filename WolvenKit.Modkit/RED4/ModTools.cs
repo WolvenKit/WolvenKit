@@ -1,6 +1,7 @@
 using System;
 using CP77.CR2W;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.Modkit.RED4
@@ -8,7 +9,7 @@ namespace WolvenKit.Modkit.RED4
     public partial class ModTools
     {
         private readonly ILoggerService _loggerService;
-        private readonly IProgress<double> _progressService;
+        private readonly IProgressService<double> _progressService;
         private readonly IHashService _hashService;
         private readonly Red4ParserService _wolvenkitFileService;
         private readonly MeshTools _meshTools;
@@ -18,7 +19,7 @@ namespace WolvenKit.Modkit.RED4
 
         public ModTools(
             ILoggerService loggerService,
-            IProgress<double> progressService,
+            IProgressService<double> progressService,
             IHashService hashService,
             Red4ParserService wolvenkitFileService,
             MeshTools meshTools,
