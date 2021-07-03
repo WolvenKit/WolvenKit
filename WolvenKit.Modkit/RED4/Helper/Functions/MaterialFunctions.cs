@@ -669,9 +669,10 @@ namespace WolvenKit.Modkit.RED4
             var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
 
             bool check = false;
-            check = blob.LocalMaterialBuffer.RawData.Buffer.IsSerialized;
+            check = blob.LocalMaterialBuffer.RawData.IsSerialized;
             if (!check)
             {
+                blob.LocalMaterialBuffer.RawData = new DataBuffer(cr2w, blob.LocalMaterialBuffer, "rawData") { IsSerialized = true };
                 blob.LocalMaterialBuffer.RawData.Buffer = new CUInt16(cr2w, blob.LocalMaterialBuffer.RawData, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true};
 
                 uint idx = (uint)cr2w.Buffers.Count;
