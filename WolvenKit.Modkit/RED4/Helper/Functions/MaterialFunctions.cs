@@ -468,13 +468,13 @@ namespace WolvenKit.Modkit.RED4
             }
 
             string type = Path.GetFileName(path);
-
+            
             BaseMaterials.Reverse();
             for(int i = 0; i < BaseMaterials.Count; i++)
             {
                 MATERIAL.ContainRawMaterialEnum(ref rawMaterial, BaseMaterials[i], type);
             }
-
+            
             MATERIAL.ContainRawMaterialEnum(ref rawMaterial, cMaterialInstance, type);
             return rawMaterial;
         }
@@ -669,11 +669,10 @@ namespace WolvenKit.Modkit.RED4
             var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
 
             bool check = false;
-            check = blob.LocalMaterialBuffer.IsSerialized;
+            check = blob.LocalMaterialBuffer.RawData.Buffer.IsSerialized;
             if (!check)
             {
-                blob.LocalMaterialBuffer.RawData.Buffer = new CUInt16(cr2w, blob.LocalMaterialBuffer.RawData, "rawData") { IsSerialized = true, Value = (UInt16)(cr2w.Buffers.Count + 1) };
-                blob.LocalMaterialBuffer.IsSerialized = true;
+                blob.LocalMaterialBuffer.RawData.Buffer = new CUInt16(cr2w, blob.LocalMaterialBuffer.RawData, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true};
 
                 uint idx = (uint)cr2w.Buffers.Count;
                 cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
