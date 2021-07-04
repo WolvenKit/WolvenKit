@@ -50,6 +50,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{E4ECEE21-F0F1-440F-A356-76BBD57E710E}"
 	ProjectSection(SolutionItems) = preProject
 		Installers\installer.iss = Installers\installer.iss
+		Installers\setup.aip = Installers\setup.aip
 	EndProjectSection
 EndProject
 Global

@@ -13,7 +13,6 @@ using Catel.Logging;
 using Catel.MVVM;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
-using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
 using Syncfusion.SfSkinManager;
