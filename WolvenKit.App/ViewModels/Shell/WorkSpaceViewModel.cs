@@ -130,7 +130,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (isManaged)
                 {
-                    _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");
+                    //_ = Process.Start(path.FullName, "/SILENT /NOCANCEL");    //INNO
+                    _ = Process.Start(path.FullName, "/qr");            //Advanced Installer
                 }
                 else
                 {

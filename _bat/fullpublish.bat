@@ -29,9 +29,13 @@ echo "create assets"
 
 REM INSTALLERS
 
-echo "Inno Setup ..."
-::.\Installers\ISCC\ISCC.exe /O"publish" /dMyAppBaseDir="..\publish\full\" .\Installers\installer.iss
+REM add managed files
+@echo {"IsPortable": false} > %OUTFULL%\.managed
 
+echo "Inno Setup ..."
+.\Installers\ISCC\ISCC.exe /O"publish\inno" /dMyAppBaseDir="..\publish\full\" .\Installers\installer.iss
+
+echo "Advanced Installer ..."
 c:
 cd "C:\Program Files (x86)\Caphyon\Advanced Installer 18.4\bin\x86\"
 
@@ -44,6 +48,10 @@ cd "C:\Program Files (x86)\Caphyon\Advanced Installer 18.4\bin\x86\"
 REM MANIFEST
 
 echo "create manifest"
+
+x:
+cd %baseDir%
+
 .\publish\WolvenManager.Installer.exe manifest -a %OUTFULL%\%EXE% -i %OUT% -o %OUT%
 
 
