@@ -7,114 +7,73 @@ on:
  
 jobs:
 
-  create_release-app:
-    runs-on: windows-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: commit-${{ github.sha }}
-        draft: true
-      
   draft-wkit-win:
     runs-on: windows-latest
-    needs: create_release-app
 
     steps:
+    # setup  
     - name: checkout
       uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.100
-        
+        dotnet-version: 5.0.x
     - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
 
+     # environmental variables
+    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
+    - run: echo "OUT=./publish/full" >> $env:GITHUB_ENV
+    - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
+    - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
     - name: Get version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version
       with:
-        proj-path: ./WolvenKit/WolvenKit.UI.csproj
-    - run: echo "${{steps.get-version.outputs.version}}"
+        proj-path:  ${{env.PROJ}}
+    - run: echo "VERSION=${{steps.get-version.outputs.version}}" >> $env:GITHUB_ENV
+    - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
+    - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
+    - run: echo "MANIFEST=manifest.json" >> $env:GITHUB_ENV
 
-    - name: dotnet publish WolvenKit
-      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/wolvenkit-${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
+    # Publish app
+    - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2
+    # Create assets
+    - run: ${{env.OUT}}/WolvenManager.Installer.exe create -a ${{env.OUT}}\${{env.NAME}}.exe -o ${{env.FINALOUT}}
+    - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}\" .\Installers\installer.iss
+    - run: ${{env.OUT}}/WolvenManager.Installer.exe manifest -a ${{env.OUT}}\${{env.NAME}}.exe -i ${{env.FINALOUT}} -o ${{env.FINALOUT}}
+
+    # PORTABLE
+    - uses: actions/upload-artifact@v2
       with:
-        name: wolvenkit-${{steps.get-version.outputs.version}}
-        path: ./publish/app
-
-    - name: zip
-      uses: papeloto/action-zip@v1
+        name: ${{env.PORTABLE}}
+        path: ${{env.FINALOUT}}/${{env.PORTABLE}}
+    # INSTALLER
+    - uses: actions/upload-artifact@v2
       with:
-        files: ./publish/app
-        dest: wolvenkit-${{steps.get-version.outputs.version}}.zip
-        
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
+        name: ${{env.INSTALLER}}
+        path: ${{env.FINALOUT}}/${{env.INSTALLER}}
+    # MANIFEST
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.MANIFEST}}
+        path: ${{env.FINALOUT}}/${{env.MANIFEST}}
+
+
+    # RELEASE
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: ./CHANGELOG.md
+        files: |
+          ${{env.FINALOUT}}/${{env.PORTABLE}}
+          ${{env.FINALOUT}}/${{env.INSTALLER}}
+          ${{env.FINALOUT}}/${{env.MANIFEST}}
+        draft: true
+        name: ${{env.NAME}} v${{env.VERSION}}
+        tag_name: "${{env.VERSION}}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{needs.create_release-app.outputs.upload_url }}
-        asset_path: ./wolvenkit-${{steps.get-version.outputs.version}}.zip
-        asset_name: wolvenkit-${{steps.get-version.outputs.version}}.zip
-        asset_content_type: application/zip
-
-  draft-console-win:
-    runs-on: windows-latest
-    needs: create_release-app
-
-    steps:
-    - name: checkout
-      uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
-    - name: dotnet clean
-      run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
-    - name: dotnet restore
-      run: dotnet restore ./CP77Tools.sln
-
-    - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version
-      with:
-        proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
-    - run: echo "${{steps.get-version.outputs.version}}"
-
-    - name: dotnet publish WolvenKit.Console
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/wolvenkit-console-${{steps.get-version.outputs.version}} -p:PublishSingleFile=true --no-self-contained -r win-x64 -c Release -f net5.0
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: console-${{steps.get-version.outputs.version}}
-        path: ./publish/console
-
-    - name: zip
-      uses: papeloto/action-zip@v1
-      with:
-        files: ./publish/console
-        dest: wolvenkit-console-${{steps.get-version.outputs.version}}.zip
-        
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{needs.create_release-app.outputs.upload_url }}
-        asset_path: ./wolvenkit-console-${{steps.get-version.outputs.version}}.zip
-        asset_name: wolvenkit_console-${{steps.get-version.outputs.version}}.zip
-        asset_content_type: application/zip
