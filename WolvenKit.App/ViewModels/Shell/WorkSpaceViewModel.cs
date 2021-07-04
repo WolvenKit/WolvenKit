@@ -124,10 +124,8 @@ namespace WolvenKit.ViewModels.Shell
 
         #region init
 
-        private void OnStartup()
+        private async void OnStartup()
         {
-
-
             _updateService.Init(Constants.UpdateUrl, Constants.AssemblyName, delegate (FileInfo path, bool isManaged)
             {
                 if (isManaged)
@@ -161,6 +159,8 @@ namespace WolvenKit.ViewModels.Shell
 
                 Application.Current.Shutdown();
             });
+
+            await _updateService.CheckForUpdatesAsync();
         }
 
         protected override async Task InitializeAsync()

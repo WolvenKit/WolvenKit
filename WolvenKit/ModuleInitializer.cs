@@ -25,46 +25,7 @@ public static class ModuleInitializer
     /// </summary>
     public static void Initialize()
     {
-        var serviceLocator = ServiceLocator.Default;
-
-
-        // Orchestra
-        serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
-        serviceLocator.RegisterType<INotificationService, NotificationService>();
-
-
-        // Wkit
-        var config = SettingsManager.Load();
-        serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
-
-        serviceLocator.RegisterType< IProgressService<double>, ProgressService<double> > ();
-        serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
-
-        // singletons
-        serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
-        serviceLocator.RegisterType<IHashService, HashService>();
-
-        serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
-        serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
-        serviceLocator.RegisterType<MockGameController>();
-
-        serviceLocator.RegisterType<Red4ParserService>();
-        serviceLocator.RegisterType<TargetTools>();      //Cp77FileService
-        serviceLocator.RegisterType<RIG>();              //Cp77FileService
-        serviceLocator.RegisterType<MeshTools>();        //RIG, Cp77FileService
-
-        serviceLocator.RegisterType<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
-
-        serviceLocator.RegisterType<Cp77Controller>();
-
-        // red3 modding tools
-        serviceLocator.RegisterType<Red3ModTools>();
-        serviceLocator.RegisterType<Tw3Controller>();
-
         
-
-
-        serviceLocator.RegisterType<IGameControllerFactory, GameControllerFactory>();
 
     }
 }
