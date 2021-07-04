@@ -8,7 +8,6 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using Orc.Squirrel;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -29,7 +28,6 @@ namespace WolvenKit.ViewModels.Wizards
         private const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
         private readonly IOpenFileService _openFileService;
         private readonly ISettingsManager _settingsManager;
-        private readonly IUpdateService _updateService;
         private string cp77eexe = "";
         private string wccLiteexe = "";
         private string witcherexe = "";
@@ -38,15 +36,9 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Constructors
 
-        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IUpdateService updateService, IOpenFileService openFileService, ILoggerService loggerService)
+        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IOpenFileService openFileService, ILoggerService loggerService)
         {
-            Argument.IsNotNull(() => settingsManager);
-            Argument.IsNotNull(() => updateService);
-            Argument.IsNotNull(() => openFileService);
-            Argument.IsNotNull(() => loggerService);
-
             _settingsManager = settingsManager;
-            _updateService = updateService;
             _openFileService = openFileService;
 
             OpenW3GamePathCommand = new RelayCommand(ExecuteOpenGamePath, CanOpenGamePath);
@@ -88,8 +80,6 @@ namespace WolvenKit.ViewModels.Wizards
                 RaisePropertyChanged(nameof(AllFieldIsValid));
             }
         }
-
-        public List<UpdateChannel> AvailableUpdateChannels { get; private set; }
         public bool CheckForUpdates { get; set; }
 
         public string CP77ExePath
@@ -104,7 +94,6 @@ namespace WolvenKit.ViewModels.Wizards
 
         public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
         public bool IsUpdateSystemAvailable { get; private set; }
-        public UpdateChannel UpdateChannel { get; set; }
 
         public string W3ExePath
         {
@@ -222,10 +211,6 @@ namespace WolvenKit.ViewModels.Wizards
         {
             await base.InitializeAsync();
 
-            IsUpdateSystemAvailable = _updateService.IsUpdateSystemAvailable;
-            _settingsManager.CheckForUpdates = _updateService.CheckForUpdates;
-            AvailableUpdateChannels = new List<UpdateChannel>(_updateService.AvailableChannels);
-            UpdateChannel = _updateService.CurrentChannel;
         }
 
         protected override async Task<bool> SaveAsync()

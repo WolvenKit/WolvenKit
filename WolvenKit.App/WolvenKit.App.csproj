@@ -17,6 +17,7 @@
 
     <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj" />
+    <ProjectReference Include="..\WolvenManager.Installer\WolvenManager.Installer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,8 +27,7 @@
     <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="3.0.11" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="NAudio" Version="2.0.0" />
-    <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
-      <PackageReference Include="ReactiveUI" Version="14.1.1" />
+    <PackageReference Include="ReactiveUI" Version="14.1.1" />
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />

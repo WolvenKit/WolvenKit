@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Windows.Input;
-using Orc.Squirrel;
 using InputGesture = Catel.Windows.Input.InputGesture;
 
 namespace WolvenKit.Functionality.WKitGlobal
@@ -109,22 +108,6 @@ namespace WolvenKit.Functionality.WKitGlobal
         public static class Application
         {
             #region Classes
-
-            public static class AutomaticUpdates
-            {
-                #region Fields
-
-                public const bool CheckForUpdatesDefaultValue = true;
-
-                public static readonly ImmutableArray<UpdateChannel> AvailableChannels = ImmutableArray.Create(
-                    new UpdateChannel("Stable", "XXX"),     //TODO
-                    new UpdateChannel("Beta", "XXX")        //TODO
-                );
-
-                public static readonly UpdateChannel DefaultChannel = AvailableChannels[0];
-
-                #endregion Fields
-            }
 
             public static class General
             {
