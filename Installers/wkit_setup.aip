@@ -30,10 +30,10 @@
     <ROW Property="AppLogoIcon" Value="applogoicon" MultiBuildValue="DefaultBuild:png" Type="1" MsiKey="AppLogoIcon"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="WolvenKit"/>
-    <ROW Property="ProductCode" Value="2057:{1121519A-03B5-4B92-B40F-D009A204EA70} " Type="16"/>
+    <ROW Property="ProductCode" Value="2057:{7BB910AE-50CA-4CFB-A77F-AE58CF36B436} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="WolvenKit"/>
-    <ROW Property="ProductVersion" Value="1.0.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="8.2.3.0" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{F1F8FC1A-6964-403C-B573-F2601DBE21CE}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -74,259 +74,241 @@
     <ROW Directory="winx64_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win-x64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="AI_CustomARPName" ComponentId="{91B97938-782E-40CD-B352-9D7DF158EE24}" Directory_="APPDIR" Attributes="4" KeyPath="DisplayName" Options="1"/>
+    <ROW Component="AI_CustomARPName" ComponentId="{8A90C8DD-900F-45B3-B9DF-410CB850A73D}" Directory_="APPDIR" Attributes="4" KeyPath="DisplayName" Options="1"/>
     <ROW Component="AI_ExePath" ComponentId="{5103F472-1FB6-435C-8E68-E5683E558077}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
     <ROW Component="AI_IA_ENABLE" ComponentId="{7E9D3F0A-CD00-43FA-A22A-38DC6BBACE07}" Directory_="APPDIR" Attributes="4" KeyPath="AI_IA_ENABLE" Options="1"/>
     <ROW Component="APPDIR" ComponentId="{2052DDA6-F3CD-43C5-8F45-3537D3851A5A}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="Ab3d.DXEngine.Wpf.dll" ComponentId="{A9D4D510-E74D-4B6F-BAB7-07B6628AD8A8}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.DXEngine.Wpf.dll"/>
-    <ROW Component="Ab3d.DXEngine.dll" ComponentId="{A1E1F6B0-3C2B-4922-87DF-3F5004130DED}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.DXEngine.dll"/>
-    <ROW Component="Ab3d.DirectX.Client.Settings.dll" ComponentId="{7345D917-098B-403E-9C48-6C3D2D57B24E}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.DirectX.Client.Settings.dll"/>
-    <ROW Component="Ab3d.PowerToys.Assimp.dll" ComponentId="{BDADE26F-6ACA-4A0C-882B-22C18D0B3B0E}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.PowerToys.Assimp.dll"/>
-    <ROW Component="Ab3d.PowerToys.dll" ComponentId="{172C31EA-BF35-4A96-903F-ED72ED1C9CC9}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.PowerToys.dll"/>
-    <ROW Component="Assimp32.dll" ComponentId="{E235CE75-1663-4B7D-BBB9-BA4E06EE70C7}" Directory_="APPDIR" Attributes="0" KeyPath="Assimp32.dll"/>
-    <ROW Component="Assimp64.dll" ComponentId="{6D4B0875-1399-4C15-8A2E-79B09190A174}" Directory_="APPDIR" Attributes="256" KeyPath="Assimp64.dll"/>
-    <ROW Component="AssimpNet.dll" ComponentId="{A5732399-CEE9-4BC1-8DE4-8F7636493CC2}" Directory_="APPDIR" Attributes="0" KeyPath="AssimpNet.dll"/>
-    <ROW Component="AsyncEnumerable.dll" ComponentId="{DD358DA1-5385-4914-B3D2-AD12A96AB65B}" Directory_="APPDIR" Attributes="0" KeyPath="AsyncEnumerable.dll"/>
-    <ROW Component="AvalonDock.Layout.config" ComponentId="{89C08A53-922F-4C0E-802B-44EF14F55C6A}" Directory_="Config_Dir" Attributes="0" KeyPath="AvalonDock.Layout.config" Type="0"/>
-    <ROW Component="AvalonDock.Themes.VS2013.dll" ComponentId="{339F2DD0-17DA-495D-B5D8-C198824FC134}" Directory_="APPDIR" Attributes="0" KeyPath="AvalonDock.Themes.VS2013.dll"/>
-    <ROW Component="AvalonDock.dll" ComponentId="{220C012B-9BB6-4D18-BE4A-0EE372D96537}" Directory_="APPDIR" Attributes="0" KeyPath="AvalonDock.dll"/>
-    <ROW Component="COPYING" ComponentId="{732D63E9-D7EC-4199-BE22-92CE4B850BD7}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="COPYING" Type="0"/>
-    <ROW Component="CatFacts.Net.dll" ComponentId="{52B01606-1976-47CE-83E0-67F12F3D7E06}" Directory_="APPDIR" Attributes="0" KeyPath="CatFacts.Net.dll"/>
-    <ROW Component="Catel.Core.dll" ComponentId="{4353B7F8-BF00-4023-894E-F7D924AC31D3}" Directory_="APPDIR" Attributes="0" KeyPath="Catel.Core.dll"/>
-    <ROW Component="Catel.MVVM.dll" ComponentId="{DDC29324-BB98-47BB-B7FF-C0E586665D37}" Directory_="APPDIR" Attributes="0" KeyPath="Catel.MVVM.dll"/>
-    <ROW Component="CloudyLightRaysBack512.png" ComponentId="{A1AAE165-D90D-4632-8189-CB159D27F00C}" Directory_="SkyboxTextures_Dir" Attributes="0" KeyPath="CloudyLightRaysBack512.png" Type="0"/>
-    <ROW Component="ControlzEx.dll" ComponentId="{F03926BB-7007-4556-99C3-CB381302614A}" Directory_="APPDIR" Attributes="0" KeyPath="ControlzEx.dll"/>
-    <ROW Component="Crc32C.NET.dll" ComponentId="{241C175A-3C84-41B5-BF16-609F940EA84F}" Directory_="APPDIR" Attributes="0" KeyPath="Crc32C.NET.dll"/>
-    <ROW Component="CsvHelper.dll" ComponentId="{7FC25B44-1079-4A04-A252-A1AD1AA23BEB}" Directory_="APPDIR" Attributes="0" KeyPath="CsvHelper.dll"/>
-    <ROW Component="Discord.Net.Commands.dll" ComponentId="{3FCA557E-BE52-4CA8-9C0B-6DB221566BE3}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Commands.dll"/>
-    <ROW Component="Discord.Net.Core.dll" ComponentId="{42147AB6-0E9C-4D34-85BC-3C57D42AD40C}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Core.dll"/>
-    <ROW Component="Discord.Net.Rest.dll" ComponentId="{CA4ACEBD-A50E-4997-B6C9-0D786C0B94D9}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Rest.dll"/>
-    <ROW Component="Discord.Net.WebSocket.dll" ComponentId="{11F5E855-21B3-4DE8-80BB-ACC1A86DF941}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.WebSocket.dll"/>
-    <ROW Component="Discord.Net.Webhook.dll" ComponentId="{A7728132-7045-4397-9CA5-7D5E8C309581}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Webhook.dll"/>
-    <ROW Component="DiscordRPC.dll" ComponentId="{978E4CCB-08D7-42B0-B4CA-C8CE85252DFD}" Directory_="APPDIR" Attributes="0" KeyPath="DiscordRPC.dll"/>
-    <ROW Component="Doboz.dll" ComponentId="{F2144E17-59D3-41BB-901C-199513673182}" Directory_="APPDIR" Attributes="0" KeyPath="Doboz.dll"/>
-    <ROW Component="DockStatesCR2W.xml" ComponentId="{63565512-F6D1-4A6B-807D-6C39F5E0692E}" Directory_="Layout_Dir" Attributes="0" KeyPath="DockStatesCR2W.xml" Type="0"/>
-    <ROW Component="DotNetHelper.FastMember.Extension.dll" ComponentId="{FB2AFD8E-C9B1-4FB4-B8F0-763089E1BEC5}" Directory_="APPDIR" Attributes="0" KeyPath="DotNetHelper.FastMember.Extension.dll"/>
-    <ROW Component="DotNetZip.dll" ComponentId="{B44DA24F-2E1C-4628-9163-8CEF3E56E48C}" Directory_="APPDIR" Attributes="0" KeyPath="DotNetZip.dll"/>
-    <ROW Component="DynamicData.dll" ComponentId="{4F1C48CF-D36A-4512-8937-303DEDC47A2B}" Directory_="APPDIR" Attributes="0" KeyPath="DynamicData.dll"/>
-    <ROW Component="FastMember.dll" ComponentId="{5690DE94-BBFA-469E-A501-E926C0E2086E}" Directory_="APPDIR" Attributes="0" KeyPath="FastMember.dll"/>
-    <ROW Component="Feather.Boost.dll" ComponentId="{36450DE5-4662-45A4-82DA-19A531EC245C}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Boost.dll"/>
-    <ROW Component="Feather.Controls.dll" ComponentId="{E1DED4A4-43CE-4C97-8E89-DF226D4483F2}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Controls.dll"/>
-    <ROW Component="Feather.Converters.dll" ComponentId="{6D3CDA43-BC8F-4AA3-8D86-7D4890F9850C}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Converters.dll"/>
-    <ROW Component="Feather.Core.dll" ComponentId="{C8CD6B8E-4580-4BEC-B255-78E4CCD7323D}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Core.dll"/>
-    <ROW Component="Fizzler.dll" ComponentId="{0D53188E-DB8A-4F84-A741-1152AD0F6819}" Directory_="APPDIR" Attributes="0" KeyPath="Fizzler.dll"/>
-    <ROW Component="Fluent.dll" ComponentId="{0739C3C4-17FD-42CB-82D3-4F5BCCF29765}" Directory_="APPDIR" Attributes="0" KeyPath="Fluent.dll"/>
-    <ROW Component="FluentNexus.dll" ComponentId="{66745F78-1D6C-4A75-A0E0-A82029015C2B}" Directory_="APPDIR" Attributes="0" KeyPath="FluentNexus.dll"/>
-    <ROW Component="FmodAudio.dll" ComponentId="{0A2615E1-3AA2-40FC-92EF-E54F39C63A1B}" Directory_="APPDIR" Attributes="0" KeyPath="FmodAudio.dll"/>
-    <ROW Component="HandyControl.dll" ComponentId="{ABA009C3-E214-4E12-AEFD-26E36CC9B371}" Directory_="APPDIR" Attributes="0" KeyPath="HandyControl.dll"/>
-    <ROW Component="HandyControl.resources.dll" ComponentId="{A92F8543-B538-43AA-B1C5-08C46BD18DA3}" Directory_="en_Dir" Attributes="0" KeyPath="HandyControl.resources.dll"/>
-    <ROW Component="ICSharpCode.AvalonEdit.dll" ComponentId="{BB1CEBBC-5D6B-4BA6-BC39-4D5AC8FE648A}" Directory_="APPDIR" Attributes="0" KeyPath="ICSharpCode.AvalonEdit.dll"/>
-    <ROW Component="ICSharpCode.SharpZipLib.dll" ComponentId="{F40DCA36-874B-45B9-9F3C-D92913371B15}" Directory_="APPDIR" Attributes="0" KeyPath="ICSharpCode.SharpZipLib.dll"/>
-    <ROW Component="INIFileParser.dll" ComponentId="{39F85485-A4C5-48E7-95F0-1CFBD39876E0}" Directory_="APPDIR" Attributes="0" KeyPath="INIFileParser.dll"/>
-    <ROW Component="Ionic.ZLib.dll" ComponentId="{4516EFDA-572A-4BC6-A5A2-0F7AF55A4772}" Directory_="APPDIR" Attributes="0" KeyPath="Ionic.ZLib.dll"/>
-    <ROW Component="LZ4.dll" ComponentId="{DD367795-34BF-4714-9C60-E140F239BE7F}" Directory_="APPDIR" Attributes="0" KeyPath="LZ4.dll"/>
-    <ROW Component="LZ4pn.dll" ComponentId="{6D78A87C-5488-438C-9338-7D24078A0F00}" Directory_="APPDIR" Attributes="0" KeyPath="LZ4pn.dll"/>
-    <ROW Component="MLib.dll" ComponentId="{BFD0A9BB-F142-41A5-BCD9-7518A3D6B162}" Directory_="APPDIR" Attributes="0" KeyPath="MLib.dll"/>
-    <ROW Component="MWindowInterfacesLib.dll" ComponentId="{4574C3B2-0196-4ED9-A199-1F76293D95EE}" Directory_="APPDIR" Attributes="0" KeyPath="MWindowInterfacesLib.dll"/>
-    <ROW Component="MWindowLib.dll" ComponentId="{23CBF1CC-FC02-4B61-A57E-E0A44E9E2743}" Directory_="APPDIR" Attributes="0" KeyPath="MWindowLib.dll"/>
-    <ROW Component="Magick.NET.Core.dll" ComponentId="{1E30913A-8803-47F5-9BED-C415C9FF0B86}" Directory_="APPDIR" Attributes="0" KeyPath="Magick.NET.Core.dll"/>
-    <ROW Component="Magick.NET.SystemDrawing.dll" ComponentId="{4B067C26-5215-4C8C-A00A-AD78F236DF76}" Directory_="APPDIR" Attributes="0" KeyPath="Magick.NET.SystemDrawing.dll"/>
-    <ROW Component="Magick.NET.SystemWindowsMedia.dll" ComponentId="{DDD918C8-5BD1-4D30-9703-38D0F331CE4C}" Directory_="APPDIR" Attributes="0" KeyPath="Magick.NET.SystemWindowsMedia.dll"/>
-    <ROW Component="Magick.NETQ16HDRIAnyCPU.dll" ComponentId="{E18157A3-6DF8-4BB7-8A93-6DF2683FE0D2}" Directory_="APPDIR" Attributes="0" KeyPath="Magick.NETQ16HDRIAnyCPU.dll"/>
-    <ROW Component="Magick.NativeQ16HDRIx64.dll" ComponentId="{02A0F61F-CDC2-4C89-9355-32430086DDD3}" Directory_="APPDIR" Attributes="256" KeyPath="Magick.NativeQ16HDRIx64.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.BootstrapIcons.dll" ComponentId="{1A18EC95-9E6E-4D98-827B-C95A564643E2}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.BootstrapIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.BoxIcons.dll" ComponentId="{B0D7E0E1-04EC-4568-ABEB-EBAC7EB00F26}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.BoxIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Codicons.dll" ComponentId="{D3204B31-1E84-46F3-9D4D-68226A62B6C0}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Codicons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Core.dll" ComponentId="{8D36105E-08E8-4529-95E9-DEB003E1A100}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Core.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Entypo.dll" ComponentId="{861B48C8-9750-4ADB-91AD-C9E154B7029E}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Entypo.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.EvaIcons.dll" ComponentId="{B5384A07-31E1-4197-82BF-68386ECFC75B}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.EvaIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.FeatherIcons.dll" ComponentId="{21E092DD-0233-4DFD-81BF-EDF630E7C706}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.FeatherIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.FileIcons.dll" ComponentId="{38889F80-59F8-43DA-AD27-2D15DB863990}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.FileIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.FontAwesome.dll" ComponentId="{6D4E5D07-8EA3-48B1-ACFB-F92A6602FCC2}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.FontAwesome.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Fontaudio.dll" ComponentId="{F1458B11-0C15-415D-8AD7-D1594310C2F5}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Fontaudio.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.ForkAwesome.dll" ComponentId="{D957A65C-FB2A-41FF-997C-3658B7364C73}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.ForkAwesome.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Ionicons.dll" ComponentId="{2702502E-7013-454D-BF2C-80E2FA16E6B4}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Ionicons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.JamIcons.dll" ComponentId="{45AE60BD-80E9-4E32-B22D-A9B0C0230953}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.JamIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Material.dll" ComponentId="{787FAF5E-C891-4CEE-94DB-F0D1A568870B}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Material.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.MaterialDesign.dll" ComponentId="{C2DE5ADB-1A63-4D41-A8E5-52C9DF19A5AC}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.MaterialDesign.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.MaterialLight.dll" ComponentId="{EDB62064-A546-4333-ADDB-EC183CD531D6}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.MaterialLight.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Microns.dll" ComponentId="{EEA7ACC9-9786-4C5B-8E87-2B8ED7F0C7EC}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Microns.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Modern.dll" ComponentId="{7651AAE8-4F6D-45B9-A3F8-209DA0447B86}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Modern.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Octicons.dll" ComponentId="{C4E7F491-6B31-42C3-B8E8-80379658CAE1}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Octicons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.PicolIcons.dll" ComponentId="{04C3F6D4-3EBF-4161-9B9F-5E2E8B3FAD0A}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.PicolIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.PixelartIcons.dll" ComponentId="{49D2CB25-D93B-4AE7-A1F0-36B8CE7C5C9C}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.PixelartIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.RPGAwesome.dll" ComponentId="{2341D6DE-B16B-47B2-AE39-706765CC4891}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.RPGAwesome.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.RadixIcons.dll" ComponentId="{C89EDADF-1C18-4773-AA37-15D2D85B6B94}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.RadixIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.RemixIcon.dll" ComponentId="{FA92DFBE-F83F-4CFE-98A6-9F662757662B}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.RemixIcon.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.SimpleIcons.dll" ComponentId="{3A33AAC9-42DC-4AFC-8D17-76E2CE742A7E}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.SimpleIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Typicons.dll" ComponentId="{553AE6C8-3720-4FD5-AA29-D44CA09895CA}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Typicons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Unicons.dll" ComponentId="{D09B411F-841B-4651-AF45-1841B5E09B89}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Unicons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.VaadinIcons.dll" ComponentId="{8E4974FA-0E96-4D8F-920F-46D242202332}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.VaadinIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.WeatherIcons.dll" ComponentId="{A71F9769-9E8F-4280-BE33-C15D83C8AA20}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.WeatherIcons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.Zondicons.dll" ComponentId="{CCDFAA55-324C-429B-8224-7F46048A8FF0}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Zondicons.dll"/>
-    <ROW Component="MahApps.Metro.IconPacks.dll" ComponentId="{C0F197E9-D689-4944-8B54-EBD01876958D}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.dll"/>
-    <ROW Component="MahApps.Metro.dll" ComponentId="{2B3E4C4F-AFC3-4653-B50F-3A12676932B8}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.dll"/>
-    <ROW Component="MathNet.Numerics.dll" ComponentId="{9B32E37C-769E-4CAE-A4EC-AB3B116D71B6}" Directory_="APPDIR" Attributes="0" KeyPath="MathNet.Numerics.dll"/>
-    <ROW Component="Microsoft.CodeAnalysis.CSharp.dll" ComponentId="{68F6E656-FC6A-4D9F-8089-81B9D956D661}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.dll"/>
-    <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{F77D5338-00F7-4C89-B9BD-92CD5C24C62C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
-    <ROW Component="Microsoft.Expression.Interactions.dll" ComponentId="{A9007CEF-FDFE-4485-98FA-D8F1821A321C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Expression.Interactions.dll"/>
-    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{25A8337F-2F68-42B7-B67E-E03E6D400031}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{9B63BFE0-EA4F-4B2A-B282-A943694EE09D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
-    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{22D0DBFE-D22C-4B67-84FC-F34C4F75E6D3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
-    <ROW Component="Microsoft.Web.WebView2.Core.dll" ComponentId="{03590644-A3F6-46FE-9EAA-6F352E446B4B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.Core.dll"/>
-    <ROW Component="Microsoft.Web.WebView2.WinForms.dll" ComponentId="{8DEE8734-437E-4FCB-BC84-F1B351BD615B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.WinForms.dll"/>
-    <ROW Component="Microsoft.Web.WebView2.Wpf.dll" ComponentId="{A7DC6355-BE6A-4E4E-B31E-259972A8F9FB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.Wpf.dll"/>
-    <ROW Component="Microsoft.WindowsAPICodePack.Shell.dll" ComponentId="{8AE03680-7965-4800-9357-D2593FD9BC1B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Shell.dll"/>
-    <ROW Component="Microsoft.WindowsAPICodePack.dll" ComponentId="{4993438F-21BF-40CE-9CE0-BB93F578E051}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.dll"/>
-    <ROW Component="Microsoft.Xaml.Behaviors.dll" ComponentId="{FDE2EB6D-52B2-4BC3-92A3-1E2B0E80284F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll"/>
-    <ROW Component="NAudio.Asio.dll" ComponentId="{0D2B12FF-25B0-4858-8976-2F031541FD6F}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Asio.dll"/>
-    <ROW Component="NAudio.Core.dll" ComponentId="{741C89DD-00A7-4F61-BA64-064BCA14BFF2}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Core.dll"/>
-    <ROW Component="NAudio.Midi.dll" ComponentId="{601345EA-FDDA-4BA0-8389-5813A17E745E}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Midi.dll"/>
-    <ROW Component="NAudio.Wasapi.dll" ComponentId="{7BCB529C-425D-4FE1-A0ED-68319A3A1972}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Wasapi.dll"/>
-    <ROW Component="NAudio.WinForms.dll" ComponentId="{39DBC972-C718-490A-961C-E3D611D54329}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.WinForms.dll"/>
-    <ROW Component="NAudio.WinMM.dll" ComponentId="{F60E3572-5E86-4998-BE0E-ECE629C1C02D}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.WinMM.dll"/>
-    <ROW Component="NAudio.dll" ComponentId="{62BF740B-0E70-4A5C-BF47-FCE0AED8380F}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.dll"/>
-    <ROW Component="Newtonsoft.Json.Bson.dll" ComponentId="{E56B7779-064A-49D2-B86E-B387FC4687F5}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.Bson.dll"/>
-    <ROW Component="Newtonsoft.Json.dll" ComponentId="{446F5D9C-9DEE-411B-A8DE-7C29412853AB}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
-    <ROW Component="NodeNetwork.dll" ComponentId="{10E2A2C2-DC8E-49A6-9571-E618F2983E11}" Directory_="APPDIR" Attributes="0" KeyPath="NodeNetwork.dll"/>
-    <ROW Component="NodeNetworkToolkit.dll" ComponentId="{24C39631-C7C8-4E9E-845F-9A07CFC2961F}" Directory_="APPDIR" Attributes="0" KeyPath="NodeNetworkToolkit.dll"/>
-    <ROW Component="Obsolete.dll" ComponentId="{4AE033CA-F883-4EE3-837A-FC057A73CDE9}" Directory_="APPDIR" Attributes="0" KeyPath="Obsolete.dll"/>
-    <ROW Component="Octokit.dll" ComponentId="{35063224-75C0-4D58-A9EB-5331DCD56FAB}" Directory_="APPDIR" Attributes="0" KeyPath="Octokit.dll"/>
-    <ROW Component="Open.ChannelExtensions.dll" ComponentId="{747E5CDB-0213-4FA6-A911-CEFD2E010B9F}" Directory_="APPDIR" Attributes="0" KeyPath="Open.ChannelExtensions.dll"/>
-    <ROW Component="Orc.CommandLine.dll" ComponentId="{B1FB1650-D2FF-419E-AFC4-592509121FCE}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.CommandLine.dll"/>
-    <ROW Component="Orc.Controls.dll" ComponentId="{FE35AE5E-9813-477A-8439-5B59069C9FC9}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.Controls.dll"/>
-    <ROW Component="Orc.CsvTextEditor.dll" ComponentId="{8A5CD979-99D9-44EB-8783-DBD4F6EAF3DF}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.CsvTextEditor.dll"/>
-    <ROW Component="Orc.FileSystem.dll" ComponentId="{E7C8F4B6-4963-48F6-B055-8A406B328712}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.FileSystem.dll"/>
-    <ROW Component="Orc.LogViewer.dll" ComponentId="{A73CE0D0-87AE-45AF-925B-80BBE7B04B7B}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.LogViewer.dll"/>
-    <ROW Component="Orc.Squirrel.Xaml.dll" ComponentId="{8F2957FC-8A57-4E04-8E8B-F5B5D0B3A40F}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.Squirrel.Xaml.dll"/>
-    <ROW Component="Orc.Squirrel.dll" ComponentId="{DCA6FAD0-FB8D-47B4-ADD3-3B7AB717B1E8}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.Squirrel.dll"/>
-    <ROW Component="Orc.SystemInfo.dll" ComponentId="{6F3561F8-0807-45CC-B80A-968FD5664D6C}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.SystemInfo.dll"/>
-    <ROW Component="Orc.Theming.dll" ComponentId="{C5CB3206-B29C-4583-BCFE-E256A9773E8E}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.Theming.dll"/>
-    <ROW Component="Orchestra.Core.dll" ComponentId="{BEBA8A8F-C87E-4E57-B67E-E736945ED81E}" Directory_="APPDIR" Attributes="0" KeyPath="Orchestra.Core.dll"/>
-    <ROW Component="Orchestra.Shell.Ribbon.Fluent.dll" ComponentId="{8F512E3D-D8B1-4608-A969-61686E48D442}" Directory_="APPDIR" Attributes="0" KeyPath="Orchestra.Shell.Ribbon.Fluent.dll"/>
-    <ROW Component="Panuon.UI.Silver.dll" ComponentId="{9BE2791A-9390-4D8A-B955-DA4A18EA6F53}" Directory_="APPDIR" Attributes="0" KeyPath="Panuon.UI.Silver.dll"/>
-    <ROW Component="Pathoschild.Http.Client.dll" ComponentId="{91AB5CE6-B87A-433B-9E8E-38D95A300FB6}" Directory_="APPDIR" Attributes="0" KeyPath="Pathoschild.Http.Client.dll"/>
-    <ROW Component="Pfim.dll" ComponentId="{3C661966-C9FE-4F5D-AA64-1CA11053212C}" Directory_="APPDIR" Attributes="0" KeyPath="Pfim.dll"/>
-    <ROW Component="Pharmacist.Common.dll" ComponentId="{7D0F16F1-CCB8-451F-9610-D12DC2B44B79}" Directory_="APPDIR" Attributes="0" KeyPath="Pharmacist.Common.dll"/>
+    <ROW Component="Ab3d.DXEngine.Wpf.dll" ComponentId="{45800E45-0A52-4E30-8D4B-0126B20B327F}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.DXEngine.Wpf.dll"/>
+    <ROW Component="Ab3d.DXEngine.dll" ComponentId="{2DFCC9C3-984F-4E1E-84CF-8A1E0870691F}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.DXEngine.dll"/>
+    <ROW Component="Ab3d.DirectX.Client.Settings.dll" ComponentId="{74B22679-C925-4C09-8766-B7BB43B2346B}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.DirectX.Client.Settings.dll"/>
+    <ROW Component="Ab3d.PowerToys.Assimp.dll" ComponentId="{3576C78F-DE48-42F6-AE52-4C5B8DB28BA3}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.PowerToys.Assimp.dll"/>
+    <ROW Component="Ab3d.PowerToys.dll" ComponentId="{CBAFB089-3FFD-4D45-9026-132BE19E7ACF}" Directory_="APPDIR" Attributes="0" KeyPath="Ab3d.PowerToys.dll"/>
+    <ROW Component="Assimp32.dll" ComponentId="{20C0034E-D1DD-4077-946C-C4C5AE2BA7D2}" Directory_="APPDIR" Attributes="0" KeyPath="Assimp32.dll"/>
+    <ROW Component="Assimp64.dll" ComponentId="{A67161A9-150C-468F-9BE0-A83B75FF1590}" Directory_="APPDIR" Attributes="256" KeyPath="Assimp64.dll"/>
+    <ROW Component="AssimpNet.dll" ComponentId="{0B8C9F42-F796-4CE2-B0CA-FF73C8F82F8B}" Directory_="APPDIR" Attributes="0" KeyPath="AssimpNet.dll"/>
+    <ROW Component="AsyncEnumerable.dll" ComponentId="{983D95B5-E9AE-4FAB-A14B-CBED2C83649F}" Directory_="APPDIR" Attributes="0" KeyPath="AsyncEnumerable.dll"/>
+    <ROW Component="AvalonDock.Layout.config" ComponentId="{795BC753-4E9B-4DC2-830B-F828A2104914}" Directory_="Config_Dir" Attributes="0" KeyPath="AvalonDock.Layout.config" Type="0"/>
+    <ROW Component="AvalonDock.Themes.VS2013.dll" ComponentId="{3BD3CF5B-8A75-41F3-AC1D-EC0B996AA2CB}" Directory_="APPDIR" Attributes="0" KeyPath="AvalonDock.Themes.VS2013.dll"/>
+    <ROW Component="AvalonDock.dll" ComponentId="{B943C721-ACFC-48A4-B7D4-0F1AF37AED7B}" Directory_="APPDIR" Attributes="0" KeyPath="AvalonDock.dll"/>
+    <ROW Component="COPYING" ComponentId="{AA21D870-6463-4D3C-98EB-1982BB8FF779}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="COPYING" Type="0"/>
+    <ROW Component="CatFacts.Net.dll" ComponentId="{C63AA1C3-FC99-4910-B36F-88033E2F98CD}" Directory_="APPDIR" Attributes="0" KeyPath="CatFacts.Net.dll"/>
+    <ROW Component="Catel.Core.dll" ComponentId="{C8BA3994-C821-40A3-A217-A46A81CA81C9}" Directory_="APPDIR" Attributes="0" KeyPath="Catel.Core.dll"/>
+    <ROW Component="Catel.MVVM.dll" ComponentId="{EE049E5F-E136-4670-8F89-BF7D23E89C18}" Directory_="APPDIR" Attributes="0" KeyPath="Catel.MVVM.dll"/>
+    <ROW Component="CloudyLightRaysBack512.png" ComponentId="{AABEC025-6FC9-4480-B02B-4BDCC5D30AA2}" Directory_="SkyboxTextures_Dir" Attributes="0" KeyPath="CloudyLightRaysBack512.png" Type="0"/>
+    <ROW Component="ControlzEx.dll" ComponentId="{60293E8E-74F2-44F6-8426-29F4EFB0E682}" Directory_="APPDIR" Attributes="0" KeyPath="ControlzEx.dll"/>
+    <ROW Component="Crc32C.NET.dll" ComponentId="{5045060F-8EEC-48EB-845E-3C50C24164C6}" Directory_="APPDIR" Attributes="0" KeyPath="Crc32C.NET.dll"/>
+    <ROW Component="CsvHelper.dll" ComponentId="{2E7BED78-FDAE-4A4C-9A9D-8A978241DF54}" Directory_="APPDIR" Attributes="0" KeyPath="CsvHelper.dll"/>
+    <ROW Component="Discord.Net.Commands.dll" ComponentId="{2835824B-D429-4F12-B1DD-BCF691F70CC4}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Commands.dll"/>
+    <ROW Component="Discord.Net.Core.dll" ComponentId="{781320D3-A1DD-41CF-9AA0-43F11787B3B9}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Core.dll"/>
+    <ROW Component="Discord.Net.Rest.dll" ComponentId="{2FF29657-DCF9-488E-942A-5FDC93921A7E}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Rest.dll"/>
+    <ROW Component="Discord.Net.WebSocket.dll" ComponentId="{89994F07-4A0D-4026-BA45-EC3A3C5090DF}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.WebSocket.dll"/>
+    <ROW Component="Discord.Net.Webhook.dll" ComponentId="{2CEE33FE-B59F-4A0D-B8BE-33343AF6AB66}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Webhook.dll"/>
+    <ROW Component="DiscordRPC.dll" ComponentId="{6AC16F33-2FE7-4ECB-8118-1C710E8D6B9B}" Directory_="APPDIR" Attributes="0" KeyPath="DiscordRPC.dll"/>
+    <ROW Component="Doboz.dll" ComponentId="{D78AD0AD-2409-4275-B507-BBBBF13AF74C}" Directory_="APPDIR" Attributes="0" KeyPath="Doboz.dll"/>
+    <ROW Component="DockStatesCR2W.xml" ComponentId="{86EF5DDF-8565-467E-AC22-04DE46899C12}" Directory_="Layout_Dir" Attributes="0" KeyPath="DockStatesCR2W.xml" Type="0"/>
+    <ROW Component="DotNetHelper.FastMember.Extension.dll" ComponentId="{711CAD02-42AC-45FA-BE9D-6909E3808E7E}" Directory_="APPDIR" Attributes="0" KeyPath="DotNetHelper.FastMember.Extension.dll"/>
+    <ROW Component="DotNetZip.dll" ComponentId="{EA8CDE28-6CF3-40C2-8090-2A361B480B97}" Directory_="APPDIR" Attributes="0" KeyPath="DotNetZip.dll"/>
+    <ROW Component="DynamicData.dll" ComponentId="{5791DBBE-9D47-4E09-8368-C6B09519A471}" Directory_="APPDIR" Attributes="0" KeyPath="DynamicData.dll"/>
+    <ROW Component="FastMember.dll" ComponentId="{06C7C67C-94DA-49F3-BA61-62012C48C4D9}" Directory_="APPDIR" Attributes="0" KeyPath="FastMember.dll"/>
+    <ROW Component="Feather.Boost.dll" ComponentId="{63DCC3D8-EC11-4F67-A3D5-B9600DF0C42F}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Boost.dll"/>
+    <ROW Component="Feather.Controls.dll" ComponentId="{9443FD42-C41D-4F73-A33F-364AAF67F80A}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Controls.dll"/>
+    <ROW Component="Feather.Converters.dll" ComponentId="{DC7D659E-3D07-4537-AB7A-8EA63BB8A99D}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Converters.dll"/>
+    <ROW Component="Feather.Core.dll" ComponentId="{E4C60D12-7FD0-400E-BA76-4C5E9033E76C}" Directory_="APPDIR" Attributes="0" KeyPath="Feather.Core.dll"/>
+    <ROW Component="Fluent.dll" ComponentId="{776C814E-9E59-4939-BD3C-BDF5A968F9CB}" Directory_="APPDIR" Attributes="0" KeyPath="Fluent.dll"/>
+    <ROW Component="FmodAudio.dll" ComponentId="{BF2BA184-1134-4433-812A-30761F1A26C6}" Directory_="APPDIR" Attributes="0" KeyPath="FmodAudio.dll"/>
+    <ROW Component="HandyControl.dll" ComponentId="{17E53351-3636-49D9-A5EE-F1F0602F8EA7}" Directory_="APPDIR" Attributes="0" KeyPath="HandyControl.dll"/>
+    <ROW Component="HandyControl.resources.dll" ComponentId="{24E14B82-902F-4A85-B0B7-C9BD948DA3B2}" Directory_="en_Dir" Attributes="0" KeyPath="HandyControl.resources.dll"/>
+    <ROW Component="ICSharpCode.AvalonEdit.dll" ComponentId="{6C73BCCA-8B5B-45DD-81B1-0E7A1B2D5E07}" Directory_="APPDIR" Attributes="0" KeyPath="ICSharpCode.AvalonEdit.dll"/>
+    <ROW Component="ICSharpCode.SharpZipLib.dll" ComponentId="{C124658F-2662-4ADC-B498-C50E751CFA30}" Directory_="APPDIR" Attributes="0" KeyPath="ICSharpCode.SharpZipLib.dll"/>
+    <ROW Component="INIFileParser.dll" ComponentId="{20DB1E77-4F26-4F02-B856-60C6D942618F}" Directory_="APPDIR" Attributes="0" KeyPath="INIFileParser.dll"/>
+    <ROW Component="Ionic.ZLib.dll" ComponentId="{0EC70AC1-EB38-4C91-AD40-CAFBB0F33520}" Directory_="APPDIR" Attributes="0" KeyPath="Ionic.ZLib.dll"/>
+    <ROW Component="LZ4.dll" ComponentId="{E4707B0E-6850-46B9-8B97-2A39088DE098}" Directory_="APPDIR" Attributes="0" KeyPath="LZ4.dll"/>
+    <ROW Component="LZ4pn.dll" ComponentId="{6AFA732B-D3F0-4CD1-80FD-B61F1E876049}" Directory_="APPDIR" Attributes="0" KeyPath="LZ4pn.dll"/>
+    <ROW Component="Magick.NET.Core.dll" ComponentId="{65CAB743-671A-40A9-88DE-1331E00DCAE6}" Directory_="APPDIR" Attributes="0" KeyPath="Magick.NET.Core.dll"/>
+    <ROW Component="Magick.NET.SystemWindowsMedia.dll" ComponentId="{351C1582-4A88-4615-95C7-250ACFB60815}" Directory_="APPDIR" Attributes="0" KeyPath="Magick.NET.SystemWindowsMedia.dll"/>
+    <ROW Component="Magick.NETQ16HDRIAnyCPU.dll" ComponentId="{14C70D90-B994-4884-8F72-817BF625095E}" Directory_="APPDIR" Attributes="0" KeyPath="Magick.NETQ16HDRIAnyCPU.dll"/>
+    <ROW Component="Magick.NativeQ16HDRIx64.dll" ComponentId="{FA3F1F58-B272-4C88-8E53-3886BEC3EDA5}" Directory_="APPDIR" Attributes="256" KeyPath="Magick.NativeQ16HDRIx64.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.BootstrapIcons.dll" ComponentId="{9D671C5A-1564-4F7A-B5B9-A640D9F94C8A}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.BootstrapIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.BoxIcons.dll" ComponentId="{0D959E24-6520-4B02-8620-1ED3B6359826}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.BoxIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Codicons.dll" ComponentId="{7F65A8E7-CD28-4B65-A09D-892E8265B714}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Codicons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Core.dll" ComponentId="{5C8FFEC7-10D4-41C1-967F-87D36B614FBD}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Core.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Entypo.dll" ComponentId="{6E5AE426-1A64-4DB1-A763-8FE4130DC8EE}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Entypo.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.EvaIcons.dll" ComponentId="{90589DC2-8267-4B9D-8462-660157463A4C}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.EvaIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.FeatherIcons.dll" ComponentId="{DFC07830-F307-4BEE-8C6E-215815A2CD5F}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.FeatherIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.FileIcons.dll" ComponentId="{E8268E3A-6CEE-40D0-BAC8-432B57DD7D08}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.FileIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.FontAwesome.dll" ComponentId="{077EBE9C-AE28-4B64-8B8C-0297E3A8248B}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.FontAwesome.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Fontaudio.dll" ComponentId="{CB73D03A-8C97-46C0-AA01-943AC49B8EAC}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Fontaudio.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.ForkAwesome.dll" ComponentId="{6FB8867D-C5D8-407F-A4C3-1E4DF1A7A421}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.ForkAwesome.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Ionicons.dll" ComponentId="{C2AE7CED-809F-429E-84D3-C7780215DF05}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Ionicons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.JamIcons.dll" ComponentId="{6F80F32F-1811-4048-836C-6EE14387169F}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.JamIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Material.dll" ComponentId="{8BDFA982-A070-4043-BF98-51A361834675}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Material.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.MaterialDesign.dll" ComponentId="{2205FD74-3147-4A91-B5DB-7D3C1439D44E}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.MaterialDesign.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.MaterialLight.dll" ComponentId="{05ACE96F-EA66-4084-A6E0-837E89BA3E39}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.MaterialLight.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Microns.dll" ComponentId="{0F07EBED-BA97-42A7-89D9-4939046CB941}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Microns.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Modern.dll" ComponentId="{598AF140-5DD4-4B5D-A837-A8E74C4AD0C5}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Modern.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Octicons.dll" ComponentId="{5489E4CA-79DD-4A31-A9C5-1144F20EECEF}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Octicons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.PicolIcons.dll" ComponentId="{3B4CCF33-E01A-4405-A723-243AA4BFCAAD}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.PicolIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.PixelartIcons.dll" ComponentId="{55CAF1A3-EE74-45E6-A3A9-A4A36C063DC4}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.PixelartIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.RPGAwesome.dll" ComponentId="{2662DAE3-5CB4-4160-9657-D990E914C9E7}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.RPGAwesome.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.RadixIcons.dll" ComponentId="{DC9B9AD7-46F6-4055-A0D7-EB8FD51986D4}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.RadixIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.RemixIcon.dll" ComponentId="{6C366A5A-F634-4B79-B2AA-840946C9E32E}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.RemixIcon.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.SimpleIcons.dll" ComponentId="{346EF9F4-D78C-4FCF-BE99-4AEB089CB7A6}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.SimpleIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Typicons.dll" ComponentId="{C73A800F-9CA3-465E-BDCA-251070B44308}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Typicons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Unicons.dll" ComponentId="{C03EE59C-7D83-43F8-8773-FA9377F9B613}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Unicons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.VaadinIcons.dll" ComponentId="{639ED3BC-DC7D-494D-9124-9D02EDA28C57}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.VaadinIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.WeatherIcons.dll" ComponentId="{C68F3CA0-B674-4F08-AE34-43FC793C323C}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.WeatherIcons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.Zondicons.dll" ComponentId="{E431666E-AD58-4C06-98F9-20788D583F51}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Zondicons.dll"/>
+    <ROW Component="MahApps.Metro.IconPacks.dll" ComponentId="{200D36CA-7721-4BF5-82EB-2FE8F879E61C}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.dll"/>
+    <ROW Component="MahApps.Metro.dll" ComponentId="{7169B3BF-61AC-4E03-978D-96B821ECCC90}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.dll"/>
+    <ROW Component="MathNet.Numerics.dll" ComponentId="{DD699548-07ED-418D-B1D8-EF9C1093F5C2}" Directory_="APPDIR" Attributes="0" KeyPath="MathNet.Numerics.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.dll" ComponentId="{DC52B5B8-B610-4D63-93B3-871AE67E427C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{93EB086F-EFF4-4141-9A90-1B6F59D26DC6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
+    <ROW Component="Microsoft.Expression.Interactions.dll" ComponentId="{91C2E2FE-774D-46DD-A1AF-779AACDB0B68}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Expression.Interactions.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{37BDA633-5A03-490C-B6B7-98BADE2F074F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{164A5F30-0ADC-49E8-A864-9D424102C9F6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{BCEB9EF3-8438-426D-A79C-7559E37E1917}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="Microsoft.Web.WebView2.Core.dll" ComponentId="{458488C8-1BC1-42F0-9344-7AFDBB4D4CC3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.Core.dll"/>
+    <ROW Component="Microsoft.Web.WebView2.WinForms.dll" ComponentId="{973CF46F-4509-467B-8A74-6CE39DB8ED1D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.WinForms.dll"/>
+    <ROW Component="Microsoft.Web.WebView2.Wpf.dll" ComponentId="{9B72AC2B-945A-41B9-95C1-E500A95B1F3B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.Wpf.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.Shell.dll" ComponentId="{75900DCE-6021-48C7-99FD-4BAD604BB4E0}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Shell.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.dll" ComponentId="{461CE89C-E1EC-4721-9F22-791EBE3B8AE7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.dll"/>
+    <ROW Component="Microsoft.Xaml.Behaviors.dll" ComponentId="{9BF97937-C921-430A-829A-A06071428405}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll"/>
+    <ROW Component="NAudio.Asio.dll" ComponentId="{F7345DF7-BCF8-4D48-B4DE-08BF32914027}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Asio.dll"/>
+    <ROW Component="NAudio.Core.dll" ComponentId="{B28B2208-5F50-4478-8AA1-2229655A1BD6}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Core.dll"/>
+    <ROW Component="NAudio.Midi.dll" ComponentId="{3C135B65-193F-48F9-B0F1-B94614CE563D}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Midi.dll"/>
+    <ROW Component="NAudio.Wasapi.dll" ComponentId="{6CA15354-5525-4DBA-9EDB-E1C8188EC4C9}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.Wasapi.dll"/>
+    <ROW Component="NAudio.WinForms.dll" ComponentId="{35C298E1-2841-46AA-B513-6D2CB846A8EF}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.WinForms.dll"/>
+    <ROW Component="NAudio.WinMM.dll" ComponentId="{ED93F588-7CBD-4C5F-91B5-FBABAA032479}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.WinMM.dll"/>
+    <ROW Component="NAudio.dll" ComponentId="{F051EFF3-D955-4BDA-A374-A14EDEAF4875}" Directory_="APPDIR" Attributes="0" KeyPath="NAudio.dll"/>
+    <ROW Component="Newtonsoft.Json.dll" ComponentId="{74E1832B-7C9A-460A-923B-DB7223426B5D}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
+    <ROW Component="NodeNetwork.dll" ComponentId="{45D0E7F1-D0A4-4AA8-BF2B-9FF5A2821CA3}" Directory_="APPDIR" Attributes="0" KeyPath="NodeNetwork.dll"/>
+    <ROW Component="NodeNetworkToolkit.dll" ComponentId="{C78E432D-0A39-4FBB-916B-E3C7947F04E9}" Directory_="APPDIR" Attributes="0" KeyPath="NodeNetworkToolkit.dll"/>
+    <ROW Component="Obsolete.dll" ComponentId="{99305436-A2D5-4E26-8C73-8EBA07EC3C0E}" Directory_="APPDIR" Attributes="0" KeyPath="Obsolete.dll"/>
+    <ROW Component="Octokit.dll" ComponentId="{C2426666-0FA9-472F-8AC2-8C79DC7557C0}" Directory_="APPDIR" Attributes="0" KeyPath="Octokit.dll"/>
+    <ROW Component="Orc.CommandLine.dll" ComponentId="{A4E2142B-CA75-483E-AB68-C422F857BE90}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.CommandLine.dll"/>
+    <ROW Component="Orc.Controls.dll" ComponentId="{A71F41C5-CCBD-4ED5-AB5E-5A9EBD8F82D9}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.Controls.dll"/>
+    <ROW Component="Orc.CsvTextEditor.dll" ComponentId="{E9CA6312-27F1-494D-B349-12FE06EA3895}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.CsvTextEditor.dll"/>
+    <ROW Component="Orc.FileSystem.dll" ComponentId="{EEBE344C-EEF3-4657-AFA7-5439469B6C2E}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.FileSystem.dll"/>
+    <ROW Component="Orc.LogViewer.dll" ComponentId="{6A691078-8F08-43DE-882D-D67E4469E5DF}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.LogViewer.dll"/>
+    <ROW Component="Orc.SystemInfo.dll" ComponentId="{B103B419-EEF0-4E75-ACE7-AD038B7DC92B}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.SystemInfo.dll"/>
+    <ROW Component="Orc.Theming.dll" ComponentId="{89E10F72-56C9-4C67-9884-12AFE06B6D4F}" Directory_="APPDIR" Attributes="0" KeyPath="Orc.Theming.dll"/>
+    <ROW Component="Orchestra.Core.dll" ComponentId="{64FE8648-20D6-4298-9E2A-3C1C3EDB4F65}" Directory_="APPDIR" Attributes="0" KeyPath="Orchestra.Core.dll"/>
+    <ROW Component="Orchestra.Shell.Ribbon.Fluent.dll" ComponentId="{60AC6B7C-94A7-4365-ADBA-1C1899C2A9AF}" Directory_="APPDIR" Attributes="0" KeyPath="Orchestra.Shell.Ribbon.Fluent.dll"/>
+    <ROW Component="Pfim.dll" ComponentId="{9FF7056C-F3D3-47C7-BDEB-EC3D8D97C858}" Directory_="APPDIR" Attributes="0" KeyPath="Pfim.dll"/>
+    <ROW Component="Pharmacist.Common.dll" ComponentId="{29B915C0-F6DA-4019-BD80-46EA8ED4FAB4}" Directory_="APPDIR" Attributes="0" KeyPath="Pharmacist.Common.dll"/>
     <ROW Component="ProductInformation" ComponentId="{BC459B1D-64CA-4D4D-AE64-04ADBCA9A3D1}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="ReactiveUI.Events.WPF.dll" ComponentId="{0B4BF983-F325-4419-B4F1-0192806E3D72}" Directory_="APPDIR" Attributes="0" KeyPath="ReactiveUI.Events.WPF.dll"/>
-    <ROW Component="ReactiveUI.Wpf.dll" ComponentId="{B68C1B72-5F3A-445D-8068-A430D37E6219}" Directory_="APPDIR" Attributes="0" KeyPath="ReactiveUI.Wpf.dll"/>
-    <ROW Component="ReactiveUI.dll" ComponentId="{5978E0AD-4F6D-4AA6-95FB-497718AF5DAE}" Directory_="APPDIR" Attributes="0" KeyPath="ReactiveUI.dll"/>
-    <ROW Component="RestSharp.Serializers.NewtonsoftJson.dll" ComponentId="{F1C81E03-A889-4C33-BEB5-DFB4606C1315}" Directory_="APPDIR" Attributes="0" KeyPath="RestSharp.Serializers.NewtonsoftJson.dll"/>
-    <ROW Component="RestSharp.dll" ComponentId="{2D9F84A7-EF53-4C91-B33D-D3819EA9447A}" Directory_="APPDIR" Attributes="0" KeyPath="RestSharp.dll"/>
+    <ROW Component="ReactiveUI.Events.WPF.dll" ComponentId="{8ED62A83-6D0C-41EF-9322-2C783E8994E8}" Directory_="APPDIR" Attributes="0" KeyPath="ReactiveUI.Events.WPF.dll"/>
+    <ROW Component="ReactiveUI.Wpf.dll" ComponentId="{2524F752-D381-44B9-9AD1-0F1B4CF52082}" Directory_="APPDIR" Attributes="0" KeyPath="ReactiveUI.Wpf.dll"/>
+    <ROW Component="ReactiveUI.dll" ComponentId="{B12E2C2E-A628-42EC-9CB6-C7105B75FC39}" Directory_="APPDIR" Attributes="0" KeyPath="ReactiveUI.dll"/>
+    <ROW Component="RestSharp.Serializers.NewtonsoftJson.dll" ComponentId="{36697A39-51DA-40F8-9E25-C916213239E6}" Directory_="APPDIR" Attributes="0" KeyPath="RestSharp.Serializers.NewtonsoftJson.dll"/>
+    <ROW Component="RestSharp.dll" ComponentId="{47EC7C5A-81C5-4417-883C-E037DAA59FAB}" Directory_="APPDIR" Attributes="0" KeyPath="RestSharp.dll"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{9FFAED09-CD11-4BF9-A708-38200E39BDE5}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="Serilog.dll" ComponentId="{21A9523B-FDFD-459F-A66D-1BC8FAC33202}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
-    <ROW Component="SharpDX.DXGI.dll" ComponentId="{19F9ED3C-979F-4C32-865F-994A16272377}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.DXGI.dll"/>
-    <ROW Component="SharpDX.Direct3D11.dll" ComponentId="{DDECD1E3-22CF-4DE4-A032-D1DEE5DAC118}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.Direct3D11.dll"/>
-    <ROW Component="SharpDX.Mathematics.dll" ComponentId="{B31EB74D-5E4D-49DB-B064-A54EF06EE373}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.Mathematics.dll"/>
-    <ROW Component="SharpDX.dll" ComponentId="{46397376-E8C3-400D-9BE2-D528C5D319F3}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.dll"/>
-    <ROW Component="SharpGLTF.Core.dll" ComponentId="{95259EE4-663F-4465-957E-45D916B5472F}" Directory_="APPDIR" Attributes="0" KeyPath="SharpGLTF.Core.dll"/>
-    <ROW Component="SharpGLTF.Toolkit.dll" ComponentId="{3D4DA26D-0F16-4F45-9C66-03741D07AAED}" Directory_="APPDIR" Attributes="0" KeyPath="SharpGLTF.Toolkit.dll"/>
-    <ROW Component="SharpVectors.Converters.Wpf.dll" ComponentId="{5BF5642B-8E70-46DA-A872-5116382BF4E0}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Converters.Wpf.dll"/>
-    <ROW Component="SharpVectors.Core.dll" ComponentId="{E4C8894F-8AE7-4A6A-86AE-C331CFC9CBAD}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Core.dll"/>
-    <ROW Component="SharpVectors.Css.dll" ComponentId="{043C4A67-6116-476B-8358-98E755F0BBFB}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Css.dll"/>
-    <ROW Component="SharpVectors.Dom.dll" ComponentId="{7F9C7C9F-A573-4D71-82D6-EB01F231E66F}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Dom.dll"/>
-    <ROW Component="SharpVectors.Model.dll" ComponentId="{E22756EE-0402-47FA-B4AA-95164CD745A8}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Model.dll"/>
-    <ROW Component="SharpVectors.Rendering.Gdi.dll" ComponentId="{BDD9896C-9680-41A3-AFCF-FA7777F04B2E}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Rendering.Gdi.dll"/>
-    <ROW Component="SharpVectors.Rendering.Wpf.dll" ComponentId="{EA38BE9E-F9B4-443D-A034-41E86C72F9BB}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Rendering.Wpf.dll"/>
-    <ROW Component="SharpVectors.Runtime.Wpf.dll" ComponentId="{A3B8BB83-3799-4A18-ACBC-7DAF1E480DD1}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Runtime.Wpf.dll"/>
-    <ROW Component="SkiaSharp.Views.Desktop.Common.dll" ComponentId="{C38C5A90-0903-4159-8DD4-2B8BB029E650}" Directory_="APPDIR" Attributes="0" KeyPath="SkiaSharp.Views.Desktop.Common.dll"/>
-    <ROW Component="SkiaSharp.Views.WPF.dll" ComponentId="{CE43E5CB-DAFB-460B-B612-E93B3B58D193}" Directory_="APPDIR" Attributes="0" KeyPath="SkiaSharp.Views.WPF.dll"/>
-    <ROW Component="SkiaSharp.dll" ComponentId="{20105726-3E52-4498-9FE2-6BDF19C88B7B}" Directory_="APPDIR" Attributes="0" KeyPath="SkiaSharp.dll"/>
-    <ROW Component="Snappy.NET.dll" ComponentId="{FC6BFF6A-2B2D-42A8-9932-B7F857CDFDF9}" Directory_="APPDIR" Attributes="0" KeyPath="Snappy.NET.dll"/>
-    <ROW Component="Splat.Drawing.dll" ComponentId="{81365541-E710-4962-83F5-D48A6D8C0765}" Directory_="APPDIR" Attributes="0" KeyPath="Splat.Drawing.dll"/>
-    <ROW Component="Splat.dll" ComponentId="{3C19EF65-0C51-4617-9E77-FCFAA38D0F0D}" Directory_="APPDIR" Attributes="0" KeyPath="Splat.dll"/>
-    <ROW Component="Svg.dll" ComponentId="{D40C593C-9E63-47C9-A37F-812BC996BDF8}" Directory_="APPDIR" Attributes="0" KeyPath="Svg.dll"/>
-    <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{ADC8B737-36C7-463F-8B21-C92C4686B180}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
-    <ROW Component="Syncfusion.Data.WPF.dll" ComponentId="{94ADE519-6835-41E5-BE46-9C0C344F7C02}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Data.WPF.dll"/>
-    <ROW Component="Syncfusion.DocIO.Base.dll" ComponentId="{99750FBD-14FD-4871-AA61-2AF76A71B76A}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.DocIO.Base.dll"/>
-    <ROW Component="Syncfusion.Edit.WPF.dll" ComponentId="{7922BF16-18A6-436A-8816-DE7B9FD2C2A9}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Edit.WPF.dll"/>
-    <ROW Component="Syncfusion.GridCommon.WPF.dll" ComponentId="{284D2C03-FFBB-4B1D-BF27-6A91ED76DDD0}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.GridCommon.WPF.dll"/>
-    <ROW Component="Syncfusion.Licensing.dll" ComponentId="{080338B5-6F66-410B-BDFD-05807EB1794C}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Licensing.dll"/>
-    <ROW Component="Syncfusion.OfficeChart.Base.dll" ComponentId="{312BCE46-2027-4CC2-8EB7-B7A4618F8E0D}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.OfficeChart.Base.dll"/>
-    <ROW Component="Syncfusion.PropertyGrid.WPF.dll" ComponentId="{7FE7E87D-A793-4227-9494-B00FBB454939}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.PropertyGrid.WPF.dll"/>
-    <ROW Component="Syncfusion.SfAccordion.WPF.dll" ComponentId="{68580A33-887C-4710-899B-C9A37442DA0D}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfAccordion.WPF.dll"/>
-    <ROW Component="Syncfusion.SfBarcode.WPF.dll" ComponentId="{5E13EEE7-AB32-4036-96A7-77E515B01F44}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfBarcode.WPF.dll"/>
-    <ROW Component="Syncfusion.SfBusyIndicator.WPF.dll" ComponentId="{77B35E74-416A-43B6-9A3F-1E74D2DBCB8A}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfBusyIndicator.WPF.dll"/>
-    <ROW Component="Syncfusion.SfGrid.WPF.dll" ComponentId="{F647B6BF-6969-4F32-99D2-5ECDC928A110}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfGrid.WPF.dll"/>
-    <ROW Component="Syncfusion.SfGridCommon.WPF.dll" ComponentId="{90DDEB9A-6C77-4D32-B1D9-8BAD91477808}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfGridCommon.WPF.dll"/>
-    <ROW Component="Syncfusion.SfHubTile.WPF.dll" ComponentId="{A7ABAD2E-4FB7-459C-9E5A-00CD3D9E7638}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfHubTile.WPF.dll"/>
-    <ROW Component="Syncfusion.SfImageEditor.WPF.dll" ComponentId="{92BB7622-2AD0-4E1E-8FB4-1CF8EED72D26}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfImageEditor.WPF.dll"/>
-    <ROW Component="Syncfusion.SfInput.WPF.dll" ComponentId="{72F822A8-95F9-4DF1-B10C-6711F99F8079}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfInput.WPF.dll"/>
-    <ROW Component="Syncfusion.SfKanban.WPF.dll" ComponentId="{7F5D757A-B421-4082-8A79-925F0EE1C712}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfKanban.WPF.dll"/>
-    <ROW Component="Syncfusion.SfNavigationDrawer.WPF.dll" ComponentId="{133974D9-A9BC-4D65-B782-5335BB8DB336}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfNavigationDrawer.WPF.dll"/>
-    <ROW Component="Syncfusion.SfRadialMenu.WPF.dll" ComponentId="{A77EB994-C34D-475B-90EE-EC50F302E55E}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfRadialMenu.WPF.dll"/>
-    <ROW Component="Syncfusion.SfRichTextBoxAdv.WPF.dll" ComponentId="{823E295A-777E-4A9D-899B-C342D0B660BC}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfRichTextBoxAdv.WPF.dll"/>
-    <ROW Component="Syncfusion.SfSkinManager.WPF.dll" ComponentId="{3AA30B1A-627E-4539-B4CD-48B440018ADA}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfSkinManager.WPF.dll"/>
-    <ROW Component="Syncfusion.SfTextInputLayout.WPF.dll" ComponentId="{574425C7-30BE-4D1E-A949-5B77464697F7}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfTextInputLayout.WPF.dll"/>
-    <ROW Component="Syncfusion.SfTreeNavigator.WPF.dll" ComponentId="{2EF0F466-083F-49AF-9873-216DC15B4B54}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfTreeNavigator.WPF.dll"/>
-    <ROW Component="Syncfusion.SfTreeView.WPF.dll" ComponentId="{11E3C643-B949-4A2A-BB71-616B644CA0AB}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfTreeView.WPF.dll"/>
-    <ROW Component="Syncfusion.Shared.WPF.dll" ComponentId="{6AD524BC-C500-4D6A-B5EA-3C1B712F412B}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Shared.WPF.dll"/>
-    <ROW Component="Syncfusion.Themes.MaterialDark.WPF.dll" ComponentId="{C3493AD6-13D2-4A45-9224-BF480567FE96}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Themes.MaterialDark.WPF.dll"/>
-    <ROW Component="Syncfusion.Themes.Office2019Black.WPF.dll" ComponentId="{6FDB0DDE-C791-42F7-93DE-EA8D8CDFF610}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Themes.Office2019Black.WPF.dll"/>
-    <ROW Component="Syncfusion.Tools.WPF.dll" ComponentId="{303D1297-BC55-4A5B-AA42-D95D20F2AE81}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Tools.WPF.dll"/>
-    <ROW Component="System.Drawing.Common.dll" ComponentId="{6040D82D-86F6-4781-B4A9-10A1673318C0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Drawing.Common.dll"/>
-    <ROW Component="System.Interactive.Async.dll" ComponentId="{85831DCA-52D2-47DA-ABB6-120AECC18E85}" Directory_="APPDIR" Attributes="0" KeyPath="System.Interactive.Async.dll"/>
-    <ROW Component="System.Linq.Async.dll" ComponentId="{FAC82D61-6FEE-4FC6-A678-729472A66219}" Directory_="APPDIR" Attributes="0" KeyPath="System.Linq.Async.dll"/>
-    <ROW Component="System.Management.dll" ComponentId="{B5206D87-F0AF-46E8-92C4-30877AC5658B}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
-    <ROW Component="System.Net.Http.Formatting.dll" ComponentId="{51E76C72-966A-4745-9026-8BC5439B0CA7}" Directory_="APPDIR" Attributes="0" KeyPath="System.Net.Http.Formatting.dll"/>
-    <ROW Component="System.Reactive.dll" ComponentId="{E74D1E8D-0B44-480C-9852-7BE0E36A7A22}" Directory_="APPDIR" Attributes="0" KeyPath="System.Reactive.dll"/>
-    <ROW Component="System.Reflection.MetadataLoadContext.dll" ComponentId="{38EB3C27-E7D2-4E37-9BB4-94DF5FEE95FC}" Directory_="APPDIR" Attributes="0" KeyPath="System.Reflection.MetadataLoadContext.dll"/>
-    <ROW Component="System.Windows.Interactivity.dll" ComponentId="{97CF124C-CB9A-4E7F-906E-85F1B07ED4C2}" Directory_="APPDIR" Attributes="0" KeyPath="System.Windows.Interactivity.dll"/>
-    <ROW Component="TaskBarIcon.ico" ComponentId="{496139B6-7D84-427D-8121-997E06DAD9C8}" Directory_="Application_Dir" Attributes="0" KeyPath="TaskBarIcon.ico" Type="0"/>
-    <ROW Component="WPFSoundVisualizationLibNet5.dll" ComponentId="{0CBB76E8-7418-43BF-99E5-E585825AD2EB}" Directory_="APPDIR" Attributes="0" KeyPath="WPFSoundVisualizationLibNet5.dll"/>
-    <ROW Component="WSF.dll" ComponentId="{002AB5B4-CCC2-43A5-8322-6BBE1C902A92}" Directory_="APPDIR" Attributes="0" KeyPath="WSF.dll"/>
-    <ROW Component="WebView2Loader.dll" ComponentId="{0C3E4F2C-5EF0-4F32-B919-2FDE02F8B13C}" Directory_="native_Dir" Attributes="256" KeyPath="WebView2Loader.dll"/>
-    <ROW Component="WebView2Loader.dll_1" ComponentId="{B5E16716-CC25-431C-9794-8A2CE7EC60A2}" Directory_="APPDIR" Attributes="256" KeyPath="WebView2Loader.dll_1"/>
-    <ROW Component="WolvenKit.App.dll" ComponentId="{4BC10409-E82F-41F2-BAEB-D40E3188C69C}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.App.dll"/>
-    <ROW Component="WolvenKit.Common.dll" ComponentId="{2D422C12-D894-4DA8-A7C1-B7B2E9901F23}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Common.dll"/>
-    <ROW Component="WolvenKit.Core.dll" ComponentId="{18A515E8-402A-4A73-8AC1-C9B50C5DC415}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Core.dll"/>
-    <ROW Component="WolvenKit.Modkit.dll" ComponentId="{98DF08BA-CCE2-4C28-A666-1FA536668FEC}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Modkit.dll"/>
-    <ROW Component="WolvenKit.RED3.CR2W.dll" ComponentId="{2E151883-3222-4FB3-B799-1BADBBEF9E7C}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.RED3.CR2W.dll"/>
-    <ROW Component="WolvenKit.RED4.CR2W.dll" ComponentId="{526AD0F3-25C3-4E88-9C30-362628605203}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.RED4.CR2W.dll"/>
-    <ROW Component="WolvenKit.Witcher3Formats.dll" ComponentId="{8CDE5530-F2BB-4AF4-8DF0-E80F72EC048D}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Witcher3Formats.dll"/>
-    <ROW Component="WolvenKit.deps.json" ComponentId="{385ADB92-AF42-4A01-8A0F-A9691E7C185C}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.deps.json" Type="0"/>
-    <ROW Component="WolvenKit.dll" ComponentId="{F6F9A6C2-4483-4F66-831F-46A3FCA8C256}" Directory_="APPDIR" Attributes="256" KeyPath="WolvenKit.dll"/>
+    <ROW Component="SharpDX.DXGI.dll" ComponentId="{A215C8EC-EA63-4DFD-B23F-59510CD21116}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.DXGI.dll"/>
+    <ROW Component="SharpDX.Direct3D11.dll" ComponentId="{37098AFA-E180-4088-8758-66EF0E6B3AFA}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.Direct3D11.dll"/>
+    <ROW Component="SharpDX.Mathematics.dll" ComponentId="{1B7C6869-6953-472F-ADD0-B17AF16415F3}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.Mathematics.dll"/>
+    <ROW Component="SharpDX.dll" ComponentId="{A3ED1DA6-BDCD-44B6-BBA9-AAD8CE7E156B}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.dll"/>
+    <ROW Component="SharpGLTF.Core.dll" ComponentId="{2A8882A9-4D15-4EE8-BBD0-A06D28F5F02F}" Directory_="APPDIR" Attributes="0" KeyPath="SharpGLTF.Core.dll"/>
+    <ROW Component="SharpGLTF.Toolkit.dll" ComponentId="{AA6426F9-CFDD-420E-BC25-311BB21A191A}" Directory_="APPDIR" Attributes="0" KeyPath="SharpGLTF.Toolkit.dll"/>
+    <ROW Component="SharpVectors.Converters.Wpf.dll" ComponentId="{04334021-76F5-44DA-BCA2-BA72AE1F0DA3}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Converters.Wpf.dll"/>
+    <ROW Component="SharpVectors.Core.dll" ComponentId="{28FE278B-FAF0-4FF0-BFA5-13770C563804}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Core.dll"/>
+    <ROW Component="SharpVectors.Css.dll" ComponentId="{E0C65058-72BC-485D-9FB6-705E7805C895}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Css.dll"/>
+    <ROW Component="SharpVectors.Dom.dll" ComponentId="{D197137E-4834-485F-AFA1-9AC18C3ED2A3}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Dom.dll"/>
+    <ROW Component="SharpVectors.Model.dll" ComponentId="{7EE8B4F5-281C-4375-AB39-AE2FB0150725}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Model.dll"/>
+    <ROW Component="SharpVectors.Rendering.Gdi.dll" ComponentId="{FD534357-0040-4283-AE06-A62FA0D3FA52}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Rendering.Gdi.dll"/>
+    <ROW Component="SharpVectors.Rendering.Wpf.dll" ComponentId="{06772B49-953F-4749-9D2A-B0D07502E527}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Rendering.Wpf.dll"/>
+    <ROW Component="SharpVectors.Runtime.Wpf.dll" ComponentId="{B4FEA554-99AC-478E-85AF-05A943E75EE4}" Directory_="APPDIR" Attributes="0" KeyPath="SharpVectors.Runtime.Wpf.dll"/>
+    <ROW Component="Snappy.NET.dll" ComponentId="{C9CD9016-34BD-46C7-99B8-0A96E6FD21B9}" Directory_="APPDIR" Attributes="0" KeyPath="Snappy.NET.dll"/>
+    <ROW Component="Splat.Drawing.dll" ComponentId="{325081BC-A823-45F5-BF39-D9E9A7678504}" Directory_="APPDIR" Attributes="0" KeyPath="Splat.Drawing.dll"/>
+    <ROW Component="Splat.dll" ComponentId="{83329D10-DB8B-4102-A9CB-880A4E11919A}" Directory_="APPDIR" Attributes="0" KeyPath="Splat.dll"/>
+    <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{21E585D9-7C31-4818-986E-69159F3719F2}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
+    <ROW Component="Syncfusion.Data.WPF.dll" ComponentId="{4C91F057-E505-4F17-89AC-A5914D3ACD67}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Data.WPF.dll"/>
+    <ROW Component="Syncfusion.DocIO.Base.dll" ComponentId="{F81A3F40-607F-4B84-A6C8-3D934BE611AB}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.DocIO.Base.dll"/>
+    <ROW Component="Syncfusion.Edit.WPF.dll" ComponentId="{13D0C860-FE37-40AB-9FAC-81E1A9232855}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Edit.WPF.dll"/>
+    <ROW Component="Syncfusion.GridCommon.WPF.dll" ComponentId="{D6939C9C-E0B4-4363-A2A8-C50942278097}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.GridCommon.WPF.dll"/>
+    <ROW Component="Syncfusion.Licensing.dll" ComponentId="{6BBF2B4C-29A4-484D-8ACB-8F4CFC6E0EC9}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Licensing.dll"/>
+    <ROW Component="Syncfusion.OfficeChart.Base.dll" ComponentId="{FCCA5B0C-E1E7-4B92-B5B8-54DD4F51FB4E}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.OfficeChart.Base.dll"/>
+    <ROW Component="Syncfusion.PropertyGrid.WPF.dll" ComponentId="{F8574556-3FED-4EFC-9E62-06246FFA57E8}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.PropertyGrid.WPF.dll"/>
+    <ROW Component="Syncfusion.SfAccordion.WPF.dll" ComponentId="{1B080CA3-4C0B-4DB2-8C4F-ECB5C8E49939}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfAccordion.WPF.dll"/>
+    <ROW Component="Syncfusion.SfBarcode.WPF.dll" ComponentId="{2964757F-B5A1-4491-93CB-271DF190F562}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfBarcode.WPF.dll"/>
+    <ROW Component="Syncfusion.SfBusyIndicator.WPF.dll" ComponentId="{CAE4EABB-3807-4A30-9923-7EF55968230D}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfBusyIndicator.WPF.dll"/>
+    <ROW Component="Syncfusion.SfGrid.WPF.dll" ComponentId="{29D29945-C1DE-49BF-90E4-6292633334F4}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfGrid.WPF.dll"/>
+    <ROW Component="Syncfusion.SfGridCommon.WPF.dll" ComponentId="{C437B5CD-CEEC-4B5F-86C4-D33B04060C22}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfGridCommon.WPF.dll"/>
+    <ROW Component="Syncfusion.SfHubTile.WPF.dll" ComponentId="{4A84B7F1-9EEB-4439-AAE6-3638C880F43D}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfHubTile.WPF.dll"/>
+    <ROW Component="Syncfusion.SfImageEditor.WPF.dll" ComponentId="{FAABD78A-30DD-40F0-A55B-28C6714D173B}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfImageEditor.WPF.dll"/>
+    <ROW Component="Syncfusion.SfInput.WPF.dll" ComponentId="{D7053850-FE91-4BC4-9759-12DB9FDF32B3}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfInput.WPF.dll"/>
+    <ROW Component="Syncfusion.SfKanban.WPF.dll" ComponentId="{B1479D7A-F566-4DB3-9207-D1BEE1C5650C}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfKanban.WPF.dll"/>
+    <ROW Component="Syncfusion.SfNavigationDrawer.WPF.dll" ComponentId="{94CA8C9E-2360-4B29-91BA-65609EBFB46C}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfNavigationDrawer.WPF.dll"/>
+    <ROW Component="Syncfusion.SfRadialMenu.WPF.dll" ComponentId="{12B5A1BF-3FDA-4A8A-B9DC-9B84CDCCBC51}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfRadialMenu.WPF.dll"/>
+    <ROW Component="Syncfusion.SfRichTextBoxAdv.WPF.dll" ComponentId="{4DB392F7-4DEE-457E-832B-EE35C6861FCE}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfRichTextBoxAdv.WPF.dll"/>
+    <ROW Component="Syncfusion.SfSkinManager.WPF.dll" ComponentId="{9034C77D-2FBC-488B-AE8A-82EB50DE5B51}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfSkinManager.WPF.dll"/>
+    <ROW Component="Syncfusion.SfTextInputLayout.WPF.dll" ComponentId="{10CA56EA-5448-4800-B2FE-C212D6B7A620}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfTextInputLayout.WPF.dll"/>
+    <ROW Component="Syncfusion.SfTreeNavigator.WPF.dll" ComponentId="{73D6E6CD-6F4A-4048-8E03-FF67D555133C}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfTreeNavigator.WPF.dll"/>
+    <ROW Component="Syncfusion.SfTreeView.WPF.dll" ComponentId="{F0AA3778-1EEB-4A5C-9EB4-50BDA94AD48D}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfTreeView.WPF.dll"/>
+    <ROW Component="Syncfusion.Shared.WPF.dll" ComponentId="{A91F4470-4C82-4445-A2E4-0A1F8D9FBF74}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Shared.WPF.dll"/>
+    <ROW Component="Syncfusion.Themes.MaterialDark.WPF.dll" ComponentId="{0E937685-1B00-46FD-A7A1-F232A4C81BAC}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Themes.MaterialDark.WPF.dll"/>
+    <ROW Component="Syncfusion.Themes.Office2019Black.WPF.dll" ComponentId="{50A6A0D0-27E1-4364-8A44-AEA9C38311AA}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Themes.Office2019Black.WPF.dll"/>
+    <ROW Component="Syncfusion.Tools.WPF.dll" ComponentId="{2C2DAC6E-E4F7-4587-90BB-454D00E5DB54}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Tools.WPF.dll"/>
+    <ROW Component="System.CommandLine.dll" ComponentId="{265CFA5D-0A7F-40FB-9AF2-83936B1A5506}" Directory_="APPDIR" Attributes="0" KeyPath="System.CommandLine.dll"/>
+    <ROW Component="System.Drawing.Common.dll" ComponentId="{5264FFE9-0FD2-4ECA-8901-01CE767F8E68}" Directory_="APPDIR" Attributes="0" KeyPath="System.Drawing.Common.dll"/>
+    <ROW Component="System.Interactive.Async.dll" ComponentId="{F386720E-DEA4-4DA8-AD5D-D59C9B0A03F8}" Directory_="APPDIR" Attributes="0" KeyPath="System.Interactive.Async.dll"/>
+    <ROW Component="System.Linq.Async.dll" ComponentId="{ECC2DFB0-963F-47E0-B5B9-6286A7F5087E}" Directory_="APPDIR" Attributes="0" KeyPath="System.Linq.Async.dll"/>
+    <ROW Component="System.Management.dll" ComponentId="{7C0B2301-5066-4A42-9814-41BA1F0E1ECB}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
+    <ROW Component="System.Reactive.dll" ComponentId="{3F3DDD2F-AE27-4F6E-965A-1B86B4E6EFC6}" Directory_="APPDIR" Attributes="0" KeyPath="System.Reactive.dll"/>
+    <ROW Component="System.Reflection.MetadataLoadContext.dll" ComponentId="{4BE7358B-198A-4C26-887A-92D3A4CE4395}" Directory_="APPDIR" Attributes="0" KeyPath="System.Reflection.MetadataLoadContext.dll"/>
+    <ROW Component="System.Windows.Interactivity.dll" ComponentId="{186BA01A-E0DB-43BB-A896-496CE15121C0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Windows.Interactivity.dll"/>
+    <ROW Component="TaskBarIcon.ico" ComponentId="{72BB3B43-CD7E-40CE-B2D0-C35EAC89F883}" Directory_="Application_Dir" Attributes="0" KeyPath="TaskBarIcon.ico" Type="0"/>
+    <ROW Component="WPFSoundVisualizationLibNet5.dll" ComponentId="{7C5C2A24-147D-4AF1-85CB-D85C47AB6FB1}" Directory_="APPDIR" Attributes="0" KeyPath="WPFSoundVisualizationLibNet5.dll"/>
+    <ROW Component="WebView2Loader.dll" ComponentId="{3BD6A3FA-22E5-4C7A-8A7E-90CF3DC34E6B}" Directory_="native_Dir" Attributes="256" KeyPath="WebView2Loader.dll"/>
+    <ROW Component="WebView2Loader.dll_1" ComponentId="{1F8D3B8F-98E2-417E-B567-3394F268C2F7}" Directory_="APPDIR" Attributes="256" KeyPath="WebView2Loader.dll_1"/>
+    <ROW Component="WolvenKit.App.dll" ComponentId="{976C8F16-3526-4B65-9685-1487A05D7CA7}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.App.dll"/>
+    <ROW Component="WolvenKit.Common.dll" ComponentId="{2E44D1F2-1EA7-4589-ABB6-670173B564C0}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Common.dll"/>
+    <ROW Component="WolvenKit.Core.dll" ComponentId="{17B06C59-F088-40CF-9515-A0D8C14BEE39}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Core.dll"/>
+    <ROW Component="WolvenKit.Modkit.dll" ComponentId="{BED7AE26-4505-42B6-9DB5-6398626B203D}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Modkit.dll"/>
+    <ROW Component="WolvenKit.RED3.CR2W.dll" ComponentId="{C33BEFB3-0E9E-44FF-8D9D-91754FDD1879}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.RED3.CR2W.dll"/>
+    <ROW Component="WolvenKit.RED4.CR2W.dll" ComponentId="{2756E424-D45F-4F22-BB4F-B15DA6568D1F}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.RED4.CR2W.dll"/>
+    <ROW Component="WolvenKit.Witcher3Formats.dll" ComponentId="{E044AF83-A36C-4DCE-B8BE-B5BC34894581}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.Witcher3Formats.dll"/>
+    <ROW Component="WolvenKit.deps.json" ComponentId="{FAB3F34B-0462-46CB-95C0-7DD2363BE07D}" Directory_="APPDIR" Attributes="0" KeyPath="WolvenKit.deps.json" Type="0"/>
+    <ROW Component="WolvenKit.dll" ComponentId="{2B06445C-BBC4-4A69-9372-BAA677151A44}" Directory_="APPDIR" Attributes="256" KeyPath="WolvenKit.dll"/>
     <ROW Component="WolvenKit.exe" ComponentId="{58171D21-964D-432B-B11E-A252560E4BFD}" Directory_="APPDIR" Attributes="256" KeyPath="WolvenKit.exe"/>
-    <ROW Component="Wolvenkit.InteropControls.dll" ComponentId="{176EE416-3966-4431-9403-D4EB8C3CD493}" Directory_="APPDIR" Attributes="0" KeyPath="Wolvenkit.InteropControls.dll"/>
-    <ROW Component="WpfExtensions.Xaml.dll" ComponentId="{2E4844EB-BADA-4435-9FCD-2CFE56087378}" Directory_="APPDIR" Attributes="0" KeyPath="WpfExtensions.Xaml.dll"/>
-    <ROW Component="acousticdata.bmp" ComponentId="{7F697DAA-4D62-4FBC-B5D9-F4A2560A9952}" Directory_="Files_Dir" Attributes="0" KeyPath="acousticdata.bmp" Type="0"/>
-    <ROW Component="avcodecvgmstream58.dll" ComponentId="{989DA5AB-EAD0-44FD-A4DF-EF8C2DE93685}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="avcodecvgmstream58.dll"/>
-    <ROW Component="avformatvgmstream58.dll" ComponentId="{174B1E8E-9701-4EBE-A559-4F7E841BC0D2}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="avformatvgmstream58.dll"/>
-    <ROW Component="avutilvgmstream56.dll" ComponentId="{0F5589C5-EB6C-43B5-A279-20F0BB509213}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="avutilvgmstream56.dll"/>
-    <ROW Component="bnkextr.exe" ComponentId="{6DAC24E1-1FF4-4281-BCF6-E397A9257A40}" Directory_="bnkext_Dir" Attributes="0" KeyPath="bnkextr.exe"/>
-    <ROW Component="casesensitive.svg" ComponentId="{7F6A7627-2E37-46EF-B3FC-F90CE3E5CD6D}" Directory_="Svg_Dir" Attributes="0" KeyPath="casesensitive.svg" Type="0"/>
-    <ROW Component="git.png" ComponentId="{997AD1F0-8501-4CF5-AB51-1B3CB12B639F}" Directory_="Images_1_Dir" Attributes="0" KeyPath="git.png" Type="0"/>
-    <ROW Component="in_vgmstream.dll" ComponentId="{D81D56F5-4D5D-415A-9605-8B2494F4BD8E}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="in_vgmstream.dll"/>
-    <ROW Component="kraken.dll" ComponentId="{1A08B553-0E02-4E37-A413-96F183DC1EAC}" Directory_="lib_Dir" Attributes="256" KeyPath="kraken.dll"/>
-    <ROW Component="libSkiaSharp.dll" ComponentId="{7DC99326-0BDA-4D3B-8B89-CB27F74DCCF3}" Directory_="APPDIR" Attributes="256" KeyPath="libSkiaSharp.dll"/>
-    <ROW Component="libatrac9.dll" ComponentId="{F5784312-742C-4606-AB36-F3E0EF1BE430}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libatrac9.dll"/>
-    <ROW Component="libcelt0061.dll" ComponentId="{AEF25B7E-A6B6-4B7A-9818-1EF9C30304A8}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libcelt0061.dll"/>
-    <ROW Component="libcelt0110.dll" ComponentId="{B68EA59A-BF13-4144-8141-2EE926778F7E}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libcelt0110.dll"/>
-    <ROW Component="libg719_decode.dll" ComponentId="{F8C83121-5421-473E-B30F-1A892EB06DB2}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libg719_decode.dll"/>
-    <ROW Component="libmpg1230.dll" ComponentId="{57D19203-1E17-43C5-A937-C4EA7F45041A}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libmpg1230.dll"/>
-    <ROW Component="libvorbis.dll" ComponentId="{220067E7-C24E-48BE-8DFB-DAFECE37D6AB}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libvorbis.dll"/>
-    <ROW Component="log4net.dll" ComponentId="{92E4A2B4-C053-4B5F-B77F-A2F442E7691E}" Directory_="APPDIR" Attributes="0" KeyPath="log4net.dll"/>
-    <ROW Component="opusdec.exe" ComponentId="{2C60B9C2-A011-43A3-82E6-58C27851C626}" Directory_="opustools_Dir" Attributes="256" KeyPath="opusdec.exe"/>
-    <ROW Component="opusenc.exe" ComponentId="{3B1F9F79-276B-48AE-B639-10507A52CB34}" Directory_="opustools_Dir" Attributes="256" KeyPath="opusenc.exe"/>
-    <ROW Component="opusinfo.exe" ComponentId="{473405E8-BF3A-4BEE-9E1B-15C755A8A9CB}" Directory_="opustools_Dir" Attributes="256" KeyPath="opusinfo.exe"/>
-    <ROW Component="protobufnet.Core.dll" ComponentId="{00631EDF-967A-4094-8A76-D02436E961D0}" Directory_="APPDIR" Attributes="0" KeyPath="protobufnet.Core.dll"/>
-    <ROW Component="protobufnet.dll" ComponentId="{6FCC8D93-C12A-4594-A4C4-15328B117C43}" Directory_="APPDIR" Attributes="0" KeyPath="protobufnet.dll"/>
-    <ROW Component="runtime.osx.10.10x64.CoreCompat.System.Drawing.dll" ComponentId="{3E134965-BD79-4638-B684-EF4C2EF6D2B7}" Directory_="APPDIR" Attributes="0" KeyPath="runtime.osx.10.10x64.CoreCompat.System.Drawing.dll"/>
-    <ROW Component="soundbanksinfo.xml" ComponentId="{FA509764-8C86-4961-BD20-C0CD8344285B}" Directory_="SoundCache_Dir" Attributes="0" KeyPath="soundbanksinfo.xml" Type="0"/>
-    <ROW Component="swresamplevgmstream3.dll" ComponentId="{2A8DB346-3FD2-451E-BF43-2AE1DA13DB22}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="swresamplevgmstream3.dll"/>
-    <ROW Component="t1.kark" ComponentId="{EB30AA57-5E67-47C7-A9ED-BD7786317E40}" Directory_="Media_Dir" Attributes="0" KeyPath="t1.kark" Type="0"/>
-    <ROW Component="taglibsharp.dll" ComponentId="{27681E39-E3DF-4189-A7DD-83FA692B231D}" Directory_="APPDIR" Attributes="0" KeyPath="taglibsharp.dll"/>
-    <ROW Component="test.exe" ComponentId="{AC538D25-0015-44A5-8000-15331F46DE0A}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="test.exe"/>
-    <ROW Component="texconv.exe" ComponentId="{052C6975-B954-4777-BF8F-9D42EE6CA2AC}" Directory_="APPDIR" Attributes="256" KeyPath="texconv.exe"/>
+    <ROW Component="WolvenManager.Installer.dll" ComponentId="{7C24B1D6-AF09-4DDB-BAEA-BDF17D0AD10F}" Directory_="APPDIR" Attributes="256" KeyPath="WolvenManager.Installer.dll"/>
+    <ROW Component="WolvenManager.Installer.exe" ComponentId="{DD6AC7B1-83AF-4A98-B31A-3768D4EF648C}" Directory_="APPDIR" Attributes="256" KeyPath="WolvenManager.Installer.exe"/>
+    <ROW Component="WpfExtensions.Xaml.dll" ComponentId="{96B64B01-8647-4E8B-808D-B707DCF76726}" Directory_="APPDIR" Attributes="0" KeyPath="WpfExtensions.Xaml.dll"/>
+    <ROW Component="acousticdata.bmp" ComponentId="{ADA1B03E-4CD8-4A2D-A998-BCCF88098D62}" Directory_="Files_Dir" Attributes="0" KeyPath="acousticdata.bmp" Type="0"/>
+    <ROW Component="avcodecvgmstream58.dll" ComponentId="{4DD66B82-E4A6-4B9C-8558-70E28BBED216}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="avcodecvgmstream58.dll"/>
+    <ROW Component="avformatvgmstream58.dll" ComponentId="{6C687763-30F9-4649-973A-BB8A0F1E3472}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="avformatvgmstream58.dll"/>
+    <ROW Component="avutilvgmstream56.dll" ComponentId="{08ACE416-615E-4E4B-9C15-1E790A3A7744}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="avutilvgmstream56.dll"/>
+    <ROW Component="bnkextr.exe" ComponentId="{2F9A9E66-1C86-48A0-9B9A-0D6407C671B4}" Directory_="bnkext_Dir" Attributes="0" KeyPath="bnkextr.exe"/>
+    <ROW Component="casesensitive.svg" ComponentId="{F91B9601-713B-4F9A-A6FB-F801AFC2AD57}" Directory_="Svg_Dir" Attributes="0" KeyPath="casesensitive.svg" Type="0"/>
+    <ROW Component="git.png" ComponentId="{AF572CAB-A123-4589-9FD8-578ABBEA45F2}" Directory_="Images_1_Dir" Attributes="0" KeyPath="git.png" Type="0"/>
+    <ROW Component="in_vgmstream.dll" ComponentId="{49C13E3D-0FD3-4ABD-BC6E-F08BB798FC7A}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="in_vgmstream.dll"/>
+    <ROW Component="kraken.dll" ComponentId="{1CF3A1DB-31AF-4BEB-B647-629E03F84A2C}" Directory_="lib_Dir" Attributes="256" KeyPath="kraken.dll"/>
+    <ROW Component="libatrac9.dll" ComponentId="{CC56DBFC-ABDF-49D5-9FAE-BDE6D94F44AD}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libatrac9.dll"/>
+    <ROW Component="libcelt0061.dll" ComponentId="{2D218047-6012-4EDD-A02A-1763AB2522D8}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libcelt0061.dll"/>
+    <ROW Component="libcelt0110.dll" ComponentId="{04C8E274-3A67-43ED-B5B0-0DE2AFFFAE46}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libcelt0110.dll"/>
+    <ROW Component="libg719_decode.dll" ComponentId="{E1CCCA47-4D2F-4FDF-8E28-1430C36677AE}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libg719_decode.dll"/>
+    <ROW Component="libmpg1230.dll" ComponentId="{5C22D15B-3F16-42D8-8E19-96CAD9CEB8F7}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libmpg1230.dll"/>
+    <ROW Component="libvorbis.dll" ComponentId="{FE00492D-F979-4484-A7B7-CD0226D97FE4}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="libvorbis.dll"/>
+    <ROW Component="log4net.dll" ComponentId="{1C48D8C8-7778-4D65-AE99-CE3B39C6E763}" Directory_="APPDIR" Attributes="0" KeyPath="log4net.dll"/>
+    <ROW Component="opusdec.exe" ComponentId="{BA4EBC41-E5B7-458C-BA73-718E7746DFE2}" Directory_="opustools_Dir" Attributes="256" KeyPath="opusdec.exe"/>
+    <ROW Component="opusenc.exe" ComponentId="{437DDF71-133D-4FB8-95A6-71C5493783E2}" Directory_="opustools_Dir" Attributes="256" KeyPath="opusenc.exe"/>
+    <ROW Component="opusinfo.exe" ComponentId="{C97793DB-943A-433C-BEE9-79F637E6C714}" Directory_="opustools_Dir" Attributes="256" KeyPath="opusinfo.exe"/>
+    <ROW Component="protobufnet.Core.dll" ComponentId="{2C47D0F7-2ACB-4449-BE9F-0595AA6B299D}" Directory_="APPDIR" Attributes="0" KeyPath="protobufnet.Core.dll"/>
+    <ROW Component="protobufnet.dll" ComponentId="{533BF703-285A-4C17-B7DA-C010900C95AE}" Directory_="APPDIR" Attributes="0" KeyPath="protobufnet.dll"/>
+    <ROW Component="soundbanksinfo.xml" ComponentId="{B48AD7BE-1FFC-44FD-B764-5DB45B169D52}" Directory_="SoundCache_Dir" Attributes="0" KeyPath="soundbanksinfo.xml" Type="0"/>
+    <ROW Component="swresamplevgmstream3.dll" ComponentId="{DEF1BBE0-FFCB-4D8D-8C5F-CB386C988F32}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="swresamplevgmstream3.dll"/>
+    <ROW Component="t1.kark" ComponentId="{643DC2DA-D398-4C22-A915-B9F01B804617}" Directory_="Media_Dir" Attributes="0" KeyPath="t1.kark" Type="0"/>
+    <ROW Component="test.exe" ComponentId="{689A0138-343B-49ED-93DE-EE9A26BBDB02}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="test.exe"/>
+    <ROW Component="texconv.exe" ComponentId="{56110AB7-8194-4DF3-AF4F-DDDEC9C5681E}" Directory_="APPDIR" Attributes="256" KeyPath="texconv.exe"/>
     <ROW Component="updater.exe" ComponentId="{8F222BA3-C17D-4A6F-9964-B5B6E95E7486}" Directory_="APPDIR" Attributes="0" KeyPath="updater.exe"/>
-    <ROW Component="xmpvgmstream.dll" ComponentId="{8938E766-07ED-486C-9276-CD0A4FCF28AD}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="xmpvgmstream.dll"/>
+    <ROW Component="xmpvgmstream.dll" ComponentId="{5195E5B3-2C76-44EF-AEAB-BA69C9F23118}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="xmpvgmstream.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="WolvenKit.exe" Component_="WolvenKit.exe" FileName="WOLVEN~1.EXE|WolvenKit.exe" Attributes="0" SourcePath="..\publish\full\WolvenKit.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="updater.exe" Component_="updater.exe" FileName="updater.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_STUBS&gt;updater.exe" SelfReg="false" DigSign="true"/>
     <ROW File="Ab3d.DirectX.Client.Settings.dll" Component_="Ab3d.DirectX.Client.Settings.dll" FileName="AB3DDI~1.DLL|Ab3d.DirectX.Client.Settings.dll" Attributes="0" SourcePath="..\publish\full\Ab3d.DirectX.Client.Settings.dll" SelfReg="false"/>
     <ROW File="Ab3d.DXEngine.dll" Component_="Ab3d.DXEngine.dll" FileName="AB3DDX~1.DLL|Ab3d.DXEngine.dll" Attributes="0" SourcePath="..\publish\full\Ab3d.DXEngine.dll" SelfReg="false"/>
     <ROW File="Ab3d.DXEngine.Wpf.dll" Component_="Ab3d.DXEngine.Wpf.dll" FileName="AB3DDX~2.DLL|Ab3d.DXEngine.Wpf.dll" Attributes="0" SourcePath="..\publish\full\Ab3d.DXEngine.Wpf.dll" SelfReg="false"/>
@@ -338,7 +320,7 @@
     <ROW File="AsyncEnumerable.dll" Component_="AsyncEnumerable.dll" FileName="ASYNCE~1.DLL|AsyncEnumerable.dll" Attributes="0" SourcePath="..\publish\full\AsyncEnumerable.dll" SelfReg="false"/>
     <ROW File="AvalonDock.dll" Component_="AvalonDock.dll" FileName="AVALON~1.DLL|AvalonDock.dll" Attributes="0" SourcePath="..\publish\full\AvalonDock.dll" SelfReg="false"/>
     <ROW File="AvalonDock.Themes.VS2013.dll" Component_="AvalonDock.Themes.VS2013.dll" FileName="AVALON~2.DLL|AvalonDock.Themes.VS2013.dll" Attributes="0" SourcePath="..\publish\full\AvalonDock.Themes.VS2013.dll" SelfReg="false"/>
-    <ROW File="bnkextr.exe" Component_="bnkextr.exe" FileName="bnkextr.exe" Attributes="0" SourcePath="..\publish\full\bnkext\bnkextr.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="bnkextr.exe" Component_="bnkextr.exe" FileName="bnkextr.exe" Attributes="0" SourcePath="..\publish\full\bnkext\bnkextr.exe" SelfReg="false"/>
     <ROW File="Catel.Core.dll" Component_="Catel.Core.dll" FileName="CATELC~1.DLL|Catel.Core.dll" Attributes="0" SourcePath="..\publish\full\Catel.Core.dll" SelfReg="false"/>
     <ROW File="Catel.MVVM.dll" Component_="Catel.MVVM.dll" FileName="CATELM~1.DLL|Catel.MVVM.dll" Attributes="0" SourcePath="..\publish\full\Catel.MVVM.dll" SelfReg="false"/>
     <ROW File="CatFacts.Net.dll" Component_="CatFacts.Net.dll" FileName="CATFAC~1.DLL|CatFacts.Net.dll" Attributes="0" SourcePath="..\publish\full\CatFacts.Net.dll" SelfReg="false"/>
@@ -364,9 +346,7 @@
     <ROW File="Feather.Controls.dll" Component_="Feather.Controls.dll" FileName="FEATHE~2.DLL|Feather.Controls.dll" Attributes="0" SourcePath="..\publish\full\Feather.Controls.dll" SelfReg="false"/>
     <ROW File="Feather.Converters.dll" Component_="Feather.Converters.dll" FileName="FEATHE~3.DLL|Feather.Converters.dll" Attributes="0" SourcePath="..\publish\full\Feather.Converters.dll" SelfReg="false"/>
     <ROW File="Feather.Core.dll" Component_="Feather.Core.dll" FileName="FEATHE~4.DLL|Feather.Core.dll" Attributes="0" SourcePath="..\publish\full\Feather.Core.dll" SelfReg="false"/>
-    <ROW File="Fizzler.dll" Component_="Fizzler.dll" FileName="Fizzler.dll" Attributes="0" SourcePath="..\publish\full\Fizzler.dll" SelfReg="false"/>
     <ROW File="Fluent.dll" Component_="Fluent.dll" FileName="Fluent.dll" Attributes="0" SourcePath="..\publish\full\Fluent.dll" SelfReg="false"/>
-    <ROW File="FluentNexus.dll" Component_="FluentNexus.dll" FileName="FLUENT~1.DLL|FluentNexus.dll" Attributes="0" SourcePath="..\publish\full\FluentNexus.dll" SelfReg="false"/>
     <ROW File="FmodAudio.dll" Component_="FmodAudio.dll" FileName="FMODAU~1.DLL|FmodAudio.dll" Attributes="0" SourcePath="..\publish\full\FmodAudio.dll" SelfReg="false"/>
     <ROW File="HandyControl.dll" Component_="HandyControl.dll" FileName="HANDYC~1.DLL|HandyControl.dll" Attributes="0" SourcePath="..\publish\full\HandyControl.dll" SelfReg="false"/>
     <ROW File="ICSharpCode.AvalonEdit.dll" Component_="ICSharpCode.AvalonEdit.dll" FileName="ICSHAR~1.DLL|ICSharpCode.AvalonEdit.dll" Attributes="0" SourcePath="..\publish\full\ICSharpCode.AvalonEdit.dll" SelfReg="false"/>
@@ -374,15 +354,13 @@
     <ROW File="INIFileParser.dll" Component_="INIFileParser.dll" FileName="INIFIL~1.DLL|INIFileParser.dll" Attributes="0" SourcePath="..\publish\full\INIFileParser.dll" SelfReg="false"/>
     <ROW File="Ionic.ZLib.dll" Component_="Ionic.ZLib.dll" FileName="IONICZ~1.DLL|Ionic.ZLib.dll" Attributes="0" SourcePath="..\publish\full\Ionic.ZLib.dll" SelfReg="false"/>
     <ROW File="kraken.dll" Component_="kraken.dll" FileName="kraken.dll" Attributes="0" SourcePath="..\publish\full\lib\kraken.dll" SelfReg="false"/>
-    <ROW File="libSkiaSharp.dll" Component_="libSkiaSharp.dll" FileName="LIBSKI~1.DLL|libSkiaSharp.dll" Attributes="0" SourcePath="..\publish\full\libSkiaSharp.dll" SelfReg="false"/>
     <ROW File="log4net.dll" Component_="log4net.dll" FileName="log4net.dll" Attributes="0" SourcePath="..\publish\full\log4net.dll" SelfReg="false"/>
     <ROW File="LZ4.dll" Component_="LZ4.dll" FileName="LZ4.dll" Attributes="0" SourcePath="..\publish\full\LZ4.dll" SelfReg="false"/>
     <ROW File="LZ4pn.dll" Component_="LZ4pn.dll" FileName="LZ4pn.dll" Attributes="0" SourcePath="..\publish\full\LZ4pn.dll" SelfReg="false"/>
     <ROW File="Magick.NativeQ16HDRIx64.dll" Component_="Magick.NativeQ16HDRIx64.dll" FileName="MAGICK~1.DLL|Magick.Native-Q16-HDRI-x64.dll" Attributes="0" SourcePath="..\publish\full\Magick.Native-Q16-HDRI-x64.dll" SelfReg="false"/>
     <ROW File="Magick.NETQ16HDRIAnyCPU.dll" Component_="Magick.NETQ16HDRIAnyCPU.dll" FileName="MAGICK~2.DLL|Magick.NET-Q16-HDRI-AnyCPU.dll" Attributes="0" SourcePath="..\publish\full\Magick.NET-Q16-HDRI-AnyCPU.dll" SelfReg="false"/>
     <ROW File="Magick.NET.Core.dll" Component_="Magick.NET.Core.dll" FileName="MAGICK~3.DLL|Magick.NET.Core.dll" Attributes="0" SourcePath="..\publish\full\Magick.NET.Core.dll" SelfReg="false"/>
-    <ROW File="Magick.NET.SystemDrawing.dll" Component_="Magick.NET.SystemDrawing.dll" FileName="MAGICK~4.DLL|Magick.NET.SystemDrawing.dll" Attributes="0" SourcePath="..\publish\full\Magick.NET.SystemDrawing.dll" SelfReg="false"/>
-    <ROW File="Magick.NET.SystemWindowsMedia.dll" Component_="Magick.NET.SystemWindowsMedia.dll" FileName="MAGICK~5.DLL|Magick.NET.SystemWindowsMedia.dll" Attributes="0" SourcePath="..\publish\full\Magick.NET.SystemWindowsMedia.dll" SelfReg="false"/>
+    <ROW File="Magick.NET.SystemWindowsMedia.dll" Component_="Magick.NET.SystemWindowsMedia.dll" FileName="MAGICK~4.DLL|Magick.NET.SystemWindowsMedia.dll" Attributes="0" SourcePath="..\publish\full\Magick.NET.SystemWindowsMedia.dll" SelfReg="false"/>
     <ROW File="MahApps.Metro.dll" Component_="MahApps.Metro.dll" FileName="MAHAPP~1.DLL|MahApps.Metro.dll" Attributes="0" SourcePath="..\publish\full\MahApps.Metro.dll" SelfReg="false"/>
     <ROW File="MahApps.Metro.IconPacks.BootstrapIcons.dll" Component_="MahApps.Metro.IconPacks.BootstrapIcons.dll" FileName="MAHAPP~2.DLL|MahApps.Metro.IconPacks.BootstrapIcons.dll" Attributes="0" SourcePath="..\publish\full\MahApps.Metro.IconPacks.BootstrapIcons.dll" SelfReg="false"/>
     <ROW File="MahApps.Metro.IconPacks.BoxIcons.dll" Component_="MahApps.Metro.IconPacks.BoxIcons.dll" FileName="MAHAPP~3.DLL|MahApps.Metro.IconPacks.BoxIcons.dll" Attributes="0" SourcePath="..\publish\full\MahApps.Metro.IconPacks.BoxIcons.dll" SelfReg="false"/>
@@ -428,9 +406,6 @@
     <ROW File="Microsoft.WindowsAPICodePack.dll" Component_="Microsoft.WindowsAPICodePack.dll" FileName="MICRO~10.DLL|Microsoft.WindowsAPICodePack.dll" Attributes="0" SourcePath="..\publish\full\Microsoft.WindowsAPICodePack.dll" SelfReg="false"/>
     <ROW File="Microsoft.WindowsAPICodePack.Shell.dll" Component_="Microsoft.WindowsAPICodePack.Shell.dll" FileName="MICRO~11.DLL|Microsoft.WindowsAPICodePack.Shell.dll" Attributes="0" SourcePath="..\publish\full\Microsoft.WindowsAPICodePack.Shell.dll" SelfReg="false"/>
     <ROW File="Microsoft.Xaml.Behaviors.dll" Component_="Microsoft.Xaml.Behaviors.dll" FileName="MICRO~12.DLL|Microsoft.Xaml.Behaviors.dll" Attributes="0" SourcePath="..\publish\full\Microsoft.Xaml.Behaviors.dll" SelfReg="false"/>
-    <ROW File="MLib.dll" Component_="MLib.dll" FileName="MLib.dll" Attributes="0" SourcePath="..\publish\full\MLib.dll" SelfReg="false"/>
-    <ROW File="MWindowInterfacesLib.dll" Component_="MWindowInterfacesLib.dll" FileName="MWINDO~1.DLL|MWindowInterfacesLib.dll" Attributes="0" SourcePath="..\publish\full\MWindowInterfacesLib.dll" SelfReg="false"/>
-    <ROW File="MWindowLib.dll" Component_="MWindowLib.dll" FileName="MWINDO~2.DLL|MWindowLib.dll" Attributes="0" SourcePath="..\publish\full\MWindowLib.dll" SelfReg="false"/>
     <ROW File="NAudio.Asio.dll" Component_="NAudio.Asio.dll" FileName="NAUDIO~1.DLL|NAudio.Asio.dll" Attributes="0" SourcePath="..\publish\full\NAudio.Asio.dll" SelfReg="false"/>
     <ROW File="NAudio.Core.dll" Component_="NAudio.Core.dll" FileName="NAUDIO~2.DLL|NAudio.Core.dll" Attributes="0" SourcePath="..\publish\full\NAudio.Core.dll" SelfReg="false"/>
     <ROW File="NAudio.dll" Component_="NAudio.dll" FileName="NAudio.dll" Attributes="0" SourcePath="..\publish\full\NAudio.dll" SelfReg="false"/>
@@ -438,29 +413,23 @@
     <ROW File="NAudio.Wasapi.dll" Component_="NAudio.Wasapi.dll" FileName="NAUDIO~4.DLL|NAudio.Wasapi.dll" Attributes="0" SourcePath="..\publish\full\NAudio.Wasapi.dll" SelfReg="false"/>
     <ROW File="NAudio.WinForms.dll" Component_="NAudio.WinForms.dll" FileName="NAUDIO~5.DLL|NAudio.WinForms.dll" Attributes="0" SourcePath="..\publish\full\NAudio.WinForms.dll" SelfReg="false"/>
     <ROW File="NAudio.WinMM.dll" Component_="NAudio.WinMM.dll" FileName="NAUDIO~6.DLL|NAudio.WinMM.dll" Attributes="0" SourcePath="..\publish\full\NAudio.WinMM.dll" SelfReg="false"/>
-    <ROW File="Newtonsoft.Json.Bson.dll" Component_="Newtonsoft.Json.Bson.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.Bson.dll" Attributes="0" SourcePath="..\publish\full\Newtonsoft.Json.Bson.dll" SelfReg="false"/>
-    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~2.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\publish\full\Newtonsoft.Json.dll" SelfReg="false"/>
+    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\publish\full\Newtonsoft.Json.dll" SelfReg="false"/>
     <ROW File="NodeNetwork.dll" Component_="NodeNetwork.dll" FileName="NODENE~1.DLL|NodeNetwork.dll" Attributes="0" SourcePath="..\publish\full\NodeNetwork.dll" SelfReg="false"/>
     <ROW File="NodeNetworkToolkit.dll" Component_="NodeNetworkToolkit.dll" FileName="NODENE~2.DLL|NodeNetworkToolkit.dll" Attributes="0" SourcePath="..\publish\full\NodeNetworkToolkit.dll" SelfReg="false"/>
     <ROW File="Obsolete.dll" Component_="Obsolete.dll" FileName="Obsolete.dll" Attributes="0" SourcePath="..\publish\full\Obsolete.dll" SelfReg="false"/>
     <ROW File="Octokit.dll" Component_="Octokit.dll" FileName="Octokit.dll" Attributes="0" SourcePath="..\publish\full\Octokit.dll" SelfReg="false"/>
-    <ROW File="Open.ChannelExtensions.dll" Component_="Open.ChannelExtensions.dll" FileName="OPENCH~1.DLL|Open.ChannelExtensions.dll" Attributes="0" SourcePath="..\publish\full\Open.ChannelExtensions.dll" SelfReg="false"/>
-    <ROW File="opusdec.exe" Component_="opusdec.exe" FileName="opusdec.exe" Attributes="0" SourcePath="..\publish\full\opus-tools\opusdec.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="opusenc.exe" Component_="opusenc.exe" FileName="opusenc.exe" Attributes="0" SourcePath="..\publish\full\opus-tools\opusenc.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="opusinfo.exe" Component_="opusinfo.exe" FileName="opusinfo.exe" Attributes="0" SourcePath="..\publish\full\opus-tools\opusinfo.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="opusdec.exe" Component_="opusdec.exe" FileName="opusdec.exe" Attributes="0" SourcePath="..\publish\full\opus-tools\opusdec.exe" SelfReg="false"/>
+    <ROW File="opusenc.exe" Component_="opusenc.exe" FileName="opusenc.exe" Attributes="0" SourcePath="..\publish\full\opus-tools\opusenc.exe" SelfReg="false"/>
+    <ROW File="opusinfo.exe" Component_="opusinfo.exe" FileName="opusinfo.exe" Attributes="0" SourcePath="..\publish\full\opus-tools\opusinfo.exe" SelfReg="false"/>
     <ROW File="Orc.CommandLine.dll" Component_="Orc.CommandLine.dll" FileName="ORCCOM~1.DLL|Orc.CommandLine.dll" Attributes="0" SourcePath="..\publish\full\Orc.CommandLine.dll" SelfReg="false"/>
     <ROW File="Orc.Controls.dll" Component_="Orc.Controls.dll" FileName="ORCCON~1.DLL|Orc.Controls.dll" Attributes="0" SourcePath="..\publish\full\Orc.Controls.dll" SelfReg="false"/>
     <ROW File="Orc.CsvTextEditor.dll" Component_="Orc.CsvTextEditor.dll" FileName="ORCCSV~1.DLL|Orc.CsvTextEditor.dll" Attributes="0" SourcePath="..\publish\full\Orc.CsvTextEditor.dll" SelfReg="false"/>
     <ROW File="Orc.FileSystem.dll" Component_="Orc.FileSystem.dll" FileName="ORCFIL~1.DLL|Orc.FileSystem.dll" Attributes="0" SourcePath="..\publish\full\Orc.FileSystem.dll" SelfReg="false"/>
     <ROW File="Orc.LogViewer.dll" Component_="Orc.LogViewer.dll" FileName="ORCLOG~1.DLL|Orc.LogViewer.dll" Attributes="0" SourcePath="..\publish\full\Orc.LogViewer.dll" SelfReg="false"/>
-    <ROW File="Orc.Squirrel.dll" Component_="Orc.Squirrel.dll" FileName="ORCSQU~1.DLL|Orc.Squirrel.dll" Attributes="0" SourcePath="..\publish\full\Orc.Squirrel.dll" SelfReg="false"/>
-    <ROW File="Orc.Squirrel.Xaml.dll" Component_="Orc.Squirrel.Xaml.dll" FileName="ORCSQU~2.DLL|Orc.Squirrel.Xaml.dll" Attributes="0" SourcePath="..\publish\full\Orc.Squirrel.Xaml.dll" SelfReg="false"/>
     <ROW File="Orc.SystemInfo.dll" Component_="Orc.SystemInfo.dll" FileName="ORCSYS~1.DLL|Orc.SystemInfo.dll" Attributes="0" SourcePath="..\publish\full\Orc.SystemInfo.dll" SelfReg="false"/>
     <ROW File="Orc.Theming.dll" Component_="Orc.Theming.dll" FileName="ORCTHE~1.DLL|Orc.Theming.dll" Attributes="0" SourcePath="..\publish\full\Orc.Theming.dll" SelfReg="false"/>
     <ROW File="Orchestra.Core.dll" Component_="Orchestra.Core.dll" FileName="ORCHES~1.DLL|Orchestra.Core.dll" Attributes="0" SourcePath="..\publish\full\Orchestra.Core.dll" SelfReg="false"/>
     <ROW File="Orchestra.Shell.Ribbon.Fluent.dll" Component_="Orchestra.Shell.Ribbon.Fluent.dll" FileName="ORCHES~2.DLL|Orchestra.Shell.Ribbon.Fluent.dll" Attributes="0" SourcePath="..\publish\full\Orchestra.Shell.Ribbon.Fluent.dll" SelfReg="false"/>
-    <ROW File="Panuon.UI.Silver.dll" Component_="Panuon.UI.Silver.dll" FileName="PANUON~1.DLL|Panuon.UI.Silver.dll" Attributes="0" SourcePath="..\publish\full\Panuon.UI.Silver.dll" SelfReg="false"/>
-    <ROW File="Pathoschild.Http.Client.dll" Component_="Pathoschild.Http.Client.dll" FileName="PATHOS~1.DLL|Pathoschild.Http.Client.dll" Attributes="0" SourcePath="..\publish\full\Pathoschild.Http.Client.dll" SelfReg="false"/>
     <ROW File="Pfim.dll" Component_="Pfim.dll" FileName="Pfim.dll" Attributes="0" SourcePath="..\publish\full\Pfim.dll" SelfReg="false"/>
     <ROW File="Pharmacist.Common.dll" Component_="Pharmacist.Common.dll" FileName="PHARMA~1.DLL|Pharmacist.Common.dll" Attributes="0" SourcePath="..\publish\full\Pharmacist.Common.dll" SelfReg="false"/>
     <ROW File="protobufnet.Core.dll" Component_="protobufnet.Core.dll" FileName="PROTOB~1.DLL|protobuf-net.Core.dll" Attributes="0" SourcePath="..\publish\full\protobuf-net.Core.dll" SelfReg="false"/>
@@ -714,9 +683,7 @@
     <ROW File="skyrender0005.bmp" Component_="CloudyLightRaysBack512.png" FileName="SKYREN~5.BMP|skyrender0005.bmp" Attributes="0" SourcePath="..\publish\full\Resources\SkyboxTextures\skyrender0005.bmp" SelfReg="false"/>
     <ROW File="RestSharp.dll" Component_="RestSharp.dll" FileName="RESTSH~1.DLL|RestSharp.dll" Attributes="0" SourcePath="..\publish\full\RestSharp.dll" SelfReg="false"/>
     <ROW File="RestSharp.Serializers.NewtonsoftJson.dll" Component_="RestSharp.Serializers.NewtonsoftJson.dll" FileName="RESTSH~2.DLL|RestSharp.Serializers.NewtonsoftJson.dll" Attributes="0" SourcePath="..\publish\full\RestSharp.Serializers.NewtonsoftJson.dll" SelfReg="false"/>
-    <ROW File="runtime.osx.10.10x64.CoreCompat.System.Drawing.dll" Component_="runtime.osx.10.10x64.CoreCompat.System.Drawing.dll" FileName="RUNTIM~1.DLL|runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll" Attributes="0" SourcePath="..\publish\full\runtime.osx.10.10-x64.CoreCompat.System.Drawing.dll" SelfReg="false"/>
     <ROW File="WebView2Loader.dll" Component_="WebView2Loader.dll" FileName="WEBVIE~1.DLL|WebView2Loader.dll" Attributes="0" SourcePath="..\publish\full\runtimes\win-x64\native\WebView2Loader.dll" SelfReg="false"/>
-    <ROW File="Serilog.dll" Component_="Serilog.dll" FileName="Serilog.dll" Attributes="0" SourcePath="..\publish\full\Serilog.dll" SelfReg="false"/>
     <ROW File="SharpDX.Direct3D11.dll" Component_="SharpDX.Direct3D11.dll" FileName="SHARPD~1.DLL|SharpDX.Direct3D11.dll" Attributes="0" SourcePath="..\publish\full\SharpDX.Direct3D11.dll" SelfReg="false"/>
     <ROW File="SharpDX.dll" Component_="SharpDX.dll" FileName="SharpDX.dll" Attributes="0" SourcePath="..\publish\full\SharpDX.dll" SelfReg="false"/>
     <ROW File="SharpDX.DXGI.dll" Component_="SharpDX.DXGI.dll" FileName="SHARPD~2.DLL|SharpDX.DXGI.dll" Attributes="0" SourcePath="..\publish\full\SharpDX.DXGI.dll" SelfReg="false"/>
@@ -731,14 +698,10 @@
     <ROW File="SharpVectors.Rendering.Gdi.dll" Component_="SharpVectors.Rendering.Gdi.dll" FileName="SHARPV~6.DLL|SharpVectors.Rendering.Gdi.dll" Attributes="0" SourcePath="..\publish\full\SharpVectors.Rendering.Gdi.dll" SelfReg="false"/>
     <ROW File="SharpVectors.Rendering.Wpf.dll" Component_="SharpVectors.Rendering.Wpf.dll" FileName="SHARPV~7.DLL|SharpVectors.Rendering.Wpf.dll" Attributes="0" SourcePath="..\publish\full\SharpVectors.Rendering.Wpf.dll" SelfReg="false"/>
     <ROW File="SharpVectors.Runtime.Wpf.dll" Component_="SharpVectors.Runtime.Wpf.dll" FileName="SHARPV~8.DLL|SharpVectors.Runtime.Wpf.dll" Attributes="0" SourcePath="..\publish\full\SharpVectors.Runtime.Wpf.dll" SelfReg="false"/>
-    <ROW File="SkiaSharp.dll" Component_="SkiaSharp.dll" FileName="SKIASH~1.DLL|SkiaSharp.dll" Attributes="0" SourcePath="..\publish\full\SkiaSharp.dll" SelfReg="false"/>
-    <ROW File="SkiaSharp.Views.Desktop.Common.dll" Component_="SkiaSharp.Views.Desktop.Common.dll" FileName="SKIASH~2.DLL|SkiaSharp.Views.Desktop.Common.dll" Attributes="0" SourcePath="..\publish\full\SkiaSharp.Views.Desktop.Common.dll" SelfReg="false"/>
-    <ROW File="SkiaSharp.Views.WPF.dll" Component_="SkiaSharp.Views.WPF.dll" FileName="SKIASH~3.DLL|SkiaSharp.Views.WPF.dll" Attributes="0" SourcePath="..\publish\full\SkiaSharp.Views.WPF.dll" SelfReg="false"/>
     <ROW File="Snappy.NET.dll" Component_="Snappy.NET.dll" FileName="SNAPPY~1.DLL|Snappy.NET.dll" Attributes="0" SourcePath="..\publish\full\Snappy.NET.dll" SelfReg="false"/>
     <ROW File="soundbanksinfo.xml" Component_="soundbanksinfo.xml" FileName="SOUNDB~1.XML|soundbanksinfo.xml" Attributes="0" SourcePath="..\publish\full\SoundCache\soundbanksinfo.xml" SelfReg="false"/>
     <ROW File="Splat.dll" Component_="Splat.dll" FileName="Splat.dll" Attributes="0" SourcePath="..\publish\full\Splat.dll" SelfReg="false"/>
     <ROW File="Splat.Drawing.dll" Component_="Splat.Drawing.dll" FileName="SPLATD~1.DLL|Splat.Drawing.dll" Attributes="0" SourcePath="..\publish\full\Splat.Drawing.dll" SelfReg="false"/>
-    <ROW File="Svg.dll" Component_="Svg.dll" FileName="Svg.dll" Attributes="0" SourcePath="..\publish\full\Svg.dll" SelfReg="false"/>
     <ROW File="Syncfusion.Compression.Base.dll" Component_="Syncfusion.Compression.Base.dll" FileName="SYNCFU~1.DLL|Syncfusion.Compression.Base.dll" Attributes="0" SourcePath="..\publish\full\Syncfusion.Compression.Base.dll" SelfReg="false"/>
     <ROW File="Syncfusion.Data.WPF.dll" Component_="Syncfusion.Data.WPF.dll" FileName="SYNCFU~2.DLL|Syncfusion.Data.WPF.dll" Attributes="0" SourcePath="..\publish\full\Syncfusion.Data.WPF.dll" SelfReg="false"/>
     <ROW File="Syncfusion.DocIO.Base.dll" Component_="Syncfusion.DocIO.Base.dll" FileName="SYNCFU~3.DLL|Syncfusion.DocIO.Base.dll" Attributes="0" SourcePath="..\publish\full\Syncfusion.DocIO.Base.dll" SelfReg="false"/>
@@ -767,15 +730,14 @@
     <ROW File="Syncfusion.Themes.MaterialDark.WPF.dll" Component_="Syncfusion.Themes.MaterialDark.WPF.dll" FileName="SYNCF~26.DLL|Syncfusion.Themes.MaterialDark.WPF.dll" Attributes="0" SourcePath="..\publish\full\Syncfusion.Themes.MaterialDark.WPF.dll" SelfReg="false"/>
     <ROW File="Syncfusion.Themes.Office2019Black.WPF.dll" Component_="Syncfusion.Themes.Office2019Black.WPF.dll" FileName="SYNCF~27.DLL|Syncfusion.Themes.Office2019Black.WPF.dll" Attributes="0" SourcePath="..\publish\full\Syncfusion.Themes.Office2019Black.WPF.dll" SelfReg="false"/>
     <ROW File="Syncfusion.Tools.WPF.dll" Component_="Syncfusion.Tools.WPF.dll" FileName="SYNCF~28.DLL|Syncfusion.Tools.WPF.dll" Attributes="0" SourcePath="..\publish\full\Syncfusion.Tools.WPF.dll" SelfReg="false"/>
-    <ROW File="System.Drawing.Common.dll" Component_="System.Drawing.Common.dll" FileName="SYSTEM~1.DLL|System.Drawing.Common.dll" Attributes="0" SourcePath="..\publish\full\System.Drawing.Common.dll" SelfReg="false"/>
-    <ROW File="System.Interactive.Async.dll" Component_="System.Interactive.Async.dll" FileName="SYSTEM~2.DLL|System.Interactive.Async.dll" Attributes="0" SourcePath="..\publish\full\System.Interactive.Async.dll" SelfReg="false"/>
-    <ROW File="System.Linq.Async.dll" Component_="System.Linq.Async.dll" FileName="SYSTEM~3.DLL|System.Linq.Async.dll" Attributes="0" SourcePath="..\publish\full\System.Linq.Async.dll" SelfReg="false"/>
-    <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTEM~4.DLL|System.Management.dll" Attributes="0" SourcePath="..\publish\full\System.Management.dll" SelfReg="false"/>
-    <ROW File="System.Net.Http.Formatting.dll" Component_="System.Net.Http.Formatting.dll" FileName="SYSTEM~5.DLL|System.Net.Http.Formatting.dll" Attributes="0" SourcePath="..\publish\full\System.Net.Http.Formatting.dll" SelfReg="false"/>
+    <ROW File="System.CommandLine.dll" Component_="System.CommandLine.dll" FileName="SYSTEM~1.DLL|System.CommandLine.dll" Attributes="0" SourcePath="..\publish\full\System.CommandLine.dll" SelfReg="false"/>
+    <ROW File="System.Drawing.Common.dll" Component_="System.Drawing.Common.dll" FileName="SYSTEM~2.DLL|System.Drawing.Common.dll" Attributes="0" SourcePath="..\publish\full\System.Drawing.Common.dll" SelfReg="false"/>
+    <ROW File="System.Interactive.Async.dll" Component_="System.Interactive.Async.dll" FileName="SYSTEM~3.DLL|System.Interactive.Async.dll" Attributes="0" SourcePath="..\publish\full\System.Interactive.Async.dll" SelfReg="false"/>
+    <ROW File="System.Linq.Async.dll" Component_="System.Linq.Async.dll" FileName="SYSTEM~4.DLL|System.Linq.Async.dll" Attributes="0" SourcePath="..\publish\full\System.Linq.Async.dll" SelfReg="false"/>
+    <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTEM~5.DLL|System.Management.dll" Attributes="0" SourcePath="..\publish\full\System.Management.dll" SelfReg="false"/>
     <ROW File="System.Reactive.dll" Component_="System.Reactive.dll" FileName="SYSTEM~6.DLL|System.Reactive.dll" Attributes="0" SourcePath="..\publish\full\System.Reactive.dll" SelfReg="false"/>
     <ROW File="System.Reflection.MetadataLoadContext.dll" Component_="System.Reflection.MetadataLoadContext.dll" FileName="SYSTEM~7.DLL|System.Reflection.MetadataLoadContext.dll" Attributes="0" SourcePath="..\publish\full\System.Reflection.MetadataLoadContext.dll" SelfReg="false"/>
     <ROW File="System.Windows.Interactivity.dll" Component_="System.Windows.Interactivity.dll" FileName="SYSTEM~8.DLL|System.Windows.Interactivity.dll" Attributes="0" SourcePath="..\publish\full\System.Windows.Interactivity.dll" SelfReg="false"/>
-    <ROW File="taglibsharp.dll" Component_="taglibsharp.dll" FileName="TAGLIB~1.DLL|taglib-sharp.dll" Attributes="0" SourcePath="..\publish\full\taglib-sharp.dll" SelfReg="false"/>
     <ROW File="texconv.exe" Component_="texconv.exe" FileName="texconv.exe" Attributes="0" SourcePath="..\publish\full\texconv.exe" SelfReg="false"/>
     <ROW File="avcodecvgmstream58.dll" Component_="avcodecvgmstream58.dll" FileName="AVCODE~1.DLL|avcodec-vgmstream-58.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\avcodec-vgmstream-58.dll" SelfReg="false"/>
     <ROW File="avformatvgmstream58.dll" Component_="avformatvgmstream58.dll" FileName="AVFORM~1.DLL|avformat-vgmstream-58.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\avformat-vgmstream-58.dll" SelfReg="false"/>
@@ -790,7 +752,7 @@
     <ROW File="libvorbis.dll" Component_="libvorbis.dll" FileName="LIBVOR~1.DLL|libvorbis.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\libvorbis.dll" SelfReg="false"/>
     <ROW File="README.md" Component_="COPYING" FileName="README.md" Attributes="0" SourcePath="..\publish\full\vgmstream\README.md" SelfReg="false"/>
     <ROW File="swresamplevgmstream3.dll" Component_="swresamplevgmstream3.dll" FileName="SWRESA~1.DLL|swresample-vgmstream-3.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\swresample-vgmstream-3.dll" SelfReg="false"/>
-    <ROW File="test.exe" Component_="test.exe" FileName="test.exe" Attributes="0" SourcePath="..\publish\full\vgmstream\test.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="test.exe" Component_="test.exe" FileName="test.exe" Attributes="0" SourcePath="..\publish\full\vgmstream\test.exe" SelfReg="false"/>
     <ROW File="xmpvgmstream.dll" Component_="xmpvgmstream.dll" FileName="XMP-VG~1.DLL|xmp-vgmstream.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\xmp-vgmstream.dll" SelfReg="false"/>
     <ROW File="WebView2Loader.dll_1" Component_="WebView2Loader.dll_1" FileName="WEBVIE~1.DLL|WebView2Loader.dll" Attributes="0" SourcePath="..\publish\full\WebView2Loader.dll" SelfReg="false"/>
     <ROW File="WolvenKit.App.dll" Component_="WolvenKit.App.dll" FileName="WOLVEN~1.DLL|WolvenKit.App.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.App.dll" SelfReg="false"/>
@@ -800,18 +762,18 @@
     <ROW File="WolvenKit.deps.json" Component_="WolvenKit.deps.json" FileName="WOLVEN~1.JSO|WolvenKit.deps.json" Attributes="0" SourcePath="..\publish\full\WolvenKit.deps.json" SelfReg="false"/>
     <ROW File="WolvenKit.dll" Component_="WolvenKit.dll" FileName="WOLVEN~4.DLL|WolvenKit.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.dll" SelfReg="false"/>
     <ROW File="WolvenKit.dll.config" Component_="WolvenKit.deps.json" FileName="WOLVEN~1.CON|WolvenKit.dll.config" Attributes="0" SourcePath="..\publish\full\WolvenKit.dll.config" SelfReg="false"/>
-    <ROW File="WolvenKit.exe" Component_="WolvenKit.exe" FileName="WOLVEN~1.EXE|WolvenKit.exe" Attributes="0" SourcePath="..\publish\full\WolvenKit.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="Wolvenkit.InteropControls.dll" Component_="Wolvenkit.InteropControls.dll" FileName="WOLVEN~5.DLL|Wolvenkit.InteropControls.dll" Attributes="0" SourcePath="..\publish\full\Wolvenkit.InteropControls.dll" SelfReg="false"/>
-    <ROW File="WolvenKit.Modkit.dll" Component_="WolvenKit.Modkit.dll" FileName="WOLVEN~6.DLL|WolvenKit.Modkit.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.Modkit.dll" SelfReg="false"/>
-    <ROW File="WolvenKit.RED3.CR2W.dll" Component_="WolvenKit.RED3.CR2W.dll" FileName="WOLVEN~7.DLL|WolvenKit.RED3.CR2W.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.RED3.CR2W.dll" SelfReg="false"/>
-    <ROW File="WolvenKit.RED4.CR2W.dll" Component_="WolvenKit.RED4.CR2W.dll" FileName="WOLVEN~8.DLL|WolvenKit.RED4.CR2W.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.RED4.CR2W.dll" SelfReg="false"/>
+    <ROW File="WolvenKit.Modkit.dll" Component_="WolvenKit.Modkit.dll" FileName="WOLVEN~5.DLL|WolvenKit.Modkit.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.Modkit.dll" SelfReg="false"/>
+    <ROW File="WolvenKit.RED3.CR2W.dll" Component_="WolvenKit.RED3.CR2W.dll" FileName="WOLVEN~6.DLL|WolvenKit.RED3.CR2W.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.RED3.CR2W.dll" SelfReg="false"/>
+    <ROW File="WolvenKit.RED4.CR2W.dll" Component_="WolvenKit.RED4.CR2W.dll" FileName="WOLVEN~7.DLL|WolvenKit.RED4.CR2W.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.RED4.CR2W.dll" SelfReg="false"/>
     <ROW File="WolvenKit.runtimeconfig.json" Component_="WolvenKit.deps.json" FileName="WOLVEN~2.JSO|WolvenKit.runtimeconfig.json" Attributes="0" SourcePath="..\publish\full\WolvenKit.runtimeconfig.json" SelfReg="false"/>
-    <ROW File="WolvenKit.Witcher3Formats.dll" Component_="WolvenKit.Witcher3Formats.dll" FileName="WOLVEN~9.DLL|WolvenKit.Witcher3Formats.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.Witcher3Formats.dll" SelfReg="false"/>
+    <ROW File="WolvenKit.Witcher3Formats.dll" Component_="WolvenKit.Witcher3Formats.dll" FileName="WOLVEN~8.DLL|WolvenKit.Witcher3Formats.dll" Attributes="0" SourcePath="..\publish\full\WolvenKit.Witcher3Formats.dll" SelfReg="false"/>
     <ROW File="WolvenKit.Witcher3Formats.pdb" Component_="WolvenKit.Witcher3Formats.dll" FileName="WOLVEN~2.PDB|WolvenKit.Witcher3Formats.pdb" Attributes="0" SourcePath="..\publish\full\WolvenKit.Witcher3Formats.pdb" SelfReg="false"/>
+    <ROW File="WolvenManager.Installer.deps.json" Component_="WolvenKit.deps.json" FileName="WOLVEN~3.JSO|WolvenManager.Installer.deps.json" Attributes="0" SourcePath="..\publish\full\WolvenManager.Installer.deps.json" SelfReg="false"/>
+    <ROW File="WolvenManager.Installer.dll" Component_="WolvenManager.Installer.dll" FileName="WOLVEN~9.DLL|WolvenManager.Installer.dll" Attributes="0" SourcePath="..\publish\full\WolvenManager.Installer.dll" SelfReg="false"/>
+    <ROW File="WolvenManager.Installer.exe" Component_="WolvenManager.Installer.exe" FileName="WOLVEN~2.EXE|WolvenManager.Installer.exe" Attributes="0" SourcePath="..\publish\full\WolvenManager.Installer.exe" SelfReg="false"/>
+    <ROW File="WolvenManager.Installer.runtimeconfig.json" Component_="WolvenKit.deps.json" FileName="WOLVEN~4.JSO|WolvenManager.Installer.runtimeconfig.json" Attributes="0" SourcePath="..\publish\full\WolvenManager.Installer.runtimeconfig.json" SelfReg="false"/>
     <ROW File="WpfExtensions.Xaml.dll" Component_="WpfExtensions.Xaml.dll" FileName="WPFEXT~1.DLL|WpfExtensions.Xaml.dll" Attributes="0" SourcePath="..\publish\full\WpfExtensions.Xaml.dll" SelfReg="false"/>
     <ROW File="WPFSoundVisualizationLibNet5.dll" Component_="WPFSoundVisualizationLibNet5.dll" FileName="WPFSOU~1.DLL|WPFSoundVisualizationLibNet5.dll" Attributes="0" SourcePath="..\publish\full\WPFSoundVisualizationLibNet5.dll" SelfReg="false"/>
-    <ROW File="WSF.dll" Component_="WSF.dll" FileName="WSF.dll" Attributes="0" SourcePath="..\publish\full\WSF.dll" SelfReg="false"/>
-    <ROW File="updater.exe" Component_="updater.exe" FileName="updater.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_STUBS&gt;updater.exe" SelfReg="false" DigSign="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.custcomp.MsiEmbeddedUIComponent">
     <ROW MsiEmbeddedUI="embeddeduiproxy" FileName="embeddeduiproxy.dll" Attributes="3" MessageFilter="201359327" Data="&lt;AI_HOME&gt;bin\x86\embeddeduiproxy.dll"/>
@@ -821,13 +783,13 @@
     <ROW Property="AI_IA_ENABLE" Registry="AI_IA_ENABLE" HklmSearch="AI_IA_ENABLE" HkcuSearch="AI_IA_ENABLE_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
-    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="6" UpdatesUrl="https://github.com/WolvenKit/WolvenKit/releases/latest/download/manifest.json"/>
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="6" UpdatesUrl="https://github.com/WolvenKit/WolvenKit/releases/latest/download/manifest.txt"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
     <ROW Action="AI_DetectSoftware" Sequence="151"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="Setup Files" Languages="en_GB" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="..\publish" Languages="en_GB" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true" ExeName="[|ProductName]-installer-[|ProductVersion]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.CacheComponent">
     <ATTRIBUTE name="CacheIndex" value="setup.txt"/>
@@ -875,7 +837,6 @@
     <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
     <ROW Name="lzmaextractor.dll" SourcePath="&lt;AI_CUSTACTS&gt;lzmaextractor.dll"/>
     <ROW Name="png" SourcePath="..\WolvenKit\Resources\Media\Images\Application\3.png"/>
-    <ROW Name="viewer.exe" SourcePath="&lt;AI_CUSTACTS&gt;viewer.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
     <ROW Dialog_="CustomizeDlg" Control="CustomizeDlgDialogInitializer" Type="DialogInitializer" X="0" Y="0" Width="0" Height="0" Attributes="0" Order="-1" TextLocId="-" HelpLocId="-" ExtDataLocId="-"/>
@@ -1005,7 +966,6 @@
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
     <ROW Action="AI_UPDATER_UNINSTALL" Type="82" Source="updater.exe" Target="/clean silent"/>
-    <ROW Action="LaunchApplication" Type="194" Source="viewer.exe" Target="/DontWait &quot;[#WolvenKit.exe]&quot;" Options="1"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[LocalAppDataFolder][Manufacturer]\[ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
@@ -1015,6 +975,10 @@
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
     <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
     <ROW Feature_="MainFeature" Component_="AI_IA_ENABLE"/>
+    <ROW Feature_="MainFeature" Component_="WolvenKit.exe"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+    <ROW Feature_="MainFeature" Component_="AI_CustomARPName"/>
+    <ROW Feature_="MainFeature" Component_="updater.exe"/>
     <ROW Feature_="MainFeature" Component_="Ab3d.DirectX.Client.Settings.dll"/>
     <ROW Feature_="MainFeature" Component_="Ab3d.DXEngine.dll"/>
     <ROW Feature_="MainFeature" Component_="Ab3d.DXEngine.Wpf.dll"/>
@@ -1051,9 +1015,7 @@
     <ROW Feature_="MainFeature" Component_="Feather.Controls.dll"/>
     <ROW Feature_="MainFeature" Component_="Feather.Converters.dll"/>
     <ROW Feature_="MainFeature" Component_="Feather.Core.dll"/>
-    <ROW Feature_="MainFeature" Component_="Fizzler.dll"/>
     <ROW Feature_="MainFeature" Component_="Fluent.dll"/>
-    <ROW Feature_="MainFeature" Component_="FluentNexus.dll"/>
     <ROW Feature_="MainFeature" Component_="FmodAudio.dll"/>
     <ROW Feature_="MainFeature" Component_="HandyControl.dll"/>
     <ROW Feature_="MainFeature" Component_="ICSharpCode.AvalonEdit.dll"/>
@@ -1061,14 +1023,12 @@
     <ROW Feature_="MainFeature" Component_="INIFileParser.dll"/>
     <ROW Feature_="MainFeature" Component_="Ionic.ZLib.dll"/>
     <ROW Feature_="MainFeature" Component_="kraken.dll"/>
-    <ROW Feature_="MainFeature" Component_="libSkiaSharp.dll"/>
     <ROW Feature_="MainFeature" Component_="log4net.dll"/>
     <ROW Feature_="MainFeature" Component_="LZ4.dll"/>
     <ROW Feature_="MainFeature" Component_="LZ4pn.dll"/>
     <ROW Feature_="MainFeature" Component_="Magick.NativeQ16HDRIx64.dll"/>
     <ROW Feature_="MainFeature" Component_="Magick.NETQ16HDRIAnyCPU.dll"/>
     <ROW Feature_="MainFeature" Component_="Magick.NET.Core.dll"/>
-    <ROW Feature_="MainFeature" Component_="Magick.NET.SystemDrawing.dll"/>
     <ROW Feature_="MainFeature" Component_="Magick.NET.SystemWindowsMedia.dll"/>
     <ROW Feature_="MainFeature" Component_="MahApps.Metro.dll"/>
     <ROW Feature_="MainFeature" Component_="MahApps.Metro.IconPacks.BootstrapIcons.dll"/>
@@ -1115,9 +1075,6 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.Shell.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Xaml.Behaviors.dll"/>
-    <ROW Feature_="MainFeature" Component_="MLib.dll"/>
-    <ROW Feature_="MainFeature" Component_="MWindowInterfacesLib.dll"/>
-    <ROW Feature_="MainFeature" Component_="MWindowLib.dll"/>
     <ROW Feature_="MainFeature" Component_="NAudio.Asio.dll"/>
     <ROW Feature_="MainFeature" Component_="NAudio.Core.dll"/>
     <ROW Feature_="MainFeature" Component_="NAudio.dll"/>
@@ -1125,13 +1082,11 @@
     <ROW Feature_="MainFeature" Component_="NAudio.Wasapi.dll"/>
     <ROW Feature_="MainFeature" Component_="NAudio.WinForms.dll"/>
     <ROW Feature_="MainFeature" Component_="NAudio.WinMM.dll"/>
-    <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.Bson.dll"/>
     <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
     <ROW Feature_="MainFeature" Component_="NodeNetwork.dll"/>
     <ROW Feature_="MainFeature" Component_="NodeNetworkToolkit.dll"/>
     <ROW Feature_="MainFeature" Component_="Obsolete.dll"/>
     <ROW Feature_="MainFeature" Component_="Octokit.dll"/>
-    <ROW Feature_="MainFeature" Component_="Open.ChannelExtensions.dll"/>
     <ROW Feature_="MainFeature" Component_="opusdec.exe"/>
     <ROW Feature_="MainFeature" Component_="opusenc.exe"/>
     <ROW Feature_="MainFeature" Component_="opusinfo.exe"/>
@@ -1140,14 +1095,10 @@
     <ROW Feature_="MainFeature" Component_="Orc.CsvTextEditor.dll"/>
     <ROW Feature_="MainFeature" Component_="Orc.FileSystem.dll"/>
     <ROW Feature_="MainFeature" Component_="Orc.LogViewer.dll"/>
-    <ROW Feature_="MainFeature" Component_="Orc.Squirrel.dll"/>
-    <ROW Feature_="MainFeature" Component_="Orc.Squirrel.Xaml.dll"/>
     <ROW Feature_="MainFeature" Component_="Orc.SystemInfo.dll"/>
     <ROW Feature_="MainFeature" Component_="Orc.Theming.dll"/>
     <ROW Feature_="MainFeature" Component_="Orchestra.Core.dll"/>
     <ROW Feature_="MainFeature" Component_="Orchestra.Shell.Ribbon.Fluent.dll"/>
-    <ROW Feature_="MainFeature" Component_="Panuon.UI.Silver.dll"/>
-    <ROW Feature_="MainFeature" Component_="Pathoschild.Http.Client.dll"/>
     <ROW Feature_="MainFeature" Component_="Pfim.dll"/>
     <ROW Feature_="MainFeature" Component_="Pharmacist.Common.dll"/>
     <ROW Feature_="MainFeature" Component_="protobufnet.Core.dll"/>
@@ -1163,9 +1114,7 @@
     <ROW Feature_="MainFeature" Component_="CloudyLightRaysBack512.png"/>
     <ROW Feature_="MainFeature" Component_="RestSharp.dll"/>
     <ROW Feature_="MainFeature" Component_="RestSharp.Serializers.NewtonsoftJson.dll"/>
-    <ROW Feature_="MainFeature" Component_="runtime.osx.10.10x64.CoreCompat.System.Drawing.dll"/>
     <ROW Feature_="MainFeature" Component_="WebView2Loader.dll"/>
-    <ROW Feature_="MainFeature" Component_="Serilog.dll"/>
     <ROW Feature_="MainFeature" Component_="SharpDX.Direct3D11.dll"/>
     <ROW Feature_="MainFeature" Component_="SharpDX.dll"/>
     <ROW Feature_="MainFeature" Component_="SharpDX.DXGI.dll"/>
@@ -1180,14 +1129,10 @@
     <ROW Feature_="MainFeature" Component_="SharpVectors.Rendering.Gdi.dll"/>
     <ROW Feature_="MainFeature" Component_="SharpVectors.Rendering.Wpf.dll"/>
     <ROW Feature_="MainFeature" Component_="SharpVectors.Runtime.Wpf.dll"/>
-    <ROW Feature_="MainFeature" Component_="SkiaSharp.dll"/>
-    <ROW Feature_="MainFeature" Component_="SkiaSharp.Views.Desktop.Common.dll"/>
-    <ROW Feature_="MainFeature" Component_="SkiaSharp.Views.WPF.dll"/>
     <ROW Feature_="MainFeature" Component_="Snappy.NET.dll"/>
     <ROW Feature_="MainFeature" Component_="soundbanksinfo.xml"/>
     <ROW Feature_="MainFeature" Component_="Splat.dll"/>
     <ROW Feature_="MainFeature" Component_="Splat.Drawing.dll"/>
-    <ROW Feature_="MainFeature" Component_="Svg.dll"/>
     <ROW Feature_="MainFeature" Component_="Syncfusion.Compression.Base.dll"/>
     <ROW Feature_="MainFeature" Component_="Syncfusion.Data.WPF.dll"/>
     <ROW Feature_="MainFeature" Component_="Syncfusion.DocIO.Base.dll"/>
@@ -1216,15 +1161,14 @@
     <ROW Feature_="MainFeature" Component_="Syncfusion.Themes.MaterialDark.WPF.dll"/>
     <ROW Feature_="MainFeature" Component_="Syncfusion.Themes.Office2019Black.WPF.dll"/>
     <ROW Feature_="MainFeature" Component_="Syncfusion.Tools.WPF.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.CommandLine.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Drawing.Common.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Interactive.Async.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Linq.Async.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Management.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Net.Http.Formatting.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Reactive.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Reflection.MetadataLoadContext.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Windows.Interactivity.dll"/>
-    <ROW Feature_="MainFeature" Component_="taglibsharp.dll"/>
     <ROW Feature_="MainFeature" Component_="texconv.exe"/>
     <ROW Feature_="MainFeature" Component_="avcodecvgmstream58.dll"/>
     <ROW Feature_="MainFeature" Component_="avformatvgmstream58.dll"/>
@@ -1246,18 +1190,14 @@
     <ROW Feature_="MainFeature" Component_="WolvenKit.Core.dll"/>
     <ROW Feature_="MainFeature" Component_="WolvenKit.deps.json"/>
     <ROW Feature_="MainFeature" Component_="WolvenKit.dll"/>
-    <ROW Feature_="MainFeature" Component_="WolvenKit.exe"/>
-    <ROW Feature_="MainFeature" Component_="Wolvenkit.InteropControls.dll"/>
     <ROW Feature_="MainFeature" Component_="WolvenKit.Modkit.dll"/>
     <ROW Feature_="MainFeature" Component_="WolvenKit.RED3.CR2W.dll"/>
     <ROW Feature_="MainFeature" Component_="WolvenKit.RED4.CR2W.dll"/>
     <ROW Feature_="MainFeature" Component_="WolvenKit.Witcher3Formats.dll"/>
+    <ROW Feature_="MainFeature" Component_="WolvenManager.Installer.dll"/>
+    <ROW Feature_="MainFeature" Component_="WolvenManager.Installer.exe"/>
     <ROW Feature_="MainFeature" Component_="WpfExtensions.Xaml.dll"/>
     <ROW Feature_="MainFeature" Component_="WPFSoundVisualizationLibNet5.dll"/>
-    <ROW Feature_="MainFeature" Component_="WSF.dll"/>
-    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
-    <ROW Feature_="MainFeature" Component_="AI_CustomARPName"/>
-    <ROW Feature_="MainFeature" Component_="updater.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIniFileComponent">
     <ROW IniFile="AppDir" FileName="updater.ini" DirProperty="APPDIR" Section="General" Key="AppDir" Value="[APPDIR]" Action="0" Component_="updater.exe"/>
@@ -1269,7 +1209,7 @@
     <ROW IniFile="DownloadsFolder" FileName="updater.ini" DirProperty="APPDIR" Section="General" Key="DownloadsFolder" Value="[CommonAppDataFolder][Manufacturer]\[ProductName]\updates\" Action="0" Component_="updater.exe"/>
     <ROW IniFile="Flags" FileName="updater.ini" DirProperty="APPDIR" Section="General" Key="Flags" Value="PerMachine|ShowConfigOptionsButton|GitHubUpdates" Action="0" Component_="updater.exe"/>
     <ROW IniFile="ID" FileName="updater.ini" DirProperty="APPDIR" Section="General" Key="ID" Value="[UpgradeCode]" Action="0" Component_="updater.exe"/>
-    <ROW IniFile="URL" FileName="updater.ini" DirProperty="APPDIR" Section="General" Key="URL" Value="https://github.com/WolvenKit/WolvenKit/releases/latest/download/manifest.json" Action="0" Component_="updater.exe"/>
+    <ROW IniFile="URL" FileName="updater.ini" DirProperty="APPDIR" Section="General" Key="URL" Value="https://github.com/WolvenKit/WolvenKit/releases/latest/download/manifest.txt" Action="0" Component_="updater.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -1298,7 +1238,6 @@
     <ROW Action="AI_IaLogInstallData" Sequence="1402"/>
     <ROW Action="AI_IaLogMachineInfo" Sequence="399"/>
     <ROW Action="AI_DetectSoftware" Sequence="102"/>
-    <ROW Action="LaunchApplication" Condition="NOT Installed" Sequence="6601"/>
     <ROW Action="AI_GetArpIconPath" Sequence="1401"/>
     <ROW Action="AI_RemoveExternalUIStub" Condition="(REMOVE=&quot;ALL&quot;) AND ((VersionNT &gt; 500) OR((VersionNT = 500) AND (ServicePackLevel &gt;= 4)))" Sequence="1501"/>
     <ROW Action="AI_UPDATER_UNINSTALL" Condition="($updater.exe = 2) AND (?updater.exe = 3) AND NOT (UPGRADINGPRODUCTCODE)" Sequence="1551"/>
