@@ -38,7 +38,7 @@ namespace WolvenKit.Functionality.Commands
             INavigationService navigationService,
             IProjectManager projectManager,
             ISaveFileService saveFileService,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             IUIVisualizerService uIVisualizerService,
             IViewModelFactory viewModelFactory,
             IMessageService messageService,

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Catel.Logging;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.Views.Others;
@@ -16,7 +17,7 @@ namespace WolvenKit.Functionality.Helpers
 
 
         // Show the first time setup to the user.
-        public static void ShowFirstTimeSetup(ISettingsManager settings, IGrowlNotificationService growl)
+        public static void ShowFirstTimeSetup(ISettingsManager settings, INotificationService growl)
         {
             var messages = settings.IsHealthy();
             if (!messages.Any())

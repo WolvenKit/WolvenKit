@@ -12,9 +12,8 @@ using WolvenKit.Modkit.RED3;
 using WolvenKit.MVVM.Model;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.Modkit.RED4.RigFile;
-using AboutInfoService = WolvenKit.Functionality.Services.AboutInfoService;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
@@ -31,7 +30,7 @@ public static class ModuleInitializer
 
         // Orchestra
         serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
-        serviceLocator.RegisterType<IGrowlNotificationService, GrowlNotificationService>();
+        serviceLocator.RegisterType<INotificationService, NotificationService>();
 
 
         // Wkit

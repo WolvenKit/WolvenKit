@@ -13,6 +13,7 @@ using HandyControl.Tools;
 using NodeNetwork;
 using Orchestra.Services;
 using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Initialization;
@@ -59,14 +60,14 @@ namespace WolvenKit
             Initializations.InitializeWebview2();
 
             StaticReferences.Logger.Info("Initializing MVVM");
-            await Initializations.InitializeMVVM();
+            Initializations.InitializeMVVM();
 
             StaticReferences.Logger.Info("Initializing Theme Helper");
             Initializations.InitializeThemeHelper();
 
             StaticReferences.Logger.Info("Initializing Shell");
             await Initializations.InitializeShell();
-            var growl = ServiceLocator.Default.ResolveType<IGrowlNotificationService>();
+            var growl = ServiceLocator.Default.ResolveType<INotificationService>();
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             Helpers.ShowFirstTimeSetup(settings, growl);
 

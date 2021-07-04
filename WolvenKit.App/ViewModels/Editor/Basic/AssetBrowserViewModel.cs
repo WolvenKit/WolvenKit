@@ -43,7 +43,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
-        private readonly IGrowlNotificationService _notificationService;
+        private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameController;
 
@@ -70,7 +70,7 @@ namespace WolvenKit.ViewModels.Editor
             IProjectManager projectManager,
             ILoggerService loggerService,
             IMessageService messageService,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             IGameControllerFactory gameController
         ) : base(ToolTitle)
         {

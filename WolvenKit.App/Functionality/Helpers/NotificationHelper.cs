@@ -1,5 +1,6 @@
 using Catel.IoC;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
@@ -10,7 +11,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
         /// <summary>
         ///
         /// </summary>
-        public static IGrowlNotificationService Growl => ServiceLocator.Default.ResolveType<IGrowlNotificationService>();
+        public static INotificationService Growl => ServiceLocator.Default.ResolveType<INotificationService>();
 
         public static bool IsShowNotificationsEnabled { get; set; }
 

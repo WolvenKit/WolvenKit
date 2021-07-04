@@ -30,9 +30,6 @@ using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    /// <summary>
-    /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
-    /// </summary>
     public class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
     {
         #region fields

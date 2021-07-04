@@ -18,12 +18,12 @@ namespace WolvenKit.Functionality.Services
     public class ProjectManager : ObservableObject, IProjectManager
     {
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        private readonly IGrowlNotificationService _notificationService;
+        private readonly INotificationService _notificationService;
         private readonly ILoggerService _loggerService;
 
         public ProjectManager(
             IRecentlyUsedItemsService recentlyUsedItemsService,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             ILoggerService loggerService
         )
         {

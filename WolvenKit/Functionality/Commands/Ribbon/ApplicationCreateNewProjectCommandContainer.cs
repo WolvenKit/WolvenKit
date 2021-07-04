@@ -38,7 +38,7 @@ namespace WolvenKit.Functionality.Commands
             ICommandManager commandManager,
             IProjectManager projectManager,
             ISaveFileService saveFileService,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             ILoggerService loggerService,
             Tw3Controller tw3Controller,
             Cp77Controller cp77Controller

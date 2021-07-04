@@ -142,6 +142,9 @@ publish/
 
 #installers
 Installers/MyOutput/
+Installers/setup-cache/
+Installers/caches/
+Installers/Setup Files/
 
 # Publish Web Output
 *.[Pp]ublish.xml

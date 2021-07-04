@@ -24,7 +24,6 @@
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
-    <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="MahApps.Metro.IconPacks.Codicons" Version="4.8.0" />
     <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.24.1" />
     <PackageReference Include="Magick.NET.SystemDrawing" Version="2.0.17" />
@@ -56,7 +55,7 @@
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
       <PackageReference Include="NodeNetwork" Version="5.2.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="5.2.0" />
-    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="4.2.6" />
+    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="5.0.2" />
         <PackageReference Include="Pfim" Version="0.10.0" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />

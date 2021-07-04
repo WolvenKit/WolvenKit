@@ -26,7 +26,7 @@ namespace WolvenKit.Functionality.Commands
         public ApplicationNewProjectCommandContainer(
             ICommandManager commandManager,
             IProjectManager projectManager,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             IUIVisualizerService uIVisualizerService,
             ILoggerService loggerService)
             : base(AppCommands.Application.NewProject, commandManager, projectManager, notificationService, loggerService)

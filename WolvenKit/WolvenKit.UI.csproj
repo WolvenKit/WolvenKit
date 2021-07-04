@@ -299,23 +299,19 @@
   <ItemGroup>
 
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7763" />
-
-
+    <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Ab3d.DXEngine" Version="4.3.7763" />
     <PackageReference Include="Ab3d.PowerToys" Version="9.5.7763" />
     <PackageReference Include="Catel.Core" Version="5.12.16" />
     <PackageReference Include="Catel.MVVM" Version="5.12.16" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="CatFacts.Net" Version="0.1.1" />
-    <PackageReference Include="Dirkster.MWindowLib" Version="1.3.1.2" />
-    <PackageReference Include="Dirkster.WSF" Version="1.2.0" />
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
     <PackageReference Include="Fody" Version="6.5.1" PrivateAssets="all" />
     <PackageReference Include="CsvHelper" Version="27.1.0" />
-    <PackageReference Include="Dirkster.MLib" Version="1.3.1.2" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.6" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
@@ -331,12 +327,9 @@
     </PackageReference>
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
     <PackageReference Include="Octokit" Version="0.50.0" />
-    <PackageReference Include="Open.ChannelExtensions" Version="3.5.0" />
     <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
     <PackageReference Include="Orc.CsvTextEditor" Version="4.1.0" />
     <PackageReference Include="Orc.LogViewer" Version="4.1.0" />
-    <PackageReference Include="Orc.Squirrel" Version="4.1.0" />
-    <PackageReference Include="Orc.Squirrel.Xaml" Version="4.1.0" />
     <PackageReference Include="Panuon.UI.Silver" Version="1.1.3.4" />
     <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.2" />
     <PackageReference Include="Pfim" Version="0.10.0" />
@@ -375,7 +368,7 @@
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Wolvenkit.InteropControls" Version="1.0.3" />
     <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
-    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="5.0.1" />
+    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="5.0.2" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

@@ -233,13 +233,11 @@ namespace WolvenKit.Functionality.Initialization
         }
 
         // Initialize MVVM (Catel)
-        public static async Task InitializeMVVM()
+        public static void InitializeMVVM()
         {
             try
             {
                 var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");
-
-                await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
 
                 // Register Viewmodels & Views
                 var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
