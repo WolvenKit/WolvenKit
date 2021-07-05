@@ -32,7 +32,7 @@ namespace WolvenKit.Functionality.Commands
             INavigationService navigationService,
             IProjectManager projectManager,
             ISaveFileService saveFileService,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             IUIVisualizerService uIVisualizerService,
             IViewModelFactory viewModelFactory,
             IMessageService messageService,
@@ -61,7 +61,7 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                var vm = new UserControlHostWindowViewModel(new BugReportWizard(), 600, 1000);
+                var vm = new UserControlHostWindowViewModel(new BugReportWizardView(), 600, 1000);
 
                 var result = await _uIVisualizerService.ShowDialogAsync(vm);
             }

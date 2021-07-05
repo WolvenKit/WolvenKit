@@ -38,16 +38,11 @@
                         </Grid>
                     </DataTemplate>
 
-                   
-              
-
                     <DataTemplate DataType="{x:Type viewmodels:ImportExportViewModel}">
                         <Grid>
                             <views:ImportExportView />
                         </Grid>
                     </DataTemplate>
-
-               
 
                     <!--<DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
                         <Grid>
@@ -55,15 +50,12 @@
                         </Grid>
                     </DataTemplate>-->
 
-              
-
                     <DataTemplate DataType="{x:Type viewmodels:VisualEditorViewModel}">
                         <Grid>
                             <views1:VisualEditorView />
                         </Grid>
                     </DataTemplate>
-
-                 
+                    
                 </ResourceDictionary>
 
                 <!--  Global Styles  -->
@@ -96,6 +88,11 @@
                 <!--  Theme setting  -->
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/WizardControl/WizardControl.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTextInputLayout/SfTextInputLayout.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfTextBoxExt/SfTextBoxExt.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfDataGrid/SfDataGrid.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/SfImageEditor/SfImageEditor.xaml" />

@@ -10,6 +10,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
@@ -26,7 +27,7 @@ namespace WolvenKit.Views.Dialogs
     {
         private readonly ISettingsManager _settingsManager;
         private readonly IGameControllerFactory _gameControllerFactory;
-        private readonly IProgress<double> _progress;
+        private readonly IProgressService<double> _progress;
         private readonly ModTools _modTools;
         private readonly ILoggerService _loggerService;
 
@@ -39,7 +40,7 @@ namespace WolvenKit.Views.Dialogs
             _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
             _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
             _modTools = ServiceLocator.Default.ResolveType<ModTools>();
-            _progress = ServiceLocator.Default.ResolveType<IProgress<double>>();
+            _progress = ServiceLocator.Default.ResolveType<IProgressService<double>>();
             _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
 
             _archivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");

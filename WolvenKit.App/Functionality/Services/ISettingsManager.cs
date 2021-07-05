@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -38,7 +39,7 @@ namespace WolvenKit.Functionality.Services
 
     }
 
-    public interface ISettingsManager : ISettingsDto
+    public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     {
         // This is here because Catel can't expose inherited Properties ¯\_(ツ)_/¯
         // and we use this in the first set up viewmodels
@@ -64,7 +65,7 @@ namespace WolvenKit.Functionality.Services
         string GetRED4GameModDir();
 
 
-        public static string GetWolvenkitAppData()
+        public static string GetAppData()
         {
             var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding",
                 "WolvenKit");
@@ -78,7 +79,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetManagerCacheDir()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Config");
+            var dir = Path.Combine(GetAppData(), "Config");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -89,7 +90,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetWorkDir()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "tmp_workdir");
+            var dir = Path.Combine(GetAppData(), "tmp_workdir");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -105,7 +106,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetTemp_AudioPath()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Audio");
+            var dir = Path.Combine(GetAppData(), "Temp_Audio");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -116,7 +117,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetTemp_OBJPath()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_OBJ");
+            var dir = Path.Combine(GetAppData(), "Temp_OBJ");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -127,7 +128,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetTemp_MeshPath()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Mesh");
+            var dir = Path.Combine(GetAppData(), "Temp_Mesh");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -138,7 +139,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetTemp_Audio_importPath()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Audio_import");
+            var dir = Path.Combine(GetAppData(), "Temp_Audio_import");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -149,7 +150,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetTemp_Video_PreviewPath()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "Temp_Video_Preview");
+            var dir = Path.Combine(GetAppData(), "Temp_Video_Preview");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -160,7 +161,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetWebViewDataPath()
         {
-            var dir = Path.Combine(GetWolvenkitAppData(), "WebViewData");
+            var dir = Path.Combine(GetAppData(), "WebViewData");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);

@@ -1,84 +1,49 @@
+using System.Windows;
 using Catel.IoC;
+using Catel.Windows;
+using Catel.Windows.Controls;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Wizards.WizardPages.ProjectWizard;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class ProjectWizardView
+    public partial class ProjectWizardView : DataWindow //: DataWindow
     {
-        #region Fields
 
-        private FinalizeSetupView FSV;
-
-        private ProjectConfigurationView PCV;
-
-        private SelectProjectTypeView SPTV;
-
-        #endregion Fields
-
-        #region Constructors
-
-        public ProjectWizardView()
+        public ProjectWizardView() : base(DataWindowMode.Custom)
         {
-            ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectWizardModel>();
 
             InitializeComponent();
         }
 
-        #endregion Constructors
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+            => ValidateAllFields();
 
-        #region Methods
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Next();
-            ShowPage();
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StepMain.Prev();
-            ShowPage();
-        }
-
-        private void ShowPage()
-        {
-            switch (StepMain.StepIndex)
-            {
-                case 0:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(SPTV);
-                    break;
-
-                case 1:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(PCV);
-                    break;
-
-                case 2:
-                    PageGrid.Children.Clear();
-                    PageGrid.Children.Add(FSV);
-                    break;
-            }
-        }
-
-
-        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
+        private void ValidateAllFields()
         {
             if (ViewModel is ProjectWizardViewModel vm)
             {
-                ServiceLocator.Default.RegisterInstance(vm);
-
-                SPTV = new SelectProjectTypeView();
-                PCV = new ProjectConfigurationView();
-                FSV = new FinalizeSetupView();
-
-                ShowPage();
+                vm.AllFieldsValid = /*projectNameTxtbx.VerifyData() &&*/ projectPathTxtbx.VerifyData();
             }
         }
 
-        #endregion Methods
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
+            => System.IO.Directory.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed("Selected path does not exist");
+
+        private HandyControl.Data.OperationResult<bool> VerifyIfProjectExists(string str)
+            => string.IsNullOrEmpty(str) || System.IO.Directory.Exists(System.IO.Path.Combine(projectPathTxtbx.Text, xprojectNameTxtbx.Text))
+                ? HandyControl.Data.OperationResult.Failed("WolvenKit project exists")
+                : HandyControl.Data.OperationResult.Success();
+
+        private void ButtonClose(object sender, RoutedEventArgs e) => Close();
+
+        private void ButtonMinimize(object sender, RoutedEventArgs e) => SetCurrentValue(WindowStateProperty, WindowState.Minimized);
+
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => DragMove();
+
+
     }
 }

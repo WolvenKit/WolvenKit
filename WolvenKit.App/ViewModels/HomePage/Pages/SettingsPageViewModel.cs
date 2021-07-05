@@ -184,6 +184,26 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         public CP77SettingsPGModel(ISettingsManager settingsManager)
         {
             _settingsManager = settingsManager;
+
+            _settingsManager.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ISettingsManager.CP77ExecutablePath))
+                {
+                    this.Game_Executable_Path = _settingsManager.CP77ExecutablePath;
+                    RaisePropertyChanged(() => Game_Executable_Path);
+                }
+                if (e.PropertyName == nameof(ISettingsManager.MaterialRepositoryPath))
+                {
+                    this.MaterialRepositoryPath = _settingsManager.MaterialRepositoryPath;
+                    RaisePropertyChanged(() => MaterialRepositoryPath);
+                }
+                if(e.PropertyName == nameof(ISettingsManager.CatFactAnimal))
+                {
+                    this.CatFacts_Animal = _settingsManager.CatFactAnimal;
+                    RaisePropertyChanged(() => CatFacts_Animal);
+                }
+                
+            };
         }
 
         [Category("General")]
@@ -193,8 +213,13 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             get => _settingsManager.CP77ExecutablePath;
             set
             {
-                _settingsManager.CP77ExecutablePath = value;
-                _settingsManager.Save();
+                if(_settingsManager.CP77ExecutablePath != value)
+                {
+                    _settingsManager.CP77ExecutablePath = value;
+                    _settingsManager.Save();
+                    RaisePropertyChanged(() => Game_Executable_Path);
+                }
+                
             }
         }
 
@@ -205,8 +230,12 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             get => _settingsManager.MaterialRepositoryPath;
             set
             {
-                _settingsManager.MaterialRepositoryPath = value;
-                _settingsManager.Save();
+                if (_settingsManager.MaterialRepositoryPath != value)
+                {
+                    _settingsManager.MaterialRepositoryPath = value;
+                    _settingsManager.Save();
+                    RaisePropertyChanged(() => MaterialRepositoryPath);
+                }
             }
         }
 
@@ -217,8 +246,12 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             get => _settingsManager.CatFactAnimal;
             set
             {
-                _settingsManager.CatFactAnimal = value;
-                _settingsManager.Save();
+                if (_settingsManager.CatFactAnimal != value)
+                {
+                    _settingsManager.CatFactAnimal = value;
+                    _settingsManager.Save();
+                    RaisePropertyChanged(() => CatFacts_Animal);
+                }
             }
         }
     }
@@ -251,13 +284,21 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         public string Uncooked_Depot_Path { get; set; }
     }
 
-    public class GeneralSettingsPGModel : ObservableObject
+    public class GeneralSettingsPGModel : Catel.Data.ObservableObject
     {
         private ISettingsManager _settingsManager;
 
         public GeneralSettingsPGModel(ISettingsManager settingsManager)
         {
             _settingsManager = settingsManager;
+            _settingsManager.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ISettingsManager.ThemeAccentString))
+                {
+                    this.BrushProperty = new SolidColorBrush(_settingsManager.GetThemeAccent());
+                    RaisePropertyChanged(() => BrushProperty);
+                }
+            };
         }
 
         //[Category("General")]
@@ -288,8 +329,13 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             get => new SolidColorBrush(_settingsManager.GetThemeAccent());
             set
             {
-                _settingsManager.SetThemeAccent(((SolidColorBrush)value).Color);
-                _settingsManager.Save();
+                var color = ((SolidColorBrush)value).Color;
+                if (_settingsManager.GetThemeAccent() != color)
+                {
+                    _settingsManager.SetThemeAccent(color);
+                    _settingsManager.Save();
+                    RaisePropertyChanged(() => BrushProperty);
+                }
             }
         }
     }

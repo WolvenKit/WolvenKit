@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Catel.IoC;
 using Catel.Logging;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Others;
 using WolvenKit.Views.Others;
@@ -17,7 +17,7 @@ namespace WolvenKit.Functionality.Helpers
 
 
         // Show the first time setup to the user.
-        public static void ShowFirstTimeSetup(ISettingsManager settings, IGrowlNotificationService growl)
+        public static void ShowFirstTimeSetup(ISettingsManager settings, INotificationService growl)
         {
             var messages = settings.IsHealthy();
             if (!messages.Any())
@@ -37,7 +37,7 @@ namespace WolvenKit.Functionality.Helpers
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         var rpv = new FirstSetupWizardView();
-                        var zxc = new UserControlHostWindowViewModel(rpv);
+                        var zxc = new UserControlHostWindowViewModel(rpv, 400, 600);
                         var uchwv = new UserControlHostWindowView(zxc);
                         rpv.ViewModelChanged += (_s, _e) =>
                         {

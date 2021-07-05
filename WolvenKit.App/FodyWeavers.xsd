@@ -4,8 +4,6 @@
   <xs:element name="Weavers">
     <xs:complexType>
       <xs:all>
-        <xs:element name="Obsolete" minOccurs="0" maxOccurs="1" type="xs:anyType" />
-        <xs:element name="ModuleInit" minOccurs="0" maxOccurs="1" type="xs:anyType" />
         <xs:element name="LoadAssembliesOnStartup" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:all>

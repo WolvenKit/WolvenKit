@@ -8,6 +8,7 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
@@ -170,6 +171,8 @@ namespace WolvenKit.Views.Editor
 
         private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+
+
             if (!StaticReferences.AllowVideoPreview)
             {
                 return;
@@ -231,6 +234,17 @@ namespace WolvenKit.Views.Editor
                 //StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 //StaticReferences.XoWindow.Show();
             }
+        }
+
+        private void TreeGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        {
+            SfTreeGrid sfTreeGrid = sender as SfTreeGrid;
+            if (sfTreeGrid.SelectedItem == null)
+            {
+                return;
+            }
+            var tempselect = sfTreeGrid.SelectedItem as FileModel;
+            StaticReferencesVM.GlobalStatusBar.SelectedFilename = tempselect.Name;
         }
     }
 }

@@ -57,7 +57,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private readonly ILoggerService _loggerService;
         private readonly IMessageService _messageService;
-        private readonly IGrowlNotificationService _notificationService;
+        private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
@@ -96,7 +96,7 @@ namespace WolvenKit.ViewModels.Editor
            ILoggerService loggerService,
            IMessageService messageService,
            IWatcherService watcherService,
-           IGrowlNotificationService notificationService,
+           INotificationService notificationService,
            IGameControllerFactory gameController,
            ISettingsManager settingsManager,
            ModTools modTools,
@@ -104,15 +104,6 @@ namespace WolvenKit.ViewModels.Editor
 
            ) : base(ToolTitle)
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => watcherService);
-            Argument.IsNotNull(() => modTools);
-            Argument.IsNotNull(() => gameController);
-            Argument.IsNotNull(() => notificationService);
-            Argument.IsNotNull(() => settingsManager);
-
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;

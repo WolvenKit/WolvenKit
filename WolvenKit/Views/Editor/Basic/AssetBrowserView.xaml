@@ -161,9 +161,12 @@
                                 Background="{DynamicResource ContentBackground}"
                                 BorderBrush="{DynamicResource BorderBrush}"
                                 FlowDirection="LeftToRight"
+                                hc:InfoElement.Placeholder="Search"
+                                Style="{StaticResource SearchBarExtend}"
+                                hc:InfoElement.Necessary="True"
                                 SearchStarted="FolderSearchBar_OnSearchStarted"
                                 ShowClearButton="True"
-                                Text="search" />
+                               />
 
                             <Button
                                 HorizontalAlignment="Right"
@@ -178,16 +181,19 @@
 
                     <Grid Grid.Column="1">
 
+
                         <hc:SearchBar
                             x:Name="SBBar"
-                            Margin="0,0,0,0"
+                            Margin="0,0,3,0"
                             VerticalAlignment="Top"
                             Background="{DynamicResource ContentBackgroundAlt}"
                             BorderBrush="{DynamicResource BorderBrush}"
                             FlowDirection="LeftToRight"
                             MouseDown="SearchBar_MouseDown"
                             PreviewTextInput="SBBar_PreviewTextInput"
-                            Text="search"
+                            hc:InfoElement.Placeholder="Search"
+                            Style="{StaticResource SearchBarExtend}"
+                            hc:InfoElement.Necessary="True"
                             TextChanged="SBBar_TextChanged">
 
                             <hc:Interaction.Triggers>
@@ -197,7 +203,7 @@
                             </hc:Interaction.Triggers>
                         </hc:SearchBar>
 
-                        <Grid Margin="0,45,0,0">
+                        <Grid Margin="0,45,3,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
