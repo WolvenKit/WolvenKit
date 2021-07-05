@@ -27,8 +27,11 @@ namespace WolvenKit.ViewModels.Wizards
         private const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
         private const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
         private const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
+
         private readonly IOpenFileService _openFileService;
         private readonly ISettingsManager _settingsManager;
+        private readonly ISelectDirectoryService _selectDirectoryService;
+
         private string cp77eexe = "";
         private string wccLiteexe = "";
         private string witcherexe = "";
@@ -37,19 +40,31 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Constructors
 
-        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IOpenFileService openFileService, ILoggerService loggerService)
+        public FirstSetupWizardViewModel(
+            ISettingsManager settingsManager,
+            IOpenFileService openFileService,
+            ISelectDirectoryService selectDirectoryService
+            )
         {
             _settingsManager = settingsManager;
             _openFileService = openFileService;
+            _selectDirectoryService = selectDirectoryService;
+
+            Title = "Settings";
+
+
+            FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
+
+            OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
+            OpenDepotPathCommand = new RelayCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
+
+
 
             OpenW3GamePathCommand = new RelayCommand(ExecuteOpenGamePath, CanOpenGamePath);
-            OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
             OpenWccPathCommand = new RelayCommand(ExecuteOpenWccPath, CanOpenWccPath);
             OpenModDirectoryCommand = new RelayCommand(ExecuteOpenMod, CanOpenMod);
             OpenDlcDirectoryCommand = new RelayCommand(ExecuteOpenDlc, CanOpenDlc);
-            FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
 
-            Title = "Settings";
 
             CheckForUpdates = _settingsManager.CheckForUpdates;
             W3ExePath = _settingsManager.W3ExecutablePath;
@@ -155,6 +170,7 @@ namespace WolvenKit.ViewModels.Wizards
 
 
 
+        public ICommand OpenDepotPathCommand { get; private set; }
         public ICommand OpenCP77GamePathCommand { get; private set; }
         public ICommand OpenDlcDirectoryCommand { get; private set; }
         public ICommand OpenModDirectoryCommand { get; private set; }
@@ -165,6 +181,7 @@ namespace WolvenKit.ViewModels.Wizards
         private bool CanOpenDlc() => true;
 
         private bool CanOpenGamePath() => true;
+        private bool CanOpenDepotPath() => true;
 
         private bool CanOpenMod() => true;
 
@@ -182,6 +199,16 @@ namespace WolvenKit.ViewModels.Wizards
             if (result.Result)
             {
                 CP77ExePath = result.FileName;
+            }
+        }
+        private async void ExecuteOpenDepotPath()
+        {
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(
+                new DetermineDirectoryContext()
+            );
+            if (result.Result)
+            {
+                MaterialDepotPath = result.DirectoryName;
             }
         }
 

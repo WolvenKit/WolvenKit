@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore ./WolvenKit.sln 
 
     - name: dotnet publish WolvenKit
-      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/nightly --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
+      run: dotnet publish ./WolvenKit/WolvenKit.csproj -o publish/app/nightly --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2

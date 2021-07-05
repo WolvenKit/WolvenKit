@@ -236,7 +236,8 @@
                                                         hc:InfoElement.TitleWidth="150"
                                                         Style="{StaticResource TextBoxExtend}"
                                                         Text="{Binding MaterialDepotPath}"
-                                                        Visibility="Visible" />
+                                                        Visibility="Visible"
+                                                        VerifyFunc="VerifyFolder" />
                                                     <Button
                                                         Grid.Column="1"
                                                         Width="50"
@@ -244,7 +245,7 @@
                                                         Margin="0,10,0,0"
                                                         BorderBrush="{DynamicResource BorderBrush}"
                                                         BorderThickness="1"
-                                                        Command="{Binding BINDMETOSELECTREPOPATH}"
+                                                        Command="{Binding OpenDepotPathCommand}"
                                                         Style="{DynamicResource WPFFlatButtonStyle}">
 
                                                         <iconPacks:PackIconCodicons
