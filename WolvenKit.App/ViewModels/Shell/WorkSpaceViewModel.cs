@@ -14,10 +14,12 @@ using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
+using WolvenKit;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -26,13 +28,11 @@ using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Editor;
+using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    /// <summary>
-    /// The WorkSpaceViewModel implements AvalonDock demo specific properties, events and methods.
-    /// </summary>
     public class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
     {
         #region fields
@@ -41,6 +41,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameControllerFactory;
+        private readonly IUpdateService _updateService;
 
         private DocumentViewModel _activeDocument;
 
@@ -58,17 +59,15 @@ namespace WolvenKit.ViewModels.Shell
             ILoggerService loggerService,
             IMessageService messageService,
             ICommandManager commandManager,
-            IGameControllerFactory gameControllerFactory
+            IGameControllerFactory gameControllerFactory,
+            IUpdateService updateService
         )
         {
-            #region dependency injection
-
+            _updateService = updateService;
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
             _gameControllerFactory = gameControllerFactory;
-
-            #endregion dependency injection
 
             #region commands
 
@@ -117,11 +116,53 @@ namespace WolvenKit.ViewModels.Shell
                 //VisualEditorVM,
 
             };
+
+            OnStartup();
         }
 
         #endregion constructors
 
         #region init
+
+        private async void OnStartup()
+        {
+            _updateService.Init(Constants.UpdateUrl, Constants.AssemblyName, delegate (FileInfo path, bool isManaged)
+            {
+                if (isManaged)
+                {
+                    _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");    //INNO
+                    //_ = Process.Start(path.FullName, "/qr");            //Advanced Installer
+                }
+                else
+                {
+                    // move installer helper
+                    var basedir = new DirectoryInfo(Path.GetDirectoryName(System.AppContext.BaseDirectory));
+                    var shippedInstaller = new FileInfo(Path.Combine(basedir.FullName, "lib", Constants.UpdaterName));
+                    var newPath = Path.Combine(ISettingsManager.GetAppData(), Constants.UpdaterName);
+                    try
+                    {
+                        shippedInstaller.MoveTo(newPath, true);
+                    }
+                    catch (Exception)
+                    {
+                        _loggerService.Error("Could not initialize auto-installer.");
+                        return;
+                    }
+
+                    // start installer helper
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = "CMD.EXE",
+                        Arguments = $"/K {newPath} install -i \"{path}\" -o \"{basedir.FullName}\" -r {Constants.AppName}"
+                    };
+                    var p = Process.Start(psi);
+                }
+
+                Application.Current.Shutdown();
+            });
+
+            await _updateService.CheckForUpdatesAsync();
+        }
 
         protected override async Task InitializeAsync()
         {

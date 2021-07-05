@@ -95,7 +95,7 @@ namespace WolvenKit.Functionality.Controllers
                 return null;
             }
             _loggerService.Info("Loading archive Manager ... ");
-            var chachePath = Path.Combine(ISettingsManager.GetWolvenkitAppData(), "archive_cache.bin");
+            var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
             try
             {
                 if (File.Exists(chachePath))
@@ -178,6 +178,10 @@ namespace WolvenKit.Functionality.Controllers
             return Task.FromResult(true);
         }
 
+        /// <summary>
+        /// packs redengine files in the mod project and installs it into the game mod directory
+        /// </summary>
+        /// <returns></returns>
         public Task<bool> PackAndInstallProject()
         {
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
@@ -186,13 +190,28 @@ namespace WolvenKit.Functionality.Controllers
                 return Task.FromResult(false);
             }
 
-            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.PackedModDirectory));
+            try
+            {
+                Directory.Delete(cp77Proj.PackedModDirectory, true);
+            }
+            catch
+            {
+
+            }
+
+            _modTools.Pack(
+                new DirectoryInfo(cp77Proj.ModDirectory),
+                new DirectoryInfo(cp77Proj.PackedModDirectory),
+                $"mod{cp77Proj.Name}");
             _loggerService.Info("Packing complete!");
 
             InstallMod();
             return Task.FromResult(true);
         }
 
+        /// <summary>
+        /// Copies the contents of the "packed" folder into the game mod directory
+        /// </summary>
         public void InstallMod()
         {
             var activeMod = _projectManager.ActiveProject;
@@ -270,10 +289,6 @@ namespace WolvenKit.Functionality.Controllers
         public void AddToMod(IGameFile file)
         {
             var project = _projectManager.ActiveProject;
-            if (NotificationHelper.IsShowNotificationsEnabled)
-            {
-                NotificationHelper.Growl.Info($"Added file: {file.Name} to project: {project.Name} ");
-            }
             switch (project.GameType)
             {
                 case GameType.Witcher3:

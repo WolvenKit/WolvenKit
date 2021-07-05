@@ -1,9 +1,12 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Catel.MVVM;
 using Catel.MVVM.Views;
+using Catel.Services;
 using Catel.Windows.Controls;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.ViewModels.Others
 {
@@ -15,6 +18,13 @@ namespace WolvenKit.ViewModels.Others
         {
             var viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
             var views = viewManager.GetViewsOfViewModel(vm);
+
+            
+            if (views.Length < 1)
+            {
+                
+            }
+
 
             ContentUserControl = views.FirstOrDefault();
         }
@@ -29,8 +39,15 @@ namespace WolvenKit.ViewModels.Others
                     return;
                 }
 
-                uc.ViewModel.ClosedAsync += (s, e) => CloseViewModelAsync(null);
+                uc.ViewModel.ClosedAsync += (s, e) => OnWrappedViewModelClosedAsync(s, e);
+               
+                
             };
+        }
+
+        private async Task OnWrappedViewModelClosedAsync(object s, ViewModelClosedEventArgs e)
+        {
+            await this.CloseViewModelAsync(e.Result);
         }
 
         public UserControlHostWindowViewModel(UserControl uc, int height, int width)
@@ -52,16 +69,12 @@ namespace WolvenKit.ViewModels.Others
 
         #endregion Properties
 
-        // TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
 
         #region Methods
 
-        protected override async Task CloseAsync() =>
-            // TODO: unsubscribe from events here
+        protected override async Task CloseAsync() => await base.CloseAsync();
 
-            await base.CloseAsync();
-
-        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: subscribe to events here
+        protected override async Task InitializeAsync() => await base.InitializeAsync();
 
         #endregion Methods
     }

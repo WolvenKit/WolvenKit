@@ -42,7 +42,7 @@ namespace WolvenKit.Functionality.Commands
             IProjectManager projectManager,
             IOpenFileService openFileService,
             IPleaseWaitService pleaseWaitService,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             IRecentlyUsedItemsService recentlyUsedItemsService,
             ILoggerService loggerService,
             Tw3Controller tw3Controller,

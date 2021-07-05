@@ -9,6 +9,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
@@ -36,7 +37,7 @@ namespace CP77Tools.Tasks
         private readonly ILoggerService _loggerService;
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
-        private readonly IProgress<double> _progressService;
+        private readonly IProgressService<double> _progressService;
         private readonly Red4ParserService _wolvenkitFileService;
 
         private readonly IOptions<CommonImportArgs> _commonImportArgs;
@@ -52,7 +53,7 @@ namespace CP77Tools.Tasks
         public ConsoleFunctions(
             ILoggerService loggerService,
             IHashService hashService,
-            IProgress<double> progress,
+            IProgressService<double> progress,
             Red4ParserService wolvenkitFileService,
             ModTools modTools,
 

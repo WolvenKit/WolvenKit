@@ -25,8 +25,8 @@ namespace WolvenKit.Functionality.Services
     {
         #region fields
 
-        private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetWolvenkitAppData(), "config.json");
-        private static string GetImagePath() => Path.Combine(ISettingsManager.GetWolvenkitAppData(), "_profile_image.png");
+        private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "config.json");
+        private static string GetImagePath() => Path.Combine(ISettingsManager.GetAppData(), "_profile_image.png");
 
         #endregion fields
 
@@ -39,7 +39,7 @@ namespace WolvenKit.Functionality.Services
         {
             ManagerVersions = new string[(int)EManagerType.Max];
 
-            _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.WolvenKitDll).ToString();
+            _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
         }
 
         #endregion constructors
@@ -123,7 +123,7 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public string GetRED4OodleDll() => Path.Combine(GetRED4GameRootDir(), "bin", "x64", Constants.Oodle);
+        public string GetRED4OodleDll() => Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
 
         #endregion
 
@@ -157,7 +157,7 @@ namespace WolvenKit.Functionality.Services
 
             if (!File.Exists(GetRED4OodleDll()))
             {
-                messages.Add($"Oodle dll was not found with the game. Please make sure you have {Constants.Oodle} next to your game executable.");
+                messages.Add($"Oodle dll was not found with the game. Please make sure you have {Core.Constants.Oodle} next to your game executable.");
             }
 
             return messages;

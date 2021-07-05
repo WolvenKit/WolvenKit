@@ -139,7 +139,12 @@ DocProject/Help/html
 
 # Click-Once directory
 publish/
-publishsinglefile/
+
+#installers
+Installers/MyOutput/
+Installers/setup-cache/
+Installers/caches/
+Installers/Setup Files/
 
 # Publish Web Output
 *.[Pp]ublish.xml

@@ -10,6 +10,7 @@ using ProtoBuf.Meta;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
@@ -90,7 +91,7 @@ namespace WolvenKit.MSTests
             // IoC
             ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            ServiceLocator.Default.RegisterType<IProgress<double>, MockProgressService>();
+            ServiceLocator.Default.RegisterType<IProgressService<double>, ProgressService<double>>();
             ServiceLocator.Default.RegisterType<Red4ParserService>();
             ServiceLocator.Default.RegisterType<TargetTools>();      //Cp77FileService
             ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService

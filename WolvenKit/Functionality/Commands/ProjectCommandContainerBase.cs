@@ -23,7 +23,7 @@ namespace WolvenKit.Functionality.Commands
 
         protected readonly ICommandManager _commandManager;
         protected readonly ILoggerService _logger;
-        protected readonly IGrowlNotificationService _notificationService;
+        protected readonly INotificationService _notificationService;
         protected readonly IPleaseWaitService _pleaseWaitService;
         protected readonly IProjectManager _projectManager;
 
@@ -34,7 +34,7 @@ namespace WolvenKit.Functionality.Commands
         protected ProjectCommandContainerBase(string commandName,
             ICommandManager commandManager,
             IProjectManager projectManager,
-            IGrowlNotificationService notificationService,
+            INotificationService notificationService,
             ILoggerService loggerService)
             : base(commandName, commandManager)
         {

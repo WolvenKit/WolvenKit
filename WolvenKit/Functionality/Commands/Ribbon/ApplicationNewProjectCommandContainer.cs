@@ -1,13 +1,21 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Catel;
+using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using WolvenKit.Functionality.Services;
 using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Others;
+using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Functionality.Commands
@@ -17,7 +25,11 @@ namespace WolvenKit.Functionality.Commands
         #region Fields
 
         private readonly ILoggerService _loggerService;
+        private readonly ISaveFileService _saveFileService;
         private readonly IUIVisualizerService _uIVisualizerService;
+        private readonly Cp77Controller _cp77Controller;
+        private readonly Tw3Controller _tw3Controller;
+        private readonly IServiceLocator _serviceLocator;
 
         #endregion Fields
 
@@ -26,15 +38,22 @@ namespace WolvenKit.Functionality.Commands
         public ApplicationNewProjectCommandContainer(
             ICommandManager commandManager,
             IProjectManager projectManager,
-            IGrowlNotificationService notificationService,
+            ISaveFileService saveFileService,
+            INotificationService notificationService,
             IUIVisualizerService uIVisualizerService,
-            ILoggerService loggerService)
+            ILoggerService loggerService,
+            IServiceLocator serviceLocator,
+            Tw3Controller tw3Controller,
+            Cp77Controller cp77Controller
+        )
             : base(AppCommands.Application.NewProject, commandManager, projectManager, notificationService, loggerService)
         {
-            Argument.IsNotNull(() => loggerService);
-
             _loggerService = loggerService;
+            _saveFileService = saveFileService;
+            _tw3Controller = tw3Controller;
+            _cp77Controller = cp77Controller;
             _uIVisualizerService = uIVisualizerService;
+            _serviceLocator = serviceLocator;
         }
 
         #endregion Constructors
@@ -47,9 +66,110 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                var vm = new UserControlHostWindowViewModel(new ProjectWizardView());
+                var location = parameter as string;
+                var viewModel = _serviceLocator.ResolveType<ProjectWizardViewModel>();
 
-                var result = await _uIVisualizerService.ShowDialogAsync(vm);
+                var r = await _uIVisualizerService.ShowAsync(viewModel, (sender, args) =>
+                {
+                    if (args.DataContext is not ProjectWizardViewModel res)
+                    {
+                        return;
+                    }
+
+                    var result = args.Result;
+                    if (!result.HasValue || !result.Value)
+                    {
+                        return;
+                    }
+
+                    location = Path.Combine(res.ProjectPath, res.ProjectName);
+                    var type = res.ProjectType.First();
+                    if (type.Equals(ProjectWizardViewModel.WitcherGameName))
+                    {
+                        location += ".w3modproj";
+                    }
+                    else if (type.Equals(ProjectWizardViewModel.CyberpunkGameName))
+                    {
+                        location += ".cpmodproj";
+                    }
+
+
+                });
+
+                if (string.IsNullOrWhiteSpace(location))
+                {
+                    return;
+                }
+
+                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+                using (_pleaseWaitService.PushInScope())
+                {
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                        {
+                            var np = new Tw3Project(location)
+                            {
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
+
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
+                            break;
+                        }
+                        case ".cpmodproj":
+                        {
+                            var np = new Cp77Project(location)
+                            {
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
+                            break;
+                        }
+                        default:
+                            _loggerService.LogString("Invalid project path!", Logtype.Error);
+                            break;
+                    }
+                }
+
+                await _projectManager.LoadAsync(location);
+                switch (Path.GetExtension(location))
+                {
+                    case ".w3modproj":
+                        await _tw3Controller.HandleStartup().ContinueWith(t =>
+                        {
+                            _notificationService.Success(
+                                "Project " + Path.GetFileNameWithoutExtension(location) +
+                                " loaded!");
+
+                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    case ".cpmodproj":
+                        await _cp77Controller.HandleStartup().ContinueWith(
+                            t =>
+                            {
+                                _notificationService.Success("Project " +
+                                                             Path.GetFileNameWithoutExtension(location) +
+                                                             " loaded!");
+
+                            },
+                            TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (Exception ex)
             {
@@ -61,3 +181,4 @@ namespace WolvenKit.Functionality.Commands
         #endregion Methods
     }
 }
+

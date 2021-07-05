@@ -18,7 +18,6 @@ using Assimp;
 using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
-using Wolvenkit.InteropControls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;

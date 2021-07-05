@@ -9,9 +9,6 @@
 
   <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-      <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
-          <PrivateAssets>all</PrivateAssets>
-      </PackageReference>
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0022" />
     <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0022" />
@@ -30,7 +27,6 @@
     </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-    <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
   </ItemGroup>
 
 </Project>

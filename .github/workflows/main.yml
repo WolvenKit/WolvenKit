@@ -17,32 +17,57 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    # setup  
     - name: checkout
       uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.100
-
+        dotnet-version: 5.0.x
     - name: dotnet clean
       run: dotnet clean ./WolvenKit.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
       run: dotnet restore ./WolvenKit.sln 
 
-    - uses: naminodarie/get-net-sdk-project-versions-action@v1
+     # environmental variables
+    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
+    - run: echo "OUT=./publish/full" >> $env:GITHUB_ENV
+    - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
+    - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
+    - name: Get version
+      uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version
       with:
-        proj-path: ./WolvenKit/WolvenKit.UI.csproj
-    - run: echo "${{steps.get-version.outputs.version}}"
+        proj-path:  ${{env.PROJ}}
+    - run: echo "VERSION=${{steps.get-version.outputs.version}}" >> $env:GITHUB_ENV
+    - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
+    - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
+    - run: echo "MANIFEST=manifest.json" >> $env:GITHUB_ENV
 
-    - name: dotnet publish WolvenKit
-      run: dotnet publish ./WolvenKit/WolvenKit.UI.csproj -o publish/app/wolvenkit-${{steps.get-version.outputs.version}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
+    # Publish app
+    - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2
+    # Create assets
+    - run: ${{env.OUT}}/WolvenManager.Installer.exe create -a ${{env.OUT}}\${{env.NAME}}.exe -o ${{env.FINALOUT}}
+    - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}\" .\Installers\installer.iss
+    - run: ${{env.OUT}}/WolvenManager.Installer.exe manifest -a ${{env.OUT}}\${{env.NAME}}.exe -i ${{env.FINALOUT}} -o ${{env.FINALOUT}}
+
+    # PORTABLE
+    - uses: actions/upload-artifact@v2
       with:
-        name: wolvenkit-${{steps.get-version.outputs.version}}
-        path: ./publish/app
+        name: ${{env.PORTABLE}}
+        path: ${{env.FINALOUT}}/${{env.PORTABLE}}
+    # INSTALLER
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.INSTALLER}}
+        path: ${{env.FINALOUT}}/${{env.INSTALLER}}
+    # MANIFEST
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.MANIFEST}}
+        path: ${{env.FINALOUT}}/${{env.MANIFEST}}
+
 
   check-console-win:
     runs-on: windows-latest
@@ -53,7 +78,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.100
+        dotnet-version: 5.0.x
     - name: dotnet clean
       run: dotnet clean ./CP77Tools.sln --configuration Release && dotnet nuget locals all --clear
     - name: dotnet restore
