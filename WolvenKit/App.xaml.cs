@@ -9,17 +9,25 @@ using System.Windows;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.Messaging;
+using CP77.CR2W;
 using HandyControl.Tools;
 using NodeNetwork;
 using Orchestra.Services;
 using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core.Services;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Modkit.RED3;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.Views;
+using WolvenManager.Installer.Services;
 
 namespace WolvenKit
 {
@@ -36,6 +44,50 @@ namespace WolvenKit
         {
             // Set application licenses.
             Initializations.InitializeLicenses();
+
+
+            var serviceLocator = ServiceLocator.Default;
+
+
+            // Orchestra
+            serviceLocator.RegisterType<IAboutInfoService, AboutInfoService>();
+            serviceLocator.RegisterType<INotificationService, NotificationService>();
+
+
+            // Wkit
+            var config = SettingsManager.Load();
+            serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
+
+            serviceLocator.RegisterType<IProgressService<double>, ProgressService<double>>();
+            serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
+            serviceLocator.RegisterType<IUpdateService, UpdateService>();
+
+            // singletons
+            serviceLocator.RegisterType<IApplicationInitializationService, ApplicationInitializationService>();
+            serviceLocator.RegisterType<IHashService, HashService>();
+
+            serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
+            serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
+            serviceLocator.RegisterType<MockGameController>();
+
+            serviceLocator.RegisterType<Red4ParserService>();
+            serviceLocator.RegisterType<TargetTools>();      //Cp77FileService
+            serviceLocator.RegisterType<RIG>();              //Cp77FileService
+            serviceLocator.RegisterType<MeshTools>();        //RIG, Cp77FileService
+
+            serviceLocator.RegisterType<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
+
+            serviceLocator.RegisterType<Cp77Controller>();
+
+            // red3 modding tools
+            serviceLocator.RegisterType<Red3ModTools>();
+            serviceLocator.RegisterType<Tw3Controller>();
+
+
+
+
+            serviceLocator.RegisterType<IGameControllerFactory, GameControllerFactory>();
+
         }
 
         // Application OnStartup Override.
@@ -59,14 +111,14 @@ namespace WolvenKit
             Initializations.InitializeWebview2();
 
             StaticReferences.Logger.Info("Initializing MVVM");
-            await Initializations.InitializeMVVM();
+            Initializations.InitializeMVVM();
 
             StaticReferences.Logger.Info("Initializing Theme Helper");
             Initializations.InitializeThemeHelper();
 
             StaticReferences.Logger.Info("Initializing Shell");
             await Initializations.InitializeShell();
-            var growl = ServiceLocator.Default.ResolveType<IGrowlNotificationService>();
+            var growl = ServiceLocator.Default.ResolveType<INotificationService>();
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             Helpers.ShowFirstTimeSetup(settings, growl);
 
@@ -83,7 +135,6 @@ namespace WolvenKit
             NNViewRegistrar.RegisterSplat();
 
             StaticReferences.Logger.Info("Initializing Notifications.");
-            NotificationHelper.InitializeNotificationHelper();
 
             StaticReferences.Logger.Info("Check for new updates");
             //Helpers.CheckForUpdates();

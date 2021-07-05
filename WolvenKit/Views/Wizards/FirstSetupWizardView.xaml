@@ -3,11 +3,24 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:catel="http://schemas.catelproject.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    ViewModelChanged="UserControl_ViewModelChanged">
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    Width="auto"
+    Height="500"
+    MinWidth="700"
+    MinHeight="500"
+    Initialized="UserControl_Initialized_1">
 
-    <catel:UserControl.Resources />
+    <catel:UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Themes/TextBoxExtendedCustom.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </catel:UserControl.Resources>
     <Grid
         MinWidth="300"
         MinHeight="300"
@@ -20,88 +33,243 @@
             <RowDefinition Height="90*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-
         <StackPanel
-            Margin="15,15,0,0"
+            Margin="-5,-7,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Center"
+            VerticalAlignment="Top"
             Orientation="Horizontal">
-            <Grid>
-                <iconPacks:PackIconCodicons
-                    Grid.Row="0"
-                    Width="50"
-                    Height="50"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                    Kind="Hubot"
-                    Spin="False"
-                    SpinAutoReverse="False" />
-            </Grid>
-            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
 
-                <TextBlock
-                    Grid.Row="0"
-                    Margin="10,10,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    FontSize="20"
-                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                    Text="Let's set you up!" />
-                <hc:Divider
-                    Margin="0,5,0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
-            </StackPanel>
+            <iconPacks:PackIconCodicons
+                Grid.Row="0"
+                Width="30"
+                Height="30"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                Kind="Hubot"
+                Spin="False"
+                SpinAutoReverse="False" />
+
+            <TextBlock
+                Grid.Row="0"
+                Margin="10,5,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="17"
+                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                Text="Let's set you up!" />
         </StackPanel>
 
         <Grid x:Name="PageGrid" Grid.Row="1" />
 
-        <Grid
-            Grid.Row="2"
-            Height="95"
-            Margin="0,0,0,0"
-            VerticalAlignment="Bottom">
+        <syncfusion:WizardControl
+            Grid.RowSpan="3"
+            Margin="0,33,0,0"
+            FinishButtonClosesWindow="True"
+            FinishEnabled="{Binding AllFieldsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="Finish">
+                    <hc:EventToCommand Command="{Binding FinishCommand}" PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
 
-            <Button
-                Width="50"
-                Height="30"
-                Margin="3"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                Click="Button_Click_1"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                IsEnabled="True">
-                <iconPacks:PackIconCodicons Kind="ArrowLeft" />
-            </Button>
-            <hc:StepBar
-                x:Name="StepMain"
-                Grid.Row="2"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Margin="50,0,50,3"
-                Dock="Bottom">
-                <hc:StepBarItem Content="Create User (Optional)" />
+            <!--<syncfusion:WizardPage
+                Name="wizardPage1"
+                BackVisibility="Collapsed"
+                HelpVisibility="Collapsed"
+                NextVisibility="Visible"
+                FinishVisibility="Collapsed"
+                CancelVisibility="Collapsed">
+                <Grid Grid.Row="3" VerticalAlignment="Center">
+                    <Grid
+         Margin="5,-90,5,0"
+         HorizontalAlignment="Stretch"
+         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                            <StackPanel
+                 Margin="0,0,0,0"
+                 VerticalAlignment="Top"
+                 Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconRPGAwesome
 
-                <hc:StepBarItem Content="Locate Game Data" />
-                <hc:StepBarItem Content="Finalize Setup" />
-            </hc:StepBar>
-            <Button
-                Width="50"
-                Height="30"
-                Margin="3"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                Click="Button_Click"
-                Command="{Binding NextCmd}"
-                CommandParameter="{Binding ElementName=StepMain}"
                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                IsEnabled="{Binding AllFieldIsValid}">
-                <iconPacks:PackIconCodicons Kind="ArrowRight" />
-            </Button>
-        </Grid>
+                Kind="WolfHowl" />
+                                    <TextBlock Margin="5,0,0,0"  VerticalAlignment="Center" Text="Setup a profile (optional)" />
+                                </StackPanel>
+                                <hc:Divider Margin="0,5,0,15" />
+                                <Grid Margin="0,0,0,0">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*" />
+                                                <ColumnDefinition Width="3*" />
+                                            </Grid.ColumnDefinitions>
+                                            <hc:ImageSelector
+                                             x:Name="imgSelector"
+                                             Width="120"
+                                             Height="120"
+                                             Margin="0,-20,0,0"
+                                             HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                            <StackPanel Grid.Column="1">
+                                                <syncfusion:SfTextInputLayout  Hint="Author">
+                                                    <syncfusion:SfTextBoxExt Text="{Binding Author}" />
+                                                </syncfusion:SfTextInputLayout>
+                                                <syncfusion:SfTextInputLayout  Hint="Email">
+                                                    <syncfusion:SfTextBoxExt Text="{Binding Email}" />
+                                                </syncfusion:SfTextInputLayout>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <syncfusion:SfTextInputLayout  Hint="Donate Link">
+                                            <syncfusion:SfTextBoxExt Text="{Binding DonateLink}" />
+                                        </syncfusion:SfTextInputLayout>
+                                        <syncfusion:SfTextInputLayout  Hint="Description">
+                                            <syncfusion:SfTextBoxExt Text="{Binding Description}" />
+                                        </syncfusion:SfTextInputLayout>
+                                        <TextBlock  Text="Theme (applies after restart.)" />
+                                        <Border BorderThickness="1" BorderBrush="Gray" CornerRadius="4">
+
+                                        <WrapPanel
+                         x:Name="CircleTest"
+                         Margin="0,0,0,0"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         FlowDirection="LeftToRight" />
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </syncfusion:WizardPage>-->
+
+            <syncfusion:WizardPage
+                Name="wizardPage2"
+                BackVisibility="Collapsed"
+                CancelVisibility="Collapsed"
+                FinishVisibility="Visible"
+                HelpVisibility="Collapsed"
+                NextVisibility="Collapsed">
+                <Grid Grid.Row="3" VerticalAlignment="Center">
+                    <Grid
+                        Margin="5,-90,5,100"
+                        HorizontalAlignment="Stretch"
+                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                            <StackPanel
+                                Margin="0,0,0,0"
+                                VerticalAlignment="Top"
+                                Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconRPGAwesome Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Kind="WolfHowl" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Locate Game Data" />
+                                </StackPanel>
+                                <hc:Divider Margin="0,5,0,15" />
+                                <Grid Margin="0,0,0,0">
+                                    <StackPanel>
+                                        <Grid>
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <hc:TextBox
+                                                        x:Name="cp77ExeTxtb"
+                                                        Width="600"
+                                                        Margin="0"
+                                                        hc:InfoElement.Necessary="True"
+                                                        hc:InfoElement.Placeholder="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe"
+                                                        hc:InfoElement.Title="Executable Path"
+                                                        hc:InfoElement.TitlePlacement="Left"
+                                                        hc:InfoElement.TitleWidth="150"
+                                                        Style="{StaticResource TextBoxExtendCustom}"
+                                                        Text="{Binding CP77ExePath}"
+                                                        TextChanged="Field_TextChanged"
+                                                        VerifyFunc="VerifyFile" />
+                                                    <Button
+                                                        Grid.Column="1"
+                                                        Width="50"
+                                                        Height="34"
+                                                        Margin="0,10,0,0"
+                                                        BorderBrush="{DynamicResource BorderBrush}"
+                                                        BorderThickness="1"
+                                                        Command="{Binding OpenCP77GamePathCommand}"
+                                                        Style="{DynamicResource WPFFlatButtonStyle}">
+
+                                                        <iconPacks:PackIconCodicons
+                                                            Grid.Row="0"
+                                                            Width="15"
+                                                            Height="15"
+                                                            Margin="0,0,0,0"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                                            Kind="FolderOpened"
+                                                            Spin="False"
+                                                            SpinAutoReverse="False" />
+                                                    </Button>
+                                                </StackPanel>
+                                                <TextBlock
+                                                    x:Name="ValidationText"
+                                                    MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
+                                                    Margin="150,2,65,0"
+                                                    Background="DarkRed"
+                                                    FontSize="14"
+                                                    Text="TEMP"
+                                                    TextAlignment="Center"
+                                                    TextWrapping="Wrap"
+                                                    Visibility="Collapsed" />
+
+                                                <StackPanel Orientation="Horizontal">
+
+                                                    <hc:TextBox
+                                                        x:Name="matdepotxtb"
+                                                        Width="590"
+                                                        Margin="0,10,10,0"
+                                                        hc:InfoElement.Necessary="False"
+                                                        hc:InfoElement.Placeholder="Enter full path : Material Repository Path (Can be any new folder)"
+                                                        hc:InfoElement.Title="Material Repository Folder"
+                                                        hc:InfoElement.TitlePlacement="Left"
+                                                        hc:InfoElement.TitleWidth="150"
+                                                        Style="{StaticResource TextBoxExtend}"
+                                                        Text="{Binding MaterialDepotPath}"
+                                                        Visibility="Visible"
+                                                        VerifyFunc="VerifyFolder" />
+                                                    <Button
+                                                        Grid.Column="1"
+                                                        Width="50"
+                                                        Height="34"
+                                                        Margin="0,10,0,0"
+                                                        BorderBrush="{DynamicResource BorderBrush}"
+                                                        BorderThickness="1"
+                                                        Command="{Binding OpenDepotPathCommand}"
+                                                        Style="{DynamicResource WPFFlatButtonStyle}">
+
+                                                        <iconPacks:PackIconCodicons
+                                                            Grid.Row="0"
+                                                            Width="15"
+                                                            Height="15"
+                                                            Margin="0,0,0,0"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                                            Kind="FolderOpened"
+                                                            Spin="False"
+                                                            SpinAutoReverse="False" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </syncfusion:WizardPage>
+        </syncfusion:WizardControl>
     </Grid>
 </catel:UserControl>

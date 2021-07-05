@@ -61,6 +61,14 @@ namespace WolvenKit.Views.Editor
 
         private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
         {
+            var newsender = sender as SfDataGrid;
+            if (newsender.SelectedItem != null)
+            {
+                var selected = newsender.SelectedItem as FileEntryViewModel;
+                StaticReferencesVM.GlobalStatusBar.SelectedFilename = selected.Name;
+
+            }
+
             if (StaticReferences.GlobalPropertiesView == null)
             { return; }
 
@@ -265,7 +273,6 @@ namespace WolvenKit.Views.Editor
         {
             if (ViewModel is AssetBrowserViewModel vm)
             {
-                NotificationHelper.IsShowNotificationsEnabled = false;
                 vm.AddSelectedCommand.SafeExecute();
             }
         }

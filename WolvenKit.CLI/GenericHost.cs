@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using WolvenKit.CLI.Services;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
@@ -44,7 +45,7 @@ namespace WolvenKit.CLI
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddScoped<ILoggerService, MicrosoftLoggerService>();
-                    services.AddScoped<IProgress<double>, PercentProgressService>();
+                    services.AddScoped<IProgressService<double>, PercentProgressService>();
                     //services.AddScoped<IProgress<double>, ProgressBar>();
 
                     services.AddSingleton<IHashService, HashService>();

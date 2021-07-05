@@ -14,7 +14,6 @@
     xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:Wolvenkit.InteropControls;assembly=Wolvenkit.InteropControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:WolvenKit.Models;assembly=WolvenKit.App"
     xmlns:svl1="clr-namespace:WPFSoundVisualizationLib;assembly=WPFSoundVisualizationLibNet5"

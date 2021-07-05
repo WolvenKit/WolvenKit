@@ -2,6 +2,7 @@ using System;
 using Catel.IoC;
 using CatFacts.Net;
 using Orchestra.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Views.Shell
@@ -31,7 +32,7 @@ namespace WolvenKit.Views.Shell
                 {
                     if (!catfact.Contains("test", StringComparison.OrdinalIgnoreCase))
                     {
-                        ServiceLocator.Default.ResolveType<IGrowlNotificationService>().Info(catfact);
+                        ServiceLocator.Default.ResolveType<INotificationService>().Info(catfact);
                     }
                 }
                 else

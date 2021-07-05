@@ -8,7 +8,6 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using Orc.Squirrel;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -20,6 +19,7 @@ namespace WolvenKit.ViewModels.Wizards
     /// </summary>
     public class FirstSetupWizardViewModel : ViewModelBase
     {
+
         #region Fields
 
         private const string greenBG = "#9600ff00";
@@ -27,9 +27,11 @@ namespace WolvenKit.ViewModels.Wizards
         private const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
         private const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
         private const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
+
         private readonly IOpenFileService _openFileService;
         private readonly ISettingsManager _settingsManager;
-        private readonly IUpdateService _updateService;
+        private readonly ISelectDirectoryService _selectDirectoryService;
+
         private string cp77eexe = "";
         private string wccLiteexe = "";
         private string witcherexe = "";
@@ -38,24 +40,31 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Constructors
 
-        public FirstSetupWizardViewModel(ISettingsManager settingsManager, IUpdateService updateService, IOpenFileService openFileService, ILoggerService loggerService)
+        public FirstSetupWizardViewModel(
+            ISettingsManager settingsManager,
+            IOpenFileService openFileService,
+            ISelectDirectoryService selectDirectoryService
+            )
         {
-            Argument.IsNotNull(() => settingsManager);
-            Argument.IsNotNull(() => updateService);
-            Argument.IsNotNull(() => openFileService);
-            Argument.IsNotNull(() => loggerService);
-
             _settingsManager = settingsManager;
-            _updateService = updateService;
             _openFileService = openFileService;
+            _selectDirectoryService = selectDirectoryService;
+
+            Title = "Settings";
+
+
+            FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
+
+            OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
+            OpenDepotPathCommand = new RelayCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
+
+
 
             OpenW3GamePathCommand = new RelayCommand(ExecuteOpenGamePath, CanOpenGamePath);
-            OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
             OpenWccPathCommand = new RelayCommand(ExecuteOpenWccPath, CanOpenWccPath);
             OpenModDirectoryCommand = new RelayCommand(ExecuteOpenMod, CanOpenMod);
             OpenDlcDirectoryCommand = new RelayCommand(ExecuteOpenDlc, CanOpenDlc);
 
-            Title = "Settings";
 
             CheckForUpdates = _settingsManager.CheckForUpdates;
             W3ExePath = _settingsManager.W3ExecutablePath;
@@ -74,47 +83,39 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Properties
 
-        private bool _allFieldIsValid = false;
-        private string _cpp77ExePath;
-        private string _w3ExePath;
+        //public string Author { get; set; }
+        //public string Email { get; set; }
+        //public string DonateLink { get; set; }
+        //public string Description { get; set; }
+        public string MaterialDepotPath { get; set; }
+
+        private bool _allFieldsValid;
+        public bool AllFieldsValid
+        {
+            get => _allFieldsValid;
+            set
+            {
+                if (_allFieldsValid != value)
+                {
+                    var oldValue = _allFieldsValid;
+                    _allFieldsValid = value;
+                    RaisePropertyChanged(() => AllFieldsValid, oldValue, value);
+                }
+            }
+        }
+
+
         private string _wccLitePath;
 
-        public bool AllFieldIsValid
-        {
-            get => _allFieldIsValid;
-            set
-            {
-                _allFieldIsValid = value;
-                RaisePropertyChanged(nameof(AllFieldIsValid));
-            }
-        }
-
-        public List<UpdateChannel> AvailableUpdateChannels { get; private set; }
+        public bool AllFieldIsValid { get; set; }
         public bool CheckForUpdates { get; set; }
 
-        public string CP77ExePath
-        {
-            get => _cpp77ExePath;
-            set
-            {
-                _cpp77ExePath = value;
-                RaisePropertyChanged(nameof(CP77ExePath));
-            }
-        }
+        public string CP77ExePath { get; set; }
 
         public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
         public bool IsUpdateSystemAvailable { get; private set; }
-        public UpdateChannel UpdateChannel { get; set; }
 
-        public string W3ExePath
-        {
-            get => _w3ExePath;
-            set
-            {
-                _w3ExePath = value;
-                RaisePropertyChanged(nameof(W3ExePath));
-            }
-        }
+        public string W3ExePath { get; set; }
 
         public string WccLitePath
         {
@@ -144,6 +145,32 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Commands
 
+        public ICommand FinishCommand { get; private set; }
+
+        private bool CanFinish()
+        {
+            return true;
+        }
+
+        private void ExecuteFinish()
+        {
+
+            _settingsManager.CheckForUpdates = CheckForUpdates;
+            _settingsManager.W3ExecutablePath = W3ExePath;
+            _settingsManager.CP77ExecutablePath = CP77ExePath;
+            _settingsManager.WccLitePath = WccLitePath;
+            _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
+
+            _settingsManager.Save();
+
+
+        }
+
+        
+
+
+
+        public ICommand OpenDepotPathCommand { get; private set; }
         public ICommand OpenCP77GamePathCommand { get; private set; }
         public ICommand OpenDlcDirectoryCommand { get; private set; }
         public ICommand OpenModDirectoryCommand { get; private set; }
@@ -154,6 +181,7 @@ namespace WolvenKit.ViewModels.Wizards
         private bool CanOpenDlc() => true;
 
         private bool CanOpenGamePath() => true;
+        private bool CanOpenDepotPath() => true;
 
         private bool CanOpenMod() => true;
 
@@ -171,6 +199,16 @@ namespace WolvenKit.ViewModels.Wizards
             if (result.Result)
             {
                 CP77ExePath = result.FileName;
+            }
+        }
+        private async void ExecuteOpenDepotPath()
+        {
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(
+                new DetermineDirectoryContext()
+            );
+            if (result.Result)
+            {
+                MaterialDepotPath = result.DirectoryName;
             }
         }
 
@@ -222,30 +260,6 @@ namespace WolvenKit.ViewModels.Wizards
         {
             await base.InitializeAsync();
 
-            IsUpdateSystemAvailable = _updateService.IsUpdateSystemAvailable;
-            _settingsManager.CheckForUpdates = _updateService.CheckForUpdates;
-            AvailableUpdateChannels = new List<UpdateChannel>(_updateService.AvailableChannels);
-            UpdateChannel = _updateService.CurrentChannel;
-        }
-
-        protected override async Task<bool> SaveAsync()
-        {
-            //var cansave =
-            //    //(File.Exists(WccLitePath) && Path.GetExtension(WccLitePath) == ".exe" && WccLitePath.Contains("wcc_lite.exe")) &&
-            //    (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"));
-            //if (!cansave) return false;
-
-            //_updateService.CheckForUpdates = _settingsManager.CheckForUpdates;
-            //_updateService.CurrentChannel = UpdateChannel;
-
-            _settingsManager.CheckForUpdates = CheckForUpdates;
-            _settingsManager.W3ExecutablePath = W3ExePath;
-            _settingsManager.CP77ExecutablePath = CP77ExePath;
-            _settingsManager.WccLitePath = WccLitePath;
-
-            _settingsManager.Save();
-
-            return await base.SaveAsync();
         }
 
         private void exeSearcherSlave_DoWork()

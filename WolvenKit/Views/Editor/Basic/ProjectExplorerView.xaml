@@ -33,6 +33,7 @@
         </Grid.Resources>
 
         <syncfusion:SfTreeGrid
+            Margin="0,0,3,0"
             Name="TreeGrid"
             AllowEditing="False"
             AllowFiltering="False"
@@ -47,6 +48,7 @@
             ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             MouseDown="TreeGrid_MouseDown"
+            SelectionChanged="TreeGrid_SelectionChanged"
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"
@@ -98,7 +100,7 @@
                                     <Image.Style>
                                         <Style TargetType="Image">
                                             <Style.Triggers>
-                                                
+
                                                 <DataTrigger Binding="{Binding Extension}" Value="fbx">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
                                                 </DataTrigger>
@@ -882,13 +884,15 @@
 
         <hc:SearchBar
             x:Name="PESearchBar"
-            Margin="0,0,0,0"
+            Margin="0,0,3,0"
             VerticalAlignment="Top"
             Background="{DynamicResource ContentBackground}"
             BorderBrush="{DynamicResource BorderBrush}"
             FlowDirection="LeftToRight"
             SearchStarted="PESearchBar_OnSearchStarted"
             ShowClearButton="True"
-            Text="search" />
+                                hc:InfoElement.Placeholder="Search"
+                                Style="{StaticResource SearchBarExtend}"
+                                hc:InfoElement.Necessary="True" />
     </Grid>
 </catel:UserControl>

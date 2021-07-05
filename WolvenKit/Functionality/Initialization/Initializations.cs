@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -12,24 +11,24 @@ using System.Windows.Media.Imaging;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
+using Catel.Services;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
-using Orc.Squirrel;
 using Orchestra.Services;
 using Orchestra.Views;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Tools.Oodle;
-using WolvenKit.Controls;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
+using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Functionality.Initialization
 {
@@ -236,13 +235,11 @@ namespace WolvenKit.Functionality.Initialization
         }
 
         // Initialize MVVM (Catel)
-        public static async Task InitializeMVVM()
+        public static void InitializeMVVM()
         {
             try
             {
                 var uri = new Uri("pack://application:,,,/WolvenKit.Resources;component/Resources/Media/Images/git.png");
-
-                await SquirrelHelper.HandleSquirrelAutomaticallyAsync();
 
                 // Register Viewmodels & Views
                 var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
@@ -305,20 +302,17 @@ namespace WolvenKit.Functionality.Initialization
                 viewLocator.NamingConventions.Add("WolvenKit.Views.Others.PropertyGridEditors.[VM]View");
                 viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors.[VW]ViewModel");
 
-                viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
-                viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));
-                viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
-                viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
-                viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
-
-                // Fixes
+               // Fixes
                 // Custom Registrations
 
                 viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
-                viewModelLocator.Register(typeof(RecentProjectView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
-                viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
+
+                viewLocator.Register(typeof(ProjectWizardViewModel), typeof(ProjectWizardView));
+                viewModelLocator.Register(typeof(Views.Wizards.ProjectWizardView), typeof(ViewModels.Wizards.ProjectWizardViewModel));
+
+
             }
             catch (Exception e)
             {
@@ -339,6 +333,7 @@ namespace WolvenKit.Functionality.Initialization
                 sh.ShowIcon = false;
                 sh.Icon = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\Media\\Images\\Icons\\Application\\TaskBarIcon.ico"));
                 StaticReferences.GlobalShell = sh;
+                sh.BringIntoView();
                 //sh.MinWidth = 1;
                 //sh.MinHeight = 1;
                 // sh.WindowState = WindowState.Maximized;

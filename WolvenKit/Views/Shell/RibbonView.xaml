@@ -1484,7 +1484,7 @@
                     Name="Help"
                     Width="auto"
                     Header="Help"
-                    Visibility="Collapsed">
+                    Visibility="Visible">
 
                     <!--  BugReport Button  -->
                     <syncfusion:RibbonButton
@@ -1530,7 +1530,8 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="About"
-                        SizeForm="Large">
+                        SizeForm="Large"
+                        Visibility="Collapsed">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
                                 <iconPacks:PackIconCodicons

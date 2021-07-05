@@ -38,15 +38,14 @@ namespace WolvenKit.Modkit.RED4
 
         #region Methods
 
-
-
         /// <summary>
         /// Creates and archive from a folder and packs all files inside into it
         /// </summary>
         /// <param name="infolder"></param>
         /// <param name="outpath"></param>
+        /// <param name="modname">Optional archivename</param>
         /// <returns></returns>
-        public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath)
+        public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string modname = null)
         {
             if (!infolder.Exists)
             {
@@ -79,6 +78,11 @@ namespace WolvenKit.Modkit.RED4
 
 
             var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
+            if (modname != null)
+            {
+                outfile = Path.Combine(outpath.FullName, $"{modname}.archive");
+            }
+
             var ar = new Archive
             {
                 ArchiveAbsolutePath = outfile,

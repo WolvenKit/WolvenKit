@@ -22,7 +22,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "packed", "archive", "pc", "mod", $"mod{Name}");
+                var dir = Path.Combine(ProjectDirectory, "packed", "archive", "pc", "mod"/*, $"mod{Name}"*/);
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

@@ -12,7 +12,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Opacity != null)
@@ -171,7 +171,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DissolveBurnColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DissolveBurnColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DissolveBurnColor.Red }, Green = new CUInt8() { Value = (Byte)DissolveBurnColor.Green }, Blue = new CUInt8() { Value = (Byte)DissolveBurnColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DissolveBurnColor.Alpha } };
+                var p = new CColor(cr2w, v, "DissolveBurnColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DissolveBurnColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DissolveBurnColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DissolveBurnColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DissolveBurnColor.Alpha };
                 v.Variant = p;
             }
             if (DissolveBurnStrength != null)
@@ -231,14 +231,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (EdgeColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EdgeColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EdgeColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EdgeColor.Red }, Green = new CUInt8() { Value = (Byte)EdgeColor.Green }, Blue = new CUInt8() { Value = (Byte)EdgeColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EdgeColor.Alpha } };
+                var p = new CColor(cr2w, v, "EdgeColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EdgeColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EdgeColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EdgeColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EdgeColor.Alpha };
                 v.Variant = p;
             }
             if (EdgeThickness != null)
@@ -350,7 +350,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
         }
@@ -476,7 +476,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (TextureColorBlend != null)
@@ -666,7 +666,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LightColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LightColor.Red }, Green = new CUInt8() { Value = (Byte)LightColor.Green }, Blue = new CUInt8() { Value = (Byte)LightColor.Blue }, Alpha = new CUInt8() { Value = (Byte)LightColor.Alpha } };
+                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LightColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LightColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LightColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LightColor.Alpha };
                 v.Variant = p;
             }
             if (SkyAmbient != null)
@@ -744,7 +744,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LightColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LightColor.Red }, Green = new CUInt8() { Value = (Byte)LightColor.Green }, Blue = new CUInt8() { Value = (Byte)LightColor.Blue }, Alpha = new CUInt8() { Value = (Byte)LightColor.Alpha } };
+                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LightColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LightColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LightColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LightColor.Alpha };
                 v.Variant = p;
             }
             if (LightIntensity != null)
@@ -772,7 +772,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SkyColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SkyColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SkyColor.Red }, Green = new CUInt8() { Value = (Byte)SkyColor.Green }, Blue = new CUInt8() { Value = (Byte)SkyColor.Blue }, Alpha = new CUInt8() { Value = (Byte)SkyColor.Alpha } };
+                var p = new CColor(cr2w, v, "SkyColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SkyColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SkyColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SkyColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SkyColor.Alpha };
                 v.Variant = p;
             }
             if (VectorNoiseSize != null)
@@ -793,14 +793,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "AmbientLightTop") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "AmbientLightTop") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)AmbientLightTop.Red }, Green = new CUInt8() { Value = (Byte)AmbientLightTop.Green }, Blue = new CUInt8() { Value = (Byte)AmbientLightTop.Blue }, Alpha = new CUInt8() { Value = (Byte)AmbientLightTop.Alpha } };
+                var p = new CColor(cr2w, v, "AmbientLightTop") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)AmbientLightTop.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)AmbientLightTop.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)AmbientLightTop.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)AmbientLightTop.Alpha };
                 v.Variant = p;
             }
             if (AmbientLightBottom != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "AmbientLightBottom") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "AmbientLightBottom") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)AmbientLightBottom.Red }, Green = new CUInt8() { Value = (Byte)AmbientLightBottom.Green }, Blue = new CUInt8() { Value = (Byte)AmbientLightBottom.Blue }, Alpha = new CUInt8() { Value = (Byte)AmbientLightBottom.Alpha } };
+                var p = new CColor(cr2w, v, "AmbientLightBottom") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)AmbientLightBottom.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)AmbientLightBottom.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)AmbientLightBottom.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)AmbientLightBottom.Alpha };
                 v.Variant = p;
             }
             if (CoverageShift != null)
@@ -997,7 +997,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -1169,7 +1169,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -1310,7 +1310,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColor.Red }, Green = new CUInt8() { Value = (Byte)BaseColor.Green }, Blue = new CUInt8() { Value = (Byte)BaseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColor.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColor.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -1489,7 +1489,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -1866,7 +1866,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tint.Red }, Green = new CUInt8() { Value = (Byte)Tint.Green }, Blue = new CUInt8() { Value = (Byte)Tint.Blue }, Alpha = new CUInt8() { Value = (Byte)Tint.Alpha } };
+                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tint.Alpha };
                 v.Variant = p;
             }
             if (Mask != null)
@@ -2139,7 +2139,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tint.Red }, Green = new CUInt8() { Value = (Byte)Tint.Green }, Blue = new CUInt8() { Value = (Byte)Tint.Blue }, Alpha = new CUInt8() { Value = (Byte)Tint.Alpha } };
+                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tint.Alpha };
                 v.Variant = p;
             }
         }
@@ -2317,14 +2317,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tint.Red }, Green = new CUInt8() { Value = (Byte)Tint.Green }, Blue = new CUInt8() { Value = (Byte)Tint.Blue }, Alpha = new CUInt8() { Value = (Byte)Tint.Alpha } };
+                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tint.Alpha };
                 v.Variant = p;
             }
             if (TintPulse != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintPulse") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintPulse") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintPulse.Red }, Green = new CUInt8() { Value = (Byte)TintPulse.Green }, Blue = new CUInt8() { Value = (Byte)TintPulse.Blue }, Alpha = new CUInt8() { Value = (Byte)TintPulse.Alpha } };
+                var p = new CColor(cr2w, v, "TintPulse") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintPulse.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintPulse.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintPulse.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintPulse.Alpha };
                 v.Variant = p;
             }
         }
@@ -2572,7 +2572,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorMain") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorMain") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorMain.Red }, Green = new CUInt8() { Value = (Byte)ColorMain.Green }, Blue = new CUInt8() { Value = (Byte)ColorMain.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorMain.Alpha } };
+                var p = new CColor(cr2w, v, "ColorMain") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorMain.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorMain.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorMain.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorMain.Alpha };
                 v.Variant = p;
             }
             if (Brightness != null)
@@ -2819,7 +2819,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tint.Red }, Green = new CUInt8() { Value = (Byte)Tint.Green }, Blue = new CUInt8() { Value = (Byte)Tint.Blue }, Alpha = new CUInt8() { Value = (Byte)Tint.Alpha } };
+                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tint.Alpha };
                 v.Variant = p;
             }
         }
@@ -2840,7 +2840,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -2980,7 +2980,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (MetalnessScale != null)
@@ -3120,7 +3120,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -3211,7 +3211,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -3288,7 +3288,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -3379,7 +3379,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -3470,7 +3470,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -3562,7 +3562,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -3654,7 +3654,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -3738,7 +3738,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (RoughnessTexture != null)
@@ -4041,7 +4041,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -4069,21 +4069,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MaskColorR") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MaskColorR") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MaskColorR.Red }, Green = new CUInt8() { Value = (Byte)MaskColorR.Green }, Blue = new CUInt8() { Value = (Byte)MaskColorR.Blue }, Alpha = new CUInt8() { Value = (Byte)MaskColorR.Alpha } };
+                var p = new CColor(cr2w, v, "MaskColorR") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MaskColorR.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MaskColorR.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MaskColorR.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MaskColorR.Alpha };
                 v.Variant = p;
             }
             if (MaskColorG != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MaskColorG") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MaskColorG") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MaskColorG.Red }, Green = new CUInt8() { Value = (Byte)MaskColorG.Green }, Blue = new CUInt8() { Value = (Byte)MaskColorG.Blue }, Alpha = new CUInt8() { Value = (Byte)MaskColorG.Alpha } };
+                var p = new CColor(cr2w, v, "MaskColorG") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MaskColorG.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MaskColorG.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MaskColorG.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MaskColorG.Alpha };
                 v.Variant = p;
             }
             if (MaskColorB != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MaskColorB") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MaskColorB") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MaskColorB.Red }, Green = new CUInt8() { Value = (Byte)MaskColorB.Green }, Blue = new CUInt8() { Value = (Byte)MaskColorB.Blue }, Alpha = new CUInt8() { Value = (Byte)MaskColorB.Alpha } };
+                var p = new CColor(cr2w, v, "MaskColorB") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MaskColorB.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MaskColorB.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MaskColorB.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MaskColorB.Alpha };
                 v.Variant = p;
             }
             if (AtlasSize != null)
@@ -4119,21 +4119,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorForeground") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorForeground") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorForeground.Red }, Green = new CUInt8() { Value = (Byte)ColorForeground.Green }, Blue = new CUInt8() { Value = (Byte)ColorForeground.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorForeground.Alpha } };
+                var p = new CColor(cr2w, v, "ColorForeground") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorForeground.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorForeground.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorForeground.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorForeground.Alpha };
                 v.Variant = p;
             }
             if (ColorMiddle != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorMiddle") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorMiddle") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorMiddle.Red }, Green = new CUInt8() { Value = (Byte)ColorMiddle.Green }, Blue = new CUInt8() { Value = (Byte)ColorMiddle.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorMiddle.Alpha } };
+                var p = new CColor(cr2w, v, "ColorMiddle") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorMiddle.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorMiddle.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorMiddle.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorMiddle.Alpha };
                 v.Variant = p;
             }
             if (ColorBackground != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorBackground") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorBackground") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorBackground.Red }, Green = new CUInt8() { Value = (Byte)ColorBackground.Green }, Blue = new CUInt8() { Value = (Byte)ColorBackground.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorBackground.Alpha } };
+                var p = new CColor(cr2w, v, "ColorBackground") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorBackground.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorBackground.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorBackground.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorBackground.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -4359,7 +4359,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (SunDirection != null)
@@ -4412,7 +4412,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CityLightsColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CityLightsColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CityLightsColor.Red }, Green = new CUInt8() { Value = (Byte)CityLightsColor.Green }, Blue = new CUInt8() { Value = (Byte)CityLightsColor.Blue }, Alpha = new CUInt8() { Value = (Byte)CityLightsColor.Alpha } };
+                var p = new CColor(cr2w, v, "CityLightsColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CityLightsColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CityLightsColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CityLightsColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CityLightsColor.Alpha };
                 v.Variant = p;
             }
             if (OceanDetailNormalMap != null)
@@ -4461,14 +4461,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "AtmosphereColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "AtmosphereColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)AtmosphereColor.Red }, Green = new CUInt8() { Value = (Byte)AtmosphereColor.Green }, Blue = new CUInt8() { Value = (Byte)AtmosphereColor.Blue }, Alpha = new CUInt8() { Value = (Byte)AtmosphereColor.Alpha } };
+                var p = new CColor(cr2w, v, "AtmosphereColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)AtmosphereColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)AtmosphereColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)AtmosphereColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)AtmosphereColor.Alpha };
                 v.Variant = p;
             }
             if (AtmosphereOrangeColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "AtmosphereOrangeColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "AtmosphereOrangeColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)AtmosphereOrangeColor.Red }, Green = new CUInt8() { Value = (Byte)AtmosphereOrangeColor.Green }, Blue = new CUInt8() { Value = (Byte)AtmosphereOrangeColor.Blue }, Alpha = new CUInt8() { Value = (Byte)AtmosphereOrangeColor.Alpha } };
+                var p = new CColor(cr2w, v, "AtmosphereOrangeColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)AtmosphereOrangeColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)AtmosphereOrangeColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)AtmosphereOrangeColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)AtmosphereOrangeColor.Alpha };
                 v.Variant = p;
             }
             if (Brigthness != null)
@@ -4542,7 +4542,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -4655,7 +4655,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -4725,7 +4725,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -4991,7 +4991,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (Albedo != null)
@@ -5383,7 +5383,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ShadowColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ShadowColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ShadowColor.Red }, Green = new CUInt8() { Value = (Byte)ShadowColor.Green }, Blue = new CUInt8() { Value = (Byte)ShadowColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ShadowColor.Alpha } };
+                var p = new CColor(cr2w, v, "ShadowColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ShadowColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ShadowColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ShadowColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ShadowColor.Alpha };
                 v.Variant = p;
             }
             if (Exponent != null)
@@ -5474,7 +5474,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -5502,7 +5502,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ShadowColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ShadowColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ShadowColor.Red }, Green = new CUInt8() { Value = (Byte)ShadowColor.Green }, Blue = new CUInt8() { Value = (Byte)ShadowColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ShadowColor.Alpha } };
+                var p = new CColor(cr2w, v, "ShadowColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ShadowColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ShadowColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ShadowColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ShadowColor.Alpha };
                 v.Variant = p;
             }
             if (Exponent != null)
@@ -5608,7 +5608,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (RoughnessScale != null)
@@ -5777,7 +5777,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (FrontFacesReflectionPower != null)
@@ -5805,7 +5805,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (BlurRadius != null)
@@ -6006,7 +6006,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintFromVertexPaint != null)
@@ -6055,7 +6055,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (NormalStrength != null)
@@ -6242,7 +6242,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorMultiplier") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorMultiplier") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorMultiplier.Red }, Green = new CUInt8() { Value = (Byte)ColorMultiplier.Green }, Blue = new CUInt8() { Value = (Byte)ColorMultiplier.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorMultiplier.Alpha } };
+                var p = new CColor(cr2w, v, "ColorMultiplier") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorMultiplier.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorMultiplier.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorMultiplier.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorMultiplier.Alpha };
                 v.Variant = p;
             }
             if (GlassTint != null)
@@ -6256,14 +6256,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintSurface") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintSurface") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintSurface.Red }, Green = new CUInt8() { Value = (Byte)TintSurface.Green }, Blue = new CUInt8() { Value = (Byte)TintSurface.Blue }, Alpha = new CUInt8() { Value = (Byte)TintSurface.Alpha } };
+                var p = new CColor(cr2w, v, "TintSurface") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintSurface.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintSurface.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintSurface.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintSurface.Alpha };
                 v.Variant = p;
             }
             if (GlassSpecularColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (FrontFacesReflectionPower != null)
@@ -6438,7 +6438,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorMultiplier") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorMultiplier") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorMultiplier.Red }, Green = new CUInt8() { Value = (Byte)ColorMultiplier.Green }, Blue = new CUInt8() { Value = (Byte)ColorMultiplier.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorMultiplier.Alpha } };
+                var p = new CColor(cr2w, v, "ColorMultiplier") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorMultiplier.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorMultiplier.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorMultiplier.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorMultiplier.Alpha };
                 v.Variant = p;
             }
             if (TintColorAttenuation != null)
@@ -6611,7 +6611,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (GlassTint != null)
@@ -6667,7 +6667,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (NormalStrength != null)
@@ -6807,7 +6807,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -6835,7 +6835,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintFromVertexPaint != null)
@@ -6884,7 +6884,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (NormalStrength != null)
@@ -7109,7 +7109,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintFromVertexPaint != null)
@@ -7253,7 +7253,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassTintMultiplier") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassTintMultiplier") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassTintMultiplier.Red }, Green = new CUInt8() { Value = (Byte)GlassTintMultiplier.Green }, Blue = new CUInt8() { Value = (Byte)GlassTintMultiplier.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassTintMultiplier.Alpha } };
+                var p = new CColor(cr2w, v, "GlassTintMultiplier") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassTintMultiplier.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassTintMultiplier.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassTintMultiplier.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassTintMultiplier.Alpha };
                 v.Variant = p;
             }
             if (EmissiveTint != null)
@@ -7267,7 +7267,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LensSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LensSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LensSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)LensSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)LensSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)LensSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "LensSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LensSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LensSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LensSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LensSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (LensReflectionPower != null)
@@ -7362,7 +7362,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ScopeInside") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ScopeInside") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ScopeInside.Red }, Green = new CUInt8() { Value = (Byte)ScopeInside.Green }, Blue = new CUInt8() { Value = (Byte)ScopeInside.Blue }, Alpha = new CUInt8() { Value = (Byte)ScopeInside.Alpha } };
+                var p = new CColor(cr2w, v, "ScopeInside") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ScopeInside.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ScopeInside.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ScopeInside.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ScopeInside.Alpha };
                 v.Variant = p;
             }
             if (DistortionStrenght != null)
@@ -7535,14 +7535,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintSurface != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintSurface") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintSurface") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintSurface.Red }, Green = new CUInt8() { Value = (Byte)TintSurface.Green }, Blue = new CUInt8() { Value = (Byte)TintSurface.Blue }, Alpha = new CUInt8() { Value = (Byte)TintSurface.Alpha } };
+                var p = new CColor(cr2w, v, "TintSurface") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintSurface.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintSurface.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintSurface.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintSurface.Alpha };
                 v.Variant = p;
             }
             if (FrontFacesReflectionPower != null)
@@ -7570,7 +7570,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (MaskTexture != null)
@@ -7864,7 +7864,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -8169,28 +8169,28 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "WaterColorShallow") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "WaterColorShallow") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)WaterColorShallow.Red }, Green = new CUInt8() { Value = (Byte)WaterColorShallow.Green }, Blue = new CUInt8() { Value = (Byte)WaterColorShallow.Blue }, Alpha = new CUInt8() { Value = (Byte)WaterColorShallow.Alpha } };
+                var p = new CColor(cr2w, v, "WaterColorShallow") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)WaterColorShallow.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)WaterColorShallow.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)WaterColorShallow.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)WaterColorShallow.Alpha };
                 v.Variant = p;
             }
             if (WaterColorDeep != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "WaterColorDeep") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "WaterColorDeep") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)WaterColorDeep.Red }, Green = new CUInt8() { Value = (Byte)WaterColorDeep.Green }, Blue = new CUInt8() { Value = (Byte)WaterColorDeep.Blue }, Alpha = new CUInt8() { Value = (Byte)WaterColorDeep.Alpha } };
+                var p = new CColor(cr2w, v, "WaterColorDeep") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)WaterColorDeep.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)WaterColorDeep.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)WaterColorDeep.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)WaterColorDeep.Alpha };
                 v.Variant = p;
             }
             if (WaveColor0 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "WaveColor0") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "WaveColor0") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)WaveColor0.Red }, Green = new CUInt8() { Value = (Byte)WaveColor0.Green }, Blue = new CUInt8() { Value = (Byte)WaveColor0.Blue }, Alpha = new CUInt8() { Value = (Byte)WaveColor0.Alpha } };
+                var p = new CColor(cr2w, v, "WaveColor0") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)WaveColor0.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)WaveColor0.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)WaveColor0.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)WaveColor0.Alpha };
                 v.Variant = p;
             }
             if (WaveColor1 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "WaveColor1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "WaveColor1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)WaveColor1.Red }, Green = new CUInt8() { Value = (Byte)WaveColor1.Green }, Blue = new CUInt8() { Value = (Byte)WaveColor1.Blue }, Alpha = new CUInt8() { Value = (Byte)WaveColor1.Alpha } };
+                var p = new CColor(cr2w, v, "WaveColor1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)WaveColor1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)WaveColor1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)WaveColor1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)WaveColor1.Alpha };
                 v.Variant = p;
             }
             if (WaveNoiseTiling != null)
@@ -8225,14 +8225,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "IceColor1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "IceColor1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)IceColor1.Red }, Green = new CUInt8() { Value = (Byte)IceColor1.Green }, Blue = new CUInt8() { Value = (Byte)IceColor1.Blue }, Alpha = new CUInt8() { Value = (Byte)IceColor1.Alpha } };
+                var p = new CColor(cr2w, v, "IceColor1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)IceColor1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)IceColor1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)IceColor1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)IceColor1.Alpha };
                 v.Variant = p;
             }
             if (IceColor2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "IceColor2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "IceColor2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)IceColor2.Red }, Green = new CUInt8() { Value = (Byte)IceColor2.Green }, Blue = new CUInt8() { Value = (Byte)IceColor2.Blue }, Alpha = new CUInt8() { Value = (Byte)IceColor2.Alpha } };
+                var p = new CColor(cr2w, v, "IceColor2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)IceColor2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)IceColor2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)IceColor2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)IceColor2.Alpha };
                 v.Variant = p;
             }
             if (IceTiling != null)
@@ -8267,7 +8267,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BloodColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BloodColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BloodColor.Red }, Green = new CUInt8() { Value = (Byte)BloodColor.Green }, Blue = new CUInt8() { Value = (Byte)BloodColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BloodColor.Alpha } };
+                var p = new CColor(cr2w, v, "BloodColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BloodColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BloodColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BloodColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BloodColor.Alpha };
                 v.Variant = p;
             }
             if (BloodFadeStart != null)
@@ -8418,7 +8418,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -8460,7 +8460,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "RefractionTint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "RefractionTint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)RefractionTint.Red }, Green = new CUInt8() { Value = (Byte)RefractionTint.Green }, Blue = new CUInt8() { Value = (Byte)RefractionTint.Blue }, Alpha = new CUInt8() { Value = (Byte)RefractionTint.Alpha } };
+                var p = new CColor(cr2w, v, "RefractionTint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)RefractionTint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)RefractionTint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)RefractionTint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)RefractionTint.Alpha };
                 v.Variant = p;
             }
             if (IOR != null)
@@ -8657,7 +8657,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "HighlightColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "HighlightColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)HighlightColor.Red }, Green = new CUInt8() { Value = (Byte)HighlightColor.Green }, Blue = new CUInt8() { Value = (Byte)HighlightColor.Blue }, Alpha = new CUInt8() { Value = (Byte)HighlightColor.Alpha } };
+                var p = new CColor(cr2w, v, "HighlightColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)HighlightColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)HighlightColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)HighlightColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)HighlightColor.Alpha };
                 v.Variant = p;
             }
             if (HighlightIntensity != null)
@@ -8706,7 +8706,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -8951,7 +8951,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -8979,7 +8979,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -9196,7 +9196,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -9217,7 +9217,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SecondaryDiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SecondaryDiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SecondaryDiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)SecondaryDiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)SecondaryDiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)SecondaryDiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "SecondaryDiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SecondaryDiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SecondaryDiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SecondaryDiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SecondaryDiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (SecondaryDiffuseAlphaIntensity != null)
@@ -9448,14 +9448,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseColor2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor2.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor2.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor2.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor2.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor2.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -9624,7 +9624,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -9673,7 +9673,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -9848,7 +9848,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -10002,7 +10002,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -10114,7 +10114,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -10226,56 +10226,56 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor0") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor0") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor0.Red }, Green = new CUInt8() { Value = (Byte)TintColor0.Green }, Blue = new CUInt8() { Value = (Byte)TintColor0.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor0.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor0") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor0.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor0.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor0.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor0.Alpha };
                 v.Variant = p;
             }
             if (TintColor1 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor1.Red }, Green = new CUInt8() { Value = (Byte)TintColor1.Green }, Blue = new CUInt8() { Value = (Byte)TintColor1.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor1.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor1.Alpha };
                 v.Variant = p;
             }
             if (TintColor2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor2.Red }, Green = new CUInt8() { Value = (Byte)TintColor2.Green }, Blue = new CUInt8() { Value = (Byte)TintColor2.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor2.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor2.Alpha };
                 v.Variant = p;
             }
             if (TintColor3 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor3") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor3") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor3.Red }, Green = new CUInt8() { Value = (Byte)TintColor3.Green }, Blue = new CUInt8() { Value = (Byte)TintColor3.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor3.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor3") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor3.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor3.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor3.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor3.Alpha };
                 v.Variant = p;
             }
             if (TintColor4 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor4") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor4") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor4.Red }, Green = new CUInt8() { Value = (Byte)TintColor4.Green }, Blue = new CUInt8() { Value = (Byte)TintColor4.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor4.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor4") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor4.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor4.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor4.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor4.Alpha };
                 v.Variant = p;
             }
             if (TintColor5 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor5") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor5") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor5.Red }, Green = new CUInt8() { Value = (Byte)TintColor5.Green }, Blue = new CUInt8() { Value = (Byte)TintColor5.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor5.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor5") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor5.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor5.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor5.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor5.Alpha };
                 v.Variant = p;
             }
             if (TintColor6 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor6") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor6") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor6.Red }, Green = new CUInt8() { Value = (Byte)TintColor6.Green }, Blue = new CUInt8() { Value = (Byte)TintColor6.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor6.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor6") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor6.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor6.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor6.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor6.Alpha };
                 v.Variant = p;
             }
             if (TintColor7 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor7") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor7") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor7.Red }, Green = new CUInt8() { Value = (Byte)TintColor7.Green }, Blue = new CUInt8() { Value = (Byte)TintColor7.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor7.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor7") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor7.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor7.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor7.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor7.Alpha };
                 v.Variant = p;
             }
         }
@@ -10296,7 +10296,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -10492,7 +10492,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -10639,7 +10639,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -10842,7 +10842,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -10905,7 +10905,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -11288,7 +11288,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -11460,7 +11460,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -11597,7 +11597,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -11769,7 +11769,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -11981,7 +11981,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DirtColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DirtColor.Red }, Green = new CUInt8() { Value = (Byte)DirtColor.Green }, Blue = new CUInt8() { Value = (Byte)DirtColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DirtColor.Alpha } };
+                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DirtColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DirtColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DirtColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DirtColor.Alpha };
                 v.Variant = p;
             }
             if (DirtRoughness != null)
@@ -12009,7 +12009,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tint.Red }, Green = new CUInt8() { Value = (Byte)Tint.Green }, Blue = new CUInt8() { Value = (Byte)Tint.Blue }, Alpha = new CUInt8() { Value = (Byte)Tint.Alpha } };
+                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tint.Alpha };
                 v.Variant = p;
             }
             if (FixForBlack != null)
@@ -12030,7 +12030,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ForcedTint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ForcedTint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ForcedTint.Red }, Green = new CUInt8() { Value = (Byte)ForcedTint.Green }, Blue = new CUInt8() { Value = (Byte)ForcedTint.Blue }, Alpha = new CUInt8() { Value = (Byte)ForcedTint.Alpha } };
+                var p = new CColor(cr2w, v, "ForcedTint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ForcedTint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ForcedTint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ForcedTint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ForcedTint.Alpha };
                 v.Variant = p;
             }
         }
@@ -12065,7 +12065,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (DataTex != null)
@@ -12121,7 +12121,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (DataTex != null)
@@ -12170,7 +12170,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (DataTex != null)
@@ -12377,7 +12377,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LightColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LightColor.Red }, Green = new CUInt8() { Value = (Byte)LightColor.Green }, Blue = new CUInt8() { Value = (Byte)LightColor.Blue }, Alpha = new CUInt8() { Value = (Byte)LightColor.Alpha } };
+                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LightColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LightColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LightColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LightColor.Alpha };
                 v.Variant = p;
             }
             if (SilhouetteTex != null)
@@ -12412,14 +12412,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CoatTintFwd") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CoatTintFwd") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CoatTintFwd.Red }, Green = new CUInt8() { Value = (Byte)CoatTintFwd.Green }, Blue = new CUInt8() { Value = (Byte)CoatTintFwd.Blue }, Alpha = new CUInt8() { Value = (Byte)CoatTintFwd.Alpha } };
+                var p = new CColor(cr2w, v, "CoatTintFwd") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CoatTintFwd.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CoatTintFwd.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CoatTintFwd.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CoatTintFwd.Alpha };
                 v.Variant = p;
             }
             if (CoatTintSide != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CoatTintSide") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CoatTintSide") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CoatTintSide.Red }, Green = new CUInt8() { Value = (Byte)CoatTintSide.Green }, Blue = new CUInt8() { Value = (Byte)CoatTintSide.Blue }, Alpha = new CUInt8() { Value = (Byte)CoatTintSide.Alpha } };
+                var p = new CColor(cr2w, v, "CoatTintSide") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CoatTintSide.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CoatTintSide.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CoatTintSide.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CoatTintSide.Alpha };
                 v.Variant = p;
             }
             if (CoatTintFresnelBias != null)
@@ -12433,7 +12433,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CoatSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CoatSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CoatSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)CoatSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)CoatSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)CoatSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "CoatSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (CoatNormalStrength != null)
@@ -12794,14 +12794,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScaleEdgeStart") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScaleEdgeStart") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScaleEdgeStart.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScaleEdgeStart.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScaleEdgeStart.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScaleEdgeStart.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScaleEdgeStart") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeStart.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeStart.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeStart.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeStart.Alpha };
                 v.Variant = p;
             }
             if (BaseColorScaleEdgeEnd != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScaleEdgeEnd") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScaleEdgeEnd") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScaleEdgeEnd.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScaleEdgeEnd.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScaleEdgeEnd.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScaleEdgeEnd.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScaleEdgeEnd") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeEnd.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeEnd.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeEnd.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScaleEdgeEnd.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -12976,7 +12976,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -13088,7 +13088,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -13214,28 +13214,28 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color1.Red }, Green = new CUInt8() { Value = (Byte)Color1.Green }, Blue = new CUInt8() { Value = (Byte)Color1.Blue }, Alpha = new CUInt8() { Value = (Byte)Color1.Alpha } };
+                var p = new CColor(cr2w, v, "Color1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color1.Alpha };
                 v.Variant = p;
             }
             if (Color2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color2.Red }, Green = new CUInt8() { Value = (Byte)Color2.Green }, Blue = new CUInt8() { Value = (Byte)Color2.Blue }, Alpha = new CUInt8() { Value = (Byte)Color2.Alpha } };
+                var p = new CColor(cr2w, v, "Color2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color2.Alpha };
                 v.Variant = p;
             }
             if (Color3 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color3") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color3") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color3.Red }, Green = new CUInt8() { Value = (Byte)Color3.Green }, Blue = new CUInt8() { Value = (Byte)Color3.Blue }, Alpha = new CUInt8() { Value = (Byte)Color3.Alpha } };
+                var p = new CColor(cr2w, v, "Color3") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color3.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color3.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color3.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color3.Alpha };
                 v.Variant = p;
             }
             if (Color4 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color4") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color4") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color4.Red }, Green = new CUInt8() { Value = (Byte)Color4.Green }, Blue = new CUInt8() { Value = (Byte)Color4.Blue }, Alpha = new CUInt8() { Value = (Byte)Color4.Alpha } };
+                var p = new CColor(cr2w, v, "Color4") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color4.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color4.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color4.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color4.Alpha };
                 v.Variant = p;
             }
             if (MetalnessScale != null)
@@ -13464,14 +13464,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (EmissiveColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (Emissive != null)
@@ -13639,7 +13639,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (AlphaThreshold != null)
@@ -13800,7 +13800,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (TransitionSize != null)
@@ -13990,7 +13990,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -14142,7 +14142,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -14421,7 +14421,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintScale != null)
@@ -14484,7 +14484,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BloodColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BloodColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BloodColor.Red }, Green = new CUInt8() { Value = (Byte)BloodColor.Green }, Blue = new CUInt8() { Value = (Byte)BloodColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BloodColor.Alpha } };
+                var p = new CColor(cr2w, v, "BloodColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BloodColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BloodColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BloodColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BloodColor.Alpha };
                 v.Variant = p;
             }
             if (DetailNormalInfluence != null)
@@ -14540,7 +14540,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -14652,7 +14652,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintScale != null)
@@ -14694,7 +14694,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BloodColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BloodColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BloodColor.Red }, Green = new CUInt8() { Value = (Byte)BloodColor.Green }, Blue = new CUInt8() { Value = (Byte)BloodColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BloodColor.Alpha } };
+                var p = new CColor(cr2w, v, "BloodColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BloodColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BloodColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BloodColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BloodColor.Alpha };
                 v.Variant = p;
             }
             if (SkinProfile != null)
@@ -15305,7 +15305,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -15449,7 +15449,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -15554,7 +15554,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -15624,21 +15624,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ScatteringColorThin") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ScatteringColorThin") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ScatteringColorThin.Red }, Green = new CUInt8() { Value = (Byte)ScatteringColorThin.Green }, Blue = new CUInt8() { Value = (Byte)ScatteringColorThin.Blue }, Alpha = new CUInt8() { Value = (Byte)ScatteringColorThin.Alpha } };
+                var p = new CColor(cr2w, v, "ScatteringColorThin") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Alpha };
                 v.Variant = p;
             }
             if (ScatteringColorThick != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ScatteringColorThick") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ScatteringColorThick") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ScatteringColorThick.Red }, Green = new CUInt8() { Value = (Byte)ScatteringColorThick.Green }, Blue = new CUInt8() { Value = (Byte)ScatteringColorThick.Blue }, Alpha = new CUInt8() { Value = (Byte)ScatteringColorThick.Alpha } };
+                var p = new CColor(cr2w, v, "ScatteringColorThick") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Alpha };
                 v.Variant = p;
             }
             if (Albedo != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Albedo") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Albedo") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Albedo.Red }, Green = new CUInt8() { Value = (Byte)Albedo.Green }, Blue = new CUInt8() { Value = (Byte)Albedo.Blue }, Alpha = new CUInt8() { Value = (Byte)Albedo.Alpha } };
+                var p = new CColor(cr2w, v, "Albedo") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Albedo.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Albedo.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Albedo.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Albedo.Alpha };
                 v.Variant = p;
             }
             if (IOR != null)
@@ -15856,21 +15856,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorScale.Red }, Green = new CUInt8() { Value = (Byte)ColorScale.Green }, Blue = new CUInt8() { Value = (Byte)ColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "ColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorScale.Alpha };
                 v.Variant = p;
             }
             if (ColorScale1 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorScale1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorScale1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorScale1.Red }, Green = new CUInt8() { Value = (Byte)ColorScale1.Green }, Blue = new CUInt8() { Value = (Byte)ColorScale1.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorScale1.Alpha } };
+                var p = new CColor(cr2w, v, "ColorScale1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorScale1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorScale1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorScale1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorScale1.Alpha };
                 v.Variant = p;
             }
             if (ColorScale2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorScale2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorScale2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorScale2.Red }, Green = new CUInt8() { Value = (Byte)ColorScale2.Green }, Blue = new CUInt8() { Value = (Byte)ColorScale2.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorScale2.Alpha } };
+                var p = new CColor(cr2w, v, "ColorScale2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorScale2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorScale2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorScale2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorScale2.Alpha };
                 v.Variant = p;
             }
             if (ColorGradientPositions != null)
@@ -15986,7 +15986,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DirtColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DirtColor.Red }, Green = new CUInt8() { Value = (Byte)DirtColor.Green }, Blue = new CUInt8() { Value = (Byte)DirtColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DirtColor.Alpha } };
+                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DirtColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DirtColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DirtColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DirtColor.Alpha };
                 v.Variant = p;
             }
             if (DirtMaskOffsets != null)
@@ -16004,14 +16004,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CoatTintFwd") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CoatTintFwd") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CoatTintFwd.Red }, Green = new CUInt8() { Value = (Byte)CoatTintFwd.Green }, Blue = new CUInt8() { Value = (Byte)CoatTintFwd.Blue }, Alpha = new CUInt8() { Value = (Byte)CoatTintFwd.Alpha } };
+                var p = new CColor(cr2w, v, "CoatTintFwd") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CoatTintFwd.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CoatTintFwd.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CoatTintFwd.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CoatTintFwd.Alpha };
                 v.Variant = p;
             }
             if (CoatTintSide != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CoatTintSide") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CoatTintSide") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CoatTintSide.Red }, Green = new CUInt8() { Value = (Byte)CoatTintSide.Green }, Blue = new CUInt8() { Value = (Byte)CoatTintSide.Blue }, Alpha = new CUInt8() { Value = (Byte)CoatTintSide.Alpha } };
+                var p = new CColor(cr2w, v, "CoatTintSide") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CoatTintSide.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CoatTintSide.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CoatTintSide.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CoatTintSide.Alpha };
                 v.Variant = p;
             }
             if (CoatTintFresnelBias != null)
@@ -16025,7 +16025,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CoatSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CoatSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CoatSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)CoatSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)CoatSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)CoatSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "CoatSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CoatSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (CoatFresnelBias != null)
@@ -16191,14 +16191,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintSurface != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintSurface") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintSurface") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintSurface.Red }, Green = new CUInt8() { Value = (Byte)TintSurface.Green }, Blue = new CUInt8() { Value = (Byte)TintSurface.Blue }, Alpha = new CUInt8() { Value = (Byte)TintSurface.Alpha } };
+                var p = new CColor(cr2w, v, "TintSurface") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintSurface.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintSurface.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintSurface.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintSurface.Alpha };
                 v.Variant = p;
             }
             if (FrontFacesReflectionPower != null)
@@ -16226,7 +16226,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (NormalStrength != null)
@@ -16296,7 +16296,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ShatterColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ShatterColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ShatterColor.Red }, Green = new CUInt8() { Value = (Byte)ShatterColor.Green }, Blue = new CUInt8() { Value = (Byte)ShatterColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ShatterColor.Alpha } };
+                var p = new CColor(cr2w, v, "ShatterColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ShatterColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ShatterColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ShatterColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ShatterColor.Alpha };
                 v.Variant = p;
             }
             if (ShatterTexture != null)
@@ -16447,7 +16447,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (FrontFacesReflectionPower != null)
@@ -16461,7 +16461,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
         }
@@ -16658,28 +16658,28 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DebugLightsColor0") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DebugLightsColor0") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DebugLightsColor0.Red }, Green = new CUInt8() { Value = (Byte)DebugLightsColor0.Green }, Blue = new CUInt8() { Value = (Byte)DebugLightsColor0.Blue }, Alpha = new CUInt8() { Value = (Byte)DebugLightsColor0.Alpha } };
+                var p = new CColor(cr2w, v, "DebugLightsColor0") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DebugLightsColor0.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DebugLightsColor0.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DebugLightsColor0.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DebugLightsColor0.Alpha };
                 v.Variant = p;
             }
             if (DebugLightsColor1 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DebugLightsColor1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DebugLightsColor1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DebugLightsColor1.Red }, Green = new CUInt8() { Value = (Byte)DebugLightsColor1.Green }, Blue = new CUInt8() { Value = (Byte)DebugLightsColor1.Blue }, Alpha = new CUInt8() { Value = (Byte)DebugLightsColor1.Alpha } };
+                var p = new CColor(cr2w, v, "DebugLightsColor1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DebugLightsColor1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DebugLightsColor1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DebugLightsColor1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DebugLightsColor1.Alpha };
                 v.Variant = p;
             }
             if (DebugLightsColor2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DebugLightsColor2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DebugLightsColor2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DebugLightsColor2.Red }, Green = new CUInt8() { Value = (Byte)DebugLightsColor2.Green }, Blue = new CUInt8() { Value = (Byte)DebugLightsColor2.Blue }, Alpha = new CUInt8() { Value = (Byte)DebugLightsColor2.Alpha } };
+                var p = new CColor(cr2w, v, "DebugLightsColor2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DebugLightsColor2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DebugLightsColor2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DebugLightsColor2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DebugLightsColor2.Alpha };
                 v.Variant = p;
             }
             if (DebugLightsColor3 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DebugLightsColor3") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DebugLightsColor3") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DebugLightsColor3.Red }, Green = new CUInt8() { Value = (Byte)DebugLightsColor3.Green }, Blue = new CUInt8() { Value = (Byte)DebugLightsColor3.Blue }, Alpha = new CUInt8() { Value = (Byte)DebugLightsColor3.Alpha } };
+                var p = new CColor(cr2w, v, "DebugLightsColor3") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DebugLightsColor3.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DebugLightsColor3.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DebugLightsColor3.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DebugLightsColor3.Alpha };
                 v.Variant = p;
             }
         }
@@ -16714,7 +16714,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (DiffuseAlpha != null)
@@ -16935,7 +16935,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -16998,7 +16998,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -17227,7 +17227,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintFromVertexPaint != null)
@@ -17276,7 +17276,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassSpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassSpecularColor.Red }, Green = new CUInt8() { Value = (Byte)GlassSpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassSpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassSpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassSpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassSpecularColor.Alpha };
                 v.Variant = p;
             }
             if (NormalStrength != null)
@@ -17670,7 +17670,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -17747,7 +17747,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -17838,7 +17838,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -17901,7 +17901,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -17943,14 +17943,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LightColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LightColor.Red }, Green = new CUInt8() { Value = (Byte)LightColor.Green }, Blue = new CUInt8() { Value = (Byte)LightColor.Blue }, Alpha = new CUInt8() { Value = (Byte)LightColor.Alpha } };
+                var p = new CColor(cr2w, v, "LightColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LightColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LightColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LightColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LightColor.Alpha };
                 v.Variant = p;
             }
             if (GlassColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GlassColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GlassColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GlassColor.Red }, Green = new CUInt8() { Value = (Byte)GlassColor.Green }, Blue = new CUInt8() { Value = (Byte)GlassColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GlassColor.Alpha } };
+                var p = new CColor(cr2w, v, "GlassColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GlassColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GlassColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GlassColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GlassColor.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -18010,14 +18010,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CeilFloorColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CeilFloorColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CeilFloorColor.Red }, Green = new CUInt8() { Value = (Byte)CeilFloorColor.Green }, Blue = new CUInt8() { Value = (Byte)CeilFloorColor.Blue }, Alpha = new CUInt8() { Value = (Byte)CeilFloorColor.Alpha } };
+                var p = new CColor(cr2w, v, "CeilFloorColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CeilFloorColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CeilFloorColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CeilFloorColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CeilFloorColor.Alpha };
                 v.Variant = p;
             }
             if (WallColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "WallColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "WallColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)WallColor.Red }, Green = new CUInt8() { Value = (Byte)WallColor.Green }, Blue = new CUInt8() { Value = (Byte)WallColor.Blue }, Alpha = new CUInt8() { Value = (Byte)WallColor.Alpha } };
+                var p = new CColor(cr2w, v, "WallColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)WallColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)WallColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)WallColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)WallColor.Alpha };
                 v.Variant = p;
             }
             if (Ceiling != null)
@@ -18210,7 +18210,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColorAtNight") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColorAtNight") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColorAtNight.Red }, Green = new CUInt8() { Value = (Byte)TintColorAtNight.Green }, Blue = new CUInt8() { Value = (Byte)TintColorAtNight.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColorAtNight.Alpha } };
+                var p = new CColor(cr2w, v, "TintColorAtNight") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColorAtNight.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColorAtNight.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColorAtNight.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColorAtNight.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -18410,7 +18410,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColorAtNight") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColorAtNight") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColorAtNight.Red }, Green = new CUInt8() { Value = (Byte)TintColorAtNight.Green }, Blue = new CUInt8() { Value = (Byte)TintColorAtNight.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColorAtNight.Alpha } };
+                var p = new CColor(cr2w, v, "TintColorAtNight") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColorAtNight.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColorAtNight.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColorAtNight.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColorAtNight.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -18459,7 +18459,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -18599,7 +18599,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -18760,7 +18760,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (EnableWorldSpace != null)
@@ -18788,7 +18788,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorScale.Red }, Green = new CUInt8() { Value = (Byte)ColorScale.Green }, Blue = new CUInt8() { Value = (Byte)ColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "ColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorScale.Alpha };
                 v.Variant = p;
             }
             if (BinkY != null)
@@ -18844,7 +18844,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -19072,7 +19072,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ScatteringColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ScatteringColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ScatteringColor.Red }, Green = new CUInt8() { Value = (Byte)ScatteringColor.Green }, Blue = new CUInt8() { Value = (Byte)ScatteringColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ScatteringColor.Alpha } };
+                var p = new CColor(cr2w, v, "ScatteringColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ScatteringColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ScatteringColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ScatteringColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ScatteringColor.Alpha };
                 v.Variant = p;
             }
             if (BlurRadius != null)
@@ -19135,7 +19135,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FoamColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FoamColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FoamColor.Red }, Green = new CUInt8() { Value = (Byte)FoamColor.Green }, Blue = new CUInt8() { Value = (Byte)FoamColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FoamColor.Alpha } };
+                var p = new CColor(cr2w, v, "FoamColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FoamColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FoamColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FoamColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FoamColor.Alpha };
                 v.Variant = p;
             }
             if (FoamSize != null)
@@ -19272,7 +19272,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -19370,7 +19370,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -19472,7 +19472,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -19609,7 +19609,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -19739,7 +19739,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -19862,7 +19862,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -20006,7 +20006,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (FadeStart != null)
@@ -20215,7 +20215,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Roughness != null)
@@ -20250,7 +20250,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -20495,7 +20495,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (TextureScaling != null)
@@ -20632,7 +20632,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SpecularColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SpecularColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SpecularColor.Red }, Green = new CUInt8() { Value = (Byte)SpecularColor.Green }, Blue = new CUInt8() { Value = (Byte)SpecularColor.Blue }, Alpha = new CUInt8() { Value = (Byte)SpecularColor.Alpha } };
+                var p = new CColor(cr2w, v, "SpecularColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SpecularColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SpecularColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SpecularColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SpecularColor.Alpha };
                 v.Variant = p;
             }
         }
@@ -20765,7 +20765,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MainColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MainColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MainColor.Red }, Green = new CUInt8() { Value = (Byte)MainColor.Green }, Blue = new CUInt8() { Value = (Byte)MainColor.Blue }, Alpha = new CUInt8() { Value = (Byte)MainColor.Alpha } };
+                var p = new CColor(cr2w, v, "MainColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MainColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MainColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MainColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MainColor.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -20927,14 +20927,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LightSmoke") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LightSmoke") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LightSmoke.Red }, Green = new CUInt8() { Value = (Byte)LightSmoke.Green }, Blue = new CUInt8() { Value = (Byte)LightSmoke.Blue }, Alpha = new CUInt8() { Value = (Byte)LightSmoke.Alpha } };
+                var p = new CColor(cr2w, v, "LightSmoke") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LightSmoke.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LightSmoke.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LightSmoke.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LightSmoke.Alpha };
                 v.Variant = p;
             }
             if (DarkSmoke != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DarkSmoke") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DarkSmoke") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DarkSmoke.Red }, Green = new CUInt8() { Value = (Byte)DarkSmoke.Green }, Blue = new CUInt8() { Value = (Byte)DarkSmoke.Blue }, Alpha = new CUInt8() { Value = (Byte)DarkSmoke.Alpha } };
+                var p = new CColor(cr2w, v, "DarkSmoke") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DarkSmoke.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DarkSmoke.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DarkSmoke.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DarkSmoke.Alpha };
                 v.Variant = p;
             }
             if (ExpensiveBlending != null)
@@ -21142,14 +21142,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorThin") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorThin") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorThin.Red }, Green = new CUInt8() { Value = (Byte)ColorThin.Green }, Blue = new CUInt8() { Value = (Byte)ColorThin.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorThin.Alpha } };
+                var p = new CColor(cr2w, v, "ColorThin") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorThin.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorThin.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorThin.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorThin.Alpha };
                 v.Variant = p;
             }
             if (ColorThick != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorThick") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorThick") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorThick.Red }, Green = new CUInt8() { Value = (Byte)ColorThick.Green }, Blue = new CUInt8() { Value = (Byte)ColorThick.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorThick.Alpha } };
+                var p = new CColor(cr2w, v, "ColorThick") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorThick.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorThick.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorThick.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorThick.Alpha };
                 v.Variant = p;
             }
             if (BloodThickness != null)
@@ -21416,7 +21416,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Brightness != null)
@@ -21546,7 +21546,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tinge") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tinge") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tinge.Red }, Green = new CUInt8() { Value = (Byte)Tinge.Green }, Blue = new CUInt8() { Value = (Byte)Tinge.Blue }, Alpha = new CUInt8() { Value = (Byte)Tinge.Alpha } };
+                var p = new CColor(cr2w, v, "Tinge") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tinge.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tinge.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tinge.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tinge.Alpha };
                 v.Variant = p;
             }
             if (DirtMask != null)
@@ -21585,7 +21585,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DirtColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DirtColor.Red }, Green = new CUInt8() { Value = (Byte)DirtColor.Green }, Blue = new CUInt8() { Value = (Byte)DirtColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DirtColor.Alpha } };
+                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DirtColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DirtColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DirtColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DirtColor.Alpha };
                 v.Variant = p;
             }
             if (UseOutline != null)
@@ -21662,7 +21662,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -21813,14 +21813,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ThickScanlinesColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ThickScanlinesColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ThickScanlinesColor.Red }, Green = new CUInt8() { Value = (Byte)ThickScanlinesColor.Green }, Blue = new CUInt8() { Value = (Byte)ThickScanlinesColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ThickScanlinesColor.Alpha } };
+                var p = new CColor(cr2w, v, "ThickScanlinesColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ThickScanlinesColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ThickScanlinesColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ThickScanlinesColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ThickScanlinesColor.Alpha };
                 v.Variant = p;
             }
             if (ThinScanlinesColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ThinScanlinesColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ThinScanlinesColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ThinScanlinesColor.Red }, Green = new CUInt8() { Value = (Byte)ThinScanlinesColor.Green }, Blue = new CUInt8() { Value = (Byte)ThinScanlinesColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ThinScanlinesColor.Alpha } };
+                var p = new CColor(cr2w, v, "ThinScanlinesColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ThinScanlinesColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ThinScanlinesColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ThinScanlinesColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ThinScanlinesColor.Alpha };
                 v.Variant = p;
             }
             if (ScanlineDensity != null)
@@ -21897,7 +21897,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -22016,14 +22016,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor1.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor1.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor1.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor1.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor1.Alpha };
                 v.Variant = p;
             }
             if (EmissiveColor2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor2.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor2.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor2.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor2.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor2.Alpha };
                 v.Variant = p;
             }
             if (EmissiveInitialState != null)
@@ -22079,7 +22079,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -22142,28 +22142,28 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor1.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor1.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor1.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor1.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor1.Alpha };
                 v.Variant = p;
             }
             if (EmissiveColor2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor2.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor2.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor2.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor2.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor2.Alpha };
                 v.Variant = p;
             }
             if (EmissiveColor3 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor3") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor3") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor3.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor3.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor3.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor3.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor3") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor3.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor3.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor3.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor3.Alpha };
                 v.Variant = p;
             }
             if (EmissiveColor4 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor4") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor4") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor4.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor4.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor4.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor4.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor4") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor4.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor4.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor4.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor4.Alpha };
                 v.Variant = p;
             }
             if (EmissiveColorSelector != null)
@@ -22367,14 +22367,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DarkColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DarkColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DarkColor.Red }, Green = new CUInt8() { Value = (Byte)DarkColor.Green }, Blue = new CUInt8() { Value = (Byte)DarkColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DarkColor.Alpha } };
+                var p = new CColor(cr2w, v, "DarkColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DarkColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DarkColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DarkColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DarkColor.Alpha };
                 v.Variant = p;
             }
             if (BrightColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BrightColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BrightColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BrightColor.Red }, Green = new CUInt8() { Value = (Byte)BrightColor.Green }, Blue = new CUInt8() { Value = (Byte)BrightColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BrightColor.Alpha } };
+                var p = new CColor(cr2w, v, "BrightColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BrightColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BrightColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BrightColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BrightColor.Alpha };
                 v.Variant = p;
             }
             if (DarkColorPower != null)
@@ -22437,7 +22437,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
         }
@@ -22500,7 +22500,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LaserColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LaserColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LaserColor.Red }, Green = new CUInt8() { Value = (Byte)LaserColor.Green }, Blue = new CUInt8() { Value = (Byte)LaserColor.Blue }, Alpha = new CUInt8() { Value = (Byte)LaserColor.Alpha } };
+                var p = new CColor(cr2w, v, "LaserColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LaserColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LaserColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LaserColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LaserColor.Alpha };
                 v.Variant = p;
             }
             if (SmokeExponent != null)
@@ -22700,7 +22700,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DotsColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DotsColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DotsColor.Red }, Green = new CUInt8() { Value = (Byte)DotsColor.Green }, Blue = new CUInt8() { Value = (Byte)DotsColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DotsColor.Alpha } };
+                var p = new CColor(cr2w, v, "DotsColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DotsColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DotsColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DotsColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DotsColor.Alpha };
                 v.Variant = p;
             }
             if (Projector1Position != null)
@@ -22718,21 +22718,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SurfaceColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SurfaceColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SurfaceColor.Red }, Green = new CUInt8() { Value = (Byte)SurfaceColor.Green }, Blue = new CUInt8() { Value = (Byte)SurfaceColor.Blue }, Alpha = new CUInt8() { Value = (Byte)SurfaceColor.Alpha } };
+                var p = new CColor(cr2w, v, "SurfaceColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SurfaceColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SurfaceColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SurfaceColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SurfaceColor.Alpha };
                 v.Variant = p;
             }
             if (SurfaceShadows != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SurfaceShadows") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SurfaceShadows") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SurfaceShadows.Red }, Green = new CUInt8() { Value = (Byte)SurfaceShadows.Green }, Blue = new CUInt8() { Value = (Byte)SurfaceShadows.Blue }, Alpha = new CUInt8() { Value = (Byte)SurfaceShadows.Alpha } };
+                var p = new CColor(cr2w, v, "SurfaceShadows") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SurfaceShadows.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SurfaceShadows.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SurfaceShadows.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SurfaceShadows.Alpha };
                 v.Variant = p;
             }
             if (FallofColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FallofColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FallofColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FallofColor.Red }, Green = new CUInt8() { Value = (Byte)FallofColor.Green }, Blue = new CUInt8() { Value = (Byte)FallofColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FallofColor.Alpha } };
+                var p = new CColor(cr2w, v, "FallofColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FallofColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FallofColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FallofColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FallofColor.Alpha };
                 v.Variant = p;
             }
             if (Diffuse != null)
@@ -22978,28 +22978,28 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DotsColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DotsColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DotsColor.Red }, Green = new CUInt8() { Value = (Byte)DotsColor.Green }, Blue = new CUInt8() { Value = (Byte)DotsColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DotsColor.Alpha } };
+                var p = new CColor(cr2w, v, "DotsColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DotsColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DotsColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DotsColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DotsColor.Alpha };
                 v.Variant = p;
             }
             if (SurfaceColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SurfaceColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SurfaceColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SurfaceColor.Red }, Green = new CUInt8() { Value = (Byte)SurfaceColor.Green }, Blue = new CUInt8() { Value = (Byte)SurfaceColor.Blue }, Alpha = new CUInt8() { Value = (Byte)SurfaceColor.Alpha } };
+                var p = new CColor(cr2w, v, "SurfaceColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SurfaceColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SurfaceColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SurfaceColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SurfaceColor.Alpha };
                 v.Variant = p;
             }
             if (SurfaceShadows != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SurfaceShadows") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SurfaceShadows") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SurfaceShadows.Red }, Green = new CUInt8() { Value = (Byte)SurfaceShadows.Green }, Blue = new CUInt8() { Value = (Byte)SurfaceShadows.Blue }, Alpha = new CUInt8() { Value = (Byte)SurfaceShadows.Alpha } };
+                var p = new CColor(cr2w, v, "SurfaceShadows") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SurfaceShadows.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SurfaceShadows.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SurfaceShadows.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SurfaceShadows.Alpha };
                 v.Variant = p;
             }
             if (FallofColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FallofColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FallofColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FallofColor.Red }, Green = new CUInt8() { Value = (Byte)FallofColor.Green }, Blue = new CUInt8() { Value = (Byte)FallofColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FallofColor.Alpha } };
+                var p = new CColor(cr2w, v, "FallofColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FallofColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FallofColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FallofColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FallofColor.Alpha };
                 v.Variant = p;
             }
             if (GradientOffset != null)
@@ -23174,7 +23174,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (BrightnessNoiseStreght != null)
@@ -23416,14 +23416,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Second_Color != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Second_Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Second_Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Second_Color.Red }, Green = new CUInt8() { Value = (Byte)Second_Color.Green }, Blue = new CUInt8() { Value = (Byte)Second_Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Second_Color.Alpha } };
+                var p = new CColor(cr2w, v, "Second_Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Second_Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Second_Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Second_Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Second_Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -23577,14 +23577,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Second_Color != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Second_Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Second_Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Second_Color.Red }, Green = new CUInt8() { Value = (Byte)Second_Color.Green }, Blue = new CUInt8() { Value = (Byte)Second_Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Second_Color.Alpha } };
+                var p = new CColor(cr2w, v, "Second_Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Second_Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Second_Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Second_Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Second_Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -23738,14 +23738,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Second_Color != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Second_Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Second_Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Second_Color.Red }, Green = new CUInt8() { Value = (Byte)Second_Color.Green }, Blue = new CUInt8() { Value = (Byte)Second_Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Second_Color.Alpha } };
+                var p = new CColor(cr2w, v, "Second_Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Second_Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Second_Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Second_Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Second_Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -23927,7 +23927,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -23973,7 +23973,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -24050,7 +24050,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Tilling != null)
@@ -24099,14 +24099,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (BodyColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BodyColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BodyColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BodyColor.Red }, Green = new CUInt8() { Value = (Byte)BodyColor.Green }, Blue = new CUInt8() { Value = (Byte)BodyColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BodyColor.Alpha } };
+                var p = new CColor(cr2w, v, "BodyColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BodyColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BodyColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BodyColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BodyColor.Alpha };
                 v.Variant = p;
             }
             if (Tilling != null)
@@ -24267,7 +24267,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -24523,7 +24523,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -24607,7 +24607,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (HistogramRange != null)
@@ -24684,7 +24684,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)color.Red }, Green = new CUInt8() { Value = (Byte)color.Green }, Blue = new CUInt8() { Value = (Byte)color.Blue }, Alpha = new CUInt8() { Value = (Byte)color.Alpha } };
+                var p = new CColor(cr2w, v, "color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)color.Alpha };
                 v.Variant = p;
             }
             if (tex1 != null)
@@ -25065,7 +25065,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (HSV_Mod != null)
@@ -25129,7 +25129,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Emissive != null)
@@ -25500,7 +25500,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tint.Red }, Green = new CUInt8() { Value = (Byte)Tint.Green }, Blue = new CUInt8() { Value = (Byte)Tint.Blue }, Alpha = new CUInt8() { Value = (Byte)Tint.Alpha } };
+                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tint.Alpha };
                 v.Variant = p;
             }
             if (FixForVerticalSlide != null)
@@ -25535,7 +25535,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorScale.Red }, Green = new CUInt8() { Value = (Byte)ColorScale.Green }, Blue = new CUInt8() { Value = (Byte)ColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "ColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorScale.Alpha };
                 v.Variant = p;
             }
             if (BinkY != null)
@@ -25591,7 +25591,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -25825,7 +25825,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorParam") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorParam") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorParam.Red }, Green = new CUInt8() { Value = (Byte)ColorParam.Green }, Blue = new CUInt8() { Value = (Byte)ColorParam.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorParam.Alpha } };
+                var p = new CColor(cr2w, v, "ColorParam") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorParam.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorParam.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorParam.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorParam.Alpha };
                 v.Variant = p;
             }
             if (DotsCoords != null)
@@ -25977,7 +25977,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ReColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ReColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ReColor.Red }, Green = new CUInt8() { Value = (Byte)ReColor.Green }, Blue = new CUInt8() { Value = (Byte)ReColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ReColor.Alpha } };
+                var p = new CColor(cr2w, v, "ReColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ReColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ReColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ReColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ReColor.Alpha };
                 v.Variant = p;
             }
             if (BlurredIntensity != null)
@@ -26026,7 +26026,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ReColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ReColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ReColor.Red }, Green = new CUInt8() { Value = (Byte)ReColor.Green }, Blue = new CUInt8() { Value = (Byte)ReColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ReColor.Alpha } };
+                var p = new CColor(cr2w, v, "ReColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ReColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ReColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ReColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ReColor.Alpha };
                 v.Variant = p;
             }
             if (BlurredIntensity != null)
@@ -26103,21 +26103,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "RedLine1") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "RedLine1") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)RedLine1.Red }, Green = new CUInt8() { Value = (Byte)RedLine1.Green }, Blue = new CUInt8() { Value = (Byte)RedLine1.Blue }, Alpha = new CUInt8() { Value = (Byte)RedLine1.Alpha } };
+                var p = new CColor(cr2w, v, "RedLine1") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)RedLine1.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)RedLine1.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)RedLine1.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)RedLine1.Alpha };
                 v.Variant = p;
             }
             if (RedLine2 != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "RedLine2") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "RedLine2") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)RedLine2.Red }, Green = new CUInt8() { Value = (Byte)RedLine2.Green }, Blue = new CUInt8() { Value = (Byte)RedLine2.Blue }, Alpha = new CUInt8() { Value = (Byte)RedLine2.Alpha } };
+                var p = new CColor(cr2w, v, "RedLine2") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)RedLine2.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)RedLine2.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)RedLine2.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)RedLine2.Alpha };
                 v.Variant = p;
             }
             if (BluringBackgroundRecolor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BluringBackgroundRecolor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BluringBackgroundRecolor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BluringBackgroundRecolor.Red }, Green = new CUInt8() { Value = (Byte)BluringBackgroundRecolor.Green }, Blue = new CUInt8() { Value = (Byte)BluringBackgroundRecolor.Blue }, Alpha = new CUInt8() { Value = (Byte)BluringBackgroundRecolor.Alpha } };
+                var p = new CColor(cr2w, v, "BluringBackgroundRecolor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BluringBackgroundRecolor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BluringBackgroundRecolor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BluringBackgroundRecolor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BluringBackgroundRecolor.Alpha };
                 v.Variant = p;
             }
             if (AberationAmount != null)
@@ -26222,7 +26222,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (UseAlphaOverEffect != null)
@@ -26324,7 +26324,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MainAdditiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MainAdditiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MainAdditiveColor.Red }, Green = new CUInt8() { Value = (Byte)MainAdditiveColor.Green }, Blue = new CUInt8() { Value = (Byte)MainAdditiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)MainAdditiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "MainAdditiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MainAdditiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MainAdditiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MainAdditiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MainAdditiveColor.Alpha };
                 v.Variant = p;
             }
             if (MainAdditiveColorMultiplier != null)
@@ -26352,14 +26352,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MainColorStart") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MainColorStart") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MainColorStart.Red }, Green = new CUInt8() { Value = (Byte)MainColorStart.Green }, Blue = new CUInt8() { Value = (Byte)MainColorStart.Blue }, Alpha = new CUInt8() { Value = (Byte)MainColorStart.Alpha } };
+                var p = new CColor(cr2w, v, "MainColorStart") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MainColorStart.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MainColorStart.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MainColorStart.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MainColorStart.Alpha };
                 v.Variant = p;
             }
             if (MainColorEnd != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MainColorEnd") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MainColorEnd") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MainColorEnd.Red }, Green = new CUInt8() { Value = (Byte)MainColorEnd.Green }, Blue = new CUInt8() { Value = (Byte)MainColorEnd.Blue }, Alpha = new CUInt8() { Value = (Byte)MainColorEnd.Alpha } };
+                var p = new CColor(cr2w, v, "MainColorEnd") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MainColorEnd.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MainColorEnd.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MainColorEnd.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MainColorEnd.Alpha };
                 v.Variant = p;
             }
             if (HueSpread != null)
@@ -26527,7 +26527,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Complexity != null)
@@ -26625,7 +26625,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Complexity != null)
@@ -26723,7 +26723,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
         }
@@ -26744,7 +26744,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (SingelColor != null)
@@ -26842,7 +26842,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GridColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GridColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GridColor.Red }, Green = new CUInt8() { Value = (Byte)GridColor.Green }, Blue = new CUInt8() { Value = (Byte)GridColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GridColor.Alpha } };
+                var p = new CColor(cr2w, v, "GridColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GridColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GridColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GridColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GridColor.Alpha };
                 v.Variant = p;
             }
             if (BlurredIntensity != null)
@@ -26940,7 +26940,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ArtifactColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ArtifactColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ArtifactColor.Red }, Green = new CUInt8() { Value = (Byte)ArtifactColor.Green }, Blue = new CUInt8() { Value = (Byte)ArtifactColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ArtifactColor.Alpha } };
+                var p = new CColor(cr2w, v, "ArtifactColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ArtifactColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ArtifactColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ArtifactColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ArtifactColor.Alpha };
                 v.Variant = p;
             }
             if (ArtifactIntensity != null)
@@ -27066,7 +27066,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GridColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GridColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GridColor.Red }, Green = new CUInt8() { Value = (Byte)GridColor.Green }, Blue = new CUInt8() { Value = (Byte)GridColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GridColor.Alpha } };
+                var p = new CColor(cr2w, v, "GridColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GridColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GridColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GridColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GridColor.Alpha };
                 v.Variant = p;
             }
             if (BlurredIntensity != null)
@@ -27164,7 +27164,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ArtifactColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ArtifactColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ArtifactColor.Red }, Green = new CUInt8() { Value = (Byte)ArtifactColor.Green }, Blue = new CUInt8() { Value = (Byte)ArtifactColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ArtifactColor.Alpha } };
+                var p = new CColor(cr2w, v, "ArtifactColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ArtifactColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ArtifactColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ArtifactColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ArtifactColor.Alpha };
                 v.Variant = p;
             }
             if (ArtifactIntensity != null)
@@ -27297,7 +27297,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "GridColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "GridColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)GridColor.Red }, Green = new CUInt8() { Value = (Byte)GridColor.Green }, Blue = new CUInt8() { Value = (Byte)GridColor.Blue }, Alpha = new CUInt8() { Value = (Byte)GridColor.Alpha } };
+                var p = new CColor(cr2w, v, "GridColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)GridColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)GridColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)GridColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)GridColor.Alpha };
                 v.Variant = p;
             }
             if (BlurredIntensity != null)
@@ -27395,7 +27395,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ArtifactColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ArtifactColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ArtifactColor.Red }, Green = new CUInt8() { Value = (Byte)ArtifactColor.Green }, Blue = new CUInt8() { Value = (Byte)ArtifactColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ArtifactColor.Alpha } };
+                var p = new CColor(cr2w, v, "ArtifactColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ArtifactColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ArtifactColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ArtifactColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ArtifactColor.Alpha };
                 v.Variant = p;
             }
             if (ArtifactIntensity != null)
@@ -27609,14 +27609,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorOneStart") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorOneStart") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorOneStart.Red }, Green = new CUInt8() { Value = (Byte)ColorOneStart.Green }, Blue = new CUInt8() { Value = (Byte)ColorOneStart.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorOneStart.Alpha } };
+                var p = new CColor(cr2w, v, "ColorOneStart") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorOneStart.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorOneStart.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorOneStart.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorOneStart.Alpha };
                 v.Variant = p;
             }
             if (ColorOneEnd != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorOneEnd") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorOneEnd") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorOneEnd.Red }, Green = new CUInt8() { Value = (Byte)ColorOneEnd.Green }, Blue = new CUInt8() { Value = (Byte)ColorOneEnd.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorOneEnd.Alpha } };
+                var p = new CColor(cr2w, v, "ColorOneEnd") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorOneEnd.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorOneEnd.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorOneEnd.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorOneEnd.Alpha };
                 v.Variant = p;
             }
             if (ColorGradientScale != null)
@@ -27644,35 +27644,35 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorTwo") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorTwo") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorTwo.Red }, Green = new CUInt8() { Value = (Byte)ColorTwo.Green }, Blue = new CUInt8() { Value = (Byte)ColorTwo.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorTwo.Alpha } };
+                var p = new CColor(cr2w, v, "ColorTwo") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorTwo.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorTwo.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorTwo.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorTwo.Alpha };
                 v.Variant = p;
             }
             if (ColorThree != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorThree") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorThree") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorThree.Red }, Green = new CUInt8() { Value = (Byte)ColorThree.Green }, Blue = new CUInt8() { Value = (Byte)ColorThree.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorThree.Alpha } };
+                var p = new CColor(cr2w, v, "ColorThree") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorThree.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorThree.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorThree.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorThree.Alpha };
                 v.Variant = p;
             }
             if (ColorFour != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorFour") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorFour") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorFour.Red }, Green = new CUInt8() { Value = (Byte)ColorFour.Green }, Blue = new CUInt8() { Value = (Byte)ColorFour.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorFour.Alpha } };
+                var p = new CColor(cr2w, v, "ColorFour") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorFour.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorFour.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorFour.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorFour.Alpha };
                 v.Variant = p;
             }
             if (ColorFive != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorFive") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorFive") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorFive.Red }, Green = new CUInt8() { Value = (Byte)ColorFive.Green }, Blue = new CUInt8() { Value = (Byte)ColorFive.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorFive.Alpha } };
+                var p = new CColor(cr2w, v, "ColorFive") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorFive.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorFive.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorFive.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorFive.Alpha };
                 v.Variant = p;
             }
             if (ColorSix != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorSix") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorSix") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorSix.Red }, Green = new CUInt8() { Value = (Byte)ColorSix.Green }, Blue = new CUInt8() { Value = (Byte)ColorSix.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorSix.Alpha } };
+                var p = new CColor(cr2w, v, "ColorSix") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorSix.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorSix.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorSix.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorSix.Alpha };
                 v.Variant = p;
             }
             if (NoiseTexture != null)
@@ -27837,14 +27837,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorOneStart") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorOneStart") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorOneStart.Red }, Green = new CUInt8() { Value = (Byte)ColorOneStart.Green }, Blue = new CUInt8() { Value = (Byte)ColorOneStart.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorOneStart.Alpha } };
+                var p = new CColor(cr2w, v, "ColorOneStart") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorOneStart.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorOneStart.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorOneStart.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorOneStart.Alpha };
                 v.Variant = p;
             }
             if (ColorOneEnd != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorOneEnd") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorOneEnd") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorOneEnd.Red }, Green = new CUInt8() { Value = (Byte)ColorOneEnd.Green }, Blue = new CUInt8() { Value = (Byte)ColorOneEnd.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorOneEnd.Alpha } };
+                var p = new CColor(cr2w, v, "ColorOneEnd") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorOneEnd.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorOneEnd.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorOneEnd.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorOneEnd.Alpha };
                 v.Variant = p;
             }
             if (ColorGradientScale != null)
@@ -27872,35 +27872,35 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorTwo") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorTwo") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorTwo.Red }, Green = new CUInt8() { Value = (Byte)ColorTwo.Green }, Blue = new CUInt8() { Value = (Byte)ColorTwo.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorTwo.Alpha } };
+                var p = new CColor(cr2w, v, "ColorTwo") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorTwo.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorTwo.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorTwo.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorTwo.Alpha };
                 v.Variant = p;
             }
             if (ColorThree != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorThree") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorThree") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorThree.Red }, Green = new CUInt8() { Value = (Byte)ColorThree.Green }, Blue = new CUInt8() { Value = (Byte)ColorThree.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorThree.Alpha } };
+                var p = new CColor(cr2w, v, "ColorThree") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorThree.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorThree.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorThree.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorThree.Alpha };
                 v.Variant = p;
             }
             if (ColorFour != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorFour") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorFour") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorFour.Red }, Green = new CUInt8() { Value = (Byte)ColorFour.Green }, Blue = new CUInt8() { Value = (Byte)ColorFour.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorFour.Alpha } };
+                var p = new CColor(cr2w, v, "ColorFour") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorFour.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorFour.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorFour.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorFour.Alpha };
                 v.Variant = p;
             }
             if (ColorFive != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorFive") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorFive") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorFive.Red }, Green = new CUInt8() { Value = (Byte)ColorFive.Green }, Blue = new CUInt8() { Value = (Byte)ColorFive.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorFive.Alpha } };
+                var p = new CColor(cr2w, v, "ColorFive") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorFive.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorFive.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorFive.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorFive.Alpha };
                 v.Variant = p;
             }
             if (ColorSix != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorSix") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorSix") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorSix.Red }, Green = new CUInt8() { Value = (Byte)ColorSix.Green }, Blue = new CUInt8() { Value = (Byte)ColorSix.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorSix.Alpha } };
+                var p = new CColor(cr2w, v, "ColorSix") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorSix.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorSix.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorSix.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorSix.Alpha };
                 v.Variant = p;
             }
             if (NoiseTexture != null)
@@ -28115,7 +28115,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (Saturation != null)
@@ -28143,7 +28143,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DirtColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DirtColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DirtColorScale.Red }, Green = new CUInt8() { Value = (Byte)DirtColorScale.Green }, Blue = new CUInt8() { Value = (Byte)DirtColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)DirtColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "DirtColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DirtColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DirtColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DirtColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DirtColorScale.Alpha };
                 v.Variant = p;
             }
         }
@@ -28171,7 +28171,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (SubUVWidth != null)
@@ -28234,7 +28234,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelPower != null)
@@ -28340,7 +28340,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -28592,7 +28592,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Stretch != null)
@@ -28627,14 +28627,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (TintColorDeep != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColorDeep") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColorDeep") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColorDeep.Red }, Green = new CUInt8() { Value = (Byte)TintColorDeep.Green }, Blue = new CUInt8() { Value = (Byte)TintColorDeep.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColorDeep.Alpha } };
+                var p = new CColor(cr2w, v, "TintColorDeep") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColorDeep.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColorDeep.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColorDeep.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColorDeep.Alpha };
                 v.Variant = p;
             }
             if (TexCoordDtortScaleSpeed != null)
@@ -28719,7 +28719,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "OutlineColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "OutlineColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)OutlineColor.Red }, Green = new CUInt8() { Value = (Byte)OutlineColor.Green }, Blue = new CUInt8() { Value = (Byte)OutlineColor.Blue }, Alpha = new CUInt8() { Value = (Byte)OutlineColor.Alpha } };
+                var p = new CColor(cr2w, v, "OutlineColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)OutlineColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)OutlineColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)OutlineColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)OutlineColor.Alpha };
                 v.Variant = p;
             }
             if (OutlineThickness != null)
@@ -28866,7 +28866,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (WorldOrLocalSpace != null)
@@ -29034,14 +29034,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LightSmoke") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LightSmoke") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LightSmoke.Red }, Green = new CUInt8() { Value = (Byte)LightSmoke.Green }, Blue = new CUInt8() { Value = (Byte)LightSmoke.Blue }, Alpha = new CUInt8() { Value = (Byte)LightSmoke.Alpha } };
+                var p = new CColor(cr2w, v, "LightSmoke") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LightSmoke.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LightSmoke.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LightSmoke.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LightSmoke.Alpha };
                 v.Variant = p;
             }
             if (DarkSmoke != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DarkSmoke") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DarkSmoke") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DarkSmoke.Red }, Green = new CUInt8() { Value = (Byte)DarkSmoke.Green }, Blue = new CUInt8() { Value = (Byte)DarkSmoke.Blue }, Alpha = new CUInt8() { Value = (Byte)DarkSmoke.Alpha } };
+                var p = new CColor(cr2w, v, "DarkSmoke") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DarkSmoke.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DarkSmoke.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DarkSmoke.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DarkSmoke.Alpha };
                 v.Variant = p;
             }
             if (SoftAlpha != null)
@@ -29270,14 +29270,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LightSmoke") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LightSmoke") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LightSmoke.Red }, Green = new CUInt8() { Value = (Byte)LightSmoke.Green }, Blue = new CUInt8() { Value = (Byte)LightSmoke.Blue }, Alpha = new CUInt8() { Value = (Byte)LightSmoke.Alpha } };
+                var p = new CColor(cr2w, v, "LightSmoke") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LightSmoke.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LightSmoke.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LightSmoke.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LightSmoke.Alpha };
                 v.Variant = p;
             }
             if (DarkSmoke != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DarkSmoke") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DarkSmoke") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DarkSmoke.Red }, Green = new CUInt8() { Value = (Byte)DarkSmoke.Green }, Blue = new CUInt8() { Value = (Byte)DarkSmoke.Blue }, Alpha = new CUInt8() { Value = (Byte)DarkSmoke.Alpha } };
+                var p = new CColor(cr2w, v, "DarkSmoke") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DarkSmoke.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DarkSmoke.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DarkSmoke.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DarkSmoke.Alpha };
                 v.Variant = p;
             }
             if (SoftAlpha != null)
@@ -29394,14 +29394,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorThin") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorThin") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorThin.Red }, Green = new CUInt8() { Value = (Byte)ColorThin.Green }, Blue = new CUInt8() { Value = (Byte)ColorThin.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorThin.Alpha } };
+                var p = new CColor(cr2w, v, "ColorThin") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorThin.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorThin.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorThin.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorThin.Alpha };
                 v.Variant = p;
             }
             if (ColorThick != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ColorThick") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ColorThick") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ColorThick.Red }, Green = new CUInt8() { Value = (Byte)ColorThick.Green }, Blue = new CUInt8() { Value = (Byte)ColorThick.Blue }, Alpha = new CUInt8() { Value = (Byte)ColorThick.Alpha } };
+                var p = new CColor(cr2w, v, "ColorThick") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ColorThick.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ColorThick.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ColorThick.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ColorThick.Alpha };
                 v.Variant = p;
             }
             if (NormalAndDensity != null)
@@ -29513,7 +29513,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Contrast != null)
@@ -29783,14 +29783,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "PrimaryGlowColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "PrimaryGlowColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)PrimaryGlowColor.Red }, Green = new CUInt8() { Value = (Byte)PrimaryGlowColor.Green }, Blue = new CUInt8() { Value = (Byte)PrimaryGlowColor.Blue }, Alpha = new CUInt8() { Value = (Byte)PrimaryGlowColor.Alpha } };
+                var p = new CColor(cr2w, v, "PrimaryGlowColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)PrimaryGlowColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)PrimaryGlowColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)PrimaryGlowColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)PrimaryGlowColor.Alpha };
                 v.Variant = p;
             }
             if (SecondaryGlowColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SecondaryGlowColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SecondaryGlowColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SecondaryGlowColor.Red }, Green = new CUInt8() { Value = (Byte)SecondaryGlowColor.Green }, Blue = new CUInt8() { Value = (Byte)SecondaryGlowColor.Blue }, Alpha = new CUInt8() { Value = (Byte)SecondaryGlowColor.Alpha } };
+                var p = new CColor(cr2w, v, "SecondaryGlowColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SecondaryGlowColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SecondaryGlowColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SecondaryGlowColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SecondaryGlowColor.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -30201,7 +30201,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -30411,7 +30411,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveEV != null)
@@ -30530,7 +30530,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
         }
@@ -30586,7 +30586,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "LinesColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "LinesColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)LinesColor.Red }, Green = new CUInt8() { Value = (Byte)LinesColor.Green }, Blue = new CUInt8() { Value = (Byte)LinesColor.Blue }, Alpha = new CUInt8() { Value = (Byte)LinesColor.Alpha } };
+                var p = new CColor(cr2w, v, "LinesColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)LinesColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)LinesColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)LinesColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)LinesColor.Alpha };
                 v.Variant = p;
             }
             if (Brightness != null)
@@ -30840,7 +30840,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DirtColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DirtColor.Red }, Green = new CUInt8() { Value = (Byte)DirtColor.Green }, Blue = new CUInt8() { Value = (Byte)DirtColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DirtColor.Alpha } };
+                var p = new CColor(cr2w, v, "DirtColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DirtColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DirtColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DirtColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DirtColor.Alpha };
                 v.Variant = p;
             }
             if (Multiplier != null)
@@ -31001,7 +31001,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Multiplier != null)
@@ -31064,7 +31064,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Multiplier != null)
@@ -31169,7 +31169,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CrackColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CrackColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CrackColor.Red }, Green = new CUInt8() { Value = (Byte)CrackColor.Green }, Blue = new CUInt8() { Value = (Byte)CrackColor.Blue }, Alpha = new CUInt8() { Value = (Byte)CrackColor.Alpha } };
+                var p = new CColor(cr2w, v, "CrackColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CrackColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CrackColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CrackColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CrackColor.Alpha };
                 v.Variant = p;
             }
         }
@@ -31225,7 +31225,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "CrackColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "CrackColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)CrackColor.Red }, Green = new CUInt8() { Value = (Byte)CrackColor.Green }, Blue = new CUInt8() { Value = (Byte)CrackColor.Blue }, Alpha = new CUInt8() { Value = (Byte)CrackColor.Alpha } };
+                var p = new CColor(cr2w, v, "CrackColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)CrackColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)CrackColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)CrackColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)CrackColor.Alpha };
                 v.Variant = p;
             }
         }
@@ -31386,21 +31386,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MinColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MinColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MinColor.Red }, Green = new CUInt8() { Value = (Byte)MinColor.Green }, Blue = new CUInt8() { Value = (Byte)MinColor.Blue }, Alpha = new CUInt8() { Value = (Byte)MinColor.Alpha } };
+                var p = new CColor(cr2w, v, "MinColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MinColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MinColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MinColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MinColor.Alpha };
                 v.Variant = p;
             }
             if (MaxColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MaxColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MaxColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MaxColor.Red }, Green = new CUInt8() { Value = (Byte)MaxColor.Green }, Blue = new CUInt8() { Value = (Byte)MaxColor.Blue }, Alpha = new CUInt8() { Value = (Byte)MaxColor.Alpha } };
+                var p = new CColor(cr2w, v, "MaxColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MaxColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MaxColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MaxColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MaxColor.Alpha };
                 v.Variant = p;
             }
             if (EyesColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EyesColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EyesColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EyesColor.Red }, Green = new CUInt8() { Value = (Byte)EyesColor.Green }, Blue = new CUInt8() { Value = (Byte)EyesColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EyesColor.Alpha } };
+                var p = new CColor(cr2w, v, "EyesColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EyesColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EyesColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EyesColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EyesColor.Alpha };
                 v.Variant = p;
             }
             if (BrightnessBoost != null)
@@ -31701,7 +31701,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Tint") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Tint.Red }, Green = new CUInt8() { Value = (Byte)Tint.Green }, Blue = new CUInt8() { Value = (Byte)Tint.Blue }, Alpha = new CUInt8() { Value = (Byte)Tint.Alpha } };
+                var p = new CColor(cr2w, v, "Tint") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Tint.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Tint.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Tint.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Tint.Alpha };
                 v.Variant = p;
             }
             if (SoftAlpha != null)
@@ -31772,14 +31772,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BottomColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BottomColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BottomColor.Red }, Green = new CUInt8() { Value = (Byte)BottomColor.Green }, Blue = new CUInt8() { Value = (Byte)BottomColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BottomColor.Alpha } };
+                var p = new CColor(cr2w, v, "BottomColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BottomColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BottomColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BottomColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BottomColor.Alpha };
                 v.Variant = p;
             }
             if (TopColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TopColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TopColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TopColor.Red }, Green = new CUInt8() { Value = (Byte)TopColor.Green }, Blue = new CUInt8() { Value = (Byte)TopColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TopColor.Alpha } };
+                var p = new CColor(cr2w, v, "TopColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TopColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TopColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TopColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TopColor.Alpha };
                 v.Variant = p;
             }
             if (LerpGradient != null)
@@ -31954,14 +31954,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "VignetteColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "VignetteColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)VignetteColor.Red }, Green = new CUInt8() { Value = (Byte)VignetteColor.Green }, Blue = new CUInt8() { Value = (Byte)VignetteColor.Blue }, Alpha = new CUInt8() { Value = (Byte)VignetteColor.Alpha } };
+                var p = new CColor(cr2w, v, "VignetteColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)VignetteColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)VignetteColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)VignetteColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)VignetteColor.Alpha };
                 v.Variant = p;
             }
             if (FluffTextColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FluffTextColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FluffTextColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FluffTextColor.Red }, Green = new CUInt8() { Value = (Byte)FluffTextColor.Green }, Blue = new CUInt8() { Value = (Byte)FluffTextColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FluffTextColor.Alpha } };
+                var p = new CColor(cr2w, v, "FluffTextColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FluffTextColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FluffTextColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FluffTextColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FluffTextColor.Alpha };
                 v.Variant = p;
             }
             if (VignetteMin != null)
@@ -32130,14 +32130,14 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Bright") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Bright") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Bright.Red }, Green = new CUInt8() { Value = (Byte)Bright.Green }, Blue = new CUInt8() { Value = (Byte)Bright.Blue }, Alpha = new CUInt8() { Value = (Byte)Bright.Alpha } };
+                var p = new CColor(cr2w, v, "Bright") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Bright.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Bright.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Bright.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Bright.Alpha };
                 v.Variant = p;
             }
             if (Dark != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Dark") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Dark") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Dark.Red }, Green = new CUInt8() { Value = (Byte)Dark.Green }, Blue = new CUInt8() { Value = (Byte)Dark.Blue }, Alpha = new CUInt8() { Value = (Byte)Dark.Alpha } };
+                var p = new CColor(cr2w, v, "Dark") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Dark.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Dark.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Dark.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Dark.Alpha };
                 v.Variant = p;
             }
             if (Normal != null)
@@ -32456,7 +32456,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MainColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MainColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MainColor.Red }, Green = new CUInt8() { Value = (Byte)MainColor.Green }, Blue = new CUInt8() { Value = (Byte)MainColor.Blue }, Alpha = new CUInt8() { Value = (Byte)MainColor.Alpha } };
+                var p = new CColor(cr2w, v, "MainColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MainColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MainColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MainColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MainColor.Alpha };
                 v.Variant = p;
             }
             if (NormalMap != null)
@@ -32686,28 +32686,28 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "PrimaryColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "PrimaryColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)PrimaryColor.Red }, Green = new CUInt8() { Value = (Byte)PrimaryColor.Green }, Blue = new CUInt8() { Value = (Byte)PrimaryColor.Blue }, Alpha = new CUInt8() { Value = (Byte)PrimaryColor.Alpha } };
+                var p = new CColor(cr2w, v, "PrimaryColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)PrimaryColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)PrimaryColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)PrimaryColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)PrimaryColor.Alpha };
                 v.Variant = p;
             }
             if (SecondaryColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "SecondaryColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "SecondaryColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)SecondaryColor.Red }, Green = new CUInt8() { Value = (Byte)SecondaryColor.Green }, Blue = new CUInt8() { Value = (Byte)SecondaryColor.Blue }, Alpha = new CUInt8() { Value = (Byte)SecondaryColor.Alpha } };
+                var p = new CColor(cr2w, v, "SecondaryColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)SecondaryColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)SecondaryColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)SecondaryColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)SecondaryColor.Alpha };
                 v.Variant = p;
             }
             if (BackgroundColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BackgroundColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BackgroundColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BackgroundColor.Red }, Green = new CUInt8() { Value = (Byte)BackgroundColor.Green }, Blue = new CUInt8() { Value = (Byte)BackgroundColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BackgroundColor.Alpha } };
+                var p = new CColor(cr2w, v, "BackgroundColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BackgroundColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BackgroundColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BackgroundColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BackgroundColor.Alpha };
                 v.Variant = p;
             }
             if (NoiseColor != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "NoiseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "NoiseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)NoiseColor.Red }, Green = new CUInt8() { Value = (Byte)NoiseColor.Green }, Blue = new CUInt8() { Value = (Byte)NoiseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)NoiseColor.Alpha } };
+                var p = new CColor(cr2w, v, "NoiseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)NoiseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)NoiseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)NoiseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)NoiseColor.Alpha };
                 v.Variant = p;
             }
             if (NormalOrBroken != null)
@@ -32742,7 +32742,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (EmissiveMask != null)
@@ -32925,7 +32925,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Brightness != null)
@@ -33112,7 +33112,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (SoftAlpha != null)
@@ -33168,7 +33168,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (Multiplier != null)
@@ -33210,21 +33210,21 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ScatteringColorThin") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ScatteringColorThin") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ScatteringColorThin.Red }, Green = new CUInt8() { Value = (Byte)ScatteringColorThin.Green }, Blue = new CUInt8() { Value = (Byte)ScatteringColorThin.Blue }, Alpha = new CUInt8() { Value = (Byte)ScatteringColorThin.Alpha } };
+                var p = new CColor(cr2w, v, "ScatteringColorThin") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ScatteringColorThin.Alpha };
                 v.Variant = p;
             }
             if (ScatteringColorThick != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ScatteringColorThick") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ScatteringColorThick") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ScatteringColorThick.Red }, Green = new CUInt8() { Value = (Byte)ScatteringColorThick.Green }, Blue = new CUInt8() { Value = (Byte)ScatteringColorThick.Blue }, Alpha = new CUInt8() { Value = (Byte)ScatteringColorThick.Alpha } };
+                var p = new CColor(cr2w, v, "ScatteringColorThick") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ScatteringColorThick.Alpha };
                 v.Variant = p;
             }
             if (Albedo != null)
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Albedo") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Albedo") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Albedo.Red }, Green = new CUInt8() { Value = (Byte)Albedo.Green }, Blue = new CUInt8() { Value = (Byte)Albedo.Blue }, Alpha = new CUInt8() { Value = (Byte)Albedo.Alpha } };
+                var p = new CColor(cr2w, v, "Albedo") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Albedo.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Albedo.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Albedo.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Albedo.Alpha };
                 v.Variant = p;
             }
             if (IOR != null)
@@ -33946,7 +33946,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "FresnelColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)FresnelColor.Red }, Green = new CUInt8() { Value = (Byte)FresnelColor.Green }, Blue = new CUInt8() { Value = (Byte)FresnelColor.Blue }, Alpha = new CUInt8() { Value = (Byte)FresnelColor.Alpha } };
+                var p = new CColor(cr2w, v, "FresnelColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)FresnelColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)FresnelColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)FresnelColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)FresnelColor.Alpha };
                 v.Variant = p;
             }
             if (FresnelColorIntensity != null)
@@ -34077,7 +34077,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -34154,7 +34154,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "DiffuseColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)DiffuseColor.Red }, Green = new CUInt8() { Value = (Byte)DiffuseColor.Green }, Blue = new CUInt8() { Value = (Byte)DiffuseColor.Blue }, Alpha = new CUInt8() { Value = (Byte)DiffuseColor.Alpha } };
+                var p = new CColor(cr2w, v, "DiffuseColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)DiffuseColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)DiffuseColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)DiffuseColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)DiffuseColor.Alpha };
                 v.Variant = p;
             }
             if (AlphaMaskContrast != null)
@@ -34252,7 +34252,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "TintColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)TintColor.Red }, Green = new CUInt8() { Value = (Byte)TintColor.Green }, Blue = new CUInt8() { Value = (Byte)TintColor.Blue }, Alpha = new CUInt8() { Value = (Byte)TintColor.Alpha } };
+                var p = new CColor(cr2w, v, "TintColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)TintColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)TintColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)TintColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)TintColor.Alpha };
                 v.Variant = p;
             }
             if (LayerTile != null)
@@ -34466,7 +34466,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "EmissiveColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)EmissiveColor.Red }, Green = new CUInt8() { Value = (Byte)EmissiveColor.Green }, Blue = new CUInt8() { Value = (Byte)EmissiveColor.Blue }, Alpha = new CUInt8() { Value = (Byte)EmissiveColor.Alpha } };
+                var p = new CColor(cr2w, v, "EmissiveColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)EmissiveColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)EmissiveColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)EmissiveColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)EmissiveColor.Alpha };
                 v.Variant = p;
             }
             if (LayerTile != null)
@@ -34501,7 +34501,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BaseColorScale") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BaseColorScale.Red }, Green = new CUInt8() { Value = (Byte)BaseColorScale.Green }, Blue = new CUInt8() { Value = (Byte)BaseColorScale.Blue }, Alpha = new CUInt8() { Value = (Byte)BaseColorScale.Alpha } };
+                var p = new CColor(cr2w, v, "BaseColorScale") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BaseColorScale.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BaseColorScale.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BaseColorScale.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BaseColorScale.Alpha };
                 v.Variant = p;
             }
             if (Metalness != null)
@@ -34571,7 +34571,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "BorderColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "BorderColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)BorderColor.Red }, Green = new CUInt8() { Value = (Byte)BorderColor.Green }, Blue = new CUInt8() { Value = (Byte)BorderColor.Blue }, Alpha = new CUInt8() { Value = (Byte)BorderColor.Alpha } };
+                var p = new CColor(cr2w, v, "BorderColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)BorderColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)BorderColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)BorderColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)BorderColor.Alpha };
                 v.Variant = p;
             }
         }
@@ -34592,7 +34592,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "Color") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "Color") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)Color.Red }, Green = new CUInt8() { Value = (Byte)Color.Green }, Blue = new CUInt8() { Value = (Byte)Color.Blue }, Alpha = new CUInt8() { Value = (Byte)Color.Alpha } };
+                var p = new CColor(cr2w, v, "Color") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)Color.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)Color.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)Color.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)Color.Alpha };
                 v.Variant = p;
             }
             if (ColorMultiplier != null)
@@ -34922,7 +34922,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "ReflectionColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "ReflectionColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)ReflectionColor.Red }, Green = new CUInt8() { Value = (Byte)ReflectionColor.Green }, Blue = new CUInt8() { Value = (Byte)ReflectionColor.Blue }, Alpha = new CUInt8() { Value = (Byte)ReflectionColor.Alpha } };
+                var p = new CColor(cr2w, v, "ReflectionColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)ReflectionColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)ReflectionColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)ReflectionColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)ReflectionColor.Alpha };
                 v.Variant = p;
             }
             if (RefractionMultiplier != null)
@@ -34978,7 +34978,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Types
             {
                 var v = new CVariantSizeNameType(cr2w, m, "MainColor") { IsSerialized = true };
                 m.Add(v);
-                var p = new CColor(cr2w, v, "MainColor") { IsSerialized = true, Red = new CUInt8() { Value = (Byte)MainColor.Red }, Green = new CUInt8() { Value = (Byte)MainColor.Green }, Blue = new CUInt8() { Value = (Byte)MainColor.Blue }, Alpha = new CUInt8() { Value = (Byte)MainColor.Alpha } };
+                var p = new CColor(cr2w, v, "MainColor") { IsSerialized = true}; p.Red = new CUInt8(cr2w,p,"Red") { IsSerialized = true, Value = (Byte)MainColor.Red }; p.Green = new CUInt8(cr2w,p,"Green") { IsSerialized = true, Value = (Byte)MainColor.Green }; p.Blue = new CUInt8(cr2w,p,"Blue") { IsSerialized = true, Value = (Byte)MainColor.Blue }; p.Alpha = new CUInt8(cr2w,p,"Alpha") { IsSerialized = true, Value = (Byte)MainColor.Alpha };
                 v.Variant = p;
             }
         }
