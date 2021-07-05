@@ -15,7 +15,6 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string About = "Application.About";
             public const string BackupMod = "Application.BackupMod";
             public const string BugReport = "Application.BugReport";
-            public const string CreateNewProject = "Application.CreateNewProject";
             public const string DelProject = "Application.DeleteProject";
             public const string Exit = "Application.Exit";
             public const string NewFile = "Application.NewFile";

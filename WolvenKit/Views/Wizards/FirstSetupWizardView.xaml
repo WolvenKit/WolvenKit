@@ -7,7 +7,7 @@
 
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    ViewModelChanged="UserControl_ViewModelChanged" Height="500" MinHeight="500" MinWidth="700" Width="auto">
+    Height="500" MinHeight="500" MinWidth="700" Width="auto">
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -58,56 +58,15 @@
 
         <Grid x:Name="PageGrid" Grid.Row="1" />
 
-        <!--<Grid
-            Grid.Row="2"
-            Height="95"
-            Margin="0,0,0,0"
-            VerticalAlignment="Bottom">
-
-            <Button
-                Width="50"
-                Height="30"
-                Margin="3"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                Click="Button_Click_1"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                IsEnabled="True">
-                <iconPacks:PackIconCodicons Kind="ArrowLeft" />
-            </Button>
-            <hc:StepBar
-                x:Name="StepMain"
-                Grid.Row="2"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Margin="50,0,50,3"
-                Dock="Bottom">
-                <hc:StepBarItem Content="Create User (Optional)" />
-
-                <hc:StepBarItem Content="Locate Game Data" />
-                <hc:StepBarItem Content="Finalize Setup" />
-            </hc:StepBar>
-            <Button
-                Width="50"
-                Height="30"
-                Margin="3"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                Click="Button_Click"
-                Command="{Binding NextCmd}"
-                CommandParameter="{Binding ElementName=StepMain}"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                IsEnabled="{Binding AllFieldIsValid}">
-                <iconPacks:PackIconCodicons Kind="ArrowRight" />
-            </Button>
-        </Grid>-->
         <syncfusion:WizardControl
             Grid.RowSpan="3"
             Margin="0,33,0,0"
-            Finish="WizardControl_Finish"
             FinishButtonClosesWindow="True">
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="Finish">
+                    <hc:EventToCommand Command="{Binding FinishCommand}" PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
 
             <syncfusion:WizardPage
                 Name="wizardPage1"
@@ -152,10 +111,10 @@
                                              HorizontalAlignment="Left" VerticalAlignment="Center" />
                                             <StackPanel Grid.Column="1">
                                                 <syncfusion:SfTextInputLayout  Hint="Author">
-                                                    <syncfusion:SfTextBoxExt  />
+                                                    <syncfusion:SfTextBoxExt Text="{Binding Author}" />
                                                 </syncfusion:SfTextInputLayout>
                                                 <syncfusion:SfTextInputLayout  Hint="Email">
-                                                    <syncfusion:SfTextBoxExt  />
+                                                    <syncfusion:SfTextBoxExt Text="{Binding Email}" />
                                                 </syncfusion:SfTextInputLayout>
                                             </StackPanel>
 
@@ -164,10 +123,10 @@
 
 
                                         <syncfusion:SfTextInputLayout  Hint="Donate Link">
-                                            <syncfusion:SfTextBoxExt  />
+                                            <syncfusion:SfTextBoxExt Text="{Binding DonateLink}" />
                                         </syncfusion:SfTextInputLayout>
                                         <syncfusion:SfTextInputLayout  Hint="Description">
-                                            <syncfusion:SfTextBoxExt  />
+                                            <syncfusion:SfTextBoxExt Text="{Binding Description}" />
                                         </syncfusion:SfTextInputLayout>
                                         <TextBlock  Text="Theme (applies after restart.)"/>
                                         <Border BorderThickness="1" BorderBrush="Gray" CornerRadius="4">
@@ -181,62 +140,7 @@
                          FlowDirection="LeftToRight" />
                                         </Border>
 
-                                        <!--<StackPanel Orientation="Horizontal">
-
-
-                                            <TextBlock VerticalAlignment="Center" Text="Profile Image " />
-                                            <hc:ImageSelector
-                                 x:Name="imgSelector"
-                                 Width="100"
-                                 Height="100"
-                                 Margin="64,0,0,0"
-                                 HorizontalAlignment="Left" />
-                                        </StackPanel>
-                                        <hc:TextBox
-                             x:Name="NameTb"
-                             Margin="0,32,0,0"
-                             HorizontalAlignment="Stretch"
-                             hc:InfoElement.Title="Author"
-                             hc:InfoElement.TitlePlacement="Left"
-                             hc:InfoElement.TitleWidth="140"
-                             Style="{StaticResource TextBoxExtend}"
-                             Text="{Binding Author}"
-                            />
-
-                                        <hc:TextBox
-                             x:Name="EmailTb"
-                             Margin="0,32,0,0"
-                             HorizontalAlignment="Stretch"
-                             hc:InfoElement.Title="Email"
-                             hc:InfoElement.TitlePlacement="Left"
-                             hc:InfoElement.TitleWidth="140"
-                             Style="{StaticResource TextBoxExtend}"
-                             Text="{Binding Email}"
-                             />
-                                        -->
-                                        <!--VerifyFunc="IsValidEmail" />-->
-                                        <!--
-
-                                        <hc:TextBox
-                             x:Name="DonateTb"
-                             Margin="0,32,0,0"
-                             HorizontalAlignment="Stretch"
-                             hc:InfoElement.Title="Donate Link"
-                             hc:InfoElement.TitlePlacement="Left"
-                             hc:InfoElement.TitleWidth="140"
-                             Style="{StaticResource TextBoxExtend}"
-                             Text="{Binding DonateLink}"/>
-
-                                        <hc:TextBox
-                             Height="100"
-                             Margin="0,32,10,0"
-                             HorizontalAlignment="Stretch"
-                             VerticalContentAlignment="Top"
-                             hc:InfoElement.Title="Description"
-                             hc:InfoElement.TitlePlacement="Left"
-                             hc:InfoElement.TitleWidth="140"
-                             Text="{Binding DefaultDescription}" />
-                                    </StackPanel>-->
+                                       
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>
@@ -304,7 +208,7 @@
                                  hc:InfoElement.TitlePlacement="Left"
                                  hc:InfoElement.TitleWidth="0"
                                  Style="{StaticResource TextBoxExtendCustom}"
-                                 Text="fuzzo bind plox" />
+                                 Text="{Binding MaterialDepotPath}" />
                                         </syncfusion:SfTextInputLayout>
 
 

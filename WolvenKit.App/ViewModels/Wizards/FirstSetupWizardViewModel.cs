@@ -19,6 +19,7 @@ namespace WolvenKit.ViewModels.Wizards
     /// </summary>
     public class FirstSetupWizardViewModel : ViewModelBase
     {
+
         #region Fields
 
         private const string greenBG = "#9600ff00";
@@ -46,6 +47,7 @@ namespace WolvenKit.ViewModels.Wizards
             OpenWccPathCommand = new RelayCommand(ExecuteOpenWccPath, CanOpenWccPath);
             OpenModDirectoryCommand = new RelayCommand(ExecuteOpenMod, CanOpenMod);
             OpenDlcDirectoryCommand = new RelayCommand(ExecuteOpenDlc, CanOpenDlc);
+            FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
 
             Title = "Settings";
 
@@ -66,44 +68,25 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Properties
 
-        private bool _allFieldIsValid = false;
-        private string _cpp77ExePath;
-        private string _w3ExePath;
+        public string Author { get; set; }
+        public string Email { get; set; }
+        public string DonateLink { get; set; }
+        public string Description { get; set; }
+        public string MaterialDepotPath { get; set; }
+
+
+
         private string _wccLitePath;
 
-        public bool AllFieldIsValid
-        {
-            get => _allFieldIsValid;
-            set
-            {
-                _allFieldIsValid = value;
-                RaisePropertyChanged(nameof(AllFieldIsValid));
-            }
-        }
+        public bool AllFieldIsValid { get; set; }
         public bool CheckForUpdates { get; set; }
 
-        public string CP77ExePath
-        {
-            get => _cpp77ExePath;
-            set
-            {
-                _cpp77ExePath = value;
-                RaisePropertyChanged(nameof(CP77ExePath));
-            }
-        }
+        public string CP77ExePath { get; set; }
 
         public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
         public bool IsUpdateSystemAvailable { get; private set; }
 
-        public string W3ExePath
-        {
-            get => _w3ExePath;
-            set
-            {
-                _w3ExePath = value;
-                RaisePropertyChanged(nameof(W3ExePath));
-            }
-        }
+        public string W3ExePath { get; set; }
 
         public string WccLitePath
         {
@@ -132,6 +115,31 @@ namespace WolvenKit.ViewModels.Wizards
         #endregion Properties
 
         #region Commands
+
+        public ICommand FinishCommand { get; private set; }
+
+        private bool CanFinish()
+        {
+            return true;
+        }
+
+        private void ExecuteFinish()
+        {
+
+            _settingsManager.CheckForUpdates = CheckForUpdates;
+            _settingsManager.W3ExecutablePath = W3ExePath;
+            _settingsManager.CP77ExecutablePath = CP77ExePath;
+            _settingsManager.WccLitePath = WccLitePath;
+            _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
+
+            _settingsManager.Save();
+
+
+        }
+
+        
+
+
 
         public ICommand OpenCP77GamePathCommand { get; private set; }
         public ICommand OpenDlcDirectoryCommand { get; private set; }
@@ -211,26 +219,6 @@ namespace WolvenKit.ViewModels.Wizards
         {
             await base.InitializeAsync();
 
-        }
-
-        protected override async Task<bool> SaveAsync()
-        {
-            //var cansave =
-            //    //(File.Exists(WccLitePath) && Path.GetExtension(WccLitePath) == ".exe" && WccLitePath.Contains("wcc_lite.exe")) &&
-            //    (File.Exists(ExecutablePath) && Path.GetExtension(ExecutablePath) == ".exe" && ExecutablePath.Contains("witcher3.exe"));
-            //if (!cansave) return false;
-
-            //_updateService.CheckForUpdates = _settingsManager.CheckForUpdates;
-            //_updateService.CurrentChannel = UpdateChannel;
-
-            _settingsManager.CheckForUpdates = CheckForUpdates;
-            _settingsManager.W3ExecutablePath = W3ExePath;
-            _settingsManager.CP77ExecutablePath = CP77ExePath;
-            _settingsManager.WccLitePath = WccLitePath;
-
-            _settingsManager.Save();
-
-            return await base.SaveAsync();
         }
 
         private void exeSearcherSlave_DoWork()

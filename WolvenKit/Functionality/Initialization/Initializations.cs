@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using Catel.IoC;
 using Catel.Logging;
 using Catel.MVVM;
+using Catel.Services;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
 using Orchestra.Services;
@@ -24,8 +25,10 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
+using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Functionality.Initialization
 {
@@ -299,18 +302,17 @@ namespace WolvenKit.Functionality.Initialization
                 viewLocator.NamingConventions.Add("WolvenKit.Views.Others.PropertyGridEditors.[VM]View");
                 viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors.[VW]ViewModel");
 
-                viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
-                viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
-                viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
-                viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
-
-                // Fixes
+               // Fixes
                 // Custom Registrations
 
                 viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
                 viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
-                viewModelLocator.Register(typeof(Views.Wizards.WizardPages.ProjectWizard.FinalizeSetupView), typeof(ViewModels.Wizards.ProjectWizard.FinalizeSetupViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
+
+                viewLocator.Register(typeof(ProjectWizardViewModel), typeof(ProjectWizardView));
+                viewModelLocator.Register(typeof(Views.Wizards.ProjectWizardView), typeof(ViewModels.Wizards.ProjectWizardViewModel));
+
+
             }
             catch (Exception e)
             {

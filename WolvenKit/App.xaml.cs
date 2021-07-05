@@ -135,7 +135,6 @@ namespace WolvenKit
             NNViewRegistrar.RegisterSplat();
 
             StaticReferences.Logger.Info("Initializing Notifications.");
-            NotificationHelper.InitializeNotificationHelper();
 
             StaticReferences.Logger.Info("Check for new updates");
             //Helpers.CheckForUpdates();

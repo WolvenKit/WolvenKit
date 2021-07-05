@@ -9,7 +9,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Tag="Project Wizard"
-    mc:Ignorable="av">
+    mc:Ignorable="av"
+
+
+
+    >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -28,9 +32,8 @@
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="15*" />
-            <RowDefinition Height="90*" />
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <StackPanel
@@ -61,12 +64,22 @@
                 Text="Let's create a project!" />
         </StackPanel>
 
-        <syncfusion:WizardControl
+        <syncfusion:WizardControl Grid.Row="1"
             Name="wizardControl"
             Grid.RowSpan="3"
-            Margin="0,33,0,0"
-            Finish="wizardControl_Finish"
-            FinishButtonClosesWindow="True">
+            Margin="0,0,0,0"
+            FinishEnabled="{Binding AllFieldsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="Finish">
+                    <hc:EventToCommand Command="{Binding FinishCommand}" PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+                <hc:EventTrigger EventName="Cancel">
+                    <hc:EventToCommand Command="{Binding CancelCommand}" PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
+
+
             <syncfusion:WizardPage
                 Name="wizardPage1"
                 BackVisibility="Collapsed"
@@ -113,8 +126,8 @@
                                             hc:InfoElement.TitlePlacement="Left"
                                             hc:InfoElement.TitleWidth="90"
                                             Style="{StaticResource TextBoxExtendCustom}"
-                                            Text="{Binding ProjectName}" />
-                                        <!--  VerifyFunc="VerifyIfProjectExists"  -->
+                                            Text="{Binding ProjectName}"
+                                            VerifyFunc="VerifyIfProjectExists"/>
 
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -131,15 +144,19 @@
                                                 hc:InfoElement.TitlePlacement="Left"
                                                 hc:InfoElement.TitleWidth="90"
                                                 Style="{StaticResource TextBoxExtendCustom}"
-                                                Text="{Binding ProjectPath}" />
-                                            <!--  VerifyFunc="VerifyFolder"  -->
+                                                Text="{Binding ProjectPath}"
+                                                TextChanged="TextBox_TextChanged"
+                                                VerifyFunc="VerifyFolder"
+                                                />
+
                                             <Button
                                                 Grid.Column="1"
                                                 Width="50"
                                                 Height="34"
                                                 Margin="0,0,10,0"
                                                 HorizontalAlignment="Center"
-                                                VerticalAlignment="Bottom">
+                                                VerticalAlignment="Bottom"
+                                                Command="{Binding OpenProjectPathCommand}">
 
                                                 <iconPacks:PackIconCodicons
                                                     Grid.Row="0"

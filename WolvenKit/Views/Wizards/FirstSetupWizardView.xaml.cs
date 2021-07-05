@@ -7,9 +7,6 @@ using System.Windows.Shapes;
 using Catel.IoC;
 using ControlzEx.Theming;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models.Wizards;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Wizards.WizardPages.FirstSetupWizard;
 
 namespace WolvenKit.Views.Wizards
 {
@@ -17,22 +14,16 @@ namespace WolvenKit.Views.Wizards
     {
         #region Fields
 
-        private CreateUserView CUV;
+        private bool _filled = false;
 
-        private FinalizeSetupView FSV;
+        private Brush _lastaccent;
 
-        private LocateGameDateView LGDV;
-        private bool filled = false;
-
-        private Brush lastaccent;
         #endregion Fields
 
         #region Constructors
 
         public FirstSetupWizardView()
         {
-            ServiceLocator.Default.RegisterTypeAndInstantiate<FirstSetupWizardModel>();
-
             InitializeComponent();
         }
 
@@ -40,20 +31,20 @@ namespace WolvenKit.Views.Wizards
         private void Circle_MouseEnter(object sender, MouseEventArgs e)
         {
             var a = (Ellipse)sender;
-            lastaccent = a.Fill;
+            _lastaccent = a.Fill;
             a.Fill = new SolidColorBrush(Colors.AliceBlue);
         }
 
         private void Circle_MouseLeave(object sender, MouseEventArgs e)
         {
             var a = (Ellipse)sender;
-            a.Fill = lastaccent;
+            a.Fill = _lastaccent;
         }
 
         private void Circle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var a = (Ellipse)sender;
-            a.Fill = new SolidColorBrush(Colors.Black);
+            //a.Fill = new SolidColorBrush(Colors.Black);
             //ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name);
 
             try
@@ -69,62 +60,9 @@ namespace WolvenKit.Views.Wizards
         }
         #region Methods
 
-        //private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        //{
-        //    StepMain.Next();
-        //    ShowPage();
-        //}
-
-        //private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        //{
-        //    StepMain.Prev();
-        //    ShowPage();
-        //}
-
-        //private void ShowPage()
-        //{
-        //    switch (StepMain.StepIndex)
-        //    {
-        //        case 0:
-        //            PageGrid.Children.Clear();
-        //            PageGrid.Children.Add(CUV);
-        //            break;
-
-        //        case 1:
-        //            PageGrid.Children.Clear();
-        //            PageGrid.Children.Add(LGDV);
-        //            break;
-
-        //        case 2:
-        //            PageGrid.Children.Clear();
-        //            PageGrid.Children.Add(FSV);
-        //            break;
-        //    }
-        //}
-
-        private void UserControl_ViewModelChanged(object sender, System.EventArgs e)
-        {
-            if (ViewModel is FirstSetupWizardViewModel vm)
-            {
-                ServiceLocator.Default.RegisterInstance(vm);
-
-                CUV = new CreateUserView();
-                LGDV = new LocateGameDateView();
-                FSV = new FinalizeSetupView();
-
-                //ShowPage();
-            }
-        }
-
-        #endregion Methods
-
-        private void WizardControl_Finish(object sender, System.Windows.RoutedEventArgs e)
-        {
-
-        }
         private void UserControl_Initialized_1(object sender, EventArgs e)
         {
-            if (!filled)
+            if (!_filled)
             {
                 new Thread(() =>
                 {
@@ -159,7 +97,10 @@ namespace WolvenKit.Views.Wizards
                     }
                 }).Start();
             }
-            filled = true;
+            _filled = true;
         }
+
+        #endregion Methods
+
     }
 }

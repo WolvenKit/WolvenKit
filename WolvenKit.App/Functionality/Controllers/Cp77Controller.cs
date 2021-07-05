@@ -270,10 +270,6 @@ namespace WolvenKit.Functionality.Controllers
         public void AddToMod(IGameFile file)
         {
             var project = _projectManager.ActiveProject;
-            if (NotificationHelper.IsShowNotificationsEnabled)
-            {
-                NotificationHelper.Growl.Info($"Added file: {file.Name} to project: {project.Name} ");
-            }
             switch (project.GameType)
             {
                 case GameType.Witcher3:

@@ -273,7 +273,6 @@ namespace WolvenKit.Views.Editor
         {
             if (ViewModel is AssetBrowserViewModel vm)
             {
-                NotificationHelper.IsShowNotificationsEnabled = false;
                 vm.AddSelectedCommand.SafeExecute();
             }
         }

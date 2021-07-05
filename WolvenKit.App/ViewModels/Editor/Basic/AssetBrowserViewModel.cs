@@ -158,11 +158,6 @@ namespace WolvenKit.ViewModels.Editor
                 if (o is FileEntryViewModel fileVm)
                 {
                     AddFile(fileVm);
-
-                    if (RightSelectedItems.LastOrDefault() == o)
-                    {
-                        NotificationHelper.IsShowNotificationsEnabled = true;
-                    }
                 }
             }
         }

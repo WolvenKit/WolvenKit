@@ -148,9 +148,9 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
-                await using var sf = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
+                await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
                 var ser = new XmlSerializer(typeof(CP77Mod));
-                ser.Serialize(sf, new CP77Mod(ActiveProject));
+                ser.Serialize(fs, new CP77Mod(ActiveProject));
 
             }
             catch (Exception e)
