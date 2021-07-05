@@ -1,3 +1,4 @@
+using System.Windows;
 using Catel.IoC;
 using Catel.Windows;
 using Catel.Windows.Controls;
@@ -7,10 +8,10 @@ using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class ProjectWizardView : UserControl //: DataWindow
+    public partial class ProjectWizardView : DataWindow //: DataWindow
     {
 
-        public ProjectWizardView()
+        public ProjectWizardView() : base(DataWindowMode.Custom)
         {
 
             InitializeComponent();
@@ -36,6 +37,13 @@ namespace WolvenKit.Views.Wizards
             => string.IsNullOrEmpty(str) || System.IO.Directory.Exists(System.IO.Path.Combine(projectPathTxtbx.Text, xprojectNameTxtbx.Text))
                 ? HandyControl.Data.OperationResult.Failed("WolvenKit project exists")
                 : HandyControl.Data.OperationResult.Success();
+
+        private void ButtonClose(object sender, RoutedEventArgs e) => Close();
+
+        private void ButtonMinimize(object sender, RoutedEventArgs e) => SetCurrentValue(WindowStateProperty, WindowState.Minimized);
+
+        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => DragMove();
+
 
     }
 }

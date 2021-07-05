@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
 using Catel.MVVM;
@@ -12,8 +14,9 @@ namespace WolvenKit.ViewModels.Wizards
 
         private readonly ISelectDirectoryService _selectDirectoryService;
 
-        
-        
+        public const string WitcherGameName = "Witcher 3";
+        public const string CyberpunkGameName = "Cyberpunk 2077";
+
 
 
         #endregion Fields
@@ -31,6 +34,9 @@ namespace WolvenKit.ViewModels.Wizards
             OpenProjectPathCommand = new RelayCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
             FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
             CancelCommand = new RelayCommand(ExecuteCancel, CanCancel);
+
+            ProjectType = new ObservableCollection<string> {"Cyberpunk 2077"};
+            //ProjectType.Add("Witcher 3");
         }
 
         #endregion Constructors
@@ -67,6 +73,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         public string ProjectName { get; set; }
         public string ProjectPath { get; set; }
+        public ObservableCollection<string> ProjectType { get; set; }
 
 
         /// <summary>

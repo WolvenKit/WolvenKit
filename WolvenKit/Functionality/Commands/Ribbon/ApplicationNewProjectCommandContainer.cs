@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Catel;
 using Catel.IoC;
@@ -66,128 +67,108 @@ namespace WolvenKit.Functionality.Commands
             try
             {
                 var location = parameter as string;
-                //var filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj| Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj";
-                //if (location == null && parameter is ProjectWizardModel.TypeAndPath res)
-                //{
-                //    location = Path.Combine(res.Path, res.Name);
-                //    if (res.Type == ProjectWizardModel.WitcherGameName)
-                //    {
-                //        filter = "Witcher 3 Project (*.w3modproj)|*.w3modproj";
-                //        location += ".w3modproj";
-                //    }
-                //    else if (res.Type == ProjectWizardModel.CyberpunkGameName)
-                //    {
-                //        filter = "Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj";
-                //        location += ".cpmodproj";
-                //    }
-                //}
-                //else
+                var viewModel = _serviceLocator.ResolveType<ProjectWizardViewModel>();
+
+                var r = await _uIVisualizerService.ShowAsync(viewModel, (sender, args) =>
                 {
-
-                    var viewModel = new UserControlHostWindowViewModel(_serviceLocator.ResolveType<ProjectWizardViewModel>());
-                    //var viewModel = _serviceLocator.ResolveType<ProjectWizardViewModel>();
-
-                    var r = await _uIVisualizerService.ShowAsync(viewModel, (sender, args) =>
+                    if (args.DataContext is not ProjectWizardViewModel res)
                     {
-                        if (args.DataContext is ProjectWizardViewModel res)
-                        {
-                            var result = args.Result;
-                            if (result.HasValue && result.Value)
-                            {
-                                location = Path.Combine(res.ProjectPath, res.ProjectName);
-                                if (res.Type == ProjectWizardModel.WitcherGameName)
-                                {
-                                    location += ".w3modproj";
-                                }
-                                else if (res.Type == ProjectWizardModel.CyberpunkGameName)
-                                {
-                                    location += ".cpmodproj";
-                                }
-                            }
-                        }
-
-                        
-                    });
-
-                    
-                    else
-                    {
-                        
+                        return;
                     }
+
+                    var result = args.Result;
+                    if (!result.HasValue || !result.Value)
+                    {
+                        return;
+                    }
+
+                    location = Path.Combine(res.ProjectPath, res.ProjectName);
+                    var type = res.ProjectType.First();
+                    if (type.Equals(ProjectWizardViewModel.WitcherGameName))
+                    {
+                        location += ".w3modproj";
+                    }
+                    else if (type.Equals(ProjectWizardViewModel.CyberpunkGameName))
+                    {
+                        location += ".cpmodproj";
+                    }
+
+
+                });
+
+                if (string.IsNullOrWhiteSpace(location))
+                {
+                    return;
                 }
 
-                if (!string.IsNullOrWhiteSpace(location))
+                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+                using (_pleaseWaitService.PushInScope())
                 {
-                    RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-                    RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
-                    using (_pleaseWaitService.PushInScope())
-                    {
-                        switch (Path.GetExtension(location))
-                        {
-                            case ".w3modproj":
-                            {
-                                var np = new Tw3Project(location)
-                                {
-                                    Name = Path.GetFileNameWithoutExtension(location),
-                                    Author = "WolvenKit",
-                                    Email = "",
-                                    Version = "1.0"
-
-                                };
-                                _projectManager.ActiveProject = np;
-                                await _projectManager.SaveAsync();
-                                np.CreateDefaultDirectories();
-                                //saveProjectImg(location);
-                                break;
-                            }
-                            case ".cpmodproj":
-                            {
-                                var np = new Cp77Project(location)
-                                {
-                                    Name = Path.GetFileNameWithoutExtension(location),
-                                    Author = "WolvenKit",
-                                    Email = "",
-                                    Version = "1.0"
-                                };
-                                _projectManager.ActiveProject = np;
-                                await _projectManager.SaveAsync();
-                                np.CreateDefaultDirectories();
-                                //saveProjectImg(location);
-                                break;
-                            }
-                            default:
-                                _loggerService.LogString("Invalid project path!", Logtype.Error);
-                                break;
-                        }
-                    }
-
-                    await _projectManager.LoadAsync(location);
                     switch (Path.GetExtension(location))
                     {
                         case ".w3modproj":
-                            await _tw3Controller.HandleStartup().ContinueWith(t =>
+                        {
+                            var np = new Tw3Project(location)
                             {
-                                _notificationService.Success(
-                                    "Project " + Path.GetFileNameWithoutExtension(location) +
-                                    " loaded!");
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
 
-                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
                             break;
+                        }
                         case ".cpmodproj":
-                            await _cp77Controller.HandleStartup().ContinueWith(
-                                t =>
-                                {
-                                    _notificationService.Success("Project " +
-                                                                 Path.GetFileNameWithoutExtension(location) +
-                                                                 " loaded!");
-
-                                },
-                                TaskContinuationOptions.OnlyOnRanToCompletion);
+                        {
+                            var np = new Cp77Project(location)
+                            {
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
                             break;
+                        }
                         default:
+                            _loggerService.LogString("Invalid project path!", Logtype.Error);
                             break;
                     }
+                }
 
+                await _projectManager.LoadAsync(location);
+                switch (Path.GetExtension(location))
+                {
+                    case ".w3modproj":
+                        await _tw3Controller.HandleStartup().ContinueWith(t =>
+                        {
+                            _notificationService.Success(
+                                "Project " + Path.GetFileNameWithoutExtension(location) +
+                                " loaded!");
+
+                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    case ".cpmodproj":
+                        await _cp77Controller.HandleStartup().ContinueWith(
+                            t =>
+                            {
+                                _notificationService.Success("Project " +
+                                                             Path.GetFileNameWithoutExtension(location) +
+                                                             " loaded!");
+
+                            },
+                            TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    default:
+                        break;
                 }
             }
             catch (Exception ex)

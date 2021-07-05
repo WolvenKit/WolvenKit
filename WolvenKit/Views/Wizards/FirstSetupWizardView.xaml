@@ -68,7 +68,7 @@
                 </hc:EventTrigger>
             </hc:Interaction.Triggers>
 
-            <syncfusion:WizardPage
+            <!--<syncfusion:WizardPage
                 Name="wizardPage1"
                 BackVisibility="Collapsed"
                 HelpVisibility="Collapsed"
@@ -147,7 +147,7 @@
                         </Grid>
                     </Grid>
                 </Grid>
-            </syncfusion:WizardPage>
+            </syncfusion:WizardPage>-->
 
             <syncfusion:WizardPage
                 Name="wizardPage2"

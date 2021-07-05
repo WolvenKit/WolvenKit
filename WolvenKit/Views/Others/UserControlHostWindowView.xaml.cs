@@ -16,10 +16,7 @@ namespace WolvenKit.Views.Others
             UserContentControl.Content = ucvm.ContentUserControl;
             ucvm.ClosedAsync += (s, e) =>
             {
-                //return System.Threading.Tasks.Task.Run(() => Dispatcher.Invoke(() => Close()));
-                DialogResult = e.Result;
-                return Task.CompletedTask;
-                
+                return System.Threading.Tasks.Task.Run(() => Dispatcher.Invoke(() => Close()));
             };
         }
 
