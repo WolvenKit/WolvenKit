@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -38,7 +39,7 @@ namespace WolvenKit.Functionality.Services
 
     }
 
-    public interface ISettingsManager : ISettingsDto
+    public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     {
         // This is here because Catel can't expose inherited Properties ¯\_(ツ)_/¯
         // and we use this in the first set up viewmodels
