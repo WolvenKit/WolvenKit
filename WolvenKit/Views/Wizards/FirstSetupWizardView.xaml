@@ -4,10 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:catel="http://schemas.catelproject.com"
     Initialized="UserControl_Initialized_1"
-
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    Height="500" MinHeight="500" MinWidth="700" Width="auto">
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    Height="500" MinHeight="500" MinWidth="700" Width="auto"
+    >
 
     <catel:UserControl.Resources>
         <ResourceDictionary>
@@ -61,7 +64,9 @@
         <syncfusion:WizardControl
             Grid.RowSpan="3"
             Margin="0,33,0,0"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            FinishEnabled="{Binding AllFieldsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            >
             <hc:Interaction.Triggers>
                 <hc:EventTrigger EventName="Finish">
                     <hc:EventToCommand Command="{Binding FinishCommand}" PassEventArgsToCommand="True" />
@@ -188,27 +193,79 @@
                                             </Grid.ColumnDefinitions>
                                         </Grid>
 
-                                        <syncfusion:SfTextInputLayout  Hint="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe">
-                                            <hc:TextBox
-                                 x:Name="cp77ExeTxtb"
-                                 Margin="0,-15,0,-15"
-                                 hc:InfoElement.Necessary="True"
-                                 hc:InfoElement.Title="Executable Path"
-                                 hc:InfoElement.TitlePlacement="Left"
-                                 hc:InfoElement.TitleWidth="0"
-                                 Style="{StaticResource TextBoxExtendCustom}"
-                                 Text="{Binding CP77ExePath}" />
-                                        </syncfusion:SfTextInputLayout>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*" />
+                                                <ColumnDefinition Width="60" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel>
+                                                <syncfusion:SfTextInputLayout  Hint="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe">
+                                                    <hc:TextBox
+                                                         x:Name="cp77ExeTxtb"
+                                                         Margin="0,-15,0,-15"
+                                                         hc:InfoElement.Necessary="True"
+                                                         hc:InfoElement.Title="Executable Path"
+                                                         hc:InfoElement.TitlePlacement="Left"
+                                                         hc:InfoElement.TitleWidth="0"
+                                                         Style="{StaticResource TextBoxExtendCustom}"
+                                                         Text="{Binding CP77ExePath}"
+                                                         TextChanged="Field_TextChanged"
+                                                         VerifyFunc="VerifyFile"
+                                                         />
+                                                </syncfusion:SfTextInputLayout>
+                                                
+                                                <TextBlock Visibility="Collapsed"
+                                                   x:Name="ValidationText"
+                                                   TextWrapping="Wrap"
+                                                   MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
+                                                   Background="OrangeRed"
+                                                   FontSize="14"
+                                                   TextAlignment="Center"
+                                                   Text ="TEMP"
+                                                />
+                                            </StackPanel>
+
+                                            <Button
+                                                Grid.Column="1"
+                                                Width="50"
+                                                Height="34"
+                                                Margin="0,0,10,0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding OpenCP77GamePathCommand}">
+
+                                                <iconPacks:PackIconCodicons
+                                                    Grid.Row="0"
+                                                    Width="15"
+                                                    Height="15"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                                    Kind="FolderOpened"
+                                                    Spin="False"
+                                                    SpinAutoReverse="False" />
+                                            </Button>
+
+                                            
+                                        </Grid>
+                                        
+                                        
+                                        
+
                                         <syncfusion:SfTextInputLayout  Hint="Enter full path : Material Repository Path (Can be any new folder)">
                                             <hc:TextBox
                                  x:Name="matdepotxtb"
                                  Margin="0,-15,0,-15"
-                                 hc:InfoElement.Necessary="True"
+                                 hc:InfoElement.Necessary="False"
                                  hc:InfoElement.Title="Executable Path"
                                  hc:InfoElement.TitlePlacement="Left"
                                  hc:InfoElement.TitleWidth="0"
                                  Style="{StaticResource TextBoxExtendCustom}"
-                                 Text="{Binding MaterialDepotPath}" />
+                                 Text="{Binding MaterialDepotPath}"
+                                
+                                 />
                                         </syncfusion:SfTextInputLayout>
 
 

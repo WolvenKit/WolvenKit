@@ -153,6 +153,7 @@
                                                     <ColumnDefinition Width="1.2*" />
                                                     <ColumnDefinition Width="4*" />
                                                 </Grid.ColumnDefinitions>
+                                                
                                                 <StackPanel Orientation="Vertical">
                                                     <hc:ImageSelector
                                             x:Name="imgSelector"
@@ -167,6 +168,7 @@
                                             Foreground="Gray"
                                             Text="Project icon (Optional)"
                                             TextAlignment="Left" />
+                                                    
                                                 </StackPanel>
                                                 <StackPanel Grid.Column="1" Margin="0,5,0,0">
                                                     <hc:TextBox
@@ -223,6 +225,7 @@
                                                     SpinAutoReverse="False" />
                                                         </Button>
                                                     </Grid>
+                                                    
                                                     <hc:ComboBox
                                             Margin="0,20,8,0"
                                             hc:InfoElement.Necessary="False"

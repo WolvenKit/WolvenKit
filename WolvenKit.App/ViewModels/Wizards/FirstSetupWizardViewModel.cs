@@ -68,12 +68,26 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Properties
 
-        public string Author { get; set; }
-        public string Email { get; set; }
-        public string DonateLink { get; set; }
-        public string Description { get; set; }
+        //public string Author { get; set; }
+        //public string Email { get; set; }
+        //public string DonateLink { get; set; }
+        //public string Description { get; set; }
         public string MaterialDepotPath { get; set; }
 
+        private bool _allFieldsValid;
+        public bool AllFieldsValid
+        {
+            get => _allFieldsValid;
+            set
+            {
+                if (_allFieldsValid != value)
+                {
+                    var oldValue = _allFieldsValid;
+                    _allFieldsValid = value;
+                    RaisePropertyChanged(() => AllFieldsValid, oldValue, value);
+                }
+            }
+        }
 
 
         private string _wccLitePath;

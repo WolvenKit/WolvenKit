@@ -1,12 +1,16 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using Catel.IoC;
+using Catel.Services;
 using ControlzEx.Theming;
+using WolvenKit.Core;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Wizards;
+using Path = System.IO.Path;
 
 namespace WolvenKit.Views.Wizards
 {
@@ -58,6 +62,7 @@ namespace WolvenKit.Views.Wizards
         //        // swallow
         //    }
         //}
+
         #region Methods
 
         private void UserControl_Initialized_1(object sender, EventArgs e)
@@ -99,6 +104,48 @@ namespace WolvenKit.Views.Wizards
             //}
             //_filled = true;
         }
+
+
+        #region Validation
+
+       private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
+
+        private void validateAllFields()
+        {
+            if (ViewModel is FirstSetupWizardViewModel vm)
+            {
+                vm.AllFieldsValid = /*projectNameTxtbx.VerifyData() &&*/ cp77ExeTxtb.VerifyData();
+            }
+        }
+
+        private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
+        {
+            if (File.Exists(str) && System.IO.Path.GetFileName(str).Equals(Core.Constants.Red4Exe))
+            {
+                var oodle = Path.Combine(new FileInfo(str).Directory.FullName, Constants.Oodle);
+                if (!File.Exists(oodle))
+                {
+                    ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    ValidationText.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty,
+                        $"Oodle dll was not found with the game. Please make sure you have {Constants.Oodle} next to your game executable.");
+                    return HandyControl.Data.OperationResult.Failed();
+                }
+                ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                return HandyControl.Data.OperationResult.Success();
+            }
+
+            ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            ValidationText.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty,
+                "Game exe location was not found.");
+            return HandyControl.Data.OperationResult.Failed();
+        }
+
+        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
+                ? HandyControl.Data.OperationResult.Success()
+                : HandyControl.Data.OperationResult.Failed();
+
+        #endregion Methods
+
 
         #endregion Methods
 
