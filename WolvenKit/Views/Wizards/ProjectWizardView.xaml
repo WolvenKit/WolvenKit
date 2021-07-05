@@ -8,17 +8,13 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    Tag="Project Wizard"
-    mc:Ignorable="av"
-
     AllowsTransparency="True"
     BorderBrush="{x:Null}"
     ShowInTaskbar="True"
+    Tag="Project Wizard"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
-    
-    
-    >
+    mc:Ignorable="av">
 
     <catel:DataWindow.Resources>
         <ResourceDictionary>
@@ -77,11 +73,11 @@
                 </Grid>
 
                 <Grid
-        MinWidth="150"
-        Margin="0"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+                    MinWidth="150"
+                    Margin="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -89,38 +85,39 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel
-            Margin="0,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Orientation="Horizontal">
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
 
                         <iconPacks:PackIconCodicons
-                Grid.Row="0"
-                Width="30"
-                Height="30"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Kind="Hubot"
-                Spin="False"
-                SpinAutoReverse="False" />
+                            Grid.Row="0"
+                            Width="30"
+                            Height="30"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                            Kind="Hubot"
+                            Spin="False"
+                            SpinAutoReverse="False" />
 
                         <TextBlock
-                Grid.Row="0"
-                Margin="10,-1,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontSize="17"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Text="Let's create a project!" />
+                            Grid.Row="0"
+                            Margin="10,-1,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="17"
+                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                            Text="Let's create a project!" />
                     </StackPanel>
 
-                    <syncfusion:WizardControl Grid.Row="1"
-            Name="wizardControl"
-            Grid.RowSpan="3"
-            Margin="0,0,0,0"
-            FinishEnabled="{Binding AllFieldsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                    <syncfusion:WizardControl
+                        Name="wizardControl"
+                        Grid.Row="1"
+                        Grid.RowSpan="3"
+                        Margin="0,0,0,0"
+                        FinishEnabled="{Binding AllFieldsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 
                         <hc:Interaction.Triggers>
                             <hc:EventTrigger EventName="Finish">
@@ -131,19 +128,18 @@
                             </hc:EventTrigger>
                         </hc:Interaction.Triggers>
 
-
                         <syncfusion:WizardPage
-                Name="wizardPage1"
-                BackVisibility="Collapsed"
-                HelpVisibility="Collapsed"
-                NextVisibility="Collapsed">
+                            Name="wizardPage1"
+                            BackVisibility="Collapsed"
+                            HelpVisibility="Collapsed"
+                            NextVisibility="Collapsed">
 
                             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
 
                                 <StackPanel
-                        Margin="0,-20,0,0"
-                        VerticalAlignment="Center"
-                        Orientation="Vertical">
+                                    Margin="0,-20,0,0"
+                                    VerticalAlignment="Center"
+                                    Orientation="Vertical">
 
                                     <Grid Margin="0,-40,0,0">
 
@@ -153,35 +149,34 @@
                                                     <ColumnDefinition Width="1.2*" />
                                                     <ColumnDefinition Width="4*" />
                                                 </Grid.ColumnDefinitions>
-                                                
+
                                                 <StackPanel Orientation="Vertical">
                                                     <hc:ImageSelector
-                                            x:Name="imgSelector"
-                                            Width="125"
-                                            Height="125"
-                                            Margin="0,10,0,0"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center" />
+                                                        x:Name="imgSelector"
+                                                        Width="125"
+                                                        Height="125"
+                                                        Margin="0,10,0,0"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center" />
                                                     <TextBlock
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Foreground="Gray"
-                                            Text="Project icon (Optional)"
-                                            TextAlignment="Left" />
-                                                    
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Foreground="Gray"
+                                                        Text="Project icon (Optional)"
+                                                        TextAlignment="Left" />
                                                 </StackPanel>
                                                 <StackPanel Grid.Column="1" Margin="0,5,0,0">
                                                     <hc:TextBox
-                                            x:Name="xprojectNameTxtbx"
-                                            Margin="0,-10,0,0"
-                                            HorizontalAlignment="Stretch"
-                                            hc:InfoElement.Necessary="True"
-                                            hc:InfoElement.Title="Project Name"
-                                            hc:InfoElement.TitlePlacement="Left"
-                                            hc:InfoElement.TitleWidth="90"
-                                            Style="{StaticResource TextBoxExtendCustom}"
-                                            Text="{Binding ProjectName}"
-                                            VerifyFunc="VerifyIfProjectExists"/>
+                                                        x:Name="xprojectNameTxtbx"
+                                                        Margin="0,-10,0,0"
+                                                        HorizontalAlignment="Stretch"
+                                                        hc:InfoElement.Necessary="True"
+                                                        hc:InfoElement.Title="Project Name"
+                                                        hc:InfoElement.TitlePlacement="Left"
+                                                        hc:InfoElement.TitleWidth="90"
+                                                        Style="{StaticResource TextBoxExtendCustom}"
+                                                        Text="{Binding ProjectName}"
+                                                        VerifyFunc="VerifyIfProjectExists" />
 
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
@@ -189,52 +184,53 @@
                                                             <ColumnDefinition Width="60" />
                                                         </Grid.ColumnDefinitions>
                                                         <hc:TextBox
-                                                x:Name="projectPathTxtbx"
-                                                Margin="0,10,0,0"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Top"
-                                                hc:InfoElement.Necessary="True"
-                                                hc:InfoElement.Title="Project Path"
-                                                hc:InfoElement.TitlePlacement="Left"
-                                                hc:InfoElement.TitleWidth="90"
-                                                Style="{StaticResource TextBoxExtendCustom}"
-                                                Text="{Binding ProjectPath}"
-                                                TextChanged="TextBox_TextChanged"
-                                                VerifyFunc="VerifyFolder"
-                                                />
+                                                            x:Name="projectPathTxtbx"
+                                                            Margin="0,10,0,0"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Top"
+                                                            hc:InfoElement.Necessary="True"
+                                                            hc:InfoElement.Title="Project Folder"
+                                                            hc:InfoElement.TitlePlacement="Left"
+                                                            hc:InfoElement.TitleWidth="90"
+                                                            Style="{StaticResource TextBoxExtendCustom}"
+                                                            Text="{Binding ProjectPath}"
+                                                            TextChanged="TextBox_TextChanged"
+                                                            VerifyFunc="VerifyFolder" />
 
                                                         <Button
-                                                Grid.Column="1"
-                                                Width="50"
-                                                Height="34"
-                                                Margin="0,0,10,0"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Bottom"
-                                                Command="{Binding OpenProjectPathCommand}">
+                                                            Grid.Column="1"
+                                                            Width="50"
+                                                            Height="34"
+                                                            Margin="0,0,10,0"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Bottom"
+                                                            BorderBrush="{DynamicResource BorderBrush}"
+                                                            BorderThickness="1"
+                                                            Command="{Binding OpenProjectPathCommand}"
+                                                            Style="{DynamicResource WPFFlatButtonStyle}">
 
                                                             <iconPacks:PackIconCodicons
-                                                    Grid.Row="0"
-                                                    Width="15"
-                                                    Height="15"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                    Kind="FolderOpened"
-                                                    Spin="False"
-                                                    SpinAutoReverse="False" />
+                                                                Grid.Row="0"
+                                                                Width="15"
+                                                                Height="15"
+                                                                Margin="0,0,0,0"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                                                Kind="FolderOpened"
+                                                                Spin="False"
+                                                                SpinAutoReverse="False" />
                                                         </Button>
                                                     </Grid>
-                                                    
+
                                                     <hc:ComboBox
-                                            Margin="0,20,8,0"
-                                            hc:InfoElement.Necessary="False"
-                                            hc:InfoElement.Title="Project Type"
-                                            hc:InfoElement.TitlePlacement="Left"
-                                            hc:InfoElement.TitleWidth="90"
-                                            SelectedIndex="0"
-                                            ItemsSource="{Binding ProjectType}">
-                                                    </hc:ComboBox>
+                                                        Margin="0,20,8,0"
+                                                        hc:InfoElement.Necessary="False"
+                                                        hc:InfoElement.Title="Project Type"
+                                                        hc:InfoElement.TitlePlacement="Left"
+                                                        hc:InfoElement.TitleWidth="90"
+                                                        ItemsSource="{Binding ProjectType}"
+                                                        SelectedIndex="0" />
                                                 </StackPanel>
                                             </Grid>
                                         </StackPanel>
@@ -247,6 +243,4 @@
             </Grid>
         </Border>
     </Grid>
-
-    
 </catel:DataWindow>
