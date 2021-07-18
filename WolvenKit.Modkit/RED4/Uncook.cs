@@ -313,7 +313,18 @@ namespace WolvenKit.Modkit.RED4
                         if (xbmargs.UncookExtension != EUncookExtension.dds)
                         {
                             ms.Seek(0, SeekOrigin.Begin);
-                            TexConv.ConvertDdsToFile(ms, ddsPath, xbmargs);
+                            try
+                            {
+                                TexConv.ConvertDdsToFile(ms, ddsPath, xbmargs);
+                            }
+                            catch (Exception)
+                            {
+
+                                throw;
+                            }
+
+
+                            
                         }
                         else
                         {

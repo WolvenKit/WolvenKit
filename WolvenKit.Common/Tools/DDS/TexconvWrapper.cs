@@ -174,7 +174,7 @@ namespace WolvenKit.Common.DDS
                 fixed (byte* ptr = span)
                 {
                     var filetype = UncookExtensionToSaveFileType(uext);
-                    var outDir = Path.Combine(new FileInfo(ddsPath).Directory.FullName, "out");
+                    var outDir = new FileInfo(ddsPath).Directory.FullName;
                     Directory.CreateDirectory(outDir);
                     var fileName = Path.GetFileNameWithoutExtension(ddsPath);
                     var extension = filetype.ToString().ToLower();
