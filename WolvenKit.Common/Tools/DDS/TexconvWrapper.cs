@@ -1,6 +1,9 @@
+using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.DDS
@@ -124,63 +127,83 @@ namespace WolvenKit.Common.DDS
         png,
     }
 
-    public static class TexconvWrapper
+    public static class TexConv
     {
-        #region Fields
-
-        private static string textconvpath = Path.Combine(System.AppContext.BaseDirectory, "texconv.exe");
-
-        #endregion Fields
-
-        #region Methods
-
-        public static string Convert(string outDir,
-            string filepath,
-            EUncookExtension filetype,
-            EFormat format = EFormat.R8G8B8A8_UNORM,
-            int mipmaps = 0
-            )
+        public unsafe static void ConvertDdsToFile(Stream ms, string ddsPath, ExportArgs args)
         {
-
-            var proc = new ProcessStartInfo(textconvpath)
+            var uext = EUncookExtension.dds;
+            var flip = false;
+            if (args is not XbmExportArgs or MlmaskExportArgs)
             {
-                WorkingDirectory = Path.GetDirectoryName(textconvpath),
-                Arguments = $" -o \"{outDir}\" -y -f {format} -m {mipmaps} -l -ft {filetype} \"{filepath}\"",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true,
+                return;
+              
+            }
+            if (args is XbmExportArgs xbm)
+            {
+                uext = xbm.UncookExtension;
+                flip = xbm.Flip;
+            }
+            if (args is MlmaskExportArgs ml)
+            {
+                uext = ml.UncookExtension;
+            }
+            if (uext == EUncookExtension.dds)
+            {
+                return;
+            }
+
+
+            byte[] rentedBuffer = null;
+            try
+            {
+                int len;
+                var offset = 0;
+
+                len = checked((int)ms.Length);
+                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
+
+                int readBytes;
+                while (offset < len &&
+                       (readBytes = ms.Read(rentedBuffer, offset, len - offset)) > 0)
+                {
+                    offset += readBytes;
+                }
+
+                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
+
+                fixed (byte* ptr = span)
+                {
+                    var filetype = UncookExtensionToSaveFileType(uext);
+                    var outDir = Path.Combine(new FileInfo(ddsPath).Directory.FullName, "out");
+                    Directory.CreateDirectory(outDir);
+                    var fileName = Path.GetFileNameWithoutExtension(ddsPath);
+                    var extension = filetype.ToString().ToLower();
+                    var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
+
+                    var span_len = span.Length;
+
+                    DirectXTexSharp.Texcconv.ConvertAndSaveDdsImage(ptr, span_len, newpath, filetype, flip, false);
+                }
+            }
+            finally
+            {
+                if (rentedBuffer is object)
+                {
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+                }
+            }
+
+            DirectXTexSharp.ESaveFileTypes UncookExtensionToSaveFileType(EUncookExtension uncookExtension) => uncookExtension switch
+            {
+                EUncookExtension.dds => throw new ArgumentOutOfRangeException(nameof(uncookExtension)),
+                EUncookExtension.tga => DirectXTexSharp.ESaveFileTypes.TGA,
+                EUncookExtension.bmp => DirectXTexSharp.ESaveFileTypes.BMP,
+                EUncookExtension.jpg => DirectXTexSharp.ESaveFileTypes.JPEG,
+                EUncookExtension.jpeg => DirectXTexSharp.ESaveFileTypes.JPEG,
+                EUncookExtension.png => DirectXTexSharp.ESaveFileTypes.PNG,
+                _ => throw new ArgumentOutOfRangeException(nameof(uncookExtension)),
             };
-
-            using (var p = Process.Start(proc))
-            {
-                p.WaitForExit();
-            }
-
-            var fi = new FileInfo(Path.Combine(outDir, $"{Path.GetFileNameWithoutExtension(filepath)}.{filetype}"));
-            if (!fi.Exists)
-            {
-                return null;
-            }
-
-            return fi.FullName;
         }
-
-        public static void VFlip(string outDir, string filepath, EFormat format = EFormat.R8G8B8A8_UNORM)
-        {
-            var proc = new ProcessStartInfo(textconvpath)
-            {
-                WorkingDirectory = Path.GetDirectoryName(textconvpath),
-                Arguments = $" -o \"{outDir}\" -y -f {format} -vflip \"{filepath}\"",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true,
-            };
-            using (var p = Process.Start(proc))
-            {
-                p.WaitForExit();
-            }
-        }
-
-        #endregion Methods
     }
+
 }

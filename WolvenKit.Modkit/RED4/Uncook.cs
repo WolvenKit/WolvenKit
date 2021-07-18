@@ -17,6 +17,7 @@ using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.Opus;
+using System.Buffers;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -167,8 +168,8 @@ namespace WolvenKit.Modkit.RED4
             var progress = 0;
             _progressService.Report(0);
 
-            //foreach (var info in finalMatchesList)
-            Parallel.ForEach(finalMatchesList, info =>
+            foreach (var info in finalMatchesList)
+            //Parallel.ForEach(finalMatchesList, info =>
             {
                 if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers))
                 {
@@ -182,7 +183,7 @@ namespace WolvenKit.Modkit.RED4
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             }
-            );
+            //);
 
             foreach (var failed in failedList)
             {
@@ -293,40 +294,38 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                     EFormat texformat;
-                    var ddspath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
-                    if (!UncookXbm(cr2wStream, ddspath, out texformat))
-                    {
-                        return false;
-                    }
-
+                    
                     if (WolvenTesting.IsTesting)
                     {
-                        return true;
+                        using var ms = new MemoryStream();
+                        return ConvertXbmToDdsStream(cr2wStream, ms, out texformat);
                     }
 
-                    #region texconv
+                    using (var ms = new MemoryStream())
+                    {
+                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out texformat))
+                        {
+                            return false;
+                        }
 
-                    // flip the physical file
-                    if (xbmargs.Flip && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        TexconvWrapper.VFlip(outfile.Directory.FullName, ddspath, texformat);
-                    }
+                        // convert if needed else save to file
+                        var ddsPath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
+                        if (xbmargs.UncookExtension != EUncookExtension.dds)
+                        {
+                            ms.Seek(0, SeekOrigin.Begin);
+                            TexConv.ConvertDdsToFile(ms, ddsPath, xbmargs);
+                        }
+                        else
+                        {
+                            //TODO: flip dds
 
-                    // convert the texture
-                    if (xbmargs.UncookExtension == EUncookExtension.dds || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        return true;
+                            using (var fs = new FileStream(ddsPath, FileMode.Create, FileAccess.Write))
+                            {
+                                ms.Seek(0, SeekOrigin.Begin);
+                                ms.CopyTo(fs);
+                            }
+                        }
                     }
-                    try
-                    {
-                        TexconvWrapper.Convert(outfile.Directory.FullName, $"{ddspath}", xbmargs.UncookExtension);
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-
-                    #endregion texconv
 
                     return true;
                 }
@@ -701,19 +700,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool UncookXbm(Stream redInFile, string ddsOutFile, out EFormat texformat)
-        {
-            if (WolvenTesting.IsTesting)
-            {
-                using var ms = new MemoryStream();
-                return UncookXbm(redInFile, ms, out texformat);
-            }
-
-            using var fs = new FileStream(ddsOutFile, FileMode.Create, FileAccess.Write);
-            return UncookXbm(redInFile, fs, out texformat);
-        }
-
-        public bool UncookXbm(Stream redInFile, Stream outstream, out EFormat texformat)
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out EFormat texformat)
         {
             texformat = EFormat.R8G8B8A8_UNORM;
 
@@ -759,7 +746,7 @@ namespace WolvenKit.Modkit.RED4
 
             #endregion get xbm data
 
-            // extract and write buffer
+            // extract and write dds to stream
             DDSUtils.GenerateAndWriteHeader(outstream, new DDSMetadata(width, height, mips, texformat, alignment, false,
                 slicecount, true));
             var b = cr2w.Buffers[0];

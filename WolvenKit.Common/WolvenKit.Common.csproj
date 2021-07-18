@@ -38,33 +38,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\hash_cache_0.zip" />
-    <None Remove="Resources\hash_cache_1.zip" />
-    <None Remove="Resources\hash_cache_10.zip" />
-    <None Remove="Resources\hash_cache_2.zip" />
-    <None Remove="Resources\hash_cache_3.zip" />
-    <None Remove="Resources\hash_cache_4.zip" />
-    <None Remove="Resources\hash_cache_5.zip" />
-    <None Remove="Resources\hash_cache_6.zip" />
-    <None Remove="Resources\hash_cache_7.zip" />
-    <None Remove="Resources\hash_cache_8.zip" />
-    <None Remove="Resources\hash_cache_9.zip" />
-    <None Remove="Resources\hash_lookup.bin" />
-    <None Remove="Tools\DDS\texconv.exe" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="lib\kraken.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         <Pack>true</Pack>
         <PackagePath>lib\net5.0</PackagePath>
     </Content>
-    <Content Include="texconv.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DirectXTexSharp" Version="0.1.0" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="FmodAudio" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

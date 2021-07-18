@@ -346,7 +346,10 @@ namespace WolvenKit.Modkit.RED4
                         _loggerService.Error($"{ddsPath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.");
                         return false;
                     }
-                    TexconvWrapper.Convert(rawRelative.ToFileInfo().Directory.FullName, $"{ddsPath}", EUncookExtension.dds);
+
+                    // TODO: convert to DDS
+
+                    //TexconvWrapper.Convert(rawRelative.ToFileInfo().Directory.FullName, $"{ddsPath}", EUncookExtension.dds);
                 }
                 catch (Exception)
                 {
