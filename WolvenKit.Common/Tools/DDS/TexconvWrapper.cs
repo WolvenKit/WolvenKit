@@ -182,7 +182,7 @@ namespace WolvenKit.Common.DDS
 
                     var span_len = span.Length;
 
-                    DirectXTexSharp.Texcconv.ConvertAndSaveDdsImage(ptr, span_len, newpath, filetype, flip, false);
+                    DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, span_len, newpath, filetype, flip, false);
                 }
             }
             finally

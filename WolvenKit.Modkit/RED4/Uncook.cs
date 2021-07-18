@@ -168,8 +168,8 @@ namespace WolvenKit.Modkit.RED4
             var progress = 0;
             _progressService.Report(0);
 
-            foreach (var info in finalMatchesList)
-            //Parallel.ForEach(finalMatchesList, info =>
+            //foreach (var info in finalMatchesList)
+            Parallel.ForEach(finalMatchesList, info =>
             {
                 if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers))
                 {
@@ -183,7 +183,7 @@ namespace WolvenKit.Modkit.RED4
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             }
-            //);
+            );
 
             foreach (var failed in failedList)
             {
