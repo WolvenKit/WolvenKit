@@ -136,16 +136,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         // convert
                         ms.Seek(0, SeekOrigin.Begin);
-                        try
-                        {
-                            TexConv.ConvertDdsToFile(ms, newpath, args);
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
-                        
+                        return DDSUtils.ConvertFromDdsAndSave(ms, newpath, args);
                     }
                 }
             }

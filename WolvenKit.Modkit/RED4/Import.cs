@@ -334,38 +334,31 @@ namespace WolvenKit.Modkit.RED4
         public bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
         {
             var rawExt = rawRelative.Extension;
-            // TODO: do this in a working directory?
-            var ddsPath = Path.ChangeExtension(rawRelative.FullName, ERawFileFormat.dds.ToString());
+            byte[] buffer;
             // convert to dds if not already
-            if (rawExt != ERawFileFormat.dds.ToString())
+            if (rawExt != EUncookExtension.dds.ToString())
             {
-                try
+                if (!Enum.TryParse(rawRelative.Extension, true, out EUncookExtension extAsEnum))
                 {
-                    if (ddsPath.Length > 255)
-                    {
-                        _loggerService.Error($"{ddsPath} - Path length exceeds 255 chars. Please move the archive to a directory with a shorter path.");
-                        return false;
-                    }
-
-                    // TODO: convert to DDS
-
-                    //TexconvWrapper.Convert(rawRelative.ToFileInfo().Directory.FullName, $"{ddsPath}", EUncookExtension.dds);
-                }
-                catch (Exception)
-                {
-                    //TODO: proper exception handling
+                    _loggerService.Warning($"Can not convert file to dds: {rawRelative.Name}");
                     return false;
                 }
 
-                if (!File.Exists(ddsPath))
+                var infile = rawRelative.FullName;
+                using (var fs = new FileStream(infile, FileMode.Open))
                 {
-                    return false;
+                    buffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum);
                 }
+            }
+            else
+            {
+                var infile = rawRelative.FullName;
+                buffer = File.ReadAllBytes(infile);
             }
 
             if (args.Keep)
             {
-                var buffer = new FileInfo(ddsPath);
+                //var buffer = new FileInfo(ddsPath);
                 var redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
 
                 if (string.IsNullOrEmpty(redfile))
@@ -375,7 +368,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                var result = Rebuild(fileStream, new List<FileInfo>() {buffer});
+                var result = Rebuild(fileStream, new List<byte[]>() {buffer});
 
                 if (result)
                 {
@@ -395,39 +388,39 @@ namespace WolvenKit.Modkit.RED4
 
 
 
-                // read dds metadata
-                var metadata = DDSUtils.ReadHeader(ddsPath);
-                var width = metadata.Width;
-                var height = metadata.Height;
+                //// read dds metadata
+                //var metadata = DDSUtils.ReadHeader(ddsPath);
+                //var width = metadata.Width;
+                //var height = metadata.Height;
 
-                // create cr2wfile
-                var red = new CR2WFile();
-                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
-                // create xbm chunk
-                var xbm = new CBitmapTexture(red, null, "CBitmapTexture");
-                xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(red, xbm, "cookingPlatform")
-                {
-                    Value = Enums.ECookingPlatform.PLATFORM_PC,
-                    IsSerialized = true
-                };
-                xbm.Width = new CUInt32(red, xbm, "width") { Value = width, IsSerialized = true };
-                xbm.Height = new CUInt32(red, xbm, "height") { Value = height, IsSerialized = true };
-                xbm.Setup = new STextureGroupSetup(red, xbm, "setup")
-                {
-                    IsSerialized = true
-                };
-                SetTextureGroupSetup(xbm.Setup, red);
-                xbm.RenderResourceBlob = new CHandle<IRenderResourceBlob>(red, xbm, "renderTextureResource")
-                    .SetValue(2) as CHandle<IRenderResourceBlob>;
+                //// create cr2wfile
+                //var red = new CR2WFile();
+                //red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
+                //// create xbm chunk
+                //var xbm = new CBitmapTexture(red, null, "CBitmapTexture");
+                //xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(red, xbm, "cookingPlatform")
+                //{
+                //    Value = Enums.ECookingPlatform.PLATFORM_PC,
+                //    IsSerialized = true
+                //};
+                //xbm.Width = new CUInt32(red, xbm, "width") { Value = width, IsSerialized = true };
+                //xbm.Height = new CUInt32(red, xbm, "height") { Value = height, IsSerialized = true };
+                //xbm.Setup = new STextureGroupSetup(red, xbm, "setup")
+                //{
+                //    IsSerialized = true
+                //};
+                //SetTextureGroupSetup(xbm.Setup, red);
+                //xbm.RenderResourceBlob = new CHandle<IRenderResourceBlob>(red, xbm, "renderTextureResource")
+                //    .SetValue(2) as CHandle<IRenderResourceBlob>;
 
-                // create rendRenderTextureBlobPC chunk
-                var blob = new rendRenderTextureBlobPC(red, null, "rendRenderTextureBlobPC");
-                blob.Header = new rendRenderTextureBlobHeader(red, blob.ParentVar as CVariable, "header")
-                {
-                    IsSerialized = true
-                };
-                blob.TextureData = new serializationDeferredDataBuffer(red, blob.ParentVar as CVariable, "textureData")
-                    .SetValue(1) as serializationDeferredDataBuffer;
+                //// create rendRenderTextureBlobPC chunk
+                //var blob = new rendRenderTextureBlobPC(red, null, "rendRenderTextureBlobPC");
+                //blob.Header = new rendRenderTextureBlobHeader(red, blob.ParentVar as CVariable, "header")
+                //{
+                //    IsSerialized = true
+                //};
+                //blob.TextureData = new serializationDeferredDataBuffer(red, blob.ParentVar as CVariable, "textureData")
+                //    .SetValue(1) as serializationDeferredDataBuffer;
 
 
 
@@ -445,7 +438,9 @@ namespace WolvenKit.Modkit.RED4
 
             #region local functions
 
+#pragma warning disable CS8321 // Local function is declared but never used
             void SetTextureGroupSetup(STextureGroupSetup setup, CR2WFile cr2w)
+#pragma warning restore CS8321 // Local function is declared but never used
             {
                 // first check the user-texture group
                 var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(args.TextureGroup);
