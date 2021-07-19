@@ -9,6 +9,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Common;
 
 namespace WolvenKit.Modkit.RED4
 {

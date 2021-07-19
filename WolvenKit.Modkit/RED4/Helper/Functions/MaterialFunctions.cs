@@ -20,6 +20,7 @@ using WolvenKit.Common.Model.Cr2w;
 using Newtonsoft.Json;
 using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Common;
 
 namespace WolvenKit.Modkit.RED4
 {

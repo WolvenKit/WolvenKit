@@ -54,9 +54,12 @@ namespace WolvenKit.Modkit.RED4
             // import files
             switch (extAsEnum)
             {
+                case ERawFileFormat.bmp:
+                case ERawFileFormat.jpg:
+                case ERawFileFormat.png:
+                case ERawFileFormat.tiff:
                 case ERawFileFormat.tga:
                 case ERawFileFormat.dds:
-                    // check here for textures
                     return HandleTextures(rawRelative, outDir, args);
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:

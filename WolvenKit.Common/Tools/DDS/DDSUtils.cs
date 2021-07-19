@@ -120,15 +120,7 @@ namespace WolvenKit.Common.DDS
         //BPTC_FLOAT
     }
 
-    public enum EUncookExtension
-    {
-        bmp = 0,
-        jpg = 1,
-        png = 2,
-        tga = 3,
-        tiff = 4,
-        dds = 5
-    }
+    
 
 
     public static class DDSUtils

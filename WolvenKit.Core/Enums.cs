@@ -218,8 +218,12 @@ namespace WolvenKit.Common
     /// </summary>
     public enum ERawFileFormat
     {
-        tga,
-        dds,
+        bmp = 0,
+        jpg = 1,
+        png = 2,
+        tga = 3,
+        tiff = 4,
+        dds = 5,
         fbx,
         gltf,
         glb,
@@ -266,6 +270,20 @@ namespace WolvenKit.Common
         cubemap,
         envprobe,
         texarray,
+    }
+
+
+    /// <summary>
+    /// Possible extensions to uncook textures
+    /// </summary>
+    public enum EUncookExtension
+    {
+        bmp = 0,
+        jpg = 1,
+        png = 2,
+        tga = 3,
+        tiff = 4,
+        dds = 5
     }
 
     /// <summary>
