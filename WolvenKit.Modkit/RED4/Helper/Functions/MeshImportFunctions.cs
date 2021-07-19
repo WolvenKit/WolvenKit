@@ -94,7 +94,7 @@ namespace WolvenKit.Modkit.RED4
                 for (int i = 0; i < model.LogicalSkins[0].JointsCount; i++)
                     bones[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
 
-                string[] meshbones = RIG.GetboneNames(cr2w, "CMesh");
+                string[] meshbones = RIG.GetboneNames(cr2w);
 
                 // reset vertex joint indices according to original
                 for (int i = 0; i < Meshes.Count; i++)

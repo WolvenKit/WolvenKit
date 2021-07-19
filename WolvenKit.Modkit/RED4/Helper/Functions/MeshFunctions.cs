@@ -17,11 +17,9 @@ using WolvenKit.RED4.CR2W.Types;
 
 namespace CP77.CR2W
 {
-    using VCT = VertexColor1Texture2;
     using Vec2 = System.Numerics.Vector2;
     using Vec3 = System.Numerics.Vector3;
     using Vec4 = System.Numerics.Vector4;
-    using VJ = VertexJoints8;
 
     public class MeshTools
     {
@@ -174,7 +172,7 @@ namespace CP77.CR2W
 
             if (meshBones.boneCount != 0)    // for rigid meshes
             {
-                meshBones.Names = RIG.GetboneNames(cr2w, "CMesh");
+                meshBones.Names = RIG.GetboneNames(cr2w);
                 meshBones.WorldPosn = GetMeshBonesPosn(cr2w);
             }
             RawArmature Rig = GetNonParentedRig(meshBones);
@@ -328,7 +326,7 @@ namespace CP77.CR2W
             CMesh cmesh = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
             if (cmesh.BoneNames.Count != 0)    // for rigid meshes
             {
-                bones.Names = RIG.GetboneNames(cr2w, "CMesh");
+                bones.Names = RIG.GetboneNames(cr2w);
                 bones.WorldPosn = GetMeshBonesPosn(cr2w);
             }
 
@@ -386,7 +384,7 @@ namespace CP77.CR2W
 
                 if (cmesh.BoneNames.Count != 0)    // for rigid meshes
                 {
-                    bones.Names = RIG.GetboneNames(cr2w, "CMesh");
+                    bones.Names = RIG.GetboneNames(cr2w);
                     bones.WorldPosn = GetMeshBonesPosn(cr2w);
                 }
 
@@ -585,7 +583,6 @@ namespace CP77.CR2W
             };
             return meshesInfo;
         }
-
         public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool LODFilter)
         {
             BinaryReader gbr = new BinaryReader(gfs);
@@ -654,7 +651,7 @@ namespace CP77.CR2W
                         Vec4 tempv = Converters.TenBitShifted(NorRead32);
                         // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
                         normals[i] = new Vec3(tempv.X, tempv.Z, -tempv.Y);
-
+                        normals[i] = Vec3.Normalize(normals[i]);
                         if (NorRead32 != 0x5FF7FDFF)
                         {
                             invalidNors = false;
@@ -673,7 +670,8 @@ namespace CP77.CR2W
                         NorRead32 = gbr.ReadUInt32();
                         Vec4 tempv = Converters.TenBitShifted(NorRead32);
                         // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
-                        tangents[i] = new Vec4(tempv.X, tempv.Z, -tempv.Y, 1f);
+                        Vec3 vec = Vec3.Normalize(new Vec3(tempv.X, tempv.Z, -tempv.Y));
+                        tangents[i] = new Vec4(vec.X, vec.Y, vec.Z, 1f);
                     }
                 }
 
@@ -742,6 +740,11 @@ namespace CP77.CR2W
                     {
                         boneindices[i, 0] = 0;
                         weights[i, 0] = 1f;
+                        sum = 1;
+                    }
+                    for (int e = 0; e < info.weightcounts[index]; e++)
+                    {
+                        weights[i, e] *= 1f / sum;
                     }
                 }
                 // got weights
@@ -793,7 +796,6 @@ namespace CP77.CR2W
             }
             return expMeshes;
         }
-
         public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature Rig, MeshBones Bones)
         {
             // updating mesh bone indexes
@@ -821,7 +823,6 @@ namespace CP77.CR2W
                 }
             }
         }
-
         public static MemoryStream GetMeshBufferStream(Stream ms, CR2WFile cr2w)
         {
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
@@ -833,296 +834,247 @@ namespace CP77.CR2W
             ms.DecompressAndCopySegment(meshstream, buffer.DiskSize, buffer.MemSize);
             return meshstream;
         }
-
         public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
         {
-            var scene = new SceneBuilder();
-            if (Rig == null)
+            var model = ModelRoot.CreateModel();
+            var mat = model.CreateMaterial("Default");
+            mat.WithPBRMetallicRoughness().WithDefault();
+            mat.DoubleSided = true;
+            List<Skin> skins = new List<Skin>();
+            if(Rig != null)
             {
-                foreach (var mesh in meshes)
+                var skin = model.CreateSkin();
+                skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());
+                skins.Add(skin);
+            }
+
+            var ms = new MemoryStream();
+            var bw = new BinaryWriter(ms);
+            foreach (var mesh in meshes)
+            {
+                for (int i = 0; i < mesh.vertices.Length; i++)
                 {
-                    if (mesh.normals.Length != 0 && mesh.tangents.Length != 0)
-                        scene.AddRigidMesh(VPNT(mesh), System.Numerics.Matrix4x4.Identity);
-                    if (mesh.normals.Length != 0 && mesh.tangents.Length == 0)
-                        scene.AddRigidMesh(VPN(mesh), System.Numerics.Matrix4x4.Identity);
-                    if (mesh.normals.Length == 0 && mesh.tangents.Length == 0)
-                        scene.AddRigidMesh(VP(mesh), System.Numerics.Matrix4x4.Identity);
+                    bw.Write(mesh.vertices[i].X);
+                    bw.Write(mesh.vertices[i].Y);
+                    bw.Write(mesh.vertices[i].Z);
+                }
+                for (int i = 0; i < mesh.normals.Length; i++)
+                {
+                    bw.Write(mesh.normals[i].X);
+                    bw.Write(mesh.normals[i].Y);
+                    bw.Write(mesh.normals[i].Z);
+                }
+                for (int i = 0; i < mesh.tangents.Length; i++)
+                {
+                    bw.Write(mesh.tangents[i].X);
+                    bw.Write(mesh.tangents[i].Y);
+                    bw.Write(mesh.tangents[i].Z);
+                    bw.Write(mesh.tangents[i].W);
+                }
+                for (int i = 0; i < mesh.colors.Length; i++)
+                {
+                    bw.Write(mesh.colors[i].X);
+                    bw.Write(mesh.colors[i].Y);
+                    bw.Write(mesh.colors[i].Z);
+                    bw.Write(mesh.colors[i].W);
+                }
+                for (int i = 0; i < mesh.tx0coords.Length; i++)
+                {
+                    bw.Write(mesh.tx0coords[i].X);
+                    bw.Write(mesh.tx0coords[i].Y);
+                }
+                for (int i = 0; i < mesh.tx1coords.Length; i++)
+                {
+                    bw.Write(mesh.tx1coords[i].X);
+                    bw.Write(mesh.tx1coords[i].Y);
+                }
+                
+                if (mesh.weightcount > 0)
+                {
+                    if(Rig != null)
+                    {
+                        for (int i = 0; i < mesh.vertices.Length; i++)
+                        {
+                            bw.Write(mesh.boneindices[i, 0]);
+                            bw.Write(mesh.boneindices[i, 1]);
+                            bw.Write(mesh.boneindices[i, 2]);
+                            bw.Write(mesh.boneindices[i, 3]);
+                        }
+                        for (int i = 0; i < mesh.vertices.Length; i++)
+                        {
+                            bw.Write(mesh.weights[i, 0]);
+                            bw.Write(mesh.weights[i, 1]);
+                            bw.Write(mesh.weights[i, 2]);
+                            bw.Write(mesh.weights[i, 3]);
+                        }
+                        if (mesh.weightcount > 4)
+                        {
+                            for (int i = 0; i < mesh.vertices.Length; i++)
+                            {
+                                bw.Write(mesh.boneindices[i, 4]);
+                                bw.Write(mesh.boneindices[i, 5]);
+                                bw.Write(mesh.boneindices[i, 6]);
+                                bw.Write(mesh.boneindices[i, 7]);
+                            }
+                            for (int i = 0; i < mesh.vertices.Length; i++)
+                            {
+                                bw.Write(mesh.weights[i, 4]);
+                                bw.Write(mesh.weights[i, 5]);
+                                bw.Write(mesh.weights[i, 6]);
+                                bw.Write(mesh.weights[i, 7]);
+                            }
+                        }
+                    }
+                }
+                for(int i = 0; i < mesh.indices.Length; i+= 3)
+                {
+                    bw.Write(Convert.ToUInt16(mesh.indices[i + 1]));
+                    bw.Write(Convert.ToUInt16(mesh.indices[i + 0]));
+                    bw.Write(Convert.ToUInt16(mesh.indices[i + 2]));
+                }
+                if (mesh.extraExist)
+                {
+                    for (int i = 0; i < mesh.vertices.Length; i++)
+                    {
+                        bw.Write(mesh.extradata[i].X);
+                        bw.Write(mesh.extradata[i].Y);
+                        bw.Write(mesh.extradata[i].Z);
+                    }
                 }
             }
-            else
-            {
-                var bones = RIG.ExportNodes(Rig);
-                var rootbone = bones.Values.Where(n => n.Parent == null).FirstOrDefault();
+            var buffer = model.UseBuffer(ms.ToArray());
+            int BuffViewoffset = 0;
 
-                foreach (var mesh in meshes)
+            foreach (var mesh in meshes)
+            {
+                var mes = model.CreateMesh(mesh.name);
+                var prim = mes.CreatePrimitive();
+                prim.Material = mat;
                 {
-                    if (mesh.weightcount == 0)
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 12);
+                    acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("POSITION", acc);
+                    BuffViewoffset += mesh.vertices.Length * 12;
+                }
+                if(mesh.normals.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.normals.Length * 12);
+                    acc.SetData(buff, 0, mesh.normals.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("NORMAL", acc);
+                    BuffViewoffset += mesh.normals.Length * 12;
+                }
+                if (mesh.tangents.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tangents.Length * 16);
+                    acc.SetData(buff, 0, mesh.tangents.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("TANGENT", acc);
+                    BuffViewoffset += mesh.tangents.Length * 16;
+                }
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors.Length * 16);
+                    acc.SetData(buff, 0, mesh.colors.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("COLOR_0", acc);
+                    BuffViewoffset += mesh.colors.Length * 16;
+                }
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx0coords.Length * 8);
+                    acc.SetData(buff, 0, mesh.tx0coords.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("TEXCOORD_0", acc);
+                    BuffViewoffset += mesh.tx0coords.Length * 8;
+                }
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx1coords.Length * 8);
+                    acc.SetData(buff, 0, mesh.tx1coords.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("TEXCOORD_1", acc);
+                    BuffViewoffset += mesh.tx1coords.Length * 8;
+                }
+                if(mesh.weightcount > 0)
+                {
+                    if(Rig != null)
                     {
-                        if (mesh.normals.Length != 0 && mesh.tangents.Length != 0)
-                            scene.AddRigidMesh(VPNT(mesh), System.Numerics.Matrix4x4.Identity);
-                        if (mesh.normals.Length != 0 && mesh.tangents.Length == 0)
-                            scene.AddRigidMesh(VPN(mesh), System.Numerics.Matrix4x4.Identity);
-                        if (mesh.normals.Length == 0 && mesh.tangents.Length == 0)
-                            scene.AddRigidMesh(VP(mesh), System.Numerics.Matrix4x4.Identity);
-                    }
-                    else
-                    {
-                        if (mesh.normals.Length != 0 && mesh.tangents.Length != 0)
-                            scene.AddSkinnedMesh(VPNT(mesh), rootbone.WorldMatrix, bones.Values.ToArray());
-                        if (mesh.normals.Length != 0 && mesh.tangents.Length == 0)
-                            scene.AddSkinnedMesh(VPN(mesh), rootbone.WorldMatrix, bones.Values.ToArray());
-                        if (mesh.normals.Length == 0 && mesh.tangents.Length == 0)
-                            scene.AddSkinnedMesh(VP(mesh), rootbone.WorldMatrix, bones.Values.ToArray());
+                        {
+                            var acc = model.CreateAccessor();
+                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 8);
+                            acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                            prim.SetVertexAccessor("JOINTS_0", acc);
+                            BuffViewoffset += mesh.vertices.Length * 8;
+                        }
+                        {
+                            var acc = model.CreateAccessor();
+                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 16);
+                            acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                            prim.SetVertexAccessor("WEIGHTS_0", acc);
+                            BuffViewoffset += mesh.vertices.Length * 16;
+                        }
+                        if (mesh.weightcount > 4)
+                        {
+                            {
+                                var acc = model.CreateAccessor();
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 8);
+                                acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                                prim.SetVertexAccessor("JOINTS_1", acc);
+                                BuffViewoffset += mesh.vertices.Length * 8;
+                            }
+                            {
+                                var acc = model.CreateAccessor();
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 16);
+                                acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                                prim.SetVertexAccessor("WEIGHTS_1", acc);
+                                BuffViewoffset += mesh.vertices.Length * 16;
+                            }
+                        }
                     }
                 }
-            }
-            var model = scene.ToGltf2();
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.indices.Length * 2);
+                    acc.SetData(buff, 0, mesh.indices.Length, DimensionType.SCALAR, EncodingType.UNSIGNED_SHORT, false);
+                    prim.SetIndexAccessor(acc);
+                    BuffViewoffset += mesh.indices.Length * 2;
+                }
+                var nod = model.UseScene(0).CreateNode(mesh.name);
+                nod.Mesh = mes;
+                if (Rig != null && mesh.weightcount > 0)
+                    nod.Skin = skins[0];
 
+                if(mesh.extraExist)
+                {
+                    string[] arr = { "GarmentSupport" };
+                    var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames, targetNames = arr };
+                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                }
+                else
+                {
+                    var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames };
+                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                }
+                if(mesh.extraExist)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.extradata.Length * 12);
+                    acc.SetData(buff, 0, mesh.extradata.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    var dict = new Dictionary<string, Accessor>();
+                    dict.Add("POSITION", acc);
+                    prim.SetMorphTargetAccessors(0, dict);
+                    BuffViewoffset += mesh.extradata.Length * 12;
+                }
+            }
+            model.UseScene(0).Name = "Scene";
+            model.DefaultScene = model.UseScene(0);
+            model.MergeBuffers();
             return model;
         }
-
         public class MeshBones
         {
             public string[] Names;
             public Vec3[] WorldPosn;
             public int boneCount;
-        }
-
-        private static MeshBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8> VP(RawMeshContainer mesh)
-        {
-            long indCount = mesh.indices.Length;
-            var expmesh = new MeshBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(mesh.name);
-            var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
-
-            for (int i = 0; i < indCount; i += 3)
-            {
-                uint idx0 = mesh.indices[i + 1];
-                uint idx1 = mesh.indices[i];
-                uint idx2 = mesh.indices[i + 2];
-
-                //VPNT
-                Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
-
-                Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
-
-                Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
-
-                //VCT
-                Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
-                Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
-
-                Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
-                Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
-
-                Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
-                Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
-
-                Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
-                Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
-                Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
-
-                (int, float)[] bind0 = new (int, float)[8];
-                (int, float)[] bind1 = new (int, float)[8];
-                (int, float)[] bind2 = new (int, float)[8];
-
-                if (mesh.weightcount == 0)   // for rigid meshes
-                {
-                    bind0[0].Item2 = 1f;
-                    bind1[0].Item2 = 1f;
-                    bind2[0].Item2 = 1f;
-                }
-
-                for (int w = 0; w < mesh.weightcount; w++)
-                {
-                    bind0[w].Item1 = mesh.boneindices[idx0, w];
-                    bind0[w].Item2 = mesh.weights[idx0, w];
-                    bind1[w].Item1 = mesh.boneindices[idx1, w];
-                    bind1[w].Item2 = mesh.weights[idx1, w];
-                    bind2[w].Item1 = mesh.boneindices[idx2, w];
-                    bind2[w].Item2 = mesh.weights[idx2, w];
-                }
-                // vertex build
-                var v0 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
-                var v1 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
-                var v2 = new VertexBuilder<VertexPosition, VertexColor1Texture2, VertexJoints8>(new VertexPosition(p_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
-                // triangle build
-                prim.AddTriangle(v0, v1, v2);
-            }
-
-            if (mesh.extraExist)
-            {
-                var morphbuilder = expmesh.UseMorphTarget(0);
-                for (int i = 0; i < mesh.vertices.Length; i++)
-                {
-                    morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
-                }
-            }
-
-            var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
-            expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-
-            return expmesh;
-        }
-
-        private static MeshBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8> VPN(RawMeshContainer mesh)
-        {
-            long indCount = mesh.indices.Length;
-            var expmesh = new MeshBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(mesh.name);
-            var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
-
-            for (int i = 0; i < indCount; i += 3)
-            {
-                uint idx0 = mesh.indices[i + 1];
-                uint idx1 = mesh.indices[i];
-                uint idx2 = mesh.indices[i + 2];
-
-                //VPNT
-                Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
-                Vec3 n_0 = new Vec3(mesh.normals[idx0].X, mesh.normals[idx0].Y, mesh.normals[idx0].Z);
-
-                Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
-                Vec3 n_1 = new Vec3(mesh.normals[idx1].X, mesh.normals[idx1].Y, mesh.normals[idx1].Z);
-
-                Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
-                Vec3 n_2 = new Vec3(mesh.normals[idx2].X, mesh.normals[idx2].Y, mesh.normals[idx2].Z);
-
-                //VCT
-                Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
-                Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
-
-                Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
-                Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
-
-                Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
-                Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
-
-                Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
-                Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
-                Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
-
-                (int, float)[] bind0 = new (int, float)[8];
-                (int, float)[] bind1 = new (int, float)[8];
-                (int, float)[] bind2 = new (int, float)[8];
-
-                if (mesh.weightcount == 0)   // for rigid meshes
-                {
-                    bind0[0].Item2 = 1f;
-                    bind1[0].Item2 = 1f;
-                    bind2[0].Item2 = 1f;
-                }
-
-                for (int w = 0; w < mesh.weightcount; w++)
-                {
-                    bind0[w].Item1 = mesh.boneindices[idx0, w];
-                    bind0[w].Item2 = mesh.weights[idx0, w];
-                    bind1[w].Item1 = mesh.boneindices[idx1, w];
-                    bind1[w].Item2 = mesh.weights[idx1, w];
-                    bind2[w].Item1 = mesh.boneindices[idx2, w];
-                    bind2[w].Item2 = mesh.weights[idx2, w];
-                }
-                // vertex build
-                var v0 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_0, n_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
-                var v1 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_1, n_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
-                var v2 = new VertexBuilder<VertexPositionNormal, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormal(p_2, n_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
-                // triangle build
-                prim.AddTriangle(v0, v1, v2);
-            }
-
-            if (mesh.extraExist)
-            {
-                var morphbuilder = expmesh.UseMorphTarget(0);
-                for (int i = 0; i < mesh.vertices.Length; i++)
-                {
-                    morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
-                }
-            }
-
-            var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
-            expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-
-            return expmesh;
-        }
-
-        private static MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8> VPNT(RawMeshContainer mesh)
-        {
-            long indCount = mesh.indices.Length;
-            var expmesh = new MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(mesh.name);
-            var prim = expmesh.UsePrimitive(new MaterialBuilder("Default").WithDoubleSide(true));
-
-            for (int i = 0; i < indCount; i += 3)
-            {
-                uint idx0 = mesh.indices[i + 1];
-                uint idx1 = mesh.indices[i];
-                uint idx2 = mesh.indices[i + 2];
-
-                //VPNT
-                Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
-                Vec3 n_0 = new Vec3(mesh.normals[idx0].X, mesh.normals[idx0].Y, mesh.normals[idx0].Z);
-                Vec4 t_0 = new Vec4(mesh.tangents[idx0].X, mesh.tangents[idx0].Y, mesh.tangents[idx0].Z, mesh.tangents[idx0].W);
-
-                Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
-                Vec3 n_1 = new Vec3(mesh.normals[idx1].X, mesh.normals[idx1].Y, mesh.normals[idx1].Z);
-                Vec4 t_1 = new Vec4(mesh.tangents[idx1].X, mesh.tangents[idx1].Y, mesh.tangents[idx1].Z, mesh.tangents[idx1].W);
-
-                Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
-                Vec3 n_2 = new Vec3(mesh.normals[idx2].X, mesh.normals[idx2].Y, mesh.normals[idx2].Z);
-                Vec4 t_2 = new Vec4(mesh.tangents[idx2].X, mesh.tangents[idx2].Y, mesh.tangents[idx2].Z, mesh.tangents[idx2].W);
-
-                //VCT
-                Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
-                Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
-
-                Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
-                Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
-
-                Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
-                Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
-
-                Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
-                Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
-                Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
-
-                (int, float)[] bind0 = new (int, float)[8];
-                (int, float)[] bind1 = new (int, float)[8];
-                (int, float)[] bind2 = new (int, float)[8];
-
-                if (mesh.weightcount == 0)   // for rigid meshes
-                {
-                    bind0[0].Item2 = 1f;
-                    bind1[0].Item2 = 1f;
-                    bind2[0].Item2 = 1f;
-                }
-
-                for (int w = 0; w < mesh.weightcount; w++)
-                {
-                    bind0[w].Item1 = mesh.boneindices[idx0, w];
-                    bind0[w].Item2 = mesh.weights[idx0, w];
-                    bind1[w].Item1 = mesh.boneindices[idx1, w];
-                    bind1[w].Item2 = mesh.weights[idx1, w];
-                    bind2[w].Item1 = mesh.boneindices[idx2, w];
-                    bind2[w].Item2 = mesh.weights[idx2, w];
-                }
-                // vertex build
-                var v0 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_0, n_0, t_0), new VCT(col_0, tx0_0, tx1_0), new VJ(bind0));
-                var v1 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_1, n_1, t_1), new VCT(col_1, tx0_1, tx1_1), new VJ(bind1));
-                var v2 = new VertexBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints8>(new VertexPositionNormalTangent(p_2, n_2, t_2), new VCT(col_2, tx0_2, tx1_2), new VJ(bind2));
-                // triangle build
-                prim.AddTriangle(v0, v1, v2);
-            }
-
-            if (mesh.extraExist)
-            {
-                var morphbuilder = expmesh.UseMorphTarget(0);
-                for (int i = 0; i < mesh.vertices.Length; i++)
-                {
-                    morphbuilder.SetVertexDelta(mesh.vertices[i], mesh.extradata[i]);
-                }
-            }
-
-            var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames }; // anonymous variable/obj
-            expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-
-            return expmesh;
         }
         private static ModelRoot RawMeshesToMinimalGLTF(List<RawMeshContainer> meshes)
         {
