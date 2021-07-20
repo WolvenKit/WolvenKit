@@ -1109,9 +1109,9 @@ namespace CP77.CR2W
         }
         public static RawArmature GetNonParentedRig(MeshBones meshBones)
         {
-            RawArmature Rig = new RawArmature();
             if (meshBones.boneCount != 0)    // for rigid meshes
             {
+                RawArmature Rig = new RawArmature();
                 Rig.BoneCount = meshBones.boneCount + 1;
                 Rig.LocalPosn = new Vec3[Rig.BoneCount];
                 Rig.LocalRot = new System.Numerics.Quaternion[Rig.BoneCount];
@@ -1133,8 +1133,9 @@ namespace CP77.CR2W
                     Rig.LocalScale[i + 1] = new Vec3(1f, 1f, 1f);
                     Rig.Parent[i + 1] = 0;
                 }
+                return Rig;
             }
-            return Rig;
+            return null;
         }
     }
 }
