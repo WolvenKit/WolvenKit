@@ -45,19 +45,29 @@ namespace CP77.CR2W
 
 
             var buffers = cr2w.Buffers;
-
+            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
             MemoryStream diffsbuffer = new MemoryStream();
             MemoryStream mappingbuffer = new MemoryStream();
             MemoryStream texbuffer = new MemoryStream();
 
-            targetStream.Seek(cr2w.Buffers[0].Offset, SeekOrigin.Begin);
-            targetStream.DecompressAndCopySegment(diffsbuffer, buffers[0].DiskSize, buffers[0].MemSize);
+            if(blob.DiffsBuffer.IsSerialized)
+            {
+                targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(diffsbuffer, buffers[blob.DiffsBuffer.Buffer.Value - 1].DiskSize, buffers[blob.DiffsBuffer.Buffer.Value - 1].MemSize);
+            }
 
-            targetStream.Seek(cr2w.Buffers[1].Offset, SeekOrigin.Begin);
-            targetStream.DecompressAndCopySegment(mappingbuffer, buffers[1].DiskSize, buffers[1].MemSize);
+            if(blob.MappingBuffer.IsSerialized)
+            {
+                targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(mappingbuffer, buffers[blob.MappingBuffer.Buffer.Value - 1].DiskSize, buffers[blob.MappingBuffer.Buffer.Value - 1].MemSize);
+            }
 
-            targetStream.Seek(cr2w.Buffers[2].Offset, SeekOrigin.Begin);
-            targetStream.DecompressAndCopySegment(texbuffer, buffers[2].DiskSize, buffers[2].MemSize);
+            if(blob.TextureDiffsBuffer.IsSerialized)
+            {
+                targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(texbuffer, buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].DiskSize, buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].MemSize);
+            }
+
 
             targetStream.Dispose();
             targetStream.Close();
