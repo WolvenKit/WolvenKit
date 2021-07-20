@@ -204,15 +204,13 @@ namespace CP77.CR2W
                 {
                     return true;
                 }
-
-                SceneBuilder scene = new SceneBuilder();
                 if (isGLBinary)
                 {
-                    scene.ToGltf2().SaveGLB(outfile.FullName);
+                    ModelRoot.CreateModel().SaveGLB(outfile.FullName);
                 }
                 else
                 {
-                    scene.ToGltf2().SaveGLTF(outfile.FullName);
+                    ModelRoot.CreateModel().SaveGLTF(outfile.FullName);
                 }
 
                 return true;
