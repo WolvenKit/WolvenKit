@@ -21,9 +21,8 @@ namespace WolvenKit.Modkit.RED4
         /// <summary>
         /// Imports a raw File to a RedEngine file (e.g. .dds to .xbm, .fbx to .mesh)
         /// </summary>
-        /// <param name="rawFile">the raw file to be imported</param>
+        /// <param name="rawRelative"></param>
         /// <param name="args"></param>
-        /// <param name="inDir"></param>
         /// <param name="outDir">can be a depotpath, or if null the parent directory of the rawfile</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
@@ -323,25 +322,28 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
-            rawextension switch
-            {
-                ERawFileFormat.fbx => ECookedFileFormat.mesh,
-                ERawFileFormat.gltf => ECookedFileFormat.mesh,
-                ERawFileFormat.glb => ECookedFileFormat.mesh,
-                ERawFileFormat.ttf => ECookedFileFormat.fnt,
-                _ => throw new ArgumentOutOfRangeException(nameof(rawextension), rawextension, null)
-            };
-
-
-        public bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
+        private bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
         {
             var rawExt = rawRelative.Extension;
             byte[] buffer;
+            string redfile = "";
+
+            if (args.Keep)
+            {
+                //var buffer = new FileInfo(ddsPath);
+                redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
+
+                if (string.IsNullOrEmpty(redfile))
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+                    return false;
+                }
+            }
+
             // convert to dds if not already
             if (rawExt != EUncookExtension.dds.ToString())
             {
-                if (!Enum.TryParse(rawRelative.Extension, true, out EUncookExtension extAsEnum))
+                if (!Enum.TryParse(rawExt, true, out EUncookExtension extAsEnum))
                 {
                     _loggerService.Warning($"Can not convert file to dds: {rawRelative.Name}");
                     return false;
@@ -350,7 +352,52 @@ namespace WolvenKit.Modkit.RED4
                 var infile = rawRelative.FullName;
                 using (var fs = new FileStream(infile, FileMode.Open))
                 {
-                    buffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum);
+                    EFormat? format = null;
+                    if (args.Keep)
+                    {
+                        using var redstream = new FileStream(redfile, FileMode.Open);
+                        using var fileReader = new BinaryReader(redstream);
+
+                        var cr2w = _wolvenkitFileService.TryReadRED4File(fileReader);
+                        if (cr2w == null)
+                        {
+                            return false;
+                        }
+
+                        if (cr2w.StringDictionary[1] != "CBitmapTexture")
+                        {
+                            return false;
+                        }
+
+                        if (cr2w.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
+                            cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
+                        {
+                            return false;
+                        }
+
+                        var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+                        if (xbm.Setup.RawFormat?.Value != null)
+                        {
+                            rawfmt = xbm.Setup.RawFormat.Value;
+                        }
+
+                        var compression = Enums.ETextureCompression.TCM_None;
+                        if (xbm.Setup.Compression?.Value != null)
+                        {
+                            compression = xbm.Setup.Compression.Value;
+                        }
+
+                        format = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
+
+                    }
+
+
+
+                    var ddsbuffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum, format);
+
+                    // remove first 148 bytes (dds header)
+                    buffer = new byte[ddsbuffer.Length - 148];
+                    Buffer.BlockCopy(ddsbuffer, 148, buffer, 0, buffer.Length);
                 }
             }
             else
@@ -361,15 +408,6 @@ namespace WolvenKit.Modkit.RED4
 
             if (args.Keep)
             {
-                //var buffer = new FileInfo(ddsPath);
-                var redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
-
-                if (string.IsNullOrEmpty(redfile))
-                {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
-                    return false;
-                }
-
                 using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
                 var result = Rebuild(fileStream, new List<byte[]>() {buffer});
 
@@ -500,22 +538,6 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private static string FindRedFile(RedRelativePath rawRelPath,  DirectoryInfo outDir, string overrideExt = null)
-        {
-            var ext = rawRelPath.Extension;
-            if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
-            {
-                return "";
-            }
-            var redfile = new RedRelativePath(rawRelPath)
-                .ChangeBaseDir(outDir)
-                .ChangeExtension(string.IsNullOrEmpty(overrideExt)
-                    ? FromRawExtension(extAsEnum).ToString()
-                    : overrideExt );
-
-            return !File.Exists(redfile.FullPath) ? "" : redfile.FullPath;
-        }
-
         private bool ImportMesh(RedRelativePath rawRelative, DirectoryInfo outDir, MeshImportArgs args)
         {
             if (args.Keep)
@@ -557,5 +579,41 @@ namespace WolvenKit.Modkit.RED4
             _loggerService.Warning($"{rawRelative.Name} - Direct mesh importing is not implemented");
             return false;
         }
+
+
+        private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
+            rawextension switch
+            {
+                ERawFileFormat.fbx => ECookedFileFormat.mesh,
+                ERawFileFormat.gltf => ECookedFileFormat.mesh,
+                ERawFileFormat.glb => ECookedFileFormat.mesh,
+                ERawFileFormat.ttf => ECookedFileFormat.fnt,
+                //ERawFileFormat.bmp => expr,
+                //ERawFileFormat.jpg => expr,
+                //ERawFileFormat.png => expr,
+                //ERawFileFormat.tga => expr,
+                //ERawFileFormat.tiff => expr,
+                //ERawFileFormat.dds => expr,
+                //ERawFileFormat.wav => expr,
+                _ => throw new ArgumentOutOfRangeException(nameof(rawextension), rawextension, null)
+            };
+
+        private static string FindRedFile(RedRelativePath rawRelPath, DirectoryInfo outDir, string overrideExt = null)
+        {
+            var ext = rawRelPath.Extension;
+            if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+                return "";
+            }
+            var redfile = new RedRelativePath(rawRelPath)
+                .ChangeBaseDir(outDir)
+                .ChangeExtension(string.IsNullOrEmpty(overrideExt)
+                    ? FromRawExtension(extAsEnum).ToString()
+                    : overrideExt);
+
+            return !File.Exists(redfile.FullPath) ? "" : redfile.FullPath;
+        }
+
+
     }
 }
