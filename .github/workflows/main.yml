@@ -5,12 +5,10 @@ on:
     branches:
       - master
       - develop
-      - stable
   push:
     branches:
       - master      
       - develop
-      - stable
 
 jobs:   
   check-wkit-win:
