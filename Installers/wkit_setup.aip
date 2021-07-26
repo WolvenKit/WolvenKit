@@ -22,10 +22,10 @@
     <ROW Property="AppLogoIcon" Value="applogoicon" MultiBuildValue="DefaultBuild:png" Type="1" MsiKey="AppLogoIcon"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="WolvenKit"/>
-    <ROW Property="ProductCode" Value="2057:{C247D57B-1574-4022-9D0F-D83E4A04E41F} " Type="16"/>
+    <ROW Property="ProductCode" Value="2057:{17A982B3-790E-4619-ADB1-DC35A2AB90F3} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="WolvenKit"/>
-    <ROW Property="ProductVersion" Value="8.3.0.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="8.2.2.0" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{F1F8FC1A-6964-403C-B573-F2601DBE21CE}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -90,6 +90,7 @@
     <ROW Component="ControlzEx.dll" ComponentId="{60293E8E-74F2-44F6-8426-29F4EFB0E682}" Directory_="APPDIR" Attributes="0" KeyPath="ControlzEx.dll"/>
     <ROW Component="Crc32C.NET.dll" ComponentId="{5045060F-8EEC-48EB-845E-3C50C24164C6}" Directory_="APPDIR" Attributes="0" KeyPath="Crc32C.NET.dll"/>
     <ROW Component="CsvHelper.dll" ComponentId="{2E7BED78-FDAE-4A4C-9A9D-8A978241DF54}" Directory_="APPDIR" Attributes="0" KeyPath="CsvHelper.dll"/>
+    <ROW Component="DirectXTexSharp.dll" ComponentId="{55A1C1E2-83FA-45A9-9131-9E54E8273F03}" Directory_="APPDIR" Attributes="256" KeyPath="DirectXTexSharp.dll"/>
     <ROW Component="Discord.Net.Commands.dll" ComponentId="{2835824B-D429-4F12-B1DD-BCF691F70CC4}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Commands.dll"/>
     <ROW Component="Discord.Net.Core.dll" ComponentId="{781320D3-A1DD-41CF-9AA0-43F11787B3B9}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Core.dll"/>
     <ROW Component="Discord.Net.Rest.dll" ComponentId="{2FF29657-DCF9-488E-942A-5FDC93921A7E}" Directory_="APPDIR" Attributes="0" KeyPath="Discord.Net.Rest.dll"/>
@@ -113,6 +114,7 @@
     <ROW Component="ICSharpCode.AvalonEdit.dll" ComponentId="{6C73BCCA-8B5B-45DD-81B1-0E7A1B2D5E07}" Directory_="APPDIR" Attributes="0" KeyPath="ICSharpCode.AvalonEdit.dll"/>
     <ROW Component="ICSharpCode.SharpZipLib.dll" ComponentId="{C124658F-2662-4ADC-B498-C50E751CFA30}" Directory_="APPDIR" Attributes="0" KeyPath="ICSharpCode.SharpZipLib.dll"/>
     <ROW Component="INIFileParser.dll" ComponentId="{20DB1E77-4F26-4F02-B856-60C6D942618F}" Directory_="APPDIR" Attributes="0" KeyPath="INIFileParser.dll"/>
+    <ROW Component="Ijwhost.dll" ComponentId="{6D0117A0-C94F-4E5C-8F62-D67D13621458}" Directory_="APPDIR" Attributes="256" KeyPath="Ijwhost.dll"/>
     <ROW Component="Ionic.ZLib.dll" ComponentId="{0EC70AC1-EB38-4C91-AD40-CAFBB0F33520}" Directory_="APPDIR" Attributes="0" KeyPath="Ionic.ZLib.dll"/>
     <ROW Component="LZ4.dll" ComponentId="{E4707B0E-6850-46B9-8B97-2A39088DE098}" Directory_="APPDIR" Attributes="0" KeyPath="LZ4.dll"/>
     <ROW Component="LZ4pn.dll" ComponentId="{6AFA732B-D3F0-4CD1-80FD-B61F1E876049}" Directory_="APPDIR" Attributes="0" KeyPath="LZ4pn.dll"/>
@@ -290,7 +292,6 @@
     <ROW Component="swresamplevgmstream3.dll" ComponentId="{DEF1BBE0-FFCB-4D8D-8C5F-CB386C988F32}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="swresamplevgmstream3.dll"/>
     <ROW Component="t1.kark" ComponentId="{643DC2DA-D398-4C22-A915-B9F01B804617}" Directory_="Media_Dir" Attributes="0" KeyPath="t1.kark" Type="0"/>
     <ROW Component="test.exe" ComponentId="{689A0138-343B-49ED-93DE-EE9A26BBDB02}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="test.exe"/>
-    <ROW Component="texconv.exe" ComponentId="{56110AB7-8194-4DF3-AF4F-DDDEC9C5681E}" Directory_="APPDIR" Attributes="256" KeyPath="texconv.exe"/>
     <ROW Component="xmpvgmstream.dll" ComponentId="{5195E5B3-2C76-44EF-AEAB-BA69C9F23118}" Directory_="vgmstream_Dir" Attributes="0" KeyPath="xmpvgmstream.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
@@ -728,7 +729,6 @@
     <ROW File="System.Reactive.dll" Component_="System.Reactive.dll" FileName="SYSTEM~6.DLL|System.Reactive.dll" Attributes="0" SourcePath="..\publish\full\System.Reactive.dll" SelfReg="false"/>
     <ROW File="System.Reflection.MetadataLoadContext.dll" Component_="System.Reflection.MetadataLoadContext.dll" FileName="SYSTEM~7.DLL|System.Reflection.MetadataLoadContext.dll" Attributes="0" SourcePath="..\publish\full\System.Reflection.MetadataLoadContext.dll" SelfReg="false"/>
     <ROW File="System.Windows.Interactivity.dll" Component_="System.Windows.Interactivity.dll" FileName="SYSTEM~8.DLL|System.Windows.Interactivity.dll" Attributes="0" SourcePath="..\publish\full\System.Windows.Interactivity.dll" SelfReg="false"/>
-    <ROW File="texconv.exe" Component_="texconv.exe" FileName="texconv.exe" Attributes="0" SourcePath="..\publish\full\texconv.exe" SelfReg="false"/>
     <ROW File="avcodecvgmstream58.dll" Component_="avcodecvgmstream58.dll" FileName="AVCODE~1.DLL|avcodec-vgmstream-58.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\avcodec-vgmstream-58.dll" SelfReg="false"/>
     <ROW File="avformatvgmstream58.dll" Component_="avformatvgmstream58.dll" FileName="AVFORM~1.DLL|avformat-vgmstream-58.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\avformat-vgmstream-58.dll" SelfReg="false"/>
     <ROW File="avutilvgmstream56.dll" Component_="avutilvgmstream56.dll" FileName="AVUTIL~1.DLL|avutil-vgmstream-56.dll" Attributes="0" SourcePath="..\publish\full\vgmstream\avutil-vgmstream-56.dll" SelfReg="false"/>
@@ -765,6 +765,8 @@
     <ROW File="WpfExtensions.Xaml.dll" Component_="WpfExtensions.Xaml.dll" FileName="WPFEXT~1.DLL|WpfExtensions.Xaml.dll" Attributes="0" SourcePath="..\publish\full\WpfExtensions.Xaml.dll" SelfReg="false"/>
     <ROW File="WPFSoundVisualizationLibNet5.dll" Component_="WPFSoundVisualizationLibNet5.dll" FileName="WPFSOU~1.DLL|WPFSoundVisualizationLibNet5.dll" Attributes="0" SourcePath="..\publish\full\WPFSoundVisualizationLibNet5.dll" SelfReg="false"/>
     <ROW File="managed" Component_="WolvenKit.deps.json" FileName="MANAGE~1|.managed" Attributes="0" SourcePath="..\publish\full\.managed" SelfReg="false"/>
+    <ROW File="DirectXTexSharp.dll" Component_="DirectXTexSharp.dll" FileName="DIRECT~1.DLL|DirectXTexSharp.dll" Attributes="0" SourcePath="..\publish\full\DirectXTexSharp.dll" SelfReg="false"/>
+    <ROW File="Ijwhost.dll" Component_="Ijwhost.dll" FileName="Ijwhost.dll" Attributes="0" SourcePath="..\publish\full\Ijwhost.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.custcomp.MsiEmbeddedUIComponent">
     <ROW MsiEmbeddedUI="embeddeduiproxy" FileName="embeddeduiproxy.dll" Attributes="3" MessageFilter="201359327" Data="&lt;AI_HOME&gt;bin\x86\embeddeduiproxy.dll"/>
@@ -1158,7 +1160,6 @@
     <ROW Feature_="MainFeature" Component_="System.Reactive.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Reflection.MetadataLoadContext.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Windows.Interactivity.dll"/>
-    <ROW Feature_="MainFeature" Component_="texconv.exe"/>
     <ROW Feature_="MainFeature" Component_="avcodecvgmstream58.dll"/>
     <ROW Feature_="MainFeature" Component_="avformatvgmstream58.dll"/>
     <ROW Feature_="MainFeature" Component_="avutilvgmstream56.dll"/>
@@ -1187,6 +1188,8 @@
     <ROW Feature_="MainFeature" Component_="WolvenManager.Installer.exe"/>
     <ROW Feature_="MainFeature" Component_="WpfExtensions.Xaml.dll"/>
     <ROW Feature_="MainFeature" Component_="WPFSoundVisualizationLibNet5.dll"/>
+    <ROW Feature_="MainFeature" Component_="DirectXTexSharp.dll"/>
+    <ROW Feature_="MainFeature" Component_="Ijwhost.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>

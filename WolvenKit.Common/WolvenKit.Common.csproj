@@ -46,7 +46,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DirectXTexSharp" Version="0.3.0" />
+    <PackageReference Include="DirectXTexSharp" Version="0.3.0" >
+        <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="FmodAudio" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
