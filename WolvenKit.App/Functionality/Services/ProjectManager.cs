@@ -3,10 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Orchestra.Models;
-using Orchestra.Services;
 using ReactiveUI;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using ObservableObject = Catel.Data.ObservableObject;
 

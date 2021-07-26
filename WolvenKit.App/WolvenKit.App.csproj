@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Catel.MVVM" Version="5.12.17" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack" Version="2.5.0" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.5.0" />
+    <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
       <PackageReference Include="MahApps.Metro.IconPacks.Codicons" Version="4.8.0" />
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.24.1" />
@@ -31,13 +35,10 @@
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.1.0.63" />
-    <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
-    <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="5.0.2" />
         <PackageReference Include="Pfim" Version="0.10.0" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
 

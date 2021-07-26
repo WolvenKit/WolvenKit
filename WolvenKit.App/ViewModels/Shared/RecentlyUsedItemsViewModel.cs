@@ -1,9 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RecentlyUsedFilesViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,9 +10,6 @@ using Catel.Data;
 using Catel.MVVM;
 using Catel.Services;
 using HandyControl.Tools;
-using Orc.FileSystem;
-using Orchestra.Models;
-using Orchestra.Services;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.ViewModels.HomePage;
@@ -31,7 +22,6 @@ namespace WolvenKit.ViewModels.Shared
         #region Fields
 
         public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new ObservableCollection<FancyProjectObject>();
-        private readonly IFileService _fileService;
         private readonly IMessageService _messageService;
         private readonly IProcessService _processService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
@@ -41,17 +31,15 @@ namespace WolvenKit.ViewModels.Shared
 
         #region Constructors
 
-        public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService,
+        public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService,
             IMessageService messageService, IProcessService processService, IOpenFileService openFileService)
         {
             Argument.IsNotNull(() => recentlyUsedItemsService);
-            Argument.IsNotNull(() => fileService);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => processService);
             Argument.IsNotNull(() => openFileService);
 
             _recentlyUsedItemsService = recentlyUsedItemsService;
-            _fileService = fileService;
             _messageService = messageService;
             _processService = processService;
             _openFileService = openFileService;
@@ -109,7 +97,7 @@ namespace WolvenKit.ViewModels.Shared
 #pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
 #pragma warning restore AvoidAsyncVoid
         {
-            if (!_fileService.Exists(parameter))
+            if (!File.Exists(parameter))
             {
                 parameter = await ProjectHelpers.LocateMissingProjectAsync(parameter);
             }
@@ -172,7 +160,6 @@ namespace WolvenKit.ViewModels.Shared
 
         protected override Task CloseAsync()
         {
-            _recentlyUsedItemsService.Updated -= OnRecentlyUsedItemsServiceUpdated;
 
             return base.CloseAsync();
         }
@@ -181,7 +168,6 @@ namespace WolvenKit.ViewModels.Shared
         {
             await base.InitializeAsync();
 
-            _recentlyUsedItemsService.Updated += OnRecentlyUsedItemsServiceUpdated;
 
             UpdateRecentlyUsedItems();
             UpdatePinnedItem();

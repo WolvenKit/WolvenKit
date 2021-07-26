@@ -96,7 +96,8 @@ namespace WolvenKit.ViewModels.Shell
                     var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
                     _selectedTheme = value;
                     var color = new SolidColorBrush(value);
-                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
+                    //ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
+                    //TODO
 
                     _loggerService.Info("Changed theme : " + value.ToString());
                     _settingsManager.SetThemeAccent(value);

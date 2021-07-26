@@ -15,6 +15,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
+using IRecentlyUsedItemsService = WolvenKit.Functionality.ProjectManagement.IRecentlyUsedItemsService;
 
 namespace WolvenKit.Functionality.Commands
 {

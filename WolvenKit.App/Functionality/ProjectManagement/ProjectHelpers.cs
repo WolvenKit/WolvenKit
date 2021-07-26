@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Catel.Services;
-using Orchestra.Models;
-using Orchestra.Services;
 using WolvenKit.Common;
 
 namespace WolvenKit.Functionality.ProjectManagement

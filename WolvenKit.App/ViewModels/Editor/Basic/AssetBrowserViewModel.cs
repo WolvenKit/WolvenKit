@@ -10,7 +10,6 @@ using Catel;
 using Catel.Services;
 using DynamicData;
 using HandyControl.Data;
-using Orchestra.Services;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;

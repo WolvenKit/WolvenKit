@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -302,8 +302,8 @@
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7763" />
     <PackageReference Include="Ab3d.DXEngine" Version="4.3.7763" />
     <PackageReference Include="Ab3d.PowerToys" Version="9.5.7763" />
-    <PackageReference Include="Catel.Core" Version="5.12.16" />
-    <PackageReference Include="Catel.MVVM" Version="5.12.16" />
+    <PackageReference Include="Catel.Core" Version="5.12.17" />
+    <PackageReference Include="Catel.MVVM" Version="5.12.17" />
     <PackageReference Include="CatFacts.Net" Version="0.1.1" />
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
