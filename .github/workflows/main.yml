@@ -90,7 +90,7 @@ jobs:
     - run: echo "${{steps.get-version.outputs.version}}"
 
     - name: dotnet publish WolvenKit.Console
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/wolvenkit-console-${{steps.get-version.outputs.version}} -p:PublishSingleFile=true --no-self-contained -r win-x64 -c Release -f net5.0
+      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/wolvenkit-console-${{steps.get-version.outputs.version}} --no-self-contained -r win-x64 -c Release -f net5.0
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2

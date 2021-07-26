@@ -2,11 +2,131 @@ using System;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Interfaces.Core;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
+using System.Buffers;
 
 namespace WolvenKit.Common.DDS
 {
+    /// <summary>
+    /// Texconv format: DXGI format without the DXGI_FORMAT_ prefix
+    /// </summary>
+    public enum EFormat
+    {
+        UNKNOWN = 0,
+
+        R32G32B32A32_FLOAT = 2,
+
+        //R32G32B32A32_UINT,
+        //R32G32B32A32_SINT,
+        //R32G32B32_FLOAT,
+        //R32G32B32_UINT,
+        //R32G32B32_SINT,
+        R16G16B16A16_FLOAT = 10,
+
+        //R16G16B16A16_UNORM,
+        //R16G16B16A16_UINT,
+        //R16G16B16A16_SNORM,
+        //R16G16B16A16_SINT,
+        //R32G32_FLOAT,
+        //R32G32_UINT,
+        //R32G32_SINT,
+        R10G10B10A2_UNORM = 24,
+
+        //R10G10B10A2_UINT,
+        //R11G11B10_FLOAT,
+        R8G8B8A8_UNORM = 28,
+
+        //R8G8B8A8_UNORM_SRGB,
+        //R8G8B8A8_UINT,
+        //R8G8B8A8_SNORM,
+        //R8G8B8A8_SINT,
+        //R16G16_FLOAT,
+        //R16G16_UNORM,
+        //R16G16_UINT,
+        //R16G16_SNORM,
+        //R16G16_SINT,
+        //R32_FLOAT,
+        R32_UINT = 42,
+
+        //R32_SINT,
+        R8G8_UNORM = 49,
+
+        //R8G8_UINT,
+        //R8G8_SNORM,
+        //R8G8_SINT,
+        R16_FLOAT = 54,
+
+        //R16_UNORM,
+        //R16_UINT,
+        //R16_SNORM,
+        //R16_SINT,
+        R8_UNORM = 61,
+
+        R8_UINT = 62,
+
+        //R8_SNORM,
+        //R8_SINT,
+        A8_UNORM = 65,
+
+        //R9G9B9E5_SHAREDEXP,
+        //R8G8_B8G8_UNORM,
+        //G8R8_G8B8_UNORM,
+        BC1_UNORM  = 71,
+
+        //BC1_UNORM_SRGB,
+        BC2_UNORM = 74,
+
+        //BC2_UNORM_SRGB,
+        BC3_UNORM = 77,
+
+        //BC3_UNORM_SRGB,
+        BC4_UNORM = 80,
+
+        //BC4_SNORM,
+        BC5_UNORM = 83,
+
+        //BC5_SNORM,
+        //B5G6R5_UNORM,
+        //B5G5R5A1_UNORM,
+        //B8G8R8A8_UNORM,
+        //B8G8R8X8_UNORM,
+        //R10G10B10_XR_BIAS_A2_UNORM,
+        //B8G8R8A8_UNORM_SRGB,
+        //B8G8R8X8_UNORM_SRGB,
+        //BC6H_UF16,
+        //BC6H_SF16,
+        BC7_UNORM = 98,
+
+        //BC7_UNORM_SRGB,
+        //AYUV,
+        //Y410,
+        //Y416,
+        //YUY2,
+        //Y210,
+        //Y216,
+        //B4G4R4A4_UNORM,
+        //DXT1,
+        //DXT2,
+        //DXT3,
+        //DXT4,
+        //DXT5,
+        //RGBA,
+        //BGRA,
+        //FP16,
+        //FP32,
+        //BPTC,
+        //BPTC_FLOAT
+    }
+
+    
+
+
     public static class DDSUtils
     {
+       
+
         #region Fields
 
         private const uint DDS_MAGIC = 0x20534444;
@@ -505,15 +625,20 @@ namespace WolvenKit.Common.DDS
         {
             var metadata = new DDSMetadata();
             using var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read);
-            using var reader = new BinaryReader(fs);
 
             if (fs.Length < 128)
-                return metadata;
+            {
+                throw new InvalidParsingException(ddsfile);
+            }
+
+            using var reader = new BinaryReader(fs);
 
             // check if DDS file
             var buffer = reader.ReadBytes(4);
             if (!buffer.SequenceEqual(BitConverter.GetBytes(DDS_MAGIC)))
+            {
                 return metadata;
+            }
 
             var id = reader.BaseStream.ReadStruct<DDS_HEADER>();
             metadata = new DDSMetadata(id);
@@ -521,6 +646,220 @@ namespace WolvenKit.Common.DDS
             return metadata;
         }
 
+        /// <summary>
+        /// Reads the dds header from a dds stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="header"></param>
+        /// <returns></returns>
+        public static bool TryReadDdsHeader(Stream stream, out DDS_HEADER header)
+        {
+            header = default;
+            if (stream.Length < 128)
+            {
+                return false;
+            }
+
+            if (stream.ReadStruct<int>() != DDS_MAGIC)
+            {
+                return false;
+            }
+
+            header = stream.ReadStruct<DDS_HEADER>();
+
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if a stream is a dds file. Does not advance the stream.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static bool IsDdsFile(Stream stream)
+        {
+            var pos = stream.Position;
+            var result = TryReadDdsHeader(stream, out _);
+            stream.Seek(pos, SeekOrigin.Begin);
+            return result;
+        }
+
         #endregion Reading
+
+        /// <summary>
+        /// Converts a dds stream to another texture file type and writes it to file
+        /// </summary>
+        /// <param name="ms">The input dds stream</param>
+        /// <param name="outfilename">The output filename. Extension will be overwritten with the correct filetype</param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static unsafe bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args)
+        {
+            // check if stream is dds
+            if (!DDSUtils.IsDdsFile(ms))
+            {
+                throw new ArgumentException("Input stream not a dds file", nameof(ms));
+            }
+
+            // get arguments
+            var uext = EUncookExtension.dds;
+            var vflip = false;
+            if (args is not XbmExportArgs or MlmaskExportArgs)
+            {
+                return false;
+
+            }
+            if (args is XbmExportArgs xbm)
+            {
+                uext = xbm.UncookExtension;
+                vflip = xbm.Flip;
+            }
+            if (args is MlmaskExportArgs ml)
+            {
+                uext = ml.UncookExtension;
+            }
+            if (uext == EUncookExtension.dds)
+            {
+                return false;
+            }
+
+            return ConvertFromDdsAndSave(ms, outfilename, (DirectXTexSharp.ESaveFileTypes)uext, vflip);
+
+
+            
+        }
+
+        /// <summary>
+        /// Converts a dds stream to another texture file type and writes it to file
+        /// </summary>
+        /// <param name="ms"></param>
+        /// <param name="outfilename"></param>
+        /// <param name="filetype"></param>
+        /// <param name="vflip"></param>
+        /// <param name="hflip"></param>
+        /// <returns></returns>
+        private static unsafe bool ConvertFromDdsAndSave(Stream ms, string outfilename, DirectXTexSharp.ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
+        {
+            byte[] rentedBuffer = null;
+            try
+            {
+                int len;
+                var offset = 0;
+
+                len = checked((int)ms.Length);
+                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
+
+                int readBytes;
+                while (offset < len &&
+                       (readBytes = ms.Read(rentedBuffer, offset, len - offset)) > 0)
+                {
+                    offset += readBytes;
+                }
+
+                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
+
+                fixed (byte* ptr = span)
+                {
+                    var outDir = new FileInfo(outfilename).Directory.FullName;
+                    Directory.CreateDirectory(outDir);
+                    var fileName = Path.GetFileNameWithoutExtension(outfilename);
+                    var extension = filetype.ToString().ToLower();
+                    var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
+
+                    DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, span.Length, newpath, filetype, vflip, hflip);
+                }
+            }
+            finally
+            {
+                if (rentedBuffer is object)
+                {
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+                }
+            }
+
+            return true;
+
+            
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public unsafe static byte[] ConvertToDdsMemory(
+            Stream ms,
+            EUncookExtension filetype,
+            EFormat? format = null,
+            bool vflip = false,
+            bool hflip = false)
+        {
+            byte[] rentedBuffer = null;
+            try
+            {
+                int len;
+                var offset = 0;
+
+                len = checked((int)ms.Length);
+                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
+
+                int readBytes;
+                while (offset < len &&
+                       (readBytes = ms.Read(rentedBuffer, offset, len - offset)) > 0)
+                {
+                    offset += readBytes;
+                }
+
+                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
+
+                fixed (byte* ptr = span)
+                {
+                    var fmt = format != null ? (DirectXTexSharp.DXGI_FORMAT_WRAPPED)format : DirectXTexSharp.DXGI_FORMAT_WRAPPED.DXGI_FORMAT_UNKNOWN;
+
+
+                    var buffer = DirectXTexSharp.Texconv.ConvertToDdsArray(ptr, span.Length,
+                        (DirectXTexSharp.ESaveFileTypes)filetype,
+                        fmt, vflip, hflip);
+                    return buffer;
+                }
+            }
+            finally
+            {
+                if (rentedBuffer is object)
+                {
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+                }
+            }
+        }
+
+
+
+
+        ////TODO: remove this
+        //private static DirectXTexSharp.ESaveFileTypes UncookExtensionToSaveFileType(EUncookExtension uncookExtension) => uncookExtension switch
+        //{
+        //    EUncookExtension.dds => throw new ArgumentOutOfRangeException(nameof(uncookExtension)),
+        //    EUncookExtension.tga => DirectXTexSharp.ESaveFileTypes.TGA,
+        //    EUncookExtension.bmp => DirectXTexSharp.ESaveFileTypes.BMP,
+        //    EUncookExtension.jpg => DirectXTexSharp.ESaveFileTypes.JPEG,
+        //    EUncookExtension.png => DirectXTexSharp.ESaveFileTypes.PNG,
+        //    EUncookExtension.tiff => DirectXTexSharp.ESaveFileTypes.TIFF,
+        //    _ => throw new ArgumentOutOfRangeException(nameof(uncookExtension)),
+        //};
+
+        //private static EUncookExtension SaveFileTypeToUncookExtension(DirectXTexSharp.ESaveFileTypes filetype) => filetype switch
+        //{
+        //    DirectXTexSharp.ESaveFileTypes.BMP => EUncookExtension.bmp,
+        //    DirectXTexSharp.ESaveFileTypes.JPEG => EUncookExtension.jpg,
+        //    DirectXTexSharp.ESaveFileTypes.PNG => EUncookExtension.png,
+        //    DirectXTexSharp.ESaveFileTypes.TGA => EUncookExtension.tga,
+        //    DirectXTexSharp.ESaveFileTypes.TIFF => EUncookExtension.tiff,
+        //    _ => throw new ArgumentOutOfRangeException(nameof(filetype)),
+        //};
+
+        //private static DirectXTexSharp.DXGI_FORMAT_WRAPPED EFormatToDXGIFormat(EFormat format)
+        //{
+        //    return (DirectXTexSharp.DXGI_FORMAT_WRAPPED)format;
+        //}
+
+
     }
 }

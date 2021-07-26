@@ -352,7 +352,10 @@ namespace WolvenKit.ViewModels.Editor
             // create a temporary dds
             var tempdir = ISettingsManager.GetWorkDir();
             var textureformat = ImageUtility.GetEFormatFromCompression(compression);
-            var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
+            //var ddsfile = TexconvWrapper.Convert(tempdir, fullpath, EUncookExtension.dds, textureformat);
+            //TODO: texconv
+            var ddsfile = fullpath;
+
 
             if (!File.Exists(ddsfile))
             {

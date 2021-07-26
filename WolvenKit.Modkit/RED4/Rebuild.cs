@@ -21,6 +21,66 @@ namespace WolvenKit.Modkit.RED4
     {
         #region Methods
 
+
+        private bool Rebuild(Stream fileStream, IEnumerable<byte[]> buffersenumerable)
+        {
+            using var fileReader = new BinaryReader(fileStream);
+
+            var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileReader);
+            if (cr2w == null)
+            {
+                return false;
+            }
+
+            // remove old buffers
+            fileReader.BaseStream.Seek(0, SeekOrigin.Begin);
+            fileStream.SetLength(cr2w.Header.objectsEnd);
+
+            // kraken the buffers and handle textures
+            using var fileWriter = new BinaryWriter(fileStream);
+            fileWriter.BaseStream.Seek(0, SeekOrigin.End);
+
+            var existingBufferCount = cr2w.Buffers.Count;
+
+            var buffers = buffersenumerable.ToList();
+            for (var i = 0; i < buffers.Count; i++)
+            {
+                var inbuffer = buffers[i];
+
+                var offset = (uint)fileWriter.BaseStream.Position;
+                var (zsize, crc) = fileWriter.CompressAndWrite(inbuffer);
+
+                if (i < existingBufferCount)
+                {
+                    var b = cr2w.Buffers[i];
+                    b.Offset = offset;
+                    b.DiskSize = zsize;
+                    b.MemSize = (uint)inbuffer.Length;
+                    b.Crc32 = crc;
+                }
+                else
+                {
+                    cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                    {
+                        flags = 0, //TODO: find out what these are
+                        index = (uint)i,
+                        offset = offset,
+                        diskSize = zsize,
+                        memSize = (uint)inbuffer.Length,
+                        crc32 = crc
+                    }));
+                }
+            }
+
+            // write cr2w headers
+            fileWriter.BaseStream.Seek(0, SeekOrigin.Begin);
+            cr2w.WriteHeader(fileWriter);
+
+            return true;
+
+
+        }
+
         /// <summary>
         /// Rebuild a list of buffers into a redfile
         /// </summary>
