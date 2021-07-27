@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orc.FileSystem;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
@@ -21,7 +20,6 @@ namespace WolvenKit.Functionality.Commands
     {
         #region Fields
 
-        private readonly IFileService _fileService;
         private readonly IOpenFileService _openFileService;
         private new readonly IPleaseWaitService _pleaseWaitService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
@@ -37,7 +35,6 @@ namespace WolvenKit.Functionality.Commands
 
         public ApplicationOpenProjectCommandContainer(
             ICommandManager commandManager,
-            IFileService fileService,
             IProjectManager projectManager,
             IOpenFileService openFileService,
             IPleaseWaitService pleaseWaitService,
@@ -51,13 +48,11 @@ namespace WolvenKit.Functionality.Commands
                 loggerService)
         {
             Argument.IsNotNull(() => openFileService);
-            Argument.IsNotNull(() => fileService);
             Argument.IsNotNull(() => pleaseWaitService);
             Argument.IsNotNull(() => recentlyUsedItemsService);
 
             _pleaseWaitService = pleaseWaitService;
             _openFileService = openFileService;
-            _fileService = fileService;
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _tw3Controller = tw3Controller;
             _cp77Controller = cp77Controller;
@@ -86,7 +81,7 @@ namespace WolvenKit.Functionality.Commands
             {
                 
 
-                if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
+                if (string.IsNullOrWhiteSpace(location) || !File.Exists(location))
                 {
                     // file was moved or deleted
                     if (_recentlyUsedItemsService.Items.Items.Any(_ => _.Name == location))
@@ -120,7 +115,7 @@ namespace WolvenKit.Functionality.Commands
                 }
 
                 // one last check
-                if (!_fileService.Exists(location))
+                if (!File.Exists(location))
                 {
                     return;
                 }

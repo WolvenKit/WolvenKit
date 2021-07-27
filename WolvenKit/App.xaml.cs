@@ -62,7 +62,10 @@ namespace WolvenKit
             serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
 
             serviceLocator.RegisterType<IProgressService<double>, ProgressService<double>>();
-            serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
+
+            //serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
+            serviceLocator.RegisterType<ILoggerService, ReactiveLoggerService>();
+            
             serviceLocator.RegisterType<IUpdateService, UpdateService>();
 
             // singletons

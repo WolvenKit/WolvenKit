@@ -606,8 +606,14 @@ namespace WolvenKit.ViewModels.Shell
 
 
 
-        public LogViewModel Log => _logViewModel ??= new LogViewModel();
-
+        public LogViewModel Log //=> _logViewModel ??= new LogViewModel();
+        {
+            get
+            {
+                _logViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<LogViewModel>();
+                return _logViewModel;
+            }
+        }
 
 
         public ProjectExplorerViewModel ProjectExplorer
