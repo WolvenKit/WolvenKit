@@ -286,7 +286,7 @@ namespace WolvenKit.Views.Shell
 
         private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (StaticReferences.GlobalShell != null)
+            //if (StaticReferences.GlobalShell != null)
             {
                 StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
                 StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);

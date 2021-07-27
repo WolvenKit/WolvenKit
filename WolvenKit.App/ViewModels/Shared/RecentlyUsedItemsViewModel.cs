@@ -1,24 +1,19 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RecentlyUsedFilesViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Catel;
 using Catel.Data;
 using Catel.MVVM;
 using Catel.Services;
+using DynamicData;
+using DynamicData.Binding;
 using HandyControl.Tools;
-using Orc.FileSystem;
-using Orchestra.Models;
-using Orchestra.Services;
+using ReactiveUI;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.ViewModels.HomePage;
@@ -31,27 +26,28 @@ namespace WolvenKit.ViewModels.Shared
         #region Fields
 
         public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new ObservableCollection<FancyProjectObject>();
-        private readonly IFileService _fileService;
         private readonly IMessageService _messageService;
         private readonly IProcessService _processService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IOpenFileService _openFileService;
+        private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
         #endregion Fields
 
         #region Constructors
 
-        public RecentlyUsedItemsViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, IFileService fileService,
-            IMessageService messageService, IProcessService processService, IOpenFileService openFileService)
+        public RecentlyUsedItemsViewModel(
+            IRecentlyUsedItemsService recentlyUsedItemsService,
+            IMessageService messageService,
+            IProcessService processService,
+            IOpenFileService openFileService)
         {
             Argument.IsNotNull(() => recentlyUsedItemsService);
-            Argument.IsNotNull(() => fileService);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => processService);
             Argument.IsNotNull(() => openFileService);
 
             _recentlyUsedItemsService = recentlyUsedItemsService;
-            _fileService = fileService;
             _messageService = messageService;
             _processService = processService;
             _openFileService = openFileService;
@@ -63,6 +59,18 @@ namespace WolvenKit.ViewModels.Shared
             PinItem = new Command<string>(OnPinItemExecute);
             UnpinItem = new Command<string>(OnUnpinItemExecute);
             OpenInExplorer = new Command<string>(OnOpenInExplorerExecute);
+
+            recentlyUsedItemsService.Items
+                .Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _recentlyUsedItems)
+                .Subscribe(OnRecentlyUsedItemsChanged);
+        }
+
+        private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj)
+        {
+
+            ConvertRecentProjects();
         }
 
         #endregion Constructors
@@ -82,19 +90,13 @@ namespace WolvenKit.ViewModels.Shared
         public Command<string> OpenInExplorer { get; private set; }
         public string PatreonLink => "https://www.patreon.com/m/RedModdingTools";
         public Command<string> PinItem { get; private set; }
-        public List<RecentlyUsedItem> PinnedItems { get; private set; }
-        public List<RecentlyUsedItem> RecentlyUsedItems { get; private set; }
+        public List<RecentlyUsedItemModel> PinnedItems { get; private set; }
+        //public List<RecentlyUsedItem> RecentlyUsedItems { get; private set; }
         public ICommand SettingsCommand { get; private set; }
         public ICommand TutorialsCommand { get; private set; }
         public string TwitterLink => "https://twitter.com/ModdingRed";
         public Command<string> UnpinItem { get; private set; }
-        public string VersionWkit
-        {
-            get { return GetAssemblyVersion(); }
-            set
-            {
-            }
-        }
+        
 
         public ICommand WikiCommand { get; private set; }
 
@@ -109,7 +111,7 @@ namespace WolvenKit.ViewModels.Shared
 #pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
 #pragma warning restore AvoidAsyncVoid
         {
-            if (!_fileService.Exists(parameter))
+            if (!File.Exists(parameter))
             {
                 parameter = await ProjectHelpers.LocateMissingProjectAsync(parameter);
             }
@@ -122,15 +124,15 @@ namespace WolvenKit.ViewModels.Shared
             _processService.StartProcess("explorer.exe", $"/select, \"{parameter}\"");
         }
 
-        public void ConvertRecentProjects() // Converts Recent projects for the homepage.
+        private void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
-            DispatcherHelper.RunOnMainThread(() =>
-                       {
-                           FancyProjects.Clear();
-                       });
+            //DispatcherHelper.RunOnMainThread(() =>
+            //           {
+            //               FancyProjects.Clear();
+            //           });
+            FancyProjects.Clear();
 
-            var RCUI = RecentlyUsedItems;
-            foreach (var item in RCUI)
+            foreach (var item in _recentlyUsedItems)
             {
                 var fi = new FileInfo(item.Name);
 
@@ -168,23 +170,12 @@ namespace WolvenKit.ViewModels.Shared
             }
         }
 
-        public string GetAssemblyVersion() => "8.2.0";
-
-        protected override Task CloseAsync()
-        {
-            _recentlyUsedItemsService.Updated -= OnRecentlyUsedItemsServiceUpdated;
-
-            return base.CloseAsync();
-        }
-
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
 
-            _recentlyUsedItemsService.Updated += OnRecentlyUsedItemsServiceUpdated;
-
-            UpdateRecentlyUsedItems();
-            UpdatePinnedItem();
+            //UpdateRecentlyUsedItems();
+            //UpdatePinnedItem();
         }
 
         private bool CanSC() => true;
@@ -193,20 +184,11 @@ namespace WolvenKit.ViewModels.Shared
 
         private bool CanWC() => true;
 
-        private void ExecSC()
-        {
-            HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Settings");
-        }
+        private void ExecSC() => HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Settings");
 
-        private void ExecTC()
-        {
-            HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
-        }
+        private void ExecTC() => HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
 
-        private void ExecWC()
-        {
-            HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
-        }
+        private void ExecWC() => HomePageViewModel.GlobalHomePageVM.SetCurrentPage("Wiki");
 
         private void OnPinItemExecute(string parameter)
         {
@@ -215,26 +197,26 @@ namespace WolvenKit.ViewModels.Shared
             _recentlyUsedItemsService.PinItem(parameter);
         }
 
-        private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
-        {
-            UpdateRecentlyUsedItems();
-            UpdatePinnedItem();
-        }
+        //private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
+        //{
+        //    UpdateRecentlyUsedItems();
+        //    UpdatePinnedItem();
+        //}
 
         private void OnUnpinItemExecute(string parameter)
         {
-            Argument.IsNotNullOrWhitespace(() => parameter);
+            //Argument.IsNotNullOrWhitespace(() => parameter);
 
-            _recentlyUsedItemsService.UnpinItem(parameter);
+            //_recentlyUsedItemsService.UnpinItem(parameter);
         }
 
-        private void UpdatePinnedItem() => PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
+        //private void UpdatePinnedItem() => PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
 
-        private void UpdateRecentlyUsedItems()
-        {
-            RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);
-            ConvertRecentProjects();
-        }
+        //private void UpdateRecentlyUsedItems()
+        //{
+        //    //RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);
+        //    //ConvertRecentProjects();
+        //}
 
         #endregion Methods
 

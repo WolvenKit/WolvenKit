@@ -2,7 +2,6 @@ using System;
 using Catel;
 using Catel.MVVM;
 using Catel.Services;
-using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;

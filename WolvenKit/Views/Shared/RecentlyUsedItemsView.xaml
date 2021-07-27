@@ -49,10 +49,10 @@
          >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <orchestra:RibbonBackstageButton
+                    <Button
                      Command="{catel:CommandManagerBinding File.Open}"
                      CommandParameter="{Binding Name}"
-                     ShowBorder="False"
+                     
                      ToolTip="{Binding Name}"
                      >
                         <Grid>
@@ -63,14 +63,14 @@
                                 <ColumnDefinition Width="6" />
                             </Grid.ColumnDefinitions>
 
-                            <orchestra:RibbonBackstageButton
+                            <Button
                              Grid.Column="0"
                              Width="24"
                              Height="24"
                              Command="{Binding ElementName=topGrid, Path=DataContext.UnpinItem}"
                              CommandParameter="{Binding Name}"
                              Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
-                             ShowBorder="False"
+                             
                              >
                                 <iconPacks:PackIconCodicons
                                  Width="20"
@@ -79,22 +79,22 @@
                                  VerticalAlignment="Center"
                                  Kind="Pinned"
                                  />
-                            </orchestra:RibbonBackstageButton>
+                            </Button>
 
                             <TextBlock
                              Grid.Column="1"
                              Margin="5"
                              Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                             Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}"
+                             Text="{Binding Name}"
                              />
 
-                            <orchestra:RibbonBackstageButton
+                            <Button
                              Grid.Column="2"
                              Width="24"
                              Height="24"
                              Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
                              CommandParameter="{Binding Name}"
-                             ShowBorder="False"
+                             
                              ToolTip="Open in explorer"
                              >
                                 <iconPacks:PackIconCodicons
@@ -104,9 +104,9 @@
                                  VerticalAlignment="Center"
                                  Kind="FolderOpened"
                                  />
-                            </orchestra:RibbonBackstageButton>
+                            </Button>
                         </Grid>
-                    </orchestra:RibbonBackstageButton>
+                    </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -124,10 +124,10 @@
          >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <orchestra:RibbonBackstageButton
+                    <Button
                      Command="{catel:CommandManagerBinding Application.OpenProject}"
                      CommandParameter="{Binding Name}"
-                     ShowBorder="False"
+                     
                      ToolTip="{Binding Name}"
                      >
                         <Grid>
@@ -138,14 +138,14 @@
                                 <ColumnDefinition Width="6" />
                             </Grid.ColumnDefinitions>
 
-                            <orchestra:RibbonBackstageButton
+                            <Button
                              Grid.Column="0"
                              Width="24"
                              Height="24"
                              VerticalAlignment="Center"
                              Command="{Binding ElementName=topGrid, Path=DataContext.PinItem}"
                              CommandParameter="{Binding Name}"
-                             ShowBorder="False"
+                             
                              >
                                 <iconPacks:PackIconCodicons
                                  Width="20"
@@ -154,22 +154,22 @@
                                  VerticalAlignment="Center"
                                  Kind="pin"
                                  />
-                            </orchestra:RibbonBackstageButton>
+                            </Button>
 
                             <TextBlock
                              Grid.Column="1"
                              Margin="5"
                              VerticalAlignment="Center"
-                             Text="{Binding Name, Converter={orchestra:PathToStringConverter}, ConverterParameter=100}"
+                             Text="{Binding Name}"
                              />
 
-                            <orchestra:RibbonBackstageButton
+                            <Button
                              Grid.Column="2"
                              Width="24"
                              Height="24"
                              Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
                              CommandParameter="{Binding Name}"
-                             ShowBorder="False"
+                             
                              ToolTip="Open in explorer"
                              >
                                 <iconPacks:PackIconCodicons
@@ -179,9 +179,9 @@
                                  VerticalAlignment="Center"
                                  Kind="FolderOpened"
                                  />
-                            </orchestra:RibbonBackstageButton>
+                            </Button>
                         </Grid>
-                    </orchestra:RibbonBackstageButton>
+                    </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

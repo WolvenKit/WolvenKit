@@ -6,7 +6,6 @@ using Catel;
 using Catel.MVVM;
 using Catel.Services;
 using Orc.FileSystem;
-using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
@@ -85,13 +84,12 @@ namespace WolvenKit.Functionality.Commands
 
             try
             {
-                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+                
 
                 if (string.IsNullOrWhiteSpace(location) || !_fileService.Exists(location))
                 {
                     // file was moved or deleted
-                    if (_recentlyUsedItemsService.Items.Any(_ => _.Name == location))
+                    if (_recentlyUsedItemsService.Items.Items.Any(_ => _.Name == location))
                     {
                         // would you like to locate it?
                         location = await ProjectHelpers.LocateMissingProjectAsync(location);
@@ -127,6 +125,9 @@ namespace WolvenKit.Functionality.Commands
                     return;
                 }
 
+                RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
+                RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+
                 // if a valid location has been set
                 //using (_pleaseWaitService.PushInScope())
                 {
@@ -157,10 +158,11 @@ namespace WolvenKit.Functionality.Commands
                             break;
                     }
 
-                    if (StaticReferences.GlobalShell != null)
-                    {
-                        StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
-                    }
+                    //TODO:ORC
+                    //if (StaticReferences.GlobalShell != null)
+                    //{
+                    //    StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
+                    //}
 
                     StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
                 }

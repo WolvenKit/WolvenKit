@@ -1,8 +1,11 @@
 using System.Windows;
 using Catel.IoC;
 using Feather.Controls;
+using ReactiveUI;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Shell;
+using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.HomePage
 {
@@ -91,10 +94,8 @@ namespace WolvenKit.Views.HomePage
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            if (StaticReferences.GlobalShell != null)
-            {
-                StaticReferences.GlobalShell.DragMove();
-            }
+            var mainWindow = (MainView)ServiceLocator.Default.ResolveType<IViewFor<WorkSpaceViewModel>>();
+            mainWindow.DragMove();
         }
 
         private void Grid_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -103,22 +104,21 @@ namespace WolvenKit.Views.HomePage
             {
                 if (IsMouseOver)
                 {
-                    if (StaticReferences.GlobalShell != null)
-                    {
-                        StaticReferences.GlobalShell.SetCurrentValue(Window.WindowStateProperty,
-                            StaticReferences.GlobalShell.WindowState == WindowState.Maximized
-                                ? WindowState.Normal
-                                : WindowState.Maximized);
-                    }
+                    //TODO:ORC
+                    //if (StaticReferences.GlobalShell != null)
+                    //{
+                    //    StaticReferences.GlobalShell.SetCurrentValue(Window.WindowStateProperty,
+                    //        StaticReferences.GlobalShell.WindowState == WindowState.Maximized
+                    //            ? WindowState.Normal
+                    //            : WindowState.Maximized);
+                    //}
                 }
             }
             else
             {
                 base.OnMouseLeftButtonDown(e);
-                if (StaticReferences.GlobalShell != null)
-                {
-                    StaticReferences.GlobalShell.DragMove();
-                }
+                var mainWindow = (MainView)ServiceLocator.Default.ResolveType<IViewFor<WorkSpaceViewModel>>();
+                mainWindow.DragMove();
             }
         }
 

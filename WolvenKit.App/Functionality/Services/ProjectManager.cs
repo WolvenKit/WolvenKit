@@ -3,10 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Orchestra.Models;
-using Orchestra.Services;
 using ReactiveUI;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using ObservableObject = Catel.Data.ObservableObject;
 
@@ -61,9 +60,9 @@ namespace WolvenKit.Functionality.Services
                         ActiveProject = _.Result;
                         IsProjectLoaded = true;
 
-                        if (_recentlyUsedItemsService.Items.All(item => item.Name != location))
+                        if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
                         {
-                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItem(location, DateTime.Now));
+                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now));
                         }
                     }
                 }

@@ -11,7 +11,6 @@ using Catel.MVVM;
 using Catel.Services;
 using Catel.Threading;
 using WolvenKit.Functionality.Services;
-using Orchestra.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 

@@ -9,7 +9,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 using Catel.Data;
-using Orchestra.Services;
 using WolvenKit.Common.Tools;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
