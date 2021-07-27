@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using CP77.CR2W;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;

@@ -294,7 +294,7 @@ namespace WolvenKit.ViewModels.Editor
                         await using var ddsstream = new MemoryStream();
                         await using var filestream = new FileStream(PE_SelectedItem.FullName,
                             FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        man.UncookXbm(filestream, ddsstream, out _);
+                        man.ConvertXbmToDdsStream(filestream, ddsstream, out _);
 
                         // try loading it in pfim
                         try

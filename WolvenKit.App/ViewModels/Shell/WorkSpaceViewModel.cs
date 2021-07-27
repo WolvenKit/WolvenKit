@@ -14,7 +14,7 @@ using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using WolvenKit;
+using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
@@ -167,11 +167,6 @@ namespace WolvenKit.ViewModels.Shell
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
-        }
-
-        protected override Task OnClosingAsync()
-        {
-            return base.OnClosingAsync();
         }
 
         private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -611,8 +606,14 @@ namespace WolvenKit.ViewModels.Shell
 
 
 
-        public LogViewModel Log => _logViewModel ??= new LogViewModel();
-
+        public LogViewModel Log //=> _logViewModel ??= new LogViewModel();
+        {
+            get
+            {
+                _logViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<LogViewModel>();
+                return _logViewModel;
+            }
+        }
 
 
         public ProjectExplorerViewModel ProjectExplorer

@@ -71,7 +71,7 @@ namespace WolvenKit.ViewModels.Shell
         #region properties
 
         public Random rnd = new Random();
-        private Color _selectedTheme;
+        
 
         public enum ERibbonContextualTabGroupVisibility
         {
@@ -86,24 +86,24 @@ namespace WolvenKit.ViewModels.Shell
         public string ProjectExplorerContextualTabGroupVisibilityStr =>
             ProjectExplorerContextualTabGroupVisibility.ToString();
 
-        public Color SelectedTheme
-        {
-            get => _selectedTheme;
-            set
-            {
-                if (_selectedTheme != value)
-                {
-                    var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
-                    _selectedTheme = value;
-                    var color = new SolidColorBrush(value);
-                    ControlzEx.Theming.ThemeManager.Current.ChangeTheme(Application.Current, ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", value, false));
+        //private Color _selectedTheme;
+        //public Color SelectedTheme
+        //{
+        //    get => _selectedTheme;
+        //    set
+        //    {
+        //        if (_selectedTheme != value)
+        //        {
+        //            //var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
+        //            _selectedTheme = value;
 
-                    _loggerService.Info("Changed theme : " + value.ToString());
-                    _settingsManager.SetThemeAccent(value);
-                    _settingsManager.Save();
-                }
-            }
-        }
+
+        //            _loggerService.Info("Changed theme : " + value.ToString());
+        //            _settingsManager.SetThemeAccent(value);
+        //            _settingsManager.Save();
+        //        }
+        //    }
+        //}
 
         public bool StartScreenShown { get; set; }
 
@@ -156,11 +156,6 @@ namespace WolvenKit.ViewModels.Shell
         #endregion commands
 
         #region methods
-
-        protected override Task CloseAsync() =>
-            // TODO: Unsubscribe from events
-
-            base.CloseAsync();
 
         protected override async Task InitializeAsync()
         {

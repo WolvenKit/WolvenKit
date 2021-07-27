@@ -175,7 +175,7 @@ namespace WolvenKit.Views.Editor
             // convert xbm to dds stream
             await using var ddsstream = new MemoryStream();
             var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.tga };
-            man.UncookXbm(cr2wstream, ddsstream, out _);
+            man.ConvertXbmToDdsStream(cr2wstream, ddsstream, out _);
 
             // try loading it in pfim
             try

@@ -24,10 +24,10 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
+            foreach (var file in path)
             {
                 UncookTaskInner(file, outpath, rawOutDir, uext, flip, hash, pattern, regex, unbundle, forcebuffers);
-            });
+            }
         }
 
         private void UncookTaskInner(string path, string outpath, string rawOutDir,

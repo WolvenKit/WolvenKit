@@ -39,7 +39,8 @@
          Stretch="Fill"
          Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
          StrokeThickness="1"
-         Style="{DynamicResource Path}" />
+         />
+        <!--Style="{DynamicResource Path}"-->
 
         <StackPanel
          Margin="35,0,0,0"

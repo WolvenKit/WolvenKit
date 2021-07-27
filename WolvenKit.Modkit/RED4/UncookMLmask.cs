@@ -9,6 +9,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Common;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -117,18 +118,27 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                // write texture to file
+                using (var ms = new MemoryStream())
                 {
-                    DDSUtils.GenerateAndWriteHeader(ddsStream, new DDSMetadata(maskWidth, maskHeight, 0, EFormat.R8_UNORM, 8, false, 0, false));
+                    // create dds stream
+                    DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(maskWidth, maskHeight, 0, EFormat.R8_UNORM, 8, false, 0, false));
+                    ms.Write(maskData);
 
-                    ddsStream.Write(maskData);
-                }
-
-                //convert texture if neccessary
-                if (args.UncookExtension != EUncookExtension.dds && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    var di = new FileInfo(outfile.FullName).Directory;
-                    TexconvWrapper.Convert(di.FullName, $"{newpath}", args.UncookExtension);
+                    if (args.UncookExtension == EUncookExtension.dds)
+                    {
+                        using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
+                        {
+                            ms.Seek(0, SeekOrigin.Begin);
+                            ms.CopyTo(ddsStream);
+                        }
+                    }
+                    else
+                    {
+                        // convert
+                        ms.Seek(0, SeekOrigin.Begin);
+                        return DDSUtils.ConvertFromDdsAndSave(ms, newpath, args);
+                    }
                 }
             }
             return true;
