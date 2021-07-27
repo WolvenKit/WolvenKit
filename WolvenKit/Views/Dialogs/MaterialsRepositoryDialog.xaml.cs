@@ -155,15 +155,14 @@ namespace WolvenKit.Views.Dialogs
 
         private void MaterialsButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //TODO
-            //var dialog = new CommonOpenFileDialog { IsFolderPicker = true };
-            //if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-            //{
-            //    MaterialsTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, dialog.FileName);
-            //    MaterialsDepotPath = dialog.FileName;
-            //    _settingsManager.MaterialRepositoryPath = dialog.FileName;
-            //    _settingsManager.Save();
-            //}
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog { IsFolderPicker = true };
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                MaterialsTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, dialog.FileName);
+                MaterialsDepotPath = dialog.FileName;
+                _settingsManager.MaterialRepositoryPath = dialog.FileName;
+                _settingsManager.Save();
+            }
         }
 
         private void ArchivesButton_Click(object sender, System.Windows.RoutedEventArgs e)
