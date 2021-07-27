@@ -14,8 +14,7 @@ using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
-using Orchestra.Services;
-using Orchestra.Views;
+using ReactiveUI;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using WolvenKit.Common.Oodle;
@@ -29,6 +28,7 @@ using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Wizards;
+using IViewLocator = Catel.MVVM.IViewLocator;
 
 namespace WolvenKit.Functionality.Initialization
 {
@@ -48,49 +48,51 @@ namespace WolvenKit.Functionality.Initialization
 
             var oodlePath = settings.GetRED4OodleDll();
 
-            if (File.Exists(settings.GetRED4OodleDll()))
+            if (!File.Exists(settings.GetRED4OodleDll()))
             {
-                OodleLoadLib.Load(oodlePath);
+                return;
+            }
 
-                foreach (string path in binkhelpers)
+            OodleLoadLib.Load(oodlePath);
+
+            foreach (var path in binkhelpers)
+            {
+                switch (path)
                 {
-                    switch (path)
-                    {
-                        case @"Resources\Media\t1.kark":
-                            if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
-                            { }
-                            else
-                            { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true, false); }
-                            break;
+                    case @"Resources\Media\t1.kark":
+                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
+                        { }
+                        else
+                        { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true, false); }
+                        break;
 
-                        case @"Resources\Media\t2.kark":
-                            if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
-                            { }
-                            else
-                            { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true, false); }
-                            break;
+                    case @"Resources\Media\t2.kark":
+                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
+                        { }
+                        else
+                        { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true, false); }
+                        break;
 
-                        case @"Resources\Media\t3.kark":
-                            if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
-                            { }
-                            else
-                            { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true, false); }
-                            break;
+                    case @"Resources\Media\t3.kark":
+                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
+                        { }
+                        else
+                        { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true, false); }
+                        break;
 
-                        case @"Resources\Media\t4.kark":
-                            if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
-                            { }
-                            else
-                            { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true, false); }
-                            break;
+                    case @"Resources\Media\t4.kark":
+                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
+                        { }
+                        else
+                        { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true, false); }
+                        break;
 
-                        case @"Resources\Media\t5.kark":
-                            if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
-                            { }
-                            else
-                            { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true, false); }
-                            break;
-                    }
+                    case @"Resources\Media\t5.kark":
+                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
+                        { }
+                        else
+                        { var q = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true, false); }
+                        break;
                 }
             }
         }
@@ -157,9 +159,9 @@ namespace WolvenKit.Functionality.Initialization
         /// </summary>
         public async static void InitializeWebview2()
         {
-            string WebViewData = ISettingsManager.GetWebViewDataPath();
-            Directory.CreateDirectory(WebViewData);
-            Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, WebViewData, null);
+            var webViewData = ISettingsManager.GetWebViewDataPath();
+            Directory.CreateDirectory(webViewData);
+            Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
         }
 
         // Initialize Github RPC
@@ -180,13 +182,13 @@ namespace WolvenKit.Functionality.Initialization
         {
             try
             {
-                var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
+                var settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
                 HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
                 var themeResources = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
                 var themeSettings = new MaterialDarkThemeSettings
                 {
-                    PrimaryBackground = new SolidColorBrush(SettingsManag.GetThemeAccent()),
+                    PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
                     BodyFontSize = 11,
                     HeaderFontSize = 14,
                     SubHeaderFontSize = 13,
@@ -220,16 +222,32 @@ namespace WolvenKit.Functionality.Initialization
         }
 
         // Initialize Shell
-        public static async Task InitializeShell()
+        public static /*async Task*/ void InitializeShell()
         {
             if (!WolvenDBG.EnableTheming)
             {
                 ThemeInnerInit();
-                await ShellInnerInit();
+                //await ShellInnerInit();
             }
             else
             {
-                await ShellInnerInit();
+
+                // Set service locator.
+                var mainWindow = ServiceLocator.Default.ResolveType<IViewFor<WorkSpaceViewModel>>();
+                if (mainWindow is MainView window)
+                {
+                    //if (Environment.OSVersion.Version.Major >= 6) // Windows Vista and above
+                    //{
+                    //    RegisterApplicationRestart("/restart", RestartRestrictions.None);
+                    //}
+
+
+                    window.Show();
+                }
+
+
+
+                //await ShellInnerInit();
                 ThemeInnerInit();
             }
         }
@@ -302,10 +320,14 @@ namespace WolvenKit.Functionality.Initialization
                 viewLocator.NamingConventions.Add("WolvenKit.Views.Others.PropertyGridEditors.[VM]View");
                 viewModelLocator.NamingConventions.Add("WolvenKit.ViewModels.Others.PropertyGridEditors.[VW]ViewModel");
 
-               // Fixes
+                // Fixes
                 // Custom Registrations
 
-                viewModelLocator.Register(typeof(MainView), typeof(WorkSpaceViewModel));
+
+               
+
+                //viewModelLocator.Register(typeof(MainView), typeof(IViewFor<WorkSpaceViewModel>));
+
                 viewModelLocator.Register(typeof(WelcomePageView), typeof(RecentlyUsedItemsViewModel));
                 viewModelLocator.Register(typeof(Views.Wizards.WizardPages.PublishWizard.FinalizeSetupView), typeof(ViewModels.Wizards.PublishWizard.FinalizeSetupViewModel));
 
@@ -313,43 +335,6 @@ namespace WolvenKit.Functionality.Initialization
                 viewModelLocator.Register(typeof(Views.Wizards.ProjectWizardView), typeof(ViewModels.Wizards.ProjectWizardViewModel));
 
 
-            }
-            catch (Exception e)
-            {
-                StaticReferences.Logger.Error(e);
-            }
-        }
-
-        private static async Task ShellInnerInit()
-        {
-            try
-            {
-                HandyControl.Tools.ConfigHelper.Instance.SetLang("en");
-                var shellService = ServiceLocator.Default.ResolveType<IShellService>();
-
-                await shellService.CreateAsync<ShellWindow>();
-                var sh = (ShellWindow)shellService.Shell;
-                sh.TitleTextAlignment = System.Windows.HorizontalAlignment.Right;
-                sh.ShowIcon = false;
-                sh.Icon = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\Media\\Images\\Icons\\Application\\TaskBarIcon.ico"));
-                StaticReferences.GlobalShell = sh;
-                sh.BringIntoView();
-                //sh.MinWidth = 1;
-                //sh.MinHeight = 1;
-                // sh.WindowState = WindowState.Maximized;
-                // sh.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                var ws = new Binding
-                {
-                    Source = HomePageViewModel.GlobalHomePageVM,
-                    Path = new PropertyPath("CurrentWindowState"),
-                    Mode = BindingMode.TwoWay,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-                };
-                BindingOperations.SetBinding(sh, ShellWindow.WindowStateProperty, ws);
-                sh.Closed += Sh_Closed;
-
-                //StaticReferences.GlobalShell.SetCurrentValue(MahApps.Metro.Controls.MetroWindow.TitleBarHeightProperty, 25);
-                //StaticReferences.GlobalShell.SetCurrentValue(Window.TitleProperty, "");
             }
             catch (Exception e)
             {

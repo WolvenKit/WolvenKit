@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -297,6 +297,12 @@
   </ItemGroup>
 
   <ItemGroup>
+      <PackageReference Include="ControlzEx" Version="5.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+      <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="11.1.1" />
+      <PackageReference Include="AdonisUI" Version="1.17.0" />
+      <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.0" />
+    <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7763" />
@@ -347,10 +353,7 @@
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.5" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
-    <PackageReference Include="WolvenKit.AvalonDock.Themes.VS2013" Version="4.50.4" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
-    <PackageReference Include="WolvenKit.Orchestra.Core" Version="4.2.3" />
-    <PackageReference Include="WolvenKit.Shell.Ribbon.FluentMahApps" Version="5.0.2" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

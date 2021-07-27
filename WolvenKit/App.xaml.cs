@@ -1,28 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using Catel;
 using Catel.IoC;
 using Catel.Logging;
-using Catel.Messaging;
 using Catel.MVVM;
 using CP77.CR2W;
 using HandyControl.Tools;
 using NodeNetwork;
 using ProtoBuf.Meta;
+using ReactiveUI;
 using WolvenKit.Common;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Initialization;
+using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -31,12 +25,17 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Views;
+using WolvenKit.ViewModels.Shell;
+using WolvenKit.Views.Shell;
 using WolvenManager.Installer.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Splat.Microsoft.Extensions.DependencyInjection;
+using Splat;
 
 namespace WolvenKit
 {
-    public partial class App : Application
+    public partial class App //: Application
     {
         // Determines if the application is in design mode.
         public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
@@ -47,24 +46,18 @@ namespace WolvenKit
         // Constructor #2
         public App()
         {
+            // SPLAT
+            Init();
+
+
             // Set application licenses.
             Initializations.InitializeLicenses();
-
             //protobuf
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-
             var serviceLocator = ServiceLocator.Default;
-
-
-            // Orchestra
-
-
-            // Wkit
-
             serviceLocator.RegisterType<INotificationService, NotificationService>();
-
-
+            
             var config = SettingsManager.Load();
             serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
 
@@ -75,6 +68,7 @@ namespace WolvenKit
             // singletons
             serviceLocator.RegisterType<IHashService, HashService>();
 
+            serviceLocator.RegisterType<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
             serviceLocator.RegisterTypeAndInstantiate<IProjectManager, ProjectManager>();
             serviceLocator.RegisterTypeAndInstantiate<IWatcherService, WatcherService>();
             serviceLocator.RegisterType<MockGameController>();
@@ -97,16 +91,18 @@ namespace WolvenKit
 
             serviceLocator.RegisterType<IGameControllerFactory, GameControllerFactory>();
 
+
+            serviceLocator.RegisterType<WorkSpaceViewModel>();
+            serviceLocator.RegisterType<IViewFor<WorkSpaceViewModel>, MainView>();
         }
 
         // Application OnStartup Override.
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override /*async*/ void OnStartup(StartupEventArgs e)
         {
             // Startup speed boosting (HC)
             ApplicationHelper.StartProfileOptimization();
 
-            // Set service locator.
-            var serviceLocator = ServiceLocator.Default;
+            
 
 
 #if DEBUG
@@ -124,8 +120,11 @@ namespace WolvenKit
             StaticReferences.Logger.Info("Initializing Theme Helper");
             Initializations.InitializeThemeHelper();
 
+            InitializeCommands();
+
+
             StaticReferences.Logger.Info("Initializing Shell");
-            await Initializations.InitializeShell();
+            /*await*/ Initializations.InitializeShell();
             var growl = ServiceLocator.Default.ResolveType<INotificationService>();
             var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             Helpers.ShowFirstTimeSetup(settings, growl);
@@ -158,6 +157,8 @@ namespace WolvenKit
             // Create WebView Data Folder.
             //Directory.CreateDirectory(@"C:\WebViewData");
             // Message system for video tool.
+
+
         }
 
         private void InitializeCommands()
@@ -229,6 +230,54 @@ namespace WolvenKit
             _commandManager.CreateCommand(AppCommands.Application.FileSelected);
 
             _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
+        }
+
+        protected override /*async*/ void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+        }
+
+
+
+        //public IServiceProvider Container { get; private set; }
+        //private IHost _host;
+        void Init()
+        {
+            //_host = Host
+            //    .CreateDefaultBuilder()
+            //    .ConfigureServices(services =>
+            //    {
+            //        services.UseMicrosoftDependencyResolver();
+            //        var resolver = Locator.CurrentMutable;
+            //        resolver.InitializeSplat();
+            //        resolver.InitializeReactiveUI();
+            //    })
+            //    //.ConfigureLogging(logging =>
+            //    //{
+            //    //    logging.AddSplat();
+            //    //})
+            //    .ConfigureServices((hostContext, services) =>
+            //    {
+                   
+
+
+            //        // this passes IScreen resolution through to the previous viewmodel registration.
+            //        // this is to prevent multiple instances by mistake.
+            //        services.AddSingleton<WorkSpaceViewModel>();
+            //        //services.AddSingleton<IScreen, WorkSpaceViewModel>(x => x.GetRequiredService<WorkSpaceViewModel>());
+            //        services.AddSingleton<IViewFor<WorkSpaceViewModel>, MainView>();
+
+                   
+
+
+            //    })
+            //    .UseEnvironment(Environments.Development)
+            //    .Build();
+
+            //// Since MS DI container is a different type,
+            //// we need to re-register the built container with Splat again
+            //Container = _host.Services;
+            //Container.UseMicrosoftDependencyResolver();
         }
     }
 }
