@@ -1,9 +1,6 @@
 name: WolvenKit-Draft-release
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
  
 jobs:
 
