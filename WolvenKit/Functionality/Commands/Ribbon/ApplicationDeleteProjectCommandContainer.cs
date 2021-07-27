@@ -70,7 +70,7 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                var projectToDel = _recentlyUsedItemsService.Items
+                var projectToDel = _recentlyUsedItemsService.Items.Items
                     .FirstOrDefault(project => project.Name == parameter?.ToString());
                 if (projectToDel != null)
                 {

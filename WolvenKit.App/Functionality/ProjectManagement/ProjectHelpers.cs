@@ -45,13 +45,13 @@ namespace WolvenKit.Functionality.ProjectManagement
                     {
                         parameter = result.FileName;
 
-                        var items = recentlyUsedItemsService.Items
+                        var items = recentlyUsedItemsService.Items.Items
                             .Where(_ => Path.GetFileName(_.Name) == Path.GetFileName(parameter))
                             .ToList();
                         if (items.Count > 0)
                         {
                             var item = items.First();
-                            recentlyUsedItemsService.AddItem(new RecentlyUsedItem(parameter, item.DateTime));
+                            recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime));
                             recentlyUsedItemsService.RemoveItem(item);
                             return parameter;
                         }
@@ -67,7 +67,7 @@ namespace WolvenKit.Functionality.ProjectManagement
                 // if you don't want to locate it, remove the item from the recently used projects
                 case MessageResult.No:
                 {
-                    var items = recentlyUsedItemsService.Items
+                    var items = recentlyUsedItemsService.Items.Items
                         .Where(_ => _.Name == parameter)
                         .ToList();
                     if (items.Count > 0)

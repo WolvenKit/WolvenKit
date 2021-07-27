@@ -60,9 +60,9 @@ namespace WolvenKit.Functionality.Services
                         ActiveProject = _.Result;
                         IsProjectLoaded = true;
 
-                        if (_recentlyUsedItemsService.Items.All(item => item.Name != location))
+                        if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
                         {
-                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItem(location, DateTime.Now));
+                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now));
                         }
                     }
                 }
