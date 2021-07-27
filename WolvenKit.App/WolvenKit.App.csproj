@@ -27,8 +27,8 @@
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
       <PackageReference Include="MahApps.Metro.IconPacks.Codicons" Version="4.8.0" />
     <PackageReference Include="Discord.Net" Version="2.4.0" />
-    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="7.24.1" />
-    <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="3.0.11" />
+    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="8.1.0" />
+    <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="4.0.2" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="NAudio" Version="2.0.0" />
     <PackageReference Include="ReactiveUI" Version="14.1.1" />
@@ -39,7 +39,7 @@
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-        <PackageReference Include="Pfim" Version="0.10.0" />
+        <PackageReference Include="Pfim" Version="0.10.1" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
 
 

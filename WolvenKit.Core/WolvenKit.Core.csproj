@@ -21,11 +21,11 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DynamicData" Version="7.1.17" />
+        <PackageReference Include="DynamicData" Version="7.2.1" />
         <PackageReference Include="FastMember" Version="1.5.0" />
         <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" />
-        <PackageReference Include="CsvHelper" Version="27.1.0" />
+        <PackageReference Include="CsvHelper" Version="27.1.1" />
         <PackageReference Include="protobuf-net.Core" Version="3.0.101" />
         <PackageReference Include="ReactiveUI" Version="14.1.1" />
         <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />

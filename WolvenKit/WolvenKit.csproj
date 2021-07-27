@@ -298,12 +298,15 @@
 
   <ItemGroup>
       <PackageReference Include="ControlzEx" Version="5.0.1" />
+      <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
       <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="11.1.1" />
       <PackageReference Include="AdonisUI" Version="1.17.0" />
       <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.0" />
     <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
-    <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7763" />
     <PackageReference Include="Ab3d.DXEngine" Version="4.3.7763" />
@@ -314,20 +317,15 @@
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
-    <PackageReference Include="Fody" Version="6.5.1" PrivateAssets="all" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.6" />
+    <PackageReference Include="Fody" Version="6.5.2" PrivateAssets="all" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.864.35" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.902.49" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NodeNetwork" Version="5.2.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="5.2.0" />
-   <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Octokit" Version="0.50.0" />
-    <PackageReference Include="Orc.CommandLine" Version="4.1.1" />
-    <PackageReference Include="Orc.CsvTextEditor" Version="4.1.0" />
     <PackageReference Include="Orc.LogViewer" Version="4.1.0" />
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.1.0.63" />
@@ -349,7 +347,6 @@
     <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.1.0.63" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="19.1.0.63" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
-    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.5" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
