@@ -1,4 +1,11 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Catel.IoC;
+using DynamicData;
+using ReactiveUI;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -19,13 +26,28 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public const string ToolTitle = "Log";
 
+        private readonly ILoggerService _loggerService;
+
+        private readonly ReadOnlyObservableCollection<LogEntry> _logEntries;
+        public ReadOnlyObservableCollection<LogEntry> LogEntries => _logEntries;
+
         #endregion Fields
 
         #region constructors
 
-        public LogViewModel() : base(ToolTitle)
+        public LogViewModel(
+            ILoggerService loggerService
+            ) : base(ToolTitle)
         {
+            _loggerService = loggerService ??  ServiceLocator.Default.ResolveType<ILoggerService>();
+
             SetupToolDefaults();
+
+            //filter, sort and populate reactive list,
+            _loggerService.Connect() //connect to the cache
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _logEntries)
+                .Subscribe();
         }
 
         #endregion constructors

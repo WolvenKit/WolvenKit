@@ -20,8 +20,8 @@ namespace WolvenKit.Views.Editor
         public LogView()
         {
             InitializeComponent();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            { return; } // Prevents Designer from trying to do the below.
+            //if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            //{ return; } // Prevents Designer from trying to do the below.
         }
 
         #endregion Constructors
@@ -35,7 +35,7 @@ namespace WolvenKit.Views.Editor
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            LogRichTextBox.Clear();
+            //LogRichTextBox.Clear();
         }
     }
 }

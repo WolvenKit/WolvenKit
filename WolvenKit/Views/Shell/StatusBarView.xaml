@@ -9,9 +9,6 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
-    xmlns:orchestra="http://schemas.wildgums.com/orchestra"
-    xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=shell:StatusBarViewModel}"
     mc:Ignorable="d">

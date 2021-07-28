@@ -17,7 +17,6 @@ using Catel.MVVM;
 using Catel.Services;
 using CP77.CR2W;
 using DynamicData;
-using Orchestra.Services;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;

@@ -68,10 +68,18 @@ namespace WolvenKit.Views.Shell
 
         public void SetLayoutToDefault()
         {
-            var reader = XmlReader.Create("Config\\Layout\\DockStatesCR2W.xml");
-            var Debugging_A = PART_DockingManager.LoadDockState(reader);
-            Trace.WriteLine(Debugging_A);
-            reader.Close();
+            try
+            {
+                var reader = XmlReader.Create("Config\\Layout\\DockStatesCR2W.xml");
+                var Debugging_A = PART_DockingManager.LoadDockState(reader);
+                Trace.WriteLine(Debugging_A);
+                reader.Close();
+            }
+            catch (Exception)
+            {
+
+            }
+            
         }
 
         private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e)
@@ -89,8 +97,18 @@ namespace WolvenKit.Views.Shell
             }
             else
             {
-                var Debugging_A = PART_DockingManager.LoadDockState();
-                Trace.WriteLine(Debugging_A);
+                try
+                {
+                    var Debugging_A = PART_DockingManager.LoadDockState();
+                    Trace.WriteLine(Debugging_A);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.Message);
+                    //SetLayoutToDefault();
+                }
+                
+                
             }
 
             if (DebuggingLayouts)
@@ -286,7 +304,7 @@ namespace WolvenKit.Views.Shell
 
         private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (StaticReferences.GlobalShell != null)
+            //if (StaticReferences.GlobalShell != null)
             {
                 StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
                 StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);

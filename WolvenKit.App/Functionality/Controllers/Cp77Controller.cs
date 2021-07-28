@@ -131,7 +131,7 @@ namespace WolvenKit.Functionality.Controllers
             {
                 assetBrowserViewModel.LoadVisibility = Visibility.Collapsed;
             }
-            _loggerService.Info("Finished loading archive manager.");
+            _loggerService.Success("Finished loading archive manager.");
 
             _rootCache.Edit(innerCache =>
             {

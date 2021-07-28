@@ -59,13 +59,16 @@ namespace WolvenKit.Views.Shell
 
             switch (property.PropertyName)
             {
-                case "SelectedTheme":
-                    if (property.NewValue is Color themename)
-                    {
-                        //wtf is this even
-                    }
+                //case "SelectedTheme":
+                //    if (property.NewValue is Color accentColor)
+                //    {
+                //        //var color = new SolidColorBrush(accentColor);
+                //        ControlzEx.Theming.ThemeManager.Current.ChangeTheme(
+                //            Application.Current,
+                //            ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", accentColor, false));
+                //    }
 
-                    break;
+                //    break;
 
                 default:
                     break;
@@ -74,6 +77,8 @@ namespace WolvenKit.Views.Shell
 
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            //_ribbon.SetCurrentValue(Syncfusion.Windows.Tools.Controls.Ribbon.IsBackStageVisibleProperty, true);
+
             RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
             RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
         }
@@ -101,9 +106,13 @@ namespace WolvenKit.Views.Shell
             var dxEngineSettingsWindow = new DXEngineSettingsWindow();
 
             if (DXEngineSettings.Current.GraphicsProfiles != null && DXEngineSettings.Current.GraphicsProfiles.Length > 0)
+            {
                 dxEngineSettingsWindow.SelectedGraphicsProfile = DXEngineSettings.Current.GraphicsProfiles[0];
+            }
             else
+            {
                 dxEngineSettingsWindow.SelectedGraphicsProfile = null;
+            }
 
             dxEngineSettingsWindow.SelectedDpiScale = _selectedDpiScale;
 

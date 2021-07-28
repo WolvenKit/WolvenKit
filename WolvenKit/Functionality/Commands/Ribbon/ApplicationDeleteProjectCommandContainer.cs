@@ -5,10 +5,9 @@ using Catel.IoC;
 using Catel.MVVM;
 using Catel.Services;
 using WolvenKit.Functionality.Services;
-using Orchestra.Models;
-using Orchestra.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.ViewModels.Shared;
 
@@ -71,7 +70,7 @@ namespace WolvenKit.Functionality.Commands
         {
             try
             {
-                var projectToDel = _recentlyUsedItemsService.Items
+                var projectToDel = _recentlyUsedItemsService.Items.Items
                     .FirstOrDefault(project => project.Name == parameter?.ToString());
                 if (projectToDel != null)
                 {

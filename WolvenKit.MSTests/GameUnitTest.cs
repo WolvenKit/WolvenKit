@@ -38,14 +38,14 @@ namespace WolvenKit.MSTests
 
         protected static void Setup(TestContext context)
         {
+            #region cp77 game dir
+
             // Init
             Console.WriteLine("BaseTestClass.BaseTestInitialize()");
             s_config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
             s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value);
-
-            #region cp77 game dir
 
             // overrides hardcoded appsettings.json
             var cp77Dir = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
@@ -112,7 +112,6 @@ namespace WolvenKit.MSTests
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
             s_bm.LoadFromFolder(archivedir);
             s_groupedFiles = s_bm.GroupedFiles;
-
         }
 
         #endregion Methods

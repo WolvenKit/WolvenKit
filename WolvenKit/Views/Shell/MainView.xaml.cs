@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using AvalonDock.Layout.Serialization;
+using AdonisUI.Controls;
 using Catel.Data;
+using Catel.IoC;
+using ReactiveUI;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Layout.MLib;
@@ -14,47 +16,26 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell
 {
-    public partial class MainView
+    public partial class MainView : IViewFor<WorkSpaceViewModel>
     {
-        #region fields
+        public WorkSpaceViewModel ViewModel { get; set; }
 
-        private const string AvalonDockConfigPath = @".\Config\AvalonDock.Layout.config";
-
-        #endregion fields
-
-        #region Constructors
-
-        public MainView()
+        object IViewFor.ViewModel
         {
-            InitializeComponent();
+            get => ViewModel;
+            set => ViewModel = (WorkSpaceViewModel)value;
+        }
 
-            var path = Path.GetFullPath(AvalonDockConfigPath);
+        public MainView(WorkSpaceViewModel vm = null)
+        {
+            ViewModel = vm ?? ServiceLocator.Default.ResolveType<WorkSpaceViewModel>();
+            DataContext = ViewModel;
+
+            InitializeComponent();
 
             StaticReferences.MainView = this;
         }
 
-        #endregion Constructors
-
-        #region Methods
-
-        protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        {
-            base.OnViewModelPropertyChanged(e);
-
-            if (e is not AdvancedPropertyChangedEventArgs property)
-            {
-                return;
-            }
-
-            switch (property.PropertyName)
-            {
-                default:
-                    break;
-            }
-        }
-
-        #endregion Methods
-
-
+        protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();
     }
 }

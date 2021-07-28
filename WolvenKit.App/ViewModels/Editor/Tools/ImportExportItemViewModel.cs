@@ -60,6 +60,10 @@ namespace WolvenKit.ViewModels.Editor
                 ERawFileFormat.gltf => new MeshImportArgs(),
                 ERawFileFormat.ttf => new FntImportArgs(),
                 ERawFileFormat.wav => new OpusImportArgs(),
+                ERawFileFormat.bmp => new XbmImportArgs(),
+                ERawFileFormat.jpg => new XbmImportArgs(),
+                ERawFileFormat.png => new XbmImportArgs(),
+                ERawFileFormat.tiff => new XbmImportArgs(),
                 _ => new CommonImportArgs()
             };
         }
