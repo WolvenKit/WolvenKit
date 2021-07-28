@@ -162,6 +162,7 @@ namespace WolvenKit.ViewModels.Shell
             });
 
             await _updateService.CheckForUpdatesAsync();
+
         }
 
         protected override async Task InitializeAsync()

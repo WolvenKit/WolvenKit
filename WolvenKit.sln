@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31521.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution_Items", "_Solution_Items", "{6E63DB95-528E-4816-BE98-7F339599C512}"
 	ProjectSection(SolutionItems) = preProject
@@ -36,7 +36,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{C22F3C33-7D76-48BC-97DA-95F0BA300775}"
 	ProjectSection(SolutionItems) = preProject
 		Installers\installer.iss = Installers\installer.iss
-		Installers\setup.aip = Installers\setup.aip
+		Installers\wkit_setup.aip = Installers\wkit_setup.aip
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit", "WolvenKit\WolvenKit.csproj", "{283EA282-F15F-4978-8FF4-43EFE7A9EF69}"

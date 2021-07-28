@@ -159,6 +159,11 @@ namespace WolvenKit.Functionality.Initialization
         /// </summary>
         public async static void InitializeWebview2()
         {
+            if (!StaticReferences.IsWebView2Enabled)
+            {
+                return;
+            }
+
             var webViewData = ISettingsManager.GetWebViewDataPath();
             Directory.CreateDirectory(webViewData);
             Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);

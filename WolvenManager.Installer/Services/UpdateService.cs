@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -84,6 +85,23 @@ namespace WolvenManager.Installer.Services
                 return;
             }
 
+            // ping
+            try
+            {
+                var host = GetManifestUri().Host;
+                var reply = new Ping().Send(host, 3000);
+                if (reply.Status != IPStatus.Success)
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _loggerService.Error(ex.Message);
+                return;
+            }
+
             // check versions
             var http = new HttpClient();
             var manifestJson = await http.GetStringAsync(GetManifestUri());
@@ -109,6 +127,7 @@ namespace WolvenManager.Installer.Services
                     await HandleUpdate(EIncludedFiles.Portable);
                 }
             }
+
 
             async Task HandleUpdate(EIncludedFiles type)
             {

@@ -8,12 +8,44 @@ using System.Xml;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Microsoft.Win32;
 
 namespace WolvenKit.Models
 {
     public static class Commonfunctions
     {
-        #region Methods
+
+
+        /// <summary>
+        /// Check if a registry value exists
+        /// </summary>
+        /// <param name="hive"></param>
+        /// <param name="registryRoot"></param>
+        /// <param name="valueName"></param>
+        /// <returns></returns>
+        public static bool RegistryValueExists(RegistryHive hive, string registryRoot, string valueName)
+        {
+            RegistryKey root;
+            switch (hive)
+            {
+                case RegistryHive.LocalMachine:
+                    root = Registry.LocalMachine.OpenSubKey(registryRoot, false);
+                    break;
+                case RegistryHive.CurrentUser:
+                    root = Registry.CurrentUser.OpenSubKey(registryRoot, false);
+                    break;
+                case RegistryHive.ClassesRoot:
+                case RegistryHive.Users:
+                case RegistryHive.PerformanceData:
+                case RegistryHive.CurrentConfig:
+                default:
+                    throw new System.InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\"");
+            }
+
+            var r = root.GetValue(valueName) != null;
+            return r;
+        }
+
 
         /// <summary>
         /// Compresses a file into a zipstream.
@@ -289,6 +321,5 @@ namespace WolvenKit.Models
             return ms.ToArray();
         }
 
-        #endregion Methods
     }
 }
