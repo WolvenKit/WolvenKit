@@ -46,18 +46,16 @@ namespace WolvenKit
         // Constructor #2
         public App()
         {
-            // SPLAT
             Init();
 
+            ConfigureServices();            
+        }
 
-            // Set application licenses.
-            Initializations.InitializeLicenses();
-            //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
-
+        private void ConfigureServices()
+        {
             var serviceLocator = ServiceLocator.Default;
             serviceLocator.RegisterType<INotificationService, NotificationService>();
-            
+
             var config = SettingsManager.Load();
             serviceLocator.RegisterInstance(typeof(ISettingsManager), config);
 
@@ -65,7 +63,7 @@ namespace WolvenKit
 
             //serviceLocator.RegisterType<ILoggerService, CatelLoggerService>();
             serviceLocator.RegisterType<ILoggerService, ReactiveLoggerService>();
-            
+
             serviceLocator.RegisterType<IUpdateService, UpdateService>();
 
             // singletons
@@ -100,8 +98,14 @@ namespace WolvenKit
         }
 
         // Application OnStartup Override.
-        protected override /*async*/ void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
+            // check prerequisites
+            // check Webview2
+            string keyName = @"SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\ClientState\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}";
+            string keyvalue = "pv";
+            StaticReferences.IsWebView2Enabled = Models.Commonfunctions.RegistryValueExists(Microsoft.Win32.RegistryHive.LocalMachine, keyName, keyvalue);
+
             // Startup speed boosting (HC)
             ApplicationHelper.StartProfileOptimization();
 
@@ -110,7 +114,6 @@ namespace WolvenKit
 
 #if DEBUG
             LogManager.AddDebugListener(false);
-            VMHelpers.InDebug = true;
 #endif
 
             StaticReferences.Logger.Info("Starting application");
@@ -235,7 +238,7 @@ namespace WolvenKit
             _commandManager.CreateCommand(AppCommands.Application.ViewSelected);
         }
 
-        protected override /*async*/ void OnExit(ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
         }
@@ -246,6 +249,12 @@ namespace WolvenKit
         //private IHost _host;
         void Init()
         {
+            // Set application licenses.
+            Initializations.InitializeLicenses();
+            //protobuf
+            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+
+
             //_host = Host
             //    .CreateDefaultBuilder()
             //    .ConfigureServices(services =>
@@ -261,7 +270,7 @@ namespace WolvenKit
             //    //})
             //    .ConfigureServices((hostContext, services) =>
             //    {
-                   
+
 
 
             //        // this passes IScreen resolution through to the previous viewmodel registration.
@@ -270,7 +279,7 @@ namespace WolvenKit
             //        //services.AddSingleton<IScreen, WorkSpaceViewModel>(x => x.GetRequiredService<WorkSpaceViewModel>());
             //        services.AddSingleton<IViewFor<WorkSpaceViewModel>, MainView>();
 
-                   
+
 
 
             //    })

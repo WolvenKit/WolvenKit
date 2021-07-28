@@ -126,11 +126,10 @@ namespace WolvenKit.ViewModels.Shared
 
         private void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
-            //DispatcherHelper.RunOnMainThread(() =>
-            //           {
-            //               FancyProjects.Clear();
-            //           });
-            FancyProjects.Clear();
+            DispatcherHelper.RunOnMainThread(() =>
+                       {
+                           FancyProjects.Clear();
+                       });
 
             foreach (var item in _recentlyUsedItems)
             {

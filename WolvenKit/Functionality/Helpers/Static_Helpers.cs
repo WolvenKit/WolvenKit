@@ -19,6 +19,8 @@ namespace WolvenKit.Functionality.Helpers
 
         public static bool AllowVideoPreview { get; set; } = true;
 
+        public static bool IsWebView2Enabled { get; set; } = false;
+
         /// <summary>
         /// Clean settings below this text.
         /// </summary>

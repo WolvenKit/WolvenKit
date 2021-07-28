@@ -462,12 +462,12 @@
                     </StackPanel>
                     <hc:Divider Margin="15,5,15,3" />
 
-                    <wv2:WebView2
+                    <wv2:WebView2 x:Name="cal"
                         Width="414"
                         Height="{Binding ElementName=lokz, Path=ActualHeight}"
                         MaxWidth="414"
                         Margin="0,0,15,0"
-                        Source="https://www.youtube.com/embed/WfEi3QwhTIs" />
+                        />
                 </StackPanel>
             </Border>
         </Grid>

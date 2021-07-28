@@ -17,6 +17,11 @@ namespace WolvenKit.Views.HomePage.Pages
         // initialize webviev for Wiki page.
         private async void InitializeWebviev()
         {
+            if (!StaticReferences.IsWebView2Enabled)
+            {
+                return;
+            }
+
             try
             {
                 await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);

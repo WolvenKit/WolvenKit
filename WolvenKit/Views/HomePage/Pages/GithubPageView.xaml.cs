@@ -16,6 +16,11 @@ namespace WolvenKit.Views.HomePage.Pages
 
         private async void dome()
         {
+            if (!StaticReferences.IsWebView2Enabled)
+            {
+                return;
+            }
+
             try
             {
                 await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
