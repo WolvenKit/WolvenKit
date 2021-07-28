@@ -20,9 +20,8 @@ namespace WolvenKit.Modkit.RED4
     using Vec3 = System.Numerics.Vector3;
     public partial class ModTools
     {
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, Archive ar = null, Stream outStream = null)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, Archive ar = null,bool importMaterialOnly = false, Stream outStream = null)
         {
-
             var cr2w = _wolvenkitFileService.TryReadRED4File(inmeshStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
@@ -33,7 +32,26 @@ namespace WolvenKit.Modkit.RED4
             if (File.Exists(Path.Combine(outDir.FullName, "Material.json")))
             {
                 if (ar != null)
+                {
                     WriteMatToMesh(ref cr2w, File.ReadAllText(Path.Combine(outDir.FullName, "Material.json")), ar);
+                }
+                if (importMaterialOnly)
+                {
+                    MemoryStream matOnlyStream = new MemoryStream();
+                    cr2w.Write(new BinaryWriter(matOnlyStream));
+                    matOnlyStream.Seek(0, SeekOrigin.Begin);
+                    if (outStream != null)
+                    {
+                        matOnlyStream.CopyTo(outStream);
+                    }
+                    else
+                    {
+                        inmeshStream.SetLength(0);
+                        matOnlyStream.CopyTo(inmeshStream);
+                    }
+                    return true;
+                }
+
             }
 
             var model = ModelRoot.Load(inGltfFile.FullName);
