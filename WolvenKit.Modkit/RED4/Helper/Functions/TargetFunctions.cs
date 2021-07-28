@@ -5,7 +5,7 @@ using System.Linq;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
-//using System.IO;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Oodle;
 using SharpGLTF.Geometry;
@@ -13,8 +13,10 @@ using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Services;
-
-namespace CP77.CR2W
+using CP77.CR2W;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Modkit.RED4.RigFile;
+namespace WolvenKit.Modkit.RED4
 {
     using Vec4 = System.Numerics.Vector4;
     using Vec3 = System.Numerics.Vector3;
@@ -24,49 +26,85 @@ namespace CP77.CR2W
     using RIGIDMESH = MeshBuilder<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>;
     using VPNT = VertexPositionNormalTangent;
     using VCT = VertexColor1Texture2;
-    public class TargetTools
+    public partial class ModTools
     {
-        private readonly Red4ParserService _modTools;
-
-        public TargetTools(Red4ParserService modTools)
+        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile,List<Archive> archives, bool isGLBinary = true)
         {
-            _modTools = modTools;
-        }
-
-        public bool ExportTargets(Stream targetStream, FileInfo outfile, bool isGLBinary = true)
-        {
-            var cr2w = _modTools.TryReadRED4File(targetStream);
+            var cr2w = _wolvenkitFileService.TryReadRED4File(targetStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
 
+            RawArmature Rig = null;
             MemoryStream meshbuffer = MeshTools.GetMeshBufferStream(targetStream, cr2w);
-
+            MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
+            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshinfo, true);
+            int subMeshC = expMeshes.Count;
 
             var buffers = cr2w.Buffers;
+            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
+            string baseMeshPath = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First().BaseMesh.DepotPath;
+            ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
+            foreach (Archive ar in archives)
+            {
+                if (ar.Files.ContainsKey(hash))
+                {
+                    var meshStream = new MemoryStream();
+                    ExtractSingleToStream(ar, hash, meshStream);
+                    var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
+
+                    if (meshCr2w == null || !meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                    {
+                        break;
+                    }
+
+                    MeshTools.MeshBones meshBones = new MeshTools.MeshBones();
+                    meshBones.boneCount = meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().BoneNames.Count;
+                    if (meshBones.boneCount != 0)    // for rigid meshes
+                    {
+                        meshBones.Names = RIG.GetboneNames(meshCr2w);
+                        meshBones.WorldPosn = MeshTools.GetMeshBonesPosn(meshCr2w);
+                    }
+
+                    Rig = MeshTools.GetNonParentedRig(meshBones);
+
+                    MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, meshCr2w);
+                    meshinfo = MeshTools.GetMeshesinfo(meshCr2w);
+                    expMeshes = MeshTools.ContainRawMesh(ms, meshinfo, true);
+                    subMeshC = expMeshes.Count;
+                    if (meshBones.boneCount == 0)    // for rigid meshes
+                    {
+                        for (int i = 0; i < expMeshes.Count; i++)
+                            expMeshes[i].weightcount = 0;
+                    }
+                    MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshBones);
+
+                    break;
+                }
+            }
 
             MemoryStream diffsbuffer = new MemoryStream();
             MemoryStream mappingbuffer = new MemoryStream();
             MemoryStream texbuffer = new MemoryStream();
 
-            targetStream.Seek(cr2w.Buffers[0].Offset, SeekOrigin.Begin);
-            targetStream.DecompressAndCopySegment(diffsbuffer, buffers[0].DiskSize, buffers[0].MemSize);
+            if(blob.DiffsBuffer.IsSerialized)
+            {
+                targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(diffsbuffer, buffers[blob.DiffsBuffer.Buffer.Value - 1].DiskSize, buffers[blob.DiffsBuffer.Buffer.Value - 1].MemSize);
+            }
 
-            targetStream.Seek(cr2w.Buffers[1].Offset, SeekOrigin.Begin);
-            targetStream.DecompressAndCopySegment(mappingbuffer, buffers[1].DiskSize, buffers[1].MemSize);
+            if(blob.MappingBuffer.IsSerialized)
+            {
+                targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(mappingbuffer, buffers[blob.MappingBuffer.Buffer.Value - 1].DiskSize, buffers[blob.MappingBuffer.Buffer.Value - 1].MemSize);
+            }
 
-            targetStream.Seek(cr2w.Buffers[2].Offset, SeekOrigin.Begin);
-            targetStream.DecompressAndCopySegment(texbuffer, buffers[2].DiskSize, buffers[2].MemSize);
-
-            targetStream.Dispose();
-            targetStream.Close();
-
-            MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
-
-            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshinfo, true);
-
-            int subMeshC = expMeshes.Count;
+            if(blob.TextureDiffsBuffer.IsSerialized)
+            {
+                targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(texbuffer, buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].DiskSize, buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].MemSize);
+            }
 
             TargetsInfo targetsInfo = GetTargetInfos(cr2w, subMeshC);
 
@@ -91,13 +129,13 @@ namespace CP77.CR2W
             }
 
             List<MemoryStream> textureStreams = ContainTextureStreams(cr2w, texbuffer);
-            ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, names);
+            ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, names,Rig);
 
             if (WolvenTesting.IsTesting)
             {
                 return true;
             }
-
+            model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { BaseMesh = targetsInfo.BaseMesh});
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else
@@ -114,6 +152,9 @@ namespace CP77.CR2W
             {
                 File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds", textureStreams[i].ToArray());
             }
+
+            targetStream.Dispose();
+            targetStream.Close();
 
             return true;
         }
@@ -310,75 +351,298 @@ namespace CP77.CR2W
 
             return textureStreams;
         }
-        static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names)
+        static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, RawArmature Rig)
         {
-            var scene = new SharpGLTF.Scenes.SceneBuilder();
+            var model = ModelRoot.CreateModel();
+            var mat = model.CreateMaterial("Default");
+            mat.WithPBRMetallicRoughness().WithDefault();
+            mat.DoubleSided = true;
+            List<Skin> skins = new List<Skin>();
+            if (Rig != null)
+            {
+                var skin = model.CreateSkin();
+                skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());
+                skins.Add(skin);
+            }
 
+            var ms = new MemoryStream();
+            var bw = new BinaryWriter(ms);
             int mIndex = -1;
             foreach (var mesh in meshes)
             {
                 ++mIndex;
-                long indCount = mesh.indices.Length;
-                var expmesh = new RIGIDMESH(mesh.name);
-
-                var prim = expmesh.UsePrimitive(new MaterialBuilder(mesh.name));
-                for (long i = 0; i < indCount; i += 3)
+                for (int i = 0; i < mesh.vertices.Length; i++)
                 {
-                    uint idx0 = mesh.indices[i + 1];
-                    uint idx1 = mesh.indices[i];
-                    uint idx2 = mesh.indices[i + 2];
+                    bw.Write(mesh.vertices[i].X);
+                    bw.Write(mesh.vertices[i].Y);
+                    bw.Write(mesh.vertices[i].Z);
+                }
+                for (int i = 0; i < mesh.normals.Length; i++)
+                {
+                    bw.Write(mesh.normals[i].X);
+                    bw.Write(mesh.normals[i].Y);
+                    bw.Write(mesh.normals[i].Z);
+                }
+                for (int i = 0; i < mesh.tangents.Length; i++)
+                {
+                    bw.Write(mesh.tangents[i].X);
+                    bw.Write(mesh.tangents[i].Y);
+                    bw.Write(mesh.tangents[i].Z);
+                    bw.Write(mesh.tangents[i].W);
+                }
+                for (int i = 0; i < mesh.colors.Length; i++)
+                {
+                    bw.Write(mesh.colors[i].X);
+                    bw.Write(mesh.colors[i].Y);
+                    bw.Write(mesh.colors[i].Z);
+                    bw.Write(mesh.colors[i].W);
+                }
+                for (int i = 0; i < mesh.tx0coords.Length; i++)
+                {
+                    bw.Write(mesh.tx0coords[i].X);
+                    bw.Write(mesh.tx0coords[i].Y);
+                }
+                for (int i = 0; i < mesh.tx1coords.Length; i++)
+                {
+                    bw.Write(mesh.tx1coords[i].X);
+                    bw.Write(mesh.tx1coords[i].Y);
+                }
 
-                    //VPNT
-                    Vec3 p_0 = new Vec3(mesh.vertices[idx0].X, mesh.vertices[idx0].Y, mesh.vertices[idx0].Z);
-                    Vec3 n_0 = new Vec3(mesh.normals[idx0].X, mesh.normals[idx0].Y, mesh.normals[idx0].Z);
-                    Vec4 t_0 = new Vec4(new Vec3(mesh.tangents[idx0].X, mesh.tangents[idx0].Y, mesh.tangents[idx0].Z), 1);
-
-                    Vec3 p_1 = new Vec3(mesh.vertices[idx1].X, mesh.vertices[idx1].Y, mesh.vertices[idx1].Z);
-                    Vec3 n_1 = new Vec3(mesh.normals[idx1].X, mesh.normals[idx1].Y, mesh.normals[idx1].Z);
-                    Vec4 t_1 = new Vec4(new Vec3(mesh.tangents[idx1].X, mesh.tangents[idx1].Y, mesh.tangents[idx1].Z), 1);
-
-                    Vec3 p_2 = new Vec3(mesh.vertices[idx2].X, mesh.vertices[idx2].Y, mesh.vertices[idx2].Z);
-                    Vec3 n_2 = new Vec3(mesh.normals[idx2].X, mesh.normals[idx2].Y, mesh.normals[idx2].Z);
-                    Vec4 t_2 = new Vec4(new Vec3(mesh.tangents[idx2].X, mesh.tangents[idx2].Y, mesh.tangents[idx2].Z), 1);
-
-                    //VCT
-                    Vec2 tx0_0 = new Vec2(mesh.tx0coords[idx0].X, mesh.tx0coords[idx0].Y);
-                    Vec2 tx1_0 = new Vec2(mesh.tx1coords[idx0].X, mesh.tx1coords[idx0].Y);
-
-                    Vec2 tx0_1 = new Vec2(mesh.tx0coords[idx1].X, mesh.tx0coords[idx1].Y);
-                    Vec2 tx1_1 = new Vec2(mesh.tx1coords[idx1].X, mesh.tx1coords[idx1].Y);
-
-                    Vec2 tx0_2 = new Vec2(mesh.tx0coords[idx2].X, mesh.tx0coords[idx2].Y);
-                    Vec2 tx1_2 = new Vec2(mesh.tx1coords[idx2].X, mesh.tx1coords[idx2].Y);
-
-                    Vec4 col_0 = new Vec4(mesh.colors[idx0].X, mesh.colors[idx0].Y, mesh.colors[idx0].Z, mesh.colors[idx0].W);
-                    Vec4 col_1 = new Vec4(mesh.colors[idx1].X, mesh.colors[idx1].Y, mesh.colors[idx1].Z, mesh.colors[idx1].W);
-                    Vec4 col_2 = new Vec4(mesh.colors[idx2].X, mesh.colors[idx2].Y, mesh.colors[idx2].Z, mesh.colors[idx2].W);
-
-                    // vertex build
-                    var v0 = new RIGIDVERTEX(new VPNT(p_0, n_0, t_0), new VCT(col_0, tx0_0, tx1_0));
-                    var v1 = new RIGIDVERTEX(new VPNT(p_1, n_1, t_1), new VCT(col_1, tx0_1, tx1_1));
-                    var v2 = new RIGIDVERTEX(new VPNT(p_2, n_2, t_2), new VCT(col_2, tx0_2, tx1_2));
-
-                    // triangle build
-                    prim.AddTriangle(v0, v1, v2);
+                if (mesh.weightcount > 0)
+                {
+                    if (Rig != null)
+                    {
+                        for (int i = 0; i < mesh.vertices.Length; i++)
+                        {
+                            bw.Write(mesh.boneindices[i, 0]);
+                            bw.Write(mesh.boneindices[i, 1]);
+                            bw.Write(mesh.boneindices[i, 2]);
+                            bw.Write(mesh.boneindices[i, 3]);
+                        }
+                        for (int i = 0; i < mesh.vertices.Length; i++)
+                        {
+                            bw.Write(mesh.weights[i, 0]);
+                            bw.Write(mesh.weights[i, 1]);
+                            bw.Write(mesh.weights[i, 2]);
+                            bw.Write(mesh.weights[i, 3]);
+                        }
+                        if (mesh.weightcount > 4)
+                        {
+                            for (int i = 0; i < mesh.vertices.Length; i++)
+                            {
+                                bw.Write(mesh.boneindices[i, 4]);
+                                bw.Write(mesh.boneindices[i, 5]);
+                                bw.Write(mesh.boneindices[i, 6]);
+                                bw.Write(mesh.boneindices[i, 7]);
+                            }
+                            for (int i = 0; i < mesh.vertices.Length; i++)
+                            {
+                                bw.Write(mesh.weights[i, 4]);
+                                bw.Write(mesh.weights[i, 5]);
+                                bw.Write(mesh.weights[i, 6]);
+                                bw.Write(mesh.weights[i, 7]);
+                            }
+                        }
+                    }
+                }
+                for (int i = 0; i < mesh.indices.Length; i += 3)
+                {
+                    bw.Write(Convert.ToUInt16(mesh.indices[i + 1]));
+                    bw.Write(Convert.ToUInt16(mesh.indices[i + 0]));
+                    bw.Write(Convert.ToUInt16(mesh.indices[i + 2]));
                 }
                 for (int i = 0; i < expTargets.Count; i++)
                 {
-                    var morphBuilder = expmesh.UseMorphTarget(i);
-
-                    for (int e = 0; e < expTargets[i][mIndex].diffsCount; e++)
+                    var mappings = expTargets[i][mIndex].vertexMapping.ToList();
+                    for (ushort e = 0; e < mesh.vertices.Length; e++)
                     {
-                        morphBuilder.SetVertexDelta(mesh.vertices[expTargets[i][mIndex].vertexMapping[e]], new VertexGeometryDelta(expTargets[i][mIndex].vertexDelta[e], expTargets[i][mIndex].normalDelta[e], expTargets[i][mIndex].tangentDelta[e]));
+                        if(mappings.Contains(e))
+                        {
+                            int idx = mappings.IndexOf(e);
+                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].X);
+                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].Y);
+                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].Z);
+                        }
+                        else
+                        {
+                            bw.Write(0f);
+                            bw.Write(0f);
+                            bw.Write(0f);
+                        }
+                    }
+                    for (ushort e = 0; e < mesh.normals.Length; e++)
+                    {
+                        if (mappings.Contains(e))
+                        {
+                            int idx = mappings.IndexOf(e);
+                            bw.Write(expTargets[i][mIndex].normalDelta[idx].X);
+                            bw.Write(expTargets[i][mIndex].normalDelta[idx].Y);
+                            bw.Write(expTargets[i][mIndex].normalDelta[idx].Z);
+                        }
+                        else
+                        {
+                            bw.Write(0f);
+                            bw.Write(0f);
+                            bw.Write(0f);
+                        }
+                    }
+                    for (ushort e = 0; e < mesh.tangents.Length; e++)
+                    {
+                        if (mappings.Contains(e))
+                        {
+                            int idx = mappings.IndexOf(e);
+                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].X);
+                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].Y);
+                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].Z);
+                        }
+                        else
+                        {
+                            bw.Write(0f);
+                            bw.Write(0f);
+                            bw.Write(0f);
+                        }
                     }
                 }
-                var obj = new { targetNames = names }; // anonymous variable/obj
-
-                expmesh.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                scene.AddRigidMesh(expmesh, System.Numerics.Matrix4x4.Identity);
             }
-            var model = scene.ToGltf2();
+            var buffer = model.UseBuffer(ms.ToArray());
+            int BuffViewoffset = 0;
 
+            foreach (var mesh in meshes)
+            {
+                var mes = model.CreateMesh(mesh.name);
+                var prim = mes.CreatePrimitive();
+                prim.Material = mat;
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 12);
+                    acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("POSITION", acc);
+                    BuffViewoffset += mesh.vertices.Length * 12;
+                }
+                if (mesh.normals.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.normals.Length * 12);
+                    acc.SetData(buff, 0, mesh.normals.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("NORMAL", acc);
+                    BuffViewoffset += mesh.normals.Length * 12;
+                }
+                if (mesh.tangents.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tangents.Length * 16);
+                    acc.SetData(buff, 0, mesh.tangents.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("TANGENT", acc);
+                    BuffViewoffset += mesh.tangents.Length * 16;
+                }
+                if (mesh.colors.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors.Length * 16);
+                    acc.SetData(buff, 0, mesh.colors.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("COLOR_0", acc);
+                    BuffViewoffset += mesh.colors.Length * 16;
+                }
+                if (mesh.tx0coords.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx0coords.Length * 8);
+                    acc.SetData(buff, 0, mesh.tx0coords.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("TEXCOORD_0", acc);
+                    BuffViewoffset += mesh.tx0coords.Length * 8;
+                }
+                if (mesh.tx1coords.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx1coords.Length * 8);
+                    acc.SetData(buff, 0, mesh.tx1coords.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("TEXCOORD_1", acc);
+                    BuffViewoffset += mesh.tx1coords.Length * 8;
+                }
+                if (mesh.weightcount > 0)
+                {
+                    if (Rig != null)
+                    {
+                        {
+                            var acc = model.CreateAccessor();
+                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 8);
+                            acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                            prim.SetVertexAccessor("JOINTS_0", acc);
+                            BuffViewoffset += mesh.vertices.Length * 8;
+                        }
+                        {
+                            var acc = model.CreateAccessor();
+                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 16);
+                            acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                            prim.SetVertexAccessor("WEIGHTS_0", acc);
+                            BuffViewoffset += mesh.vertices.Length * 16;
+                        }
+                        if (mesh.weightcount > 4)
+                        {
+                            {
+                                var acc = model.CreateAccessor();
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 8);
+                                acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                                prim.SetVertexAccessor("JOINTS_1", acc);
+                                BuffViewoffset += mesh.vertices.Length * 8;
+                            }
+                            {
+                                var acc = model.CreateAccessor();
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 16);
+                                acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                                prim.SetVertexAccessor("WEIGHTS_1", acc);
+                                BuffViewoffset += mesh.vertices.Length * 16;
+                            }
+                        }
+                    }
+                }
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.indices.Length * 2);
+                    acc.SetData(buff, 0, mesh.indices.Length, DimensionType.SCALAR, EncodingType.UNSIGNED_SHORT, false);
+                    prim.SetIndexAccessor(acc);
+                    BuffViewoffset += mesh.indices.Length * 2;
+                }
+                var nod = model.UseScene(0).CreateNode(mesh.name);
+                nod.Mesh = mes;
+                if (Rig != null && mesh.weightcount > 0)
+                    nod.Skin = skins[0];
+
+                var obj = new { targetNames = names }; // anonymous variable/obj
+                mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+
+                for (int i = 0; i < expTargets.Count; i++)
+                {
+                    var dict = new Dictionary<string, Accessor>();
+                    {
+                        var acc = model.CreateAccessor();
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 12);
+                        acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                        dict.Add("POSITION", acc);
+                        BuffViewoffset += mesh.vertices.Length * 12;
+                    }
+                    if(mesh.normals.Length > 0)
+                    {
+                        var acc = model.CreateAccessor();
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.normals.Length * 12);
+                        acc.SetData(buff, 0, mesh.normals.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                        dict.Add("NORMAL", acc);
+                        BuffViewoffset += mesh.normals.Length * 12;
+                    }
+                    if (mesh.tangents.Length > 0)
+                    {
+                        var acc = model.CreateAccessor();
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tangents.Length * 12);
+                        acc.SetData(buff, 0, mesh.tangents.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                        dict.Add("TANGENT", acc);
+                        BuffViewoffset += mesh.tangents.Length * 12;
+                    }
+                    prim.SetMorphTargetAccessors(i, dict);
+                }
+            }
+            model.UseScene(0).Name = "Scene";
+            model.DefaultScene = model.UseScene(0);
+            model.MergeBuffers();
             return model;
         }
     }

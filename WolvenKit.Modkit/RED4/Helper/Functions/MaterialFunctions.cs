@@ -24,7 +24,6 @@ using WolvenKit.Common;
 
 namespace WolvenKit.Modkit.RED4
 {
-    using Vec3 = System.Numerics.Vector3;
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>
@@ -48,7 +47,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (meshBones.boneCount != 0)    // for rigid meshes
             {
-                meshBones.Names = RIG.GetboneNames(cr2w, "CMesh");
+                meshBones.Names = RIG.GetboneNames(cr2w);
                 meshBones.WorldPosn = MeshTools.GetMeshBonesPosn(cr2w);
             }
             RawArmature Rig = MeshTools.GetNonParentedRig(meshBones);

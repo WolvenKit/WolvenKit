@@ -240,7 +240,10 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Browsable(false)]
         public Archive Archive { get; set; } = new(); // basegame4_gamedata.archive
-
+        [Category("Mesh Import Settings")]
+        [Display(Name = "Import Material.Json Only")]
+        [Description("If checked only the Materials from Material.Json will be imported to the mesh, geometry from GLTF/GLB will not be imported!, uncheck imports Both!")]
+        public bool importMaterialOnly { get; set; } = false;
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -297,6 +300,12 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Is Binary")]
         [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
+
+        /// <summary>
+        /// List of Archives for WithMaterials Mesh Export.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
 
         /// <summary>
         /// String Override to display info in datagrid.
