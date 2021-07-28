@@ -23,7 +23,6 @@ using WolvenKit.Modkit.RED4.RigFile;
 
 namespace WolvenKit.Modkit.RED4
 {
-    using Vec3 = System.Numerics.Vector3;
     /// <summary>
     /// Collection of common modding utilities.
     /// </summary>

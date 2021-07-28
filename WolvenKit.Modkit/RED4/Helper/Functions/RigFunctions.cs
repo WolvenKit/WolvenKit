@@ -57,7 +57,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
             for (int i = 0; i < Rig.BoneCount; i++)
             {
                 Vec3 v = new Vec3(animrig.Unk2[i][2].X.Value, animrig.Unk2[i][2].Y.Value, animrig.Unk2[i][2].Z.Value);
-                Rig.LocalScale[i] = new Vec3(v.X, v.Z, v.Y);
+                Rig.LocalScale[i] = new Vec3(v.X, v.Y, v.Z);
             }
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...

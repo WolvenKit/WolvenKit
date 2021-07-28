@@ -637,6 +637,14 @@ namespace WolvenKit.ViewModels.Editor
                     }
                     meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
                 }
+                if(item.Properties is MorphTargetExportArgs morphTargetExportArgs)
+                {
+                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    {
+                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
+                        morphTargetExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                    }
+                }
                 if (item.Properties is OpusExportArgs opusExportArgs)
                 {
                     if (_gameController.GetController() is Cp77Controller cp77Controller)

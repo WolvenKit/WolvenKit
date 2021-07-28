@@ -283,7 +283,16 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                 case ECookedFileFormat.morphtarget:
-                    return _targetTools.ExportTargets(cr2wStream, outfile);
+                    var archives = new List<Archive>();
+                    foreach (var ar in settings.Get<MorphTargetExportArgs>().Archives)
+                    {
+                        var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
+                        if (name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
+                        {
+                            archives.Add(ar);
+                        }
+                    }
+                    return ExportMorphTargets(cr2wStream, outfile, archives, settings.Get<MorphTargetExportArgs>().IsBinary);
 
                 case ECookedFileFormat.xbm:
                 {

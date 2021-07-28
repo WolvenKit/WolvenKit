@@ -13,7 +13,6 @@ namespace WolvenKit.Modkit.RED4
         private readonly IHashService _hashService;
         private readonly Red4ParserService _wolvenkitFileService;
         private readonly MeshTools _meshTools;
-        private readonly TargetTools _targetTools;
         //private readonly MaterialTools _materialTools;
 
 
@@ -22,8 +21,7 @@ namespace WolvenKit.Modkit.RED4
             IProgressService<double> progressService,
             IHashService hashService,
             Red4ParserService wolvenkitFileService,
-            MeshTools meshTools,
-            TargetTools targetTools
+            MeshTools meshTools
         //MaterialTools materialTools
         )
         {
@@ -32,7 +30,6 @@ namespace WolvenKit.Modkit.RED4
             _hashService = hashService;
             _wolvenkitFileService = wolvenkitFileService;
             _meshTools = meshTools;
-            _targetTools = targetTools;
             //_materialTools = materialTools;
         }
     }

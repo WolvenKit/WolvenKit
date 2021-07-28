@@ -299,6 +299,12 @@ namespace WolvenKit.Common.Model.Arguments
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
+        /// List of Archives for WithMaterials Mesh Export.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
+
+        /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>

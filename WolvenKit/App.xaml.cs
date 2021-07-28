@@ -71,7 +71,6 @@ namespace WolvenKit
             serviceLocator.RegisterType<MockGameController>();
 
             serviceLocator.RegisterType<Red4ParserService>();
-            serviceLocator.RegisterType<TargetTools>();      //Cp77FileService
             serviceLocator.RegisterType<RIG>();              //Cp77FileService
             serviceLocator.RegisterType<MeshTools>();        //RIG, Cp77FileService
 

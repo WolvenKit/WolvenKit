@@ -971,6 +971,7 @@ namespace CP77.CR2W
                     prim.SetVertexAccessor("TANGENT", acc);
                     BuffViewoffset += mesh.tangents.Length * 16;
                 }
+                if (mesh.colors.Length > 0)
                 {
                     var acc = model.CreateAccessor();
                     var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors.Length * 16);
@@ -978,6 +979,7 @@ namespace CP77.CR2W
                     prim.SetVertexAccessor("COLOR_0", acc);
                     BuffViewoffset += mesh.colors.Length * 16;
                 }
+                if (mesh.tx0coords.Length > 0)
                 {
                     var acc = model.CreateAccessor();
                     var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx0coords.Length * 8);
@@ -985,6 +987,7 @@ namespace CP77.CR2W
                     prim.SetVertexAccessor("TEXCOORD_0", acc);
                     BuffViewoffset += mesh.tx0coords.Length * 8;
                 }
+                if (mesh.tx1coords.Length > 0)
                 {
                     var acc = model.CreateAccessor();
                     var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx1coords.Length * 8);
