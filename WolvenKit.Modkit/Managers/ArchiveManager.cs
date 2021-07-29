@@ -57,6 +57,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 {
                     file.Archive = archive;
                     archive.Files.Add(file.Key, file);
+                    file.SetHashService(_hashService);
+                }
+                var deps = (archive as Archive).Index.Dependencies;
+                foreach (var d in deps)
+                {
+                    d.SetHashService(_hashService);
                 }
             }
 

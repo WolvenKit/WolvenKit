@@ -162,17 +162,17 @@ namespace WolvenKit.Common.Services
 
         private static Dependency ReadDependency(this BinaryReader br, IHashService _hashService)
         {
-            var d = new Dependency()
+            var d = new Dependency(_hashService)
             {
                 Hash = br.ReadUInt64(),
             };
-            d.HashStr = _hashService?.Get(d.Hash);
+            
             return d;
         }
 
         private static FileEntry ReadFileEntry(this BinaryReader br, IHashService _hashService)
         {
-            var fileEntry = new FileEntry
+            var fileEntry = new FileEntry(_hashService)
             {
                 NameHash64 = br.ReadUInt64(),
                 Timestamp = DateTime.FromFileTime(br.ReadInt64()),
@@ -183,20 +183,6 @@ namespace WolvenKit.Common.Services
                 ResourceDependenciesEnd = br.ReadUInt32(),
                 SHA1Hash = br.ReadBytes(20)
             };
-
-
-            var _nameStr = _hashService?.Get(fileEntry.NameHash64);
-            // x-platform support
-            if (System.Runtime.InteropServices.RuntimeInformation
-                .IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
-            {
-                if (!string.IsNullOrEmpty(_nameStr) && _nameStr.Contains('\\'))
-                {
-                    _nameStr = _nameStr.Replace('\\', Path.DirectorySeparatorChar);
-                }
-            }
-
-            fileEntry.SetNameStr(_nameStr);
 
             return fileEntry;
         }
