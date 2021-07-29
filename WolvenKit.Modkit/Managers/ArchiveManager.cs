@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Catel.IoC;
 using ProtoBuf;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
@@ -21,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager()
+        public ArchiveManager() : this(ServiceLocator.Default.ResolveType<IHashService>())
         {
 
         }
