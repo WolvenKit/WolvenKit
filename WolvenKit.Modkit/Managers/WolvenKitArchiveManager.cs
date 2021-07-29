@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ProtoBuf;
 
 namespace WolvenKit.Common.Model
@@ -70,8 +68,10 @@ namespace WolvenKit.Common.Model
                     }
                 }
 
-                currentNode.Files.Add(parts[^1], item.Value.ToList());
+                currentNode.Files.AddRange(item.Value.ToList());
             }
+
+            //RootNode.Files.AddRange(Items.Values.ToList());
         }
 
 
@@ -95,7 +95,7 @@ namespace WolvenKit.Common.Model
             {
                 foreach (var wfile in mainnode.Files)
                 {
-                    bundfiles.AddRange(wfile.Value);
+                    bundfiles.Add(wfile);
                 }
                 bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
             }
