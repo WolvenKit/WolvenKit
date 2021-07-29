@@ -34,10 +34,8 @@ namespace WolvenKit.Functionality.Initialization
 {
     public static class Initializations
     {
-        public static void InitializeBk()
+        public static void InitializeBk(ISettingsManager settings)
         {
-            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-
             string[] binkhelpers = { @"Resources\Media\t1.kark", @"Resources\Media\t2.kark", @"Resources\Media\t3.kark", @"Resources\Media\t4.kark", @"Resources\Media\t5.kark" };
 
             if (string.IsNullOrEmpty(settings.GetRED4GameRootDir()))
@@ -227,11 +225,11 @@ namespace WolvenKit.Functionality.Initialization
         }
 
         // Initialize Shell
-        public static /*async Task*/ void InitializeShell()
+        public static /*async Task*/ void InitializeShell(ISettingsManager settings)
         {
             if (!WolvenDBG.EnableTheming)
             {
-                ThemeInnerInit();
+                ThemeInnerInit(settings);
                 //await ShellInnerInit();
             }
             else
@@ -253,7 +251,7 @@ namespace WolvenKit.Functionality.Initialization
 
 
                 //await ShellInnerInit();
-                ThemeInnerInit();
+                ThemeInnerInit(settings);
             }
         }
 
@@ -359,15 +357,13 @@ namespace WolvenKit.Functionality.Initialization
             }
         }
 
-        public static void ThemeInnerInit()
+        public static void ThemeInnerInit(ISettingsManager settings)
         {
-            var SettingsManag = ServiceLocator.Default.ResolveType<ISettingsManager>();
-
             ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", SettingsManag.GetThemeAccent(), false));
+                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", settings.GetThemeAccent(), false));
             MaterialDarkThemeSettings themeSettings = new MaterialDarkThemeSettings
             {
-                PrimaryBackground = new SolidColorBrush(SettingsManag.GetThemeAccent()),
+                PrimaryBackground = new SolidColorBrush(settings.GetThemeAccent()),
                 BodyFontSize = 11,
                 HeaderFontSize = 14,
                 SubHeaderFontSize = 13,
