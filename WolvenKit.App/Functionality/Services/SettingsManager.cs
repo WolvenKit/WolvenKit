@@ -49,6 +49,8 @@ namespace WolvenKit.Functionality.Services
 
         public bool CheckForUpdates { get; set; }
 
+        public EUpdateChannel UpdateChannel { get; set; }
+
         public string DepotPath { get; set; }
 
         public string MaterialRepositoryPath { get; set; }
@@ -167,6 +169,7 @@ namespace WolvenKit.Functionality.Services
             var config = new SettingsManager()
             {
                 CheckForUpdates = settings.CheckForUpdates,
+                UpdateChannel = settings.UpdateChannel,
                 ShowGuidedTour = settings.ShowGuidedTour,
                 //ProfileImageBrush = settings.ProfileImageBrush,
                 TextLanguage = settings.TextLanguage,
@@ -260,6 +263,7 @@ namespace WolvenKit.Functionality.Services
         public SettingsDto(SettingsManager settings)
         {
             CheckForUpdates = settings.CheckForUpdates;
+            UpdateChannel = settings.UpdateChannel;
             ShowGuidedTour = settings.ShowGuidedTour;
             //ProfileImageBrush = settings.ProfileImageBrush;
             TextLanguage = settings.TextLanguage;
@@ -276,6 +280,7 @@ namespace WolvenKit.Functionality.Services
         public EAnimals CatFactAnimal { get; set; }
 
         public bool CheckForUpdates { get; set; }
+        public EUpdateChannel UpdateChannel { get; set; }
 
         //public ImageBrush ProfileImageBrush { get; set; }
         public string TextLanguage { get; set; }

@@ -14,7 +14,6 @@ using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
@@ -130,8 +129,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (isManaged)
                 {
-                    _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");    //INNO
-                    //_ = Process.Start(path.FullName, "/qr");            //Advanced Installer
+                    _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");      //INNO
+                    //_ = Process.Start(path.FullName, "/qr");                  //Advanced Installer
                 }
                 else
                 {
