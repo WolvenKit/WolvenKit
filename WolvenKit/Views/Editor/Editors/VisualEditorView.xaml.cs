@@ -5,10 +5,11 @@ using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor.VisualEditor
 {
-    public partial class VisualEditorView
+    public partial class VisualEditorView : ReactiveUserControl<VisualEditorViewModel>
     {
         #region Constructors
 

@@ -1,10 +1,11 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="editor:PropertiesViewModel"
     x:Class="WolvenKit.Views.Editor.PropertiesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ab3d="clr-namespace:Ab3d.Controls;assembly=Ab3d.PowerToys"
     xmlns:cameras="clr-namespace:Ab3d.Cameras;assembly=Ab3d.PowerToys"
-    xmlns:catel="http://schemas.catelproject.com"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:conv="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:converters2="clr-namespace:WolvenKit.Functionality.Converters"
@@ -25,172 +26,176 @@
     FontSize="10"
     mc:Ignorable="d">
 
-    <catel:UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources RequestedTheme="Dark" />
-                <hc:Theme />
-            </ResourceDictionary.MergedDictionaries>
-            <converters2:ValueConverterGroup x:Key="DateTimeVisi">
-                <hc:Object2StringConverter />
-                <hc:String2VisibilityConverter />
-            </converters2:ValueConverterGroup>
+    
 
-            <conv:StringPathToItemStringConverter x:Key="PathConverter" />
+    <Grid>
 
-            <!--  Region: WaveformTimeline  -->
-            <LinearGradientBrush x:Key="WaveformRightLevelBrush" StartPoint="1,0" EndPoint="1,1">
-                <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
-                <GradientStop Offset="1" Color="Black" />
-            </LinearGradientBrush>
-            <LinearGradientBrush x:Key="WaveformLeftLevelBrush" StartPoint="1,1" EndPoint="1,0">
-                <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.Accent4}" />
-                <GradientStop Offset="1" Color="White" />
-            </LinearGradientBrush>
-            <Style TargetType="{x:Type svl1:WaveformTimeline}">
-                <Setter Property="RepeatRegionBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
-                <Setter Property="TimelineTickBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
-                <Setter Property="ProgressBarBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
-                <Setter Property="CenterLineBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
-                <Setter Property="RightLevelBrush" Value="{DynamicResource MahApps.Brushes.Accent3}" />
-                <Setter Property="LeftLevelBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type svl1:WaveformTimeline}">
-                            <Border
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources RequestedTheme="Dark" />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+                <converters2:ValueConverterGroup x:Key="DateTimeVisi">
+                    <hc:Object2StringConverter />
+                    <hc:String2VisibilityConverter />
+                </converters2:ValueConverterGroup>
+
+                <conv:StringPathToItemStringConverter x:Key="PathConverter" />
+
+                <!--  Region: WaveformTimeline  -->
+                <LinearGradientBrush x:Key="WaveformRightLevelBrush" StartPoint="1,0" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
+                    <GradientStop Offset="1" Color="Black" />
+                </LinearGradientBrush>
+                <LinearGradientBrush x:Key="WaveformLeftLevelBrush" StartPoint="1,1" EndPoint="1,0">
+                    <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.Accent4}" />
+                    <GradientStop Offset="1" Color="White" />
+                </LinearGradientBrush>
+                <Style TargetType="{x:Type svl1:WaveformTimeline}">
+                    <Setter Property="RepeatRegionBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
+                    <Setter Property="TimelineTickBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
+                    <Setter Property="ProgressBarBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
+                    <Setter Property="CenterLineBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
+                    <Setter Property="RightLevelBrush" Value="{DynamicResource MahApps.Brushes.Accent3}" />
+                    <Setter Property="LeftLevelBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type svl1:WaveformTimeline}">
+                                <Border
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Canvas
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="20" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Canvas
                                         Name="PART_Waveform"
                                         Grid.Row="1"
                                         ClipToBounds="True" />
-                                    <Border
+                                        <Border
                                         Grid.Row="0"
                                         Panel.ZIndex="0"
                                         BorderBrush="{TemplateBinding TimelineTickBrush}"
                                         BorderThickness="0,0,0,1">
-                                        <Canvas
+                                            <Canvas
                                             Name="PART_Timeline"
                                             Height="20"
                                             ClipToBounds="True" />
-                                    </Border>
-                                    <Canvas
+                                        </Border>
+                                        <Canvas
                                         Name="PART_Repeat"
                                         Grid.Row="1"
                                         ClipToBounds="True" />
-                                    <Canvas
+                                        <Canvas
                                         Name="PART_Progress"
                                         Grid.Row="0"
                                         Grid.RowSpan="2"
                                         ClipToBounds="True" />
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <!--  EndRegion: WaveformTimeline  -->
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <!--  EndRegion: WaveformTimeline  -->
 
-            <Style TargetType="{x:Type svl1:SpectrumAnalyzer}">
-                <Setter Property="BarStyle">
-                    <Setter.Value>
-                        <Style TargetType="{x:Type Rectangle}">
-                            <Setter Property="Fill">
-                                <Setter.Value>
-                                    <LinearGradientBrush>
-                                        <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
-                                        <GradientStop Offset="1" Color="{DynamicResource MahApps.Colors.Gray.SemiTransparent}" />
-                                    </LinearGradientBrush>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="PeakStyle">
-                    <Setter.Value>
-                        <Style TargetType="{x:Type Rectangle}">
-                            <Setter Property="Fill">
-                                <Setter.Value>
-                                    <LinearGradientBrush>
-                                        <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
-                                    </LinearGradientBrush>
-                                </Setter.Value>
-                            </Setter>
+                <Style TargetType="{x:Type svl1:SpectrumAnalyzer}">
+                    <Setter Property="BarStyle">
+                        <Setter.Value>
+                            <Style TargetType="{x:Type Rectangle}">
+                                <Setter Property="Fill">
+                                    <Setter.Value>
+                                        <LinearGradientBrush>
+                                            <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
+                                            <GradientStop Offset="1" Color="{DynamicResource MahApps.Colors.Gray.SemiTransparent}" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="PeakStyle">
+                        <Setter.Value>
+                            <Style TargetType="{x:Type Rectangle}">
+                                <Setter Property="Fill">
+                                    <Setter.Value>
+                                        <LinearGradientBrush>
+                                            <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
 
-                            <Setter Property="Effect">
-                                <Setter.Value>
-                                    <hc:BrightnessEffect Brightness="3" />
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type svl1:SpectrumAnalyzer}">
-                            <Border
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <hc:BrightnessEffect Brightness="3" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type svl1:SpectrumAnalyzer}">
+                                <Border
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
-                                <Canvas
+                                    <Canvas
                                     Name="PART_SpectrumCanvas"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     ClipToBounds="True" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
 
-            <!--  region PreviewSlider  -->
+                <!--  region PreviewSlider  -->
 
-            <Style x:Key="PreviewSliderRepeatButtonHorizontalStyle" TargetType="RepeatButton">
-                <Setter Property="OverridesDefaultStyle" Value="true" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Focusable" Value="false" />
-                <Setter Property="IsTabStop" Value="false" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="RepeatButton">
-                            <Border
+                <Style x:Key="PreviewSliderRepeatButtonHorizontalStyle" TargetType="RepeatButton">
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Focusable" Value="false" />
+                    <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RepeatButton">
+                                <Border
                                 Width="{TemplateBinding Width}"
                                 Height="{TemplateBinding Height}"
                                 Background="Transparent">
-                                <Rectangle Height="2" Fill="{TemplateBinding Background}" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+                                    <Rectangle Height="2" Fill="{TemplateBinding Background}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
 
-            <Style x:Key="PreviewSliderRepeatButtonVerticalStyle" TargetType="RepeatButton">
-                <Setter Property="OverridesDefaultStyle" Value="true" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Focusable" Value="false" />
-                <Setter Property="IsTabStop" Value="false" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="RepeatButton">
-                            <Border
+                <Style x:Key="PreviewSliderRepeatButtonVerticalStyle" TargetType="RepeatButton">
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Focusable" Value="false" />
+                    <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RepeatButton">
+                                <Border
                                 Width="{TemplateBinding Width}"
                                 Height="{TemplateBinding Height}"
                                 Background="Transparent">
-                                <Rectangle Width="2" Fill="{TemplateBinding Background}" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+                                    <Rectangle Width="2" Fill="{TemplateBinding Background}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
 
-            <ControlTemplate x:Key="PreviewSliderThumb" TargetType="Thumb">
-                <Border
+                <ControlTemplate x:Key="PreviewSliderThumb" TargetType="Thumb">
+                    <Border
                     Name="BorderDot"
                     Width="18"
                     Height="18"
@@ -199,59 +204,59 @@
                     BorderThickness="0"
                     CornerRadius="9"
                     Effect="{StaticResource EffectShadow1}" />
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Effect" Value="{StaticResource EffectShadow2}" />
-                    </Trigger>
-                    <EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
-                        <EventTrigger.Actions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ThicknessAnimation
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Effect" Value="{StaticResource EffectShadow2}" />
+                        </Trigger>
+                        <EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation
                                         Storyboard.TargetName="BorderDot"
                                         Storyboard.TargetProperty="BorderThickness"
                                         To="2"
                                         Duration="0:0:.1" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="PreviewMouseLeftButtonUp">
-                        <EventTrigger.Actions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ThicknessAnimation
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="PreviewMouseLeftButtonUp">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation
                                         Storyboard.TargetName="BorderDot"
                                         Storyboard.TargetProperty="BorderThickness"
                                         To="1"
                                         Duration="0:0:.1" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
 
-            <ControlTemplate x:Key="PreviewSliderHorizontal" TargetType="hc:PreviewSlider">
-                <hc:SimplePanel>
-                    <Border
+                <ControlTemplate x:Key="PreviewSliderHorizontal" TargetType="hc:PreviewSlider">
+                    <hc:SimplePanel>
+                        <Border
                         x:Name="TrackBackground"
                         Height="2"
                         Margin="9,0"
                         VerticalAlignment="center"
                         Background="{TemplateBinding Background}" />
-                    <Track x:Name="PART_Track" Margin="9,0">
-                        <Track.DecreaseRepeatButton>
-                            <RepeatButton
+                        <Track x:Name="PART_Track" Margin="9,0">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton
                                 Background="{DynamicResource PrimaryBrush}"
                                 Command="{x:Static Slider.DecreaseLarge}"
                                 Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}" />
-                        </Track.DecreaseRepeatButton>
-                        <Track.IncreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}" />
-                        </Track.IncreaseRepeatButton>
-                        <Track.Thumb>
-                            <Thumb
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb
                                 x:Name="PART_Thumb"
                                 Width="18"
                                 Height="18"
@@ -260,31 +265,31 @@
                                 Focusable="False"
                                 OverridesDefaultStyle="True"
                                 Template="{StaticResource PreviewSliderThumb}" />
-                        </Track.Thumb>
-                    </Track>
-                </hc:SimplePanel>
-            </ControlTemplate>
+                            </Track.Thumb>
+                        </Track>
+                    </hc:SimplePanel>
+                </ControlTemplate>
 
-            <ControlTemplate x:Key="PreviewSliderVertical" TargetType="hc:PreviewSlider">
-                <hc:SimplePanel>
-                    <Border
+                <ControlTemplate x:Key="PreviewSliderVertical" TargetType="hc:PreviewSlider">
+                    <hc:SimplePanel>
+                        <Border
                         x:Name="TrackBackground"
                         Width="2"
                         Margin="0,9"
                         HorizontalAlignment="center"
                         Background="{TemplateBinding Background}" />
-                    <Track x:Name="PART_Track" Margin="0,9">
-                        <Track.DecreaseRepeatButton>
-                            <RepeatButton
+                        <Track x:Name="PART_Track" Margin="0,9">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton
                                 Background="{DynamicResource PrimaryBrush}"
                                 Command="{x:Static Slider.DecreaseLarge}"
                                 Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}" />
-                        </Track.DecreaseRepeatButton>
-                        <Track.IncreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}" />
-                        </Track.IncreaseRepeatButton>
-                        <Track.Thumb>
-                            <Thumb
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb
                                 x:Name="PART_Thumb"
                                 Width="18"
                                 Height="18"
@@ -293,32 +298,30 @@
                                 Focusable="False"
                                 OverridesDefaultStyle="True"
                                 Template="{StaticResource PreviewSliderThumb}" />
-                        </Track.Thumb>
-                    </Track>
-                </hc:SimplePanel>
-            </ControlTemplate>
+                            </Track.Thumb>
+                        </Track>
+                    </hc:SimplePanel>
+                </ControlTemplate>
 
-            <Style x:Key="PreviewSliderBaseStyle" TargetType="hc:PreviewSlider">
-                <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
-                <Setter Property="IsMoveToPointEnabled" Value="True" />
-                <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-                <Setter Property="Template" Value="{StaticResource PreviewSliderHorizontal}" />
-                <Style.Triggers>
-                    <Trigger Property="Orientation" Value="Vertical">
-                        <Setter Property="Template" Value="{StaticResource PreviewSliderVertical}" />
-                    </Trigger>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Opacity" Value=".4" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+                <Style x:Key="PreviewSliderBaseStyle" TargetType="hc:PreviewSlider">
+                    <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+                    <Setter Property="IsMoveToPointEnabled" Value="True" />
+                    <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                    <Setter Property="Template" Value="{StaticResource PreviewSliderHorizontal}" />
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Template" Value="{StaticResource PreviewSliderVertical}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value=".4" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
 
-            <!--  endregion  -->
-        </ResourceDictionary>
-    </catel:UserControl.Resources>
-
-    <Grid>
+                <!--  endregion  -->
+            </ResourceDictionary>
+        </Grid.Resources>
 
         <syncfusion:TabControlExt>
             <syncfusion:TabItemExt Header="File Properties">
@@ -717,4 +720,4 @@
                 Visibility="{Binding IsVideoPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}" />
         </syncfusion:TabControlExt>
     </Grid>
-</catel:UserControl>
+</reactiveUi:ReactiveUserControl>

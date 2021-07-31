@@ -4,9 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Catel.IoC;
-using Catel.Services;
-using ControlzEx.Theming;
+using ReactiveUI;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Wizards;
@@ -14,7 +12,7 @@ using Path = System.IO.Path;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class FirstSetupWizardView
+    public partial class FirstSetupWizardView : ReactiveUserControl<FirstSetupWizardViewModel>
     {
         #region Fields
 

@@ -1,18 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
-using Catel.MVVM;
-using Catel.Services;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.ViewModels.Wizards
 {
-    public class ProjectWizardViewModel : ViewModelBase
+    public class ProjectWizardViewModel : ReactiveObject
     {
         #region Fields
-
-        private readonly ISelectDirectoryService _selectDirectoryService;
 
         public const string WitcherGameName = "Witcher 3";
         public const string CyberpunkGameName = "Cyberpunk 2077";
@@ -23,17 +23,14 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Constructors
 
-        public ProjectWizardViewModel(
-            ISelectDirectoryService selectDirectoryService
-            ) : base(null)
+        public ProjectWizardViewModel()
         {
-            _selectDirectoryService = selectDirectoryService;
 
 
 
             OpenProjectPathCommand = new RelayCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
             FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
-            CancelCommand = new RelayCommand(ExecuteCancel, CanCancel);
+            CancelCommand = new RelayCommand(ExecuteCancel);
 
             ProjectType = new ObservableCollection<string> {"Cyberpunk 2077"};
             //ProjectType.Add("Witcher 3");
@@ -45,27 +42,39 @@ namespace WolvenKit.ViewModels.Wizards
         public ICommand FinishCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
 
-        private bool CanCancel() => true;
-
-        private void ExecuteCancel() => this.CancelAndCloseViewModelAsync();
+        private void ExecuteCancel() => throw new NotImplementedException();
 
 
         private bool CanFinish() => AllFieldsValid;
 
-        private void ExecuteFinish() => this.SaveAndCloseViewModelAsync();
+        private void ExecuteFinish() => throw new NotImplementedException();
 
 
         private bool CanOpenProjectPath() => true;
 
-        private async void ExecuteOpenProjectPath()
+        private void ExecuteOpenProjectPath()
         {
-            var result = await _selectDirectoryService.DetermineDirectoryAsync(
-                new DetermineDirectoryContext()
-            );
-            if (result.Result)
+            var dlg = new CommonOpenFileDialog
             {
-                ProjectPath = result.DirectoryName;
+                AllowNonFileSystemItems = false,
+                Multiselect = false,
+                IsFolderPicker = false,
+                Title = "Locate the WolvenKit project"
+            };
+            dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
+
+            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            {
+                return;
             }
+
+            var result = dlg.FileName;
+            if (string.IsNullOrEmpty(result))
+            {
+                return;
+            }
+
+            ProjectPath = result;
         }
 
         
@@ -79,21 +88,7 @@ namespace WolvenKit.ViewModels.Wizards
         /// <summary>
         /// Gets/Sets if all the fields are valid.
         /// </summary>
-        public bool AllFieldsValid
-        {
-            get => _allFieldsValid;
-            set
-            {
-                if (_allFieldsValid != value)
-                {
-                    var oldValue = _allFieldsValid;
-                    _allFieldsValid = value;
-                    RaisePropertyChanged(() => AllFieldsValid, oldValue, value);
-                }
-            }
-        }
-
-        private bool _allFieldsValid;
+        [Reactive] public bool AllFieldsValid { get; set; }
 
         ///// <summary>
         ///// Gets/Sets the author's profile image brush.

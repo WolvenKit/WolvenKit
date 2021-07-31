@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using ReactiveUI;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Functionality.Commands;
@@ -7,7 +8,7 @@ using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
 {
-    public partial class ImportExportView
+    public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
         /// <summary>
         /// Constructor I/E Tool.

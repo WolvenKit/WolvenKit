@@ -1,8 +1,9 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="wizards:FirstSetupWizardViewModel"
     x:Class="WolvenKit.Views.Wizards.FirstSetupWizardView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:catel="http://schemas.catelproject.com"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -14,19 +15,21 @@
     MinHeight="500"
     Initialized="UserControl_Initialized_1">
 
-    <catel:UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Themes/TextBoxExtendedCustom.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </catel:UserControl.Resources>
+   
     <Grid
         MinWidth="300"
         MinHeight="300"
         Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
+
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/Themes/TextBoxExtendedCustom.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
@@ -272,4 +275,4 @@
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
     </Grid>
-</catel:UserControl>
+</reactiveUi:ReactiveUserControl>

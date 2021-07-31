@@ -4,16 +4,18 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
-using Catel.IoC;
 using Discord;
 using Discord.WebSocket;
 using HandyControl.Controls;
+using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class BugReportWizardView
+    public partial class BugReportWizardView : ReactiveUserControl<BugReportWizardViewModel>
     {
         #region Constructors
 
@@ -66,7 +68,7 @@ namespace WolvenKit.Views.Wizards
         public async Task SendMessage()
 
         {
-            var _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
             var z = new EmbedFieldBuilder
             {

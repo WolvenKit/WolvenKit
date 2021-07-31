@@ -1,10 +1,9 @@
 using System;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using Catel.MVVM;
 using HandyControl.Controls;
 using HandyControl.Data;
+using ReactiveUI;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -12,19 +11,13 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage
 {
-    public class HomePageViewModel : ViewModelBase
+    public class HomePageViewModel : ReactiveObject
     {
         // #needs_MVVM
 
         #region Fields
 
         private readonly ISettingsManager _settingsManager;
-
-        
-        
-
-
-        public static HomePageViewModel GlobalHomePageVM;
 
         #endregion Fields
 
@@ -34,8 +27,12 @@ namespace WolvenKit.ViewModels.HomePage
         {
             _settingsManager = settingsManager;
 
-            GlobalHomePageVM = this;
-            RegisterCommands();
+            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
+            ClosePage = new RelayCommand(ExecPage, CanPage);
+            RestoreWindow = new RelayCommand(ExecuteRestoreWindow, CanRestoreWindow);
+            MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow, CanMinimizeWindow);
+            SwitchItemCmd = new DelegateCommand<FunctionEventArgs<object>>(SwitchItem);
+
             SetCurrentPage("Welcome");
             CurrentWindowState = WindowState.Maximized;
         }
@@ -78,8 +75,10 @@ namespace WolvenKit.ViewModels.HomePage
         public bool SettingsPV { get; set; }
 
         // Helps with switching pages , Listens to the selectionchanged on a sidemenu.  , SetCurrentPage deals with the actual "Decision" of what page needs to be shown.
-        public Command<FunctionEventArgs<object>> SwitchItemCmd => new Lazy<Command<FunctionEventArgs<object>>>(() =>
-            new Command<FunctionEventArgs<object>>(SwitchItem)).Value;
+        //public Command<FunctionEventArgs<object>> SwitchItemCmd => new Lazy<Command<FunctionEventArgs<object>>>(() =>
+        //    new Command<FunctionEventArgs<object>>(SwitchItem)).Value;
+
+        public ICommand SwitchItemCmd { get; private set; }
 
         public bool UserPV { get; set; }
 
@@ -110,15 +109,6 @@ namespace WolvenKit.ViewModels.HomePage
             { CurrentWindowState = WindowState.Normal; }
             else
             { CurrentWindowState = WindowState.Maximized; }
-        }
-
-        // Register VM commands
-        public void RegisterCommands()
-        {
-            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
-            ClosePage = new RelayCommand(ExecPage, CanPage);
-            RestoreWindow = new RelayCommand(ExecuteRestoreWindow, CanRestoreWindow);
-            MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow, CanMinimizeWindow);
         }
 
         public void SetCurrentPage(string page)

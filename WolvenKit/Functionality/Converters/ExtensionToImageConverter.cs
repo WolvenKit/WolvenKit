@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Windows;
-using Catel.MVVM.Converters;
+using System.Windows.Data;
 using WolvenKit.Common;
 
 namespace WolvenKit.Functionality.Converters

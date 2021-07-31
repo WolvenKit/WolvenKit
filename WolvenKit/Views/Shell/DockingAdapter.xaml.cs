@@ -9,8 +9,8 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
-using Catel.IoC;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
@@ -60,7 +60,7 @@ namespace WolvenKit.Views.Shell
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                vm.CloseCommand.SafeExecute();
+                vm.Close.Execute().Subscribe();
             }
         }
 
@@ -89,8 +89,7 @@ namespace WolvenKit.Views.Shell
 
             // Add setting to persist State or not ? ( Load Default Docking on Startup : Yes/No )
             // if (XSETTINGX){ SetLayoutToDefault();}else{
-            var serviceLocator = ServiceLocator.Default;
-            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var settings = Locator.Current.GetService<ISettingsManager>();
             if (settings.IsHealthy().Any())
             {
                 SetLayoutToDefault();
@@ -306,14 +305,14 @@ namespace WolvenKit.Views.Shell
         {
             //if (StaticReferences.GlobalShell != null)
             {
-                StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
-                StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
-                StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
+                //StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
+                //StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
+                //StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
 
                 if (e.NewValue is ContentControl content)
                 {
-                    var x = DockingManager.GetHeader((DependencyObject)e.NewValue);
-                    var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+                    var x = DockingManager.GetHeader(content);
+                    var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
                     if (!string.IsNullOrEmpty(x as string))
                     {
                         DiscordHelper.SetDiscordRPCStatus(x as string);
@@ -322,14 +321,12 @@ namespace WolvenKit.Views.Shell
                     switch (x)
                     {
                         case "Project Explorer":
-                            StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
                             propertiesViewModel.SetToNullAndResetVisibility();
                             propertiesViewModel.PE_FileInfoVisible = true;
 
                             break;
 
                         case "Asset Browser":
-                            StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
                             propertiesViewModel.SetToNullAndResetVisibility();
                             propertiesViewModel.AB_FileInfoVisible = true;
                             break;
@@ -387,7 +384,7 @@ namespace WolvenKit.Views.Shell
                             break;
 
                         default:
-                            StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+                            //StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
 
                             break;
                     }

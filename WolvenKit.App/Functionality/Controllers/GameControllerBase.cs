@@ -8,7 +8,7 @@ using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.W3Strings;
-using Catel.IoC;
+
 using DynamicData;
 using WolvenKit.Functionality.Services;
 
@@ -16,7 +16,7 @@ namespace WolvenKit.Functionality.Controllers
 {
     public interface IGameController
     {
-        
+        public bool IsManagerLoaded { get; set; }
 
         #region Methods
 

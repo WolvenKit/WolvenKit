@@ -1,8 +1,10 @@
-using Catel.MVVM;
+
+
+using ReactiveUI;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
-    public class WebsitePageViewModel : ViewModelBase
+    public class WebsitePageViewModel : ReactiveObject
     {
     }
 }

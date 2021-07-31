@@ -15,9 +15,7 @@ using Ab3d.DirectX;
 using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
-using Catel.Data;
-using Catel.IoC;
-using Catel.MVVM;
+using ReactiveUI;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -29,7 +27,7 @@ namespace WolvenKit.Views.Editor
     /// <summary>
     /// Interaction logic for PropertiesView.xaml
     /// </summary>
-    public partial class PropertiesView
+    public partial class PropertiesView : ReactiveUserControl<PropertiesViewModel>
     {
         public string _fileName;
 
@@ -37,14 +35,14 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
 
+
+
             Helpers.LoadAssimpNativeLibrary();
 
             var assimpWpfImporter = new AssimpWpfImporter();
             string[] supportedImportFormats = assimpWpfImporter.SupportedImportFormats;
             var assimpWpfExporter = new AssimpWpfExporter();
             string[] supportedExportFormats = assimpWpfExporter.ExportFormatDescriptions.Select(f => f.FileExtension).ToArray();
-
-            StaticReferences.GlobalPropertiesView = this;
 
             var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             Resources.MergedDictionaries.Add(themeResources);
@@ -55,52 +53,27 @@ namespace WolvenKit.Views.Editor
             //appControl.ExeName = "binkpl64.exe";
             //appControl.Args = "test2.bk2 /J /I2 /P";
             //this.Unloaded += new RoutedEventHandler((s, e) => { appControl.Dispose(); });
-        }
 
-        private static HandyControl.Controls.GlowWindow XoWindow = new HandyControl.Controls.GlowWindow();
-
-        protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        {
-            base.OnViewModelPropertyChanged(e);
-
-            if (e is not AdvancedPropertyChangedEventArgs property)
+            this.WhenActivated(disposables =>
             {
-                return;
-            }
-
-            if (ViewModel is PropertiesViewModel vm)
-            {
-                //vm.SetExeCommand += (obj) =>
-                //{
-                //    var x = obj as string;
-
-                //    var appControl = new AppControl();
-                //    appControl.ExeName = x.Split('|')[0];
-                //    appControl.Args = x.Split('|')[1];
-                //    //StaticReferences.RibbonViewInstance.VideoDrawerContent.Child = appControl;
-                //};
-            }
-
-            switch (property.PropertyName)
-            {
-                case nameof(PropertiesViewModel.LoadedBitmapFrame):
-                    if (property.NewValue is BitmapSource frame)
+                ViewModel.WhenAnyValue(x => x.LoadedBitmapFrame).Subscribe(source =>
+                {
+                    if (source is { } frame)
                     {
                         LoadImage(frame);
                     }
-                    break;
-
-                case nameof(PropertiesViewModel.LoadedModelPath):
-                    if (property.NewValue is string modelpath)
+                });
+                ViewModel.WhenAnyValue(x => x.LoadedModelPath).Subscribe(source =>
+                {
+                    if (source is { } modelpath)
                     {
                         LoadModel(modelpath);
                     }
-                    break;
-
-                default:
-                    break;
-            }
+                });
+            });
         }
+
+        private static HandyControl.Controls.GlowWindow XoWindow = new HandyControl.Controls.GlowWindow();
 
         private Stream StreamFromBitmapSource(BitmapSource writeBmp)
         {

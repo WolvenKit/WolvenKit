@@ -1,4 +1,3 @@
-using Catel.Logging;
 using Octokit;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Editor;
@@ -8,10 +7,10 @@ namespace WolvenKit.Functionality.Helpers
 {
     public static class StaticReferences
     {
-        public static PropertiesView GlobalPropertiesView { get; set; }
-        public static RibbonView RibbonViewInstance { get; set; }
-        public static StatusBarViewModel GlobalStatusBar { get; set; }
-        public static MainView MainView { get; set; }
+        //public static PropertiesView GlobalPropertiesView { get; set; }
+        //public static RibbonView RibbonViewInstance { get; set; }
+        //public static StatusBarViewModel GlobalStatusBar { get; set; }
+        //public static MainView MainView { get; set; }
 
         public static HandyControl.Controls.GlowWindow XoWindow;
 
@@ -28,7 +27,5 @@ namespace WolvenKit.Functionality.Helpers
         // Github Client
         public static GitHubClient Githubclient;
 
-        // Global Logger.
-        public static readonly ILog Logger = LogManager.GetCurrentClassLogger();
     }
 }

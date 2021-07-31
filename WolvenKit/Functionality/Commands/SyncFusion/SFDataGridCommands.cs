@@ -1,4 +1,4 @@
-using Catel.IoC;
+
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Splat;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit
@@ -28,7 +29,7 @@ namespace WolvenKit
         private static void OnCheckUnCheckCommand(object sender, ExecutedRoutedEventArgs args)
         {
             var sfdatagrid = (args.Parameter as SfDataGrid);
-            var viewmodel = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
+            var viewmodel = Locator.Current.GetService<ImportExportViewModel>();
             var checkbox = (sender as CheckBox).IsChecked;
             if (viewmodel != null)
             {

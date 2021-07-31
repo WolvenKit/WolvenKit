@@ -1,8 +1,10 @@
-using Catel.MVVM;
+
+
+using ReactiveUI;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
-    public class AddChunkDialogViewModel : ViewModelBase
+    public class AddChunkDialogViewModel : ReactiveObject
     {
     }
 }

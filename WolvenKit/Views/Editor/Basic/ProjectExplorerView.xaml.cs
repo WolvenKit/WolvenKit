@@ -1,14 +1,23 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Controls.Primitives;
 using HandyControl.Data;
+using ReactiveUI;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
-using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Editor;
 
@@ -17,17 +26,52 @@ namespace WolvenKit.Views.Editor
     /// <summary>
     /// Interaction logic for ProjectExplorerView.xaml
     /// </summary>
-    public partial class ProjectExplorerView
+    public partial class ProjectExplorerView : ReactiveUserControl<ProjectExplorerViewModel>
     {
         #region Constructors
-
-        public static ProjectExplorerView GlobalPEView;
 
         public ProjectExplorerView()
         {
             InitializeComponent();
-            GlobalPEView = this;
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
+
+
+
+            this.WhenActivated(disposables =>
+            {
+                Interactions.ConfirmMultiple.RegisterHandler(
+                    async interaction =>
+                    {
+                        var action = await this.DisplayModSortDialog(interaction.Input);
+                        interaction.SetOutput(action);
+                    });
+                Interactions.Rename.RegisterHandler(
+                    async interaction =>
+                    {
+                        var action = await this.DisplayRenameDialog(interaction.Input);
+                        interaction.SetOutput(action);
+                    });
+
+                ViewModel.ExpandAll.Subscribe(x => ExpandAll());
+                ViewModel.CollapseAll.Subscribe(x => CollapseAll());
+                ViewModel.ExpandChildren.Subscribe(x => ExpandChildren());
+                ViewModel.CollapseChildren.Subscribe(x => CollapseChildren());
+
+                //EventBindings
+                Observable
+                    .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
+                    .Subscribe(_ => OnCellDoubleTapped(_.Sender, _.EventArgs as TreeGridCellDoubleTappedEventArgs))
+                    .DisposeWith(disposables);
+
+
+            });
+
+        }
+
+        private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs treeGridCellDoubleTappedEventArgs)
+        {
+            var model = treeGridCellDoubleTappedEventArgs.Node.Item;
+            ViewModel.OpenFileCommand.Execute(model);
         }
 
         private bool _isfirsttime { get; set; } = true;
@@ -60,6 +104,63 @@ namespace WolvenKit.Views.Editor
                 else
                 { _isfirsttime = false; }
             }
+        }
+
+#pragma warning disable 1998
+        private async Task<string> DisplayRenameDialog(string input)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<bool> DisplayModSortDialog(IEnumerable<string> input)
+#pragma warning restore 1998
+        {
+            throw new NotImplementedException();
+
+            //return false;
+
+
+            //var inputDialog = new PackageResolverView(new PackageResolverViewModel(input))
+            //{
+            //    Owner = Application.Current.MainWindow
+            //};
+            //this.Overlay.Opacity = 0.5;
+            //this.Overlay.Background = new SolidColorBrush(Colors.White);
+
+            //var output = new Dictionary<string, string>();
+            //if (inputDialog.ShowDialog() == true)
+            //{
+            //    output = inputDialog.GetOutput().ToDictionary(_ => _.Name, _ => _.ComputedFullName);
+            //}
+
+            //this.Overlay.Opacity = 1;
+            //this.Overlay.Background = new SolidColorBrush(Colors.Transparent);
+
+            //return new ZipModifyArgs(output);
+
+
+            //var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
+            //var viewModel = new InputDialogViewModel() { Text = SelectedItem.Name };
+            //await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
+            //{
+            //    if (args.Result != true)
+            //    {
+            //        return;
+            //    }
+
+            //    if (args.DataContext is not Dialogs.InputDialogViewModel vm)
+            //    {
+            //        return;
+            //    }
+
+
+
+            //    finally
+            //    {
+            //        SelectedItem.RaiseRequestRefresh();
+            //    }
+            //});
+
         }
 
         //private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -164,15 +265,8 @@ namespace WolvenKit.Views.Editor
             TreeGrid.View.RefreshFilter();
         }
 
-        private void UserControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
-        }
-
         private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
-
             if (!StaticReferences.AllowVideoPreview)
             {
                 return;

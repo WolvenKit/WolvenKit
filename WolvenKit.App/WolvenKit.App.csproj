@@ -15,13 +15,24 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="ViewModels\Wizards\PublishWizard\**" />
+    <EmbeddedResource Remove="ViewModels\Wizards\PublishWizard\**" />
+    <None Remove="ViewModels\Wizards\PublishWizard\**" />
+    <Page Remove="ViewModels\Wizards\PublishWizard\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\HomePage\Pages\RecentlyUsedItemsViewModel.cs" />
+    <Compile Remove="ViewModels\Wizards\PublishWizardViewModel.cs" />
+  </ItemGroup>
+
     <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj" />
     <ProjectReference Include="..\WolvenManager.Installer\WolvenManager.Installer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catel.MVVM" Version="5.12.17" />
     <PackageReference Include="WinCopies.WindowsAPICodePack" Version="2.5.0" />
     <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.5.0" />
     <PackageReference Include="WolvenKit.HandyControl" Version="3.2.0" />
@@ -31,14 +42,15 @@
     <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="4.0.2" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="NAudio" Version="2.0.1" />
+    
     <PackageReference Include="ReactiveUI" Version="14.1.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
+    <PackageReference Include="ReactiveUI.Validation" Version="2.1.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="14.1.1" />
+    
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.2.0.49" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.2.0.49" />
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
-    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
         <PackageReference Include="Pfim" Version="0.10.1" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
 
@@ -54,6 +66,11 @@
     <Reference Include="AssimpNet">
       <HintPath>..\WolvenKit\AssimpNet.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Others\" />
+    <Folder Include="ViewModels\Shared\" />
   </ItemGroup>
 
 </Project>

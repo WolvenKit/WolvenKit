@@ -1,15 +1,17 @@
 using System.Windows;
-using Catel.IoC;
+
 using Feather.Controls;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.HomePage
 {
-    public partial class HomePageView
+    public partial class HomePageView : ReactiveUserControl<HomePageViewModel>
     {
         #region Fields
 
@@ -26,8 +28,7 @@ namespace WolvenKit.Views.HomePage
             GlobalHomePage = this;
 
 
-            _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>()
-;
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
 
 
@@ -58,11 +59,11 @@ namespace WolvenKit.Views.HomePage
                 },
                 new GuidedTourItem()
                 {
-                    Target = WlcmPage.irathernot,
+                    Target = WlcmPage.DiscordLinkButton,
                     Content = "On the right you can find a 'quick access panel'.\nLet's start of making a new project.\n\nClick on 'Create Project' to continue\n (The tour will End here, more will be explained in the next version.)",
                     Placement = GuidedTourItem.ItemPlacement.Left,
                     Title = "Quick Access Panel",
-                    AlternateTargets = new[] { WlcmPage.sdasd}
+                    AlternateTargets = new[] { WlcmPage.TwitterLinkButton}
                 }
             });
 
@@ -94,7 +95,7 @@ namespace WolvenKit.Views.HomePage
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            var mainWindow = (MainView)ServiceLocator.Default.ResolveType<IViewFor<WorkSpaceViewModel>>();
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<WorkSpaceViewModel>>();
             mainWindow.DragMove();
         }
 
@@ -117,7 +118,7 @@ namespace WolvenKit.Views.HomePage
             else
             {
                 base.OnMouseLeftButtonDown(e);
-                var mainWindow = (MainView)ServiceLocator.Default.ResolveType<IViewFor<WorkSpaceViewModel>>();
+                var mainWindow = (MainView)Locator.Current.GetService<IViewFor<WorkSpaceViewModel>>();
                 mainWindow.DragMove();
             }
         }

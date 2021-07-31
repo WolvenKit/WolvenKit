@@ -1,16 +1,16 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Catel;
-using Catel.IoC;
-using Catel.MVVM;
-using Catel.Reflection;
-using Catel.Services;
 using ProtoBuf.Meta;
+using ReactiveUI;
+using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
@@ -20,16 +20,14 @@ using WolvenKit.ViewModels.Editor;
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
     // #SortNameSpace
-    public class RibbonViewModel : ViewModelBase
+    public class RibbonViewModel : ReactiveObject
     {
         #region fields
 
         public static RibbonViewModel GlobalRibbonVM;
         private readonly ILoggerService _loggerService;
-        private readonly INavigationService _navigationService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
-        private readonly IUIVisualizerService _uiVisualizerService;
 
         #endregion fields
 
@@ -38,40 +36,50 @@ namespace WolvenKit.ViewModels.Shell
         public RibbonViewModel(
             ISettingsManager settingsManager,
             IProjectManager projectManager,
-            ILoggerService loggerService,
-            INavigationService navigationService,
-            IUIVisualizerService uiVisualizerService
-            )
+            ILoggerService loggerService
+        )
         {
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => navigationService);
-            Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => settingsManager);
 
             _projectManager = projectManager;
             _loggerService = loggerService;
-            _navigationService = navigationService;
-            _uiVisualizerService = uiVisualizerService;
             _settingsManager = settingsManager;
 
             StartScreenShown = false;
             BackstageIsOpen = true;
             GlobalRibbonVM = this;
 
-            ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
+            //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
             AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
-
-            var assembly = AssemblyHelper.GetEntryAssembly();
-            Title = assembly.Title();
         }
 
         #endregion constructors
 
-        #region properties
+        #region commands
 
-        public Random rnd = new Random();
-        
+        public ReactiveCommand<string, Unit> OpenProjectCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> NewProjectCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> PackProjectCommand = ReactiveCommand.Create<string>(link => { });
+
+        public ReactiveCommand<string, Unit> NewFileCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> SaveFileCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> SaveAllCommand = ReactiveCommand.Create<string>(link => { });
+
+        public ReactiveCommand<string, Unit> ViewProjectExplorerCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> ViewAssetBrowserCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> ViewPropertiesCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> ViewLogCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> ViewCodeEditorCommand = ReactiveCommand.Create<string>(link => { });
+
+        public ReactiveCommand<string, Unit> ShowSettingsCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> ShowBugReportCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> ShowFeedbackCommand = ReactiveCommand.Create<string>(link => { });
+
+        public ReactiveCommand<string, Unit> ShowImportExportToolCommand = ReactiveCommand.Create<string>(link => { });
+       
+        #endregion
+
+
+        #region properties
 
         public enum ERibbonContextualTabGroupVisibility
         {
@@ -115,58 +123,16 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanAssetBrowserAdd()
         {
-            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
             return abvm is {RightSelectedItems: { }} && abvm.RightSelectedItems.Any();
         }
 
         private void ExecuteAssetBrowserAdd()
         {
-            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
             abvm.AddSelectedCommand.SafeExecute();
         }
 
-        
-
-
-
-        /// <summary>
-        /// Is raised when a PaneView is selected: shows the contextual ribbon tab
-        /// </summary>
-        public ICommand ViewSelectedCommand { get; private set; }
-
-        private bool CanViewSelected(object view) => true;
-
-        private void ExecuteViewSelected(object viewmodel)
-        {
-            if (viewmodel is not Tuple<PaneViewModel, bool> tuple)
-            {
-                return;
-            }
-
-            if (tuple.Item1 is ProjectExplorerViewModel)
-            {
-                ProjectExplorerContextualTabGroupVisibility = tuple.Item2
-                    ? ERibbonContextualTabGroupVisibility.Visible
-                    : ERibbonContextualTabGroupVisibility.Collapsed;
-            }
-
-            //DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
-        }
-
         #endregion commands
-
-        #region methods
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            // Write initialization code here and subscribe to events
-
-            ServiceLocator.Default.ResolveType<ICommandManager>()
-                .RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
-        }
-
-        #endregion methods
     }
 }

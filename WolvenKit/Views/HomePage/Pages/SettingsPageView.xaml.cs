@@ -1,20 +1,18 @@
 using System.Windows;
 using System.Windows.Controls;
-using Catel.IoC;
-using Catel.MVVM.Views;
+using ReactiveUI;
 using Syncfusion.Windows.Controls.Layout;
 using WolvenKit.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
-    public partial class SettingsPageView
+    public partial class SettingsPageView : ReactiveUserControl<SettingsPageViewModel>
     {
         #region Constructors
 
         public SettingsPageView()
         {
             InitializeComponent();
-            var vm = ServiceLocator.Default.ResolveType<SettingsPageViewModel>();
            AccordionItems = SfAccordion.Items;
         }
 
@@ -22,21 +20,8 @@ namespace WolvenKit.Views.HomePage.Pages
 
         #region properties
 
-        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
-        public ItemCollection AccordionItems
-        {
-            get
-            {
-                return (ItemCollection)GetValue(AccordionItemsProperty);
-            }
-            set
-            {
-                SetValue(AccordionItemsProperty, value);
-            }
-        }
+        public ItemCollection AccordionItems { get; set; }
 
-        public static readonly DependencyProperty AccordionItemsProperty =
-            DependencyProperty.Register(nameof(AccordionItems), typeof(ItemCollection), typeof(SettingsPageView));
 
         #endregion
 

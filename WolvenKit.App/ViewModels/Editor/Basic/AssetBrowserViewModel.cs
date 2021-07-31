@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Catel;
-using Catel.Services;
+using ReactiveUI.Fody.Helpers;
 using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
@@ -41,7 +41,6 @@ namespace WolvenKit.ViewModels.Editor
         #region fields
 
         private readonly ILoggerService _loggerService;
-        private readonly IMessageService _messageService;
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameController;
@@ -49,17 +48,7 @@ namespace WolvenKit.ViewModels.Editor
         private List<IGameArchiveManager> _managers;
         private readonly ReadOnlyObservableCollection<GameFileTreeNode> _boundRootNodes;
 
-        private bool _stillLoading;
-
-        public bool StillLoading
-        {
-            get => _stillLoading;
-            set
-            {
-                _stillLoading = value;
-                RaisePropertyChanged(() => StillLoading);
-            }
-        }
+        [Reactive] public bool StillLoading { get; set; }
 
         #endregion fields
 
@@ -68,20 +57,12 @@ namespace WolvenKit.ViewModels.Editor
         public AssetBrowserViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService,
             INotificationService notificationService,
             IGameControllerFactory gameController
         ) : base(ToolTitle)
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => notificationService);
-            Argument.IsNotNull(() => gameController);
-
             _projectManager = projectManager;
             _loggerService = loggerService;
-            _messageService = messageService;
             _notificationService = notificationService;
             _gameController = gameController;
 
@@ -98,6 +79,20 @@ namespace WolvenKit.ViewModels.Editor
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
                 .Subscribe(OnRootNodesUpdated);
+
+            controller
+                .WhenAnyValue(x => x.IsManagerLoaded)
+                .Subscribe(b =>
+                {
+                    LoadVisibility = b ? Visibility.Collapsed : Visibility.Visible;
+                });
+
+
+            ExpandAll = ReactiveCommand.Create(() => { });
+            CollapseAll = ReactiveCommand.Create(() => { });
+            Collapse = ReactiveCommand.Create(() => { });
+            Expand = ReactiveCommand.Create(() => { });
+
         }
 
         private void OnRootNodesUpdated(IChangeSet<GameFileTreeNode, string> obj) => LeftItems = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
@@ -105,6 +100,11 @@ namespace WolvenKit.ViewModels.Editor
         #endregion ctor
 
         #region properties
+
+        public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
+        public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
+        public ReactiveCommand<Unit, Unit> Expand { get; set; }
+        public ReactiveCommand<Unit, Unit> Collapse { get; set; }
 
         // binding properties. do not make private
         public bool PreviewVisible { get; set; }
@@ -220,8 +220,6 @@ namespace WolvenKit.ViewModels.Editor
 
             _notificationService.Success($"Asset Browser is initialized");
         }
-
-        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
 
         private static IEnumerable<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
         {

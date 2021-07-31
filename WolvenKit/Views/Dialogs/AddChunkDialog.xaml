@@ -1,19 +1,24 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="dialogs:AddChunkDialogViewModel"
     x:Class="WolvenKit.Views.Dialogs.AddChunkDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:catel="http://schemas.catelproject.com"
-    xmlns:hc="https://handyorg.github.io/handycontrol">
-    <catel:UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources />
-                <hc:Theme />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </catel:UserControl.Resources>
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App">
+    
 
     <Grid>
+
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
         <Grid Margin="0,50,0,0">
             <Button
                 Width="150"
@@ -34,4 +39,4 @@
             IsEditable="True"
             Text="None" />
     </Grid>
-</catel:UserControl>
+</reactiveUi:ReactiveUserControl>

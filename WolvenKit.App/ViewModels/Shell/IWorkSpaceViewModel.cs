@@ -9,18 +9,8 @@ using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    /// <summary>
-    /// Defines the interface to the <see cref="WorkSpaceViewModel"/> which implements
-    /// AvalonDock demo specific properties, events and methods.
-    /// </summary>
     public interface IWorkSpaceViewModel
     {
-        #region Events
-
-        /// <summary>Event is raised when AvalonDock (or the user) selects a new document.</summary>
-        event EventHandler ActiveDocumentChanged;
-
-        #endregion Events
 
         #region Properties
 

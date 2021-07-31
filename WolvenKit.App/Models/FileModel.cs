@@ -3,16 +3,15 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using Catel.IoC;
+using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.Models
 {
-    public class FileModel : ObservableObject
+    public class FileModel : ReactiveObject
     {
 
         private readonly string _extension = ".default";

@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Catel.MVVM;
 using Discord;
 using Discord.WebSocket;
+using ReactiveUI;
 
 namespace WolvenKit.ViewModels.Wizards
 {
-    public class BugReportWizardViewModel : ViewModelBase
+    public class BugReportWizardViewModel : ReactiveObject
     {
         public BugReportWizardViewModel()
         {

@@ -4,19 +4,17 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Catel;
-using Catel.IoC;
-using Catel.MVVM;
-using Catel.Services;
 using DynamicData;
 using DynamicData.Binding;
 using HandyControl.Data;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -25,6 +23,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
@@ -45,9 +44,7 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public const string ToolTitle = "Project Explorer";
 
-        private readonly ICommandManager _commandManager;
         private readonly ILoggerService _loggerService;
-        private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly Tw3Controller _tw3Controller;
@@ -55,7 +52,6 @@ namespace WolvenKit.ViewModels.Editor
         public FileModel LastSelected { get { return _watcherService.LastSelect; } }
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
-        public static ProjectExplorerViewModel GlobalProjectExplorer;
 
         public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
         private readonly IObservableList<FileModel> _observableList;
@@ -67,91 +63,62 @@ namespace WolvenKit.ViewModels.Editor
         public ProjectExplorerViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService,
             IWatcherService watcherService,
-            ICommandManager commandManager,
             Tw3Controller tw3Controller
             ) : base(ToolTitle)
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => watcherService);
-            Argument.IsNotNull(() => tw3Controller);
-
             _projectManager = projectManager;
             _loggerService = loggerService;
-            _messageService = messageService;
-            _commandManager = commandManager;
             _watcherService = watcherService;
             _tw3Controller = tw3Controller;
 
             SetupCommands();
             SetupToolDefaults();
 
-            GlobalProjectExplorer = this;
-
             _watcherService.Files
                 .Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .BindToObservableList(out _observableList)
                 .Subscribe(OnNext);
+
+            ExpandAll = ReactiveCommand.Create(() => { });
+            CollapseAll = ReactiveCommand.Create(() => { });
+            CollapseChildren = ReactiveCommand.Create(() => { });
+            ExpandChildren = ReactiveCommand.Create(() => { });
         }
 
-        public bool IsTreeBeingEdited { get; set; }
-
-        private void OnNext(IChangeSet<FileModel, ulong> obj)
-        {
-            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-            StaticReferencesVM.GlobalStatusBar.FileCount = BindGrid1.Count;
-        }
-
-
-        /// <summary>
-        /// Initialize commands for this window.
-        /// </summary>
-        private void SetupCommands()
-        {
-            CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
-            CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
-            PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
-            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
-            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
-            OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
-
-            Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
-            Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);
-
-            PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
-
-            CookCommand = new RelayCommand(Cook, CanCook);
-            FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
-            ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
-            AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
-            ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
-            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
-        }
-
-        /// <summary>
-        /// Initialize Avalondock specific defaults that are specific to this tool window.
-        /// </summary>
-        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
-
+       
         #endregion constructors
 
         #region properties
 
-        public FileModel SelectedItem { get; set; }
+        public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
+        public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
+        public ReactiveCommand<Unit, Unit> CollapseChildren { get; set; }
+        public ReactiveCommand<Unit, Unit> ExpandChildren { get; set; }
 
-        public ObservableCollection<object> SelectedItems { get; set; } = new();
+
+        [Reactive] public FileModel SelectedItem { get; set; }
+
+        [Reactive] public ObservableCollection<object> SelectedItems { get; set; } = new();
 
         #endregion properties
 
         #region commands
 
         #region general commands
+
+        public ICommand OpenFileCommand { get; private set; }
+
+        private bool CanOpenFile() => true;
+
+        private void ExecuteOpenFile()
+        {
+            // TODO: Handle command logic here
+        }
+
+        
+
 
         /// <summary>
         /// Copies selected node to the clipboard.
@@ -214,17 +181,14 @@ namespace WolvenKit.ViewModels.Editor
 
         private async void ExecuteDeleteFile()
         {
-            //// TODO: close open documents
-
-            if (await _messageService.ShowAsync(
-                    "Are you sure you want to delete this?", "Are you sure?", MessageButton.YesNo) !=
-                MessageResult.Yes)
+            var selected = SelectedItems.OfType<FileModel>().ToList();
+            var delete = await Interactions.ConfirmMultiple.Handle(selected.Select(_ => _.Name));
+            if (!delete)
             {
                 return;
             }
 
             // Delete from file structure
-            var selected = SelectedItems.OfType<FileModel>().ToList();
             foreach (var item in selected)
             {
                 var fullpath = item.FullName;
@@ -329,48 +293,38 @@ namespace WolvenKit.ViewModels.Editor
 
         private async void ExecuteRenameFile()
         {
-            var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            var viewModel = new InputDialogViewModel() { Text = SelectedItem.Name };
-            await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
+            var filename = SelectedItem.FullName;
+            var newfilename = await Interactions.Rename.Handle(filename);
+
+            if (string.IsNullOrEmpty(newfilename))
             {
-                if (args.Result != true)
-                {
-                    return;
-                }
+                return;
+            }
 
-                if (args.DataContext is not Dialogs.InputDialogViewModel vm)
-                {
-                    return;
-                }
+            var newfullpath = Path.Combine(Path.GetDirectoryName(filename), newfilename);
 
-                var filename = SelectedItem.FullName;
-                var newfullpath = Path.Combine(Path.GetDirectoryName(filename), vm.Text);
+            if (File.Exists(newfullpath))
+            {
+                return;
+            }
 
-                if (File.Exists(newfullpath))
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
+                if (SelectedItem.IsDirectory)
                 {
-                    return;
+                    Directory.Move(filename, newfullpath);
                 }
+                else
+                {
+                    File.Move(filename, newfullpath);
+                }
+            }
+            catch
+            {
+            }
 
-                try
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
-                    if (SelectedItem.IsDirectory)
-                    {
-                        Directory.Move(filename, newfullpath);
-                    }
-                    else
-                    {
-                        File.Move(filename, newfullpath);
-                    }
-                }
-                catch
-                {
-                }
-                finally
-                {
-                    //SelectedItem.RaiseRequestRefresh();
-                }
-            });
+            
         }
 
         #endregion general commands
@@ -519,9 +473,47 @@ namespace WolvenKit.ViewModels.Editor
 
         #region Methods
 
-        protected override async Task CloseAsync() => await base.CloseAsync();
+        public bool IsTreeBeingEdited { get; set; }
 
-        protected override async Task InitializeAsync() => await base.InitializeAsync();
+        private void OnNext(IChangeSet<FileModel, ulong> obj)
+        {
+            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
+            StaticReferencesVM.GlobalStatusBar.FileCount = BindGrid1.Count;
+        }
+
+
+        /// <summary>
+        /// Initialize commands for this window.
+        /// </summary>
+        private void SetupCommands()
+        {
+            OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
+            CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
+            CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
+            PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
+            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
+            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
+            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
+            OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
+
+            Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
+            Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);
+
+            PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
+
+            CookCommand = new RelayCommand(Cook, CanCook);
+            FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
+            ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
+            AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
+            ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
+            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
+        }
+
+        /// <summary>
+        /// Initialize Avalondock specific defaults that are specific to this tool window.
+        /// </summary>
+        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+
 
         private async void RequestFileCook(object sender, RequestFileOpenArgs e)
         {

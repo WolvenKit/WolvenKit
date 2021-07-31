@@ -1,32 +1,31 @@
-<catel:DataWindow
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="wizards:ProjectWizardViewModel"
     x:Class="WolvenKit.Views.Wizards.ProjectWizardView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:catel="http://schemas.catelproject.com"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    AllowsTransparency="True"
+    xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
     BorderBrush="{x:Null}"
-    ShowInTaskbar="True"
     Tag="Project Wizard"
-    WindowStartupLocation="CenterScreen"
-    WindowStyle="None"
     mc:Ignorable="av">
 
-    <catel:DataWindow.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources />
-                <hc:Theme />
-                <ResourceDictionary Source="pack://application:,,,/Themes/TextBoxExtendedCustom.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </catel:DataWindow.Resources>
-
     <Grid>
+
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                    <ResourceDictionary Source="pack://application:,,,/Themes/TextBoxExtendedCustom.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
         <Border
             MinWidth="700"
             MinHeight="300"
@@ -243,4 +242,4 @@
             </Grid>
         </Border>
     </Grid>
-</catel:DataWindow>
+</reactiveUi:ReactiveUserControl>

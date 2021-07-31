@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Catel;
+
 using Catel.Fody;
-using Catel.IoC;
-using Catel.MVVM;
-using Catel.Services;
+
+
+
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Model;

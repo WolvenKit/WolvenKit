@@ -2,17 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
-using Catel.Data;
-using Catel.IoC;
-using Catel.MVVM;
-using CP77.CR2W;
-using HandyControl.Controls;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
@@ -22,7 +20,6 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED3.CR2W.SRT;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Shell;
 using ModTools = WolvenKit.Modkit.RED4.ModTools;
@@ -34,73 +31,51 @@ namespace WolvenKit.ViewModels.Editor
         #region fields
 
         private static ImageSourceConverter ISC = new ImageSourceConverter();
-        private ICommand _closeCommand = null;
-        private string _filePath = null;
-        private string _initialPath;
         
-        private bool _IsExistingInFileSystem;
+        private string _initialPath;
         private bool _isInitialized;
-        private ICommand _saveAsCommand = null;
-        private ICommand _saveCommand = null;
-        private ChunkViewModel _selectedChunk;
-        private string _textContent = string.Empty;
-        private IWorkSpaceViewModel _workSpaceViewModel = null;
-        private FileModel fileinfo;
 
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IProjectManager _projectManager;
+        private readonly ILoggerService _loggerService;
         private readonly Red4ParserService _wolvenkitFileService;
         private readonly ModTools _modTools;
 
-
+        private ICommand _saveAsCommand = null;
+        private ICommand _saveCommand = null;
+        public ReactiveCommand<Unit, Unit> Close { get; set; }
         #endregion fields
 
         #region ctors
 
         public DocumentViewModel(
-            IWorkSpaceViewModel workSpaceViewModel, FileModel model, bool isExistingInFileSystem)
-            : this(workSpaceViewModel)
-        {
-            fileinfo = model;
-            _initialPath = fileinfo.FullName;
-
-            try
-            {
-                Title = Path.GetFileName(fileinfo.FullName);
-                Header = Title;
-            }
-            catch
-            {
-
-            }
-
-            ContentId = fileinfo.FullName;
-            _IsExistingInFileSystem = isExistingInFileSystem;
-        }
-
-        private DocumentViewModel(IWorkSpaceViewModel workSpaceViewModel)
+            FileModel model)
             : this()
         {
-            _workSpaceViewModel = workSpaceViewModel;
+            var fileinfo = model;
+            _initialPath = fileinfo.FullName;
+
+            Title = Path.GetFileName(fileinfo.FullName);
+            Header = Title;
+
+            ContentId = fileinfo.FullName;
         }
 
         private DocumentViewModel()
         {
             State = DockState.Document;
-            
 
-            _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
-            _projectManager = ServiceLocator.Default.ResolveType<IProjectManager>();
-            _modTools = ServiceLocator.Default.ResolveType<ModTools>();
-            _wolvenkitFileService = ServiceLocator.Default.ResolveType<Red4ParserService>();
-
-            IsDirty = false;
+            _loggerService = Locator.Current.GetService<ILoggerService>();
+            _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
+            _projectManager = Locator.Current.GetService<IProjectManager>();
+            _modTools = Locator.Current.GetService<ModTools>();
+            _wolvenkitFileService = Locator.Current.GetService<Red4ParserService>();
 
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
             OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
-
             OpenImportCommand = new RelayCommand(ExecuteViewImports, CanViewImports);
+            Close = ReactiveCommand.Create(() => { });
         }
 
         #endregion ctors
@@ -188,17 +163,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Gets or sets the editable File.
         /// </summary>
-        [Model]
-        public IWolvenkitFile File
-        {
-            get => GetValue<IWolvenkitFile>(FileProperty);
-            private set => SetValue(FileProperty, value);
-        }
-
-        /// <summary>
-        /// Register the dependency property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData FileProperty = RegisterProperty(nameof(File), typeof(IWolvenkitFile));
+        [Reactive] public IWolvenkitFile File { get; set; }
 
         //private IWolvenkitFile File { get; set; }
 
@@ -213,10 +178,6 @@ namespace WolvenKit.ViewModels.Editor
         public List<ChunkViewModel> Chunks => File.Chunks
             .Where(_ => _.VirtualParentChunk == null)
             .Select(_ => new ChunkViewModel(_)).ToList();
-
-        /// <summary>Gets a command to close this document.</summary>
-        public ICommand CloseCommand =>
-            _closeCommand ??= new DelegateCommand<object>((p) => OnClose(), (p) => CanClose());
 
         /// <summary>
         /// Bound to the View
@@ -238,25 +199,6 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         /// <summary>
-        /// Gets the current path of the file being managed in this document viewmodel.
-        /// </summary>
-        public string FilePath
-        {
-            get => _filePath;
-            set
-            {
-                if (_filePath != value)
-                {
-                    var oldValue = _filePath;
-                    _filePath = value;
-                    RaisePropertyChanged(nameof(FilePath));
-                    RaisePropertyChanged(nameof(FileName));
-                    RaisePropertyChanged(nameof(Title));
-                }
-            }
-        }
-
-        /// <summary>
         /// Bound to the View
         /// </summary>
         public List<ICR2WImport> Imports => File.Imports;
@@ -264,56 +206,23 @@ namespace WolvenKit.ViewModels.Editor
         public void SetIsDirty(bool b) => IsDirty = b;
 
         /// <summary>
+        /// Gets the current path of the file being managed in this document viewmodel.
+        /// </summary>
+        [Reactive] public string FilePath { get; set; }
+
+        /// <summary>
         /// Gets/sets whether the documents content has been changed without saving into file system or not.
         /// </summary>
-        public bool IsExistingInFileSystem
-        {
-            get => _IsExistingInFileSystem;
-            set
-            {
-                if (_IsExistingInFileSystem != value)
-                {
-                    _IsExistingInFileSystem = value;
-                    RaisePropertyChanged(nameof(IsExistingInFileSystem));
-                }
-            }
-        }
+        [Reactive] public bool IsExistingInFileSystem { get; set; }
 
         /// <summary>
         /// Bound to the View via TreeViewBehavior.cs
         /// </summary>
-        public ChunkViewModel SelectedChunk
-        {
-            get => _selectedChunk;
-            set
-            {
-                if (_selectedChunk != value)
-                {
-                    var oldValue = _selectedChunk;
-                    _selectedChunk = value;
-                    RaisePropertyChanged(() => SelectedChunk, oldValue, value);
+        [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 
-                    //SelectEditableVariables = _selectedChunk?.ChildrenProperties;
-                }
-            }
-        }
+        [Reactive] public ICR2WImport SelectedImport { get; set; }
 
-        private ICR2WImport _selectedImport;
-        public ICR2WImport SelectedImport
-        {
-            get => _selectedImport;
-            set
-            {
-                if (_selectedImport != value)
-                {
-                    var oldValue = _selectedImport;
-                    _selectedImport = value;
-                    RaisePropertyChanged(() => SelectedImport, oldValue, value);
-                }
-            }
-        }
-
-
+        [Reactive] public bool IsDirty { get; private set; }
 
         private List<EditorViewModel> GetEditorsForFile(IWolvenkitFile file) => new();
 
@@ -342,8 +251,7 @@ namespace WolvenKit.ViewModels.Editor
                 // 2. The file is to be accessed sequentially from beginning to end.
                 // FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
-                var logger = ServiceLocator.Default.ResolveType<ILoggerService>();
-                logger.Log("Opening file: " + path + "...");
+                _loggerService.Info("Opening file: " + path + "...");
 
                 //TODO
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -362,14 +270,13 @@ namespace WolvenKit.ViewModels.Editor
                     else
                     {
                         // check game
-                        var pm = ServiceLocator.Default.ResolveType<IProjectManager>();
-                        switch (pm.ActiveProject)
+                        switch (_projectManager.ActiveProject)
                         {
                             case Cp77Project cp77proj:
                                 var cr2w = _wolvenkitFileService.TryReadCr2WFile(reader);
                                 if (cr2w == null)
                                 {
-                                    logger.LogString($"Failed to read cr2w file {path}", Logtype.Error);
+                                    _loggerService.Error($"Failed to read cr2w file {path}");
                                     return false;
                                 }
                                 cr2w.FileName = path;
@@ -420,7 +327,7 @@ namespace WolvenKit.ViewModels.Editor
                 return false;
             }
 
-            if (_isInitialized || _IsExistingInFileSystem == false)
+            if (_isInitialized)
             {
                 return true;
             }
@@ -440,8 +347,6 @@ namespace WolvenKit.ViewModels.Editor
         private bool CanSave(object parameter) => IsDirty;
 
         private bool CanSaveAs(object parameter) => IsDirty;
-
-        private void OnClose() => _workSpaceViewModel.Close(this);
 
         private void OnSave(object parameter)
         {

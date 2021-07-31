@@ -7,14 +7,13 @@ using ReactiveUI;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.Functionality.Services
 {
     /// <summary>
     /// Singleton Service
     /// </summary>
-    public class ProjectManager : ObservableObject, IProjectManager
+    public class ProjectManager : ReactiveObject, IProjectManager
     {
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly INotificationService _notificationService;

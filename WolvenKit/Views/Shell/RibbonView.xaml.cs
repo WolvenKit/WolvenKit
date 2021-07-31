@@ -4,12 +4,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Media;
 using Ab3d.DirectX;
 using Ab3d.DirectX.Client.Settings;
-using Catel.Data;
-using Catel.IoC;
+using ReactiveUI;
+using Splat;
+using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.ViewModels.Editor;
@@ -19,16 +21,141 @@ using WolvenKit.Views.Editor;
 
 namespace WolvenKit.Views.Shell
 {
-    public partial class RibbonView
+    public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
         public RibbonView()
         {
             InitializeComponent();
-            StaticReferences.RibbonViewInstance = this;
+
             var dxEngineSettingsStorage = new DXEngineSettingsStorage();
             DXEngineSettings.Initialize(dxEngineSettingsStorage);
             this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
+
+            this.WhenActivated(disposables =>
+            {
+                // contextual tabs
+                CPEOpenFileButton.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
+                OpeninFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
+                CopyFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
+                PasteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
+                DeleteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
+                RenameFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
+
+                PrevFileInfo.DataContext = Locator.Current.GetService<PropertiesViewModel>();
+
+
+                _mainViewModel = Locator.Current.GetService<WorkSpaceViewModel>();
+
+
+                _mainViewModel.ProjectExplorer.WhenAnyValue(x => x.IsVisible).Subscribe(b =>
+                    projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
+                _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsVisible).Subscribe(b =>
+                    abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
+
+                // App Menu
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.OpenProjectCommand,
+                        view => view.AppMenuOpenProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.NewProjectCommand,
+                        view => view.AppMenuNewProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.PackProjectCommand,
+                        view => view.AppMenuPackProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.NewFileCommand,
+                        view => view.AppMenuNewFileButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveFileCommand,
+                        view => view.AppMenuSaveFileButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveAllCommand,
+                        view => view.AppMenuSaveAllFileButton)
+                    .DisposeWith(disposables);
+
+                // General
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.OpenProjectCommand,
+                        view => view.GeneralOpenProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.NewProjectCommand,
+                        view => view.GeneralNewProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.PackProjectCommand,
+                        view => view.GeneralPackProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.NewFileCommand,
+                        view => view.GeneralNewFileButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveFileCommand,
+                        view => view.GeneralSaveFileButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveAllCommand,
+                        view => view.GeneralSaveAllButton)
+                    .DisposeWith(disposables);
+
+                //View
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ViewProjectExplorerCommand,
+                        view => view.ViewProjectExplorerButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ViewAssetBrowserCommand,
+                        view => view.ViewAssetBrowserButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ViewPropertiesCommand,
+                        view => view.ViewPropertiesButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ViewLogCommand,
+                        view => view.ViewLogButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ViewCodeEditorCommand,
+                        view => view.ViewCodeEditorButton)
+                    .DisposeWith(disposables);
+
+                //Options
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ShowSettingsCommand,
+                        view => view.OptionsShowSettingsButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ShowBugReportCommand,
+                        view => view.OptionsShowBugReportButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ShowFeedbackCommand,
+                        view => view.OptionsShowFeedbackButton)
+                    .DisposeWith(disposables);
+
+                // Utilities
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ShowImportExportToolCommand,
+                        view => view.UtilitiesShowImportExportToolButton)
+                    .DisposeWith(disposables);
+
+            });
         }
+
+        #region properties
+
+        private WorkSpaceViewModel _mainViewModel;
+
+        #endregion
+
+
 
         private void SetRibbonUI()
         {
@@ -37,42 +164,6 @@ namespace WolvenKit.Views.Shell
                 _ribbon.BackStageButton.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
             Trace.WriteLine("Disabled File Button");
-        }
-
-        protected override void OnViewModelChanged() => base.OnViewModelChanged();
-
-        protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        {
-            base.OnViewModelPropertyChanged(e);
-            OpenFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            OpeninFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            CopyFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            PasteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            DeleteFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            RenameFileContext.DataContext = (ProjectExplorerViewModel)ServiceLocator.Default.ResolveType<ProjectExplorerViewModel>();
-            PrevFileInfo.DataContext = (PropertiesViewModel)ServiceLocator.Default.ResolveType<PropertiesViewModel>();
-
-            if (e is not AdvancedPropertyChangedEventArgs property)
-            {
-                return;
-            }
-
-            switch (property.PropertyName)
-            {
-                //case "SelectedTheme":
-                //    if (property.NewValue is Color accentColor)
-                //    {
-                //        //var color = new SolidColorBrush(accentColor);
-                //        ControlzEx.Theming.ThemeManager.Current.ChangeTheme(
-                //            Application.Current,
-                //            ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", accentColor, false));
-                //    }
-
-                //    break;
-
-                default:
-                    break;
-            }
         }
 
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -148,21 +239,27 @@ namespace WolvenKit.Views.Shell
 
         private void RibbonButton_Click(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
 
-        private void ExandAllNodesContext_Click(object sender, RoutedEventArgs e) => ProjectExplorerView.GlobalPEView.ExpandAll();
+        private void ExandAllNodesContext_Click(object sender, RoutedEventArgs e) =>
+            _mainViewModel.ProjectExplorer.ExpandAll.Execute().Subscribe();
 
-        private void collapseAllNodesContext_Click(object sender, RoutedEventArgs e) => ProjectExplorerView.GlobalPEView.CollapseAll();
+        private void collapseAllNodesContext_Click(object sender, RoutedEventArgs e) =>
+            _mainViewModel.ProjectExplorer.CollapseAll.Execute().Subscribe();
 
-        private void CollapseChildrenContext_Click(object sender, RoutedEventArgs e) => ProjectExplorerView.GlobalPEView.CollapseChildren();
+        private void CollapseChildrenContext_Click(object sender, RoutedEventArgs e) =>
+            _mainViewModel.ProjectExplorer.CollapseChildren.Execute().Subscribe();
 
-        private void ExandChildrenContext_Click(object sender, RoutedEventArgs e) => ProjectExplorerView.GlobalPEView.ExpandChildren();
+        private void ExandChildrenContext_Click(object sender, RoutedEventArgs e) =>
+            _mainViewModel.ProjectExplorer.ExpandChildren.Execute().Subscribe();
 
-        private void ExpandAllAB_Click(object sender, RoutedEventArgs e) => AssetBrowserView.GlobalABView.ExpandAllNodes();
 
-        private void CollapseAllAB_Click(object sender, RoutedEventArgs e) => AssetBrowserView.GlobalABView.CollapseAllNodes();
 
-        private void ExpandSingleAB_Click(object sender, RoutedEventArgs e) => AssetBrowserView.GlobalABView.ExpandAllNodes();
+        private void ExpandAllAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.ExpandAll.Execute().Subscribe();
 
-        private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => AssetBrowserView.GlobalABView.CollapseNode();
+        private void CollapseAllAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.CollapseAll.Execute().Subscribe();
+
+        private void ExpandSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Expand.Execute().Subscribe();
+
+        private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Collapse.Execute().Subscribe();
 
         /// <summary>
         /// Closes material drawer

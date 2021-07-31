@@ -1,229 +1,93 @@
 using System.Windows.Media;
-using Catel.Data;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+
 
 namespace WolvenKit.Models.Wizards
 {
     /// <summary>
     /// Keeps track of which game was selected by the user during setting up a project.
     /// </summary>
-    public class PublishWizardModel : ModelBase
+    public class PublishWizardModel : ReactiveObject
     {
-        #region fields
 
-        private string _youtubeLink = "";
-        private string _twitchLink = "";
-        private string _twitterLink = "";
-        private string _facebookLink = "";
-        private string _discordLink = "";
-        private string _websiteLink = "";
-        private string _donateLink = "";
-        private string _license = "";
-        private string _description = "";
-        private string _largeDescription = "";
-        private ImageBrush _profileImageBrush = default(ImageBrush);
-        private string _profileImagePath = "";
-        private Color _headerBackground;
-        private Color _iconBackground;
-        private bool _useBlackText = false;
-
-        #endregion fields
 
         #region properties
 
         /// <summary>
         /// Gets/Sets the youtube link.
         /// </summary>
-        public string YoutubeLink
-        {
-            get => _youtubeLink;
-            set
-            {
-                _youtubeLink = value;
-                RaisePropertyChanged(nameof(YoutubeLink));
-            }
-        }
+        [Reactive] public string YoutubeLink { get; set; }
 
         /// <summary>
         /// Gets/Sets the twitch link.
         /// </summary>
-        public string TwitchLink
-        {
-            get => _twitchLink;
-            set
-            {
-                _twitchLink = value;
-                RaisePropertyChanged(nameof(TwitchLink));
-            }
-        }
+        [Reactive] public string TwitchLink { get; set; }
 
         /// <summary>
         /// Gets/Sets the twitter link.
         /// </summary>
-        public string TwitterLink
-        {
-            get => _twitterLink;
-            set
-            {
-                _twitterLink = value;
-                RaisePropertyChanged(nameof(TwitterLink));
-            }
-        }
+        [Reactive] public string TwitterLink { get; set; }
 
         /// <summary>
         /// Gets/Sets the facebook link.
         /// </summary>
-        public string FacebookLink
-        {
-            get => _facebookLink;
-            set
-            {
-                _facebookLink = value;
-                RaisePropertyChanged(nameof(FacebookLink));
-            }
-        }
+        [Reactive] public string FacebookLink { get; set; }
 
         /// <summary>
         /// Gets/Sets the discord link.
         /// </summary>
-        public string DiscordLink
-        {
-            get => _discordLink;
-            set
-            {
-                _discordLink = value;
-                RaisePropertyChanged(nameof(DiscordLink));
-            }
-        }
+        [Reactive] public string DiscordLink { get; set; }
 
         /// <summary>
         /// Gets/Sets the website link.
         /// </summary>
-        public string WebsiteLink
-        {
-            get => _websiteLink;
-            set
-            {
-                _websiteLink = value;
-                RaisePropertyChanged(nameof(WebsiteLink));
-            }
-        }
+        [Reactive] public string WebsiteLink { get; set; }
 
         /// <summary>
         /// Gets/Sets the donate link.
         /// </summary>
-        public string DonateLink
-        {
-            get => _donateLink;
-            set
-            {
-                _donateLink = value;
-                RaisePropertyChanged(nameof(DonateLink));
-            }
-        }
+        [Reactive] public string DonateLink { get; set; }
 
         /// <summary>
         /// Gets/Sets the license.
         /// </summary>
-        public string License
-        {
-            get => _license;
-            set
-            {
-                _license = value;
-                RaisePropertyChanged(nameof(License));
-            }
-        }
+        [Reactive] public string License { get; set; }
 
         /// <summary>
         /// Gets/Sets the description.
         /// </summary>
-        public string Description
-        {
-            get => _description;
-            set
-            {
-                _description = value;
-                RaisePropertyChanged(nameof(Description));
-            }
-        }
+        [Reactive] public string Description { get; set; }
 
         /// <summary>
         /// Gets/Sets the large description.
         /// </summary>
-        public string LargeDescription
-        {
-            get => _largeDescription;
-            set
-            {
-                _largeDescription = value;
-                RaisePropertyChanged(nameof(LargeDescription));
-            }
-        }
+        [Reactive] public string LargeDescription { get; set; }
 
         /// <summary>
         /// Gets/Sets the author's profile image brush.
         /// </summary>
-        public ImageBrush ProfileImageBrush
-        {
-            get => _profileImageBrush;
-            set
-            {
-                _profileImageBrush = value;
-                RaisePropertyChanged(nameof(ProfileImageBrush));
-            }
-        }
+        [Reactive] public ImageBrush ProfileImageBrush { get; set; } = default(ImageBrush);
 
         /// <summary>
         /// Gets/Sets the author's profile image path.
         /// </summary>
-        public string ProfileImageBrushPath
-        {
-            get => _profileImagePath;
-            set
-            {
-                _profileImagePath = value;
-                RaisePropertyChanged(nameof(ProfileImageBrushPath));
-            }
-        }
+        [Reactive] public string ProfileImageBrushPath { get; set; }
 
         /// <summary>
         /// Gets/Sets the header background color.
         /// </summary>
-        public Color HeaderBackground
-        {
-            get => _headerBackground;
-            set
-            {
-                _headerBackground = value;
-                RaisePropertyChanged(nameof(HeaderBackground));
-            }
-        }
+        [Reactive] public Color HeaderBackground { get; set; }
 
         /// <summary>
         /// Gets/Sets the icon background color.
         /// </summary>
-        public Color IconBackground
-        {
-            get => _iconBackground;
-            set
-            {
-                _iconBackground = value;
-                RaisePropertyChanged(nameof(IconBackground));
-            }
-        }
+        [Reactive] public Color IconBackground { get; set; }
 
         /// <summary>
         /// Gets/Sets the use black text property.
         /// </summary>
-        public bool UseBlackText
-        {
-            get => _useBlackText;
-            set
-            {
-                _useBlackText = value;
-                RaisePropertyChanged(nameof(UseBlackText));
-            }
-        }
+        [Reactive] public bool UseBlackText { get; set; }
 
         #endregion properties
     }

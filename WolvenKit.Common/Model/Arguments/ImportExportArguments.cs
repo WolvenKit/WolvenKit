@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ReactiveUI;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
@@ -163,7 +164,7 @@ namespace WolvenKit.Common.Model.Arguments
     /// <summary>
     /// Import Export Arguments
     /// </summary>
-    public abstract class ImportExportArgs : ObservableObject
+    public abstract class ImportExportArgs : ReactiveObject
     {
     }
 

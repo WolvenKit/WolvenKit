@@ -1,8 +1,8 @@
-using Catel.MVVM;
+using ReactiveUI;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
-    public class RenameDialogViewModel : ViewModelBase
+    public class RenameDialogViewModel : ReactiveObject
     {
     }
 }
