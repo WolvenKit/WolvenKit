@@ -22,6 +22,10 @@ namespace WolvenKit.Views.Wizards
         public BugReportWizardView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<BugReportWizardViewModel>();
+            DataContext = ViewModel;
+
             TestConnect();
         }
 

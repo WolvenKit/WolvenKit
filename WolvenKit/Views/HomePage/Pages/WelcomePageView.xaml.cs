@@ -1,7 +1,9 @@
 using System;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using AdonisUI.Controls;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.HomePage.Pages;
@@ -14,6 +16,9 @@ namespace WolvenKit.Views.HomePage.Pages
         public WelcomePageView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<WelcomePageViewModel>();
+
             InitWebView2();
 
             this.WhenActivated(disposables =>
@@ -45,6 +50,30 @@ namespace WolvenKit.Views.HomePage.Pages
                     vm => vm.OpenLinkCommand,
                     v => v.PatreonLinkButton,
                     vm => vm.PatreonLink);
+
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.NewProjectCommand,
+                        view => view.NewProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.OpenProjectCommand,
+                        view => view.OpenProjectButton)
+                    .DisposeWith(disposables);
+
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SettingsCommand,
+                        view => view.SettingsButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.TutorialsCommand,
+                        view => view.TutorialsButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.WikiCommand,
+                        view => view.WikiButton)
+                    .DisposeWith(disposables);
 
 
             });

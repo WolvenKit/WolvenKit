@@ -16,6 +16,15 @@ namespace WolvenKit.Views.Shell
         public StatusBarView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<StatusBarViewModel>();
+            DataContext = ViewModel;
+
+            this.WhenActivated(disposables =>
+            {
+
+            });
+
         }
 
         #endregion Constructors

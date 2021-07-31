@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Media;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.Edit;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
@@ -14,9 +15,13 @@ namespace WolvenKit.Views.Editor
         public CodeEditorView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<CodeEditorViewModel>();
+            DataContext = ViewModel;
+
             //customLanguage.Lexem = this.Resources["pythonLanguageLexems"] as LexemCollection;
 
-          //  customLanguage.Formats = this.Resources["pythonLanguageFormats"] as FormatsCollection;
+            //  customLanguage.Formats = this.Resources["pythonLanguageFormats"] as FormatsCollection;
         }
 
         #endregion Constructors

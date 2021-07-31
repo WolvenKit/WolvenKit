@@ -16,6 +16,7 @@ using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -35,7 +36,8 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
 
-
+            ViewModel = Locator.Current.GetService<PropertiesViewModel>();
+            DataContext = ViewModel;
 
             Helpers.LoadAssimpNativeLibrary();
 

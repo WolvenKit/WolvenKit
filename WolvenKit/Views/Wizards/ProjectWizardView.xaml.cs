@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Editor;
@@ -14,6 +15,9 @@ namespace WolvenKit.Views.Wizards
         public ProjectWizardView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<ProjectWizardViewModel>();
+            DataContext = ViewModel;
 
             this.WhenAnyValue(x => x.ViewModel)
                 .BindTo(this, x => x.DataContext);

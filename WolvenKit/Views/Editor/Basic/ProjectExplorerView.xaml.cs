@@ -11,6 +11,7 @@ using HandyControl.Data;
 using ReactiveUI;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
@@ -35,7 +36,8 @@ namespace WolvenKit.Views.Editor
             InitializeComponent();
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
 
-
+            ViewModel = Locator.Current.GetService<ProjectExplorerViewModel>();
+            DataContext = ViewModel;
 
             this.WhenActivated(disposables =>
             {
@@ -61,6 +63,11 @@ namespace WolvenKit.Views.Editor
                 Observable
                     .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
                     .Subscribe(_ => OnCellDoubleTapped(_.Sender, _.EventArgs as TreeGridCellDoubleTappedEventArgs))
+                    .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.BindGrid1,
+                        view => view.TreeGrid.ItemsSource)
                     .DisposeWith(disposables);
 
 
@@ -230,7 +237,7 @@ namespace WolvenKit.Views.Editor
 
         public void CollapseChildren()
         {
-            if (ViewModel is not ProjectExplorerViewModel viewModel)
+            if (ViewModel is not { } viewModel)
             {
                 return;
             }
@@ -328,17 +335,6 @@ namespace WolvenKit.Views.Editor
                 //StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 //StaticReferences.XoWindow.Show();
             }
-        }
-
-        private void TreeGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
-        {
-            SfTreeGrid sfTreeGrid = sender as SfTreeGrid;
-            if (sfTreeGrid.SelectedItem == null)
-            {
-                return;
-            }
-            var tempselect = sfTreeGrid.SelectedItem as FileModel;
-            StaticReferencesVM.GlobalStatusBar.SelectedFilename = tempselect.Name;
         }
     }
 }

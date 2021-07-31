@@ -1,10 +1,9 @@
-
-
 using ReactiveUI;
+using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
-    public class WebsitePageViewModel : ReactiveObject
+    public class WebsitePageViewModel : PageViewModel
     {
     }
 }

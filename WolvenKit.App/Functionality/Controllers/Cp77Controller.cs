@@ -4,37 +4,39 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Xml.Linq;
-
-using CP77.CR2W;
 using DynamicData;
 using ProtoBuf;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Bundles;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.ViewModels.Editor;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.Functionality.Controllers
 {
     public class Cp77Controller : ReactiveObject, IGameController
     {
+        #region fields
+
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
+
+        private static ArchiveManager ArchiveManager { get; set; }
+
+        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+
+        #endregion
 
         public Cp77Controller(ILoggerService loggerService,
             IProjectManager projectManager,
@@ -54,13 +56,10 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Properties
 
-        private static ArchiveManager ArchiveManager { get; set; }
-
-        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+        [Reactive] public bool IsManagerLoaded { get; set; }
 
         public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
 
-        [Reactive] public bool IsManagerLoaded { get; set; }
 
         #endregion Properties
 

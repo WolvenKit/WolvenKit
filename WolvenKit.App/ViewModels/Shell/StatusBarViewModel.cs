@@ -11,21 +11,26 @@ namespace WolvenKit.ViewModels.Shell
         #region Fields
 
         private readonly ISettingsManager _settingsManager;
+        private readonly WorkSpaceViewModel _workSpaceViewModel;
+
+        
+        
+
 
         #endregion Fields
 
         #region Constructors
 
         public StatusBarViewModel(
-            ISettingsManager settingsManager
+            ISettingsManager settingsManager,
+            WorkSpaceViewModel workSpaceViewModel
             )
         {
             _settingsManager = settingsManager;
-            StaticReferencesVM.GlobalStatusBar = this;
+            _workSpaceViewModel = workSpaceViewModel;
 
             CurrentProject = "No project loaded, create or load an project to be able to view the game files...";
 
-            StaticReferencesVM.GlobalStatusBar = this;
 
             var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
             if (Connected)

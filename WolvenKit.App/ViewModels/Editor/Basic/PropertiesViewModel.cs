@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using CP77.CR2W;
-using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
@@ -28,10 +27,17 @@ namespace WolvenKit.ViewModels.Editor
 {
     public class PropertiesViewModel : ToolViewModel
     {
+        #region fields
+
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly MeshTools _meshTools;
         private readonly ModTools _modTools;
+
+        public const string ToolContentId = "Properties_Tool";
+        public const string ToolTitle = "Properties";
+
+        #endregion
 
         /// <summary>
         /// Constructor PropertiesViewModel
@@ -63,101 +69,69 @@ namespace WolvenKit.ViewModels.Editor
             PauseAudioCommand = new RelayCommand(ExecutePausePlaying, CanPausePlaying);
         }
 
+        
+
+        #region properties
+
+
+        /// <summary>
+        /// Selected Item from Project Explorer If Available.
+        /// </summary>
+        ///
+        [Reactive] public bool canShowPrev { get; set; } = true;
+
+        [Reactive] public FileModel PE_SelectedItem { get; set; }
+
+        /// <summary>
+        /// Selected Item from Asset Browser If Available.
+        /// </summary>
+        [Reactive] public FileEntryViewModel AB_SelectedItem { get; set; }
+
+        /// <summary>
+        /// Decides if Asset browser Selected File info should be visible.
+        /// </summary>
+        [Reactive] public bool AB_FileInfoVisible { get; set; }
+
+        /// <summary>
+        /// Decides if Project Explorer Selected file info should be Visible.
+        /// </summary>
+        [Reactive] public bool PE_FileInfoVisible { get; set; }
+
+        /// <summary>
+        /// Decides if Asset browser Mesh preview should be visible.
+        /// </summary>
+        [Reactive] public bool AB_MeshPreviewVisible { get; set; }
+
+        /// <summary>
+        /// Decides if Project Explorer Mesh preview should be visible.
+        /// </summary>
+        [Reactive] public bool PE_MeshPreviewVisible { get; set; }
+
+        /// <summary>
+        /// Decides if the mesh previewer Tab should be visible or not.
+        /// </summary>
+        [Reactive] public bool IsMeshPreviewVisible { get; set; }
+
+        [Reactive] public bool IsAudioPreviewVisible { get; set; }
+        [Reactive] public bool IsImagePreviewVisible { get; set; }
+        [Reactive] public bool IsVideoPreviewVisible { get; set; }
+
+        [Reactive] public string ExeCommand { get; set; }
+
+        [Reactive] public string LoadedModelPath { get; set; }
+
+        [Reactive] public BitmapSource LoadedBitmapFrame { get; set; }
+
+        #endregion properties
+
+        #region commands
+
         public ICommand PlayAudioCommand { get; private set; }
 
         public ICommand PauseAudioCommand { get; private set; }
 
         public ICommand StopAudioCommand { get; private set; }
 
-        private bool CanStopPlaying() => true;
-
-        private void ExecuteStopPlaying()
-        {
-            mediaPlayer.Stop();
-            mediaPlayer.Position = new TimeSpan(0);
-        }
-
-        private bool CanStartPlaying() => true;
-
-        private void ExecuteStartPlaying()
-        {
-            mediaPlayer.Play();
-        }
-
-        private bool CanPausePlaying() => true;
-
-        private void ExecutePausePlaying()
-        {
-            mediaPlayer.Pause();
-        }
-
-        #region properties
-
-        /// <summary>
-        /// Resets stuff each time a new item is selected.
-        /// </summary>
-        public void SetToNullAndResetVisibility()
-        {
-            // Asset Browser
-            AB_SelectedItem = null;
-            AB_FileInfoVisible = false;
-            AB_MeshPreviewVisible = false;
-
-            // Project Explorer
-            PE_SelectedItem = null;
-            PE_FileInfoVisible = false;
-            PE_MeshPreviewVisible = false;
-
-            IsAudioPreviewVisible = false;
-
-            IsImagePreviewVisible = false;
-        }
-
-        /// <summary>
-        /// Selected Item from Project Explorer If Available.
-        /// </summary>
-        ///
-
-        public bool canShowPrev { get; set; } = true;
-        public FileModel PE_SelectedItem { get; set; }
-
-        /// <summary>
-        /// Selected Item from Asset Browser If Available.
-        /// </summary>
-        public FileEntryViewModel AB_SelectedItem { get; set; }
-
-        /// <summary>
-        /// Decides if Asset browser Selected File info should be visible.
-        /// </summary>
-        public bool AB_FileInfoVisible { get; set; }
-
-        /// <summary>
-        /// Decides if Project Explorer Selected file info should be Visible.
-        /// </summary>
-        public bool PE_FileInfoVisible { get; set; }
-
-        /// <summary>
-        /// Decides if Asset browser Mesh preview should be visible.
-        /// </summary>
-        public bool AB_MeshPreviewVisible { get; set; }
-
-        /// <summary>
-        /// Decides if Project Explorer Mesh preview should be visible.
-        /// </summary>
-        public bool PE_MeshPreviewVisible { get; set; }
-
-        /// <summary>
-        /// Decides if the mesh previewer Tab should be visible or not.
-        /// </summary>
-        public bool IsMeshPreviewVisible { get; set; }
-
-        public bool IsAudioPreviewVisible { get; set; }
-        public bool IsImagePreviewVisible { get; set; }
-        public bool IsVideoPreviewVisible { get; set; }
-
-        #endregion properties
-
-        #region commands
 
         /// <summary>
         /// Opens a physical file in WolvenKit.
@@ -296,17 +270,33 @@ namespace WolvenKit.ViewModels.Editor
             DecideForMeshPreview();
         }
 
-        public string ExeCommand { get; set; }
-
-        public string LoadedModelPath { get; set; }
-
         public void LoadModel(string s) => LoadedModelPath = s;
-
-        public BitmapSource LoadedBitmapFrame { get; set; }
 
         public void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;
 
         #endregion commands
+
+        #region methods
+
+        /// <summary>
+        /// Resets stuff each time a new item is selected.
+        /// </summary>
+        public void SetToNullAndResetVisibility()
+        {
+            // Asset Browser
+            AB_SelectedItem = null;
+            AB_FileInfoVisible = false;
+            AB_MeshPreviewVisible = false;
+
+            // Project Explorer
+            PE_SelectedItem = null;
+            PE_FileInfoVisible = false;
+            PE_MeshPreviewVisible = false;
+
+            IsAudioPreviewVisible = false;
+
+            IsImagePreviewVisible = false;
+        }
 
         /// <summary>
         /// Decides if the Mesh Previewer should be visible or not.
@@ -319,24 +309,35 @@ namespace WolvenKit.ViewModels.Editor
             { IsMeshPreviewVisible = false; }
         }
 
-        #region ToolViewModel
+        private bool CanStopPlaying() => true;
+
+        private void ExecuteStopPlaying()
+        {
+            mediaPlayer.Stop();
+            mediaPlayer.Position = new TimeSpan(0);
+        }
+
+        private bool CanStartPlaying() => true;
+
+        private void ExecuteStartPlaying()
+        {
+            mediaPlayer.Play();
+        }
+
+        private bool CanPausePlaying() => true;
+
+        private void ExecutePausePlaying()
+        {
+            mediaPlayer.Pause();
+        }
 
         /// <summary>
         /// Initialize Syncfusion specific defaults that are specific to this tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
 
-        /// <summary>
-        /// Identifies the <see ref="ContentId"/> of this tool window.
-        /// </summary>
-        public const string ToolContentId = "Properties_Tool";
+        #endregion
 
-        /// <summary>
-        /// Identifies the caption string used for this tool window.
-        /// </summary>
-        public const string ToolTitle = "Properties";
-
-        #endregion ToolViewModel
 
         #region AudioPreview
 

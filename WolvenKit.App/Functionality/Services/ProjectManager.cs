@@ -1,9 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -38,9 +41,28 @@ namespace WolvenKit.Functionality.Services
             });
         }
 
-        public bool IsProjectLoaded { get; set; }
+        #region properties
 
-        public EditorProject ActiveProject { get; set; }
+        [Reactive] public bool IsProjectLoaded { get; set; }
+
+        [Reactive] public EditorProject ActiveProject { get; set; }
+
+        #endregion
+
+        #region commands
+
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
+
+
+        #endregion
+
+
+
+
+
+
+
+        #region methods
 
         public async Task<bool> SaveAsync() => await Save();
 
@@ -159,6 +181,15 @@ namespace WolvenKit.Functionality.Services
 
             return true;
         }
+
+        #endregion
+
+
+        
+
+
+
+
 
         public class CP77Mod
         {

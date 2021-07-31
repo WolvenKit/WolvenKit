@@ -4,6 +4,7 @@ using DynamicData;
 using NodeNetwork.Toolkit.ValueNode;
 using NodeNetwork.ViewModels;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
 
@@ -16,6 +17,9 @@ namespace WolvenKit.Views.Editor.VisualEditor
         public VisualEditorView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<VisualEditorViewModel>();
+            DataContext = ViewModel;
         }
 
         #endregion Constructors

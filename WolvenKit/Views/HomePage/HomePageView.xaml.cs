@@ -6,6 +6,7 @@ using Splat;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
+using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
@@ -15,7 +16,6 @@ namespace WolvenKit.Views.HomePage
     {
         #region Fields
 
-        public static HomePageView GlobalHomePage;
 
         #endregion Fields
 
@@ -25,7 +25,9 @@ namespace WolvenKit.Views.HomePage
         public HomePageView()
         {
             InitializeComponent();
-            GlobalHomePage = this;
+
+            ViewModel = Locator.Current.GetService<HomePageViewModel>();
+            DataContext = ViewModel;
 
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();

@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.Controls.Layout;
 using WolvenKit.ViewModels.HomePage.Pages;
 
@@ -13,7 +14,11 @@ namespace WolvenKit.Views.HomePage.Pages
         public SettingsPageView()
         {
             InitializeComponent();
-           AccordionItems = SfAccordion.Items;
+
+            ViewModel = Locator.Current.GetService<SettingsPageViewModel>();
+            DataContext = ViewModel;
+
+            AccordionItems = SfAccordion.Items;
         }
 
         #endregion Constructors

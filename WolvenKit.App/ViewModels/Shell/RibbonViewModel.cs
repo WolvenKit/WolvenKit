@@ -1,20 +1,13 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using ProtoBuf.Meta;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.Core;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
@@ -24,10 +17,10 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region fields
 
-        public static RibbonViewModel GlobalRibbonVM;
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
+        private readonly WorkSpaceViewModel _mainViewModel;
 
         #endregion fields
 
@@ -36,9 +29,11 @@ namespace WolvenKit.ViewModels.Shell
         public RibbonViewModel(
             ISettingsManager settingsManager,
             IProjectManager projectManager,
-            ILoggerService loggerService
+            ILoggerService loggerService,
+            WorkSpaceViewModel workSpaceViewModel
         )
         {
+            _mainViewModel = workSpaceViewModel;
 
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -46,19 +41,23 @@ namespace WolvenKit.ViewModels.Shell
 
             StartScreenShown = false;
             BackstageIsOpen = true;
-            GlobalRibbonVM = this;
 
             //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
             AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
+
+            OpenProjectCommand =
+                ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
+
+            PackProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackModCommand.SafeExecute());
         }
 
         #endregion constructors
 
         #region commands
 
-        public ReactiveCommand<string, Unit> OpenProjectCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> NewProjectCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> PackProjectCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
+        public ReactiveCommand<string, Unit> NewProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> PackProjectCommand { get; }
 
         public ReactiveCommand<string, Unit> NewFileCommand = ReactiveCommand.Create<string>(link => { });
         public ReactiveCommand<string, Unit> SaveFileCommand = ReactiveCommand.Create<string>(link => { });
@@ -87,12 +86,11 @@ namespace WolvenKit.ViewModels.Shell
             Visible,
         }
 
+        [Reactive] public bool StartScreenShown { get; set; }
 
-        public bool BackstageIsOpen { get; set; }
-        public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
+        [Reactive] public bool BackstageIsOpen { get; set; }
 
-        public string ProjectExplorerContextualTabGroupVisibilityStr =>
-            ProjectExplorerContextualTabGroupVisibility.ToString();
+        [Reactive] public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
 
         //private Color _selectedTheme;
         //public Color SelectedTheme
@@ -113,7 +111,9 @@ namespace WolvenKit.ViewModels.Shell
         //    }
         //}
 
-        public bool StartScreenShown { get; set; }
+
+        public string ProjectExplorerContextualTabGroupVisibilityStr =>
+            ProjectExplorerContextualTabGroupVisibility.ToString();
 
         #endregion properties
 

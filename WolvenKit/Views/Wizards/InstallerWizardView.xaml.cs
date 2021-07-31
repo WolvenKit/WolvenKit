@@ -1,4 +1,5 @@
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Wizards;
 
@@ -11,6 +12,9 @@ namespace WolvenKit.Views.Wizards
         public InstallerWizardView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<InstallerWizardViewModel>();
+            DataContext = ViewModel;
         }
 
         #endregion Constructors

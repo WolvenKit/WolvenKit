@@ -107,40 +107,41 @@ namespace WolvenKit.ViewModels.Editor
         public ReactiveCommand<Unit, Unit> Collapse { get; set; }
 
         // binding properties. do not make private
-        public bool PreviewVisible { get; set; }
+        [Reactive] public bool PreviewVisible { get; set; }
 
-        public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
-        public Visibility LoadVisibility { get; set; } = Visibility.Visible;
+        [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
+
+        [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
         /// <summary>
         /// Bound RootNodes to left navigation
         /// </summary>
-        public ObservableCollection<GameFileTreeNode> LeftItems { get; set; } = new();
+        [Reactive] public ObservableCollection<GameFileTreeNode> LeftItems { get; set; } = new();
 
         /// <summary>
         /// Selected Root node in left navigation
         /// </summary>
-        public object LeftSelectedItem { get; set; }
+        [Reactive] public object LeftSelectedItem { get; set; }
 
         /// <summary>
         /// Selected File in right navigaiton
         /// </summary>
-        public FileEntryViewModel RightSelectedItem { get; set; }
+        [Reactive] public FileEntryViewModel RightSelectedItem { get; set; }
 
         /// <summary>
         /// Items (Files) inside a Node (Folder) bound to right navigation
         /// </summary>
-        public IEnumerable<FileEntryViewModel> RightItems { get; set; }
+        [Reactive] public IEnumerable<FileEntryViewModel> RightItems { get; set; }
 
         /// <summary>
         /// Selected Files in right navigaiton
         /// </summary>
-        public ObservableCollection<object> RightSelectedItems { get; set; }
+        [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; }
 
-        public List<string> Extensions { get; set; }
-        public List<string> Classes { get; set; }
-        public string SelectedClass { get; set; }
-        public string SelectedExtension { get; set; }
+        [Reactive] public List<string> Extensions { get; set; }
+        [Reactive] public List<string> Classes { get; set; }
+        [Reactive] public string SelectedClass { get; set; }
+        [Reactive] public string SelectedExtension { get; set; }
 
         #endregion properties
 

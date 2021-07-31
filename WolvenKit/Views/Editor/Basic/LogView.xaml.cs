@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using ControlzEx.Theming;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -22,7 +23,8 @@ namespace WolvenKit.Views.Editor
         {
             InitializeComponent();
 
-
+            ViewModel = Locator.Current.GetService<LogViewModel>();
+            DataContext = ViewModel;
         }
 
         #endregion Constructors

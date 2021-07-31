@@ -1,7 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using CP77.CR2W;
 using HandyControl.Tools;
@@ -16,7 +14,6 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Modkit.RED3;
 using WolvenKit.Modkit.RED4;
@@ -48,7 +45,7 @@ namespace WolvenKit
     public partial class App //: Application
     {
         // Determines if the application is in design mode.
-        public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
+        //public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
         // Constructor #1
         static App() { }
@@ -64,8 +61,8 @@ namespace WolvenKit
         {
             // check prerequisites
             // check Webview2
-            string keyName = @"SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\ClientState\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}";
-            string keyvalue = "pv";
+            var keyName = @"SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\ClientState\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}";
+            var keyvalue = "pv";
             StaticReferences.IsWebView2Enabled = Models.Commonfunctions.RegistryValueExists(Microsoft.Win32.RegistryHive.LocalMachine, keyName, keyvalue);
 
             // Startup speed boosting (HC)
@@ -78,53 +75,35 @@ namespace WolvenKit
 
             Initializations.InitializeWebview2();
 
-            loggerService.Info("Initializing MVVM");
-
             loggerService.Info("Initializing Theme Helper");
             Initializations.InitializeThemeHelper();
-
 
             loggerService.Info("Initializing Shell");
             /*await*/ Initializations.InitializeShell(settings);
             
-            
-
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
             loggerService.Info("Initializing Github API");
             Initializations.InitializeGitHub();
 
+            // Some things can only be initialized after base.OnStartup(e);
             loggerService.Info("Calling base.OnStartup");
-            base.OnStartup(e); // Some things can only be initialized after base.OnStartup(e);
+            base.OnStartup(e); 
 
             loggerService.Info("Initializing NodeNetwork.");
             NNViewRegistrar.RegisterSplat();
 
-            loggerService.Info("Initializing Notifications.");
 
-            loggerService.Info("Check for new updates");
-            //Helpers.CheckForUpdates();
             Initializations.InitializeBk(settings);
 
-            //Window window = new Window();
-            //window.AllowsTransparency = true;
-            //window.Background = new SolidColorBrush(Colors.Transparent);
-            //window.Content = new HomePageView();
-            //window.WindowStyle = WindowStyle.None;
-            //window.Show();
-
 
         }
 
-        protected override void OnExit(ExitEventArgs e)
-        {
-            base.OnExit(e);
-        }
-
-        public IServiceProvider Container { get; private set; }
+        private IServiceProvider Container { get; set; }
         private IHost _host;
-        void Init()
+
+        private void Init()
         {
             // Set application licenses.
             Initializations.InitializeLicenses();
@@ -184,14 +163,23 @@ namespace WolvenKit
                     services.AddSingleton<IViewFor<WorkSpaceViewModel>, MainView>();
 
                     // register views
+                    #region shell
+
+                    services.AddSingleton<RibbonViewModel>();
+                    services.AddSingleton<IViewFor<RibbonViewModel>, RibbonView>();
+
+                    services.AddSingleton<StatusBarViewModel>();
+                    services.AddSingleton<IViewFor<StatusBarViewModel>, StatusBarView>();
+
+                    #endregion
 
                     #region dialogs
 
-                    services.AddSingleton<AddChunkDialogViewModel>();
+                    services.AddTransient<AddChunkDialogViewModel>();
                     services.AddSingleton<IViewFor<AddChunkDialogViewModel>, AddChunkDialog>();
 
-                    services.AddSingleton<InputDialogViewModel>();
-                    services.AddSingleton<IViewFor<InputDialogViewModel>, InputDialogView>();
+                    services.AddTransient<InputDialogViewModel>();
+                    services.AddTransient<IViewFor<InputDialogViewModel>, InputDialogView>();
 
                     //services.AddSingleton<MaterialsRepositoryDialogViewModel>();
                     //services.AddSingleton<IViewFor<MaterialsRepositoryDialogViewModel>, MaterialsRepositoryDialog>();
@@ -204,53 +192,53 @@ namespace WolvenKit
                     #region editor
 
                     services.AddSingleton<AssetBrowserViewModel>();
-                    services.AddSingleton<IViewFor<AssetBrowserViewModel>, AssetBrowserView>();
+                    services.AddTransient<IViewFor<AssetBrowserViewModel>, AssetBrowserView>();
 
                     services.AddSingleton<LogViewModel>();
-                    services.AddSingleton<IViewFor<LogViewModel>, LogView>();
+                    services.AddTransient<IViewFor<LogViewModel>, LogView>();
 
                     services.AddSingleton<ProjectExplorerViewModel>();
-                    services.AddSingleton<IViewFor<ProjectExplorerViewModel>, ProjectExplorerView>();
+                    services.AddTransient<IViewFor<ProjectExplorerViewModel>, ProjectExplorerView>();
 
                     services.AddSingleton<PropertiesViewModel>();
-                    services.AddSingleton<IViewFor<PropertiesViewModel>, PropertiesView>();
+                    services.AddTransient<IViewFor<PropertiesViewModel>, PropertiesView>();
 
-                    services.AddSingleton<DocumentViewModel>();
-                    services.AddSingleton<IViewFor<DocumentViewModel>, DocumentView>();
 
-                    services.AddSingleton<CodeEditorViewModel>();
-                    services.AddSingleton<IViewFor<CodeEditorViewModel>, CodeEditorView>();
 
-                    services.AddSingleton<VisualEditorViewModel>();
-                    services.AddSingleton<IViewFor<VisualEditorViewModel>, VisualEditorView>();
 
-                    services.AddSingleton<ImportExportViewModel>();
-                    services.AddSingleton<IViewFor<ImportExportViewModel>, ImportExportView>();
+                    services.AddTransient<CodeEditorViewModel>();
+                    services.AddTransient<IViewFor<CodeEditorViewModel>, CodeEditorView>();
+
+                    services.AddTransient<VisualEditorViewModel>();
+                    services.AddTransient<IViewFor<VisualEditorViewModel>, VisualEditorView>();
+
+                    services.AddTransient<ImportExportViewModel>();
+                    services.AddTransient<IViewFor<ImportExportViewModel>, ImportExportView>();
 
                     #endregion
 
                     #region homepage
 
-                    services.AddSingleton<DebugPageViewModel>();
-                    services.AddSingleton<IViewFor<DebugPageViewModel>, DebugPageView>();
-
-                    services.AddSingleton<GithubPageViewModel>();
-                    services.AddSingleton<IViewFor<GithubPageViewModel>, GithubPageView>();
-
-                    services.AddSingleton<SettingsPageViewModel>();
-                    services.AddSingleton<IViewFor<SettingsPageViewModel>, SettingsPageView>();
-
-                    services.AddSingleton<WebsitePageViewModel>();
-                    services.AddSingleton<IViewFor<WebsitePageViewModel>, WebsitePageView>();
-
-                    services.AddSingleton<WelcomePageViewModel>();
-                    services.AddSingleton<IViewFor<WelcomePageViewModel>, WelcomePageView>();
-
-                    services.AddSingleton<WikiPageViewModel>();
-                    services.AddSingleton<IViewFor<WikiPageViewModel>, WikiPageView>();
-
                     services.AddSingleton<HomePageViewModel>();
-                    services.AddSingleton<IViewFor<HomePageViewModel>, HomePageView>();
+                    services.AddTransient<IViewFor<HomePageViewModel>, HomePageView>();
+
+                    services.AddTransient<DebugPageViewModel>();
+                    services.AddTransient<IViewFor<DebugPageViewModel>, DebugPageView>();
+
+                    services.AddTransient<GithubPageViewModel>();
+                    services.AddTransient<IViewFor<GithubPageViewModel>, GithubPageView>();
+
+                    services.AddTransient<SettingsPageViewModel>();
+                    services.AddTransient<IViewFor<SettingsPageViewModel>, SettingsPageView>();
+
+                    services.AddTransient<WebsitePageViewModel>();
+                    services.AddTransient<IViewFor<WebsitePageViewModel>, WebsitePageView>();
+
+                    services.AddTransient<WelcomePageViewModel>();
+                    services.AddTransient<IViewFor<WelcomePageViewModel>, WelcomePageView>();
+
+                    services.AddTransient<WikiPageViewModel>();
+                    services.AddTransient<IViewFor<WikiPageViewModel>, WikiPageView>();
 
                     #endregion
 
@@ -261,31 +249,23 @@ namespace WolvenKit
 
                     #endregion
 
-                    #region shell
-
-                    services.AddSingleton<RibbonViewModel>();
-                    services.AddSingleton<IViewFor<RibbonViewModel>, RibbonView>();
-
-                    services.AddSingleton<StatusBarViewModel>();
-                    services.AddSingleton<IViewFor<StatusBarViewModel>, StatusBarView>();
-
-                    #endregion
+                   
 
                     #region wizards
 
-                    services.AddSingleton<BugReportWizardViewModel>();
+                    services.AddTransient<BugReportWizardViewModel>();
                     services.AddSingleton<IViewFor<BugReportWizardViewModel>, BugReportWizardView>();
 
-                    services.AddSingleton<FeedbackWizardViewModel>();
+                    services.AddTransient<FeedbackWizardViewModel>();
                     services.AddSingleton<IViewFor<FeedbackWizardViewModel>, FeedbackWizardView>();
 
-                    services.AddSingleton<FirstSetupWizardViewModel>();
+                    services.AddTransient<FirstSetupWizardViewModel>();
                     services.AddSingleton<IViewFor<FirstSetupWizardViewModel>, FirstSetupWizardView>();
 
-                    services.AddSingleton<InstallerWizardViewModel>();
+                    services.AddTransient<InstallerWizardViewModel>();
                     services.AddSingleton<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
 
-                    services.AddSingleton<ProjectWizardViewModel>();
+                    services.AddTransient<ProjectWizardViewModel>();
                     services.AddSingleton<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
                     #endregion

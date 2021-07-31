@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
@@ -22,6 +23,10 @@ namespace WolvenKit.Views.Wizards
         public FeedbackWizardView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<FeedbackWizardViewModel>();
+            DataContext = ViewModel;
+
             TestConnect();
         }
 

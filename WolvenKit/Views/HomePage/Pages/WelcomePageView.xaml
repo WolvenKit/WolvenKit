@@ -317,7 +317,6 @@
                                 HorizontalAlignment="Stretch"
                                 BorderBrush="{DynamicResource ContentBackground}"
                                 BorderThickness="2"
-                                Command="{Binding NewProjectCommand}"
                                 Style="{DynamicResource ButtonDefault}">
                                 <Grid Width="125">
                                     <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Add" />
@@ -336,7 +335,6 @@
                                 HorizontalAlignment="Stretch"
                                 BorderBrush="{DynamicResource ContentBackground}"
                                 BorderThickness="2"
-                                Command="{Binding OpenProjectCommand}"
                                 Style="{DynamicResource ButtonDefault}">
                                 <Grid Width="125">
                                     <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="GoToFile" />
@@ -347,14 +345,13 @@
                                 </Grid>
                             </Button>
                             <Button
-                                x:Name="asad"
+                                x:Name="SettingsButton"
                                 Width="200"
                                 Height="33"
                                 Margin="2"
                                 HorizontalAlignment="Stretch"
                                 BorderBrush="{DynamicResource ContentBackground}"
                                 BorderThickness="2"
-                                Command="{Binding SettingsCommand}"
                                 Style="{DynamicResource ButtonDefault}">
                                 <Grid Width="125">
                                     <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Settings" />
@@ -366,14 +363,13 @@
                             </Button>
 
                             <Button
-                                x:Name="asda"
+                                x:Name="TutorialsButton"
                                 Width="200"
                                 Height="33"
                                 Margin="2"
                                 HorizontalAlignment="Stretch"
                                 BorderBrush="{DynamicResource ContentBackground}"
                                 BorderThickness="2"
-                                Command="{Binding TutorialsCommand}"
                                 Style="{DynamicResource ButtonDefault}">
                                 <Grid Width="125">
                                     <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Question" />
@@ -384,14 +380,13 @@
                                 </Grid>
                             </Button>
                             <Button
-                                x:Name="asdasd"
+                                x:Name="WikiButton"
                                 Width="200"
                                 Height="33"
                                 Margin="2"
                                 HorizontalAlignment="Stretch"
                                 BorderBrush="{DynamicResource ContentBackground}"
                                 BorderThickness="2"
-                                Command="{Binding WikiCommand}"
                                 Style="{DynamicResource ButtonDefault}">
                                 <Grid Width="125">
                                     <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Info" />

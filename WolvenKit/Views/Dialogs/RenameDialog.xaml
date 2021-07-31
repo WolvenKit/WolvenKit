@@ -20,7 +20,7 @@
         </Grid.Resources>
 
 
-        <hc:TextBox Width="400" VerticalAlignment="Top" />
+        <hc:TextBox Width="400" VerticalAlignment="Top" x:Name="TextBox" />
         <Grid Margin="0,50,0,0">
             <Button
                 Width="150"

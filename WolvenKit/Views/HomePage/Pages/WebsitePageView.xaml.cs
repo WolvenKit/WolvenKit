@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Web.WebView2.Core;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.ViewModels.HomePage.Pages;
 
@@ -13,6 +14,10 @@ namespace WolvenKit.Views.HomePage.Pages
         public WebsitePageView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<WebsitePageViewModel>();
+            DataContext = ViewModel;
+
             dome();
         }
 

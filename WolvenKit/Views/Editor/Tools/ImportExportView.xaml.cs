@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Functionality.Commands;
@@ -16,6 +17,9 @@ namespace WolvenKit.Views.Editor
         public ImportExportView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<ImportExportViewModel>();
+            DataContext = ViewModel;
         }
 
         /// <summary>

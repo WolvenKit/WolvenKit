@@ -16,5 +16,6 @@ namespace WolvenKit.Functionality.Services
         Task<bool> SaveAsync();
 
         Task<bool> LoadAsync(string location);
+
     }
 }

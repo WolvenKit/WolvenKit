@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 using ReactiveUI;
-using WolvenKit.Common.Tools;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
@@ -45,17 +41,17 @@ namespace WolvenKit.Functionality.Services
 
         #region properties
 
-        public bool ShowGuidedTour { get; set; } = true;
+        [Reactive] public bool ShowGuidedTour { get; set; } = true;
 
-        public bool CheckForUpdates { get; set; }
+        [Reactive] public bool CheckForUpdates { get; set; }
 
-        public EUpdateChannel UpdateChannel { get; set; }
+        [Reactive] public EUpdateChannel UpdateChannel { get; set; }
 
-        public string DepotPath { get; set; }
+        [Reactive] public string DepotPath { get; set; }
 
-        public string MaterialRepositoryPath { get; set; }
+        [Reactive] public string MaterialRepositoryPath { get; set; }
 
-        public string ThemeAccentString { get; set; }
+        [Reactive] public string ThemeAccentString { get; set; }
 
         public Color GetThemeAccent() =>
             !string.IsNullOrEmpty(ThemeAccentString)
@@ -67,32 +63,32 @@ namespace WolvenKit.Functionality.Services
             ThemeAccentString = color.ToString();
         }
 
-        public EAnimals  CatFactAnimal { get; set; } =  EAnimals.Cat;
+        [Reactive] public EAnimals  CatFactAnimal { get; set; } =  EAnimals.Cat;
 
         private string _assemblyVersion;
 
         public string GetVersionNumber() => _assemblyVersion;
 
-        public string[] ManagerVersions { get; set; }
+        [Reactive] public string[] ManagerVersions { get; set; }
 
         /// <summary>
         /// Gets/Sets the author's profile image brush.
         /// </summary>
-        [JsonIgnore] public ImageBrush ProfileImageBrush { get; set; }
+        [JsonIgnore] [Reactive] public ImageBrush ProfileImageBrush { get; set; }
 
-        public string TextLanguage { get; set; }
+        [Reactive] public string TextLanguage { get; set; }
 
         #region red4
 
-        public string CP77ExecutablePath { get; set; }
+        [Reactive] public string CP77ExecutablePath { get; set; }
 
         #endregion red4
 
         #region red3
 
-        public string W3ExecutablePath { get; set; }
+        [Reactive] public string W3ExecutablePath { get; set; }
 
-        public string WccLitePath { get; set; }
+        [Reactive] public string WccLitePath { get; set; }
 
         #endregion red3
 

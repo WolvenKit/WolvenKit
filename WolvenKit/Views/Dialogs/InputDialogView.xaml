@@ -15,6 +15,6 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox x:Name="TextBox" />
     </Grid>
 </reactiveUi:ReactiveUserControl>

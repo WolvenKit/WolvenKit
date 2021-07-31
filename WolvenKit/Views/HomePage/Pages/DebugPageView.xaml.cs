@@ -1,4 +1,5 @@
 using ReactiveUI;
+using Splat;
 using WolvenKit.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
@@ -10,6 +11,9 @@ namespace WolvenKit.Views.HomePage.Pages
         public DebugPageView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<DebugPageViewModel>();
+            DataContext = ViewModel;
         }
 
         #endregion Constructors

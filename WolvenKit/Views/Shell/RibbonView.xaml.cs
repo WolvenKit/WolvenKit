@@ -25,6 +25,9 @@ namespace WolvenKit.Views.Shell
     {
         public RibbonView()
         {
+            ViewModel = Locator.Current.GetService<RibbonViewModel>();
+            DataContext = ViewModel;
+
             InitializeComponent();
 
             var dxEngineSettingsStorage = new DXEngineSettingsStorage();
@@ -170,8 +173,8 @@ namespace WolvenKit.Views.Shell
         {
             //_ribbon.SetCurrentValue(Syncfusion.Windows.Tools.Controls.Ribbon.IsBackStageVisibleProperty, true);
 
-            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = true;
+            ViewModel.StartScreenShown = false;
+            ViewModel.BackstageIsOpen = true;
         }
 
         private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Wizards;
@@ -27,6 +28,9 @@ namespace WolvenKit.Views.Wizards
         public FirstSetupWizardView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
+            DataContext = ViewModel;
         }
 
         #endregion Constructors

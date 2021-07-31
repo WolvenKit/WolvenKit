@@ -1,6 +1,8 @@
 using System;
+using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.ViewModels.HomePage.Pages;
 
@@ -13,6 +15,10 @@ namespace WolvenKit.Views.HomePage.Pages
         public GithubPageView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<GithubPageViewModel>();
+            DataContext = ViewModel;
+
             dome();
         }
 

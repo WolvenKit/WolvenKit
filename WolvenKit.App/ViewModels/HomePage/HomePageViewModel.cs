@@ -4,6 +4,8 @@ using System.Windows.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -41,8 +43,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         #region Properties
 
-        // Static Reference of self for page switching.
-        public bool AboutPV { get; set; }
+
 
         // Close HomePage (Navigates to Project Editor
         public ICommand CloseHomePage { get; private set; }
@@ -50,43 +51,46 @@ namespace WolvenKit.ViewModels.HomePage
         // Closes any open page on the homepage and returns to the welcome page.
         public ICommand ClosePage { get; private set; }
 
+        // Restore Shell Window.
+        public ICommand RestoreWindow { get; set; }
+
+        public ICommand SwitchItemCmd { get; private set; }
+
         public WindowState CurrentWindowState { get; set; }
-
-        public bool DebugPV { get; set; }
-
-        public bool FirstSWV { get; set; }
-
-        public bool GithubPV { get; set; }
-
-        public bool IntegratedTPV { get; set; }
 
         // Minimize Shell Window
         public ICommand MinimizeWindow { get; set; }
 
-        public bool ProjectWV { get; set; }
+        // Static Reference of self for page switching.
+        [Reactive] public bool AboutPV { get; set; }
 
-        public bool RecentPV { get; set; }
+        [Reactive] public bool DebugPV { get; set; }
 
-        // Restore Shell Window.
-        public ICommand RestoreWindow { get; set; }
+        [Reactive] public bool FirstSWV { get; set; }
 
-        public bool ReturnButtonVisibile { get; set; }
+        [Reactive] public bool GithubPV { get; set; }
 
-        public bool SettingsPV { get; set; }
+        [Reactive] public bool IntegratedTPV { get; set; }
+
+        [Reactive] public bool ProjectWV { get; set; }
+
+        [Reactive] public bool RecentPV { get; set; }
+
+        [Reactive] public bool ReturnButtonVisibile { get; set; }
+
+        [Reactive] public bool SettingsPV { get; set; }
 
         // Helps with switching pages , Listens to the selectionchanged on a sidemenu.  , SetCurrentPage deals with the actual "Decision" of what page needs to be shown.
         //public Command<FunctionEventArgs<object>> SwitchItemCmd => new Lazy<Command<FunctionEventArgs<object>>>(() =>
         //    new Command<FunctionEventArgs<object>>(SwitchItem)).Value;
 
-        public ICommand SwitchItemCmd { get; private set; }
+        [Reactive] public bool UserPV { get; set; }
 
-        public bool UserPV { get; set; }
+        [Reactive] public bool WebsitePV { get; set; }
 
-        public bool WebsitePV { get; set; }
+        [Reactive] public bool WelcomePV { get; set; }
 
-        public bool WelcomePV { get; set; }
-
-        public bool WikitPV { get; set; }
+        [Reactive] public bool WikitPV { get; set; }
 
         public string VersionNumber => _settingsManager.GetVersionNumber();
 
@@ -212,8 +216,9 @@ namespace WolvenKit.ViewModels.HomePage
 
         private void ExecuteHome()
         {
-            RibbonViewModel.GlobalRibbonVM.StartScreenShown = false;
-            RibbonViewModel.GlobalRibbonVM.BackstageIsOpen = false;
+            var ribbon = Locator.Current.GetService<RibbonViewModel>();
+            ribbon.StartScreenShown = false;
+            ribbon.BackstageIsOpen = false;
         }
 
         private void SwitchItem(FunctionEventArgs<object> info) => SetCurrentPage((info.Info as SideMenuItem)?.Header.ToString());

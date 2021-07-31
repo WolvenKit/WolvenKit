@@ -2,29 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.ViewModels.HomePage;
 using WolvenKit.Controls;
-using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.RED3.CR2W.Types;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
-    public class SettingsPageViewModel : ReactiveObject
+    public class SettingsPageViewModel : PageViewModel
     {
         private readonly ISettingsManager _settingsManager;
 

@@ -8,27 +8,30 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DotNetHelper.FastMember.Extension.Helpers;
 using DynamicData;
-using DynamicData.Binding;
-using HandyControl.Tools;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.ProjectManagement;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.HomePage;
-using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Shared
 {
-    public class WelcomePageViewModel : ReactiveObject
+    public class WelcomePageViewModel : PageViewModel
     {
         #region Fields
 
-        public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new();
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        private readonly IProjectManager _projectManager;
+        private readonly WorkSpaceViewModel _mainViewModel;
+
+        public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new();
         private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
         #endregion Fields
@@ -36,10 +39,14 @@ namespace WolvenKit.ViewModels.Shared
         #region Constructors
 
         public WelcomePageViewModel(
-            IRecentlyUsedItemsService recentlyUsedItemsService)
+            IRecentlyUsedItemsService recentlyUsedItemsService,
+            IProjectManager projectManager
+            )
         {
 
+            _mainViewModel = Locator.Current.GetService<WorkSpaceViewModel>();
 
+            _projectManager = projectManager;
             _recentlyUsedItemsService = recentlyUsedItemsService;
 
 
@@ -51,6 +58,23 @@ namespace WolvenKit.ViewModels.Shared
             UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
             OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
 
+            OpenProjectCommand = ReactiveCommand.Create<string>(link =>
+            {
+                _mainViewModel.OpenProjectCommand.Execute(link).Subscribe();
+
+                var ribbon = Locator.Current.GetService<RibbonViewModel>();
+                ribbon.StartScreenShown = false;
+                ribbon.BackstageIsOpen = false;
+            });
+            NewProjectCommand = ReactiveCommand.Create(() =>
+            {
+                _mainViewModel.NewProjectCommand.Execute().Subscribe();
+
+                var ribbon = Locator.Current.GetService<RibbonViewModel>();
+                ribbon.StartScreenShown = false;
+                ribbon.BackstageIsOpen = false;
+            });
+
             recentlyUsedItemsService.Items
                 .Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -58,17 +82,17 @@ namespace WolvenKit.ViewModels.Shared
                 .Subscribe(OnRecentlyUsedItemsChanged);
         }
 
-        private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj)
-        {
-
-            ConvertRecentProjects();
-        }
+        private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj) => ConvertRecentProjects();
 
         #endregion Constructors
 
         #region Properties
 
-        public ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
+        
+
+        public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
             link =>
             {
                 var ps = new ProcessStartInfo(link)
@@ -80,7 +104,11 @@ namespace WolvenKit.ViewModels.Shared
             });
 
 
-        public string DiscordLink => "https://discord.gg/tKZXma5SaA";
+        public string DiscordLink = "https://discord.gg/tKZXma5SaA";
+        public string OpenCollectiveLink = "https://opencollective.com/redmodding";
+        public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
+        public string TwitterLink = "https://twitter.com/ModdingRed";
+
 
         public ObservableCollection<FancyProjectObject> FancyProjects
         {
@@ -89,18 +117,14 @@ namespace WolvenKit.ViewModels.Shared
             set => BFancyProjectObjects = value;
         }
 
-        public string OpenCollectiveLink => "https://opencollective.com/redmodding";
-        public ICommand OpenInExplorer { get; private set; }
-        public string PatreonLink => "https://www.patreon.com/m/RedModdingTools";
-        public ICommand PinItem { get; private set; }
         public List<RecentlyUsedItemModel> PinnedItems { get; private set; }
-        //public List<RecentlyUsedItem> RecentlyUsedItems { get; private set; }
+
+
+        public ICommand OpenInExplorer { get; private set; }
+        public ICommand PinItem { get; private set; }
         public ICommand SettingsCommand { get; private set; }
         public ICommand TutorialsCommand { get; private set; }
-        public string TwitterLink => "https://twitter.com/ModdingRed";
         public ICommand UnpinItem { get; private set; }
-
-
         public ICommand WikiCommand { get; private set; }
 
         #endregion Properties
@@ -183,7 +207,7 @@ namespace WolvenKit.ViewModels.Shared
 
         private void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
-            DispatcherHelper.RunOnMainThread(() =>
+            HandyControl.Tools.DispatcherHelper.RunOnMainThread(() =>
             {
                 FancyProjects.Clear();
             });
@@ -207,7 +231,7 @@ namespace WolvenKit.ViewModels.Shared
                     if (!IsThere)
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/CpProj.png"; }
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
+                    HandyControl.Tools.DispatcherHelper.RunOnMainThread(() =>
                     {
                         FancyProjects.Add(NewItem);
                     });
@@ -218,7 +242,7 @@ namespace WolvenKit.ViewModels.Shared
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
 
                     NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
+                    HandyControl.Tools.DispatcherHelper.RunOnMainThread(() =>
                     {
                         FancyProjects.Add(NewItem);
                     });

@@ -26,7 +26,6 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -49,11 +48,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IWatcherService _watcherService;
         private readonly Tw3Controller _tw3Controller;
 
-        public FileModel LastSelected { get { return _watcherService.LastSelect; } }
-
         private EditorProject ActiveMod => _projectManager.ActiveProject;
-
-        public ObservableCollection<FileModel> BindGrid1 { get; set; } = new();
         private readonly IObservableList<FileModel> _observableList;
 
         #endregion fields
@@ -92,15 +87,20 @@ namespace WolvenKit.ViewModels.Editor
 
         #region properties
 
-        public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
-        public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
-        public ReactiveCommand<Unit, Unit> CollapseChildren { get; set; }
-        public ReactiveCommand<Unit, Unit> ExpandChildren { get; set; }
+        public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
+        public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
+        public ReactiveCommand<Unit, Unit> CollapseChildren { get; private set; }
+        public ReactiveCommand<Unit, Unit> ExpandChildren { get; private set; }
 
+        
+        [Reactive] public ObservableCollection<FileModel> BindGrid1 { get; private set; } = new();
 
         [Reactive] public FileModel SelectedItem { get; set; }
 
         [Reactive] public ObservableCollection<object> SelectedItems { get; set; } = new();
+
+
+        public FileModel LastSelected => _watcherService.LastSelect;
 
         #endregion properties
 
@@ -210,10 +210,6 @@ namespace WolvenKit.ViewModels.Editor
                 catch (Exception)
                 {
                     _loggerService.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
-                }
-                finally
-                {
-                    //SelectedItem.RaiseRequestRefresh();
                 }
             }
         }
@@ -473,12 +469,9 @@ namespace WolvenKit.ViewModels.Editor
 
         #region Methods
 
-        public bool IsTreeBeingEdited { get; set; }
-
         private void OnNext(IChangeSet<FileModel, ulong> obj)
         {
             BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-            StaticReferencesVM.GlobalStatusBar.FileCount = BindGrid1.Count;
         }
 
 

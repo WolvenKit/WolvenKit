@@ -9,9 +9,11 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -22,11 +24,15 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
+using WolvenKit.ViewModels.Wizards;
 using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
@@ -42,6 +48,10 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IUpdateService _updateService;
         private readonly ISettingsManager _settingsManager;
         private readonly INotificationService _notificationService;
+        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+
+        
+        
 
         
         
@@ -60,7 +70,8 @@ namespace WolvenKit.ViewModels.Shell
             IGameControllerFactory gameControllerFactory,
             IUpdateService updateService,
             ISettingsManager settingsManager,
-            INotificationService notificationService
+            INotificationService notificationService,
+            IRecentlyUsedItemsService recentlyUsedItemsService
         )
         {
             _updateService = updateService;
@@ -69,6 +80,7 @@ namespace WolvenKit.ViewModels.Shell
             _gameControllerFactory = gameControllerFactory;
             _settingsManager = settingsManager;
             _notificationService = notificationService;
+            _recentlyUsedItemsService = recentlyUsedItemsService;
 
             #region commands
 
@@ -83,9 +95,6 @@ namespace WolvenKit.ViewModels.Shell
             ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
-
-
-
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteOpenFile(p), CanOpenFile);
@@ -99,6 +108,9 @@ namespace WolvenKit.ViewModels.Shell
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
+
+            OpenProjectCommand = ReactiveCommand.CreateFromTask<string, Unit>(OpenProjectAsync);
+            NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
 
             #endregion commands
 
@@ -124,6 +136,7 @@ namespace WolvenKit.ViewModels.Shell
                 .Switch()
                 .Subscribe(x => OpenDocuments.Remove(x));
         }
+
 
         IObservable<DocumentViewModel> WhenAnyDocumentClosed() =>
             OpenDocuments
@@ -171,10 +184,15 @@ namespace WolvenKit.ViewModels.Shell
                 Application.Current.Shutdown();
             });
 
-            await _updateService.CheckForUpdatesAsync();
-
-
-
+            try
+            {
+                await _updateService.CheckForUpdatesAsync();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e.Message);
+            }
+            
         }
 
         private async void ShowFirstTimeSetup()
@@ -208,6 +226,220 @@ namespace WolvenKit.ViewModels.Shell
         #endregion init
 
         #region commands
+
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
+
+        private async Task<Unit> OpenProjectAsync(string location)
+        {
+            // switch from one active project to another
+
+            if (_projectManager.ActiveProject != null && !string.IsNullOrEmpty(location))
+            {
+                if (_projectManager.ActiveProject.Location == location)
+                {
+                    return Unit.Default;
+                }
+            }
+
+            try
+            {
+
+
+                if (string.IsNullOrWhiteSpace(location) || !File.Exists(location))
+                {
+                    // file was moved or deleted
+                    if (_recentlyUsedItemsService.Items.Items.Any(_ => _.Name == location))
+                    {
+                        // would you like to locate it?
+                        //TODO
+                        //location = await ProjectHelpers.LocateMissingProjectAsync(location);
+                        location = "";
+                        if (string.IsNullOrEmpty(location))
+                        {
+                            // user canceled locating a project
+                            return Unit.Default;
+                        }
+                    }
+                    // open an existing project
+                    else
+                    {
+                        var dlg = new CommonOpenFileDialog
+                        {
+                            AllowNonFileSystemItems = false,
+                            Multiselect = false,
+                            IsFolderPicker = false,
+                            Title = "Locate the WolvenKit project"
+                        };
+                        dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
+
+                        if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+                        {
+                            return Unit.Default;
+                        }
+
+                        var result = dlg.FileName;
+                        if (string.IsNullOrEmpty(result))
+                        {
+                            return Unit.Default;
+                        }
+
+                        location = result;
+                    }
+                }
+
+                // one last check
+                if (!File.Exists(location))
+                {
+                    return Unit.Default;
+                }
+
+                // if a valid location has been set
+                //using (_pleaseWaitService.PushInScope())
+                {
+                    await _projectManager.LoadAsync(location);
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                            await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                            {
+                                _notificationService.Success(
+                                    "Project " + Path.GetFileNameWithoutExtension(location) +
+                                    " loaded!");
+
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        case ".cpmodproj":
+                            await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
+                                t =>
+                                {
+                                    _notificationService.Success("Project " +
+                                                                 Path.GetFileNameWithoutExtension(location) +
+                                                                 " loaded!");
+
+                                },
+                                TaskContinuationOptions.OnlyOnRanToCompletion);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    //TODO:ORC
+                    //if (StaticReferences.GlobalShell != null)
+                    //{
+                    //    StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
+                    //}
+
+                    //StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
+                }
+
+            }
+            catch (Exception)
+            {
+                // TODO: Are we intentionally swallowing this?
+                //Log.Error(ex, "Failed to open file");
+            }
+
+            return Unit.Default;
+        }
+
+        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; set; }
+
+        protected async Task<Unit> NewProjectAsync()
+        {
+            try
+            {
+                var location = await Interactions.NewProjectInteraction.Handle(Unit.Default);
+
+                if (string.IsNullOrWhiteSpace(location))
+                {
+                    return Unit.Default;
+                }
+
+               
+                //using (_pleaseWaitService.PushInScope())
+                {
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                        {
+                            var np = new Tw3Project(location)
+                            {
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
+
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
+                            break;
+                        }
+                        case ".cpmodproj":
+                        {
+                            var np = new Cp77Project(location)
+                            {
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
+                            break;
+                        }
+                        default:
+                            _loggerService.LogString("Invalid project path!", Logtype.Error);
+                            break;
+                    }
+                }
+
+                await _projectManager.LoadAsync(location);
+                switch (Path.GetExtension(location))
+                {
+                    case ".w3modproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                        {
+                            _notificationService.Success(
+                                "Project " + Path.GetFileNameWithoutExtension(location) +
+                                " loaded!");
+
+                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    case ".cpmodproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
+                            t =>
+                            {
+                                _notificationService.Success("Project " +
+                                                             Path.GetFileNameWithoutExtension(location) +
+                                                             " loaded!");
+
+                            },
+                            TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerService.LogString(ex.Message, Logtype.Error);
+                _loggerService.LogString("Failed to create a new project!", Logtype.Error);
+            }
+
+            return Unit.Default;
+
+        }
+
+
+
+
+
+
+
 
         public ICommand FileSelectedCommand { get; private set; }
 
