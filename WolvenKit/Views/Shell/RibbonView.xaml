@@ -1402,7 +1402,7 @@
                     Header="Options">
 
                     <!--  Settings Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         x:Name="OptionsShowSettingsButton"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1418,7 +1418,7 @@
                                     Kind="Settings" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Material Depot Settings Button  -->
                     <syncfusion:RibbonButton

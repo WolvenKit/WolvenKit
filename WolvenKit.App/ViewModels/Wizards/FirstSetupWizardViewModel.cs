@@ -52,8 +52,8 @@ namespace WolvenKit.ViewModels.Wizards
             Title = "Settings";
 
 
-            CloseCommand = ReactiveCommand.Create(() => { }, CanExecute);
-            OkCommand = ReactiveCommand.Create(ExecuteFinish);
+            CloseCommand = ReactiveCommand.Create(() => { });
+            OkCommand = ReactiveCommand.Create(ExecuteFinish, CanExecute);
             CancelCommand = ReactiveCommand.Create(() => { });
 
             OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
@@ -94,6 +94,8 @@ namespace WolvenKit.ViewModels.Wizards
         #endregion Constructors
 
         #region Properties
+
+        public sealed override string Title { get; set; }
 
         //public string Author { get; set; }
         //public string Email { get; set; }

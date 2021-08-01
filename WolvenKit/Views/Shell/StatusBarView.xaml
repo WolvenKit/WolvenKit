@@ -59,7 +59,7 @@
                 </hc:Tag>
             </Fluent:StatusBarItem>
 
-            <Fluent:StatusBarItem
+            <!--<Fluent:StatusBarItem
                 Title="Selected File"
                 HorizontalAlignment="Right"
                 ToolTip="Selected File"
@@ -83,8 +83,9 @@
                     </hc:Tag.Header>
                 </hc:Tag>
 
-            </Fluent:StatusBarItem>
-            <Fluent:StatusBarItem
+            </Fluent:StatusBarItem>-->
+
+            <!--<Fluent:StatusBarItem
                 Title="Files in project"
                 HorizontalAlignment="Right"
                 ToolTip="Files in project"
@@ -108,7 +109,7 @@
                         </hc:Tag.Header>
                     </hc:Tag>
 
-            </Fluent:StatusBarItem>
+            </Fluent:StatusBarItem>-->
 
             <Fluent:StatusBarItem
                 Title="Current Project"
@@ -126,7 +127,9 @@
                     <StackPanel Orientation="Horizontal">
 
                         <TextBlock FontSize="11" Text="Current Project : "/>
-                        <TextBlock FontSize="11" FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.AccentBase}"  Text="{Binding CurrentProject}"/>
+                        <TextBlock FontSize="11" FontWeight="Bold"
+                                   Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
+                                   Text="{Binding CurrentProject}"/>
                     </StackPanel>
                     <hc:Tag.Header>
                         <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />

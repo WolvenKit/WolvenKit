@@ -47,6 +47,8 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Properties
 
+        public sealed override string Title { get; set; }
+
         [Reactive] public string ProjectName { get; set; }
         [Reactive] public string ProjectPath { get; set; }
         [Reactive] public ObservableCollection<string> ProjectType { get; set; }

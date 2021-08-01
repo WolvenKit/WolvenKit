@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -8,6 +9,7 @@ using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
@@ -64,13 +66,13 @@ namespace WolvenKit.ViewModels.Shell
             {
 
             });
-            ShowBugReportCommand = ReactiveCommand.Create(() =>
+            ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-
+                var result = await Interactions.ShowBugReport.Handle(Unit.Default);
             });
-            ShowFeedbackCommand = ReactiveCommand.Create(() =>
+            ShowFeedbackCommand = ReactiveCommand.CreateFromTask(async  () =>
             {
-
+                var result = await Interactions.ShowFeedback.Handle(Unit.Default);
             });
         }
 

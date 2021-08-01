@@ -21,7 +21,7 @@ namespace WolvenKit.ViewModels.Dialogs
         }
 
 
-        [Reactive] public string Title { get; set; }
+        public abstract string Title { get; set; }
 
     }
 }

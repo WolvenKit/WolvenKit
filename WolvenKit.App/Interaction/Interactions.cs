@@ -13,6 +13,9 @@ namespace WolvenKit.Interaction
         public static readonly Interaction<string, bool> Confirm = new();
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
 
+        public static readonly Interaction<Unit, bool> ShowBugReport = new();
+        public static readonly Interaction<Unit, bool> ShowFeedback = new();
+
         public static readonly Interaction<IEnumerable<string>, bool> ConfirmMultiple = new();
 
 

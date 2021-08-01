@@ -1,10 +1,6 @@
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Ab3d.DirectX;
@@ -13,11 +9,11 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
-using WolvenKit.Functionality.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.Editor;
 
 namespace WolvenKit.Views.Shell
 {
@@ -49,11 +45,12 @@ namespace WolvenKit.Views.Shell
 
                 _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
-
                 _mainViewModel.ProjectExplorer.WhenAnyValue(x => x.IsActive).Subscribe(b =>
                     projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
                 _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsActive).Subscribe(b =>
                     abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
+
+                #region commands
 
                 // App Menu
                 this.BindCommand(ViewModel,
@@ -130,10 +127,10 @@ namespace WolvenKit.Views.Shell
                     .DisposeWith(disposables);
 
                 //Options
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ShowSettingsCommand,
-                        view => view.OptionsShowSettingsButton)
-                    .DisposeWith(disposables);
+                //this.BindCommand(ViewModel,
+                //        viewModel => viewModel.ShowSettingsCommand,
+                //        view => view.OptionsShowSettingsButton)
+                //    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.ShowBugReportCommand,
                         view => view.OptionsShowBugReportButton)
@@ -149,6 +146,31 @@ namespace WolvenKit.Views.Shell
                         view => view.UtilitiesShowImportExportToolButton)
                     .DisposeWith(disposables);
 
+                #endregion
+
+                Interactions.ShowBugReport.RegisterHandler(interaction =>
+                {
+                    var dialog = new DialogHostView();
+                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<BugReportWizardViewModel>();
+
+                    return Observable.Start(() =>
+                    {
+                        var result = dialog.ShowDialog() == true;
+                        interaction.SetOutput(result);
+                    }, RxApp.MainThreadScheduler);
+                });
+                Interactions.ShowFeedback.RegisterHandler(interaction =>
+                {
+                    var dialog = new DialogHostView();
+                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FeedbackWizardViewModel>();
+
+                    return Observable.Start(() =>
+                    {
+                        var result = dialog.ShowDialog() == true;
+                        interaction.SetOutput(result);
+                    }, RxApp.MainThreadScheduler);
+                });
+
             });
         }
 
@@ -160,14 +182,14 @@ namespace WolvenKit.Views.Shell
 
 
 
-        private void SetRibbonUI()
-        {
-            while (_ribbon.BackStageButton.IsVisible)
-            {
-                _ribbon.BackStageButton.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            }
-            Trace.WriteLine("Disabled File Button");
-        }
+        //private void SetRibbonUI()
+        //{
+        //    while (_ribbon.BackStageButton.IsVisible)
+        //    {
+        //        _ribbon.BackStageButton.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        //    }
+        //    Trace.WriteLine("Disabled File Button");
+        //}
 
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

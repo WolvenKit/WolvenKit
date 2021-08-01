@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
@@ -10,12 +11,12 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region Fields
 
+        private const string s_noProjectLoaded =
+            "No project loaded, create or load an project to be able to view the game files...";
+
         private readonly ISettingsManager _settingsManager;
         private readonly AppViewModel _appViewModel;
-
-        
-        
-
+        private readonly IProjectManager _projectManager;
 
         #endregion Fields
 
@@ -23,21 +24,34 @@ namespace WolvenKit.ViewModels.Shell
 
         public StatusBarViewModel(
             ISettingsManager settingsManager,
+            IProjectManager projectManager,
             AppViewModel appViewModel
             )
         {
             _settingsManager = settingsManager;
             _appViewModel = appViewModel;
-
-            CurrentProject = "No project loaded, create or load an project to be able to view the game files...";
+            _projectManager = projectManager;
 
 
             var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
             if (Connected)
-            { InternetConnected = "Connected"; }
+            {
+                InternetConnected = "Connected";
+            }
 
             IsLoading = false;
             LoadingString = "";
+
+            _projectManager
+                .WhenAnyValue(
+                    x => x.ActiveProject,
+                    project => project != null ? project.Name : s_noProjectLoaded)
+                .ToProperty(
+                    this,
+                    x => x.CurrentProject,
+                    out _currentProject);
+
+
         }
 
         #endregion Constructors
@@ -47,7 +61,7 @@ namespace WolvenKit.ViewModels.Shell
 
 
 
-        public int FileCount { get; set; } = 0;
+        //[Reactive] public int FileCount { get; set; } = 0;
         public int Column { get; private set; }
         public string Heading { get; private set; }
         public string InternetConnected { get; private set; }
@@ -56,16 +70,16 @@ namespace WolvenKit.ViewModels.Shell
         public int Line { get; private set; }
         public string LoadingString { get; set; }
         public string ReceivingAutomaticUpdates { get; private set; }
-        public string CurrentProject { get; set; }
+
+        readonly ObservableAsPropertyHelper<string> _currentProject;
+        public string CurrentProject => _currentProject.Value;
+
+        //[Reactive] public string CurrentProject { get; set; }
 
         public object VersionNumber => _settingsManager.GetVersionNumber();
 
-        public string SelectedFilename { get; set; }
+        //[Reactive] public string SelectedFilename { get; set; }
 
         #endregion Properties
-
-        #region Methods
-
-        #endregion Methods
     }
 }

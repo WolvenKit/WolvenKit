@@ -8,7 +8,9 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
-    Margin="0,0,0,0">
+    Margin="0,0,0,0"
+    
+    >
     
     <Grid Margin="5,5,2,5" hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
