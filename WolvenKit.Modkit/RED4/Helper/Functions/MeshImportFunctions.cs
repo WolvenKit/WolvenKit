@@ -205,9 +205,9 @@ namespace WolvenKit.Modkit.RED4
                 tangents[i] = new Vec4(tangentsList[i].X, -tangentsList[i].Z, tangentsList[i].Y, tangentsList[i].W);
             }
 
-            Vec4[] colors = new Vec4[vertCount];
+            Vec4[] colors0 = new Vec4[vertCount];
             if (accessors.Contains("COLOR_0"))
-                colors = mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray();
+                colors0 = mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray();
 
             Vec2[] tx0coords = new Vec2[vertCount];
             if (accessors.Contains("TEXCOORD_0"))
@@ -296,7 +296,7 @@ namespace WolvenKit.Modkit.RED4
                 tx1coords = tx1coords,
                 normals = normals,
                 tangents = tangents,
-                colors = colors,
+                colors0 = colors0,
                 boneindices = boneindices,
                 weights = weights,
                 weightcount = weightcount,
@@ -356,12 +356,12 @@ namespace WolvenKit.Modkit.RED4
 
             Byte[,] colors = new byte[vertCount, 4];
 
-            for (int i = 0; i < mesh.colors.Length; i++)
+            for (int i = 0; i < mesh.colors0.Length; i++)
             {
-                colors[i, 0] = Convert.ToByte(mesh.colors[i].X * 255);
-                colors[i, 1] = Convert.ToByte(mesh.colors[i].Y * 255);
-                colors[i, 2] = Convert.ToByte(mesh.colors[i].Z * 255);
-                colors[i, 3] = Convert.ToByte(mesh.colors[i].W * 255);
+                colors[i, 0] = Convert.ToByte(mesh.colors0[i].X * 255);
+                colors[i, 1] = Convert.ToByte(mesh.colors0[i].Y * 255);
+                colors[i, 2] = Convert.ToByte(mesh.colors0[i].Z * 255);
+                colors[i, 3] = Convert.ToByte(mesh.colors0[i].W * 255);
             }
             UInt32 weightcount = mesh.weightcount;
 

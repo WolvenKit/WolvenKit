@@ -390,12 +390,19 @@ namespace WolvenKit.Modkit.RED4
                     bw.Write(mesh.tangents[i].Z);
                     bw.Write(mesh.tangents[i].W);
                 }
-                for (int i = 0; i < mesh.colors.Length; i++)
+                for (int i = 0; i < mesh.colors0.Length; i++)
                 {
-                    bw.Write(mesh.colors[i].X);
-                    bw.Write(mesh.colors[i].Y);
-                    bw.Write(mesh.colors[i].Z);
-                    bw.Write(mesh.colors[i].W);
+                    bw.Write(mesh.colors0[i].X);
+                    bw.Write(mesh.colors0[i].Y);
+                    bw.Write(mesh.colors0[i].Z);
+                    bw.Write(mesh.colors0[i].W);
+                }
+                for (int i = 0; i < mesh.colors1.Length; i++)
+                {
+                    bw.Write(mesh.colors1[i].X);
+                    bw.Write(mesh.colors1[i].Y);
+                    bw.Write(mesh.colors1[i].Z);
+                    bw.Write(mesh.colors1[i].W);
                 }
                 for (int i = 0; i < mesh.tx0coords.Length; i++)
                 {
@@ -535,13 +542,21 @@ namespace WolvenKit.Modkit.RED4
                     prim.SetVertexAccessor("TANGENT", acc);
                     BuffViewoffset += mesh.tangents.Length * 16;
                 }
-                if (mesh.colors.Length > 0)
+                if (mesh.colors0.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors.Length * 16);
-                    acc.SetData(buff, 0, mesh.colors.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors0.Length * 16);
+                    acc.SetData(buff, 0, mesh.colors0.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("COLOR_0", acc);
-                    BuffViewoffset += mesh.colors.Length * 16;
+                    BuffViewoffset += mesh.colors0.Length * 16;
+                }
+                if (mesh.colors1.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors1.Length * 16);
+                    acc.SetData(buff, 0, mesh.colors1.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("COLOR_1", acc);
+                    BuffViewoffset += mesh.colors1.Length * 16;
                 }
                 if (mesh.tx0coords.Length > 0)
                 {

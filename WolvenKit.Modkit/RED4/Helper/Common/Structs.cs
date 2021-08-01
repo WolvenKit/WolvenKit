@@ -57,7 +57,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public Vector2[] tx1coords { get; set; }
         public Vector3[] normals { get; set; }
         public Vector4[] tangents { get; set; }
-        public Vector4[] colors { get; set; }
+        public Vector4[] colors0 { get; set; }
+        public Vector4[] colors1 { get; set; }
         public float[,] weights { get; set; }
         public bool extraExist { get; set; }
         public UInt16[,] boneindices { get; set; }
