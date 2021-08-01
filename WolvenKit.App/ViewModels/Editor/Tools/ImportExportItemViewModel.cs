@@ -30,7 +30,7 @@ namespace WolvenKit.ViewModels.Editor
         public string FullName => BaseFile.FullName;
         public string Name => BaseFile.Name;
 
-        public bool IsChecked { get; set; }
+        [Reactive] public bool IsChecked { get; set; }
 
         public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
 

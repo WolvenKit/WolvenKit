@@ -13,12 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Ab3d.Assimp;
 using Assimp;
-
-
-
 using CP77.CR2W;
 using DynamicData;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
@@ -152,8 +150,8 @@ namespace WolvenKit.ViewModels.Editor
 
         #region properties
 
-        public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
-        public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
+        [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
+        [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
 
         public ReadOnlyObservableCollection<ConvertableItemViewModel> ConvertableItems => _convertableItems;
 
@@ -167,29 +165,29 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
 
-        public ConvertableItemViewModel SelectedConvert { get; set; }
+        [Reactive] public ConvertableItemViewModel SelectedConvert { get; set; }
 
         /// <summary>
         /// Selected Export Item
         /// </summary>
-        public ExportableItemViewModel SelectedExport { get; set; }
+        [Reactive] public ExportableItemViewModel SelectedExport { get; set; }
 
         /// <summary>
         /// Selected Import Item
         /// </summary>
-        public ImportableItemViewModel SelectedImport { get; set; }
+        [Reactive] public ImportableItemViewModel SelectedImport { get; set; }
 
         /// <summary>
         /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
         /// </summary>
         public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
 
-        public bool? IsHeaderChecked { get; set; }
+        [Reactive] public bool? IsHeaderChecked { get; set; }
 
         /// <summary>
         /// Lock Selection of items in grid.
         /// </summary>
-        public bool SelectionLocked { get; set; } = false;
+        [Reactive] public bool SelectionLocked { get; set; } = false;
 
         /// <summary>
         /// Returns the name of current selected object in Import/Export Grid.
@@ -224,10 +222,10 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Is Import Selected, if false Export is default.
         /// </summary>
-        public bool IsImportsSelected { get; set; }
+        [Reactive] public bool IsImportsSelected { get; set; }
 
-        public bool IsExportsSelected { get; set; } = true;
-        public bool IsConvertsSelected { get; set; }
+        [Reactive] public bool IsExportsSelected { get; set; } = true;
+        [Reactive] public bool IsConvertsSelected { get; set; }
 
         #endregion properties
 
