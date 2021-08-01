@@ -50,9 +50,9 @@ namespace WolvenKit.Views.Shell
                 _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
 
-                _mainViewModel.ProjectExplorer.WhenAnyValue(x => x.IsVisible).Subscribe(b =>
+                _mainViewModel.ProjectExplorer.WhenAnyValue(x => x.IsActive).Subscribe(b =>
                     projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
-                _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsVisible).Subscribe(b =>
+                _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsActive).Subscribe(b =>
                     abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
 
                 // App Menu

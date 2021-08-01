@@ -47,6 +47,10 @@ namespace WolvenKit.Views.Editor
                 ViewModel.CollapseAll.Subscribe(x => CollapseAllNodes());
                 ViewModel.Expand.Subscribe(x => ExpandNode());
                 ViewModel.Collapse.Subscribe(x => CollapseNode());
+
+                
+
+
             });
 
         }

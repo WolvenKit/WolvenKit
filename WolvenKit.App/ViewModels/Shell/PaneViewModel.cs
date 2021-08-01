@@ -7,14 +7,16 @@ namespace WolvenKit.ViewModels.Shell
 {
     public abstract class PaneViewModel : ReactiveObject, IDockElement
     {
-        #region fields
-
-        #endregion fields
+        public PaneViewModel()
+        {
+            
+        }
 
         #region Properties
 
-        public string Header { get; set; }
-        public DockState State { get; set; }
+        [Reactive] public string Header { get; set; }
+
+        [Reactive] public DockState State { get; set; }
 
         [Reactive] public string ContentId { get; set; }
 
@@ -26,7 +28,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public bool IsActive { get; set; }
 
-        [Reactive] public bool IsSelected { get; set; }
+        //[Reactive] public bool IsSelected { get; set; }
 
         [Reactive] public string Title { get; set; }
 
