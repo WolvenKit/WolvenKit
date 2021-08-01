@@ -62,6 +62,10 @@ namespace WolvenKit.ViewModels.Shared
             {
                 _mainViewModel.OpenProjectCommand.Execute(s).Subscribe();
             });
+            DeleteProjectCommand = ReactiveCommand.Create<string>(s =>
+            {
+                _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe();
+            });
             NewProjectCommand = ReactiveCommand.Create(() =>
             {
                 _mainViewModel.NewProjectCommand.Execute().Subscribe();
@@ -92,6 +96,7 @@ namespace WolvenKit.ViewModels.Shared
         [Reactive] public List<RecentlyUsedItemModel> PinnedItems { get; private set; } = new();
 
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
+        public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
         public ICommand OpenInExplorer { get; private set; }
         public ICommand PinItem { get; private set; }

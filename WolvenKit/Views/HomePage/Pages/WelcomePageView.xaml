@@ -493,6 +493,7 @@
                 CanSort="False"
                 ItemsSource="{Binding FancyProjects}"
                 ShowHeader="False">
+
                 <syncfusion:CardView.HeaderTemplate>
                     <DataTemplate>
                         <Border Margin="-7,-9,-7,-9" Background="{DynamicResource MahApps.Brushes.Accent4}">
@@ -537,7 +538,6 @@
                 </syncfusion:CardView.HeaderTemplate>
                 <syncfusion:CardView.ItemTemplate>
                     <DataTemplate>
-
                         <StackPanel Orientation="Horizontal">
                             <Border
                                 Width="196"
@@ -598,11 +598,12 @@
                                             VerticalAlignment="Bottom"
                                             Orientation="Horizontal">
                                             <Button
-                                                x:Name="OpenProjectButton"
+                                                x:Name="RUIOpenProjectButton"
                                                 Height="35"
                                                 HorizontalAlignment="Left"
-                                                Command="{Binding OpenProjectCommand}"
-                                                CommandParameter="{Binding ProjectPath}">
+                                                Command="{Binding ElementName=topGrid, Path=DataContext.OpenProjectCommand}"
+                                                CommandParameter="{Binding ProjectPath}"
+                                                >
                                                 <iconPacks:PackIconCodicons Kind="Edit" />
                                             </Button>
                                             <hc:Divider
@@ -623,10 +624,10 @@
                                                 LineStrokeThickness="2"
                                                 Orientation="Vertical" />
                                             <Button
-                                                x:Name="DeleteProjectButton"
+                                                x:Name="RUIDeleteProjectButton"
                                                 Height="35"
                                                 HorizontalAlignment="Left"
-                                                Command="{Binding DeleteProjectCommand}"
+                                                Command="{Binding ElementName=topGrid, Path=DataContext.DeleteProjectCommand}"
                                                 CommandParameter="{Binding ProjectPath}">
                                                 <iconPacks:PackIconCodicons Kind="Trash" />
                                             </Button>

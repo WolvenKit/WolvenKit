@@ -18,6 +18,7 @@ namespace WolvenKit.Views.HomePage.Pages
             InitializeComponent();
 
             ViewModel = Locator.Current.GetService<WelcomePageViewModel>();
+            DataContext = ViewModel;
 
             InitWebView2();
 

@@ -110,6 +110,7 @@ namespace WolvenKit.ViewModels.Shell
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
 
             OpenProjectCommand = ReactiveCommand.CreateFromTask<string, Unit>(OpenProjectAsync);
+            DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
 
             #endregion commands
@@ -228,6 +229,25 @@ namespace WolvenKit.ViewModels.Shell
 
         #region commands
 
+        public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
+        private void DeleteProject(string parameter)
+        {
+            try
+            {
+                var projectToDel = _recentlyUsedItemsService.Items.Items
+                    .FirstOrDefault(project => project.Name == parameter?.ToString());
+                if (projectToDel != null)
+                {
+                    _recentlyUsedItemsService.RemoveItem(projectToDel);
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerService.LogString(ex.Message, Logtype.Error);
+                _loggerService.LogString("Failed to delete recent project", Logtype.Error);
+            }
+        }
+
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
         private async Task<Unit> OpenProjectAsync(string location)
         {
@@ -252,10 +272,11 @@ namespace WolvenKit.ViewModels.Shell
                         // would you like to locate it?
                         //TODO
                         //location = await ProjectHelpers.LocateMissingProjectAsync(location);
-                        location = "";
-                        if (string.IsNullOrEmpty(location))
+                        //location = "";
+                        //if (string.IsNullOrEmpty(location))
                         {
                             // user canceled locating a project
+                            DeleteProject(location);
                             return Unit.Default;
                         }
                     }
