@@ -2,35 +2,40 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.ViewModels.Wizards
 {
     /// <summary>
     /// During the first time setup it tries to automatically determine the missing paths and settings.
     /// </summary>
-    public class FirstSetupWizardViewModel : ReactiveObject
+    public class FirstSetupWizardViewModel : DialogViewModel
     {
 
         #region Fields
 
-        private const string greenBG = "#9600ff00";
-        private const string redBG = "#96ff0000";
-        private const string wcc_sha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
-        private const string wcc_sha256_patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
-        private const string wcc_sha256_patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
+        private const string s_greenBg = "#9600ff00";
+        private const string s_redBg = "#96ff0000";
+        private const string s_wccSha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
+        private const string s_wccSha256Patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
+        private const string s_wccSha256Patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
 
         private readonly ISettingsManager _settingsManager;
 
-        private string cp77eexe = "";
+        private string _cp77Eexe = "";
         //private string wccLiteexe = "";
         //private string witcherexe = "";
 
@@ -47,7 +52,9 @@ namespace WolvenKit.ViewModels.Wizards
             Title = "Settings";
 
 
-            FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
+            CloseCommand = ReactiveCommand.Create(() => { }, CanExecute);
+            OkCommand = ReactiveCommand.Create(ExecuteFinish);
+            CancelCommand = ReactiveCommand.Create(() => { });
 
             OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
             OpenDepotPathCommand = new RelayCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
@@ -56,14 +63,16 @@ namespace WolvenKit.ViewModels.Wizards
 
             //OpenW3GamePathCommand = new RelayCommand(ExecuteOpenGamePath, CanOpenGamePath);
             //OpenWccPathCommand = new RelayCommand(ExecuteOpenWccPath, CanOpenWccPath);
-            OpenModDirectoryCommand = new RelayCommand(ExecuteOpenMod, CanOpenMod);
-            OpenDlcDirectoryCommand = new RelayCommand(ExecuteOpenDlc, CanOpenDlc);
+            //OpenModDirectoryCommand = new RelayCommand(ExecuteOpenMod, CanOpenMod);
+            //OpenDlcDirectoryCommand = new RelayCommand(ExecuteOpenDlc, CanOpenDlc);
 
 
             CheckForUpdates = _settingsManager.CheckForUpdates;
            // W3ExePath = _settingsManager.W3ExecutablePath;
             CP77ExePath = _settingsManager.CP77ExecutablePath;
             //WccLitePath = _settingsManager.WccLitePath;
+
+            MaterialDepotPath = _settingsManager.MaterialRepositoryPath;
 
             // automatically scan the registry for exe paths for wcc and tw3
             // if either text field is empty
@@ -72,7 +81,14 @@ namespace WolvenKit.ViewModels.Wizards
                 exeSearcherSlave_DoWork();
             }
 
-
+            if (string.IsNullOrEmpty(MaterialDepotPath))
+            {
+                MaterialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "MaterialDepot");
+                if (!Directory.Exists(MaterialDepotPath))
+                {
+                    Directory.CreateDirectory(MaterialDepotPath);
+                }
+            }
         }
 
         #endregion Constructors
@@ -83,20 +99,24 @@ namespace WolvenKit.ViewModels.Wizards
         //public string Email { get; set; }
         //public string DonateLink { get; set; }
         //public string Description { get; set; }
-        public string MaterialDepotPath { get; set; }
+        [Reactive] public string MaterialDepotPath { get; set; }
 
         [Reactive] public bool AllFieldsValid { get; set; }
+        private IObservable<bool> CanExecute =>
+            this.WhenAnyValue(
+                x => x.AllFieldsValid,
+                (b) => b == true
+            );
 
 
         //private string _wccLitePath;
 
-        public bool AllFieldIsValid { get; set; }
-        public bool CheckForUpdates { get; set; }
+        [Reactive] public bool CheckForUpdates { get; set; }
 
-        public string CP77ExePath { get; set; }
+        [Reactive] public string CP77ExePath { get; set; }
 
-       // public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
-        public bool IsUpdateSystemAvailable { get; private set; }
+        // public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
+        //public bool IsUpdateSystemAvailable { get; private set; }
 
         //public string W3ExePath { get; set; }
 
@@ -126,16 +146,12 @@ namespace WolvenKit.ViewModels.Wizards
 
         #endregion Properties
 
-        public string Title { get; set; }
-
         #region Commands
 
-        public ICommand FinishCommand { get; private set; }
+        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
 
-        private bool CanFinish()
-        {
-            return true;
-        }
 
         private void ExecuteFinish()
         {
@@ -157,20 +173,20 @@ namespace WolvenKit.ViewModels.Wizards
 
         public ICommand OpenDepotPathCommand { get; private set; }
         public ICommand OpenCP77GamePathCommand { get; private set; }
-        public ICommand OpenDlcDirectoryCommand { get; private set; }
-        public ICommand OpenModDirectoryCommand { get; private set; }
-        public ICommand OpenW3GamePathCommand { get; private set; }
+        //public ICommand OpenDlcDirectoryCommand { get; private set; }
+        //public ICommand OpenModDirectoryCommand { get; private set; }
+        //public ICommand OpenW3GamePathCommand { get; private set; }
 
-        public ICommand OpenWccPathCommand { get; private set; }
+        //public ICommand OpenWccPathCommand { get; private set; }
 
-        private bool CanOpenDlc() => true;
+        //private bool CanOpenDlc() => true;
 
         private bool CanOpenGamePath() => true;
         private bool CanOpenDepotPath() => true;
 
-        private bool CanOpenMod() => true;
+        //private bool CanOpenMod() => true;
 
-        private bool CanOpenWccPath() => true;
+        //private bool CanOpenWccPath() => true;
 
         private void ExecuteOpenCP77GamePath()
         {
@@ -220,9 +236,9 @@ namespace WolvenKit.ViewModels.Wizards
             MaterialDepotPath = result;
         }
 
-        private void ExecuteOpenDlc()
-        {
-        }
+        //private void ExecuteOpenDlc()
+        //{
+        //}
 
         //private async void ExecuteOpenGamePath()
         //{
@@ -239,9 +255,9 @@ namespace WolvenKit.ViewModels.Wizards
         //    }
         //}
 
-        private void ExecuteOpenMod()
-        {
-        }
+        //private void ExecuteOpenMod()
+        //{
+        //}
 
         //private async void ExecuteOpenWccPath()
         //{
@@ -275,7 +291,7 @@ namespace WolvenKit.ViewModels.Wizards
             {
                 //StrDelegate w3del = msg => witcherexe = msg;
                 //StrDelegate wccdel = msg => wccLiteexe = msg;
-                StrDelegate cp77del = msg => cp77eexe = msg;
+                StrDelegate cp77del = msg => _cp77Eexe = msg;
 
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
@@ -377,9 +393,9 @@ namespace WolvenKit.ViewModels.Wizards
             //    WccLitePath = wccLiteexe;
             //}
 
-            if (File.Exists(cp77eexe))
+            if (File.Exists(_cp77Eexe))
             {
-                CP77ExePath = cp77eexe;
+                CP77ExePath = _cp77Eexe;
             }
 
             // get the depot path

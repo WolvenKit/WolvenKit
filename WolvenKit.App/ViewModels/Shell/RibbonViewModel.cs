@@ -20,7 +20,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
-        private readonly WorkSpaceViewModel _mainViewModel;
+        public readonly WorkSpaceViewModel _mainViewModel;
 
         #endregion fields
 
@@ -45,10 +45,33 @@ namespace WolvenKit.ViewModels.Shell
             //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
             AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
 
-            OpenProjectCommand =
-                ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
-
+            OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
+            //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
             PackProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackModCommand.SafeExecute());
+
+            NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute());
+            SaveFileCommand = ReactiveCommand.Create(() => _mainViewModel.SaveFileCommand.SafeExecute());
+            SaveAllCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAllCommand.SafeExecute());
+
+            ViewProjectExplorerCommand = ReactiveCommand.Create(() => _mainViewModel.ShowProjectExplorerCommand.SafeExecute());
+            ViewAssetBrowserCommand = ReactiveCommand.Create(() => _mainViewModel.ShowAssetsCommand.SafeExecute());
+            ViewPropertiesCommand = ReactiveCommand.Create(() => _mainViewModel.ShowPropertiesCommand.SafeExecute());
+            ViewLogCommand = ReactiveCommand.Create(() => _mainViewModel.ShowLogCommand.SafeExecute());
+            ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
+            ShowImportExportToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowImportExportToolCommand.SafeExecute());
+
+            ShowSettingsCommand = ReactiveCommand.Create(() =>
+            {
+
+            });
+            ShowBugReportCommand = ReactiveCommand.Create(() =>
+            {
+
+            });
+            ShowFeedbackCommand = ReactiveCommand.Create(() =>
+            {
+
+            });
         }
 
         #endregion constructors
@@ -56,25 +79,24 @@ namespace WolvenKit.ViewModels.Shell
         #region commands
 
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
-        public ReactiveCommand<string, Unit> NewProjectCommand { get; }
+        //public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
         public ReactiveCommand<Unit, Unit> PackProjectCommand { get; }
 
-        public ReactiveCommand<string, Unit> NewFileCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> SaveFileCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> SaveAllCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<Unit, Unit> NewFileCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveAllCommand { get; }
 
-        public ReactiveCommand<string, Unit> ViewProjectExplorerCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> ViewAssetBrowserCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> ViewPropertiesCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> ViewLogCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> ViewCodeEditorCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<Unit, Unit> ViewProjectExplorerCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewAssetBrowserCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewPropertiesCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewLogCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewCodeEditorCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowImportExportToolCommand { get; }
 
-        public ReactiveCommand<string, Unit> ShowSettingsCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> ShowBugReportCommand = ReactiveCommand.Create<string>(link => { });
-        public ReactiveCommand<string, Unit> ShowFeedbackCommand = ReactiveCommand.Create<string>(link => { });
+        public ReactiveCommand<Unit, Unit> ShowSettingsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
 
-        public ReactiveCommand<string, Unit> ShowImportExportToolCommand = ReactiveCommand.Create<string>(link => { });
-       
         #endregion
 
 

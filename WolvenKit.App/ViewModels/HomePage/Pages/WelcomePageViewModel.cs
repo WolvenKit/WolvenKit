@@ -12,6 +12,7 @@ using DotNetHelper.FastMember.Extension.Helpers;
 using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.ProjectManagement;
@@ -31,7 +32,6 @@ namespace WolvenKit.ViewModels.Shared
         private readonly IProjectManager _projectManager;
         private readonly WorkSpaceViewModel _mainViewModel;
 
-        public ObservableCollection<FancyProjectObject> BFancyProjectObjects = new();
         private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
         #endregion Fields
@@ -58,21 +58,13 @@ namespace WolvenKit.ViewModels.Shared
             UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
             OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
 
-            OpenProjectCommand = ReactiveCommand.Create<string>(link =>
+            OpenProjectCommand = ReactiveCommand.Create<string>(s =>
             {
-                _mainViewModel.OpenProjectCommand.Execute(link).Subscribe();
-
-                var ribbon = Locator.Current.GetService<RibbonViewModel>();
-                ribbon.StartScreenShown = false;
-                ribbon.BackstageIsOpen = false;
+                _mainViewModel.OpenProjectCommand.Execute(s).Subscribe();
             });
             NewProjectCommand = ReactiveCommand.Create(() =>
             {
                 _mainViewModel.NewProjectCommand.Execute().Subscribe();
-
-                var ribbon = Locator.Current.GetService<RibbonViewModel>();
-                ribbon.StartScreenShown = false;
-                ribbon.BackstageIsOpen = false;
             });
 
             recentlyUsedItemsService.Items
@@ -88,10 +80,25 @@ namespace WolvenKit.ViewModels.Shared
 
         #region Properties
 
+
+        public string DiscordLink = "https://discord.gg/tKZXma5SaA";
+        public string OpenCollectiveLink = "https://opencollective.com/redmodding";
+        public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
+        public string TwitterLink = "https://twitter.com/ModdingRed";
+
+
+        [Reactive] public ObservableCollection<FancyProjectObject> FancyProjects { get; set; } = new();
+
+        [Reactive] public List<RecentlyUsedItemModel> PinnedItems { get; private set; } = new();
+
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
-        
-
+        public ICommand OpenInExplorer { get; private set; }
+        public ICommand PinItem { get; private set; }
+        public ICommand SettingsCommand { get; private set; }
+        public ICommand TutorialsCommand { get; private set; }
+        public ICommand UnpinItem { get; private set; }
+        public ICommand WikiCommand { get; private set; }
         public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
             link =>
             {
@@ -103,29 +110,6 @@ namespace WolvenKit.ViewModels.Shared
                 Process.Start(ps);
             });
 
-
-        public string DiscordLink = "https://discord.gg/tKZXma5SaA";
-        public string OpenCollectiveLink = "https://opencollective.com/redmodding";
-        public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
-        public string TwitterLink = "https://twitter.com/ModdingRed";
-
-
-        public ObservableCollection<FancyProjectObject> FancyProjects
-        {
-            get => BFancyProjectObjects;
-
-            set => BFancyProjectObjects = value;
-        }
-
-        public List<RecentlyUsedItemModel> PinnedItems { get; private set; }
-
-
-        public ICommand OpenInExplorer { get; private set; }
-        public ICommand PinItem { get; private set; }
-        public ICommand SettingsCommand { get; private set; }
-        public ICommand TutorialsCommand { get; private set; }
-        public ICommand UnpinItem { get; private set; }
-        public ICommand WikiCommand { get; private set; }
 
         #endregion Properties
 

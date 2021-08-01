@@ -61,7 +61,7 @@ namespace WolvenKit.Views.Shell
                         view => view.AppMenuOpenProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.NewProjectCommand,
+                        viewModel => viewModel._mainViewModel.NewProjectCommand,
                         view => view.AppMenuNewProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -87,7 +87,7 @@ namespace WolvenKit.Views.Shell
                         view => view.GeneralOpenProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.NewProjectCommand,
+                        viewModel => viewModel._mainViewModel.NewProjectCommand,
                         view => view.GeneralNewProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,

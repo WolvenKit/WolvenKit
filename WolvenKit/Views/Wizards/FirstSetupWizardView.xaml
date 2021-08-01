@@ -31,12 +31,13 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="15*" />
             <RowDefinition Height="90*" />
             <RowDefinition Height="10*" />
-        </Grid.RowDefinitions>
-        <StackPanel
+        </Grid.RowDefinitions>-->
+
+        <!--<StackPanel
             Margin="-5,-7,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
@@ -62,20 +63,21 @@
                 FontSize="17"
                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                 Text="Let's set you up!" />
-        </StackPanel>
+        </StackPanel>-->
 
-        <Grid x:Name="PageGrid" Grid.Row="1" />
+        <!--<Grid x:Name="PageGrid" Grid.Row="1" />-->
 
         <syncfusion:WizardControl
+            x:Name="WizardControl"
             Grid.RowSpan="3"
-            Margin="0,33,0,0"
+            CancelButtonCancelsWindow="True"
             FinishButtonClosesWindow="True"
-            FinishEnabled="{Binding AllFieldsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-            <hc:Interaction.Triggers>
+            >
+            <!--<hc:Interaction.Triggers>
                 <hc:EventTrigger EventName="Finish">
                     <hc:EventToCommand Command="{Binding FinishCommand}" PassEventArgsToCommand="True" />
                 </hc:EventTrigger>
-            </hc:Interaction.Triggers>
+            </hc:Interaction.Triggers>-->
 
             <!--<syncfusion:WizardPage
                 Name="wizardPage1"
@@ -189,17 +191,16 @@
                                                         hc:InfoElement.TitlePlacement="Left"
                                                         hc:InfoElement.TitleWidth="150"
                                                         Style="{StaticResource TextBoxExtendCustom}"
-                                                        Text="{Binding CP77ExePath}"
                                                         TextChanged="Field_TextChanged"
                                                         VerifyFunc="VerifyFile" />
                                                     <Button
+                                                        x:Name="cp77ExeButton"
                                                         Grid.Column="1"
                                                         Width="50"
                                                         Height="34"
                                                         Margin="0,10,0,0"
                                                         BorderBrush="{DynamicResource BorderBrush}"
                                                         BorderThickness="1"
-                                                        Command="{Binding OpenCP77GamePathCommand}"
                                                         Style="{DynamicResource WPFFlatButtonStyle}">
 
                                                         <iconPacks:PackIconCodicons
@@ -237,18 +238,18 @@
                                                         hc:InfoElement.Title="Material Repository Folder"
                                                         hc:InfoElement.TitlePlacement="Left"
                                                         hc:InfoElement.TitleWidth="150"
+                                                        TextChanged="Field_TextChanged"
                                                         Style="{StaticResource TextBoxExtend}"
-                                                        Text="{Binding MaterialDepotPath}"
                                                         Visibility="Visible"
                                                         VerifyFunc="VerifyFolder" />
                                                     <Button
+                                                        x:Name="matdepotButton"
                                                         Grid.Column="1"
                                                         Width="50"
                                                         Height="34"
                                                         Margin="0,10,0,0"
                                                         BorderBrush="{DynamicResource BorderBrush}"
                                                         BorderThickness="1"
-                                                        Command="{Binding OpenDepotPathCommand}"
                                                         Style="{DynamicResource WPFFlatButtonStyle}">
 
                                                         <iconPacks:PackIconCodicons

@@ -88,6 +88,11 @@ namespace WolvenKit.Functionality.Controllers
 
         private ArchiveManager LoadArchiveManager()
         {
+            if (ArchiveManager != null && IsManagerLoaded)
+            {
+                return ArchiveManager;
+            }
+
             _loggerService.Info("Loading archive Manager ... ");
             var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
             try

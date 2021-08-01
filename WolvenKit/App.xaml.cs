@@ -175,8 +175,11 @@ namespace WolvenKit
 
                     #region dialogs
 
+                    services.AddTransient<DialogHostViewModel>();
+                    services.AddTransient<IViewFor<DialogHostViewModel>, DialogHostView>();
+
                     services.AddTransient<AddChunkDialogViewModel>();
-                    services.AddSingleton<IViewFor<AddChunkDialogViewModel>, AddChunkDialog>();
+                    services.AddTransient<IViewFor<AddChunkDialogViewModel>, AddChunkDialog>();
 
                     services.AddTransient<InputDialogViewModel>();
                     services.AddTransient<IViewFor<InputDialogViewModel>, InputDialogView>();
@@ -184,8 +187,8 @@ namespace WolvenKit
                     //services.AddSingleton<MaterialsRepositoryDialogViewModel>();
                     //services.AddSingleton<IViewFor<MaterialsRepositoryDialogViewModel>, MaterialsRepositoryDialog>();
 
-                    services.AddSingleton<RenameDialogViewModel>();
-                    services.AddSingleton<IViewFor<RenameDialogViewModel>, RenameDialog>();
+                    services.AddTransient<RenameDialogViewModel>();
+                    services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
 
                     #endregion
 
@@ -254,19 +257,19 @@ namespace WolvenKit
                     #region wizards
 
                     services.AddTransient<BugReportWizardViewModel>();
-                    services.AddSingleton<IViewFor<BugReportWizardViewModel>, BugReportWizardView>();
+                    services.AddTransient<IViewFor<BugReportWizardViewModel>, BugReportWizardView>();
 
                     services.AddTransient<FeedbackWizardViewModel>();
-                    services.AddSingleton<IViewFor<FeedbackWizardViewModel>, FeedbackWizardView>();
+                    services.AddTransient<IViewFor<FeedbackWizardViewModel>, FeedbackWizardView>();
 
                     services.AddTransient<FirstSetupWizardViewModel>();
-                    services.AddSingleton<IViewFor<FirstSetupWizardViewModel>, FirstSetupWizardView>();
+                    services.AddTransient<IViewFor<FirstSetupWizardViewModel>, FirstSetupWizardView>();
 
                     services.AddTransient<InstallerWizardViewModel>();
-                    services.AddSingleton<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
+                    services.AddTransient<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
 
                     services.AddTransient<ProjectWizardViewModel>();
-                    services.AddSingleton<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
+                    services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
                     #endregion
 

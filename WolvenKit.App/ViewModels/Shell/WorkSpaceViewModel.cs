@@ -104,7 +104,7 @@ namespace WolvenKit.ViewModels.Shell
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
-            SaveFileFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
+            SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
@@ -192,7 +192,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 _loggerService.Error(e.Message);
             }
-            
+
+            ShowFirstTimeSetup();
         }
 
         private async void ShowFirstTimeSetup()
@@ -208,7 +209,7 @@ namespace WolvenKit.ViewModels.Shell
                 _notificationService.Error(message);
             }
 
-            var result = await Interactions.Confirm.Handle("");
+            var result = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
         }
 
         private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -227,8 +228,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region commands
 
-        public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
-
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
         private async Task<Unit> OpenProjectAsync(string location)
         {
             // switch from one active project to another
@@ -243,7 +243,6 @@ namespace WolvenKit.ViewModels.Shell
 
             try
             {
-
 
                 if (string.IsNullOrWhiteSpace(location) || !File.Exists(location))
                 {
@@ -293,43 +292,35 @@ namespace WolvenKit.ViewModels.Shell
                     return Unit.Default;
                 }
 
-                // if a valid location has been set
-                //using (_pleaseWaitService.PushInScope())
+                var ribbon = Locator.Current.GetService<RibbonViewModel>();
+                ribbon.StartScreenShown = false;
+                ribbon.BackstageIsOpen = false;
+
+                await _projectManager.LoadAsync(location);
+                switch (Path.GetExtension(location))
                 {
-                    await _projectManager.LoadAsync(location);
-                    switch (Path.GetExtension(location))
-                    {
-                        case ".w3modproj":
-                            await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                    case ".w3modproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                        {
+                            _notificationService.Success(
+                                "Project " + Path.GetFileNameWithoutExtension(location) +
+                                " loaded!");
+
+                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    case ".cpmodproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
+                            t =>
                             {
-                                _notificationService.Success(
-                                    "Project " + Path.GetFileNameWithoutExtension(location) +
-                                    " loaded!");
+                                _notificationService.Success("Project " +
+                                                             Path.GetFileNameWithoutExtension(location) +
+                                                             " loaded!");
 
-                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                            break;
-                        case ".cpmodproj":
-                            await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
-                                t =>
-                                {
-                                    _notificationService.Success("Project " +
-                                                                 Path.GetFileNameWithoutExtension(location) +
-                                                                 " loaded!");
-
-                                },
-                                TaskContinuationOptions.OnlyOnRanToCompletion);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    //TODO:ORC
-                    //if (StaticReferences.GlobalShell != null)
-                    //{
-                    //    StaticReferences.GlobalShell.SetCurrentValue(System.Windows.Window.TitleProperty, Path.GetFileNameWithoutExtension(location));
-                    //}
-
-                    //StaticReferencesVM.GlobalStatusBar.CurrentProject = Path.GetFileNameWithoutExtension(location);
+                            },
+                            TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    default:
+                        break;
                 }
 
             }
@@ -342,9 +333,8 @@ namespace WolvenKit.ViewModels.Shell
             return Unit.Default;
         }
 
-        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; set; }
-
-        protected async Task<Unit> NewProjectAsync()
+        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
+        private async Task<Unit> NewProjectAsync()
         {
             try
             {
@@ -355,7 +345,10 @@ namespace WolvenKit.ViewModels.Shell
                     return Unit.Default;
                 }
 
-               
+                var ribbon = Locator.Current.GetService<RibbonViewModel>();
+                ribbon.StartScreenShown = false;
+                ribbon.BackstageIsOpen = false;
+
                 //using (_pleaseWaitService.PushInScope())
                 {
                     switch (Path.GetExtension(location))
@@ -450,7 +443,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Saves the active Documents
         /// </summary>
-        public ICommand SaveFileFileCommand { get; private set; }
+        public ICommand SaveFileCommand { get; private set; }
 
         /// <summary>
         /// Saves all open Documents

@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.ViewModels.Wizards
 {
-    public class ProjectWizardViewModel : ReactiveObject
+    public class ProjectWizardViewModel : DialogViewModel
     {
         #region Fields
 
         public const string WitcherGameName = "Witcher 3";
         public const string CyberpunkGameName = "Cyberpunk 2077";
-
-
 
         #endregion Fields
 
@@ -25,12 +25,14 @@ namespace WolvenKit.ViewModels.Wizards
 
         public ProjectWizardViewModel()
         {
-
+            Title = "Project Wizard";
 
 
             OpenProjectPathCommand = new RelayCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
-            FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
-            CancelCommand = new RelayCommand(ExecuteCancel);
+
+            CloseCommand = ReactiveCommand.Create(() => { });
+            OkCommand = ReactiveCommand.Create(() => { }, CanExecute);
+            CancelCommand = ReactiveCommand.Create(() => { });
 
             ProjectType = new ObservableCollection<string> {"Cyberpunk 2077"};
             //ProjectType.Add("Witcher 3");
@@ -38,52 +40,22 @@ namespace WolvenKit.ViewModels.Wizards
 
         #endregion Constructors
 
-        public ICommand OpenProjectPathCommand { get; private set; }
-        public ICommand FinishCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
-
-        private void ExecuteCancel() => throw new NotImplementedException();
+        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
 
 
-        private bool CanFinish() => AllFieldsValid;
-
-        private void ExecuteFinish() => throw new NotImplementedException();
-
-
-        private bool CanOpenProjectPath() => true;
-
-        private void ExecuteOpenProjectPath()
-        {
-            var dlg = new CommonOpenFileDialog
-            {
-                AllowNonFileSystemItems = false,
-                Multiselect = false,
-                IsFolderPicker = false,
-                Title = "Locate the WolvenKit project"
-            };
-            dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
-
-            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
-            {
-                return;
-            }
-
-            var result = dlg.FileName;
-            if (string.IsNullOrEmpty(result))
-            {
-                return;
-            }
-
-            ProjectPath = result;
-        }
-
-        
         #region Properties
 
-        public string ProjectName { get; set; }
-        public string ProjectPath { get; set; }
-        public ObservableCollection<string> ProjectType { get; set; }
+        [Reactive] public string ProjectName { get; set; }
+        [Reactive] public string ProjectPath { get; set; }
+        [Reactive] public ObservableCollection<string> ProjectType { get; set; }
 
+        private IObservable<bool> CanExecute =>
+            this.WhenAnyValue(
+                x => x.AllFieldsValid,
+                (b) => b == true
+            );
 
         /// <summary>
         /// Gets/Sets if all the fields are valid.
@@ -101,5 +73,39 @@ namespace WolvenKit.ViewModels.Wizards
         //public string ProfileImageBrushPath { get; set; }
 
         #endregion Properties
+
+        public ICommand OpenProjectPathCommand { get; private set; }
+
+
+
+        private bool CanOpenProjectPath() => true;
+
+        private void ExecuteOpenProjectPath()
+        {
+            var dlg = new CommonOpenFileDialog
+            {
+                AllowNonFileSystemItems = false,
+                Multiselect = false,
+                IsFolderPicker = true,
+                Title = "Select the WolvenKit project folder"
+            };
+            //dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
+
+            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            {
+                return;
+            }
+
+            var result = dlg.FileName;
+            if (string.IsNullOrEmpty(result))
+            {
+                return;
+            }
+
+            ProjectPath = result;
+        }
+
+        
+
     }
 }

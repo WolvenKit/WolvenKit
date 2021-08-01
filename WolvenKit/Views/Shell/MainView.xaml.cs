@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
 using AdonisUI.Controls;
@@ -17,6 +18,7 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
@@ -41,52 +43,48 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
-                Interactions.Confirm.RegisterHandler(interaction =>
+                Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
+                {
+                    var dialog = new DialogHostView();
+                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
+
+                    return Observable.Start(() =>
                     {
-                        var action = this.ShowFirstTimeSetup(interaction.Input);
-                        interaction.SetOutput(action);
-                    });
+                        var result = dialog.ShowDialog() == true;
+                        interaction.SetOutput(result);
+                    }, RxApp.MainThreadScheduler);
+                });
 
                 Interactions.NewProjectInteraction.RegisterHandler(interaction =>
                 {
-                    var action = this.ShowNewProjectInteraction(interaction.Input);
-                    interaction.SetOutput(action);
+                    var dialog = new DialogHostView();
+                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<ProjectWizardViewModel>();
+
+                    return Observable.Start(() =>
+                    {
+                        var result = "";
+                        if (dialog.ShowDialog() == true)
+                        {
+                            var innerVm = (ProjectWizardViewModel)dialog.ViewModel.HostedViewModel;
+                            var location = Path.Combine(innerVm.ProjectPath, innerVm.ProjectName);
+                            var type = innerVm.ProjectType.First();
+                            switch (type)
+                            {
+                                case ProjectWizardViewModel.WitcherGameName:
+                                    location += ".w3modproj";
+                                    break;
+                                case ProjectWizardViewModel.CyberpunkGameName:
+                                    location += ".cpmodproj";
+                                    break;
+                            }
+
+                            result = location;
+                        }
+
+                        interaction.SetOutput(result);
+                    }, RxApp.MainThreadScheduler);
                 });
             });
-        }
-
-        private bool ShowFirstTimeSetup(string input)
-        {
-            var firstSetupWizard = new FirstSetupWizardView();
-            firstSetupWizard.Show();
-
-            return true;
-        }
-
-        private string ShowNewProjectInteraction(Unit input)
-        {
-            var location = "";
-
-            var a = Locator.Current.GetService<IViewFor<ProjectWizardViewModel>>();
-            var view = (ProjectWizardView)a;
-            view.Show();
-
-            var res = view.ViewModel;
-
-            location = Path.Combine(res.ProjectPath, res.ProjectName);
-            var type = res.ProjectType.First();
-            switch (type)
-            {
-                case ProjectWizardViewModel.WitcherGameName:
-                    location += ".w3modproj";
-                    break;
-                case ProjectWizardViewModel.CyberpunkGameName:
-                    location += ".cpmodproj";
-                    break;
-            }
-
-
-            return location;
         }
 
         protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();

@@ -36,14 +36,14 @@
 
             <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
 
-                <Grid
+                <!--<Grid
                     x:Name="DraggableTitleBar"
                     Grid.ColumnSpan="2"
                     VerticalAlignment="Top"
                     Background="{DynamicResource ContentBackground}"
                     MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
 
-                    <!--  TitleBar  Please add onmousedown event to be able to drag the window  -->
+                    --><!--  TitleBar  Please add onmousedown event to be able to drag the window  --><!--
                     <Button
                         Margin="3,3,5,3"
                         HorizontalAlignment="Right"
@@ -65,11 +65,11 @@
                         Click="ButtonMinimize"
                         Style="{StaticResource ButtonIcon}" />
 
-                    <!--
+                    --><!--
 
                     <TextBlock Margin="13,0,0,0" Height="23" Text="{Binding Content, ElementName=UserContentControl }"  HorizontalAlignment="Left" VerticalAlignment="Center" />
-                     No Title needed for Wizards imo-->
-                </Grid>
+                     No Title needed for Wizards imo--><!--
+                </Grid>-->
 
                 <Grid
                     MinWidth="150"
@@ -83,7 +83,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel
+                    <!--<StackPanel
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
@@ -109,23 +109,16 @@
                             FontSize="17"
                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                             Text="Let's create a project!" />
-                    </StackPanel>
+                    </StackPanel>-->
 
                     <syncfusion:WizardControl
                         Name="wizardControl"
                         Grid.Row="1"
                         Grid.RowSpan="3"
                         Margin="0,0,0,0"
-                        FinishEnabled="{Binding AllFieldsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="Finish">
-                                <hc:EventToCommand Command="{Binding FinishCommand}" PassEventArgsToCommand="True" />
-                            </hc:EventTrigger>
-                            <hc:EventTrigger EventName="Cancel">
-                                <hc:EventToCommand Command="{Binding CancelCommand}" PassEventArgsToCommand="True" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
+                        CancelButtonCancelsWindow="True"
+                        FinishButtonClosesWindow="True"
+                        >
 
                         <syncfusion:WizardPage
                             Name="wizardPage1"
@@ -174,7 +167,6 @@
                                                         hc:InfoElement.TitlePlacement="Left"
                                                         hc:InfoElement.TitleWidth="90"
                                                         Style="{StaticResource TextBoxExtendCustom}"
-                                                        Text="{Binding ProjectName}"
                                                         VerifyFunc="VerifyIfProjectExists" />
 
                                                     <Grid>
@@ -192,11 +184,11 @@
                                                             hc:InfoElement.TitlePlacement="Left"
                                                             hc:InfoElement.TitleWidth="90"
                                                             Style="{StaticResource TextBoxExtendCustom}"
-                                                            Text="{Binding ProjectPath}"
                                                             TextChanged="TextBox_TextChanged"
                                                             VerifyFunc="VerifyFolder" />
 
                                                         <Button
+                                                            x:Name="ProjectPathButton"
                                                             Grid.Column="1"
                                                             Width="50"
                                                             Height="34"
@@ -205,7 +197,6 @@
                                                             VerticalAlignment="Bottom"
                                                             BorderBrush="{DynamicResource BorderBrush}"
                                                             BorderThickness="1"
-                                                            Command="{Binding OpenProjectPathCommand}"
                                                             Style="{DynamicResource WPFFlatButtonStyle}">
 
                                                             <iconPacks:PackIconCodicons
@@ -222,14 +213,14 @@
                                                         </Button>
                                                     </Grid>
 
-                                                    <hc:ComboBox
+                                                    <!--<hc:ComboBox
+                                                        x:Name="ProjectypeTextBox"
                                                         Margin="0,20,8,0"
                                                         hc:InfoElement.Necessary="False"
                                                         hc:InfoElement.Title="Project Type"
                                                         hc:InfoElement.TitlePlacement="Left"
                                                         hc:InfoElement.TitleWidth="90"
-                                                        ItemsSource="{Binding ProjectType}"
-                                                        SelectedIndex="0" />
+                                                        SelectedIndex="0" />-->
                                                 </StackPanel>
                                             </Grid>
                                         </StackPanel>
