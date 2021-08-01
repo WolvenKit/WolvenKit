@@ -6,14 +6,14 @@ using System.Text;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using RigFile;
-using GeneralStructs;
+using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Common.FNV1A;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Modkit.RED4;
 
-namespace Animation
+namespace WolvenKit.Modkit.RED4.Animation
 {
     public class ANIMATION
     {

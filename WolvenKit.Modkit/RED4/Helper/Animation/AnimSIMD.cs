@@ -4,7 +4,7 @@ using System.IO;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.CR2W.Types;
 
-namespace Animation
+namespace WolvenKit.Modkit.RED4.Animation
 {
     using Quat = System.Numerics.Quaternion;
     using Vec3 = System.Numerics.Vector3;
