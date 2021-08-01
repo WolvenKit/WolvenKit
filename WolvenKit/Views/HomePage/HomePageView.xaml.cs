@@ -97,7 +97,7 @@ namespace WolvenKit.Views.HomePage
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<WorkSpaceViewModel>>();
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
             mainWindow.DragMove();
         }
 
@@ -120,7 +120,7 @@ namespace WolvenKit.Views.HomePage
             else
             {
                 base.OnMouseLeftButtonDown(e);
-                var mainWindow = (MainView)Locator.Current.GetService<IViewFor<WorkSpaceViewModel>>();
+                var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
                 mainWindow.DragMove();
             }
         }

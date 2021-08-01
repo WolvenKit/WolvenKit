@@ -236,7 +236,7 @@ namespace WolvenKit.Functionality.Initialization
             {
 
                 // Set service locator.
-                var mainWindow = Locator.Current.GetService<IViewFor<WorkSpaceViewModel>>();
+                var mainWindow = Locator.Current.GetService<IViewFor<AppViewModel>>();
                 if (mainWindow is MainView window)
                 {
                     //if (Environment.OSVersion.Version.Major >= 6) // Windows Vista and above

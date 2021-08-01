@@ -28,7 +28,7 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
-        private readonly WorkSpaceViewModel viewModel;
+        private readonly AppViewModel viewModel;
         public static DockingAdapter G_Dock;
 
         public DockingAdapter()
@@ -40,7 +40,7 @@ namespace WolvenKit.Views.Shell
             PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
             PART_DockingManager.DockStateChanging += PART_DockingManagerOnDockStateChanging;
 
-            viewModel = DataContext as WorkSpaceViewModel;
+            viewModel = DataContext as AppViewModel;
         }
 
         private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)

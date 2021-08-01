@@ -20,7 +20,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
-        public readonly WorkSpaceViewModel _mainViewModel;
+        public readonly AppViewModel _mainViewModel;
 
         #endregion fields
 
@@ -30,10 +30,10 @@ namespace WolvenKit.ViewModels.Shell
             ISettingsManager settingsManager,
             IProjectManager projectManager,
             ILoggerService loggerService,
-            WorkSpaceViewModel workSpaceViewModel
+            AppViewModel appViewModel
         )
         {
-            _mainViewModel = workSpaceViewModel;
+            _mainViewModel = appViewModel;
 
             _projectManager = projectManager;
             _loggerService = loggerService;

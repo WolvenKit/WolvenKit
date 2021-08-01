@@ -158,9 +158,9 @@ namespace WolvenKit
 
                     // this passes IScreen resolution through to the previous viewmodel registration.
                     // this is to prevent multiple instances by mistake.
-                    services.AddSingleton<WorkSpaceViewModel>();
+                    services.AddSingleton<AppViewModel>();
                     //services.AddSingleton<IScreen, WorkSpaceViewModel>(x => x.GetRequiredService<WorkSpaceViewModel>());
-                    services.AddSingleton<IViewFor<WorkSpaceViewModel>, MainView>();
+                    services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     // register views
                     #region shell

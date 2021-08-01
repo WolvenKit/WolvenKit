@@ -30,7 +30,7 @@ namespace WolvenKit.ViewModels.Shared
 
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IProjectManager _projectManager;
-        private readonly WorkSpaceViewModel _mainViewModel;
+        private readonly AppViewModel _mainViewModel;
 
         private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
@@ -44,7 +44,7 @@ namespace WolvenKit.ViewModels.Shared
             )
         {
 
-            _mainViewModel = Locator.Current.GetService<WorkSpaceViewModel>();
+            _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
             _projectManager = projectManager;
             _recentlyUsedItemsService = recentlyUsedItemsService;

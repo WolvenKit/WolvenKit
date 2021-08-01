@@ -38,7 +38,7 @@ using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class WorkSpaceViewModel : ReactiveObject, IWorkSpaceViewModel
+    public class AppViewModel : ReactiveObject, IAppViewModel
     {
         #region fields
 
@@ -64,7 +64,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Class constructor
         /// </summary>
-        public WorkSpaceViewModel(
+        public AppViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
             IGameControllerFactory gameControllerFactory,

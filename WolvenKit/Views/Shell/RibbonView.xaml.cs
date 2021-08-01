@@ -47,7 +47,7 @@ namespace WolvenKit.Views.Shell
                 PrevFileInfo.DataContext = Locator.Current.GetService<PropertiesViewModel>();
 
 
-                _mainViewModel = Locator.Current.GetService<WorkSpaceViewModel>();
+                _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
 
                 _mainViewModel.ProjectExplorer.WhenAnyValue(x => x.IsVisible).Subscribe(b =>
@@ -154,7 +154,7 @@ namespace WolvenKit.Views.Shell
 
         #region properties
 
-        private WorkSpaceViewModel _mainViewModel;
+        private AppViewModel _mainViewModel;
 
         #endregion
 

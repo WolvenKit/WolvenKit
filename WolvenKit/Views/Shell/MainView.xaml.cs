@@ -23,19 +23,19 @@ using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
 {
-    public partial class MainView : IViewFor<WorkSpaceViewModel>
+    public partial class MainView : IViewFor<AppViewModel>
     {
-        public WorkSpaceViewModel ViewModel { get; set; }
+        public AppViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel
         {
             get => ViewModel;
-            set => ViewModel = (WorkSpaceViewModel)value;
+            set => ViewModel = (AppViewModel)value;
         }
 
-        public MainView(WorkSpaceViewModel vm = null)
+        public MainView(AppViewModel vm = null)
         {
-            ViewModel = vm ?? Locator.Current.GetService<WorkSpaceViewModel>();
+            ViewModel = vm ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
 
             InitializeComponent();

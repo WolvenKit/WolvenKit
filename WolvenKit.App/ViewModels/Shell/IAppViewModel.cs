@@ -9,7 +9,7 @@ using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public interface IWorkSpaceViewModel
+    public interface IAppViewModel
     {
 
         #region Properties

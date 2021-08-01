@@ -11,7 +11,7 @@ namespace WolvenKit.ViewModels.Shell
         #region Fields
 
         private readonly ISettingsManager _settingsManager;
-        private readonly WorkSpaceViewModel _workSpaceViewModel;
+        private readonly AppViewModel _appViewModel;
 
         
         
@@ -23,11 +23,11 @@ namespace WolvenKit.ViewModels.Shell
 
         public StatusBarViewModel(
             ISettingsManager settingsManager,
-            WorkSpaceViewModel workSpaceViewModel
+            AppViewModel appViewModel
             )
         {
             _settingsManager = settingsManager;
-            _workSpaceViewModel = workSpaceViewModel;
+            _appViewModel = appViewModel;
 
             CurrentProject = "No project loaded, create or load an project to be able to view the game files...";
 
