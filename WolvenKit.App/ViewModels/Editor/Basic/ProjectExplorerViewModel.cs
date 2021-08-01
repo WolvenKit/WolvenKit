@@ -15,6 +15,7 @@ using DynamicData.Binding;
 using HandyControl.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -26,6 +27,7 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -47,6 +49,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly Tw3Controller _tw3Controller;
+        //private readonly AppViewModel _appViewModel;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
@@ -60,6 +63,7 @@ namespace WolvenKit.ViewModels.Editor
             ILoggerService loggerService,
             IWatcherService watcherService,
             Tw3Controller tw3Controller
+            //IAppViewModel appViewModel
             ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -80,6 +84,15 @@ namespace WolvenKit.ViewModels.Editor
             CollapseAll = ReactiveCommand.Create(() => { });
             CollapseChildren = ReactiveCommand.Create(() => { });
             ExpandChildren = ReactiveCommand.Create(() => { });
+
+            this.WhenAnyValue(x => x.SelectedItem).Subscribe(model =>
+            {
+                if (model != null)
+                {
+                    Locator.Current.GetService<AppViewModel>().FileSelectedCommand.SafeExecute(model);
+                }
+            });
+
         }
 
        

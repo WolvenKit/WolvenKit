@@ -455,7 +455,7 @@ namespace WolvenKit.ViewModels.Shell
 
 
 
-        public ICommand FileSelectedCommand { get; private set; }
+        public ICommand FileSelectedCommand { get; set; }
 
         private bool CanSelectFile(FileModel model) => true;
 

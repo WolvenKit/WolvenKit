@@ -132,10 +132,6 @@ namespace WolvenKit.ViewModels.Editor
 
         public ICommand StopAudioCommand { get; private set; }
 
-
-        /// <summary>
-        /// Opens a physical file in WolvenKit.
-        /// </summary>
         public ICommand FileSelectedCommand { get; private set; }
 
         private bool CanOpenFile(FileModel model) => model != null;

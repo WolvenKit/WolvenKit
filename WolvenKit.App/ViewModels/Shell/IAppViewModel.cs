@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
@@ -22,6 +23,9 @@ namespace WolvenKit.ViewModels.Shell
 
         /// <summary>Gets an enumeration of all currently available tool window viewmodels.</summary>
         ObservableCollection<IDockElement> Tools { get; }
+
+        ICommand FileSelectedCommand { get; set; }
+
 
         #endregion Properties
 
