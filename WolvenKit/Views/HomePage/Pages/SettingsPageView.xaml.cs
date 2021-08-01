@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Controls.Layout;
+using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
@@ -48,6 +49,30 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             System.Windows.Forms.Application.Restart();
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void CP77SettingsPG_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(ReactiveObject.Changed):
+                case nameof(ReactiveObject.Changing):
+                case nameof(ReactiveObject.ThrownExceptions):
+                    e.Cancel = true;
+                    break;
+            }
+        }
+
+        private void GeneralSettingsPG_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(ReactiveObject.Changed):
+                case nameof(ReactiveObject.Changing):
+                case nameof(ReactiveObject.ThrownExceptions):
+                    e.Cancel = true;
+                    break;
+            }
         }
     }
 }

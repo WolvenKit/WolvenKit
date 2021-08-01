@@ -31,8 +31,10 @@ namespace WolvenKit.ViewModels.HomePage
 
             CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
             ClosePage = new RelayCommand(ExecPage, CanPage);
-            RestoreWindow = new RelayCommand(ExecuteRestoreWindow, CanRestoreWindow);
-            MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow, CanMinimizeWindow);
+
+            RestoreWindow = new RelayCommand(ExecuteRestoreWindow);
+            MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow);
+
             SwitchItemCmd = new DelegateCommand<FunctionEventArgs<object>>(SwitchItem);
 
             SetCurrentPage("Welcome");
@@ -98,21 +100,24 @@ namespace WolvenKit.ViewModels.HomePage
 
         #region Methods
 
-        public bool CanMinimizeWindow() => true;
-
-        public bool CanRestoreWindow() => true;
-
         public void ExecuteMinimizeWindow()
         {
+            SystemCommands.MinimizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
             CurrentWindowState = WindowState.Minimized;
         }
 
-        public void ExecuteRestoreWindow()
+        private void ExecuteRestoreWindow()
         {
             if (CurrentWindowState == WindowState.Maximized)
-            { CurrentWindowState = WindowState.Normal; }
+            {
+                SystemCommands.RestoreWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+                CurrentWindowState = WindowState.Normal;
+            }
             else
-            { CurrentWindowState = WindowState.Maximized; }
+            {
+                SystemCommands.MaximizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+                CurrentWindowState = WindowState.Maximized;
+            }
         }
 
         public void SetCurrentPage(string page)

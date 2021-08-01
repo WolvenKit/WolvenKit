@@ -63,6 +63,7 @@
                     <StackPanel Orientation="Vertical">
                         <syncfusion:PropertyGrid
                             x:Name="GeneralSettingsPG"
+                            AutoGeneratingPropertyGridItem="GeneralSettingsPG_OnAutoGeneratingPropertyGridItem"
                             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                             EnableGrouping="True"
                             SelectedObject="{Binding generalSettingsPGModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -87,7 +88,7 @@
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
-                <syncfusion:SfAccordionItem Header="Editor" Visibility="Collapsed">
+                <!--<syncfusion:SfAccordionItem Header="Editor" Visibility="Collapsed">
                     <syncfusion:PropertyGrid
                         x:Name="EditorSettingsPG"
                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
@@ -100,11 +101,12 @@
                         x:Name="ToolsSettingsPG"
                         EnableGrouping="True"
                         SelectedObject="{Binding ToolSettingsPGModel}" />
-                </syncfusion:SfAccordionItem>
+                </syncfusion:SfAccordionItem>-->
 
                 <syncfusion:SfAccordionItem Header="Cyberpunk 2077">
                     <StackPanel>
                         <syncfusion:PropertyGrid
+                            AutoGeneratingPropertyGridItem="CP77SettingsPG_OnAutoGeneratingPropertyGridItem"
                             x:Name="CP77SettingsPG"
                             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                             EnableGrouping="True"
@@ -112,13 +114,13 @@
                     </StackPanel>
                 </syncfusion:SfAccordionItem>
 
-                <syncfusion:SfAccordionItem Header="The Witcher 3" Visibility="Collapsed">
+                <!--<syncfusion:SfAccordionItem Header="The Witcher 3" Visibility="Collapsed">
                     <syncfusion:PropertyGrid
                         x:Name="TW3SettingsPG"
                         CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                         EnableGrouping="True"
                         SelectedObject="{Binding tw3SettingsPGModel}" />
-                </syncfusion:SfAccordionItem>
+                </syncfusion:SfAccordionItem>-->
             </syncfusion:SfAccordion>
         </Grid>
 

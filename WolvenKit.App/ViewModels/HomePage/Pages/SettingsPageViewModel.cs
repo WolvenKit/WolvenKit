@@ -195,7 +195,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
             this.WhenAnyValue(x => x.CP77ExecutablePath).Subscribe(value =>
             {
-                if (CP77ExecutablePath != value)
+                if (_settingsManager.CP77ExecutablePath != value)
                 {
                     _settingsManager.CP77ExecutablePath = value;
                     _settingsManager.Save();
@@ -203,7 +203,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             });
             this.WhenAnyValue(x => x.MaterialRepositoryPath).Subscribe(value =>
             {
-                if (CP77ExecutablePath != value)
+                if (_settingsManager.CP77ExecutablePath != value)
                 {
                     _settingsManager.MaterialRepositoryPath = value;
                     _settingsManager.Save();
@@ -288,7 +288,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
 
             this.WhenAnyValue(x => x.UpdateChannel).Subscribe(value =>
                 {
-                    if (UpdateChannel != value)
+                    if (_settingsManager.UpdateChannel != value)
                     {
                         _settingsManager.UpdateChannel = value;
                         _settingsManager.Save();
@@ -296,7 +296,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                 });
             this.WhenAnyValue(x => x.CatFactAnimal).Subscribe(value =>
             {
-                if (CatFactAnimal != value)
+                if (_settingsManager.CatFactAnimal != value)
                 {
                     _settingsManager.CatFactAnimal = value;
                     _settingsManager.Save();
