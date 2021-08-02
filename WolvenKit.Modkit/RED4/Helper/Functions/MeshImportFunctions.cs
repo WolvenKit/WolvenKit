@@ -146,6 +146,7 @@ namespace WolvenKit.Modkit.RED4
                         }
 
             }
+            UpdateSkinningParamCloth(ref Meshes, ref cr2w);
 
             List<Re4MeshContainer> expMeshes = new List<Re4MeshContainer>();
 
@@ -208,6 +209,10 @@ namespace WolvenKit.Modkit.RED4
             Vec4[] colors0 = new Vec4[vertCount];
             if (accessors.Contains("COLOR_0"))
                 colors0 = mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray();
+
+            Vec4[] colors1 = new Vec4[vertCount];
+            if (accessors.Contains("COLOR_1"))
+                colors1 = mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray();
 
             Vec2[] tx0coords = new Vec2[vertCount];
             if (accessors.Contains("TEXCOORD_0"))
@@ -297,6 +302,7 @@ namespace WolvenKit.Modkit.RED4
                 normals = normals,
                 tangents = tangents,
                 colors0 = colors0,
+                colors1 = colors1,
                 boneindices = boneindices,
                 weights = weights,
                 weightcount = weightcount,
@@ -1055,6 +1061,556 @@ namespace WolvenKit.Modkit.RED4
             if (!LODs.Contains(1))
             {
                 throw new Exception("None of the Geometry/sub meshes are of 1 Level of Detail or (LOD 1) in provided GLTF");
+            }
+        }
+        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes,ref CR2WFile cr2w)
+        {
+            var LODLvl = new UInt32[meshes.Count];
+            for (int i = 0; i < meshes.Count; i++)
+            {
+                if (meshes[i].name.Contains("LOD"))
+                {
+                    int idx = meshes[i].name.IndexOf("LOD_");
+                    if (idx < meshes[i].name.Length - 1)
+                    {
+                        LODLvl[i] = Convert.ToUInt32(meshes[i].name.Substring(idx + 4, 1));
+                    }
+                }
+                else
+                {
+                    LODLvl[i] = 1;
+                }
+
+            }
+
+            int meshBufferIdx = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First().RenderBuffer.Buffer.Value - 1;
+            int materialBufferIdx = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.Value - 1;
+            if (!cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.IsSerialized)
+                materialBufferIdx = int.MaxValue;
+
+            int buffCount = cr2w.Buffers.Count;
+
+            for (int i = 0; i < buffCount; i++)
+            {
+                int idx = cr2w.Buffers.Count - 1;
+                if (idx != meshBufferIdx && idx != materialBufferIdx)
+                {
+                    cr2w.Buffers.Remove(cr2w.Buffers[idx]);
+                    if (idx < meshBufferIdx)
+                        meshBufferIdx--;
+                    if (idx < materialBufferIdx)
+                        materialBufferIdx--;
+                }
+            }
+            if (!cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.IsSerialized)
+                materialBufferIdx = 0;
+
+            cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First().RenderBuffer.Buffer.Value = Convert.ToUInt16(meshBufferIdx + 1);
+            cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.Value = Convert.ToUInt16(materialBufferIdx + 1);
+
+
+            if (cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth>().Any())
+            {
+                var blob = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth>().First();
+                blob.Chunks = new CArray<meshPhxClothChunkData>(cr2w, blob, "chunks") { IsSerialized = true };
+                for (int i = 0; i < meshes.Count;i++)
+                {
+                    var chunk = new meshPhxClothChunkData(cr2w, blob.Chunks,Convert.ToString(i)) { IsSerialized = true};
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for(int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(meshes[i].vertices[e].X);
+                            bw.Write(meshes[i].vertices[e].Y);
+                            bw.Write(meshes[i].vertices[e].Z);
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.Positions = new DataBuffer(cr2w, chunk,"positions") { IsSerialized = true };
+                        chunk.Positions.Buffer = new CUInt16(cr2w, chunk.Positions, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].indices.Length; e++)
+                        {
+                            bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.Indices = new DataBuffer(cr2w, chunk, "indices") { IsSerialized = true };
+                        chunk.Indices.Buffer = new CUInt16(cr2w, chunk.Indices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if(meshes[i].weightcount > 0)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 0]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 1]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 2]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinIndices = new DataBuffer(cr2w, chunk, "skinIndices") { IsSerialized = true };
+                        chunk.SkinIndices.Buffer = new CUInt16(cr2w, chunk.SkinIndices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if (meshes[i].weightcount > 0)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(meshes[i].weights[e, 0]);
+                            bw.Write(meshes[i].weights[e, 1]);
+                            bw.Write(meshes[i].weights[e, 2]);
+                            bw.Write(meshes[i].weights[e, 3]);
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinWeights = new DataBuffer(cr2w, chunk, "skinWeights") { IsSerialized = true };
+                        chunk.SkinWeights.Buffer = new CUInt16(cr2w, chunk.SkinWeights, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if (meshes[i].weightcount > 4)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 4]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 5]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 6]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinIndicesExt = new DataBuffer(cr2w, chunk, "skinIndicesExt") { IsSerialized = true };
+                        chunk.SkinIndicesExt.Buffer = new CUInt16(cr2w, chunk.SkinIndicesExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if (meshes[i].weightcount > 4)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(meshes[i].weights[e, 4]);
+                            bw.Write(meshes[i].weights[e, 5]);
+                            bw.Write(meshes[i].weights[e, 6]);
+                            bw.Write(meshes[i].weights[e, 7]);
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinWeightsExt = new DataBuffer(cr2w, chunk, "skinWeightsExt") { IsSerialized = true };
+                        chunk.SkinWeightsExt.Buffer = new CUInt16(cr2w, chunk.SkinWeightsExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].normals.Length; e++)
+                        {
+                            bw.Write(meshes[i].normals[e].X);
+                            bw.Write(meshes[i].normals[e].Y);
+                            bw.Write(meshes[i].normals[e].Z);
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.Normals = new DataBuffer(cr2w, chunk,"normals") { IsSerialized = true };
+                        chunk.Normals.Buffer = new CUInt16(cr2w, chunk.Normals, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    blob.Chunks.Add(chunk);
+                    meshes[i].weightcount = 0;
+                }
+                blob.LodChunkIndices = new CArray<CArray<CUInt16>>(cr2w, blob, "lodChunkIndices") { IsSerialized = true };
+                blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "0") { IsSerialized = true });
+                if (LODLvl.Contains(2U))
+                {
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "1") { IsSerialized = true });
+                }
+                if (LODLvl.Contains(4U))
+                {
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "3") { IsSerialized = true });
+                }
+                if (LODLvl.Contains(8U))
+                {
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "4") { IsSerialized = true });
+                }
+                for(ushort i = 0; i < LODLvl.Length; i++)
+                {
+                    if(LODLvl[i] == 1)
+                    {
+                        blob.LodChunkIndices[0].Add(new CUInt16(cr2w, blob.LodChunkIndices[0], Convert.ToString(blob.LodChunkIndices[0].Count)) { IsSerialized = true, Value = i });
+                    }
+                    if (LODLvl[i] == 2)
+                    {
+                        blob.LodChunkIndices[1].Add(new CUInt16(cr2w, blob.LodChunkIndices[1], Convert.ToString(blob.LodChunkIndices[1].Count)) { IsSerialized = true, Value = i });
+                    }
+                    if (LODLvl[i] == 4)
+                    {
+                        blob.LodChunkIndices[2].Add(new CUInt16(cr2w, blob.LodChunkIndices[2], Convert.ToString(blob.LodChunkIndices[2].Count)) { IsSerialized = true, Value = i });
+                    }
+                    if (LODLvl[i] == 8)
+                    {
+                        blob.LodChunkIndices[3].Add(new CUInt16(cr2w, blob.LodChunkIndices[3], Convert.ToString(blob.LodChunkIndices[3].Count)) { IsSerialized = true, Value = i });
+                    }
+                }
+            }
+            if (cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth_Graphical>().Any())
+            {
+                var blob = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth_Graphical>().First();
+                blob.Chunks = new CArray<meshGfxClothChunkData>(cr2w, blob, "chunks") { IsSerialized = true };
+                for (int i = 0; i < meshes.Count; i++)
+                {
+                    var chunk = new meshGfxClothChunkData(cr2w, blob.Chunks, Convert.ToString(i)) { IsSerialized = true };
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(meshes[i].vertices[e].X);
+                            bw.Write(meshes[i].vertices[e].Y);
+                            bw.Write(meshes[i].vertices[e].Z);
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.Positions = new DataBuffer(cr2w, chunk, "positions") { IsSerialized = true };
+                        chunk.Positions.Buffer = new CUInt16(cr2w, chunk.Positions, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].indices.Length; e++)
+                        {
+                            bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.Indices = new DataBuffer(cr2w, chunk, "indices") { IsSerialized = true };
+                        chunk.Indices.Buffer = new CUInt16(cr2w, chunk.Indices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if (meshes[i].weightcount > 0)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 0]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 1]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 2]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinIndices = new DataBuffer(cr2w, chunk, "skinIndices") { IsSerialized = true };
+                        chunk.SkinIndices.Buffer = new CUInt16(cr2w, chunk.SkinIndices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if (meshes[i].weightcount > 0)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(meshes[i].weights[e, 0]);
+                            bw.Write(meshes[i].weights[e, 1]);
+                            bw.Write(meshes[i].weights[e, 2]);
+                            bw.Write(meshes[i].weights[e, 3]);
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinWeights = new DataBuffer(cr2w, chunk, "skinWeights") { IsSerialized = true };
+                        chunk.SkinWeights.Buffer = new CUInt16(cr2w, chunk.SkinWeights, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if (meshes[i].weightcount > 4)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 4]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 5]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 6]));
+                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinIndicesExt = new DataBuffer(cr2w, chunk, "skinIndicesExt") { IsSerialized = true };
+                        chunk.SkinIndicesExt.Buffer = new CUInt16(cr2w, chunk.SkinIndicesExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    if (meshes[i].weightcount > 4)
+                    {
+                        var buffer = new MemoryStream();
+                        var bw = new BinaryWriter(buffer);
+                        for (int e = 0; e < meshes[i].vertices.Length; e++)
+                        {
+                            bw.Write(meshes[i].weights[e, 4]);
+                            bw.Write(meshes[i].weights[e, 5]);
+                            bw.Write(meshes[i].weights[e, 6]);
+                            bw.Write(meshes[i].weights[e, 7]);
+                        }
+                        var compressed = new MemoryStream();
+                        using var buff = new BinaryWriter(compressed);
+                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
+
+                        chunk.SkinWeightsExt = new DataBuffer(cr2w, chunk, "skinWeightsExt") { IsSerialized = true };
+                        chunk.SkinWeightsExt.Buffer = new CUInt16(cr2w, chunk.SkinWeightsExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+
+                        uint idx = (uint)cr2w.Buffers.Count;
+                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                        {
+                            flags = 0,
+                            index = idx,
+                            offset = 0,
+                            diskSize = zsize,
+                            memSize = (UInt32)buffer.Length,
+                            crc32 = crc
+                        }));
+
+                        cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
+                        cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    }
+                    {
+                        chunk.Simulation = new CArray<CUInt16>(cr2w, chunk, "simulation") { IsSerialized = true };
+                        int z = 0;
+                        for (ushort e = 0; e < meshes[i].colors1.Length; e++)
+                        {
+                            if(meshes[i].colors1[e].X > 0.01f)
+                            {
+                                var val = new CUInt16(cr2w, chunk.Simulation, Convert.ToString(z)) { IsSerialized = true, Value = e };
+                                chunk.Simulation.Add(val);
+                                z++;
+                            }
+                        }
+                    }
+                    blob.Chunks.Add(chunk);
+                    meshes[i].weightcount = 0;
+                }
+                blob.LodChunkIndices = new CArray<CArray<CUInt16>>(cr2w, blob, "lodChunkIndices") { IsSerialized = true };
+                blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "0") { IsSerialized = true });
+                if (LODLvl.Contains(2U))
+                {
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "1") { IsSerialized = true });
+                }
+                if (LODLvl.Contains(4U))
+                {
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "3") { IsSerialized = true });
+                }
+                if (LODLvl.Contains(8U))
+                {
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "4") { IsSerialized = true });
+                }
+                for (ushort i = 0; i < LODLvl.Length; i++)
+                {
+                    if (LODLvl[i] == 1)
+                    {
+                        blob.LodChunkIndices[0].Add(new CUInt16(cr2w, blob.LodChunkIndices[0], Convert.ToString(blob.LodChunkIndices[0].Count)) { IsSerialized = true, Value = i });
+                    }
+                    if (LODLvl[i] == 2)
+                    {
+                        blob.LodChunkIndices[1].Add(new CUInt16(cr2w, blob.LodChunkIndices[1], Convert.ToString(blob.LodChunkIndices[1].Count)) { IsSerialized = true, Value = i });
+                    }
+                    if (LODLvl[i] == 4)
+                    {
+                        blob.LodChunkIndices[2].Add(new CUInt16(cr2w, blob.LodChunkIndices[2], Convert.ToString(blob.LodChunkIndices[2].Count)) { IsSerialized = true, Value = i });
+                    }
+                    if (LODLvl[i] == 8)
+                    {
+                        blob.LodChunkIndices[3].Add(new CUInt16(cr2w, blob.LodChunkIndices[3], Convert.ToString(blob.LodChunkIndices[3].Count)) { IsSerialized = true, Value = i });
+                    }
+                }
             }
         }
     }
