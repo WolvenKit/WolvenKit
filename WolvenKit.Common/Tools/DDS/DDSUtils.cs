@@ -704,7 +704,7 @@ namespace WolvenKit.Common.DDS
             // get arguments
             var uext = EUncookExtension.dds;
             var vflip = false;
-            if (args is not XbmExportArgs or MlmaskExportArgs)
+            if (args is not XbmExportArgs and not MlmaskExportArgs)
             {
                 return false;
 
