@@ -39,7 +39,6 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-            DirectoryInfo outDir = new DirectoryInfo(Path.Combine(outfile.DirectoryName, Path.GetFileNameWithoutExtension(outfile.FullName)));
 
             MeshTools.MeshBones meshBones = new MeshTools.MeshBones();
 
@@ -65,12 +64,7 @@ namespace WolvenKit.Modkit.RED4
 
             ModelRoot model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
 
-            if (!outDir.Exists)
-            {
-                Directory.CreateDirectory(outDir.FullName);
-            }
-
-            ParseMaterials(cr2w, meshStream, outDir, archives, matRepo, eUncookExtension);
+            ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, eUncookExtension);
 
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
@@ -244,8 +238,12 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
         }
-        private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, DirectoryInfo outDir, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, FileInfo outfile, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
+            var settings = new JsonSerializerSettings();
+            settings.NullValueHandling = NullValueHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+
             List<string> primaryDependencies = new List<string>();
 
             List<string> materialEntryNames = new List<string>();
@@ -254,12 +252,9 @@ namespace WolvenKit.Modkit.RED4
             GetMateriaEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
 
             List<string> mlSetupNames = new List<string>();
-            List<Multilayer_Setup> mlSetups = new List<Multilayer_Setup>();
 
             List<string> mlTemplateNames = new List<string>();
-            List<Multilayer_LayerTemplate> mlTemplates = new List<Multilayer_LayerTemplate>();
 
-            List<HairProfile> HairProfiles = new List<HairProfile>();
             List<string> HairProfileNames = new List<string>();
 
             List<string> TexturesList = new List<string>();
@@ -283,7 +278,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (ar.Files.ContainsKey(hash))
                         {
-                            if (!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace("xbm",exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                            if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i],"." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
                             {
                                 if (Directory.Exists(matRepo))
                                     UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
@@ -315,9 +310,8 @@ namespace WolvenKit.Modkit.RED4
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".hp")
                 {
-                    if (!HairProfileNames.Contains(Path.GetFileName(primaryDependencies[i])))
+                    if (!HairProfileNames.Contains(primaryDependencies[i]))
                     {
-                        HairProfileNames.Add(Path.GetFileName(primaryDependencies[i]));
                         ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                         foreach (Archive ar in archives)
                         {
@@ -326,7 +320,17 @@ namespace WolvenKit.Modkit.RED4
                                 var ms = new MemoryStream();
                                 ExtractSingleToStream(ar, hash, ms);
                                 var hp = _wolvenkitFileService.TryReadCr2WFile(ms);
-                                HairProfiles.Add(new HairProfile(hp.Chunks[0].Data as CHairProfile, Path.GetFileName(primaryDependencies[i])));
+                                HairProfileNames.Add(primaryDependencies[i]);
+                                string path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".hp.json"));
+                                if (!File.Exists(path))
+                                {
+                                    if (!new FileInfo(path).Directory.Exists)
+                                    {
+                                        Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
+                                    }
+                                    var doc = JsonConvert.SerializeObject(new HairProfile(hp.Chunks[0].Data as CHairProfile, Path.GetFileName(primaryDependencies[i])), settings);
+                                    File.WriteAllText(path, doc);
+                                }
                                 break;
                             }
                         }
@@ -335,110 +339,121 @@ namespace WolvenKit.Modkit.RED4
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
                 {
-                    ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                    foreach (Archive ar in archives)
+                    if(!mlSetupNames.Contains(primaryDependencies[i]))
                     {
-                        if(ar.Files.ContainsKey(hash))
+                        ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                        foreach (Archive ar in archives)
                         {
-                            var ms = new MemoryStream();
-                            ExtractSingleToStream(ar, hash, ms);
-                            var mls = _wolvenkitFileService.TryReadCr2WFile(ms);
-                            mlSetupNames.Add(Path.GetFileName(primaryDependencies[i]));
-                            mlSetups.Add(mls.Chunks[0].Data as Multilayer_Setup);
-
-                            for (int e = 0; e < mls.Imports.Count; e++)
+                            if (ar.Files.ContainsKey(hash))
                             {
-                                if (Path.GetExtension(mls.Imports[e].DepotPathStr) == ".xbm")
-                                {
-                                    if (!TexturesList.Contains(mls.Imports[e].DepotPathStr))
-                                        TexturesList.Add(mls.Imports[e].DepotPathStr);
+                                var ms = new MemoryStream();
+                                ExtractSingleToStream(ar, hash, ms);
+                                var mls = _wolvenkitFileService.TryReadCr2WFile(ms);
+                                mlSetupNames.Add(primaryDependencies[i]);
 
-                                    ulong hash1 = FNV1A64HashAlgorithm.HashString(mls.Imports[e].DepotPathStr);
-                                    foreach (Archive arr in archives)
+                                string path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".mlsetup.json"));
+                                if (!File.Exists(path))
+                                {
+                                    if (!new FileInfo(path).Directory.Exists)
                                     {
-                                        if (arr.Files.ContainsKey(hash1))
+                                        Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
+                                    }
+                                    var doc = JsonConvert.SerializeObject(new Setup(mls.Chunks[0].Data as Multilayer_Setup, Path.GetFileName(primaryDependencies[i])), settings);
+                                    File.WriteAllText(path, doc);
+                                }
+
+                                for (int e = 0; e < mls.Imports.Count; e++)
+                                {
+                                    if (Path.GetExtension(mls.Imports[e].DepotPathStr) == ".xbm")
+                                    {
+                                        if (!TexturesList.Contains(mls.Imports[e].DepotPathStr))
+                                            TexturesList.Add(mls.Imports[e].DepotPathStr);
+
+                                        ulong hash1 = FNV1A64HashAlgorithm.HashString(mls.Imports[e].DepotPathStr);
+                                        foreach (Archive arr in archives)
                                         {
-                                            if (!File.Exists(Path.Combine(matRepo, mls.Imports[e].DepotPathStr.Replace("xbm", exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                            if (arr.Files.ContainsKey(hash1))
                                             {
-                                                if (Directory.Exists(matRepo))
-                                                    UncookSingle(arr, hash1, new DirectoryInfo(matRepo), exportArgs);
+                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(mls.Imports[e].DepotPathStr,"." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                {
+                                                    if (Directory.Exists(matRepo))
+                                                        UncookSingle(arr, hash1, new DirectoryInfo(matRepo), exportArgs);
+                                                }
+                                                break;
                                             }
-                                            break;
                                         }
                                     }
-                                }
-                                if (Path.GetExtension(mls.Imports[e].DepotPathStr) == ".mltemplate")
-                                {
-                                    ulong hash2 = FNV1A64HashAlgorithm.HashString(mls.Imports[e].DepotPathStr);
-                                    foreach (Archive arr in archives)
+                                    if (Path.GetExtension(mls.Imports[e].DepotPathStr) == ".mltemplate")
                                     {
-                                        if (arr.Files.ContainsKey(hash2))
+                                        if (!mlTemplateNames.Contains(mls.Imports[e].DepotPathStr))
                                         {
-                                            var mss = new MemoryStream();
-                                            ExtractSingleToStream(arr, hash2, mss);
-
-                                            var mlt = _wolvenkitFileService.TryReadCr2WFile(mss);
-                                            mlTemplateNames.Add(Path.GetFileName(mls.Imports[e].DepotPathStr));
-                                            mlTemplates.Add(mlt.Chunks[0].Data as Multilayer_LayerTemplate);
-
-                                            for (int eye = 0; eye < mlt.Imports.Count; eye++)
+                                            ulong hash2 = FNV1A64HashAlgorithm.HashString(mls.Imports[e].DepotPathStr);
+                                            foreach (Archive arr in archives)
                                             {
-                                                if (!TexturesList.Contains(mlt.Imports[eye].DepotPathStr))
-                                                    TexturesList.Add(mlt.Imports[eye].DepotPathStr);
-
-                                                ulong hash3 = FNV1A64HashAlgorithm.HashString(mlt.Imports[eye].DepotPathStr);
-                                                foreach (Archive arrr in archives)
+                                                if (arr.Files.ContainsKey(hash2))
                                                 {
-                                                    if (arrr.Files.ContainsKey(hash3))
+                                                    var mss = new MemoryStream();
+                                                    ExtractSingleToStream(arr, hash2, mss);
+
+                                                    var mlt = _wolvenkitFileService.TryReadCr2WFile(mss);
+                                                    mlTemplateNames.Add(mls.Imports[e].DepotPathStr);
+
+                                                    string path1 = Path.Combine(matRepo, Path.ChangeExtension(mls.Imports[e].DepotPathStr, ".mltemplate.json"));
+                                                    if (!File.Exists(path1))
                                                     {
-                                                        if (!File.Exists(Path.Combine(matRepo, mlt.Imports[eye].DepotPathStr.Replace("xbm", exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                        if (!new FileInfo(path1).Directory.Exists)
                                                         {
-                                                            if (Directory.Exists(matRepo))
-                                                                UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
+                                                            Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
                                                         }
-                                                        break;
+                                                        var doc1 = JsonConvert.SerializeObject(new Template(mlt.Chunks[0].Data as Multilayer_LayerTemplate, Path.GetFileName(mls.Imports[e].DepotPathStr)), settings);
+                                                        File.WriteAllText(path1, doc1);
                                                     }
+
+                                                    for (int eye = 0; eye < mlt.Imports.Count; eye++)
+                                                    {
+                                                        if (!TexturesList.Contains(mlt.Imports[eye].DepotPathStr))
+                                                            TexturesList.Add(mlt.Imports[eye].DepotPathStr);
+
+                                                        ulong hash3 = FNV1A64HashAlgorithm.HashString(mlt.Imports[eye].DepotPathStr);
+                                                        foreach (Archive arrr in archives)
+                                                        {
+                                                            if (arrr.Files.ContainsKey(hash3))
+                                                            {
+                                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(mlt.Imports[eye].DepotPathStr,"." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                                {
+                                                                    if (Directory.Exists(matRepo))
+                                                                        UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
+                                                                }
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
                                                 }
                                             }
-                                            break;
                                         }
                                     }
-                                }
 
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
             }
+
+
 
             List<RawMaterial> RawMaterials = new List<RawMaterial>();
             for (int i = 0; i < materialEntries.Count; i++)
             {
                 RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i],archives));
             }
-
-            List<Setup> MaterialSetups = new List<Setup>();
-            for (int i = 0; i < mlSetups.Count; i++)
-            {
-                MaterialSetups.Add(new Setup(mlSetups[i], mlSetupNames[i]));
-            }
-
-            List<Template> MaterialTemplates = new List<Template>();
-            for (int i = 0; i < mlTemplates.Count; i++)
-            {
-                MaterialTemplates.Add(new Template(mlTemplates[i], mlTemplateNames[i]));
-            }
-            var obj = new { MaterialRepo = matRepo, Materials = RawMaterials,HairProfiles = HairProfiles, MaterialSetups = MaterialSetups, MaterialTemplates = MaterialTemplates };
-
-            var settings = new JsonSerializerSettings();
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            settings.Formatting = Formatting.Indented;
+            var obj = new { MaterialRepo = matRepo, Materials = RawMaterials, Description = "Following Texture List is for user reference and has no purpose for importing materials", TexturesList };
 
             string str = JsonConvert.SerializeObject(obj, settings);
 
-            File.WriteAllLines(Path.Combine(outDir.FullName,"Textures.txt"), TexturesList);
-            File.WriteAllText(Path.Combine(outDir.FullName,"Material.json"), str);
+            File.WriteAllText(Path.ChangeExtension(outfile.FullName,".Material.json"), str);
 
         }
         private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string Name, List<Archive> archives)

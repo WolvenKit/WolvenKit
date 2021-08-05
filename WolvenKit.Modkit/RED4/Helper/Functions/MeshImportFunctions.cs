@@ -28,12 +28,11 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            DirectoryInfo outDir = new DirectoryInfo(Path.Combine(inGltfFile.DirectoryName, Path.GetFileNameWithoutExtension(inGltfFile.FullName)));
-            if (File.Exists(Path.Combine(outDir.FullName, "Material.json")))
+            if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
             {
                 if (ar != null)
                 {
-                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.Combine(outDir.FullName, "Material.json")), ar);
+                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), ar);
                 }
                 if (importMaterialOnly)
                 {
