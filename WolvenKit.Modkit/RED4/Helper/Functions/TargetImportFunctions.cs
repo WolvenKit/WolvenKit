@@ -29,10 +29,16 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            string baseMeshPath = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First().BaseMesh.DepotPath;
-            ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
+            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First();
 
-            FileStream meshStream = new FileStream(Path.Combine(modFolder, baseMeshPath),FileMode.OpenOrCreate,FileAccess.ReadWrite);
+            string baseMeshPath = blob.BaseMesh.DepotPath;
+            ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
+            baseMeshPath = Path.Combine(modFolder, baseMeshPath);
+            if (!new FileInfo(baseMeshPath).Directory.Exists)
+            {
+                Directory.CreateDirectory(new FileInfo(baseMeshPath).Directory.FullName);
+            }
+            FileStream meshStream = new FileStream(baseMeshPath, FileMode.OpenOrCreate,FileAccess.ReadWrite);
             meshStream.Seek(0, SeekOrigin.Begin);
             if (meshStream.Length == 0)
             {
@@ -45,37 +51,27 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
-
+            
             var renderblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
-            renderblob.Header.NumDiffs.Value = 0;
-            renderblob.Header.NumDiffsMapping.Value = 0;
-            for(int i = 0; i < renderblob.Header.TargetStartsInVertexDiffs.Count; i++)
+            for (int i = 0; i < renderblob.Header.TargetPositionDiffOffset.Count; i++)
             {
-                renderblob.Header.TargetStartsInVertexDiffs[i].Value = 0;
+                renderblob.Header.TargetPositionDiffOffset[i].X.Value = 0f;
+                renderblob.Header.TargetPositionDiffOffset[i].Y.Value = 0f;
+                renderblob.Header.TargetPositionDiffOffset[i].Z.Value = 0f;
             }
-            for (int i = 0; i < renderblob.Header.TargetStartsInVertexDiffsMapping.Count; i++)
+            for (int i = 0; i < renderblob.Header.TargetPositionDiffScale.Count; i++)
             {
-                renderblob.Header.TargetStartsInVertexDiffsMapping[i].Value = 0;
+                renderblob.Header.TargetPositionDiffScale[i].X.Value = 0f;
+                renderblob.Header.TargetPositionDiffScale[i].Y.Value = 0f;
+                renderblob.Header.TargetPositionDiffScale[i].Z.Value = 0f;
             }
-            for (int i = 0; i < renderblob.Header.NumVertexDiffsInEachChunk.Count; i++)
-            {
-                for (int e = 0; e < renderblob.Header.NumVertexDiffsInEachChunk[i].Count; e++)
-                {
-                    renderblob.Header.NumVertexDiffsInEachChunk[i][e].Value = 0;
-                }
-            }
-            for (int i = 0; i < renderblob.Header.NumVertexDiffsMappingInEachChunk.Count; i++)
-            {
-                for (int e = 0; e < renderblob.Header.NumVertexDiffsMappingInEachChunk[i].Count; e++)
-                {
-                    renderblob.Header.NumVertexDiffsMappingInEachChunk[i][e].Value = 0;
-                }
-            }
+            
             for (int i = 0; i < renderblob.Header.TargetTextureDiffsData.Count; i++)
             {
-                renderblob.Header.TargetTextureDiffsData[i] = new rendRenderMorphTargetMeshBlobTextureData(cr2w, renderblob.Header.TargetTextureDiffsData, "rendRenderMorphTargetMeshBlobTextureData");
+                renderblob.Header.TargetTextureDiffsData[i] = new rendRenderMorphTargetMeshBlobTextureData(cr2w, renderblob.Header.TargetTextureDiffsData, Convert.ToString(i));
             }
-
+            
+            
             var model = ModelRoot.Load(inGltfFile.FullName);
 
             VerifyGLTF(model);
@@ -107,7 +103,7 @@ namespace WolvenKit.Modkit.RED4
 
 
             // updating bounding box
-            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First();
+
             blob.BoundingBox.Min.X.Value = min.X;
             blob.BoundingBox.Min.Y.Value = min.Y;
             blob.BoundingBox.Min.Z.Value = min.Z;
@@ -171,8 +167,9 @@ namespace WolvenKit.Modkit.RED4
 
             meshesInfo.qScale = QuantScale;
             meshesInfo.qTrans = QuantTrans;
-
+            
             MemoryStream ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+            
             ms.Seek(0, SeekOrigin.Begin);
             if (outStream != null)
             {
@@ -184,7 +181,8 @@ namespace WolvenKit.Modkit.RED4
                 ms.CopyTo(intargetStream);
             }
             meshStream.Seek(0, SeekOrigin.Begin);
-            return ImportMesh(inGltfFile, meshStream);
+            var arr = archives.FirstOrDefault(_ => _.Name.Equals("basegame_4_gamedata.archive"));
+            return ImportMesh(inGltfFile, meshStream, arr);
         }
     }
 }
