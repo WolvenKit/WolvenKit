@@ -28,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
     using VCT = VertexColor1Texture2;
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile,List<Archive> archives, bool isGLBinary = true)
+        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile,List<Archive> archives, string modFolder, bool isGLBinary = true)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(targetStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -46,19 +46,28 @@ namespace WolvenKit.Modkit.RED4
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
             string baseMeshPath = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First().BaseMesh.DepotPath;
             ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
-            foreach (Archive ar in archives)
-            {
-                if (ar.Files.ContainsKey(hash))
-                {
-                    var meshStream = new MemoryStream();
-                    ExtractSingleToStream(ar, hash, meshStream);
-                    var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
 
-                    if (meshCr2w == null || !meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            MemoryStream meshStream = new MemoryStream();
+            if(File.Exists(Path.Combine(modFolder,baseMeshPath)))
+            {
+                meshStream = new MemoryStream(File.ReadAllBytes(Path.Combine(modFolder, baseMeshPath)));
+            }
+            else
+            {
+                foreach (Archive ar in archives)
+                {
+                    if (ar.Files.ContainsKey(hash))
                     {
+                        ExtractSingleToStream(ar, hash, meshStream);
                         break;
                     }
+                }
+            }
+            {
+                var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
 
+                if (meshCr2w != null && meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() && meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                {
                     MeshTools.MeshBones meshBones = new MeshTools.MeshBones();
                     meshBones.boneCount = meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().BoneNames.Count;
                     if (meshBones.boneCount != 0)    // for rigid meshes
@@ -79,11 +88,8 @@ namespace WolvenKit.Modkit.RED4
                             expMeshes[i].weightcount = 0;
                     }
                     MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshBones);
-
-                    break;
                 }
             }
-
             MemoryStream diffsbuffer = new MemoryStream();
             MemoryStream mappingbuffer = new MemoryStream();
             MemoryStream texbuffer = new MemoryStream();

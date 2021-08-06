@@ -307,6 +307,8 @@ namespace WolvenKit.Common.Model.Arguments
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
 
+        [Browsable(false)]
+        public string ModFolderPath { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

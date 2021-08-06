@@ -643,6 +643,7 @@ namespace WolvenKit.ViewModels.Editor
                         var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                         morphTargetExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                     }
+                    morphTargetExportArgs.ModFolderPath = _projectManager.ActiveProject.ModDirectory;
                 }
                 if (item.Properties is OpusExportArgs opusExportArgs)
                 {
