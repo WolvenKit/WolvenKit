@@ -14,14 +14,14 @@ namespace WolvenKit.Common
         public GameFileTreeNode()
         {
             Directories = new Dictionary<string, GameFileTreeNode>();
-            Files = new Dictionary<string, List<IGameFile>>();
+            Files = new List<IGameFile>();
             Name = "";
         }
 
         public GameFileTreeNode(EArchiveType bundleType)
         {
             Directories = new Dictionary<string, GameFileTreeNode>();
-            Files = new Dictionary<string, List<IGameFile>>();
+            Files = new List<IGameFile>();
             Name = "";
         }
 
@@ -29,11 +29,17 @@ namespace WolvenKit.Common
 
         #region Properties
 
+        public string Name { get; set; }
+
+        public GameFileTreeNode Parent { get; set; }
+
         public Dictionary<string, GameFileTreeNode> Directories { get; set; }
 
-        public string Extension => nameof(ECustomImageKeys.ClosedDirImageKey);
+        public List<IGameFile> Files { get; set; }
 
-        public Dictionary<string, List<IGameFile>> Files { get; set; }
+
+
+        public string Extension => nameof(ECustomImageKeys.ClosedDirImageKey);
 
         public string FullPath
         {
@@ -51,10 +57,6 @@ namespace WolvenKit.Common
                 return path ?? "";
             }
         }
-
-        public string Name { get; set; }
-
-        public GameFileTreeNode Parent { get; set; }
 
         public List<GameFileTreeNode> SubDirectories => Directories.Values.OrderBy(_ => _.Name).ToList();
 

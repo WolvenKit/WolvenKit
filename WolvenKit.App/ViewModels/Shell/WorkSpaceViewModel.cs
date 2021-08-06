@@ -14,7 +14,6 @@ using Catel.Messaging;
 using Catel.MVVM;
 using Catel.Services;
 using Microsoft.Win32;
-using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
@@ -73,7 +72,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
             ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
-            ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
+            //ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
             ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
             ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
             ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
@@ -111,7 +110,7 @@ namespace WolvenKit.ViewModels.Shell
                 AssetBrowserVM,
                 ImportExportToolVM,
 
-                ImportViewModel,
+                //ImportViewModel,
                 //CodeEditorVM,
                 //VisualEditorVM,
 
@@ -130,8 +129,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (isManaged)
                 {
-                    _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");    //INNO
-                    //_ = Process.Start(path.FullName, "/qr");            //Advanced Installer
+                    _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");      //INNO
+                    //_ = Process.Start(path.FullName, "/qr");                  //Advanced Installer
                 }
                 else
                 {
@@ -187,7 +186,7 @@ namespace WolvenKit.ViewModels.Shell
             // View Tab
             commandManager.RegisterCommand(AppCommands.Application.ShowLog, ShowLogCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowProjectExplorer, ShowProjectExplorerCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
+            //commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowProperties, ShowPropertiesCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowAssetBrowser, ShowAssetsCommand, this);
             commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
@@ -311,7 +310,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Displays the Import Utility View
         /// </summary>
-        public ICommand ShowImportUtilityCommand { get; private set; }
+        //public ICommand ShowImportUtilityCommand { get; private set; }
 
         /// <summary>
         /// Displays the AssetBrowser.
@@ -415,7 +414,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanShowImporterTool() => false;
 
-        private bool CanShowImportUtility() => _projectManager.ActiveProject != null;
+        //private bool CanShowImportUtility() => _projectManager.ActiveProject != null;
 
         private bool CanShowInstaller() => false;
 
@@ -501,7 +500,7 @@ namespace WolvenKit.ViewModels.Shell
             //  }
         }
 
-        private void ExecuteShowImportUtility() => ImportViewModel.IsVisible = !ImportViewModel.IsVisible;
+        //private void ExecuteShowImportUtility() => ImportViewModel.IsVisible = !ImportViewModel.IsVisible;
 
         private void ExecuteShowInstaller()
         {                // #convert2MVVMSoon
@@ -550,7 +549,7 @@ namespace WolvenKit.ViewModels.Shell
         private ImportExportViewModel _importExportToolViewModel = null;
 
 
-        private ImportViewModel _importViewModel = null;
+        //private ImportViewModel _importViewModel = null;
 
         private LogViewModel _logViewModel = null;
 
@@ -596,14 +595,14 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        public ImportViewModel ImportViewModel
-        {
-            get
-            {
-                _importViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportViewModel>();
-                return _importViewModel;
-            }
-        }
+        //public ImportViewModel ImportViewModel
+        //{
+        //    get
+        //    {
+        //        _importViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportViewModel>();
+        //        return _importViewModel;
+        //    }
+        //}
 
 
 

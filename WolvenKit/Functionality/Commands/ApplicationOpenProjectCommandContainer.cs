@@ -27,8 +27,6 @@ namespace WolvenKit.Functionality.Commands
         private readonly Tw3Controller _tw3Controller;
 
 
-
-
         #endregion Fields
 
         #region Constructors
@@ -45,12 +43,8 @@ namespace WolvenKit.Functionality.Commands
             Cp77Controller cp77Controller
             )
             : base(AppCommands.Application.OpenProject, commandManager, projectManager, notificationService,
-                loggerService)
+                loggerService, pleaseWaitService)
         {
-            Argument.IsNotNull(() => openFileService);
-            Argument.IsNotNull(() => pleaseWaitService);
-            Argument.IsNotNull(() => recentlyUsedItemsService);
-
             _pleaseWaitService = pleaseWaitService;
             _openFileService = openFileService;
             _recentlyUsedItemsService = recentlyUsedItemsService;

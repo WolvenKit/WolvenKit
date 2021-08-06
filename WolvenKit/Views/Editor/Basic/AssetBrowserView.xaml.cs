@@ -218,7 +218,7 @@ namespace WolvenKit.Views.Editor
 
             if (e.AddedItems.First() is TreeGridRowInfo { RowData: GameFileTreeNode model })
             {
-                vm.RightItems = model.Files.Values.SelectMany(_ => _)
+                vm.RightItems = model.Files
                     .Select(_ => new FileEntryViewModel(_ as FileEntry));
             }
         }
