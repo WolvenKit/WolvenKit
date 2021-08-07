@@ -20,7 +20,7 @@ namespace WolvenKit.Modkit.RED4
     using Vec3 = System.Numerics.Vector3;
     public partial class ModTools
     {
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, Archive ar = null,bool importMaterialOnly = false, Stream outStream = null)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream,bool importMaterialOnly = false, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(inmeshStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -30,10 +30,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
             {
-                if (ar != null)
-                {
-                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), ar);
-                }
+                WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")));
                 if (importMaterialOnly)
                 {
                     MemoryStream matOnlyStream = new MemoryStream();
@@ -631,6 +628,7 @@ namespace WolvenKit.Modkit.RED4
 
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
             int Count = blob.Header.Topology.Count;
+            
             for (int i = 0; i < Count; i++)
             {
                 blob.Header.Topology.Remove(blob.Header.Topology[0]);
@@ -639,7 +637,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 blob.Header.Topology.Add(new rendTopologyData(cr2w, blob.Header.Topology, Convert.ToString(i)) { IsSerialized = true, IsNulled = false });
             }
-
+            
             //dependent RenderLOD's removal and addition
             Count = blob.Header.RenderLODs.Count;
             if (Count > 1)

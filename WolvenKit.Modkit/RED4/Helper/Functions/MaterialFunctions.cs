@@ -612,21 +612,12 @@ namespace WolvenKit.Modkit.RED4
             inmeshStream.Close();
 
         }
-        public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, Archive ar)
+        public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData)
         {
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any() || cr2w.Buffers.Count < 1)
             {
                 return false;
             }
-
-            ulong hash = FNV1A64HashAlgorithm.HashString("base\\characters\\common\\skin\\old_mat_instances\\skin_ma_a__head.mi");
-            if (!ar.Files.ContainsKey(hash))
-                return false;
-
-            var ms = new MemoryStream();
-            ModTools.ExtractSingleToStream(ar, hash, ms);
-            _wolvenkitFileService.TryReadRED4File(ms);
-            ms.Seek(0, SeekOrigin.Begin);
 
             var obj = JsonConvert.DeserializeObject<MatData>(_matData);
 
@@ -642,10 +633,17 @@ namespace WolvenKit.Modkit.RED4
             {
                 var mat = obj.Materials[i];
                 names.Add(mat.Name);
-                var mi = _wolvenkitFileService.TryReadRED4File(ms);
-                ms.Seek(0, SeekOrigin.Begin);
+                CR2WFile mi = new CR2WFile();
+                {
+                    var chunk = new CMaterialInstance(mi, null, "CMaterialInstance") { IsSerialized = true };
+                    chunk.CookingPlatform = new CEnum<Enums.ECookingPlatform>(mi, chunk, "cookingPlatform") { IsSerialized = true, Value = Enums.ECookingPlatform.PLATFORM_PC };
+                    chunk.CookingPlatform.EnumValueList.Add("PLATFORM_PC");
+                    chunk.ResourceVersion = new CUInt8(mi, chunk, "resourceVersion") { IsSerialized = true, Value = 4 };
+                    chunk.BaseMaterial = new rRef<IMaterial>(mi, chunk, "baseMaterial") { IsSerialized = true, DepotPath = mat.BaseMaterial };
+                    chunk.CMaterialInstanceData = new CArray<CVariantSizeNameType>(mi, chunk, "CMaterialInstanceData") { IsSerialized = true };
+                    mi.CreateChunk(chunk, 0);
+                }
                 MATERIAL.WriteMatToMeshEnum(ref mi, ref mat);
-                (mi.Chunks[0].Data as CMaterialInstance).BaseMaterial.DepotPath = mat.BaseMaterial;
 
                 offsets.Add((UInt32)materialbuffer.Position);
                 var m = new MemoryStream();

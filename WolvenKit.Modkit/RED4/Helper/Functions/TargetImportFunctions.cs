@@ -181,8 +181,7 @@ namespace WolvenKit.Modkit.RED4
                 ms.CopyTo(intargetStream);
             }
             meshStream.Seek(0, SeekOrigin.Begin);
-            var arr = archives.FirstOrDefault(_ => _.Name.Equals("basegame_4_gamedata.archive"));
-            return ImportMesh(inGltfFile, meshStream, arr);
+            return ImportMesh(inGltfFile, meshStream);
         }
     }
 }
