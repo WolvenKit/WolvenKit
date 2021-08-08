@@ -635,7 +635,7 @@ namespace CP77.CR2W
                 }
 
                 UInt32 NorRead32;
-                bool invalidNors = true;
+                int invalidNormalsCount = 0;
                 if (info.normalOffsets[index] != 0)
                 {
                     normals = new Vec3[info.vertCounts[index]];
@@ -651,13 +651,13 @@ namespace CP77.CR2W
                         // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
                         normals[i] = new Vec3(tempv.X, tempv.Z, -tempv.Y);
                         normals[i] = Vec3.Normalize(normals[i]);
-                        if (NorRead32 != 0x5FF7FDFF)
+                        if (NorRead32 == 0x5FF7FDFF)
                         {
-                            invalidNors = false;
+                            invalidNormalsCount++;
                         }
                     }
                 }
-                bool invalidTans = true;
+                int invalidTangentsCount = 0;
                 // got 10bit normals
                 if (info.tangentOffsets[index] != 0 && info.normalOffsets[index] != 0)
                 {
@@ -672,19 +672,19 @@ namespace CP77.CR2W
                         // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
                         Vec3 vec = Vec3.Normalize(new Vec3(tempv.X, tempv.Z, -tempv.Y));
                         tangents[i] = new Vec4(vec.X, vec.Y, vec.Z, 1f);
-                        if (NorRead32 != 0)
+                        if (NorRead32 == 0)
                         {
-                            invalidTans = false;
+                            invalidTangentsCount++;
                         }
                     }
                 }
-                if (invalidTans)
-                {
-                    tangents = new Vec4[0];
-                }
-                if (invalidNors)
+                if (invalidNormalsCount > (info.vertCounts[index] / 2))
                 {
                     normals = new Vec3[0];
+                }
+                if (invalidTangentsCount > (info.vertCounts[index] / 2))
+                {
+                    tangents = new Vec4[0];
                 }
 
                 if (info.tx1Offsets[index] != 0)
