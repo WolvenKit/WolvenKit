@@ -356,7 +356,6 @@ namespace CP77.CR2W
         public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
         {
             List<RawArmature> Rigs = new List<RawArmature>();
-            rigStreamS = rigStreamS.OrderByDescending(r => r.Length).ToList();  // not so smart hacky method to get bodybase rigs on top/ orderby descending
             for (int r = 0; r < rigStreamS.Count; r++)
             {
                 RawArmature Rig = _rig.ProcessRig(rigStreamS[r]);
@@ -535,6 +534,10 @@ namespace CP77.CR2W
                         if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex.Value == 0)
                             extraExists[i] = true;
                     }
+                }
+                if(!cr2w.Chunks.Select(_=>_.Data).OfType<meshMeshParamGarmentSupport>().Any())
+                {
+                    extraExists[i] = false;
                 }
             }
 
