@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
+using SharpGLTF.Validation;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -242,6 +243,14 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Import Material.Json Only")]
         [Description("If checked only the Materials from Material.Json will be imported to the mesh, geometry from GLTF/GLB will not be imported!, uncheck imports Both!")]
         public bool importMaterialOnly { get; set; } = false;
+
+        /// <summary>
+        /// Validation type for the selected GLB/GLTF.
+        /// </summary>
+        [Category("Mesh Import Settings")]
+        [Display(Name = "GLTF Validation Checks")]
+        [Description("The type of validation check for your glb/gltf file")]
+        public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

@@ -14,7 +14,7 @@ using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
-using System.Diagnostics;
+using SharpGLTF.Validation;
 namespace CP77.CR2W
 {
     using Vec2 = System.Numerics.Vector2;
@@ -152,7 +152,7 @@ namespace CP77.CR2W
             return outfile;
         }
 
-        public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
             var cr2w = _modTools.TryReadRED4File(meshStream);
 
@@ -226,16 +226,16 @@ namespace CP77.CR2W
 
                 if (isGLBinary)
                 {
-                    model.SaveGLB(outfile.FullName);
+                    model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
                 }
                 else
                 {
-                    model.SaveGLTF(outfile.FullName);
+                    model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
                 }
             }
         }
 
-        public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
             var cr2w = _modTools.TryReadRED4File(meshStream);
 
@@ -258,16 +258,20 @@ namespace CP77.CR2W
             ModelRoot model = RawMeshesToGLTF(expMeshes, null);
 
             if (isGLBinary)
-                model.SaveGLB(outfile.FullName);
+            {
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+            }
             else
-                model.SaveGLTF(outfile.FullName);
+            {
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+            }
 
             meshStream.Dispose();
             meshStream.Close();
             return true;
         }
 
-        public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
@@ -288,9 +292,13 @@ namespace CP77.CR2W
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, null);
             if (isGLBinary)
-                model.SaveGLB(outfile.FullName);
+            {
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+            }
             else
-                model.SaveGLTF(outfile.FullName);
+            {
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+            }
 
             for (int i = 0; i < meshStreamS.Count; i++)
             {
@@ -301,7 +309,7 @@ namespace CP77.CR2W
             return true;
         }
 
-        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
             RawArmature Rig = _rig.ProcessRig(rigStream);
 
@@ -341,9 +349,13 @@ namespace CP77.CR2W
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
             if (isGLBinary)
-                model.SaveGLB(outfile.FullName);
+            {
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+            }
             else
-                model.SaveGLTF(outfile.FullName);
+            {
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+            }
 
             meshStream.Dispose();
             meshStream.Close();
@@ -353,7 +365,7 @@ namespace CP77.CR2W
             return true;
         }
 
-        public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true)
+        public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
             List<RawArmature> Rigs = new List<RawArmature>();
             for (int r = 0; r < rigStreamS.Count; r++)
@@ -400,9 +412,13 @@ namespace CP77.CR2W
             }
             ModelRoot model = RawMeshesToGLTF(expMeshes, expRig);
             if (isGLBinary)
-                model.SaveGLB(outfile.FullName);
+            {
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+            }
             else
-                model.SaveGLTF(outfile.FullName);
+            {
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+            }
 
             for (int i = 0; i < meshStreamS.Count; i++)
             {

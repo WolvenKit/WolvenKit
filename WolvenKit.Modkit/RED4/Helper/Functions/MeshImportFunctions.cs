@@ -9,7 +9,7 @@ using SharpGLTF.IO;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.CR2W;
-using CP77.CR2W;
+using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -20,7 +20,7 @@ namespace WolvenKit.Modkit.RED4
     using Vec3 = System.Numerics.Vector3;
     public partial class ModTools
     {
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream,bool importMaterialOnly = false, Stream outStream = null)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(inmeshStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -50,7 +50,7 @@ namespace WolvenKit.Modkit.RED4
 
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName);
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
 
             VerifyGLTF(model);
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
