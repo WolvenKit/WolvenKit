@@ -238,8 +238,6 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class MeshImportArgs : ImportArgs
     {
-        [Browsable(false)]
-        public Archive Archive { get; set; } = new(); // basegame4_gamedata.archive
         [Category("Mesh Import Settings")]
         [Display(Name = "Import Material.Json Only")]
         [Description("If checked only the Materials from Material.Json will be imported to the mesh, geometry from GLTF/GLB will not be imported!, uncheck imports Both!")]
@@ -307,6 +305,8 @@ namespace WolvenKit.Common.Model.Arguments
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
 
+        [Browsable(false)]
+        public string ModFolderPath { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

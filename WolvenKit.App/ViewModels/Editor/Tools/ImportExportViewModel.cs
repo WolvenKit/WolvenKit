@@ -598,18 +598,6 @@ namespace WolvenKit.ViewModels.Editor
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
-                if (item.Properties is MeshImportArgs meshImportArgs)
-                {
-                    var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                    var archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
-                    var basegameArchive = archives.FirstOrDefault(_ => _.Name.Equals("basegame_4_gamedata.archive"));
-                    if (basegameArchive == null)
-                    {
-                        return;
-                    }
-                    meshImportArgs.Archive = basegameArchive;
-                }
-
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
@@ -643,6 +631,7 @@ namespace WolvenKit.ViewModels.Editor
                         var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
                         morphTargetExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                     }
+                    morphTargetExportArgs.ModFolderPath = _projectManager.ActiveProject.ModDirectory;
                 }
                 if (item.Properties is OpusExportArgs opusExportArgs)
                 {
