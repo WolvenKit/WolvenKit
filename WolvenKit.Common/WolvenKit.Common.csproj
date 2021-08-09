@@ -13,13 +13,17 @@
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <TargetFramework>net5.0</TargetFramework>
-      <Version>2.3.0-pre</Version>
+      <Version>2.3.0</Version>
       <AssemblyVersion>2.3.0.0</AssemblyVersion>
       <FileVersion>2.3.0.0</FileVersion>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <DebugType>embedded</DebugType>
 
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NoWarn>1701;1702;NU5104</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
