@@ -26,6 +26,10 @@
     <NoWarn>1701;1702;NU5104</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;NU5014</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Extensions\PropertyGridEditors\**" />
     <Compile Remove="Model\Cr2w\**" />

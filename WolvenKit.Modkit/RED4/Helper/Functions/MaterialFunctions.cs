@@ -11,7 +11,7 @@ using SharpGLTF.Schema2;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Modkit.RED4.MaterialSetupFile;
+using WolvenKit.Modkit.RED4.Materials.Extras;
 using SharpGLTF.IO;
 using System.Threading;
 using WolvenKit.Common.Model.Arguments;
@@ -328,7 +328,7 @@ namespace WolvenKit.Modkit.RED4
                                     {
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
-                                    var doc = JsonConvert.SerializeObject(new HairProfile(hp.Chunks[0].Data as CHairProfile, Path.GetFileName(primaryDependencies[i])), settings);
+                                    var doc = JsonConvert.SerializeObject(new HairProfile(hp.Chunks[0].Data as CHairProfile), settings);
                                     File.WriteAllText(path, doc);
                                 }
                                 break;
@@ -358,7 +358,7 @@ namespace WolvenKit.Modkit.RED4
                                     {
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
-                                    var doc = JsonConvert.SerializeObject(new Setup(mls.Chunks[0].Data as Multilayer_Setup, Path.GetFileName(primaryDependencies[i])), settings);
+                                    var doc = JsonConvert.SerializeObject(new Setup(mls.Chunks[0].Data as Multilayer_Setup), settings);
                                     File.WriteAllText(path, doc);
                                 }
 
@@ -405,7 +405,7 @@ namespace WolvenKit.Modkit.RED4
                                                         {
                                                             Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
                                                         }
-                                                        var doc1 = JsonConvert.SerializeObject(new Template(mlt.Chunks[0].Data as Multilayer_LayerTemplate, Path.GetFileName(mls.Imports[e].DepotPathStr)), settings);
+                                                        var doc1 = JsonConvert.SerializeObject(new Template(mlt.Chunks[0].Data as Multilayer_LayerTemplate), settings);
                                                         File.WriteAllText(path1, doc1);
                                                     }
 
