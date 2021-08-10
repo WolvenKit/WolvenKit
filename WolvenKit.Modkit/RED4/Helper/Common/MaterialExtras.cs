@@ -31,6 +31,10 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
             public string MetalLevelsOut { get; set; } = null;
             public string Overrides { get; set; } = null;
         }
+        public Setup()
+        {
+
+        }
         public Setup(Multilayer_Setup setup)
         {
             LayerCount = setup.Layers.Count;
@@ -77,15 +81,13 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 Layers[i].Overrides = data.Overrides.IsSerialized ? data.Overrides.Value : null;
             }
         }
-        public CR2WFile Deserialize(Setup setup)
+        public static CR2WFile Deserialize(Setup setup)
         {
             CR2WFile mlsetup = new CR2WFile();
             {
                 var chunk = new Multilayer_Setup(mlsetup, null, "Multilayer_Setup") { IsSerialized = true };
                 chunk.CookingPlatform = new CEnum<Enums.ECookingPlatform>(mlsetup, chunk, "cookingPlatform") { IsSerialized = true, Value = Enums.ECookingPlatform.PLATFORM_PC };
                 chunk.CookingPlatform.EnumValueList.Add("PLATFORM_PC");
-                chunk.UseNormal = new CBool(mlsetup, chunk, "useNormal") { IsSerialized = true, Value = false };
-                chunk.Ratio = new CFloat(mlsetup, chunk, "ratio") { IsSerialized = true, Value = 0f };
                 chunk.Layers = new CArray<Multilayer_Layer>(mlsetup, chunk, "layers") { IsSerialized = true };
 
                 for(int i = 0; i < setup.LayerCount; i++)
@@ -337,7 +339,11 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
 
             }
         }
-        public CR2WFile Deserialize(Template template)
+        public Template()
+        {
+
+        }
+        public static CR2WFile Deserialize(Template template)
         {
             CR2WFile mltemplate = new CR2WFile();
             {
@@ -349,15 +355,19 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 chunk.NormalTexture = new rRef<CBitmapTexture>(mltemplate, chunk, "normalTexture") { IsSerialized = true, DepotPath = template.NormalTexture };
                 chunk.RoughnessTexture = new rRef<CBitmapTexture>(mltemplate, chunk, "roughnessTexture") { IsSerialized = true, DepotPath = template.RoughnessTexture };
                 chunk.MetalnessTexture = new rRef<CBitmapTexture>(mltemplate, chunk, "metalnessTexture") { IsSerialized = true, DepotPath = template.MetalnessTexture };
+                
                 if (template.TilingMultiplier != null)
                 {
                     chunk.TilingMultiplier = new CFloat(mltemplate, chunk, "tilingMultiplier") { IsSerialized = true, Value = template.TilingMultiplier.Value };
                 }
+                
                 chunk.ColorMaskLevelsIn = new CArrayFixedSize<CFloat>(mltemplate, chunk, "colorMaskLevelsIn") { IsSerialized = true };
+
                 for (int i = 0; i < template.ColorMaskLevelsIn.Length; i++)
                 {
                     chunk.ColorMaskLevelsIn.Add(new CFloat(mltemplate, chunk.ColorMaskLevelsIn, Convert.ToString(i)) { IsSerialized = true, Value = template.ColorMaskLevelsIn[i].Value });
                 }
+
                 chunk.ColorMaskLevelsOut = new CArrayFixedSize<CFloat>(mltemplate, chunk, "colorMaskLevelsOut") { IsSerialized = true };
                 for (int i = 0; i < template.ColorMaskLevelsOut.Length; i++)
                 {
@@ -372,6 +382,7 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 chunk.DefaultOverrides.MetalLevelsOut = new CName(mltemplate, chunk.DefaultOverrides, "metalLevelsOut") { IsSerialized = true, Value = template.DefaultOverrides.MetalLevelsOut };
 
                 chunk.Overrides = new Multilayer_LayerTemplateOverrides(mltemplate, chunk, "overrides") { IsSerialized = true };
+                
                 chunk.Overrides.ColorScale = new CArray<Multilayer_LayerTemplateOverridesColor>(mltemplate, chunk.Overrides, "colorScale") { IsSerialized = true };
                 for (int i = 0; i < template.Overrides.ColorScale.Length; i++)
                 {
@@ -433,9 +444,15 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 {
                     var normalStrength = new Multilayer_LayerTemplateOverridesNormalStrength(mltemplate, chunk.Overrides.NormalStrength, Convert.ToString(i)) { IsSerialized = true };
                     normalStrength.N = new CName(mltemplate, normalStrength, "n") { IsSerialized = true, Value = template.Overrides.NormalStrength[i].N };
-                    normalStrength.V = new CFloat(mltemplate, normalStrength, "v") { IsSerialized = true, Value = template.Overrides.NormalStrength[i].V[0].Value };
+                    if (template.Overrides.NormalStrength[i].V != null)
+                    {
+                        if(template.Overrides.NormalStrength[i].V[0].Value != 0f)
+                        {
+                            normalStrength.V = new CFloat(mltemplate, normalStrength, "v") { IsSerialized = true, Value = template.Overrides.NormalStrength[i].V[0].Value };
+                        }
+                    }
                 }
-
+                
                 mltemplate.CreateChunk(chunk,0);
             }
             return mltemplate;
@@ -455,6 +472,10 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 Value = g.Value.Value;
                 Color = new Color(g.Color);
             }
+            public GradientEntry()
+            {
+
+            }
         }
         public HairProfile(CHairProfile c)
         {
@@ -470,38 +491,59 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 GradientEntriesRootToTip[i] = new GradientEntry(c.GradientEntriesRootToTip[i]);
             }
         }
-        public CR2WFile Deserialize(HairProfile hp)
+        public HairProfile()
+        {
+
+        }
+        public static CR2WFile Deserialize(HairProfile hp)
         {
             CR2WFile hairprofile = new CR2WFile();
             {
                 var chunk = new CHairProfile(hairprofile, null, "CHairProfile") { IsSerialized = true };
                 chunk.CookingPlatform = new CEnum<Enums.ECookingPlatform>(hairprofile, chunk, "cookingPlatform") { IsSerialized = true, Value = Enums.ECookingPlatform.PLATFORM_PC };
                 chunk.CookingPlatform.EnumValueList.Add("PLATFORM_PC");
-
+                
                 chunk.GradientEntriesID = new CArray<rendGradientEntry>(hairprofile, chunk, "gradientEntriesID") { IsSerialized = true };
+                
                 for (int i = 0; i < hp.GradientEntriesID.Length; i++)
                 {
                     var entry = new rendGradientEntry(hairprofile, chunk.GradientEntriesID, Convert.ToString(i)) { IsSerialized = true };
-                    entry.Value = new CFloat(hairprofile, entry, "value") { IsSerialized = true, Value = hp.GradientEntriesID[i].Value };
+                    
+                    if(hp.GradientEntriesID[i].Value !=0)
+                    {
+                        entry.Value = new CFloat(hairprofile, entry, "value") { IsSerialized = true, Value = hp.GradientEntriesID[i].Value };
+                    }
+                    
                     entry.Color = new CColor(hairprofile, entry, "color") { IsSerialized = true };
-                    entry.Color.Red = new CUInt8(hairprofile, entry.Color, "red") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Red };
-                    entry.Color.Green = new CUInt8(hairprofile, entry.Color, "green") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Green };
-                    entry.Color.Blue = new CUInt8(hairprofile, entry.Color, "blue") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Blue };
-                    entry.Color.Alpha = new CUInt8(hairprofile, entry.Color, "alpha") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Alpha };
+                    
+                    entry.Color.Red = new CUInt8(hairprofile, entry.Color, "Red") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Red };
+                    entry.Color.Green = new CUInt8(hairprofile, entry.Color, "Green") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Green };
+                    entry.Color.Blue = new CUInt8(hairprofile, entry.Color, "Blue") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Blue };
+                    entry.Color.Alpha = new CUInt8(hairprofile, entry.Color, "Alpha") { IsSerialized = true, Value = hp.GradientEntriesID[i].Color.Alpha };
+
                     chunk.GradientEntriesID.Add(entry);
                 }
+                
+                
                 chunk.GradientEntriesRootToTip = new CArray<rendGradientEntry>(hairprofile, chunk, "gradientEntriesRootToTip") { IsSerialized = true };
                 for (int i = 0; i < hp.GradientEntriesRootToTip.Length; i++)
                 {
                     var entry = new rendGradientEntry(hairprofile, chunk.GradientEntriesRootToTip, Convert.ToString(i)) { IsSerialized = true };
-                    entry.Value = new CFloat(hairprofile, entry, "value") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Value };
+
+                    if (hp.GradientEntriesRootToTip[i].Value != 0)
+                    {
+                        entry.Value = new CFloat(hairprofile, entry, "value") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Value };
+                    }
+
                     entry.Color = new CColor(hairprofile, entry, "color") { IsSerialized = true };
-                    entry.Color.Red = new CUInt8(hairprofile, entry.Color, "red") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Red };
-                    entry.Color.Green = new CUInt8(hairprofile, entry.Color, "green") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Green };
-                    entry.Color.Blue = new CUInt8(hairprofile, entry.Color, "blue") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Blue };
-                    entry.Color.Alpha = new CUInt8(hairprofile, entry.Color, "alpha") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Alpha };
+                    entry.Color.Red = new CUInt8(hairprofile, entry.Color, "Red") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Red };
+                    entry.Color.Green = new CUInt8(hairprofile, entry.Color, "Green") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Green };
+                    entry.Color.Blue = new CUInt8(hairprofile, entry.Color, "Blue") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Blue };
+                    entry.Color.Alpha = new CUInt8(hairprofile, entry.Color, "Alpha") { IsSerialized = true, Value = hp.GradientEntriesRootToTip[i].Color.Alpha };
+
                     chunk.GradientEntriesRootToTip.Add(entry);
                 }
+                
                 hairprofile.CreateChunk(chunk, 0);
             }
             return hairprofile;
