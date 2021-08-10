@@ -360,26 +360,48 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 {
                     chunk.TilingMultiplier = new CFloat(mltemplate, chunk, "tilingMultiplier") { IsSerialized = true, Value = template.TilingMultiplier.Value };
                 }
-                
-                chunk.ColorMaskLevelsIn = new CArrayFixedSize<CFloat>(mltemplate, chunk, "colorMaskLevelsIn") { IsSerialized = true };
 
                 for (int i = 0; i < template.ColorMaskLevelsIn.Length; i++)
                 {
                     chunk.ColorMaskLevelsIn.Add(new CFloat(mltemplate, chunk.ColorMaskLevelsIn, Convert.ToString(i)) { IsSerialized = true, Value = template.ColorMaskLevelsIn[i].Value });
                 }
-
-                chunk.ColorMaskLevelsOut = new CArrayFixedSize<CFloat>(mltemplate, chunk, "colorMaskLevelsOut") { IsSerialized = true };
+                
                 for (int i = 0; i < template.ColorMaskLevelsOut.Length; i++)
                 {
                     chunk.ColorMaskLevelsOut.Add(new CFloat(mltemplate, chunk.ColorMaskLevelsOut, Convert.ToString(i)) { IsSerialized = true, Value = template.ColorMaskLevelsOut[i].Value });
                 }
-                chunk.DefaultOverrides = new Multilayer_LayerOverrideSelection(mltemplate, chunk, "defaultOverrides") { IsSerialized = true };
-                chunk.DefaultOverrides.ColorScale = new CName(mltemplate, chunk.DefaultOverrides, "colorScale") { IsSerialized = true, Value = template.DefaultOverrides.ColorScale };
-                chunk.DefaultOverrides.NormalStrength = new CName(mltemplate, chunk.DefaultOverrides, "normalStrength") { IsSerialized = true, Value = template.DefaultOverrides.NormalStrength };
-                chunk.DefaultOverrides.RoughLevelsIn = new CName(mltemplate, chunk.DefaultOverrides, "roughLevelsIn") { IsSerialized = true, Value = template.DefaultOverrides.RoughLevelsIn };
-                chunk.DefaultOverrides.RoughLevelsOut = new CName(mltemplate, chunk.DefaultOverrides, "roughLevelsOut") { IsSerialized = true, Value = template.DefaultOverrides.RoughLevelsOut };
-                chunk.DefaultOverrides.MetalLevelsIn = new CName(mltemplate, chunk.DefaultOverrides, "metalLevelsIn") { IsSerialized = true, Value = template.DefaultOverrides.MetalLevelsIn };
-                chunk.DefaultOverrides.MetalLevelsOut = new CName(mltemplate, chunk.DefaultOverrides, "metalLevelsOut") { IsSerialized = true, Value = template.DefaultOverrides.MetalLevelsOut };
+                chunk.DefaultOverrides = new Multilayer_LayerOverrideSelection(mltemplate, chunk, "defaultOverrides");
+                if(template.DefaultOverrides.ColorScale != "")
+                {
+                    chunk.DefaultOverrides.ColorScale = new CName(mltemplate, chunk.DefaultOverrides, "colorScale") { IsSerialized = true, Value = template.DefaultOverrides.ColorScale };
+                    chunk.DefaultOverrides.IsSerialized = true;
+                }
+                if(template.DefaultOverrides.NormalStrength != "")
+                {
+                    chunk.DefaultOverrides.NormalStrength = new CName(mltemplate, chunk.DefaultOverrides, "normalStrength") { IsSerialized = true, Value = template.DefaultOverrides.NormalStrength };
+                    chunk.DefaultOverrides.IsSerialized = true;
+                }
+                if (template.DefaultOverrides.RoughLevelsIn != "")
+                {
+                    chunk.DefaultOverrides.RoughLevelsIn = new CName(mltemplate, chunk.DefaultOverrides, "roughLevelsIn") { IsSerialized = true, Value = template.DefaultOverrides.RoughLevelsIn };
+                    chunk.DefaultOverrides.IsSerialized = true;
+                }
+
+                if (template.DefaultOverrides.RoughLevelsOut != "")
+                {
+                    chunk.DefaultOverrides.RoughLevelsOut = new CName(mltemplate, chunk.DefaultOverrides, "roughLevelsOut") { IsSerialized = true, Value = template.DefaultOverrides.RoughLevelsOut };
+                    chunk.DefaultOverrides.IsSerialized = true;
+                }
+                if (template.DefaultOverrides.MetalLevelsIn != "")
+                {
+                    chunk.DefaultOverrides.MetalLevelsIn = new CName(mltemplate, chunk.DefaultOverrides, "metalLevelsIn") { IsSerialized = true, Value = template.DefaultOverrides.MetalLevelsIn };
+                    chunk.DefaultOverrides.IsSerialized = true;
+                }
+                if (template.DefaultOverrides.MetalLevelsOut != "")
+                {
+                    chunk.DefaultOverrides.MetalLevelsOut = new CName(mltemplate, chunk.DefaultOverrides, "metalLevelsOut") { IsSerialized = true, Value = template.DefaultOverrides.MetalLevelsOut };
+                    chunk.DefaultOverrides.IsSerialized = true;
+                }
 
                 chunk.Overrides = new Multilayer_LayerTemplateOverrides(mltemplate, chunk, "overrides") { IsSerialized = true };
                 
@@ -388,7 +410,6 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 {
                     var colorScale = new Multilayer_LayerTemplateOverridesColor(mltemplate, chunk.Overrides.ColorScale, Convert.ToString(i)) { IsSerialized = true };
                     colorScale.N = new CName(mltemplate, colorScale, "n") { IsSerialized = true, Value = template.Overrides.ColorScale[i].N };
-                    colorScale.V = new CArrayFixedSize<CFloat>(mltemplate, colorScale, "v") { IsSerialized = true };
                     for (int j = 0; j < template.Overrides.ColorScale[i].V.Length; j++)
                     {
                         colorScale.V.Add(new CFloat(mltemplate, colorScale.V, Convert.ToString(j)) { IsSerialized = true, Value = template.Overrides.ColorScale[i].V[j].Value });
@@ -400,44 +421,44 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                 {
                     var roughLevelsIn = new Multilayer_LayerTemplateOverridesLevels(mltemplate, chunk.Overrides.RoughLevelsIn, Convert.ToString(i)) { IsSerialized = true };
                     roughLevelsIn.N = new CName(mltemplate, roughLevelsIn, "n") { IsSerialized = true, Value = template.Overrides.RoughLevelsIn[i].N };
-                    roughLevelsIn.V = new CArrayFixedSize<CFloat>(mltemplate, roughLevelsIn, "v") { IsSerialized = true };
                     for (int j = 0; j < template.Overrides.RoughLevelsIn[i].V.Length; j++)
                     {
                         roughLevelsIn.V.Add(new CFloat(mltemplate, roughLevelsIn.V, Convert.ToString(j)) { IsSerialized = true, Value = template.Overrides.RoughLevelsIn[i].V[j].Value });
                     }
+                    chunk.Overrides.RoughLevelsIn.Add(roughLevelsIn);
                 }
                 chunk.Overrides.RoughLevelsOut = new CArray<Multilayer_LayerTemplateOverridesLevels>(mltemplate, chunk.Overrides, "roughLevelsOut") { IsSerialized = true };
                 for (int i = 0; i < template.Overrides.RoughLevelsOut.Length; i++)
                 {
                     var roughLevelsOut = new Multilayer_LayerTemplateOverridesLevels(mltemplate, chunk.Overrides.RoughLevelsOut, Convert.ToString(i)) { IsSerialized = true };
                     roughLevelsOut.N = new CName(mltemplate, roughLevelsOut, "n") { IsSerialized = true, Value = template.Overrides.RoughLevelsOut[i].N };
-                    roughLevelsOut.V = new CArrayFixedSize<CFloat>(mltemplate, roughLevelsOut, "v") { IsSerialized = true };
                     for (int j = 0; j < template.Overrides.RoughLevelsOut[i].V.Length; j++)
                     {
                         roughLevelsOut.V.Add(new CFloat(mltemplate, roughLevelsOut.V, Convert.ToString(j)) { IsSerialized = true, Value = template.Overrides.RoughLevelsOut[i].V[j].Value });
                     }
+                    chunk.Overrides.RoughLevelsOut.Add(roughLevelsOut);
                 }
                 chunk.Overrides.MetalLevelsIn = new CArray<Multilayer_LayerTemplateOverridesLevels>(mltemplate, chunk.Overrides, "metalLevelsIn") { IsSerialized = true };
                 for (int i = 0; i < template.Overrides.MetalLevelsIn.Length; i++)
                 {
                     var metalLevelsIn = new Multilayer_LayerTemplateOverridesLevels(mltemplate, chunk.Overrides.MetalLevelsIn, Convert.ToString(i)) { IsSerialized = true };
                     metalLevelsIn.N = new CName(mltemplate, metalLevelsIn, "n") { IsSerialized = true, Value = template.Overrides.MetalLevelsIn[i].N };
-                    metalLevelsIn.V = new CArrayFixedSize<CFloat>(mltemplate, metalLevelsIn, "v") { IsSerialized = true };
                     for (int j = 0; j < template.Overrides.MetalLevelsIn[i].V.Length; j++)
                     {
                         metalLevelsIn.V.Add(new CFloat(mltemplate, metalLevelsIn.V, Convert.ToString(j)) { IsSerialized = true, Value = template.Overrides.MetalLevelsIn[i].V[j].Value });
                     }
+                    chunk.Overrides.MetalLevelsIn.Add(metalLevelsIn);
                 }
                 chunk.Overrides.MetalLevelsOut = new CArray<Multilayer_LayerTemplateOverridesLevels>(mltemplate, chunk.Overrides, "metalLevelsOut") { IsSerialized = true };
                 for (int i = 0; i < template.Overrides.MetalLevelsOut.Length; i++)
                 {
                     var metalLevelsOut = new Multilayer_LayerTemplateOverridesLevels(mltemplate, chunk.Overrides.MetalLevelsOut, Convert.ToString(i)) { IsSerialized = true };
                     metalLevelsOut.N = new CName(mltemplate, metalLevelsOut, "n") { IsSerialized = true, Value = template.Overrides.MetalLevelsOut[i].N };
-                    metalLevelsOut.V = new CArrayFixedSize<CFloat>(mltemplate, metalLevelsOut, "v") { IsSerialized = true };
                     for (int j = 0; j < template.Overrides.MetalLevelsOut[i].V.Length; j++)
                     {
                         metalLevelsOut.V.Add(new CFloat(mltemplate, metalLevelsOut.V, Convert.ToString(j)) { IsSerialized = true, Value = template.Overrides.MetalLevelsOut[i].V[j].Value });
                     }
+                    chunk.Overrides.MetalLevelsOut.Add(metalLevelsOut);
                 }
                 chunk.Overrides.NormalStrength = new CArray<Multilayer_LayerTemplateOverridesNormalStrength>(mltemplate, chunk.Overrides, "normalStrength") { IsSerialized = true };
                 for (int i = 0; i < template.Overrides.NormalStrength.Length; i++)
@@ -451,8 +472,8 @@ namespace WolvenKit.Modkit.RED4.Materials.Extras
                             normalStrength.V = new CFloat(mltemplate, normalStrength, "v") { IsSerialized = true, Value = template.Overrides.NormalStrength[i].V[0].Value };
                         }
                     }
+                    chunk.Overrides.NormalStrength.Add(normalStrength);
                 }
-                
                 mltemplate.CreateChunk(chunk,0);
             }
             return mltemplate;
