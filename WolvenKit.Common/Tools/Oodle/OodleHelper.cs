@@ -265,20 +265,13 @@ namespace WolvenKit.Common.Oodle
         /// <exception cref="DecompressionException"></exception>
         public static void DecompressAndCopySegment(this Stream stream, Stream outStream, uint zSize, uint size)
         {
-            //InPlace Buffer -> KARK in a KARK
-            var oodleCompression = stream.ReadStruct<uint>();
-            if ((oodleCompression == KARK) && zSize == size)
-            {
-                size = stream.ReadStruct<uint>();
-            }
-            stream.Seek(0, SeekOrigin.Begin);
             if (zSize == size)
             {
                 stream.CopyToWithLength(outStream, (int)zSize);
             }
             else
             {
-                oodleCompression = stream.ReadStruct<uint>();
+                var oodleCompression = stream.ReadStruct<uint>();
                 if (oodleCompression == KARK)
                 {
                     var headerSize = stream.ReadStruct<uint>();
@@ -303,35 +296,8 @@ namespace WolvenKit.Common.Oodle
                         throw new DecompressionException(
                             $"Unpacked size {unpackedSize} doesn't match real size {size}.");
                     }
-                    #region INPLACE BUFFER
-                    using (MemoryStream tempStream = new MemoryStream(outputBufferSpan.ToArray()))
-                    {
-                        var oodleInner = tempStream.ReadStruct<uint>();
-                        if (oodleInner == KARK)
-                        {
-                            var innerSize = tempStream.ReadStruct<uint>();
-                            length = (int)unpackedSize - 8;
-                            var inBufferSpan = length <= SPAN_LEN
-                                ? stackalloc byte[length]
-                                : new byte[length];
-                            var outBufferSpan = innerSize <= SPAN_LEN ? stackalloc byte[(int)innerSize] : new byte[innerSize];
 
-                            stream.Read(inBufferSpan);
-
-                            long finalSize = OodleHelper.Decompress(inBufferSpan, outBufferSpan);
-                            if (finalSize != innerSize)
-                            {
-                                throw new DecompressionException(
-                                    $"Unpacked size {finalSize} doesn't match real size {innerSize}.");
-                            }
-                            outStream.Write(outBufferSpan);
-                        }
-                        else
-                        {
-                            outStream.Write(outputBufferSpan);
-                        }
-                    }
-                    #endregion
+                    outStream.Write(outputBufferSpan);
                 }
                 else
                 {
