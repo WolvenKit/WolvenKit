@@ -179,12 +179,12 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case 0:
                         if (positions.ContainsKey(boneIdx))
                         {
-                            positions[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            positions[boneIdx].Add(0f, new Vec3(x, z, -y));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>();
-                            dic.Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            dic.Add(0f, new Vec3(x, z, -y));
                             positions.Add(boneIdx, dic);
                         }
                         break;
@@ -199,24 +199,24 @@ namespace WolvenKit.Modkit.RED4.Animation
                         Quat q = new Quat(x, z, -y, w);
                         if (rotations.ContainsKey(boneIdx))
                         {
-                            rotations[boneIdx].Add(timeNormalized * duration, Quat.Normalize(q));
+                            rotations[boneIdx].Add(0f, Quat.Normalize(q));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Quat>();
-                            dic.Add(timeNormalized * duration, Quat.Normalize(q));
+                            dic.Add(0f, Quat.Normalize(q));
                             rotations.Add(boneIdx, dic);
                         }
                         break;
                     case 2:
                         if (scales.ContainsKey(boneIdx))
                         {
-                            scales[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            scales[boneIdx].Add(0f, new Vec3(x, z, -y));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>();
-                            dic.Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            dic.Add(0f, new Vec3(x, z, -y));
                             scales.Add(boneIdx, dic);
                         }
                         break;
@@ -224,83 +224,6 @@ namespace WolvenKit.Modkit.RED4.Animation
                         break;
                 }
             }
-            
-            /*
-            for (UInt32 i = 0; i < NumConstAnimKeys; i++)
-            {
-                UInt16 bitWiseData = br.ReadUInt16();
-                br.ReadUInt16();  // is it some time normalized or some padding garbage data i have no idea
-                UInt16 wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
-                UInt16 component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
-                UInt16 boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
-                float x = br.ReadSingle();
-                float y = br.ReadSingle();
-                float z = br.ReadSingle();
-
-                for(UInt32 e = 0; e < numFrames; e++)
-                {
-                    float diff = duration / (numFrames - 1);
-                    switch (component)
-                    {
-                        case 0:
-                            if (positions.ContainsKey(boneIdx))
-                            {
-                                if (!positions[boneIdx].ContainsKey(e * diff))
-                                {
-                                    positions[boneIdx].Add(e * diff, new Vec3(x, z, -y));
-                                }
-                            }
-                            else
-                            {
-                                var dic = new Dictionary<float, Vec3>();
-                                dic.Add(e * diff, new Vec3(x, z, -y));
-                                positions.Add(boneIdx, dic);
-                            }
-                            break;
-                        case 1:
-                            float dotPr = (x * x + y * y + z * z);
-                            x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                            y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                            z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                            float w = 1f - dotPr;
-                            if (wSign == 1)
-                                w = -w;
-                            Quat q = new Quat(x, z, -y, w);
-                            if (rotations.ContainsKey(boneIdx))
-                            {
-                                if (!rotations[boneIdx].ContainsKey(e * diff))
-                                {
-                                    rotations[boneIdx].Add(e * diff, Quat.Normalize(q));
-                                }
-                            }
-                            else
-                            {
-                                var dic = new Dictionary<float, Quat>();
-                                dic.Add(e * diff, Quat.Normalize(q));
-                                rotations.Add(boneIdx, dic);
-                            }
-                            break;
-                        case 2:
-                            if (scales.ContainsKey(boneIdx))
-                            {
-                                if (!scales[boneIdx].ContainsKey(e * diff))
-                                {
-                                    scales[boneIdx].Add(e * diff, new Vec3(x, z, -y));
-                                }
-                            }
-                            else
-                            {
-                                var dic = new Dictionary<float, Vec3>();
-                                dic.Add(e * diff, new Vec3(x, z, -y));
-                                scales.Add(boneIdx, dic);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            */
             /*
             for (UInt32 i = 0; i < numConstTrackKeys; i++)
             {
