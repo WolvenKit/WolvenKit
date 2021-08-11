@@ -130,11 +130,11 @@ namespace WolvenKit.Modkit.RED4.Compiled
             CR2WFile cr2w = new CR2WFile();
             {
                 uint idx = 0;
-                cr2w.StringDictionary.Add(idx, "");
+                //cr2w.StringDictionary.Add(idx, "");
                 var nam = new CR2WName();
-                nam.value = idx;
-                cr2w.Names.Add(new CR2WNameWrapper(nam, cr2w));
-                idx += 1;
+                //nam.value = idx;
+                //cr2w.Names.Add(new CR2WNameWrapper(nam, cr2w));
+                //idx += 1;
                 for (int i = 0; i < StrTable2asStr.Values.Count; i++)
                 {
                     cr2w.StringDictionary.Add(idx, StrTable2asStr[i].Replace("\0",""));
@@ -150,6 +150,55 @@ namespace WolvenKit.Modkit.RED4.Compiled
                     imp.depotPath = idx;
                     cr2w.Imports.Add(new CR2WImportWrapper(imp, cr2w));
                     idx += (uint)StrTable1asStr[i].Length;
+                }
+                // these are similar to cr2w chunks (cdpr why u do this huh? why u won't use a cr2w file instead, why bully me?)
+                for(int i = 1; i < ObjectDescs.Count; i++)
+                {
+                    br.BaseStream.Position = ObjectDescs[i].objDataOffset;
+                    ushort num = br.ReadUInt16();
+                    UInt32[] offs = new UInt32[num];
+                    for (int e = 0; e < num; e++)
+                    {
+                        br.BaseStream.Position += 4;
+                        offs[e] = br.ReadUInt32();
+                    }
+                    long pos = ObjectDescs[i].objDataOffset + 2;
+
+                    for (int e = 0; e < num; e++)
+                    {
+                        br.BaseStream.Position = pos;
+                        var reMs = new MemoryStream();
+                        var reBw = new BinaryWriter(reMs);
+                        reBw.Write(Convert.ToUInt16(br.ReadUInt16()));
+                        reBw.Write(Convert.ToUInt16(br.ReadUInt16()));
+                        UInt32 off = br.ReadUInt32();
+                        pos = br.BaseStream.Position;
+                        UInt32 len = 0;
+                        if (e == num - 1)
+                        {
+                            if(i != ObjectDescs.Count - 1)
+                            {
+                                len = Convert.ToUInt32(ObjectDescs[i + 1].objDataOffset - ObjectDescs[i].objDataOffset - off);
+                                reBw.Write(len + 4);
+                            }
+                            else
+                            {
+                                len = Convert.ToUInt32(br.BaseStream.Length - ObjectDescs[i].objDataOffset - off);
+                                reBw.Write(len + 4);
+                            }
+                        }
+                        else
+                        {
+                            len = Convert.ToUInt32(offs[e + 1] - off);
+                            reBw.Write(len + 4);
+                        }
+
+                        br.BaseStream.Position = ObjectDescs[i].objDataOffset + off;
+                        reBw.Write(br.ReadBytes((int)len));
+                        var reBr = new BinaryReader(reMs);
+                        reMs.Position = 0;
+                        //cr2w.ReadVariable(reBr,npc);
+                    }
                 }
             }
         }
