@@ -284,6 +284,7 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                 case ECookedFileFormat.morphtarget:
+                {
                     var archives = new List<Archive>();
                     foreach (var ar in settings.Get<MorphTargetExportArgs>().Archives)
                     {
@@ -294,7 +295,22 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                     return ExportMorphTargets(cr2wStream, outfile, archives, settings.Get<MorphTargetExportArgs>().IsBinary);
-
+                }
+                case ECookedFileFormat.anims:
+                {
+                    /*
+                    var archives = new List<Archive>();
+                    foreach (var ar in settings.Get<AnimationExportArgs>().Archives)
+                    {
+                        var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
+                        if (name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
+                        {
+                            archives.Add(ar);
+                        }
+                    }
+                    */
+                    return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary);
+                }
                 case ECookedFileFormat.xbm:
                 {
                     if (settings.Get<XbmExportArgs>() is not { } xbmargs)

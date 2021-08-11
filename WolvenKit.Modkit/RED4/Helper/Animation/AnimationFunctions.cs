@@ -12,16 +12,12 @@ using WolvenKit.Common.FNV1A;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.Animation;
 
-namespace WolvenKit.Modkit.RED4.Animation
+namespace WolvenKit.Modkit.RED4
 {
-    public class ANIMATION
+    public partial class ModTools
     {
-        private readonly Red4ParserService _wolvenkitFileService;
-        public ANIMATION(Red4ParserService fileservice)
-        {
-            _wolvenkitFileService = fileservice;
-        }
         public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(animStream);

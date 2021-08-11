@@ -60,6 +60,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(MlmaskExportArgs), new MlmaskExportArgs() },
             { typeof(XbmExportArgs), new XbmExportArgs() },
             { typeof(MeshExportArgs), new MeshExportArgs() },
+            { typeof(AnimationExportArgs), new AnimationExportArgs() },
             { typeof(WemExportArgs), new WemExportArgs() },
             { typeof(OpusExportArgs), new OpusExportArgs() },
         };
@@ -306,6 +307,11 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
+        /// <summary>
+        /// Archive path for Console Morphtarget Export.
+        /// </summary>
+        [Browsable(false)]
+        public string ArchiveDepot { get; set; }
 
         /// <summary>
         /// String Override to display info in datagrid.
@@ -473,7 +479,32 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => wemExportType.ToString();
     }
+    public class AnimationExportArgs : ExportArgs
+    {
+        /// <summary>
+        /// Binary Export Bool, Decides between GLB and GLTF
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "Is Binary")]
+        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        public bool IsBinary { get; set; } = true;
 
+        /// <summary>
+        /// List of Archives for Animations Export.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
+        /// <summary>
+        /// Archive path for Console Anims Export.
+        /// </summary>
+        [Browsable(false)]
+        public string ArchiveDepot { get; set; }
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
+    }
     /// <summary>
     /// Wem Export Types
     /// </summary>
