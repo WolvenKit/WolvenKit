@@ -127,7 +127,31 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 ObjDesc obj_desc = new ObjDesc(varNameIdx, off + baseOff);
                 ObjectDescs.Add(obj_desc);
             }
-
+            CR2WFile cr2w = new CR2WFile();
+            {
+                uint idx = 0;
+                cr2w.StringDictionary.Add(idx, "");
+                var nam = new CR2WName();
+                nam.value = idx;
+                cr2w.Names.Add(new CR2WNameWrapper(nam, cr2w));
+                idx += 1;
+                for (int i = 0; i < StrTable2asStr.Values.Count; i++)
+                {
+                    cr2w.StringDictionary.Add(idx, StrTable2asStr[i].Replace("\0",""));
+                    nam.value = idx;
+                    cr2w.Names.Add(new CR2WNameWrapper(nam, cr2w));
+                    idx += (uint)StrTable2asStr[i].Length;
+                }
+                var imp = new CR2WImport();
+                imp.flags = 4;
+                for (int i = 0; i < StrTable1asStr.Values.Count; i++)
+                {
+                    cr2w.StringDictionary.Add(idx, StrTable1asStr[i]);
+                    imp.depotPath = idx;
+                    cr2w.Imports.Add(new CR2WImportWrapper(imp, cr2w));
+                    idx += (uint)StrTable1asStr[i].Length;
+                }
+            }
         }
         struct ObjDesc
         {
