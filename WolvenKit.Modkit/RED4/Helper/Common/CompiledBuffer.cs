@@ -7,6 +7,8 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.Common.Services;
+
 namespace WolvenKit.Modkit.RED4.Compiled
 {
     public class CompiledBuffer
@@ -55,7 +57,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
         const UInt32 strTable2SizeBitShift = 24;
         const UInt32 strTable2OffsetMask = (1U << (int)strTable2SizeBitShift) - 1U;
         const UInt32 sizeBitMask = (1U << 8) - 1;
-        public CompiledBuffer(Stream ms)
+        public CompiledBuffer(Stream ms,IHashService hashservice)
         {
             var br = new BinaryReader(ms);
             _header = br.BaseStream.ReadStruct<header>();
@@ -96,6 +98,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 {
                     ms.Seek(baseOff + off, SeekOrigin.Begin);
                     StrTable1asHash.Add(i, br.ReadUInt64());
+                    StrTable1asStr.Add(i, hashservice.Get(StrTable1asHash[i]));
                 }
             }
 
@@ -154,10 +157,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 // these are similar to cr2w chunks (cdpr why u do this huh? why u won't use a cr2w file instead, why bully me?)
                 for(int i = 0; i < ObjectDescs.Count; i++)
                 {
-                    var chunk = cr2w.CreateChunk(cr2w.Names[(int)ObjectDescs[i].NameIdx].Str,i);
-                    //var wrap = new CR2WExportWrapper(new CR2WExport(),cr2w);
-                    //cr2w.Chunks.Add().CreateChunk(new CR2WExportWrapper());
-                    /*
+                    var evar = cr2w.CreateChunk(cr2w.Names[(int)ObjectDescs[i].NameIdx].Str, i).Data;
                     br.BaseStream.Position = ObjectDescs[i].objDataOffset;
                     ushort num = br.ReadUInt16();
                     UInt32[] offs = new UInt32[num];
@@ -200,7 +200,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
                         }
 
                         br.BaseStream.Position = ObjectDescs[i].objDataOffset + off;
-                        if(cr2w.Names[typeIdx].Str.Contains("rRef:"))
+                        if(cr2w.Names[typeIdx].Str.Contains("Ref:"))
                         {
                             reBw.Write(Convert.ToUInt16(br.ReadUInt16() + 1));
                         }
@@ -210,8 +210,12 @@ namespace WolvenKit.Modkit.RED4.Compiled
                         }
                         var reBr = new BinaryReader(reMs);
                         reMs.Position = 0;
-                        cr2w.ReadVariable(reBr, evar);
-                    }*/
+                        try
+                        {
+                            cr2w.ReadVariable(reBr, evar);
+                        }
+                        catch { }
+                    }
                 }
             }
         }
