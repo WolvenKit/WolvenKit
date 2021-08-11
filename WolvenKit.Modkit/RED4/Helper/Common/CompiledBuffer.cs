@@ -152,8 +152,12 @@ namespace WolvenKit.Modkit.RED4.Compiled
                     idx += (uint)StrTable1asStr[i].Length;
                 }
                 // these are similar to cr2w chunks (cdpr why u do this huh? why u won't use a cr2w file instead, why bully me?)
-                for(int i = 1; i < ObjectDescs.Count; i++)
+                for(int i = 0; i < ObjectDescs.Count; i++)
                 {
+                    var chunk = cr2w.CreateChunk(cr2w.Names[(int)ObjectDescs[i].NameIdx].Str,i);
+                    //var wrap = new CR2WExportWrapper(new CR2WExport(),cr2w);
+                    //cr2w.Chunks.Add().CreateChunk(new CR2WExportWrapper());
+                    /*
                     br.BaseStream.Position = ObjectDescs[i].objDataOffset;
                     ushort num = br.ReadUInt16();
                     UInt32[] offs = new UInt32[num];
@@ -169,8 +173,10 @@ namespace WolvenKit.Modkit.RED4.Compiled
                         br.BaseStream.Position = pos;
                         var reMs = new MemoryStream();
                         var reBw = new BinaryWriter(reMs);
-                        reBw.Write(Convert.ToUInt16(br.ReadUInt16()));
-                        reBw.Write(Convert.ToUInt16(br.ReadUInt16()));
+                        ushort nameIdx = br.ReadUInt16();
+                        ushort typeIdx = br.ReadUInt16();
+                        reBw.Write(nameIdx);
+                        reBw.Write(typeIdx);
                         UInt32 off = br.ReadUInt32();
                         pos = br.BaseStream.Position;
                         UInt32 len = 0;
@@ -194,11 +200,18 @@ namespace WolvenKit.Modkit.RED4.Compiled
                         }
 
                         br.BaseStream.Position = ObjectDescs[i].objDataOffset + off;
-                        reBw.Write(br.ReadBytes((int)len));
+                        if(cr2w.Names[typeIdx].Str.Contains("rRef:"))
+                        {
+                            reBw.Write(Convert.ToUInt16(br.ReadUInt16() + 1));
+                        }
+                        else
+                        {
+                            reBw.Write(br.ReadBytes((int)len));
+                        }
                         var reBr = new BinaryReader(reMs);
                         reMs.Position = 0;
-                        //cr2w.ReadVariable(reBr,npc);
-                    }
+                        cr2w.ReadVariable(reBr, evar);
+                    }*/
                 }
             }
         }
