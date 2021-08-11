@@ -73,26 +73,53 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case "animAnimationBufferSimd":
                     {
                         var animBuff = (animAnimDes.AnimBuffer.GetReference().Data as animAnimationBufferSimd);
-                        var bufferIdx = animBuff.DefferedBuffer.Buffer.Value;
-                        var b = cr2w.Buffers[bufferIdx - 1];
-                        animStream.Seek(b.Offset, SeekOrigin.Begin);
                         var defferedBuffer = new MemoryStream();
-                        animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
+                        if (animBuff.InplaceCompressedBuffer != null)
+                        {
+                            var bufferIdx = animBuff.InplaceCompressedBuffer.Buffer.Value;
+                            var b = cr2w.Buffers[bufferIdx - 1];
+                            animStream.Seek(b.Offset, SeekOrigin.Begin);
+                            animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
+                        }
+                        else
+                        {
+                            var bufferIdx = animBuff.DefferedBuffer.Buffer.Value;
+                            var b = cr2w.Buffers[bufferIdx - 1];
+                            animStream.Seek(b.Offset, SeekOrigin.Begin);
+                            animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
+                        }
                         SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer);
                     }
                     break;
                     case "animAnimationBufferCompressed":
                     {
                         var animBuff = (animAnimDes.AnimBuffer.GetReference().Data as animAnimationBufferCompressed);
-                        var dataAddr = animBuff.DataAddress;
-                        Byte[] bytes = new Byte[dataAddr.ZeInBytes.Value];
-                        animDataBuffers[(int)dataAddr.UnkIndex.Value].Seek(dataAddr.FsetInBytes.Value, SeekOrigin.Begin);
-                        animDataBuffers[(int)dataAddr.UnkIndex.Value].Read(bytes, 0,(int) dataAddr.ZeInBytes.Value);
-                        var defferedBuffer = new MemoryStream(bytes);
+                        var defferedBuffer = new MemoryStream();
+                        if (animBuff.InplaceCompressedBuffer != null)
+                        {
+                            var bufferIdx = animBuff.InplaceCompressedBuffer.Buffer.Value;
+                            var b = cr2w.Buffers[bufferIdx - 1];
+                            animStream.Seek(b.Offset, SeekOrigin.Begin);
+                            defferedBuffer = new MemoryStream();
+                            animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
+                        }
+                        else if (animBuff.DataAddress != null)
+                        {
+                            var dataAddr = animBuff.DataAddress;
+                            Byte[] bytes = new Byte[dataAddr.ZeInBytes.Value];
+                            animDataBuffers[(int)dataAddr.UnkIndex.Value].Seek(dataAddr.FsetInBytes.Value, SeekOrigin.Begin);
+                            animDataBuffers[(int)dataAddr.UnkIndex.Value].Read(bytes, 0, (int)dataAddr.ZeInBytes.Value);
+                            defferedBuffer = new MemoryStream(bytes);
+                        }
+                        else if (animBuff.DefferedBuffer != null)
+                        {
+                            var bufferIdx = animBuff.DefferedBuffer.Buffer.Value;
+                            var b = cr2w.Buffers[bufferIdx - 1];
+                            animStream.Seek(b.Offset, SeekOrigin.Begin);
+                            animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
+                        }
                         SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer);
                     }
-                    break;
-                    default:
                     break;
                 }
             }
