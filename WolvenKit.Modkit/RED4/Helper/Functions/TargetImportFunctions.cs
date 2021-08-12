@@ -9,7 +9,7 @@ using SharpGLTF.IO;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.CR2W;
-using CP77.CR2W;
+using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
@@ -21,7 +21,7 @@ namespace WolvenKit.Modkit.RED4
     using Vec3 = System.Numerics.Vector3;
     public partial class ModTools
     {
-        public bool ImportTargetBaseMesh(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, string modFolder, Stream outStream = null)
+        public bool ImportTargetBaseMesh(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, string modFolder, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(intargetStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -72,7 +72,7 @@ namespace WolvenKit.Modkit.RED4
             }
             
             
-            var model = ModelRoot.Load(inGltfFile.FullName);
+            var model = ModelRoot.Load(inGltfFile.FullName,new ReadSettings(vmode));
 
             VerifyGLTF(model);
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
@@ -181,7 +181,7 @@ namespace WolvenKit.Modkit.RED4
                 ms.CopyTo(intargetStream);
             }
             meshStream.Seek(0, SeekOrigin.Begin);
-            return ImportMesh(inGltfFile, meshStream);
+            return ImportMesh(inGltfFile, meshStream, vmode);
         }
     }
 }

@@ -117,7 +117,7 @@ namespace WolvenKit.Common.Model.Arguments
         {
             { typeof(CommonImportArgs), new CommonImportArgs() },
             { typeof(XbmImportArgs), new XbmImportArgs() },
-            { typeof(MeshImportArgs), new MeshImportArgs() },
+            { typeof(GltfImportArgs), new GltfImportArgs() },
             { typeof(OpusImportArgs), new OpusImportArgs() },
         };
 
@@ -237,7 +237,7 @@ namespace WolvenKit.Common.Model.Arguments
     /// <summary>
     /// Mesh Import Arguments
     /// </summary>
-    public class MeshImportArgs : ImportArgs
+    public class GltfImportArgs : ImportArgs
     {
         [Category("Mesh Import Settings")]
         [Display(Name = "Import Material.Json Only")]
@@ -252,12 +252,28 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("The type of validation check for your glb/gltf file")]
         public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
         /// <summary>
+        /// RedEngine4 Cooked File type for the selected GLB/GLTF.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import As RedEngine File Format")]
+        [Description("The RedEngine file format to import as for your glb/gltf file")]
+        public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
+        /// <summary>
+        /// List of Archives for Morphtarget Import.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
+        /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => ".Mesh";
+        public override string ToString() => "Mesh/Morphtarget | " + $"Import Format :  {importFormat.ToString()}";
     }
-
+    public enum GltfImportAsFormat
+    {
+        Mesh,
+        Morphtarget
+    }
     #endregion import args
 
     #region export args
@@ -309,7 +325,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
-        /// List of Archives for WithMaterials Mesh Export.
+        /// List of Archives for Morphtarget Export.
         /// </summary>
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
