@@ -239,7 +239,7 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class GltfImportArgs : ImportArgs
     {
-        [Category("Mesh Import Settings")]
+        [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
         [Description("If checked only the Materials from Material.Json will be imported to the mesh, geometry from GLTF/GLB will not be imported!, uncheck imports Both!")]
         public bool importMaterialOnly { get; set; } = false;
@@ -247,7 +247,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// <summary>
         /// Validation type for the selected GLB/GLTF.
         /// </summary>
-        [Category("Mesh Import Settings")]
+        [Category("Import Settings")]
         [Display(Name = "GLTF Validation Checks")]
         [Description("The type of validation check for your glb/gltf file")]
         public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
