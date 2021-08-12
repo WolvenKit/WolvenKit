@@ -11,12 +11,11 @@ using SharpGLTF.Schema2;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Modkit.RED4.Materials.Extras;
 using SharpGLTF.IO;
 using System.Threading;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Tools;
 using Newtonsoft.Json;
 using WolvenKit.Modkit.RED4.Materials;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -241,7 +240,6 @@ namespace WolvenKit.Modkit.RED4
         private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, FileInfo outfile, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var settings = new JsonSerializerSettings();
-            settings.NullValueHandling = NullValueHandling.Ignore;
             settings.Formatting = Formatting.Indented;
 
             List<string> primaryDependencies = new List<string>();
@@ -319,7 +317,6 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ms = new MemoryStream();
                                 ExtractSingleToStream(ar, hash, ms);
-                                var hp = _wolvenkitFileService.TryReadCr2WFile(ms);
                                 HairProfileNames.Add(primaryDependencies[i]);
                                 string path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".hp.json"));
                                 if (!File.Exists(path))
@@ -328,7 +325,10 @@ namespace WolvenKit.Modkit.RED4
                                     {
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
-                                    var doc = JsonConvert.SerializeObject(new HairProfile(hp.Chunks[0].Data as CHairProfile), settings);
+                                    var hp = _wolvenkitFileService.TryReadCr2WFile(ms);
+                                    hp.FileName = primaryDependencies[i];
+                                    var dto = new Red4W2rcFileDto(hp);
+                                    var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
                                 break;
@@ -358,7 +358,9 @@ namespace WolvenKit.Modkit.RED4
                                     {
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
-                                    var doc = JsonConvert.SerializeObject(new Setup(mls.Chunks[0].Data as Multilayer_Setup), settings);
+                                    mls.FileName = primaryDependencies[i];
+                                    var dto = new Red4W2rcFileDto(mls);
+                                    var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
 
@@ -405,7 +407,9 @@ namespace WolvenKit.Modkit.RED4
                                                         {
                                                             Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
                                                         }
-                                                        var doc1 = JsonConvert.SerializeObject(new Template(mlt.Chunks[0].Data as Multilayer_LayerTemplate), settings);
+                                                        mlt.FileName = mls.Imports[e].DepotPathStr;
+                                                        var dto1 = new Red4W2rcFileDto(mlt);
+                                                        var doc1 = JsonConvert.SerializeObject(dto1, settings);
                                                         File.WriteAllText(path1, doc1);
                                                     }
 
