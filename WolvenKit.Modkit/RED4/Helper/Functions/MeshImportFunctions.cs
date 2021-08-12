@@ -9,7 +9,7 @@ using SharpGLTF.IO;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.CR2W;
-using CP77.CR2W;
+using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -20,7 +20,7 @@ namespace WolvenKit.Modkit.RED4
     using Vec3 = System.Numerics.Vector3;
     public partial class ModTools
     {
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream,bool importMaterialOnly = false, Stream outStream = null)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(inmeshStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -50,7 +50,7 @@ namespace WolvenKit.Modkit.RED4
 
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName);
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
 
             VerifyGLTF(model);
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
@@ -625,7 +625,6 @@ namespace WolvenKit.Modkit.RED4
         static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-            var cmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
             int Count = blob.Header.Topology.Count;
             
@@ -645,28 +644,46 @@ namespace WolvenKit.Modkit.RED4
                 for (int i = 0; i < Count; i++)
                 {
                     blob.Header.RenderLODs.Remove(blob.Header.RenderLODs[0]);
-                    cmeshblob.LodLevelInfo.Remove(cmeshblob.LodLevelInfo[0]);
                 }
                 blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "0") { IsSerialized = true, IsNulled = false, Value = 0f });
-                cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "0") { IsSerialized = true, IsNulled = false, Value = 0f });
                 if (info.LODLvl.ToList().Contains(2))
                 {
                     blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "1") { IsSerialized = true, IsNulled = false, Value = 3f });
-                    cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "1") { IsSerialized = true, IsNulled = false, Value = 3f });
                 }
                 if (info.LODLvl.ToList().Contains(4))
                 {
                     blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "2") { IsSerialized = true, IsNulled = false, Value = 6f });
-                    cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "2") { IsSerialized = true, IsNulled = false, Value = 6f });
                 }
                 if (info.LODLvl.ToList().Contains(8))
                 {
                     blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "3") { IsSerialized = true, IsNulled = false, Value = 9f });
-                    cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "3") { IsSerialized = true, IsNulled = false, Value = 9f });
                 }
             }
-            // depended CMesh LODLevelInfo removal and addition has not been implemented yet, implementation depends if it will cause any issue
-
+            if(cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            {
+                var cmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
+                Count = cmeshblob.LodLevelInfo.Count;
+                if (Count > 1)
+                {
+                    for (int i = 0; i < Count; i++)
+                    {
+                        cmeshblob.LodLevelInfo.Remove(cmeshblob.LodLevelInfo[0]);
+                    }
+                    cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "0") { IsSerialized = true, IsNulled = false, Value = 0f });
+                    if (info.LODLvl.ToList().Contains(2))
+                    {
+                        cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "1") { IsSerialized = true, IsNulled = false, Value = 3f });
+                    }
+                    if (info.LODLvl.ToList().Contains(4))
+                    {
+                        cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "2") { IsSerialized = true, IsNulled = false, Value = 6f });
+                    }
+                    if (info.LODLvl.ToList().Contains(8))
+                    {
+                        cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "3") { IsSerialized = true, IsNulled = false, Value = 9f });
+                    }
+                }
+            }
             // removing existing rendChunks
             Count = blob.Header.RenderChunkInfos.Count;
             for (int i = 0; i < Count; i++)

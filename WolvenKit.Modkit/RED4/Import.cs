@@ -63,7 +63,7 @@ namespace WolvenKit.Modkit.RED4
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
-                    return ImportMesh(rawRelative, outDir, args.Get<MeshImportArgs>());
+                    return ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>());
                 case ERawFileFormat.ttf:
                     return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
                 case ERawFileFormat.wav:
@@ -538,11 +538,11 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private bool ImportMesh(RedRelativePath rawRelative, DirectoryInfo outDir, MeshImportArgs args)
+        private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
             if (args.Keep)
             {
-                var redfile = FindRedFile(rawRelative,  outDir);
+                var redfile = FindRedFile(rawRelative,  outDir,$".{args.importFormat.ToString().ToLower()}");
 
                 if (string.IsNullOrEmpty(redfile))
                 {
@@ -554,7 +554,18 @@ namespace WolvenKit.Modkit.RED4
                 using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
                 try
                 {
-                    var result = ImportMesh(rawRelative.ToFileInfo(), redFs,args.importMaterialOnly);
+                    var result = false;
+                    switch (args.importFormat)
+                    {
+                        case GltfImportAsFormat.Mesh:
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args.validationMode, args.importMaterialOnly);
+                            break;
+                        case GltfImportAsFormat.Morphtarget:
+                            result = ImportTargetBaseMesh(rawRelative.ToFileInfo(), redFs, args.Archives, outDir.FullName, args.validationMode);
+                            break;
+                        default:
+                            break;
+                    }
 
                     if (result)
                     {

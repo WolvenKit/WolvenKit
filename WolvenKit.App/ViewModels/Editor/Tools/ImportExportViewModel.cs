@@ -598,6 +598,11 @@ namespace WolvenKit.ViewModels.Editor
             var fi = new FileInfo(item.FullName);
             if (fi.Exists)
             {
+                if (item.Properties is GltfImportArgs gltfImportArgs)
+                {
+                    var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
+                    gltfImportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                }
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
