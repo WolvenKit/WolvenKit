@@ -112,6 +112,16 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
                 }
             }
+            string[] baseTendencyBoneNames = new string[] { "Root", "Hips", "Spine", "LeftUpLeg", "RightUpLeg", "Spine1", "LeftLeg", "RightLeg", "Spine2", "LeftFoot", "RightFoot", "Spine3",
+                "LeftShoulder", "RightShoulder", "Neck", "LeftArm", "RightArm", "Neck1", "LeftForeArm", "RightForeArm", "Head" };
+            Rig.baseTendencyCount = 0;
+            for(int i = 0; i < baseTendencyBoneNames.Length; i++)
+            {
+                if(Rig.Names.Contains(baseTendencyBoneNames[i]))
+                {
+                    Rig.baseTendencyCount++;
+                }
+            }
             return Rig;
         }
         static Int16[] GetboneParents(animRig animrig)
@@ -148,6 +158,9 @@ namespace WolvenKit.Modkit.RED4.RigFile
         }
         public static RawArmature CombineRigs(List<RawArmature> rigs)
         {
+            rigs = rigs.OrderByDescending(_ => _.BoneCount).ToList();
+            rigs = rigs.OrderByDescending(_ => _.baseTendencyCount).ToList();
+
             List<string> Names = new List<string>();
 
             List<Int16> Parent = new List<Int16>();

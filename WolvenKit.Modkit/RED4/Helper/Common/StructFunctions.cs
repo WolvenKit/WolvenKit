@@ -79,18 +79,23 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         }
         public static Vector4 TenBitShifted(UInt32 U32)
         {
-            Int16 X = Convert.ToInt16(U32 & 0x3ff);
-            Int16 Y = Convert.ToInt16((U32 >> 10) & 0x3ff);
-            Int16 Z = Convert.ToInt16((U32 >> 20) & 0x3ff);
-            byte W = Convert.ToByte((U32) >> 30);
-            return new Vector4((X - 511) / 512f, (Y - 511) / 512f, (Z - 511) / 512f, W / 3f);
+            float X = Convert.ToSingle(U32 & 0x3ff);
+            float Y = Convert.ToSingle((U32 >> 10) & 0x3ff);
+            float Z = Convert.ToSingle((U32 >> 20) & 0x3ff);
+            float W = Convert.ToSingle((U32) >> 30);
+            float dequant = 1f / 1023f;
+            X = (X * 2 * dequant) - 1f;
+            Y = (Y * 2 * dequant) - 1f;
+            Z = (Z * 2 * dequant) - 1f;
+            W = W / 3f;
+            return new Vector4(X, Y, Z, W);
         }
         public static Vector4 TenBitUnsigned(UInt32 U32)
         {
-            Int16 X = Convert.ToInt16(U32 & 0x3ff);
-            Int16 Y = Convert.ToInt16((U32 >> 10) & 0x3ff);
-            Int16 Z = Convert.ToInt16((U32 >> 20) & 0x3ff);
-            byte W = Convert.ToByte((U32) >> 30);
+            float X = Convert.ToSingle(U32 & 0x3ff);
+            float Y = Convert.ToSingle((U32 >> 10) & 0x3ff);
+            float Z = Convert.ToSingle((U32 >> 20) & 0x3ff);
+            float W = Convert.ToSingle((U32) >> 30);
 
             return new Vector4(X / 1023f, Y / 1023f, Z / 1023f, W / 3f);
         }
@@ -111,16 +116,18 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         }
         public static UInt32 Vec4ToU32(Vector4 v) // reversing for 10bit nors and tans
         {
-            if (v.X < -0.998046f)
-                v.X = -0.998046f;
-            if (v.Y < -0.998046f)
-                v.Y = -0.998046f;
-            if (v.Z < -0.998046f)
-                v.Z = -0.998046f;
-
-            UInt32 a = Convert.ToUInt32(v.X * 512 + 511);
-            UInt32 b = Convert.ToUInt32(v.Y * 512 + 511) << 10;
-            UInt32 c = Convert.ToUInt32(v.Z * 512 + 511) << 20;
+            v.X = Math.Clamp(v.X, -1f, 1f);
+            v.Y = Math.Clamp(v.Y, -1f, 1f);
+            v.Z = Math.Clamp(v.Z, -1f, 1f);
+            float quant = 1023f;
+            UInt32 a = Convert.ToUInt32((v.X + 1f) * quant * 0.5f);
+            a = Math.Clamp(a, 0, 1023);
+            UInt32 b = Convert.ToUInt32((v.Y + 1f) * quant * 0.5f);
+            b = Math.Clamp(b, 0, 1023);
+            b <<= 10;
+            UInt32 c = Convert.ToUInt32((v.Z + 1f) * quant * 0.5f);
+            c = Math.Clamp(c, 0, 1023);
+            c <<= 20;
             UInt32 d = 0; // for tangents in bits its 00000000000000000000000000000000
             if (v.W == 0)
                 d = 1073741824;  // for normals in bits its 01000000000000000000000000000000

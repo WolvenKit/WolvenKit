@@ -27,6 +27,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Editor;
+using System.Text.RegularExpressions;
 
 namespace WolvenKit.Views.Editor
 {
@@ -223,8 +224,8 @@ namespace WolvenKit.Views.Editor
 
             if (e.AddedItems.First() is TreeGridRowInfo { RowData: GameFileTreeNode model })
             {
-                vm.RightItems = model.Files
-                    .Select(_ => new FileEntryViewModel(_ as FileEntry));
+                vm.RightItems = model.Files.Values.SelectMany(_ => _)
+                    .Select(_ => new FileEntryViewModel(_ as FileEntry)).OrderBy(_=>Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0')));
             }
         }
 

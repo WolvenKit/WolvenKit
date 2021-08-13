@@ -293,7 +293,7 @@ namespace WolvenKit.Modkit.RED4
                             archives.Add(ar);
                         }
                     }
-                    return ExportMorphTargets(cr2wStream, outfile, archives, settings.Get<MorphTargetExportArgs>().IsBinary);
+                    return ExportMorphTargets(cr2wStream, outfile, archives, settings.Get<MorphTargetExportArgs>().ModFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
 
                 case ECookedFileFormat.xbm:
                 {
