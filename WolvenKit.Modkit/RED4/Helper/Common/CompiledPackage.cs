@@ -13,11 +13,21 @@ using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common;
 using Newtonsoft.Json;
 using WolvenKit.Core.Exceptions;
+using WolvenKit.Common.Tools;
 
 namespace WolvenKit.Modkit.RED4.Compiled
 {
     public class CompiledPackage : ObservableObject, IRed4EngineFile
     {
+        [JsonIgnore] public bool CreatePropertyOnAccess { get; set; } = true;
+        [JsonIgnore] public bool IsDirty { get; set; }
+        [JsonIgnore] public string FileName { get; set; }
+        [JsonIgnore] public List<string> UnknownTypes { get; } = new();
+        [JsonIgnore] public List<string> UnknownVars { get; set; } = new();
+        [JsonIgnore] public Dictionary<uint, string> StringDictionary { get; private set; }
+        [JsonIgnore] public List<ICR2WName> Names { get; private set; }
+        [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
+
         [StructLayout(LayoutKind.Explicit, Size = 32)]
         struct header
         {
@@ -164,25 +174,22 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 var cvar = CreateChunk(Names[(int)ObjectDescs[i].NameIdx].Str, i).Data;
                 try
                 {
-                    if (cvar.ChildrEditableVariables.Count > 0)
-                    {
-                        br.BaseStream.Position = ObjectDescs[i].objDataOffset;
-                        var bytes = br.ReadBytes((int)sizes[i]);
-                        ReadVariable(new BinaryReader(new MemoryStream(bytes)), cvar);
-                    }
+
                 }
                 catch { }
+                if (cvar.ChildrEditableVariables.Count > 0)
+                {
+                    br.BaseStream.Position = ObjectDescs[i].objDataOffset;
+                    var bytes = br.ReadBytes((int)sizes[i]);
+                    ReadVariable(new BinaryReader(new MemoryStream(bytes)), cvar);
+                }
             }
             return EFileReadErrorCodes.NoError;
         }
-        [JsonIgnore] public bool CreatePropertyOnAccess { get; set; } = true;
-        [JsonIgnore] public bool IsDirty { get; set; }
-        [JsonIgnore] public string FileName { get; set; }
-        [JsonIgnore] public List<string> UnknownTypes { get; } = new();
-        [JsonIgnore] public List<string> UnknownVars { get; set; } = new();
-        [JsonIgnore] public Dictionary<uint, string> StringDictionary { get; private set; }
-        [JsonIgnore] public List<ICR2WName> Names { get; private set; }
-        [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(new Red4W2rcFileDto(this));
+        }
         public List<ICR2WExport> Chunks { get; set; }
         public List<ICR2WBuffer> Buffers { get; set; }
         public IEditableVariable ReadVariable(BinaryReader br, IEditableVariable parent)
@@ -227,8 +234,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 br.BaseStream.Position = off + basePos;
                 if ((parsedvar.ChildrEditableVariables.Count > 0) && (parsedvar is not DataBuffer))
                 {
-                    var bytes = br.ReadBytes((int)sizes[i]);
-                    ReadVariable(new BinaryReader(new MemoryStream(bytes)),parsedvar);
+                    ReadVariable(br,parsedvar);
                 }
                 else if(parsedvar is DataBuffer)
                 {
@@ -264,8 +270,8 @@ namespace WolvenKit.Modkit.RED4.Compiled
                                 element.Read(br,sizes[i]);
                                 arr.Add(element);
                             }
+                            element.IsSerialized = true;
                         }
-                        parsedvar = arr;
                     }
                     else if(parsedvar is IREDEnum)
                     {
@@ -292,7 +298,9 @@ namespace WolvenKit.Modkit.RED4.Compiled
                         parsedvar.Read(br, sizes[i]);
                     }
                 }
+                parsedvar.IsSerialized = true;
             }
+            parent.IsSerialized = true;
             return parent;
         }
         public int GetStringIndex(string name, bool addnew = false)
@@ -313,85 +321,10 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 objDataOffset = dataOffset;
             }
         }
-        public class Import : ICR2WImport
-        {
-            private readonly CompiledPackage _package;
-            public uint DepotPath { get; private set; }
-            public string DepotPathStr => _package.StrTable1asStr[DepotPath];
-            public string ClassNameStr { get; private set; } = "NAME NOT FOUND";
-            public ushort ClassName { get; private set; } = 0;
-            public ushort Flags { get; private set; } = 4;
-            public Import(CompiledPackage package,uint idx)
-            {
-                _package = package;
-                DepotPath = idx;
-            }
-        }
-        public class Name : ICR2WName
-        {
-            private readonly CompiledPackage _package;
-            public uint idx { get; private set; }
-            public string Str => _package.StrTable2asStr[idx];
-            public uint hash { get; private set; } = 0;
-            public Name(CompiledPackage package, uint idx)
-            {
-                _package = package;
-                this.idx = idx;
-            }
-        }
-        public class Export : ICR2WExport
-        {
-            public string REDType { get; }
-            public CompiledPackage Package { get; private set; }
-            public int ParentChunkIndex { get; }
-
-            public IEditableVariable Data { get; set; }
-
-            [JsonIgnore] public string REDName { get; }
-            [JsonIgnore] public int ChunkIndex { get; }
-
-            [JsonIgnore] public IEditableVariable UnknownBytes { get; }
-
-            [JsonIgnore] public ICR2WExport ParentChunk { get; set; }
-            [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
-            [JsonIgnore] public List<ICR2WExport> ChildrenChunks { get; }
-            [JsonIgnore] public List<ICR2WExport> VirtualChildrenChunks { get; }
-            [JsonIgnore] public List<IREDChunkPtr> AdReferences { get; }
-            [JsonIgnore] public List<IREDChunkPtr> AbReferences { get; }
-            [JsonIgnore] public List<string> UnknownTypes { get; }
-
-            public void CreateDefaultData(IEditableVariable cvar = null)
-            {
-                Data = cvar ?? CR2WTypeManager.Create(REDType, REDType, Package, ParentChunk?.Data as CVariable);
-
-                if (Data is not CVariable cdata)
-                {
-                    throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
-                }
-
-                Data.IsSerialized = true;
-            }
-            public string GetFullChunkTypeDependencyString() { return ""; }
-            public void MountChunkVirtually(int virtualparentchunkindex, bool force = false) { }
-            public void MountChunkVirtually(ICR2WExport virtualparentchunk, bool force = false) { }
-
-            public void ReadData(BinaryReader file)
-            { }
-            public void WriteData(BinaryWriter file)
-            { }
-            public Export(CompiledPackage file, string redtype, Export parentchunk, bool cooked = false)
-            {
-                AdReferences = new List<IREDChunkPtr>();
-                AbReferences = new List<IREDChunkPtr>();
-
-                this.Package = file;
-                this.REDType = redtype;
-                ParentChunk = parentchunk;
-            }
-        }
         public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, IEditableVariable cvar = null)
         {
             var chunk = new Export(this, type, parent as Export);
+            chunk.ChunkIndex = chunkindex;
             if (cvar != null)
             {
                 chunk.CreateDefaultData();
@@ -413,6 +346,83 @@ namespace WolvenKit.Modkit.RED4.Compiled
 
             Chunks.Insert(chunkindex, chunk);
             return chunk;
+        }
+    }
+    public class Import : ICR2WImport
+    {
+        private readonly CompiledPackage _package;
+        public uint DepotPath { get; private set; }
+        public string DepotPathStr => _package.StrTable1asStr[DepotPath];
+        public string ClassNameStr { get; private set; } = "NAME NOT FOUND";
+        public ushort ClassName { get; private set; } = 0;
+        public ushort Flags { get; private set; } = 4;
+        public Import(CompiledPackage package, uint idx)
+        {
+            _package = package;
+            DepotPath = idx;
+        }
+    }
+    public class Name : ICR2WName
+    {
+        private readonly CompiledPackage _package;
+        public uint idx { get; private set; }
+        public string Str => _package.StrTable2asStr[idx];
+        public uint hash { get; private set; } = 0;
+        public Name(CompiledPackage package, uint idx)
+        {
+            _package = package;
+            this.idx = idx;
+        }
+    }
+    public class Export : ICR2WExport
+    {
+        public bool ShouldSerializeData() => (Data.IsSerialized == true);
+        public string REDType { get; }
+        [JsonIgnore] public CompiledPackage Package { get; private set; }
+        public int ParentChunkIndex { get; }
+
+        public IEditableVariable Data { get; set; }
+
+        [JsonIgnore] public string REDName { get; }
+        [JsonIgnore] public int ChunkIndex { get; set; }
+
+        [JsonIgnore] public IEditableVariable UnknownBytes { get; }
+
+        [JsonIgnore] public ICR2WExport ParentChunk { get; set; }
+        [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
+        [JsonIgnore] public List<ICR2WExport> ChildrenChunks { get; }
+        [JsonIgnore] public List<ICR2WExport> VirtualChildrenChunks { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AdReferences { get; }
+        [JsonIgnore] public List<IREDChunkPtr> AbReferences { get; }
+        [JsonIgnore] public List<string> UnknownTypes { get; }
+
+        public void CreateDefaultData(IEditableVariable cvar = null)
+        {
+            Data = cvar ?? CR2WTypeManager.Create(REDType, REDType, Package, ParentChunk?.Data as CVariable);
+
+            if (Data is not CVariable cdata)
+            {
+                throw new InvalidParsingException($"{nameof(CreateDefaultData)} failed: {this.REDName}");
+            }
+
+            Data.IsSerialized = true;
+        }
+        public string GetFullChunkTypeDependencyString() { return ""; }
+        public void MountChunkVirtually(int virtualparentchunkindex, bool force = false) { }
+        public void MountChunkVirtually(ICR2WExport virtualparentchunk, bool force = false) { }
+
+        public void ReadData(BinaryReader file)
+        { }
+        public void WriteData(BinaryWriter file)
+        { }
+        public Export(CompiledPackage file, string redtype, Export parentchunk, bool cooked = false)
+        {
+            AdReferences = new List<IREDChunkPtr>();
+            AbReferences = new List<IREDChunkPtr>();
+
+            this.Package = file;
+            this.REDType = redtype;
+            ParentChunk = parentchunk;
         }
     }
 }
