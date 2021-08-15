@@ -188,7 +188,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
         }
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(new Red4W2rcFileDto(this));
+            return JsonConvert.SerializeObject(new Red4W2rcFileDto(this),Formatting.Indented);
         }
         public List<ICR2WExport> Chunks { get; set; }
         public List<ICR2WBuffer> Buffers { get; set; }
