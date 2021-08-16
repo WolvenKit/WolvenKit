@@ -19,6 +19,69 @@ namespace WolvenKit.Modkit.RED4.Compiled
 {
     public class CompiledPackage : ObservableObject, IRed4EngineFile
     {
+        private readonly IHashService _hashService;
+        private const UInt32 RefTableSizeBitShift = 23;
+        private const UInt32 RefTableOffsetMask = (1U << (int)RefTableSizeBitShift) - 1U;
+        private const UInt32 NamesTableSizeBitShift = 24;
+        private const UInt32 NamesTableOffsetMask = (1U << (int)NamesTableSizeBitShift) - 1U;
+        private const UInt32 SizeBitMask = (1U << 8) - 1;
+
+        [StructLayout(LayoutKind.Explicit, Size = 36)]
+        struct Header
+        {
+            [FieldOffset(0)]
+            public UInt16 Uk1;
+
+            [FieldOffset(2)]
+            public UInt16 NumSections;
+
+            [FieldOffset(4)]
+            public UInt32 NumCruids0;
+
+            [FieldOffset(8)]
+            public UInt32 RefPoolDescOffset;
+
+            [FieldOffset(12)]
+            public UInt32 RefPoolDataOffset;
+
+            [FieldOffset(16)]
+            public UInt32 NamesPoolDescoffset;
+
+            [FieldOffset(20)]
+            public UInt32 NamesPoolDataoffset;
+
+            [FieldOffset(24)]
+            public UInt32 ChunkDescOffset;
+
+            [FieldOffset(28)]
+            public UInt32 ChunkDataOffset;
+
+            [FieldOffset(32)]
+            public UInt16 Uk2;
+
+            [FieldOffset(34)]
+            public UInt16 NumCruids1;
+        }
+        private Header _header;
+        public List<UInt64> EmbeddedCruids { get; private set; }
+        private List<UInt32> RefPoolDescTable { get; set; }
+        public Dictionary<uint, string> RefTableasStr { get; private set; }
+        public Dictionary<uint, UInt64> RefTableasHash { get; private set; }
+        private List<UInt32> NamesPoolDescTable { get; set; }
+        public Dictionary<uint, string> NamesTableasStr { get; private set; }
+
+        [StructLayout(LayoutKind.Explicit, Size = 8)]
+        struct ChunkDesc
+        {
+            [FieldOffset(0)]
+            public UInt32 ChunkRedTypeIdx;
+
+            [FieldOffset(4)]
+            public UInt32 ChunkDataOffset;
+        }
+        private List<ChunkDesc> ChunkDescs { get; set; }
+        public List<ICR2WExport> Chunks { get; private set; }
+        public List<ICR2WBuffer> Buffers { get; private set; }
         [JsonIgnore] public bool CreatePropertyOnAccess { get; set; } = true;
         [JsonIgnore] public bool IsDirty { get; set; }
         [JsonIgnore] public string FileName { get; set; }
@@ -27,162 +90,87 @@ namespace WolvenKit.Modkit.RED4.Compiled
         [JsonIgnore] public Dictionary<uint, string> StringDictionary { get; private set; }
         [JsonIgnore] public List<ICR2WName> Names { get; private set; }
         [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
-
-        [StructLayout(LayoutKind.Explicit, Size = 32)]
-        struct header
-        {
-            [FieldOffset(0)]
-            public UInt16 uk1;
-
-            [FieldOffset(2)]
-            public UInt16 uk2;  // sections count apparently mostly its 7
-
-            [FieldOffset(4)]
-            public UInt32 ids_cnt;
-
-            [FieldOffset(8)]
-            public UInt32 rarefpool_descs_offset;
-
-            [FieldOffset(12)]
-            public UInt32 rarefpool_data_offset;
-
-            [FieldOffset(16)]
-            public UInt32 strpool_descs_offset;
-
-            [FieldOffset(20)]
-            public UInt32 strpool_data_offset;
-
-            [FieldOffset(24)]
-            public UInt32 obj_descs_offset;
-
-            [FieldOffset(28)]
-            public UInt32 objdata_offset;
-        }
-
-        header _header;
-        UInt16 _uk1;
-        List<UInt64> _ids { get; set; }
-        public Dictionary<uint, string> StrTable1asStr { get; set; } // Imports TBH, if string exists directly in the file both StrTable1asStr and StrTable1asHash is filled
-        public Dictionary<uint, UInt64> StrTable1asHash { get; set; } // Imports as hashes TBH, if string exists as Hashes then Obvs only StrTable1asHash can be filled
-        public Dictionary<uint, string> StrTable2asStr { get; set; } // Names TBH
-        List<ObjDesc> ObjectDescs; // Names Idx and Offset of Object Data in file from Origin
-
-        const UInt32 strTable1SizeBitShift = 23;
-        const UInt32 strTable1OffsetMask = (1U << (int)strTable1SizeBitShift) - 1U;
-        const UInt32 strTable2SizeBitShift = 24;
-        const UInt32 strTable2OffsetMask = (1U << (int)strTable2SizeBitShift) - 1U;
-        const UInt32 sizeBitMask = (1U << 8) - 1;
-
-        private readonly IHashService _hashService;
         public CompiledPackage(IHashService hashservice)
         {
             _hashService = hashservice;
+
+            EmbeddedCruids = new List<UInt64>();
+            RefPoolDescTable = new List<UInt32>();
+            RefTableasStr = new Dictionary<uint, string>();
+            RefTableasHash = new Dictionary<uint, UInt64>();
+            NamesPoolDescTable = new List<UInt32>();
+            NamesTableasStr = new Dictionary<uint, string>();
+            ChunkDescs = new List<ChunkDesc>();
+
             Names = new List<ICR2WName>();
             Imports = new List<ICR2WImport>();
             Chunks = new List<ICR2WExport>();
             Buffers = new List<ICR2WBuffer>();
-
-            _ids = new List<ulong>();
-            StrTable1asStr = new Dictionary<uint, string>();
-            StrTable1asHash = new Dictionary<uint, ulong>();
-            StrTable2asStr = new Dictionary<uint, string>();
-            ObjectDescs = new List<ObjDesc>();
         }
         public EFileReadErrorCodes Read(BinaryReader br)
         {
-            _header = br.BaseStream.ReadStruct<header>();
-            if (_header.rarefpool_descs_offset != 0)
-                throw new Exception("m_header.u32arr_offset != 0");
+            _header = br.BaseStream.ReadStruct<Header>();
+            if (_header.RefPoolDescOffset != 0)
+                throw new Exception("RefPoolDescOffset != 0");
 
-            _uk1 = br.ReadUInt16();
-            UInt16 ids_cnt;
-            ids_cnt = br.ReadUInt16();
-            if (ids_cnt != _header.ids_cnt)
-                throw new Exception("ids_cnt != m_header.ids_cnt");
+            if (_header.NumCruids0 != _header.NumCruids1)
+                throw new Exception("NumCruids0 != NumCruids1");
 
-            _ids = new List<ulong>();
-            for (int i = 0; i < ids_cnt; i++)
-                _ids.Add(br.ReadUInt64());
+            for (int i = 0; i < _header.NumCruids0; i++)
+                EmbeddedCruids.Add(br.ReadUInt64());
 
             long baseOff = br.BaseStream.Position;
-            UInt32 rarefpool_descs_size = _header.rarefpool_data_offset - _header.rarefpool_descs_offset;
+            UInt32 NumRefPoolDesc = (_header.RefPoolDataOffset - _header.RefPoolDescOffset) / 4;
 
-            for (uint i = 0; i < rarefpool_descs_size/4; i++)
+            for (uint i = 0; i < NumRefPoolDesc; i++)
             {
-                br.BaseStream.Seek(baseOff + _header.rarefpool_descs_offset + i * 4, SeekOrigin.Begin);
-                UInt32 maskData = br.ReadUInt32();
-                UInt32 off = maskData & strTable1OffsetMask;
-                UInt32 len = (maskData >> (int)strTable1SizeBitShift) & sizeBitMask;
+                br.BaseStream.Seek(baseOff + _header.RefPoolDescOffset + i * 4, SeekOrigin.Begin);
+                UInt32 bitmaskData = br.ReadUInt32();
+                RefPoolDescTable.Add(bitmaskData);
+                UInt32 off = bitmaskData & RefTableOffsetMask;
+                UInt32 len = (bitmaskData >> (int)RefTableSizeBitShift) & SizeBitMask;
 
-                if(_uk1 == 0)
+                br.BaseStream.Seek(baseOff + off, SeekOrigin.Begin);
+                if (_header.Uk2 == 0)
                 {
-                    br.BaseStream.Seek(baseOff + off, SeekOrigin.Begin);
                     string name = new string(br.ReadChars((int)len));
-                    StrTable1asStr.Add(i, name);
-                    StrTable1asHash.Add(i, FNV1A64HashAlgorithm.HashString(name));
+                    RefTableasStr.Add(i, name);
+                    RefTableasHash.Add(i, FNV1A64HashAlgorithm.HashString(name));
                 }
                 else
                 {
-                    br.BaseStream.Seek(baseOff + off, SeekOrigin.Begin);
-                    StrTable1asHash.Add(i, br.ReadUInt64());
-                    StrTable1asStr.Add(i, _hashService.Get(StrTable1asHash[i]));
+                    RefTableasHash.Add(i, br.ReadUInt64());
+                    RefTableasStr.Add(i, _hashService.Get(RefTableasHash[i]));
                 }
                 Imports.Add(new Import(this, i));
             }
 
-            UInt32 strpool_descs_size = _header.strpool_data_offset - _header.strpool_descs_offset;
+            UInt32 NumNamesPoolDesc = (_header.NamesPoolDataoffset - _header.NamesPoolDescoffset) / 4;
 
-            for (uint i = 0; i < strpool_descs_size / 4; i++)
+            for (uint i = 0; i < NumNamesPoolDesc; i++)
             {
-                br.BaseStream.Seek(baseOff + _header.strpool_descs_offset + i * 4, SeekOrigin.Begin);
-                UInt32 maskData = br.ReadUInt32();
-                UInt32 off = maskData & strTable2OffsetMask;
-                UInt32 len = (maskData >> (int)strTable2SizeBitShift) & sizeBitMask;
+                br.BaseStream.Seek(baseOff + _header.NamesPoolDescoffset + i * 4, SeekOrigin.Begin);
+                UInt32 bitmaskData = br.ReadUInt32();
+                NamesPoolDescTable.Add(bitmaskData);
+                UInt32 off = bitmaskData & NamesTableOffsetMask;
+                UInt32 len = (bitmaskData >> (int)NamesTableSizeBitShift) & SizeBitMask;
 
                 br.BaseStream.Seek(baseOff + off, SeekOrigin.Begin);
                 string name = new string(br.ReadChars((int)len-1));
-                StrTable2asStr.Add(i, name);
+                NamesTableasStr.Add(i, name);
                 Names.Add(new Name(this, i));
             }
-            UInt32 obj_descs_size = _header.objdata_offset - _header.obj_descs_offset;;
 
-            for (int i = 0; i < obj_descs_size / 8; i++)
-            {
-                br.BaseStream.Seek(baseOff + _header.obj_descs_offset + i * 8, SeekOrigin.Begin);
-                UInt32 varNameIdx = br.ReadUInt32();
-                UInt32 off = br.ReadUInt32();
+            UInt32 NumChunksDesc = (_header.ChunkDataOffset - _header.ChunkDescOffset) / 8;
 
-                ObjDesc obj_desc = new ObjDesc(varNameIdx, off + baseOff);
-                ObjectDescs.Add(obj_desc);
-            }
-            List<uint> sizes = new List<uint>();
-            for (int i = 0; i < ObjectDescs.Count; i++)
+            for (int i = 0; i < NumChunksDesc; i++)
             {
-                uint size = 0;
-                if(i < ObjectDescs.Count - 1)
-                {
-                    size = (uint)(ObjectDescs[i + 1].objDataOffset - ObjectDescs[i].objDataOffset);
-                }
-                else
-                {
-                    size = (uint)(br.BaseStream.Length - ObjectDescs[i].objDataOffset);
-                }
-                sizes.Add(size);
-            }
-            for (int i = 0; i < ObjectDescs.Count; i++)
-            {
-                var cvar = CreateChunk(Names[(int)ObjectDescs[i].NameIdx].Str, i).Data;
-                try
-                {
+                br.BaseStream.Seek(baseOff + _header.ChunkDescOffset + i * 8, SeekOrigin.Begin);
+                var chunkDesc = br.BaseStream.ReadStruct<ChunkDesc>();
+                ChunkDescs.Add(chunkDesc);
 
-                }
-                catch { }
-                if (cvar.ChildrEditableVariables.Count > 0)
-                {
-                    br.BaseStream.Position = ObjectDescs[i].objDataOffset;
-                    var bytes = br.ReadBytes((int)sizes[i]);
-                    ReadVariable(new BinaryReader(new MemoryStream(bytes)), cvar);
-                }
+                br.BaseStream.Seek(baseOff + chunkDesc.ChunkDataOffset, SeekOrigin.Begin);
+                CreateChunk(Names[(int)chunkDesc.ChunkRedTypeIdx].Str, i).ReadData(br);
             }
             return EFileReadErrorCodes.NoError;
         }
@@ -190,115 +178,74 @@ namespace WolvenKit.Modkit.RED4.Compiled
         {
             return JsonConvert.SerializeObject(new Red4W2rcFileDto(this),Formatting.Indented);
         }
-        public List<ICR2WExport> Chunks { get; set; }
-        public List<ICR2WBuffer> Buffers { get; set; }
         public IEditableVariable ReadVariable(BinaryReader br, IEditableVariable parent)
         {
-            long basePos = br.BaseStream.Position;
-            ushort numChilds = br.ReadUInt16();
-            List<uint> offs = new List<uint>();
-            for (ushort i = 0; i < numChilds; i++)
+            if(parent is DataBuffer buff)
             {
-                br.BaseStream.Position += 4;
-                offs.Add(br.ReadUInt32());
+                buff.Buffer.Value = (ushort)Buffers.Count;
+                uint size = br.ReadUInt32();
+                CR2WBufferWrapper buffWrapper = new CR2WBufferWrapper();
+                buffWrapper.DiskSize = size;
+                buffWrapper.ReadData(br);
+                Buffers.Add(buffWrapper);
             }
-            List<uint> sizes = new List<uint>();
-            for (ushort i = 0; i < numChilds; i++)
+            else if(parent is IREDRef rref)
             {
-                uint size = 0;
-                if(i < numChilds - 1)
+                rref.DepotPath = Imports[br.ReadUInt16()].DepotPathStr;
+            }
+            else if (parent is IREDArray arr)
+            {
+                uint len = br.ReadUInt32();
+                for (uint e = 0; e < len; e++)
                 {
-                    size = offs[i + 1] - offs[i];
+                    var element = CR2WTypeManager.Create(arr.Elementtype, Convert.ToString(e), this, null);
+                    arr.Add(ReadVariable(br, element));
+                    element.ParentVar = arr;
+                }
+            }
+            else if (parent is IREDEnum enu)
+            {
+                List<string> strings = new List<string>();
+                if (enu.IsFlag)
+                {
+                    byte len = br.ReadByte();
+                    for (byte e = 0; e < len; e++)
+                    {
+                        strings.Add(Names[br.ReadUInt16()].Str);
+                    }
                 }
                 else
                 {
-                    size = (uint)br.BaseStream.Length - offs[i];
+                    strings.Add(Names[br.ReadUInt16()].Str);
                 }
-                sizes.Add(size);
+                enu.SetValue(strings);
             }
-            long pos = basePos + 2;
-            for (ushort i = 0; i < numChilds; i++)
+            else if(parent.ChildrEditableVariables.Count > 0)
             {
-                br.BaseStream.Position = pos;
-                ushort name = br.ReadUInt16();
-                string varname = Names[name].Str;
-                ushort type = br.ReadUInt16();
-                string typename = Names[type].Str;
-                uint off = br.ReadUInt32();
-                pos = br.BaseStream.Position;
-                var parsedvar = parent.GetPropertyByREDName(varname);
-                if (parsedvar == null || parsedvar.REDType != typename)
+                long basePos = br.BaseStream.Position;
+                ushort numChilds = br.ReadUInt16();
+                long pos = basePos + 2;
+                for (ushort i = 0; i < numChilds; i++)
                 {
-                    throw new MissingRTTIException(varname, typename, parent.REDType);
-                }
-                br.BaseStream.Position = off + basePos;
-                if ((parsedvar.ChildrEditableVariables.Count > 0) && (parsedvar is not DataBuffer))
-                {
-                    ReadVariable(br,parsedvar);
-                }
-                else if(parsedvar is DataBuffer)
-                {
-                    ((DataBuffer)parsedvar).Buffer.Value = (ushort)Buffers.Count;
-                    uint size = br.ReadUInt32();
-                    CR2WBufferWrapper buff = new CR2WBufferWrapper();
-                    buff.DiskSize = size;
-                    buff.ReadData(br);
-                    Buffers.Add(buff);
-                }
-                else
-                {
-                    if (parsedvar is IREDRef)
+                    br.BaseStream.Position = pos;
+                    ushort name = br.ReadUInt16();
+                    string varname = Names[name].Str;
+                    ushort type = br.ReadUInt16();
+                    string typename = Names[type].Str;
+                    uint off = br.ReadUInt32();
+                    pos = br.BaseStream.Position;
+                    var parsedvar = parent.GetPropertyByREDName(varname);
+                    if (parsedvar == null || parsedvar.REDType != typename)
                     {
-                        var reMs = new MemoryStream();
-                        var reBw = new BinaryWriter(reMs);
-                        reBw.Write(br.ReadUInt16() + 1);
-                        reMs.Position = 0;
-                        parsedvar.Read(new BinaryReader(reMs), 2);
+                        throw new MissingRTTIException(varname, typename, parent.REDType);
                     }
-                    else if(parsedvar is IREDArray arr)
-                    {
-                        uint len = br.ReadUInt32();
-                        for (uint e = 0; e < len; e++)
-                        {
-                            var element = CR2WTypeManager.Create(arr.Elementtype,Convert.ToString(e), this, null);
-                            if (element.ChildrEditableVariables.Count > 0)
-                            {
-                                arr.Add(ReadVariable(br, element));
-                            }
-                            else
-                            {
-                                element.Read(br,sizes[i]);
-                                arr.Add(element);
-                            }
-                            element.IsSerialized = true;
-                        }
-                    }
-                    else if(parsedvar is IREDEnum)
-                    {
-                        if(((IREDEnum)parsedvar).IsFlag)
-                        {
-                            var reMs = new MemoryStream();
-                            var reBw = new BinaryWriter(reMs);
-                            byte len = br.ReadByte();
-                            for (byte e = 0; e < len; e++)
-                            {
-                                reBw.Write(br.ReadUInt16());
-                            }
-                            reBw.Write(Convert.ToUInt16(0));
-                            reMs.Position = 0;
-                            parsedvar.Read(new BinaryReader(reMs), ((uint)len + 1) * 2);
-                        }
-                        else
-                        {
-                            parsedvar.Read(br, 2);
-                        }
-                    }
-                    else
-                    {
-                        parsedvar.Read(br, sizes[i]);
-                    }
+                    br.BaseStream.Position = off + basePos;
+                    parsedvar = ReadVariable(br, parsedvar);
                 }
-                parsedvar.IsSerialized = true;
+            }
+            else
+            {
+                parent.Read(br, (uint)(br.BaseStream.Length - br.BaseStream.Position));
             }
             parent.IsSerialized = true;
             return parent;
@@ -310,16 +257,6 @@ namespace WolvenKit.Modkit.RED4.Compiled
         public void Write(BinaryWriter writer)
         {
 
-        }
-        struct ObjDesc
-        {
-            public uint NameIdx;
-            public long objDataOffset;
-            public ObjDesc(uint varnameIdx, long dataOffset)
-            {
-                NameIdx = varnameIdx;
-                objDataOffset = dataOffset;
-            }
         }
         public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, IEditableVariable cvar = null)
         {
@@ -352,7 +289,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
     {
         private readonly CompiledPackage _package;
         public uint DepotPath { get; private set; }
-        public string DepotPathStr => _package.StrTable1asStr[DepotPath];
+        public string DepotPathStr => _package.RefTableasStr[DepotPath];
         public string ClassNameStr { get; private set; } = "NAME NOT FOUND";
         public ushort ClassName { get; private set; } = 0;
         public ushort Flags { get; private set; } = 4;
@@ -366,7 +303,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
     {
         private readonly CompiledPackage _package;
         public uint idx { get; private set; }
-        public string Str => _package.StrTable2asStr[idx];
+        public string Str => _package.NamesTableasStr[idx];
         public uint hash { get; private set; } = 0;
         public Name(CompiledPackage package, uint idx)
         {
@@ -411,8 +348,29 @@ namespace WolvenKit.Modkit.RED4.Compiled
         public void MountChunkVirtually(int virtualparentchunkindex, bool force = false) { }
         public void MountChunkVirtually(ICR2WExport virtualparentchunk, bool force = false) { }
 
-        public void ReadData(BinaryReader file)
-        { }
+        public void ReadData(BinaryReader br)
+        {
+            long basePos = br.BaseStream.Position;
+            ushort numChilds = br.ReadUInt16();
+            long pos = basePos + 2;
+            for (ushort i = 0; i < numChilds; i++)
+            {
+                br.BaseStream.Position = pos;
+                ushort name = br.ReadUInt16();
+                string varname = Package.Names[name].Str;
+                ushort type = br.ReadUInt16();
+                string typename = Package.Names[type].Str;
+                uint off = br.ReadUInt32();
+                pos = br.BaseStream.Position;
+                var parsedvar = Data.GetPropertyByREDName(varname);
+                if (parsedvar == null || parsedvar.REDType != typename)
+                {
+                    throw new MissingRTTIException(varname, typename, Data.REDType);
+                }
+                br.BaseStream.Position = off + basePos;
+                Package.ReadVariable(br, parsedvar);
+            }
+        }
         public void WriteData(BinaryWriter file)
         { }
         public Export(CompiledPackage file, string redtype, Export parentchunk, bool cooked = false)
