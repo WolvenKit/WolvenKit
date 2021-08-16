@@ -219,8 +219,7 @@ namespace WolvenKit.Views.Editor
 
             if (e.AddedItems.First() is TreeGridRowInfo { RowData: GameFileTreeNode model })
             {
-                vm.RightItems = model.Files.Values.SelectMany(_ => _)
-                    .Select(_ => new FileEntryViewModel(_ as FileEntry)).OrderBy(_=>Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0')));
+                vm.RightItems = model.Files.Select(_ => new FileEntryViewModel(_ as FileEntry)).OrderBy(_=>Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0')));
             }
         }
 

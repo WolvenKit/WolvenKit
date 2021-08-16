@@ -22,7 +22,8 @@ namespace WolvenKit.Core
 
             using (mlc)
             {
-                return mlc.LoadFromAssemblyPath(assemblyName);
+                var a = mlc.LoadFromAssemblyPath(assemblyName);
+                return a;
             }
         }
 

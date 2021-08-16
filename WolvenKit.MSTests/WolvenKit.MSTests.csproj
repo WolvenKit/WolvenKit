@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Catel.Core" Version="5.12.16" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
       <PackageReference Include="MSTest.TestAdapter" Version="2.2.4" />

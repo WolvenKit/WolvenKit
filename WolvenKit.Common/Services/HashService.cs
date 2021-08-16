@@ -62,6 +62,11 @@ namespace WolvenKit.Common.Services
             {
                 return _userHashes[key].ToString();
             }
+            if (_missing.Contains(key))
+            {
+                return "";
+            }
+
 
             // load additional
             LoadAdditional();

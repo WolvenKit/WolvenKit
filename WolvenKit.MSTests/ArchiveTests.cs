@@ -114,6 +114,8 @@ namespace WolvenKit.MSTests
             Assert.AreEqual(x.GroupedFiles.Count(), s_bm.GroupedFiles.Count());
         }
 
+        
+
         #endregion Methods
     }
 }
