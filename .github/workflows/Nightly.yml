@@ -98,5 +98,4 @@ jobs:
         draft: true
         name: ${{env.VERSION}}
         token: ${{ secrets.GITHUB_TOKEN }}
-      env:
-        GITHUB_REPOSITORY: WolvenKit/WolvenKit-nightly-releases
+        repository: WolvenKit/WolvenKit-nightly-releases
