@@ -41,6 +41,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IUpdateService _updateService;
+        private readonly ISettingsManager _settingsManager;
 
         private DocumentViewModel _activeDocument;
 
@@ -59,14 +60,15 @@ namespace WolvenKit.ViewModels.Shell
             IMessageService messageService,
             ICommandManager commandManager,
             IGameControllerFactory gameControllerFactory,
-            IUpdateService updateService
-        )
+            IUpdateService updateService,
+            ISettingsManager settingsManager)
         {
             _updateService = updateService;
             _projectManager = projectManager;
             _loggerService = loggerService;
             _messageService = messageService;
             _gameControllerFactory = gameControllerFactory;
+            _settingsManager = settingsManager;
 
             #region commands
 
@@ -117,6 +119,23 @@ namespace WolvenKit.ViewModels.Shell
             };
 
             OnStartup();
+
+            _settingsManager.PropertyChanged += _settingsManager_PropertyChanged;
+        }
+
+        private void _settingsManager_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ISettingsManager.UpdateChannel):
+                    _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
+                    Task.Run(() => _updateService.CheckForUpdatesAsync());
+                    break;
+
+                default:
+                    // Do Nothing
+                    break;
+            }
         }
 
         #endregion constructors
@@ -125,7 +144,9 @@ namespace WolvenKit.ViewModels.Shell
 
         private async void OnStartup()
         {
-            _updateService.Init(Constants.UpdateUrl, Constants.AssemblyName, delegate (FileInfo path, bool isManaged)
+            _updateService.Init(new string[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
+                Constants.AssemblyName,
+                delegate (FileInfo path, bool isManaged)
             {
                 if (isManaged)
                 {

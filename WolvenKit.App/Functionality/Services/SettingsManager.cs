@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 using Catel.Data;
+using WolvenKit.Common;
 using WolvenKit.Common.Tools;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
@@ -20,7 +21,7 @@ namespace WolvenKit.Functionality.Services
     /// <summary>
     /// This handles the application settings defined by the user.
     /// </summary>
-    public class SettingsManager : ObservableObject, ISettingsManager
+    public class SettingsManager : Catel.Data.ObservableObject, ISettingsManager
     {
         #region fields
 

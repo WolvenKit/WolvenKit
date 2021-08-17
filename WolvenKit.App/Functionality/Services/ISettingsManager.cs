@@ -5,24 +5,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media;
+using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
-    public enum EUpdateChannel
-    {
-        Stable,
-        Nightly
-    }
-
-
     public interface ISettingsDto
     {
         #region Properties
 
         bool CheckForUpdates { get; set; }
-
-        EUpdateChannel UpdateChannel{ get; set; }
 
         string TextLanguage { get; set; }
 
@@ -52,6 +44,8 @@ namespace WolvenKit.Functionality.Services
     {
         // This is here because Catel can't expose inherited Properties ¯\_(ツ)_/¯
         // and we use this in the first set up viewmodels
+        public EUpdateChannel UpdateChannel { get; set; }
+
         bool ShowGuidedTour { get; set; }
 
         public ImageBrush ProfileImageBrush { get; set; }

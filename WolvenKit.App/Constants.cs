@@ -19,6 +19,7 @@ namespace WolvenKit.Functionality
         public const string UpdaterName = "WolvenManager.Installer.exe";
 
         public const string UpdateUrl = "https://github.com/WolvenKit/Wolvenkit/releases/latest/download/";
+        public const string UpdateUrlNightly = "https://github.com/WolvenKit/WolvenKit-nightly-releases/latest/download/";
 
     }
 }

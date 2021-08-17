@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Win32;
+using Semver;
 
 namespace WolvenKit.Core
 {
@@ -27,10 +28,26 @@ namespace WolvenKit.Core
             }
         }
 
-        public static Version GetAssemblyVersion(string assemblyName)
+        public static SemVersion GetAssemblyVersion(string assemblyName)
         {
-            var name = GetAssembly(assemblyName)?.GetName();
-            return name?.Version;
+            var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            var paths = new List<string>(runtimeAssemblies);
+            var resolver = new PathAssemblyResolver(paths);
+            var mlc = new MetadataLoadContext(resolver);
+
+            using (mlc)
+            {
+                var assembly = mlc.LoadFromAssemblyPath(assemblyName);
+
+                var productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
+
+                var version = SemVersion.Parse(productVersion);
+                return version;
+            }
+
+            //var name = GetAssembly(assemblyName)?.GetName();
+            //return name?.Version;
+            
         }
 
         public static string HashFile(FileInfo fInfo, SHA256 mySha256)
