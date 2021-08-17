@@ -8,7 +8,7 @@ cd ..\
 :: @RD /S /Q .\publish\console
 
 echo "publish app"
-dotnet publish .\WolvenKit\WolvenKit.csproj -o publish\full --no-self-contained -r win-x64 -c Release -f net5.0-windows --version-suffix nightly
+dotnet publish .\WolvenKit\WolvenKit.csproj -o publish\full --no-self-contained -r win-x64 -c Release -f net5.0-windows
 
 echo "publish console"
 dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o publish\console --no-self-contained -r win-x64 -c Release -f net5.0
