@@ -53,7 +53,7 @@ jobs:
     - name: Get Date
       run: |
         echo $date = Get-Date -Format "yyyy-MM-dd"
-        echo "ISODATE=date" >> $env:GITHUB_ENV
+        echo "ISODATE=$date" >> $env:GITHUB_ENV
         
         
     - run: echo "VERSION=${{steps.get-version.outputs.version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
