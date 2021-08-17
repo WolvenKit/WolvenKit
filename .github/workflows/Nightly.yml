@@ -52,7 +52,7 @@ jobs:
         proj-path:  ${{env.PROJ}}
     - name: Get Date
       run: |
-        echo $date = Get-Date -Format "yyyy-MM-dd"
+        $date = Get-Date -Format "yyyy-MM-dd"
         echo "ISODATE=$date" >> $env:GITHUB_ENV
         
         
