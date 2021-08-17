@@ -58,7 +58,7 @@ namespace WolvenManager.Installer.Commands
 
             // get assemblyversion
             var fvi = FileVersionInfo.GetVersionInfo(assembly.FullName);
-            var assemblyversion = fvi.FileVersion;
+            var assemblyversion = fvi.ProductVersion;
             var manifestversion = assemblyversion ?? throw new InvalidOperationException();
 
             // get version
