@@ -61,6 +61,10 @@ jobs:
     # Publish app
     - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} --no-self-contained --no-restore -r win-x64 -c Release -f net5.0-windows /p:Version="${{env.VERSION}}"
 
+    - name: Get version again
+      uses: naminodarie/get-net-sdk-project-versions-action@v1
+      with:
+        proj-path:  ${{env.PROJ}}
     
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
