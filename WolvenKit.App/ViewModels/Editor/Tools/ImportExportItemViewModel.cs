@@ -64,6 +64,7 @@ namespace WolvenKit.ViewModels.Editor
                 ERawFileFormat.jpg => new XbmImportArgs(),
                 ERawFileFormat.png => new XbmImportArgs(),
                 ERawFileFormat.tiff => new XbmImportArgs(),
+                ERawFileFormat.masklist => new MlmaskImportArgs(),
                 _ => new CommonImportArgs()
             };
         }

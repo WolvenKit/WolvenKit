@@ -10,6 +10,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.Modkit.RED4.MLMask;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -64,6 +65,8 @@ namespace WolvenKit.Modkit.RED4
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
                     return ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>());
+                case ERawFileFormat.masklist:
+                    return ImportMlmask(rawRelative, outDir);
                 case ERawFileFormat.ttf:
                     return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
                 case ERawFileFormat.wav:
@@ -78,7 +81,31 @@ namespace WolvenKit.Modkit.RED4
             _loggerService.Success($"Use WolvenKit to import opus.");
             return false;
         }
-
+        private bool ImportMlmask(RedRelativePath rawRelative, DirectoryInfo outDir)
+        {
+            MLMASK mlmask = new MLMASK();
+            var ext = rawRelative.Extension;
+            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+                var redfile = new RedRelativePath(rawRelative).ChangeBaseDir(outDir).ChangeExtension(string.IsNullOrEmpty(".mlmask")? FromRawExtension(extAsEnum).ToString(): ".mlmask");
+                try
+                {
+                    mlmask.Import(rawRelative.ToFileInfo(), redfile.ToFileInfo());
+                    _loggerService.Success($"Successfully created {redfile.ToString()}");
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    _loggerService.Error($"Unexpected error occured while importing {rawRelative.ToString()}: {ex.Message}");
+                    return false;
+                }
+            }
+            else
+            {
+                _loggerService.Error($"Unexpected error occured while importing {rawRelative.ToString()}");
+                return false;
+            }
+        }
         private bool HandleTextures(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
         {
             // dds can be imported to cubemap, envprobe, texarray, xbm, mlmask
