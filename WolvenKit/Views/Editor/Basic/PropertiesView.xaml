@@ -408,9 +408,9 @@
                     <ab3d:MouseCameraController
                         Name="MouseCameraController1"
                         EventsSourceElement="{Binding ElementName=ViewportBorder}"
-                        MoveCameraConditions="LeftMouseButtonPressed, ControlKey"
+                        MoveCameraConditions="MiddleMouseButtonPressed"
                         MoveOnlyHorizontally="True"
-                        QuickZoomConditions="ShiftKey, LeftMouseButtonPressed"
+                        QuickZoomConditions="RightMouseButtonPressed"
                         RotateCameraConditions="LeftMouseButtonPressed"
                         TargetCamera="{Binding ElementName=Camera1}"
                         ZoomMode="Viewport3DCenter" />
