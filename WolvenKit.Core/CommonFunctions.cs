@@ -38,10 +38,37 @@ namespace WolvenKit.Core
             using (mlc)
             {
                 var assembly = mlc.LoadFromAssemblyPath(assemblyName);
+                var productVersion = "1.0.0";
 
-                var attr = assembly
-                    .CustomAttributes.First(_ => _.AttributeType.Name.Equals(nameof(AssemblyInformationalVersionAttribute)));
-                var productVersion = (string)attr.ConstructorArguments.First().Value;
+                var attributes = assembly.CustomAttributes.ToList();
+                for (int i = 0; i < attributes.Count; i++)
+                {
+                    var a = attributes[i];
+
+                    try
+                    {
+                        var t = a.AttributeType.Name;
+
+
+                        if (t == nameof(AssemblyInformationalVersionAttribute))
+                        {
+                            productVersion = (string)a.ConstructorArguments.First().Value;
+                            break;
+                        }
+                    }
+                    catch (FileNotFoundException ex)
+                    {
+                        // We are missing the required dependency assembly.
+                        Console.WriteLine($"Error while getting attribute type: {ex.Message}");
+                    }
+
+
+                }
+
+
+                //var attr = assembly
+                //    .CustomAttributes.First(_ => _.AttributeType.Name.Equals(nameof(AssemblyInformationalVersionAttribute)));
+                //var productVersion = "8.2.2"; /*(string)attr.ConstructorArguments.First().Value;*/
 
                 //var productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
 
@@ -51,7 +78,7 @@ namespace WolvenKit.Core
 
             //var name = GetAssembly(assemblyName)?.GetName();
             //return name?.Version;
-            
+
         }
 
         public static string HashFile(FileInfo fInfo, SHA256 mySha256)
