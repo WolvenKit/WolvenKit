@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media;
+using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
@@ -52,6 +53,8 @@ namespace WolvenKit.Functionality.Services
     {
         // This is here because Catel can't expose inherited Properties ¯\_(ツ)_/¯
         // and we use this in the first set up viewmodels
+        public EUpdateChannel UpdateChannel { get; set; }
+
         bool ShowGuidedTour { get; set; }
 
         public ImageBrush ProfileImageBrush { get; set; }

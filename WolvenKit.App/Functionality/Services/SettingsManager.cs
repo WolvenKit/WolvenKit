@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 using System.Windows.Media;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Common;
+using WolvenKit.Common.Tools;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;

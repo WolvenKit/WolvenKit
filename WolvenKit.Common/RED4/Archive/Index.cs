@@ -14,24 +14,25 @@ namespace CP77Tools.Model
     /// An entry in Index 3 (DependencyTable)
     /// </summary>
     [ProtoContract]
-    public class Dependency
+    public struct Dependency
     {
         #region Constructors
 
         private IHashService _hashService;
 
-        public Dependency()
-        {
+        //public Dependency()
+        //{
 
-        }
+        //}
 
-        public Dependency(IHashService hashService)
+        //public Dependency(IHashService hashService)
+        //{
+        //    _hashService = hashService;
+        //}
+
+        public Dependency(IHashService hashService, ulong hash)
         {
             _hashService = hashService;
-        }
-
-        public Dependency(ulong hash)
-        {
             Hash = hash;
         }
 
@@ -51,14 +52,14 @@ namespace CP77Tools.Model
     /// An entry in Index 2 (OffsetTable)
     /// </summary>
     [ProtoContract]
-    public class FileSegment
+    public struct FileSegment
     {
         #region Constructors
 
-        public FileSegment()
-        {
+        //public FileSegment()
+        //{
             
-        }
+        //}
 
         public FileSegment(ulong offset, uint zsize, uint size)
         {

@@ -158,7 +158,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (!ar.Index.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
                             ar.Index.Dependencies.Add(
-                                new Dependency(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
+                                new Dependency(_hashService, FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
                     }
                     lastimportidx = (uint)ar.Index.Dependencies.Count;
 

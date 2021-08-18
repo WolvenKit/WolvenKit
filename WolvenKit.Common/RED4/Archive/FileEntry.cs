@@ -62,20 +62,17 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Properties
 
+        public IGameArchive Archive { get; set; }
+
+
         [ProtoMember(1)] public ulong NameHash64 { get; set; }
         [ProtoMember(2)] public DateTime Timestamp { get; set; }
-
-        public void SetHashService(IHashService hashService) => _hashService = hashService;
-
         [ProtoMember(3)] public uint NumInlineBufferSegments { get; set; }
         [ProtoMember(4)] public uint SegmentsStart { get; set; }
         [ProtoMember(5)] public uint SegmentsEnd { get; set; }
         [ProtoMember(6)] public uint ResourceDependenciesStart { get; set; }
         [ProtoMember(7)] public uint ResourceDependenciesEnd { get; set; }
         [ProtoMember(8)] public byte[] SHA1Hash { get; set; }
-
-        public IGameArchive Archive { get; set; }
-
         [ProtoMember(9)] public uint Size { get; set; }
         [ProtoMember(10)] public uint ZSize { get; set; }
 
@@ -91,6 +88,9 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion Properties
 
         #region Methods
+
+        public void SetHashService(IHashService hashService) => _hashService = hashService;
+
 
         public void Extract(Stream output)
         {

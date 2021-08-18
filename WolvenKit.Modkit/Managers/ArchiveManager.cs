@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using ProtoBuf;
 using Splat;
 using WolvenKit.Common;
