@@ -136,6 +136,14 @@ namespace WolvenKit.ViewModels.Shell
                 .Select(_ => WhenAnyDocumentClosed())
                 .Switch()
                 .Subscribe(x => OpenDocuments.Remove(x));
+
+            _settingsManager
+                .WhenAnyValue(x => x.UpdateChannel)
+                .Subscribe(b =>
+                {
+                    _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
+                    Task.Run(() => _updateService.CheckForUpdatesAsync());
+                });
         }
 
 
@@ -150,7 +158,10 @@ namespace WolvenKit.ViewModels.Shell
 
         private async void OnStartup()
         {
-            _updateService.Init(Constants.UpdateUrl, Constants.AssemblyName, delegate (FileInfo path, bool isManaged)
+            _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
+            _updateService.Init(new string[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
+                Constants.AssemblyName,
+            delegate (FileInfo path, bool isManaged)
             {
                 if (isManaged)
                 {

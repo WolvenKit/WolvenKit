@@ -5,6 +5,56 @@
     <xs:complexType>
       <xs:all>
         <xs:element name="ReactiveUI" minOccurs="0" maxOccurs="1" type="xs:anyType" />
+        <xs:element name="LoadAssembliesOnStartup" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:all>
+              <xs:element minOccurs="0" maxOccurs="1" name="ExcludeAssemblies" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>A list of assembly names to exclude from loading at startup, delimited with line breaks. This will process all assemblies except these assemblies.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="IncludeAssemblies" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>A list of assembly names to include from loading at startup, delimited with line breaks. This will process only these these assemblies.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:all>
+            <xs:attribute name="ExcludeAssemblies" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>A list of assembly names to exclude from loading at startup, delimited with line breaks. This will process all assemblies except these assemblies.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="IncludeAssemblies" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>A list of assembly names to include from loading at startup, delimited with line breaks. This will process only these these assemblies.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="ExcludeOptimizedAssemblies" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>Exclude assemblies that are optimized away by the compiler. The default value is <c>false</c>, so optimized assemblies will still be included.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="ExcludePrivateAssemblies" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>
+        Exclude private assemblies in modern SDK projects (e.g. PackageReference PrivateAssets='all' /&gt;). The default value is <c>true</c>.
+      </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="ExcludeSystemAssemblies" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>
+        Exclude system assemblies (e.g. System.Runtime.Serialization). The default value is <c>true</c>.
+      </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="WrapInTryCatch" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>Wrap the assembly loading in a try - catch. The default value is <c>false</c>.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
       </xs:all>
       <xs:attribute name="VerifyAssembly" type="xs:boolean">
         <xs:annotation>

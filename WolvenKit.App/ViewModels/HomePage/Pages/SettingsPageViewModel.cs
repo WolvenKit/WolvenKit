@@ -15,6 +15,7 @@ using WolvenKit.Controls;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Common;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {

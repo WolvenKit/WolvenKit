@@ -10,20 +10,11 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
-    public enum EUpdateChannel
-    {
-        Stable,
-        Nightly
-    }
-
-
     public interface ISettingsDto
     {
         #region Properties
 
         bool CheckForUpdates { get; set; }
-
-        EUpdateChannel UpdateChannel{ get; set; }
 
         string TextLanguage { get; set; }
 
