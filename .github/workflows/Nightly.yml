@@ -88,14 +88,13 @@ jobs:
 
     # RELEASE
     - name: Release
-      uses: softprops/action-gh-release@v0.1.8
-      with:
-        prerelease: true
-        files: |
-          ${{env.FINALOUT}}/${{env.PORTABLE}}
-          ${{env.FINALOUT}}/${{env.INSTALLER}}
-          ${{env.FINALOUT}}/${{env.MANIFEST}}
-        draft: true
-        name: ${{env.VERSION}}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        repository: WolvenKit/WolvenKit-nightly-releases
+      run: |
+          gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} -F README.md -p -d  ${{ env.FILES }}
+      env:
+        MESSAGE: "This is a beta release so you may encounter bugs. Please report them. This build is generated every day at 12:00am UTC. The builds are preserved for one week below. Please download the newest one."
+        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.INSTALLER}} ${{env.FINALOUT}}/${{env.MANIFEST}}
+        REPO: WolvenKit/WolvenKit-nightly-releases
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+    
+    
+      
