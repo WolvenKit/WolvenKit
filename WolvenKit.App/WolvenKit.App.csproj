@@ -56,4 +56,8 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="dotnet publish ..\WolvenManager.Installer\WolvenManager.Installer.csproj -o ..\WolvenKit\lib -p:PublishSingleFile=true --no-self-contained -r win-x64 -c Release -f net5.0" />
+  </Target>
+
 </Project>

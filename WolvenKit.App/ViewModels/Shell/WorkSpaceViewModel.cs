@@ -144,6 +144,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private async void OnStartup()
         {
+            _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
             _updateService.Init(new string[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
                 Constants.AssemblyName,
                 delegate (FileInfo path, bool isManaged)
@@ -161,7 +162,7 @@ namespace WolvenKit.ViewModels.Shell
                     var newPath = Path.Combine(ISettingsManager.GetAppData(), Constants.UpdaterName);
                     try
                     {
-                        shippedInstaller.MoveTo(newPath, true);
+                        shippedInstaller.CopyTo(newPath, true);
                     }
                     catch (Exception)
                     {

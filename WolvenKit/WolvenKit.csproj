@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>WolvenKit</AssemblyName>
@@ -15,7 +15,8 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <AssemblyVersion>8.2.3.0</AssemblyVersion>
+    <AssemblyVersion>8.2.2</AssemblyVersion>
+    <Version>8.2.2</Version>
     <Description>WPF</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -74,6 +75,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Config\Layout\DockStatesCR2W.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\WolvenManager.Installer.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Obsolete.dll">
@@ -1583,6 +1587,7 @@
     <None Remove="AssimpNet.dll" />
     <None Remove="Config\Layout\DockStatesCR2W.xml" />
     <None Remove="distraction_generic.bk2" />
+    <None Remove="lib\WolvenManager.Installer.exe" />
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Icons\Files\acousticdata.bmp" />

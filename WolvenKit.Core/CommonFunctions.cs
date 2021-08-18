@@ -39,7 +39,11 @@ namespace WolvenKit.Core
             {
                 var assembly = mlc.LoadFromAssemblyPath(assemblyName);
 
-                var productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
+                var attr = assembly
+                    .CustomAttributes.First(_ => _.AttributeType.Name.Equals(nameof(AssemblyInformationalVersionAttribute)));
+                var productVersion = (string)attr.ConstructorArguments.First().Value;
+
+                //var productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
 
                 var version = SemVersion.Parse(productVersion);
                 return version;

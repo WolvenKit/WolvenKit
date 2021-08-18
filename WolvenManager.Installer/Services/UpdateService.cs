@@ -85,6 +85,8 @@ namespace WolvenManager.Installer.Services
         /// <returns></returns>
         public async Task CheckForUpdatesAsync()
         {
+            var manifestUri = GetManifestUri();
+
             if (!_isInitialized)
             {
                 return;
@@ -93,7 +95,7 @@ namespace WolvenManager.Installer.Services
             // ping
             try
             {
-                var host = GetManifestUri().Host;
+                var host = manifestUri.Host;
                 var reply = new Ping().Send(host, 3000);
                 if (reply.Status != IPStatus.Success)
                 {
@@ -109,7 +111,8 @@ namespace WolvenManager.Installer.Services
 
             // check versions
             var http = new HttpClient();
-            var manifestJson = await http.GetStringAsync(GetManifestUri());
+
+            var manifestJson = await http.GetStringAsync(manifestUri);
             if (string.IsNullOrEmpty(manifestJson))
             {
                 return;
@@ -119,6 +122,7 @@ namespace WolvenManager.Installer.Services
             {
                 return;
             }
+
             var latestVersion = SemVersion.Parse(manifest.Version);
             var myVersion = CommonFunctions.GetAssemblyVersion(_assemblyName);
 
@@ -179,9 +183,11 @@ namespace WolvenManager.Installer.Services
 
         private async Task DownloadUpdateAsync(Manifest manifest, EIncludedFiles type)
         {
-            var latestVersion = new Version(manifest.Version);
+            _notificationService.ShowDesktopNotification("test", ENotificationType.Info);
 
-            _notificationService.Ask($"Update available. Would you like to update to the latest version {latestVersion}?",
+            var latestVersion = manifest.Version;
+
+            _notificationService.AskInDesktop($"Update available. Would you like to update to the latest version {latestVersion}?",
                 delegate(bool b)
                 {
                     if (!b)
@@ -263,7 +269,7 @@ namespace WolvenManager.Installer.Services
             IsUpdateReadyToInstall = true;
 
             // ask user to restart
-            _notificationService.Ask($"Update ready to install - restart?", delegate(bool b)
+            _notificationService.AskInDesktop($"Update ready to install - restart?", delegate(bool b)
             {
                 if (!b)
                 {
