@@ -113,7 +113,7 @@ namespace WolvenKit.ViewModels.Editor
                 ECookedFileFormat.wem => new WemExportArgs(),
                 ECookedFileFormat.csv => new CommonExportArgs(),
                 //ECookedFileFormat.json => new CommonExportArgs(),
-                ECookedFileFormat.mlmask => new CommonExportArgs(),
+                ECookedFileFormat.mlmask => new MlmaskExportArgs(),
                 ECookedFileFormat.cubemap => new CommonExportArgs(),
                 ECookedFileFormat.envprobe => new CommonExportArgs(),
                 ECookedFileFormat.texarray => new CommonExportArgs(),
