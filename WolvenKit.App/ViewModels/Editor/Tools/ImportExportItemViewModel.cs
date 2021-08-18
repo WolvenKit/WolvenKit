@@ -14,6 +14,12 @@ namespace WolvenKit.ViewModels.Editor
     /// </summary>
     public abstract class ImportExportItemViewModel : ReactiveObject
     {
+        public ImportExportItemViewModel()
+        {
+            
+        }
+
+
         /// <summary>
         /// BaseFile "FileModel"
         /// </summary>
@@ -43,6 +49,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             BaseFile = model;
             Properties = DecideImportOptions(model);
+
+            Properties.WhenAnyPropertyChanged().Subscribe(v =>
+            {
+                this.RaisePropertyChanged(nameof(Properties));
+            });
         }
 
         private ImportArgs DecideImportOptions(FileModel model)
@@ -73,6 +84,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             BaseFile = model;
             Properties = DecideConverOptions(model);
+
+            Properties.WhenAnyPropertyChanged().Subscribe(v =>
+            {
+                this.RaisePropertyChanged(nameof(Properties));
+            });
         }
 
         private ConvertArgs DecideConverOptions(FileModel model)
@@ -88,6 +104,11 @@ namespace WolvenKit.ViewModels.Editor
         {
             BaseFile = model;
             Properties = DecideExportOptions(model);
+
+            Properties.WhenAnyPropertyChanged().Subscribe(v =>
+            {
+                this.RaisePropertyChanged(nameof(Properties));
+            });
         }
 
         private ExportArgs DecideExportOptions(FileModel model)

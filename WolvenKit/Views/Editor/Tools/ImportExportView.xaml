@@ -80,8 +80,6 @@
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 ColumnSizer="Auto"
-                ItemsSource="{Binding ConvertableItems}"
-                SelectedItem="{Binding SelectedConvert}"
                 SelectionMode="Extended"
                 Visibility="{Binding IsConvertsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
@@ -110,7 +108,7 @@
                         ColumnSizer="AutoLastColumnFill"
                         HeaderText="Convert Task"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="ExportTaskIdentifier" />
+                        MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
                 <I:Interaction.Behaviors>
                     <local:Behaviour />
@@ -128,8 +126,6 @@
                 AutoGenerateColumns="False"
                 CellDoubleTapped="SfDataGrid_CellDoubleTapped"
                 ColumnSizer="Auto"
-                ItemsSource="{Binding ExportableItems}"
-                SelectedItem="{Binding SelectedExport}"
                 SelectionMode="Extended"
                 Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
@@ -156,7 +152,7 @@
                         ColumnSizer="AutoLastColumnFill"
                         HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="ExportTaskIdentifier" />
+                        MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
                 <I:Interaction.Behaviors>
                     <local:Behaviour />
@@ -174,9 +170,6 @@
                 AutoGenerateColumns="False"
                 CellDoubleTapped="SfDataGrid_CellDoubleTapped"
                 ColumnSizer="Auto"
-                ItemsSource="{Binding ImportableItems}"
-                SelectedItem="{Binding SelectedImport}"
-                SelectedItems="{Binding SelectedImports}"
                 SelectionMode="Extended"
                 Visibility="{Binding IsImportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
@@ -205,7 +198,7 @@
                         ColumnSizer="AutoLastColumnFill"
                         HeaderText="Import Task"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="ExportTaskIdentifier" />
+                        MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
                 <I:Interaction.Behaviors>
                     <local:Behaviour />
@@ -432,13 +425,14 @@
                 Margin="2"
                 Background="{DynamicResource ContentBackgroundAlt}">
                 <syncfusion:PropertyGrid
+                    x:Name="OverlayPropertyGrid"
                     ButtonPanelVisibility="Collapsed"
                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                     CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"
                     DescriptionPanelVisibility="Visible"
                     EnableGrouping="True"
                     PropertyExpandMode="NestedMode"
-                    SelectedObject="{Binding SelectedObject.Properties, Mode=OneWay}"
+                    AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
                     SortDirection="{x:Null}" />
             </Grid>
         </Grid>

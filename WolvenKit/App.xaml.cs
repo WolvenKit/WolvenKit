@@ -215,7 +215,7 @@ namespace WolvenKit
                     services.AddTransient<VisualEditorViewModel>();
                     services.AddTransient<IViewFor<VisualEditorViewModel>, VisualEditorView>();
 
-                    services.AddTransient<ImportExportViewModel>();
+                    services.AddSingleton<ImportExportViewModel>();
                     services.AddTransient<IViewFor<ImportExportViewModel>, ImportExportView>();
 
                     #endregion

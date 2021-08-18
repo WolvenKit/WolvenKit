@@ -146,6 +146,24 @@ namespace WolvenKit.ViewModels.Editor
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _convertableItems)
                 .Subscribe();
+
+            ////=> IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+            //this.WhenAnyValue(x => x.IsImportsSelected, y => y.IsExportsSelected, z => z.IsConvertsSelected)
+            //    .Subscribe(b =>
+            //{
+            //    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+            //});
+
+
+            this.WhenAnyValue(x => x.SelectedExport, y => y.SelectedImport, z => z.SelectedConvert)
+                .Subscribe(b =>
+                {
+                    var x = b.Item1;
+                    var y = b.Item2;
+                    var z = b.Item3;
+
+                    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+                });
         }
 
         #region properties
@@ -180,7 +198,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
         /// </summary>
-        public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+        [Reactive] public ImportExportItemViewModel SelectedObject { get; set; } //=> IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
 
         [Reactive] public bool? IsHeaderChecked { get; set; }
 
