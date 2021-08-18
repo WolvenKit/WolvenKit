@@ -2,6 +2,12 @@
 
 namespace WolvenKit.Common
 {
+    public enum EUpdateChannel
+    {
+        Stable,
+        Nightly
+    }
+
     public enum ESerializeFormat
     {
         json,

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using WolvenKit.Common;
 
 namespace WolvenManager.Installer.Services
 {
@@ -9,13 +10,14 @@ namespace WolvenManager.Installer.Services
         bool IsUpdateAvailable { get; set; }
         bool IsUpdateReadyToInstall { get; set; }
         Task CheckForUpdatesAsync();
+        public void SetUpdateChannel(EUpdateChannel channel);
 
         /// <summary>
         /// /releases/latest/download/
         /// </summary>
-        /// <param name="updateUrl"></param>
+        /// <param name="updateUrls"></param>
         /// <param name="assemblyName"></param>
         /// <param name="updateAction"></param>
-        void Init(string updateUrl, string assemblyName, Action<FileInfo, bool> updateAction);
+        void Init(string[] updateUrls, string assemblyName, Action<FileInfo, bool> updateAction);
     }
 }

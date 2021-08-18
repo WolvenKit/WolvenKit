@@ -37,7 +37,7 @@ jobs:
       id: get-version
       with:
         proj-path:  ${{env.PROJ}}
-    - run: echo "VERSION=${{steps.get-version.outputs.version}}" >> $env:GITHUB_ENV
+    - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}" >> $env:GITHUB_ENV
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
     - run: echo "MANIFEST=manifest.json" >> $env:GITHUB_ENV
@@ -87,13 +87,13 @@ jobs:
       id: get-version
       with:
         proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
-    - run: echo "${{steps.get-version.outputs.version}}"
+    - run: echo "${{steps.get-version.outputs.assembly-version}}"
 
     - name: dotnet publish WolvenKit.Console
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/wolvenkit-console-${{steps.get-version.outputs.version}} --no-self-contained -r win-x64 -c Release -f net5.0
+      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o publish/console/wolvenkit-console-${{steps.get-version.outputs.assembly-version}} --no-self-contained -r win-x64 -c Release -f net5.0
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: console-${{steps.get-version.outputs.version}}
+        name: console-${{steps.get-version.outputs.assembly-version}}
         path: ./publish/console
