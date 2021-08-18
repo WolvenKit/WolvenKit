@@ -15,7 +15,7 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <AssemblyVersion>8.2.2.0</AssemblyVersion>
+    <AssemblyVersion>8.2.3.0</AssemblyVersion>
     <Description>WPF</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
