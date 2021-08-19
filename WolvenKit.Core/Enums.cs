@@ -234,7 +234,8 @@ namespace WolvenKit.Common
         gltf,
         glb,
         ttf,
-        wav
+        wav,
+        masklist
     }
 
     public enum EConvertableOutput
