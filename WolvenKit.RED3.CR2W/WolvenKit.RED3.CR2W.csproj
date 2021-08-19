@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PackageId>WolvenKit.RED3.CR2W</PackageId>
     <Company>WolvenKit</Company>
@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit, witcher3</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>3.32.3</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>

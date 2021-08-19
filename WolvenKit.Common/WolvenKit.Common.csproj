@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Platforms>AnyCPU;x64</Platforms>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Platforms>x64</Platforms>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Core functionality for the WolvenKit Mod Editor.</Description>
     <Authors>Hambalkó Bence, Moritz Baron</Authors>

@@ -5,6 +5,7 @@
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <DebugType>embedded</DebugType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
