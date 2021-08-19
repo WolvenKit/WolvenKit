@@ -34,7 +34,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             foreach (var f in files)
             {
                 if (!File.Exists(f))
-                    throw new FileNotFoundException($"Line{{lineIdx}}: \"{f}\" Make sure the file path is valid and exists (paths are given line by line in ascending layer order in masklist)");
+                    throw new FileNotFoundException($"Line{{lineIdx}}: \"{f}\" Make sure the file path is valid and exists (paths are specified line by line in ascending layer order in masklist)");
 
                 var ms = new MemoryStream(File.ReadAllBytes(f));
                 var s = Path.GetExtension(f).ToLower();
