@@ -87,10 +87,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 textures.Add(tex);
                 lineIdx++;
             }
-            if(textures.Count <= 1)
-            {
-                throw new Exception("Cannot Create Mlmask with 0 layers");
-            }
             mlmask.layers = textures.ToArray();
             #endregion
 
