@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isGenerator;
 		private CBool _isOverloaded;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("fuseBoxSkillChecks")] 
 		public CHandle<EngineeringContainer> FuseBoxSkillChecks
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fuseBoxSkillChecks, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("isGenerator")] 
 		public CBool IsGenerator
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isGenerator, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isOverloaded")] 
 		public CBool IsOverloaded
 		{

@@ -12,6 +12,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CString _description;
 		private CName _icon;
 		private CHandle<gameUILocalizationDataPackage> _locPackage;
+		private CHandle<gameUILocalizationDataPackage> _descPackage;
+		private CBool _isLock;
 
 		[Ordinal(0)] 
 		[RED("level")] 
@@ -51,6 +53,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _locPackage);
 			set => SetProperty(ref _locPackage, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("descPackage")] 
+		public CHandle<gameUILocalizationDataPackage> DescPackage
+		{
+			get => GetProperty(ref _descPackage);
+			set => SetProperty(ref _descPackage, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("isLock")] 
+		public CBool IsLock
+		{
+			get => GetProperty(ref _isLock);
+			set => SetProperty(ref _isLock, value);
 		}
 
 		public LevelRewardDisplayData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -29,13 +29,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _maxValue;
 		private InventoryItemData _gameData;
 		private CEnum<QuantityPickerActionType> _actionType;
-		private CHandle<inkSliderController> _sliderController;
+		private wCHandle<inkSliderController> _sliderController;
 		private CInt32 _choosenQuantity;
 		private CInt32 _itemPrice;
 		private CFloat _itemWeight;
 		private CBool _isBuyback;
 		private CBool _sendQuantityChangedEvent;
 		private CHandle<QuantityPickerPopupData> _data;
+		private CBool _isNegativeHovered;
 		private CHandle<PickerChoosenQuantityChangedEvent> _quantityChangedEvent;
 		private CHandle<QuantityPickerPopupCloseData> _closeData;
 
@@ -217,7 +218,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("sliderController")] 
-		public CHandle<inkSliderController> SliderController
+		public wCHandle<inkSliderController> SliderController
 		{
 			get => GetProperty(ref _sliderController);
 			set => SetProperty(ref _sliderController, value);
@@ -272,6 +273,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(31)] 
+		[RED("isNegativeHovered")] 
+		public CBool IsNegativeHovered
+		{
+			get => GetProperty(ref _isNegativeHovered);
+			set => SetProperty(ref _isNegativeHovered, value);
+		}
+
+		[Ordinal(32)] 
 		[RED("quantityChangedEvent")] 
 		public CHandle<PickerChoosenQuantityChangedEvent> QuantityChangedEvent
 		{
@@ -279,7 +288,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quantityChangedEvent, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("closeData")] 
 		public CHandle<QuantityPickerPopupCloseData> CloseData
 		{

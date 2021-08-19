@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _maxTime;
 		private CHandle<entPhysicalMeshComponent> _destroyedMesh;
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("minTime")] 
 		public CFloat MinTime
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _minTime, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("maxTime")] 
 		public CFloat MaxTime
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxTime, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("destroyedMesh")] 
 		public CHandle<entPhysicalMeshComponent> DestroyedMesh
 		{

@@ -8,6 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questSceneReturn_ConditionType : questISceneConditionType
 	{
 		private raRef<scnSceneResource> _sceneFile;
+		private CEnum<scnSceneVersionCheck> _sceneVersion;
 		private CArray<CHandle<scnIReturnCondition>> _returnConditions;
 
 		[Ordinal(0)] 
@@ -19,6 +20,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("SceneVersion")] 
+		public CEnum<scnSceneVersionCheck> SceneVersion
+		{
+			get => GetProperty(ref _sceneVersion);
+			set => SetProperty(ref _sceneVersion, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("returnConditions")] 
 		public CArray<CHandle<scnIReturnCondition>> ReturnConditions
 		{

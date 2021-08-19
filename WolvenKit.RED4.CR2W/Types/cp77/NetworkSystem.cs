@@ -10,10 +10,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<SNetworkLinkData> _networkLinks;
 		private CArray<entEntityID> _networkRevealTargets;
 		private CBool _sessionStarted;
-		private CUInt32 _visionModeChangedCallback;
-		private CUInt32 _focusModeToggleCallback;
+		private CHandle<redCallbackObject> _visionModeChangedCallback;
+		private CHandle<redCallbackObject> _focusModeToggleCallback;
 		private CUInt32 _playerSpawnCallback;
-		private CUInt32 _currentPlayerTargetCallbackID;
+		private CHandle<redCallbackObject> _currentPlayerTargetCallbackID;
 		private entEntityID _lastTargetSlaveID;
 		private entEntityID _lastTargetMasterID;
 		private gameDelayID _unregisterLinksRequestDelay;
@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<PingCachedData> _pingCachedData;
 		private entEntityID _lastPingSourceID;
 		private CArray<CHandle<PingCachedData>> _activePings;
+		private CArray<CName> _pingedSquads;
 		private CInt32 _pingLinksCounter;
 		private TweakDBID _networkPresetTBDID;
 		private wCHandle<gamedataNetworkPingingParameteres_Record> _networkPresetRecord;
@@ -30,6 +31,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _revealedBackdoorsCount;
 		private gameFxResource _debugCashedPingFxResource;
 		private CInt32 _debugQueryNumber;
+		private gameDelayID _activateLinksDelayID;
+		private gameDelayID _deactivateLinksDelayID;
 
 		[Ordinal(0)] 
 		[RED("networkLinks")] 
@@ -57,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("visionModeChangedCallback")] 
-		public CUInt32 VisionModeChangedCallback
+		public CHandle<redCallbackObject> VisionModeChangedCallback
 		{
 			get => GetProperty(ref _visionModeChangedCallback);
 			set => SetProperty(ref _visionModeChangedCallback, value);
@@ -65,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("focusModeToggleCallback")] 
-		public CUInt32 FocusModeToggleCallback
+		public CHandle<redCallbackObject> FocusModeToggleCallback
 		{
 			get => GetProperty(ref _focusModeToggleCallback);
 			set => SetProperty(ref _focusModeToggleCallback, value);
@@ -81,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("currentPlayerTargetCallbackID")] 
-		public CUInt32 CurrentPlayerTargetCallbackID
+		public CHandle<redCallbackObject> CurrentPlayerTargetCallbackID
 		{
 			get => GetProperty(ref _currentPlayerTargetCallbackID);
 			set => SetProperty(ref _currentPlayerTargetCallbackID, value);
@@ -160,6 +163,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("pingedSquads")] 
+		public CArray<CName> PingedSquads
+		{
+			get => GetProperty(ref _pingedSquads);
+			set => SetProperty(ref _pingedSquads, value);
+		}
+
+		[Ordinal(17)] 
 		[RED("pingLinksCounter")] 
 		public CInt32 PingLinksCounter
 		{
@@ -167,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _pingLinksCounter, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("networkPresetTBDID")] 
 		public TweakDBID NetworkPresetTBDID
 		{
@@ -175,7 +186,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _networkPresetTBDID, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("networkPresetRecord")] 
 		public wCHandle<gamedataNetworkPingingParameteres_Record> NetworkPresetRecord
 		{
@@ -183,7 +194,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _networkPresetRecord, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("backdoors")] 
 		public CArray<gamePersistentID> Backdoors
 		{
@@ -191,7 +202,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _backdoors, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("revealedBackdoorsCount")] 
 		public CInt32 RevealedBackdoorsCount
 		{
@@ -199,7 +210,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _revealedBackdoorsCount, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("debugCashedPingFxResource")] 
 		public gameFxResource DebugCashedPingFxResource
 		{
@@ -207,12 +218,28 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugCashedPingFxResource, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("debugQueryNumber")] 
 		public CInt32 DebugQueryNumber
 		{
 			get => GetProperty(ref _debugQueryNumber);
 			set => SetProperty(ref _debugQueryNumber, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("activateLinksDelayID")] 
+		public gameDelayID ActivateLinksDelayID
+		{
+			get => GetProperty(ref _activateLinksDelayID);
+			set => SetProperty(ref _activateLinksDelayID, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("deactivateLinksDelayID")] 
+		public gameDelayID DeactivateLinksDelayID
+		{
+			get => GetProperty(ref _deactivateLinksDelayID);
+			set => SetProperty(ref _deactivateLinksDelayID, value);
 		}
 
 		public NetworkSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

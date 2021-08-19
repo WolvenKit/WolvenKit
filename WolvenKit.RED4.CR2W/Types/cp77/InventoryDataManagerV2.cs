@@ -34,11 +34,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameIBlackboard> _uIBBItemModBlackbord;
 		private CHandle<UI_EquipmentDef> _uIBBEquipment;
 		private CHandle<UI_ItemModSystemDef> _uIBBItemMod;
-		private CUInt32 _inventoryBBID;
-		private CUInt32 _equipmentBBID;
-		private CUInt32 _subEquipmentBBID;
-		private CUInt32 _itemModBBID;
-		private CUInt32 _bBWeaponList;
+		private CHandle<redCallbackObject> _inventoryBBID;
+		private CHandle<redCallbackObject> _equipmentBBID;
+		private CHandle<redCallbackObject> _subEquipmentBBID;
+		private CHandle<redCallbackObject> _itemModBBID;
+		private CHandle<redCallbackObject> _bBWeaponList;
+		private CArray<CHandle<InventoryItemDataWrapper>> _inventoryItemDataWrappers;
+		private CHandle<inkScriptWeakHashMap> _hashMapCache;
 
 		[Ordinal(0)] 
 		[RED("owner")] 
@@ -258,7 +260,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("InventoryBBID")] 
-		public CUInt32 InventoryBBID
+		public CHandle<redCallbackObject> InventoryBBID
 		{
 			get => GetProperty(ref _inventoryBBID);
 			set => SetProperty(ref _inventoryBBID, value);
@@ -266,7 +268,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("EquipmentBBID")] 
-		public CUInt32 EquipmentBBID
+		public CHandle<redCallbackObject> EquipmentBBID
 		{
 			get => GetProperty(ref _equipmentBBID);
 			set => SetProperty(ref _equipmentBBID, value);
@@ -274,7 +276,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("SubEquipmentBBID")] 
-		public CUInt32 SubEquipmentBBID
+		public CHandle<redCallbackObject> SubEquipmentBBID
 		{
 			get => GetProperty(ref _subEquipmentBBID);
 			set => SetProperty(ref _subEquipmentBBID, value);
@@ -282,7 +284,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("ItemModBBID")] 
-		public CUInt32 ItemModBBID
+		public CHandle<redCallbackObject> ItemModBBID
 		{
 			get => GetProperty(ref _itemModBBID);
 			set => SetProperty(ref _itemModBBID, value);
@@ -290,10 +292,26 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("BBWeaponList")] 
-		public CUInt32 BBWeaponList
+		public CHandle<redCallbackObject> BBWeaponList
 		{
 			get => GetProperty(ref _bBWeaponList);
 			set => SetProperty(ref _bBWeaponList, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("InventoryItemDataWrappers")] 
+		public CArray<CHandle<InventoryItemDataWrapper>> InventoryItemDataWrappers
+		{
+			get => GetProperty(ref _inventoryItemDataWrappers);
+			set => SetProperty(ref _inventoryItemDataWrappers, value);
+		}
+
+		[Ordinal(33)] 
+		[RED("HashMapCache")] 
+		public CHandle<inkScriptWeakHashMap> HashMapCache
+		{
+			get => GetProperty(ref _hashMapCache);
+			set => SetProperty(ref _hashMapCache, value);
 		}
 
 		public InventoryDataManagerV2(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AnimFeature_RotatingObject> _animFeature;
 		private CHandle<UpdateComponent> _updateComp;
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationType, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("rotateClockwise")] 
 		public CBool RotateClockwise
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rotateClockwise, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("randomizeBladesSpeed")] 
 		public CBool RandomizeBladesSpeed
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _randomizeBladesSpeed, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("maxRotationSpeed")] 
 		public CFloat MaxRotationSpeed
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxRotationSpeed, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("timeToMaxRotation")] 
 		public CFloat TimeToMaxRotation
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeToMaxRotation, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RotatingObject> AnimFeature
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeature, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("updateComp")] 
 		public CHandle<UpdateComponent> UpdateComp
 		{

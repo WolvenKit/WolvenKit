@@ -7,12 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EquipmentAreaCategory : IScriptable
 	{
-		private CHandle<InventoryItemDisplayCategoryArea> _parentCategory;
+		private wCHandle<InventoryItemDisplayCategoryArea> _parentCategory;
 		private CArray<CHandle<EquipmentAreaDisplays>> _areaDisplays;
 
 		[Ordinal(0)] 
 		[RED("parentCategory")] 
-		public CHandle<InventoryItemDisplayCategoryArea> ParentCategory
+		public wCHandle<InventoryItemDisplayCategoryArea> ParentCategory
 		{
 			get => GetProperty(ref _parentCategory);
 			set => SetProperty(ref _parentCategory, value);

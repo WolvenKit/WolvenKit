@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameuiChatBoxGameController : gameuiHUDGameController
 	{
 		private wCHandle<gamePuppetBase> _player;
-		private CUInt32 _chatBoxBlackboardId;
+		private CHandle<redCallbackObject> _chatBoxBlackboardId;
 		private inkWidgetReference _chatBox;
 		private inkTextInputWidgetReference _enteredText;
 		private CBool _chatBoxOpen;
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("chatBoxBlackboardId")] 
-		public CUInt32 ChatBoxBlackboardId
+		public CHandle<redCallbackObject> ChatBoxBlackboardId
 		{
 			get => GetProperty(ref _chatBoxBlackboardId);
 			set => SetProperty(ref _chatBoxBlackboardId, value);

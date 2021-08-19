@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gametimeLogicController : IVehicleModuleController
 	{
 		private inkTextWidgetReference _gametimeTextWidget;
-		private CUInt32 _gametimeBBConnectionId;
+		private CHandle<redCallbackObject> _gametimeBBConnectionId;
 		private wCHandle<gameIBlackboard> _vehBB;
 		private wCHandle<vehicleBaseObject> _vehicle;
 		private wCHandle<vehicleUIGameController> _parent;
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("gametimeBBConnectionId")] 
-		public CUInt32 GametimeBBConnectionId
+		public CHandle<redCallbackObject> GametimeBBConnectionId
 		{
 			get => GetProperty(ref _gametimeBBConnectionId);
 			set => SetProperty(ref _gametimeBBConnectionId, value);

@@ -10,9 +10,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameIBlackboard> _vehicleBlackboard;
 		private wCHandle<vehicleBaseObject> _vehicle;
 		private CHandle<VehicleComponentPS> _vehiclePS;
-		private CUInt32 _vehicleBBStateConectionId;
-		private CUInt32 _vehicleCollisionBBStateID;
-		private CUInt32 _vehicleBBUIActivId;
+		private CHandle<redCallbackObject> _vehicleBBStateConectionId;
+		private CHandle<redCallbackObject> _vehicleCollisionBBStateID;
+		private CHandle<redCallbackObject> _vehicleBBUIActivId;
 		private wCHandle<inkWidget> _rootWidget;
 		private CBool _uIEnabled;
 		private CHandle<inkanimProxy> _startAnimProxy;
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("vehicleBBStateConectionId")] 
-		public CUInt32 VehicleBBStateConectionId
+		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
 			get => GetProperty(ref _vehicleBBStateConectionId);
 			set => SetProperty(ref _vehicleBBStateConectionId, value);
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("vehicleCollisionBBStateID")] 
-		public CUInt32 VehicleCollisionBBStateID
+		public CHandle<redCallbackObject> VehicleCollisionBBStateID
 		{
 			get => GetProperty(ref _vehicleCollisionBBStateID);
 			set => SetProperty(ref _vehicleCollisionBBStateID, value);
@@ -71,7 +71,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("vehicleBBUIActivId")] 
-		public CUInt32 VehicleBBUIActivId
+		public CHandle<redCallbackObject> VehicleBBUIActivId
 		{
 			get => GetProperty(ref _vehicleBBUIActivId);
 			set => SetProperty(ref _vehicleBBUIActivId, value);

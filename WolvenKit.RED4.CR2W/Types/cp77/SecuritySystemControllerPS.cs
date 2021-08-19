@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _outputsSend;
 		private CInt32 _inputsReceived;
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("level_0")] 
 		public CArray<SecurityAccessLevelEntry> Level_0
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _level_0, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("level_1")] 
 		public CArray<SecurityAccessLevelEntry> Level_1
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _level_1, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("level_2")] 
 		public CArray<SecurityAccessLevelEntry> Level_2
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _level_2, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("level_3")] 
 		public CArray<SecurityAccessLevelEntry> Level_3
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _level_3, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("level_4")] 
 		public CArray<SecurityAccessLevelEntry> Level_4
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _level_4, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("allowSecuritySystemToDisableItself")] 
 		public CBool AllowSecuritySystemToDisableItself
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _allowSecuritySystemToDisableItself, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("attitudeGroup")] 
 		public TweakDBID AttitudeGroup
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attitudeGroup, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("suppressAbilityToModifyAttitude")] 
 		public CBool SuppressAbilityToModifyAttitude
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _suppressAbilityToModifyAttitude, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("attitudeChangeMode")] 
 		public CEnum<EShouldChangeAttitude> AttitudeChangeMode
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attitudeChangeMode, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("performAutomaticResetAfter")] 
 		public Time PerformAutomaticResetAfter
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _performAutomaticResetAfter, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("hideAreasOnMinimap")] 
 		public CBool HideAreasOnMinimap
 		{
@@ -125,7 +125,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hideAreasOnMinimap, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("isUnderStrictQuestControl")] 
 		public CBool IsUnderStrictQuestControl
 		{
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isUnderStrictQuestControl, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("securitySystemState")] 
 		public CEnum<ESecuritySystemState> SecuritySystemState
 		{
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securitySystemState, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("agentsRegistry")] 
 		public CHandle<AgentRegistry> AgentsRegistry
 		{
@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _agentsRegistry, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("securitySystem")] 
 		public CHandle<SecuritySystemControllerPS> SecuritySystem
 		{
@@ -157,7 +157,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securitySystem, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("latestOutputEngineTime")] 
 		public CFloat LatestOutputEngineTime
 		{
@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _latestOutputEngineTime, value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(122)] 
 		[RED("updateInterval")] 
 		public CFloat UpdateInterval
 		{
@@ -173,7 +173,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _updateInterval, value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(123)] 
 		[RED("restartDuration")] 
 		public CInt32 RestartDuration
 		{
@@ -181,7 +181,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _restartDuration, value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(124)] 
 		[RED("protectedEntityIDs")] 
 		public CArray<entEntityID> ProtectedEntityIDs
 		{
@@ -189,7 +189,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _protectedEntityIDs, value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(125)] 
 		[RED("entitiesRemainingAtGate")] 
 		public CArray<entEntityID> EntitiesRemainingAtGate
 		{
@@ -197,7 +197,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _entitiesRemainingAtGate, value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(126)] 
 		[RED("blacklist")] 
 		public CArray<CHandle<BlacklistEntry>> Blacklist
 		{
@@ -205,7 +205,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _blacklist, value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(127)] 
 		[RED("currentReprimandID")] 
 		public CInt32 CurrentReprimandID
 		{
@@ -213,7 +213,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentReprimandID, value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(128)] 
 		[RED("blacklistDelayValid")] 
 		public CBool BlacklistDelayValid
 		{
@@ -221,7 +221,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _blacklistDelayValid, value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(129)] 
 		[RED("blacklistDelayID")] 
 		public gameDelayID BlacklistDelayID
 		{
@@ -229,7 +229,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _blacklistDelayID, value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(130)] 
 		[RED("maxGlobalWarningsCount")] 
 		public CInt32 MaxGlobalWarningsCount
 		{
@@ -237,7 +237,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxGlobalWarningsCount, value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(131)] 
 		[RED("delayIDValid")] 
 		public CBool DelayIDValid
 		{
@@ -245,7 +245,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _delayIDValid, value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(132)] 
 		[RED("deescalationEventID")] 
 		public gameDelayID DeescalationEventID
 		{
@@ -253,7 +253,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deescalationEventID, value);
 		}
 
-		[Ordinal(132)] 
+		[Ordinal(133)] 
 		[RED("outputsSend")] 
 		public CInt32 OutputsSend
 		{
@@ -261,7 +261,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _outputsSend, value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(134)] 
 		[RED("inputsReceived")] 
 		public CInt32 InputsReceived
 		{

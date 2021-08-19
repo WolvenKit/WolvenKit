@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArray<CName> _effectsToPlay;
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("effectsToPlay")] 
 		public CArray<CName> EffectsToPlay
 		{

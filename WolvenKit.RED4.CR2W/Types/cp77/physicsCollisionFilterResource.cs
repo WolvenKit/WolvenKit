@@ -7,17 +7,17 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsCollisionFilterResource : ISerializable
 	{
-		private rRef<JsonResource> _presetJson;
+		private rRef<JsonResource> _collisionPresetJson;
 		private rRef<JsonResource> _overridesJson;
 		private CStatic<CName> _collisionGroups;
 		private CStatic<CName> _queryGroups;
 
 		[Ordinal(0)] 
-		[RED("presetJson")] 
-		public rRef<JsonResource> PresetJson
+		[RED("collisionPresetJson")] 
+		public rRef<JsonResource> CollisionPresetJson
 		{
-			get => GetProperty(ref _presetJson);
-			set => SetProperty(ref _presetJson, value);
+			get => GetProperty(ref _collisionPresetJson);
+			set => SetProperty(ref _collisionPresetJson, value);
 		}
 
 		[Ordinal(1)] 

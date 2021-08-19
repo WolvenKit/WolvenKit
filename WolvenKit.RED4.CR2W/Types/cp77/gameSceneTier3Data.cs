@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private gameTier3CameraSettings _cameraSettings;
 
-		[Ordinal(8)] 
+		[Ordinal(3)] 
 		[RED("cameraSettings")] 
 		public gameTier3CameraSettings CameraSettings
 		{

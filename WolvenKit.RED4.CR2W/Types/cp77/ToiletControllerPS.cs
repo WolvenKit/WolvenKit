@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _flushVFXname;
 		private CBool _isFlushing;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("flushDuration")] 
 		public CFloat FlushDuration
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _flushDuration, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("flushSFX")] 
 		public CName FlushSFX
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _flushSFX, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("flushVFXname")] 
 		public CName FlushVFXname
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _flushVFXname, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isFlushing")] 
 		public CBool IsFlushing
 		{

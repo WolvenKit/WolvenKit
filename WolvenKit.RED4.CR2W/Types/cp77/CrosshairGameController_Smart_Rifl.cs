@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _smartLinkFirmwareOnline;
 		private inkCompoundWidgetReference _smartLinkFirmwareOffline;
 		private wCHandle<gameIBlackboard> _weaponBlackboard;
-		private CUInt32 _weaponParamsListenerId;
+		private CHandle<redCallbackObject> _weaponParamsListenerId;
 		private CArray<wCHandle<inkWidget>> _targets;
 		private CArray<gamesmartGunUITargetParameters> _targetsData;
 		private CBool _isBlocked;
@@ -288,7 +288,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(48)] 
 		[RED("weaponParamsListenerId")] 
-		public CUInt32 WeaponParamsListenerId
+		public CHandle<redCallbackObject> WeaponParamsListenerId
 		{
 			get => GetProperty(ref _weaponParamsListenerId);
 			set => SetProperty(ref _weaponParamsListenerId, value);

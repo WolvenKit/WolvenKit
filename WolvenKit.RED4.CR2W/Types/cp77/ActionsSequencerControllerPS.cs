@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private SActionTypeForward _actionTypeToForward;
 		private ActionsSequence _ongoingSequence;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("sequenceDuration")] 
 		public CFloat SequenceDuration
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sequenceDuration, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("sequencerMode")] 
 		public CEnum<EActionsSequencerMode> SequencerMode
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sequencerMode, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("actionTypeToForward")] 
 		public SActionTypeForward ActionTypeToForward
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _actionTypeToForward, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("ongoingSequence")] 
 		public ActionsSequence OngoingSequence
 		{

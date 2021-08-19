@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PerksMenuAttributeItemCreated : redEvent
 	{
-		private CHandle<PerksMenuAttributeItemController> _perksMenuAttributeItem;
+		private wCHandle<PerksMenuAttributeItemController> _perksMenuAttributeItem;
 
 		[Ordinal(0)] 
 		[RED("perksMenuAttributeItem")] 
-		public CHandle<PerksMenuAttributeItemController> PerksMenuAttributeItem
+		public wCHandle<PerksMenuAttributeItemController> PerksMenuAttributeItem
 		{
 			get => GetProperty(ref _perksMenuAttributeItem);
 			set => SetProperty(ref _perksMenuAttributeItem, value);

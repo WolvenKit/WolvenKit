@@ -39,7 +39,7 @@ namespace WolvenKit.Common.Services
 
         #region Methods
 
-        private bool IsAdditionalLoaded() => _additionalhashes.Count > 0;
+        private bool IsAdditionalLoaded;/*() => _additionalhashes.Count > 0;*/
 
         public IEnumerable<ulong> GetAllHashes()
         {
@@ -50,7 +50,31 @@ namespace WolvenKit.Common.Services
 
         public IEnumerable<ulong> GetMissingHashes() => _missing;
 
-        public bool Contains(ulong key) => _hashes.ContainsKey(key) || _userHashes.ContainsKey(key);
+        public bool Contains(ulong key)
+        {
+            if (_hashes.ContainsKey(key))
+            {
+                return true;
+            }
+            if (_userHashes.ContainsKey(key))
+            {
+                return true;
+            }
+            if (_missing.Contains(key))
+            {
+                return false;
+            }
+
+
+            // load additional
+            LoadAdditional();
+            if (_additionalhashes.ContainsKey(key))
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         public string Get(ulong key)
         {
@@ -78,7 +102,7 @@ namespace WolvenKit.Common.Services
             return "";
         }
 
-        public void Add(string path)
+        public void AddCustom(string path)
         {
             var hash = FNV1A64HashAlgorithm.HashString(path);
             if (!Contains(hash))
@@ -92,12 +116,13 @@ namespace WolvenKit.Common.Services
 
         private void LoadAdditional()
         {
-            if (IsAdditionalLoaded())
+            if (IsAdditionalLoaded)
             {
                 return;
             }
 
             LoadEmbeddedHashes(s_unused, _additionalhashes);
+            IsAdditionalLoaded = true;
         }
 
         private void Load()
@@ -171,14 +196,15 @@ namespace WolvenKit.Common.Services
                 {
                     continue;
                 }
-                if (_userHashes.ContainsKey(hash))
-                {
-                    continue;
-                }
                 if (_additionalhashes.ContainsKey(hash))
                 {
                     continue;
                 }
+                if (_userHashes.ContainsKey(hash))
+                {
+                    continue;
+                }
+                
 
                 hashDict.Add(hash, new SAsciiString(line));
             }

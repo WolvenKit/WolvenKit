@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _action;
 		private CName _groupId;
 		private CString _localizedLabel;
+		private CInt32 _queuePriority;
 
 		[Ordinal(0)] 
 		[RED("show")] 
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _localizedLabel);
 			set => SetProperty(ref _localizedLabel, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("queuePriority")] 
+		public CInt32 QueuePriority
+		{
+			get => GetProperty(ref _queuePriority);
+			set => SetProperty(ref _queuePriority, value);
 		}
 
 		public questInputHint_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

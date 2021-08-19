@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private LocalizationString _text;
 		private CString _inputAction;
 		private CEnum<inkInputHintHoldIndicationType> _holdIndicationType;
+		private CInt32 _queuePriority;
 
 		[Ordinal(0)] 
 		[RED("setTooltip")] 
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _holdIndicationType);
 			set => SetProperty(ref _holdIndicationType, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("queuePriority")] 
+		public CInt32 QueuePriority
+		{
+			get => GetProperty(ref _queuePriority);
+			set => SetProperty(ref _queuePriority, value);
 		}
 
 		public questShowCustomTooltip_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -16,9 +16,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameObjectActionsCallbackController> _objectActionsCallbackCtrl;
 		private CArray<Vector4> _investigationPositionsArray;
 		private wCHandle<gameIBlackboard> _actionRestrictionPlayerBB;
-		private CUInt32 _actionRestrictionCallbackID;
+		private CHandle<redCallbackObject> _actionRestrictionCallbackID;
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _interaction, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("interactionIndicator")] 
 		public CHandle<gameLightComponent> InteractionIndicator
 		{
@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _interactionIndicator, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("disableAreaIndicatorID")] 
 		public gameDelayID DisableAreaIndicatorID
 		{
@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disableAreaIndicatorID, value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("delayedUIRefreshID")] 
 		public gameDelayID DelayedUIRefreshID
 		{
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _delayedUIRefreshID, value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("isPlayerAround")] 
 		public CBool IsPlayerAround
 		{
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPlayerAround, value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("disableAreaIndicatorDelayActive")] 
 		public CBool DisableAreaIndicatorDelayActive
 		{
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disableAreaIndicatorDelayActive, value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _objectActionsCallbackCtrl, value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(94)] 
 		[RED("investigationPositionsArray")] 
 		public CArray<Vector4> InvestigationPositionsArray
 		{
@@ -82,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _investigationPositionsArray, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(95)] 
 		[RED("actionRestrictionPlayerBB")] 
 		public wCHandle<gameIBlackboard> ActionRestrictionPlayerBB
 		{
@@ -90,9 +90,9 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _actionRestrictionPlayerBB, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(96)] 
 		[RED("actionRestrictionCallbackID")] 
-		public CUInt32 ActionRestrictionCallbackID
+		public CHandle<redCallbackObject> ActionRestrictionCallbackID
 		{
 			get => GetProperty(ref _actionRestrictionCallbackID);
 			set => SetProperty(ref _actionRestrictionCallbackID, value);

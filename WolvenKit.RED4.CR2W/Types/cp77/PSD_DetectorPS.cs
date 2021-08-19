@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gamePersistentID _lastPersistentID;
 		private CName _name;
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _counter, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("toggle")] 
 		public CBool Toggle
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _toggle, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("lastEntityID")] 
 		public entEntityID LastEntityID
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastEntityID, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("lastPersistentID")] 
 		public gamePersistentID LastPersistentID
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastPersistentID, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("name")] 
 		public CName Name
 		{

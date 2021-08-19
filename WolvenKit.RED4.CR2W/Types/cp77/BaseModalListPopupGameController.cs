@@ -15,7 +15,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkISystemRequestsHandler> _systemRequestsHandler;
 		private CHandle<inkanimProxy> _switchAnimProxy;
 		private CHandle<inkanimProxy> _transitionAnimProxy;
+		private CHandle<redCallbackObject> _isInMenuCallbackID;
 		private CFloat _c_scrollInputThreshold;
+		private CBool _firstInit;
 
 		[Ordinal(2)] 
 		[RED("content")] 
@@ -82,11 +84,27 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("isInMenuCallbackID")] 
+		public CHandle<redCallbackObject> IsInMenuCallbackID
+		{
+			get => GetProperty(ref _isInMenuCallbackID);
+			set => SetProperty(ref _isInMenuCallbackID, value);
+		}
+
+		[Ordinal(11)] 
 		[RED("c_scrollInputThreshold")] 
 		public CFloat C_scrollInputThreshold
 		{
 			get => GetProperty(ref _c_scrollInputThreshold);
 			set => SetProperty(ref _c_scrollInputThreshold, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("firstInit")] 
+		public CBool FirstInit
+		{
+			get => GetProperty(ref _firstInit);
+			set => SetProperty(ref _firstInit, value);
 		}
 
 		public BaseModalListPopupGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

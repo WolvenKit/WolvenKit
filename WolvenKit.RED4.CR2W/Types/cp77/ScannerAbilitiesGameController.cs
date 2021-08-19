@@ -8,9 +8,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ScannerAbilitiesGameController : BaseChunkGameController
 	{
 		private inkCompoundWidgetReference _scannerAbilitiesRightPanel;
-		private CUInt32 _abilitiesCallbackID;
+		private CHandle<redCallbackObject> _abilitiesCallbackID;
 		private CBool _isValidAbilities;
-		private CArray<wCHandle<inkWidget>> _abilityWidgets;
+		private CArray<wCHandle<inkAsyncSpawnRequest>> _asyncSpawnRequests;
 
 		[Ordinal(5)] 
 		[RED("ScannerAbilitiesRightPanel")] 
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("abilitiesCallbackID")] 
-		public CUInt32 AbilitiesCallbackID
+		public CHandle<redCallbackObject> AbilitiesCallbackID
 		{
 			get => GetProperty(ref _abilitiesCallbackID);
 			set => SetProperty(ref _abilitiesCallbackID, value);
@@ -37,11 +37,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("abilityWidgets")] 
-		public CArray<wCHandle<inkWidget>> AbilityWidgets
+		[RED("asyncSpawnRequests")] 
+		public CArray<wCHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
 		{
-			get => GetProperty(ref _abilityWidgets);
-			set => SetProperty(ref _abilityWidgets, value);
+			get => GetProperty(ref _asyncSpawnRequests);
+			set => SetProperty(ref _asyncSpawnRequests, value);
 		}
 
 		public ScannerAbilitiesGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

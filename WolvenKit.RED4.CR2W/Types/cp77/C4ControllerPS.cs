@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CName _itemTweakDBString;
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("itemTweakDBString")] 
 		public CName ItemTweakDBString
 		{

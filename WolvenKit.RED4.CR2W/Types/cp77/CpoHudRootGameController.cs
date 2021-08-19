@@ -7,17 +7,17 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CpoHudRootGameController : gameuiWidgetGameController
 	{
-		private CHandle<inkWidget> _hitIndicator;
-		private CHandle<inkWidget> _chatBox;
-		private CHandle<inkWidget> _playerList;
-		private CHandle<inkWidget> _narration_journal;
-		private CHandle<inkWidget> _narrative_plate;
-		private CHandle<inkWidget> _inventory;
-		private CHandle<inkWidget> _loadouts;
+		private wCHandle<inkWidget> _hitIndicator;
+		private wCHandle<inkWidget> _chatBox;
+		private wCHandle<inkWidget> _playerList;
+		private wCHandle<inkWidget> _narration_journal;
+		private wCHandle<inkWidget> _narrative_plate;
+		private wCHandle<inkWidget> _inventory;
+		private wCHandle<inkWidget> _loadouts;
 
 		[Ordinal(2)] 
 		[RED("hitIndicator")] 
-		public CHandle<inkWidget> HitIndicator
+		public wCHandle<inkWidget> HitIndicator
 		{
 			get => GetProperty(ref _hitIndicator);
 			set => SetProperty(ref _hitIndicator, value);
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("chatBox")] 
-		public CHandle<inkWidget> ChatBox
+		public wCHandle<inkWidget> ChatBox
 		{
 			get => GetProperty(ref _chatBox);
 			set => SetProperty(ref _chatBox, value);
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("playerList")] 
-		public CHandle<inkWidget> PlayerList
+		public wCHandle<inkWidget> PlayerList
 		{
 			get => GetProperty(ref _playerList);
 			set => SetProperty(ref _playerList, value);
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("narration_journal")] 
-		public CHandle<inkWidget> Narration_journal
+		public wCHandle<inkWidget> Narration_journal
 		{
 			get => GetProperty(ref _narration_journal);
 			set => SetProperty(ref _narration_journal, value);
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("narrative_plate")] 
-		public CHandle<inkWidget> Narrative_plate
+		public wCHandle<inkWidget> Narrative_plate
 		{
 			get => GetProperty(ref _narrative_plate);
 			set => SetProperty(ref _narrative_plate, value);
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("inventory")] 
-		public CHandle<inkWidget> Inventory
+		public wCHandle<inkWidget> Inventory
 		{
 			get => GetProperty(ref _inventory);
 			set => SetProperty(ref _inventory, value);
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("loadouts")] 
-		public CHandle<inkWidget> Loadouts
+		public wCHandle<inkWidget> Loadouts
 		{
 			get => GetProperty(ref _loadouts);
 			set => SetProperty(ref _loadouts, value);

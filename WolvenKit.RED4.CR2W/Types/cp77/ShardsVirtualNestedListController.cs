@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<ShardsNestedListDataView> _currentDataView;
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("currentDataView")] 
 		public wCHandle<ShardsNestedListDataView> CurrentDataView
 		{

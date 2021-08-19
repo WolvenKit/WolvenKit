@@ -18,10 +18,12 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameJournalQuestPhase> _bufferedPhase;
 		private wCHandle<gameJournalQuest> _bufferedQuest;
 		private wCHandle<inkWidget> _root;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_SystemDef> _uiSystemBB;
-		private CUInt32 _uiSystemId;
-		private CUInt32 _trackedMappinId;
+		private CHandle<redCallbackObject> _uiSystemId;
+		private CHandle<redCallbackObject> _trackedMappinId;
+		private wCHandle<inkAsyncSpawnRequest> _trackedMappinSpawnRequest;
+		private wCHandle<gamemappinsIMappin> _currentMappin;
 
 		[Ordinal(9)] 
 		[RED("QuestTitle")] 
@@ -113,7 +115,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -129,7 +131,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("uiSystemId")] 
-		public CUInt32 UiSystemId
+		public CHandle<redCallbackObject> UiSystemId
 		{
 			get => GetProperty(ref _uiSystemId);
 			set => SetProperty(ref _uiSystemId, value);
@@ -137,10 +139,26 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("trackedMappinId")] 
-		public CUInt32 TrackedMappinId
+		public CHandle<redCallbackObject> TrackedMappinId
 		{
 			get => GetProperty(ref _trackedMappinId);
 			set => SetProperty(ref _trackedMappinId, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("trackedMappinSpawnRequest")] 
+		public wCHandle<inkAsyncSpawnRequest> TrackedMappinSpawnRequest
+		{
+			get => GetProperty(ref _trackedMappinSpawnRequest);
+			set => SetProperty(ref _trackedMappinSpawnRequest, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("currentMappin")] 
+		public wCHandle<gamemappinsIMappin> CurrentMappin
+		{
+			get => GetProperty(ref _currentMappin);
+			set => SetProperty(ref _currentMappin, value);
 		}
 
 		public QuestTrackerGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

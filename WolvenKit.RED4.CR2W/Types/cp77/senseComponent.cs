@@ -11,15 +11,15 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<senseVisibleObject> _visibleObject;
 		private CHandle<senseSensorObject> _sensorObject;
 		private CBool _isEnabled;
-		private CUInt32 _highLevelCb;
-		private CUInt32 _reactionCb;
+		private CHandle<redCallbackObject> _highLevelCb;
+		private CHandle<redCallbackObject> _reactionCb;
 		private CEnum<gamedataNPCHighLevelState> _highLevelState;
 		private TweakDBID _mainPreset;
 		private TweakDBID _secondaryPreset;
-		private CHandle<gameIBlackboard> _puppetBlackboard;
-		private CUInt32 _playerTakedownStateCallbackID;
-		private CUInt32 _playerUpperBodyStateCallbackID;
-		private CUInt32 _playerCarryingStateCallbackID;
+		private wCHandle<gameIBlackboard> _puppetBlackboard;
+		private CHandle<redCallbackObject> _playerTakedownStateCallbackID;
+		private CHandle<redCallbackObject> _playerUpperBodyStateCallbackID;
+		private CHandle<redCallbackObject> _playerCarryingStateCallbackID;
 		private wCHandle<PlayerPuppet> _playerInPerception;
 
 		[Ordinal(5)] 
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("highLevelCb")] 
-		public CUInt32 HighLevelCb
+		public CHandle<redCallbackObject> HighLevelCb
 		{
 			get => GetProperty(ref _highLevelCb);
 			set => SetProperty(ref _highLevelCb, value);
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("reactionCb")] 
-		public CUInt32 ReactionCb
+		public CHandle<redCallbackObject> ReactionCb
 		{
 			get => GetProperty(ref _reactionCb);
 			set => SetProperty(ref _reactionCb, value);
@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("puppetBlackboard")] 
-		public CHandle<gameIBlackboard> PuppetBlackboard
+		public wCHandle<gameIBlackboard> PuppetBlackboard
 		{
 			get => GetProperty(ref _puppetBlackboard);
 			set => SetProperty(ref _puppetBlackboard, value);
@@ -104,7 +104,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("playerTakedownStateCallbackID")] 
-		public CUInt32 PlayerTakedownStateCallbackID
+		public CHandle<redCallbackObject> PlayerTakedownStateCallbackID
 		{
 			get => GetProperty(ref _playerTakedownStateCallbackID);
 			set => SetProperty(ref _playerTakedownStateCallbackID, value);
@@ -112,7 +112,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("playerUpperBodyStateCallbackID")] 
-		public CUInt32 PlayerUpperBodyStateCallbackID
+		public CHandle<redCallbackObject> PlayerUpperBodyStateCallbackID
 		{
 			get => GetProperty(ref _playerUpperBodyStateCallbackID);
 			set => SetProperty(ref _playerUpperBodyStateCallbackID, value);
@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("playerCarryingStateCallbackID")] 
-		public CUInt32 PlayerCarryingStateCallbackID
+		public CHandle<redCallbackObject> PlayerCarryingStateCallbackID
 		{
 			get => GetProperty(ref _playerCarryingStateCallbackID);
 			set => SetProperty(ref _playerCarryingStateCallbackID, value);

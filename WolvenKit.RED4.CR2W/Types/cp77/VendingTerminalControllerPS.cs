@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isReady;
 		private CHandle<VendorDataManager> _vendorDataManager;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("vendingTerminalSetup")] 
 		public VendingTerminalSetup VendingTerminalSetup
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendingTerminalSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isReady, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{

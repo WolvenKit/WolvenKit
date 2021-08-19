@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<AIOffMeshConnectionComponent> _offMeshConnection;
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{

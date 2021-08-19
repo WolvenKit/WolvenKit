@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkVideoWidgetSummary _videoSummary;
 		private CBool _isDataSet;
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("videoContainer")] 
 		public inkCompoundWidgetReference VideoContainer
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _videoContainer, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("sceneTexture")] 
 		public inkImageWidgetReference SceneTexture
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sceneTexture, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("backgroundVideo")] 
 		public inkVideoWidgetReference BackgroundVideo
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _backgroundVideo, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("binkVideo")] 
 		public inkVideoWidgetReference BinkVideo
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _binkVideo, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("binkVideos")] 
 		public CArray<gameuiBinkResource> BinkVideos
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _binkVideos, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("currentBinkVideo")] 
 		public CInt32 CurrentBinkVideo
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentBinkVideo, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("videoSummary")] 
 		public inkVideoWidgetSummary VideoSummary
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _videoSummary, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("isDataSet")] 
 		public CBool IsDataSet
 		{

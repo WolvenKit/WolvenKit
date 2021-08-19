@@ -8,11 +8,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class LevelUpNotificationQueue : gameuiGenericNotificationGameController
 	{
 		private CFloat _duration;
-		private CHandle<gameIBlackboard> _levelUpBlackboard;
-		private CUInt32 _playerLevelUpListener;
+		private wCHandle<gameIBlackboard> _levelUpBlackboard;
+		private CHandle<redCallbackObject> _playerLevelUpListener;
 		private wCHandle<gameObject> _playerObject;
 		private CEnum<gamePSMCombat> _combatModePSM;
-		private CUInt32 _combatModeListener;
+		private CHandle<redCallbackObject> _combatModeListener;
 
 		[Ordinal(2)] 
 		[RED("duration")] 
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("levelUpBlackboard")] 
-		public CHandle<gameIBlackboard> LevelUpBlackboard
+		public wCHandle<gameIBlackboard> LevelUpBlackboard
 		{
 			get => GetProperty(ref _levelUpBlackboard);
 			set => SetProperty(ref _levelUpBlackboard, value);
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("playerLevelUpListener")] 
-		public CUInt32 PlayerLevelUpListener
+		public CHandle<redCallbackObject> PlayerLevelUpListener
 		{
 			get => GetProperty(ref _playerLevelUpListener);
 			set => SetProperty(ref _playerLevelUpListener, value);
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("combatModeListener")] 
-		public CUInt32 CombatModeListener
+		public CHandle<redCallbackObject> CombatModeListener
 		{
 			get => GetProperty(ref _combatModeListener);
 			set => SetProperty(ref _combatModeListener, value);

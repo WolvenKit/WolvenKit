@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameEffectInstance> _gameEffectInstance;
 		private CArray<wCHandle<SensorDevice>> _jammedSensorsArray;
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("colliderComponent")] 
 		public CHandle<entIComponent> ColliderComponent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _colliderComponent, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameEffectRef, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("gameEffectInstance")] 
 		public CHandle<gameEffectInstance> GameEffectInstance
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameEffectInstance, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("jammedSensorsArray")] 
 		public CArray<wCHandle<SensorDevice>> JammedSensorsArray
 		{

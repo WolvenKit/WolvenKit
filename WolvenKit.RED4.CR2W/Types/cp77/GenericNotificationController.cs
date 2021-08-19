@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _actionLabelRef;
 		private inkWidgetReference _actionRef;
 		private CBool _blockAction;
-		private CHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
+		private wCHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
 		private CHandle<gameuiGenericNotificationViewData> _data;
 		private wCHandle<gameObject> _player;
 		private CBool _isInteractive;
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("translationAnimationCtrl")] 
-		public CHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
+		public wCHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
 		{
 			get => GetProperty(ref _translationAnimationCtrl);
 			set => SetProperty(ref _translationAnimationCtrl, value);

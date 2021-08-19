@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkanimProxy> _animationProxy;
 		private redResourceReferenceScriptToken _c_atlas1;
 		private redResourceReferenceScriptToken _c_atlas2;
-		private CHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
+		private wCHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
 		private CString _localizedText;
 
 		[Ordinal(6)] 
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("translationAnimationCtrl")] 
-		public CHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
+		public wCHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
 		{
 			get => GetProperty(ref _translationAnimationCtrl);
 			set => SetProperty(ref _translationAnimationCtrl, value);

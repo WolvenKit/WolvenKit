@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class NarrationJournalGameController : gameuiHUDGameController
 	{
 		private inkCompoundWidgetReference _entriesContainer;
-		private CUInt32 _narrationJournalBlackboardId;
+		private CHandle<redCallbackObject> _narrationJournalBlackboardId;
 
 		[Ordinal(9)] 
 		[RED("entriesContainer")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("narrationJournalBlackboardId")] 
-		public CUInt32 NarrationJournalBlackboardId
+		public CHandle<redCallbackObject> NarrationJournalBlackboardId
 		{
 			get => GetProperty(ref _narrationJournalBlackboardId);
 			set => SetProperty(ref _narrationJournalBlackboardId, value);

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<EngDemoContainer> _windowSkillChecks;
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("windowSkillChecks")] 
 		public CHandle<EngDemoContainer> WindowSkillChecks
 		{

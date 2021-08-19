@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<inkCompoundWidgetReference> _clueHolder;
 		private CArray<inkWidgetReference> _clueBarHolder;
 		private CArray<inkWidgetReference> _speedIndicatorManagers;
-		private CArray<CHandle<BraindanceClueLogicController>> _clueArray;
+		private CArray<wCHandle<BraindanceClueLogicController>> _clueArray;
 		private wCHandle<ButtonHints> _buttonHintsController;
 		private CFloat _barSize;
 		private CFloat _braindanceDuration;
@@ -30,17 +30,17 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<scnPlayDirection> _currentDirection;
 		private CFloat _startingTimerTopMargin;
 		private ScriptGameInstance _gameInstance;
-		private CHandle<gameIBlackboard> _braindanceBB;
+		private wCHandle<gameIBlackboard> _braindanceBB;
 		private CHandle<BraindanceBlackboardDef> _braindanceDef;
-		private CUInt32 _clueBBID;
-		private CUInt32 _visionModeBBID;
-		private CUInt32 _progressBBID;
-		private CUInt32 _sectionTimeBBID;
-		private CUInt32 _isActiveBBID;
-		private CUInt32 _enableExitBBID;
-		private CUInt32 _isFPPBBID;
-		private CUInt32 _playbackSpeedID;
-		private CUInt32 _playbackDirectionID;
+		private CHandle<redCallbackObject> _clueBBID;
+		private CHandle<redCallbackObject> _visionModeBBID;
+		private CHandle<redCallbackObject> _progressBBID;
+		private CHandle<redCallbackObject> _sectionTimeBBID;
+		private CHandle<redCallbackObject> _isActiveBBID;
+		private CHandle<redCallbackObject> _enableExitBBID;
+		private CHandle<redCallbackObject> _isFPPBBID;
+		private CHandle<redCallbackObject> _playbackSpeedID;
+		private CHandle<redCallbackObject> _playbackDirectionID;
 		private CBool _isFPPMode;
 		private CHandle<inkanimProxy> _showTimelineAnimation;
 		private CHandle<inkanimProxy> _hideTimelineAnimation;
@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("clueArray")] 
-		public CArray<CHandle<BraindanceClueLogicController>> ClueArray
+		public CArray<wCHandle<BraindanceClueLogicController>> ClueArray
 		{
 			get => GetProperty(ref _clueArray);
 			set => SetProperty(ref _clueArray, value);
@@ -232,7 +232,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(32)] 
 		[RED("braindanceBB")] 
-		public CHandle<gameIBlackboard> BraindanceBB
+		public wCHandle<gameIBlackboard> BraindanceBB
 		{
 			get => GetProperty(ref _braindanceBB);
 			set => SetProperty(ref _braindanceBB, value);
@@ -248,7 +248,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(34)] 
 		[RED("ClueBBID")] 
-		public CUInt32 ClueBBID
+		public CHandle<redCallbackObject> ClueBBID
 		{
 			get => GetProperty(ref _clueBBID);
 			set => SetProperty(ref _clueBBID, value);
@@ -256,7 +256,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("VisionModeBBID")] 
-		public CUInt32 VisionModeBBID
+		public CHandle<redCallbackObject> VisionModeBBID
 		{
 			get => GetProperty(ref _visionModeBBID);
 			set => SetProperty(ref _visionModeBBID, value);
@@ -264,7 +264,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(36)] 
 		[RED("ProgressBBID")] 
-		public CUInt32 ProgressBBID
+		public CHandle<redCallbackObject> ProgressBBID
 		{
 			get => GetProperty(ref _progressBBID);
 			set => SetProperty(ref _progressBBID, value);
@@ -272,7 +272,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(37)] 
 		[RED("SectionTimeBBID")] 
-		public CUInt32 SectionTimeBBID
+		public CHandle<redCallbackObject> SectionTimeBBID
 		{
 			get => GetProperty(ref _sectionTimeBBID);
 			set => SetProperty(ref _sectionTimeBBID, value);
@@ -280,7 +280,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(38)] 
 		[RED("IsActiveBBID")] 
-		public CUInt32 IsActiveBBID
+		public CHandle<redCallbackObject> IsActiveBBID
 		{
 			get => GetProperty(ref _isActiveBBID);
 			set => SetProperty(ref _isActiveBBID, value);
@@ -288,7 +288,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(39)] 
 		[RED("EnableExitBBID")] 
-		public CUInt32 EnableExitBBID
+		public CHandle<redCallbackObject> EnableExitBBID
 		{
 			get => GetProperty(ref _enableExitBBID);
 			set => SetProperty(ref _enableExitBBID, value);
@@ -296,7 +296,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(40)] 
 		[RED("IsFPPBBID")] 
-		public CUInt32 IsFPPBBID
+		public CHandle<redCallbackObject> IsFPPBBID
 		{
 			get => GetProperty(ref _isFPPBBID);
 			set => SetProperty(ref _isFPPBBID, value);
@@ -304,7 +304,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(41)] 
 		[RED("PlaybackSpeedID")] 
-		public CUInt32 PlaybackSpeedID
+		public CHandle<redCallbackObject> PlaybackSpeedID
 		{
 			get => GetProperty(ref _playbackSpeedID);
 			set => SetProperty(ref _playbackSpeedID, value);
@@ -312,7 +312,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(42)] 
 		[RED("PlaybackDirectionID")] 
-		public CUInt32 PlaybackDirectionID
+		public CHandle<redCallbackObject> PlaybackDirectionID
 		{
 			get => GetProperty(ref _playbackDirectionID);
 			set => SetProperty(ref _playbackDirectionID, value);

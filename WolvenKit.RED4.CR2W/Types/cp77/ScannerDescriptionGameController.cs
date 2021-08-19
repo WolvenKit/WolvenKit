@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkTextWidgetReference _descriptionText;
 		private inkTextWidgetReference _customDescriptionText;
-		private CUInt32 _descriptionCallbackID;
+		private CHandle<redCallbackObject> _descriptionCallbackID;
 		private CBool _isValidDescription;
 		private CBool _isValidCustomDescription;
 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("descriptionCallbackID")] 
-		public CUInt32 DescriptionCallbackID
+		public CHandle<redCallbackObject> DescriptionCallbackID
 		{
 			get => GetProperty(ref _descriptionCallbackID);
 			set => SetProperty(ref _descriptionCallbackID, value);

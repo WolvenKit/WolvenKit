@@ -34,8 +34,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<ProgramProgressData> _enemyProgramsCompletion;
 		private ProgramProgressData _basicAccessCompletion;
 		private CArray<CEnum<ExtraEffect>> _appliedViruses;
-		private CUInt32 _onBreachingNetworkListener;
-		private CUInt32 _onDevicesCountChangedListener;
+		private CHandle<redCallbackObject> _onBreachingNetworkListener;
+		private CHandle<redCallbackObject> _onDevicesCountChangedListener;
 
 		[Ordinal(2)] 
 		[RED("turn")] 
@@ -255,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("onBreachingNetworkListener")] 
-		public CUInt32 OnBreachingNetworkListener
+		public CHandle<redCallbackObject> OnBreachingNetworkListener
 		{
 			get => GetProperty(ref _onBreachingNetworkListener);
 			set => SetProperty(ref _onBreachingNetworkListener, value);
@@ -263,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("onDevicesCountChangedListener")] 
-		public CUInt32 OnDevicesCountChangedListener
+		public CHandle<redCallbackObject> OnDevicesCountChangedListener
 		{
 			get => GetProperty(ref _onDevicesCountChangedListener);
 			set => SetProperty(ref _onDevicesCountChangedListener, value);

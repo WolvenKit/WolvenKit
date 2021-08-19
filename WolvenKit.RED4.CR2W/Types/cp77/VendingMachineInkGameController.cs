@@ -13,9 +13,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _soldOutPanel;
 		private CEnum<PaymentStatus> _state;
 		private CBool _soldOut;
-		private CUInt32 _onUpdateStatusListener;
-		private CUInt32 _onGlitchingStateChangedListener;
-		private CUInt32 _onSoldOutListener;
+		private CHandle<redCallbackObject> _onUpdateStatusListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onSoldOutListener;
 
 		[Ordinal(16)] 
 		[RED("ActionsPanel")] 
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("onUpdateStatusListener")] 
-		public CUInt32 OnUpdateStatusListener
+		public CHandle<redCallbackObject> OnUpdateStatusListener
 		{
 			get => GetProperty(ref _onUpdateStatusListener);
 			set => SetProperty(ref _onUpdateStatusListener, value);
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("onSoldOutListener")] 
-		public CUInt32 OnSoldOutListener
+		public CHandle<redCallbackObject> OnSoldOutListener
 		{
 			get => GetProperty(ref _onSoldOutListener);
 			set => SetProperty(ref _onSoldOutListener, value);

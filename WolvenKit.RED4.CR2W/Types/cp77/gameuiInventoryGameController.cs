@@ -31,7 +31,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<InventoryModes> _mode;
 		private CEnum<ItemViewModes> _itemViewMode;
 		private wCHandle<InventoryItemModeLogicController> _itemModeLogicController;
-		private wCHandle<InventoryItemDisplayController> _selectedEquipmentSlot;
 		private CHandle<inkanimProxy> _animationProxy;
 		private CHandle<inkanimDefinition> _animDef;
 		private CArray<wCHandle<InventoryItemDisplay>> _inventoryList;
@@ -56,11 +55,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameIBlackboard> _uIBBEquipmentBlackboard;
 		private wCHandle<gameIBlackboard> _uIBBItemModBlackbord;
 		private wCHandle<gameIBlackboard> _disassembleBlackboard;
-		private CUInt32 _inventoryBBID;
-		private CUInt32 _equipmentBBID;
-		private CUInt32 _subEquipmentBBID;
-		private CUInt32 _itemModBBID;
-		private CUInt32 _disassembleBBID;
+		private CHandle<redCallbackObject> _inventoryBBID;
+		private CHandle<redCallbackObject> _equipmentBBID;
+		private CHandle<redCallbackObject> _subEquipmentBBID;
+		private CHandle<redCallbackObject> _itemModBBID;
+		private CHandle<redCallbackObject> _disassembleBBID;
 		private CBool _openItemMode;
 		private CBool _isE3Demo;
 		private CHandle<InventoryStatsListener> _inventoryStatsListener;
@@ -263,14 +262,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(27)] 
-		[RED("selectedEquipmentSlot")] 
-		public wCHandle<InventoryItemDisplayController> SelectedEquipmentSlot
-		{
-			get => GetProperty(ref _selectedEquipmentSlot);
-			set => SetProperty(ref _selectedEquipmentSlot, value);
-		}
-
-		[Ordinal(28)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -278,7 +269,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationProxy, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(28)] 
 		[RED("animDef")] 
 		public CHandle<inkanimDefinition> AnimDef
 		{
@@ -286,7 +277,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animDef, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(29)] 
 		[RED("InventoryList")] 
 		public CArray<wCHandle<InventoryItemDisplay>> InventoryList
 		{
@@ -294,7 +285,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryList, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("WeaponsList")] 
 		public CArray<wCHandle<InventoryItemDisplayController>> WeaponsList
 		{
@@ -302,7 +293,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponsList, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("EquipmentList")] 
 		public CArray<wCHandle<InventoryItemDisplayController>> EquipmentList
 		{
@@ -310,7 +301,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipmentList, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(32)] 
 		[RED("CyberwareList")] 
 		public CArray<wCHandle<InventoryItemDisplayController>> CyberwareList
 		{
@@ -318,7 +309,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareList, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(33)] 
 		[RED("PocketList")] 
 		public CArray<wCHandle<InventoryItemDisplayController>> PocketList
 		{
@@ -326,7 +317,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _pocketList, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(34)] 
 		[RED("ConsumablesList")] 
 		public CArray<wCHandle<InventoryItemDisplayController>> ConsumablesList
 		{
@@ -334,7 +325,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _consumablesList, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(35)] 
 		[RED("animationList")] 
 		public CArray<wCHandle<InventoryItemDisplayController>> AnimationList
 		{
@@ -342,7 +333,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationList, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(36)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -350,7 +341,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryManager, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(37)] 
 		[RED("uiScriptableSystem")] 
 		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -358,7 +349,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiScriptableSystem, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(38)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
@@ -366,7 +357,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _comparisonResolver, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(39)] 
 		[RED("equipmentSystem")] 
 		public wCHandle<EquipmentSystem> EquipmentSystem
 		{
@@ -374,7 +365,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipmentSystem, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(40)] 
 		[RED("EquipAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> EquipAreas
 		{
@@ -382,7 +373,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipAreas, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(41)] 
 		[RED("CyberwareAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> CyberwareAreas
 		{
@@ -390,7 +381,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareAreas, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(42)] 
 		[RED("WeaponAreas")] 
 		public CArray<CEnum<gamedataItemType>> WeaponAreas
 		{
@@ -398,7 +389,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponAreas, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(43)] 
 		[RED("PocketAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> PocketAreas
 		{
@@ -406,7 +397,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _pocketAreas, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(44)] 
 		[RED("ConsumablesAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> ConsumablesAreas
 		{
@@ -414,7 +405,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _consumablesAreas, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(45)] 
 		[RED("UIBBEquipment")] 
 		public CHandle<UI_EquipmentDef> UIBBEquipment
 		{
@@ -422,7 +413,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uIBBEquipment, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(46)] 
 		[RED("UIBBItemMod")] 
 		public CHandle<UI_ItemModSystemDef> UIBBItemMod
 		{
@@ -430,7 +421,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uIBBItemMod, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(47)] 
 		[RED("DisassembleCallback")] 
 		public CHandle<UI_CraftingDef> DisassembleCallback
 		{
@@ -438,7 +429,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disassembleCallback, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(48)] 
 		[RED("UIBBEquipmentBlackboard")] 
 		public wCHandle<gameIBlackboard> UIBBEquipmentBlackboard
 		{
@@ -446,7 +437,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uIBBEquipmentBlackboard, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(49)] 
 		[RED("UIBBItemModBlackbord")] 
 		public wCHandle<gameIBlackboard> UIBBItemModBlackbord
 		{
@@ -454,7 +445,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uIBBItemModBlackbord, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(50)] 
 		[RED("DisassembleBlackboard")] 
 		public wCHandle<gameIBlackboard> DisassembleBlackboard
 		{
@@ -462,47 +453,47 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disassembleBlackboard, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(51)] 
 		[RED("InventoryBBID")] 
-		public CUInt32 InventoryBBID
+		public CHandle<redCallbackObject> InventoryBBID
 		{
 			get => GetProperty(ref _inventoryBBID);
 			set => SetProperty(ref _inventoryBBID, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(52)] 
 		[RED("EquipmentBBID")] 
-		public CUInt32 EquipmentBBID
+		public CHandle<redCallbackObject> EquipmentBBID
 		{
 			get => GetProperty(ref _equipmentBBID);
 			set => SetProperty(ref _equipmentBBID, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(53)] 
 		[RED("SubEquipmentBBID")] 
-		public CUInt32 SubEquipmentBBID
+		public CHandle<redCallbackObject> SubEquipmentBBID
 		{
 			get => GetProperty(ref _subEquipmentBBID);
 			set => SetProperty(ref _subEquipmentBBID, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(54)] 
 		[RED("ItemModBBID")] 
-		public CUInt32 ItemModBBID
+		public CHandle<redCallbackObject> ItemModBBID
 		{
 			get => GetProperty(ref _itemModBBID);
 			set => SetProperty(ref _itemModBBID, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(55)] 
 		[RED("DisassembleBBID")] 
-		public CUInt32 DisassembleBBID
+		public CHandle<redCallbackObject> DisassembleBBID
 		{
 			get => GetProperty(ref _disassembleBBID);
 			set => SetProperty(ref _disassembleBBID, value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(56)] 
 		[RED("openItemMode")] 
 		public CBool OpenItemMode
 		{
@@ -510,7 +501,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openItemMode, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(57)] 
 		[RED("isE3Demo")] 
 		public CBool IsE3Demo
 		{
@@ -518,7 +509,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isE3Demo, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(58)] 
 		[RED("inventoryStatsListener")] 
 		public CHandle<InventoryStatsListener> InventoryStatsListener
 		{
@@ -526,7 +517,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryStatsListener, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(59)] 
 		[RED("quantityPickerPopupToken")] 
 		public CHandle<inkGameNotificationToken> QuantityPickerPopupToken
 		{
@@ -534,7 +525,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quantityPickerPopupToken, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(60)] 
 		[RED("psmBlackboard")] 
 		public wCHandle<gameIBlackboard> PsmBlackboard
 		{
@@ -542,7 +533,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _psmBlackboard, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(61)] 
 		[RED("equipmentAreaCategoryEventQueue")] 
 		public CArray<CHandle<EquipmentAreaCategoryCreated>> EquipmentAreaCategoryEventQueue
 		{
@@ -550,7 +541,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipmentAreaCategoryEventQueue, value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(62)] 
 		[RED("equipmentAreaCategories")] 
 		public CArray<CHandle<EquipmentAreaCategory>> EquipmentAreaCategories
 		{
@@ -558,7 +549,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipmentAreaCategories, value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(63)] 
 		[RED("telemetrySystem")] 
 		public wCHandle<gameTelemetryTelemetrySystem> TelemetrySystem
 		{

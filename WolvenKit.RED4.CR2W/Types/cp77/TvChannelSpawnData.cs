@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CName _channelName;
 		private CString _localizedName;
+		private CInt32 _order;
 
 		[Ordinal(0)] 
 		[RED("channelName")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _localizedName);
 			set => SetProperty(ref _localizedName, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("order")] 
+		public CInt32 Order
+		{
+			get => GetProperty(ref _order);
+			set => SetProperty(ref _order, value);
 		}
 
 		public TvChannelSpawnData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

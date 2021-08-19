@@ -16,10 +16,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isInitialized;
 		private CBool _hasUICameraZoom;
 		private SBreadcrumbElementData _activeBreadcrumb;
-		private CUInt32 _onRefreshListener;
-		private CUInt32 _onActionWidgetsUpdateListener;
-		private CUInt32 _onDeviceWidgetsUpdateListener;
-		private CUInt32 _onBreadcrumbBarUpdateListener;
+		private CHandle<redCallbackObject> _onRefreshListener;
+		private CHandle<redCallbackObject> _onActionWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onDeviceWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onBreadcrumbBarUpdateListener;
 		private CBool _bbCallbacksRegistered;
 
 		[Ordinal(2)] 
@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("onRefreshListener")] 
-		public CUInt32 OnRefreshListener
+		public CHandle<redCallbackObject> OnRefreshListener
 		{
 			get => GetProperty(ref _onRefreshListener);
 			set => SetProperty(ref _onRefreshListener, value);
@@ -104,7 +104,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("onActionWidgetsUpdateListener")] 
-		public CUInt32 OnActionWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnActionWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onActionWidgetsUpdateListener);
 			set => SetProperty(ref _onActionWidgetsUpdateListener, value);
@@ -112,7 +112,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("onDeviceWidgetsUpdateListener")] 
-		public CUInt32 OnDeviceWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnDeviceWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onDeviceWidgetsUpdateListener);
 			set => SetProperty(ref _onDeviceWidgetsUpdateListener, value);
@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("onBreadcrumbBarUpdateListener")] 
-		public CUInt32 OnBreadcrumbBarUpdateListener
+		public CHandle<redCallbackObject> OnBreadcrumbBarUpdateListener
 		{
 			get => GetProperty(ref _onBreadcrumbBarUpdateListener);
 			set => SetProperty(ref _onBreadcrumbBarUpdateListener, value);

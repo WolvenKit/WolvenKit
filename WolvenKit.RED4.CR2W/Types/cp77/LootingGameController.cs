@@ -14,12 +14,12 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<UIInteractionsDef> _bbInteractionsDefinition;
 		private CHandle<UI_EquipmentDataDef> _bbEquipmentDataDefinition;
 		private CHandle<UI_EquipmentDef> _bbEquipmentDefinition;
-		private CUInt32 _dataListenerId;
-		private CUInt32 _activeListenerId;
-		private CUInt32 _activeHubListenerId;
-		private CUInt32 _weaponDataListenerId;
-		private CUInt32 _itemEquippedListenerId;
-		private CHandle<LootingController> _controller;
+		private CHandle<redCallbackObject> _dataListenerId;
+		private CHandle<redCallbackObject> _activeListenerId;
+		private CHandle<redCallbackObject> _activeHubListenerId;
+		private CHandle<redCallbackObject> _weaponDataListenerId;
+		private CHandle<redCallbackObject> _itemEquippedListenerId;
+		private wCHandle<LootingController> _controller;
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<inkanimProxy> _introAnim;
 		private CHandle<inkanimProxy> _outroAnim;
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("dataListenerId")] 
-		public CUInt32 DataListenerId
+		public CHandle<redCallbackObject> DataListenerId
 		{
 			get => GetProperty(ref _dataListenerId);
 			set => SetProperty(ref _dataListenerId, value);
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("activeListenerId")] 
-		public CUInt32 ActiveListenerId
+		public CHandle<redCallbackObject> ActiveListenerId
 		{
 			get => GetProperty(ref _activeListenerId);
 			set => SetProperty(ref _activeListenerId, value);
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("activeHubListenerId")] 
-		public CUInt32 ActiveHubListenerId
+		public CHandle<redCallbackObject> ActiveHubListenerId
 		{
 			get => GetProperty(ref _activeHubListenerId);
 			set => SetProperty(ref _activeHubListenerId, value);
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("weaponDataListenerId")] 
-		public CUInt32 WeaponDataListenerId
+		public CHandle<redCallbackObject> WeaponDataListenerId
 		{
 			get => GetProperty(ref _weaponDataListenerId);
 			set => SetProperty(ref _weaponDataListenerId, value);
@@ -118,7 +118,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("itemEquippedListenerId")] 
-		public CUInt32 ItemEquippedListenerId
+		public CHandle<redCallbackObject> ItemEquippedListenerId
 		{
 			get => GetProperty(ref _itemEquippedListenerId);
 			set => SetProperty(ref _itemEquippedListenerId, value);
@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("controller")] 
-		public CHandle<LootingController> Controller
+		public wCHandle<LootingController> Controller
 		{
 			get => GetProperty(ref _controller);
 			set => SetProperty(ref _controller, value);

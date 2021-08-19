@@ -9,13 +9,13 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private TweakDBID _defaultCrosshair;
 		private inkWidgetReference _sprintWidget;
-		private CHandle<gameIBlackboard> _bbUIData;
+		private wCHandle<gameIBlackboard> _bbUIData;
 		private wCHandle<gameIBlackboard> _bbWeaponInfo;
-		private CUInt32 _bbPlayerTierEventId;
-		private CUInt32 _bbWeaponEventId;
-		private CUInt32 _interactionBlackboardId;
-		private CUInt32 _crosshairStateBlackboardId;
-		private CUInt32 _isMountedBlackboardId;
+		private CHandle<redCallbackObject> _bbPlayerTierEventId;
+		private CHandle<redCallbackObject> _bbWeaponEventId;
+		private CHandle<redCallbackObject> _interactionBlackboardId;
+		private CHandle<redCallbackObject> _crosshairStateBlackboardId;
+		private CHandle<redCallbackObject> _isMountedBlackboardId;
 		private wCHandle<inkCanvasWidget> _rootWidget;
 		private CHandle<inkanimDefinition> _fadeOutAnimation;
 		private CHandle<inkanimDefinition> _fadeInAnimation;
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isMounted;
 		private CFloat _fadeOutValue;
 		private CBool _wasLastInteractionWithDevice;
-		private CUInt32 _combatStateBlackboardId;
+		private CHandle<redCallbackObject> _combatStateBlackboardId;
 		private CHandle<inkanimProxy> _hiddenAnimProxy;
 		private wCHandle<PlayerPuppet> _player;
 		private inkWidgetReference _hiddenTextCanvas;
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("bbUIData")] 
-		public CHandle<gameIBlackboard> BbUIData
+		public wCHandle<gameIBlackboard> BbUIData
 		{
 			get => GetProperty(ref _bbUIData);
 			set => SetProperty(ref _bbUIData, value);
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("bbPlayerTierEventId")] 
-		public CUInt32 BbPlayerTierEventId
+		public CHandle<redCallbackObject> BbPlayerTierEventId
 		{
 			get => GetProperty(ref _bbPlayerTierEventId);
 			set => SetProperty(ref _bbPlayerTierEventId, value);
@@ -71,7 +71,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("bbWeaponEventId")] 
-		public CUInt32 BbWeaponEventId
+		public CHandle<redCallbackObject> BbWeaponEventId
 		{
 			get => GetProperty(ref _bbWeaponEventId);
 			set => SetProperty(ref _bbWeaponEventId, value);
@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("interactionBlackboardId")] 
-		public CUInt32 InteractionBlackboardId
+		public CHandle<redCallbackObject> InteractionBlackboardId
 		{
 			get => GetProperty(ref _interactionBlackboardId);
 			set => SetProperty(ref _interactionBlackboardId, value);
@@ -87,7 +87,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("crosshairStateBlackboardId")] 
-		public CUInt32 CrosshairStateBlackboardId
+		public CHandle<redCallbackObject> CrosshairStateBlackboardId
 		{
 			get => GetProperty(ref _crosshairStateBlackboardId);
 			set => SetProperty(ref _crosshairStateBlackboardId, value);
@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("isMountedBlackboardId")] 
-		public CUInt32 IsMountedBlackboardId
+		public CHandle<redCallbackObject> IsMountedBlackboardId
 		{
 			get => GetProperty(ref _isMountedBlackboardId);
 			set => SetProperty(ref _isMountedBlackboardId, value);
@@ -167,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("CombatStateBlackboardId")] 
-		public CUInt32 CombatStateBlackboardId
+		public CHandle<redCallbackObject> CombatStateBlackboardId
 		{
 			get => GetProperty(ref _combatStateBlackboardId);
 			set => SetProperty(ref _combatStateBlackboardId, value);

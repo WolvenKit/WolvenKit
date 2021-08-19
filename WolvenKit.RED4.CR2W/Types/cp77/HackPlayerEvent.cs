@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private entEntityID _targetID;
 		private wCHandle<gamedataObjectAction_Record> _objectRecord;
 		private CBool _showDirectionalIndicator;
+		private CBool _revealPositionAction;
 
 		[Ordinal(0)] 
 		[RED("netrunnerID")] 
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _showDirectionalIndicator);
 			set => SetProperty(ref _showDirectionalIndicator, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("revealPositionAction")] 
+		public CBool RevealPositionAction
+		{
+			get => GetProperty(ref _revealPositionAction);
+			set => SetProperty(ref _revealPositionAction, value);
 		}
 
 		public HackPlayerEvent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

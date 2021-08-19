@@ -12,6 +12,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _groupsContainer;
 		private inkWidgetLibraryReference _hintLibRef;
 		private inkWidgetLibraryReference _groupLibRef;
+		private CBool _sortInputHints;
+		private CBool _useHideOptim;
 
 		[Ordinal(2)] 
 		[RED("hintContainerId")] 
@@ -51,6 +53,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _groupLibRef);
 			set => SetProperty(ref _groupLibRef, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("sortInputHints")] 
+		public CBool SortInputHints
+		{
+			get => GetProperty(ref _sortInputHints);
+			set => SetProperty(ref _sortInputHints, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("useHideOptim")] 
+		public CBool UseHideOptim
+		{
+			get => GetProperty(ref _useHideOptim);
+			set => SetProperty(ref _useHideOptim, value);
 		}
 
 		public gameuiInputHintManagerGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

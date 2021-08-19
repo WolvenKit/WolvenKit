@@ -7,18 +7,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApplyLightPresetEffector : gameEffector
 	{
-		private wCHandle<gameObject> _owner;
 		private wCHandle<gamedataLightPreset_Record> _lightPreset;
 
 		[Ordinal(0)] 
-		[RED("owner")] 
-		public wCHandle<gameObject> Owner
-		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
-		}
-
-		[Ordinal(1)] 
 		[RED("lightPreset")] 
 		public wCHandle<gamedataLightPreset_Record> LightPreset
 		{

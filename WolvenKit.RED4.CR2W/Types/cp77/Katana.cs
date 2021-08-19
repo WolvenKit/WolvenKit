@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entIComponent> _colliderComponent;
 		private CHandle<entSlotComponent> _slotComponent;
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("bentBulletTemplateName")] 
 		public CName BentBulletTemplateName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bentBulletTemplateName, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("bulletBendingReferenceSlotName")] 
 		public CName BulletBendingReferenceSlotName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bulletBendingReferenceSlotName, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("colliderComponent")] 
 		public CHandle<entIComponent> ColliderComponent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _colliderComponent, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{

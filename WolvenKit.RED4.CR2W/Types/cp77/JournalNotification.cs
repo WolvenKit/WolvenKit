@@ -7,14 +7,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class JournalNotification : GenericNotificationController
 	{
-		private CHandle<gameIBlackboard> _interactionsBlackboard;
-		private CUInt32 _bbListenerId;
+		private wCHandle<gameIBlackboard> _interactionsBlackboard;
+		private CHandle<redCallbackObject> _bbListenerId;
 		private CHandle<inkanimProxy> _animProxy;
 		private CHandle<gameuiQuestUpdateNotificationViewData> _questNotificationData;
 
 		[Ordinal(12)] 
 		[RED("interactionsBlackboard")] 
-		public CHandle<gameIBlackboard> InteractionsBlackboard
+		public wCHandle<gameIBlackboard> InteractionsBlackboard
 		{
 			get => GetProperty(ref _interactionsBlackboard);
 			set => SetProperty(ref _interactionsBlackboard, value);
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("bbListenerId")] 
-		public CUInt32 BbListenerId
+		public CHandle<redCallbackObject> BbListenerId
 		{
 			get => GetProperty(ref _bbListenerId);
 			set => SetProperty(ref _bbListenerId, value);

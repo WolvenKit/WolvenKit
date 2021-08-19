@@ -18,6 +18,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _hdrButton;
 		private inkWidgetReference _controllerButton;
 		private inkTextWidgetReference _descriptionText;
+		private inkWidgetReference _previousButtonHint;
+		private inkWidgetReference _nextButtonHint;
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
 		private CArray<wCHandle<inkSettingsSelectorController>> _settingsElements;
 		private wCHandle<ButtonHints> _buttonHintsController;
@@ -32,6 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _resetButtonEnabled;
 		private CBool _closeSettingsRequest;
 		private CBool _resetSettingsRequest;
+		private CBool _isDlcSettings;
 		private wCHandle<inkListController> _selectorCtrl;
 
 		[Ordinal(3)] 
@@ -123,6 +126,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("previousButtonHint")] 
+		public inkWidgetReference PreviousButtonHint
+		{
+			get => GetProperty(ref _previousButtonHint);
+			set => SetProperty(ref _previousButtonHint, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("nextButtonHint")] 
+		public inkWidgetReference NextButtonHint
+		{
+			get => GetProperty(ref _nextButtonHint);
+			set => SetProperty(ref _nextButtonHint, value);
+		}
+
+		[Ordinal(16)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -130,7 +149,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("settingsElements")] 
 		public CArray<wCHandle<inkSettingsSelectorController>> SettingsElements
 		{
@@ -138,7 +157,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _settingsElements, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
@@ -146,7 +165,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonHintsController, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("data")] 
 		public CArray<SettingsCategory> Data
 		{
@@ -154,7 +173,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _data, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("menusList")] 
 		public CArray<CName> MenusList
 		{
@@ -162,7 +181,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _menusList, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("eventsList")] 
 		public CArray<CName> EventsList
 		{
@@ -170,7 +189,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _eventsList, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("settingsListener")] 
 		public CHandle<SettingsVarListener> SettingsListener
 		{
@@ -178,7 +197,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _settingsListener, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("settingsNotificationListener")] 
 		public CHandle<SettingsNotificationListener> SettingsNotificationListener
 		{
@@ -186,7 +205,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _settingsNotificationListener, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
@@ -194,7 +213,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _settings, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("isPreGame")] 
 		public CBool IsPreGame
 		{
@@ -202,7 +221,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPreGame, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("applyButtonEnabled")] 
 		public CBool ApplyButtonEnabled
 		{
@@ -210,7 +229,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _applyButtonEnabled, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("resetButtonEnabled")] 
 		public CBool ResetButtonEnabled
 		{
@@ -218,7 +237,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _resetButtonEnabled, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("closeSettingsRequest")] 
 		public CBool CloseSettingsRequest
 		{
@@ -226,7 +245,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _closeSettingsRequest, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("resetSettingsRequest")] 
 		public CBool ResetSettingsRequest
 		{
@@ -234,7 +253,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _resetSettingsRequest, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
+		[RED("isDlcSettings")] 
+		public CBool IsDlcSettings
+		{
+			get => GetProperty(ref _isDlcSettings);
+			set => SetProperty(ref _isDlcSettings, value);
+		}
+
+		[Ordinal(31)] 
 		[RED("selectorCtrl")] 
 		public wCHandle<inkListController> SelectorCtrl
 		{

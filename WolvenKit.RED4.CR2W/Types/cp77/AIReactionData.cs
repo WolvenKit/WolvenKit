@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<gamedataStimType> _stimType;
 		private CEnum<gamedataStimPriority> _stimPriority;
 		private CHandle<gamedataStim_Record> _stimRecord;
-		private stimInvestigateData _stimInvestigateData;
+		private senseStimInvestigateData _stimInvestigateData;
 		private StimEventData _stimEventData;
 		private CBool _initAnimInWorkspot;
 		private CFloat _validTillTimeStamp;
@@ -97,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("stimInvestigateData")] 
-		public stimInvestigateData StimInvestigateData
+		public senseStimInvestigateData StimInvestigateData
 		{
 			get => GetProperty(ref _stimInvestigateData);
 			set => SetProperty(ref _stimInvestigateData, value);

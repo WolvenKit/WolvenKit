@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class StatsManager : IScriptable
 	{
-		private CHandle<gameStatModifierData> _playerGodModeModifierData;
+		private CHandle<gameStatModifierData_Deprecated> _playerGodModeModifierData;
 
 		[Ordinal(0)] 
 		[RED("playerGodModeModifierData")] 
-		public CHandle<gameStatModifierData> PlayerGodModeModifierData
+		public CHandle<gameStatModifierData_Deprecated> PlayerGodModeModifierData
 		{
 			get => GetProperty(ref _playerGodModeModifierData);
 			set => SetProperty(ref _playerGodModeModifierData, value);

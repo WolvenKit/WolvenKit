@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _rotateWithSegment;
 		private CEnum<inkEChildOrder> _patternDirection;
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("vertexList")] 
 		public CArray<inkLineVertex> VertexList
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vertexList, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("spacing")] 
 		public CFloat Spacing
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _spacing, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("looseSpacing")] 
 		public CFloat LooseSpacing
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _looseSpacing, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("startOffset")] 
 		public CFloat StartOffset
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _startOffset, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("endOffset")] 
 		public CFloat EndOffset
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _endOffset, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("fadeInLength")] 
 		public CFloat FadeInLength
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fadeInLength, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("rotateWithSegment")] 
 		public CBool RotateWithSegment
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rotateWithSegment, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("patternDirection")] 
 		public CEnum<inkEChildOrder> PatternDirection
 		{

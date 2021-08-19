@@ -7,7 +7,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class VendorHubMenuGameController : gameuiMenuGameController
 	{
-		private inkWidgetReference _selectorWidget;
+		private inkWidgetReference _tabRootContainer;
+		private inkWidgetReference _tabRootRef;
 		private inkTextWidgetReference _playerCurrency;
 		private inkTextWidgetReference _vendorShopLabel;
 		private inkWidgetReference _notificationRoot;
@@ -18,38 +19,46 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _levelBarSpacer;
 		private inkWidgetReference _streetCredBarProgress;
 		private inkWidgetReference _streetCredBarSpacer;
-		private wCHandle<hubSelectorSingleSmallCarouselController> _selectorCtrl;
 		private CHandle<VendorDataManager> _vendorDataManager;
 		private CHandle<VendorUserData> _vendorUserData;
 		private CHandle<questVendorPanelData> _vendorPanelData;
 		private CHandle<StorageUserData> _storageUserData;
 		private CHandle<PlayerDevelopmentSystem> _pDS;
 		private wCHandle<inkWidget> _root;
-		private CHandle<gameIBlackboard> _vendorBlackboard;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
+		private wCHandle<TabRadioGroup> _tabRoot;
+		private wCHandle<gameIBlackboard> _vendorBlackboard;
+		private wCHandle<gameIBlackboard> _playerStatsBlackboard;
 		private CHandle<UI_VendorDef> _vendorBlackboardDef;
-		private CUInt32 _vendorUpdatedCallbackID;
-		private CUInt32 _weightListener;
-		private CUInt32 _characterLevelListener;
-		private CUInt32 _characterCurrentXPListener;
-		private CUInt32 _characterCredListener;
-		private CUInt32 _characterCredPointsListener;
-		private CUInt32 _characterCurrentHealthListener;
+		private CHandle<redCallbackObject> _vendorUpdatedCallbackID;
+		private CHandle<redCallbackObject> _weightListener;
+		private CHandle<redCallbackObject> _characterLevelListener;
+		private CHandle<redCallbackObject> _characterCurrentXPListener;
+		private CHandle<redCallbackObject> _characterCredListener;
+		private CHandle<redCallbackObject> _characterCredPointsListener;
+		private CHandle<redCallbackObject> _characterCurrentHealthListener;
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
 		private wCHandle<PlayerPuppet> _player;
 		private CArray<MenuData> _menuData;
 		private CHandle<StorageBlackboardDef> _storageDef;
-		private CHandle<gameIBlackboard> _storageBlackboard;
+		private wCHandle<gameIBlackboard> _storageBlackboard;
 
 		[Ordinal(3)] 
-		[RED("selectorWidget")] 
-		public inkWidgetReference SelectorWidget
+		[RED("tabRootContainer")] 
+		public inkWidgetReference TabRootContainer
 		{
-			get => GetProperty(ref _selectorWidget);
-			set => SetProperty(ref _selectorWidget, value);
+			get => GetProperty(ref _tabRootContainer);
+			set => SetProperty(ref _tabRootContainer, value);
 		}
 
 		[Ordinal(4)] 
+		[RED("tabRootRef")] 
+		public inkWidgetReference TabRootRef
+		{
+			get => GetProperty(ref _tabRootRef);
+			set => SetProperty(ref _tabRootRef, value);
+		}
+
+		[Ordinal(5)] 
 		[RED("playerCurrency")] 
 		public inkTextWidgetReference PlayerCurrency
 		{
@@ -57,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerCurrency, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("vendorShopLabel")] 
 		public inkTextWidgetReference VendorShopLabel
 		{
@@ -65,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendorShopLabel, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("notificationRoot")] 
 		public inkWidgetReference NotificationRoot
 		{
@@ -73,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _notificationRoot, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("playerWeight")] 
 		public inkTextWidgetReference PlayerWeight
 		{
@@ -81,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerWeight, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("levelValue")] 
 		public inkTextWidgetReference LevelValue
 		{
@@ -89,7 +98,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _levelValue, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("streetCredLabel")] 
 		public inkTextWidgetReference StreetCredLabel
 		{
@@ -97,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _streetCredLabel, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("levelBarProgress")] 
 		public inkWidgetReference LevelBarProgress
 		{
@@ -105,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _levelBarProgress, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("levelBarSpacer")] 
 		public inkWidgetReference LevelBarSpacer
 		{
@@ -113,7 +122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _levelBarSpacer, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("streetCredBarProgress")] 
 		public inkWidgetReference StreetCredBarProgress
 		{
@@ -121,20 +130,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _streetCredBarProgress, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("streetCredBarSpacer")] 
 		public inkWidgetReference StreetCredBarSpacer
 		{
 			get => GetProperty(ref _streetCredBarSpacer);
 			set => SetProperty(ref _streetCredBarSpacer, value);
-		}
-
-		[Ordinal(14)] 
-		[RED("selectorCtrl")] 
-		public wCHandle<hubSelectorSingleSmallCarouselController> SelectorCtrl
-		{
-			get => GetProperty(ref _selectorCtrl);
-			set => SetProperty(ref _selectorCtrl, value);
 		}
 
 		[Ordinal(15)] 
@@ -186,22 +187,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(21)] 
+		[RED("tabRoot")] 
+		public wCHandle<TabRadioGroup> TabRoot
+		{
+			get => GetProperty(ref _tabRoot);
+			set => SetProperty(ref _tabRoot, value);
+		}
+
+		[Ordinal(22)] 
 		[RED("VendorBlackboard")] 
-		public CHandle<gameIBlackboard> VendorBlackboard
+		public wCHandle<gameIBlackboard> VendorBlackboard
 		{
 			get => GetProperty(ref _vendorBlackboard);
 			set => SetProperty(ref _vendorBlackboard, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
+		public wCHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
 			get => GetProperty(ref _playerStatsBlackboard);
 			set => SetProperty(ref _playerStatsBlackboard, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("VendorBlackboardDef")] 
 		public CHandle<UI_VendorDef> VendorBlackboardDef
 		{
@@ -209,63 +218,63 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendorBlackboardDef, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("VendorUpdatedCallbackID")] 
-		public CUInt32 VendorUpdatedCallbackID
+		public CHandle<redCallbackObject> VendorUpdatedCallbackID
 		{
 			get => GetProperty(ref _vendorUpdatedCallbackID);
 			set => SetProperty(ref _vendorUpdatedCallbackID, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("weightListener")] 
-		public CUInt32 WeightListener
+		public CHandle<redCallbackObject> WeightListener
 		{
 			get => GetProperty(ref _weightListener);
 			set => SetProperty(ref _weightListener, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("characterLevelListener")] 
-		public CUInt32 CharacterLevelListener
+		public CHandle<redCallbackObject> CharacterLevelListener
 		{
 			get => GetProperty(ref _characterLevelListener);
 			set => SetProperty(ref _characterLevelListener, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("characterCurrentXPListener")] 
-		public CUInt32 CharacterCurrentXPListener
+		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
 			get => GetProperty(ref _characterCurrentXPListener);
 			set => SetProperty(ref _characterCurrentXPListener, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("characterCredListener")] 
-		public CUInt32 CharacterCredListener
+		public CHandle<redCallbackObject> CharacterCredListener
 		{
 			get => GetProperty(ref _characterCredListener);
 			set => SetProperty(ref _characterCredListener, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("characterCredPointsListener")] 
-		public CUInt32 CharacterCredPointsListener
+		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
 			get => GetProperty(ref _characterCredPointsListener);
 			set => SetProperty(ref _characterCredPointsListener, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("characterCurrentHealthListener")] 
-		public CUInt32 CharacterCurrentHealthListener
+		public CHandle<redCallbackObject> CharacterCurrentHealthListener
 		{
 			get => GetProperty(ref _characterCurrentHealthListener);
 			set => SetProperty(ref _characterCurrentHealthListener, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -273,7 +282,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
@@ -281,7 +290,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _player, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("menuData")] 
 		public CArray<MenuData> MenuData
 		{
@@ -289,7 +298,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _menuData, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("storageDef")] 
 		public CHandle<StorageBlackboardDef> StorageDef
 		{
@@ -297,9 +306,9 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _storageDef, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("storageBlackboard")] 
-		public CHandle<gameIBlackboard> StorageBlackboard
+		public wCHandle<gameIBlackboard> StorageBlackboard
 		{
 			get => GetProperty(ref _storageBlackboard);
 			set => SetProperty(ref _storageBlackboard, value);

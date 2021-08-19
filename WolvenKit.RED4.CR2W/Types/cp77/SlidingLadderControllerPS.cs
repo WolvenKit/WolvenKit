@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isShootable;
 		private CFloat _animationTime;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("isShootable")] 
 		public CBool IsShootable
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShootable, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("animationTime")] 
 		public CFloat AnimationTime
 		{

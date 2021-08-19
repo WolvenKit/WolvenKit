@@ -24,11 +24,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameCameraComponent> _cameraZoomComponent;
 		private CHandle<entSlotComponent> _slotComponent;
 		private CBool _isInitialized;
-		private CBool _isLogicready;
 		private CBool _isInsideLogicArea;
 		private CHandle<gameCameraComponent> _cameraComponent;
-		private CUInt32 _zoomUIListenerID;
-		private CUInt32 _zoomStateMachineListenerID;
+		private CHandle<redCallbackObject> _zoomUIListenerID;
+		private CHandle<redCallbackObject> _zoomStateMachineListenerID;
 		private TweakDBID _activeStatusEffect;
 		private TweakDBID _activeProgramToUploadOnNPC;
 		private CBool _isQhackUploadInProgerss;
@@ -37,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameDelayID _updateID;
 		private gameDelayID _delayedUpdateDeviceStateID;
 		private CHandle<gameIBlackboard> _blackboard;
-		private CUInt32 _currentPlayerTargetCallbackID;
+		private CHandle<redCallbackObject> _currentPlayerTargetCallbackID;
 		private CBool _wasLookedAtLast;
 		private entEntityID _lastPingSourceID;
 		private gameFxResource _networkGridBeamFX;
@@ -53,8 +52,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<SAreaEffectData> _areaEffectsData;
 		private CArray<SAreaEffectTargetData> _areaEffectsInFocusMode;
 		private DebuggerProperties _debugOptions;
+		private wCHandle<gameObject> _workspotActivator;
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("controller")] 
 		public CHandle<ScriptableDC> Controller
 		{
@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _controller, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("wasVisible")] 
 		public CBool WasVisible
 		{
@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasVisible, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isVisible, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("controllerTypeName")] 
 		public CName ControllerTypeName
 		{
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _controllerTypeName, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("deviceState")] 
 		public CEnum<EDeviceStatus> DeviceState
 		{
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceState, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("uiComponent")] 
 		public wCHandle<IWorldWidgetComponent> UiComponent
 		{
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiComponent, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("screenDefinition")] 
 		public SUIScreenDefinition ScreenDefinition
 		{
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _screenDefinition, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("isUIdirty")] 
 		public CBool IsUIdirty
 		{
@@ -118,7 +118,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isUIdirty, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("personalLinkComponent")] 
 		public CHandle<workWorkspotResourceComponent> PersonalLinkComponent
 		{
@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _personalLinkComponent, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("durabilityType")] 
 		public CEnum<EDeviceDurabilityType> DurabilityType
 		{
@@ -134,7 +134,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _durabilityType, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("disassemblableComponent")] 
 		public CHandle<DisassemblableComponent> DisassemblableComponent
 		{
@@ -142,7 +142,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disassemblableComponent, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("localization")] 
 		public CHandle<entLocalizationStringComponent> Localization
 		{
@@ -150,7 +150,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _localization, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("IKslotComponent")] 
 		public CHandle<entSlotComponent> IKslotComponent
 		{
@@ -158,7 +158,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _iKslotComponent, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("ToggleZoomInteractionWorkspot")] 
 		public CHandle<workWorkspotResourceComponent> ToggleZoomInteractionWorkspot
 		{
@@ -166,7 +166,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _toggleZoomInteractionWorkspot, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("cameraZoomComponent")] 
 		public CHandle<gameCameraComponent> CameraZoomComponent
 		{
@@ -174,7 +174,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cameraZoomComponent, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{
@@ -182,20 +182,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _slotComponent, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
 			get => GetProperty(ref _isInitialized);
 			set => SetProperty(ref _isInitialized, value);
-		}
-
-		[Ordinal(57)] 
-		[RED("isLogicready")] 
-		public CBool IsLogicready
-		{
-			get => GetProperty(ref _isLogicready);
-			set => SetProperty(ref _isLogicready, value);
 		}
 
 		[Ordinal(58)] 
@@ -216,7 +208,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(60)] 
 		[RED("ZoomUIListenerID")] 
-		public CUInt32 ZoomUIListenerID
+		public CHandle<redCallbackObject> ZoomUIListenerID
 		{
 			get => GetProperty(ref _zoomUIListenerID);
 			set => SetProperty(ref _zoomUIListenerID, value);
@@ -224,7 +216,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(61)] 
 		[RED("ZoomStateMachineListenerID")] 
-		public CUInt32 ZoomStateMachineListenerID
+		public CHandle<redCallbackObject> ZoomStateMachineListenerID
 		{
 			get => GetProperty(ref _zoomStateMachineListenerID);
 			set => SetProperty(ref _zoomStateMachineListenerID, value);
@@ -296,7 +288,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(70)] 
 		[RED("currentPlayerTargetCallbackID")] 
-		public CUInt32 CurrentPlayerTargetCallbackID
+		public CHandle<redCallbackObject> CurrentPlayerTargetCallbackID
 		{
 			get => GetProperty(ref _currentPlayerTargetCallbackID);
 			set => SetProperty(ref _currentPlayerTargetCallbackID, value);
@@ -420,6 +412,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _debugOptions);
 			set => SetProperty(ref _debugOptions, value);
+		}
+
+		[Ordinal(86)] 
+		[RED("workspotActivator")] 
+		public wCHandle<gameObject> WorkspotActivator
+		{
+			get => GetProperty(ref _workspotActivator);
+			set => SetProperty(ref _workspotActivator, value);
 		}
 
 		public Device(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

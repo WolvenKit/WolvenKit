@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameEffectRef _gameEffectRef;
 		private CHandle<gameEffectInstance> _gameEffectInstance;
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameEffectRef, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("gameEffectInstance")] 
 		public CHandle<gameEffectInstance> GameEffectInstance
 		{

@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeaponMachineInkGameController : VendingMachineInkGameController
 	{
-		private CHandle<WeaponVendorActionWidgetController> _buttonRef;
+		private wCHandle<WeaponVendorActionWidgetController> _buttonRef;
 
 		[Ordinal(25)] 
 		[RED("buttonRef")] 
-		public CHandle<WeaponVendorActionWidgetController> ButtonRef
+		public wCHandle<WeaponVendorActionWidgetController> ButtonRef
 		{
 			get => GetProperty(ref _buttonRef);
 			set => SetProperty(ref _buttonRef, value);

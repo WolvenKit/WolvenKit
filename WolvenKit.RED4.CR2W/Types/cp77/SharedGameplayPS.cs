@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _wasRevealedInNetworkPing;
 		private CBool _hasNetworkBackdoor;
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("deviceState")] 
 		public CEnum<EDeviceStatus> DeviceState
 		{
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceState, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("authorizationProperties")] 
 		public AuthorizationData AuthorizationProperties
 		{
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _authorizationProperties, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("wasStateCached")] 
 		public CBool WasStateCached
 		{
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasStateCached, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("wasStateSet")] 
 		public CBool WasStateSet
 		{
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasStateSet, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("cachedDeviceState")] 
 		public CEnum<EDeviceStatus> CachedDeviceState
 		{
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cachedDeviceState, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("revealDevicesGrid")] 
 		public CBool RevealDevicesGrid
 		{
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _revealDevicesGrid, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("revealDevicesGridWhenUnpowered")] 
 		public CBool RevealDevicesGridWhenUnpowered
 		{
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _revealDevicesGridWhenUnpowered, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("wasRevealedInNetworkPing")] 
 		public CBool WasRevealedInNetworkPing
 		{
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasRevealedInNetworkPing, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("hasNetworkBackdoor")] 
 		public CBool HasNetworkBackdoor
 		{

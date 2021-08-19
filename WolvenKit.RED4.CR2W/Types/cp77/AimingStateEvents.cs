@@ -8,6 +8,10 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AimingStateEvents : UpperBodyEventsTransition
 	{
 		private CHandle<gameweaponAnimFeature_AimPlayer> _aim;
+		private CHandle<AnimFeature_ProceduralIronsightData> _posAnimFeature;
+		private CHandle<DefaultTransitionStatusEffectListener> _statusEffectListener;
+		private wCHandle<gameweaponObject> _weapon;
+		private wCHandle<gameObject> _executionOwner;
 		private CFloat _mouseZoomLevel;
 		private CInt32 _zoomLevelNum;
 		private CInt32 _numZoomLevels;
@@ -22,6 +26,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _timeToBlendZoom;
 		private CFloat _time;
 		private CFloat _speed;
+		private CBool _itemChanged;
+		private CBool _firearmsNoUnequipNoSwitch;
+		private CBool _shootingRangeCompetition;
+		private CHandle<gameAttachmentSlotsScriptListener> _attachmentSlotListener;
 
 		[Ordinal(6)] 
 		[RED("aim")] 
@@ -32,6 +40,38 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("posAnimFeature")] 
+		public CHandle<AnimFeature_ProceduralIronsightData> PosAnimFeature
+		{
+			get => GetProperty(ref _posAnimFeature);
+			set => SetProperty(ref _posAnimFeature, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("statusEffectListener")] 
+		public CHandle<DefaultTransitionStatusEffectListener> StatusEffectListener
+		{
+			get => GetProperty(ref _statusEffectListener);
+			set => SetProperty(ref _statusEffectListener, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("weapon")] 
+		public wCHandle<gameweaponObject> Weapon
+		{
+			get => GetProperty(ref _weapon);
+			set => SetProperty(ref _weapon, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("executionOwner")] 
+		public wCHandle<gameObject> ExecutionOwner
+		{
+			get => GetProperty(ref _executionOwner);
+			set => SetProperty(ref _executionOwner, value);
+		}
+
+		[Ordinal(11)] 
 		[RED("mouseZoomLevel")] 
 		public CFloat MouseZoomLevel
 		{
@@ -39,7 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mouseZoomLevel, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(12)] 
 		[RED("zoomLevelNum")] 
 		public CInt32 ZoomLevelNum
 		{
@@ -47,7 +87,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _zoomLevelNum, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(13)] 
 		[RED("numZoomLevels")] 
 		public CInt32 NumZoomLevels
 		{
@@ -55,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numZoomLevels, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(14)] 
 		[RED("delayAimSnap")] 
 		public CInt32 DelayAimSnap
 		{
@@ -63,7 +103,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _delayAimSnap, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
 		[RED("isAiming")] 
 		public CBool IsAiming
 		{
@@ -71,7 +111,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isAiming, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("aimInTimeRemaining")] 
 		public CFloat AimInTimeRemaining
 		{
@@ -79,7 +119,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _aimInTimeRemaining, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("aimBroadcast")] 
 		public CBool AimBroadcast
 		{
@@ -87,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _aimBroadcast, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("zoomLevel")] 
 		public CFloat ZoomLevel
 		{
@@ -95,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _zoomLevel, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("finalZoomLevel")] 
 		public CFloat FinalZoomLevel
 		{
@@ -103,7 +143,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _finalZoomLevel, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("previousZoomLevel")] 
 		public CFloat PreviousZoomLevel
 		{
@@ -111,7 +151,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousZoomLevel, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("currentZoomLevel")] 
 		public CFloat CurrentZoomLevel
 		{
@@ -119,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentZoomLevel, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("timeToBlendZoom")] 
 		public CFloat TimeToBlendZoom
 		{
@@ -127,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeToBlendZoom, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("time")] 
 		public CFloat Time
 		{
@@ -135,12 +175,44 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _time, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
 			get => GetProperty(ref _speed);
 			set => SetProperty(ref _speed, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("itemChanged")] 
+		public CBool ItemChanged
+		{
+			get => GetProperty(ref _itemChanged);
+			set => SetProperty(ref _itemChanged, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("firearmsNoUnequipNoSwitch")] 
+		public CBool FirearmsNoUnequipNoSwitch
+		{
+			get => GetProperty(ref _firearmsNoUnequipNoSwitch);
+			set => SetProperty(ref _firearmsNoUnequipNoSwitch, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("shootingRangeCompetition")] 
+		public CBool ShootingRangeCompetition
+		{
+			get => GetProperty(ref _shootingRangeCompetition);
+			set => SetProperty(ref _shootingRangeCompetition, value);
+		}
+
+		[Ordinal(28)] 
+		[RED("attachmentSlotListener")] 
+		public CHandle<gameAttachmentSlotsScriptListener> AttachmentSlotListener
+		{
+			get => GetProperty(ref _attachmentSlotListener);
+			set => SetProperty(ref _attachmentSlotListener, value);
 		}
 
 		public AimingStateEvents(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _motherTongueContainter;
 		private inkTextWidgetReference _targetTextWidgetRef;
 		private scnDialogLineData _lineData;
+		private CHandle<textTextParameterSet> _spekerNameParams;
 
 		[Ordinal(5)] 
 		[RED("speakerNameWidget")] 
@@ -96,6 +97,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _lineData);
 			set => SetProperty(ref _lineData, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("spekerNameParams")] 
+		public CHandle<textTextParameterSet> SpekerNameParams
+		{
+			get => GetProperty(ref _spekerNameParams);
+			set => SetProperty(ref _spekerNameParams, value);
 		}
 
 		public SubtitleLineLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkTextWidgetReference _messageCounter;
 		private wCHandle<inkWidget> _rootWidget;
-		private CUInt32 _callInformationBBID;
+		private CHandle<redCallbackObject> _callInformationBBID;
 		private wCHandle<gameJournalManager> _journalManager;
 		private wCHandle<gameObject> _owner;
 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("CallInformationBBID")] 
-		public CUInt32 CallInformationBBID
+		public CHandle<redCallbackObject> CallInformationBBID
 		{
 			get => GetProperty(ref _callInformationBBID);
 			set => SetProperty(ref _callInformationBBID, value);

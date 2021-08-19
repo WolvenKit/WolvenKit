@@ -12,6 +12,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private raRef<entEntityTemplate> _baseEntity;
 		private CName _partType;
 		private CName _preset;
+		private CName _alternateAppearanceSettingName;
+		private CArray<CName> _alternateAppearanceSuffixes;
+		private CArray<appearanceAlternateAppearanceEntry> _alternateAppearanceMapping;
 		private CArray<CHandle<appearanceAppearanceDefinition>> _appearances;
 		private CArray<appearanceCensorshipEntry> _censorshipMapping;
 		private raRef<appearanceCookedAppearanceData> _commonCookData;
@@ -20,6 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private entdismembermentWoundsConfigSet _dismWoundConfig;
 		private CInt32 _proxyPolyCount;
 		private CBool _forceCompileProxy;
+		private CBool _generatePlayerBlockingCollisionForProxy;
 
 		[Ordinal(1)] 
 		[RED("baseType")] 
@@ -62,6 +66,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("alternateAppearanceSettingName")] 
+		public CName AlternateAppearanceSettingName
+		{
+			get => GetProperty(ref _alternateAppearanceSettingName);
+			set => SetProperty(ref _alternateAppearanceSettingName, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("alternateAppearanceSuffixes")] 
+		public CArray<CName> AlternateAppearanceSuffixes
+		{
+			get => GetProperty(ref _alternateAppearanceSuffixes);
+			set => SetProperty(ref _alternateAppearanceSuffixes, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("alternateAppearanceMapping")] 
+		public CArray<appearanceAlternateAppearanceEntry> AlternateAppearanceMapping
+		{
+			get => GetProperty(ref _alternateAppearanceMapping);
+			set => SetProperty(ref _alternateAppearanceMapping, value);
+		}
+
+		[Ordinal(9)] 
 		[RED("appearances")] 
 		public CArray<CHandle<appearanceAppearanceDefinition>> Appearances
 		{
@@ -69,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _appearances, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("censorshipMapping")] 
 		public CArray<appearanceCensorshipEntry> CensorshipMapping
 		{
@@ -77,7 +105,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _censorshipMapping, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("commonCookData")] 
 		public raRef<appearanceCookedAppearanceData> CommonCookData
 		{
@@ -85,7 +113,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _commonCookData, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("Wounds")] 
 		public CArray<CHandle<entdismembermentWoundResource>> Wounds
 		{
@@ -93,7 +121,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wounds, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("DismEffects")] 
 		public CArray<CHandle<entdismembermentEffectResource>> DismEffects
 		{
@@ -101,7 +129,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dismEffects, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("DismWoundConfig")] 
 		public entdismembermentWoundsConfigSet DismWoundConfig
 		{
@@ -109,7 +137,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dismWoundConfig, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("proxyPolyCount")] 
 		public CInt32 ProxyPolyCount
 		{
@@ -117,12 +145,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _proxyPolyCount, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("forceCompileProxy")] 
 		public CBool ForceCompileProxy
 		{
 			get => GetProperty(ref _forceCompileProxy);
 			set => SetProperty(ref _forceCompileProxy, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("generatePlayerBlockingCollisionForProxy")] 
+		public CBool GeneratePlayerBlockingCollisionForProxy
+		{
+			get => GetProperty(ref _generatePlayerBlockingCollisionForProxy);
+			set => SetProperty(ref _generatePlayerBlockingCollisionForProxy, value);
 		}
 
 		public appearanceAppearanceResource(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

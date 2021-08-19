@@ -45,7 +45,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<SecuritySupportListener> _securitySupportListener;
 		private CHandle<RevealRequestsStorage> _shouldBeRevealedStorage;
 		private CBool _inputProcessed;
-		private CHandle<gameIBlackboard> _targetedBlackBoard;
 		private CBool _shouldSpawnBloodPuddle;
 		private CBool _bloodPuddleSpawned;
 		private CBool _skipDeathAnimation;
@@ -370,14 +369,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(78)] 
-		[RED("targetedBlackBoard")] 
-		public CHandle<gameIBlackboard> TargetedBlackBoard
-		{
-			get => GetProperty(ref _targetedBlackBoard);
-			set => SetProperty(ref _targetedBlackBoard, value);
-		}
-
-		[Ordinal(79)] 
 		[RED("shouldSpawnBloodPuddle")] 
 		public CBool ShouldSpawnBloodPuddle
 		{
@@ -385,7 +376,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldSpawnBloodPuddle, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(79)] 
 		[RED("bloodPuddleSpawned")] 
 		public CBool BloodPuddleSpawned
 		{
@@ -393,7 +384,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bloodPuddleSpawned, value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(80)] 
 		[RED("skipDeathAnimation")] 
 		public CBool SkipDeathAnimation
 		{
@@ -401,7 +392,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _skipDeathAnimation, value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(81)] 
 		[RED("hitHistory")] 
 		public CHandle<HitHistory> HitHistory
 		{
@@ -409,7 +400,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitHistory, value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(82)] 
 		[RED("currentWorkspotTags")] 
 		public CArray<CName> CurrentWorkspotTags
 		{
@@ -417,7 +408,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentWorkspotTags, value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(83)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
@@ -425,7 +416,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lootQuality, value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(84)] 
 		[RED("hasQuestItems")] 
 		public CBool HasQuestItems
 		{
@@ -433,7 +424,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasQuestItems, value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(85)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
@@ -441,7 +432,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeQualityRangeInteraction, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(86)] 
 		[RED("weakspotComponent")] 
 		public CHandle<gameWeakspotComponent> WeakspotComponent
 		{
@@ -449,7 +440,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weakspotComponent, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(87)] 
 		[RED("highlightData")] 
 		public CHandle<FocusForcedHighlightData> HighlightData
 		{
@@ -457,7 +448,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highlightData, value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(88)] 
 		[RED("killer")] 
 		public wCHandle<entEntity> Killer
 		{
@@ -465,7 +456,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _killer, value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(89)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
@@ -473,7 +464,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _objectActionsCallbackCtrl, value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(90)] 
 		[RED("isActiveCached")] 
 		public AIUtilsCachedBoolValue IsActiveCached
 		{
@@ -481,7 +472,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isActiveCached, value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(91)] 
 		[RED("isCyberpsycho")] 
 		public CBool IsCyberpsycho
 		{
@@ -489,7 +480,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isCyberpsycho, value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(92)] 
 		[RED("isCivilian")] 
 		public CBool IsCivilian
 		{
@@ -497,7 +488,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isCivilian, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(93)] 
 		[RED("isPolice")] 
 		public CBool IsPolice
 		{
@@ -505,7 +496,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPolice, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(94)] 
 		[RED("isGanger")] 
 		public CBool IsGanger
 		{
@@ -513,7 +504,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isGanger, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(95)] 
 		[RED("attemptedShards")] 
 		public CArray<gameItemID> AttemptedShards
 		{

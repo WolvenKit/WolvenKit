@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<inkWidgetReference> _proficiencyButtonRefs;
 		private CBool _isReversed;
 		private CHandle<PlayerDevelopmentDataManager> _dataManager;
-		private CHandle<PerksMenuAttributeDisplayController> _attributeDisplayController;
+		private wCHandle<PerksMenuAttributeDisplayController> _attributeDisplayController;
 		private CBool _recentlyPurchased;
 		private CBool _holdStarted;
 		private CHandle<AttributeData> _data;
@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("attributeDisplayController")] 
-		public CHandle<PerksMenuAttributeDisplayController> AttributeDisplayController
+		public wCHandle<PerksMenuAttributeDisplayController> AttributeDisplayController
 		{
 			get => GetProperty(ref _attributeDisplayController);
 			set => SetProperty(ref _attributeDisplayController, value);

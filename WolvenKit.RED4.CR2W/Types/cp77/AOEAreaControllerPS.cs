@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private AOEAreaSetup _aOEAreaSetup;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("AOEAreaSetup")] 
 		public AOEAreaSetup AOEAreaSetup
 		{

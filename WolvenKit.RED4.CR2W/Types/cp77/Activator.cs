@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _yellowDelay;
 		private CFloat _redDelay;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeature, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("hitCount")] 
 		public CInt32 HitCount
 		{
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitCount, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("meshComponent")] 
 		public CHandle<entMeshComponent> MeshComponent
 		{
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshComponent, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("meshAppearence")] 
 		public CName MeshAppearence
 		{
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshAppearence, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("meshAppearenceBreaking")] 
 		public CName MeshAppearenceBreaking
 		{
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshAppearenceBreaking, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("meshAppearenceBroken")] 
 		public CName MeshAppearenceBroken
 		{
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshAppearenceBroken, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("defaultDelay")] 
 		public CFloat DefaultDelay
 		{
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultDelay, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("yellowDelay")] 
 		public CFloat YellowDelay
 		{
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _yellowDelay, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("redDelay")] 
 		public CFloat RedDelay
 		{

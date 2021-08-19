@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class inkCallbackData : IScriptable
 	{
 		private CEnum<inkIconResult> _loadResult;
-		private CHandle<inkImageWidget> _targetWidget;
+		private wCHandle<inkImageWidget> _targetWidget;
 		private CString _errorMsg;
 		private TweakDBID _iconSrc;
 
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("targetWidget")] 
-		public CHandle<inkImageWidget> TargetWidget
+		public wCHandle<inkImageWidget> TargetWidget
 		{
 			get => GetProperty(ref _targetWidget);
 			set => SetProperty(ref _targetWidget, value);

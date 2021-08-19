@@ -7,27 +7,18 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerQuickhackData : CVariable
 	{
-		private TweakDBID _actionTweak;
-		private CFloat _actionPenetration;
+		private wCHandle<gamedataObjectAction_Record> _actionRecord;
 		private CInt32 _quality;
 
 		[Ordinal(0)] 
-		[RED("actionTweak")] 
-		public TweakDBID ActionTweak
+		[RED("actionRecord")] 
+		public wCHandle<gamedataObjectAction_Record> ActionRecord
 		{
-			get => GetProperty(ref _actionTweak);
-			set => SetProperty(ref _actionTweak, value);
+			get => GetProperty(ref _actionRecord);
+			set => SetProperty(ref _actionRecord, value);
 		}
 
 		[Ordinal(1)] 
-		[RED("actionPenetration")] 
-		public CFloat ActionPenetration
-		{
-			get => GetProperty(ref _actionPenetration);
-			set => SetProperty(ref _actionPenetration, value);
-		}
-
-		[Ordinal(2)] 
 		[RED("quality")] 
 		public CInt32 Quality
 		{

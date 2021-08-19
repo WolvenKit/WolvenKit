@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class QuickSlotsManager : gameScriptableComponent
 	{
 		private wCHandle<PlayerPuppet> _player;
-		private CHandle<gameIBlackboard> _quickSlotsBB;
+		private wCHandle<gameIBlackboard> _quickSlotsBB;
 		private CBool _isPlayerInCar;
 		private entEntityID _playerVehicleID;
 		private CArray<QuickSlotCommand> _quickDpadCommands;
@@ -27,6 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private QuickSlotCommand _currentVehicleWheelItem;
 		private QuickSlotCommand _currentGadgetWheelItem;
 		private QuickSlotCommand _currentInteractionWheelItem;
+		private CHandle<redCallbackObject> _onVehPlayerStateDataChangedCallback;
 
 		[Ordinal(5)] 
 		[RED("Player")] 
@@ -38,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("QuickSlotsBB")] 
-		public CHandle<gameIBlackboard> QuickSlotsBB
+		public wCHandle<gameIBlackboard> QuickSlotsBB
 		{
 			get => GetProperty(ref _quickSlotsBB);
 			set => SetProperty(ref _quickSlotsBB, value);
@@ -186,6 +187,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _currentInteractionWheelItem);
 			set => SetProperty(ref _currentInteractionWheelItem, value);
+		}
+
+		[Ordinal(25)] 
+		[RED("OnVehPlayerStateDataChangedCallback")] 
+		public CHandle<redCallbackObject> OnVehPlayerStateDataChangedCallback
+		{
+			get => GetProperty(ref _onVehPlayerStateDataChangedCallback);
+			set => SetProperty(ref _onVehPlayerStateDataChangedCallback, value);
 		}
 
 		public QuickSlotsManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _hasThisAreaReceivedCombatNotification;
 		private CBool _pendingNotifyPlayerAboutTransition;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("system")] 
 		public CHandle<SecuritySystemControllerPS> System
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _system, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("usersInPerimeter")] 
 		public CArray<AreaEntry> UsersInPerimeter
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _usersInPerimeter, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isPlayerInside")] 
 		public CBool IsPlayerInside
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPlayerInside, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("securityAccessLevel")] 
 		public CEnum<ESecurityAccessLevel> SecurityAccessLevel
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityAccessLevel, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("securityAreaType")] 
 		public CEnum<ESecurityAreaType> SecurityAreaType
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityAreaType, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("eventsFilters")] 
 		public EventsFilters EventsFilters
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _eventsFilters, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("areaTransitions")] 
 		public CArray<AreaTypeTransition> AreaTransitions
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areaTransitions, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("pendingDisableRequest")] 
 		public CBool PendingDisableRequest
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _pendingDisableRequest, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("lastOutput")] 
 		public OutputPersistentData LastOutput
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastOutput, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("questPlayerHasTriggeredCombat")] 
 		public CBool QuestPlayerHasTriggeredCombat
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _questPlayerHasTriggeredCombat, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("hasThisAreaReceivedCombatNotification")] 
 		public CBool HasThisAreaReceivedCombatNotification
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasThisAreaReceivedCombatNotification, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("pendingNotifyPlayerAboutTransition")] 
 		public CBool PendingNotifyPlayerAboutTransition
 		{

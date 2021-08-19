@@ -12,11 +12,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _widgetInt;
 		private inkWidgetReference _widgetRef;
 		private inkWidgetReference _widgetTech;
-		private CHandle<CyberwareAttributes_Logic> _logicBody;
-		private CHandle<CyberwareAttributes_Logic> _logicCool;
-		private CHandle<CyberwareAttributes_Logic> _logicInt;
-		private CHandle<CyberwareAttributes_Logic> _logicRef;
-		private CHandle<CyberwareAttributes_Logic> _logicTech;
+		private wCHandle<CyberwareAttributes_Logic> _logicBody;
+		private wCHandle<CyberwareAttributes_Logic> _logicCool;
+		private wCHandle<CyberwareAttributes_Logic> _logicInt;
+		private wCHandle<CyberwareAttributes_Logic> _logicRef;
+		private wCHandle<CyberwareAttributes_Logic> _logicTech;
 
 		[Ordinal(0)] 
 		[RED("widgetBody")] 
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("logicBody")] 
-		public CHandle<CyberwareAttributes_Logic> LogicBody
+		public wCHandle<CyberwareAttributes_Logic> LogicBody
 		{
 			get => GetProperty(ref _logicBody);
 			set => SetProperty(ref _logicBody, value);
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("logicCool")] 
-		public CHandle<CyberwareAttributes_Logic> LogicCool
+		public wCHandle<CyberwareAttributes_Logic> LogicCool
 		{
 			get => GetProperty(ref _logicCool);
 			set => SetProperty(ref _logicCool, value);
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("logicInt")] 
-		public CHandle<CyberwareAttributes_Logic> LogicInt
+		public wCHandle<CyberwareAttributes_Logic> LogicInt
 		{
 			get => GetProperty(ref _logicInt);
 			set => SetProperty(ref _logicInt, value);
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("logicRef")] 
-		public CHandle<CyberwareAttributes_Logic> LogicRef
+		public wCHandle<CyberwareAttributes_Logic> LogicRef
 		{
 			get => GetProperty(ref _logicRef);
 			set => SetProperty(ref _logicRef, value);
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("logicTech")] 
-		public CHandle<CyberwareAttributes_Logic> LogicTech
+		public wCHandle<CyberwareAttributes_Logic> LogicTech
 		{
 			get => GetProperty(ref _logicTech);
 			set => SetProperty(ref _logicTech, value);
