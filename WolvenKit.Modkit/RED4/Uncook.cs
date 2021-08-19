@@ -287,16 +287,7 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                 case ECookedFileFormat.morphtarget:
-                    var archives = new List<Archive>();
-                    foreach (var ar in settings.Get<MorphTargetExportArgs>().Archives)
-                    {
-                        var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
-                        if (name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
-                        {
-                            archives.Add(ar);
-                        }
-                    }
-                    return ExportMorphTargets(cr2wStream, outfile, archives, settings.Get<MorphTargetExportArgs>().ModFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                    return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, settings.Get<MorphTargetExportArgs>().ModFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
 
                 case ECookedFileFormat.xbm:
                 {
@@ -463,23 +454,13 @@ namespace WolvenKit.Modkit.RED4
 
         private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
         {
-            var archives = new List<Archive>();
-            foreach (var ar in meshargs.Archives)
-            {
-                var name = Path.GetFileNameWithoutExtension(ar.ArchiveAbsolutePath);
-                if (name is "basegame_1_engine" or "basegame_3_nightcity" or "basegame_4_gamedata")
-                {
-                    archives.Add(ar);
-                }
-            }
-
             switch (meshargs.meshExportType)
             {
                 case MeshExportType.Default:
                     return _meshTools.ExportMesh(cr2wStream, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
 
                 case MeshExportType.WithMaterials:
-                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, archives, meshargs.MaterialRepo,
+                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, meshargs.Archives, meshargs.MaterialRepo,
                         meshargs.MaterialUncookExtension, meshargs.isGLBinary, meshargs.LodFilter);
 
                 case MeshExportType.WithRig:
