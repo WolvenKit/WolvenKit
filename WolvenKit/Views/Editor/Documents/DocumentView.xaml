@@ -390,6 +390,11 @@
                                 RedboolTemplate="{StaticResource RedboolTemplate}" />
                         </Grid.Resources>
 
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
                         <syncfusion:SfTreeGrid
                             AllowFiltering="True"
                             AllowResizingColumns="True"
@@ -422,6 +427,16 @@
 
 
                         </syncfusion:SfTreeGrid>
+
+                        <syncfusion:PropertyGrid
+                            x:Name="PropertyGrid"
+                            Grid.Column="1"
+                            SelectedObject="{Binding SelectedChunk.Data}"
+                            PropertyExpandMode="NestedMode"
+                            AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
+                            >
+                            
+                        </syncfusion:PropertyGrid>
                     </Grid>
 
                 </Grid>

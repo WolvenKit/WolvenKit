@@ -2,7 +2,9 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
 using ReactiveUI;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -133,6 +135,30 @@ namespace WolvenKit.Views.Editor
         {
             SetCollapsedAll();
             EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(IEditableVariable.accessor):
+                case nameof(IEditableVariable.ChildrEditableVariables):
+                case nameof(IEditableVariable.Cr2wFile):
+                case nameof(IEditableVariable.IsSerialized):
+                case nameof(IEditableVariable.ParentVar):
+                case nameof(IEditableVariable.REDFlags):
+                case nameof(IEditableVariable.REDName):
+                case nameof(IEditableVariable.REDType):
+                case nameof(IEditableVariable.REDValue):
+                case nameof(IEditableVariable.SerializedProperties):
+                case nameof(IEditableVariable.UniqueIdentifier):
+                case nameof(IEditableVariable.VarChunkIndex):
+                case nameof(CVariable.IsNulled):
+                case nameof(CVariable.cr2w):
+                case nameof(CVariable.UnknownCVariables):
+                    e.Cancel = true;
+                    break;
+            }
         }
     }
 }

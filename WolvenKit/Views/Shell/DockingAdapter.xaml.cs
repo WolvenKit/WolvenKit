@@ -398,7 +398,7 @@ namespace WolvenKit.Views.Shell
                         break;
                 }
 
-                if (((IDockElement)content.Content).State == DockState.Document)
+                //if (((IDockElement)content.Content).State == DockState.Document)
                 {
                     SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
                 }
