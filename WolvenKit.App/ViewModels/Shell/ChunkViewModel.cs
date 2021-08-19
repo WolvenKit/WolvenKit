@@ -51,6 +51,7 @@ namespace WolvenKit.ViewModels.Shell
         public string Name => Property.REDName;
         public string Type => Property.REDType;
         public string Value => Property.REDValue;
+        public bool IsSerialized => Property.IsSerialized;
 
         private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;

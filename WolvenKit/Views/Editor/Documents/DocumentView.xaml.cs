@@ -156,6 +156,7 @@ namespace WolvenKit.Views.Editor
                 case nameof(CVariable.IsNulled):
                 case nameof(CVariable.cr2w):
                 case nameof(CVariable.UnknownCVariables):
+                case nameof(CVariable.GottenVarChunkIndex):
                     e.Cancel = true;
                     break;
             }

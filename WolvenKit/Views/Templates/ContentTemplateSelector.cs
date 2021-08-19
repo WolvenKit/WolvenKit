@@ -14,11 +14,13 @@ namespace WolvenKit.Views.Templates
     public class EditableVariableDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate CommmonTemplate { get; set; }
+        public DataTemplate StringTemplateView { get; set; }
         public DataTemplate RedboolTemplate { get; set; }
         public DataTemplate NumericTemplate { get; set; }
         public DataTemplate EnumTemplate { get; set; }
         public DataTemplate HandleTemplateView { get; set; }
-        public DataTemplate ArrayTemplateView { get; set; }
+        //public DataTemplate ArrayTemplateView { get; set; }
+        public DataTemplate RefTemplateView { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
             item is not ChunkPropertyViewModel editableVariable
@@ -26,11 +28,13 @@ namespace WolvenKit.Views.Templates
                 : editableVariable.Property switch
                 {
                     IREDBool => RedboolTemplate,
-                    IREDString => CommmonTemplate,
+                    IREDString => StringTemplateView,
                     IREDIntegerType => NumericTemplate,
                     IREDEnum => EnumTemplate,
                     IREDChunkPtr => HandleTemplateView,
-                    IREDArray => ArrayTemplateView,
+                    IREDRef => RefTemplateView,
+
+                    IREDArray => CommmonTemplate,
                     _ => CommmonTemplate
                 };
     }
