@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isAllDoorsClosed;
 		private CBool _isAdsDisabled;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("liftSetup")] 
 		public LiftSetup LiftSetup
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _liftSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("activeFloor")] 
 		public CInt32 ActiveFloor
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeFloor, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("targetFloor")] 
 		public CInt32 TargetFloor
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetFloor, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("movementState")] 
 		public CEnum<gamePlatformMovementState> MovementState
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _movementState, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("floors")] 
 		public CArray<ElevatorFloorSetup> Floors
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _floors, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("floorIDs")] 
 		public CArray<entEntityID> FloorIDs
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _floorIDs, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("floorPSIDs")] 
 		public CArray<gamePersistentID> FloorPSIDs
 		{
@@ -80,7 +80,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _floorPSIDs, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("floorsAuthorization")] 
 		public CArray<CBool> FloorsAuthorization
 		{
@@ -88,7 +88,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _floorsAuthorization, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("timeOnPause")] 
 		public CFloat TimeOnPause
 		{
@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeOnPause, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("isPlayerInsideLift")] 
 		public CBool IsPlayerInsideLift
 		{
@@ -104,7 +104,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPlayerInsideLift, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("isSpeakerDestroyed")] 
 		public CBool IsSpeakerDestroyed
 		{
@@ -112,7 +112,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isSpeakerDestroyed, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("hasSpeaker")] 
 		public CBool HasSpeaker
 		{
@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasSpeaker, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
@@ -128,7 +128,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stations, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("cachedGoToFloorAction")] 
 		public CInt32 CachedGoToFloorAction
 		{
@@ -136,7 +136,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cachedGoToFloorAction, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("isAllDoorsClosed")] 
 		public CBool IsAllDoorsClosed
 		{
@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isAllDoorsClosed, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("isAdsDisabled")] 
 		public CBool IsAdsDisabled
 		{

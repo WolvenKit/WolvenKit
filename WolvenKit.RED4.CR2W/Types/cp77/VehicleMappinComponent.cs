@@ -17,11 +17,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameDelayID _invalidDelayID;
 		private CBool _init;
 		private CHandle<VehicleSummonDataDef> _vehicleSummonDataDef;
-		private CHandle<gameIBlackboard> _vehicleSummonDataBB;
-		private CUInt32 _vehicleSummonStateCallback;
+		private wCHandle<gameIBlackboard> _vehicleSummonDataBB;
+		private CHandle<redCallbackObject> _vehicleSummonStateCallback;
 		private CHandle<UI_ActiveVehicleDataDef> _uiActiveVehicleDataDef;
-		private CHandle<gameIBlackboard> _uiActiveVehicleDataBB;
-		private CUInt32 _vehPlayerStateDataCallback;
+		private wCHandle<gameIBlackboard> _uiActiveVehicleDataBB;
+		private CHandle<redCallbackObject> _vehPlayerStateDataCallback;
 
 		[Ordinal(0)] 
 		[RED("questMappinController")] 
@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("vehicleSummonDataBB")] 
-		public CHandle<gameIBlackboard> VehicleSummonDataBB
+		public wCHandle<gameIBlackboard> VehicleSummonDataBB
 		{
 			get => GetProperty(ref _vehicleSummonDataBB);
 			set => SetProperty(ref _vehicleSummonDataBB, value);
@@ -113,7 +113,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("vehicleSummonStateCallback")] 
-		public CUInt32 VehicleSummonStateCallback
+		public CHandle<redCallbackObject> VehicleSummonStateCallback
 		{
 			get => GetProperty(ref _vehicleSummonStateCallback);
 			set => SetProperty(ref _vehicleSummonStateCallback, value);
@@ -129,7 +129,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("uiActiveVehicleDataBB")] 
-		public CHandle<gameIBlackboard> UiActiveVehicleDataBB
+		public wCHandle<gameIBlackboard> UiActiveVehicleDataBB
 		{
 			get => GetProperty(ref _uiActiveVehicleDataBB);
 			set => SetProperty(ref _uiActiveVehicleDataBB, value);
@@ -137,7 +137,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("vehPlayerStateDataCallback")] 
-		public CUInt32 VehPlayerStateDataCallback
+		public CHandle<redCallbackObject> VehPlayerStateDataCallback
 		{
 			get => GetProperty(ref _vehPlayerStateDataCallback);
 			set => SetProperty(ref _vehPlayerStateDataCallback, value);

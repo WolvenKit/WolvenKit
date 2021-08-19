@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class MasterDeviceInkGameControllerBase : DeviceInkGameControllerBase
 	{
 		private CArray<SThumbnailWidgetPackage> _thumbnailWidgetsData;
-		private CUInt32 _onThumbnailWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onThumbnailWidgetsUpdateListener;
 
 		[Ordinal(16)] 
 		[RED("thumbnailWidgetsData")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("onThumbnailWidgetsUpdateListener")] 
-		public CUInt32 OnThumbnailWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnThumbnailWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onThumbnailWidgetsUpdateListener);
 			set => SetProperty(ref _onThumbnailWidgetsUpdateListener, value);

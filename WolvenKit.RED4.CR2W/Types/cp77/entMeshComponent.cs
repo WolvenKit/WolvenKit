@@ -20,6 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt8 _order;
 		private CBool _isEnabled;
 		private CEnum<entMeshComponentLODMode> _lODMode;
+		private CEnum<entForcedLodDistance> _forcedLodDistance;
 		private CBool _overrideMeshNavigationImpact;
 		private NavGenNavigationSetting _navigationImpact;
 
@@ -128,6 +129,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(21)] 
+		[RED("forcedLodDistance")] 
+		public CEnum<entForcedLodDistance> ForcedLodDistance
+		{
+			get => GetProperty(ref _forcedLodDistance);
+			set => SetProperty(ref _forcedLodDistance, value);
+		}
+
+		[Ordinal(22)] 
 		[RED("overrideMeshNavigationImpact")] 
 		public CBool OverrideMeshNavigationImpact
 		{
@@ -135,7 +144,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _overrideMeshNavigationImpact, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("navigationImpact")] 
 		public NavGenNavigationSetting NavigationImpact
 		{

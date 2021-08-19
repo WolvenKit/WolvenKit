@@ -29,20 +29,20 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<ItemPositionProvider> _itemsPositionProvider;
 		private wCHandle<gameIBlackboard> _equipmentBlackboard;
 		private wCHandle<gameIBlackboard> _itemModsBlackboard;
-		private CUInt32 _equipmentBlackboardCallback;
-		private CUInt32 _itemModsBlackboardCallback;
+		private CHandle<redCallbackObject> _equipmentBlackboardCallback;
+		private CHandle<redCallbackObject> _itemModsBlackboardCallback;
 		private CHandle<ItemModeGridClassifier> _itemGridClassifier;
 		private CHandle<ItemModeGridView> _itemGridDataView;
 		private CHandle<inkScriptableDataSourceWrapper> _itemGridDataSource;
-		private CHandle<BackpackFilterButtonController> _activeFilter;
+		private wCHandle<BackpackFilterButtonController> _activeFilter;
 		private CHandle<ItemCategoryFliterManager> _filterManager;
 		private CEnum<ItemFilterCategory> _savedFilter;
-		private CHandle<InventoryItemDisplayController> _lastSelectedDisplay;
+		private wCHandle<InventoryItemDisplayController> _lastSelectedDisplay;
 		private CHandle<ItemModeInventoryListenerCallback> _itemModeInventoryListenerCallback;
 		private CHandle<gameInventoryScriptListener> _itemModeInventoryListener;
 		private CBool _itemModeInventoryListenerRegistered;
-		private CHandle<ItemModeGridContainer> _itemGridContainerController;
-		private CHandle<ItemModeGridContainer> _cyberwareGridContainerController;
+		private wCHandle<ItemModeGridContainer> _itemGridContainerController;
+		private wCHandle<ItemModeGridContainer> _cyberwareGridContainerController;
 		private CHandle<ItemPreferredComparisonResolver> _comparisonResolver;
 		private CBool _isE3Demo;
 		private CBool _isShown;
@@ -231,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("equipmentBlackboardCallback")] 
-		public CUInt32 EquipmentBlackboardCallback
+		public CHandle<redCallbackObject> EquipmentBlackboardCallback
 		{
 			get => GetProperty(ref _equipmentBlackboardCallback);
 			set => SetProperty(ref _equipmentBlackboardCallback, value);
@@ -239,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("itemModsBlackboardCallback")] 
-		public CUInt32 ItemModsBlackboardCallback
+		public CHandle<redCallbackObject> ItemModsBlackboardCallback
 		{
 			get => GetProperty(ref _itemModsBlackboardCallback);
 			set => SetProperty(ref _itemModsBlackboardCallback, value);
@@ -271,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("activeFilter")] 
-		public CHandle<BackpackFilterButtonController> ActiveFilter
+		public wCHandle<BackpackFilterButtonController> ActiveFilter
 		{
 			get => GetProperty(ref _activeFilter);
 			set => SetProperty(ref _activeFilter, value);
@@ -295,7 +295,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("lastSelectedDisplay")] 
-		public CHandle<InventoryItemDisplayController> LastSelectedDisplay
+		public wCHandle<InventoryItemDisplayController> LastSelectedDisplay
 		{
 			get => GetProperty(ref _lastSelectedDisplay);
 			set => SetProperty(ref _lastSelectedDisplay, value);
@@ -327,7 +327,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("itemGridContainerController")] 
-		public CHandle<ItemModeGridContainer> ItemGridContainerController
+		public wCHandle<ItemModeGridContainer> ItemGridContainerController
 		{
 			get => GetProperty(ref _itemGridContainerController);
 			set => SetProperty(ref _itemGridContainerController, value);
@@ -335,7 +335,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(36)] 
 		[RED("cyberwareGridContainerController")] 
-		public CHandle<ItemModeGridContainer> CyberwareGridContainerController
+		public wCHandle<ItemModeGridContainer> CyberwareGridContainerController
 		{
 			get => GetProperty(ref _cyberwareGridContainerController);
 			set => SetProperty(ref _cyberwareGridContainerController, value);

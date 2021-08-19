@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isLeaving;
 		private CBool _isLocked;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("tresspasserList")] 
 		public CArray<TrespasserEntry> TresspasserList
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tresspasserList, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("entranceToken")] 
 		public entEntityID EntranceToken
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _entranceToken, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("isLeaving")] 
 		public CBool IsLeaving
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isLeaving, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{

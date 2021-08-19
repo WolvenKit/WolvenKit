@@ -7,14 +7,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStatModifierSave : CVariable
 	{
-		private CArray<CHandle<gameStatModifierData>> _statModifierUnions;
+		private CArray<CHandle<gameStatModifierData_Deprecated>> _statModifierUnions;
 		private gameStatsObjectID _statsObjectID;
 		private TweakDBID _recordID;
 		private CUInt32 _seed;
 
 		[Ordinal(0)] 
 		[RED("statModifierUnions")] 
-		public CArray<CHandle<gameStatModifierData>> StatModifierUnions
+		public CArray<CHandle<gameStatModifierData_Deprecated>> StatModifierUnions
 		{
 			get => GetProperty(ref _statModifierUnions);
 			set => SetProperty(ref _statModifierUnions, value);

@@ -17,8 +17,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _playTime;
 		private inkTextWidgetReference _characterLevel;
 		private inkTextWidgetReference _characterLevelLabel;
+		private inkTextWidgetReference _gameVersion;
 		private inkWidgetReference _emptySlotWrapper;
 		private inkWidgetReference _wrapper;
+		private CHandle<textTextParameterSet> _versionParams;
 		private CInt32 _index;
 		private CBool _emptySlot;
 		private CBool _validSlot;
@@ -105,6 +107,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(40)] 
+		[RED("gameVersion")] 
+		public inkTextWidgetReference GameVersion
+		{
+			get => GetProperty(ref _gameVersion);
+			set => SetProperty(ref _gameVersion, value);
+		}
+
+		[Ordinal(41)] 
 		[RED("emptySlotWrapper")] 
 		public inkWidgetReference EmptySlotWrapper
 		{
@@ -112,7 +122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _emptySlotWrapper, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("wrapper")] 
 		public inkWidgetReference Wrapper
 		{
@@ -120,7 +130,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wrapper, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
+		[RED("versionParams")] 
+		public CHandle<textTextParameterSet> VersionParams
+		{
+			get => GetProperty(ref _versionParams);
+			set => SetProperty(ref _versionParams, value);
+		}
+
+		[Ordinal(44)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
@@ -128,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _index, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("emptySlot")] 
 		public CBool EmptySlot
 		{
@@ -136,7 +154,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _emptySlot, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("validSlot")] 
 		public CBool ValidSlot
 		{
@@ -144,7 +162,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _validSlot, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("initialLoadingID")] 
 		public CUInt64 InitialLoadingID
 		{

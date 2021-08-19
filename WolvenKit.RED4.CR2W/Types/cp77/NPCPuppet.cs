@@ -33,6 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private Vector4 _ragdollInitialPosition;
 		private CFloat _ragdollActivationTimestamp;
 		private CArray<wCHandle<entEntity>> _ragdolledEntities;
+		private CBool _disableRagdollAfterRecovery;
 		private CBool _isNotVisible;
 		private CHandle<NPCDeathListener> _deathListener;
 		private CHandle<NPCGodModeListener> _godModeStatListener;
@@ -45,10 +46,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entIComponent> _comfortZoneComponent;
 		private CBool _isTargetingPlayer;
 		private CHandle<gameScriptStatsListener> _playerStatsListener;
-		private CUInt32 _upperBodyStateCallbackID;
-		private CUInt32 _leftCyberwareStateCallbackID;
-		private CUInt32 _meleeStateCallbackID;
-		private CUInt32 _combatGadgetStateCallbackID;
+		private CHandle<redCallbackObject> _upperBodyStateCallbackID;
+		private CHandle<redCallbackObject> _leftCyberwareStateCallbackID;
+		private CHandle<redCallbackObject> _meleeStateCallbackID;
+		private CHandle<redCallbackObject> _combatGadgetStateCallbackID;
 		private CBool _wasAimedAtLast;
 		private CBool _wasCWChargedAtLast;
 		private CBool _wasMeleeChargedAtLast;
@@ -72,13 +73,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isPlayerCompanionCached;
 		private CFloat _isPlayerCompanionCachedTimeStamp;
 		private CUInt32 _quickHackEffectsApplied;
-		private CHandle<gameConstantStatModifierData> _hackingResistanceMod;
+		private CHandle<gameConstantStatModifierData_Deprecated> _hackingResistanceMod;
 		private gameDelayID _delayNonStealthQuickHackVictimEventID;
 		private CInt32 _cachedIsPaperdoll;
 		private gameDelayID _smartDespawnDelayID;
 		private CUInt32 _despawnTicks;
 
-		[Ordinal(97)] 
+		[Ordinal(96)] 
 		[RED("lastHitEvent")] 
 		public CHandle<gameeventsHitEvent> LastHitEvent
 		{
@@ -86,7 +87,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastHitEvent, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(97)] 
 		[RED("totalFrameReactionDamageReceived")] 
 		public CFloat TotalFrameReactionDamageReceived
 		{
@@ -94,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _totalFrameReactionDamageReceived, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(98)] 
 		[RED("totalFrameWoundsDamageReceived")] 
 		public CFloat TotalFrameWoundsDamageReceived
 		{
@@ -102,7 +103,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _totalFrameWoundsDamageReceived, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(99)] 
 		[RED("totalFrameDismembermentDamageReceived")] 
 		public CFloat TotalFrameDismembermentDamageReceived
 		{
@@ -110,7 +111,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _totalFrameDismembermentDamageReceived, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(100)] 
 		[RED("hitEventLock")] 
 		public ScriptReentrantRWLock HitEventLock
 		{
@@ -118,7 +119,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hitEventLock, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(101)] 
 		[RED("NPCManager")] 
 		public CHandle<NPCManager> NPCManager
 		{
@@ -126,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nPCManager, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(102)] 
 		[RED("customDeathDirection")] 
 		public CInt32 CustomDeathDirection
 		{
@@ -134,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _customDeathDirection, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(103)] 
 		[RED("deathOverrideState")] 
 		public CBool DeathOverrideState
 		{
@@ -142,7 +143,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deathOverrideState, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(104)] 
 		[RED("agonyState")] 
 		public CBool AgonyState
 		{
@@ -150,7 +151,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _agonyState, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(105)] 
 		[RED("defensiveState")] 
 		public CBool DefensiveState
 		{
@@ -158,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defensiveState, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(106)] 
 		[RED("lastSetupWorkspotActionEvent")] 
 		public CHandle<gameSetupWorkspotActionEvent> LastSetupWorkspotActionEvent
 		{
@@ -166,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastSetupWorkspotActionEvent, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(107)] 
 		[RED("wasJustKilledOrDefeated")] 
 		public CBool WasJustKilledOrDefeated
 		{
@@ -174,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasJustKilledOrDefeated, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(108)] 
 		[RED("shouldDie")] 
 		public CBool ShouldDie
 		{
@@ -182,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldDie, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(109)] 
 		[RED("shouldBeDefeated")] 
 		public CBool ShouldBeDefeated
 		{
@@ -190,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldBeDefeated, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(110)] 
 		[RED("sentDownedEvent")] 
 		public CBool SentDownedEvent
 		{
@@ -198,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sentDownedEvent, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(111)] 
 		[RED("isRagdolling")] 
 		public CBool IsRagdolling
 		{
@@ -206,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isRagdolling, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(112)] 
 		[RED("hasAnimatedRagdoll")] 
 		public CBool HasAnimatedRagdoll
 		{
@@ -214,7 +215,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasAnimatedRagdoll, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(113)] 
 		[RED("disableCollisionRequested")] 
 		public CBool DisableCollisionRequested
 		{
@@ -222,7 +223,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disableCollisionRequested, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(114)] 
 		[RED("ragdollInstigator")] 
 		public wCHandle<gameObject> RagdollInstigator
 		{
@@ -230,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ragdollInstigator, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(115)] 
 		[RED("ragdollSplattersSpawned")] 
 		public CInt32 RagdollSplattersSpawned
 		{
@@ -238,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ragdollSplattersSpawned, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(116)] 
 		[RED("ragdollFloorSplashSpawned")] 
 		public CBool RagdollFloorSplashSpawned
 		{
@@ -246,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ragdollFloorSplashSpawned, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(117)] 
 		[RED("ragdollImpactData")] 
 		public entRagdollImpactPointData RagdollImpactData
 		{
@@ -254,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ragdollImpactData, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(118)] 
 		[RED("ragdollDamageData")] 
 		public RagdollDamagePollData RagdollDamageData
 		{
@@ -262,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ragdollDamageData, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(119)] 
 		[RED("ragdollInitialPosition")] 
 		public Vector4 RagdollInitialPosition
 		{
@@ -270,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ragdollInitialPosition, value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(120)] 
 		[RED("ragdollActivationTimestamp")] 
 		public CFloat RagdollActivationTimestamp
 		{
@@ -278,12 +279,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ragdollActivationTimestamp, value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(121)] 
 		[RED("ragdolledEntities")] 
 		public CArray<wCHandle<entEntity>> RagdolledEntities
 		{
 			get => GetProperty(ref _ragdolledEntities);
 			set => SetProperty(ref _ragdolledEntities, value);
+		}
+
+		[Ordinal(122)] 
+		[RED("disableRagdollAfterRecovery")] 
+		public CBool DisableRagdollAfterRecovery
+		{
+			get => GetProperty(ref _disableRagdollAfterRecovery);
+			set => SetProperty(ref _disableRagdollAfterRecovery, value);
 		}
 
 		[Ordinal(123)] 
@@ -384,7 +393,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(135)] 
 		[RED("upperBodyStateCallbackID")] 
-		public CUInt32 UpperBodyStateCallbackID
+		public CHandle<redCallbackObject> UpperBodyStateCallbackID
 		{
 			get => GetProperty(ref _upperBodyStateCallbackID);
 			set => SetProperty(ref _upperBodyStateCallbackID, value);
@@ -392,7 +401,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(136)] 
 		[RED("leftCyberwareStateCallbackID")] 
-		public CUInt32 LeftCyberwareStateCallbackID
+		public CHandle<redCallbackObject> LeftCyberwareStateCallbackID
 		{
 			get => GetProperty(ref _leftCyberwareStateCallbackID);
 			set => SetProperty(ref _leftCyberwareStateCallbackID, value);
@@ -400,7 +409,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(137)] 
 		[RED("meleeStateCallbackID")] 
-		public CUInt32 MeleeStateCallbackID
+		public CHandle<redCallbackObject> MeleeStateCallbackID
 		{
 			get => GetProperty(ref _meleeStateCallbackID);
 			set => SetProperty(ref _meleeStateCallbackID, value);
@@ -408,7 +417,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(138)] 
 		[RED("combatGadgetStateCallbackID")] 
-		public CUInt32 CombatGadgetStateCallbackID
+		public CHandle<redCallbackObject> CombatGadgetStateCallbackID
 		{
 			get => GetProperty(ref _combatGadgetStateCallbackID);
 			set => SetProperty(ref _combatGadgetStateCallbackID, value);
@@ -600,7 +609,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(162)] 
 		[RED("hackingResistanceMod")] 
-		public CHandle<gameConstantStatModifierData> HackingResistanceMod
+		public CHandle<gameConstantStatModifierData_Deprecated> HackingResistanceMod
 		{
 			get => GetProperty(ref _hackingResistanceMod);
 			set => SetProperty(ref _hackingResistanceMod, value);

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CFloat _countTime;
 		private CFloat _startVelocity;
-		private CFloat _lifetime_440;
+		private CFloat _lifetime_424;
 		private CName _effectName;
 		private CName _hitEffectName;
 		private CBool _followTarget;
@@ -42,10 +42,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(53)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_440
+		public CFloat Lifetime_424
 		{
-			get => GetProperty(ref _lifetime_440);
-			set => SetProperty(ref _lifetime_440, value);
+			get => GetProperty(ref _lifetime_424);
+			set => SetProperty(ref _lifetime_424, value);
 		}
 
 		[Ordinal(54)] 

@@ -7,9 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class entGarmentParameterComponentData : CVariable
 	{
+		private DataBuffer _compiledTriangleIndsData;
 		private CRUID _componentID;
 		private CUInt64 _meshGeometryHash;
+		private CUInt64 _visibleTrangleIndexBufferHash;
 		private CArray<entGarmentParameterChunkData> _chunks;
+		private CUInt32 _chunksCount;
 		private CBool _hideComponent;
 		private CFloat _bendPowerMultiplier;
 		private CFloat _bendPowerOffset;
@@ -21,8 +24,18 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _removeHiddenTriangles;
 		private CBool _disableGarment;
 		private CBool _mergeWithInnerLayer;
+		private CUInt32 _numIndices;
+		private CUInt32 _numOffsets;
 
 		[Ordinal(0)] 
+		[RED("compiledTriangleIndsData")] 
+		public DataBuffer CompiledTriangleIndsData
+		{
+			get => GetProperty(ref _compiledTriangleIndsData);
+			set => SetProperty(ref _compiledTriangleIndsData, value);
+		}
+
+		[Ordinal(1)] 
 		[RED("componentID")] 
 		public CRUID ComponentID
 		{
@@ -30,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _componentID, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("meshGeometryHash")] 
 		public CUInt64 MeshGeometryHash
 		{
@@ -38,7 +51,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshGeometryHash, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
+		[RED("visibleTrangleIndexBufferHash")] 
+		public CUInt64 VisibleTrangleIndexBufferHash
+		{
+			get => GetProperty(ref _visibleTrangleIndexBufferHash);
+			set => SetProperty(ref _visibleTrangleIndexBufferHash, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("chunks")] 
 		public CArray<entGarmentParameterChunkData> Chunks
 		{
@@ -46,7 +67,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _chunks, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
+		[RED("chunksCount")] 
+		public CUInt32 ChunksCount
+		{
+			get => GetProperty(ref _chunksCount);
+			set => SetProperty(ref _chunksCount, value);
+		}
+
+		[Ordinal(6)] 
 		[RED("hideComponent")] 
 		public CBool HideComponent
 		{
@@ -54,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hideComponent, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("bendPowerMultiplier")] 
 		public CFloat BendPowerMultiplier
 		{
@@ -62,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bendPowerMultiplier, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("bendPowerOffset")] 
 		public CFloat BendPowerOffset
 		{
@@ -70,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bendPowerOffset, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("smoothingStrength")] 
 		public CFloat SmoothingStrength
 		{
@@ -78,7 +107,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _smoothingStrength, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("smoothingThreshold")] 
 		public CFloat SmoothingThreshold
 		{
@@ -86,7 +115,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _smoothingThreshold, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("smoothingExponent")] 
 		public CFloat SmoothingExponent
 		{
@@ -94,7 +123,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _smoothingExponent, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("smoothingNumNeighbours")] 
 		public CUInt32 SmoothingNumNeighbours
 		{
@@ -102,7 +131,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _smoothingNumNeighbours, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("garmentBorderThreshold")] 
 		public CFloat GarmentBorderThreshold
 		{
@@ -110,7 +139,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _garmentBorderThreshold, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("removeHiddenTriangles")] 
 		public CBool RemoveHiddenTriangles
 		{
@@ -118,7 +147,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _removeHiddenTriangles, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("disableGarment")] 
 		public CBool DisableGarment
 		{
@@ -126,12 +155,28 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disableGarment, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("mergeWithInnerLayer")] 
 		public CBool MergeWithInnerLayer
 		{
 			get => GetProperty(ref _mergeWithInnerLayer);
 			set => SetProperty(ref _mergeWithInnerLayer, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("numIndices")] 
+		public CUInt32 NumIndices
+		{
+			get => GetProperty(ref _numIndices);
+			set => SetProperty(ref _numIndices, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("numOffsets")] 
+		public CUInt32 NumOffsets
+		{
+			get => GetProperty(ref _numOffsets);
+			set => SetProperty(ref _numOffsets, value);
 		}
 
 		public entGarmentParameterComponentData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

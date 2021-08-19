@@ -48,7 +48,7 @@ namespace WolvenKit.Common.Services
                         var lxrs = br.ReadLxrsFooter(_hashService);
                         foreach (var s in lxrs.FileInfos)
                         {
-                            _hashService.Add(s);
+                            _hashService.AddCustom(s);
                         }
                     }
                 }

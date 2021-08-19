@@ -25,6 +25,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _idleTimeBeforeAllowingOwMusicChange;
 		private CFloat _drivingStreamingAmbientEmittersDistanceRolloff;
 		private CFloat _lowHealthStateMaxTime;
+		private CFloat _lowGearMaxTrafficSpeed;
+		private CFloat _lowGearAccelerationThreshold;
+		private CFloat _mediumGearMaxTrafficSpeed;
+		private CFloat _mediumGearAccelerationThreshold;
+		private CFloat _highGearAccelerationThreshold;
 
 		[Ordinal(1)] 
 		[RED("mixSettingsName")] 
@@ -168,6 +173,46 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _lowHealthStateMaxTime);
 			set => SetProperty(ref _lowHealthStateMaxTime, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("lowGearMaxTrafficSpeed")] 
+		public CFloat LowGearMaxTrafficSpeed
+		{
+			get => GetProperty(ref _lowGearMaxTrafficSpeed);
+			set => SetProperty(ref _lowGearMaxTrafficSpeed, value);
+		}
+
+		[Ordinal(20)] 
+		[RED("lowGearAccelerationThreshold")] 
+		public CFloat LowGearAccelerationThreshold
+		{
+			get => GetProperty(ref _lowGearAccelerationThreshold);
+			set => SetProperty(ref _lowGearAccelerationThreshold, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("mediumGearMaxTrafficSpeed")] 
+		public CFloat MediumGearMaxTrafficSpeed
+		{
+			get => GetProperty(ref _mediumGearMaxTrafficSpeed);
+			set => SetProperty(ref _mediumGearMaxTrafficSpeed, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("mediumGearAccelerationThreshold")] 
+		public CFloat MediumGearAccelerationThreshold
+		{
+			get => GetProperty(ref _mediumGearAccelerationThreshold);
+			set => SetProperty(ref _mediumGearAccelerationThreshold, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("highGearAccelerationThreshold")] 
+		public CFloat HighGearAccelerationThreshold
+		{
+			get => GetProperty(ref _highGearAccelerationThreshold);
+			set => SetProperty(ref _highGearAccelerationThreshold, value);
 		}
 
 		public audioDirectorSystemSettings(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

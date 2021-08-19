@@ -9,9 +9,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkWidgetReference _logicControllerRef;
 		private wCHandle<gameJournalManager> _journalManager;
-		private CUInt32 _bbOpenerEventID;
-		private CUInt32 _bbSizeEventID;
-		private CUInt32 _bbAlignmentEventID;
+		private CHandle<redCallbackObject> _bbOpenerEventID;
+		private CHandle<redCallbackObject> _bbSizeEventID;
+		private CHandle<redCallbackObject> _bbAlignmentEventID;
 
 		[Ordinal(9)] 
 		[RED("logicControllerRef")] 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("bbOpenerEventID")] 
-		public CUInt32 BbOpenerEventID
+		public CHandle<redCallbackObject> BbOpenerEventID
 		{
 			get => GetProperty(ref _bbOpenerEventID);
 			set => SetProperty(ref _bbOpenerEventID, value);
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("bbSizeEventID")] 
-		public CUInt32 BbSizeEventID
+		public CHandle<redCallbackObject> BbSizeEventID
 		{
 			get => GetProperty(ref _bbSizeEventID);
 			set => SetProperty(ref _bbSizeEventID, value);
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("bbAlignmentEventID")] 
-		public CUInt32 BbAlignmentEventID
+		public CHandle<redCallbackObject> BbAlignmentEventID
 		{
 			get => GetProperty(ref _bbAlignmentEventID);
 			set => SetProperty(ref _bbAlignmentEventID, value);

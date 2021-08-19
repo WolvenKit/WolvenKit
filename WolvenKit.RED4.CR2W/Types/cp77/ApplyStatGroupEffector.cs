@@ -7,21 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApplyStatGroupEffector : gameEffector
 	{
-		private wCHandle<gameObject> _effectorOwner;
 		private gameStatsObjectID _target;
 		private TweakDBID _record;
 		private CString _applicationTarget;
 		private CUInt64 _modGroupID;
 
 		[Ordinal(0)] 
-		[RED("effectorOwner")] 
-		public wCHandle<gameObject> EffectorOwner
-		{
-			get => GetProperty(ref _effectorOwner);
-			set => SetProperty(ref _effectorOwner, value);
-		}
-
-		[Ordinal(1)] 
 		[RED("target")] 
 		public gameStatsObjectID Target
 		{
@@ -29,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _target, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{
@@ -37,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _record, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("applicationTarget")] 
 		public CString ApplicationTarget
 		{
@@ -45,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _applicationTarget, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("modGroupID")] 
 		public CUInt64 ModGroupID
 		{

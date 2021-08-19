@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<QuickSlotsManager> _quickSlotsManager;
 		private wCHandle<inkScrollController> _scrollController;
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _icon, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("scrollArea")] 
 		public inkScrollAreaWidgetReference ScrollArea
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scrollArea, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("scrollControllerWidget")] 
 		public inkWidgetReference ScrollControllerWidget
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scrollControllerWidget, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("dataView")] 
 		public CHandle<VehiclesManagerDataView> DataView
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataView, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataSource, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("quickSlotsManager")] 
 		public wCHandle<QuickSlotsManager> QuickSlotsManager
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickSlotsManager, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("scrollController")] 
 		public wCHandle<inkScrollController> ScrollController
 		{

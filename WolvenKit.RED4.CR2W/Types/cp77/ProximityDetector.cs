@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<ESecurityAreaType> _securityAreaType;
 		private CEnum<ESecurityNotificationType> _notifiactionType;
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("scanningAreaName")] 
 		public CName ScanningAreaName
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scanningAreaName, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("surroundingAreaName")] 
 		public CName SurroundingAreaName
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _surroundingAreaName, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("scanningArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> ScanningArea
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scanningArea, value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("surroundingArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> SurroundingArea
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _surroundingArea, value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("securityAreaType")] 
 		public CEnum<ESecurityAreaType> SecurityAreaType
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityAreaType, value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("notifiactionType")] 
 		public CEnum<ESecurityNotificationType> NotifiactionType
 		{

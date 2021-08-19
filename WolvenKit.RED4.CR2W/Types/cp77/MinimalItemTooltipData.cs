@@ -39,6 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<gamedataItemCategory> _itemCategory;
 		private CEnum<gamedataEquipmentArea> _equipmentArea;
 		private CEnum<gamedataWeaponEvolution> _itemEvolution;
+		private CEnum<gameLootItemType> _lootItemType;
 		private CString _iconPath;
 		private CBool _useMaleIcon;
 		private CBool _isIconic;
@@ -304,6 +305,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(32)] 
+		[RED("lootItemType")] 
+		public CEnum<gameLootItemType> LootItemType
+		{
+			get => GetProperty(ref _lootItemType);
+			set => SetProperty(ref _lootItemType, value);
+		}
+
+		[Ordinal(33)] 
 		[RED("iconPath")] 
 		public CString IconPath
 		{
@@ -311,7 +320,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _iconPath, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("useMaleIcon")] 
 		public CBool UseMaleIcon
 		{
@@ -319,7 +328,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useMaleIcon, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
@@ -327,7 +336,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isIconic, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("isCrafted")] 
 		public CBool IsCrafted
 		{
@@ -335,7 +344,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isCrafted, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("isEquipped")] 
 		public CBool IsEquipped
 		{
@@ -343,7 +352,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isEquipped, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
@@ -351,7 +360,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _displayContext, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{

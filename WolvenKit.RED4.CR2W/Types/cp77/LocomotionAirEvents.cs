@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _maxSuperheroFallHeight;
 		private CBool _updateInputToggles;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("maxSuperheroFallHeight")] 
 		public CBool MaxSuperheroFallHeight
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxSuperheroFallHeight, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("updateInputToggles")] 
 		public CBool UpdateInputToggles
 		{

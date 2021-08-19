@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class LootingItemController : inkWidgetLogicController
 	{
-		private CHandle<inkTextWidget> _itemNameText;
+		private wCHandle<inkTextWidget> _itemNameText;
 		private CBool _isCurrentlySelected;
 		private inkTextWidgetReference _itemName;
 		private inkTextWidgetReference _itemType;
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("itemNameText")] 
-		public CHandle<inkTextWidget> ItemNameText
+		public wCHandle<inkTextWidget> ItemNameText
 		{
 			get => GetProperty(ref _itemNameText);
 			set => SetProperty(ref _itemNameText, value);

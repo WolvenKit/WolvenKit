@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<EWindowBlindersStates> _cachedState;
 		private CBool _alarmRaised;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("windowBlindersSkillChecks")] 
 		public CHandle<EngDemoContainer> WindowBlindersSkillChecks
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _windowBlindersSkillChecks, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("windowBlindersData")] 
 		public WindowBlindersData WindowBlindersData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _windowBlindersData, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("cachedState")] 
 		public CEnum<EWindowBlindersStates> CachedState
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cachedState, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("alarmRaised")] 
 		public CBool AlarmRaised
 		{

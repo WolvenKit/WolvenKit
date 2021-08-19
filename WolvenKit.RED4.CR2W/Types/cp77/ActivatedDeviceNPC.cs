@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _hasProperAnimations;
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("hasProperAnimations")] 
 		public CBool HasProperAnimations
 		{

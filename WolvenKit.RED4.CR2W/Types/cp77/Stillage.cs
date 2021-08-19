@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<entIPlacedComponent> _collider;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{

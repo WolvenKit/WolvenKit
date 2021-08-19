@@ -32,10 +32,4 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.red4.cr2w\1.0.0\contentFiles\any\net5.0-windows7.0\Resources\archivehashes.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>

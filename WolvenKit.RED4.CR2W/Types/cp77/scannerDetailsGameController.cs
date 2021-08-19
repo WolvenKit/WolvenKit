@@ -10,7 +10,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _scannerCountainer;
 		private inkCompoundWidgetReference _quickhackContainer;
 		private inkCompoundWidgetReference _cluesContainer;
-		private inkCompoundWidgetReference _fllufContainer;
 		private inkWidgetReference _bg;
 		private inkWidgetReference _toggleDescirptionHackPart;
 		private inkWidgetReference _toggleDescriptionScanIcon;
@@ -18,15 +17,15 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _kiroshiLogo;
 		private wCHandle<gameObject> _player;
 		private ScriptGameInstance _gameInstance;
-		private CUInt32 _objectTypeCallbackID;
-		private CHandle<gameIBlackboard> _uiScannerChunkBlackboard;
+		private CHandle<redCallbackObject> _objectTypeCallbackID;
+		private wCHandle<gameIBlackboard> _uiScannerChunkBlackboard;
 		private CEnum<gameScanningState> _scanningState;
-		private CUInt32 _scanStatusCallbackID;
-		private CUInt32 _scanObjectCallbackID;
-		private CHandle<gameIBlackboard> _uiBlackboard;
-		private CHandle<gameIBlackboard> _quickSlotsBoard;
-		private CUInt32 _quickSlotsCallbackID;
-		private CUInt32 _quickhackStartedCallbackID;
+		private CHandle<redCallbackObject> _scanStatusCallbackID;
+		private CHandle<redCallbackObject> _scanObjectCallbackID;
+		private wCHandle<gameIBlackboard> _uiBlackboard;
+		private wCHandle<gameIBlackboard> _quickSlotsBoard;
+		private CHandle<redCallbackObject> _quickSlotsCallbackID;
+		private CHandle<redCallbackObject> _quickhackStartedCallbackID;
 		private CEnum<ScannerObjectType> _scannedObjectType;
 		private CHandle<inkanimProxy> _showScanAnimProxy;
 		private CHandle<inkanimProxy> _hideScanAnimProxy;
@@ -35,6 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _hasHacks;
 		private entEntityID _lastScannedObject;
 		private CBool _isDescriptionVisible;
+		private CArray<wCHandle<inkAsyncSpawnRequest>> _asyncSpawnRequests;
 
 		[Ordinal(9)] 
 		[RED("scannerCountainer")] 
@@ -61,14 +61,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(12)] 
-		[RED("fllufContainer")] 
-		public inkCompoundWidgetReference FllufContainer
-		{
-			get => GetProperty(ref _fllufContainer);
-			set => SetProperty(ref _fllufContainer, value);
-		}
-
-		[Ordinal(13)] 
 		[RED("bg")] 
 		public inkWidgetReference Bg
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bg, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("toggleDescirptionHackPart")] 
 		public inkWidgetReference ToggleDescirptionHackPart
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _toggleDescirptionHackPart, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("toggleDescriptionScanIcon")] 
 		public inkWidgetReference ToggleDescriptionScanIcon
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _toggleDescriptionScanIcon, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("fitToContentBackground")] 
 		public inkWidgetReference FitToContentBackground
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fitToContentBackground, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("kiroshiLogo")] 
 		public inkWidgetReference KiroshiLogo
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _kiroshiLogo, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("player")] 
 		public wCHandle<gameObject> Player
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _player, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -124,23 +116,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameInstance, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("objectTypeCallbackID")] 
-		public CUInt32 ObjectTypeCallbackID
+		public CHandle<redCallbackObject> ObjectTypeCallbackID
 		{
 			get => GetProperty(ref _objectTypeCallbackID);
 			set => SetProperty(ref _objectTypeCallbackID, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("uiScannerChunkBlackboard")] 
-		public CHandle<gameIBlackboard> UiScannerChunkBlackboard
+		public wCHandle<gameIBlackboard> UiScannerChunkBlackboard
 		{
 			get => GetProperty(ref _uiScannerChunkBlackboard);
 			set => SetProperty(ref _uiScannerChunkBlackboard, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("scanningState")] 
 		public CEnum<gameScanningState> ScanningState
 		{
@@ -148,55 +140,55 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scanningState, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("scanStatusCallbackID")] 
-		public CUInt32 ScanStatusCallbackID
+		public CHandle<redCallbackObject> ScanStatusCallbackID
 		{
 			get => GetProperty(ref _scanStatusCallbackID);
 			set => SetProperty(ref _scanStatusCallbackID, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("scanObjectCallbackID")] 
-		public CUInt32 ScanObjectCallbackID
+		public CHandle<redCallbackObject> ScanObjectCallbackID
 		{
 			get => GetProperty(ref _scanObjectCallbackID);
 			set => SetProperty(ref _scanObjectCallbackID, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("uiBlackboard")] 
-		public CHandle<gameIBlackboard> UiBlackboard
+		public wCHandle<gameIBlackboard> UiBlackboard
 		{
 			get => GetProperty(ref _uiBlackboard);
 			set => SetProperty(ref _uiBlackboard, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("quickSlotsBoard")] 
-		public CHandle<gameIBlackboard> QuickSlotsBoard
+		public wCHandle<gameIBlackboard> QuickSlotsBoard
 		{
 			get => GetProperty(ref _quickSlotsBoard);
 			set => SetProperty(ref _quickSlotsBoard, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(26)] 
 		[RED("quickSlotsCallbackID")] 
-		public CUInt32 QuickSlotsCallbackID
+		public CHandle<redCallbackObject> QuickSlotsCallbackID
 		{
 			get => GetProperty(ref _quickSlotsCallbackID);
 			set => SetProperty(ref _quickSlotsCallbackID, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(27)] 
 		[RED("quickhackStartedCallbackID")] 
-		public CUInt32 QuickhackStartedCallbackID
+		public CHandle<redCallbackObject> QuickhackStartedCallbackID
 		{
 			get => GetProperty(ref _quickhackStartedCallbackID);
 			set => SetProperty(ref _quickhackStartedCallbackID, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(28)] 
 		[RED("scannedObjectType")] 
 		public CEnum<ScannerObjectType> ScannedObjectType
 		{
@@ -204,7 +196,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannedObjectType, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(29)] 
 		[RED("showScanAnimProxy")] 
 		public CHandle<inkanimProxy> ShowScanAnimProxy
 		{
@@ -212,7 +204,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _showScanAnimProxy, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("hideScanAnimProxy")] 
 		public CHandle<inkanimProxy> HideScanAnimProxy
 		{
@@ -220,7 +212,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hideScanAnimProxy, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("toggleScanDescriptionAnimProxy")] 
 		public CHandle<inkanimProxy> ToggleScanDescriptionAnimProxy
 		{
@@ -228,7 +220,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _toggleScanDescriptionAnimProxy, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(32)] 
 		[RED("previousToggleAnimName")] 
 		public CName PreviousToggleAnimName
 		{
@@ -236,7 +228,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousToggleAnimName, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(33)] 
 		[RED("hasHacks")] 
 		public CBool HasHacks
 		{
@@ -244,7 +236,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasHacks, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(34)] 
 		[RED("lastScannedObject")] 
 		public entEntityID LastScannedObject
 		{
@@ -252,12 +244,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastScannedObject, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(35)] 
 		[RED("isDescriptionVisible")] 
 		public CBool IsDescriptionVisible
 		{
 			get => GetProperty(ref _isDescriptionVisible);
 			set => SetProperty(ref _isDescriptionVisible, value);
+		}
+
+		[Ordinal(36)] 
+		[RED("asyncSpawnRequests")] 
+		public CArray<wCHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
+		{
+			get => GetProperty(ref _asyncSpawnRequests);
+			set => SetProperty(ref _asyncSpawnRequests, value);
 		}
 
 		public scannerDetailsGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private ComputerQuickHackData _factName;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("factName")] 
 		public ComputerQuickHackData FactName
 		{

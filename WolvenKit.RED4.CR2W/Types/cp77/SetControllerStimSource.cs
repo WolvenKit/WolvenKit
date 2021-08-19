@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SetControllerStimSource : AIbehaviortaskScript
 	{
-		private stimInvestigateData _investigateData;
+		private senseStimInvestigateData _investigateData;
 
 		[Ordinal(0)] 
 		[RED("investigateData")] 
-		public stimInvestigateData InvestigateData
+		public senseStimInvestigateData InvestigateData
 		{
 			get => GetProperty(ref _investigateData);
 			set => SetProperty(ref _investigateData, value);

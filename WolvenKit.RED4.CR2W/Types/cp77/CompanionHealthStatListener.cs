@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CompanionHealthStatListener : gameScriptStatPoolsListener
 	{
-		private CHandle<CompanionHealthBarGameController> _healthbar;
+		private wCHandle<CompanionHealthBarGameController> _healthbar;
 
 		[Ordinal(0)] 
 		[RED("healthbar")] 
-		public CHandle<CompanionHealthBarGameController> Healthbar
+		public wCHandle<CompanionHealthBarGameController> Healthbar
 		{
 			get => GetProperty(ref _healthbar);
 			set => SetProperty(ref _healthbar, value);

@@ -7,12 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStatData : CVariable
 	{
-		private CArray<CHandle<gameStatModifierData>> _modifiers;
+		private CArray<gameStatModifierHandle> _modifiers;
 		private CEnum<gamedataStatType> _statType;
 
 		[Ordinal(0)] 
 		[RED("modifiers")] 
-		public CArray<CHandle<gameStatModifierData>> Modifiers
+		public CArray<gameStatModifierHandle> Modifiers
 		{
 			get => GetProperty(ref _modifiers);
 			set => SetProperty(ref _modifiers, value);

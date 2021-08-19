@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _collapsable;
 		private CBool _isHeader;
 		private CInt32 _level;
+		private CBool _forceToTopWithinLevel;
 		private CUInt32 _widgetType;
 		private CHandle<IScriptable> _data;
 
@@ -38,6 +39,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("forceToTopWithinLevel")] 
+		public CBool ForceToTopWithinLevel
+		{
+			get => GetProperty(ref _forceToTopWithinLevel);
+			set => SetProperty(ref _forceToTopWithinLevel, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("widgetType")] 
 		public CUInt32 WidgetType
 		{
@@ -45,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _widgetType, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("data")] 
 		public CHandle<IScriptable> Data
 		{

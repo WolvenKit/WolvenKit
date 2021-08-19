@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CName _name;
 		private SharedDataBuffer _package;
+		private DataBuffer _packageData;
 
 		[Ordinal(0)] 
 		[RED("name")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _package);
 			set => SetProperty(ref _package, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("packageData")] 
+		public DataBuffer PackageData
+		{
+			get => GetProperty(ref _packageData);
+			set => SetProperty(ref _packageData, value);
 		}
 
 		public inkWidgetLibraryItem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

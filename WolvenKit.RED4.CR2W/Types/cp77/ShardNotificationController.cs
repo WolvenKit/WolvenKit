@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _longTextTrashold;
 		private CHandle<inkanimProxy> _animationProxy;
 		private wCHandle<PlayerPuppet> _player;
-		private CHandle<gameIBlackboard> _mingameBB;
+		private wCHandle<gameIBlackboard> _mingameBB;
 
 		[Ordinal(2)] 
 		[RED("titleRef")] 
@@ -128,7 +128,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("mingameBB")] 
-		public CHandle<gameIBlackboard> MingameBB
+		public wCHandle<gameIBlackboard> MingameBB
 		{
 			get => GetProperty(ref _mingameBB);
 			set => SetProperty(ref _mingameBB, value);

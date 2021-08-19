@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<CodexEntryData> _selectedData;
 		private CInt32 _userDataEntry;
 		private CBool _doubleInputPreventionFlag;
-		private CArray<CHandle<CodexFilterButtonController>> _filtersControllers;
+		private CArray<wCHandle<CodexFilterButtonController>> _filtersControllers;
 
 		[Ordinal(3)] 
 		[RED("buttonHintsManagerRef")] 
@@ -182,7 +182,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("filtersControllers")] 
-		public CArray<CHandle<CodexFilterButtonController>> FiltersControllers
+		public CArray<wCHandle<CodexFilterButtonController>> FiltersControllers
 		{
 			get => GetProperty(ref _filtersControllers);
 			set => SetProperty(ref _filtersControllers, value);

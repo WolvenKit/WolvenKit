@@ -14,7 +14,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<worldTrafficSpotDefinition> _spotDef;
 		private CBool _disableBumps;
 		private NodeRef _lookAtTarget;
-		private worldGlobalNodeID _nearTrafficSrc;
 		private CBool _useCrowdWhitelist;
 		private CBool _useCrowdBlacklist;
 		private redTagList _crowdWhitelist;
@@ -77,14 +76,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(11)] 
-		[RED("nearTrafficSrc")] 
-		public worldGlobalNodeID NearTrafficSrc
-		{
-			get => GetProperty(ref _nearTrafficSrc);
-			set => SetProperty(ref _nearTrafficSrc, value);
-		}
-
-		[Ordinal(12)] 
 		[RED("useCrowdWhitelist")] 
 		public CBool UseCrowdWhitelist
 		{
@@ -92,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useCrowdWhitelist, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("useCrowdBlacklist")] 
 		public CBool UseCrowdBlacklist
 		{
@@ -100,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useCrowdBlacklist, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("crowdWhitelist")] 
 		public redTagList CrowdWhitelist
 		{
@@ -108,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _crowdWhitelist, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("crowdBlacklist")] 
 		public redTagList CrowdBlacklist
 		{

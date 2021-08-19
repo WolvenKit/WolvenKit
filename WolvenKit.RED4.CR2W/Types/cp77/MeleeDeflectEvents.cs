@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MeleeDeflectEvents : MeleeEventsTransition
 	{
-		private CHandle<gameStatModifierData> _deflectStatFlag;
+		private CHandle<gameStatModifierData_Deprecated> _deflectStatFlag;
 
 		[Ordinal(0)] 
 		[RED("deflectStatFlag")] 
-		public CHandle<gameStatModifierData> DeflectStatFlag
+		public CHandle<gameStatModifierData_Deprecated> DeflectStatFlag
 		{
 			get => GetProperty(ref _deflectStatFlag);
 			set => SetProperty(ref _deflectStatFlag, value);

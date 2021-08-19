@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<MinotaurOnStatusEffectAppliedListener> _statusEffectListener;
 		private CHandle<entSimpleColliderComponent> _npcCollisionComponent;
 		private CHandle<entSimpleColliderComponent> _npcDeathCollisionComponent;
+		private CHandle<entSimpleColliderComponent> _npcSystemCollapseCollisionComponent;
 		private CEnum<MechanicalScanType> _currentScanType;
 		private CName _currentScanAnimation;
 
@@ -56,6 +57,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("npcSystemCollapseCollisionComponent")] 
+		public CHandle<entSimpleColliderComponent> NpcSystemCollapseCollisionComponent
+		{
+			get => GetProperty(ref _npcSystemCollapseCollisionComponent);
+			set => SetProperty(ref _npcSystemCollapseCollisionComponent, value);
+		}
+
+		[Ordinal(11)] 
 		[RED("currentScanType")] 
 		public CEnum<MechanicalScanType> CurrentScanType
 		{
@@ -63,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentScanType, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("currentScanAnimation")] 
 		public CName CurrentScanAnimation
 		{

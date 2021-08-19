@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameinteractionsComponent> _ladderInteraction;
 		private CBool _wasShot;
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("offMeshConnectionDown")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionDown
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionDown, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("offMeshConnectionUp")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionUp
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionUp, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("ladderInteraction")] 
 		public CHandle<gameinteractionsComponent> LadderInteraction
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ladderInteraction, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("wasShot")] 
 		public CBool WasShot
 		{

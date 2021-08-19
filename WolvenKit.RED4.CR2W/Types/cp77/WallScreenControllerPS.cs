@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isShown;
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{

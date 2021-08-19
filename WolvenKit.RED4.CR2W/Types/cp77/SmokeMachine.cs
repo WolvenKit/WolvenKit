@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _highLightActive;
 		private CArray<wCHandle<entEntity>> _entities;
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areaComponent, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highLightActive, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("entities")] 
 		public CArray<wCHandle<entEntity>> Entities
 		{

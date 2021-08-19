@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<wCHandle<ScriptedPuppet>> _targets;
 		private TweakDBID _statusEffect;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("soundEventPlaying")] 
 		public CBool SoundEventPlaying
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soundEventPlaying, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("soundEvent")] 
 		public CName SoundEvent
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soundEvent, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("effectRef")] 
 		public gameEffectRef EffectRef
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectRef, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("deafGameEffect")] 
 		public CHandle<gameEffectInstance> DeafGameEffect
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deafGameEffect, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("targets")] 
 		public CArray<wCHandle<ScriptedPuppet>> Targets
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targets, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("statusEffect")] 
 		public TweakDBID StatusEffect
 		{

@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ControlsActiveEvents : BraindanceControlsTransition
 	{
-		private CHandle<gameIBlackboard> _braindanceBB;
+		private wCHandle<gameIBlackboard> _braindanceBB;
 		private CFloat _blockPerspectiveSwitchTimer;
 		private CBool _fxActive;
 		private CBool _rewindFxActive;
@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(0)] 
 		[RED("BraindanceBB")] 
-		public CHandle<gameIBlackboard> BraindanceBB
+		public wCHandle<gameIBlackboard> BraindanceBB
 		{
 			get => GetProperty(ref _braindanceBB);
 			set => SetProperty(ref _braindanceBB, value);

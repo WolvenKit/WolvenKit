@@ -11,7 +11,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _prewarmingTime;
 		private CArray<CHandle<CParticleEmitter>> _emitters;
 		private Box _boundingBox;
-		private CBool _forceDynamicBbox;
 		private CFloat _autoHideDistance;
 		private CFloat _autoHideRange;
 		private CFloat _lastLODFadeoutRange;
@@ -51,14 +50,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("forceDynamicBbox")] 
-		public CBool ForceDynamicBbox
-		{
-			get => GetProperty(ref _forceDynamicBbox);
-			set => SetProperty(ref _forceDynamicBbox, value);
-		}
-
-		[Ordinal(6)] 
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
@@ -66,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _autoHideDistance, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("autoHideRange")] 
 		public CFloat AutoHideRange
 		{
@@ -74,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _autoHideRange, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("lastLODFadeoutRange")] 
 		public CFloat LastLODFadeoutRange
 		{
@@ -82,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastLODFadeoutRange, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("renderingPlane")] 
 		public CEnum<ERenderingPlane> RenderingPlane
 		{
@@ -90,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _renderingPlane, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("particleDamage")] 
 		public CHandle<ParticleDamage> ParticleDamage
 		{

@@ -14,11 +14,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _numberPanel;
 		private CInt32 _gridWidth;
 		private CInt32 _selectedSlotIndex;
-		private CInt32 _toEquipeSlotIndex;
 		private CEnum<gamedataEquipmentArea> _equipArea;
 		private CHandle<IScriptable> _parentObject;
 		private CName _onRealeaseCallbackName;
-		private CArray<CHandle<InventoryItemDisplayController>> _gridData;
+		private CArray<wCHandle<InventoryItemDisplayController>> _gridData;
 
 		[Ordinal(1)] 
 		[RED("gridContainer")] 
@@ -77,14 +76,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("toEquipeSlotIndex")] 
-		public CInt32 ToEquipeSlotIndex
-		{
-			get => GetProperty(ref _toEquipeSlotIndex);
-			set => SetProperty(ref _toEquipeSlotIndex, value);
-		}
-
-		[Ordinal(9)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
@@ -92,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipArea, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("parentObject")] 
 		public CHandle<IScriptable> ParentObject
 		{
@@ -100,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _parentObject, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("onRealeaseCallbackName")] 
 		public CName OnRealeaseCallbackName
 		{
@@ -108,9 +99,9 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _onRealeaseCallbackName, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("gridData")] 
-		public CArray<CHandle<InventoryItemDisplayController>> GridData
+		public CArray<wCHandle<InventoryItemDisplayController>> GridData
 		{
 			get => GetProperty(ref _gridData);
 			set => SetProperty(ref _gridData, value);

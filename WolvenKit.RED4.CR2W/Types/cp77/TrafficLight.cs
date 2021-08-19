@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entPhysicalMeshComponent> _trafficLightMesh;
 		private CHandle<entPhysicalMeshComponent> _destroyedMesh;
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("lightState")] 
 		public CEnum<worldTrafficLightColor> LightState
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lightState, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("trafficLightMesh")] 
 		public CHandle<entPhysicalMeshComponent> TrafficLightMesh
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trafficLightMesh, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("destroyedMesh")] 
 		public CHandle<entPhysicalMeshComponent> DestroyedMesh
 		{

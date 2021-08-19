@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameEffectRef _effect;
 		private CFloat _countTime;
 		private CFloat _startVelocity;
-		private CFloat _lifetime_496;
+		private CFloat _lifetime_480;
 		private CFloat _bendTimeRatio;
 		private CFloat _bendFactor;
 		private CBool _useParabolicPhase;
@@ -85,10 +85,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(55)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_496
+		public CFloat Lifetime_480
 		{
-			get => GetProperty(ref _lifetime_496);
-			set => SetProperty(ref _lifetime_496, value);
+			get => GetProperty(ref _lifetime_480);
+			set => SetProperty(ref _lifetime_480, value);
 		}
 
 		[Ordinal(56)] 

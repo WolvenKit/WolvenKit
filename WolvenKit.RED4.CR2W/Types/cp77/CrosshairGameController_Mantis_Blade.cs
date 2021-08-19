@@ -7,30 +7,21 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CrosshairGameController_Mantis_Blade : gameuiCrosshairBaseGameController
 	{
-		private CHandle<gameIBlackboard> _weaponLocalBB;
-		private CUInt32 _weaponBBID;
+		private CHandle<redCallbackObject> _weaponBBID;
 		private CEnum<gamePSMMeleeWeapon> _meleeWeaponState;
 		private inkWidgetReference _targetColorChange;
 		private CHandle<inkanimProxy> _holdAnim;
 		private CHandle<inkanimProxy> _aimAnim;
 
 		[Ordinal(18)] 
-		[RED("weaponLocalBB")] 
-		public CHandle<gameIBlackboard> WeaponLocalBB
-		{
-			get => GetProperty(ref _weaponLocalBB);
-			set => SetProperty(ref _weaponLocalBB, value);
-		}
-
-		[Ordinal(19)] 
 		[RED("weaponBBID")] 
-		public CUInt32 WeaponBBID
+		public CHandle<redCallbackObject> WeaponBBID
 		{
 			get => GetProperty(ref _weaponBBID);
 			set => SetProperty(ref _weaponBBID, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("meleeWeaponState")] 
 		public CEnum<gamePSMMeleeWeapon> MeleeWeaponState
 		{
@@ -38,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meleeWeaponState, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
@@ -46,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetColorChange, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("holdAnim")] 
 		public CHandle<inkanimProxy> HoldAnim
 		{
@@ -54,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _holdAnim, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("aimAnim")] 
 		public CHandle<inkanimProxy> AimAnim
 		{

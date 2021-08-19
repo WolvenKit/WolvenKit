@@ -11,10 +11,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkHorizontalPanelWidget> _devcesStackSlot;
 		private wCHandle<inkTextWidget> _currentDeviceText;
 		private CArray<SWidgetPackage> _controlledDevicesWidgetsData;
-		private CUInt32 _isDeviceWorking_BBID;
-		private CUInt32 _activeDevice_BBID;
-		private CUInt32 _deviceChain_BBID;
-		private CUInt32 _chainLocked_BBID;
+		private CHandle<redCallbackObject> _isDeviceWorking_BBID;
+		private CHandle<redCallbackObject> _activeDevice_BBID;
+		private CHandle<redCallbackObject> _deviceChain_BBID;
+		private CHandle<redCallbackObject> _chainLocked_BBID;
 
 		[Ordinal(2)] 
 		[RED("rootWidget")] 
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("isDeviceWorking_BBID")] 
-		public CUInt32 IsDeviceWorking_BBID
+		public CHandle<redCallbackObject> IsDeviceWorking_BBID
 		{
 			get => GetProperty(ref _isDeviceWorking_BBID);
 			set => SetProperty(ref _isDeviceWorking_BBID, value);
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("activeDevice_BBID")] 
-		public CUInt32 ActiveDevice_BBID
+		public CHandle<redCallbackObject> ActiveDevice_BBID
 		{
 			get => GetProperty(ref _activeDevice_BBID);
 			set => SetProperty(ref _activeDevice_BBID, value);
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("deviceChain_BBID")] 
-		public CUInt32 DeviceChain_BBID
+		public CHandle<redCallbackObject> DeviceChain_BBID
 		{
 			get => GetProperty(ref _deviceChain_BBID);
 			set => SetProperty(ref _deviceChain_BBID, value);
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("chainLocked_BBID")] 
-		public CUInt32 ChainLocked_BBID
+		public CHandle<redCallbackObject> ChainLocked_BBID
 		{
 			get => GetProperty(ref _chainLocked_BBID);
 			set => SetProperty(ref _chainLocked_BBID, value);

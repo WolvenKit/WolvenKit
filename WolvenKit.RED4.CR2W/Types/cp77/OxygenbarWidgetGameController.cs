@@ -10,8 +10,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _oxygenControllerRef;
 		private inkTextWidgetReference _oxygenPercTextPath;
 		private inkTextWidgetReference _oxygenStatusTextPath;
-		private CUInt32 _bbPSceneTierEventId;
-		private CUInt32 _swimmingStateBlackboardId;
+		private CHandle<redCallbackObject> _bbPSceneTierEventId;
+		private CHandle<redCallbackObject> _swimmingStateBlackboardId;
 		private wCHandle<NameplateBarLogicController> _oxygenController;
 		private wCHandle<inkWidget> _rootWidget;
 		private CHandle<inkanimDefinition> _animHideTemp;
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("bbPSceneTierEventId")] 
-		public CUInt32 BbPSceneTierEventId
+		public CHandle<redCallbackObject> BbPSceneTierEventId
 		{
 			get => GetProperty(ref _bbPSceneTierEventId);
 			set => SetProperty(ref _bbPSceneTierEventId, value);
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("swimmingStateBlackboardId")] 
-		public CUInt32 SwimmingStateBlackboardId
+		public CHandle<redCallbackObject> SwimmingStateBlackboardId
 		{
 			get => GetProperty(ref _swimmingStateBlackboardId);
 			set => SetProperty(ref _swimmingStateBlackboardId, value);

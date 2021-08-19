@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private ActivatedDeviceNPCSetup _activatedDeviceNPCSetup;
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("activatedDeviceNPCSetup")] 
 		public ActivatedDeviceNPCSetup ActivatedDeviceNPCSetup
 		{

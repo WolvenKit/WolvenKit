@@ -12,6 +12,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<inkLifePath> _lifePath;
 		private CDouble _playTime;
 		private CDouble _playthroughTime;
+		private CUInt64 _initialLoadingScreenID;
+		private CString _gameVersion;
 
 		[Ordinal(0)] 
 		[RED("locationName")] 
@@ -51,6 +53,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _playthroughTime);
 			set => SetProperty(ref _playthroughTime, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("initialLoadingScreenID")] 
+		public CUInt64 InitialLoadingScreenID
+		{
+			get => GetProperty(ref _initialLoadingScreenID);
+			set => SetProperty(ref _initialLoadingScreenID, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("gameVersion")] 
+		public CString GameVersion
+		{
+			get => GetProperty(ref _gameVersion);
+			set => SetProperty(ref _gameVersion, value);
 		}
 
 		public inkLatestSaveMetadataInfo(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

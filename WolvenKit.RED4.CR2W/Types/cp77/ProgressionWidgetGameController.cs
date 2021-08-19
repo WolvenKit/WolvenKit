@@ -8,10 +8,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ProgressionWidgetGameController : gameuiGenericNotificationGameController
 	{
 		private CFloat _duration;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
 		private CHandle<PlayerDevelopmentSystem> _playerDevelopmentSystem;
 		private CEnum<gamePSMCombat> _combatModePSM;
-		private CUInt32 _combatModeListener;
+		private CHandle<redCallbackObject> _combatModeListener;
 		private wCHandle<gameObject> _playerObject;
 		private ScriptGameInstance _gameInstance;
 
@@ -24,14 +23,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
-		{
-			get => GetProperty(ref _playerStatsBlackboard);
-			set => SetProperty(ref _playerStatsBlackboard, value);
-		}
-
-		[Ordinal(4)] 
 		[RED("playerDevelopmentSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevelopmentSystem
 		{
@@ -39,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerDevelopmentSystem, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("combatModePSM")] 
 		public CEnum<gamePSMCombat> CombatModePSM
 		{
@@ -47,15 +38,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _combatModePSM, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("combatModeListener")] 
-		public CUInt32 CombatModeListener
+		public CHandle<redCallbackObject> CombatModeListener
 		{
 			get => GetProperty(ref _combatModeListener);
 			set => SetProperty(ref _combatModeListener, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("playerObject")] 
 		public wCHandle<gameObject> PlayerObject
 		{
@@ -63,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerObject, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{

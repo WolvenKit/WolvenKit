@@ -16,7 +16,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkTextWidget> _chargeValueL;
 		private wCHandle<inkTextWidget> _chargeValueR;
 		private CUInt32 _bbcharge;
-		private CHandle<gameIBlackboard> _weaponlocalBB;
 		private CHandle<MeleeResourcePoolListener> _meleeResourcePoolListener;
 		private entEntityID _weaponID;
 		private CBool _displayChargeBar;
@@ -94,14 +93,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(29)] 
-		[RED("weaponlocalBB")] 
-		public CHandle<gameIBlackboard> WeaponlocalBB
-		{
-			get => GetProperty(ref _weaponlocalBB);
-			set => SetProperty(ref _weaponlocalBB, value);
-		}
-
-		[Ordinal(30)] 
 		[RED("meleeResourcePoolListener")] 
 		public CHandle<MeleeResourcePoolListener> MeleeResourcePoolListener
 		{
@@ -109,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meleeResourcePoolListener, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
@@ -117,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponID, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("displayChargeBar")] 
 		public CBool DisplayChargeBar
 		{

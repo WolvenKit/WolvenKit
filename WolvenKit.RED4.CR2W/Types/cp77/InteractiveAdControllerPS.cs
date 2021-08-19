@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _showVendor;
 		private CBool _locationAdded;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("showAd")] 
 		public CBool ShowAd
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _showAd, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("showVendor")] 
 		public CBool ShowVendor
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _showVendor, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("locationAdded")] 
 		public CBool LocationAdded
 		{

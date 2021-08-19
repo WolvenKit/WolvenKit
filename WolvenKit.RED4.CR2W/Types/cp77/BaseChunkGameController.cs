@@ -7,13 +7,13 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BaseChunkGameController : gameuiWidgetGameController
 	{
-		private CHandle<gameIBlackboard> _chunkBlackboard;
+		private wCHandle<gameIBlackboard> _chunkBlackboard;
 		private CHandle<UI_ScannerModulesDef> _chunkBlackboardDef;
 		private CHandle<UI_ScannerDef> _questClueBlackboardDef;
 
 		[Ordinal(2)] 
 		[RED("chunkBlackboard")] 
-		public CHandle<gameIBlackboard> ChunkBlackboard
+		public wCHandle<gameIBlackboard> ChunkBlackboard
 		{
 			get => GetProperty(ref _chunkBlackboard);
 			set => SetProperty(ref _chunkBlackboard, value);

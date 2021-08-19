@@ -12,8 +12,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _descriptionText;
 		private inkImageWidgetReference _mappinIcon;
 		private inkWidgetReference _envelopIcon;
-		private CHandle<gameIBlackboard> _interactionsBlackboard;
-		private CUInt32 _bbListenerId;
+		private wCHandle<gameIBlackboard> _interactionsBlackboard;
+		private CHandle<redCallbackObject> _bbListenerId;
 		private CHandle<gameuiPhoneMessageNotificationViewData> _messageData;
 		private CHandle<inkanimProxy> _animProxy;
 		private CInt32 _textSizeLimit;
@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("interactionsBlackboard")] 
-		public CHandle<gameIBlackboard> InteractionsBlackboard
+		public wCHandle<gameIBlackboard> InteractionsBlackboard
 		{
 			get => GetProperty(ref _interactionsBlackboard);
 			set => SetProperty(ref _interactionsBlackboard, value);
@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("bbListenerId")] 
-		public CUInt32 BbListenerId
+		public CHandle<redCallbackObject> BbListenerId
 		{
 			get => GetProperty(ref _bbListenerId);
 			set => SetProperty(ref _bbListenerId, value);

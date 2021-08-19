@@ -7,18 +7,18 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ApplyStatusEffectByChanceEffector : gameEffector
 	{
-		private wCHandle<gameObject> _target;
+		private entEntityID _targetEntityID;
 		private CString _applicationTarget;
 		private TweakDBID _record;
 		private CBool _removeWithEffector;
 		private CFloat _chance;
 
 		[Ordinal(0)] 
-		[RED("target")] 
-		public wCHandle<gameObject> Target
+		[RED("targetEntityID")] 
+		public entEntityID TargetEntityID
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetProperty(ref _targetEntityID);
+			set => SetProperty(ref _targetEntityID, value);
 		}
 
 		[Ordinal(1)] 

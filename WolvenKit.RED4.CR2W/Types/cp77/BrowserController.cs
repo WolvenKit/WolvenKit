@@ -8,15 +8,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class BrowserController : inkWidgetLogicController
 	{
 		private inkWidgetReference _homeButton;
-		private CHandle<LinkController> _homeButtonCoontroller;
+		private wCHandle<LinkController> _homeButtonCoontroller;
 		private inkTextWidgetReference _addressText;
 		private inkWidgetReference _pageContentRoot;
 		private redResourceReferenceScriptToken _spinnerPath;
 		private CName _webPageLibraryID;
 		private CString _defaultDevicePage;
-		private CHandle<BrowserGameController> _gameController;
+		private wCHandle<BrowserGameController> _gameController;
 		private CArray<wCHandle<gameJournalInternetPage>> _websiteData;
-		private CString _currentRequestedPage;
+		private wCHandle<gameJournalInternetPage> _currentRequestedPage;
 		private wCHandle<inkCompoundWidget> _currentPage;
 		private wCHandle<inkWidget> _spinner;
 
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("homeButtonCoontroller")] 
-		public CHandle<LinkController> HomeButtonCoontroller
+		public wCHandle<LinkController> HomeButtonCoontroller
 		{
 			get => GetProperty(ref _homeButtonCoontroller);
 			set => SetProperty(ref _homeButtonCoontroller, value);
@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("gameController")] 
-		public CHandle<BrowserGameController> GameController
+		public wCHandle<BrowserGameController> GameController
 		{
 			get => GetProperty(ref _gameController);
 			set => SetProperty(ref _gameController, value);
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("currentRequestedPage")] 
-		public CString CurrentRequestedPage
+		public wCHandle<gameJournalInternetPage> CurrentRequestedPage
 		{
 			get => GetProperty(ref _currentRequestedPage);
 			set => SetProperty(ref _currentRequestedPage, value);

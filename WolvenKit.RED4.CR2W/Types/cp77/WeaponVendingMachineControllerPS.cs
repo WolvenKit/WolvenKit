@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private WeaponVendingMachineSetup _weaponVendingMachineSetup;
 		private WeaponVendingMachineSFX _weaponVendingMachineSFX;
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("weaponVendingMachineSetup")] 
 		public WeaponVendingMachineSetup WeaponVendingMachineSetup
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponVendingMachineSetup, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("weaponVendingMachineSFX")] 
 		public WeaponVendingMachineSFX WeaponVendingMachineSFX
 		{

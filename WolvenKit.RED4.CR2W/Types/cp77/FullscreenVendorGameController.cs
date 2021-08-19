@@ -36,13 +36,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CEnum<gamedataItemType>> _itemTypeSorting;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
-		private CArray<CHandle<InventoryItemDisplayController>> _playerInventoryitemControllers;
-		private CArray<CHandle<InventoryItemDisplayController>> _vendorInventoryitemControllers;
-		private CArray<CHandle<InventoryItemDisplayController>> _vendorSpecialOfferInventoryitemControllers;
+		private CArray<wCHandle<InventoryItemDisplayController>> _playerInventoryitemControllers;
+		private CArray<wCHandle<InventoryItemDisplayController>> _vendorInventoryitemControllers;
+		private CArray<wCHandle<InventoryItemDisplayController>> _vendorSpecialOfferInventoryitemControllers;
 		private CHandle<inkScriptableDataSourceWrapper> _playerDataSource;
-		private CHandle<inkVirtualGridController> _virtualPlayerListController;
+		private wCHandle<inkVirtualGridController> _virtualPlayerListController;
 		private CHandle<inkScriptableDataSourceWrapper> _vendorDataSource;
-		private CHandle<inkVirtualGridController> _virtualVendorListController;
+		private wCHandle<inkVirtualGridController> _virtualVendorListController;
 		private CHandle<VendorDataView> _playerItemsDataView;
 		private CHandle<VendorDataView> _vendorItemsDataView;
 		private CHandle<ItemDisplayTemplateClassifier> _itemsClassifier;
@@ -56,12 +56,12 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkGameNotificationToken> _quantityPickerPopupToken;
 		private CHandle<inkGameNotificationToken> _confirmationPopupToken;
 		private CHandle<inkGameNotificationToken> _itemPreviewPopupToken;
-		private CHandle<gameIBlackboard> _vendorBlackboard;
+		private wCHandle<gameIBlackboard> _vendorBlackboard;
 		private CHandle<UI_VendorDef> _vendorBlackboardDef;
-		private CUInt32 _vendorUpdatedCallbackID;
-		private CHandle<gameIBlackboard> _craftingBlackboard;
+		private CHandle<redCallbackObject> _vendorUpdatedCallbackID;
+		private wCHandle<gameIBlackboard> _craftingBlackboard;
 		private CHandle<UI_CraftingDef> _craftingBlackboardDef;
-		private CUInt32 _craftingCallbackID;
+		private CHandle<redCallbackObject> _craftingCallbackID;
 		private CHandle<ItemCategoryFliterManager> _playerFilterManager;
 		private CHandle<ItemCategoryFliterManager> _vendorFilterManager;
 		private CEnum<ItemFilterCategory> _lastPlayerFilter;
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<UIScriptableSystem> _uiScriptableSystem;
 		private CHandle<gameuiGameSystemUI> _uiSystem;
 		private CHandle<StorageBlackboardDef> _storageDef;
-		private CHandle<gameIBlackboard> _storageBlackboard;
+		private wCHandle<gameIBlackboard> _storageBlackboard;
 		private CArray<gameItemModParams> _itemDropQueue;
 		private CHandle<SoldItemsCache> _soldItems;
 		private CBool _isActivePanel;
@@ -313,7 +313,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(32)] 
 		[RED("playerInventoryitemControllers")] 
-		public CArray<CHandle<InventoryItemDisplayController>> PlayerInventoryitemControllers
+		public CArray<wCHandle<InventoryItemDisplayController>> PlayerInventoryitemControllers
 		{
 			get => GetProperty(ref _playerInventoryitemControllers);
 			set => SetProperty(ref _playerInventoryitemControllers, value);
@@ -321,7 +321,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(33)] 
 		[RED("vendorInventoryitemControllers")] 
-		public CArray<CHandle<InventoryItemDisplayController>> VendorInventoryitemControllers
+		public CArray<wCHandle<InventoryItemDisplayController>> VendorInventoryitemControllers
 		{
 			get => GetProperty(ref _vendorInventoryitemControllers);
 			set => SetProperty(ref _vendorInventoryitemControllers, value);
@@ -329,7 +329,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(34)] 
 		[RED("vendorSpecialOfferInventoryitemControllers")] 
-		public CArray<CHandle<InventoryItemDisplayController>> VendorSpecialOfferInventoryitemControllers
+		public CArray<wCHandle<InventoryItemDisplayController>> VendorSpecialOfferInventoryitemControllers
 		{
 			get => GetProperty(ref _vendorSpecialOfferInventoryitemControllers);
 			set => SetProperty(ref _vendorSpecialOfferInventoryitemControllers, value);
@@ -345,7 +345,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(36)] 
 		[RED("virtualPlayerListController")] 
-		public CHandle<inkVirtualGridController> VirtualPlayerListController
+		public wCHandle<inkVirtualGridController> VirtualPlayerListController
 		{
 			get => GetProperty(ref _virtualPlayerListController);
 			set => SetProperty(ref _virtualPlayerListController, value);
@@ -361,7 +361,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(38)] 
 		[RED("virtualVendorListController")] 
-		public CHandle<inkVirtualGridController> VirtualVendorListController
+		public wCHandle<inkVirtualGridController> VirtualVendorListController
 		{
 			get => GetProperty(ref _virtualVendorListController);
 			set => SetProperty(ref _virtualVendorListController, value);
@@ -473,7 +473,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(52)] 
 		[RED("VendorBlackboard")] 
-		public CHandle<gameIBlackboard> VendorBlackboard
+		public wCHandle<gameIBlackboard> VendorBlackboard
 		{
 			get => GetProperty(ref _vendorBlackboard);
 			set => SetProperty(ref _vendorBlackboard, value);
@@ -489,7 +489,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(54)] 
 		[RED("VendorUpdatedCallbackID")] 
-		public CUInt32 VendorUpdatedCallbackID
+		public CHandle<redCallbackObject> VendorUpdatedCallbackID
 		{
 			get => GetProperty(ref _vendorUpdatedCallbackID);
 			set => SetProperty(ref _vendorUpdatedCallbackID, value);
@@ -497,7 +497,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(55)] 
 		[RED("craftingBlackboard")] 
-		public CHandle<gameIBlackboard> CraftingBlackboard
+		public wCHandle<gameIBlackboard> CraftingBlackboard
 		{
 			get => GetProperty(ref _craftingBlackboard);
 			set => SetProperty(ref _craftingBlackboard, value);
@@ -513,7 +513,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(57)] 
 		[RED("craftingCallbackID")] 
-		public CUInt32 CraftingCallbackID
+		public CHandle<redCallbackObject> CraftingCallbackID
 		{
 			get => GetProperty(ref _craftingCallbackID);
 			set => SetProperty(ref _craftingCallbackID, value);
@@ -577,7 +577,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(65)] 
 		[RED("storageBlackboard")] 
-		public CHandle<gameIBlackboard> StorageBlackboard
+		public wCHandle<gameIBlackboard> StorageBlackboard
 		{
 			get => GetProperty(ref _storageBlackboard);
 			set => SetProperty(ref _storageBlackboard, value);

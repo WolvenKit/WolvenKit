@@ -1,3 +1,6 @@
+#define IS_PARALLEL
+//#undef IS_PARALLEL
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -29,6 +32,12 @@ namespace WolvenKit.MSTests
         //{
         //    Test_Extension();
         //}
+
+
+        [TestMethod]
+        public void Read_bin() => Test_Extension(".bin");
+
+
 
         [TestMethod]
         public void Read_acousticdata() => Test_Extension(".acousticdata");
@@ -65,9 +74,6 @@ namespace WolvenKit.MSTests
 
         [TestMethod]
         public void Read_bikecurveset() => Test_Extension(".bikecurveset");
-
-        [TestMethod]
-        public void Read_bin() => Test_Extension(".bin");
 
         [TestMethod]
         public void Read_bk2() => Test_Extension(".bk2");
@@ -110,6 +116,9 @@ namespace WolvenKit.MSTests
 
         [TestMethod]
         public void Read_cubemap() => Test_Extension(".cubemap");
+
+        [TestMethod]
+        public void Read_curveresset() => Test_Extension(".curveresset");
 
         [TestMethod]
         public void Read_curveset() => Test_Extension(".curveset");
@@ -161,6 +170,9 @@ namespace WolvenKit.MSTests
 
         [TestMethod]
         public void Read_fp() => Test_Extension(".fp");
+
+        [TestMethod]
+        public void Read_gamed() => Test_Extension(".game");
 
         [TestMethod]
         public void Read_gamedef() => Test_Extension(".gamedef");
@@ -268,6 +280,9 @@ namespace WolvenKit.MSTests
         public void Read_mappins() => Test_Extension(".mappins");
 
         [TestMethod]
+        public void Read_matlib() => Test_Extension(".matlib");
+
+        [TestMethod]
         public void Read_mesh() => Test_Extension(".mesh");
 
         [TestMethod]
@@ -288,8 +303,9 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void Read_mt() => Test_Extension(".mt");
 
-        [TestMethod]
-        public void Read_navmesh() => Test_Extension(".navmesh");
+        // removed in 1.3
+        //[TestMethod]
+        //public void Read_navmesh() => Test_Extension(".navmesh");
 
         [TestMethod]
         public void Read_null_areas() => Test_Extension(".null_areas");
@@ -331,6 +347,9 @@ namespace WolvenKit.MSTests
         public void Read_remt() => Test_Extension(".remt");
 
         [TestMethod]
+        public void Read_reps() => Test_Extension(".reps");
+
+        [TestMethod]
         public void Read_reslist() => Test_Extension(".reslist");
 
         [TestMethod]
@@ -357,8 +376,9 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void Read_spatial_representation() => Test_Extension(".spatial_representation");
 
-        [TestMethod]
-        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+        // removed in 1.3
+        //[TestMethod]
+        //public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
 
         [TestMethod]
         public void Read_streamingsector() => Test_Extension(".streamingsector");
@@ -380,6 +400,12 @@ namespace WolvenKit.MSTests
 
         [TestMethod]
         public void Read_traffic_persistent() => Test_Extension(".traffic_persistent");
+
+        [TestMethod]
+        public void Read_vehcommoncurveset() => Test_Extension(".vehcommoncurveset");
+
+        [TestMethod]
+        public void Read_vehcurveset() => Test_Extension(".vehcurveset");
 
         [TestMethod]
         public void Read_voicetags() => Test_Extension(".voicetags");
@@ -408,8 +434,11 @@ namespace WolvenKit.MSTests
         {
             var results = new ConcurrentBag<ReadTestResult>();
 
-            //foreach (var file in files)
+#if IS_PARALLEL
             Parallel.ForEach(files, file =>
+#else
+            foreach (var file in files)
+#endif                
             {
                 try
                 {
@@ -489,8 +518,11 @@ namespace WolvenKit.MSTests
                         Message = $"{e.Message}"
                     });
                 }
+#if IS_PARALLEL
             });
-            //}
+#else
+            }
+#endif
 
             return results;
         }
@@ -579,7 +611,7 @@ namespace WolvenKit.MSTests
             foreach (var r in results)
             {
                 sb.AppendLine(
-                    $"{r.FileEntry.NameHash64}," +
+                    $"{string.Format("0x{0:X}", r.FileEntry.NameHash64)}," +
                     $"{r.FileEntry.FileName}," +
                     $"{r.FileEntry.Archive.Name}," +
                     $"{r.ReadResult}," +

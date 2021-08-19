@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameStatsSystem> _statsSystem;
 		private entEntityID _weaponID;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("layerId")] 
 		public CUInt32 LayerId
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _layerId, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("statPoolsSystem")] 
 		public CHandle<gameStatPoolsSystem> StatPoolsSystem
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statPoolsSystem, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("statsSystem")] 
 		public CHandle<gameStatsSystem> StatsSystem
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statsSystem, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{

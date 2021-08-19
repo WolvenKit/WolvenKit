@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _quantity;
 		private CBool _hovered;
 		private CEnum<CrafringMaterialItemHighlight> _lastState;
+		private CBool _shouldBeHighlighted;
 
 		[Ordinal(2)] 
 		[RED("nameText")] 
@@ -87,6 +88,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _lastState);
 			set => SetProperty(ref _lastState, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("shouldBeHighlighted")] 
+		public CBool ShouldBeHighlighted
+		{
+			get => GetProperty(ref _shouldBeHighlighted);
+			set => SetProperty(ref _shouldBeHighlighted, value);
 		}
 
 		public CrafringMaterialItemController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

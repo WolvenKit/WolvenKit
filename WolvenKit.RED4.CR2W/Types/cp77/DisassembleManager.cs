@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkCompoundWidgetReference _listRef;
 		private CFloat _initialPopupDelay;
-		private CArray<CHandle<DisassemblePopupLogicController>> _popupList;
+		private CArray<wCHandle<DisassemblePopupLogicController>> _popupList;
 		private CArray<InventoryItemData> _listOfAddedInventoryItems;
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
@@ -19,9 +19,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkanimDefinition> _alpha_fadein;
 		private inkanimPlaybackOptions _animOptions;
 		private CHandle<UI_CraftingDef> _disassembleCallback;
-		private CHandle<gameIBlackboard> _disassembleBlackboard;
-		private CUInt32 _disassembleBBID;
-		private CUInt32 _craftingBBID;
+		private wCHandle<gameIBlackboard> _disassembleBlackboard;
+		private CHandle<redCallbackObject> _disassembleBBID;
+		private CHandle<redCallbackObject> _craftingBBID;
 
 		[Ordinal(3)] 
 		[RED("listRef")] 
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("popupList")] 
-		public CArray<CHandle<DisassemblePopupLogicController>> PopupList
+		public CArray<wCHandle<DisassemblePopupLogicController>> PopupList
 		{
 			get => GetProperty(ref _popupList);
 			set => SetProperty(ref _popupList, value);
@@ -121,7 +121,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("DisassembleBlackboard")] 
-		public CHandle<gameIBlackboard> DisassembleBlackboard
+		public wCHandle<gameIBlackboard> DisassembleBlackboard
 		{
 			get => GetProperty(ref _disassembleBlackboard);
 			set => SetProperty(ref _disassembleBlackboard, value);
@@ -129,7 +129,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("DisassembleBBID")] 
-		public CUInt32 DisassembleBBID
+		public CHandle<redCallbackObject> DisassembleBBID
 		{
 			get => GetProperty(ref _disassembleBBID);
 			set => SetProperty(ref _disassembleBBID, value);
@@ -137,7 +137,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("CraftingBBID")] 
-		public CUInt32 CraftingBBID
+		public CHandle<redCallbackObject> CraftingBBID
 		{
 			get => GetProperty(ref _craftingBBID);
 			set => SetProperty(ref _craftingBBID, value);

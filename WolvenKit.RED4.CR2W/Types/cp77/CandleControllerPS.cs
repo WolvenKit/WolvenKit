@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<EngDemoContainer> _candleSkillChecks;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("candleSkillChecks")] 
 		public CHandle<EngDemoContainer> CandleSkillChecks
 		{

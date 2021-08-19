@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _inputTab;
 		private inkWidgetReference _vehiclesTab;
 		private inkWidgetReference _braindanceTab;
-		private CHandle<TabRadioGroup> _tabRoot;
+		private wCHandle<TabRadioGroup> _tabRoot;
 
 		[Ordinal(1)] 
 		[RED("tabRootRef")] 
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("tabRoot")] 
-		public CHandle<TabRadioGroup> TabRoot
+		public wCHandle<TabRadioGroup> TabRoot
 		{
 			get => GetProperty(ref _tabRoot);
 			set => SetProperty(ref _tabRoot, value);

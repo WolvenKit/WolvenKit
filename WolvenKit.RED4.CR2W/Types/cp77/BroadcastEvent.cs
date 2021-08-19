@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _shouldOverride;
 		private CFloat _lifetime;
 		private CEnum<gamedataStimType> _stimType;
-		private stimInvestigateData _stimData;
+		private senseStimInvestigateData _stimData;
 		private CFloat _radius;
 		private CBool _propagationChange;
 		private wCHandle<entEntity> _directTarget;
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("stimData")] 
-		public stimInvestigateData StimData
+		public senseStimInvestigateData StimData
 		{
 			get => GetProperty(ref _stimData);
 			set => SetProperty(ref _stimData, value);

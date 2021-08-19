@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _alternativeNameForOFF;
 		private CBool _isCLSInitialized;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("timeTableSetup")] 
 		public CHandle<DeviceTimeTableManager> TimeTableSetup
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeTableSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("maxLightsSwitchedAtOnce")] 
 		public CInt32 MaxLightsSwitchedAtOnce
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxLightsSwitchedAtOnce, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("timeToNextSwitch")] 
 		public CFloat TimeToNextSwitch
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeToNextSwitch, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("lightSwitchRandomizerType")] 
 		public CEnum<ELightSwitchRandomizerType> LightSwitchRandomizerType
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lightSwitchRandomizerType, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("alternativeNameForON")] 
 		public TweakDBID AlternativeNameForON
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alternativeNameForON, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("alternativeNameForOFF")] 
 		public TweakDBID AlternativeNameForOFF
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alternativeNameForOFF, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("isCLSInitialized")] 
 		public CBool IsCLSInitialized
 		{

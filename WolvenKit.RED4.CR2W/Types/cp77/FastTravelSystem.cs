@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _fastTravelPointsTotal;
 		private CInt32 _lastUpdatedAchievementCount;
 		private CArray<FastTravelSystemLock> _fastTravelLocks;
-		private CUInt32 _loadingScreenCallbackID;
+		private CHandle<redCallbackObject> _loadingScreenCallbackID;
 		private CBool _requestAutoSafeAfterLoadingScreen;
 		private CName _lockLisenerID;
 		private CName _unlockLisenerID;
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("loadingScreenCallbackID")] 
-		public CUInt32 LoadingScreenCallbackID
+		public CHandle<redCallbackObject> LoadingScreenCallbackID
 		{
 			get => GetProperty(ref _loadingScreenCallbackID);
 			set => SetProperty(ref _loadingScreenCallbackID, value);

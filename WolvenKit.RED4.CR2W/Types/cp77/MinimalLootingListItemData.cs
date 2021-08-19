@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _quantity;
 		private CEnum<gameLootItemType> _lootItemType;
 		private CFloat _dpsDiff;
+		private CFloat _armorDiff;
 
 		[Ordinal(0)] 
 		[RED("gameItemData")] 
@@ -87,6 +88,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _dpsDiff);
 			set => SetProperty(ref _dpsDiff, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("armorDiff")] 
+		public CFloat ArmorDiff
+		{
+			get => GetProperty(ref _armorDiff);
+			set => SetProperty(ref _armorDiff, value);
 		}
 
 		public MinimalLootingListItemData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
