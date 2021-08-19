@@ -63,6 +63,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(MeshExportArgs), new MeshExportArgs() },
             { typeof(WemExportArgs), new WemExportArgs() },
             { typeof(OpusExportArgs), new OpusExportArgs() },
+            { typeof(EntityExportArgs), new EntityExportArgs() },
         };
 
         /// <summary>
@@ -401,7 +402,33 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => $"{UncookExtension.ToString()} | Flip : {Flip.ToString()}";
     }
-
+    /// <summary>
+    /// ENT Export Arguments
+    /// </summary>
+    public class EntityExportArgs : ExportArgs
+    {
+        /// <summary>
+        ///  Uncook Format for Entity.
+        /// </summary>
+        [Category("Export Type")]
+        [Display(Name = "Export Type")]
+        public EntityExportType ExportType { get; set; } = EntityExportType.Json;
+        /// <summary>
+        /// List of Archives for Gltf Mesh Export.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => $"{ExportType.ToString()}";
+    }
+    public enum EntityExportType
+    {
+        Json,
+        Gltf
+    }
     /// <summary>
     /// Mesh Export Arguments
     /// </summary>
