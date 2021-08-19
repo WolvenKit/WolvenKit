@@ -26,6 +26,8 @@ namespace WolvenKit.Functionality.Controllers
     {
         #region fields
 
+        public const string GameVersion = "1.3.0";
+
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
@@ -101,10 +103,15 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     using var file = File.OpenRead(chachePath);
                     ArchiveManager = Serializer.Deserialize<ArchiveManager>(file);
+
+                    if (!ArchiveManager.GameVersion.Equals(GameVersion))
+                    {
+                        throw new NotSupportedException(ArchiveManager.GameVersion.ToString());
+                    }
                 }
                 else
                 {
-                    ArchiveManager = new ArchiveManager(_hashService);
+                    ArchiveManager = new ArchiveManager(_hashService) { GameVersion = GameVersion };
                     ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                     using var file = File.Create(chachePath);
@@ -117,7 +124,7 @@ namespace WolvenKit.Functionality.Controllers
             catch (Exception e)
             {
                 _loggerService.Log(e.Message);
-                ArchiveManager = new ArchiveManager(_hashService);
+                ArchiveManager = new ArchiveManager(_hashService) { GameVersion = GameVersion };
                 ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                 using var file = File.Create(chachePath);

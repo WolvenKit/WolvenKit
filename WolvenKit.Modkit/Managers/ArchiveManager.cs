@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager() : this(Locator.Current.GetService< IHashService>())
+        public ArchiveManager() : this(Locator.Current.GetService<IHashService>())
         {
 
         }
@@ -36,6 +36,8 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
         [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
+
+        [ProtoMember(2)] public string GameVersion { get; set; } //= "1.3.0";
 
         public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
             Archives.Values

@@ -63,7 +63,6 @@
     <Page Remove="Views\Wizards\PublishWizard\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Views\Shared\RecentlyUsedItemsView.xaml.cs" />
     <Compile Remove="Views\Wizards\PublishWizardView.xaml.cs" />
   </ItemGroup>
     <ItemGroup>
@@ -1759,7 +1758,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Views\Shared\RecentlyUsedItemsView.xaml" />
     <Page Remove="Views\Wizards\PublishWizardView.xaml" />
   </ItemGroup>
   
@@ -1779,8 +1777,5 @@
     <Page Update="Views\Templates\HandleTemplateView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Shared\" />
   </ItemGroup>
 </Project>

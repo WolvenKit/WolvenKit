@@ -128,6 +128,11 @@ namespace WolvenKit.ViewModels.Editor
         private void ExecuteOpenFile()
         {
             // TODO: Handle command logic here
+            Locator.Current.GetService<AppViewModel>().OpenFileCommand.SafeExecute(SelectedItem);
+
+
+
+
         }
 
         

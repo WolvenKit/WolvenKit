@@ -82,6 +82,8 @@ namespace WolvenKit.ViewModels.Editor
 
         #region commands
 
+
+
         public ICommand ViewImportsCommand { get; private set; }
         private bool CanViewImports() => true;
         private void ExecuteViewImports()

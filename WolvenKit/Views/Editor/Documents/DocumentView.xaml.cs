@@ -1,3 +1,4 @@
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
 using ReactiveUI;
@@ -30,6 +31,24 @@ namespace WolvenKit.Views.Editor
             WeakEventManager<FrameworkElement, RoutedEventArgs>
                 .AddHandler(this, "Loaded", View_LoadedAsync);
 
+            
+            
+
+            this.WhenActivated(disposables =>
+            {
+                ////LoadOnDemandCommand = "{Binding LoadOnDemandCommand}"
+                //this.BindCommand(ViewModel,
+                //       viewModel => viewModel.LoadOnDemandCommand,
+                //       view => view.MainTreeGrid.LoadOnDemandCommand)
+                //   .DisposeWith(disposables);
+                //ItemsSource = "{Binding SelectedChunk.ChildrenProperties}"
+                //this.Bind(ViewModel,
+                //        viewModel => viewModel.SelectedChunk.ChildrenProperties,
+                //        view => view.MainTreeGrid.ItemsSource)
+                //    .DisposeWith(disposables);
+
+
+            });
 
         }
 

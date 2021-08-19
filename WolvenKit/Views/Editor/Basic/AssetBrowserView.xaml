@@ -54,7 +54,7 @@
                                 AllowTriStateSorting="False"
                                 AutoExpandMode="RootNodesExpanded"
                                 AutoGenerateColumns="False"
-                                ChildPropertyName="SubDirectories"
+                                ChildPropertyName="Directories"
                                 ColumnSizer="FillColumn"
                                 FilterLevel="Extended"
                                 ItemsSource="{Binding LeftItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
