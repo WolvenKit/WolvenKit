@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Interfaces.Extensions;
 
@@ -19,9 +20,9 @@ namespace WolvenKit.Common.Services
         private const string s_userHashes = "user_hashes.txt";
         private const string s_missing = "WolvenKit.Common.Resources.missinghashes.txt";
 
-        private readonly Dictionary<ulong, string> _hashes = new();
-        private readonly Dictionary<ulong, string> _additionalhashes = new();
-        private readonly Dictionary<ulong, string> _userHashes = new();
+        private readonly Dictionary<ulong, SAsciiString> _hashes = new();
+        private readonly Dictionary<ulong, SAsciiString> _additionalhashes = new();
+        private readonly Dictionary<ulong, SAsciiString> _userHashes = new();
 
         private List<ulong> _missing = new();
 
@@ -55,18 +56,23 @@ namespace WolvenKit.Common.Services
         {
             if (_hashes.ContainsKey(key))
             {
-                return _hashes[key];
+                return _hashes[key].ToString();
             }
             if (_userHashes.ContainsKey(key))
             {
-                return _userHashes[key];
+                return _userHashes[key].ToString();
             }
+            if (_missing.Contains(key))
+            {
+                return "";
+            }
+
 
             // load additional
             LoadAdditional();
             if (_additionalhashes.ContainsKey(key))
             {
-                return _additionalhashes[key];
+                return _additionalhashes[key].ToString();
             }
 
             return "";
@@ -77,7 +83,7 @@ namespace WolvenKit.Common.Services
             var hash = FNV1A64HashAlgorithm.HashString(path);
             if (!Contains(hash))
             {
-                _userHashes.Add(hash, path);
+                _userHashes.Add(hash, new SAsciiString(path));
             }
         }
 
@@ -108,7 +114,7 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, string> hashDictionary)
+        private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, SAsciiString> hashDictionary)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
 
@@ -154,7 +160,7 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        private void ReadHashes(Stream memoryStream, IDictionary<ulong, string> hashDict)
+        private void ReadHashes(Stream memoryStream, IDictionary<ulong, SAsciiString> hashDict)
         {
             using var sr = new StreamReader(memoryStream);
             string line;
@@ -174,7 +180,7 @@ namespace WolvenKit.Common.Services
                     continue;
                 }
 
-                hashDict.Add(hash, line);
+                hashDict.Add(hash, new SAsciiString(line));
             }
         }
 

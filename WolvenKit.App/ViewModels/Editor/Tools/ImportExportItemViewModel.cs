@@ -56,14 +56,15 @@ namespace WolvenKit.ViewModels.Editor
                 ERawFileFormat.tga => new XbmImportArgs(),
                 ERawFileFormat.dds => new XbmImportArgs(),
                 ERawFileFormat.fbx => new CommonImportArgs(),
-                ERawFileFormat.glb => new MeshImportArgs(),
-                ERawFileFormat.gltf => new MeshImportArgs(),
+                ERawFileFormat.glb => new GltfImportArgs(),
+                ERawFileFormat.gltf => new GltfImportArgs(),
                 ERawFileFormat.ttf => new FntImportArgs(),
                 ERawFileFormat.wav => new OpusImportArgs(),
                 ERawFileFormat.bmp => new XbmImportArgs(),
                 ERawFileFormat.jpg => new XbmImportArgs(),
                 ERawFileFormat.png => new XbmImportArgs(),
                 ERawFileFormat.tiff => new XbmImportArgs(),
+                ERawFileFormat.masklist => new MlmaskImportArgs(),
                 _ => new CommonImportArgs()
             };
         }
@@ -112,7 +113,7 @@ namespace WolvenKit.ViewModels.Editor
                 ECookedFileFormat.wem => new WemExportArgs(),
                 ECookedFileFormat.csv => new CommonExportArgs(),
                 //ECookedFileFormat.json => new CommonExportArgs(),
-                ECookedFileFormat.mlmask => new CommonExportArgs(),
+                ECookedFileFormat.mlmask => new MlmaskExportArgs(),
                 ECookedFileFormat.cubemap => new CommonExportArgs(),
                 ECookedFileFormat.envprobe => new CommonExportArgs(),
                 ECookedFileFormat.texarray => new CommonExportArgs(),

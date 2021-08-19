@@ -33,6 +33,7 @@ namespace WolvenKit.Common.Services
         void ShowAppNotification(string message, ENotificationType type);
         void ShowDesktopNotification(string message, ENotificationType type);
         void ShowNotification(string message, ENotificationType type, ENotificationCategory category);
-        
+        void AskInApp(string message, Func<bool, bool> func);
+        void AskInDesktop(string message, Func<bool, bool> func);
     }
 }

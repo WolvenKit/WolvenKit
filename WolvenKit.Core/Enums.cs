@@ -2,6 +2,12 @@
 
 namespace WolvenKit.Common
 {
+    public enum EUpdateChannel
+    {
+        Stable,
+        Nightly
+    }
+
     public enum ESerializeFormat
     {
         json,
@@ -228,7 +234,8 @@ namespace WolvenKit.Common
         gltf,
         glb,
         ttf,
-        wav
+        wav,
+        masklist
     }
 
     public enum EConvertableOutput

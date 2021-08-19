@@ -121,9 +121,9 @@ namespace WolvenKit.Functionality.Services
             
         }
 
-        private void AskInApp(string message, Func<bool, bool> func) => Growl.Ask(message, func);
+        public void AskInApp(string message, Func<bool, bool> func) => Growl.Ask(message, func);
 
-        private void AskInDesktop(string message, Func<bool, bool> func) => Growl.AskGlobal(message, func);
+        public void AskInDesktop(string message, Func<bool, bool> func) => Growl.AskGlobal(message, func);
 
         public void ShowAppNotification(string message, ENotificationType type) => ShowNotificationInApp(message, type);
 

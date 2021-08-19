@@ -29,6 +29,7 @@ namespace WolvenKit.Functionality.Commands
         private readonly Cp77Controller _cp77Controller;
         private readonly Tw3Controller _tw3Controller;
         private readonly IServiceLocator _serviceLocator;
+        private new readonly IPleaseWaitService _pleaseWaitService;
 
         #endregion Fields
 
@@ -42,10 +43,11 @@ namespace WolvenKit.Functionality.Commands
             IUIVisualizerService uIVisualizerService,
             ILoggerService loggerService,
             IServiceLocator serviceLocator,
+            IPleaseWaitService pleaseWaitService,
             Tw3Controller tw3Controller,
             Cp77Controller cp77Controller
         )
-            : base(AppCommands.Application.NewProject, commandManager, projectManager, notificationService, loggerService)
+            : base(AppCommands.Application.NewProject, commandManager, projectManager, notificationService, loggerService, pleaseWaitService)
         {
             _loggerService = loggerService;
             _saveFileService = saveFileService;
@@ -53,6 +55,7 @@ namespace WolvenKit.Functionality.Commands
             _cp77Controller = cp77Controller;
             _uIVisualizerService = uIVisualizerService;
             _serviceLocator = serviceLocator;
+            _pleaseWaitService = pleaseWaitService;
         }
 
         #endregion Constructors

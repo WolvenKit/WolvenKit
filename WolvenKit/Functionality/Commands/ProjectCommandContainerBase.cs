@@ -34,19 +34,15 @@ namespace WolvenKit.Functionality.Commands
             ICommandManager commandManager,
             IProjectManager projectManager,
             INotificationService notificationService,
-            ILoggerService loggerService)
+            ILoggerService loggerService,
+            IPleaseWaitService pleaseWaitService)
             : base(commandName, commandManager)
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => notificationService);
-
             _commandManager = commandManager;
             _projectManager = projectManager;
             _logger = loggerService;
             _notificationService = notificationService;
-
-            _pleaseWaitService = ServiceLocator.Default.ResolveType<IPleaseWaitService>();
+            _pleaseWaitService = pleaseWaitService;
         }
 
         #endregion Constructors

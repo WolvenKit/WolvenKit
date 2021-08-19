@@ -8,10 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+      <PackageReference Include="Catel.Core" Version="5.12.17" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
-    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0022" />
-    <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0022" />
+      <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
+      <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
     <PackageReference Include="WolvenKit.RED4.CR2W" Version="3.23.2" />
   </ItemGroup>
     <ItemGroup>

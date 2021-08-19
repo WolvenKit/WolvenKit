@@ -10,6 +10,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.Modkit.RED4.MLMask;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -63,7 +64,9 @@ namespace WolvenKit.Modkit.RED4
                 case ERawFileFormat.fbx:
                 case ERawFileFormat.gltf:
                 case ERawFileFormat.glb:
-                    return ImportMesh(rawRelative, outDir, args.Get<MeshImportArgs>());
+                    return ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>());
+                case ERawFileFormat.masklist:
+                    return ImportMlmask(rawRelative, outDir);
                 case ERawFileFormat.ttf:
                     return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
                 case ERawFileFormat.wav:
@@ -78,7 +81,31 @@ namespace WolvenKit.Modkit.RED4
             _loggerService.Success($"Use WolvenKit to import opus.");
             return false;
         }
-
+        private bool ImportMlmask(RedRelativePath rawRelative, DirectoryInfo outDir)
+        {
+            MLMASK mlmask = new MLMASK();
+            var ext = rawRelative.Extension;
+            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+                var redfile = new RedRelativePath(rawRelative).ChangeBaseDir(outDir).ChangeExtension(string.IsNullOrEmpty(".mlmask")? FromRawExtension(extAsEnum).ToString(): ".mlmask");
+                try
+                {
+                    mlmask.Import(rawRelative.ToFileInfo(), redfile.ToFileInfo());
+                    _loggerService.Success($"Successfully created {redfile.ToString()}");
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    _loggerService.Error($"Unexpected error occured while importing {rawRelative.ToString()}: {ex.Message}");
+                    return false;
+                }
+            }
+            else
+            {
+                _loggerService.Error($"Unexpected error occured while importing {rawRelative.ToString()}");
+                return false;
+            }
+        }
         private bool HandleTextures(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
         {
             // dds can be imported to cubemap, envprobe, texarray, xbm, mlmask
@@ -538,11 +565,11 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private bool ImportMesh(RedRelativePath rawRelative, DirectoryInfo outDir, MeshImportArgs args)
+        private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
             if (args.Keep)
             {
-                var redfile = FindRedFile(rawRelative,  outDir);
+                var redfile = FindRedFile(rawRelative,  outDir,$".{args.importFormat.ToString().ToLower()}");
 
                 if (string.IsNullOrEmpty(redfile))
                 {
@@ -554,7 +581,18 @@ namespace WolvenKit.Modkit.RED4
                 using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
                 try
                 {
-                    var result = ImportMesh(rawRelative.ToFileInfo(), redFs,args.Archive,args.importMaterialOnly);
+                    var result = false;
+                    switch (args.importFormat)
+                    {
+                        case GltfImportAsFormat.Mesh:
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args.validationMode, args.importMaterialOnly);
+                            break;
+                        case GltfImportAsFormat.Morphtarget:
+                            result = ImportTargetBaseMesh(rawRelative.ToFileInfo(), redFs, args.Archives, outDir.FullName, args.validationMode);
+                            break;
+                        default:
+                            break;
+                    }
 
                     if (result)
                     {
