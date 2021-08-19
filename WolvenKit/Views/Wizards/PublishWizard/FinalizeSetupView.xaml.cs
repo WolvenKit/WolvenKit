@@ -1,4 +1,4 @@
-using Catel.IoC;
+
 using HandyControl.Controls;
 using WolvenKit.Models.Wizards;
 

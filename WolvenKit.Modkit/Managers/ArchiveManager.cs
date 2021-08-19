@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Catel.IoC;
 using ProtoBuf;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using Path = System.IO.Path;
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager() : this(ServiceLocator.Default.ResolveType<IHashService>())
+        public ArchiveManager() : this(Locator.Current.GetService< IHashService>())
         {
 
         }

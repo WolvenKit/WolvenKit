@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Windows;
+using ReactiveUI;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Editor;
 
@@ -8,7 +9,7 @@ namespace WolvenKit.Views.Editor
     /// <summary>
     /// Interaction logic for TextDocumentView.xaml
     /// </summary>
-    public partial class DocumentView
+    public partial class DocumentView : ReactiveUserControl<DocumentViewModel>
     {
         #region Fields
 
@@ -40,7 +41,7 @@ namespace WolvenKit.Views.Editor
         {
             _viewInitialized = true;                    // We'll try this only once
 
-            if (DataContext is not IDocumentViewModel vm)
+            if (DataContext is not DocumentViewModel vm)
             {
                 return;
             }
@@ -53,7 +54,7 @@ namespace WolvenKit.Views.Editor
                 // Attempt to close this document if it appears to be invalid
                 if (result == false)
                 {
-                    vm.CloseCommand.Execute(null);
+                    vm.Close.Execute();
                 }
 
                 NavigationItemChunks.DataContext = ViewModel as DocumentViewModel;

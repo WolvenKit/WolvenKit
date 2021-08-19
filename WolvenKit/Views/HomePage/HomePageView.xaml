@@ -1,9 +1,10 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="homePage:HomePageViewModel"
     x:Class="WolvenKit.Views.HomePage.HomePageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:catel="http://schemas.catelproject.com"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -16,19 +17,21 @@
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
     >
 
-    <catel:UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources RequestedTheme="Dark" />
-                <hc:Theme />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </catel:UserControl.Resources>
+   
 
     <Grid
         x:Name="FocusGrid"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         Background="{DynamicResource ContentBackgroundAlt}">
+
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources RequestedTheme="Dark" />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
 
         <Grid Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_2" />
 
@@ -439,4 +442,4 @@
 
 
     </Grid>
-</catel:UserControl>
+</reactiveUi:ReactiveUserControl>

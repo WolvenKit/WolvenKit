@@ -4,8 +4,10 @@ namespace WolvenKit.Models.Docking
 {
     public interface IDockElement
     {
-        string Header { get; set; }
+        public string Header { get; set; }
 
-        DockState State { get; set; }
+        public DockState State { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

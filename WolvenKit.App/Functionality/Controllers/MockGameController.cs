@@ -20,6 +20,9 @@ namespace WolvenKit.Functionality.Controllers
         #region Methods
 
         private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+
+        public bool IsManagerLoaded { get; set; } = true;
+
         public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
 
         public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new List<IGameArchiveManager>();

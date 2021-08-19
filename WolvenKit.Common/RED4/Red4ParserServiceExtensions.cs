@@ -162,8 +162,7 @@ namespace WolvenKit.Common.Services
 
         private static Dependency ReadDependency(this BinaryReader br, IHashService _hashService)
         {
-            var d = new Dependency(_hashService, br.ReadUInt64());
-            
+            var d = new Dependency(_hashService, br.ReadUInt64());            
             return d;
         }
 

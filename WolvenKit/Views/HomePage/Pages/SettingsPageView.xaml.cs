@@ -1,42 +1,33 @@
 using System.Windows;
 using System.Windows.Controls;
-using Catel.IoC;
-using Catel.MVVM.Views;
+using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.Controls.Layout;
+using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
-    public partial class SettingsPageView
+    public partial class SettingsPageView : ReactiveUserControl<SettingsPageViewModel>
     {
         #region Constructors
 
         public SettingsPageView()
         {
             InitializeComponent();
-            var vm = ServiceLocator.Default.ResolveType<SettingsPageViewModel>();
-           AccordionItems = SfAccordion.Items;
+
+            ViewModel = Locator.Current.GetService<SettingsPageViewModel>();
+            DataContext = ViewModel;
+
+            AccordionItems = SfAccordion.Items;
         }
 
         #endregion Constructors
 
         #region properties
 
-        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
-        public ItemCollection AccordionItems
-        {
-            get
-            {
-                return (ItemCollection)GetValue(AccordionItemsProperty);
-            }
-            set
-            {
-                SetValue(AccordionItemsProperty, value);
-            }
-        }
+        public ItemCollection AccordionItems { get; set; }
 
-        public static readonly DependencyProperty AccordionItemsProperty =
-            DependencyProperty.Register(nameof(AccordionItems), typeof(ItemCollection), typeof(SettingsPageView));
 
         #endregion
 
@@ -58,6 +49,30 @@ namespace WolvenKit.Views.HomePage.Pages
         {
             System.Windows.Forms.Application.Restart();
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void CP77SettingsPG_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(ReactiveObject.Changed):
+                case nameof(ReactiveObject.Changing):
+                case nameof(ReactiveObject.ThrownExceptions):
+                    e.Cancel = true;
+                    break;
+            }
+        }
+
+        private void GeneralSettingsPG_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(ReactiveObject.Changed):
+                case nameof(ReactiveObject.Changing):
+                case nameof(ReactiveObject.ThrownExceptions):
+                    e.Cancel = true;
+                    break;
+            }
         }
     }
 }

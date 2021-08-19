@@ -1,18 +1,22 @@
 using System;
 using System.Threading.Tasks;
-using Catel.Configuration;
-using Catel.MVVM;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class StatusBarViewModel : ViewModelBase
+    public class StatusBarViewModel : ReactiveObject
     {
         #region Fields
 
-        private readonly IConfigurationService _configurationService;
+        private const string s_noProjectLoaded =
+            "No project loaded, create or load an project to be able to view the game files...";
+
         private readonly ISettingsManager _settingsManager;
+        private readonly AppViewModel _appViewModel;
+        private readonly IProjectManager _projectManager;
 
         #endregion Fields
 
@@ -20,14 +24,34 @@ namespace WolvenKit.ViewModels.Shell
 
         public StatusBarViewModel(
             ISettingsManager settingsManager,
-            IConfigurationService configurationService
+            IProjectManager projectManager,
+            AppViewModel appViewModel
             )
         {
             _settingsManager = settingsManager;
-            _configurationService = configurationService;
-            StaticReferencesVM.GlobalStatusBar = this;
+            _appViewModel = appViewModel;
+            _projectManager = projectManager;
 
-            CurrentProject = "No project loaded, create or load an project to be able to view the game files...";
+
+            var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
+            if (Connected)
+            {
+                InternetConnected = "Connected";
+            }
+
+            IsLoading = false;
+            LoadingString = "";
+
+            _projectManager
+                .WhenAnyValue(
+                    x => x.ActiveProject,
+                    project => project != null ? project.Name : s_noProjectLoaded)
+                .ToProperty(
+                    this,
+                    x => x.CurrentProject,
+                    out _currentProject);
+
+
         }
 
         #endregion Constructors
@@ -37,7 +61,7 @@ namespace WolvenKit.ViewModels.Shell
 
 
 
-        public int FileCount { get; set; } = 0;
+        //[Reactive] public int FileCount { get; set; } = 0;
         public int Column { get; private set; }
         public string Heading { get; private set; }
         public string InternetConnected { get; private set; }
@@ -46,42 +70,16 @@ namespace WolvenKit.ViewModels.Shell
         public int Line { get; private set; }
         public string LoadingString { get; set; }
         public string ReceivingAutomaticUpdates { get; private set; }
-        public string CurrentProject { get; set; }
+
+        readonly ObservableAsPropertyHelper<string> _currentProject;
+        public string CurrentProject => _currentProject.Value;
+
+        //[Reactive] public string CurrentProject { get; set; }
 
         public object VersionNumber => _settingsManager.GetVersionNumber();
 
-        public string SelectedFilename { get; set; }
+        //[Reactive] public string SelectedFilename { get; set; }
 
         #endregion Properties
-
-        #region Methods
-
-        protected override async Task CloseAsync()
-        {
-            _configurationService.ConfigurationChanged -= OnConfigurationChanged;
-
-            await base.CloseAsync();
-        }
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-            StaticReferencesVM.GlobalStatusBar = this;
-            _configurationService.ConfigurationChanged += OnConfigurationChanged;
-
-            var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
-            if (Connected)
-            { InternetConnected = "Connected"; }
-
-            IsLoading = false;
-            LoadingString = "";
-        }
-
-        private void OnConfigurationChanged(object sender, ConfigurationChangedEventArgs e)
-        {
-            
-        }
-
-        #endregion Methods
     }
 }

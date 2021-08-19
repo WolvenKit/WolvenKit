@@ -9,8 +9,8 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
-using Catel.IoC;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
@@ -28,7 +28,7 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
-        private readonly WorkSpaceViewModel viewModel;
+        private readonly AppViewModel viewModel;
         public static DockingAdapter G_Dock;
 
         public DockingAdapter()
@@ -40,7 +40,7 @@ namespace WolvenKit.Views.Shell
             PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
             PART_DockingManager.DockStateChanging += PART_DockingManagerOnDockStateChanging;
 
-            viewModel = DataContext as WorkSpaceViewModel;
+            viewModel = DataContext as AppViewModel;
         }
 
         private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)
@@ -60,7 +60,7 @@ namespace WolvenKit.Views.Shell
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                vm.CloseCommand.SafeExecute();
+                vm.Close.Execute().Subscribe();
             }
         }
 
@@ -89,8 +89,7 @@ namespace WolvenKit.Views.Shell
 
             // Add setting to persist State or not ? ( Load Default Docking on Startup : Yes/No )
             // if (XSETTINGX){ SetLayoutToDefault();}else{
-            var serviceLocator = ServiceLocator.Default;
-            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var settings = Locator.Current.GetService<ISettingsManager>();
             if (settings.IsHealthy().Any())
             {
                 SetLayoutToDefault();
@@ -304,98 +303,104 @@ namespace WolvenKit.Views.Shell
 
         private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //if (StaticReferences.GlobalShell != null)
+            // set active property
+            if (e.OldValue is ContentControl oldValue)
             {
-                StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
-                StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
-                StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, false);
-
-                if (e.NewValue is ContentControl content)
+                if (oldValue.Content is IDockElement dockElement)
                 {
-                    var x = DockingManager.GetHeader((DependencyObject)e.NewValue);
-                    var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
-                    if (!string.IsNullOrEmpty(x as string))
-                    {
-                        DiscordHelper.SetDiscordRPCStatus(x as string);
-                    }
+                    dockElement.IsActive = false;
+                }
+            }
 
-                    switch (x)
-                    {
-                        case "Project Explorer":
-                            StaticReferences.RibbonViewInstance.projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
-                            propertiesViewModel.SetToNullAndResetVisibility();
-                            propertiesViewModel.PE_FileInfoVisible = true;
+            if (e.NewValue is ContentControl content)
+            {
+                if (content.Content is IDockElement dockElement)
+                {
+                    dockElement.IsActive = true;
+                }
 
-                            break;
 
-                        case "Asset Browser":
-                            StaticReferences.RibbonViewInstance.abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
-                            propertiesViewModel.SetToNullAndResetVisibility();
-                            propertiesViewModel.AB_FileInfoVisible = true;
-                            break;
+                var header = DockingManager.GetHeader(content);
+                var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
+                if (!string.IsNullOrEmpty(header as string))
+                {
+                    DiscordHelper.SetDiscordRPCStatus(header as string);
+                }
 
-                        case "CR2W Editor":
-                            // This never happens as CR2W editor is always named after its active document.
-                            break;
+                switch (header)
+                {
+                    case "Project Explorer":
+                        propertiesViewModel.SetToNullAndResetVisibility();
+                        propertiesViewModel.PE_FileInfoVisible = true;
 
-                        case "Properties":
-                            break;
+                        break;
 
-                        case "Log":
-                            break;
+                    case "Asset Browser":
+                        propertiesViewModel.SetToNullAndResetVisibility();
+                        propertiesViewModel.AB_FileInfoVisible = true;
+                        break;
 
-                        case "Visual Editor":
-                            break;
+                    case "CR2W Editor":
+                        // This never happens as CR2W editor is always named after its active document.
+                        break;
 
-                        case "Import Export Tool":
-                            break;
+                    case "Properties":
+                        break;
 
-                        case "Audio Tool":
-                            break;
+                    case "Log":
+                        break;
 
-                        case "Bulk Editor":
-                            break;
+                    case "Visual Editor":
+                        break;
 
-                        case "Mimics":
-                            break;
+                    case "Import Export Tool":
+                        break;
 
-                        case "CR2W To Text Tool":
-                            break;
+                    case "Audio Tool":
+                        break;
 
-                        case "WCC Tool":
-                            break;
+                    case "Bulk Editor":
+                        break;
 
-                        case "Plugin Manager":
-                            break;
+                    case "Mimics":
+                        break;
 
-                        case "Menu Creator Tool":
-                            break;
+                    case "CR2W To Text Tool":
+                        break;
 
-                        case "Importer Tool":
-                            break;
+                    case "WCC Tool":
+                        break;
 
-                        case "Code Editor":
-                            break;
+                    case "Plugin Manager":
+                        break;
 
-                        case "Csv Editor":
-                            break;
+                    case "Menu Creator Tool":
+                        break;
 
-                        case "Hex Editor":
-                            break;
+                    case "Importer Tool":
+                        break;
 
-                        case "Journal Editor":
-                            break;
+                    case "Code Editor":
+                        break;
 
-                        default:
-                            StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+                    case "Csv Editor":
+                        break;
 
-                            break;
-                    }
+                    case "Hex Editor":
+                        break;
 
-                    if (((IDockElement)content.Content).State == DockState.Document)
-                    {
-                        SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
-                    }
+                    case "Journal Editor":
+                        break;
+
+                    default:
+                        //StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
+
+                        break;
+                }
+
+                if (((IDockElement)content.Content).State == DockState.Document)
+                {
+                    SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
                 }
             }
         }

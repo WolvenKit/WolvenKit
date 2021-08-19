@@ -1,19 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Catel.IoC;
-using Catel.Messaging;
-using Catel.MVVM;
-using Catel.Services;
 using Microsoft.Win32;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using DynamicData;
+using DynamicData.Binding;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
@@ -21,31 +24,38 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
+using WolvenKit.ViewModels.Wizards;
 using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class WorkSpaceViewModel : ViewModelBase, IWorkSpaceViewModel
+    public class AppViewModel : ReactiveObject, IAppViewModel
     {
         #region fields
 
         private readonly ILoggerService _loggerService;
-        private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IUpdateService _updateService;
         private readonly ISettingsManager _settingsManager;
+        private readonly INotificationService _notificationService;
+        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
 
-        private DocumentViewModel _activeDocument;
+        
+        
 
-        private delegate void DocumentViewModelDelegate(DocumentViewModel value);
+        
+        
+
 
         #endregion fields
 
@@ -54,21 +64,23 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Class constructor
         /// </summary>
-        public WorkSpaceViewModel(
+        public AppViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService,
-            ICommandManager commandManager,
             IGameControllerFactory gameControllerFactory,
             IUpdateService updateService,
-            ISettingsManager settingsManager)
+            ISettingsManager settingsManager,
+            INotificationService notificationService,
+            IRecentlyUsedItemsService recentlyUsedItemsService
+        )
         {
             _updateService = updateService;
             _projectManager = projectManager;
             _loggerService = loggerService;
-            _messageService = messageService;
             _gameControllerFactory = gameControllerFactory;
             _settingsManager = settingsManager;
+            _notificationService = notificationService;
+            _recentlyUsedItemsService = recentlyUsedItemsService;
 
             #region commands
 
@@ -83,9 +95,6 @@ namespace WolvenKit.ViewModels.Shell
             ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
-
-
-
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteOpenFile(p), CanOpenFile);
@@ -95,15 +104,18 @@ namespace WolvenKit.ViewModels.Shell
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
-            SaveFileFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
+            SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
 
-            // register as application-wide commands
-            RegisterCommands(commandManager);
+            OpenProjectCommand = ReactiveCommand.CreateFromTask<string, Unit>(OpenProjectAsync);
+            DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
+            NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
 
             #endregion commands
+
+            OnStartup();
 
             Tools = new ObservableCollection<IDockElement> {
                 Log,
@@ -118,25 +130,27 @@ namespace WolvenKit.ViewModels.Shell
 
             };
 
-            OnStartup();
+            OpenDocuments
+                .ToObservableChangeSet()
+                .AutoRefreshOnObservable(document => document.Close)
+                .Select(_ => WhenAnyDocumentClosed())
+                .Switch()
+                .Subscribe(x => OpenDocuments.Remove(x));
 
-            _settingsManager.PropertyChanged += _settingsManager_PropertyChanged;
-        }
-
-        private void _settingsManager_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(ISettingsManager.UpdateChannel):
+            _settingsManager
+                .WhenAnyValue(x => x.UpdateChannel)
+                .Subscribe(b =>
+                {
                     _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
                     Task.Run(() => _updateService.CheckForUpdatesAsync());
-                    break;
-
-                default:
-                    // Do Nothing
-                    break;
-            }
+                });
         }
+
+
+        IObservable<DocumentViewModel> WhenAnyDocumentClosed() =>
+            OpenDocuments
+                .Select(x => x.Close.Select(_ => x))
+                .Merge();
 
         #endregion constructors
 
@@ -147,7 +161,7 @@ namespace WolvenKit.ViewModels.Shell
             _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
             _updateService.Init(new string[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
                 Constants.AssemblyName,
-                delegate (FileInfo path, bool isManaged)
+            delegate (FileInfo path, bool isManaged)
             {
                 if (isManaged)
                 {
@@ -162,7 +176,7 @@ namespace WolvenKit.ViewModels.Shell
                     var newPath = Path.Combine(ISettingsManager.GetAppData(), Constants.UpdaterName);
                     try
                     {
-                        shippedInstaller.CopyTo(newPath, true);
+                        shippedInstaller.MoveTo(newPath, true);
                     }
                     catch (Exception)
                     {
@@ -182,13 +196,32 @@ namespace WolvenKit.ViewModels.Shell
                 Application.Current.Shutdown();
             });
 
-            await _updateService.CheckForUpdatesAsync();
+            try
+            {
+                await _updateService.CheckForUpdatesAsync();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e.Message);
+            }
 
+            ShowFirstTimeSetup();
         }
 
-        protected override async Task InitializeAsync()
+        private async void ShowFirstTimeSetup()
         {
-            await base.InitializeAsync();
+            var messages = _settingsManager.IsHealthy();
+            if (!messages.Any())
+            {
+                return;
+            }
+
+            foreach (var message in messages)
+            {
+                _notificationService.Error(message);
+            }
+
+            var result = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
         }
 
         private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -197,47 +230,243 @@ namespace WolvenKit.ViewModels.Shell
             // passes the currently active viewmodel
             if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
             {
-                ServiceLocator.Default.ResolveType<ICommandManager>()
-                    .GetCommand(AppCommands.Application.ViewSelected)
-                    .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
+                //ServiceLocator.Default.ResolveType<ICommandManager>()
+                //    .GetCommand(AppCommands.Application.ViewSelected)
+                //    .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
             }
-        }
-
-        private void RegisterCommands(ICommandManager commandManager)
-        {
-            // View Tab
-            commandManager.RegisterCommand(AppCommands.Application.ShowLog, ShowLogCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowProjectExplorer, ShowProjectExplorerCommand, this);
-            //commandManager.RegisterCommand(AppCommands.Application.ShowImportUtility, ShowImportUtilityCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowProperties, ShowPropertiesCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowAssetBrowser, ShowAssetsCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowVisualEditor, ShowVisualEditorCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowImportExportTool, ShowImportExportToolCommand, this);
-
-            commandManager.RegisterCommand(AppCommands.Application.ShowCodeEditor, ShowCodeEditorCommand, this);
-
-
-            // Home Tab
-            commandManager.RegisterCommand(AppCommands.Application.SaveFile, SaveFileFileCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.SaveAll, SaveAllCommand, this);
-
-            commandManager.RegisterCommand(AppCommands.Application.OpenFile, OpenFileCommand, this);
-            //commandManager.RegisterCommand(AppCommands.Application.FileSelected, OpenFileCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.NewFile, NewFileCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.PackMod, PackModCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.BackupMod, BackupModCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.PublishMod, PublishModCommand, this);
-            commandManager.RegisterCommand(AppCommands.Application.ShowPackageInstaller, ShowPackageInstallerCommand, this);
-
-            // global commands
-            commandManager.RegisterCommand(AppCommands.Application.FileSelected, FileSelectedCommand, this);
         }
 
         #endregion init
 
         #region commands
 
-        public ICommand FileSelectedCommand { get; private set; }
+        public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
+        private void DeleteProject(string parameter)
+        {
+            try
+            {
+                var projectToDel = _recentlyUsedItemsService.Items.Items
+                    .FirstOrDefault(project => project.Name == parameter?.ToString());
+                if (projectToDel != null)
+                {
+                    _recentlyUsedItemsService.RemoveItem(projectToDel);
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerService.LogString(ex.Message, Logtype.Error);
+                _loggerService.LogString("Failed to delete recent project", Logtype.Error);
+            }
+        }
+
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
+        private async Task<Unit> OpenProjectAsync(string location)
+        {
+            // switch from one active project to another
+
+            if (_projectManager.ActiveProject != null && !string.IsNullOrEmpty(location))
+            {
+                if (_projectManager.ActiveProject.Location == location)
+                {
+                    return Unit.Default;
+                }
+            }
+
+            try
+            {
+
+                if (string.IsNullOrWhiteSpace(location) || !File.Exists(location))
+                {
+                    // file was moved or deleted
+                    if (_recentlyUsedItemsService.Items.Items.Any(_ => _.Name == location))
+                    {
+                        // would you like to locate it?
+                        //TODO
+                        //location = await ProjectHelpers.LocateMissingProjectAsync(location);
+                        //location = "";
+                        //if (string.IsNullOrEmpty(location))
+                        {
+                            // user canceled locating a project
+                            DeleteProject(location);
+                            return Unit.Default;
+                        }
+                    }
+                    // open an existing project
+                    else
+                    {
+                        var dlg = new CommonOpenFileDialog
+                        {
+                            AllowNonFileSystemItems = false,
+                            Multiselect = false,
+                            IsFolderPicker = false,
+                            Title = "Locate the WolvenKit project"
+                        };
+                        dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
+
+                        if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+                        {
+                            return Unit.Default;
+                        }
+
+                        var result = dlg.FileName;
+                        if (string.IsNullOrEmpty(result))
+                        {
+                            return Unit.Default;
+                        }
+
+                        location = result;
+                    }
+                }
+
+                // one last check
+                if (!File.Exists(location))
+                {
+                    return Unit.Default;
+                }
+
+                var ribbon = Locator.Current.GetService<RibbonViewModel>();
+                ribbon.StartScreenShown = false;
+                ribbon.BackstageIsOpen = false;
+
+                await _projectManager.LoadAsync(location);
+                switch (Path.GetExtension(location))
+                {
+                    case ".w3modproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                        {
+                            _notificationService.Success(
+                                "Project " + Path.GetFileNameWithoutExtension(location) +
+                                " loaded!");
+
+                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    case ".cpmodproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
+                            t =>
+                            {
+                                _notificationService.Success("Project " +
+                                                             Path.GetFileNameWithoutExtension(location) +
+                                                             " loaded!");
+
+                            },
+                            TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception)
+            {
+                // TODO: Are we intentionally swallowing this?
+                //Log.Error(ex, "Failed to open file");
+            }
+
+            return Unit.Default;
+        }
+
+        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
+        private async Task<Unit> NewProjectAsync()
+        {
+            try
+            {
+                var location = await Interactions.NewProjectInteraction.Handle(Unit.Default);
+
+                if (string.IsNullOrWhiteSpace(location))
+                {
+                    return Unit.Default;
+                }
+
+                var ribbon = Locator.Current.GetService<RibbonViewModel>();
+                ribbon.StartScreenShown = false;
+                ribbon.BackstageIsOpen = false;
+
+                //using (_pleaseWaitService.PushInScope())
+                {
+                    switch (Path.GetExtension(location))
+                    {
+                        case ".w3modproj":
+                        {
+                            var np = new Tw3Project(location)
+                            {
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
+
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
+                            break;
+                        }
+                        case ".cpmodproj":
+                        {
+                            var np = new Cp77Project(location)
+                            {
+                                Name = Path.GetFileNameWithoutExtension(location),
+                                Author = "WolvenKit",
+                                Email = "",
+                                Version = "1.0"
+                            };
+                            _projectManager.ActiveProject = np;
+                            await _projectManager.SaveAsync();
+                            np.CreateDefaultDirectories();
+                            //saveProjectImg(location);
+                            break;
+                        }
+                        default:
+                            _loggerService.LogString("Invalid project path!", Logtype.Error);
+                            break;
+                    }
+                }
+
+                await _projectManager.LoadAsync(location);
+                switch (Path.GetExtension(location))
+                {
+                    case ".w3modproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                        {
+                            _notificationService.Success(
+                                "Project " + Path.GetFileNameWithoutExtension(location) +
+                                " loaded!");
+
+                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    case ".cpmodproj":
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
+                            t =>
+                            {
+                                _notificationService.Success("Project " +
+                                                             Path.GetFileNameWithoutExtension(location) +
+                                                             " loaded!");
+
+                            },
+                            TaskContinuationOptions.OnlyOnRanToCompletion);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerService.LogString(ex.Message, Logtype.Error);
+                _loggerService.LogString("Failed to create a new project!", Logtype.Error);
+            }
+
+            return Unit.Default;
+
+        }
+
+
+
+
+
+
+
+
+        public ICommand FileSelectedCommand { get; set; }
 
         private bool CanSelectFile(FileModel model) => true;
 
@@ -246,7 +475,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Saves the active Documents
         /// </summary>
-        public ICommand SaveFileFileCommand { get; private set; }
+        public ICommand SaveFileCommand { get; private set; }
 
         /// <summary>
         /// Saves all open Documents
@@ -397,9 +626,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public void ExecuteVideoTool()
         {
-            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-            mediator.SendMessage<int>(0);
-            mediator.SendMessage<bool>(true);
+            //var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            //mediator.SendMessage<int>(0);
+            //mediator.SendMessage<bool>(true);
         }
 
         private void ExecutePackMod() => _gameControllerFactory.GetController().PackAndInstallProject();
@@ -541,19 +770,17 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteVisualEditor() => VisualEditorVM.IsVisible = !VisualEditorVM.IsVisible;
 
 
-        private bool CanSaveAll() => _projectManager.ActiveProject is EditorProject proj
-                                     && Files?.Count > 0;
+        private bool CanSaveAll() => _projectManager.ActiveProject != null && OpenDocuments?.Count > 0;
 
         private void ExecuteSaveAll()
         {
-            foreach (var file in Files)
+            foreach (var file in OpenDocuments)
             {
                 Save(file);
             }
         }
 
-        private bool CanSaveFile() => _projectManager.ActiveProject is EditorProject proj
-                                      && ActiveDocument != null;
+        private bool CanSaveFile() => _projectManager.ActiveProject != null && ActiveDocument != null;
 
         private void ExecuteSaveFile() => Save(ActiveDocument);
 
@@ -564,24 +791,24 @@ namespace WolvenKit.ViewModels.Shell
         #region ToolViewModels
 
 
-        private AssetBrowserViewModel _AssetBrowserViewModel = null;
+        private AssetBrowserViewModel _assetBrowserViewModel;
 
-        private CodeEditorViewModel _CodeEditorVM = null;
+        private CodeEditorViewModel _codeEditorVm;
 
-        private ImportExportViewModel _importExportToolViewModel = null;
+        private ImportExportViewModel _importExportToolViewModel;
 
 
         //private ImportViewModel _importViewModel = null;
 
-        private LogViewModel _logViewModel = null;
+        private LogViewModel _logViewModel;
 
-        private ProjectExplorerViewModel _projectExplorerViewModel = null;
+        private ProjectExplorerViewModel _projectExplorerViewModel;
 
-        private PropertiesViewModel _propertiesViewModel = null;
+        private PropertiesViewModel _propertiesViewModel;
 
 
 
-        private VisualEditorViewModel _VisualEditorVM = null;
+        private VisualEditorViewModel _visualEditorVm;
 
 
 
@@ -589,9 +816,9 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                _AssetBrowserViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<AssetBrowserViewModel>();
-                _AssetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _AssetBrowserViewModel;
+                _assetBrowserViewModel ??= Locator.Current.GetService<AssetBrowserViewModel>();
+                _assetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
+                return _assetBrowserViewModel;
             }
         }
 
@@ -599,9 +826,9 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                _CodeEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<CodeEditorViewModel>();
-                _CodeEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _CodeEditorVM;
+                _codeEditorVm ??= Locator.Current.GetService<CodeEditorViewModel>();
+                _codeEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
+                return _codeEditorVm;
             }
         }
 
@@ -610,7 +837,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                _importExportToolViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportExportViewModel>();
+                _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
                 _importExportToolViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _importExportToolViewModel;
             }
@@ -632,7 +859,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                _logViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<LogViewModel>();
+                _logViewModel ??= Locator.Current.GetService<LogViewModel>();
                 return _logViewModel;
             }
         }
@@ -642,7 +869,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                _projectExplorerViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ProjectExplorerViewModel>();
+                _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
                 _projectExplorerViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _projectExplorerViewModel;
             }
@@ -652,7 +879,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                _propertiesViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<PropertiesViewModel>();
+                _propertiesViewModel ??= Locator.Current.GetService<PropertiesViewModel>();
                 return _propertiesViewModel;
             }
         }
@@ -661,9 +888,9 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                _VisualEditorVM ??= ServiceLocator.Default.RegisterTypeAndInstantiate<VisualEditorViewModel>();
-                _VisualEditorVM.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _VisualEditorVM;
+                _visualEditorVm ??= Locator.Current.GetService<VisualEditorViewModel>();
+                _visualEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
+                return _visualEditorVm;
             }
         }
 
@@ -671,36 +898,24 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion ToolViewModels
 
-        /// <summary>
-        /// Event is raised when AvalonDock (or the user) selects a new document.
-        /// </summary>
-        public event EventHandler ActiveDocumentChanged;
+        ///// <summary>
+        ///// Event is raised when AvalonDock (or the user) selects a new document.
+        ///// </summary>
+        //public event EventHandler ActiveDocumentChanged;
 
         /// <summary>
         /// Gets/Sets the currently active document.
         /// </summary>
-        public DocumentViewModel ActiveDocument
-        {
-            get => _activeDocument;
-            set             // This can also be set by the user via the view
-            {
-                if (_activeDocument != value)
-                {
-                    _activeDocument = value;
-                    RaisePropertyChanged(nameof(ActiveDocument));
-
-                    ActiveDocumentChanged?.Invoke(this, EventArgs.Empty);
-                }
-            }
-        }
+        [Reactive] public DocumentViewModel ActiveDocument { get; set; }
 
         /// <summary>
         /// Gets a collection of all currently available document viewmodels
         /// </summary>
-        public List<DocumentViewModel> Files => Tools
-            .OfType<DocumentViewModel>()
-            .Where(_ => _.State == DockState.Document)
-            .ToList();
+        [Reactive] public ObservableCollection<DocumentViewModel> OpenDocuments { get; protected set; } = new();
+        //public List<DocumentViewModel> Files => Tools
+        //    .OfType<DocumentViewModel>()
+        //    .Where(_ => _.State == DockState.Document)
+        //    .ToList();
 
         /// <summary>
         /// Gets an enumeration of all currently available tool window viewmodels.
@@ -723,7 +938,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // Don't add this twice
-            if (Files.Any(f => f.ContentId == fileToAdd.ContentId))
+            if (OpenDocuments.Any(f => f.ContentId == fileToAdd.ContentId))
             {
                 return;
             }
@@ -759,7 +974,7 @@ namespace WolvenKit.ViewModels.Shell
         public void CloseAllDocuments()
         {
             ActiveDocument = null;
-            foreach (var documentViewModel in Files)
+            foreach (var documentViewModel in OpenDocuments)
             {
                 Tools.Remove(documentViewModel);
             }
@@ -773,14 +988,14 @@ namespace WolvenKit.ViewModels.Shell
         public async Task<DocumentViewModel> OpenAsync(FileModel model)
         {
             // Check if we have already loaded this file and return it if so
-            var fileViewModel = Files.FirstOrDefault(fm => fm.ContentId == model.FullName);
+            var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == model.FullName);
             if (fileViewModel != null)
             {
                 return fileViewModel;
             }
 
             // open file
-            fileViewModel = new DocumentViewModel(this, model, true);
+            fileViewModel = new DocumentViewModel(model);
             var result = await fileViewModel.OpenFileAsync(model.FullName);
 
             if (result)
@@ -981,15 +1196,15 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private void OpenVideoFile(string fullpath)
-        {
-            var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-            mediator.SendMessage<int>(0);
+        //private void OpenVideoFile(string fullpath)
+        //{
+        //    var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+        //    mediator.SendMessage<int>(0);
 
-            mediator.SendMessage<bool>(true);
+        //    mediator.SendMessage<bool>(true);
 
-            mediator.SendMessage<string>(fullpath);
-        }
+        //    mediator.SendMessage<string>(fullpath);
+        //}
 
         #endregion methods
     }

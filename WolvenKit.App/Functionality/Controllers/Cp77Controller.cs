@@ -4,35 +4,39 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Xml.Linq;
-using Catel.IoC;
-using CP77.CR2W;
 using DynamicData;
 using ProtoBuf;
-using WolvenKit.Bundles;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.ViewModels.Editor;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    public class Cp77Controller : IGameController
+    public class Cp77Controller : ReactiveObject, IGameController
     {
+        #region fields
+
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
         private readonly ModTools _modTools;
         private readonly IHashService _hashService;
+
+        private static ArchiveManager ArchiveManager { get; set; }
+
+        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+
+        #endregion
 
         public Cp77Controller(ILoggerService loggerService,
             IProjectManager projectManager,
@@ -52,11 +56,10 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Properties
 
-        private static ArchiveManager ArchiveManager { get; set; }
-
-        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+        [Reactive] public bool IsManagerLoaded { get; set; }
 
         public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
+
 
         #endregion Properties
 
@@ -85,15 +88,11 @@ namespace WolvenKit.Functionality.Controllers
 
         private ArchiveManager LoadArchiveManager()
         {
-            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
-            assetBrowserViewModel.LoadVisibility = Visibility.Visible;
-
-            if (!File.Exists(_settingsManager.CP77ExecutablePath))
+            if (ArchiveManager != null && IsManagerLoaded)
             {
-                _loggerService.Error("Settings are not set up properly... can't load the archive manager... ");
-                assetBrowserViewModel.LoadVisibility = Visibility.Collapsed;
-                return null;
+                return ArchiveManager;
             }
+
             _loggerService.Info("Loading archive Manager ... ");
             var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
             try
@@ -129,17 +128,15 @@ namespace WolvenKit.Functionality.Controllers
             }
             finally
             {
-                assetBrowserViewModel.LoadVisibility = Visibility.Collapsed;
+                IsManagerLoaded = true;
+                _loggerService.Success("Finished loading archive manager.");
             }
-            _loggerService.Success("Finished loading archive manager.");
-
+            
             _rootCache.Edit(innerCache =>
             {
                 innerCache.Clear();
                 innerCache.AddOrUpdate(ArchiveManager.RootNode);
             });
-
-            assetBrowserViewModel.ReInit(false);
 
             return ArchiveManager;
         }
@@ -148,34 +145,37 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackageMod()
         {
-            var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
-            var headerBackground = System.Drawing.Color.FromArgb(
-                pwm.HeaderBackground.A,
-                pwm.HeaderBackground.R,
-                pwm.HeaderBackground.G,
-                pwm.HeaderBackground.B
-            );
-            var iconBackground = System.Drawing.Color.FromArgb(
-                pwm.IconBackground.A,
-                pwm.IconBackground.R,
-                pwm.IconBackground.G,
-                pwm.IconBackground.B
-            );
-            var author = Tuple.Create<string, string, string, string, string, string>(
-                _projectManager.ActiveProject.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
-            );
-            var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
-                _projectManager.ActiveProject.Version,
-                _projectManager.ActiveProject.Name,
-                author,
-                pwm.Description,
-                pwm.LargeDescription,
-                pwm.License,
-                (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
-                new List<System.Xml.Linq.XElement> { }
-            );
+            throw new NotImplementedException();
 
-            return Task.FromResult(true);
+
+            //var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
+            //var headerBackground = System.Drawing.Color.FromArgb(
+            //    pwm.HeaderBackground.A,
+            //    pwm.HeaderBackground.R,
+            //    pwm.HeaderBackground.G,
+            //    pwm.HeaderBackground.B
+            //);
+            //var iconBackground = System.Drawing.Color.FromArgb(
+            //    pwm.IconBackground.A,
+            //    pwm.IconBackground.R,
+            //    pwm.IconBackground.G,
+            //    pwm.IconBackground.B
+            //);
+            //var author = Tuple.Create<string, string, string, string, string, string>(
+            //    _projectManager.ActiveProject.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
+            //);
+            //var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
+            //    _projectManager.ActiveProject.Version,
+            //    _projectManager.ActiveProject.Name,
+            //    author,
+            //    pwm.Description,
+            //    pwm.LargeDescription,
+            //    pwm.License,
+            //    (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
+            //    new List<System.Xml.Linq.XElement> { }
+            //);
+
+            //return Task.FromResult(true);
         }
 
         /// <summary>

@@ -1,12 +1,11 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="editor:ProjectExplorerViewModel"
     x:Class="WolvenKit.Views.Editor.ProjectExplorerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:catel="http://schemas.catelproject.com"
-    xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
-    xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
@@ -14,23 +13,18 @@
     d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
-    MouseDown="UserControl_MouseDown"
     mc:Ignorable="d">
 
-    <catel:UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources RequestedTheme="Dark" />
-                <hc:Theme />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </catel:UserControl.Resources>
+   <UserControl.Resources>
+       <ResourceDictionary>
+           <ResourceDictionary.MergedDictionaries>
+               <hc:ThemeResources RequestedTheme="Dark" />
+               <hc:Theme />
+           </ResourceDictionary.MergedDictionaries>
+       </ResourceDictionary>
+    </UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
-        <Grid.Resources>
-            <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
-        </Grid.Resources>
 
         <syncfusion:SfTreeGrid
             Margin="0,0,3,0"
@@ -45,16 +39,15 @@
             ExpandStateMappingName="IsExpanded"
             FilterLevel="Extended"
             IsReadOnly="True"
-            ItemsSource="{Binding BindGrid1, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             MouseDown="TreeGrid_MouseDown"
-            SelectionChanged="TreeGrid_SelectionChanged"
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
-            SelfRelationRootValue="0">
+            SelfRelationRootValue="0"
+            >
 
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
@@ -65,23 +58,7 @@
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
-                <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
             </syncfusion:SfTreeGrid.Resources>
-
-            <ei:Interaction.Triggers>
-                <ei:EventTrigger EventName="CellDoubleTapped">
-                    <catel:EventToCommand
-                        Command="{catel:CommandManagerBinding Application.OpenFile}"
-                        CommandParameter="{Binding SelectedItem}"
-                        DisableAssociatedObjectOnCannotExecute="False" />
-                </ei:EventTrigger>
-                <ei:EventTrigger EventName="SelectionChanged">
-                    <catel:EventToCommand
-                        Command="{catel:CommandManagerBinding Application.FileSelected}"
-                        CommandParameter="{Binding SelectedItem}"
-                        DisableAssociatedObjectOnCannotExecute="False" />
-                </ei:EventTrigger>
-            </ei:Interaction.Triggers>
 
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
@@ -839,8 +816,7 @@
                 <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
                     <MenuItem Header="File">
                         <MenuItem
-                            Command="{catel:CommandManagerBinding Application.OpenFile}"
-                            CommandParameter="{Binding SelectedItem}"
+                            Command="{Binding OpenFileCommand}"
                             Header="Open" />
                         <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
                         <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
@@ -895,4 +871,4 @@
                                 Style="{StaticResource SearchBarExtend}"
                                 hc:InfoElement.Necessary="True" />
     </Grid>
-</catel:UserControl>
+</reactiveUi:ReactiveUserControl>

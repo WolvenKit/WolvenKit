@@ -126,14 +126,14 @@ namespace WolvenKit.Bundles
             }
         }
 
-        public void ExtractExistingMMF(Stream output)
-        {
-            // old deprecated way of loading mmfs still used in unit test
-            var hash = Archive.ArchiveAbsolutePath.GetHashMD5();
-            using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
-                //using (var viewstream = mmf.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
-                ExtractExistingMMF(output, mmf);
-        }
+        //public void ExtractExistingMMF(Stream output)
+        //{
+        //    // old deprecated way of loading mmfs still used in unit test
+        //    var hash = Archive.ArchiveAbsolutePath.GetHashMD5();
+        //    using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(hash, MemoryMappedFileRights.Read))
+        //        //using (var viewstream = mmf.CreateViewStream(PageOffset, ZSize, MemoryMappedFileAccess.Read))
+        //        ExtractExistingMMF(output, mmf);
+        //}
 
         /// <summary>
         /// Extract existing memory-mapped-file,

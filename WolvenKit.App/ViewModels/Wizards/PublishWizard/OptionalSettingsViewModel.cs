@@ -1,12 +1,9 @@
-using Catel;
-using Catel.Fody;
-using Catel.IoC;
-using Catel.MVVM;
+using ReactiveUI;
 using WolvenKit.Models.Wizards;
 
 namespace WolvenKit.ViewModels.Wizards.PublishWizard
 {
-    public class OptionalSettingsViewModel : ViewModelBase
+    public class OptionalSettingsViewModel : ReactiveObject
     {
         #region constructors
 

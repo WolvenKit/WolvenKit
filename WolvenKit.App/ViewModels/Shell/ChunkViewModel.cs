@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using Catel.Data;
+
 using DynamicData;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkPropertyViewModel : ObservableObject
+    public class ChunkPropertyViewModel : ReactiveObject
     {
         #region Fields
         public IEditableVariable Property { get; }
@@ -70,19 +71,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private IREDBool Prop => Property as IREDBool;
 
-        public new bool Value
-        {
-            get => Prop.Value;
-            set
-            {
-                if (Prop.Value != value)
-                {
-                    var oldValue = Prop.Value;
-                    Prop.Value = value;
-                    RaisePropertyChanged(() => Value, oldValue, value);
-                }
-            }
-        }
+        [Reactive] public new bool Value { get; set; }
     }
 
     public class RedStringViewModel : ChunkPropertyViewModel
@@ -91,19 +80,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private IREDString Prop => Property as IREDString;
 
-        public new string Value
-        {
-            get => Prop.Value;
-            set
-            {
-                if (Prop.Value != value)
-                {
-                    var oldValue = Prop.Value;
-                    Prop.Value = value;
-                    RaisePropertyChanged(() => Value, oldValue, value);
-                }
-            }
-        }
+        [Reactive] public new string Value { get; set; }
     }
 
     public class ChunkViewModel : ISelectableTreeViewItemModel
