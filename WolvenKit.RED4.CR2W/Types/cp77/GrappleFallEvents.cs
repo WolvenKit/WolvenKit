@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<LocomotionTakedownInitData> _stateMachineInitData;
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("stateMachineInitData")] 
 		public wCHandle<LocomotionTakedownInitData> StateMachineInitData
 		{

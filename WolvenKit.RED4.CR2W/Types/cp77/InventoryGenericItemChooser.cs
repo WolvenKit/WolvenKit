@@ -15,9 +15,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<InventoryDataManagerV2> _inventoryDataManager;
 		private CEnum<gamedataEquipmentArea> _equipmentArea;
-		private CHandle<InventoryItemDisplayController> _itemDisplay;
+		private wCHandle<InventoryItemDisplayController> _itemDisplay;
 		private CInt32 _slotIndex;
-		private CHandle<InventoryItemDisplayController> _selectedItem;
+		private wCHandle<InventoryItemDisplayController> _selectedItem;
 		private wCHandle<gameuiTooltipsManager> _tooltipsManager;
 
 		[Ordinal(1)] 
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("itemDisplay")] 
-		public CHandle<InventoryItemDisplayController> ItemDisplay
+		public wCHandle<InventoryItemDisplayController> ItemDisplay
 		{
 			get => GetProperty(ref _itemDisplay);
 			set => SetProperty(ref _itemDisplay, value);
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("selectedItem")] 
-		public CHandle<InventoryItemDisplayController> SelectedItem
+		public wCHandle<InventoryItemDisplayController> SelectedItem
 		{
 			get => GetProperty(ref _selectedItem);
 			set => SetProperty(ref _selectedItem, value);

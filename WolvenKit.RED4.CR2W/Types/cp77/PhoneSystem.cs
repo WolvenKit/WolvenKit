@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameIBlackboard> _blackboard;
 		private questPhoneCallInformation _lastCallInformation;
 		private CBool _contactsOpen;
-		private CUInt32 _contactsOpenBBId;
+		private CHandle<redCallbackObject> _contactsOpenBBId;
 
 		[Ordinal(0)] 
 		[RED("BlackboardSystem")] 
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("ContactsOpenBBId")] 
-		public CUInt32 ContactsOpenBBId
+		public CHandle<redCallbackObject> ContactsOpenBBId
 		{
 			get => GetProperty(ref _contactsOpenBBId);
 			set => SetProperty(ref _contactsOpenBBId, value);

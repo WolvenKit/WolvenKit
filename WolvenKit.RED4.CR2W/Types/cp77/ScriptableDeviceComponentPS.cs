@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<entEntityID> _willingInvestigators;
 		private CBool _isInteractive;
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInitialized, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("forceResolveStateOnAttach")] 
 		public CBool ForceResolveStateOnAttach
 		{
@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceResolveStateOnAttach, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("forceVisibilityInAnimSystemOnLogicReady")] 
 		public CBool ForceVisibilityInAnimSystemOnLogicReady
 		{
@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceVisibilityInAnimSystemOnLogicReady, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("masters")] 
 		public CArray<CHandle<gameDeviceComponentPS>> Masters
 		{
@@ -122,7 +122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _masters, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("mastersCached")] 
 		public CBool MastersCached
 		{
@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mastersCached, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("deviceName")] 
 		public CString DeviceName
 		{
@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceName, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("activationState")] 
 		public CEnum<EActivationState> ActivationState
 		{
@@ -146,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activationState, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("drawGridLink")] 
 		public CBool DrawGridLink
 		{
@@ -154,7 +154,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _drawGridLink, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("isLinkDynamic")] 
 		public CBool IsLinkDynamic
 		{
@@ -162,7 +162,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isLinkDynamic, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("fullDepth")] 
 		public CBool FullDepth
 		{
@@ -170,7 +170,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fullDepth, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("virtualNetworkShapeID")] 
 		public TweakDBID VirtualNetworkShapeID
 		{
@@ -178,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _virtualNetworkShapeID, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("tweakDBRecord")] 
 		public TweakDBID TweakDBRecord
 		{
@@ -186,7 +186,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tweakDBRecord, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("tweakDBDescriptionRecord")] 
 		public TweakDBID TweakDBDescriptionRecord
 		{
@@ -194,7 +194,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tweakDBDescriptionRecord, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("contentScale")] 
 		public TweakDBID ContentScale
 		{
@@ -202,7 +202,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _contentScale, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("skillCheckContainer")] 
 		public CHandle<BaseSkillCheckContainer> SkillCheckContainer
 		{
@@ -210,7 +210,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _skillCheckContainer, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("hasUICameraZoom")] 
 		public CBool HasUICameraZoom
 		{
@@ -218,7 +218,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasUICameraZoom, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("allowUICameraZoomDynamicSwitch")] 
 		public CBool AllowUICameraZoomDynamicSwitch
 		{
@@ -226,7 +226,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _allowUICameraZoomDynamicSwitch, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("hasFullScreenUI")] 
 		public CBool HasFullScreenUI
 		{
@@ -234,7 +234,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasFullScreenUI, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("hasAuthorizationModule")] 
 		public CBool HasAuthorizationModule
 		{
@@ -242,7 +242,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasAuthorizationModule, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("hasPersonalLinkSlot")] 
 		public CBool HasPersonalLinkSlot
 		{
@@ -250,7 +250,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasPersonalLinkSlot, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("backdoorBreachDifficulty")] 
 		public CEnum<EGameplayChallengeLevel> BackdoorBreachDifficulty
 		{
@@ -258,7 +258,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _backdoorBreachDifficulty, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("shouldSkipNetrunnerMinigame")] 
 		public CBool ShouldSkipNetrunnerMinigame
 		{
@@ -266,7 +266,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldSkipNetrunnerMinigame, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("minigameDefinition")] 
 		public TweakDBID MinigameDefinition
 		{
@@ -274,7 +274,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _minigameDefinition, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("minigameAttempt")] 
 		public CInt32 MinigameAttempt
 		{
@@ -282,7 +282,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _minigameAttempt, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("hackingMinigameState")] 
 		public CEnum<gameuiHackingMinigameState> HackingMinigameState
 		{
@@ -290,7 +290,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hackingMinigameState, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("disablePersonalLinkAutoDisconnect")] 
 		public CBool DisablePersonalLinkAutoDisconnect
 		{
@@ -298,7 +298,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disablePersonalLinkAutoDisconnect, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("canHandleAdvancedInteraction")] 
 		public CBool CanHandleAdvancedInteraction
 		{
@@ -306,7 +306,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canHandleAdvancedInteraction, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("canBeTrapped")] 
 		public CBool CanBeTrapped
 		{
@@ -314,7 +314,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canBeTrapped, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("disassembleProperties")] 
 		public DisassembleOptions DisassembleProperties
 		{
@@ -322,7 +322,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disassembleProperties, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("flatheadScavengeProperties")] 
 		public SpiderbotScavengeOptions FlatheadScavengeProperties
 		{
@@ -330,7 +330,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _flatheadScavengeProperties, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("destructionProperties")] 
 		public DestructionData DestructionProperties
 		{
@@ -338,7 +338,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _destructionProperties, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("canPlayerTakeOverControl")] 
 		public CBool CanPlayerTakeOverControl
 		{
@@ -346,7 +346,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canPlayerTakeOverControl, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("canBeInDeviceChain")] 
 		public CBool CanBeInDeviceChain
 		{
@@ -354,7 +354,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canBeInDeviceChain, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("personalLinkForced")] 
 		public CBool PersonalLinkForced
 		{
@@ -362,7 +362,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _personalLinkForced, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("personalLinkCustomInteraction")] 
 		public TweakDBID PersonalLinkCustomInteraction
 		{
@@ -370,7 +370,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _personalLinkCustomInteraction, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("personalLinkStatus")] 
 		public CEnum<EPersonalLinkConnectionStatus> PersonalLinkStatus
 		{
@@ -378,7 +378,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _personalLinkStatus, value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("isAdvancedInteractionModeOn")] 
 		public CBool IsAdvancedInteractionModeOn
 		{
@@ -386,7 +386,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isAdvancedInteractionModeOn, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("juryrigTrapState")] 
 		public CEnum<EJuryrigTrapState> JuryrigTrapState
 		{
@@ -394,7 +394,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _juryrigTrapState, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("isControlledByThePlayer")] 
 		public CBool IsControlledByThePlayer
 		{
@@ -402,7 +402,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isControlledByThePlayer, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("isHighlightedInFocusMode")] 
 		public CBool IsHighlightedInFocusMode
 		{
@@ -410,7 +410,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isHighlightedInFocusMode, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("wasQuickHacked")] 
 		public CBool WasQuickHacked
 		{
@@ -418,7 +418,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasQuickHacked, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("wasQuickHackAttempt")] 
 		public CBool WasQuickHackAttempt
 		{
@@ -426,7 +426,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasQuickHackAttempt, value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("lastPerformedQuickHack")] 
 		public CName LastPerformedQuickHack
 		{
@@ -434,7 +434,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastPerformedQuickHack, value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{
@@ -442,7 +442,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isGlitching, value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(66)] 
 		[RED("isRestarting")] 
 		public CBool IsRestarting
 		{
@@ -450,7 +450,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isRestarting, value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(67)] 
 		[RED("blockSecurityWakeUp")] 
 		public CBool BlockSecurityWakeUp
 		{
@@ -458,7 +458,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _blockSecurityWakeUp, value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("isLockedViaSequencer")] 
 		public CBool IsLockedViaSequencer
 		{
@@ -466,7 +466,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isLockedViaSequencer, value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
 		[RED("distractExecuted")] 
 		public CBool DistractExecuted
 		{
@@ -474,7 +474,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _distractExecuted, value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("distractionTimeCompleted")] 
 		public CBool DistractionTimeCompleted
 		{
@@ -482,7 +482,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _distractionTimeCompleted, value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(71)] 
 		[RED("hasNPCWorkspotKillInteraction")] 
 		public CBool HasNPCWorkspotKillInteraction
 		{
@@ -490,7 +490,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasNPCWorkspotKillInteraction, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("shouldNPCWorkspotFinishLoop")] 
 		public CBool ShouldNPCWorkspotFinishLoop
 		{
@@ -498,7 +498,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldNPCWorkspotFinishLoop, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(73)] 
 		[RED("durabilityState")] 
 		public CEnum<EDeviceDurabilityState> DurabilityState
 		{
@@ -506,7 +506,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _durabilityState, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(74)] 
 		[RED("hasBeenScavenged")] 
 		public CBool HasBeenScavenged
 		{
@@ -514,7 +514,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasBeenScavenged, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("currentlyAuthorizedUsers")] 
 		public CArray<SecuritySystemClearanceEntry> CurrentlyAuthorizedUsers
 		{
@@ -522,7 +522,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentlyAuthorizedUsers, value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("performedActions")] 
 		public CArray<SPerformedActions> PerformedActions
 		{
@@ -530,7 +530,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _performedActions, value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("isInitialStateOperationPerformed")] 
 		public CBool IsInitialStateOperationPerformed
 		{
@@ -538,7 +538,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInitialStateOperationPerformed, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("illegalActions")] 
 		public IllegalActionTypes IllegalActions
 		{
@@ -546,7 +546,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _illegalActions, value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("disableQuickHacks")] 
 		public CBool DisableQuickHacks
 		{
@@ -554,7 +554,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disableQuickHacks, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("availableQuickHacks")] 
 		public CArray<CName> AvailableQuickHacks
 		{
@@ -562,7 +562,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _availableQuickHacks, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("isKeyloggerInstalled")] 
 		public CBool IsKeyloggerInstalled
 		{
@@ -570,7 +570,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isKeyloggerInstalled, value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(82)] 
 		[RED("actionsWithDisabledRPGChecks")] 
 		public CArray<TweakDBID> ActionsWithDisabledRPGChecks
 		{
@@ -578,7 +578,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _actionsWithDisabledRPGChecks, value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(83)] 
 		[RED("availableSpiderbotActions")] 
 		public CArray<CName> AvailableSpiderbotActions
 		{
@@ -586,7 +586,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _availableSpiderbotActions, value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(84)] 
 		[RED("currentSpiderbotActionPerformed")] 
 		public CHandle<ScriptableDeviceAction> CurrentSpiderbotActionPerformed
 		{
@@ -594,7 +594,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentSpiderbotActionPerformed, value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(85)] 
 		[RED("isSpiderbotInteractionOrdered")] 
 		public CBool IsSpiderbotInteractionOrdered
 		{
@@ -602,7 +602,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isSpiderbotInteractionOrdered, value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(86)] 
 		[RED("shouldScannerShowStatus")] 
 		public CBool ShouldScannerShowStatus
 		{
@@ -610,7 +610,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldScannerShowStatus, value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("shouldScannerShowNetwork")] 
 		public CBool ShouldScannerShowNetwork
 		{
@@ -618,7 +618,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldScannerShowNetwork, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("shouldScannerShowAttitude")] 
 		public CBool ShouldScannerShowAttitude
 		{
@@ -626,7 +626,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldScannerShowAttitude, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("shouldScannerShowRole")] 
 		public CBool ShouldScannerShowRole
 		{
@@ -634,7 +634,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldScannerShowRole, value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("shouldScannerShowHealth")] 
 		public CBool ShouldScannerShowHealth
 		{
@@ -642,7 +642,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldScannerShowHealth, value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("debugDevice")] 
 		public CBool DebugDevice
 		{
@@ -650,7 +650,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugDevice, value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("debugName")] 
 		public CName DebugName
 		{
@@ -658,7 +658,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugName, value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("debugExposeQuickHacks")] 
 		public CBool DebugExposeQuickHacks
 		{
@@ -666,7 +666,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugExposeQuickHacks, value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(94)] 
 		[RED("debugPath")] 
 		public CName DebugPath
 		{
@@ -674,7 +674,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugPath, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(95)] 
 		[RED("debugID")] 
 		public CUInt32 DebugID
 		{
@@ -682,7 +682,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugID, value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(96)] 
 		[RED("deviceOperationsSetup")] 
 		public CHandle<DeviceOperationsContainer> DeviceOperationsSetup
 		{
@@ -690,7 +690,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceOperationsSetup, value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("connectionHighlightObjects")] 
 		public CArray<NodeRef> ConnectionHighlightObjects
 		{
@@ -698,7 +698,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _connectionHighlightObjects, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("activeContexts")] 
 		public CArray<CEnum<gamedeviceRequestType>> ActiveContexts
 		{
@@ -706,7 +706,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeContexts, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("playstyles")] 
 		public CArray<CEnum<EPlaystyle>> Playstyles
 		{
@@ -714,7 +714,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playstyles, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("quickHackVulnerabilties")] 
 		public CArray<TweakDBID> QuickHackVulnerabilties
 		{
@@ -722,7 +722,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickHackVulnerabilties, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("quickHackVulnerabiltiesInitialized")] 
 		public CBool QuickHackVulnerabiltiesInitialized
 		{
@@ -730,7 +730,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickHackVulnerabiltiesInitialized, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("willingInvestigators")] 
 		public CArray<entEntityID> WillingInvestigators
 		{
@@ -738,7 +738,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _willingInvestigators, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{

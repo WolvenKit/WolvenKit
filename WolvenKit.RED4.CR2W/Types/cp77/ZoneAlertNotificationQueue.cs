@@ -8,21 +8,21 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ZoneAlertNotificationQueue : gameuiGenericNotificationGameController
 	{
 		private CFloat _duration;
-		private CUInt32 _securityBlackBoardID;
-		private CUInt32 _combatBlackBoardID;
-		private CUInt32 _wantedValueBlackboardID;
-		private CUInt32 _bountyAmountBlackboardID;
-		private CUInt32 _playerBlackboardID;
-		private CHandle<gameIBlackboard> _blackboard;
+		private CHandle<redCallbackObject> _securityBlackBoardID;
+		private CHandle<redCallbackObject> _combatBlackBoardID;
+		private CHandle<redCallbackObject> _wantedValueBlackboardID;
+		private CHandle<redCallbackObject> _bountyAmountBlackboardID;
+		private CHandle<redCallbackObject> _playerBlackboardID;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CInt32 _bountyPrice;
-		private CHandle<gameIBlackboard> _wantedBlackboard;
+		private wCHandle<gameIBlackboard> _wantedBlackboard;
 		private CHandle<UI_WantedBarDef> _wantedBlackboardDef;
 		private CBool _playerInCombat;
 		private wCHandle<gameObject> _playerPuppet;
 		private CEnum<ESecurityAreaType> _currentSecurityZoneType;
-		private CHandle<gameIBlackboard> _vehicleZoneBlackboard;
+		private wCHandle<gameIBlackboard> _vehicleZoneBlackboard;
 		private CHandle<LocalPlayerDef> _vehicleZoneBlackboardDef;
-		private CUInt32 _vehicleZoneBlackboardID;
+		private CHandle<redCallbackObject> _vehicleZoneBlackboardID;
 		private CInt32 _wANTED_TIER_SIZE;
 		private CInt32 _wantedLevel;
 		private CUInt32 _factListenerID;
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("securityBlackBoardID")] 
-		public CUInt32 SecurityBlackBoardID
+		public CHandle<redCallbackObject> SecurityBlackBoardID
 		{
 			get => GetProperty(ref _securityBlackBoardID);
 			set => SetProperty(ref _securityBlackBoardID, value);
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("combatBlackBoardID")] 
-		public CUInt32 CombatBlackBoardID
+		public CHandle<redCallbackObject> CombatBlackBoardID
 		{
 			get => GetProperty(ref _combatBlackBoardID);
 			set => SetProperty(ref _combatBlackBoardID, value);
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("wantedValueBlackboardID")] 
-		public CUInt32 WantedValueBlackboardID
+		public CHandle<redCallbackObject> WantedValueBlackboardID
 		{
 			get => GetProperty(ref _wantedValueBlackboardID);
 			set => SetProperty(ref _wantedValueBlackboardID, value);
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("bountyAmountBlackboardID")] 
-		public CUInt32 BountyAmountBlackboardID
+		public CHandle<redCallbackObject> BountyAmountBlackboardID
 		{
 			get => GetProperty(ref _bountyAmountBlackboardID);
 			set => SetProperty(ref _bountyAmountBlackboardID, value);
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("playerBlackboardID")] 
-		public CUInt32 PlayerBlackboardID
+		public CHandle<redCallbackObject> PlayerBlackboardID
 		{
 			get => GetProperty(ref _playerBlackboardID);
 			set => SetProperty(ref _playerBlackboardID, value);
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("wantedBlackboard")] 
-		public CHandle<gameIBlackboard> WantedBlackboard
+		public wCHandle<gameIBlackboard> WantedBlackboard
 		{
 			get => GetProperty(ref _wantedBlackboard);
 			set => SetProperty(ref _wantedBlackboard, value);
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("vehicleZoneBlackboard")] 
-		public CHandle<gameIBlackboard> VehicleZoneBlackboard
+		public wCHandle<gameIBlackboard> VehicleZoneBlackboard
 		{
 			get => GetProperty(ref _vehicleZoneBlackboard);
 			set => SetProperty(ref _vehicleZoneBlackboard, value);
@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("vehicleZoneBlackboardID")] 
-		public CUInt32 VehicleZoneBlackboardID
+		public CHandle<redCallbackObject> VehicleZoneBlackboardID
 		{
 			get => GetProperty(ref _vehicleZoneBlackboardID);
 			set => SetProperty(ref _vehicleZoneBlackboardID, value);

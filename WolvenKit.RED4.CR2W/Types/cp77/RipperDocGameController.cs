@@ -13,6 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _itemTab;
 		private inkWidgetReference _femaleHovers;
 		private inkWidgetReference _maleHovers;
+		private inkWidgetReference _defaultAnimationTab;
+		private inkWidgetReference _itemAnimationTab;
 		private inkWidgetReference _f_frontalCortexHoverTexture;
 		private inkWidgetReference _f_eyesHoverTexture;
 		private inkWidgetReference _f_cardiovascularHoverTexture;
@@ -66,30 +68,31 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<VendorUserData> _vendorUserData;
 		private CHandle<VendorDataManager> _vendorDataManager;
 		private CEnum<gamedataEquipmentArea> _selectedArea;
-		private CHandle<CyberwareInventoryMiniGrid> _equipmentGrid;
-		private CHandle<gameIBlackboard> _vendorBlackboard;
-		private CHandle<gameIBlackboard> _equipmentBlackboard;
-		private CUInt32 _equipmentBlackboardCallback;
+		private wCHandle<CyberwareInventoryMiniGrid> _equipmentGrid;
+		private wCHandle<gameIBlackboard> _vendorBlackboard;
+		private wCHandle<gameIBlackboard> _equipmentBlackboard;
+		private CHandle<redCallbackObject> _equipmentBlackboardCallback;
 		private wCHandle<AGenericTooltipController> _cyberwareInfo;
 		private CEnum<CyberwareInfoType> _cyberwareInfoType;
 		private CHandle<inkanimProxy> _animationProxy;
-		private CHandle<inkVirtualGridController> _virtualCyberwareListController;
+		private wCHandle<inkVirtualGridController> _virtualCyberwareListController;
 		private CHandle<CyberwareTemplateClassifier> _cyberwareClassifier;
 		private CHandle<inkScriptableDataSourceWrapper> _cyberwareDataSource;
 		private CHandle<CyberwareDataView> _cyberwaregDataView;
 		private CEnum<RipperdocFilter> _currentFilter;
 		private wCHandle<FilterRadioGroup> _radioGroup;
-		private CHandle<RipperdocIdPanel> _ripperId;
+		private wCHandle<RipperdocIdPanel> _ripperId;
 		private CHandle<inkanimProxy> _hoverAnimation;
+		private CHandle<inkanimProxy> _hoverOverAnimation;
 		private CHandle<inkanimProxy> _introDefaultAnimation;
 		private CHandle<inkanimProxy> _outroDefaultAnimation;
 		private CHandle<inkanimProxy> _introPaperdollAnimation;
 		private CHandle<inkanimProxy> _outroPaperdollAnimation;
 		private CHandle<gameInventoryScriptListener> _inventoryListener;
-		private CArray<CHandle<CyberwareInventoryMiniGrid>> _cyberareGrids;
+		private CArray<wCHandle<CyberwareInventoryMiniGrid>> _cyberareGrids;
 		private CBool _isActivePanel;
 		private CBool _equiped;
-		private CInt32 _selectedPreviewSlot;
+		private CInt32 _activeSlotIndex;
 		private CHandle<inkGameNotificationToken> _confirmationPopupToken;
 
 		[Ordinal(3)] 
@@ -141,6 +144,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("defaultAnimationTab")] 
+		public inkWidgetReference DefaultAnimationTab
+		{
+			get => GetProperty(ref _defaultAnimationTab);
+			set => SetProperty(ref _defaultAnimationTab, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("itemAnimationTab")] 
+		public inkWidgetReference ItemAnimationTab
+		{
+			get => GetProperty(ref _itemAnimationTab);
+			set => SetProperty(ref _itemAnimationTab, value);
+		}
+
+		[Ordinal(11)] 
 		[RED("F_frontalCortexHoverTexture")] 
 		public inkWidgetReference F_frontalCortexHoverTexture
 		{
@@ -148,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_frontalCortexHoverTexture, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("F_eyesHoverTexture")] 
 		public inkWidgetReference F_eyesHoverTexture
 		{
@@ -156,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_eyesHoverTexture, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("F_cardiovascularHoverTexture")] 
 		public inkWidgetReference F_cardiovascularHoverTexture
 		{
@@ -164,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_cardiovascularHoverTexture, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("F_immuneHoverTexture")] 
 		public inkWidgetReference F_immuneHoverTexture
 		{
@@ -172,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_immuneHoverTexture, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("F_nervousHoverTexture")] 
 		public inkWidgetReference F_nervousHoverTexture
 		{
@@ -180,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_nervousHoverTexture, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("F_integumentaryHoverTexture")] 
 		public inkWidgetReference F_integumentaryHoverTexture
 		{
@@ -188,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_integumentaryHoverTexture, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("F_systemReplacementHoverTexture")] 
 		public inkWidgetReference F_systemReplacementHoverTexture
 		{
@@ -196,7 +215,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_systemReplacementHoverTexture, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("F_musculoskeletalHoverTexture")] 
 		public inkWidgetReference F_musculoskeletalHoverTexture
 		{
@@ -204,7 +223,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_musculoskeletalHoverTexture, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("F_handsHoverTexture")] 
 		public inkWidgetReference F_handsHoverTexture
 		{
@@ -212,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_handsHoverTexture, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("F_armsHoverTexture")] 
 		public inkWidgetReference F_armsHoverTexture
 		{
@@ -220,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_armsHoverTexture, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("F_legsHoverTexture")] 
 		public inkWidgetReference F_legsHoverTexture
 		{
@@ -228,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _f_legsHoverTexture, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("M_frontalCortexHoverTexture")] 
 		public inkWidgetReference M_frontalCortexHoverTexture
 		{
@@ -236,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_frontalCortexHoverTexture, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("M_eyesHoverTexture")] 
 		public inkWidgetReference M_eyesHoverTexture
 		{
@@ -244,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_eyesHoverTexture, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("M_cardiovascularHoverTexture")] 
 		public inkWidgetReference M_cardiovascularHoverTexture
 		{
@@ -252,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_cardiovascularHoverTexture, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("M_immuneHoverTexture")] 
 		public inkWidgetReference M_immuneHoverTexture
 		{
@@ -260,7 +279,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_immuneHoverTexture, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("M_nervousHoverTexture")] 
 		public inkWidgetReference M_nervousHoverTexture
 		{
@@ -268,7 +287,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_nervousHoverTexture, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("M_integumentaryHoverTexture")] 
 		public inkWidgetReference M_integumentaryHoverTexture
 		{
@@ -276,7 +295,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_integumentaryHoverTexture, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("M_systemReplacementHoverTexture")] 
 		public inkWidgetReference M_systemReplacementHoverTexture
 		{
@@ -284,7 +303,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_systemReplacementHoverTexture, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("M_musculoskeletalHoverTexture")] 
 		public inkWidgetReference M_musculoskeletalHoverTexture
 		{
@@ -292,7 +311,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_musculoskeletalHoverTexture, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("M_handsHoverTexture")] 
 		public inkWidgetReference M_handsHoverTexture
 		{
@@ -300,7 +319,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_handsHoverTexture, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("M_armsHoverTexture")] 
 		public inkWidgetReference M_armsHoverTexture
 		{
@@ -308,7 +327,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_armsHoverTexture, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("M_legsHoverTexture")] 
 		public inkWidgetReference M_legsHoverTexture
 		{
@@ -316,7 +335,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _m_legsHoverTexture, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("man_wiresTexture")] 
 		public inkWidgetReference Man_wiresTexture
 		{
@@ -324,7 +343,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _man_wiresTexture, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("woman_wiresTexture")] 
 		public inkWidgetReference Woman_wiresTexture
 		{
@@ -332,7 +351,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _woman_wiresTexture, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("frontalCortexAnchor")] 
 		public inkCompoundWidgetReference FrontalCortexAnchor
 		{
@@ -340,7 +359,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frontalCortexAnchor, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("ocularCortexAnchor")] 
 		public inkCompoundWidgetReference OcularCortexAnchor
 		{
@@ -348,7 +367,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ocularCortexAnchor, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("leftMiddleGridAnchor")] 
 		public inkCompoundWidgetReference LeftMiddleGridAnchor
 		{
@@ -356,7 +375,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _leftMiddleGridAnchor, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("leftButtomGridAnchor")] 
 		public inkCompoundWidgetReference LeftButtomGridAnchor
 		{
@@ -364,7 +383,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _leftButtomGridAnchor, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("rightTopGridAnchor")] 
 		public inkCompoundWidgetReference RightTopGridAnchor
 		{
@@ -372,7 +391,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rightTopGridAnchor, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("rightButtomGridAnchor")] 
 		public inkCompoundWidgetReference RightButtomGridAnchor
 		{
@@ -380,7 +399,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rightButtomGridAnchor, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("skeletonAnchor")] 
 		public inkCompoundWidgetReference SkeletonAnchor
 		{
@@ -388,7 +407,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _skeletonAnchor, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("handsAnchor")] 
 		public inkCompoundWidgetReference HandsAnchor
 		{
@@ -396,7 +415,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _handsAnchor, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("ripperdocIdRoot")] 
 		public inkWidgetReference RipperdocIdRoot
 		{
@@ -404,7 +423,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ripperdocIdRoot, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("playerMoney")] 
 		public inkTextWidgetReference PlayerMoney
 		{
@@ -412,7 +431,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerMoney, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("playerMoneyHolder")] 
 		public inkWidgetReference PlayerMoneyHolder
 		{
@@ -420,7 +439,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerMoneyHolder, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("cyberwareSlotsList")] 
 		public inkCompoundWidgetReference CyberwareSlotsList
 		{
@@ -428,7 +447,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareSlotsList, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("cyberwareVirtualGrid")] 
 		public inkVirtualCompoundWidgetReference CyberwareVirtualGrid
 		{
@@ -436,7 +455,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareVirtualGrid, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("radioGroupRef")] 
 		public inkWidgetReference RadioGroupRef
 		{
@@ -444,7 +463,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _radioGroupRef, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("cyberwareInfoContainer")] 
 		public inkCompoundWidgetReference CyberwareInfoContainer
 		{
@@ -452,7 +471,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareInfoContainer, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("itemsListScrollAreaContainer")] 
 		public inkWidgetReference ItemsListScrollAreaContainer
 		{
@@ -460,7 +479,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemsListScrollAreaContainer, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("sortingButton")] 
 		public inkWidgetReference SortingButton
 		{
@@ -468,7 +487,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sortingButton, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("sortingDropdown")] 
 		public inkWidgetReference SortingDropdown
 		{
@@ -476,7 +495,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sortingDropdown, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("mode")] 
 		public CEnum<RipperdocModes> Mode
 		{
@@ -484,7 +503,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mode, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("screen")] 
 		public CEnum<CyberwareScreenType> Screen
 		{
@@ -492,7 +511,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _screen, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
@@ -500,7 +519,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonHintsController, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("TooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -508,7 +527,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipsManager, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -516,7 +535,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryManager, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
 		[RED("uiScriptableSystem")] 
 		public wCHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -524,7 +543,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiScriptableSystem, value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(59)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -532,7 +551,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(60)] 
 		[RED("player")] 
 		public wCHandle<PlayerPuppet> Player
 		{
@@ -540,7 +559,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _player, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(61)] 
 		[RED("vendorUserData")] 
 		public CHandle<VendorUserData> VendorUserData
 		{
@@ -548,7 +567,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendorUserData, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(62)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
@@ -556,7 +575,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendorDataManager, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(63)] 
 		[RED("selectedArea")] 
 		public CEnum<gamedataEquipmentArea> SelectedArea
 		{
@@ -564,39 +583,39 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _selectedArea, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(64)] 
 		[RED("equipmentGrid")] 
-		public CHandle<CyberwareInventoryMiniGrid> EquipmentGrid
+		public wCHandle<CyberwareInventoryMiniGrid> EquipmentGrid
 		{
 			get => GetProperty(ref _equipmentGrid);
 			set => SetProperty(ref _equipmentGrid, value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(65)] 
 		[RED("VendorBlackboard")] 
-		public CHandle<gameIBlackboard> VendorBlackboard
+		public wCHandle<gameIBlackboard> VendorBlackboard
 		{
 			get => GetProperty(ref _vendorBlackboard);
 			set => SetProperty(ref _vendorBlackboard, value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(66)] 
 		[RED("equipmentBlackboard")] 
-		public CHandle<gameIBlackboard> EquipmentBlackboard
+		public wCHandle<gameIBlackboard> EquipmentBlackboard
 		{
 			get => GetProperty(ref _equipmentBlackboard);
 			set => SetProperty(ref _equipmentBlackboard, value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(67)] 
 		[RED("equipmentBlackboardCallback")] 
-		public CUInt32 EquipmentBlackboardCallback
+		public CHandle<redCallbackObject> EquipmentBlackboardCallback
 		{
 			get => GetProperty(ref _equipmentBlackboardCallback);
 			set => SetProperty(ref _equipmentBlackboardCallback, value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(68)] 
 		[RED("cyberwareInfo")] 
 		public wCHandle<AGenericTooltipController> CyberwareInfo
 		{
@@ -604,7 +623,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareInfo, value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(69)] 
 		[RED("cyberwareInfoType")] 
 		public CEnum<CyberwareInfoType> CyberwareInfoType
 		{
@@ -612,7 +631,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareInfoType, value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(70)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -620,15 +639,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationProxy, value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(71)] 
 		[RED("virtualCyberwareListController")] 
-		public CHandle<inkVirtualGridController> VirtualCyberwareListController
+		public wCHandle<inkVirtualGridController> VirtualCyberwareListController
 		{
 			get => GetProperty(ref _virtualCyberwareListController);
 			set => SetProperty(ref _virtualCyberwareListController, value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(72)] 
 		[RED("cyberwareClassifier")] 
 		public CHandle<CyberwareTemplateClassifier> CyberwareClassifier
 		{
@@ -636,7 +655,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareClassifier, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(73)] 
 		[RED("cyberwareDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> CyberwareDataSource
 		{
@@ -644,7 +663,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwareDataSource, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(74)] 
 		[RED("cyberwaregDataView")] 
 		public CHandle<CyberwareDataView> CyberwaregDataView
 		{
@@ -652,7 +671,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyberwaregDataView, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(75)] 
 		[RED("currentFilter")] 
 		public CEnum<RipperdocFilter> CurrentFilter
 		{
@@ -660,7 +679,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentFilter, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(76)] 
 		[RED("radioGroup")] 
 		public wCHandle<FilterRadioGroup> RadioGroup
 		{
@@ -668,15 +687,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _radioGroup, value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(77)] 
 		[RED("ripperId")] 
-		public CHandle<RipperdocIdPanel> RipperId
+		public wCHandle<RipperdocIdPanel> RipperId
 		{
 			get => GetProperty(ref _ripperId);
 			set => SetProperty(ref _ripperId, value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(78)] 
 		[RED("hoverAnimation")] 
 		public CHandle<inkanimProxy> HoverAnimation
 		{
@@ -684,7 +703,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hoverAnimation, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(79)] 
+		[RED("hoverOverAnimation")] 
+		public CHandle<inkanimProxy> HoverOverAnimation
+		{
+			get => GetProperty(ref _hoverOverAnimation);
+			set => SetProperty(ref _hoverOverAnimation, value);
+		}
+
+		[Ordinal(80)] 
 		[RED("introDefaultAnimation")] 
 		public CHandle<inkanimProxy> IntroDefaultAnimation
 		{
@@ -692,7 +719,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _introDefaultAnimation, value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(81)] 
 		[RED("outroDefaultAnimation")] 
 		public CHandle<inkanimProxy> OutroDefaultAnimation
 		{
@@ -700,7 +727,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _outroDefaultAnimation, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(82)] 
 		[RED("introPaperdollAnimation")] 
 		public CHandle<inkanimProxy> IntroPaperdollAnimation
 		{
@@ -708,7 +735,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _introPaperdollAnimation, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(83)] 
 		[RED("outroPaperdollAnimation")] 
 		public CHandle<inkanimProxy> OutroPaperdollAnimation
 		{
@@ -716,7 +743,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _outroPaperdollAnimation, value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(84)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
@@ -724,15 +751,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryListener, value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(85)] 
 		[RED("cyberareGrids")] 
-		public CArray<CHandle<CyberwareInventoryMiniGrid>> CyberareGrids
+		public CArray<wCHandle<CyberwareInventoryMiniGrid>> CyberareGrids
 		{
 			get => GetProperty(ref _cyberareGrids);
 			set => SetProperty(ref _cyberareGrids, value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(86)] 
 		[RED("isActivePanel")] 
 		public CBool IsActivePanel
 		{
@@ -740,7 +767,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isActivePanel, value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(87)] 
 		[RED("equiped")] 
 		public CBool Equiped
 		{
@@ -748,15 +775,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equiped, value);
 		}
 
-		[Ordinal(85)] 
-		[RED("selectedPreviewSlot")] 
-		public CInt32 SelectedPreviewSlot
+		[Ordinal(88)] 
+		[RED("activeSlotIndex")] 
+		public CInt32 ActiveSlotIndex
 		{
-			get => GetProperty(ref _selectedPreviewSlot);
-			set => SetProperty(ref _selectedPreviewSlot, value);
+			get => GetProperty(ref _activeSlotIndex);
+			set => SetProperty(ref _activeSlotIndex, value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(89)] 
 		[RED("confirmationPopupToken")] 
 		public CHandle<inkGameNotificationToken> ConfirmationPopupToken
 		{

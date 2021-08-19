@@ -20,9 +20,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _deadNotice;
 		private inkWidgetReference _crossedOut;
 		private CArray<inkWidgetReference> _starsWidget;
-		private CUInt32 _bountyCallbackID;
-		private CUInt32 _healthCallbackID;
-		private CUInt32 _objectCallbackID;
+		private CHandle<redCallbackObject> _bountyCallbackID;
+		private CHandle<redCallbackObject> _healthCallbackID;
+		private CHandle<redCallbackObject> _objectCallbackID;
 		private CBool _isValidBounty;
 		private CBool _isAlive;
 		private CEnum<ScannerObjectType> _objectType;
@@ -134,7 +134,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("bountyCallbackID")] 
-		public CUInt32 BountyCallbackID
+		public CHandle<redCallbackObject> BountyCallbackID
 		{
 			get => GetProperty(ref _bountyCallbackID);
 			set => SetProperty(ref _bountyCallbackID, value);
@@ -142,7 +142,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("healthCallbackID")] 
-		public CUInt32 HealthCallbackID
+		public CHandle<redCallbackObject> HealthCallbackID
 		{
 			get => GetProperty(ref _healthCallbackID);
 			set => SetProperty(ref _healthCallbackID, value);
@@ -150,7 +150,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("objectCallbackID")] 
-		public CUInt32 ObjectCallbackID
+		public CHandle<redCallbackObject> ObjectCallbackID
 		{
 			get => GetProperty(ref _objectCallbackID);
 			set => SetProperty(ref _objectCallbackID, value);

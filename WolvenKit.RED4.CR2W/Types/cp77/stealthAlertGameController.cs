@@ -17,9 +17,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _fluff_03;
 		private inkWidgetReference _fluff_04;
 		private wCHandle<inkWidget> _root;
-		private CUInt32 _securityBlackBoardID;
+		private CHandle<redCallbackObject> _securityBlackBoardID;
 		private CUInt32 _playerBlackboardID;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private wCHandle<gameObject> _playerPuppet;
 		private CHandle<inkanimProxy> _animationProxy;
 
@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("securityBlackBoardID")] 
-		public CUInt32 SecurityBlackBoardID
+		public CHandle<redCallbackObject> SecurityBlackBoardID
 		{
 			get => GetProperty(ref _securityBlackBoardID);
 			set => SetProperty(ref _securityBlackBoardID, value);
@@ -121,7 +121,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);

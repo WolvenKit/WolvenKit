@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entMeshComponent> _strongSoloHandle;
 		private CBool _duplicateDestruction;
 
-		[Ordinal(138)] 
+		[Ordinal(140)] 
 		[RED("soloCollider")] 
 		public CHandle<entIComponent> SoloCollider
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soloCollider, value);
 		}
 
-		[Ordinal(139)] 
+		[Ordinal(141)] 
 		[RED("strongSoloHandle")] 
 		public CHandle<entMeshComponent> StrongSoloHandle
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _strongSoloHandle, value);
 		}
 
-		[Ordinal(140)] 
+		[Ordinal(142)] 
 		[RED("duplicateDestruction")] 
 		public CBool DuplicateDestruction
 		{

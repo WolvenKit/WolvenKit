@@ -18,6 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _bigFireEvent;
 		private CName _engineFireEvent;
 		private CName _coolerDamageEvent;
+		private CName _interiorCollisionEvent;
 		private CArray<audioVehicleCollisionMapItem> _collisionSettings;
 
 		[Ordinal(1)] 
@@ -109,6 +110,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("interiorCollisionEvent")] 
+		public CName InteriorCollisionEvent
+		{
+			get => GetProperty(ref _interiorCollisionEvent);
+			set => SetProperty(ref _interiorCollisionEvent, value);
+		}
+
+		[Ordinal(13)] 
 		[RED("collisionSettings")] 
 		public CArray<audioVehicleCollisionMapItem> CollisionSettings
 		{

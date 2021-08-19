@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _hackingWeaknessContainer;
 		private inkCompoundWidgetReference _leftPanel;
 		private inkCompoundWidgetReference _rightPanel;
-		private CUInt32 _resistancesCallbackID;
+		private CHandle<redCallbackObject> _resistancesCallbackID;
 		private CBool _isValidResistances;
 
 		[Ordinal(5)] 
@@ -210,7 +210,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("resistancesCallbackID")] 
-		public CUInt32 ResistancesCallbackID
+		public CHandle<redCallbackObject> ResistancesCallbackID
 		{
 			get => GetProperty(ref _resistancesCallbackID);
 			set => SetProperty(ref _resistancesCallbackID, value);

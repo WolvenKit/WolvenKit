@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isTurret;
 		private CBool _isHiddenByQuest;
 		private CEnum<gamedataNPCRarity> _nPCRarity;
-		private CHandle<gameIBlackboard> _puppetStateBlackboard;
+		private wCHandle<gameIBlackboard> _puppetStateBlackboard;
 		private CEnum<gamedataNPCHighLevelState> _highLevelState;
 		private CInt32 _numberOfCombatants;
 		private CBool _waitingToExitCombat;
@@ -360,7 +360,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(46)] 
 		[RED("puppetStateBlackboard")] 
-		public CHandle<gameIBlackboard> PuppetStateBlackboard
+		public wCHandle<gameIBlackboard> PuppetStateBlackboard
 		{
 			get => GetProperty(ref _puppetStateBlackboard);
 			set => SetProperty(ref _puppetStateBlackboard, value);

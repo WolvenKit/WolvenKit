@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isAudioCall;
 		private CName _contactName;
 		private CBool _isPlayerCalling;
+		private CBool _isPlayerTriggered;
 		private CEnum<questPhoneCallPhase> _callPhase;
 
 		[Ordinal(0)] 
@@ -46,6 +47,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("isPlayerTriggered")] 
+		public CBool IsPlayerTriggered
+		{
+			get => GetProperty(ref _isPlayerTriggered);
+			set => SetProperty(ref _isPlayerTriggered, value);
+		}
+
+		[Ordinal(5)] 
 		[RED("callPhase")] 
 		public CEnum<questPhoneCallPhase> CallPhase
 		{

@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _currentImagePart;
 		private redResourceReferenceScriptToken _atlasRef;
 		private CInt32 _buttonData;
-		private CHandle<PhotoModeGridList> _parentGrid;
+		private wCHandle<PhotoModeGridList> _parentGrid;
 		private CInt32 _index;
 		private CBool _visibleOnGrid;
 		private CFloat _imageScalingSpeed;
@@ -87,7 +87,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("parentGrid")] 
-		public CHandle<PhotoModeGridList> ParentGrid
+		public wCHandle<PhotoModeGridList> ParentGrid
 		{
 			get => GetProperty(ref _parentGrid);
 			set => SetProperty(ref _parentGrid, value);

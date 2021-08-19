@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkVirtualCompoundControllerCallback _itemSelected;
 		private inkVirtualCompoundControllerCallback _itemActivated;
+		private inkEmptyCallback _allElementsSpawned;
 
 		[Ordinal(4)] 
 		[RED("ItemSelected")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _itemActivated);
 			set => SetProperty(ref _itemActivated, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("AllElementsSpawned")] 
+		public inkEmptyCallback AllElementsSpawned
+		{
+			get => GetProperty(ref _allElementsSpawned);
+			set => SetProperty(ref _allElementsSpawned, value);
 		}
 
 		public inkVirtualCompoundController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

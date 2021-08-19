@@ -7,18 +7,18 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class PlayerVisionModeControllerBBListeners : CVariable
 	{
-		private CUInt32 _kerenzikov;
-		private CUInt32 _restrictedScene;
-		private CUInt32 _dead;
-		private CUInt32 _takedown;
-		private CUInt32 _deviceTakeover;
-		private CUInt32 _braindanceFPP;
-		private CUInt32 _braindanceActive;
-		private CUInt32 _veryHardLanding;
+		private CHandle<redCallbackObject> _kerenzikov;
+		private CHandle<redCallbackObject> _restrictedScene;
+		private CHandle<redCallbackObject> _dead;
+		private CHandle<redCallbackObject> _takedown;
+		private CHandle<redCallbackObject> _deviceTakeover;
+		private CHandle<redCallbackObject> _braindanceFPP;
+		private CHandle<redCallbackObject> _braindanceActive;
+		private CHandle<redCallbackObject> _veryHardLanding;
 
 		[Ordinal(0)] 
 		[RED("kerenzikov")] 
-		public CUInt32 Kerenzikov
+		public CHandle<redCallbackObject> Kerenzikov
 		{
 			get => GetProperty(ref _kerenzikov);
 			set => SetProperty(ref _kerenzikov, value);
@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("restrictedScene")] 
-		public CUInt32 RestrictedScene
+		public CHandle<redCallbackObject> RestrictedScene
 		{
 			get => GetProperty(ref _restrictedScene);
 			set => SetProperty(ref _restrictedScene, value);
@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("dead")] 
-		public CUInt32 Dead
+		public CHandle<redCallbackObject> Dead
 		{
 			get => GetProperty(ref _dead);
 			set => SetProperty(ref _dead, value);
@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("takedown")] 
-		public CUInt32 Takedown
+		public CHandle<redCallbackObject> Takedown
 		{
 			get => GetProperty(ref _takedown);
 			set => SetProperty(ref _takedown, value);
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("deviceTakeover")] 
-		public CUInt32 DeviceTakeover
+		public CHandle<redCallbackObject> DeviceTakeover
 		{
 			get => GetProperty(ref _deviceTakeover);
 			set => SetProperty(ref _deviceTakeover, value);
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("braindanceFPP")] 
-		public CUInt32 BraindanceFPP
+		public CHandle<redCallbackObject> BraindanceFPP
 		{
 			get => GetProperty(ref _braindanceFPP);
 			set => SetProperty(ref _braindanceFPP, value);
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("braindanceActive")] 
-		public CUInt32 BraindanceActive
+		public CHandle<redCallbackObject> BraindanceActive
 		{
 			get => GetProperty(ref _braindanceActive);
 			set => SetProperty(ref _braindanceActive, value);
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("veryHardLanding")] 
-		public CUInt32 VeryHardLanding
+		public CHandle<redCallbackObject> VeryHardLanding
 		{
 			get => GetProperty(ref _veryHardLanding);
 			set => SetProperty(ref _veryHardLanding, value);

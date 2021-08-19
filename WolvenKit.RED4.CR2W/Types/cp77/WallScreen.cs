@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _factOnFullyOpened;
 		private CHandle<ObjectMoverComponent> _objectMover;
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("movementPattern")] 
 		public SMovementPattern MovementPattern
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _movementPattern, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("factOnFullyOpened")] 
 		public CName FactOnFullyOpened
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _factOnFullyOpened, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("objectMover")] 
 		public CHandle<ObjectMoverComponent> ObjectMover
 		{

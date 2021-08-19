@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<SignType> _type;
 		private CString _message;
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("signShape")] 
 		public CEnum<SignShape> SignShape
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _signShape, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("type")] 
 		public CEnum<SignType> Type
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _type, value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("message")] 
 		public CString Message
 		{

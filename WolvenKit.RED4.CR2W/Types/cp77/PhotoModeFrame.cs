@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArray<inkImageWidgetReference> _images;
 		private CBool _keepImageAspectRatio;
-		private CHandle<gameuiPhotoModeStickersController> _stickersController;
+		private wCHandle<gameuiPhotoModeStickersController> _stickersController;
 		private CName _currentImagePart;
 		private CFloat _opacity;
 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("stickersController")] 
-		public CHandle<gameuiPhotoModeStickersController> StickersController
+		public wCHandle<gameuiPhotoModeStickersController> StickersController
 		{
 			get => GetProperty(ref _stickersController);
 			set => SetProperty(ref _stickersController, value);

@@ -8,13 +8,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class buffListGameController : gameuiHUDGameController
 	{
 		private inkHorizontalPanelWidgetReference _buffsList;
-		private CUInt32 _bbBuffList;
-		private CUInt32 _bbDeBuffList;
-		private CHandle<gameIBlackboard> _uiBlackboard;
+		private CHandle<redCallbackObject> _bbBuffList;
+		private CHandle<redCallbackObject> _bbDeBuffList;
+		private wCHandle<gameIBlackboard> _uiBlackboard;
 		private CArray<gameuiBuffInfo> _buffDataList;
 		private CArray<gameuiBuffInfo> _debuffDataList;
 		private CArray<wCHandle<inkWidget>> _buffWidgets;
 		private wCHandle<gameuiGameSystemUI> _uISystem;
+		private CInt32 _pendingRequests;
 
 		[Ordinal(9)] 
 		[RED("buffsList")] 
@@ -26,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("bbBuffList")] 
-		public CUInt32 BbBuffList
+		public CHandle<redCallbackObject> BbBuffList
 		{
 			get => GetProperty(ref _bbBuffList);
 			set => SetProperty(ref _bbBuffList, value);
@@ -34,7 +35,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("bbDeBuffList")] 
-		public CUInt32 BbDeBuffList
+		public CHandle<redCallbackObject> BbDeBuffList
 		{
 			get => GetProperty(ref _bbDeBuffList);
 			set => SetProperty(ref _bbDeBuffList, value);
@@ -42,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("uiBlackboard")] 
-		public CHandle<gameIBlackboard> UiBlackboard
+		public wCHandle<gameIBlackboard> UiBlackboard
 		{
 			get => GetProperty(ref _uiBlackboard);
 			set => SetProperty(ref _uiBlackboard, value);
@@ -78,6 +79,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _uISystem);
 			set => SetProperty(ref _uISystem, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("pendingRequests")] 
+		public CInt32 PendingRequests
+		{
+			get => GetProperty(ref _pendingRequests);
+			set => SetProperty(ref _pendingRequests, value);
 		}
 
 		public buffListGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameweaponObject> _weapon;
 		private CFloat _countTime;
 		private CFloat _startVelocity;
-		private CFloat _lifetime_544;
+		private CFloat _lifetime_528;
 		private CBool _alive;
 		private CBool _hit;
 		private CBool _arrived;
@@ -24,6 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameFxInstance> _fxInstance;
 		private CBool _hasExploded;
 		private TweakDBID _missileDBID;
+		private wCHandle<gamedataAttack_Record> _missileAttackRecord;
 		private CFloat _timeToDestory;
 		private Vector4 _initialTargetPosition;
 		private Vector4 _initialTargetOffset;
@@ -96,10 +97,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(58)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_544
+		public CFloat Lifetime_528
 		{
-			get => GetProperty(ref _lifetime_544);
-			set => SetProperty(ref _lifetime_544, value);
+			get => GetProperty(ref _lifetime_528);
+			set => SetProperty(ref _lifetime_528, value);
 		}
 
 		[Ordinal(59)] 
@@ -175,6 +176,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(68)] 
+		[RED("missileAttackRecord")] 
+		public wCHandle<gamedataAttack_Record> MissileAttackRecord
+		{
+			get => GetProperty(ref _missileAttackRecord);
+			set => SetProperty(ref _missileAttackRecord, value);
+		}
+
+		[Ordinal(69)] 
 		[RED("timeToDestory")] 
 		public CFloat TimeToDestory
 		{
@@ -182,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeToDestory, value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("initialTargetPosition")] 
 		public Vector4 InitialTargetPosition
 		{
@@ -190,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialTargetPosition, value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(71)] 
 		[RED("initialTargetOffset")] 
 		public Vector4 InitialTargetOffset
 		{
@@ -198,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialTargetOffset, value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("finalTargetPosition")] 
 		public Vector4 FinalTargetPosition
 		{
@@ -206,7 +215,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _finalTargetPosition, value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(73)] 
 		[RED("finalTargetOffset")] 
 		public Vector4 FinalTargetOffset
 		{
@@ -214,7 +223,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _finalTargetOffset, value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(74)] 
 		[RED("finalTargetPositionCalculationDelay")] 
 		public CFloat FinalTargetPositionCalculationDelay
 		{
@@ -222,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _finalTargetPositionCalculationDelay, value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("targetComponent")] 
 		public wCHandle<entIPlacedComponent> TargetComponent
 		{
@@ -230,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetComponent, value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("followTargetInPhase2")] 
 		public CBool FollowTargetInPhase2
 		{
@@ -238,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _followTargetInPhase2, value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("puppetBroadphaseHitRadiusSquared")] 
 		public CFloat PuppetBroadphaseHitRadiusSquared
 		{
@@ -246,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _puppetBroadphaseHitRadiusSquared, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("phase")] 
 		public CEnum<EMissileRainPhase> Phase
 		{
@@ -254,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _phase, value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("spiralParams")] 
 		public CHandle<gameprojectileSpiralParams> SpiralParams
 		{
@@ -262,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _spiralParams, value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("useSpiralParams")] 
 		public CBool UseSpiralParams
 		{
@@ -270,7 +279,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useSpiralParams, value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("randStartVelocity")] 
 		public CFloat RandStartVelocity
 		{

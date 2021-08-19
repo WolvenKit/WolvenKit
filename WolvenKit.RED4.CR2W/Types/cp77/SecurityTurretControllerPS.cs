@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CString _weaponItemRecordString;
 		private CName _vfxNameOnShoot;
 
-		[Ordinal(144)] 
+		[Ordinal(145)] 
 		[RED("pendingSecuritySystemDisableRequest")] 
 		public CBool PendingSecuritySystemDisableRequest
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _pendingSecuritySystemDisableRequest, value);
 		}
 
-		[Ordinal(145)] 
+		[Ordinal(146)] 
 		[RED("turretSkillChecks")] 
 		public CHandle<EngDemoContainer> TurretSkillChecks
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _turretSkillChecks, value);
 		}
 
-		[Ordinal(146)] 
+		[Ordinal(147)] 
 		[RED("ignoreSkillcheckGeneration")] 
 		public CBool IgnoreSkillcheckGeneration
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ignoreSkillcheckGeneration, value);
 		}
 
-		[Ordinal(147)] 
+		[Ordinal(148)] 
 		[RED("laserGameEffectRef")] 
 		public gameEffectRef LaserGameEffectRef
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _laserGameEffectRef, value);
 		}
 
-		[Ordinal(148)] 
+		[Ordinal(149)] 
 		[RED("weaponItemRecordString")] 
 		public CString WeaponItemRecordString
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponItemRecordString, value);
 		}
 
-		[Ordinal(149)] 
+		[Ordinal(150)] 
 		[RED("vfxNameOnShoot")] 
 		public CName VfxNameOnShoot
 		{

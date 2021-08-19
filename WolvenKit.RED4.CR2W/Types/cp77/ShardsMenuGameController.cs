@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _hasNewCryptedEntries;
 		private CBool _isEncryptedEntrySelected;
 		private CHandle<ShardEntryData> _selectedData;
-		private CHandle<gameIBlackboard> _mingameBB;
+		private wCHandle<gameIBlackboard> _mingameBB;
 		private CInt32 _userDataEntry;
 		private CBool _doubleInputPreventionFlag;
 		private CHandle<inkanimProxy> _animationProxy;
@@ -167,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("mingameBB")] 
-		public CHandle<gameIBlackboard> MingameBB
+		public wCHandle<gameIBlackboard> MingameBB
 		{
 			get => GetProperty(ref _mingameBB);
 			set => SetProperty(ref _mingameBB, value);

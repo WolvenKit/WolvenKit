@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private SecurityLockerProperties _securityLockerProperties;
 		private CBool _isStoringPlayerEquipement;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("securityLockerProperties")] 
 		public SecurityLockerProperties SecurityLockerProperties
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityLockerProperties, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("isStoringPlayerEquipement")] 
 		public CBool IsStoringPlayerEquipement
 		{

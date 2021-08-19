@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _buttonOk;
 		private inkWidgetReference _buttonCancel;
 		private CHandle<VendorConfirmationPopupData> _data;
-		private CHandle<InventoryItemDisplayController> _itemDisplayController;
+		private wCHandle<InventoryItemDisplayController> _itemDisplayController;
 		private inkWidgetLibraryReference _libraryPath;
 
 		[Ordinal(2)] 
@@ -147,7 +147,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("itemDisplayController")] 
-		public CHandle<InventoryItemDisplayController> ItemDisplayController
+		public wCHandle<InventoryItemDisplayController> ItemDisplayController
 		{
 			get => GetProperty(ref _itemDisplayController);
 			set => SetProperty(ref _itemDisplayController, value);

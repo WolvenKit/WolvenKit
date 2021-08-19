@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArray<redResourceReferenceScriptToken> _gameVideosPaths;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("gameVideosPaths")] 
 		public CArray<redResourceReferenceScriptToken> GameVideosPaths
 		{

@@ -131,16 +131,30 @@ namespace CP77Tools.Tasks
                     _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
                     foreach (var hashNum in hashlist)
                     {
-                        _modTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
-                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
+                        var r = _modTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
+                        if (r > 0)
+                        {
+                            _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
+                        }
+                        else
+                        {
+                            _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNum}");
+                        }
                     }
 
                     _loggerService.Success($"Bulk extraction from hashlist file completed.");
                 }
                 else if (isHash && hashNumber != 0)
                 {
-                    _modTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
-                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
+                    var r = _modTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
+                    if (r > 0)
+                    {
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
+                    }
+                    else
+                    {
+                        _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNumber}");
+                    }
                 }
                 else
                 {

@@ -7,19 +7,10 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsCacheEntry : CVariable
 	{
-		private CUInt32 _tableIndex;
 		private CUInt32 _entryOffset;
 		private CUInt32 _entrySize;
 
 		[Ordinal(0)] 
-		[RED("tableIndex")] 
-		public CUInt32 TableIndex
-		{
-			get => GetProperty(ref _tableIndex);
-			set => SetProperty(ref _tableIndex, value);
-		}
-
-		[Ordinal(1)] 
 		[RED("entryOffset")] 
 		public CUInt32 EntryOffset
 		{
@@ -27,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _entryOffset, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("entrySize")] 
 		public CUInt32 EntrySize
 		{

@@ -10,9 +10,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _date;
 		private inkTextWidgetReference _timer;
 		private inkTextWidgetReference _cameraID;
-		private CHandle<gameIBlackboard> _scanBlackboard;
-		private CHandle<gameIBlackboard> _psmBlackboard;
-		private CUInt32 _pSM_BBID;
+		private wCHandle<gameIBlackboard> _scanBlackboard;
+		private wCHandle<gameIBlackboard> _psmBlackboard;
+		private CHandle<redCallbackObject> _pSM_BBID;
 		private wCHandle<inkCompoundWidget> _root;
 		private CFloat _currentZoom;
 		private GameTime _currentTime;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("scanBlackboard")] 
-		public CHandle<gameIBlackboard> ScanBlackboard
+		public wCHandle<gameIBlackboard> ScanBlackboard
 		{
 			get => GetProperty(ref _scanBlackboard);
 			set => SetProperty(ref _scanBlackboard, value);
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("psmBlackboard")] 
-		public CHandle<gameIBlackboard> PsmBlackboard
+		public wCHandle<gameIBlackboard> PsmBlackboard
 		{
 			get => GetProperty(ref _psmBlackboard);
 			set => SetProperty(ref _psmBlackboard, value);
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("PSM_BBID")] 
-		public CUInt32 PSM_BBID
+		public CHandle<redCallbackObject> PSM_BBID
 		{
 			get => GetProperty(ref _pSM_BBID);
 			set => SetProperty(ref _pSM_BBID, value);

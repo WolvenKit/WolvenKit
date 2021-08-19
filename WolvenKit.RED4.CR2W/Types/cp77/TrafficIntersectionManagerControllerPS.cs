@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CEnum<worldTrafficLightColor> _trafficLightStatus;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("trafficLightStatus")] 
 		public CEnum<worldTrafficLightColor> TrafficLightStatus
 		{

@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameDelayID _shortGlitchDelayID;
 		private CName _distractionSound;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shortGlitchDelayID, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("distractionSound")] 
 		public CName DistractionSound
 		{

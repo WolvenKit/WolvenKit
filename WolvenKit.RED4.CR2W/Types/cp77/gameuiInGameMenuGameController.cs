@@ -10,11 +10,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<gameuiInGameMenuGameControllerItemSceneInfo> _itemSceneInfos;
 		private CArray<gameuiInGameMenuGameControllerGarmentSwitchEffectController> _garmentSwitchEffectControllers;
 		private CBool _quickSaveInProgress;
-		private CUInt32 _showDeathScreenBBID;
-		private CUInt32 _breachingNetworkBBID;
-		private CUInt32 _triggerMenuEventBBID;
-		private CUInt32 _openStorageBBID;
-		private CUInt32 _bbOnEquipmentChangedID;
+		private CHandle<redCallbackObject> _showDeathScreenBBID;
+		private CHandle<redCallbackObject> _breachingNetworkBBID;
+		private CHandle<redCallbackObject> _triggerMenuEventBBID;
+		private CHandle<redCallbackObject> _openStorageBBID;
+		private CHandle<redCallbackObject> _bbOnEquipmentChangedID;
 		private CHandle<gameAttachmentSlotsScriptListener> _inventoryListener;
 
 		[Ordinal(3)] 
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("showDeathScreenBBID")] 
-		public CUInt32 ShowDeathScreenBBID
+		public CHandle<redCallbackObject> ShowDeathScreenBBID
 		{
 			get => GetProperty(ref _showDeathScreenBBID);
 			set => SetProperty(ref _showDeathScreenBBID, value);
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("breachingNetworkBBID")] 
-		public CUInt32 BreachingNetworkBBID
+		public CHandle<redCallbackObject> BreachingNetworkBBID
 		{
 			get => GetProperty(ref _breachingNetworkBBID);
 			set => SetProperty(ref _breachingNetworkBBID, value);
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("triggerMenuEventBBID")] 
-		public CUInt32 TriggerMenuEventBBID
+		public CHandle<redCallbackObject> TriggerMenuEventBBID
 		{
 			get => GetProperty(ref _triggerMenuEventBBID);
 			set => SetProperty(ref _triggerMenuEventBBID, value);
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("openStorageBBID")] 
-		public CUInt32 OpenStorageBBID
+		public CHandle<redCallbackObject> OpenStorageBBID
 		{
 			get => GetProperty(ref _openStorageBBID);
 			set => SetProperty(ref _openStorageBBID, value);
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("bbOnEquipmentChangedID")] 
-		public CUInt32 BbOnEquipmentChangedID
+		public CHandle<redCallbackObject> BbOnEquipmentChangedID
 		{
 			get => GetProperty(ref _bbOnEquipmentChangedID);
 			set => SetProperty(ref _bbOnEquipmentChangedID, value);

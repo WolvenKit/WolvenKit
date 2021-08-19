@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class CrosshairHealthChangeListener : gameCustomValueStatPoolsListener
 	{
-		private CHandle<gameuiCrosshairBaseGameController> _parentCrosshair;
+		private wCHandle<gameuiCrosshairBaseGameController> _parentCrosshair;
 
 		[Ordinal(0)] 
 		[RED("parentCrosshair")] 
-		public CHandle<gameuiCrosshairBaseGameController> ParentCrosshair
+		public wCHandle<gameuiCrosshairBaseGameController> ParentCrosshair
 		{
 			get => GetProperty(ref _parentCrosshair);
 			set => SetProperty(ref _parentCrosshair, value);

@@ -16,13 +16,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<TargetHitIndicatorLogicController> _defeatController;
 		private wCHandle<TargetHitIndicatorLogicController> _killController;
 		private wCHandle<TargetHitIndicatorLogicController> _bonusController;
-		private CUInt32 _damageListBlackboardId;
-		private CUInt32 _killListBlackboardId;
-		private CUInt32 _indicatorEnabledBlackboardId;
-		private CUInt32 _weaponSwayBlackboardId;
-		private CUInt32 _weaponChangeBlackboardId;
-		private CUInt32 _aimingStatusBlackboardId;
-		private CUInt32 _zoomLevelBlackboardId;
+		private CHandle<redCallbackObject> _damageListBlackboardId;
+		private CHandle<redCallbackObject> _killListBlackboardId;
+		private CHandle<redCallbackObject> _indicatorEnabledBlackboardId;
+		private CHandle<redCallbackObject> _weaponSwayBlackboardId;
+		private CHandle<redCallbackObject> _weaponChangeBlackboardId;
+		private CHandle<redCallbackObject> _aimingStatusBlackboardId;
+		private CHandle<redCallbackObject> _zoomLevelBlackboardId;
 		private wCHandle<gameObject> _realOwner;
 		private CBool _hitIndicatorEnabled;
 		private wCHandle<gameObject> _entityHit;
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("damageListBlackboardId")] 
-		public CUInt32 DamageListBlackboardId
+		public CHandle<redCallbackObject> DamageListBlackboardId
 		{
 			get => GetProperty(ref _damageListBlackboardId);
 			set => SetProperty(ref _damageListBlackboardId, value);
@@ -118,7 +118,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("killListBlackboardId")] 
-		public CUInt32 KillListBlackboardId
+		public CHandle<redCallbackObject> KillListBlackboardId
 		{
 			get => GetProperty(ref _killListBlackboardId);
 			set => SetProperty(ref _killListBlackboardId, value);
@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("indicatorEnabledBlackboardId")] 
-		public CUInt32 IndicatorEnabledBlackboardId
+		public CHandle<redCallbackObject> IndicatorEnabledBlackboardId
 		{
 			get => GetProperty(ref _indicatorEnabledBlackboardId);
 			set => SetProperty(ref _indicatorEnabledBlackboardId, value);
@@ -134,7 +134,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("weaponSwayBlackboardId")] 
-		public CUInt32 WeaponSwayBlackboardId
+		public CHandle<redCallbackObject> WeaponSwayBlackboardId
 		{
 			get => GetProperty(ref _weaponSwayBlackboardId);
 			set => SetProperty(ref _weaponSwayBlackboardId, value);
@@ -142,7 +142,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("weaponChangeBlackboardId")] 
-		public CUInt32 WeaponChangeBlackboardId
+		public CHandle<redCallbackObject> WeaponChangeBlackboardId
 		{
 			get => GetProperty(ref _weaponChangeBlackboardId);
 			set => SetProperty(ref _weaponChangeBlackboardId, value);
@@ -150,7 +150,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("aimingStatusBlackboardId")] 
-		public CUInt32 AimingStatusBlackboardId
+		public CHandle<redCallbackObject> AimingStatusBlackboardId
 		{
 			get => GetProperty(ref _aimingStatusBlackboardId);
 			set => SetProperty(ref _aimingStatusBlackboardId, value);
@@ -158,7 +158,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("zoomLevelBlackboardId")] 
-		public CUInt32 ZoomLevelBlackboardId
+		public CHandle<redCallbackObject> ZoomLevelBlackboardId
 		{
 			get => GetProperty(ref _zoomLevelBlackboardId);
 			set => SetProperty(ref _zoomLevelBlackboardId, value);

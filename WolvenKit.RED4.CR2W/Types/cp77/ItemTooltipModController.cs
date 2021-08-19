@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkWidgetReference _dotIndicator;
 		private inkCompoundWidgetReference _modAbilitiesContainer;
-		private CHandle<InventoryItemPartDisplay> _partIndicatorController;
+		private wCHandle<InventoryItemPartDisplay> _partIndicatorController;
 
 		[Ordinal(1)] 
 		[RED("dotIndicator")] 
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("partIndicatorController")] 
-		public CHandle<InventoryItemPartDisplay> PartIndicatorController
+		public wCHandle<InventoryItemPartDisplay> PartIndicatorController
 		{
 			get => GetProperty(ref _partIndicatorController);
 			set => SetProperty(ref _partIndicatorController, value);

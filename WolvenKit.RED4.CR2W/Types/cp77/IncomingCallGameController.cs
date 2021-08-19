@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _contactNameWidget;
 		private wCHandle<gameIBlackboard> _phoneBlackboard;
 		private CHandle<UI_ComDeviceDef> _phoneBBDefinition;
-		private CUInt32 _phoneCallInfoBBID;
+		private CHandle<redCallbackObject> _phoneCallInfoBBID;
 		private wCHandle<gameObject> _owner;
 		private CHandle<inkanimProxy> _animProxy;
 
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("phoneCallInfoBBID")] 
-		public CUInt32 PhoneCallInfoBBID
+		public CHandle<redCallbackObject> PhoneCallInfoBBID
 		{
 			get => GetProperty(ref _phoneCallInfoBBID);
 			set => SetProperty(ref _phoneCallInfoBBID, value);

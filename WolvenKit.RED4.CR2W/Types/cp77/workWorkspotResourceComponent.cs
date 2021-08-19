@@ -7,34 +7,34 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class workWorkspotResourceComponent : entIPlacedComponent
 	{
-		private rRef<workWorkspotResource> _resource;
-		private rRef<workWorkspotResource> _npcResource;
-		private rRef<workWorkspotResource> _deviceResource;
+		private raRef<workWorkspotResource> _workspotResource;
+		private rRef<workWorkspotResource> _npcWorkspotResourceSync;
+		private rRef<workWorkspotResource> _deviceWorkspotResourceSync;
 		private CName _syncSlotName;
 		private CBool _shouldCrouch;
 
 		[Ordinal(5)] 
-		[RED("resource")] 
-		public rRef<workWorkspotResource> Resource
+		[RED("workspotResource")] 
+		public raRef<workWorkspotResource> WorkspotResource
 		{
-			get => GetProperty(ref _resource);
-			set => SetProperty(ref _resource, value);
+			get => GetProperty(ref _workspotResource);
+			set => SetProperty(ref _workspotResource, value);
 		}
 
 		[Ordinal(6)] 
-		[RED("npcResource")] 
-		public rRef<workWorkspotResource> NpcResource
+		[RED("npcWorkspotResourceSync")] 
+		public rRef<workWorkspotResource> NpcWorkspotResourceSync
 		{
-			get => GetProperty(ref _npcResource);
-			set => SetProperty(ref _npcResource, value);
+			get => GetProperty(ref _npcWorkspotResourceSync);
+			set => SetProperty(ref _npcWorkspotResourceSync, value);
 		}
 
 		[Ordinal(7)] 
-		[RED("deviceResource")] 
-		public rRef<workWorkspotResource> DeviceResource
+		[RED("deviceWorkspotResourceSync")] 
+		public rRef<workWorkspotResource> DeviceWorkspotResourceSync
 		{
-			get => GetProperty(ref _deviceResource);
-			set => SetProperty(ref _deviceResource, value);
+			get => GetProperty(ref _deviceWorkspotResourceSync);
+			set => SetProperty(ref _deviceWorkspotResourceSync, value);
 		}
 
 		[Ordinal(8)] 

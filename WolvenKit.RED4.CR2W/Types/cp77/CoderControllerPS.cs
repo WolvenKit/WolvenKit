@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CEnum<ESecurityAccessLevel> _providedAuthorizationLevel;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("providedAuthorizationLevel")] 
 		public CEnum<ESecurityAccessLevel> ProvidedAuthorizationLevel
 		{

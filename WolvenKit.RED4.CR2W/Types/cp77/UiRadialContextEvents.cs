@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private Vector4 _mouse;
 
-		[Ordinal(0)] 
+		[Ordinal(1)] 
 		[RED("mouse")] 
 		public Vector4 Mouse
 		{

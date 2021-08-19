@@ -12,12 +12,12 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _poolHolder;
 		private CEnum<ECooldownGameControllerMode> _mode;
 		private CArray<CEnum<gamedataStatusEffectType>> _effectTypes;
-		private CArray<CHandle<SingleCooldownManager>> _cooldownPool;
-		private CArray<CHandle<SingleCooldownManager>> _matchBuffer;
-		private CUInt32 _buffsCallback;
-		private CUInt32 _debuffsCallback;
+		private CArray<wCHandle<SingleCooldownManager>> _cooldownPool;
+		private CArray<wCHandle<SingleCooldownManager>> _matchBuffer;
+		private CHandle<redCallbackObject> _buffsCallback;
+		private CHandle<redCallbackObject> _debuffsCallback;
 		private CHandle<UI_PlayerBioMonitorDef> _blackboardDef;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 
 		[Ordinal(2)] 
 		[RED("maxCooldowns")] 
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("cooldownPool")] 
-		public CArray<CHandle<SingleCooldownManager>> CooldownPool
+		public CArray<wCHandle<SingleCooldownManager>> CooldownPool
 		{
 			get => GetProperty(ref _cooldownPool);
 			set => SetProperty(ref _cooldownPool, value);
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("matchBuffer")] 
-		public CArray<CHandle<SingleCooldownManager>> MatchBuffer
+		public CArray<wCHandle<SingleCooldownManager>> MatchBuffer
 		{
 			get => GetProperty(ref _matchBuffer);
 			set => SetProperty(ref _matchBuffer, value);
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("buffsCallback")] 
-		public CUInt32 BuffsCallback
+		public CHandle<redCallbackObject> BuffsCallback
 		{
 			get => GetProperty(ref _buffsCallback);
 			set => SetProperty(ref _buffsCallback, value);
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("debuffsCallback")] 
-		public CUInt32 DebuffsCallback
+		public CHandle<redCallbackObject> DebuffsCallback
 		{
 			get => GetProperty(ref _debuffsCallback);
 			set => SetProperty(ref _debuffsCallback, value);
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);

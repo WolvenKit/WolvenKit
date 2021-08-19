@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<EngineeringContainer> _maintenancePanelSkillChecks;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("maintenancePanelSkillChecks")] 
 		public CHandle<EngineeringContainer> MaintenancePanelSkillChecks
 		{

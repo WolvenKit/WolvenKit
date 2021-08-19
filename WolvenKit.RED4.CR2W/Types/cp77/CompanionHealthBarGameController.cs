@@ -9,11 +9,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkWidgetReference _healthbar;
 		private wCHandle<inkWidget> _root;
-		private CUInt32 _flatheadListener;
+		private CHandle<redCallbackObject> _flatheadListener;
 		private CBool _isActive;
 		private CFloat _maxHealth;
 		private CHandle<CompanionHealthStatListener> _healthStatListener;
-		private CHandle<gameIBlackboard> _companionBlackboard;
+		private wCHandle<gameIBlackboard> _companionBlackboard;
 		private ScriptGameInstance _gameInstance;
 		private CHandle<gameStatPoolsSystem> _statPoolsSystem;
 
@@ -35,7 +35,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("flatheadListener")] 
-		public CUInt32 FlatheadListener
+		public CHandle<redCallbackObject> FlatheadListener
 		{
 			get => GetProperty(ref _flatheadListener);
 			set => SetProperty(ref _flatheadListener, value);
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("companionBlackboard")] 
-		public CHandle<gameIBlackboard> CompanionBlackboard
+		public wCHandle<gameIBlackboard> CompanionBlackboard
 		{
 			get => GetProperty(ref _companionBlackboard);
 			set => SetProperty(ref _companionBlackboard, value);

@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _blockAimStart;
 		private CFloat _blockAimDuration;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("hasBlockedAiming")] 
 		public CBool HasBlockedAiming
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasBlockedAiming, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("blockAimStart")] 
 		public CFloat BlockAimStart
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _blockAimStart, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("blockAimDuration")] 
 		public CFloat BlockAimDuration
 		{

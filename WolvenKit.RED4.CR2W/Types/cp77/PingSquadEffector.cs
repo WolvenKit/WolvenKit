@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameAttitudeAgent> _oldSquadAttitude;
 		private CFloat _quickhackLevel;
 		private CHandle<FocusForcedHighlightData> _data;
+		private CName _squadName;
 
 		[Ordinal(0)] 
 		[RED("squadMembers")] 
@@ -51,6 +52,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _data);
 			set => SetProperty(ref _data, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("squadName")] 
+		public CName SquadName
+		{
+			get => GetProperty(ref _squadName);
+			set => SetProperty(ref _squadName, value);
 		}
 
 		public PingSquadEffector(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

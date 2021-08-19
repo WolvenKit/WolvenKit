@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkCanvasWidget> _defaultUI;
 		private wCHandle<inkVideoWidget> _mainDisplayWidget;
 		private wCHandle<inkTextWidget> _counterWidget;
-		private CUInt32 _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
 
 		[Ordinal(16)] 
 		[RED("defaultUI")] 
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);

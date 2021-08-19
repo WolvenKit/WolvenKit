@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _alive;
 		private CBool _armed;
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("visualComponent")] 
 		public CHandle<entMeshComponent> VisualComponent
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visualComponent, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("triggerAreaIndicator")] 
 		public CHandle<entMeshComponent> TriggerAreaIndicator
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerAreaIndicator, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("shootCollision")] 
 		public CHandle<entSimpleColliderComponent> ShootCollision
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shootCollision, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerComponent, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(66)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alive, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(67)] 
 		[RED("armed")] 
 		public CBool Armed
 		{

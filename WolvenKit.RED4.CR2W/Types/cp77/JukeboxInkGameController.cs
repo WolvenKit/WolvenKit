@@ -9,9 +9,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkHorizontalPanelWidgetReference _actionsPanel;
 		private inkTextWidgetReference _priceText;
-		private CHandle<PlayPauseActionWidgetController> _playButton;
-		private CHandle<NextPreviousActionWidgetController> _nextButton;
-		private CHandle<NextPreviousActionWidgetController> _previousButton;
+		private wCHandle<PlayPauseActionWidgetController> _playButton;
+		private wCHandle<NextPreviousActionWidgetController> _nextButton;
+		private wCHandle<NextPreviousActionWidgetController> _previousButton;
 		private CBool _isPlaying;
 
 		[Ordinal(16)] 
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("playButton")] 
-		public CHandle<PlayPauseActionWidgetController> PlayButton
+		public wCHandle<PlayPauseActionWidgetController> PlayButton
 		{
 			get => GetProperty(ref _playButton);
 			set => SetProperty(ref _playButton, value);
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("nextButton")] 
-		public CHandle<NextPreviousActionWidgetController> NextButton
+		public wCHandle<NextPreviousActionWidgetController> NextButton
 		{
 			get => GetProperty(ref _nextButton);
 			set => SetProperty(ref _nextButton, value);
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("previousButton")] 
-		public CHandle<NextPreviousActionWidgetController> PreviousButton
+		public wCHandle<NextPreviousActionWidgetController> PreviousButton
 		{
 			get => GetProperty(ref _previousButton);
 			set => SetProperty(ref _previousButton, value);

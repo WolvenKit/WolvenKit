@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _quickMeleeAttackCreated;
 		private QuickMeleeAttackData _quickMeleeAttackData;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("gameEffect")] 
 		public CHandle<gameEffectInstance> GameEffect
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameEffect, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("targetObject")] 
 		public wCHandle<gameObject> TargetObject
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetObject, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("targetComponent")] 
 		public CHandle<entIPlacedComponent> TargetComponent
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetComponent, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("quickMeleeAttackCreated")] 
 		public CBool QuickMeleeAttackCreated
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickMeleeAttackCreated, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("quickMeleeAttackData")] 
 		public QuickMeleeAttackData QuickMeleeAttackData
 		{

@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<gamePersistentID> _currentlyActiveDevices;
 		private wCHandle<inkVideoWidget> _mainDisplayWidget;
 		private CString _terminalTitle;
-		private CUInt32 _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
 
 		[Ordinal(18)] 
 		[RED("layoutID")] 
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);

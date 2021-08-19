@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameStaticTriggerAreaComponent> _scanningArea;
 		private CArray<TrespasserEntry> _trespassersDataList;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("sideA")] 
 		public CHandle<gameStaticTriggerAreaComponent> SideA
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sideA, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("sideB")] 
 		public CHandle<gameStaticTriggerAreaComponent> SideB
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sideB, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("scanningArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> ScanningArea
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scanningArea, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("trespassersDataList")] 
 		public CArray<TrespasserEntry> TrespassersDataList
 		{

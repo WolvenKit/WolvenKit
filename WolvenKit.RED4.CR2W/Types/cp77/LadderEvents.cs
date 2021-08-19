@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CFloat _ladderClimbCameraTimeStamp;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("ladderClimbCameraTimeStamp")] 
 		public CFloat LadderClimbCameraTimeStamp
 		{

@@ -10,8 +10,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _staminaControllerRef;
 		private inkTextWidgetReference _staminaPercTextPath;
 		private inkTextWidgetReference _staminaStatusTextPath;
-		private CUInt32 _bbPSceneTierEventId;
-		private CUInt32 _bbPStaminaPSMEventId;
+		private CHandle<redCallbackObject> _bbPSceneTierEventId;
+		private CHandle<redCallbackObject> _bbPStaminaPSMEventId;
 		private wCHandle<NameplateBarLogicController> _staminaController;
 		private wCHandle<inkWidget> _rootWidget;
 		private CHandle<inkanimDefinition> _animLongFade;
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("bbPSceneTierEventId")] 
-		public CUInt32 BbPSceneTierEventId
+		public CHandle<redCallbackObject> BbPSceneTierEventId
 		{
 			get => GetProperty(ref _bbPSceneTierEventId);
 			set => SetProperty(ref _bbPSceneTierEventId, value);
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("bbPStaminaPSMEventId")] 
-		public CUInt32 BbPStaminaPSMEventId
+		public CHandle<redCallbackObject> BbPStaminaPSMEventId
 		{
 			get => GetProperty(ref _bbPStaminaPSMEventId);
 			set => SetProperty(ref _bbPStaminaPSMEventId, value);

@@ -10,6 +10,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameObject> _owner;
 		private wCHandle<gameObject> _executionOwner;
 		private wCHandle<gameIBlackboard> _localBlackboard;
+		private entEntityID _ownerEntityID;
+		private entEntityID _executionOwnerEntityID;
+		private CHandle<gamebbScriptDefinition> _stateMachineBBDef;
 
 		[Ordinal(0)] 
 		[RED("owner")] 
@@ -33,6 +36,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _localBlackboard);
 			set => SetProperty(ref _localBlackboard, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("ownerEntityID")] 
+		public entEntityID OwnerEntityID
+		{
+			get => GetProperty(ref _ownerEntityID);
+			set => SetProperty(ref _ownerEntityID, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("executionOwnerEntityID")] 
+		public entEntityID ExecutionOwnerEntityID
+		{
+			get => GetProperty(ref _executionOwnerEntityID);
+			set => SetProperty(ref _executionOwnerEntityID, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("stateMachineBBDef")] 
+		public CHandle<gamebbScriptDefinition> StateMachineBBDef
+		{
+			get => GetProperty(ref _stateMachineBBDef);
+			set => SetProperty(ref _stateMachineBBDef, value);
 		}
 
 		public gamestateMachineScriptInterface(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

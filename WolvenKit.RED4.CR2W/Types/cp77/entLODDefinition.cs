@@ -12,6 +12,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CStatic<CFloat> _cinematicDistanceLODs;
 		private CStatic<CFloat> _vehicleDistanceLODs;
 		private CStatic<CFloat> _cinematicVehicleDistanceLODs;
+		private CStatic<CFloat> _vehicleInteriorDistanceLODs;
+		private CStatic<CFloat> _largeVehicleInteriorDistanceLODs;
+		private CStatic<CFloat> _consoleDistanceLODs;
 
 		[Ordinal(0)] 
 		[RED("backgroundDistanceLODs", 4)] 
@@ -51,6 +54,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _cinematicVehicleDistanceLODs);
 			set => SetProperty(ref _cinematicVehicleDistanceLODs, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("vehicleInteriorDistanceLODs", 4)] 
+		public CStatic<CFloat> VehicleInteriorDistanceLODs
+		{
+			get => GetProperty(ref _vehicleInteriorDistanceLODs);
+			set => SetProperty(ref _vehicleInteriorDistanceLODs, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("largeVehicleInteriorDistanceLODs", 4)] 
+		public CStatic<CFloat> LargeVehicleInteriorDistanceLODs
+		{
+			get => GetProperty(ref _largeVehicleInteriorDistanceLODs);
+			set => SetProperty(ref _largeVehicleInteriorDistanceLODs, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("consoleDistanceLODs", 4)] 
+		public CStatic<CFloat> ConsoleDistanceLODs
+		{
+			get => GetProperty(ref _consoleDistanceLODs);
+			set => SetProperty(ref _consoleDistanceLODs, value);
 		}
 
 		public entLODDefinition(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

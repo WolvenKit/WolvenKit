@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CFloat _cementEffectCooldown;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("cementEffectCooldown")] 
 		public CFloat CementEffectCooldown
 		{

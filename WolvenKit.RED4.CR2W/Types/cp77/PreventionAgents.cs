@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class PreventionAgents : IScriptable
 	{
 		private CName _groupName;
-		private CArray<SPreventionAgentData> _requsteredAgents;
+		private CArray<CHandle<SPreventionAgentData>> _requsteredAgents;
 
 		[Ordinal(0)] 
 		[RED("groupName")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("requsteredAgents")] 
-		public CArray<SPreventionAgentData> RequsteredAgents
+		public CArray<CHandle<SPreventionAgentData>> RequsteredAgents
 		{
 			get => GetProperty(ref _requsteredAgents);
 			set => SetProperty(ref _requsteredAgents, value);

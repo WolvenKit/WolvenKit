@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<ESecurityGateStatus> _securityGateStatus;
 		private CArray<TrespasserEntry> _trespassersDataList;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("securityGateDetectionProperties")] 
 		public SecurityGateDetectionProperties SecurityGateDetectionProperties
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityGateDetectionProperties, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("securityGateResponseProperties")] 
 		public SecurityGateResponseProperties SecurityGateResponseProperties
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityGateResponseProperties, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("securityGateStatus")] 
 		public CEnum<ESecurityGateStatus> SecurityGateStatus
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityGateStatus, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("trespassersDataList")] 
 		public CArray<TrespasserEntry> TrespassersDataList
 		{

@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _gearboxRImageWidget;
 		private inkImageWidgetReference _gearboxNImageWidget;
 		private inkImageWidgetReference _gearboxDImageWidget;
-		private CUInt32 _gearboxBBConnectionId;
+		private CHandle<redCallbackObject> _gearboxBBConnectionId;
 		private wCHandle<gameIBlackboard> _vehBB;
 
 		[Ordinal(1)] 
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("gearboxBBConnectionId")] 
-		public CUInt32 GearboxBBConnectionId
+		public CHandle<redCallbackObject> GearboxBBConnectionId
 		{
 			get => GetProperty(ref _gearboxBBConnectionId);
 			set => SetProperty(ref _gearboxBBConnectionId, value);

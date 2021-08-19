@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private ForkliftSetup _forkliftSetup;
 		private CBool _isUp;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("forkliftSetup")] 
 		public ForkliftSetup ForkliftSetup
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forkliftSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("isUp")] 
 		public CBool IsUp
 		{

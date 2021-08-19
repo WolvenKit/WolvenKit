@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entMeshComponent> _mesh;
 		private CHandle<entIComponent> _collider;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mesh, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("collider")] 
 		public CHandle<entIComponent> Collider
 		{

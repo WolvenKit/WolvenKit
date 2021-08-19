@@ -7,13 +7,13 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class KillMarkerGameController : gameuiWidgetGameController
 	{
-		private CUInt32 _targetNeutralized;
-		private CHandle<gameIBlackboard> _blackboard;
+		private CHandle<redCallbackObject> _targetNeutralized;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<inkanimProxy> _animProxy;
 
 		[Ordinal(2)] 
 		[RED("targetNeutralized")] 
-		public CUInt32 TargetNeutralized
+		public CHandle<redCallbackObject> TargetNeutralized
 		{
 			get => GetProperty(ref _targetNeutralized);
 			set => SetProperty(ref _targetNeutralized, value);
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);

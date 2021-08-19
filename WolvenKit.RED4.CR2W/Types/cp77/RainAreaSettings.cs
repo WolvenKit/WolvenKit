@@ -12,14 +12,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _heightRange;
 		private CFloat _globalLightResponse;
 		private curveData<CFloat> _tiling;
-		private curveData<CFloat> _speed;
-		private CFloat _roughnessShift;
-		private CFloat _roughnessClip;
-		private CFloat _roughnessExponent;
-		private CFloat _baseColorShift;
-		private CFloat _baseColorClip;
-		private CFloat _baseColorExponent;
-		private CFloat _porosityThreshold;
+		private CFloat _porosityThresholdStart;
+		private CFloat _porosityThresholdEnd;
+		private CFloat _glossinessFactor;
+		private CFloat _baseColorFactor;
 		private CFloat _moistureAccumulationSpeed;
 		private CFloat _puddlesAccumulationSpeed;
 		private CFloat _moistureEvaporationSpeed;
@@ -73,70 +69,38 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("speed")] 
-		public curveData<CFloat> Speed
+		[RED("porosityThresholdStart")] 
+		public CFloat PorosityThresholdStart
 		{
-			get => GetProperty(ref _speed);
-			set => SetProperty(ref _speed, value);
+			get => GetProperty(ref _porosityThresholdStart);
+			set => SetProperty(ref _porosityThresholdStart, value);
 		}
 
 		[Ordinal(8)] 
-		[RED("roughnessShift")] 
-		public CFloat RoughnessShift
+		[RED("porosityThresholdEnd")] 
+		public CFloat PorosityThresholdEnd
 		{
-			get => GetProperty(ref _roughnessShift);
-			set => SetProperty(ref _roughnessShift, value);
+			get => GetProperty(ref _porosityThresholdEnd);
+			set => SetProperty(ref _porosityThresholdEnd, value);
 		}
 
 		[Ordinal(9)] 
-		[RED("roughnessClip")] 
-		public CFloat RoughnessClip
+		[RED("glossinessFactor")] 
+		public CFloat GlossinessFactor
 		{
-			get => GetProperty(ref _roughnessClip);
-			set => SetProperty(ref _roughnessClip, value);
+			get => GetProperty(ref _glossinessFactor);
+			set => SetProperty(ref _glossinessFactor, value);
 		}
 
 		[Ordinal(10)] 
-		[RED("roughnessExponent")] 
-		public CFloat RoughnessExponent
+		[RED("baseColorFactor")] 
+		public CFloat BaseColorFactor
 		{
-			get => GetProperty(ref _roughnessExponent);
-			set => SetProperty(ref _roughnessExponent, value);
+			get => GetProperty(ref _baseColorFactor);
+			set => SetProperty(ref _baseColorFactor, value);
 		}
 
 		[Ordinal(11)] 
-		[RED("baseColorShift")] 
-		public CFloat BaseColorShift
-		{
-			get => GetProperty(ref _baseColorShift);
-			set => SetProperty(ref _baseColorShift, value);
-		}
-
-		[Ordinal(12)] 
-		[RED("baseColorClip")] 
-		public CFloat BaseColorClip
-		{
-			get => GetProperty(ref _baseColorClip);
-			set => SetProperty(ref _baseColorClip, value);
-		}
-
-		[Ordinal(13)] 
-		[RED("baseColorExponent")] 
-		public CFloat BaseColorExponent
-		{
-			get => GetProperty(ref _baseColorExponent);
-			set => SetProperty(ref _baseColorExponent, value);
-		}
-
-		[Ordinal(14)] 
-		[RED("porosityThreshold")] 
-		public CFloat PorosityThreshold
-		{
-			get => GetProperty(ref _porosityThreshold);
-			set => SetProperty(ref _porosityThreshold, value);
-		}
-
-		[Ordinal(15)] 
 		[RED("moistureAccumulationSpeed")] 
 		public CFloat MoistureAccumulationSpeed
 		{
@@ -144,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _moistureAccumulationSpeed, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(12)] 
 		[RED("puddlesAccumulationSpeed")] 
 		public CFloat PuddlesAccumulationSpeed
 		{
@@ -152,7 +116,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _puddlesAccumulationSpeed, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(13)] 
 		[RED("moistureEvaporationSpeed")] 
 		public CFloat MoistureEvaporationSpeed
 		{
@@ -160,7 +124,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _moistureEvaporationSpeed, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(14)] 
 		[RED("puddlesEvaporationSpeed")] 
 		public CFloat PuddlesEvaporationSpeed
 		{
@@ -168,7 +132,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _puddlesEvaporationSpeed, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(15)] 
 		[RED("rainIntensity")] 
 		public curveData<CFloat> RainIntensity
 		{
@@ -176,7 +140,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rainIntensity, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(16)] 
 		[RED("rainOverride")] 
 		public curveData<CFloat> RainOverride
 		{
@@ -184,7 +148,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rainOverride, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(17)] 
 		[RED("rainMoistureOverride")] 
 		public curveData<CFloat> RainMoistureOverride
 		{
@@ -192,7 +156,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rainMoistureOverride, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(18)] 
 		[RED("rainPuddlesOverride")] 
 		public curveData<CFloat> RainPuddlesOverride
 		{
@@ -200,7 +164,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rainPuddlesOverride, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(19)] 
 		[RED("rainleaksMask")] 
 		public rRef<CBitmapTexture> RainleaksMask
 		{
@@ -208,7 +172,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rainleaksMask, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(20)] 
 		[RED("raindropsMask")] 
 		public rRef<CBitmapTexture> RaindropsMask
 		{
@@ -216,7 +180,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _raindropsMask, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(21)] 
 		[RED("rainRipplesMask")] 
 		public rRef<CBitmapTexture> RainRipplesMask
 		{

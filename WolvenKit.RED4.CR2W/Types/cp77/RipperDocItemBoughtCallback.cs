@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RipperDocItemBoughtCallback : gameInventoryScriptCallback
 	{
-		private CHandle<RipperDocGameController> _eventTarget;
+		private wCHandle<RipperDocGameController> _eventTarget;
 
 		[Ordinal(1)] 
 		[RED("eventTarget")] 
-		public CHandle<RipperDocGameController> EventTarget
+		public wCHandle<RipperDocGameController> EventTarget
 		{
 			get => GetProperty(ref _eventTarget);
 			set => SetProperty(ref _eventTarget, value);

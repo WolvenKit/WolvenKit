@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameprojectileComponent> _projectileComponent;
 		private wCHandle<gameObject> _weaponOwner;
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _projectileComponent, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("weaponOwner")] 
 		public wCHandle<gameObject> WeaponOwner
 		{

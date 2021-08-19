@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _clearAppearance;
 		private CName _tintedAppearance;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isTinted")] 
 		public CBool IsTinted
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isTinted, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("useAppearances")] 
 		public CBool UseAppearances
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useAppearances, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("clearAppearance")] 
 		public CName ClearAppearance
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _clearAppearance, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("tintedAppearance")] 
 		public CName TintedAppearance
 		{

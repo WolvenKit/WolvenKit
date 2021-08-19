@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkCanvasWidget> _root;
 		private inkBasePanelWidgetReference _hubsContainer;
 		private CArray<wCHandle<DialogHubLogicController>> _hubControllers;
-		private CHandle<DialogHubLogicController> _activeHubController;
+		private wCHandle<DialogHubLogicController> _activeHubController;
 		private gameinteractionsvisDialogChoiceHubs _data;
 		private CInt32 _activeHubID;
 		private CInt32 _prevActiveHubID;
@@ -21,9 +21,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _hubAvailable;
 		private CHandle<inkanimProxy> _animCloseHudProxy;
 		private wCHandle<DialogHubLogicController> _currentFadeItem;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_SystemDef> _uiSystemBB;
-		private CUInt32 _uiSystemId;
+		private CHandle<redCallbackObject> _uiSystemId;
 
 		[Ordinal(23)] 
 		[RED("root")] 
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("activeHubController")] 
-		public CHandle<DialogHubLogicController> ActiveHubController
+		public wCHandle<DialogHubLogicController> ActiveHubController
 		{
 			get => GetProperty(ref _activeHubController);
 			set => SetProperty(ref _activeHubController, value);
@@ -139,7 +139,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(37)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -155,7 +155,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(39)] 
 		[RED("uiSystemId")] 
-		public CUInt32 UiSystemId
+		public CHandle<redCallbackObject> UiSystemId
 		{
 			get => GetProperty(ref _uiSystemId);
 			set => SetProperty(ref _uiSystemId, value);

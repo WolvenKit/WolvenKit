@@ -10,7 +10,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _value;
 		private inkTextWidgetReference _proficencyLabel;
 		private CUInt32 _stateChangesBlackboardId;
-		private CHandle<gameIBlackboard> _blackboard;
 		private CHandle<inkanimProxy> _animationProxy;
 		private CHandle<LevelUpUserData> _data;
 
@@ -39,14 +38,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(12)] 
-		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
-		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
-		}
-
-		[Ordinal(13)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -54,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationProxy, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("data")] 
 		public CHandle<LevelUpUserData> Data
 		{

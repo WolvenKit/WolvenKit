@@ -7,12 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class cursorDeviceGameController : gameuiWidgetGameController
 	{
-		private CHandle<gameIBlackboard> _bbUIData;
+		private wCHandle<gameIBlackboard> _bbUIData;
 		private wCHandle<gameIBlackboard> _bbWeaponInfo;
-		private CUInt32 _bbWeaponEventId;
-		private CUInt32 _bbPlayerTierEventId;
-		private CUInt32 _interactionBlackboardId;
-		private CUInt32 _upperBodyStateBlackboardId;
+		private CHandle<redCallbackObject> _bbWeaponEventId;
+		private CHandle<redCallbackObject> _bbPlayerTierEventId;
+		private CHandle<redCallbackObject> _interactionBlackboardId;
+		private CHandle<redCallbackObject> _upperBodyStateBlackboardId;
 		private CEnum<GameplayTier> _sceneTier;
 		private CEnum<gamePSMUpperBodyStates> _upperBodyState;
 		private CBool _isUnarmed;
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("bbUIData")] 
-		public CHandle<gameIBlackboard> BbUIData
+		public wCHandle<gameIBlackboard> BbUIData
 		{
 			get => GetProperty(ref _bbUIData);
 			set => SetProperty(ref _bbUIData, value);
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("bbWeaponEventId")] 
-		public CUInt32 BbWeaponEventId
+		public CHandle<redCallbackObject> BbWeaponEventId
 		{
 			get => GetProperty(ref _bbWeaponEventId);
 			set => SetProperty(ref _bbWeaponEventId, value);
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("bbPlayerTierEventId")] 
-		public CUInt32 BbPlayerTierEventId
+		public CHandle<redCallbackObject> BbPlayerTierEventId
 		{
 			get => GetProperty(ref _bbPlayerTierEventId);
 			set => SetProperty(ref _bbPlayerTierEventId, value);
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("interactionBlackboardId")] 
-		public CUInt32 InteractionBlackboardId
+		public CHandle<redCallbackObject> InteractionBlackboardId
 		{
 			get => GetProperty(ref _interactionBlackboardId);
 			set => SetProperty(ref _interactionBlackboardId, value);
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("upperBodyStateBlackboardId")] 
-		public CUInt32 UpperBodyStateBlackboardId
+		public CHandle<redCallbackObject> UpperBodyStateBlackboardId
 		{
 			get => GetProperty(ref _upperBodyStateBlackboardId);
 			set => SetProperty(ref _upperBodyStateBlackboardId, value);

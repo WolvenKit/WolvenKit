@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _quickhackPerformed;
 		private CBool _isInSleepMode;
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("computerSetup")] 
 		public ComputerSetup ComputerSetup
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _computerSetup, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("quickHackSetup")] 
 		public ComputerQuickHackData QuickHackSetup
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickHackSetup, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("activatorActionSetup")] 
 		public CEnum<EToggleActivationTypeComputer> ActivatorActionSetup
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activatorActionSetup, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("computerSkillChecks")] 
 		public CHandle<HackEngContainer> ComputerSkillChecks
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _computerSkillChecks, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("openedMailAdress")] 
 		public SDocumentAdress OpenedMailAdress
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openedMailAdress, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("openedFileAdress")] 
 		public SDocumentAdress OpenedFileAdress
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openedFileAdress, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("quickhackPerformed")] 
 		public CBool QuickhackPerformed
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickhackPerformed, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("isInSleepMode")] 
 		public CBool IsInSleepMode
 		{

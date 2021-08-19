@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _catchingPlayer;
 		private CBool _discCaught;
 		private CBool _discLodgedToSurface;
+		private CHandle<redCallbackObject> _onProjectileCaughtCallback;
 		private CBool _wasNPCHit;
 		private CHandle<entAnimationControllerComponent> _animationController;
 
@@ -146,6 +147,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(66)] 
+		[RED("OnProjectileCaughtCallback")] 
+		public CHandle<redCallbackObject> OnProjectileCaughtCallback
+		{
+			get => GetProperty(ref _onProjectileCaughtCallback);
+			set => SetProperty(ref _onProjectileCaughtCallback, value);
+		}
+
+		[Ordinal(67)] 
 		[RED("wasNPCHit")] 
 		public CBool WasNPCHit
 		{
@@ -153,7 +162,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasNPCHit, value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{

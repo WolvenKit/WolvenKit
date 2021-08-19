@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<EFastTravelTriggerType> _triggerType;
 		private CEnum<EFastTravelDeviceType> _fastTravelDeviceType;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("linkedFastTravelPoint")] 
 		public CHandle<gameFastTravelPointData> LinkedFastTravelPoint
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _linkedFastTravelPoint, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("triggerType")] 
 		public CEnum<EFastTravelTriggerType> TriggerType
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerType, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("fastTravelDeviceType")] 
 		public CEnum<EFastTravelDeviceType> FastTravelDeviceType
 		{

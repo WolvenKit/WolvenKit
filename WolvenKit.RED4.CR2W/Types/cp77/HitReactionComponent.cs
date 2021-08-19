@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArrayFixedSize<CFloat> _hitCountData;
 		private CInt32 _hitCountArrayEnd;
 		private CInt32 _hitCountArrayCurrent;
-		private CUInt32 _indicatorEnabledBlackboardId;
+		private CHandle<redCallbackObject> _indicatorEnabledBlackboardId;
 		private CBool _hitIndicatorEnabled;
 		private CBool _hasBeenWounded;
 		private CHandle<animAnimFeature_HitReactionsData> _hitReactionData;
@@ -653,7 +653,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(76)] 
 		[RED("indicatorEnabledBlackboardId")] 
-		public CUInt32 IndicatorEnabledBlackboardId
+		public CHandle<redCallbackObject> IndicatorEnabledBlackboardId
 		{
 			get => GetProperty(ref _indicatorEnabledBlackboardId);
 			set => SetProperty(ref _indicatorEnabledBlackboardId, value);

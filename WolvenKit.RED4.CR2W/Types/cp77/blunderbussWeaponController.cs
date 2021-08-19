@@ -15,9 +15,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkWidget> _chargeModeIndicator;
 		private CArray<wCHandle<inkWidget>> _shots;
 		private wCHandle<inkWidget> _charge;
-		private CUInt32 _onCharge;
-		private CUInt32 _onTriggerMode;
-		private CUInt32 _onMagazineAmmoCount;
+		private CHandle<redCallbackObject> _onCharge;
+		private CHandle<redCallbackObject> _onTriggerMode;
+		private CHandle<redCallbackObject> _onMagazineAmmoCount;
 		private wCHandle<gameIBlackboard> _blackboard;
 
 		[Ordinal(2)] 
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("onCharge")] 
-		public CUInt32 OnCharge
+		public CHandle<redCallbackObject> OnCharge
 		{
 			get => GetProperty(ref _onCharge);
 			set => SetProperty(ref _onCharge, value);
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("onTriggerMode")] 
-		public CUInt32 OnTriggerMode
+		public CHandle<redCallbackObject> OnTriggerMode
 		{
 			get => GetProperty(ref _onTriggerMode);
 			set => SetProperty(ref _onTriggerMode, value);
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("onMagazineAmmoCount")] 
-		public CUInt32 OnMagazineAmmoCount
+		public CHandle<redCallbackObject> OnMagazineAmmoCount
 		{
 			get => GetProperty(ref _onMagazineAmmoCount);
 			set => SetProperty(ref _onMagazineAmmoCount, value);

@@ -15,11 +15,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _status;
 		private inkImageWidgetReference _statusIcon;
 		private inkWidgetReference _levelWrapper;
-		private CUInt32 _nameCallbackID;
-		private CUInt32 _networkLevelCallbackID;
-		private CUInt32 _networkStatusCallbackID;
-		private CUInt32 _deviceStatusCallbackID;
-		private CUInt32 _attitudeCallbackID;
+		private CHandle<redCallbackObject> _nameCallbackID;
+		private CHandle<redCallbackObject> _networkLevelCallbackID;
+		private CHandle<redCallbackObject> _networkStatusCallbackID;
+		private CHandle<redCallbackObject> _deviceStatusCallbackID;
+		private CHandle<redCallbackObject> _attitudeCallbackID;
 		private CBool _isValidName;
 		private CBool _isValidNetworkLevel;
 		private CBool _isValidnetworkStatus;
@@ -91,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("nameCallbackID")] 
-		public CUInt32 NameCallbackID
+		public CHandle<redCallbackObject> NameCallbackID
 		{
 			get => GetProperty(ref _nameCallbackID);
 			set => SetProperty(ref _nameCallbackID, value);
@@ -99,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("networkLevelCallbackID")] 
-		public CUInt32 NetworkLevelCallbackID
+		public CHandle<redCallbackObject> NetworkLevelCallbackID
 		{
 			get => GetProperty(ref _networkLevelCallbackID);
 			set => SetProperty(ref _networkLevelCallbackID, value);
@@ -107,7 +107,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("networkStatusCallbackID")] 
-		public CUInt32 NetworkStatusCallbackID
+		public CHandle<redCallbackObject> NetworkStatusCallbackID
 		{
 			get => GetProperty(ref _networkStatusCallbackID);
 			set => SetProperty(ref _networkStatusCallbackID, value);
@@ -115,7 +115,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("deviceStatusCallbackID")] 
-		public CUInt32 DeviceStatusCallbackID
+		public CHandle<redCallbackObject> DeviceStatusCallbackID
 		{
 			get => GetProperty(ref _deviceStatusCallbackID);
 			set => SetProperty(ref _deviceStatusCallbackID, value);
@@ -123,7 +123,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("attitudeCallbackID")] 
-		public CUInt32 AttitudeCallbackID
+		public CHandle<redCallbackObject> AttitudeCallbackID
 		{
 			get => GetProperty(ref _attitudeCallbackID);
 			set => SetProperty(ref _attitudeCallbackID, value);
