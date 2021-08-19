@@ -119,6 +119,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(XbmImportArgs), new XbmImportArgs() },
             { typeof(GltfImportArgs), new GltfImportArgs() },
             { typeof(OpusImportArgs), new OpusImportArgs() },
+            { typeof(MlmaskImportArgs), new MlmaskImportArgs() },
         };
 
         /// <summary>
@@ -274,6 +275,15 @@ namespace WolvenKit.Common.Model.Arguments
         Mesh,
         Morphtarget
     }
+    public class MlmaskImportArgs : ImportArgs
+    {
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => "Masklist(txt file containing mask image paths) TO--> Mlmask";
+    }
+
     #endregion import args
 
     #region export args
