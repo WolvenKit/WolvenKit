@@ -10,7 +10,7 @@ namespace WolvenKit.Common.Services
 
         string Get(ulong key);
 
-        void Add(string path);
+        void AddCustom(string path);
 
         public IEnumerable<ulong> GetAllHashes();
 
