@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _vendorTweakID;
 		private IceMachineSFX _iceMachineSFX;
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("vendorTweakID")] 
 		public TweakDBID VendorTweakID
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendorTweakID, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("iceMachineSFX")] 
 		public IceMachineSFX IceMachineSFX
 		{

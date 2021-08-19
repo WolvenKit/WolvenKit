@@ -26,19 +26,19 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkTextWidget> _realFluffText_1;
 		private wCHandle<inkTextWidget> _realFluffText_2;
 		private Vector2 _bufferedSpread;
-		private CHandle<gameIBlackboard> _weaponlocalBB;
-		private CUInt32 _bbcharge;
-		private CUInt32 _bbmagazineAmmoCapacity;
-		private CUInt32 _bbmagazineAmmoCount;
-		private CUInt32 _bbcurrentFireMode;
+		private wCHandle<gameIBlackboard> _weaponlocalBB;
+		private CHandle<redCallbackObject> _bbcharge;
+		private CHandle<redCallbackObject> _bbmagazineAmmoCapacity;
+		private CHandle<redCallbackObject> _bbmagazineAmmoCount;
+		private CHandle<redCallbackObject> _bbcurrentFireMode;
 		private CInt32 _currentAmmo;
 		private CInt32 _currentMaxAmmo;
 		private CInt32 _maxSupportedAmmo;
 		private CEnum<gamedataTriggerMode> _currentFireMode;
 		private Vector2 _orgSideSize;
 		private CFloat _sidesScale;
-		private CUInt32 _bbNPCStatsInfo;
-		private CUInt32 _currentObstructedTargetBBID;
+		private CHandle<redCallbackObject> _bbNPCStatsInfo;
+		private CHandle<redCallbackObject> _currentObstructedTargetBBID;
 		private wCHandle<gameObject> _potentialVisibleTarget;
 		private wCHandle<gameObject> _potentialObstructedTarget;
 		private CBool _useVisibleTarget;
@@ -202,7 +202,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(43)] 
 		[RED("weaponlocalBB")] 
-		public CHandle<gameIBlackboard> WeaponlocalBB
+		public wCHandle<gameIBlackboard> WeaponlocalBB
 		{
 			get => GetProperty(ref _weaponlocalBB);
 			set => SetProperty(ref _weaponlocalBB, value);
@@ -210,7 +210,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(44)] 
 		[RED("bbcharge")] 
-		public CUInt32 Bbcharge
+		public CHandle<redCallbackObject> Bbcharge
 		{
 			get => GetProperty(ref _bbcharge);
 			set => SetProperty(ref _bbcharge, value);
@@ -218,7 +218,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(45)] 
 		[RED("bbmagazineAmmoCapacity")] 
-		public CUInt32 BbmagazineAmmoCapacity
+		public CHandle<redCallbackObject> BbmagazineAmmoCapacity
 		{
 			get => GetProperty(ref _bbmagazineAmmoCapacity);
 			set => SetProperty(ref _bbmagazineAmmoCapacity, value);
@@ -226,7 +226,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(46)] 
 		[RED("bbmagazineAmmoCount")] 
-		public CUInt32 BbmagazineAmmoCount
+		public CHandle<redCallbackObject> BbmagazineAmmoCount
 		{
 			get => GetProperty(ref _bbmagazineAmmoCount);
 			set => SetProperty(ref _bbmagazineAmmoCount, value);
@@ -234,7 +234,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(47)] 
 		[RED("bbcurrentFireMode")] 
-		public CUInt32 BbcurrentFireMode
+		public CHandle<redCallbackObject> BbcurrentFireMode
 		{
 			get => GetProperty(ref _bbcurrentFireMode);
 			set => SetProperty(ref _bbcurrentFireMode, value);
@@ -290,7 +290,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(54)] 
 		[RED("bbNPCStatsInfo")] 
-		public CUInt32 BbNPCStatsInfo
+		public CHandle<redCallbackObject> BbNPCStatsInfo
 		{
 			get => GetProperty(ref _bbNPCStatsInfo);
 			set => SetProperty(ref _bbNPCStatsInfo, value);
@@ -298,7 +298,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(55)] 
 		[RED("currentObstructedTargetBBID")] 
-		public CUInt32 CurrentObstructedTargetBBID
+		public CHandle<redCallbackObject> CurrentObstructedTargetBBID
 		{
 			get => GetProperty(ref _currentObstructedTargetBBID);
 			set => SetProperty(ref _currentObstructedTargetBBID, value);

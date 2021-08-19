@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class WoundedTriggeredPrereqState : gamePrereqState
 	{
 		private wCHandle<gameObject> _owner;
-		private CUInt32 _listenerInt;
+		private CHandle<redCallbackObject> _listenerInt;
 
 		[Ordinal(0)] 
 		[RED("owner")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("listenerInt")] 
-		public CUInt32 ListenerInt
+		public CHandle<redCallbackObject> ListenerInt
 		{
 			get => GetProperty(ref _listenerInt);
 			set => SetProperty(ref _listenerInt, value);

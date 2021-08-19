@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<TweakDBID> _rewardsLootTable;
 		private CBool _hasPlayerCollectedReward;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("vendorRecord")] 
 		public CString VendorRecord
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendorRecord, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("rewardsLootTable")] 
 		public CArray<TweakDBID> RewardsLootTable
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rewardsLootTable, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("hasPlayerCollectedReward")] 
 		public CBool HasPlayerCollectedReward
 		{

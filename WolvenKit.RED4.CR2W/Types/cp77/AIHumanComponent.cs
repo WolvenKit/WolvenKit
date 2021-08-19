@@ -8,12 +8,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class AIHumanComponent : AICAgent
 	{
 		private TweakDBID _movementParamsRecord;
-		private CHandle<gameIBlackboard> _shootingBlackboard;
-		private CHandle<gameIBlackboard> _gadgetBlackboard;
-		private CHandle<gameIBlackboard> _coverBlackboard;
-		private CHandle<gameIBlackboard> _actionBlackboard;
-		private CHandle<gameIBlackboard> _patrolBlackboard;
-		private CHandle<gameIBlackboard> _alertedPatrolBlackboard;
+		private wCHandle<gameIBlackboard> _shootingBlackboard;
+		private wCHandle<gameIBlackboard> _gadgetBlackboard;
+		private wCHandle<gameIBlackboard> _coverBlackboard;
+		private wCHandle<gameIBlackboard> _actionBlackboard;
+		private wCHandle<gameIBlackboard> _patrolBlackboard;
+		private wCHandle<gameIBlackboard> _alertedPatrolBlackboard;
 		private CUInt32 _friendlyFireCheckID;
 		private CHandle<gameIFriendlyFireSystem> _ffs;
 		private CUInt32 _loSFinderCheckID;
@@ -27,6 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _grenadeThrowQueryId;
 		private AIbehaviorScriptExecutionContext _scriptContext;
 		private CBool _scriptContextInitialized;
+		private CHandle<gamedataGameplayAbility_Record> _kerenzikovAbilityRecord;
 		private CUInt32 _highLevelCb;
 		private AIbehaviorUniqueActiveCommandList _activeCommands;
 
@@ -40,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("shootingBlackboard")] 
-		public CHandle<gameIBlackboard> ShootingBlackboard
+		public wCHandle<gameIBlackboard> ShootingBlackboard
 		{
 			get => GetProperty(ref _shootingBlackboard);
 			set => SetProperty(ref _shootingBlackboard, value);
@@ -48,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("gadgetBlackboard")] 
-		public CHandle<gameIBlackboard> GadgetBlackboard
+		public wCHandle<gameIBlackboard> GadgetBlackboard
 		{
 			get => GetProperty(ref _gadgetBlackboard);
 			set => SetProperty(ref _gadgetBlackboard, value);
@@ -56,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("coverBlackboard")] 
-		public CHandle<gameIBlackboard> CoverBlackboard
+		public wCHandle<gameIBlackboard> CoverBlackboard
 		{
 			get => GetProperty(ref _coverBlackboard);
 			set => SetProperty(ref _coverBlackboard, value);
@@ -64,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("actionBlackboard")] 
-		public CHandle<gameIBlackboard> ActionBlackboard
+		public wCHandle<gameIBlackboard> ActionBlackboard
 		{
 			get => GetProperty(ref _actionBlackboard);
 			set => SetProperty(ref _actionBlackboard, value);
@@ -72,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("patrolBlackboard")] 
-		public CHandle<gameIBlackboard> PatrolBlackboard
+		public wCHandle<gameIBlackboard> PatrolBlackboard
 		{
 			get => GetProperty(ref _patrolBlackboard);
 			set => SetProperty(ref _patrolBlackboard, value);
@@ -80,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("alertedPatrolBlackboard")] 
-		public CHandle<gameIBlackboard> AlertedPatrolBlackboard
+		public wCHandle<gameIBlackboard> AlertedPatrolBlackboard
 		{
 			get => GetProperty(ref _alertedPatrolBlackboard);
 			set => SetProperty(ref _alertedPatrolBlackboard, value);
@@ -191,6 +192,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(24)] 
+		[RED("kerenzikovAbilityRecord")] 
+		public CHandle<gamedataGameplayAbility_Record> KerenzikovAbilityRecord
+		{
+			get => GetProperty(ref _kerenzikovAbilityRecord);
+			set => SetProperty(ref _kerenzikovAbilityRecord, value);
+		}
+
+		[Ordinal(25)] 
 		[RED("highLevelCb")] 
 		public CUInt32 HighLevelCb
 		{
@@ -198,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highLevelCb, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("activeCommands")] 
 		public AIbehaviorUniqueActiveCommandList ActiveCommands
 		{

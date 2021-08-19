@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _unmountCalled;
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("unmountCalled")] 
 		public CBool UnmountCalled
 		{

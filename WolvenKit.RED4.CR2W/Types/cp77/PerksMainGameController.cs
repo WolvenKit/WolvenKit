@@ -17,7 +17,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _johnnyConnectorRef;
 		private inkWidgetReference _attributeTooltipHolderRight;
 		private inkWidgetReference _attributeTooltipHolderLeft;
-		private inkWidgetReference _resetPerks;
+		private inkWidgetReference _respecButtonContainer;
+		private inkWidgetReference _cantRespecNotificationContainer;
+		private inkTextWidgetReference _resetPrice;
+		private inkTextWidgetReference _spentPerks;
 		private CEnum<CharacterScreenType> _activeScreen;
 		private wCHandle<gameuiTooltipsManager> _tooltipsManager;
 		private wCHandle<ButtonHints> _buttonHintsController;
@@ -25,12 +28,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
 		private CArray<CHandle<PerksMenuAttributeItemCreated>> _perksMenuItemCreatedQueue;
 		private CArray<wCHandle<PerksMenuAttributeItemController>> _attributesControllersList;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
-		private CUInt32 _characterLevelListener;
+		private wCHandle<gameIBlackboard> _playerStatsBlackboard;
+		private CHandle<redCallbackObject> _characterLevelListener;
 		private wCHandle<PerkScreenController> _perksScreenController;
 		private wCHandle<PerksPointsDisplayController> _pointsDisplayController;
 		private wCHandle<questQuestsSystem> _questSystem;
 		private CHandle<inkGameNotificationToken> _resetConfirmationToken;
+		private CBool _inCombat;
+		private CBool _enoughMoneyForRespec;
+		private CHandle<inkanimProxy> _cantRespecAnim;
+		private CEnum<PerkMenuAttribute> _lastHoveredAttribute;
 
 		[Ordinal(3)] 
 		[RED("tooltipsManagerRef")] 
@@ -113,14 +120,38 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(13)] 
-		[RED("resetPerks")] 
-		public inkWidgetReference ResetPerks
+		[RED("respecButtonContainer")] 
+		public inkWidgetReference RespecButtonContainer
 		{
-			get => GetProperty(ref _resetPerks);
-			set => SetProperty(ref _resetPerks, value);
+			get => GetProperty(ref _respecButtonContainer);
+			set => SetProperty(ref _respecButtonContainer, value);
 		}
 
 		[Ordinal(14)] 
+		[RED("cantRespecNotificationContainer")] 
+		public inkWidgetReference CantRespecNotificationContainer
+		{
+			get => GetProperty(ref _cantRespecNotificationContainer);
+			set => SetProperty(ref _cantRespecNotificationContainer, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("resetPrice")] 
+		public inkTextWidgetReference ResetPrice
+		{
+			get => GetProperty(ref _resetPrice);
+			set => SetProperty(ref _resetPrice, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("spentPerks")] 
+		public inkTextWidgetReference SpentPerks
+		{
+			get => GetProperty(ref _spentPerks);
+			set => SetProperty(ref _spentPerks, value);
+		}
+
+		[Ordinal(17)] 
 		[RED("activeScreen")] 
 		public CEnum<CharacterScreenType> ActiveScreen
 		{
@@ -128,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeScreen, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("tooltipsManager")] 
 		public wCHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -136,7 +167,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipsManager, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("buttonHintsController")] 
 		public wCHandle<ButtonHints> ButtonHintsController
 		{
@@ -144,7 +175,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _buttonHintsController, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
@@ -152,7 +183,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataManager, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("menuEventDispatcher")] 
 		public wCHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -160,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _menuEventDispatcher, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("perksMenuItemCreatedQueue")] 
 		public CArray<CHandle<PerksMenuAttributeItemCreated>> PerksMenuItemCreatedQueue
 		{
@@ -168,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _perksMenuItemCreatedQueue, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("attributesControllersList")] 
 		public CArray<wCHandle<PerksMenuAttributeItemController>> AttributesControllersList
 		{
@@ -176,23 +207,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _attributesControllersList, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
+		public wCHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
 			get => GetProperty(ref _playerStatsBlackboard);
 			set => SetProperty(ref _playerStatsBlackboard, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("characterLevelListener")] 
-		public CUInt32 CharacterLevelListener
+		public CHandle<redCallbackObject> CharacterLevelListener
 		{
 			get => GetProperty(ref _characterLevelListener);
 			set => SetProperty(ref _characterLevelListener, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("perksScreenController")] 
 		public wCHandle<PerkScreenController> PerksScreenController
 		{
@@ -200,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _perksScreenController, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("pointsDisplayController")] 
 		public wCHandle<PerksPointsDisplayController> PointsDisplayController
 		{
@@ -208,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _pointsDisplayController, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("questSystem")] 
 		public wCHandle<questQuestsSystem> QuestSystem
 		{
@@ -216,12 +247,44 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _questSystem, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("resetConfirmationToken")] 
 		public CHandle<inkGameNotificationToken> ResetConfirmationToken
 		{
 			get => GetProperty(ref _resetConfirmationToken);
 			set => SetProperty(ref _resetConfirmationToken, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("inCombat")] 
+		public CBool InCombat
+		{
+			get => GetProperty(ref _inCombat);
+			set => SetProperty(ref _inCombat, value);
+		}
+
+		[Ordinal(31)] 
+		[RED("enoughMoneyForRespec")] 
+		public CBool EnoughMoneyForRespec
+		{
+			get => GetProperty(ref _enoughMoneyForRespec);
+			set => SetProperty(ref _enoughMoneyForRespec, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("cantRespecAnim")] 
+		public CHandle<inkanimProxy> CantRespecAnim
+		{
+			get => GetProperty(ref _cantRespecAnim);
+			set => SetProperty(ref _cantRespecAnim, value);
+		}
+
+		[Ordinal(33)] 
+		[RED("lastHoveredAttribute")] 
+		public CEnum<PerkMenuAttribute> LastHoveredAttribute
+		{
+			get => GetProperty(ref _lastHoveredAttribute);
+			set => SetProperty(ref _lastHoveredAttribute, value);
 		}
 
 		public PerksMainGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

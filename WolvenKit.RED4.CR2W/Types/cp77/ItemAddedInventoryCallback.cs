@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemAddedInventoryCallback : gameInventoryScriptCallback
 	{
-		private CHandle<ItemsNotificationQueue> _notificationQueue;
+		private wCHandle<ItemsNotificationQueue> _notificationQueue;
 
 		[Ordinal(1)] 
 		[RED("notificationQueue")] 
-		public CHandle<ItemsNotificationQueue> NotificationQueue
+		public wCHandle<ItemsNotificationQueue> NotificationQueue
 		{
 			get => GetProperty(ref _notificationQueue);
 			set => SetProperty(ref _notificationQueue, value);

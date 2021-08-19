@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SceneScreenGameController : gameuiWidgetGameController
 	{
-		private CUInt32 _onQuestAnimChangeListener;
+		private CHandle<redCallbackObject> _onQuestAnimChangeListener;
 
 		[Ordinal(2)] 
 		[RED("onQuestAnimChangeListener")] 
-		public CUInt32 OnQuestAnimChangeListener
+		public CHandle<redCallbackObject> OnQuestAnimChangeListener
 		{
 			get => GetProperty(ref _onQuestAnimChangeListener);
 			set => SetProperty(ref _onQuestAnimChangeListener, value);

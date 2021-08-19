@@ -16,16 +16,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<PlayerDevelopmentSystem> _playerDevSystem;
 		private CHandle<gameTransactionSystem> _transaction;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
-		private CHandle<gameIBlackboard> _hubMenuBlackboard;
-		private CUInt32 _characterCredListener;
-		private CUInt32 _characterLevelListener;
-		private CUInt32 _characterCurrentXPListener;
-		private CUInt32 _characterCredPointsListener;
-		private CUInt32 _weightListener;
-		private CUInt32 _maxWeightListener;
-		private CUInt32 _submenuHiddenListener;
-		private CUInt32 _metaQuestStatusListener;
+		private wCHandle<gameIBlackboard> _playerStatsBlackboard;
+		private wCHandle<gameIBlackboard> _hubMenuBlackboard;
+		private CHandle<redCallbackObject> _characterCredListener;
+		private CHandle<redCallbackObject> _characterLevelListener;
+		private CHandle<redCallbackObject> _characterCurrentXPListener;
+		private CHandle<redCallbackObject> _characterCredPointsListener;
+		private CHandle<redCallbackObject> _weightListener;
+		private CHandle<redCallbackObject> _maxWeightListener;
+		private CHandle<redCallbackObject> _submenuHiddenListener;
+		private CHandle<redCallbackObject> _metaQuestStatusListener;
 		private wCHandle<gameJournalManager> _journalManager;
 		private wCHandle<gameJournalQuestObjective> _trackedEntry;
 		private wCHandle<gameJournalQuestPhase> _trackedPhase;
@@ -36,7 +36,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<PlayerDevelopmentDataManager> _dataManager;
 		private wCHandle<ButtonHints> _buttonHintsController;
 		private inkWidgetReference _gameTimeContainer;
-		private CHandle<gameuiTimeDisplayLogicController> _gameTimeController;
+		private wCHandle<gameuiTimeDisplayLogicController> _gameTimeController;
+		private CHandle<gameInventoryScriptListener> _inventoryListener;
+		private CHandle<CurrencyUpdateCallback> _callback;
+		private CUInt32 _hubMenuInstanceID;
 		private CHandle<OpenMenuRequest> _previousRequest;
 		private CHandle<OpenMenuRequest> _currentRequest;
 
@@ -114,7 +117,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
+		public wCHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
 			get => GetProperty(ref _playerStatsBlackboard);
 			set => SetProperty(ref _playerStatsBlackboard, value);
@@ -122,7 +125,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("hubMenuBlackboard")] 
-		public CHandle<gameIBlackboard> HubMenuBlackboard
+		public wCHandle<gameIBlackboard> HubMenuBlackboard
 		{
 			get => GetProperty(ref _hubMenuBlackboard);
 			set => SetProperty(ref _hubMenuBlackboard, value);
@@ -130,7 +133,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("characterCredListener")] 
-		public CUInt32 CharacterCredListener
+		public CHandle<redCallbackObject> CharacterCredListener
 		{
 			get => GetProperty(ref _characterCredListener);
 			set => SetProperty(ref _characterCredListener, value);
@@ -138,7 +141,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("characterLevelListener")] 
-		public CUInt32 CharacterLevelListener
+		public CHandle<redCallbackObject> CharacterLevelListener
 		{
 			get => GetProperty(ref _characterLevelListener);
 			set => SetProperty(ref _characterLevelListener, value);
@@ -146,7 +149,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("characterCurrentXPListener")] 
-		public CUInt32 CharacterCurrentXPListener
+		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
 			get => GetProperty(ref _characterCurrentXPListener);
 			set => SetProperty(ref _characterCurrentXPListener, value);
@@ -154,7 +157,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("characterCredPointsListener")] 
-		public CUInt32 CharacterCredPointsListener
+		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
 			get => GetProperty(ref _characterCredPointsListener);
 			set => SetProperty(ref _characterCredPointsListener, value);
@@ -162,7 +165,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("weightListener")] 
-		public CUInt32 WeightListener
+		public CHandle<redCallbackObject> WeightListener
 		{
 			get => GetProperty(ref _weightListener);
 			set => SetProperty(ref _weightListener, value);
@@ -170,7 +173,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("maxWeightListener")] 
-		public CUInt32 MaxWeightListener
+		public CHandle<redCallbackObject> MaxWeightListener
 		{
 			get => GetProperty(ref _maxWeightListener);
 			set => SetProperty(ref _maxWeightListener, value);
@@ -178,7 +181,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("submenuHiddenListener")] 
-		public CUInt32 SubmenuHiddenListener
+		public CHandle<redCallbackObject> SubmenuHiddenListener
 		{
 			get => GetProperty(ref _submenuHiddenListener);
 			set => SetProperty(ref _submenuHiddenListener, value);
@@ -186,7 +189,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("metaQuestStatusListener")] 
-		public CUInt32 MetaQuestStatusListener
+		public CHandle<redCallbackObject> MetaQuestStatusListener
 		{
 			get => GetProperty(ref _metaQuestStatusListener);
 			set => SetProperty(ref _metaQuestStatusListener, value);
@@ -274,13 +277,37 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(32)] 
 		[RED("gameTimeController")] 
-		public CHandle<gameuiTimeDisplayLogicController> GameTimeController
+		public wCHandle<gameuiTimeDisplayLogicController> GameTimeController
 		{
 			get => GetProperty(ref _gameTimeController);
 			set => SetProperty(ref _gameTimeController, value);
 		}
 
 		[Ordinal(33)] 
+		[RED("inventoryListener")] 
+		public CHandle<gameInventoryScriptListener> InventoryListener
+		{
+			get => GetProperty(ref _inventoryListener);
+			set => SetProperty(ref _inventoryListener, value);
+		}
+
+		[Ordinal(34)] 
+		[RED("callback")] 
+		public CHandle<CurrencyUpdateCallback> Callback
+		{
+			get => GetProperty(ref _callback);
+			set => SetProperty(ref _callback, value);
+		}
+
+		[Ordinal(35)] 
+		[RED("hubMenuInstanceID")] 
+		public CUInt32 HubMenuInstanceID
+		{
+			get => GetProperty(ref _hubMenuInstanceID);
+			set => SetProperty(ref _hubMenuInstanceID, value);
+		}
+
+		[Ordinal(36)] 
 		[RED("previousRequest")] 
 		public CHandle<OpenMenuRequest> PreviousRequest
 		{
@@ -288,7 +315,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousRequest, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("currentRequest")] 
 		public CHandle<OpenMenuRequest> CurrentRequest
 		{

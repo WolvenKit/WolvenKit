@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _damageLabel;
 		private inkTextWidgetReference _damageValue;
 		private inkTextWidgetReference _healthPercentageLabel;
-		private CUInt32 _quickHackDataCallbackID;
+		private CHandle<redCallbackObject> _quickHackDataCallbackID;
 		private CHandle<QuickhackData> _selectedData;
 
 		[Ordinal(5)] 
@@ -147,7 +147,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("quickHackDataCallbackID")] 
-		public CUInt32 QuickHackDataCallbackID
+		public CHandle<redCallbackObject> QuickHackDataCallbackID
 		{
 			get => GetProperty(ref _quickHackDataCallbackID);
 			set => SetProperty(ref _quickHackDataCallbackID, value);

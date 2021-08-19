@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<EAnimationType> _animationType;
 		private CBool _forceAnimationSystem;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("distractorType")] 
 		public CEnum<EPlaystyleType> DistractorType
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _distractorType, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("basicDistractionDeviceSkillChecks")] 
 		public CHandle<EngDemoContainer> BasicDistractionDeviceSkillChecks
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _basicDistractionDeviceSkillChecks, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("effectOnSartNames")] 
 		public CArray<CName> EffectOnSartNames
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectOnSartNames, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationType, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("forceAnimationSystem")] 
 		public CBool ForceAnimationSystem
 		{

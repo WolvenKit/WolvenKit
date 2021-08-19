@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CUInt32 _playerAttachedCallbackID;
 		private CUInt32 _playerDetachedCallbackID;
+		private CArray<CHandle<redCallbackObject>> _taggedListenerCallbacks;
 
 		[Ordinal(0)] 
 		[RED("playerAttachedCallbackID")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _playerDetachedCallbackID);
 			set => SetProperty(ref _playerDetachedCallbackID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("taggedListenerCallbacks")] 
+		public CArray<CHandle<redCallbackObject>> TaggedListenerCallbacks
+		{
+			get => GetProperty(ref _taggedListenerCallbacks);
+			set => SetProperty(ref _taggedListenerCallbacks, value);
 		}
 
 		public FocusModeTaggingSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

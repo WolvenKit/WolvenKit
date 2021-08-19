@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<gamedeviceClearance> _clearance;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("clearance")] 
 		public CHandle<gamedeviceClearance> Clearance
 		{

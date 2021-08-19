@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameDelayID _triggeredAlarmID;
 		private CFloat _blinkInterval;
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("debugIsBlinkOn")] 
 		public CBool DebugIsBlinkOn
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugIsBlinkOn, value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(94)] 
 		[RED("triggeredAlarmID")] 
 		public gameDelayID TriggeredAlarmID
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggeredAlarmID, value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(95)] 
 		[RED("blinkInterval")] 
 		public CFloat BlinkInterval
 		{

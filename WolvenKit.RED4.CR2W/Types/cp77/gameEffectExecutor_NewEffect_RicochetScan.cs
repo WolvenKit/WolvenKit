@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private Vector4 _box;
 		private CBool _isPreview;
+		private CBool _onlyForPlayer;
 
 		[Ordinal(5)] 
 		[RED("box")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isPreview);
 			set => SetProperty(ref _isPreview, value);
+		}
+
+		[Ordinal(7)] 
+		[RED("onlyForPlayer")] 
+		public CBool OnlyForPlayer
+		{
+			get => GetProperty(ref _onlyForPlayer);
+			set => SetProperty(ref _onlyForPlayer, value);
 		}
 
 		public gameEffectExecutor_NewEffect_RicochetScan(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isPlayerPerformingBodyDisposal;
 		private CHandle<vehicleControllerPS> _vehicleControllerPS;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("defaultStateSet")] 
 		public CBool DefaultStateSet
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultStateSet, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("stateModifiedByQuest")] 
 		public CBool StateModifiedByQuest
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stateModifiedByQuest, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("playerVehicle")] 
 		public CBool PlayerVehicle
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerVehicle, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("npcOccupiedSlots")] 
 		public CArray<CName> NpcOccupiedSlots
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _npcOccupiedSlots, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("isDestroyed")] 
 		public CBool IsDestroyed
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isDestroyed, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("isStolen")] 
 		public CBool IsStolen
 		{
@@ -80,7 +80,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isStolen, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("crystalDomeQuestModified")] 
 		public CBool CrystalDomeQuestModified
 		{
@@ -88,7 +88,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _crystalDomeQuestModified, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("crystalDomeQuestState")] 
 		public CBool CrystalDomeQuestState
 		{
@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _crystalDomeQuestState, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("crystalDomeState")] 
 		public CBool CrystalDomeState
 		{
@@ -104,7 +104,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _crystalDomeState, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("visualDestructionSet")] 
 		public CBool VisualDestructionSet
 		{
@@ -112,7 +112,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visualDestructionSet, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("visualDestructionNeeded")] 
 		public CBool VisualDestructionNeeded
 		{
@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visualDestructionNeeded, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("exploded")] 
 		public CBool Exploded
 		{
@@ -128,7 +128,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exploded, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("sirenOn")] 
 		public CBool SirenOn
 		{
@@ -136,7 +136,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sirenOn, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("sirenSoundOn")] 
 		public CBool SirenSoundOn
 		{
@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sirenSoundOn, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("sirenLightsOn")] 
 		public CBool SirenLightsOn
 		{
@@ -152,7 +152,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sirenLightsOn, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("anyDoorOpen")] 
 		public CBool AnyDoorOpen
 		{
@@ -160,7 +160,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _anyDoorOpen, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("previousInteractionState")] 
 		public CArray<TemporaryDoorState> PreviousInteractionState
 		{
@@ -168,7 +168,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousInteractionState, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("thrusterState")] 
 		public CBool ThrusterState
 		{
@@ -176,7 +176,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _thrusterState, value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(122)] 
 		[RED("uiQuestModified")] 
 		public CBool UiQuestModified
 		{
@@ -184,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiQuestModified, value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(123)] 
 		[RED("uiState")] 
 		public CBool UiState
 		{
@@ -192,7 +192,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiState, value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(124)] 
 		[RED("vehicleSkillChecks")] 
 		public CHandle<EngDemoContainer> VehicleSkillChecks
 		{
@@ -200,7 +200,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vehicleSkillChecks, value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(125)] 
 		[RED("ready")] 
 		public CBool Ready
 		{
@@ -208,7 +208,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ready, value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(126)] 
 		[RED("isPlayerPerformingBodyDisposal")] 
 		public CBool IsPlayerPerformingBodyDisposal
 		{
@@ -216,7 +216,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPlayerPerformingBodyDisposal, value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(127)] 
 		[RED("vehicleControllerPS")] 
 		public CHandle<vehicleControllerPS> VehicleControllerPS
 		{

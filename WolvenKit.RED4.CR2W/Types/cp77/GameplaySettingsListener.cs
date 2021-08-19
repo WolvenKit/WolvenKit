@@ -12,15 +12,19 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<userSettingsGroup> _diffSettingsGroup;
 		private CHandle<userSettingsGroup> _miscSettingsGroup;
 		private CHandle<userSettingsGroup> _controlsGroup;
+		private CHandle<userSettingsGroup> _hudGroup;
 		private CFloat _additiveCameraMovements;
 		private CBool _isFastForwardByLine;
 		private CBool _movementDodgeEnabled;
-		private CString _additiveCameraGroupName;
-		private CString _fastForwardGroupName;
-		private CString _movementDodgeGroupName;
-		private CString _difficultyPath;
-		private CString _miscPath;
-		private CString _controlsPath;
+		private CBool _inputHintsEnabled;
+		private CName _additiveCameraGroupName;
+		private CName _fastForwardGroupName;
+		private CName _movementDodgeGroupName;
+		private CName _difficultyPath;
+		private CName _miscPath;
+		private CName _controlsPath;
+		private CName _hudPath;
+		private CName _hintsName;
 
 		[Ordinal(0)] 
 		[RED("player")] 
@@ -63,6 +67,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("hudGroup")] 
+		public CHandle<userSettingsGroup> HudGroup
+		{
+			get => GetProperty(ref _hudGroup);
+			set => SetProperty(ref _hudGroup, value);
+		}
+
+		[Ordinal(6)] 
 		[RED("additiveCameraMovements")] 
 		public CFloat AdditiveCameraMovements
 		{
@@ -70,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _additiveCameraMovements, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("isFastForwardByLine")] 
 		public CBool IsFastForwardByLine
 		{
@@ -78,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isFastForwardByLine, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("movementDodgeEnabled")] 
 		public CBool MovementDodgeEnabled
 		{
@@ -86,52 +98,76 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _movementDodgeEnabled, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
+		[RED("InputHintsEnabled")] 
+		public CBool InputHintsEnabled
+		{
+			get => GetProperty(ref _inputHintsEnabled);
+			set => SetProperty(ref _inputHintsEnabled, value);
+		}
+
+		[Ordinal(10)] 
 		[RED("additiveCameraGroupName")] 
-		public CString AdditiveCameraGroupName
+		public CName AdditiveCameraGroupName
 		{
 			get => GetProperty(ref _additiveCameraGroupName);
 			set => SetProperty(ref _additiveCameraGroupName, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("fastForwardGroupName")] 
-		public CString FastForwardGroupName
+		public CName FastForwardGroupName
 		{
 			get => GetProperty(ref _fastForwardGroupName);
 			set => SetProperty(ref _fastForwardGroupName, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("movementDodgeGroupName")] 
-		public CString MovementDodgeGroupName
+		public CName MovementDodgeGroupName
 		{
 			get => GetProperty(ref _movementDodgeGroupName);
 			set => SetProperty(ref _movementDodgeGroupName, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("difficultyPath")] 
-		public CString DifficultyPath
+		public CName DifficultyPath
 		{
 			get => GetProperty(ref _difficultyPath);
 			set => SetProperty(ref _difficultyPath, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("miscPath")] 
-		public CString MiscPath
+		public CName MiscPath
 		{
 			get => GetProperty(ref _miscPath);
 			set => SetProperty(ref _miscPath, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("controlsPath")] 
-		public CString ControlsPath
+		public CName ControlsPath
 		{
 			get => GetProperty(ref _controlsPath);
 			set => SetProperty(ref _controlsPath, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("hudPath")] 
+		public CName HudPath
+		{
+			get => GetProperty(ref _hudPath);
+			set => SetProperty(ref _hudPath, value);
+		}
+
+		[Ordinal(17)] 
+		[RED("hintsName")] 
+		public CName HintsName
+		{
+			get => GetProperty(ref _hintsName);
+			set => SetProperty(ref _hintsName, value);
 		}
 
 		public GameplaySettingsListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

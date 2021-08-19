@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private ComputerQuickHackData _questFactSetup;
 		private CBool _isOverriden;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("techieSkillChecks")] 
 		public CHandle<EngineeringContainer> TechieSkillChecks
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _techieSkillChecks, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("questFactSetup")] 
 		public ComputerQuickHackData QuestFactSetup
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _questFactSetup, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isOverriden")] 
 		public CBool IsOverriden
 		{

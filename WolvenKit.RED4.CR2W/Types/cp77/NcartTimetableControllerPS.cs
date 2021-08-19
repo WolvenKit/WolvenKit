@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private NcartTimetableSetup _ncartTimetableSetup;
 		private CInt32 _currentTimeToDepart;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("ncartTimetableSetup")] 
 		public NcartTimetableSetup NcartTimetableSetup
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ncartTimetableSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("currentTimeToDepart")] 
 		public CInt32 CurrentTimeToDepart
 		{

@@ -18,6 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private InventoryItemData _inventoryItem;
 		private CInt32 _amount;
 		private CBool _isNew;
+		private CBool _isSelected;
 
 		[Ordinal(0)] 
 		[RED("label")] 
@@ -105,6 +106,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isNew);
 			set => SetProperty(ref _isNew, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("isSelected")] 
+		public CBool IsSelected
+		{
+			get => GetProperty(ref _isSelected);
+			set => SetProperty(ref _isSelected, value);
 		}
 
 		public RecipeData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkanimDefinition> _animFade;
 		private inkanimPlaybackOptions _animOptions;
 		private CBool _showAd;
-		private CUInt32 _onShowAdListener;
-		private CUInt32 _onShowVendorListener;
+		private CHandle<redCallbackObject> _onShowAdListener;
+		private CHandle<redCallbackObject> _onShowVendorListener;
 
 		[Ordinal(16)] 
 		[RED("ProcessingVideo")] 
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("onShowAdListener")] 
-		public CUInt32 OnShowAdListener
+		public CHandle<redCallbackObject> OnShowAdListener
 		{
 			get => GetProperty(ref _onShowAdListener);
 			set => SetProperty(ref _onShowAdListener, value);
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("onShowVendorListener")] 
-		public CUInt32 OnShowVendorListener
+		public CHandle<redCallbackObject> OnShowVendorListener
 		{
 			get => GetProperty(ref _onShowVendorListener);
 			set => SetProperty(ref _onShowVendorListener, value);

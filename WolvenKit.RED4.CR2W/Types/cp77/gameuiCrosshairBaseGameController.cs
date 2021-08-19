@@ -10,16 +10,16 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkWidget> _rootWidget;
 		private CEnum<gamePSMCrosshairStates> _crosshairState;
 		private CEnum<gamePSMVision> _visionState;
-		private CUInt32 _crosshairStateBlackboardId;
-		private CUInt32 _bulletSpreedBlackboardId;
+		private CHandle<redCallbackObject> _crosshairStateBlackboardId;
+		private CHandle<redCallbackObject> _bulletSpreedBlackboardId;
 		private CUInt32 _bbNPCStatsId;
 		private CBool _isTargetDead;
 		private CUInt64 _lastGUIStateUpdateFrame;
 		private wCHandle<gameIBlackboard> _targetBB;
 		private wCHandle<gameIBlackboard> _weaponBB;
-		private CUInt32 _currentAimTargetBBID;
-		private CUInt32 _targetDistanceBBID;
-		private CUInt32 _targetAttitudeBBID;
+		private CHandle<redCallbackObject> _currentAimTargetBBID;
+		private CHandle<redCallbackObject> _targetDistanceBBID;
+		private CHandle<redCallbackObject> _targetAttitudeBBID;
 		private wCHandle<entEntity> _targetEntity;
 		private CHandle<CrosshairHealthChangeListener> _healthListener;
 		private CBool _isActive;
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("crosshairStateBlackboardId")] 
-		public CUInt32 CrosshairStateBlackboardId
+		public CHandle<redCallbackObject> CrosshairStateBlackboardId
 		{
 			get => GetProperty(ref _crosshairStateBlackboardId);
 			set => SetProperty(ref _crosshairStateBlackboardId, value);
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("bulletSpreedBlackboardId")] 
-		public CUInt32 BulletSpreedBlackboardId
+		public CHandle<redCallbackObject> BulletSpreedBlackboardId
 		{
 			get => GetProperty(ref _bulletSpreedBlackboardId);
 			set => SetProperty(ref _bulletSpreedBlackboardId, value);
@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("currentAimTargetBBID")] 
-		public CUInt32 CurrentAimTargetBBID
+		public CHandle<redCallbackObject> CurrentAimTargetBBID
 		{
 			get => GetProperty(ref _currentAimTargetBBID);
 			set => SetProperty(ref _currentAimTargetBBID, value);
@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("targetDistanceBBID")] 
-		public CUInt32 TargetDistanceBBID
+		public CHandle<redCallbackObject> TargetDistanceBBID
 		{
 			get => GetProperty(ref _targetDistanceBBID);
 			set => SetProperty(ref _targetDistanceBBID, value);
@@ -122,7 +122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("targetAttitudeBBID")] 
-		public CUInt32 TargetAttitudeBBID
+		public CHandle<redCallbackObject> TargetAttitudeBBID
 		{
 			get => GetProperty(ref _targetAttitudeBBID);
 			set => SetProperty(ref _targetAttitudeBBID, value);

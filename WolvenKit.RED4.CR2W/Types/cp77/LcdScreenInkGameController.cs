@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gamedataScreenMessageData_Record> _messegeRecord;
 		private CBool _replaceTextWithCustomNumber;
 		private CInt32 _customNumber;
-		private CUInt32 _onGlitchingStateChangedListener;
-		private CUInt32 _onMessegeChangedListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onMessegeChangedListener;
 
 		[Ordinal(16)] 
 		[RED("defaultUI")] 
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("onMessegeChangedListener")] 
-		public CUInt32 OnMessegeChangedListener
+		public CHandle<redCallbackObject> OnMessegeChangedListener
 		{
 			get => GetProperty(ref _onMessegeChangedListener);
 			set => SetProperty(ref _onMessegeChangedListener, value);

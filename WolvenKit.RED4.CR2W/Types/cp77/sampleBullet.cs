@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entIComponent> _meshComponent;
 		private CFloat _countTime;
 		private CFloat _startVelocity;
-		private CFloat _lifetime_456;
+		private CFloat _lifetime_440;
 		private CHandle<BulletCollisionEvaluator> _bulletCollisionEvaluator;
 		private CBool _alive;
 
@@ -40,10 +40,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(54)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_456
+		public CFloat Lifetime_440
 		{
-			get => GetProperty(ref _lifetime_456);
-			set => SetProperty(ref _lifetime_456, value);
+			get => GetProperty(ref _lifetime_440);
+			set => SetProperty(ref _lifetime_440, value);
 		}
 
 		[Ordinal(55)] 

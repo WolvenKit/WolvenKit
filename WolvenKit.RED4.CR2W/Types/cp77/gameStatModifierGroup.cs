@@ -7,14 +7,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameStatModifierGroup : CVariable
 	{
-		private CArray<CHandle<gameStatModifierData>> _statModifierArray;
+		private CArray<gameStatModifierHandle> _statModifierArray;
 		private CInt32 _statModifiersLimit;
 		private TweakDBID _statModifiersLimitModifier;
 		private CBool _drawBasedOnStatType;
 
 		[Ordinal(0)] 
 		[RED("statModifierArray")] 
-		public CArray<CHandle<gameStatModifierData>> StatModifierArray
+		public CArray<gameStatModifierHandle> StatModifierArray
 		{
 			get => GetProperty(ref _statModifierArray);
 			set => SetProperty(ref _statModifierArray, value);

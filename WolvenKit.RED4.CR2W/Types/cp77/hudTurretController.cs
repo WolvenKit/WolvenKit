@@ -19,15 +19,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _offsetLeft;
 		private CFloat _offsetRight;
 		private GameTime _currentTime;
-		private CHandle<gameIBlackboard> _bbPlayerStats;
-		private CUInt32 _bbPlayerEventId;
+		private wCHandle<gameIBlackboard> _bbPlayerStats;
+		private CHandle<redCallbackObject> _bbPlayerEventId;
 		private CInt32 _currentHealth;
 		private CInt32 _previousHealth;
 		private CInt32 _maximumHealth;
 		private wCHandle<gameObject> _playerObject;
 		private wCHandle<gameObject> _playerPuppet;
-		private inkanimPlaybackOptions _optionIntro;
-		private inkanimPlaybackOptions _optionMalfunction;
 		private ScriptGameInstance _gameInstance;
 		private CHandle<inkanimProxy> _animationProxy;
 
@@ -129,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("bbPlayerStats")] 
-		public CHandle<gameIBlackboard> BbPlayerStats
+		public wCHandle<gameIBlackboard> BbPlayerStats
 		{
 			get => GetProperty(ref _bbPlayerStats);
 			set => SetProperty(ref _bbPlayerStats, value);
@@ -137,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("bbPlayerEventId")] 
-		public CUInt32 BbPlayerEventId
+		public CHandle<redCallbackObject> BbPlayerEventId
 		{
 			get => GetProperty(ref _bbPlayerEventId);
 			set => SetProperty(ref _bbPlayerEventId, value);
@@ -184,22 +182,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(28)] 
-		[RED("optionIntro")] 
-		public inkanimPlaybackOptions OptionIntro
-		{
-			get => GetProperty(ref _optionIntro);
-			set => SetProperty(ref _optionIntro, value);
-		}
-
-		[Ordinal(29)] 
-		[RED("optionMalfunction")] 
-		public inkanimPlaybackOptions OptionMalfunction
-		{
-			get => GetProperty(ref _optionMalfunction);
-			set => SetProperty(ref _optionMalfunction, value);
-		}
-
-		[Ordinal(30)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -207,7 +189,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameInstance, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(29)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{

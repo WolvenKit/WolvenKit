@@ -7,12 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EquipmentAreaCategoryCreated : redEvent
 	{
-		private CHandle<InventoryItemDisplayCategoryArea> _categoryController;
-		private CArray<CHandle<InventoryItemDisplayEquipmentArea>> _equipmentAreasControllers;
+		private wCHandle<InventoryItemDisplayCategoryArea> _categoryController;
+		private CArray<wCHandle<InventoryItemDisplayEquipmentArea>> _equipmentAreasControllers;
 
 		[Ordinal(0)] 
 		[RED("categoryController")] 
-		public CHandle<InventoryItemDisplayCategoryArea> CategoryController
+		public wCHandle<InventoryItemDisplayCategoryArea> CategoryController
 		{
 			get => GetProperty(ref _categoryController);
 			set => SetProperty(ref _categoryController, value);
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("equipmentAreasControllers")] 
-		public CArray<CHandle<InventoryItemDisplayEquipmentArea>> EquipmentAreasControllers
+		public CArray<wCHandle<InventoryItemDisplayEquipmentArea>> EquipmentAreasControllers
 		{
 			get => GetProperty(ref _equipmentAreasControllers);
 			set => SetProperty(ref _equipmentAreasControllers, value);

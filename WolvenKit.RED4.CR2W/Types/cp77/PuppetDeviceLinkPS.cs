@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private SecuritySystemData _securitySystemData;
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("securitySystemData")] 
 		public SecuritySystemData SecuritySystemData
 		{

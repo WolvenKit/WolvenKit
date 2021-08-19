@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameTargetSearchQuery _searchQuery;
 		private EulerAngles _searchAngles;
 		private CUInt32 _maxTargets;
+		private CBool _usePlayerPosAndForward;
 
 		[Ordinal(0)] 
 		[RED("filterData")] 
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _maxTargets);
 			set => SetProperty(ref _maxTargets, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("usePlayerPosAndForward")] 
+		public CBool UsePlayerPosAndForward
+		{
+			get => GetProperty(ref _usePlayerPosAndForward);
+			set => SetProperty(ref _usePlayerPosAndForward, value);
 		}
 
 		public gameEffectObjectProvider_TargetingObjectsInCone(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

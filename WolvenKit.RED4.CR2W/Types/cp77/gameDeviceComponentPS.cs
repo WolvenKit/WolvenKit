@@ -19,6 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _exposeQuickHacks;
 		private CBool _isAttachedToGame;
 		private CBool _isLogicReady;
+		private CInt32 _maxDevicesToExtractInOneFrame;
 
 		[Ordinal(0)] 
 		[RED("markAsQuest")] 
@@ -114,6 +115,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isLogicReady);
 			set => SetProperty(ref _isLogicReady, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("maxDevicesToExtractInOneFrame")] 
+		public CInt32 MaxDevicesToExtractInOneFrame
+		{
+			get => GetProperty(ref _maxDevicesToExtractInOneFrame);
+			set => SetProperty(ref _maxDevicesToExtractInOneFrame, value);
 		}
 
 		public gameDeviceComponentPS(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

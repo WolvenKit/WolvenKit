@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _mainShieldlookatActive;
 		private wCHandle<gameObject> _currentLookatTarget;
 		private wCHandle<gameObject> _shieldTarget;
-		private CHandle<gameIBlackboard> _centaurBlackboard;
+		private wCHandle<gameIBlackboard> _centaurBlackboard;
 		private CFloat _shieldTargetTimeStamp;
 
 		[Ordinal(0)] 
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("centaurBlackboard")] 
-		public CHandle<gameIBlackboard> CentaurBlackboard
+		public wCHandle<gameIBlackboard> CentaurBlackboard
 		{
 			get => GetProperty(ref _centaurBlackboard);
 			set => SetProperty(ref _centaurBlackboard, value);

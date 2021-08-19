@@ -7,16 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class healthbarWidgetGameController : gameuiHUDGameController
 	{
-		private CHandle<gameIBlackboard> _bbPlayerStats;
-		private CUInt32 _bbPlayerEventId;
-		private CHandle<gameIBlackboard> _bbRightWeaponInfo;
-		private CUInt32 _bbRightWeaponEventId;
-		private CHandle<gameIBlackboard> _bbLeftWeaponInfo;
-		private CUInt32 _bbLeftWeaponEventId;
-		private CUInt32 _bbPSceneTierEventId;
-		private CUInt32 _visionStateBlackboardId;
-		private CUInt32 _combatModeBlackboardId;
-		private CUInt32 _bbQuickhacksMemeoryEventId;
+		private wCHandle<gameIBlackboard> _bbPlayerStats;
+		private CHandle<redCallbackObject> _bbPlayerEventId;
+		private wCHandle<gameIBlackboard> _bbRightWeaponInfo;
+		private CHandle<redCallbackObject> _bbRightWeaponEventId;
+		private wCHandle<gameIBlackboard> _bbLeftWeaponInfo;
+		private CHandle<redCallbackObject> _bbLeftWeaponEventId;
+		private CHandle<redCallbackObject> _bbPSceneTierEventId;
+		private CHandle<redCallbackObject> _visionStateBlackboardId;
+		private CHandle<redCallbackObject> _combatModeBlackboardId;
+		private CHandle<redCallbackObject> _bbQuickhacksMemeoryEventId;
 		private inkWidgetPath _healthPath;
 		private inkWidgetPath _healthBarPath;
 		private inkWidgetPath _armorPath;
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _currentArmor;
 		private CInt32 _maximumArmor;
 		private CArray<wCHandle<inkWidget>> _quickhackBarArray;
-		private CInt32 _maxQuickhackBars;
+		private CInt32 _spawnedMemoryCells;
 		private CInt32 _usedQuickhacks;
 		private CBool _buffsVisible;
 		private CBool _isUnarmedRightHand;
@@ -68,19 +68,23 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<gamePSMCombat> _combatModePSM;
 		private CEnum<GameplayTier> _sceneTier;
 		private CHandle<GodModeStatListener> _godModeStatListener;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
-		private CUInt32 _characterCurrentXPListener;
-		private CHandle<gameIBlackboard> _levelUpBlackboard;
-		private CUInt32 _playerLevelUpListener;
+		private wCHandle<gameIBlackboard> _playerStatsBlackboard;
+		private CHandle<redCallbackObject> _characterCurrentXPListener;
+		private wCHandle<gameIBlackboard> _levelUpBlackboard;
+		private CHandle<redCallbackObject> _playerLevelUpListener;
 		private CInt32 _currentLevel;
 		private wCHandle<gameObject> _playerObject;
 		private CHandle<PlayerDevelopmentSystem> _playerDevelopmentSystem;
 		private ScriptGameInstance _gameInstance;
 		private CHandle<inkanimProxy> _foldingAnimProxy;
+		private CFloat _memoryFillCells;
+		private CInt32 _memoryMaxCells;
+		private CInt32 _pendingRequests;
+		private CArray<wCHandle<inkAsyncSpawnRequest>> _spawnTokens;
 
 		[Ordinal(9)] 
 		[RED("bbPlayerStats")] 
-		public CHandle<gameIBlackboard> BbPlayerStats
+		public wCHandle<gameIBlackboard> BbPlayerStats
 		{
 			get => GetProperty(ref _bbPlayerStats);
 			set => SetProperty(ref _bbPlayerStats, value);
@@ -88,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("bbPlayerEventId")] 
-		public CUInt32 BbPlayerEventId
+		public CHandle<redCallbackObject> BbPlayerEventId
 		{
 			get => GetProperty(ref _bbPlayerEventId);
 			set => SetProperty(ref _bbPlayerEventId, value);
@@ -96,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("bbRightWeaponInfo")] 
-		public CHandle<gameIBlackboard> BbRightWeaponInfo
+		public wCHandle<gameIBlackboard> BbRightWeaponInfo
 		{
 			get => GetProperty(ref _bbRightWeaponInfo);
 			set => SetProperty(ref _bbRightWeaponInfo, value);
@@ -104,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("bbRightWeaponEventId")] 
-		public CUInt32 BbRightWeaponEventId
+		public CHandle<redCallbackObject> BbRightWeaponEventId
 		{
 			get => GetProperty(ref _bbRightWeaponEventId);
 			set => SetProperty(ref _bbRightWeaponEventId, value);
@@ -112,7 +116,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("bbLeftWeaponInfo")] 
-		public CHandle<gameIBlackboard> BbLeftWeaponInfo
+		public wCHandle<gameIBlackboard> BbLeftWeaponInfo
 		{
 			get => GetProperty(ref _bbLeftWeaponInfo);
 			set => SetProperty(ref _bbLeftWeaponInfo, value);
@@ -120,7 +124,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("bbLeftWeaponEventId")] 
-		public CUInt32 BbLeftWeaponEventId
+		public CHandle<redCallbackObject> BbLeftWeaponEventId
 		{
 			get => GetProperty(ref _bbLeftWeaponEventId);
 			set => SetProperty(ref _bbLeftWeaponEventId, value);
@@ -128,7 +132,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("bbPSceneTierEventId")] 
-		public CUInt32 BbPSceneTierEventId
+		public CHandle<redCallbackObject> BbPSceneTierEventId
 		{
 			get => GetProperty(ref _bbPSceneTierEventId);
 			set => SetProperty(ref _bbPSceneTierEventId, value);
@@ -136,7 +140,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("visionStateBlackboardId")] 
-		public CUInt32 VisionStateBlackboardId
+		public CHandle<redCallbackObject> VisionStateBlackboardId
 		{
 			get => GetProperty(ref _visionStateBlackboardId);
 			set => SetProperty(ref _visionStateBlackboardId, value);
@@ -144,7 +148,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("combatModeBlackboardId")] 
-		public CUInt32 CombatModeBlackboardId
+		public CHandle<redCallbackObject> CombatModeBlackboardId
 		{
 			get => GetProperty(ref _combatModeBlackboardId);
 			set => SetProperty(ref _combatModeBlackboardId, value);
@@ -152,7 +156,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("bbQuickhacksMemeoryEventId")] 
-		public CUInt32 BbQuickhacksMemeoryEventId
+		public CHandle<redCallbackObject> BbQuickhacksMemeoryEventId
 		{
 			get => GetProperty(ref _bbQuickhacksMemeoryEventId);
 			set => SetProperty(ref _bbQuickhacksMemeoryEventId, value);
@@ -495,11 +499,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(61)] 
-		[RED("maxQuickhackBars")] 
-		public CInt32 MaxQuickhackBars
+		[RED("spawnedMemoryCells")] 
+		public CInt32 SpawnedMemoryCells
 		{
-			get => GetProperty(ref _maxQuickhackBars);
-			set => SetProperty(ref _maxQuickhackBars, value);
+			get => GetProperty(ref _spawnedMemoryCells);
+			set => SetProperty(ref _spawnedMemoryCells, value);
 		}
 
 		[Ordinal(62)] 
@@ -568,7 +572,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(70)] 
 		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
+		public wCHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
 			get => GetProperty(ref _playerStatsBlackboard);
 			set => SetProperty(ref _playerStatsBlackboard, value);
@@ -576,7 +580,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(71)] 
 		[RED("characterCurrentXPListener")] 
-		public CUInt32 CharacterCurrentXPListener
+		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
 			get => GetProperty(ref _characterCurrentXPListener);
 			set => SetProperty(ref _characterCurrentXPListener, value);
@@ -584,7 +588,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(72)] 
 		[RED("levelUpBlackboard")] 
-		public CHandle<gameIBlackboard> LevelUpBlackboard
+		public wCHandle<gameIBlackboard> LevelUpBlackboard
 		{
 			get => GetProperty(ref _levelUpBlackboard);
 			set => SetProperty(ref _levelUpBlackboard, value);
@@ -592,7 +596,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(73)] 
 		[RED("playerLevelUpListener")] 
-		public CUInt32 PlayerLevelUpListener
+		public CHandle<redCallbackObject> PlayerLevelUpListener
 		{
 			get => GetProperty(ref _playerLevelUpListener);
 			set => SetProperty(ref _playerLevelUpListener, value);
@@ -636,6 +640,38 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _foldingAnimProxy);
 			set => SetProperty(ref _foldingAnimProxy, value);
+		}
+
+		[Ordinal(79)] 
+		[RED("memoryFillCells")] 
+		public CFloat MemoryFillCells
+		{
+			get => GetProperty(ref _memoryFillCells);
+			set => SetProperty(ref _memoryFillCells, value);
+		}
+
+		[Ordinal(80)] 
+		[RED("memoryMaxCells")] 
+		public CInt32 MemoryMaxCells
+		{
+			get => GetProperty(ref _memoryMaxCells);
+			set => SetProperty(ref _memoryMaxCells, value);
+		}
+
+		[Ordinal(81)] 
+		[RED("pendingRequests")] 
+		public CInt32 PendingRequests
+		{
+			get => GetProperty(ref _pendingRequests);
+			set => SetProperty(ref _pendingRequests, value);
+		}
+
+		[Ordinal(82)] 
+		[RED("spawnTokens")] 
+		public CArray<wCHandle<inkAsyncSpawnRequest>> SpawnTokens
+		{
+			get => GetProperty(ref _spawnTokens);
+			set => SetProperty(ref _spawnTokens, value);
 		}
 
 		public healthbarWidgetGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

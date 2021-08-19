@@ -47,13 +47,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameuiGameSystemUI> _uiSystem;
 		private CBool _contextHelpOverlay;
 		private CUInt32 _quickHackDescriptionVisibility;
-		private CUInt32 _buffListListener;
-		private CHandle<gameIBlackboard> _memoryBoard;
+		private CHandle<redCallbackObject> _buffListListener;
+		private wCHandle<gameIBlackboard> _memoryBoard;
 		private CHandle<UI_PlayerBioMonitorDef> _memoryBoardDef;
-		private CUInt32 _memoryPercentListener;
+		private CHandle<redCallbackObject> _memoryPercentListener;
 		private CArray<wCHandle<inkCompoundWidget>> _quickhackBarArray;
 		private CInt32 _maxQuickhackBars;
-		private CHandle<inkListController> _listController;
+		private wCHandle<inkListController> _listController;
 		private CArray<CHandle<QuickhackData>> _data;
 		private CHandle<QuickhackData> _selectedData;
 		private CBool _active;
@@ -72,8 +72,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _hasActiveUpload;
 		private entEntityID _lastCompiledTarget;
 		private CArray<CInt32> _statPoolListenersIndexes;
-		private CHandle<gameIBlackboard> _chunkBlackboard;
-		private CUInt32 _nameCallbackID;
+		private wCHandle<gameIBlackboard> _chunkBlackboard;
+		private CHandle<redCallbackObject> _nameCallbackID;
+		private CInt32 _lastFillCells;
+		private CInt32 _lastUsedCells;
+		private CInt32 _lastMaxCells;
 		private CBool _axisInputConsumed;
 		private wCHandle<gameObject> _playerObject;
 
@@ -399,7 +402,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(49)] 
 		[RED("buffListListener")] 
-		public CUInt32 BuffListListener
+		public CHandle<redCallbackObject> BuffListListener
 		{
 			get => GetProperty(ref _buffListListener);
 			set => SetProperty(ref _buffListListener, value);
@@ -407,7 +410,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(50)] 
 		[RED("memoryBoard")] 
-		public CHandle<gameIBlackboard> MemoryBoard
+		public wCHandle<gameIBlackboard> MemoryBoard
 		{
 			get => GetProperty(ref _memoryBoard);
 			set => SetProperty(ref _memoryBoard, value);
@@ -423,7 +426,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(52)] 
 		[RED("memoryPercentListener")] 
-		public CUInt32 MemoryPercentListener
+		public CHandle<redCallbackObject> MemoryPercentListener
 		{
 			get => GetProperty(ref _memoryPercentListener);
 			set => SetProperty(ref _memoryPercentListener, value);
@@ -447,7 +450,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(55)] 
 		[RED("listController")] 
-		public CHandle<inkListController> ListController
+		public wCHandle<inkListController> ListController
 		{
 			get => GetProperty(ref _listController);
 			set => SetProperty(ref _listController, value);
@@ -599,7 +602,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(74)] 
 		[RED("chunkBlackboard")] 
-		public CHandle<gameIBlackboard> ChunkBlackboard
+		public wCHandle<gameIBlackboard> ChunkBlackboard
 		{
 			get => GetProperty(ref _chunkBlackboard);
 			set => SetProperty(ref _chunkBlackboard, value);
@@ -607,13 +610,37 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(75)] 
 		[RED("nameCallbackID")] 
-		public CUInt32 NameCallbackID
+		public CHandle<redCallbackObject> NameCallbackID
 		{
 			get => GetProperty(ref _nameCallbackID);
 			set => SetProperty(ref _nameCallbackID, value);
 		}
 
 		[Ordinal(76)] 
+		[RED("lastFillCells")] 
+		public CInt32 LastFillCells
+		{
+			get => GetProperty(ref _lastFillCells);
+			set => SetProperty(ref _lastFillCells, value);
+		}
+
+		[Ordinal(77)] 
+		[RED("lastUsedCells")] 
+		public CInt32 LastUsedCells
+		{
+			get => GetProperty(ref _lastUsedCells);
+			set => SetProperty(ref _lastUsedCells, value);
+		}
+
+		[Ordinal(78)] 
+		[RED("lastMaxCells")] 
+		public CInt32 LastMaxCells
+		{
+			get => GetProperty(ref _lastMaxCells);
+			set => SetProperty(ref _lastMaxCells, value);
+		}
+
+		[Ordinal(79)] 
 		[RED("axisInputConsumed")] 
 		public CBool AxisInputConsumed
 		{
@@ -621,7 +648,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _axisInputConsumed, value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(80)] 
 		[RED("playerObject")] 
 		public wCHandle<gameObject> PlayerObject
 		{

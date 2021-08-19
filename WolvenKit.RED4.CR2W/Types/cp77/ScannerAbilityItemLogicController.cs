@@ -9,7 +9,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkTextWidgetReference _abilityNameText;
 		private inkImageWidgetReference _abilityIcon;
-		private CHandle<gamedataGameplayAbility_Record> _abilityStruct;
 
 		[Ordinal(1)] 
 		[RED("abilityNameText")] 
@@ -25,14 +24,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _abilityIcon);
 			set => SetProperty(ref _abilityIcon, value);
-		}
-
-		[Ordinal(3)] 
-		[RED("abilityStruct")] 
-		public CHandle<gamedataGameplayAbility_Record> AbilityStruct
-		{
-			get => GetProperty(ref _abilityStruct);
-			set => SetProperty(ref _abilityStruct, value);
 		}
 
 		public ScannerAbilityItemLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

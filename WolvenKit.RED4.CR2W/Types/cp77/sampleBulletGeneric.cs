@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameEffectInstance> _damage;
 		private CFloat _countTime;
 		private CFloat _startVelocity;
-		private CFloat _lifetime_472;
+		private CFloat _lifetime_456;
 		private CBool _alive;
 
 		[Ordinal(51)] 
@@ -48,10 +48,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(55)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_472
+		public CFloat Lifetime_456
 		{
-			get => GetProperty(ref _lifetime_472);
-			set => SetProperty(ref _lifetime_472, value);
+			get => GetProperty(ref _lifetime_456);
+			set => SetProperty(ref _lifetime_456, value);
 		}
 
 		[Ordinal(56)] 

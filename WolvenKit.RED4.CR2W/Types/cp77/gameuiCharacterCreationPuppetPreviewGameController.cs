@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetLibraryReference _animLib;
 		private CName _animName;
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("maleSceneName")] 
 		public CName MaleSceneName
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maleSceneName, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("femaleSceneName")] 
 		public CName FemaleSceneName
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _femaleSceneName, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("maleCamera01Ref")] 
 		public NodeRef MaleCamera01Ref
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maleCamera01Ref, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("femaleCamera01Ref")] 
 		public NodeRef FemaleCamera01Ref
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _femaleCamera01Ref, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("root")] 
 		public inkCompoundWidgetReference Root
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _root, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _image, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("animLib")] 
 		public inkWidgetLibraryReference AnimLib
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animLib, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("animName")] 
 		public CName AnimName
 		{

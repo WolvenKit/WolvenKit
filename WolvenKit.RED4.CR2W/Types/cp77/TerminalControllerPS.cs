@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<gameinteractionsReactionState> _state;
 		private CEnum<EForcedElevatorArrowsState> _forcedElevatorArrowsState;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("terminalSetup")] 
 		public TerminalSetup TerminalSetup
 		{
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _terminalSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("terminalSkillChecks")] 
 		public CHandle<HackEngContainer> TerminalSkillChecks
 		{
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _terminalSkillChecks, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("spawnedSystems")] 
 		public CArray<CHandle<VirtualSystemPS>> SpawnedSystems
 		{
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _spawnedSystems, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("useKeyloggerHack")] 
 		public CBool UseKeyloggerHack
 		{
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useKeyloggerHack, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("shouldShowTerminalTitle")] 
 		public CBool ShouldShowTerminalTitle
 		{
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldShowTerminalTitle, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("defaultGlitchVideoPath")] 
 		public redResourceReferenceScriptToken DefaultGlitchVideoPath
 		{
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultGlitchVideoPath, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("broadcastGlitchVideoPath")] 
 		public redResourceReferenceScriptToken BroadcastGlitchVideoPath
 		{
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _broadcastGlitchVideoPath, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("state")] 
 		public CEnum<gameinteractionsReactionState> State
 		{
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _state, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("forcedElevatorArrowsState")] 
 		public CEnum<EForcedElevatorArrowsState> ForcedElevatorArrowsState
 		{

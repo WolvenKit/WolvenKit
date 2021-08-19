@@ -11,13 +11,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _list;
 		private inkWidgetReference _bar;
 		private inkTextWidgetReference _value;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_PlayerBioMonitorDef> _bbDefinition;
 		private CUInt32 _netrunnerCapacityId;
-		private CUInt32 _netrunnerCurrentId;
+		private CHandle<redCallbackObject> _netrunnerCurrentId;
 		private CInt32 _currentCharges;
 		private CInt32 _maxCharges;
-		private CArray<CHandle<NetRunnerListItem>> _chargesList;
+		private CArray<wCHandle<NetRunnerListItem>> _chargesList;
 		private wCHandle<inkWidget> _root;
 
 		[Ordinal(2)] 
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("netrunnerCurrentId")] 
-		public CUInt32 NetrunnerCurrentId
+		public CHandle<redCallbackObject> NetrunnerCurrentId
 		{
 			get => GetProperty(ref _netrunnerCurrentId);
 			set => SetProperty(ref _netrunnerCurrentId, value);
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("chargesList")] 
-		public CArray<CHandle<NetRunnerListItem>> ChargesList
+		public CArray<wCHandle<NetRunnerListItem>> ChargesList
 		{
 			get => GetProperty(ref _chargesList);
 			set => SetProperty(ref _chargesList, value);

@@ -10,9 +10,17 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CyberwareAttributes_ContainersStruct _attributes;
 		private CyberwareAttributes_ResistancesStruct _resistances;
 		private inkTextWidgetReference _levelUpPoints;
-		private CHandle<gameIBlackboard> _uiBlackboard;
+		private wCHandle<gameIBlackboard> _uiBlackboard;
 		private wCHandle<PlayerPuppet> _playerPuppet;
 		private CInt32 _devPoints;
+		private CHandle<redCallbackObject> _onAttributesChangeCallback;
+		private CHandle<redCallbackObject> _onDevelopmentPointsChangeCallback;
+		private CHandle<redCallbackObject> _onProficiencyChangeCallback;
+		private CHandle<redCallbackObject> _onMaxHealthChangedCallback;
+		private CHandle<redCallbackObject> _onPhysicalResistanceChangedCallback;
+		private CHandle<redCallbackObject> _onThermalResistanceChangedCallback;
+		private CHandle<redCallbackObject> _onEnergyResistanceChangedCallback;
+		private CHandle<redCallbackObject> _onChemicalResistanceChangedCallback;
 
 		[Ordinal(2)] 
 		[RED("attributes")] 
@@ -40,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("uiBlackboard")] 
-		public CHandle<gameIBlackboard> UiBlackboard
+		public wCHandle<gameIBlackboard> UiBlackboard
 		{
 			get => GetProperty(ref _uiBlackboard);
 			set => SetProperty(ref _uiBlackboard, value);
@@ -60,6 +68,70 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _devPoints);
 			set => SetProperty(ref _devPoints, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("OnAttributesChangeCallback")] 
+		public CHandle<redCallbackObject> OnAttributesChangeCallback
+		{
+			get => GetProperty(ref _onAttributesChangeCallback);
+			set => SetProperty(ref _onAttributesChangeCallback, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("OnDevelopmentPointsChangeCallback")] 
+		public CHandle<redCallbackObject> OnDevelopmentPointsChangeCallback
+		{
+			get => GetProperty(ref _onDevelopmentPointsChangeCallback);
+			set => SetProperty(ref _onDevelopmentPointsChangeCallback, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("OnProficiencyChangeCallback")] 
+		public CHandle<redCallbackObject> OnProficiencyChangeCallback
+		{
+			get => GetProperty(ref _onProficiencyChangeCallback);
+			set => SetProperty(ref _onProficiencyChangeCallback, value);
+		}
+
+		[Ordinal(11)] 
+		[RED("OnMaxHealthChangedCallback")] 
+		public CHandle<redCallbackObject> OnMaxHealthChangedCallback
+		{
+			get => GetProperty(ref _onMaxHealthChangedCallback);
+			set => SetProperty(ref _onMaxHealthChangedCallback, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("OnPhysicalResistanceChangedCallback")] 
+		public CHandle<redCallbackObject> OnPhysicalResistanceChangedCallback
+		{
+			get => GetProperty(ref _onPhysicalResistanceChangedCallback);
+			set => SetProperty(ref _onPhysicalResistanceChangedCallback, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("OnThermalResistanceChangedCallback")] 
+		public CHandle<redCallbackObject> OnThermalResistanceChangedCallback
+		{
+			get => GetProperty(ref _onThermalResistanceChangedCallback);
+			set => SetProperty(ref _onThermalResistanceChangedCallback, value);
+		}
+
+		[Ordinal(14)] 
+		[RED("OnEnergyResistanceChangedCallback")] 
+		public CHandle<redCallbackObject> OnEnergyResistanceChangedCallback
+		{
+			get => GetProperty(ref _onEnergyResistanceChangedCallback);
+			set => SetProperty(ref _onEnergyResistanceChangedCallback, value);
+		}
+
+		[Ordinal(15)] 
+		[RED("OnChemicalResistanceChangedCallback")] 
+		public CHandle<redCallbackObject> OnChemicalResistanceChangedCallback
+		{
+			get => GetProperty(ref _onChemicalResistanceChangedCallback);
+			set => SetProperty(ref _onChemicalResistanceChangedCallback, value);
 		}
 
 		public CyberwareAttributesSkills(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

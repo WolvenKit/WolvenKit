@@ -8,7 +8,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CentaurShieldController : AICustomComponents
 	{
 		private CBool _startWithShieldActive;
-		private gameEffectRef _explosionAttack;
 		private CName _animFeatureName;
 		private CName _shieldDestroyedModifierName;
 		private CEnum<ECentaurShieldState> _shieldState;
@@ -23,14 +22,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("explosionAttack")] 
-		public gameEffectRef ExplosionAttack
-		{
-			get => GetProperty(ref _explosionAttack);
-			set => SetProperty(ref _explosionAttack, value);
-		}
-
-		[Ordinal(7)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
@@ -38,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeatureName, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("shieldDestroyedModifierName")] 
 		public CName ShieldDestroyedModifierName
 		{
@@ -46,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shieldDestroyedModifierName, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("shieldState")] 
 		public CEnum<ECentaurShieldState> ShieldState
 		{
@@ -54,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shieldState, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("centaurBlackboard")] 
 		public CHandle<gameIBlackboard> CentaurBlackboard
 		{

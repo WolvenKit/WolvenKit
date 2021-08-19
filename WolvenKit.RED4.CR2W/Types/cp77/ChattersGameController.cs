@@ -17,10 +17,15 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _playerInDialogChoice;
 		private EngineTime _lastBroadcastBlockingLineTime;
 		private EngineTime _lastChoiceTime;
-		private CUInt32 _bbPSceneTierEventId;
+		private CHandle<redCallbackObject> _bbPSceneTierEventId;
 		private CInt32 _sceneTier;
+		private CHandle<redCallbackObject> _onNameplateEntityChangedCallback;
+		private CHandle<redCallbackObject> _onNameplateOffsetChangedCallback;
+		private CHandle<redCallbackObject> _onNameplateVisibilityChangedCallback;
+		private CHandle<redCallbackObject> _onScannerModeChangedCallback;
+		private CHandle<redCallbackObject> _onOnDialogsDataCallback;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("c_DisplayRange")] 
 		public CFloat C_DisplayRange
 		{
@@ -28,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_DisplayRange, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("c_CloseDisplayRange")] 
 		public CFloat C_CloseDisplayRange
 		{
@@ -36,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_CloseDisplayRange, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("c_TimeToUnblockSec")] 
 		public CFloat C_TimeToUnblockSec
 		{
@@ -44,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _c_TimeToUnblockSec, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("rootWidget")] 
 		public wCHandle<inkCompoundWidget> RootWidget
 		{
@@ -52,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rootWidget, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("AllControllers")] 
 		public CArray<ChatterKeyValuePair> AllControllers
 		{
@@ -60,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _allControllers, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("targetingSystem")] 
 		public CHandle<gametargetingTargetingSystem> TargetingSystem
 		{
@@ -68,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _targetingSystem, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("broadcastBlockingLines")] 
 		public CArray<CRUID> BroadcastBlockingLines
 		{
@@ -76,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _broadcastBlockingLines, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("playerInDialogChoice")] 
 		public CBool PlayerInDialogChoice
 		{
@@ -84,7 +89,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerInDialogChoice, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("lastBroadcastBlockingLineTime")] 
 		public EngineTime LastBroadcastBlockingLineTime
 		{
@@ -92,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastBroadcastBlockingLineTime, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("lastChoiceTime")] 
 		public EngineTime LastChoiceTime
 		{
@@ -100,20 +105,60 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastChoiceTime, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("bbPSceneTierEventId")] 
-		public CUInt32 BbPSceneTierEventId
+		public CHandle<redCallbackObject> BbPSceneTierEventId
 		{
 			get => GetProperty(ref _bbPSceneTierEventId);
 			set => SetProperty(ref _bbPSceneTierEventId, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("sceneTier")] 
 		public CInt32 SceneTier
 		{
 			get => GetProperty(ref _sceneTier);
 			set => SetProperty(ref _sceneTier, value);
+		}
+
+		[Ordinal(41)] 
+		[RED("OnNameplateEntityChangedCallback")] 
+		public CHandle<redCallbackObject> OnNameplateEntityChangedCallback
+		{
+			get => GetProperty(ref _onNameplateEntityChangedCallback);
+			set => SetProperty(ref _onNameplateEntityChangedCallback, value);
+		}
+
+		[Ordinal(42)] 
+		[RED("OnNameplateOffsetChangedCallback")] 
+		public CHandle<redCallbackObject> OnNameplateOffsetChangedCallback
+		{
+			get => GetProperty(ref _onNameplateOffsetChangedCallback);
+			set => SetProperty(ref _onNameplateOffsetChangedCallback, value);
+		}
+
+		[Ordinal(43)] 
+		[RED("OnNameplateVisibilityChangedCallback")] 
+		public CHandle<redCallbackObject> OnNameplateVisibilityChangedCallback
+		{
+			get => GetProperty(ref _onNameplateVisibilityChangedCallback);
+			set => SetProperty(ref _onNameplateVisibilityChangedCallback, value);
+		}
+
+		[Ordinal(44)] 
+		[RED("OnScannerModeChangedCallback")] 
+		public CHandle<redCallbackObject> OnScannerModeChangedCallback
+		{
+			get => GetProperty(ref _onScannerModeChangedCallback);
+			set => SetProperty(ref _onScannerModeChangedCallback, value);
+		}
+
+		[Ordinal(45)] 
+		[RED("OnOnDialogsDataCallback")] 
+		public CHandle<redCallbackObject> OnOnDialogsDataCallback
+		{
+			get => GetProperty(ref _onOnDialogsDataCallback);
+			set => SetProperty(ref _onOnDialogsDataCallback, value);
 		}
 
 		public ChattersGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -17,14 +17,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkVideoWidget> _mainDisplayWidget;
 		private CEnum<EDocumentType> _forceOpenDocumentType;
 		private SDocumentAdress _forceOpenDocumentAdress;
-		private CUInt32 _onMailThumbnailWidgetsUpdateListener;
-		private CUInt32 _onFileThumbnailWidgetsUpdateListener;
-		private CUInt32 _onMailWidgetsUpdateListener;
-		private CUInt32 _onFileWidgetsUpdateListener;
-		private CUInt32 _onMenuButtonWidgetsUpdateListener;
-		private CUInt32 _onMainMenuButtonWidgetsUpdateListener;
-		private CUInt32 _onBannerWidgetsUpdateListener;
-		private CUInt32 _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onMailThumbnailWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onFileThumbnailWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onMailWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onFileWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onMenuButtonWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onMainMenuButtonWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onBannerWidgetsUpdateListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
 
 		[Ordinal(16)] 
 		[RED("layoutID")] 
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("onMailThumbnailWidgetsUpdateListener")] 
-		public CUInt32 OnMailThumbnailWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnMailThumbnailWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onMailThumbnailWidgetsUpdateListener);
 			set => SetProperty(ref _onMailThumbnailWidgetsUpdateListener, value);
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("onFileThumbnailWidgetsUpdateListener")] 
-		public CUInt32 OnFileThumbnailWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnFileThumbnailWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onFileThumbnailWidgetsUpdateListener);
 			set => SetProperty(ref _onFileThumbnailWidgetsUpdateListener, value);
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("onMailWidgetsUpdateListener")] 
-		public CUInt32 OnMailWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnMailWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onMailWidgetsUpdateListener);
 			set => SetProperty(ref _onMailWidgetsUpdateListener, value);
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("onFileWidgetsUpdateListener")] 
-		public CUInt32 OnFileWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnFileWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onFileWidgetsUpdateListener);
 			set => SetProperty(ref _onFileWidgetsUpdateListener, value);
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("onMenuButtonWidgetsUpdateListener")] 
-		public CUInt32 OnMenuButtonWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnMenuButtonWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onMenuButtonWidgetsUpdateListener);
 			set => SetProperty(ref _onMenuButtonWidgetsUpdateListener, value);
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("onMainMenuButtonWidgetsUpdateListener")] 
-		public CUInt32 OnMainMenuButtonWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnMainMenuButtonWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onMainMenuButtonWidgetsUpdateListener);
 			set => SetProperty(ref _onMainMenuButtonWidgetsUpdateListener, value);
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(32)] 
 		[RED("onBannerWidgetsUpdateListener")] 
-		public CUInt32 OnBannerWidgetsUpdateListener
+		public CHandle<redCallbackObject> OnBannerWidgetsUpdateListener
 		{
 			get => GetProperty(ref _onBannerWidgetsUpdateListener);
 			set => SetProperty(ref _onBannerWidgetsUpdateListener, value);
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(33)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);

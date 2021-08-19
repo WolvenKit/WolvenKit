@@ -9,9 +9,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<inkWidget> _root;
 		private inkTextWidgetReference _mainTextWidget;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_NotificationsDef> _blackboardDef;
-		private CUInt32 _warningMessageCallbackId;
+		private CHandle<redCallbackObject> _warningMessageCallbackId;
 		private gameSimpleScreenMessage _simpleMessage;
 		private CHandle<inkanimDefinition> _blinkingAnim;
 		private CHandle<inkanimDefinition> _showAnim;
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("warningMessageCallbackId")] 
-		public CUInt32 WarningMessageCallbackId
+		public CHandle<redCallbackObject> WarningMessageCallbackId
 		{
 			get => GetProperty(ref _warningMessageCallbackId);
 			set => SetProperty(ref _warningMessageCallbackId, value);

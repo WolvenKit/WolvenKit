@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkTextWidget> _districtText;
 		private wCHandle<inkTextWidget> _pointText;
 		private wCHandle<gameFastTravelPointData> _point;
-		private CUInt32 _onFastTravelPointUpdateListener;
+		private CHandle<redCallbackObject> _onFastTravelPointUpdateListener;
 
 		[Ordinal(16)] 
 		[RED("fcPointsPanel")] 
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("onFastTravelPointUpdateListener")] 
-		public CUInt32 OnFastTravelPointUpdateListener
+		public CHandle<redCallbackObject> OnFastTravelPointUpdateListener
 		{
 			get => GetProperty(ref _onFastTravelPointUpdateListener);
 			set => SetProperty(ref _onFastTravelPointUpdateListener, value);

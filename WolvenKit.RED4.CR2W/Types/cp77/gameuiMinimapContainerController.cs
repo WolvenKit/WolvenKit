@@ -33,10 +33,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkanimProxy> _zoneVignetteAnimProxy;
 		private CBool _inPublicOrRestrictedZone;
 		private CInt32 _fluffTextCount;
-		private CHandle<gameIBlackboard> _mapBlackboard;
+		private wCHandle<gameIBlackboard> _mapBlackboard;
 		private CHandle<UI_MapDef> _mapDefinition;
-		private CUInt32 _locationDataCallback;
-		private CUInt32 _securityBlackBoardID;
+		private CHandle<redCallbackObject> _locationDataCallback;
+		private CHandle<redCallbackObject> _securityBlackBoardID;
 		private CHandle<inkanimProxy> _combatAnimation;
 		private CBool _playerInCombat;
 		private CBool _zoneNeedsUpdate;
@@ -253,7 +253,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(42)] 
 		[RED("mapBlackboard")] 
-		public CHandle<gameIBlackboard> MapBlackboard
+		public wCHandle<gameIBlackboard> MapBlackboard
 		{
 			get => GetProperty(ref _mapBlackboard);
 			set => SetProperty(ref _mapBlackboard, value);
@@ -269,7 +269,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(44)] 
 		[RED("locationDataCallback")] 
-		public CUInt32 LocationDataCallback
+		public CHandle<redCallbackObject> LocationDataCallback
 		{
 			get => GetProperty(ref _locationDataCallback);
 			set => SetProperty(ref _locationDataCallback, value);
@@ -277,7 +277,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(45)] 
 		[RED("securityBlackBoardID")] 
-		public CUInt32 SecurityBlackBoardID
+		public CHandle<redCallbackObject> SecurityBlackBoardID
 		{
 			get => GetProperty(ref _securityBlackBoardID);
 			set => SetProperty(ref _securityBlackBoardID, value);

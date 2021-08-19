@@ -13,10 +13,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<RadialSlot> _statusEffects;
 		private inkWidgetReference _pointerRef;
 		private CHandle<WeaponRadialSlot> _activeSlot;
-		private CHandle<PointerController> _pointer;
+		private wCHandle<PointerController> _pointer;
 		private CInt32 _activeIndex;
 		private CBool _initialized;
 		private CBool _isActive;
+		private CInt32 _pendingRadialSlotAsyncSpawnCount;
 		private InventoryItemData _consSlotCachedData;
 		private InventoryItemData _gadgetSlotCachedData;
 		private CName _cyclingActionRegistered;
@@ -28,15 +29,15 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
 		private wCHandle<EquipmentSystem> _equipmentSystem;
 		private wCHandle<gameTransactionSystem> _transactionSystem;
-		private CHandle<gameIBlackboard> _quickSlotBlackboard;
+		private wCHandle<gameIBlackboard> _quickSlotBlackboard;
 		private CHandle<UI_QuickSlotsDataDef> _quickSlotBlackboardDef;
-		private CUInt32 _axisInputCallbackID;
-		private CHandle<gameIBlackboard> _uISystemBB;
+		private CHandle<redCallbackObject> _axisInputCallbackID;
+		private wCHandle<gameIBlackboard> _uISystemBB;
 		private CHandle<UI_SystemDef> _uISystemDef;
-		private CUInt32 _isInMenuCallbackID;
-		private CHandle<gameIBlackboard> _equipmentUIBlackboard;
+		private CHandle<redCallbackObject> _isInMenuCallbackID;
+		private wCHandle<gameIBlackboard> _equipmentUIBlackboard;
 		private CHandle<UI_EquipmentDef> _equipmentBlackboardDef;
-		private CUInt32 _equipmentUICallbackID;
+		private CHandle<redCallbackObject> _equipmentUICallbackID;
 		private CInt32 _dbg_int;
 		private CArray<CUInt32> _dbg_layers;
 		private CArray<CUInt32> _dbg_activeSlotLayers;
@@ -91,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("pointer")] 
-		public CHandle<PointerController> Pointer
+		public wCHandle<PointerController> Pointer
 		{
 			get => GetProperty(ref _pointer);
 			set => SetProperty(ref _pointer, value);
@@ -122,6 +123,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("pendingRadialSlotAsyncSpawnCount")] 
+		public CInt32 PendingRadialSlotAsyncSpawnCount
+		{
+			get => GetProperty(ref _pendingRadialSlotAsyncSpawnCount);
+			set => SetProperty(ref _pendingRadialSlotAsyncSpawnCount, value);
+		}
+
+		[Ordinal(20)] 
 		[RED("consSlotCachedData")] 
 		public InventoryItemData ConsSlotCachedData
 		{
@@ -129,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _consSlotCachedData, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("gadgetSlotCachedData")] 
 		public InventoryItemData GadgetSlotCachedData
 		{
@@ -137,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gadgetSlotCachedData, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("cyclingActionRegistered")] 
 		public CName CyclingActionRegistered
 		{
@@ -145,7 +154,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cyclingActionRegistered, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("registeredInputHints")] 
 		public CArray<gameuiInputHintData> RegisteredInputHints
 		{
@@ -153,7 +162,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _registeredInputHints, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("applyInputHint")] 
 		public gameuiInputHintData ApplyInputHint
 		{
@@ -161,7 +170,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _applyInputHint, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("cycleInputHintDataLeft")] 
 		public gameuiInputHintData CycleInputHintDataLeft
 		{
@@ -169,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cycleInputHintDataLeft, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("cycleInputHintDataRight")] 
 		public gameuiInputHintData CycleInputHintDataRight
 		{
@@ -177,7 +186,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cycleInputHintDataRight, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("radialMode")] 
 		public CEnum<ERadialMode> RadialMode
 		{
@@ -185,7 +194,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _radialMode, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -193,7 +202,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryManager, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("equipmentSystem")] 
 		public wCHandle<EquipmentSystem> EquipmentSystem
 		{
@@ -201,7 +210,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipmentSystem, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("transactionSystem")] 
 		public wCHandle<gameTransactionSystem> TransactionSystem
 		{
@@ -209,15 +218,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _transactionSystem, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("quickSlotBlackboard")] 
-		public CHandle<gameIBlackboard> QuickSlotBlackboard
+		public wCHandle<gameIBlackboard> QuickSlotBlackboard
 		{
 			get => GetProperty(ref _quickSlotBlackboard);
 			set => SetProperty(ref _quickSlotBlackboard, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("QuickSlotBlackboardDef")] 
 		public CHandle<UI_QuickSlotsDataDef> QuickSlotBlackboardDef
 		{
@@ -225,23 +234,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickSlotBlackboardDef, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("axisInputCallbackID")] 
-		public CUInt32 AxisInputCallbackID
+		public CHandle<redCallbackObject> AxisInputCallbackID
 		{
 			get => GetProperty(ref _axisInputCallbackID);
 			set => SetProperty(ref _axisInputCallbackID, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("UISystemBB")] 
-		public CHandle<gameIBlackboard> UISystemBB
+		public wCHandle<gameIBlackboard> UISystemBB
 		{
 			get => GetProperty(ref _uISystemBB);
 			set => SetProperty(ref _uISystemBB, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("UISystemDef")] 
 		public CHandle<UI_SystemDef> UISystemDef
 		{
@@ -249,23 +258,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uISystemDef, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("isInMenuCallbackID")] 
-		public CUInt32 IsInMenuCallbackID
+		public CHandle<redCallbackObject> IsInMenuCallbackID
 		{
 			get => GetProperty(ref _isInMenuCallbackID);
 			set => SetProperty(ref _isInMenuCallbackID, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("equipmentUIBlackboard")] 
-		public CHandle<gameIBlackboard> EquipmentUIBlackboard
+		public wCHandle<gameIBlackboard> EquipmentUIBlackboard
 		{
 			get => GetProperty(ref _equipmentUIBlackboard);
 			set => SetProperty(ref _equipmentUIBlackboard, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("EquipmentBlackboardDef")] 
 		public CHandle<UI_EquipmentDef> EquipmentBlackboardDef
 		{
@@ -273,15 +282,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipmentBlackboardDef, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("equipmentUICallbackID")] 
-		public CUInt32 EquipmentUICallbackID
+		public CHandle<redCallbackObject> EquipmentUICallbackID
 		{
 			get => GetProperty(ref _equipmentUICallbackID);
 			set => SetProperty(ref _equipmentUICallbackID, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("dbg_int")] 
 		public CInt32 Dbg_int
 		{
@@ -289,7 +298,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dbg_int, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("dbg_layers")] 
 		public CArray<CUInt32> Dbg_layers
 		{
@@ -297,7 +306,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dbg_layers, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("dbg_activeSlotLayers")] 
 		public CArray<CUInt32> Dbg_activeSlotLayers
 		{

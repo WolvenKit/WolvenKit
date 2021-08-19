@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ChatterKeyValuePair : CVariable
 	{
 		private CRUID _key;
-		private CHandle<ChatterLineLogicController> _value;
+		private wCHandle<ChatterLineLogicController> _value;
 		private wCHandle<gameObject> _owner;
 
 		[Ordinal(0)] 
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("Value")] 
-		public CHandle<ChatterLineLogicController> Value
+		public wCHandle<ChatterLineLogicController> Value
 		{
 			get => GetProperty(ref _value);
 			set => SetProperty(ref _value, value);

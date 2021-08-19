@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<entMeshComponent> _additionalMeshComponent;
 		private wCHandle<NPCPuppet> _npcBody;
-		private CHandle<gameIBlackboard> _playerStateMachineBlackboard;
+		private wCHandle<gameIBlackboard> _playerStateMachineBlackboard;
 		private CArray<CName> _sideTriggerNames;
 		private CArray<CHandle<gameStaticTriggerAreaComponent>> _triggerComponents;
 		private CName _currentDisposalSyncName;
@@ -23,8 +23,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isReactToHit;
 		private CName _distractionSoundName;
 		private CFloat _workspotDuration;
+		private CHandle<redCallbackObject> _onTakedownChangedCallback;
+		private CHandle<redCallbackObject> _onCarryingChangedCallback;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("additionalMeshComponent")] 
 		public CHandle<entMeshComponent> AdditionalMeshComponent
 		{
@@ -32,7 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _additionalMeshComponent, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("npcBody")] 
 		public wCHandle<NPCPuppet> NpcBody
 		{
@@ -40,15 +42,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _npcBody, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("playerStateMachineBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStateMachineBlackboard
+		public wCHandle<gameIBlackboard> PlayerStateMachineBlackboard
 		{
 			get => GetProperty(ref _playerStateMachineBlackboard);
 			set => SetProperty(ref _playerStateMachineBlackboard, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
@@ -56,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sideTriggerNames, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{
@@ -64,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerComponents, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("currentDisposalSyncName")] 
 		public CName CurrentDisposalSyncName
 		{
@@ -72,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentDisposalSyncName, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("currentKillSyncName")] 
 		public CName CurrentKillSyncName
 		{
@@ -80,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentKillSyncName, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isNonlethal")] 
 		public CBool IsNonlethal
 		{
@@ -88,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isNonlethal, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("physicalMeshNames")] 
 		public CArray<CName> PhysicalMeshNames
 		{
@@ -96,7 +98,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _physicalMeshNames, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("physicalMeshes")] 
 		public CArray<CHandle<entPhysicalMeshComponent>> PhysicalMeshes
 		{
@@ -104,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _physicalMeshes, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("lethalTakedownKillDelay")] 
 		public CFloat LethalTakedownKillDelay
 		{
@@ -112,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lethalTakedownKillDelay, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("lethalTakedownComponentNames")] 
 		public CArray<CName> LethalTakedownComponentNames
 		{
@@ -120,7 +122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lethalTakedownComponentNames, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("lethalTakedownComponents")] 
 		public CArray<CHandle<entIPlacedComponent>> LethalTakedownComponents
 		{
@@ -128,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lethalTakedownComponents, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("isReactToHit")] 
 		public CBool IsReactToHit
 		{
@@ -136,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isReactToHit, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("distractionSoundName")] 
 		public CName DistractionSoundName
 		{
@@ -144,12 +146,28 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _distractionSoundName, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("workspotDuration")] 
 		public CFloat WorkspotDuration
 		{
 			get => GetProperty(ref _workspotDuration);
 			set => SetProperty(ref _workspotDuration, value);
+		}
+
+		[Ordinal(113)] 
+		[RED("OnTakedownChangedCallback")] 
+		public CHandle<redCallbackObject> OnTakedownChangedCallback
+		{
+			get => GetProperty(ref _onTakedownChangedCallback);
+			set => SetProperty(ref _onTakedownChangedCallback, value);
+		}
+
+		[Ordinal(114)] 
+		[RED("OnCarryingChangedCallback")] 
+		public CHandle<redCallbackObject> OnCarryingChangedCallback
+		{
+			get => GetProperty(ref _onCarryingChangedCallback);
+			set => SetProperty(ref _onCarryingChangedCallback, value);
 		}
 
 		public DisposalDevice(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

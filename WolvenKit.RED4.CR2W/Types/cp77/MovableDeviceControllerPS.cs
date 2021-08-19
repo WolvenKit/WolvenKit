@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private MovableDeviceSetup _movableDeviceSetup;
 		private CHandle<DemolitionContainer> _movableDeviceSkillChecks;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("MovableDeviceSetup")] 
 		public MovableDeviceSetup MovableDeviceSetup
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _movableDeviceSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("movableDeviceSkillChecks")] 
 		public CHandle<DemolitionContainer> MovableDeviceSkillChecks
 		{

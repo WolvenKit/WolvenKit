@@ -17,8 +17,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _fluffTextRight;
 		private inkTextWidgetReference _fluffTextDown;
 		private inkTextWidgetReference _fluffTextLeft;
-		private CArray<CHandle<CharacterCreationTopBarHeader>> _headers;
-		private CHandle<CharacterCreationTopBarHeader> _selectedHeader;
+		private CArray<wCHandle<CharacterCreationTopBarHeader>> _headers;
+		private wCHandle<CharacterCreationTopBarHeader> _selectedHeader;
 		private CFloat _c_fluffMaxX;
 		private CFloat _c_fluffMinY;
 		private CFloat _c_fluffMaxY;
@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("headers")] 
-		public CArray<CHandle<CharacterCreationTopBarHeader>> Headers
+		public CArray<wCHandle<CharacterCreationTopBarHeader>> Headers
 		{
 			get => GetProperty(ref _headers);
 			set => SetProperty(ref _headers, value);
@@ -113,7 +113,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("selectedHeader")] 
-		public CHandle<CharacterCreationTopBarHeader> SelectedHeader
+		public wCHandle<CharacterCreationTopBarHeader> SelectedHeader
 		{
 			get => GetProperty(ref _selectedHeader);
 			set => SetProperty(ref _selectedHeader, value);

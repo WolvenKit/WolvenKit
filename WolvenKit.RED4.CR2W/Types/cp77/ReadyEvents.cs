@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CFloat _timeStamp;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("timeStamp")] 
 		public CFloat TimeStamp
 		{

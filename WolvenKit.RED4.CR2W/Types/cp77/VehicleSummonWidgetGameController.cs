@@ -19,8 +19,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkanimPlaybackOptions _optionIntro;
 		private inkanimPlaybackOptions _optionCounter;
 		private CHandle<VehicleSummonDataDef> _vehicleSummonDataDef;
-		private CHandle<gameIBlackboard> _vehicleSummonDataBB;
-		private CUInt32 _vehicleSummonStateCallback;
+		private wCHandle<gameIBlackboard> _vehicleSummonDataBB;
+		private CHandle<redCallbackObject> _vehicleSummonStateCallback;
 		private CUInt32 _vehicleSummonState;
 		private Vector4 _vehiclePos;
 		private Vector4 _playerPos;
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("vehicleSummonDataBB")] 
-		public CHandle<gameIBlackboard> VehicleSummonDataBB
+		public wCHandle<gameIBlackboard> VehicleSummonDataBB
 		{
 			get => GetProperty(ref _vehicleSummonDataBB);
 			set => SetProperty(ref _vehicleSummonDataBB, value);
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("vehicleSummonStateCallback")] 
-		public CUInt32 VehicleSummonStateCallback
+		public CHandle<redCallbackObject> VehicleSummonStateCallback
 		{
 			get => GetProperty(ref _vehicleSummonStateCallback);
 			set => SetProperty(ref _vehicleSummonStateCallback, value);

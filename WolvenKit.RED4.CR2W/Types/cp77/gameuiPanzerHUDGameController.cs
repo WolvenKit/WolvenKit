@@ -25,29 +25,29 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _rPMValue;
 		private wCHandle<gameIBlackboard> _scanBlackboard;
 		private wCHandle<gameIBlackboard> _psmBlackboard;
-		private CUInt32 _pSM_BBID;
+		private CHandle<redCallbackObject> _pSM_BBID;
 		private wCHandle<inkCompoundWidget> _root;
 		private CFloat _currentZoom;
 		private GameTime _currentTime;
 		private wCHandle<gameIBlackboard> _vehicleBlackboard;
 		private wCHandle<gameIBlackboard> _activeVehicleUIBlackboard;
-		private CUInt32 _vehicleBBStateConectionId;
-		private CUInt32 _speedBBConnectionId;
-		private CUInt32 _gearBBConnectionId;
-		private CUInt32 _tppBBConnectionId;
-		private CUInt32 _rpmValueBBConnectionId;
-		private CUInt32 _leanAngleBBConnectionId;
-		private CUInt32 _playerStateBBConnectionId;
-		private CUInt32 _isTargetingFriendlyConnectionId;
-		private CHandle<gameIBlackboard> _bbPlayerStats;
-		private CUInt32 _bbPlayerEventId;
+		private CHandle<redCallbackObject> _vehicleBBStateConectionId;
+		private CHandle<redCallbackObject> _speedBBConnectionId;
+		private CHandle<redCallbackObject> _gearBBConnectionId;
+		private CHandle<redCallbackObject> _tppBBConnectionId;
+		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
+		private CHandle<redCallbackObject> _leanAngleBBConnectionId;
+		private CHandle<redCallbackObject> _playerStateBBConnectionId;
+		private CHandle<redCallbackObject> _isTargetingFriendlyConnectionId;
+		private wCHandle<gameIBlackboard> _bbPlayerStats;
+		private CHandle<redCallbackObject> _bbPlayerEventId;
 		private CInt32 _currentHealth;
 		private CInt32 _previousHealth;
 		private CInt32 _maximumHealth;
 		private CFloat _quickhacksMemoryPercent;
 		private wCHandle<gameObject> _playerObject;
 		private wCHandle<gameIBlackboard> _weaponBlackboard;
-		private CUInt32 _weaponParamsListenerId;
+		private CHandle<redCallbackObject> _weaponParamsListenerId;
 		private CArray<TargetIndicatorEntry> _targetIndicators;
 		private inkCompoundWidgetReference _targetHolder;
 		private CName _targetWidgetLibraryName;
@@ -199,7 +199,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("PSM_BBID")] 
-		public CUInt32 PSM_BBID
+		public CHandle<redCallbackObject> PSM_BBID
 		{
 			get => GetProperty(ref _pSM_BBID);
 			set => SetProperty(ref _pSM_BBID, value);
@@ -247,7 +247,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(33)] 
 		[RED("vehicleBBStateConectionId")] 
-		public CUInt32 VehicleBBStateConectionId
+		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
 			get => GetProperty(ref _vehicleBBStateConectionId);
 			set => SetProperty(ref _vehicleBBStateConectionId, value);
@@ -255,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(34)] 
 		[RED("speedBBConnectionId")] 
-		public CUInt32 SpeedBBConnectionId
+		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
 			get => GetProperty(ref _speedBBConnectionId);
 			set => SetProperty(ref _speedBBConnectionId, value);
@@ -263,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("gearBBConnectionId")] 
-		public CUInt32 GearBBConnectionId
+		public CHandle<redCallbackObject> GearBBConnectionId
 		{
 			get => GetProperty(ref _gearBBConnectionId);
 			set => SetProperty(ref _gearBBConnectionId, value);
@@ -271,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(36)] 
 		[RED("tppBBConnectionId")] 
-		public CUInt32 TppBBConnectionId
+		public CHandle<redCallbackObject> TppBBConnectionId
 		{
 			get => GetProperty(ref _tppBBConnectionId);
 			set => SetProperty(ref _tppBBConnectionId, value);
@@ -279,7 +279,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(37)] 
 		[RED("rpmValueBBConnectionId")] 
-		public CUInt32 RpmValueBBConnectionId
+		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
 			get => GetProperty(ref _rpmValueBBConnectionId);
 			set => SetProperty(ref _rpmValueBBConnectionId, value);
@@ -287,7 +287,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(38)] 
 		[RED("leanAngleBBConnectionId")] 
-		public CUInt32 LeanAngleBBConnectionId
+		public CHandle<redCallbackObject> LeanAngleBBConnectionId
 		{
 			get => GetProperty(ref _leanAngleBBConnectionId);
 			set => SetProperty(ref _leanAngleBBConnectionId, value);
@@ -295,7 +295,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(39)] 
 		[RED("playerStateBBConnectionId")] 
-		public CUInt32 PlayerStateBBConnectionId
+		public CHandle<redCallbackObject> PlayerStateBBConnectionId
 		{
 			get => GetProperty(ref _playerStateBBConnectionId);
 			set => SetProperty(ref _playerStateBBConnectionId, value);
@@ -303,7 +303,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(40)] 
 		[RED("isTargetingFriendlyConnectionId")] 
-		public CUInt32 IsTargetingFriendlyConnectionId
+		public CHandle<redCallbackObject> IsTargetingFriendlyConnectionId
 		{
 			get => GetProperty(ref _isTargetingFriendlyConnectionId);
 			set => SetProperty(ref _isTargetingFriendlyConnectionId, value);
@@ -311,7 +311,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(41)] 
 		[RED("bbPlayerStats")] 
-		public CHandle<gameIBlackboard> BbPlayerStats
+		public wCHandle<gameIBlackboard> BbPlayerStats
 		{
 			get => GetProperty(ref _bbPlayerStats);
 			set => SetProperty(ref _bbPlayerStats, value);
@@ -319,7 +319,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(42)] 
 		[RED("bbPlayerEventId")] 
-		public CUInt32 BbPlayerEventId
+		public CHandle<redCallbackObject> BbPlayerEventId
 		{
 			get => GetProperty(ref _bbPlayerEventId);
 			set => SetProperty(ref _bbPlayerEventId, value);
@@ -375,7 +375,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(49)] 
 		[RED("weaponParamsListenerId")] 
-		public CUInt32 WeaponParamsListenerId
+		public CHandle<redCallbackObject> WeaponParamsListenerId
 		{
 			get => GetProperty(ref _weaponParamsListenerId);
 			set => SetProperty(ref _weaponParamsListenerId, value);

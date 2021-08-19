@@ -7,13 +7,13 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class InteractionUIBase : gameuiHUDGameController
 	{
-		private CHandle<gameIBlackboard> _interactionsBlackboard;
+		private wCHandle<gameIBlackboard> _interactionsBlackboard;
 		private CHandle<UIInteractionsDef> _interactionsBBDefinition;
-		private CUInt32 _dialogsDataListenerId;
-		private CUInt32 _dialogsActiveHubListenerId;
-		private CUInt32 _dialogsSelectedChoiceListenerId;
-		private CUInt32 _interactionsDataListenerId;
-		private CUInt32 _lootingDataListenerId;
+		private CHandle<redCallbackObject> _dialogsDataListenerId;
+		private CHandle<redCallbackObject> _dialogsActiveHubListenerId;
+		private CHandle<redCallbackObject> _dialogsSelectedChoiceListenerId;
+		private CHandle<redCallbackObject> _interactionsDataListenerId;
+		private CHandle<redCallbackObject> _lootingDataListenerId;
 		private CBool _areDialogsOpen;
 		private CBool _areContactsOpen;
 		private CBool _isLootingOpen;
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("InteractionsBlackboard")] 
-		public CHandle<gameIBlackboard> InteractionsBlackboard
+		public wCHandle<gameIBlackboard> InteractionsBlackboard
 		{
 			get => GetProperty(ref _interactionsBlackboard);
 			set => SetProperty(ref _interactionsBlackboard, value);
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("DialogsDataListenerId")] 
-		public CUInt32 DialogsDataListenerId
+		public CHandle<redCallbackObject> DialogsDataListenerId
 		{
 			get => GetProperty(ref _dialogsDataListenerId);
 			set => SetProperty(ref _dialogsDataListenerId, value);
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("DialogsActiveHubListenerId")] 
-		public CUInt32 DialogsActiveHubListenerId
+		public CHandle<redCallbackObject> DialogsActiveHubListenerId
 		{
 			get => GetProperty(ref _dialogsActiveHubListenerId);
 			set => SetProperty(ref _dialogsActiveHubListenerId, value);
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("DialogsSelectedChoiceListenerId")] 
-		public CUInt32 DialogsSelectedChoiceListenerId
+		public CHandle<redCallbackObject> DialogsSelectedChoiceListenerId
 		{
 			get => GetProperty(ref _dialogsSelectedChoiceListenerId);
 			set => SetProperty(ref _dialogsSelectedChoiceListenerId, value);
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("InteractionsDataListenerId")] 
-		public CUInt32 InteractionsDataListenerId
+		public CHandle<redCallbackObject> InteractionsDataListenerId
 		{
 			get => GetProperty(ref _interactionsDataListenerId);
 			set => SetProperty(ref _interactionsDataListenerId, value);
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("lootingDataListenerId")] 
-		public CUInt32 LootingDataListenerId
+		public CHandle<redCallbackObject> LootingDataListenerId
 		{
 			get => GetProperty(ref _lootingDataListenerId);
 			set => SetProperty(ref _lootingDataListenerId, value);

@@ -19,8 +19,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _trackedChangesBlackboardId;
 		private CHandle<JournalWrapper> _journalWrapper;
 		private wCHandle<gameObject> _player;
-		private CHandle<QuestListHeaderLogicController> _optionalHeaderController;
-		private CHandle<QuestListHeaderLogicController> _toDoHeaderController;
+		private wCHandle<QuestListHeaderLogicController> _optionalHeaderController;
+		private wCHandle<QuestListHeaderLogicController> _toDoHeaderController;
 		private CHandle<QuestObjectiveWrapper> _lastNonOptionalObjective;
 
 		[Ordinal(9)] 
@@ -121,7 +121,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("optionalHeaderController")] 
-		public CHandle<QuestListHeaderLogicController> OptionalHeaderController
+		public wCHandle<QuestListHeaderLogicController> OptionalHeaderController
 		{
 			get => GetProperty(ref _optionalHeaderController);
 			set => SetProperty(ref _optionalHeaderController, value);
@@ -129,7 +129,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("toDoHeaderController")] 
-		public CHandle<QuestListHeaderLogicController> ToDoHeaderController
+		public wCHandle<QuestListHeaderLogicController> ToDoHeaderController
 		{
 			get => GetProperty(ref _toDoHeaderController);
 			set => SetProperty(ref _toDoHeaderController, value);

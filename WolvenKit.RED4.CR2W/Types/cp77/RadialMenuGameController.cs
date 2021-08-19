@@ -10,9 +10,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _containerRef;
 		private inkWidgetReference _highlightRef;
 		private CArray<inkWidgetReference> _itemListRef;
-		private CHandle<gameIBlackboard> _quickSlotsBoard;
+		private wCHandle<gameIBlackboard> _quickSlotsBoard;
 		private CHandle<UI_QuickSlotsDataDef> _quickSlotsDef;
-		private CUInt32 _inputAxisCallbackId;
+		private CHandle<redCallbackObject> _inputAxisCallbackId;
 
 		[Ordinal(9)] 
 		[RED("containerRef")] 
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("quickSlotsBoard")] 
-		public CHandle<gameIBlackboard> QuickSlotsBoard
+		public wCHandle<gameIBlackboard> QuickSlotsBoard
 		{
 			get => GetProperty(ref _quickSlotsBoard);
 			set => SetProperty(ref _quickSlotsBoard, value);
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("inputAxisCallbackId")] 
-		public CUInt32 InputAxisCallbackId
+		public CHandle<redCallbackObject> InputAxisCallbackId
 		{
 			get => GetProperty(ref _inputAxisCallbackId);
 			set => SetProperty(ref _inputAxisCallbackId, value);

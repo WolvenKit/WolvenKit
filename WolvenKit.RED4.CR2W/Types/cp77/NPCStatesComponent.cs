@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _highLevelAnimFeatureName;
 		private CName _upperBodyAnimFeatureName;
 		private CName _stanceAnimFeatureName;
-		private CHandle<gameStatModifierData> _statFlagDefensiveState;
+		private CHandle<gameStatModifierData_Deprecated> _statFlagDefensiveState;
 		private CEnum<gamedataNPCStanceState> _prevNPCStanceState;
 		private CEnum<gamedataNPCHighLevelState> _previousHighLevelState;
 		private CEnum<EHitReactionMode> _prevHitReactionMode;
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("statFlagDefensiveState")] 
-		public CHandle<gameStatModifierData> StatFlagDefensiveState
+		public CHandle<gameStatModifierData_Deprecated> StatFlagDefensiveState
 		{
 			get => GetProperty(ref _statFlagDefensiveState);
 			set => SetProperty(ref _statFlagDefensiveState, value);

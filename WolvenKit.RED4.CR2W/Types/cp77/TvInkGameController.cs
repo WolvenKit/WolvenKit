@@ -25,8 +25,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkWidget> _globalTVslot;
 		private CName _activeAudio;
 		private wCHandle<gamedataScreenMessageData_Record> _activeMessage;
-		private CUInt32 _onChangeChannelListener;
-		private CUInt32 _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onChangeChannelListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
 
 		[Ordinal(16)] 
 		[RED("defaultUI")] 
@@ -174,7 +174,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(34)] 
 		[RED("onChangeChannelListener")] 
-		public CUInt32 OnChangeChannelListener
+		public CHandle<redCallbackObject> OnChangeChannelListener
 		{
 			get => GetProperty(ref _onChangeChannelListener);
 			set => SetProperty(ref _onChangeChannelListener, value);
@@ -182,7 +182,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);

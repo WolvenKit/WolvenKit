@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<PlayerStateMachineDef> _playerStateMachine;
 		private CHandle<PlayerPerkDataDef> _playerPerkData;
+		private CHandle<PlayerQuickHackDataDef> _playerQuickHackData;
 		private CHandle<EffectSharedDataDef> _effectSharedData;
 		private CHandle<FollowNPCDef> _followNPC;
 		private CHandle<AISquadBlackBoardDef> _aISquadBlackBoard;
@@ -25,7 +26,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<QuickMeleeDataDef> _quickMeleeData;
 		private CHandle<VehicleDef> _vehicle;
 		private CHandle<VehicleSummonDataDef> _vehicleSummonData;
-		private CHandle<SceneGameplayOverridesDef> _sceneGameplayOverrides;
 		private CHandle<BraindanceBlackboardDef> _braindance;
 		private CHandle<HackingMinigameDef> _hackingMinigame;
 		private CHandle<HackingDataDef> _hackingData;
@@ -108,6 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<UI_TopbarHubMenuDef> _uI_TopbarHubMenu;
 		private CHandle<LocalPlayerDef> _uI_LocalPlayer;
 		private CHandle<UI_SceneScreenDef> _uI_SceneScreen;
+		private CHandle<UI_PointOfNoReturnRewardScreenDef> _uI_PointOfNoReturnRewardScreen;
 		private CHandle<CombatGadgetDataDef> _combatGadget;
 		private CHandle<MinesDataDef> _mines;
 		private CHandle<DebugDataDef> _debugData;
@@ -134,6 +135,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("PlayerQuickHackData")] 
+		public CHandle<PlayerQuickHackDataDef> PlayerQuickHackData
+		{
+			get => GetProperty(ref _playerQuickHackData);
+			set => SetProperty(ref _playerQuickHackData, value);
+		}
+
+		[Ordinal(3)] 
 		[RED("EffectSharedData")] 
 		public CHandle<EffectSharedDataDef> EffectSharedData
 		{
@@ -141,7 +150,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _effectSharedData, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("FollowNPC")] 
 		public CHandle<FollowNPCDef> FollowNPC
 		{
@@ -149,7 +158,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _followNPC, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("AISquadBlackBoard")] 
 		public CHandle<AISquadBlackBoardDef> AISquadBlackBoard
 		{
@@ -157,7 +166,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _aISquadBlackBoard, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("Puppet")] 
 		public CHandle<PuppetDef> Puppet
 		{
@@ -165,7 +174,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _puppet, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("PuppetState")] 
 		public CHandle<PuppetStateDef> PuppetState
 		{
@@ -173,7 +182,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _puppetState, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("PuppetReaction")] 
 		public CHandle<PuppetReactionDef> PuppetReaction
 		{
@@ -181,7 +190,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _puppetReaction, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("LocalPlayer")] 
 		public CHandle<PuppetReactionDef> LocalPlayer
 		{
@@ -189,7 +198,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _localPlayer, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("UIGameData")] 
 		public CHandle<UIGameDataDef> UIGameData
 		{
@@ -197,7 +206,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uIGameData, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("UIInteractions")] 
 		public CHandle<UIInteractionsDef> UIInteractions
 		{
@@ -205,7 +214,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uIInteractions, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("Weapon")] 
 		public CHandle<WeaponDataDef> Weapon
 		{
@@ -213,7 +222,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weapon, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("DeviceTakeControl")] 
 		public CHandle<DeviceTakeControlDef> DeviceTakeControl
 		{
@@ -221,7 +230,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceTakeControl, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("TaggedObjectsList")] 
 		public CHandle<TaggedObjectsListDef> TaggedObjectsList
 		{
@@ -229,7 +238,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _taggedObjectsList, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("AdHocAnimation")] 
 		public CHandle<AdHocAnimationDef> AdHocAnimation
 		{
@@ -237,7 +246,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _adHocAnimation, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("QuickMeleeData")] 
 		public CHandle<QuickMeleeDataDef> QuickMeleeData
 		{
@@ -245,7 +254,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickMeleeData, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("Vehicle")] 
 		public CHandle<VehicleDef> Vehicle
 		{
@@ -253,20 +262,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vehicle, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("VehicleSummonData")] 
 		public CHandle<VehicleSummonDataDef> VehicleSummonData
 		{
 			get => GetProperty(ref _vehicleSummonData);
 			set => SetProperty(ref _vehicleSummonData, value);
-		}
-
-		[Ordinal(18)] 
-		[RED("SceneGameplayOverrides")] 
-		public CHandle<SceneGameplayOverridesDef> SceneGameplayOverrides
-		{
-			get => GetProperty(ref _sceneGameplayOverrides);
-			set => SetProperty(ref _sceneGameplayOverrides, value);
 		}
 
 		[Ordinal(19)] 
@@ -926,6 +927,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(101)] 
+		[RED("UI_PointOfNoReturnRewardScreen")] 
+		public CHandle<UI_PointOfNoReturnRewardScreenDef> UI_PointOfNoReturnRewardScreen
+		{
+			get => GetProperty(ref _uI_PointOfNoReturnRewardScreen);
+			set => SetProperty(ref _uI_PointOfNoReturnRewardScreen, value);
+		}
+
+		[Ordinal(102)] 
 		[RED("CombatGadget")] 
 		public CHandle<CombatGadgetDataDef> CombatGadget
 		{
@@ -933,7 +942,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _combatGadget, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("Mines")] 
 		public CHandle<MinesDataDef> Mines
 		{
@@ -941,7 +950,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mines, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("DebugData")] 
 		public CHandle<DebugDataDef> DebugData
 		{
@@ -949,7 +958,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _debugData, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("DeviceDebug")] 
 		public CHandle<DeviceDebugDef> DeviceDebug
 		{
@@ -957,7 +966,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceDebug, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("CustomCentaurBlackboard")] 
 		public CHandle<CustomCentaurBlackboardDef> CustomCentaurBlackboard
 		{
@@ -965,7 +974,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _customCentaurBlackboard, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("CW_MuteArm")] 
 		public CHandle<CW_MuteArmDef> CW_MuteArm
 		{
@@ -973,7 +982,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cW_MuteArm, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("PhotoMode")] 
 		public CHandle<PhotoModeDef> PhotoMode
 		{
@@ -981,7 +990,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _photoMode, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("GameplaySettings")] 
 		public CHandle<GameplaySettingsDef> GameplaySettings
 		{

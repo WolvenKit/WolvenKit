@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CHandle<gameLightComponent>> _lightComponents;
 		private CArray<gamedataLightPreset> _lightDefinitions;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("lightComponents")] 
 		public CArray<CHandle<gameLightComponent>> LightComponents
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lightComponents, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("lightDefinitions")] 
 		public CArray<gamedataLightPreset> LightDefinitions
 		{

@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkWidget> _topPart;
 		private wCHandle<inkRectangleWidget> _chargeBar;
 		private Vector2 _sizeOfChargeBar;
-		private CUInt32 _chargeBBID;
+		private CHandle<redCallbackObject> _chargeBBID;
 
 		[Ordinal(18)] 
 		[RED("leftPart")] 
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("chargeBBID")] 
-		public CUInt32 ChargeBBID
+		public CHandle<redCallbackObject> ChargeBBID
 		{
 			get => GetProperty(ref _chargeBBID);
 			set => SetProperty(ref _chargeBBID, value);

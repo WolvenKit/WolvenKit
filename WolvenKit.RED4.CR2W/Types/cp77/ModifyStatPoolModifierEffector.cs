@@ -8,6 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ModifyStatPoolModifierEffector : gameEffector
 	{
 		private wCHandle<gameObject> _owner;
+		private entEntityID _ownerEntityID;
 		private gameStatPoolModifier _poolModifier;
 		private CEnum<gamedataStatPoolType> _poolType;
 		private CEnum<gameStatPoolModificationTypes> _modType;
@@ -22,6 +23,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("ownerEntityID")] 
+		public entEntityID OwnerEntityID
+		{
+			get => GetProperty(ref _ownerEntityID);
+			set => SetProperty(ref _ownerEntityID, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("poolModifier")] 
 		public gameStatPoolModifier PoolModifier
 		{
@@ -29,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _poolModifier, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("poolType")] 
 		public CEnum<gamedataStatPoolType> PoolType
 		{
@@ -37,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _poolType, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("modType")] 
 		public CEnum<gameStatPoolModificationTypes> ModType
 		{
@@ -45,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _modType, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("previousMod")] 
 		public gameStatPoolModifier PreviousMod
 		{

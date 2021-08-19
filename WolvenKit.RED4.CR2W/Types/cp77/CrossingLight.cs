@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _audioLightIsGreen;
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("audioLightIsGreen")] 
 		public CBool AudioLightIsGreen
 		{

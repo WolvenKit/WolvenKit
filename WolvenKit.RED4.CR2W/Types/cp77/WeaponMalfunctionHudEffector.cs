@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class WeaponMalfunctionHudEffector : gameEffector
 	{
-		private CHandle<gameIBlackboard> _bb;
+		private wCHandle<gameIBlackboard> _bb;
 
 		[Ordinal(0)] 
 		[RED("bb")] 
-		public CHandle<gameIBlackboard> Bb
+		public wCHandle<gameIBlackboard> Bb
 		{
 			get => GetProperty(ref _bb);
 			set => SetProperty(ref _bb, value);

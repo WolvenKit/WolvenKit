@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _nameForBlocking;
 		private TweakDBID _nameForUnblocking;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isBlocking")] 
 		public CBool IsBlocking
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isBlocking, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("negateAnimState")] 
 		public CBool NegateAnimState
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _negateAnimState, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("nameForBlocking")] 
 		public TweakDBID NameForBlocking
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nameForBlocking, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("nameForUnblocking")] 
 		public TweakDBID NameForUnblocking
 		{

@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _modifiable;
 		private CBool _affectedByTimeDilation;
 		private CEnum<gamedataStatType> _abilityType;
-		private CHandle<gameStatModifierData> _statMod;
+		private CHandle<gameStatModifierData_Deprecated> _statMod;
 
 		[Ordinal(0)] 
 		[RED("delayId")] 
@@ -128,7 +128,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("statMod")] 
-		public CHandle<gameStatModifierData> StatMod
+		public CHandle<gameStatModifierData_Deprecated> StatMod
 		{
 			get => GetProperty(ref _statMod);
 			set => SetProperty(ref _statMod, value);

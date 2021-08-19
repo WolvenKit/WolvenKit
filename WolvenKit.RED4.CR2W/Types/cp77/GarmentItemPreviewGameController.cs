@@ -11,8 +11,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _placementSlot;
 		private gameItemID _initialItem;
 		private gameItemID _givenItem;
+		private CBool _isMouseDown;
 
-		[Ordinal(9)] 
+		[Ordinal(14)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
@@ -20,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _data, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(15)] 
 		[RED("placementSlot")] 
 		public TweakDBID PlacementSlot
 		{
@@ -28,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _placementSlot, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(16)] 
 		[RED("initialItem")] 
 		public gameItemID InitialItem
 		{
@@ -36,12 +37,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialItem, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(17)] 
 		[RED("givenItem")] 
 		public gameItemID GivenItem
 		{
 			get => GetProperty(ref _givenItem);
 			set => SetProperty(ref _givenItem, value);
+		}
+
+		[Ordinal(18)] 
+		[RED("isMouseDown")] 
+		public CBool IsMouseDown
+		{
+			get => GetProperty(ref _isMouseDown);
+			set => SetProperty(ref _isMouseDown, value);
 		}
 
 		public GarmentItemPreviewGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

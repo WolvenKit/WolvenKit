@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isOpen;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{

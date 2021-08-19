@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CrossingLightSetup _crossingLightSFXSetup;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("crossingLightSFXSetup")] 
 		public CrossingLightSetup CrossingLightSFXSetup
 		{

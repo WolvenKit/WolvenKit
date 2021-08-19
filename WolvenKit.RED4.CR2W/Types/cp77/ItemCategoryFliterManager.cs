@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArray<CEnum<ItemFilterCategory>> _filtersToCheck;
 		private CArray<CEnum<ItemFilterCategory>> _filters;
+		private CArray<CEnum<ItemFilterCategory>> _sharedFiltersToCheck;
 		private CBool _isOrderDirty;
 
 		[Ordinal(0)] 
@@ -28,6 +29,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("sharedFiltersToCheck")] 
+		public CArray<CEnum<ItemFilterCategory>> SharedFiltersToCheck
+		{
+			get => GetProperty(ref _sharedFiltersToCheck);
+			set => SetProperty(ref _sharedFiltersToCheck, value);
+		}
+
+		[Ordinal(3)] 
 		[RED("isOrderDirty")] 
 		public CBool IsOrderDirty
 		{
