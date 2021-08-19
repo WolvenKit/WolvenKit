@@ -406,6 +406,7 @@ namespace WolvenKit.Modkit.RED4
                     default:
                         break;
                 }
+
             }
             catch (Exception ex)
             {

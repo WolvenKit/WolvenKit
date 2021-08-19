@@ -81,7 +81,7 @@ namespace WolvenKit.Modkit.RED4
             }
             if(datas.Count > 1)
             {
-                var data = JsonConvert.SerializeObject(datas);
+                var data = JsonConvert.SerializeObject(datas,Formatting.Indented);
                 File.WriteAllText(outfile, data);
                 return true;
             }
